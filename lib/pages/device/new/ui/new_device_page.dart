@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:super_green_app/blocs/device/new_device.dart';
+import 'package:super_green_app/pages/device/new/bloc/new_device_bloc.dart';
 
-class NewDevicePage extends StatelessWidget {
+class NewDevicePage extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() => NewDevicePageState();
+}
+
+class NewDevicePageState extends State<NewDevicePage> {
+
+  NewDevice _newDevice = NewDevice("supergreencontroller.local");
 
   @override
   Widget build(BuildContext context) {
-    NewDevice nd = NewDevice("supergreencontroller.local");
-    nd.startSearch();
+    _newDevice.startSearch();
     return StreamBuilder<NewDeviceState>(
-        stream: nd.state,
-        initialData: nd.data,
+        stream: _newDevice.state,
+        initialData: _newDevice.data,
         builder: (BuildContext context, AsyncSnapshot<NewDeviceState> snapshot) {
           return Scaffold(
             appBar: AppBar(
@@ -30,4 +37,11 @@ class NewDevicePage extends StatelessWidget {
       )
     ];
   }
+
+  @override
+  void dispose() {
+    _newDevice.dispose();
+    super.dispose();
+  }
+
 }

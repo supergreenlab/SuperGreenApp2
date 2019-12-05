@@ -13,7 +13,15 @@ class Module {
   String get name => _module.name;
   List<String> get _paramKeys => _params[0].keys;
 
-  Module(this._module);
+  static Map<String, Module> _instances = Map();
+
+  factory Module(ModuleData module) {
+    String key = '${module.deviceId}_${module.name}';
+    if (!_instances.containsKey(key)) {
+      _instances[key] = Module(module);
+    }
+    return _instances[key];
+  }
 
   void setParam(int i, Param param) {
     _params[i][param.key] = param;

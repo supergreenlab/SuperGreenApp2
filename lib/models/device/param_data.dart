@@ -6,13 +6,13 @@ enum Status {
 }
 
 class ParamData<T> {
-  final String controllerId;
-  final String module;
+  final String deviceId;
+  final String moduleName;
 
   final String key;
   T value;
 
   Status status = Status.NOT_SET;
 
-  ParamData(this.controllerId, this.module, this.key);
+  ParamData(this.deviceId, this.moduleName, this.key);
 }

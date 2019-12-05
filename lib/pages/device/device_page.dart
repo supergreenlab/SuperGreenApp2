@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/blocs/device/device.dart';
 import 'package:super_green_app/models/device/device_data.dart';
 
-class DevicePage extends StatelessWidget {
-
+class DevicePage extends StatefulWidget {
   final Device _device;
 
   DevicePage(this._device);
+
+  @override
+  State<StatefulWidget> createState() => DevicePageState(_device);
+}
+
+class DevicePageState extends State<DevicePage> {
+
+  final Device _device;
+
+  DevicePageState(this._device);
 
   @override
   Widget build(BuildContext context) {
@@ -41,4 +50,11 @@ class DevicePage extends StatelessWidget {
       ),
     ];
   }
+
+  @override
+  void dispose() {
+    _device.dispose();
+    super.dispose();
+  }
+
 }

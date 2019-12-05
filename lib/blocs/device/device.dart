@@ -14,7 +14,14 @@ class Device {
 
   DeviceData get data => _device;
 
-  Device(this._device);
+  static Map<String, Device> _instances = Map();
+
+  factory Device(DeviceData device) {
+    if (!_instances.containsKey(device.id)) {
+      _instances[device.id] = Device(device);
+    }
+    return _instances[device.id];
+  }
 
   void setModule(Module module) {
     _modules[module.name] = module;

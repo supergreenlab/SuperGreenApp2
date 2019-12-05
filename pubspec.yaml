@@ -20,6 +20,15 @@ dependencies:
   multicast_dns:
   http:
   rxdart:
+  flutter_svg:
+  permission_handler:
+  path_provider:
+  hive:
+  hive_flutter:
+  bloc:
+  flutter_bloc:
+  provider:
+  equatable:
   flutter:
     sdk: flutter
 
@@ -28,6 +37,8 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
+  hive_generator:
+  build_runner:
   flutter_test:
     sdk: flutter
 
@@ -42,6 +53,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/super_green_lab_vertical.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

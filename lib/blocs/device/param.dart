@@ -11,6 +11,16 @@ class Param<T> {
   String get key => _param.key;
   ParamData get data => _param;
 
+  static Map<String, Param> _instances = Map();
+
+  factory Param(ParamData<T> param) {
+    String key = '${param.deviceId}_${param.moduleName}_${param.key}';
+    if (!_instances.containsKey(key)) {
+      _instances[key] = Param<T>(param);
+    }
+    return _instances[key];
+  }
+
   void dispose() {
     _paramStream.close();
   }
