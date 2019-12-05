@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
-import 'package:super_green_app/pages/main_page/bloc/main_bloc.dart';
-import 'package:super_green_app/pages/main_page/ui/main_page.dart';
 
 class WelcomePage extends StatelessWidget {
   final showNextButton;
@@ -57,11 +56,6 @@ class WelcomePage extends StatelessWidget {
 
   _next(BuildContext context) {
     BlocProvider.of<AppInitBloc>(context).done();
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => BlocProvider(
-        create: (context) => MainBloc(),
-        child: MainPage(),
-      )),
-    );
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
   }
 }

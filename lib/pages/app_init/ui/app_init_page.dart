@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:super_green_app/blocs/navigator_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
 import 'package:super_green_app/pages/welcome/ui/welcome_page.dart';
 
