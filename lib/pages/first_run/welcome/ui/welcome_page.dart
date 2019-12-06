@@ -21,6 +21,7 @@ class WelcomePage extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: widgets,
       ),
     ));
@@ -29,7 +30,6 @@ class WelcomePage extends StatelessWidget {
   Widget _logo() => Expanded(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(
                 width: 200,

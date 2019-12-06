@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/apis/device/kv_device.dart';
-import 'package:super_green_app/models/device/device_data.dart';
 
 abstract class ExistingDeviceBlocEvent extends Equatable {}
 
@@ -14,6 +13,11 @@ class ExistingDeviceBlocEventStartSearch extends ExistingDeviceBlocEvent {
   @override
   List<Object> get props => [query];
 
+}
+
+class ExistingDeviceBlocEventReset extends ExistingDeviceBlocEvent {
+  @override
+  List<Object> get props => [];
 }
 
 abstract class ExistingDeviceBlocState extends Equatable {}
@@ -29,6 +33,9 @@ class ExistingDeviceBlocStateResolving extends ExistingDeviceBlocState {
 }
 
 class ExistingDeviceBlocStateFound extends ExistingDeviceBlocState {
+  final String ip;
+  ExistingDeviceBlocStateFound(this.ip);
+
   @override
   List<Object> get props => [];
 }
@@ -36,19 +43,6 @@ class ExistingDeviceBlocStateFound extends ExistingDeviceBlocState {
 class ExistingDeviceBlocStateNotFound extends ExistingDeviceBlocState {
   @override
   List<Object> get props => [];
-}
-
-class ExistingDeviceBlocStateOutdated extends ExistingDeviceBlocState {
-  @override
-  List<Object> get props => [];
-}
-
-class ExistingDeviceBlocStateDone extends ExistingDeviceBlocState {
-  final DeviceData deviceData;
-  ExistingDeviceBlocStateDone(this.deviceData);
-
-  @override
-  List<Object> get props => [deviceData];
 }
 
 class ExistingDeviceBloc extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
@@ -60,6 +54,8 @@ class ExistingDeviceBloc extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlo
   Stream<ExistingDeviceBlocState> mapEventToState(ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
       yield* this._startSearch(event);
+    } else if (event is ExistingDeviceBlocEventReset) {
+      yield ExistingDeviceBlocStateIdle();
     }
   }
 
@@ -69,14 +65,6 @@ class ExistingDeviceBloc extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlo
       yield ExistingDeviceBlocStateNotFound();
       return;
     }
-    yield ExistingDeviceBlocStateFound();
-    final deviceName = await KVDevice.fetchStringParam(ip, "DEVICE_NAME");
-    final deviceId = await KVDevice.fetchStringParam(ip, "BROKER_CLIENTID");
-    final config = await KVDevice.fetchConfig(ip);
-
-    final deviceData = DeviceData(deviceId, deviceName);
-    deviceData.config = config;
-    // TODO store deviceData
-    yield ExistingDeviceBlocStateDone(deviceData);
+    yield ExistingDeviceBlocStateFound(ip);
   }
 }

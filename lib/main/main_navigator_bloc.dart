@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_setup/bloc/device_setup_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_setup/ui/device_setup_page.dart';
 import 'package:super_green_app/pages/add_device/existing_device/bloc/existing_device_bloc.dart';
 import 'package:super_green_app/pages/add_device/existing_device/ui/existing_device_page.dart';
 import 'package:super_green_app/pages/add_device/new_device/bloc/new_device_bloc.dart';
@@ -22,6 +24,14 @@ class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
+  final String ip;
+  MainNavigateToDeviceSetupEvent(this.ip);
+
   @override
   List<Object> get props => [];
 }
@@ -59,6 +69,12 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
           builder: (context) => BlocProvider(
                 create: (context) => ExistingDeviceBloc(),
                 child: ExistingDevicePage(),
+              )));
+    } else if (event is MainNavigateToDeviceSetupEvent) {
+      navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => BlocProvider(
+                create: (context) => DeviceSetupBloc(event.ip),
+                child: DeviceSetupPage(),
               )));
     }
   }
