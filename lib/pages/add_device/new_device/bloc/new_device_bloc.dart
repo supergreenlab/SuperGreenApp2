@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/apis/device/kv_device.dart';
 import 'package:super_green_app/models/device/device_data.dart';
 import 'package:wifi_iot/wifi_iot.dart';
@@ -16,6 +18,11 @@ class NewDeviceBlocEventStartSearch extends NewDeviceBlocEvent {
 abstract class NewDeviceBlocState extends Equatable {}
 
 class NewDeviceBlocStateIdle extends NewDeviceBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class NewDeviceBlocStateMissingPermission extends NewDeviceBlocState {
   @override
   List<Object> get props => [];
 }
@@ -50,6 +57,8 @@ class NewDeviceBlocStateDone extends NewDeviceBlocState {
 
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
 
+  final PermissionHandler _permissionHandler = PermissionHandler();
+
     @override
   NewDeviceBlocState get initialState => NewDeviceBlocStateIdle();
 
@@ -65,6 +74,16 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   }
 
   Stream<NewDeviceBlocState> _startSearch(NewDeviceBlocEventStartSearch event) async* {
-    print(await WiFiForIoTPlugin.getSSID());
+    if (Platform.isIOS && await _permissionHandler.checkPermissionStatus(PermissionGroup.locationWhenInUse) != PermissionStatus.granted) {
+      final result = await _permissionHandler.requestPermissions([PermissionGroup.locationWhenInUse]);
+      if (result[PermissionGroup.locationWhenInUse] != PermissionStatus.granted) {
+        yield NewDeviceBlocStateMissingPermission();
+        return;
+      }
+    }
+    final currentSSID = await WiFiForIoTPlugin.getSSID();
+    if (currentSSID != '🤖🍁') {
+      await WiFiForIoTPlugin.connect('🤖🍁', password: 'multipass', security: NetworkSecurity.WPA);
+    }
   }
 }
