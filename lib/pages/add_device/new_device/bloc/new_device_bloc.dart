@@ -4,16 +4,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/apis/device/kv_device.dart';
 import 'package:super_green_app/models/device/device_data.dart';
+import 'package:wifi_iot/wifi_iot.dart';
 
 abstract class NewDeviceBlocEvent extends Equatable {}
 
 class NewDeviceBlocEventStartSearch extends NewDeviceBlocEvent {
-  final String query;
-  NewDeviceBlocEventStartSearch(this.query);
-
   @override
-  List<Object> get props => [query];
-
+  List<Object> get props => [];
 }
 
 abstract class NewDeviceBlocState extends Equatable {}
@@ -56,6 +53,10 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
     @override
   NewDeviceBlocState get initialState => NewDeviceBlocStateIdle();
 
+  NewDeviceBloc() {
+    this.add(NewDeviceBlocEventStartSearch());
+  }
+
   @override
   Stream<NewDeviceBlocState> mapEventToState(NewDeviceBlocEvent event) async* {
     if (event is NewDeviceBlocEventStartSearch) {
@@ -64,19 +65,6 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   }
 
   Stream<NewDeviceBlocState> _startSearch(NewDeviceBlocEventStartSearch event) async* {
-    final ip = await KVDevice.resolveLocalName(event.query);
-    if (ip == "") {
-      yield NewDeviceBlocStateNotFound();
-      return;
-    }
-    yield NewDeviceBlocStateFound();
-    final deviceName = await KVDevice.fetchStringParam(ip, "DEVICE_NAME");
-    final deviceId = await KVDevice.fetchStringParam(ip, "BROKER_CLIENTID");
-    final config = await KVDevice.fetchConfig(ip);
-
-    final deviceData = DeviceData(deviceId, deviceName);
-    deviceData.config = config;
-    // TODO store deviceData
-    yield NewDeviceBlocStateDone(deviceData);
+    print(await WiFiForIoTPlugin.getSSID());
   }
 }

@@ -31,7 +31,11 @@ class WelcomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SvgPicture.asset("assets/super_green_lab_vertical.svg"),
+              SizedBox(
+                width: 200,
+                height: 300,
+                child: SvgPicture.asset("assets/super_green_lab_vertical.svg")
+              ),
               Text(
                 'Welcome to SuperGreenLab!',
                 style: TextStyle(

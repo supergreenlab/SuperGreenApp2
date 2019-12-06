@@ -590,6 +590,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  wifi_iot:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: d53e3ae20d871c7e738fc8db28df15ce39cbe1d4
+      url: "https://github.com/alternadom/WiFiFlutter.git"
+    source: git
+    version: "0.0.1"
   xml:
     dependency: transitive
     description:

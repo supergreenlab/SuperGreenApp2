@@ -13,8 +13,12 @@ void main() async {
         navigatorKey: _navigatorKey,
         title: 'SuperGreenLab',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+            primarySwatch: Colors.blue,
+            buttonTheme: ButtonThemeData(
+              buttonColor: Colors.blueAccent,
+              shape: RoundedRectangleBorder(),
+              textTheme: ButtonTextTheme.accent,
+            )),
         home: BlocProvider<AppInitBloc>(
           create: (context) => AppInitBloc(),
           child: AppInitPage(),
