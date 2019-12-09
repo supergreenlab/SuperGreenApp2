@@ -7,6 +7,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/models/app_data.dart';
 import 'package:super_green_app/models/device/device_data.dart';
+import 'package:super_green_app/models/device/module_data.dart';
+import 'package:super_green_app/models/device/param_data.dart';
 import 'package:super_green_app/storage/app_db.dart';
 
 abstract class AppInitEvent extends Equatable {}
@@ -58,6 +60,9 @@ class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
     Hive.init(appDocDir.path);
     Hive.registerAdapter(AppDataAdapter(), 35);
     Hive.registerAdapter(DeviceDataAdapter(), 36);
+    Hive.registerAdapter(ModuleDataAdapter(), 37);
+    Hive.registerAdapter(ParamDataAdapter(), 38);
+    Hive.registerAdapter(ParamTypeAdapter(), 39);
 
     await _db.init();
 

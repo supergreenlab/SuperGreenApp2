@@ -29,6 +29,7 @@ dependencies:
   flutter_bloc:
   provider:
   equatable:
+  url_launcher:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

@@ -4,26 +4,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
+import 'package:super_green_app/widgets/button_ok.dart';
 
 class WelcomePage extends StatelessWidget {
-  final showNextButton;
+  final _loading;
 
-  WelcomePage(this.showNextButton);
+  WelcomePage(this._loading);
 
   @override
   Widget build(BuildContext context) {
     final widgets = <Widget>[this._logo()];
-    if (this.showNextButton) {
+    if (this._loading == false) {
       widgets.add(this._nextButton(context));
     }
     return Scaffold(
         body: Container(
       padding: EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: widgets,
-      ),
+      child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 250),
+          child: Column(
+            key: ValueKey<bool>(_loading),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: widgets,
+          )),
     ));
   }
 
@@ -32,12 +36,12 @@ class WelcomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
-                width: 200,
-                height: 300,
-                child: SvgPicture.asset("assets/super_green_lab_vertical.svg")
-              ),
+                  width: 200,
+                  height: 300,
+                  child:
+                      SvgPicture.asset("assets/super_green_lab_vertical.svg")),
               Text(
-                'Welcome to SuperGreenLab!',
+                _loading ? 'Loading..' : 'Welcome to SuperGreenLab!',
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontFamily: 'Roboto',
@@ -49,12 +53,10 @@ class WelcomePage extends StatelessWidget {
       );
 
   Widget _nextButton(BuildContext context) => Center(
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(30.0),
-          ),
+        child: ButtonOK(
           onPressed: () => _next(context),
-          child: Text('Next'),
+          text: 'Next',
+          themeData: Theme.of(context),
         ),
       );
 

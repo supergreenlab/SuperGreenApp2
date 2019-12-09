@@ -2,6 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/models/device/device_data.dart';
+import 'package:super_green_app/pages/add_device/device_done/bloc/device_done_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_done/ui/device_done_page.dart';
+import 'package:super_green_app/pages/add_device/device_name/bloc/device_name_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_name/ui/device_name_page.dart';
 import 'package:super_green_app/pages/add_device/device_setup/bloc/device_setup_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_setup/ui/device_setup_page.dart';
 import 'package:super_green_app/pages/add_device/existing_device/bloc/existing_device_bloc.dart';
@@ -29,8 +34,24 @@ class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
-  final String ip;
+  final ip;
   MainNavigateToDeviceSetupEvent(this.ip);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
+  final DeviceData deviceData;
+  MainNavigateToDeviceNameEvent(this.deviceData);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
+  final DeviceData deviceData;
+  MainNavigateToDeviceDoneEvent(this.deviceData);
 
   @override
   List<Object> get props => [];
@@ -75,6 +96,18 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
           builder: (context) => BlocProvider(
                 create: (context) => DeviceSetupBloc(event.ip),
                 child: DeviceSetupPage(),
+              )));
+    } else if (event is MainNavigateToDeviceNameEvent) {
+      navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => BlocProvider(
+                create: (context) => DeviceNameBloc(event.deviceData),
+                child: DeviceNamePage(),
+              )));
+    } else if (event is MainNavigateToDeviceDoneEvent) {
+      navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => BlocProvider(
+                create: (context) => DeviceDoneBloc(event.deviceData),
+                child: DeviceDonePage(),
               )));
     }
   }

@@ -11,6 +11,7 @@ import 'package:super_green_app/pages/home/home_page/bloc/home_navigator_bloc.da
 import 'package:super_green_app/pages/home/home_social_page/bloc/home_social_bloc.dart';
 import 'package:super_green_app/pages/home/home_social_page/ui/home_social_page.dart';
 import 'package:super_green_app/pages/home/no_device/ui/no_device_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
@@ -67,7 +68,7 @@ class HomePage extends StatelessWidget {
                     ListTile(
                         leading: Icon(Icons.add_shopping_cart),
                         title: Text('Shop new'),
-                        onTap: () => _onAddExistingDevice(context)),
+                        onTap: () => _onShopNew(context)),
                     ListTile(
                         leading: Icon(Icons.settings), title: Text('Settings')),
                   ],
@@ -84,6 +85,10 @@ class HomePage extends StatelessWidget {
   void _onAddDevice(BuildContext context) {
     BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToNewDeviceEvent());
+  }
+
+  void _onShopNew(BuildContext context) {
+    launch('https://www.supergreenlab.com');
   }
 
   Route<dynamic> onGenerateRoute(BuildContext context, RouteSettings settings) {

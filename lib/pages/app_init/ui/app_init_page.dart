@@ -13,12 +13,12 @@ class AppInitPage extends StatelessWidget {
       builder: (BuildContext context, AppInitState state) {
         if (state is AppInitStateReady) {
           if (state.firstStart == true) {
-            return WelcomePage(true);
+            return WelcomePage(false);
           } else {
             BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
           }
         }
-        return WelcomePage(false);
+        return WelcomePage(true);
       },
     );
   }

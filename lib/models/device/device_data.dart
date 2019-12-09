@@ -10,8 +10,12 @@ class DeviceData {
   String name;
   @HiveField(3)
   String config;
+  @HiveField(4)
+  String ip;
+  @HiveField(5)
+  String mdns;
 
   List<String> modules = List();
 
-  DeviceData(this.id, this.name);
+  DeviceData(this.id, this.name, this.config, this.ip, this.mdns);
 }

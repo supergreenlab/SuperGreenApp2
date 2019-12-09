@@ -24,7 +24,26 @@ class KVDevice {
 
   static Future<String> fetchStringParam(
       String controllerIP, String paramName) async {
-    Response r = await get('http://$controllerIP/s?k=$paramName');
+    Response r = await get('http://$controllerIP/s?k=${paramName.toUpperCase()}');
     return r.body;
   }
+
+  static Future<int> fetchIntParam(
+      String controllerIP, String paramName) async {
+    Response r = await get('http://$controllerIP/i?k=${paramName.toUpperCase()}');
+    return int.parse(r.body);
+  }
+
+  static Future<String> setStringParam(
+      String controllerIP, String paramName, String value) async {
+    Response r = await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value');
+    return r.body;
+  }
+
+  static Future<int> setIntParam(
+      String controllerIP, String paramName, int value) async {
+    Response r = await get('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value');
+    return int.parse(r.body);
+  }
+
 }
