@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
           body: Navigator(
             key: _navigatorKey,
             onGenerateRoute: (settings) =>
-                this.onGenerateRoute(context, settings),
+                this._onGenerateRoute(context, settings),
           ),
         ));
   }
@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
     launch('https://www.supergreenlab.com');
   }
 
-  Route<dynamic> onGenerateRoute(BuildContext context, RouteSettings settings) {
+  Route<dynamic> _onGenerateRoute(BuildContext context, RouteSettings settings) {
     switch (settings.name) {
       case '/monitoring':
         return MaterialPageRoute(

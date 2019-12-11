@@ -14,11 +14,6 @@ class NewDeviceBlocEventStartSearch extends NewDeviceBlocEvent {
   List<Object> get props => [];
 }
 
-class NewDeviceBlocEventReset extends NewDeviceBlocEvent {
-  @override
-  List<Object> get props => [];
-}
-
 abstract class NewDeviceBlocState extends Equatable {}
 
 class NewDeviceBlocStateIdle extends NewDeviceBlocState {
@@ -68,8 +63,6 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   Stream<NewDeviceBlocState> mapEventToState(NewDeviceBlocEvent event) async* {
     if (event is NewDeviceBlocEventStartSearch) {
       yield* this._startSearch(event);
-    } else if (event is NewDeviceBlocEventReset) {
-      yield NewDeviceBlocStateIdle();
     }
   }
 

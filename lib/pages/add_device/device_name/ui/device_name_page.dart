@@ -14,30 +14,32 @@ class DeviceNamePageState extends State<DeviceNamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
-        bloc: Provider.of<DeviceNameBloc>(context),
-        builder: (context, state) {
-          if (state is DeviceNameBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToDeviceDoneEvent(state.deviceData));
-            Provider.of<DeviceNameBloc>(context)
-                .add(DeviceNameBlocEventReset());
-          }
-          return Scaffold(
-            appBar: AppBar(title: Text('Add device')),
-            body: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                  controller: _nameController,
-                )),
-                RaisedButton(
-                  onPressed: () => _handleInput(context),
-                  child: Text('OK'),
-                ),
-              ],
-            ));
-        });
+    return BlocListener(
+          bloc: Provider.of<DeviceNameBloc>(context),
+      listener: (BuildContext context, DeviceNameBlocState state) {
+        if (state is DeviceNameBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToDeviceNameEvent(state.deviceData));
+        }
+      },
+          child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
+          bloc: Provider.of<DeviceNameBloc>(context),
+          builder: (context, state) => Scaffold(
+              appBar: AppBar(title: Text('Add device')),
+              body: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                    controller: _nameController,
+                  )),
+                  RaisedButton(
+                    onPressed: () => _handleInput(context),
+                    child: Text('OK'),
+                  ),
+                ],
+              ))
+          ),
+    );
   }
 
   void _handleInput(BuildContext context) {

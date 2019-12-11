@@ -7,19 +7,22 @@ import 'package:super_green_app/pages/add_device/device_setup/bloc/device_setup_
 class DeviceSetupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
-        bloc: Provider.of<DeviceSetupBloc>(context),
-        builder: (context, state) {
-          if (state is DeviceSetupBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToDeviceNameEvent(state.deviceData));
-            Provider.of<DeviceSetupBloc>(context)
-                .add(DeviceSetupBlocEventReset());
-          }
-          return Scaffold(
-            appBar: AppBar(title: Text('Add device')),
-            body: Text('DeviceSetupPage'),
-          );
-        });
+    return BlocListener(
+      bloc: Provider.of<DeviceSetupBloc>(context),
+      listener: (BuildContext context, DeviceSetupBlocState state) {
+        if (state is DeviceSetupBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToDeviceNameEvent(state.deviceData));
+        }
+      },
+      child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
+          bloc: Provider.of<DeviceSetupBloc>(context),
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(title: Text('Add device')),
+              body: Text('DeviceSetupPage'),
+            );
+          }),
+    );
   }
 }

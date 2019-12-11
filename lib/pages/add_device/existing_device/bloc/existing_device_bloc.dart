@@ -15,11 +15,6 @@ class ExistingDeviceBlocEventStartSearch extends ExistingDeviceBlocEvent {
 
 }
 
-class ExistingDeviceBlocEventReset extends ExistingDeviceBlocEvent {
-  @override
-  List<Object> get props => [];
-}
-
 abstract class ExistingDeviceBlocState extends Equatable {}
 
 class ExistingDeviceBlocStateIdle extends ExistingDeviceBlocState {
@@ -54,8 +49,6 @@ class ExistingDeviceBloc extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlo
   Stream<ExistingDeviceBlocState> mapEventToState(ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
       yield* this._startSearch(event);
-    } else if (event is ExistingDeviceBlocEventReset) {
-      yield ExistingDeviceBlocStateIdle();
     }
   }
 
