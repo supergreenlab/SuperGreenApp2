@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/device/api/device_api.dart';
+import 'package:super_green_app/data/device/device_helper.dart';
 import 'package:super_green_app/data/device/storage/devices.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -47,7 +48,7 @@ class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   @override
   Stream<DeviceNameBlocState> mapEventToState(DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventSetName) {
-      await DeviceAPI.setStringParam(_args.device.ip, 'DEVICE_NAME', event.name);
+      await DeviceHelper.updateDeviceName(_args.device, event.name);
       yield DeviceNameBlocStateDone(_args.device);
     }
   }

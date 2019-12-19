@@ -66,6 +66,10 @@ class DevicesDB extends _$DevicesDB {
     return select(devices).watch();
   }
 
+  Future updateDevice(device) async {
+    await update(devices).replace(device);
+  }
+
   Future<int> addModule(ModulesCompanion module) {
     return into(modules).insert(module);
   }

@@ -52,9 +52,10 @@ class HomePage extends StatelessWidget {
         return ListView(
           children: devices
               .map((d) => ListTile(
-                  onTap: () => _selectDevice(context, d),
-                  title: Text('${d.name}'),
-                  subtitle: Text('online'),))
+                    onTap: () => _selectDevice(context, d),
+                    title: Text('${d.name}'),
+                    subtitle: Text('online'),
+                  ))
               .toList(),
         );
       },
@@ -63,9 +64,11 @@ class HomePage extends StatelessWidget {
 
   void _selectDevice(BuildContext context, Device device) {
     //ignore: close_sinks
-    HomeNavigatorBloc navigatorBloc = BlocProvider.of<HomeNavigatorBloc>(context);
+    HomeNavigatorBloc navigatorBloc =
+        BlocProvider.of<HomeNavigatorBloc>(context);
     Navigator.pop(context);
-    Timer(Duration(milliseconds: 250), () => navigatorBloc.add(HomeNavigateToMonitoringEvent(device)));
+    Timer(Duration(milliseconds: 250),
+        () => navigatorBloc.add(HomeNavigateToMonitoringEvent(device)));
   }
 
   Widget _drawerContent(BuildContext context) {
