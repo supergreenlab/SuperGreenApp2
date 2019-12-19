@@ -2,43 +2,58 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/device/storage/devices.dart';
 
-abstract class MainBlocEvent extends Equatable {}
+abstract class HomeBlocEvent extends Equatable {}
 
-class MainBlocEventLoadControllers extends MainBlocEvent {
+class HomeBlocEventLoadControllers extends HomeBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-abstract class MainBlocState extends Equatable {}
-
-class MainBlocStateLoading extends MainBlocState {
-  @override
-  List<Object> get props => [];
-}
-
-class MainBlocStateDevicesLoaded extends MainBlocState {
+class HomeBlocEventDeviceListUpdated extends HomeBlocEvent {
   final List<Device> devices;
 
-  MainBlocStateDevicesLoaded(this.devices);
+  HomeBlocEventDeviceListUpdated(this.devices);
 
+  @override
+  List<Object> get props => [devices];
+}
+
+abstract class HomeBlocState extends Equatable {}
+
+class HomeBlocStateLoadingDeviceList extends HomeBlocState {
   @override
   List<Object> get props => [];
 }
 
-class MainBloc extends Bloc<MainBlocEvent, MainBlocState> {
-  @override
-  MainBlocState get initialState => MainBlocStateLoading();
+class HomeBlocStateDeviceListUpdated extends HomeBlocState {
+  final List<Device> devices;
 
-  MainBloc() {
-    add(MainBlocEventLoadControllers());
+  HomeBlocStateDeviceListUpdated(this.devices);
+
+  @override
+  List<Object> get props => [devices];
+}
+
+class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
+  @override
+  HomeBlocState get initialState => HomeBlocStateLoadingDeviceList();
+
+  HomeBloc() {
+    add(HomeBlocEventLoadControllers());
   }
 
   @override
-  Stream<MainBlocState> mapEventToState(MainBlocEvent event) async* {
-    if (event is MainBlocEventLoadControllers) {
+  Stream<HomeBlocState> mapEventToState(HomeBlocEvent event) async* {
+    if (event is HomeBlocEventLoadControllers) {
       final db = DevicesDB.get();
-      List<Device> devices = await db.getDevices();
-      yield MainBlocStateDevicesLoaded(devices);
+      Stream<List<Device>> devicesStream = db.watchDevices();
+      devicesStream.listen(_onDeviceListChange);
+    } else if (event is HomeBlocEventDeviceListUpdated) {
+      yield HomeBlocStateDeviceListUpdated(event.devices);
     }
+  }
+
+  void _onDeviceListChange(List<Device> devices) {
+    add(HomeBlocEventDeviceListUpdated(devices));
   }
 }

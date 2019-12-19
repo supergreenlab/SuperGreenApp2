@@ -50,8 +50,8 @@ class MainNavigatorActionPop extends MainNavigatorEvent {
 }
 
 class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
-  final GlobalKey<NavigatorState> navigatorKey;
-  MainNavigatorBloc({this.navigatorKey});
+  final GlobalKey<NavigatorState> _navigatorKey;
+  MainNavigatorBloc(this._navigatorKey);
 
   @override
   dynamic get initialState => 0;
@@ -59,19 +59,19 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
   @override
   Stream<dynamic> mapEventToState(MainNavigatorEvent event) async* {
     if (event is MainNavigatorActionPop) {
-      navigatorKey.currentState.pop();
+      _navigatorKey.currentState.pop();
     } else if (event is MainNavigateToHomeEvent) {
-      navigatorKey.currentState.pushReplacementNamed('/home', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/home', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
-      navigatorKey.currentState.pushNamed('/setup/new', arguments: event);
+      _navigatorKey.currentState.pushNamed('/setup/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {
-      navigatorKey.currentState.pushNamed('/setup/add', arguments: event);
+      _navigatorKey.currentState.pushNamed('/setup/add', arguments: event);
     } else if (event is MainNavigateToDeviceSetupEvent) {
-      navigatorKey.currentState.pushReplacementNamed('/setup/load', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/setup/load', arguments: event);
     } else if (event is MainNavigateToDeviceNameEvent) {
-      navigatorKey.currentState.pushReplacementNamed('/setup/name', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/setup/name', arguments: event);
     } else if (event is MainNavigateToDeviceDoneEvent) {
-      navigatorKey.currentState.pushReplacementNamed('/setup/done', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/setup/done', arguments: event);
     }
   }
 }

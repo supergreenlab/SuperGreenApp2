@@ -1,25 +1,30 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:super_green_app/data/device/storage/devices.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_control_page/bloc/home_control_page.dart';
 import 'package:super_green_app/pages/home/home_control_page/ui/home_control_page.dart';
 import 'package:super_green_app/pages/home/home_monitoring_page/bloc/home_monitoring_bloc.dart';
 import 'package:super_green_app/pages/home/home_monitoring_page/ui/home_monitoring_page.dart';
+import 'package:super_green_app/pages/home/home_page/bloc/home_bloc.dart';
 import 'package:super_green_app/pages/home/home_page/bloc/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_social_page/bloc/home_social_bloc.dart';
 import 'package:super_green_app/pages/home/home_social_page/ui/home_social_page.dart';
 import 'package:super_green_app/pages/home/no_device/ui/no_device_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomePage extends StatelessWidget {
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
+final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HomeNavigatorBloc>(
-        create: (context) => HomeNavigatorBloc(navigatorKey: _navigatorKey),
+        create: (context) => HomeNavigatorBloc(_navigatorKey),
         child: Scaffold(
           appBar: AppBar(
             title: Text('SuperGreenLab'),
@@ -31,6 +36,36 @@ class HomePage extends StatelessWidget {
                 this._onGenerateRoute(context, settings),
           ),
         ));
+  }
+
+  Widget _deviceList(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeBlocState>(
+      bloc: Provider.of<HomeBloc>(context),
+      condition: (previousState, state) =>
+          state is HomeBlocStateLoadingDeviceList ||
+          state is HomeBlocStateDeviceListUpdated,
+      builder: (BuildContext context, HomeBlocState state) {
+        List<Device> devices = List();
+        if (state is HomeBlocStateDeviceListUpdated) {
+          devices = state.devices;
+        }
+        return ListView(
+          children: devices
+              .map((d) => ListTile(
+                  onTap: () => _selectDevice(context, d),
+                  title: Text('${d.name}'),
+                  subtitle: Text('online'),))
+              .toList(),
+        );
+      },
+    );
+  }
+
+  void _selectDevice(BuildContext context, Device device) {
+    //ignore: close_sinks
+    HomeNavigatorBloc navigatorBloc = BlocProvider.of<HomeNavigatorBloc>(context);
+    Navigator.pop(context);
+    Timer(Duration(milliseconds: 250), () => navigatorBloc.add(HomeNavigateToMonitoringEvent(device)));
   }
 
   Widget _drawerContent(BuildContext context) {
@@ -48,9 +83,7 @@ class HomePage extends StatelessWidget {
           ),
         ])),
         Expanded(
-          child: ListView(
-            children: <Widget>[],
-          ),
+          child: _deviceList(context),
         ),
         Divider(),
         Container(
@@ -104,19 +137,19 @@ class HomePage extends StatelessWidget {
       case '/monitoring':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => HomeMonitoringBloc(),
+                  create: (context) => HomeMonitoringBloc(settings.arguments),
                   child: HomeMonitoringPage(),
                 ));
       case '/control':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => HomeControlBloc(),
+                  create: (context) => HomeControlBloc(settings.arguments),
                   child: HomeControlPage(),
                 ));
       case '/social':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => HomeSocialBloc(),
+                  create: (context) => HomeSocialBloc(settings.arguments),
                   child: HomeSocialPage(),
                 ));
       default:

@@ -5,7 +5,7 @@ part 'devices.g.dart';
 class Devices extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get identifier => text().withLength(min: 1, max: 16)();
-  TextColumn get name => text().withLength(min: 8, max: 24)();
+  TextColumn get name => text().withLength(min: 1, max: 24)();
   TextColumn get config => text()();
   TextColumn get ip => text().withLength(min: 7, max: 15)();
   TextColumn get mdns => text().withLength(min: 1, max: 64)();
@@ -62,12 +62,17 @@ class DevicesDB extends _$DevicesDB {
     return select(devices).get();
   }
 
+  Stream<List<Device>> watchDevices() {
+    return select(devices).watch();
+  }
+
   Future<int> addModule(ModulesCompanion module) {
     return into(modules).insert(module);
   }
 
   Future<Module> getModule(int deviceID, String name) {
-    return (select(modules)..where((m) => m.device.equals(deviceID) & m.name.equals(name)))
+    return (select(modules)
+          ..where((m) => m.device.equals(deviceID) & m.name.equals(name)))
         .getSingle();
   }
 
@@ -76,11 +81,15 @@ class DevicesDB extends _$DevicesDB {
   }
 
   SimpleSelectStatement<Params, Param> _getParam(int deviceID, String key) {
-    return (select(params)..where((p) => p.device.equals(deviceID) & p.key.equals(key)));
+    return (select(params)
+      ..where((p) => p.device.equals(deviceID) & p.key.equals(key)));
   }
 
-  Stream<Param> getParam(int deviceID, String key) {
+  Future<Param> getParam(int deviceID, String key) {
+    return _getParam(deviceID, key).getSingle();
+  }
+
+  Stream<Param> watchParam(int deviceID, String key) {
     return _getParam(deviceID, key).watchSingle();
   }
-
 }

@@ -1,20 +1,33 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/device/storage/devices.dart';
 
 abstract class HomeNavigatorAction extends Equatable {}
 
 class HomeNavigateToMonitoringEvent extends HomeNavigatorAction {
+  final Device device;
+
+  HomeNavigateToMonitoringEvent(this.device);
+
   @override
   List<Object> get props => [];
 }
 
 class HomeNavigateToControlEvent extends HomeNavigatorAction {
+  final Device device;
+
+  HomeNavigateToControlEvent(this.device);
+
   @override
   List<Object> get props => [];
 }
 
 class HomeNavigateToSocialEvent extends HomeNavigatorAction {
+  final Device device;
+
+  HomeNavigateToSocialEvent(this.device);
+
   @override
   List<Object> get props => [];
 }
@@ -25,8 +38,8 @@ class HomeNavigatorActionPop extends HomeNavigatorAction {
 }
 
 class HomeNavigatorBloc extends Bloc<HomeNavigatorAction, dynamic> {
-  final GlobalKey<NavigatorState> navigatorKey;
-  HomeNavigatorBloc({this.navigatorKey});
+  final GlobalKey<NavigatorState> _navigatorKey;
+  HomeNavigatorBloc(this._navigatorKey);
 
   @override
   dynamic get initialState => 0;
@@ -34,13 +47,13 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorAction, dynamic> {
   @override
   Stream<dynamic> mapEventToState(HomeNavigatorAction event) async* {
     if (event is HomeNavigatorActionPop) {
-      navigatorKey.currentState.pop();
+      _navigatorKey.currentState.pop();
     } else if (event is HomeNavigateToMonitoringEvent) {
-      navigatorKey.currentState.pushReplacementNamed('/monitoring', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/monitoring', arguments: event);
     } else if (event is HomeNavigateToControlEvent) {
-      navigatorKey.currentState.pushReplacementNamed('/control', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/control', arguments: event);
     } else if (event is HomeNavigateToSocialEvent) {
-      navigatorKey.currentState.pushReplacementNamed('/social', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/social', arguments: event);
     }
   }
 

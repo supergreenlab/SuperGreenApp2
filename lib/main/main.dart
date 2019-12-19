@@ -7,6 +7,6 @@ void main() async {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
   runApp(BlocProvider<MainNavigatorBloc>(
-      create: (context) => MainNavigatorBloc(navigatorKey: navigatorKey),
+      create: (context) => MainNavigatorBloc(navigatorKey),
       child: MainPage(navigatorKey)));
 }

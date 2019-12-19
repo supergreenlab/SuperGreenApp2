@@ -76,7 +76,7 @@ class MainPage extends StatelessWidget {
       case '/home':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => MainBloc(),
+                  create: (context) => HomeBloc(),
                   child: HomePage(),
                 ));
       case '/setup/new':

@@ -196,7 +196,7 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
     return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 8, maxTextLength: 24);
+        minTextLength: 1, maxTextLength: 24);
   }
 
   final VerificationMeta _configMeta = const VerificationMeta('config');
