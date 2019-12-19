@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:super_green_app/models/device/device_data.dart';
+import 'package:super_green_app/storage/models/devices.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
 abstract class NewDeviceBlocEvent extends Equatable {}
@@ -42,11 +42,11 @@ class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
 }
 
 class NewDeviceBlocStateDone extends NewDeviceBlocState {
-  final DeviceData deviceData;
-  NewDeviceBlocStateDone(this.deviceData);
+  final Device device;
+  NewDeviceBlocStateDone(this.device);
 
   @override
-  List<Object> get props => [deviceData];
+  List<Object> get props => [device];
 }
 
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {

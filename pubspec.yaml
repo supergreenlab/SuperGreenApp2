@@ -23,6 +23,7 @@ dependencies:
   flutter_svg:
   permission_handler:
   path_provider:
+  moor_flutter:
   hive:
   hive_flutter:
   bloc:
@@ -41,6 +42,7 @@ dependencies:
 
 dev_dependencies:
   hive_generator:
+  moor_generator:
   build_runner:
   flutter_test:
     sdk: flutter

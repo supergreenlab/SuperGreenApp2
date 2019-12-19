@@ -92,6 +92,11 @@ class HomePage extends StatelessWidget {
   }
 
   Route<dynamic> _onGenerateRoute(BuildContext context, RouteSettings settings) {
+    if (settings.arguments == null) {
+        return MaterialPageRoute(
+            builder: (BuildContext context) => NoDevicePage(),
+            settings: settings);
+    }
     switch (settings.name) {
       case '/monitoring':
         return MaterialPageRoute(
