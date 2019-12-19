@@ -4,8 +4,9 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor_flutter/moor_flutter.dart';
-import 'package:super_green_app/apis/device/kv_device.dart';
-import 'package:super_green_app/storage/models/devices.dart';
+import 'package:super_green_app/data/device/api/device_api.dart';
+import 'package:super_green_app/data/device/storage/devices.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class DeviceSetupBlocEvent extends Equatable {}
 
@@ -40,12 +41,12 @@ class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
 }
 
 class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
-  String _ip;
+  final MainNavigateToDeviceSetupEvent _args;
 
   @override
   DeviceSetupBlocState get initialState => DeviceSetupBlocStateIdle();
 
-  DeviceSetupBloc(this._ip) {
+  DeviceSetupBloc(this._args) {
     Future.delayed(const Duration(seconds: 1),
         () => this.add(DeviceSetupBlocEventStartSetup()));
   }
@@ -63,14 +64,14 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
   Stream<DeviceSetupBlocState> _startSearch(
       DeviceSetupBlocEventStartSetup event) async* {
 
-    final deviceName = await KVDevice.fetchStringParam(_ip, "DEVICE_NAME");
-    final deviceId = await KVDevice.fetchStringParam(_ip, "BROKER_CLIENTID");
-    final mdnsDomain = await KVDevice.fetchStringParam(_ip, "MDNS_DOMAIN");
-    final config = await KVDevice.fetchConfig(_ip);
+    final deviceName = await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
+    final deviceId = await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
+    final mdnsDomain = await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
+    final config = await DeviceAPI.fetchConfig(_args.ip);
     final keys = json.decode(config);
 
     final db = DevicesDB.get();
-    final device = DevicesCompanion.insert(identifier: deviceId, name: deviceName, config: config, ip: _ip, mdns: mdnsDomain);
+    final device = DevicesCompanion.insert(identifier: deviceId, name: deviceName, config: config, ip: _args.ip, mdns: mdnsDomain);
     final deviceID = await db.addDevice(device);
     final Map<String, int> modules = Map();
 
@@ -85,10 +86,10 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
       ParamsCompanion param;
       if (type == INTEGER_TYPE) {
-        final value = await KVDevice.fetchIntParam(_ip, k['caps_name']);
+        final value = await DeviceAPI.fetchIntParam(_args.ip, k['caps_name']);
         param = ParamsCompanion.insert(device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, ivalue: Value(value));
       } else {
-        final value = await KVDevice.fetchStringParam(_ip, k['caps_name']);
+        final value = await DeviceAPI.fetchStringParam(_args.ip, k['caps_name']);
         param = ParamsCompanion.insert(device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, svalue: Value(value));
       }
       await db.addParam(param);

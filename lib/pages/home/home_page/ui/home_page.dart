@@ -38,13 +38,15 @@ class HomePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         DrawerHeader(
-          child: Column(children: <Widget>[
-            Expanded(child: SizedBox(
+            child: Column(children: <Widget>[
+          Expanded(
+            child: SizedBox(
               width: 100,
               height: 100,
-              child: SvgPicture.asset("assets/super_green_lab_vertical.svg"),),
+              child: SvgPicture.asset("assets/super_green_lab_vertical.svg"),
             ),
-          ])),
+          ),
+        ])),
         Expanded(
           child: ListView(
             children: <Widget>[],
@@ -91,11 +93,12 @@ class HomePage extends StatelessWidget {
     launch('https://www.supergreenlab.com');
   }
 
-  Route<dynamic> _onGenerateRoute(BuildContext context, RouteSettings settings) {
+  Route<dynamic> _onGenerateRoute(
+      BuildContext context, RouteSettings settings) {
     if (settings.arguments == null) {
-        return MaterialPageRoute(
-            builder: (BuildContext context) => NoDevicePage(),
-            settings: settings);
+      return MaterialPageRoute(
+          builder: (BuildContext context) => NoDevicePage(),
+          settings: settings);
     }
     switch (settings.name) {
       case '/monitoring':

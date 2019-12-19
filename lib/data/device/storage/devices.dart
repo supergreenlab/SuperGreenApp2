@@ -55,7 +55,7 @@ class DevicesDB extends _$DevicesDB {
   }
 
   Future<Device> getDevice(int id) {
-    return (select(devices)..where((t) => t.id.equals(id))).getSingle();
+    return (select(devices)..where((d) => d.id.equals(id))).getSingle();
   }
 
   Future<List<Device>> getDevices() {
@@ -66,8 +66,21 @@ class DevicesDB extends _$DevicesDB {
     return into(modules).insert(module);
   }
 
+  Future<Module> getModule(int deviceID, String name) {
+    return (select(modules)..where((m) => m.device.equals(deviceID) & m.name.equals(name)))
+        .getSingle();
+  }
+
   Future<int> addParam(ParamsCompanion param) {
     return into(params).insert(param);
+  }
+
+  SimpleSelectStatement<Params, Param> _getParam(int deviceID, String key) {
+    return (select(params)..where((p) => p.device.equals(deviceID) & p.key.equals(key)));
+  }
+
+  Stream<Param> getParam(int deviceID, String key) {
+    return _getParam(deviceID, key).watchSingle();
   }
 
 }

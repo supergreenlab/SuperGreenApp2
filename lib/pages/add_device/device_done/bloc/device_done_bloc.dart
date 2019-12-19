@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/apis/device/kv_device.dart';
-import 'package:super_green_app/storage/models/devices.dart';
+import 'package:super_green_app/data/device/api/device_api.dart';
+import 'package:super_green_app/data/device/storage/devices.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class DeviceDoneBlocEvent extends Equatable {}
 
@@ -36,19 +37,19 @@ class DeviceDoneBlocStateDone extends DeviceDoneBlocState {
 }
 
 class DeviceDoneBloc extends Bloc<DeviceDoneBlocEvent, DeviceDoneBlocState> {
-  Device _device;
+  final MainNavigateToDeviceDoneEvent _args;
 
   @override
   DeviceDoneBlocState get initialState => DeviceDoneBlocStateIdle();
 
-  DeviceDoneBloc(this._device);
+  DeviceDoneBloc(this._args);
 
   @override
   Stream<DeviceDoneBlocState> mapEventToState(DeviceDoneBlocEvent event) async* {
     if (event is DeviceDoneBlocEventSetName) {
-      await KVDevice.setStringParam(_device.ip, 'DEVICE_NAME', event.name);
-      await KVDevice.setStringParam(_device.ip, 'MDNS_DOMAIN', event.name.toLowerCase());
-      yield DeviceDoneBlocStateDone(_device);
+      await DeviceAPI.setStringParam(_args.device.ip, 'DEVICE_NAME', event.name);
+      await DeviceAPI.setStringParam(_args.device.ip, 'MDNS_DOMAIN', event.name.toLowerCase());
+      yield DeviceDoneBlocStateDone(_args.device);
     }
   }
 }

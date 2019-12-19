@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/apis/device/kv_device.dart';
-import 'package:super_green_app/storage/models/devices.dart';
+import 'package:super_green_app/data/device/api/device_api.dart';
+import 'package:super_green_app/data/device/storage/devices.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class DeviceNameBlocEvent extends Equatable {}
 
@@ -36,18 +37,18 @@ class DeviceNameBlocStateDone extends DeviceNameBlocState {
 }
 
 class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
-  Device _device;
+  final MainNavigateToDeviceNameEvent _args;
 
   @override
   DeviceNameBlocState get initialState => DeviceNameBlocStateIdle();
 
-  DeviceNameBloc(this._device);
+  DeviceNameBloc(this._args);
 
   @override
   Stream<DeviceNameBlocState> mapEventToState(DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventSetName) {
-      await KVDevice.setStringParam(_device.ip, 'DEVICE_NAME', event.name);
-      yield DeviceNameBlocStateDone(this._device);
+      await DeviceAPI.setStringParam(_args.device.ip, 'DEVICE_NAME', event.name);
+      yield DeviceNameBlocStateDone(_args.device);
     }
   }
 }

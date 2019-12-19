@@ -8,18 +8,25 @@ import 'package:super_green_app/pages/first_run/welcome/ui/welcome_page.dart';
 class AppInitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppInitBloc, AppInitState>(
+    return BlocListener(
       bloc: Provider.of<AppInitBloc>(context),
-      builder: (BuildContext context, AppInitState state) {
-        if (state is AppInitStateReady) {
-          if (state.firstStart == true) {
-            return WelcomePage(false);
-          } else {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
+        listener: (BuildContext context, AppInitBlocState state) {
+          if (state is AppInitBlocStateReady) {
+            if (state.firstStart == false) {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToHomeEvent());
+            }
           }
-        }
-        return WelcomePage(true);
-      },
+        },
+        child: BlocBuilder<AppInitBloc, AppInitBlocState>(
+        bloc: Provider.of<AppInitBloc>(context),
+        builder: (BuildContext context, AppInitBlocState state) {
+          if (state is AppInitBlocStateReady) {
+            return WelcomePage(!state.firstStart);
+          }
+          return WelcomePage(true);
+        },
+      ),
     );
   }
 }

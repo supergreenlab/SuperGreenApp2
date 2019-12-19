@@ -1,7 +1,7 @@
 import 'package:http/http.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
-class KVDevice {
+class DeviceAPI {
   static Future<String> resolveLocalName(String name) async {
     final MDnsClient client = MDnsClient();
     await client.start();

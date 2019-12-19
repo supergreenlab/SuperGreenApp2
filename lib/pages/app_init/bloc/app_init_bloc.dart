@@ -5,51 +5,51 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:super_green_app/storage/app_db.dart';
-import 'package:super_green_app/storage/models/app_data.dart';
+import 'package:super_green_app/data/app/app_db.dart';
+import 'package:super_green_app/data/app/models/app_data.dart';
 
-abstract class AppInitEvent extends Equatable {}
+abstract class AppInitBlocEvent extends Equatable {}
 
-class AppInitEventLoaded extends AppInitEvent {
+class AppInitBlocEventLoaded extends AppInitBlocEvent {
   final AppData appData;
-  AppInitEventLoaded(this.appData);
+  AppInitBlocEventLoaded(this.appData);
 
   @override
   List<Object> get props => [appData];
 }
 
-abstract class AppInitState extends Equatable {}
+abstract class AppInitBlocState extends Equatable {}
 
-class AppInitStateLoading extends AppInitState {
+class AppInitBlocStateLoading extends AppInitBlocState {
   @override
   List<Object> get props => [];
 }
 
-class AppInitStateReady extends  AppInitState {
+class AppInitBlocStateReady extends  AppInitBlocState {
   final bool firstStart;
 
-  AppInitStateReady(this.firstStart);
+  AppInitBlocStateReady(this.firstStart);
 
   @override
   List<Object> get props => [firstStart];
 
 }
 
-class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
+class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
   AppDB _db = AppDB();
 
   @override
-  AppInitState get initialState => AppInitStateLoading();
-
-  @override
-  Stream<AppInitState> mapEventToState(AppInitEvent event) async* {
-    if (event is AppInitEventLoaded) {
-      yield AppInitStateReady(event.appData.firstStart);
-    }
-  }
+  AppInitBlocState get initialState => AppInitBlocStateLoading();
 
   AppInitBloc() {
     _init();
+  }
+
+  @override
+  Stream<AppInitBlocState> mapEventToState(AppInitBlocEvent event) async* {
+    if (event is AppInitBlocEventLoaded) {
+      yield AppInitBlocStateReady(event.appData.firstStart);
+    }
   }
 
   _init() async {
@@ -60,7 +60,7 @@ class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
     await _db.init();
 
     AppData appData = _db.getAppData();
-    add(AppInitEventLoaded(appData));
+    add(AppInitBlocEventLoaded(appData));
   }
 
   done() {
