@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moor_flutter/moor_flutter.dart';
-import 'package:super_green_app/data/device/api/device_api.dart';
-import 'package:super_green_app/data/device/storage/devices.dart';
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/device_api.dart';
+import 'package:super_green_app/data/rel/device/devices.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class DeviceSetupBlocEvent extends Equatable {}
@@ -70,7 +71,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     final config = await DeviceAPI.fetchConfig(_args.ip);
     final keys = json.decode(config);
 
-    final db = DevicesDB.get();
+    final db = RelDB.get().devicesDAO;
     final device = DevicesCompanion.insert(identifier: deviceId, name: deviceName, config: config, ip: _args.ip, mdns: mdnsDomain);
     final deviceID = await db.addDevice(device);
     final Map<String, int> modules = Map();

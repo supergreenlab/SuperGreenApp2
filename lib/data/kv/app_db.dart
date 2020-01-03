@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:super_green_app/data/app/models/app_data.dart';
+import 'package:super_green_app/data/kv/models/app_data.dart';
 
 class AppDB {
   static final AppDB _instance = AppDB.newInstance();

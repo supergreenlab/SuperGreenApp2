@@ -12,8 +12,8 @@ import 'package:super_green_app/pages/add_device/new_device/bloc/new_device_bloc
 import 'package:super_green_app/pages/add_device/new_device/ui/new_device_page.dart';
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/ui/app_init_page.dart';
-import 'package:super_green_app/pages/home/home_page/bloc/home_bloc.dart';
-import 'package:super_green_app/pages/home/home_page/ui/home_page.dart';
+import 'package:super_green_app/pages/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feed/ui/feed_page.dart';
 
 Map<int, Color> primaryColor = {
   50: Color.fromRGBO(69, 69, 69, .1),
@@ -73,11 +73,11 @@ class MainPage extends StatelessWidget {
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
     switch (settings.name) {
-      case '/home':
+      case '/feed':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => HomeBloc(),
-                  child: HomePage(),
+                  create: (context) => FeedBloc(settings.arguments),
+                  child: FeedPage(),
                 ));
       case '/setup/new':
         return MaterialPageRoute(

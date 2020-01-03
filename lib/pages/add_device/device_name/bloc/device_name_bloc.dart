@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/device/api/device_api.dart';
-import 'package:super_green_app/data/device/device_helper.dart';
-import 'package:super_green_app/data/device/storage/devices.dart';
+import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class DeviceNameBlocEvent extends Equatable {}

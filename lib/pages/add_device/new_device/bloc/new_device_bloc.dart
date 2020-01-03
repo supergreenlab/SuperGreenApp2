@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:super_green_app/data/device/storage/devices.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
 abstract class NewDeviceBlocEvent extends Equatable {}

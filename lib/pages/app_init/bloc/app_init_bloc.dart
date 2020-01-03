@@ -5,8 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:super_green_app/data/app/app_db.dart';
-import 'package:super_green_app/data/app/models/app_data.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/app_data.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 

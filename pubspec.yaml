@@ -22,8 +22,10 @@ dependencies:
   rxdart:
   flutter_svg:
   permission_handler:
+  moor:
+  moor_ffi:
   path_provider:
-  moor_flutter:
+  path:
   hive:
   hive_flutter:
   bloc:

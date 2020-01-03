@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:super_green_app/data/device/storage/devices.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class MainNavigatorEvent extends Equatable {}
 
@@ -31,6 +31,14 @@ class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
 class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
   final Device device;
   MainNavigateToDeviceNameEvent(this.device);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToFeedEvent extends MainNavigatorEvent {
+  final Device device;
+  MainNavigateToFeedEvent(this.device);
 
   @override
   List<Object> get props => [];

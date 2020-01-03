@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'devices.dart';
+part of 'rel_db.dart';
 
 // **************************************************************************
 // MoorGenerator
@@ -51,7 +51,7 @@ class Device extends DataClass implements Insertable<Device> {
   @override
   Map<String, dynamic> toJson(
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
-    return {
+    return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'identifier': serializer.toJson<String>(identifier),
       'name': serializer.toJson<String>(name),
@@ -112,7 +112,7 @@ class Device extends DataClass implements Insertable<Device> {
           $mrjc(name.hashCode,
               $mrjc(config.hashCode, $mrjc(ip.hashCode, mdns.hashCode))))));
   @override
-  bool operator ==(other) =>
+  bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Device &&
           other.id == this.id &&
@@ -358,7 +358,7 @@ class Module extends DataClass implements Insertable<Module> {
   @override
   Map<String, dynamic> toJson(
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
-    return {
+    return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'device': serializer.toJson<int>(device),
       'name': serializer.toJson<String>(name),
@@ -410,7 +410,7 @@ class Module extends DataClass implements Insertable<Module> {
       $mrjc(device.hashCode,
           $mrjc(name.hashCode, $mrjc(isArray.hashCode, arrayLen.hashCode)))));
   @override
-  bool operator ==(other) =>
+  bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Module &&
           other.id == this.id &&
@@ -643,7 +643,7 @@ class Param extends DataClass implements Insertable<Param> {
   @override
   Map<String, dynamic> toJson(
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
-    return {
+    return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'device': serializer.toJson<int>(device),
       'module': serializer.toJson<int>(module),
@@ -714,7 +714,7 @@ class Param extends DataClass implements Insertable<Param> {
                   $mrjc(type.hashCode,
                       $mrjc(svalue.hashCode, ivalue.hashCode)))))));
   @override
-  bool operator ==(other) =>
+  bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Param &&
           other.id == this.id &&
@@ -951,14 +951,568 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   }
 }
 
-abstract class _$DevicesDB extends GeneratedDatabase {
-  _$DevicesDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+class Box extends DataClass implements Insertable<Box> {
+  final int id;
+  final int feed;
+  final String name;
+  Box({@required this.id, @required this.feed, @required this.name});
+  factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Box(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+    );
+  }
+  factory Box.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return Box(
+      id: serializer.fromJson<int>(json['id']),
+      feed: serializer.fromJson<int>(json['feed']),
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson(
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'feed': serializer.toJson<int>(feed),
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  @override
+  BoxesCompanion createCompanion(bool nullToAbsent) {
+    return BoxesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+    );
+  }
+
+  Box copyWith({int id, int feed, String name}) => Box(
+        id: id ?? this.id,
+        feed: feed ?? this.feed,
+        name: name ?? this.name,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Box(')
+          ..write('id: $id, ')
+          ..write('feed: $feed, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      $mrjf($mrjc(id.hashCode, $mrjc(feed.hashCode, name.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Box &&
+          other.id == this.id &&
+          other.feed == this.feed &&
+          other.name == this.name);
+}
+
+class BoxesCompanion extends UpdateCompanion<Box> {
+  final Value<int> id;
+  final Value<int> feed;
+  final Value<String> name;
+  const BoxesCompanion({
+    this.id = const Value.absent(),
+    this.feed = const Value.absent(),
+    this.name = const Value.absent(),
+  });
+  BoxesCompanion.insert({
+    this.id = const Value.absent(),
+    @required int feed,
+    @required String name,
+  })  : feed = Value(feed),
+        name = Value(name);
+  BoxesCompanion copyWith(
+      {Value<int> id, Value<int> feed, Value<String> name}) {
+    return BoxesCompanion(
+      id: id ?? this.id,
+      feed: feed ?? this.feed,
+      name: name ?? this.name,
+    );
+  }
+}
+
+class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $BoxesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+  GeneratedIntColumn _feed;
+  @override
+  GeneratedIntColumn get feed => _feed ??= _constructFeed();
+  GeneratedIntColumn _constructFeed() {
+    return GeneratedIntColumn(
+      'feed',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 32);
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, feed, name];
+  @override
+  $BoxesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'boxes';
+  @override
+  final String actualTableName = 'boxes';
+  @override
+  VerificationContext validateIntegrity(BoxesCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    } else if (id.isRequired && isInserting) {
+      context.missing(_idMeta);
+    }
+    if (d.feed.present) {
+      context.handle(
+          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
+    } else if (feed.isRequired && isInserting) {
+      context.missing(_feedMeta);
+    }
+    if (d.name.present) {
+      context.handle(
+          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+    } else if (name.isRequired && isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Box map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Box.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(BoxesCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.feed.present) {
+      map['feed'] = Variable<int, IntType>(d.feed.value);
+    }
+    if (d.name.present) {
+      map['name'] = Variable<String, StringType>(d.name.value);
+    }
+    return map;
+  }
+
+  @override
+  $BoxesTable createAlias(String alias) {
+    return $BoxesTable(_db, alias);
+  }
+}
+
+class Feed extends DataClass implements Insertable<Feed> {
+  final int id;
+  Feed({@required this.id});
+  factory Feed.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    return Feed(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+    );
+  }
+  factory Feed.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return Feed(
+      id: serializer.fromJson<int>(json['id']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson(
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+    };
+  }
+
+  @override
+  FeedsCompanion createCompanion(bool nullToAbsent) {
+    return FeedsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+    );
+  }
+
+  Feed copyWith({int id}) => Feed(
+        id: id ?? this.id,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Feed(')..write('id: $id')..write(')')).toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(id.hashCode);
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) || (other is Feed && other.id == this.id);
+}
+
+class FeedsCompanion extends UpdateCompanion<Feed> {
+  final Value<int> id;
+  const FeedsCompanion({
+    this.id = const Value.absent(),
+  });
+  FeedsCompanion.insert({
+    this.id = const Value.absent(),
+  });
+  FeedsCompanion copyWith({Value<int> id}) {
+    return FeedsCompanion(
+      id: id ?? this.id,
+    );
+  }
+}
+
+class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $FeedsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id];
+  @override
+  $FeedsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'feeds';
+  @override
+  final String actualTableName = 'feeds';
+  @override
+  VerificationContext validateIntegrity(FeedsCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    } else if (id.isRequired && isInserting) {
+      context.missing(_idMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Feed map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Feed.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(FeedsCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    return map;
+  }
+
+  @override
+  $FeedsTable createAlias(String alias) {
+    return $FeedsTable(_db, alias);
+  }
+}
+
+class FeedEntry extends DataClass implements Insertable<FeedEntry> {
+  final int id;
+  final DateTime date;
+  final String type;
+  final String params;
+  FeedEntry(
+      {@required this.id,
+      @required this.date,
+      @required this.type,
+      @required this.params});
+  factory FeedEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return FeedEntry(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      date:
+          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      params:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
+    );
+  }
+  factory FeedEntry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return FeedEntry(
+      id: serializer.fromJson<int>(json['id']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      type: serializer.fromJson<String>(json['type']),
+      params: serializer.fromJson<String>(json['params']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson(
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'date': serializer.toJson<DateTime>(date),
+      'type': serializer.toJson<String>(type),
+      'params': serializer.toJson<String>(params),
+    };
+  }
+
+  @override
+  FeedEntriesCompanion createCompanion(bool nullToAbsent) {
+    return FeedEntriesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      params:
+          params == null && nullToAbsent ? const Value.absent() : Value(params),
+    );
+  }
+
+  FeedEntry copyWith({int id, DateTime date, String type, String params}) =>
+      FeedEntry(
+        id: id ?? this.id,
+        date: date ?? this.date,
+        type: type ?? this.type,
+        params: params ?? this.params,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FeedEntry(')
+          ..write('id: $id, ')
+          ..write('date: $date, ')
+          ..write('type: $type, ')
+          ..write('params: $params')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(date.hashCode, $mrjc(type.hashCode, params.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is FeedEntry &&
+          other.id == this.id &&
+          other.date == this.date &&
+          other.type == this.type &&
+          other.params == this.params);
+}
+
+class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
+  final Value<int> id;
+  final Value<DateTime> date;
+  final Value<String> type;
+  final Value<String> params;
+  const FeedEntriesCompanion({
+    this.id = const Value.absent(),
+    this.date = const Value.absent(),
+    this.type = const Value.absent(),
+    this.params = const Value.absent(),
+  });
+  FeedEntriesCompanion.insert({
+    this.id = const Value.absent(),
+    @required DateTime date,
+    @required String type,
+    @required String params,
+  })  : date = Value(date),
+        type = Value(type),
+        params = Value(params);
+  FeedEntriesCompanion copyWith(
+      {Value<int> id,
+      Value<DateTime> date,
+      Value<String> type,
+      Value<String> params}) {
+    return FeedEntriesCompanion(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      type: type ?? this.type,
+      params: params ?? this.params,
+    );
+  }
+}
+
+class $FeedEntriesTable extends FeedEntries
+    with TableInfo<$FeedEntriesTable, FeedEntry> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $FeedEntriesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  GeneratedDateTimeColumn _date;
+  @override
+  GeneratedDateTimeColumn get date => _date ??= _constructDate();
+  GeneratedDateTimeColumn _constructDate() {
+    return GeneratedDateTimeColumn(
+      'date',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
+  @override
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn('type', $tableName, false,
+        minTextLength: 1, maxTextLength: 24);
+  }
+
+  final VerificationMeta _paramsMeta = const VerificationMeta('params');
+  GeneratedTextColumn _params;
+  @override
+  GeneratedTextColumn get params => _params ??= _constructParams();
+  GeneratedTextColumn _constructParams() {
+    return GeneratedTextColumn(
+      'params',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, date, type, params];
+  @override
+  $FeedEntriesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'feed_entries';
+  @override
+  final String actualTableName = 'feed_entries';
+  @override
+  VerificationContext validateIntegrity(FeedEntriesCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    } else if (id.isRequired && isInserting) {
+      context.missing(_idMeta);
+    }
+    if (d.date.present) {
+      context.handle(
+          _dateMeta, date.isAcceptableValue(d.date.value, _dateMeta));
+    } else if (date.isRequired && isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (d.type.present) {
+      context.handle(
+          _typeMeta, type.isAcceptableValue(d.type.value, _typeMeta));
+    } else if (type.isRequired && isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (d.params.present) {
+      context.handle(
+          _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
+    } else if (params.isRequired && isInserting) {
+      context.missing(_paramsMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FeedEntry map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return FeedEntry.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(FeedEntriesCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.date.present) {
+      map['date'] = Variable<DateTime, DateTimeType>(d.date.value);
+    }
+    if (d.type.present) {
+      map['type'] = Variable<String, StringType>(d.type.value);
+    }
+    if (d.params.present) {
+      map['params'] = Variable<String, StringType>(d.params.value);
+    }
+    return map;
+  }
+
+  @override
+  $FeedEntriesTable createAlias(String alias) {
+    return $FeedEntriesTable(_db, alias);
+  }
+}
+
+abstract class _$RelDB extends GeneratedDatabase {
+  _$RelDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $DevicesTable _devices;
   $DevicesTable get devices => _devices ??= $DevicesTable(this);
   $ModulesTable _modules;
   $ModulesTable get modules => _modules ??= $ModulesTable(this);
   $ParamsTable _params;
   $ParamsTable get params => _params ??= $ParamsTable(this);
+  $BoxesTable _boxes;
+  $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
+  $FeedsTable _feeds;
+  $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
+  $FeedEntriesTable _feedEntries;
+  $FeedEntriesTable get feedEntries => _feedEntries ??= $FeedEntriesTable(this);
+  DevicesDAO _devicesDAO;
+  DevicesDAO get devicesDAO => _devicesDAO ??= DevicesDAO(this as RelDB);
   @override
-  List<TableInfo> get allTables => [devices, modules, params];
+  List<TableInfo> get allTables =>
+      [devices, modules, params, boxes, feeds, feedEntries];
 }

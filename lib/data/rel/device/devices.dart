@@ -1,4 +1,6 @@
-import 'package:moor_flutter/moor_flutter.dart';
+
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'devices.g.dart';
 
@@ -32,23 +34,10 @@ class Params extends Table {
   IntColumn get ivalue => integer().nullable()();
 }
 
-@UseMoor(tables: [Devices, Modules, Params])
-class DevicesDB extends _$DevicesDB {
-  static DevicesDB _instance;
+@UseDao(tables: [Devices, Modules, Params])
+class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
 
-  factory DevicesDB.get() {
-    if (_instance == null) {
-      _instance = DevicesDB();
-    }
-    return _instance;
-  }
-
-  DevicesDB()
-      : super(FlutterQueryExecutor.inDatabaseFolder(
-            path: 'db.sqlite', logStatements: true));
-
-  @override
-  int get schemaVersion => 1;
+  DevicesDAO(RelDB db) : super(db);
 
   Future<int> addDevice(DevicesCompanion device) {
     return into(devices).insert(device);

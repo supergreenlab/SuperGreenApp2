@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/device/api/device_api.dart';
+import 'package:super_green_app/data/api/device_api.dart';
 
 abstract class ExistingDeviceBlocEvent extends Equatable {}
 
