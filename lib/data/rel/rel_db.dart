@@ -21,7 +21,7 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [Devices, Modules, Params, Boxes, Feeds, FeedEntries], daos: [DevicesDAO])
+@UseMoor(tables: [Devices, Modules, Params, Boxes, Feeds, FeedEntries], daos: [DevicesDAO, BoxesDAO, FeedsDAO])
 class RelDB extends _$RelDB {
   static RelDB _instance;
 

@@ -954,8 +954,13 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
 class Box extends DataClass implements Insertable<Box> {
   final int id;
   final int feed;
+  final int device;
   final String name;
-  Box({@required this.id, @required this.feed, @required this.name});
+  Box(
+      {@required this.id,
+      @required this.feed,
+      this.device,
+      @required this.name});
   factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -964,6 +969,7 @@ class Box extends DataClass implements Insertable<Box> {
     return Box(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
     );
   }
@@ -972,6 +978,7 @@ class Box extends DataClass implements Insertable<Box> {
     return Box(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
+      device: serializer.fromJson<int>(json['device']),
       name: serializer.fromJson<String>(json['name']),
     );
   }
@@ -981,6 +988,7 @@ class Box extends DataClass implements Insertable<Box> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
+      'device': serializer.toJson<int>(device),
       'name': serializer.toJson<String>(name),
     };
   }
@@ -990,13 +998,16 @@ class Box extends DataClass implements Insertable<Box> {
     return BoxesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
+      device:
+          device == null && nullToAbsent ? const Value.absent() : Value(device),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
     );
   }
 
-  Box copyWith({int id, int feed, String name}) => Box(
+  Box copyWith({int id, int feed, int device, String name}) => Box(
         id: id ?? this.id,
         feed: feed ?? this.feed,
+        device: device ?? this.device,
         name: name ?? this.name,
       );
   @override
@@ -1004,43 +1015,49 @@ class Box extends DataClass implements Insertable<Box> {
     return (StringBuffer('Box(')
           ..write('id: $id, ')
           ..write('feed: $feed, ')
+          ..write('device: $device, ')
           ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      $mrjf($mrjc(id.hashCode, $mrjc(feed.hashCode, name.hashCode)));
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(feed.hashCode, $mrjc(device.hashCode, name.hashCode))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Box &&
           other.id == this.id &&
           other.feed == this.feed &&
+          other.device == this.device &&
           other.name == this.name);
 }
 
 class BoxesCompanion extends UpdateCompanion<Box> {
   final Value<int> id;
   final Value<int> feed;
+  final Value<int> device;
   final Value<String> name;
   const BoxesCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
+    this.device = const Value.absent(),
     this.name = const Value.absent(),
   });
   BoxesCompanion.insert({
     this.id = const Value.absent(),
     @required int feed,
+    this.device = const Value.absent(),
     @required String name,
   })  : feed = Value(feed),
         name = Value(name);
   BoxesCompanion copyWith(
-      {Value<int> id, Value<int> feed, Value<String> name}) {
+      {Value<int> id, Value<int> feed, Value<int> device, Value<String> name}) {
     return BoxesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
+      device: device ?? this.device,
       name: name ?? this.name,
     );
   }
@@ -1071,6 +1088,18 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     );
   }
 
+  final VerificationMeta _deviceMeta = const VerificationMeta('device');
+  GeneratedIntColumn _device;
+  @override
+  GeneratedIntColumn get device => _device ??= _constructDevice();
+  GeneratedIntColumn _constructDevice() {
+    return GeneratedIntColumn(
+      'device',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   GeneratedTextColumn _name;
   @override
@@ -1081,7 +1110,7 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, feed, name];
+  List<GeneratedColumn> get $columns => [id, feed, device, name];
   @override
   $BoxesTable get asDslTable => this;
   @override
@@ -1102,6 +1131,12 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
           _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
     } else if (feed.isRequired && isInserting) {
       context.missing(_feedMeta);
+    }
+    if (d.device.present) {
+      context.handle(
+          _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
+    } else if (device.isRequired && isInserting) {
+      context.missing(_deviceMeta);
     }
     if (d.name.present) {
       context.handle(
@@ -1129,6 +1164,9 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     if (d.feed.present) {
       map['feed'] = Variable<int, IntType>(d.feed.value);
     }
+    if (d.device.present) {
+      map['device'] = Variable<int, IntType>(d.device.value);
+    }
     if (d.name.present) {
       map['name'] = Variable<String, StringType>(d.name.value);
     }
@@ -1143,19 +1181,23 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
 
 class Feed extends DataClass implements Insertable<Feed> {
   final int id;
-  Feed({@required this.id});
+  final String name;
+  Feed({@required this.id, @required this.name});
   factory Feed.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
     return Feed(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
     );
   }
   factory Feed.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
     return Feed(
       id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
@@ -1163,6 +1205,7 @@ class Feed extends DataClass implements Insertable<Feed> {
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
     };
   }
 
@@ -1170,35 +1213,46 @@ class Feed extends DataClass implements Insertable<Feed> {
   FeedsCompanion createCompanion(bool nullToAbsent) {
     return FeedsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
     );
   }
 
-  Feed copyWith({int id}) => Feed(
+  Feed copyWith({int id, String name}) => Feed(
         id: id ?? this.id,
+        name: name ?? this.name,
       );
   @override
   String toString() {
-    return (StringBuffer('Feed(')..write('id: $id')..write(')')).toString();
+    return (StringBuffer('Feed(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
   }
 
   @override
-  int get hashCode => $mrjf(id.hashCode);
+  int get hashCode => $mrjf($mrjc(id.hashCode, name.hashCode));
   @override
   bool operator ==(dynamic other) =>
-      identical(this, other) || (other is Feed && other.id == this.id);
+      identical(this, other) ||
+      (other is Feed && other.id == this.id && other.name == this.name);
 }
 
 class FeedsCompanion extends UpdateCompanion<Feed> {
   final Value<int> id;
+  final Value<String> name;
   const FeedsCompanion({
     this.id = const Value.absent(),
+    this.name = const Value.absent(),
   });
   FeedsCompanion.insert({
     this.id = const Value.absent(),
-  });
-  FeedsCompanion copyWith({Value<int> id}) {
+    @required String name,
+  }) : name = Value(name);
+  FeedsCompanion copyWith({Value<int> id, Value<String> name}) {
     return FeedsCompanion(
       id: id ?? this.id,
+      name: name ?? this.name,
     );
   }
 }
@@ -1216,8 +1270,17 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
   @override
-  List<GeneratedColumn> get $columns => [id];
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 24);
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, name];
   @override
   $FeedsTable get asDslTable => this;
   @override
@@ -1232,6 +1295,12 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
     } else if (id.isRequired && isInserting) {
       context.missing(_idMeta);
+    }
+    if (d.name.present) {
+      context.handle(
+          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+    } else if (name.isRequired && isInserting) {
+      context.missing(_nameMeta);
     }
     return context;
   }
@@ -1249,6 +1318,9 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
     final map = <String, Variable>{};
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.name.present) {
+      map['name'] = Variable<String, StringType>(d.name.value);
     }
     return map;
   }
@@ -1512,6 +1584,10 @@ abstract class _$RelDB extends GeneratedDatabase {
   $FeedEntriesTable get feedEntries => _feedEntries ??= $FeedEntriesTable(this);
   DevicesDAO _devicesDAO;
   DevicesDAO get devicesDAO => _devicesDAO ??= DevicesDAO(this as RelDB);
+  BoxesDAO _boxesDAO;
+  BoxesDAO get boxesDAO => _boxesDAO ??= BoxesDAO(this as RelDB);
+  FeedsDAO _feedsDAO;
+  FeedsDAO get feedsDAO => _feedsDAO ??= FeedsDAO(this as RelDB);
   @override
   List<TableInfo> get allTables =>
       [devices, modules, params, boxes, feeds, feedEntries];

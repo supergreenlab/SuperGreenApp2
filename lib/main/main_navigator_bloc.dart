@@ -6,6 +6,13 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 abstract class MainNavigatorEvent extends Equatable {}
 
 class MainNavigateToHomeEvent extends MainNavigatorEvent {
+  MainNavigateToHomeEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToNewBoxEvent extends MainNavigatorEvent {
   @override
   List<Object> get props => [];
 }
@@ -25,7 +32,7 @@ class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
   MainNavigateToDeviceSetupEvent(this.ip);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [ip];
 }
 
 class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
@@ -33,15 +40,7 @@ class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
   MainNavigateToDeviceNameEvent(this.device);
 
   @override
-  List<Object> get props => [];
-}
-
-class MainNavigateToFeedEvent extends MainNavigatorEvent {
-  final Device device;
-  MainNavigateToFeedEvent(this.device);
-
-  @override
-  List<Object> get props => [];
+  List<Object> get props => [device];
 }
 
 class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
@@ -49,7 +48,7 @@ class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
   MainNavigateToDeviceDoneEvent(this.device);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [device];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
@@ -70,16 +69,18 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       _navigatorKey.currentState.pop();
     } else if (event is MainNavigateToHomeEvent) {
       _navigatorKey.currentState.pushReplacementNamed('/home', arguments: event);
+    } else if (event is MainNavigateToNewBoxEvent) {
+      _navigatorKey.currentState.pushNamed('/box/new', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
-      _navigatorKey.currentState.pushNamed('/setup/new', arguments: event);
+      _navigatorKey.currentState.pushNamed('/device/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {
-      _navigatorKey.currentState.pushNamed('/setup/add', arguments: event);
+      _navigatorKey.currentState.pushNamed('/device/add', arguments: event);
     } else if (event is MainNavigateToDeviceSetupEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/setup/load', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/device/load', arguments: event);
     } else if (event is MainNavigateToDeviceNameEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/setup/name', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/device/name', arguments: event);
     } else if (event is MainNavigateToDeviceDoneEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/setup/done', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/device/done', arguments: event);
     }
   }
 }

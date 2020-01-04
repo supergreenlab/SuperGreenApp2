@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/add_box/bloc/add_box_bloc.dart';
+import 'package:super_green_app/pages/add_box/ui/add_box_page.dart';
 import 'package:super_green_app/pages/add_device/device_done/bloc/device_done_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_done/ui/device_done_page.dart';
 import 'package:super_green_app/pages/add_device/device_name/bloc/device_name_bloc.dart';
@@ -12,8 +14,8 @@ import 'package:super_green_app/pages/add_device/new_device/bloc/new_device_bloc
 import 'package:super_green_app/pages/add_device/new_device/ui/new_device_page.dart';
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/ui/app_init_page.dart';
-import 'package:super_green_app/pages/feed/bloc/feed_bloc.dart';
-import 'package:super_green_app/pages/feed/ui/feed_page.dart';
+import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
+import 'package:super_green_app/pages/home/ui/home_page.dart';
 
 Map<int, Color> primaryColor = {
   50: Color.fromRGBO(69, 69, 69, .1),
@@ -73,37 +75,43 @@ class MainPage extends StatelessWidget {
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
     switch (settings.name) {
-      case '/feed':
+      case '/home':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => FeedBloc(settings.arguments),
-                  child: FeedPage(),
+                  create: (context) => HomeBloc(),
+                  child: HomePage(),
                 ));
-      case '/setup/new':
+      case '/box/new':
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => NewBoxBloc(),
+                  child: NewBoxPage(),
+                ));
+      case '/device/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => NewDeviceBloc(),
                   child: NewDevicePage(),
                 ));
-      case '/setup/add':
+      case '/device/add':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => ExistingDeviceBloc(),
                   child: ExistingDevicePage(),
                 ));
-      case '/setup/load':
+      case '/device/load':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceSetupBloc(settings.arguments),
                   child: DeviceSetupPage(),
                 ));
-      case '/setup/name':
+      case '/device/name':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceNameBloc(settings.arguments),
                   child: DeviceNamePage(),
                 ));
-      case '/setup/done':
+      case '/device/done':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceDoneBloc(settings.arguments),
