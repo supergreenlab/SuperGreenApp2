@@ -22,4 +22,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   FeedsDAO(RelDB db) : super(db);
 
+  Future<int> addFeed(FeedsCompanion feed) {
+    return into(feeds).insert(feed);
+  }
 }

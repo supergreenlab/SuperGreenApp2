@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
 abstract class NewDeviceBlocEvent extends Equatable {}
@@ -37,25 +38,31 @@ class NewDeviceBlocStateConnectionToSSIDFailed extends NewDeviceBlocState {
 }
 
 class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
+  final Box box;
+
+  NewDeviceBlocStateConnectionToSSIDSuccess(this.box);
+
   @override
   List<Object> get props => [];
 }
 
 class NewDeviceBlocStateDone extends NewDeviceBlocState {
+  final Box box;
   final Device device;
-  NewDeviceBlocStateDone(this.device);
+  NewDeviceBlocStateDone(this.box, this.device);
 
   @override
   List<Object> get props => [device];
 }
 
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
+  MainNavigateToNewDeviceEvent _args;
   final PermissionHandler _permissionHandler = PermissionHandler();
 
   @override
   NewDeviceBlocState get initialState => NewDeviceBlocStateIdle();
 
-  NewDeviceBloc() {
+  NewDeviceBloc(this._args) {
     Future.delayed(const Duration(seconds: 1), () => this.add(NewDeviceBlocEventStartSearch()));
   }
 
@@ -90,6 +97,6 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
         return;
       }
     }
-    yield NewDeviceBlocStateConnectionToSSIDSuccess();
+    yield NewDeviceBlocStateConnectionToSSIDSuccess(_args.box);
   }
 }

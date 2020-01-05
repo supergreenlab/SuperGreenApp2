@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/add_box/bloc/add_box_bloc.dart';
-import 'package:super_green_app/pages/add_box/ui/add_box_page.dart';
+import 'package:super_green_app/pages/add_box/box_infos/bloc/new_box_infos_bloc.dart';
+import 'package:super_green_app/pages/add_box/box_infos/ui/new_box_infos_page.dart';
+import 'package:super_green_app/pages/add_box/select_device/bloc/select_device_bloc.dart';
+import 'package:super_green_app/pages/add_box/select_device/ui/select_device_page.dart';
 import 'package:super_green_app/pages/add_device/device_done/bloc/device_done_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_done/ui/device_done_page.dart';
 import 'package:super_green_app/pages/add_device/device_name/bloc/device_name_bloc.dart';
@@ -84,19 +86,25 @@ class MainPage extends StatelessWidget {
       case '/box/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => NewBoxBloc(),
-                  child: NewBoxPage(),
+                  create: (context) => NewBoxInfosBloc(),
+                  child: NewBoxInfosPage(),
+                ));
+      case '/box/device':
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => SelectDeviceBloc(settings.arguments),
+                  child: SelectDevicePage(),
                 ));
       case '/device/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => NewDeviceBloc(),
+                  create: (context) => NewDeviceBloc(settings.arguments),
                   child: NewDevicePage(),
                 ));
       case '/device/add':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => ExistingDeviceBloc(),
+                  create: (context) => ExistingDeviceBloc(settings.arguments),
                   child: ExistingDevicePage(),
                 ));
       case '/device/load':

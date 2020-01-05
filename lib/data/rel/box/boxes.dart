@@ -15,6 +15,18 @@ class Boxes extends Table {
 class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
   BoxesDAO(RelDB db) : super(db);
 
+  Future<Box> getBox(int id) {
+    return (select(boxes)..where((b) => b.id.equals(id))).getSingle();
+  }
+
+  Future<int> addBox(BoxesCompanion box) {
+    return into(boxes).insert(box);
+  }
+
+  Future updateBox(int boxID, BoxesCompanion box) {
+    return (update(boxes)..where((b) => b.id.equals(boxID))).write(box);
+  }
+
   Stream<List<Box>> watchBoxes() {
     return select(boxes).watch();
   }

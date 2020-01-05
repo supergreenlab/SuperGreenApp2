@@ -12,7 +12,7 @@ class ExistingDevicePage extends StatelessWidget {
       listener: (BuildContext context, ExistingDeviceBlocState state) {
         if (state is ExistingDeviceBlocStateFound) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceSetupEvent(state.ip));
+              .add(MainNavigateToDeviceSetupEvent(state.box, state.ip));
         }
       },
       child: BlocBuilder<ExistingDeviceBloc, ExistingDeviceBlocState>(

@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 
 abstract class SGLFeedBlocEvent extends Equatable {}
 
@@ -20,12 +19,12 @@ class SGLFeedBlocStateInit extends SGLFeedBlocState {
 
 class SGLFeedBloc
     extends Bloc<SGLFeedBlocEvent, SGLFeedBlocState> {
-  final HomeNavigateToFeedEvent _args;
+  final Feed _feed;
 
-  SGLFeedBloc(this._args);
+  SGLFeedBloc() : this._feed = Feed(id: 0, name: 'SuperGreenLab');
 
   @override
-  SGLFeedBlocState get initialState => SGLFeedBlocStateInit(_args.feed);
+  SGLFeedBlocState get initialState => SGLFeedBlocStateInit(_feed);
 
   @override
   Stream<SGLFeedBlocState> mapEventToState(

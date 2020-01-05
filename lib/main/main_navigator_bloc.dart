@@ -12,43 +12,64 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
-class MainNavigateToNewBoxEvent extends MainNavigatorEvent {
+class MainNavigateToNewBoxInfosEvent extends MainNavigatorEvent {
   @override
   List<Object> get props => [];
+}
+
+class MainNavigateToSelectBoxDeviceEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToSelectBoxDeviceEvent(this.box);
+
+  @override
+  List<Object> get props => [box];
 }
 
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToNewDeviceEvent(this.box);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToExistingDeviceEvent(this.box);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
   final ip;
-  MainNavigateToDeviceSetupEvent(this.ip);
+  final Box box;
+
+  MainNavigateToDeviceSetupEvent(this.box, this.ip);
 
   @override
   List<Object> get props => [ip];
 }
 
 class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
+  final Box box;
   final Device device;
-  MainNavigateToDeviceNameEvent(this.device);
+  MainNavigateToDeviceNameEvent(this.box, this.device);
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [box, device];
 }
 
 class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
+  final Box box;
   final Device device;
-  MainNavigateToDeviceDoneEvent(this.device);
+  MainNavigateToDeviceDoneEvent(this.box, this.device);
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [box, device];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
@@ -69,7 +90,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       _navigatorKey.currentState.pop();
     } else if (event is MainNavigateToHomeEvent) {
       _navigatorKey.currentState.pushReplacementNamed('/home', arguments: event);
-    } else if (event is MainNavigateToNewBoxEvent) {
+    } else if (event is MainNavigateToNewBoxInfosEvent) {
       _navigatorKey.currentState.pushNamed('/box/new', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
       _navigatorKey.currentState.pushNamed('/device/new', arguments: event);

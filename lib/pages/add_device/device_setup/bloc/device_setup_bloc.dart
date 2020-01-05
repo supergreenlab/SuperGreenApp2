@@ -34,8 +34,9 @@ class DeviceSetupBlocStateOutdated extends DeviceSetupBlocState {
 }
 
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
+  final Box box;
   final Device device;
-  DeviceSetupBlocStateDone(this.device);
+  DeviceSetupBlocStateDone(this.box, this.device);
 
   @override
   List<Object> get props => [device];
@@ -97,6 +98,6 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     }
 
     final d = await db.getDevice(deviceID);
-    yield DeviceSetupBlocStateDone(d);
+    yield DeviceSetupBlocStateDone(_args.box, d);
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +11,6 @@ import 'package:super_green_app/pages/feeds/sgl_feed/bloc/sgl_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/ui/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
 import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
@@ -35,7 +32,7 @@ class HomePage extends StatelessWidget {
         ));
   }
 
-  Widget _deviceList(BuildContext context) {
+  Widget _boxList(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeBlocState>(
       bloc: Provider.of<HomeBloc>(context),
       condition: (previousState, state) =>
@@ -51,7 +48,6 @@ class HomePage extends StatelessWidget {
               .map((b) => ListTile(
                     onTap: () => _selectBox(context, b),
                     title: Text('${b.name}'),
-                    subtitle: Text('online'),
                   ))
               .toList(),
         );
@@ -83,7 +79,7 @@ class HomePage extends StatelessWidget {
           ),
         ])),
         Expanded(
-          child: _deviceList(context),
+          child: _boxList(context),
         ),
         Divider(),
         Container(
@@ -106,19 +102,15 @@ class HomePage extends StatelessWidget {
 
   void _onAddBox(BuildContext context) {
     BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToNewBoxEvent());
-  }
-
-  void _onShopNew(BuildContext context) {
-    launch('https://www.supergreenlab.com');
+        .add(MainNavigateToNewBoxInfosEvent());
   }
 
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
-    if (!settings.arguments) {
+    if (settings.arguments == null) {
       return MaterialPageRoute(
           builder: (context) => BlocProvider(
-                create: (context) => SGLFeedBloc(settings.arguments),
+                create: (context) => SGLFeedBloc(),
                 child: SGLFeedPage(),
               ));
     }
@@ -132,7 +124,7 @@ class HomePage extends StatelessWidget {
       default:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => SGLFeedBloc(settings.arguments),
+                  create: (context) => SGLFeedBloc(),
                   child: SGLFeedPage(),
                 ));
     }
