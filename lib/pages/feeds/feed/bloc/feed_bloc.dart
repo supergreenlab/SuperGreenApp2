@@ -1,33 +1,66 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 
 abstract class FeedBlocEvent extends Equatable {}
 
-abstract class FeedBlocState extends Equatable {
-  final Feed feed;
-
-  FeedBlocState(this.feed);
+class FeedBlocEventLoadFeed extends FeedBlocEvent {
+  @override
+  List<Object> get props => [];
 }
+
+class FeedBlocEventFeedEntriesListUpdated extends FeedBlocEvent {
+  final List<FeedEntry> _feedEntries;
+
+  FeedBlocEventFeedEntriesListUpdated(this._feedEntries);
+
+  @override
+  List<Object> get props => [_feedEntries];
+}
+
+abstract class FeedBlocState extends Equatable {}
 
 class FeedBlocStateInit extends FeedBlocState {
-  FeedBlocStateInit(Feed feed) : super(feed);
+  FeedBlocStateInit() : super();
 
   @override
-  List<Object> get props => [this.feed];
+  List<Object> get props => [];
 }
 
-class FeedBloc
-    extends Bloc<FeedBlocEvent, FeedBlocState> {
-  final HomeNavigateToFeedEvent _args;
+class FeedBlocStateLoaded extends FeedBlocState {
+  final Feed feed;
+  final List<FeedEntry> entries;
 
-  FeedBloc(this._args);
-
-  @override
-  FeedBlocState get initialState => FeedBlocStateInit(_args.feed);
+  FeedBlocStateLoaded(this.feed, this.entries);
 
   @override
-  Stream<FeedBlocState> mapEventToState(
-      FeedBlocEvent event) async* {}
+  List<Object> get props => [feed, entries];
+}
+
+class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
+  final int _feedID;
+  Feed _feed;
+
+  FeedBloc(this._feedID) {
+    add(FeedBlocEventLoadFeed());
+  }
+
+  @override
+  FeedBlocState get initialState => FeedBlocStateInit();
+
+  @override
+  Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {
+    if (event is FeedBlocEventLoadFeed) {
+      final fdb = RelDB.get().feedsDAO;
+      _feed = await fdb.getFeed(_feedID);
+      final entries = fdb.watchEntries(_feedID);
+      entries.listen(_onFeedEntriesChange);
+    } else if (event is FeedBlocEventFeedEntriesListUpdated) {
+      yield FeedBlocStateLoaded(_feed, event._feedEntries);
+    }
+  }
+
+  void _onFeedEntriesChange(List<FeedEntry> entries) {
+    add(FeedBlocEventFeedEntriesListUpdated(entries));
+  }
 }

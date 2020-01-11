@@ -1,30 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class SGLFeedBlocEvent extends Equatable {}
 
-abstract class SGLFeedBlocState extends Equatable {
-  final Feed feed;
-
-  SGLFeedBlocState(this.feed);
-}
+abstract class SGLFeedBlocState extends Equatable {}
 
 class SGLFeedBlocStateInit extends SGLFeedBlocState {
-  SGLFeedBlocStateInit(Feed feed) : super(feed);
+  SGLFeedBlocStateInit() : super();
 
   @override
-  List<Object> get props => [this.feed];
+  List<Object> get props => [];
 }
 
 class SGLFeedBloc
     extends Bloc<SGLFeedBlocEvent, SGLFeedBlocState> {
-  final Feed _feed;
 
-  SGLFeedBloc() : this._feed = Feed(id: 0, name: 'SuperGreenLab');
+  SGLFeedBloc();
 
   @override
-  SGLFeedBlocState get initialState => SGLFeedBlocStateInit(_feed);
+  SGLFeedBlocState get initialState => SGLFeedBlocStateInit();
 
   @override
   Stream<SGLFeedBlocState> mapEventToState(

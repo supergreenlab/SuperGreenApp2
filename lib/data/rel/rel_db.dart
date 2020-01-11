@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:moor/moor.dart';
@@ -39,4 +40,22 @@ class RelDB extends _$RelDB {
   // are covered later in this readme.
   @override
   int get schemaVersion => 1;
+  
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    beforeOpen: (details) async {
+      if (details.wasCreated) {
+        int feed = await this.feedsDAO.addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
+        await this.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          type: 'TUTO',
+          feed: feed,
+          date: DateTime.now(),
+          params: JsonEncoder().convert({
+            'test': 'pouet',
+            'toto': 'tutu'
+          }),
+        ));
+      }
+    },
+  );
 }

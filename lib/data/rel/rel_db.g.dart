@@ -1333,11 +1333,13 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
 
 class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   final int id;
+  final int feed;
   final DateTime date;
   final String type;
   final String params;
   FeedEntry(
       {@required this.id,
+      @required this.feed,
       @required this.date,
       @required this.type,
       @required this.params});
@@ -1349,6 +1351,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
     final stringType = db.typeSystem.forDartType<String>();
     return FeedEntry(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
       type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
@@ -1360,6 +1363,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
     return FeedEntry(
       id: serializer.fromJson<int>(json['id']),
+      feed: serializer.fromJson<int>(json['feed']),
       date: serializer.fromJson<DateTime>(json['date']),
       type: serializer.fromJson<String>(json['type']),
       params: serializer.fromJson<String>(json['params']),
@@ -1370,6 +1374,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'feed': serializer.toJson<int>(feed),
       'date': serializer.toJson<DateTime>(date),
       'type': serializer.toJson<String>(type),
       'params': serializer.toJson<String>(params),
@@ -1380,6 +1385,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   FeedEntriesCompanion createCompanion(bool nullToAbsent) {
     return FeedEntriesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       params:
@@ -1387,9 +1393,11 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
     );
   }
 
-  FeedEntry copyWith({int id, DateTime date, String type, String params}) =>
+  FeedEntry copyWith(
+          {int id, int feed, DateTime date, String type, String params}) =>
       FeedEntry(
         id: id ?? this.id,
+        feed: feed ?? this.feed,
         date: date ?? this.date,
         type: type ?? this.type,
         params: params ?? this.params,
@@ -1398,6 +1406,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   String toString() {
     return (StringBuffer('FeedEntry(')
           ..write('id: $id, ')
+          ..write('feed: $feed, ')
           ..write('date: $date, ')
           ..write('type: $type, ')
           ..write('params: $params')
@@ -1406,13 +1415,16 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(date.hashCode, $mrjc(type.hashCode, params.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(feed.hashCode,
+          $mrjc(date.hashCode, $mrjc(type.hashCode, params.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is FeedEntry &&
           other.id == this.id &&
+          other.feed == this.feed &&
           other.date == this.date &&
           other.type == this.type &&
           other.params == this.params);
@@ -1420,30 +1432,36 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
 
 class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   final Value<int> id;
+  final Value<int> feed;
   final Value<DateTime> date;
   final Value<String> type;
   final Value<String> params;
   const FeedEntriesCompanion({
     this.id = const Value.absent(),
+    this.feed = const Value.absent(),
     this.date = const Value.absent(),
     this.type = const Value.absent(),
     this.params = const Value.absent(),
   });
   FeedEntriesCompanion.insert({
     this.id = const Value.absent(),
+    @required int feed,
     @required DateTime date,
     @required String type,
     @required String params,
-  })  : date = Value(date),
+  })  : feed = Value(feed),
+        date = Value(date),
         type = Value(type),
         params = Value(params);
   FeedEntriesCompanion copyWith(
       {Value<int> id,
+      Value<int> feed,
       Value<DateTime> date,
       Value<String> type,
       Value<String> params}) {
     return FeedEntriesCompanion(
       id: id ?? this.id,
+      feed: feed ?? this.feed,
       date: date ?? this.date,
       type: type ?? this.type,
       params: params ?? this.params,
@@ -1463,6 +1481,18 @@ class $FeedEntriesTable extends FeedEntries
   GeneratedIntColumn _constructId() {
     return GeneratedIntColumn('id', $tableName, false,
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+  GeneratedIntColumn _feed;
+  @override
+  GeneratedIntColumn get feed => _feed ??= _constructFeed();
+  GeneratedIntColumn _constructFeed() {
+    return GeneratedIntColumn(
+      'feed',
+      $tableName,
+      false,
+    );
   }
 
   final VerificationMeta _dateMeta = const VerificationMeta('date');
@@ -1499,7 +1529,7 @@ class $FeedEntriesTable extends FeedEntries
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, date, type, params];
+  List<GeneratedColumn> get $columns => [id, feed, date, type, params];
   @override
   $FeedEntriesTable get asDslTable => this;
   @override
@@ -1514,6 +1544,12 @@ class $FeedEntriesTable extends FeedEntries
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
     } else if (id.isRequired && isInserting) {
       context.missing(_idMeta);
+    }
+    if (d.feed.present) {
+      context.handle(
+          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
+    } else if (feed.isRequired && isInserting) {
+      context.missing(_feedMeta);
     }
     if (d.date.present) {
       context.handle(
@@ -1549,6 +1585,9 @@ class $FeedEntriesTable extends FeedEntries
     final map = <String, Variable>{};
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.feed.present) {
+      map['feed'] = Variable<int, IntType>(d.feed.value);
     }
     if (d.date.present) {
       map['date'] = Variable<DateTime, DateTimeType>(d.date.value);

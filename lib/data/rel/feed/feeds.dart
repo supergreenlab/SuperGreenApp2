@@ -11,6 +11,7 @@ class Feeds extends Table {
 @DataClassName("FeedEntry")
 class FeedEntries extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get feed => integer()();
   DateTimeColumn get date => dateTime()();
   TextColumn get type => text().withLength(min: 1, max: 24)();
 
@@ -24,5 +25,17 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   Future<int> addFeed(FeedsCompanion feed) {
     return into(feeds).insert(feed);
+  }
+
+  Future<Feed> getFeed(int feedID) {
+    return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
+  }
+  
+  Stream<List<FeedEntry>> watchEntries(int feedID) {
+    return (select(feedEntries)..where((fe) => fe.feed.equals(feedID))).watch();
+  }
+
+  Future<int> addFeedEntry(FeedEntriesCompanion feedEntry) {
+    return into(feedEntries).insert(feedEntry);
   }
 }

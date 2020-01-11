@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/add_box/box_infos/bloc/new_box_infos_bloc.dart';
-import 'package:super_green_app/pages/add_box/box_infos/ui/new_box_infos_page.dart';
+import 'package:super_green_app/pages/add_box/box_infos/bloc/box_infos_bloc.dart';
+import 'package:super_green_app/pages/add_box/box_infos/ui/box_infos_page.dart';
 import 'package:super_green_app/pages/add_box/select_device/bloc/select_device_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/ui/select_device_page.dart';
 import 'package:super_green_app/pages/add_device/device_done/bloc/device_done_bloc.dart';
@@ -86,8 +86,8 @@ class MainPage extends StatelessWidget {
       case '/box/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                  create: (context) => NewBoxInfosBloc(),
-                  child: NewBoxInfosPage(),
+                  create: (context) => BoxInfosBloc(),
+                  child: BoxInfosPage(),
                 ));
       case '/box/device':
         return MaterialPageRoute(

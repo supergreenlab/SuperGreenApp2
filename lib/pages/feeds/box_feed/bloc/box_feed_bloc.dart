@@ -6,17 +6,23 @@ import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 abstract class BoxFeedBlocEvent extends Equatable {}
 
 abstract class BoxFeedBlocState extends Equatable {
-  final Feed feed;
   final Box box;
 
-  BoxFeedBlocState(this.box, this.feed);
+  BoxFeedBlocState(this.box);
 }
 
 class BoxFeedBlocStateInit extends BoxFeedBlocState {
-  BoxFeedBlocStateInit(Box box, Feed feed) : super(box, feed);
+  BoxFeedBlocStateInit(Box box) : super(box);
 
   @override
-  List<Object> get props => [this.box, this.feed];
+  List<Object> get props => [box];
+}
+
+class BoxFeedBlocStateFeedLoaded extends BoxFeedBlocState {
+  BoxFeedBlocStateFeedLoaded(Box box, Feed feed) : super(box);
+
+  @override
+  List<Object> get props => [box];
 }
 
 class BoxFeedBloc
@@ -26,7 +32,7 @@ class BoxFeedBloc
   BoxFeedBloc(this._args);
 
   @override
-  BoxFeedBlocState get initialState => BoxFeedBlocStateInit(_args.box, _args.feed);
+  BoxFeedBlocState get initialState => BoxFeedBlocStateInit(_args.box);
 
   @override
   Stream<BoxFeedBlocState> mapEventToState(

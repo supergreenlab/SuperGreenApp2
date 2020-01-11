@@ -3,38 +3,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
-abstract class NewBoxInfosBlocEvent extends Equatable {}
+abstract class BoxInfosBlocEvent extends Equatable {}
 
-class NewBoxInfosBlocEventCreateBox extends NewBoxInfosBlocEvent {
+class BoxInfosBlocEventCreateBox extends BoxInfosBlocEvent {
   final String name;
-  NewBoxInfosBlocEventCreateBox(this.name);
+  BoxInfosBlocEventCreateBox(this.name);
 
   @override
   List<Object> get props => [];
 }
 
-abstract class NewBoxInfosBlocState extends Equatable {}
+abstract class BoxInfosBlocState extends Equatable {}
 
-class NewBoxInfosBlocStateIdle extends NewBoxInfosBlocState {
+class BoxInfosBlocStateIdle extends BoxInfosBlocState {
   @override
   List<Object> get props => [];
 }
 
-class NewBoxInfosBlocStateDone extends NewBoxInfosBlocState {
+class BoxInfosBlocStateDone extends BoxInfosBlocState {
   final Box box;
-  NewBoxInfosBlocStateDone(this.box);
+  BoxInfosBlocStateDone(this.box);
 
   @override
   List<Object> get props => [box];
 }
 
-class NewBoxInfosBloc extends Bloc<NewBoxInfosBlocEvent, NewBoxInfosBlocState> {
+class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
   @override
-  NewBoxInfosBlocState get initialState => NewBoxInfosBlocStateIdle();
+  BoxInfosBlocState get initialState => BoxInfosBlocStateIdle();
 
   @override
-  Stream<NewBoxInfosBlocState> mapEventToState(NewBoxInfosBlocEvent event) async* {
-    if (event is NewBoxInfosBlocEventCreateBox) {
+  Stream<BoxInfosBlocState> mapEventToState(BoxInfosBlocEvent event) async* {
+    if (event is BoxInfosBlocEventCreateBox) {
       final bdb = RelDB.get().boxesDAO;
       final fdb = RelDB.get().feedsDAO;
       final feed = FeedsCompanion.insert(name: event.name);
@@ -42,7 +42,7 @@ class NewBoxInfosBloc extends Bloc<NewBoxInfosBlocEvent, NewBoxInfosBlocState> {
       final box = BoxesCompanion.insert(device: Value(0), feed: feedID, name: event.name);
       final boxID = await bdb.addBox(box);
       final b = await bdb.getBox(boxID);
-      yield NewBoxInfosBlocStateDone(b);
+      yield BoxInfosBlocStateDone(b);
     }
   }
 }

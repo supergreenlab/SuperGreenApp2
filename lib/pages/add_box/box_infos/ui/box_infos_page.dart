@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_box/box_infos/bloc/new_box_infos_bloc.dart';
+import 'package:super_green_app/pages/add_box/box_infos/bloc/box_infos_bloc.dart';
 
-class NewBoxInfosPage extends StatefulWidget {
+class BoxInfosPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => NewBoxInfosPageState();
+  State<StatefulWidget> createState() => BoxInfosPageState();
 }
 
-class NewBoxInfosPageState extends State<NewBoxInfosPage> {
+class BoxInfosPageState extends State<BoxInfosPage> {
   final _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: Provider.of<NewBoxInfosBloc>(context),
-      listener: (BuildContext context, NewBoxInfosBlocState state) {
-        if (state is NewBoxInfosBlocStateDone) {
+      bloc: Provider.of<BoxInfosBloc>(context),
+      listener: (BuildContext context, BoxInfosBlocState state) {
+        if (state is BoxInfosBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigateToSelectBoxDeviceEvent(state.box));
         }
       },
-      child: BlocBuilder<NewBoxInfosBloc, NewBoxInfosBlocState>(
-          bloc: Provider.of<NewBoxInfosBloc>(context),
+      child: BlocBuilder<BoxInfosBloc, BoxInfosBlocState>(
+          bloc: Provider.of<BoxInfosBloc>(context),
           builder: (context, state) => Scaffold(
               appBar: AppBar(title: Text('New Box infos')),
               body: Row(
@@ -42,7 +42,7 @@ class NewBoxInfosPageState extends State<NewBoxInfosPage> {
   }
 
   void _handleInput(BuildContext context) {
-    Provider.of<NewBoxInfosBloc>(context)
-        .add(NewBoxInfosBlocEventCreateBox(_nameController.text));
+    Provider.of<BoxInfosBloc>(context, listen: false)
+        .add(BoxInfosBlocEventCreateBox(_nameController.text));
   }
 }

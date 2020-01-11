@@ -42,7 +42,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   }
 
   void _handleInput(BuildContext context) {
-    Provider.of<DeviceNameBloc>(context)
+    Provider.of<DeviceNameBloc>(context, listen: false)
         .add(DeviceNameBlocEventSetName(_nameController.text));
   }
 }

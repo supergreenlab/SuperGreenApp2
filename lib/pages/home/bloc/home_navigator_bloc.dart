@@ -5,19 +5,20 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class HomeNavigatorEvent extends Equatable {}
 
-abstract class HomeNavigateToFeedEvent extends HomeNavigatorEvent {
-  final Feed feed;
-
-  HomeNavigateToFeedEvent(this.feed);
-}
-
-class HomeNavigateToBoxFeedEvent extends HomeNavigateToFeedEvent {
+class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {
   final Box box;
 
-  HomeNavigateToBoxFeedEvent(Feed feed, this.box) : super(feed);
+  HomeNavigateToBoxFeedEvent(this.box);
 
   @override
-  List<Object> get props => [this.feed, box];
+  List<Object> get props => [box];
+}
+
+class HomeNavigateToSGLFeedEvent extends HomeNavigatorEvent {
+  HomeNavigateToSGLFeedEvent() : super();
+
+  @override
+  List<Object> get props => [];
 }
 
 class HomeNavigatorEventPop extends HomeNavigatorEvent {
@@ -38,6 +39,8 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
       _navigatorKey.currentState.pop();
     } else if (event is HomeNavigateToBoxFeedEvent) {
       _navigatorKey.currentState.pushReplacementNamed('/feed/box', arguments: event);
+    } else if (event is HomeNavigateToSGLFeedEvent) {
+      _navigatorKey.currentState.pushReplacementNamed('/feed/sgl', arguments: event);
     }
   }
 
