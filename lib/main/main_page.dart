@@ -17,33 +17,10 @@ import 'package:super_green_app/pages/add_device/new_device/ui/new_device_page.d
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/ui/app_init_page.dart';
 import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
+import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/ui/home_page.dart';
 
-Map<int, Color> primaryColor = {
-  50: Color.fromRGBO(69, 69, 69, .1),
-  100: Color.fromRGBO(69, 69, 69, .2),
-  200: Color.fromRGBO(69, 69, 69, .3),
-  300: Color.fromRGBO(69, 69, 69, .4),
-  400: Color.fromRGBO(69, 69, 69, .5),
-  500: Color.fromRGBO(69, 69, 69, .6),
-  600: Color.fromRGBO(69, 69, 69, .7),
-  700: Color.fromRGBO(69, 69, 69, .8),
-  800: Color.fromRGBO(69, 69, 69, .9),
-  900: Color.fromRGBO(69, 69, 69, 1),
-};
-
-Map<int, Color> secondaryColor = {
-  50: Color.fromRGBO(59, 179, 11, .1),
-  100: Color.fromRGBO(59, 179, 11, .2),
-  200: Color.fromRGBO(59, 179, 11, .3),
-  300: Color.fromRGBO(59, 179, 11, .4),
-  400: Color.fromRGBO(59, 179, 11, .5),
-  500: Color.fromRGBO(59, 179, 11, .6),
-  600: Color.fromRGBO(59, 179, 11, .7),
-  700: Color.fromRGBO(59, 179, 11, .8),
-  800: Color.fromRGBO(59, 179, 11, .9),
-  900: Color.fromRGBO(59, 179, 11, 1),
-};
+final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 
 class MainPage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
@@ -57,16 +34,8 @@ class MainPage extends StatelessWidget {
       title: 'SuperGreenLab',
       onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
       theme: ThemeData(
-          fontFamily: 'Roboto',
-          primaryColor: Color(0XFF212845),
-          scaffoldBackgroundColor: Color(0XFFEFEFEF),
-          primarySwatch: MaterialColor(0xFF454545, primaryColor),
-          buttonColor: Color(0xff3bb30b),
-          accentColor: Colors.green,
-          buttonTheme: ButtonThemeData(
-            shape: RoundedRectangleBorder(),
-            textTheme: ButtonTextTheme.accent,
-          )),
+        fontFamily: 'Roboto',
+      ),
       home: BlocProvider<AppInitBloc>(
         create: (context) => AppInitBloc(),
         child: AppInitPage(),
@@ -79,53 +48,74 @@ class MainPage extends StatelessWidget {
     switch (settings.name) {
       case '/home':
         return MaterialPageRoute(
-            builder: (context) => BlocProvider(
-                  create: (context) => HomeBloc(),
-                  child: HomePage(),
+            builder: (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider<HomeNavigatorBloc>(
+                        create: (context) =>
+                            HomeNavigatorBloc(_homeNavigatorKey)),
+                    BlocProvider<HomeBloc>(
+                      create: (context) => HomeBloc(),
+                    )
+                  ],
+                  child: _wrapBg(context, HomePage(_homeNavigatorKey)),
                 ));
       case '/box/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => BoxInfosBloc(),
-                  child: BoxInfosPage(),
+                  child: _wrapBg(context, BoxInfosPage()),
                 ));
       case '/box/device':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SelectDeviceBloc(settings.arguments),
-                  child: SelectDevicePage(),
+                  child: _wrapBg(context, SelectDevicePage()),
                 ));
       case '/device/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => NewDeviceBloc(settings.arguments),
-                  child: NewDevicePage(),
+                  child: _wrapBg(context, NewDevicePage()),
                 ));
       case '/device/add':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => ExistingDeviceBloc(settings.arguments),
-                  child: ExistingDevicePage(),
+                  child: _wrapBg(context, ExistingDevicePage()),
                 ));
       case '/device/load':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceSetupBloc(settings.arguments),
-                  child: DeviceSetupPage(),
+                  child: _wrapBg(context, DeviceSetupPage()),
                 ));
       case '/device/name':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceNameBloc(settings.arguments),
-                  child: DeviceNamePage(),
+                  child: _wrapBg(context, DeviceNamePage()),
                 ));
       case '/device/done':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceDoneBloc(settings.arguments),
-                  child: DeviceDonePage(),
+                  child: _wrapBg(context, DeviceDonePage()),
                 ));
     }
     return MaterialPageRoute(builder: (context) => Text('Unknown route'));
+  }
+
+  Widget _wrapBg(BuildContext context, Widget w) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        colors: [Color(0xFF103A3A), Color(0xFF022C22), Color(0xFF298D9B)],
+        begin: Alignment(-0.25, 1),
+        end: Alignment(0.25, -1),
+      )),
+      child: w,
+    );
   }
 }

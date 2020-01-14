@@ -93,7 +93,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToNewBoxInfosEvent) {
       _navigatorKey.currentState.pushNamed('/box/new', arguments: event);
     } else if (event is MainNavigateToSelectBoxDeviceEvent) {
-      _navigatorKey.currentState.pushNamed('/box/device', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/box/device', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
       _navigatorKey.currentState.pushNamed('/device/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {

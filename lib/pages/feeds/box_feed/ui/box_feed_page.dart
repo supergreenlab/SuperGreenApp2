@@ -16,8 +16,11 @@ class BoxFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text('SuperGreenLab'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
       drawer: Drawer(child: this._drawerContent(context)),
       body: BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
@@ -30,42 +33,13 @@ class BoxFeedPage extends StatelessWidget {
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
-    return BlocProvider(
-      create: (context) => FeedBloc(state.box.feed),
-      child: FeedPage(),
-    );
-  }
-
-  Widget _boxList(BuildContext context) {
-    return BlocBuilder<BoxDrawerBloc, BoxDrawerBlocState>(
-      bloc: Provider.of<BoxDrawerBloc>(context),
-      condition: (previousState, state) =>
-          state is BoxDrawerBlocStateLoadingBoxList ||
-          state is BoxDrawerBlocStateBoxListUpdated,
-      builder: (BuildContext context, BoxDrawerBlocState state) {
-        List<Box> boxes = List();
-        if (state is BoxDrawerBlocStateBoxListUpdated) {
-          boxes = state.boxes;
-        }
-        return ListView(
-          children: boxes
-              .map((b) => ListTile(
-                    onTap: () => _selectBox(context, b),
-                    title: Text('${b.name}'),
-                  ))
-              .toList(),
-        );
-      },
-    );
-  }
-
-  void _selectBox(BuildContext context, Box box) {
-    //ignore: close_sinks
-    HomeNavigatorBloc navigatorBloc =
-        BlocProvider.of<HomeNavigatorBloc>(context);
-    Navigator.pop(context);
-    Timer(Duration(milliseconds: 250),
-        () => navigatorBloc.add(HomeNavigateToBoxFeedEvent(box)));
+    if (state is BoxFeedBlocStateFeedLoaded) {
+      return BlocProvider(
+        create: (context) => FeedBloc(state.box.feed),
+        child: FeedPage(),
+      );
+    }
+    return Text('Box loading');
   }
 
   Widget _drawerContent(BuildContext context) {
@@ -102,6 +76,38 @@ class BoxFeedPage extends StatelessWidget {
                 ))))
       ],
     );
+  }
+
+  Widget _boxList(BuildContext context) {
+    return BlocBuilder<BoxDrawerBloc, BoxDrawerBlocState>(
+      bloc: Provider.of<BoxDrawerBloc>(context),
+      condition: (previousState, state) =>
+          state is BoxDrawerBlocStateLoadingBoxList ||
+          state is BoxDrawerBlocStateBoxListUpdated,
+      builder: (BuildContext context, BoxDrawerBlocState state) {
+        List<Box> boxes = List();
+        if (state is BoxDrawerBlocStateBoxListUpdated) {
+          boxes = state.boxes;
+        }
+        return ListView(
+          children: boxes
+              .map((b) => ListTile(
+                    onTap: () => _selectBox(context, b),
+                    title: Text('${b.name}'),
+                  ))
+              .toList(),
+        );
+      },
+    );
+  }
+
+  void _selectBox(BuildContext context, Box box) {
+    //ignore: close_sinks
+    HomeNavigatorBloc navigatorBloc =
+        BlocProvider.of<HomeNavigatorBloc>(context);
+    Navigator.pop(context);
+    Timer(Duration(milliseconds: 250),
+        () => navigatorBloc.add(HomeNavigateToBoxFeedEvent(box)));
   }
 
   void _onAddBox(BuildContext context) {

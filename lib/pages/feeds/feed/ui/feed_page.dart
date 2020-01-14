@@ -11,12 +11,7 @@ class FeedPage extends StatelessWidget {
       bloc: Provider.of<FeedBloc>(context),
       builder: (BuildContext context, FeedBlocState state) {
         if (state is FeedBlocStateLoaded) {
-          return Column(
-            children: [
-              Text('FeedPage ${state.feed.name} ${state.feed.id}'),
-              Expanded(child: _renderCards(context, state)),
-            ],
-          );
+          return _renderCards(context, state);
         }
         return Text('FeedPage loading');
       },
@@ -27,18 +22,19 @@ class FeedPage extends StatelessWidget {
     return ListView(
       children: state.entries
           .map((e) => Card(
+                color: Color.fromARGB(40, 255, 255, 255),
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.album),
-                      title: Text('Feed'),
-                      subtitle: Text(e.date.toIso8601String()),
+                      leading: Icon(Icons.album, color: Colors.white,),
+                      title: const Text('Feed', style: TextStyle(color: Colors.white)),
+                      subtitle: Text(e.date.toIso8601String(), style: TextStyle(color: Colors.white)),
                     ),
-                    Text(e.params),
+                    Text(e.params, style: TextStyle(color: Colors.white)),
                     ButtonBar(
                       children: <Widget>[
                         FlatButton(
-                          child: const Text('CREATE BOX'),
+                          child: const Text('CREATE BOX', style: TextStyle(color: Color(0xFF3BB30B))),
                           onPressed: () {
                             BlocProvider.of<MainNavigatorBloc>(context)
                                 .add(MainNavigateToNewBoxInfosEvent());

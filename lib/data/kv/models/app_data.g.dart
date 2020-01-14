@@ -8,6 +8,9 @@ part of 'app_data.dart';
 
 class AppDataAdapter extends TypeAdapter<AppData> {
   @override
+  final typeId = 35;
+
+  @override
   AppData read(BinaryReader reader) {
     var numOfFields = reader.readByte();
     var fields = <int, dynamic>{

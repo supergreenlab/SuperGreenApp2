@@ -55,7 +55,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
   _init() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     Hive.init(appDocDir.path);
-    Hive.registerAdapter(AppDataAdapter(), 35);
+    Hive.registerAdapter(AppDataAdapter());
 
     await _db.init();
 

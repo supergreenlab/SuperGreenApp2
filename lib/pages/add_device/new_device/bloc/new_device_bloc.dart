@@ -8,6 +8,9 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
+const DefaultSSID = '🤖🍁';
+const DefaultPass = 'multipass';
+
 abstract class NewDeviceBlocEvent extends Equatable {}
 
 class NewDeviceBlocEventStartSearch extends NewDeviceBlocEvent {
@@ -88,10 +91,10 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
       }
     }
     final currentSSID = await WiFiForIoTPlugin.getSSID();
-    if (currentSSID != '🤖🍁') {
+    if (currentSSID != DefaultSSID) {
       yield NewDeviceBlocStateConnectingToSSID();
-      if (await WiFiForIoTPlugin.connect('🤖🍁',
-              password: 'multipass', security: NetworkSecurity.WPA) ==
+      if (await WiFiForIoTPlugin.connect(DefaultSSID,
+              password: DefaultPass, security: NetworkSecurity.WPA) ==
           false) {
         yield NewDeviceBlocStateConnectionToSSIDFailed();
         return;

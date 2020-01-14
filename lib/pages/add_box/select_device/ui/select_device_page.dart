@@ -20,7 +20,18 @@ class SelectDevicePage extends StatelessWidget {
           bloc: Provider.of<SelectDeviceBloc>(context),
           builder: (context, state) => Scaffold(
               appBar: AppBar(title: Text('Select Box device')),
-              body: _deviceList(context))),
+              body: Column(
+                children: [
+                  Expanded(child: _deviceList(context)),
+                  FlatButton(
+                    child: Text('ADD DEVICE'),
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToNewDeviceEvent(state.box));
+                    },
+                  )
+                ],
+              ))),
     );
   }
 
@@ -47,7 +58,7 @@ class SelectDevicePage extends StatelessWidget {
   }
 
   void _selectDevice(BuildContext context, Box box, Device device) {
-    Provider.of<SelectDeviceBloc>(context)
+    BlocProvider.of<SelectDeviceBloc>(context)
         .add(SelectDeviceBlocEventSelectDevice(box, device));
   }
 }

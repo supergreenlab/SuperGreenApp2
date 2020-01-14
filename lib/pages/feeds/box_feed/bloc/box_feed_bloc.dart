@@ -5,36 +5,56 @@ import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 
 abstract class BoxFeedBlocEvent extends Equatable {}
 
-abstract class BoxFeedBlocState extends Equatable {
+class BoxFeedBlocEventLoadBox extends BoxFeedBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+abstract class BoxFeedBlocState extends Equatable {}
+
+abstract class BoxFeedBlocStateBox extends BoxFeedBlocState {
   final Box box;
 
-  BoxFeedBlocState(this.box);
+  BoxFeedBlocStateBox(this.box);
 }
 
 class BoxFeedBlocStateInit extends BoxFeedBlocState {
-  BoxFeedBlocStateInit(Box box) : super(box);
+  @override
+  List<Object> get props => [];
+}
+
+class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
+  BoxFeedBlocStateBoxLoaded(Box box) : super(box);
 
   @override
   List<Object> get props => [box];
 }
 
-class BoxFeedBlocStateFeedLoaded extends BoxFeedBlocState {
+class BoxFeedBlocStateFeedLoaded extends BoxFeedBlocStateBox {
   BoxFeedBlocStateFeedLoaded(Box box, Feed feed) : super(box);
 
   @override
   List<Object> get props => [box];
 }
 
-class BoxFeedBloc
-    extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
+class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent _args;
 
-  BoxFeedBloc(this._args);
+  BoxFeedBloc(this._args) {
+    this.add(BoxFeedBlocEventLoadBox());
+  }
 
   @override
-  BoxFeedBlocState get initialState => BoxFeedBlocStateInit(_args.box);
+  BoxFeedBlocState get initialState => BoxFeedBlocStateInit();
 
   @override
-  Stream<BoxFeedBlocState> mapEventToState(
-      BoxFeedBlocEvent event) async* {}
+  Stream<BoxFeedBlocState> mapEventToState(BoxFeedBlocEvent event) async* {
+    if (event is BoxFeedBlocEventLoadBox) {
+      Box box = _args.box;
+      if (box == null) {
+        box = await RelDB.get().boxesDAO.getBox(1);
+      }
+      yield BoxFeedBlocStateBoxLoaded(box);
+    }
+  }
 }
