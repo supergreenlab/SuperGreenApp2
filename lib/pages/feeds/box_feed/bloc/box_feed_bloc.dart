@@ -30,13 +30,6 @@ class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
   List<Object> get props => [box];
 }
 
-class BoxFeedBlocStateFeedLoaded extends BoxFeedBlocStateBox {
-  BoxFeedBlocStateFeedLoaded(Box box, Feed feed) : super(box);
-
-  @override
-  List<Object> get props => [box];
-}
-
 class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent _args;
 

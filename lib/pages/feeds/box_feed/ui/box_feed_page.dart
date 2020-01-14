@@ -15,31 +15,38 @@ import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 class BoxFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: Text('SuperGreenLab'),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      drawer: Drawer(child: this._drawerContent(context)),
-      body: BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
-        bloc: Provider.of<BoxFeedBloc>(context),
-        builder: (BuildContext context, BoxFeedBlocState state) {
-          return _renderFeed(context, state);
-        },
-      ),
+    return BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
+      bloc: Provider.of<BoxFeedBloc>(context),
+      builder: (BuildContext context, BoxFeedBlocState state) {
+        String name = 'SuperGreenLab';
+        if (state is BoxFeedBlocStateBox) {
+          name = state.box.name;
+        }
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text(name),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
+          drawer: Drawer(child: this._drawerContent(context)),
+          body: _renderFeed(context, state),
+        );
+      },
     );
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
-    if (state is BoxFeedBlocStateFeedLoaded) {
+    if (state is BoxFeedBlocStateBox) {
       return BlocProvider(
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(),
       );
     }
-    return Text('Box loading');
+    return Text(
+      'Box loading',
+      style: TextStyle(color: Colors.white),
+    );
   }
 
   Widget _drawerContent(BuildContext context) {
