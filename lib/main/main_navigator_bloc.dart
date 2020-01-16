@@ -90,6 +90,15 @@ class MainNavigateToFeedLightFormEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
+class MainNavigateToFeedWaterFormEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToFeedWaterFormEvent(this.box);
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   @override
   List<Object> get props => [];
@@ -130,7 +139,10 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
           .pushReplacementNamed('/device/done', arguments: event);
     } else if (event is MainNavigateToFeedLightFormEvent) {
       _navigatorKey.currentState
-          .pushNamed('/feed/form', arguments: event);
+          .pushNamed('/feed/form/light', arguments: event);
+    } else if (event is MainNavigateToFeedWaterFormEvent) {
+      _navigatorKey.currentState
+          .pushNamed('/feed/form/water', arguments: event);
     }
   }
 }

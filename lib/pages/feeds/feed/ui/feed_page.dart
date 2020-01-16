@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_entries.dart';
 
 class FeedPage extends StatelessWidget {
   @override
@@ -21,31 +23,11 @@ class FeedPage extends StatelessWidget {
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
     return ListView(
       children: state.entries
-          .map((e) => Card(
-                color: Color.fromARGB(40, 255, 255, 255),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.album, color: Colors.white,),
-                      title: const Text('Feed', style: TextStyle(color: Colors.white)),
-                      subtitle: Text(e.date.toIso8601String(), style: TextStyle(color: Colors.white)),
-                    ),
-                    Text(e.params, style: TextStyle(color: Colors.white)),
-                    ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: const Text('CREATE BOX', style: TextStyle(color: Color(0xFF3BB30B))),
-                          onPressed: () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToNewBoxInfosEvent());
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ))
+          .map((e) => FeedEntriesHelper.cardForFeedEntry(state.feed, e))
           .toList(),
     );
   }
+}
+
+class FeedEntrie {
 }

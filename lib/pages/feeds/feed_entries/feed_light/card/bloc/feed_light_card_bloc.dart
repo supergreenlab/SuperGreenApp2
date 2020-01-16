@@ -14,12 +14,13 @@ class FeedLightCardBlocStateIdle extends FeedLightCardBlocState {
 }
 
 class FeedLightCardBloc extends Bloc<FeedLightCardBlocEvent, FeedLightCardBlocState> {
+  final Feed _feed;
   final FeedEntry _feedEntry;
 
   @override
   FeedLightCardBlocState get initialState => FeedLightCardBlocStateIdle();
 
-  FeedLightCardBloc(this._feedEntry);
+  FeedLightCardBloc(this._feed, this._feedEntry);
 
   @override
   Stream<FeedLightCardBlocState> mapEventToState(FeedLightCardBlocEvent event) async* {

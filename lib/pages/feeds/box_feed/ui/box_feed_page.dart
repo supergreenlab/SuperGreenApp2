@@ -60,7 +60,7 @@ class BoxFeedPage extends StatelessWidget {
             'Watering',
             Colors.blue,
             _onSpeedDialSelected(
-                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+                context, () => MainNavigateToFeedWaterFormEvent(state.box))),
         _renderSpeedDialChild(
             'Light dimming',
             Colors.yellow,

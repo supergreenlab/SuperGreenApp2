@@ -18,6 +18,8 @@ import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/ui/app_init_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_light/form/bloc/feed_light_form_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_light/form/ui/feed_light_form_page.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_water/form/bloc/feed_water_form_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_water/form/ui/feed_water_form_page.dart';
 import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
 import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/ui/home_page.dart';
@@ -103,11 +105,17 @@ class MainPage extends StatelessWidget {
                   create: (context) => DeviceDoneBloc(settings.arguments),
                   child: _wrapBg(context, DeviceDonePage()),
                 ));
-      case '/feed/form':
+      case '/feed/form/light':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => FeedLightFormBloc(settings.arguments),
                   child: _wrapBg(context, FeedLightFormPage()),
+                ), fullscreenDialog: true,);
+      case '/feed/form/water':
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => FeedWaterFormBloc(settings.arguments),
+                  child: _wrapBg(context, FeedWaterFormPage()),
                 ), fullscreenDialog: true,);
     }
     return MaterialPageRoute(builder: (context) => Text('Unknown route'));

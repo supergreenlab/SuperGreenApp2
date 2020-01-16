@@ -47,7 +47,7 @@ class RelDB extends _$RelDB {
       if (details.wasCreated) {
         int feed = await this.feedsDAO.addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
         await this.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-          type: 'TUTO',
+          type: 'FE_TOWELIE_INFO',
           feed: feed,
           date: DateTime.now(),
           params: JsonEncoder().convert({
