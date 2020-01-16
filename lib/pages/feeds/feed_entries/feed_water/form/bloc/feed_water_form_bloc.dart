@@ -24,7 +24,13 @@ class FeedWaterFormBlocStateIdle extends FeedWaterFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedWaterFormBloc extends Bloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
+class FeedWaterFormBlocStateDone extends FeedWaterFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class FeedWaterFormBloc
+    extends Bloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
   final MainNavigateToFeedWaterFormEvent _args;
 
   @override
@@ -33,15 +39,17 @@ class FeedWaterFormBloc extends Bloc<FeedWaterFormBlocEvent, FeedWaterFormBlocSt
   FeedWaterFormBloc(this._args);
 
   @override
-  Stream<FeedWaterFormBlocState> mapEventToState(FeedWaterFormBlocEvent event) async* {
-        if (event is FeedWaterFormBlocEventCreate) {
+  Stream<FeedWaterFormBlocState> mapEventToState(
+      FeedWaterFormBlocEvent event) async* {
+    if (event is FeedWaterFormBlocEventCreate) {
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-            type: 'FE_WATER',
-            feed: _args.box.feed,
-            date: DateTime.now(),
-            params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
-          ));
+        type: 'FE_WATER',
+        feed: _args.box.feed,
+        date: DateTime.now(),
+        params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
+      ));
+      yield FeedWaterFormBlocStateDone();
     }
   }
 }

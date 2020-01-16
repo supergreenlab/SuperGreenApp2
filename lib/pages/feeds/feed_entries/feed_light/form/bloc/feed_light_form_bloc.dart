@@ -24,6 +24,11 @@ class FeedLightFormBlocStateIdle extends FeedLightFormBlocState {
   List<Object> get props => [];
 }
 
+class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedLightFormBloc
     extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
   final MainNavigateToFeedLightFormEvent _args;
@@ -39,11 +44,12 @@ class FeedLightFormBloc
     if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-            type: 'FE_LIGHT',
-            feed: _args.box.feed,
-            date: DateTime.now(),
-            params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
-          ));
+        type: 'FE_LIGHT',
+        feed: _args.box.feed,
+        date: DateTime.now(),
+        params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
+      ));
+      yield FeedLightFormBlocStateDone();
     }
   }
 }
