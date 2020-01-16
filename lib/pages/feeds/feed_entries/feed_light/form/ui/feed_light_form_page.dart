@@ -11,10 +11,20 @@ class FeedLightFormPage extends StatelessWidget {
         builder: (context, state) => Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              title: Text('Add light change', style: TextStyle(color: Colors.white),),
+              title: Text(
+                'Add light change',
+                style: TextStyle(color: Colors.white),
+              ),
               backgroundColor: Colors.transparent,
               elevation: 0,
             ),
-            body: Text('LightChange', style: TextStyle(color: Colors.white))));
+            body: Column(children: [
+              Text('LightChange', style: TextStyle(color: Colors.white)),
+              RaisedButton(
+                child: Text('OK'),
+                onPressed: () => BlocProvider.of<FeedLightFormBloc>(context)
+                    .add(FeedLightFormBlocEventCreate('Test')),
+              ),
+            ])));
   }
 }

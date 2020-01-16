@@ -18,7 +18,7 @@ class FeedEntriesHelper {
           create: (context) => FeedLightCardBloc(feed, feedEntry),
           child: FeedLightCardPage(),
         ),
-    'FE_WATERING': (feed, feedEntry) => BlocProvider(
+    'FE_WATER': (feed, feedEntry) => BlocProvider(
           create: (context) => FeedWaterCardBloc(feed, feedEntry),
           child: FeedWaterCardPage(),
         ),

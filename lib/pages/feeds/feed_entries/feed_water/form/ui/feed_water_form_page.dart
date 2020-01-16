@@ -11,10 +11,20 @@ class FeedWaterFormPage extends StatelessWidget {
         builder: (context, state) => Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              title: Text('Add water change', style: TextStyle(color: Colors.white),),
+              title: Text(
+                'Add water',
+                style: TextStyle(color: Colors.white),
+              ),
               backgroundColor: Colors.transparent,
               elevation: 0,
             ),
-            body: Text('WaterChange', style: TextStyle(color: Colors.white))));
+            body: Column(children: [
+              Text('Water', style: TextStyle(color: Colors.white)),
+              RaisedButton(
+                child: Text('OK'),
+                onPressed: () => BlocProvider.of<FeedWaterFormBloc>(context)
+                    .add(FeedWaterFormBlocEventCreate('Test')),
+              ),
+            ])));
   }
 }

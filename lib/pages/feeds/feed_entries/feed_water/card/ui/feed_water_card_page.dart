@@ -14,7 +14,7 @@ class FeedWaterCardPage extends StatelessWidget {
                   children: [
                     ListTile(
                       leading: Icon(Icons.album, color: Colors.white,),
-                      title: const Text('Feed', style: TextStyle(color: Colors.white)),
+                      title: const Text('Feed water', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

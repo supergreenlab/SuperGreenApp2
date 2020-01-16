@@ -32,7 +32,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
   
   Stream<List<FeedEntry>> watchEntries(int feedID) {
-    return (select(feedEntries)..where((fe) => fe.feed.equals(feedID))).watch();
+    return (select(feedEntries)..where((fe) => fe.feed.equals(feedID))..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)])).watch();
   }
 
   Future<int> addFeedEntry(FeedEntriesCompanion feedEntry) {
