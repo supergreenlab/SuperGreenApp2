@@ -81,6 +81,15 @@ class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
   List<Object> get props => [box, device];
 }
 
+class MainNavigateToFeedLightFormEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToFeedLightFormEvent(this.box);
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   @override
   List<Object> get props => [];
@@ -97,22 +106,31 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
   Stream<dynamic> mapEventToState(MainNavigatorEvent event) async* {
     if (event is MainNavigatorActionPop) {
       _navigatorKey.currentState.pop();
-    } else if (event is MainNavigateToHomeEvent || event is MainNavigateToHomeBoxEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/home', arguments: event);
+    } else if (event is MainNavigateToHomeEvent ||
+        event is MainNavigateToHomeBoxEvent) {
+      _navigatorKey.currentState
+          .pushReplacementNamed('/home', arguments: event);
     } else if (event is MainNavigateToNewBoxInfosEvent) {
       _navigatorKey.currentState.pushNamed('/box/new', arguments: event);
     } else if (event is MainNavigateToSelectBoxDeviceEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/box/device', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/box/device', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
       _navigatorKey.currentState.pushNamed('/device/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {
       _navigatorKey.currentState.pushNamed('/device/add', arguments: event);
     } else if (event is MainNavigateToDeviceSetupEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/device/load', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/device/load', arguments: event);
     } else if (event is MainNavigateToDeviceNameEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/device/name', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/device/name', arguments: event);
     } else if (event is MainNavigateToDeviceDoneEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/device/done', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/device/done', arguments: event);
+    } else if (event is MainNavigateToFeedLightFormEvent) {
+      _navigatorKey.currentState
+          .pushNamed('/feed/form', arguments: event);
     }
   }
 }

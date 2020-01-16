@@ -28,8 +28,8 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Color(0xFF3BB30B),
+        unselectedItemColor: Colors.white30,
+        selectedItemColor: Colors.white,
         backgroundColor: Colors.transparent,
         onTap: (i) => this._onNavigationBarItemSelect(context, i),
         elevation: 0,
@@ -40,8 +40,8 @@ class HomePageState extends State<HomePage> {
             title: Text('Towelie'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.crop_square),
-            title: Text('Boxes'),
+            icon: Icon(Icons.home),
+            title: Text('Home'),
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.explore), title: Text('Explore')),

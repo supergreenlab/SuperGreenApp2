@@ -33,36 +33,76 @@ class BoxFeedPage extends StatelessWidget {
             ),
             drawer: Drawer(child: this._drawerContent(context)),
             body: _renderFeed(context, state),
-            floatingActionButton: SpeedDial(
-              backgroundColor: Color(0xFF3BB30B),
-              animatedIcon: AnimatedIcons.menu_close,
-              animatedIconTheme: IconThemeData(size: 22.0),
-              overlayOpacity: 0,
-              children: [
-                SpeedDialChild(
-                    child: Icon(Icons.accessibility),
-                    backgroundColor: Colors.red,
-                    label: 'First',
-                    labelStyle: TextStyle(fontSize: 15.0),
-                    onTap: () => print('FIRST CHILD')),
-                SpeedDialChild(
-                  child: Icon(Icons.brush),
-                  backgroundColor: Colors.blue,
-                  label: 'Second',
-                  labelStyle: TextStyle(fontSize: 15.0),
-                  onTap: () => print('SECOND CHILD'),
-                ),
-                SpeedDialChild(
-                  child: Icon(Icons.keyboard_voice),
-                  backgroundColor: Colors.green,
-                  label: 'Third',
-                  labelStyle: TextStyle(fontSize: 15.0),
-                  onTap: () => print('THIRD CHILD'),
-                ),
-              ],
-            ));
+            floatingActionButton: state is BoxFeedBlocStateBox
+                ? _renderSpeedDial(context, state)
+                : null);
       },
     );
+  }
+
+  SpeedDial _renderSpeedDial(BuildContext context, BoxFeedBlocStateBox state) {
+    return SpeedDial(
+      marginBottom: 10,
+      animationSpeed: 50,
+      curve: Curves.bounceIn,
+      backgroundColor: Colors.blueGrey,
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(size: 22.0),
+      overlayOpacity: 0.4,
+      overlayColor: Colors.black,
+      children: [
+        _renderSpeedDialChild(
+            'Video / photo',
+            Colors.amber,
+            _onSpeedDialSelected(context,
+                () => MainNavigateToFeedLightFormEvent(state.box))),
+        _renderSpeedDialChild(
+            'Watering',
+            Colors.blue,
+            _onSpeedDialSelected(
+                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+        _renderSpeedDialChild(
+            'Light dimming',
+            Colors.yellow,
+            _onSpeedDialSelected(
+                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+        _renderSpeedDialChild(
+            'Ventilation',
+            Colors.grey,
+            _onSpeedDialSelected(
+                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+        _renderSpeedDialChild(
+            'Defoliation',
+            Colors.green,
+            _onSpeedDialSelected(
+                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+        _renderSpeedDialChild(
+            'Topping',
+            Colors.blueGrey,
+            _onSpeedDialSelected(
+                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+        _renderSpeedDialChild(
+            'Veg/Bloom',
+            Colors.orange,
+            _onSpeedDialSelected(
+                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+      ],
+    );
+  }
+
+  SpeedDialChild _renderSpeedDialChild(
+      String label, Color color, void Function() navigateTo) {
+    return SpeedDialChild(
+      backgroundColor: color,
+      labelWidget: Text(label, style: TextStyle(color: Colors.white)),
+      onTap: navigateTo,
+    );
+  }
+
+  void Function() _onSpeedDialSelected(
+      BuildContext context, MainNavigatorEvent Function() navigatorEvent) {
+    return () =>
+        BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
