@@ -24,6 +24,12 @@ class AppDB {
     setAppData(appData);
   }
 
+  void setLastBox(int boxID) {
+    AppData appData = getAppData();
+    appData.lastBoxID = boxID;
+    setAppData(appData);
+  }
+
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
   }

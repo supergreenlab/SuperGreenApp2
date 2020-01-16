@@ -7,5 +7,5 @@ class AppData {
   @HiveField(0)
   bool firstStart = true;
   @HiveField(1)
-  String lastController = "";
+  int lastBoxID;
 }

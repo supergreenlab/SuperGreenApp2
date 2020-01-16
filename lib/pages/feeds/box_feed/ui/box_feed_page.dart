@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -20,18 +22,45 @@ class BoxFeedPage extends StatelessWidget {
       builder: (BuildContext context, BoxFeedBlocState state) {
         String name = 'SuperGreenLab';
         if (state is BoxFeedBlocStateBox) {
-          name = state.box.name;
+          name = StringUtils.capitalize(state.box.name);
         }
         return Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: Text(name),
-            elevation: 0,
             backgroundColor: Colors.transparent,
-          ),
-          drawer: Drawer(child: this._drawerContent(context)),
-          body: _renderFeed(context, state),
-        );
+            appBar: AppBar(
+              title: Text(name),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            ),
+            drawer: Drawer(child: this._drawerContent(context)),
+            body: _renderFeed(context, state),
+            floatingActionButton: SpeedDial(
+              backgroundColor: Color(0xFF3BB30B),
+              animatedIcon: AnimatedIcons.menu_close,
+              animatedIconTheme: IconThemeData(size: 22.0),
+              overlayOpacity: 0,
+              children: [
+                SpeedDialChild(
+                    child: Icon(Icons.accessibility),
+                    backgroundColor: Colors.red,
+                    label: 'First',
+                    labelStyle: TextStyle(fontSize: 15.0),
+                    onTap: () => print('FIRST CHILD')),
+                SpeedDialChild(
+                  child: Icon(Icons.brush),
+                  backgroundColor: Colors.blue,
+                  label: 'Second',
+                  labelStyle: TextStyle(fontSize: 15.0),
+                  onTap: () => print('SECOND CHILD'),
+                ),
+                SpeedDialChild(
+                  child: Icon(Icons.keyboard_voice),
+                  backgroundColor: Colors.green,
+                  label: 'Third',
+                  labelStyle: TextStyle(fontSize: 15.0),
+                  onTap: () => print('THIRD CHILD'),
+                ),
+              ],
+            ));
       },
     );
   }
@@ -42,6 +71,8 @@ class BoxFeedPage extends StatelessWidget {
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(),
       );
+    } else if (state is BoxFeedBlocStateNoBox) {
+      return Text('No box yet', style: TextStyle(color: Colors.white));
     }
     return Text(
       'Box loading',
@@ -53,16 +84,22 @@ class BoxFeedPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        DrawerHeader(
-            child: Column(children: <Widget>[
-          Expanded(
-            child: SizedBox(
-              width: 100,
-              height: 100,
+        Container(
+          height: 120,
+          child: DrawerHeader(
+              child: Row(children: <Widget>[
+            SizedBox(
+              width: 40,
+              height: 40,
               child: SvgPicture.asset("assets/super_green_lab_vertical.svg"),
             ),
-          ),
-        ])),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Text('Box list',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ])),
+        ),
         Expanded(
           child: _boxList(context),
         ),

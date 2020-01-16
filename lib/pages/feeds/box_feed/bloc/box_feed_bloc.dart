@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 
@@ -23,6 +25,13 @@ class BoxFeedBlocStateInit extends BoxFeedBlocState {
   List<Object> get props => [];
 }
 
+class BoxFeedBlocStateNoBox extends BoxFeedBlocState {
+  BoxFeedBlocStateNoBox() : super();
+
+  @override
+  List<Object> get props => [];
+}
+
 class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
   BoxFeedBlocStateBoxLoaded(Box box) : super(box);
 
@@ -42,10 +51,18 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
 
   @override
   Stream<BoxFeedBlocState> mapEventToState(BoxFeedBlocEvent event) async* {
+    AppDB _db = AppDB();
     if (event is BoxFeedBlocEventLoadBox) {
       Box box = _args.box;
       if (box == null) {
-        box = await RelDB.get().boxesDAO.getBox(1);
+        AppData appData = _db.getAppData();
+        if (appData.lastBoxID == null) {
+          yield BoxFeedBlocStateNoBox();
+          return;
+        }
+        box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
+      } else {
+        _db.setLastBox(box.id);
       }
       yield BoxFeedBlocStateBoxLoaded(box);
     }

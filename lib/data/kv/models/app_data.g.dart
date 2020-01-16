@@ -18,7 +18,7 @@ class AppDataAdapter extends TypeAdapter<AppData> {
     };
     return AppData()
       ..firstStart = fields[0] as bool
-      ..lastController = fields[1] as String;
+      ..lastBoxID = fields[1] as int;
   }
 
   @override
@@ -28,6 +28,6 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..writeByte(0)
       ..write(obj.firstStart)
       ..writeByte(1)
-      ..write(obj.lastController);
+      ..write(obj.lastBoxID);
   }
 }

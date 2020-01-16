@@ -33,6 +33,8 @@ dependencies:
   provider:
   equatable:
   url_launcher:
+  basic_utils:
+  flutter_speed_dial:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

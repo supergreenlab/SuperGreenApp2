@@ -13,7 +13,7 @@ class SGLFeedPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Center(child: Text('Home', style: TextStyle(color: Colors.white))),
+        title: Center(child: Text('Towelie', style: TextStyle(color: Colors.white))),
       ),
       body: BlocBuilder<SGLFeedBloc, SGLFeedBlocState>(
         bloc: Provider.of<SGLFeedBloc>(context),

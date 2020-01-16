@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class HomeNavigatorEvent extends Equatable {}
 
@@ -27,8 +28,14 @@ class HomeNavigatorEventPop extends HomeNavigatorEvent {
 }
 
 class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
+  final MainNavigatorEvent _args;
   final GlobalKey<NavigatorState> _navigatorKey;
-  HomeNavigatorBloc(this._navigatorKey);
+
+  HomeNavigatorBloc(this._args, this._navigatorKey) {
+    if (_args is MainNavigateToHomeBoxEvent) {
+      this.add(HomeNavigateToBoxFeedEvent((_args as MainNavigateToHomeBoxEvent).box));
+    }
+  }
 
   @override
   dynamic get initialState => 0;

@@ -36,15 +36,15 @@ class HomePageState extends State<HomePage> {
         currentIndex: _navigationIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('General'),
+            icon: Icon(Icons.feedback),
+            title: Text('Towelie'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.crop_square),
-            title: Text('Box'),
+            title: Text('Boxes'),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('Profile')),
+              icon: Icon(Icons.explore), title: Text('Explore')),
         ],
       ),
       body: Navigator(
@@ -55,6 +55,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void _onNavigationBarItemSelect(BuildContext context, int i) {
+    if (i == _navigationIndex) return;
     setState(() => _navigationIndex = i);
     if (i == 0) {
       BlocProvider.of<HomeNavigatorBloc>(context)
