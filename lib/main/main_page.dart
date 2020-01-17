@@ -16,8 +16,18 @@ import 'package:super_green_app/pages/add_device/new_device/bloc/new_device_bloc
 import 'package:super_green_app/pages/add_device/new_device/ui/new_device_page.dart';
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/ui/app_init_page.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_defoliation/form/bloc/feed_defoliation_form_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_defoliation/form/ui/feed_defoliation_form_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_light/form/bloc/feed_light_form_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_light/form/ui/feed_light_form_page.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_media/form/bloc/feed_media_form_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_media/form/ui/feed_media_form_page.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_schedule/form/bloc/feed_schedule_form_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_schedule/form/ui/feed_schedule_form_page.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_topping/form/bloc/feed_topping_form_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_topping/form/ui/feed_topping_form_page.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_ventilation/form/bloc/feed_ventilation_form_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed_entries/feed_ventilation/form/ui/feed_ventilation_form_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_water/form/bloc/feed_water_form_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_water/form/ui/feed_water_form_page.dart';
 import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
@@ -105,18 +115,62 @@ class MainPage extends StatelessWidget {
                   create: (context) => DeviceDoneBloc(settings.arguments),
                   child: _wrapBg(context, DeviceDonePage()),
                 ));
+      case '/feed/form/defoliation':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => FeedDefoliationFormBloc(settings.arguments),
+            child: _wrapBg(context, FeedDefoliationFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
       case '/feed/form/light':
         return MaterialPageRoute(
-            builder: (context) => BlocProvider(
-                  create: (context) => FeedLightFormBloc(settings.arguments),
-                  child: _wrapBg(context, FeedLightFormPage()),
-                ), fullscreenDialog: true,);
+          builder: (context) => BlocProvider(
+            create: (context) => FeedLightFormBloc(settings.arguments),
+            child: _wrapBg(context, FeedLightFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
+      case '/feed/form/media':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => FeedMediaFormBloc(settings.arguments),
+            child: _wrapBg(context, FeedMediaFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
+      case '/feed/form/schedule':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => FeedScheduleFormBloc(settings.arguments),
+            child: _wrapBg(context, FeedScheduleFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
+      case '/feed/form/topping':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => FeedToppingFormBloc(settings.arguments),
+            child: _wrapBg(context, FeedToppingFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
+      case '/feed/form/ventilation':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => FeedVentilationFormBloc(settings.arguments),
+            child: _wrapBg(context, FeedVentilationFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
       case '/feed/form/water':
         return MaterialPageRoute(
-            builder: (context) => BlocProvider(
-                  create: (context) => FeedWaterFormBloc(settings.arguments),
-                  child: _wrapBg(context, FeedWaterFormPage()),
-                ), fullscreenDialog: true,);
+          builder: (context) => BlocProvider(
+            create: (context) => FeedWaterFormBloc(settings.arguments),
+            child: _wrapBg(context, FeedWaterFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
     }
     return MaterialPageRoute(builder: (context) => Text('Unknown route'));
   }

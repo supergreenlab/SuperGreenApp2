@@ -99,6 +99,51 @@ class MainNavigateToFeedWaterFormEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
+class MainNavigateToFeedVentilationFormEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToFeedVentilationFormEvent(this.box);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToFeedMediaFormEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToFeedMediaFormEvent(this.box);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToFeedDefoliationFormEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToFeedDefoliationFormEvent(this.box);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToFeedScheduleFormEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToFeedScheduleFormEvent(this.box);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToFeedToppingFormEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToFeedToppingFormEvent(this.box);
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   @override
   List<Object> get props => [];
@@ -137,9 +182,24 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToDeviceDoneEvent) {
       _navigatorKey.currentState
           .pushReplacementNamed('/device/done', arguments: event);
+    } else if (event is MainNavigateToFeedDefoliationFormEvent) {
+      _navigatorKey.currentState
+          .pushNamed('/feed/form/defoliation', arguments: event);
     } else if (event is MainNavigateToFeedLightFormEvent) {
       _navigatorKey.currentState
           .pushNamed('/feed/form/light', arguments: event);
+    } else if (event is MainNavigateToFeedMediaFormEvent) {
+      _navigatorKey.currentState
+          .pushNamed('/feed/form/media', arguments: event);
+    } else if (event is MainNavigateToFeedScheduleFormEvent) {
+      _navigatorKey.currentState
+          .pushNamed('/feed/form/schedule', arguments: event);
+    } else if (event is MainNavigateToFeedToppingFormEvent) {
+      _navigatorKey.currentState
+          .pushNamed('/feed/form/topping', arguments: event);
+    } else if (event is MainNavigateToFeedVentilationFormEvent) {
+      _navigatorKey.currentState
+          .pushNamed('/feed/form/ventilation', arguments: event);
     } else if (event is MainNavigateToFeedWaterFormEvent) {
       _navigatorKey.currentState
           .pushNamed('/feed/form/water', arguments: event);

@@ -55,7 +55,7 @@ class BoxFeedPage extends StatelessWidget {
             'Video / photo',
             Colors.amber,
             _onSpeedDialSelected(context,
-                () => MainNavigateToFeedLightFormEvent(state.box))),
+                () => MainNavigateToFeedMediaFormEvent(state.box))),
         _renderSpeedDialChild(
             'Watering',
             Colors.blue,
@@ -70,22 +70,22 @@ class BoxFeedPage extends StatelessWidget {
             'Ventilation',
             Colors.grey,
             _onSpeedDialSelected(
-                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+                context, () => MainNavigateToFeedVentilationFormEvent(state.box))),
         _renderSpeedDialChild(
             'Defoliation',
             Colors.green,
             _onSpeedDialSelected(
-                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+                context, () => MainNavigateToFeedDefoliationFormEvent(state.box))),
         _renderSpeedDialChild(
             'Topping',
             Colors.blueGrey,
             _onSpeedDialSelected(
-                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+                context, () => MainNavigateToFeedToppingFormEvent(state.box))),
         _renderSpeedDialChild(
             'Veg/Bloom',
             Colors.orange,
             _onSpeedDialSelected(
-                context, () => MainNavigateToFeedLightFormEvent(state.box))),
+                context, () => MainNavigateToFeedScheduleFormEvent(state.box))),
       ],
     );
   }
