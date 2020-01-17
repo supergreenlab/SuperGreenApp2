@@ -955,11 +955,13 @@ class Box extends DataClass implements Insertable<Box> {
   final int id;
   final int feed;
   final int device;
+  final int deviceBox;
   final String name;
   Box(
       {@required this.id,
       @required this.feed,
       this.device,
+      this.deviceBox,
       @required this.name});
   factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -970,6 +972,8 @@ class Box extends DataClass implements Insertable<Box> {
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
       device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
+      deviceBox:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
     );
   }
@@ -979,6 +983,7 @@ class Box extends DataClass implements Insertable<Box> {
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
       device: serializer.fromJson<int>(json['device']),
+      deviceBox: serializer.fromJson<int>(json['deviceBox']),
       name: serializer.fromJson<String>(json['name']),
     );
   }
@@ -989,6 +994,7 @@ class Box extends DataClass implements Insertable<Box> {
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
       'device': serializer.toJson<int>(device),
+      'deviceBox': serializer.toJson<int>(deviceBox),
       'name': serializer.toJson<String>(name),
     };
   }
@@ -1000,14 +1006,19 @@ class Box extends DataClass implements Insertable<Box> {
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       device:
           device == null && nullToAbsent ? const Value.absent() : Value(device),
+      deviceBox: deviceBox == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceBox),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
     );
   }
 
-  Box copyWith({int id, int feed, int device, String name}) => Box(
+  Box copyWith({int id, int feed, int device, int deviceBox, String name}) =>
+      Box(
         id: id ?? this.id,
         feed: feed ?? this.feed,
         device: device ?? this.device,
+        deviceBox: deviceBox ?? this.deviceBox,
         name: name ?? this.name,
       );
   @override
@@ -1016,14 +1027,17 @@ class Box extends DataClass implements Insertable<Box> {
           ..write('id: $id, ')
           ..write('feed: $feed, ')
           ..write('device: $device, ')
+          ..write('deviceBox: $deviceBox, ')
           ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(feed.hashCode, $mrjc(device.hashCode, name.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(feed.hashCode,
+          $mrjc(device.hashCode, $mrjc(deviceBox.hashCode, name.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1031,6 +1045,7 @@ class Box extends DataClass implements Insertable<Box> {
           other.id == this.id &&
           other.feed == this.feed &&
           other.device == this.device &&
+          other.deviceBox == this.deviceBox &&
           other.name == this.name);
 }
 
@@ -1038,26 +1053,34 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   final Value<int> id;
   final Value<int> feed;
   final Value<int> device;
+  final Value<int> deviceBox;
   final Value<String> name;
   const BoxesCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
     this.device = const Value.absent(),
+    this.deviceBox = const Value.absent(),
     this.name = const Value.absent(),
   });
   BoxesCompanion.insert({
     this.id = const Value.absent(),
     @required int feed,
     this.device = const Value.absent(),
+    this.deviceBox = const Value.absent(),
     @required String name,
   })  : feed = Value(feed),
         name = Value(name);
   BoxesCompanion copyWith(
-      {Value<int> id, Value<int> feed, Value<int> device, Value<String> name}) {
+      {Value<int> id,
+      Value<int> feed,
+      Value<int> device,
+      Value<int> deviceBox,
+      Value<String> name}) {
     return BoxesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
       device: device ?? this.device,
+      deviceBox: deviceBox ?? this.deviceBox,
       name: name ?? this.name,
     );
   }
@@ -1100,6 +1123,18 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     );
   }
 
+  final VerificationMeta _deviceBoxMeta = const VerificationMeta('deviceBox');
+  GeneratedIntColumn _deviceBox;
+  @override
+  GeneratedIntColumn get deviceBox => _deviceBox ??= _constructDeviceBox();
+  GeneratedIntColumn _constructDeviceBox() {
+    return GeneratedIntColumn(
+      'device_box',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   GeneratedTextColumn _name;
   @override
@@ -1110,7 +1145,7 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, feed, device, name];
+  List<GeneratedColumn> get $columns => [id, feed, device, deviceBox, name];
   @override
   $BoxesTable get asDslTable => this;
   @override
@@ -1137,6 +1172,12 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
           _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
     } else if (device.isRequired && isInserting) {
       context.missing(_deviceMeta);
+    }
+    if (d.deviceBox.present) {
+      context.handle(_deviceBoxMeta,
+          deviceBox.isAcceptableValue(d.deviceBox.value, _deviceBoxMeta));
+    } else if (deviceBox.isRequired && isInserting) {
+      context.missing(_deviceBoxMeta);
     }
     if (d.name.present) {
       context.handle(
@@ -1166,6 +1207,9 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     }
     if (d.device.present) {
       map['device'] = Variable<int, IntType>(d.device.value);
+    }
+    if (d.deviceBox.present) {
+      map['device_box'] = Variable<int, IntType>(d.deviceBox.value);
     }
     if (d.name.present) {
       map['name'] = Variable<String, StringType>(d.name.value);

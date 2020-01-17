@@ -13,7 +13,7 @@ class SelectDevicePage extends StatelessWidget {
       listener: (BuildContext context, SelectDeviceBlocState state) {
         if (state is SelectDeviceBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToHomeBoxEvent(state.box));
+              .add(MainNavigateToSelectBoxDeviceBoxEvent(state.box));
         }
       },
       child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(

@@ -35,6 +35,15 @@ class MainNavigateToSelectBoxDeviceEvent extends MainNavigatorEvent {
   List<Object> get props => [box];
 }
 
+class MainNavigateToSelectBoxDeviceBoxEvent extends MainNavigatorEvent {
+  final Box box;
+
+  MainNavigateToSelectBoxDeviceBoxEvent(this.box);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
   final Box box;
 
@@ -169,6 +178,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSelectBoxDeviceEvent) {
       _navigatorKey.currentState
           .pushReplacementNamed('/box/device', arguments: event);
+    } else if (event is MainNavigateToSelectBoxDeviceBoxEvent) {
+      _navigatorKey.currentState
+          .pushReplacementNamed('/box/device/box', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
       _navigatorKey.currentState.pushNamed('/device/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {

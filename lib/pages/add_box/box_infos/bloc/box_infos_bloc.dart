@@ -39,7 +39,7 @@ class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
       final fdb = RelDB.get().feedsDAO;
       final feed = FeedsCompanion.insert(name: event.name);
       final feedID = await fdb.addFeed(feed);
-      final box = BoxesCompanion.insert(device: Value(0), feed: feedID, name: event.name);
+      final box = BoxesCompanion.insert(feed: feedID, name: event.name);
       final boxID = await bdb.addBox(box);
       final b = await bdb.getBox(boxID);
       yield BoxInfosBlocStateDone(b);

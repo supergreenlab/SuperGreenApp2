@@ -8,6 +8,7 @@ class Boxes extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
   IntColumn get device => integer().nullable()();
+  IntColumn get deviceBox => integer().nullable()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
 }
 

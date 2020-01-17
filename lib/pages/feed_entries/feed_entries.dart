@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/bloc/feed_towelie_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/ui/feed_towelie_info_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_defoliation/card/bloc/feed_defoliation_card_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_defoliation/card/ui/feed_defoliation_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_light/card/bloc/feed_light_card_bloc.dart';
@@ -11,8 +13,6 @@ import 'package:super_green_app/pages/feeds/feed_entries/feed_schedule/card/bloc
 import 'package:super_green_app/pages/feeds/feed_entries/feed_schedule/card/ui/feed_schedule_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_topping/card/bloc/feed_topping_card_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_topping/card/ui/feed_topping_card_page.dart';
-import 'package:super_green_app/pages/feeds/feed_entries/feed_towelie_info/card/bloc/feed_light_card_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed_entries/feed_towelie_info/card/ui/feed_towelie_info_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_ventilation/card/bloc/feed_ventilation_card_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_ventilation/card/ui/feed_ventilation_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed_entries/feed_water/card/bloc/feed_water_card_bloc.dart';
