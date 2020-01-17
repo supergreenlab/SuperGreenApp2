@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -28,6 +29,8 @@ class HomeNavigatorEventPop extends HomeNavigatorEvent {
 }
 
 class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
+  static final eventBus = EventBus();
+  
   final MainNavigatorEvent _args;
   final GlobalKey<NavigatorState> _navigatorKey;
 
@@ -35,6 +38,7 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
     if (_args is MainNavigateToHomeBoxEvent) {
       this.add(HomeNavigateToBoxFeedEvent((_args as MainNavigateToHomeBoxEvent).box));
     }
+    eventBus.on<HomeNavigatorEvent>().listen((e) => this.add(e));
   }
 
   @override

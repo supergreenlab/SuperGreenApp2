@@ -35,6 +35,7 @@ dependencies:
   url_launcher:
   basic_utils:
   flutter_speed_dial:
+  event_bus:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

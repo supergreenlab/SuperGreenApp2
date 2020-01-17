@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/bloc/feed_light_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/bloc/feed_towelie_card_bloc.dart';
 
 class FeedTowelieInfoCardPage extends StatelessWidget {
   @override

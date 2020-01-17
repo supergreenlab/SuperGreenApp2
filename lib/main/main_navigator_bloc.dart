@@ -12,7 +12,7 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
-class MainNavigateToHomeBoxEvent extends MainNavigatorEvent {
+class MainNavigateToHomeBoxEvent extends MainNavigateToHomeEvent {
   final Box box;
 
   MainNavigateToHomeBoxEvent(this.box);
@@ -169,8 +169,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
   Stream<dynamic> mapEventToState(MainNavigatorEvent event) async* {
     if (event is MainNavigatorActionPop) {
       _navigatorKey.currentState.pop();
-    } else if (event is MainNavigateToHomeEvent ||
-        event is MainNavigateToHomeBoxEvent) {
+    } else if (event is MainNavigateToHomeEvent) {
       _navigatorKey.currentState
           .pushReplacementNamed('/home', arguments: event);
     } else if (event is MainNavigateToNewBoxInfosEvent) {

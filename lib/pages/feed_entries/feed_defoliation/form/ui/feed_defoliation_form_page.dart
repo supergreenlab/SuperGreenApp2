@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed_entries/feed_defoliation/form/bloc/feed_defoliation_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_defoliation/form/bloc/feed_defoliation_form_bloc.dart';
 
 class FeedDefoliationFormPage extends StatelessWidget {
   @override

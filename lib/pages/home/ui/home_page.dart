@@ -44,7 +44,9 @@ class HomePageState extends State<HomePage> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.explore), title: Text('Explore')),
+            icon: Icon(Icons.explore),
+            title: Text('Explore'),
+          ),
         ],
       ),
       body: Navigator(
