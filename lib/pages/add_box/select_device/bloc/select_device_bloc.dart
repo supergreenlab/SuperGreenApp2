@@ -6,29 +6,31 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
-abstract class SelectDeviceBlocEvent extends Equatable {
-  final Box box;
-
-  SelectDeviceBlocEvent(this.box);
-
-  @override
-  List<Object> get props => [box];
-}
+abstract class SelectDeviceBlocEvent extends Equatable {}
 
 class SelectDeviceBlocEventLoadDevices extends SelectDeviceBlocEvent {
-  SelectDeviceBlocEventLoadDevices(Box box) : super(box);
+  SelectDeviceBlocEventLoadDevices() : super();
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [];
+}
+
+class SelectDeviceBlocEventDeviceListUpdated extends SelectDeviceBlocEvent {
+  final List<Device> devices;
+
+  SelectDeviceBlocEventDeviceListUpdated(this.devices) : super();
+
+  @override
+  List<Object> get props => [devices];
 }
 
 class SelectDeviceBlocEventSelectDevice extends SelectDeviceBlocEvent {
   final Device device;
 
-  SelectDeviceBlocEventSelectDevice(box, this.device) : super(box);
+  SelectDeviceBlocEventSelectDevice(this.device) : super();
 
   @override
-  List<Object> get props => [box, device];
+  List<Object> get props => [device];
 }
 
 class SelectDeviceBlocState extends Equatable {
@@ -44,10 +46,10 @@ class SelectDeviceBlocStateIdle extends SelectDeviceBlocState {
   SelectDeviceBlocStateIdle(Box box) : super(box);
 }
 
-class SelectDeviceBlocStateLoadedDevices extends SelectDeviceBlocState {
+class SelectDeviceBlocStateDeviceListUpdated extends SelectDeviceBlocState {
   final List<Device> devices;
 
-  SelectDeviceBlocStateLoadedDevices(Box box, this.devices) : super(box);
+  SelectDeviceBlocStateDeviceListUpdated(Box box, this.devices) : super(box);
 
   @override
   List<Object> get props => [box, devices];
@@ -65,7 +67,7 @@ class SelectDeviceBloc
   SelectDeviceBlocState get initialState => SelectDeviceBlocStateIdle(_args.box);
 
   SelectDeviceBloc(this._args) {
-    this.add(SelectDeviceBlocEventLoadDevices(_args.box));
+    this.add(SelectDeviceBlocEventLoadDevices());
   }
 
   @override
@@ -73,12 +75,18 @@ class SelectDeviceBloc
       SelectDeviceBlocEvent event) async* {
     if (event is SelectDeviceBlocEventLoadDevices) {
       final ddb = RelDB.get().devicesDAO;
-      final devices = await ddb.getDevices();
-      yield SelectDeviceBlocStateLoadedDevices(event.box, devices);
+      final watcher = ddb.watchDevices();
+      watcher.listen(_onDeviceListChanged);
+    } else if (event is SelectDeviceBlocEventDeviceListUpdated) {
+      yield SelectDeviceBlocStateDeviceListUpdated(_args.box, event.devices);
     } else if (event is SelectDeviceBlocEventSelectDevice) {
       final bdb = RelDB.get().boxesDAO;
-      await bdb.updateBox(event.box.id, BoxesCompanion(device: Value(event.device.id)));
+      await bdb.updateBox(_args.box.id, BoxesCompanion(device: Value(event.device.id)));
       yield SelectDeviceBlocStateDone(_args.box);
     }
+  }
+  
+  void _onDeviceListChanged(List<Device> devices) {
+    add(SelectDeviceBlocEventDeviceListUpdated(devices));
   }
 }

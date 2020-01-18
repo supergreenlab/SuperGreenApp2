@@ -13,7 +13,7 @@ class FeedPage extends StatelessWidget {
         if (state is FeedBlocStateLoaded) {
           return _renderCards(context, state);
         }
-        return Text('FeedPage loading');
+        return Text('FeedPage loading', style: TextStyle(color: Colors.white));
       },
     );
   }
@@ -25,7 +25,4 @@ class FeedPage extends StatelessWidget {
           .toList(),
     );
   }
-}
-
-class FeedEntrie {
 }

@@ -35,6 +35,8 @@ import 'package:super_green_app/pages/feed_entries/feed_water/form/ui/feed_water
 import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
 import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/ui/home_page.dart';
+import 'package:super_green_app/pages/tip/bloc/tip_bloc.dart';
+import 'package:super_green_app/pages/tip/ui/tip_page.dart';
 
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 
@@ -176,6 +178,14 @@ class MainPage extends StatelessWidget {
           builder: (context) => BlocProvider(
             create: (context) => FeedWaterFormBloc(settings.arguments),
             child: _wrapBg(context, FeedWaterFormPage()),
+          ),
+          fullscreenDialog: true,
+        );
+      case '/tip':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => TipBloc(settings.arguments),
+            child: _wrapBg(context, TipPage()),
           ),
           fullscreenDialog: true,
         );

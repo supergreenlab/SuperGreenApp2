@@ -39,16 +39,16 @@ class SelectDevicePage extends StatelessWidget {
     return BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
       bloc: Provider.of<SelectDeviceBloc>(context),
       condition: (previousState, state) =>
-          state is SelectDeviceBlocStateLoadedDevices,
+          state is SelectDeviceBlocStateDeviceListUpdated,
       builder: (BuildContext context, SelectDeviceBlocState state) {
         List<Device> devices = List();
-        if (state is SelectDeviceBlocStateLoadedDevices) {
+        if (state is SelectDeviceBlocStateDeviceListUpdated) {
           devices = state.devices;
         }
         return ListView(
           children: devices
               .map((d) => ListTile(
-                    onTap: () => _selectDevice(context, state.box, d),
+                    onTap: () => _selectDevice(context, d),
                     title: Text('${d.name}'),
                   ))
               .toList(),
@@ -57,8 +57,8 @@ class SelectDevicePage extends StatelessWidget {
     );
   }
 
-  void _selectDevice(BuildContext context, Box box, Device device) {
+  void _selectDevice(BuildContext context, Device device) {
     BlocProvider.of<SelectDeviceBloc>(context)
-        .add(SelectDeviceBlocEventSelectDevice(box, device));
+        .add(SelectDeviceBlocEventSelectDevice(device));
   }
 }

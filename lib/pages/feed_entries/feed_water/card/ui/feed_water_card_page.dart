@@ -15,6 +15,8 @@ class FeedWaterCardPage extends StatelessWidget {
                     ListTile(
                       leading: Icon(Icons.album, color: Colors.white,),
                       title: const Text('Feed Water', style: TextStyle(color: Colors.white)),
+                      subtitle: Text(state.feedEntry.date.toIso8601String(),
+                        style: TextStyle(color: Colors.white54)),
                     ),
                   ],
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/bloc/feed_towelie_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/bloc/feed_towelie_info_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/ui/feed_towelie_info_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/card/bloc/feed_defoliation_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/card/ui/feed_defoliation_card_page.dart';

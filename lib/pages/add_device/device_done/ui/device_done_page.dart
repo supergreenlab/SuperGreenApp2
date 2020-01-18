@@ -11,6 +11,8 @@ class DeviceDonePage extends StatelessWidget {
       listener: (context, DeviceDoneBlocState state) {
         if (state is DeviceDoneBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop());
+          BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigateToSelectBoxDeviceBoxEvent(state.box));
         }
       },

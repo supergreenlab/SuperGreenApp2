@@ -90,64 +90,91 @@ class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
   List<Object> get props => [box, device];
 }
 
-class MainNavigateToFeedLightFormEvent extends MainNavigatorEvent {
+class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
+  final bool fromTip;
+
+  MainNavigateToFeedFormEvent(this.fromTip);
+
+  @override
+  List<Object> get props => [fromTip];
+}
+
+class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedLightFormEvent(this.box);
+  MainNavigateToFeedLightFormEvent(this.box, {fromTip = false})
+      : super(fromTip);
 
   @override
   List<Object> get props => [];
 }
 
-class MainNavigateToFeedWaterFormEvent extends MainNavigatorEvent {
+class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedWaterFormEvent(this.box);
+  MainNavigateToFeedWaterFormEvent(this.box, {fromTip = false})
+      : super(fromTip);
 
   @override
   List<Object> get props => [];
 }
 
-class MainNavigateToFeedVentilationFormEvent extends MainNavigatorEvent {
+class MainNavigateToFeedVentilationFormEvent
+    extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedVentilationFormEvent(this.box);
+  MainNavigateToFeedVentilationFormEvent(this.box, {fromTip = false})
+      : super(fromTip);
 
   @override
   List<Object> get props => [];
 }
 
-class MainNavigateToFeedMediaFormEvent extends MainNavigatorEvent {
+class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedMediaFormEvent(this.box);
+  MainNavigateToFeedMediaFormEvent(this.box, {fromTip = false})
+      : super(fromTip);
 
   @override
   List<Object> get props => [];
 }
 
-class MainNavigateToFeedDefoliationFormEvent extends MainNavigatorEvent {
+class MainNavigateToFeedDefoliationFormEvent
+    extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedDefoliationFormEvent(this.box);
+  MainNavigateToFeedDefoliationFormEvent(this.box, {fromTip = false})
+      : super(fromTip);
 
   @override
   List<Object> get props => [];
 }
 
-class MainNavigateToFeedScheduleFormEvent extends MainNavigatorEvent {
+class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedScheduleFormEvent(this.box);
+  MainNavigateToFeedScheduleFormEvent(this.box, {fromTip = false})
+      : super(fromTip);
 
   @override
   List<Object> get props => [];
 }
 
-class MainNavigateToFeedToppingFormEvent extends MainNavigatorEvent {
+class MainNavigateToFeedToppingFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedToppingFormEvent(this.box);
+  MainNavigateToFeedToppingFormEvent(this.box, {fromTip = false})
+      : super(fromTip);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToTipEvent extends MainNavigatorEvent {
+  final MainNavigateToFeedFormEvent nextRoute;
+
+  MainNavigateToTipEvent(this.nextRoute);
 
   @override
   List<Object> get props => [];
@@ -194,26 +221,29 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       _navigatorKey.currentState
           .pushReplacementNamed('/device/done', arguments: event);
     } else if (event is MainNavigateToFeedDefoliationFormEvent) {
-      _navigatorKey.currentState
-          .pushNamed('/feed/form/defoliation', arguments: event);
+      _pushFeedFormTip('/feed/form/defoliation', event);
     } else if (event is MainNavigateToFeedLightFormEvent) {
-      _navigatorKey.currentState
-          .pushNamed('/feed/form/light', arguments: event);
+      _pushFeedFormTip('/feed/form/light', event);
     } else if (event is MainNavigateToFeedMediaFormEvent) {
-      _navigatorKey.currentState
-          .pushNamed('/feed/form/media', arguments: event);
+      _pushFeedFormTip('/feed/form/media', event);
     } else if (event is MainNavigateToFeedScheduleFormEvent) {
-      _navigatorKey.currentState
-          .pushNamed('/feed/form/schedule', arguments: event);
+      _pushFeedFormTip('/feed/form/schedule', event);
     } else if (event is MainNavigateToFeedToppingFormEvent) {
-      _navigatorKey.currentState
-          .pushNamed('/feed/form/topping', arguments: event);
+      _pushFeedFormTip('/feed/form/topping', event);
     } else if (event is MainNavigateToFeedVentilationFormEvent) {
-      _navigatorKey.currentState
-          .pushNamed('/feed/form/ventilation', arguments: event);
+      _pushFeedFormTip('/feed/form/ventilation', event);
     } else if (event is MainNavigateToFeedWaterFormEvent) {
-      _navigatorKey.currentState
-          .pushNamed('/feed/form/water', arguments: event);
+      _pushFeedFormTip('/feed/form/water', event);
+    } else if (event is MainNavigateToTipEvent) {
+      _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     }
+  }
+
+  void _pushFeedFormTip(String url, MainNavigateToFeedFormEvent event) {
+    if (event.fromTip) {
+      _navigatorKey.currentState.pushReplacementNamed(url, arguments: event);
+      return;
+    }
+    _navigatorKey.currentState.pushNamed(url, arguments: event);
   }
 }
