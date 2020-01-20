@@ -25,7 +25,7 @@ class FeedFormLayout extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 24.0),
                   child: this.body,
                 )
               ],

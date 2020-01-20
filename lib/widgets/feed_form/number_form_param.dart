@@ -6,10 +6,17 @@ class NumberFormParam extends StatelessWidget {
   final String title;
   final String icon;
   final double value;
+  final String unit;
   final double step;
   final void Function(double) onChange;
 
-  const NumberFormParam({this.title, this.icon, this.value, this.step=0.5, this.onChange});
+  const NumberFormParam(
+      {this.title,
+      this.icon,
+      this.value,
+      this.step = 0.5,
+      this.onChange,
+      this.unit = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +28,50 @@ class NumberFormParam extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            FeedFormButton(title: '-', onPressed: () {onChange(value - step);}, textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+            ButtonTheme(
+                padding: EdgeInsets.symmetric(
+                    vertical: 4.0,
+                    horizontal: 8.0), //adds padding inside the button
+                materialTapTargetSize: MaterialTapTargetSize
+                    .shrinkWrap, //limits the touch area to the button area
+                height: 36,
+                minWidth: 60, //wraps child's width
+                child: FeedFormButton(
+                  title: '-',
+                  onPressed: () {
+                    onChange(value - step);
+                  },
+                  textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),
+                )),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('$value', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25)),
+              child: Text('$value$unit',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22)),
             ),
-            FeedFormButton(title: '+', onPressed: () {onChange(value + step);}, textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+            ButtonTheme(
+                padding: EdgeInsets.symmetric(
+                    vertical: 4.0,
+                    horizontal: 8.0), //adds padding inside the button
+                materialTapTargetSize: MaterialTapTargetSize
+                    .shrinkWrap, //limits the touch area to the button area
+                height: 36,
+                minWidth: 60, //wraps child's width
+                child: FeedFormButton(
+                  title: '+',
+                  onPressed: () {
+                    onChange(value + step);
+                  },
+                  textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),
+                )),
           ],
         ),
       ),

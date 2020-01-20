@@ -20,8 +20,26 @@ class YesNoFormParam extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            FeedFormButton(title: 'YES', border: yes == true, onPressed: () {this.onPressed(yes == true ? null : true);}),
-            FeedFormButton(title: 'NO', border: yes == false, onPressed: () {this.onPressed(yes == false ? null : false);}),
+            FeedFormButton(
+                title: 'YES',
+                border: yes == true,
+                onPressed: () {
+                  this.onPressed(yes == true ? null : true);
+                },
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
+            FeedFormButton(
+                title: 'NO',
+                border: yes == false,
+                onPressed: () {
+                  this.onPressed(yes == false ? null : false);
+                },
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
           ],
         ),
       ),

@@ -5,7 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/tip/bloc/tip_bloc.dart';
 
-class TipPage extends StatelessWidget {
+class TipPage extends StatefulWidget {
+  @override
+  _TipPageState createState() => _TipPageState();
+}
+
+class _TipPageState extends State<TipPage> {
+  bool dontShow = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TipBloc, TipBlocState>(
@@ -54,8 +61,8 @@ class TipPage extends StatelessWidget {
                           child: Checkbox(
                             activeColor: Colors.white,
                             checkColor: Colors.white,
-                            value: false,
-                            onChanged: (bool value) {},
+                            value: dontShow,
+                            onChanged: (bool value) {setState(() {dontShow = value;});}
                           ),
                         ),
                         Text('Don’t show me this again',

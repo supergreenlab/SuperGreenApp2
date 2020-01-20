@@ -48,9 +48,12 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                       icon: 'assets/feed_form/icon_volume.svg',
                       title: 'Approx. volume',
                       value: volume,
+                      unit: 'L',
                       onChange: (newValue) {
                         setState(() {
-                          volume = newValue;
+                          if (newValue > 0) {
+                            volume = newValue;
+                          }
                         });
                       }),
                   YesNoFormParam(
