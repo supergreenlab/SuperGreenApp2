@@ -36,6 +36,7 @@ dependencies:
   basic_utils:
   flutter_speed_dial:
   event_bus:
+  flutter_html:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:
@@ -67,6 +68,7 @@ flutter:
   assets:
     - assets/
     - assets/home/
+    - assets/feed_form/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

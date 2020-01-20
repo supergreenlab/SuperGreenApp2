@@ -199,7 +199,7 @@ class MainPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
           gradient: LinearGradient(
-        colors: [Color(0xFF103A3A), Color(0xFF022C22), Color(0xFF298D9B)],
+        colors: [Color(0xFF103A3A), Color(0xFF0D3735), Color(0xFF022C22), Color(0xFF1F6C77)],
         begin: Alignment(-0.25, 1),
         end: Alignment(0.25, -1),
       )),

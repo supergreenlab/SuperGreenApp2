@@ -39,7 +39,7 @@ class WelcomePage extends StatelessWidget {
                   width: 200,
                   height: 300,
                   child:
-                      SvgPicture.asset("assets/super_green_lab_vertical.svg")),
+                      SvgPicture.asset('assets/super_green_lab_vertical.svg')),
               Text(
                 _loading ? 'Loading..' : 'Welcome to SuperGreenLab!',
                 style: TextStyle(
