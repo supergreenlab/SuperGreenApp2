@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/bloc/feed_light_card_bloc.dart';
 
@@ -13,7 +14,7 @@ class FeedLightCardPage extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.album, color: Colors.white,),
+                      leading: SvgPicture.asset('assets/feed_card/light.svg'),
                       title: const Text('Feed Light', style: TextStyle(color: Colors.white)),
                     ),
                   ],
