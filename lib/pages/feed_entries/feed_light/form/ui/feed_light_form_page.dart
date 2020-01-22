@@ -12,7 +12,7 @@ class FeedLightFormPage extends StatefulWidget {
 }
 
 class _FeedLightFormPageState extends State<FeedLightFormPage> {
-  List<double> values = List();
+  List<int> values = List();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                 title: 'Record creation',
                 buttonTitle: 'ADD RECORD',
                 onOK: () {
-                  BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocEventCreate(values));
+                  BlocProvider.of<FeedLightFormBloc>(context)
+                      .add(FeedLightFormBlocEventCreate(values));
                 },
                 body: ListView.builder(
                   itemCount: values.length,
@@ -47,22 +48,23 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
   Widget _renderLightParam(BuildContext context, int i) {
     return SliderFormParam(
       key: Key('$i'),
-      title: 'Light ${i+1}',
+      title: 'Light ${i + 1}',
       icon: 'assets/feed_form/icon_${values[i] > 30 ? "sun" : "moon"}.svg',
-      value: values[i],
+      value: values[i].toDouble(),
       color: _color(values[i]),
       onChanged: (double newValue) {
         setState(() {
-          values[i] = newValue;
+          values[i] = newValue.round();
         });
       },
       onChangeEnd: (double value) {
-        BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocValueChangedEvent(i, value));
+        BlocProvider.of<FeedLightFormBloc>(context)
+            .add(FeedLightFormBlocValueChangedEvent(i, value));
       },
     );
   }
 
-  Color _color(double value) {
+  Color _color(int value) {
     if (value > 60) {
       return Colors.yellow;
     } else if (value > 30) {

@@ -17,7 +17,7 @@ class FeedLightFormBlocEventLoadLights extends FeedLightFormBlocEvent {
 }
 
 class FeedLightFormBlocEventCreate extends FeedLightFormBlocEvent {
-  final List<double> values;
+  final List<int> values;
 
   FeedLightFormBlocEventCreate(this.values);
 
@@ -43,7 +43,7 @@ class FeedLightFormBlocStateIdle extends FeedLightFormBlocState {
 }
 
 class FeedLightFormBlocStateLightsLoaded extends FeedLightFormBlocState {
-  final List<double> values;
+  final List<int> values;
 
   FeedLightFormBlocStateLightsLoaded(this.values);
 
@@ -62,7 +62,7 @@ class FeedLightFormBloc
 
   Device _device;
   List<Param> _lightParams;
-  List<double> _initialValues;
+  List<int> _initialValues;
 
   @override
   FeedLightFormBlocState get initialState => FeedLightFormBlocStateIdle();
@@ -86,7 +86,7 @@ class FeedLightFormBloc
               await db.devicesDAO.getParam(_device.id, "LED_${i}_DIM");
         }
       }
-      List<double> values = _lightParams.map((l) => l.ivalue.toDouble()).toList();
+      List<int> values = _lightParams.map((l) => l.ivalue).toList();
       _initialValues = values;
       yield FeedLightFormBlocStateLightsLoaded(values);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
