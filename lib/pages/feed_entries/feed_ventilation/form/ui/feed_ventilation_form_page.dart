@@ -3,40 +3,82 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/bloc/feed_ventilation_form_bloc.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
+import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationFormPage extends StatelessWidget {
+class FeedVentilationFormPage extends StatefulWidget {
+  @override
+  _FeedVentilationFormPageState createState() =>
+      _FeedVentilationFormPageState();
+}
+
+class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
+  int _blowerDay = 0;
+  int _blowerNight = 0;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: Provider.of<FeedVentilationFormBloc>(context),
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
-        if (state is FeedVentilationFormBlocStateDone) {
+        if (state is FeedVentilationFormBlocStateVentilationLoaded) {
+          setState(() {
+            _blowerDay = state.blowerDay;
+            _blowerNight = state.blowerNight;
+          });
+        } else if (state is FeedVentilationFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop());
         }
       },
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
           bloc: Provider.of<FeedVentilationFormBloc>(context),
-          builder: (context, state) => Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                title: Text(
-                  'Add ventilation change',
-                  style: TextStyle(color: Colors.white),
+          builder: (context, state) => FeedFormLayout(
+                title: 'Record creation',
+                buttonTitle: 'ADD RECORD',
+                onOK: () {
+                  BlocProvider.of<FeedVentilationFormBloc>(context)
+                      .add(FeedVentilationFormBlocEventCreate());
+                },
+                body: ListView(
+                  children: [
+                    SliderFormParam(
+                      key: Key('day'),
+                      title: 'Blower day',
+                      icon: 'assets/feed_form/icon_blower.svg',
+                      value: _blowerDay.toDouble(),
+                      color: Colors.white,
+                      onChanged: (double newValue) {
+                        setState(() {
+                          _blowerDay = newValue.toInt();
+                        });
+                      },
+                      onChangeEnd: (double newValue) {
+                        BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                            FeedVentilationFormBlocBlowerDayChangedEvent(
+                                newValue.toInt()));
+                      },
+                    ),
+                    SliderFormParam(
+                      key: Key('night'),
+                      title: 'Blower night',
+                      icon: 'assets/feed_form/icon_blower.svg',
+                      value: _blowerNight.toDouble(),
+                      color: Colors.white,
+                      onChanged: (double newValue) {
+                        setState(() {
+                          _blowerNight = newValue.toInt();
+                        });
+                      },
+                      onChangeEnd: (double newValue) {
+                        BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                            FeedVentilationFormBlocBlowerNightChangedEvent(
+                                newValue.toInt()));
+                      },
+                    ),
+                  ],
                 ),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-              ),
-              body: Column(children: [
-                Text('VentilationChange',
-                    style: TextStyle(color: Colors.white)),
-                RaisedButton(
-                  child: Text('OK'),
-                  onPressed: () =>
-                      BlocProvider.of<FeedVentilationFormBloc>(context)
-                          .add(FeedVentilationFormBlocEventCreate('Test')),
-                ),
-              ]))),
+              )),
     );
   }
 }

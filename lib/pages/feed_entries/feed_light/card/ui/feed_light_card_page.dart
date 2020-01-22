@@ -16,7 +16,6 @@ class FeedLightCardPage extends StatelessWidget {
                       leading: Icon(Icons.album, color: Colors.white,),
                       title: const Text('Feed Light', style: TextStyle(color: Colors.white)),
                     ),
-                    Text(state.feedEntry.params, style: TextStyle(color: Colors.white)),
                   ],
                 ),
               ));
