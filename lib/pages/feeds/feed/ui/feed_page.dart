@@ -19,10 +19,10 @@ class FeedPage extends StatelessWidget {
   }
 
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
-    return ListView(
-      children: state.entries
-          .map((e) => FeedEntriesHelper.cardForFeedEntry(state.feed, e))
-          .toList(),
-    );
+    return ListView.builder(
+      itemCount: state.entries.length,
+      itemBuilder: (context, i) {
+        return FeedEntriesHelper.cardForFeedEntry(state.feed, state.entries[i]);
+      });
   }
 }

@@ -21,34 +21,42 @@ import 'package:super_green_app/pages/feed_entries/feed_water/card/ui/feed_water
 class FeedEntriesHelper {
   static Map<String, Widget Function(Feed feed, FeedEntry feedEntry)> _cards = {
     'FE_DEFOLIATION': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedDefoliationCardBloc(feed, feedEntry),
           child: FeedDefoliationCardPage(),
         ),
     'FE_LIGHT': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedLightCardBloc(feed, feedEntry),
           child: FeedLightCardPage(),
         ),
     'FE_MEDIA': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedMediaCardBloc(feed, feedEntry),
           child: FeedMediaCardPage(),
         ),
     'FE_SCHEDULE': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedScheduleCardBloc(feed, feedEntry),
           child: FeedScheduleCardPage(),
         ),
     'FE_TOPPING': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedToppingCardBloc(feed, feedEntry),
           child: FeedToppingCardPage(),
         ),
     'FE_VENTILATION': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedVentilationCardBloc(feed, feedEntry),
           child: FeedVentilationCardPage(),
         ),
     'FE_TOWELIE_INFO': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedTowelieInfoCardBloc(feed, feedEntry),
           child: FeedTowelieInfoCardPage(),
         ),
     'FE_WATER': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
           create: (context) => FeedWaterCardBloc(feed, feedEntry),
           child: FeedWaterCardPage(),
         ),

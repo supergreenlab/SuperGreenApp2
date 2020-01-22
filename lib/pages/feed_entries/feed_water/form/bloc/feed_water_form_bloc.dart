@@ -9,12 +9,14 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 abstract class FeedWaterFormBlocEvent extends Equatable {}
 
 class FeedWaterFormBlocEventCreate extends FeedWaterFormBlocEvent {
-  final String name;
+  final bool tooDry;
+  final double volume;
+  final bool nutrient;
 
-  FeedWaterFormBlocEventCreate(this.name);
+  FeedWaterFormBlocEventCreate(this.tooDry, this.volume, this.nutrient);
 
   @override
-  List<Object> get props => [name];
+  List<Object> get props => [tooDry, volume, nutrient];
 }
 
 abstract class FeedWaterFormBlocState extends Equatable {}
@@ -47,7 +49,11 @@ class FeedWaterFormBloc
         type: 'FE_WATER',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
+        params: JsonEncoder().convert({
+          'tooDry': event.tooDry,
+          'volume': event.volume,
+          'nutrient': event.nutrient,
+        }),
       ));
       yield FeedWaterFormBlocStateDone();
     }

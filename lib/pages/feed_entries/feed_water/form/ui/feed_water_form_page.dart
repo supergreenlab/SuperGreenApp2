@@ -32,44 +32,42 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           builder: (context, state) => FeedFormLayout(
             title: 'New watering record',
             buttonTitle: 'ADD RECORD',
-            body: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  YesNoFormParam(
-                      icon: 'assets/feed_form/icon_dry.svg',
-                      title: 'Was it too dry?',
-                      yes: tooDry,
-                      onPressed: (yes) {
-                        setState(() {
-                          tooDry = yes;
-                        });
-                      }),
-                  NumberFormParam(
-                      icon: 'assets/feed_form/icon_volume.svg',
-                      title: 'Approx. volume',
-                      value: volume,
-                      unit: 'L',
-                      onChange: (newValue) {
-                        setState(() {
-                          if (newValue > 0) {
-                            volume = newValue;
-                          }
-                        });
-                      }),
-                  YesNoFormParam(
-                      icon: 'assets/feed_form/icon_nutrient.svg',
-                      title: 'Nutrient?',
-                      yes: nutrient,
-                      onPressed: (yes) {
-                        setState(() {
-                          nutrient = yes;
-                        });
-                      }),
-                ],
-              ),
+            body: ListView(
+              children: <Widget>[
+                YesNoFormParam(
+                    icon: 'assets/feed_form/icon_dry.svg',
+                    title: 'Was it too dry?',
+                    yes: tooDry,
+                    onPressed: (yes) {
+                      setState(() {
+                        tooDry = yes;
+                      });
+                    }),
+                NumberFormParam(
+                    icon: 'assets/feed_form/icon_volume.svg',
+                    title: 'Approx. volume',
+                    value: volume,
+                    unit: 'L',
+                    onChange: (newValue) {
+                      setState(() {
+                        if (newValue > 0) {
+                          volume = newValue;
+                        }
+                      });
+                    }),
+                YesNoFormParam(
+                    icon: 'assets/feed_form/icon_nutrient.svg',
+                    title: 'Nutrient?',
+                    yes: nutrient,
+                    onPressed: (yes) {
+                      setState(() {
+                        nutrient = yes;
+                      });
+                    }),
+              ],
             ),
             onOK: () => BlocProvider.of<FeedWaterFormBloc>(context).add(
-              FeedWaterFormBlocEventCreate('Test'),
+              FeedWaterFormBlocEventCreate(tooDry, volume, nutrient),
             ),
           ),
         ));
