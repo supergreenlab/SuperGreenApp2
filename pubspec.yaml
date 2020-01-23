@@ -38,6 +38,7 @@ dependencies:
   flutter_speed_dial:
   event_bus:
   flutter_html:
+  video_player:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

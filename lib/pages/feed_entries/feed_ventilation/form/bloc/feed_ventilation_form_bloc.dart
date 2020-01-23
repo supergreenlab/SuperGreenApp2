@@ -18,7 +18,10 @@ class FeedVentilationFormBlocEventLoadVentilations
 }
 
 class FeedVentilationFormBlocEventCreate extends FeedVentilationFormBlocEvent {
-  FeedVentilationFormBlocEventCreate();
+  final int blowerDay;
+  final int blowerNight;
+
+  FeedVentilationFormBlocEventCreate(this.blowerDay, this.blowerNight);
 
   @override
   List<Object> get props => [];
@@ -75,6 +78,8 @@ class FeedVentilationFormBloc
   Device _device;
   Param _blowerDay;
   Param _blowerNight;
+  int _initialBlowerDay;
+  int _initialBlowerNight;
 
   @override
   FeedVentilationFormBlocState get initialState =>
@@ -92,21 +97,34 @@ class FeedVentilationFormBloc
       _device = await db.devicesDAO.getDevice(_args.box.device);
       _blowerDay = await db.devicesDAO
           .getParam(_device.id, "BOX_${_args.box.deviceBox}_BLOWER_DAY");
+      _initialBlowerDay = _blowerDay.ivalue;
       _blowerNight = await db.devicesDAO
           .getParam(_device.id, "BOX_${_args.box.deviceBox}_BLOWER_NIGHT");
+      _initialBlowerNight = _blowerNight.ivalue;
       yield FeedVentilationFormBlocStateVentilationLoaded(
           _blowerDay.ivalue, _blowerNight.ivalue);
     } else if (event is FeedVentilationFormBlocBlowerDayChangedEvent) {
-      await DeviceHelper.updateIntParam(_device, _blowerDay, (event.blowerDay).toInt());
+      await DeviceHelper.updateIntParam(
+          _device, _blowerDay, (event.blowerDay).toInt());
     } else if (event is FeedVentilationFormBlocBlowerNightChangedEvent) {
-      await DeviceHelper.updateIntParam(_device, _blowerNight, (event.blowerNight).toInt());
+      await DeviceHelper.updateIntParam(
+          _device, _blowerNight, (event.blowerNight).toInt());
     } else if (event is FeedVentilationFormBlocEventCreate) {
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_VENTILATION',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
+        params: JsonEncoder().convert({
+          'initialValues': {
+            'blowerDay': _initialBlowerDay,
+            'blowerNight': _initialBlowerNight
+          },
+          'values': {
+            'blowerDay': event.blowerDay,
+            'blowerNight': event.blowerNight
+          }
+        }),
       ));
       yield FeedVentilationFormBlocStateDone();
     }

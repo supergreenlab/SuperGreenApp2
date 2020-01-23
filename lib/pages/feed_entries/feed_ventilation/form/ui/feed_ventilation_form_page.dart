@@ -38,7 +38,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 buttonTitle: 'ADD RECORD',
                 onOK: () {
                   BlocProvider.of<FeedVentilationFormBloc>(context)
-                      .add(FeedVentilationFormBlocEventCreate());
+                      .add(FeedVentilationFormBlocEventCreate(_blowerDay, _blowerNight));
                 },
                 body: ListView(
                   children: [

@@ -55,7 +55,7 @@ class BoxFeedPage extends StatelessWidget {
             'Video / photo',
             Colors.amber,
             _onSpeedDialSelected(context,
-                ({fromTip = false}) => MainNavigateToFeedMediaFormEvent(state.box, fromTip: fromTip))),
+                ({fromTip = false}) => MainNavigateToImageCaptureEvent(fromTip: fromTip, nextRoute: MainNavigateToFeedMediaFormEvent(state.box, fromTip: fromTip)))),
         _renderSpeedDialChild(
             'Watering',
             Colors.blue,

@@ -9,12 +9,12 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 abstract class FeedMediaFormBlocEvent extends Equatable {}
 
 class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
-  final String name;
+  final String message;
 
-  FeedMediaFormBlocEventCreate(this.name);
+  FeedMediaFormBlocEventCreate(this.message);
 
   @override
-  List<Object> get props => [name];
+  List<Object> get props => [message];
 }
 
 abstract class FeedMediaFormBlocState extends Equatable {}
@@ -47,7 +47,7 @@ class FeedMediaFormBloc
         type: 'FE_MEDIA',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
+        params: JsonEncoder().convert({'filePath': _args.filePath}),
       ));
       yield FeedMediaFormBlocStateDone();
     }

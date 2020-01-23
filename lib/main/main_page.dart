@@ -35,6 +35,8 @@ import 'package:super_green_app/pages/feed_entries/feed_water/form/ui/feed_water
 import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
 import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/ui/home_page.dart';
+import 'package:super_green_app/pages/image_capture/bloc/image_capture_bloc.dart';
+import 'package:super_green_app/pages/image_capture/ui/image_capture_page.dart';
 import 'package:super_green_app/pages/tip/bloc/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/ui/tip_page.dart';
 
@@ -189,6 +191,14 @@ class MainPage extends StatelessWidget {
           ),
           fullscreenDialog: true,
         );
+      case '/capture':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => ImageCaptureBloc(settings.arguments),
+            child: _wrapBg(context, ImageCapturePage()),
+          ),
+          fullscreenDialog: true,
+        );
     }
     return MaterialPageRoute(builder: (context) => Text('Unknown route'));
   }
@@ -199,7 +209,12 @@ class MainPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
           gradient: LinearGradient(
-        colors: [Color(0xFF103A3A), Color(0xFF0D3735), Color(0xFF022C22), Color(0xFF1F6C77)],
+        colors: [
+          Color(0xFF103A3A),
+          Color(0xFF0D3735),
+          Color(0xFF022C22),
+          Color(0xFF1F6C77)
+        ],
         begin: Alignment(-0.25, 1),
         end: Alignment(0.25, -1),
       )),
