@@ -98,12 +98,12 @@ class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
-  final bool fromTip;
+  final bool pushAsReplacement;
 
-  MainNavigateToFeedFormEvent(this.fromTip);
+  MainNavigateToFeedFormEvent(this.pushAsReplacement);
 
   @override
-  List<Object> get props => [fromTip];
+  List<Object> get props => [pushAsReplacement];
 }
 
 class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
@@ -151,7 +151,7 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent
   @override
   ImageCaptureNextRouteEvent copyWith(String filePath) {
     return MainNavigateToFeedMediaFormEvent(box,
-        fromTip: fromTip, fp: filePath);
+        fromTip: pushAsReplacement, fp: filePath);
   }
 
   @override
@@ -262,31 +262,31 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState
           .pushReplacementNamed('/device/done', arguments: event);
     } else if (event is MainNavigateToFeedDefoliationFormEvent) {
-      future = _pushFeedFormTip('/feed/form/defoliation', event);
+      future = _pushOrReplace('/feed/form/defoliation', event);
     } else if (event is MainNavigateToFeedLightFormEvent) {
-      future = _pushFeedFormTip('/feed/form/light', event);
+      future = _pushOrReplace('/feed/form/light', event);
     } else if (event is MainNavigateToFeedMediaFormEvent) {
-      future = _pushFeedFormTip('/feed/form/media', event);
+      future = _pushOrReplace('/feed/form/media', event);
     } else if (event is MainNavigateToFeedScheduleFormEvent) {
-      future = _pushFeedFormTip('/feed/form/schedule', event);
+      future = _pushOrReplace('/feed/form/schedule', event);
     } else if (event is MainNavigateToFeedToppingFormEvent) {
-      future = _pushFeedFormTip('/feed/form/topping', event);
+      future = _pushOrReplace('/feed/form/topping', event);
     } else if (event is MainNavigateToFeedVentilationFormEvent) {
-      future = _pushFeedFormTip('/feed/form/ventilation', event);
+      future = _pushOrReplace('/feed/form/ventilation', event);
     } else if (event is MainNavigateToFeedWaterFormEvent) {
-      future = _pushFeedFormTip('/feed/form/water', event);
+      future = _pushOrReplace('/feed/form/water', event);
     } else if (event is MainNavigateToTipEvent) {
       future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {
-      future = _pushFeedFormTip('/capture', event);
+      future = _pushOrReplace('/capture', event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);
     }
   }
 
-  Future _pushFeedFormTip(String url, MainNavigateToFeedFormEvent event) {
-    if (event.fromTip) {
+  Future _pushOrReplace(String url, MainNavigateToFeedFormEvent event) {
+    if (event.pushAsReplacement) {
       return _navigatorKey.currentState
           .pushReplacementNamed(url, arguments: event);
     }
