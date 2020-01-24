@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:video_player/video_player.dart';
 
 abstract class ImageCaptureBlocEvent extends Equatable {}
 
@@ -39,6 +40,13 @@ class ImageCaptureBlocEventStopVideoRecording extends ImageCaptureBlocEvent {
   List<Object> get props => [];
 }
 
+class ImageCaptureBlocEventCancelPreview extends ImageCaptureBlocEvent {
+  ImageCaptureBlocEventCancelPreview();
+
+  @override
+  List<Object> get props => [];
+}
+
 class ImageCaptureBlocEventCreate extends ImageCaptureBlocEvent {
   final String filePath;
 
@@ -46,6 +54,11 @@ class ImageCaptureBlocEventCreate extends ImageCaptureBlocEvent {
 
   @override
   List<Object> get props => [filePath];
+}
+
+class ImageCaptureBlocEventDispose extends ImageCaptureBlocEvent {
+  @override
+  List<Object> get props => [];
 }
 
 abstract class ImageCaptureBlocState extends Equatable {}
@@ -65,12 +78,11 @@ class ImageCaptureBlocStateCameraMode extends ImageCaptureBlocState {
   List<Object> get props => [cameras, cameraController];
 }
 
-class ImageCaptureBlocStateRecordMode
-    extends ImageCaptureBlocStateCameraMode {
+class ImageCaptureBlocStateRecordMode extends ImageCaptureBlocStateCameraMode {
   final String filePath;
 
-  ImageCaptureBlocStateRecordMode(
-      List<CameraDescription> cameras, CameraController cameraController, this.filePath)
+  ImageCaptureBlocStateRecordMode(List<CameraDescription> cameras,
+      CameraController cameraController, this.filePath)
       : super(cameras, cameraController);
 }
 
@@ -84,15 +96,23 @@ class ImageCaptureBlocStatePlaybackMode extends ImageCaptureBlocState {
   List<Object> get props => [];
 }
 
-class ImageCaptureBlocStateVideoPlaybackMode extends ImageCaptureBlocStatePlaybackMode {
-  ImageCaptureBlocStateVideoPlaybackMode(String filePath, ImageCaptureNextRouteEvent nextRoute) : super(filePath, nextRoute);
+class ImageCaptureBlocStateVideoPlaybackMode
+    extends ImageCaptureBlocStatePlaybackMode {
+  final VideoPlayerController videoPlayerController;
+
+  ImageCaptureBlocStateVideoPlaybackMode(String filePath,
+      ImageCaptureNextRouteEvent nextRoute, this.videoPlayerController)
+      : super(filePath, nextRoute);
 
   @override
   List<Object> get props => [];
 }
 
-class ImageCaptureBlocStatePicturePlaybackMode extends ImageCaptureBlocStatePlaybackMode {
-  ImageCaptureBlocStatePicturePlaybackMode(String filePath, ImageCaptureNextRouteEvent nextRoute) : super(filePath, nextRoute);
+class ImageCaptureBlocStatePicturePlaybackMode
+    extends ImageCaptureBlocStatePlaybackMode {
+  ImageCaptureBlocStatePicturePlaybackMode(
+      String filePath, ImageCaptureNextRouteEvent nextRoute)
+      : super(filePath, nextRoute);
 
   @override
   List<Object> get props => [];
@@ -109,6 +129,7 @@ class ImageCaptureBloc
 
   List<CameraDescription> _cameras;
   CameraController _cameraController;
+  VideoPlayerController _videoPlayerController;
 
   @override
   ImageCaptureBlocState get initialState => ImageCaptureBlocStateIdle();
@@ -129,14 +150,33 @@ class ImageCaptureBloc
     } else if (event is ImageCaptureBlocEventStartVideoRecording) {
       String filePath = await _filePath('mp4');
       await _cameraController.startVideoRecording(filePath);
-      yield ImageCaptureBlocStateRecordMode(_cameras, _cameraController, filePath);
+      yield ImageCaptureBlocStateRecordMode(
+          _cameras, _cameraController, filePath);
     } else if (event is ImageCaptureBlocEventStopVideoRecording) {
       await _cameraController.stopVideoRecording();
-      yield ImageCaptureBlocStateVideoPlaybackMode(event.filePath, _args.nextRoute);
+      _videoPlayerController = VideoPlayerController.file(File(event.filePath));
+      await _videoPlayerController.initialize();
+      _videoPlayerController.play();
+      _videoPlayerController.setLooping(true);
+      yield ImageCaptureBlocStateVideoPlaybackMode(
+          event.filePath, _args.nextRoute, _videoPlayerController);
     } else if (event is ImageCaptureBlocEventTakePicture) {
       String filePath = await _filePath('jpg');
       await _cameraController.takePicture(filePath);
       yield ImageCaptureBlocStatePicturePlaybackMode(filePath, _args.nextRoute);
+    } else if (event is ImageCaptureBlocEventCancelPreview) {
+      if (_videoPlayerController != null) {
+        _videoPlayerController.dispose();
+        _videoPlayerController = null;
+      }
+      yield ImageCaptureBlocStateCameraMode(_cameras, _cameraController);
+    } else if (event is ImageCaptureBlocEventDispose) {
+      if (_videoPlayerController != null) {
+        _videoPlayerController.dispose();
+      }
+      if (_cameraController != null) {
+        _cameraController.dispose();
+      }
     }
   }
 

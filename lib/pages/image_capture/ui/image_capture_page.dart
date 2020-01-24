@@ -1,39 +1,46 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/bloc/image_capture_bloc.dart';
+import 'package:video_player/video_player.dart';
 
-class ImageCapturePage extends StatefulWidget {
-  @override
-  _ImageCapturePageState createState() => _ImageCapturePageState();
-}
-
-class _ImageCapturePageState extends State<ImageCapturePage> {
+class ImageCapturePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: Provider.of<ImageCaptureBloc>(context),
-      listener: (BuildContext context, ImageCaptureBlocState state) {
-        if (state is ImageCaptureBlocStateCameraMode) {
-        } else if (state is ImageCaptureBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
-        }
+    return WillPopScope(
+      onWillPop: () async {
+        BlocProvider.of<ImageCaptureBloc>(context)
+            .add(ImageCaptureBlocEventCancelPreview());
+        BlocProvider.of<ImageCaptureBloc>(context)
+            .add(ImageCaptureBlocEventDispose());
+        return true;
       },
-      child: BlocBuilder<ImageCaptureBloc, ImageCaptureBlocState>(
-          bloc: Provider.of<ImageCaptureBloc>(context),
-          builder: (context, state) {
-            if (state is ImageCaptureBlocStateCameraMode) {
-              return _renderCamera(context, state);
-            } else if (state is ImageCaptureBlocStateVideoPlaybackMode) {
-              return _renderVideoPlayer(context, state);
-            } else if (state is ImageCaptureBlocStatePicturePlaybackMode) {
-              return _renderPicturePlayer(context, state);
-            }
-            return _renderLoading(context, state);
-          }),
+      child: BlocListener(
+        bloc: Provider.of<ImageCaptureBloc>(context),
+        listener: (BuildContext context, ImageCaptureBlocState state) {
+          if (state is ImageCaptureBlocStateCameraMode) {
+          } else if (state is ImageCaptureBlocStateDone) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop());
+          }
+        },
+        child: BlocBuilder<ImageCaptureBloc, ImageCaptureBlocState>(
+            bloc: Provider.of<ImageCaptureBloc>(context),
+            builder: (context, state) {
+              if (state is ImageCaptureBlocStateCameraMode) {
+                return _renderCamera(context, state);
+              } else if (state is ImageCaptureBlocStateVideoPlaybackMode) {
+                return _renderVideoPlayer(context, state);
+              } else if (state is ImageCaptureBlocStatePicturePlaybackMode) {
+                return _renderPicturePlayer(context, state);
+              }
+              return _renderLoading(context, state);
+            }),
+      ),
     );
   }
 
@@ -57,6 +64,15 @@ class _ImageCapturePageState extends State<ImageCapturePage> {
             width: 35,
             height: 35,
             child: _renderCloseButton(context),
+          ),
+        ),
+        Positioned(
+          top: 25,
+          right: 0,
+          child: SizedBox(
+            width: 35,
+            height: 35,
+            child: _renderMuteButton(context, state),
           ),
         ),
         Positioned(
@@ -87,19 +103,85 @@ class _ImageCapturePageState extends State<ImageCapturePage> {
 
   Widget _renderVideoPlayer(
       BuildContext context, ImageCaptureBlocStateVideoPlaybackMode state) {
-    return RaisedButton(
-      onPressed: () {
-        _onCaptureDone(context, state);
-      },
+    return Stack(
+      children: [
+        LayoutBuilder(builder: (context, constraints) {
+          return FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                child: VideoPlayer(state.videoPlayerController)),
+          );
+        }),
+        Positioned(
+          top: 25,
+          left: 0,
+          child: SizedBox(
+            width: 35,
+            height: 35,
+            child: _renderCloseButton(context),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            color: Colors.black26,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: _renderPreviewMode(context, state),
+              )),
+            ),
+          ),
+        )
+      ],
     );
   }
 
   Widget _renderPicturePlayer(
       BuildContext context, ImageCaptureBlocStatePicturePlaybackMode state) {
-    return RaisedButton(
-      onPressed: () {
-        _onCaptureDone(context, state);
-      },
+    return Stack(
+      children: [
+        LayoutBuilder(builder: (context, constraints) {
+          return FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                child: Image.file(File(state.filePath))),
+          );
+        }),
+        Positioned(
+          top: 25,
+          left: 0,
+          child: SizedBox(
+            width: 35,
+            height: 35,
+            child: _renderCloseButton(context),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            color: Colors.black26,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: _renderPreviewMode(context, state),
+              )),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -112,6 +194,19 @@ class _ImageCapturePageState extends State<ImageCapturePage> {
       shape: new CircleBorder(),
       child: new Icon(
         Icons.close,
+        color: Colors.white,
+        size: 35.0,
+      ),
+    );
+  }
+
+  Widget _renderMuteButton(
+      BuildContext context, ImageCaptureBlocStateCameraMode state) {
+    return RawMaterialButton(
+      onPressed: () {},
+      shape: new CircleBorder(),
+      child: new Icon(
+        Icons.volume_mute,
         color: Colors.white,
         size: 35.0,
       ),
@@ -131,6 +226,27 @@ class _ImageCapturePageState extends State<ImageCapturePage> {
       BuildContext context, ImageCaptureBlocStateRecordMode state) {
     return <Widget>[
       _renderStopButton(context, state),
+    ];
+  }
+
+  List<Widget> _renderPreviewMode(
+      BuildContext context, ImageCaptureBlocStatePlaybackMode state) {
+    return [
+      RawMaterialButton(
+        child:
+            Text('RETAKE', style: TextStyle(color: Colors.white, fontSize: 20)),
+        onPressed: () {
+          BlocProvider.of<ImageCaptureBloc>(context)
+              .add(ImageCaptureBlocEventCancelPreview());
+        },
+      ),
+      RawMaterialButton(
+        child:
+            Text('NEXT', style: TextStyle(color: Colors.white, fontSize: 20)),
+        onPressed: () {
+          _onCaptureDone(context, state);
+        },
+      ),
     ];
   }
 
@@ -176,9 +292,11 @@ class _ImageCapturePageState extends State<ImageCapturePage> {
   void _onCaptureDone(
       BuildContext context, ImageCaptureBlocStatePlaybackMode state) {
     if (state.nextRoute != null) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(state.nextRoute.copyWith(state.filePath) as MainNavigatorEvent);
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(state.nextRoute.copyWith(state.filePath) as MainNavigatorEvent);
     } else {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.filePath));
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigatorActionPop(param: state.filePath));
     }
   }
 }

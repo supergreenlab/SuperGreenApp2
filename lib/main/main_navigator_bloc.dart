@@ -233,7 +233,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
   Stream<dynamic> mapEventToState(MainNavigatorEvent event) async* {
     Future future;
     if (event is MainNavigatorActionPop) {
-      _navigatorKey.currentState.pop(event.param);
+      _navigatorKey.currentState.maybePop(event.param);
     } else if (event is MainNavigateToHomeEvent) {
       future = _navigatorKey.currentState
           .pushReplacementNamed('/home', arguments: event);
