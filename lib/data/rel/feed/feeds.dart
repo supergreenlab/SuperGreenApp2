@@ -18,7 +18,14 @@ class FeedEntries extends Table {
   TextColumn get params => text()();
 }
 
-@UseDao(tables: [Feeds, FeedEntries])
+class FeedMedias extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get feedEntry => integer()();
+  TextColumn get filePath => text()();
+  TextColumn get thumbnailPath => text()();
+}
+
+@UseDao(tables: [Feeds, FeedEntries, FeedMedias])
 class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   FeedsDAO(RelDB db) : super(db);

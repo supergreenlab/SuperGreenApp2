@@ -17,7 +17,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         listener: (BuildContext context, FeedMediaFormBlocState state) {
           if (state is FeedMediaFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPopToRoot());
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
@@ -26,14 +26,16 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
             backgroundColor: Colors.transparent,
             appBar: AppBar(
               title: Text(
-                'Add schedule',
+                'Record picture',
                 style: TextStyle(color: Colors.white),
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
             ),
             body: Column(children: [
-              Text('ScheduleChange', style: TextStyle(color: Colors.white)),
+              Row(children: <Widget>[
+                
+              ],),
               RaisedButton(
                 child: Text('OK'),
                 onPressed: () => BlocProvider.of<FeedMediaFormBloc>(context)

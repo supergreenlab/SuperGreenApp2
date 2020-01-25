@@ -231,6 +231,13 @@ class MainNavigatorActionPop extends MainNavigatorEvent {
   MainNavigatorActionPop({this.param});
 
   @override
+  List<Object> get props => [param];
+}
+
+class MainNavigatorActionPopToRoot extends MainNavigatorEvent {
+  MainNavigatorActionPopToRoot();
+
+  @override
   List<Object> get props => [];
 }
 
@@ -246,6 +253,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     Future future;
     if (event is MainNavigatorActionPop) {
       _navigatorKey.currentState.maybePop(event.param);
+    } else if (event is MainNavigatorActionPopToRoot) {
+      _navigatorKey.currentState.popUntil((route) => route.isFirst);
     } else if (event is MainNavigateToHomeEvent) {
       future = _navigatorKey.currentState
           .pushReplacementNamed('/home', arguments: event);
