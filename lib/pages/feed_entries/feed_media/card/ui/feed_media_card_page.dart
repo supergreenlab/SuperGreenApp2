@@ -21,7 +21,7 @@ class FeedMediaCardPage extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: const Text('Note', style: TextStyle(color: Colors.white)),
                       ),
-                      subtitle: Text(state.feedEntry.date.toString()),
+                      subtitle: Text(state.feedEntry.date.toString(), style: TextStyle(color: Colors.white60)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
