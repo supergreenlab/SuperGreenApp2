@@ -137,26 +137,14 @@ class MainNavigateToFeedVentilationFormEvent
   List<Object> get props => [];
 }
 
-class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent
-    with ImageCaptureNextRouteEvent {
+class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
-  final String fp;
 
-  MainNavigateToFeedMediaFormEvent(this.box,
-      {pushAsReplacement = false, this.fp})
+  MainNavigateToFeedMediaFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [box, fp];
-
-  @override
-  ImageCaptureNextRouteEvent copyWith(String filePath) {
-    return MainNavigateToFeedMediaFormEvent(box,
-        pushAsReplacement: pushAsReplacement, fp: filePath);
-  }
-
-  @override
-  String get filePath => fp;
+  List<Object> get props => [box];
 }
 
 class MainNavigateToFeedDefoliationFormEvent
@@ -200,9 +188,7 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToImageCaptureEvent extends MainNavigateToFeedFormEvent {
-  final ImageCaptureNextRouteEvent nextRoute;
-
-  MainNavigateToImageCaptureEvent({this.nextRoute, pushAsReplacement = false})
+  MainNavigateToImageCaptureEvent({pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -211,18 +197,13 @@ class MainNavigateToImageCaptureEvent extends MainNavigateToFeedFormEvent {
 
 class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
   final String filePath;
-  final ImageCaptureNextRouteEvent nextRoute;
 
-  MainNavigateToImageCapturePlaybackEvent(this.filePath, {this.nextRoute, Function(Future<Object> f) futureFn})
+  MainNavigateToImageCapturePlaybackEvent(this.filePath,
+      {Function(Future<Object> f) futureFn})
       : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [];
-}
-
-abstract class ImageCaptureNextRouteEvent {
-  String get filePath;
-  ImageCaptureNextRouteEvent copyWith(String filePath);
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
@@ -301,7 +282,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToImageCaptureEvent) {
       future = _pushOrReplace('/capture', event);
     } else if (event is MainNavigateToImageCapturePlaybackEvent) {
-      future = _navigatorKey.currentState.pushNamed('/capture/playback', arguments: event);
+      future = _navigatorKey.currentState
+          .pushNamed('/capture/playback', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

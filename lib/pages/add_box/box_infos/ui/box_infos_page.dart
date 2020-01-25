@@ -45,4 +45,10 @@ class BoxInfosPageState extends State<BoxInfosPage> {
     Provider.of<BoxInfosBloc>(context, listen: false)
         .add(BoxInfosBlocEventCreateBox(_nameController.text));
   }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 }

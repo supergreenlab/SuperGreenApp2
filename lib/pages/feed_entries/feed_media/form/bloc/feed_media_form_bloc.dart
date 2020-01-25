@@ -17,14 +17,18 @@ class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
   List<Object> get props => [message];
 }
 
-abstract class FeedMediaFormBlocState extends Equatable {}
+class FeedMediaFormBlocState extends Equatable {
+  final List<FeedMedia> medias;
 
-class FeedMediaFormBlocStateIdle extends FeedMediaFormBlocState {
+  FeedMediaFormBlocState(this.medias);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [medias];
 }
 
 class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
+  FeedMediaFormBlocStateDone(List<FeedMedia> medias) : super(medias);
+
   @override
   List<Object> get props => [];
 }
@@ -33,8 +37,10 @@ class FeedMediaFormBloc
     extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent _args;
 
+  List<FeedMedia> _medias = [];
+
   @override
-  FeedMediaFormBlocState get initialState => FeedMediaFormBlocStateIdle();
+  FeedMediaFormBlocState get initialState => FeedMediaFormBlocState(_medias);
 
   FeedMediaFormBloc(this._args);
 
@@ -47,9 +53,9 @@ class FeedMediaFormBloc
         type: 'FE_MEDIA',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({'filePath': _args.filePath}),
+        params: JsonEncoder().convert({'filePath': ''}),
       ));
-      yield FeedMediaFormBlocStateDone();
+      yield FeedMediaFormBlocStateDone(_medias);
     }
   }
 }

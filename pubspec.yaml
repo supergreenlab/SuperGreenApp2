@@ -39,6 +39,8 @@ dependencies:
   event_bus:
   flutter_html:
   video_player:
+  keyboard_visibility:
+  video_thumbnail:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

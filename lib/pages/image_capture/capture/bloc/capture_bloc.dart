@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class CaptureBlocEvent extends Equatable {}
@@ -11,26 +13,40 @@ class CaptureBlocEventInit extends CaptureBlocEvent {
   List<Object> get props => [];
 }
 
-class CaptureBlocState extends Equatable {
-  final ImageCaptureNextRouteEvent nextRoute;
+class CaptureBlocEventCreate extends CaptureBlocEvent {
+  final String filePath;
 
-  CaptureBlocState(this.nextRoute);
+  CaptureBlocEventCreate(this.filePath);
 
   @override
-  List<Object> get props => [
-        nextRoute,
-      ];
+  List<Object> get props => [filePath];
+}
+
+class CaptureBlocState extends Equatable {
+  CaptureBlocState();
+
+  @override
+  List<Object> get props => [];
 }
 
 class CaptureBlocStateInit extends CaptureBlocState {
-  CaptureBlocStateInit(ImageCaptureNextRouteEvent nextRoute) : super(nextRoute);
+  CaptureBlocStateInit();
+}
+
+class CaptureBlocStateDone extends CaptureBlocState {
+  final FeedMediasCompanion feedMedia;
+
+  CaptureBlocStateDone(this.feedMedia);
+
+  @override
+  List<Object> get props => [feedMedia];
 }
 
 class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   final MainNavigateToImageCaptureEvent _args;
 
   @override
-  CaptureBlocState get initialState => CaptureBlocState(_args.nextRoute);
+  CaptureBlocState get initialState => CaptureBlocState();
 
   CaptureBloc(this._args) {
     add(CaptureBlocEventInit());
@@ -39,7 +55,12 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   @override
   Stream<CaptureBlocState> mapEventToState(CaptureBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield CaptureBlocStateInit(_args.nextRoute);
+      yield CaptureBlocStateInit();
+    } else if (event is CaptureBlocEventCreate) {
+      final feedMedia = FeedMediasCompanion(
+        filePath: Value(event.filePath),
+      );
+      yield CaptureBlocStateDone(feedMedia);
     }
   }
 }

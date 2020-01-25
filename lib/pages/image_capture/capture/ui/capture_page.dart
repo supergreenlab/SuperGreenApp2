@@ -14,7 +14,9 @@ class CapturePage extends StatefulWidget {
 }
 
 class _CapturePageState extends State<CapturePage> {
+  bool _enableAudio = false;
   String _filePath;
+  List<CameraDescription> _cameras;
   CameraController _cameraController;
 
   @override
@@ -25,12 +27,12 @@ class _CapturePageState extends State<CapturePage> {
         if (state is CaptureBlocStateInit) {
           if (_cameraController == null) {
             _filePath = await _makeFilePath();
-            List<CameraDescription> cameras = await availableCameras();
-            _cameraController =
-                CameraController(cameras[0], ResolutionPreset.medium);
-            await _cameraController.initialize();
-            setState(() {});
+            _cameras = await availableCameras();
+            _setupCamera();
           }
+        } else if (state is CaptureBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.feedMedia));
         }
       },
       child: BlocBuilder<CaptureBloc, CaptureBlocState>(
@@ -63,7 +65,8 @@ class _CapturePageState extends State<CapturePage> {
               fit: BoxFit.cover,
               child: SizedBox(
                   width: constraints.maxWidth,
-                  height: constraints.maxWidth / _cameraController.value.aspectRatio,
+                  height: constraints.maxWidth /
+                      _cameraController.value.aspectRatio,
                   child: CameraPreview(_cameraController)),
             );
           }),
@@ -118,7 +121,8 @@ class _CapturePageState extends State<CapturePage> {
           LayoutBuilder(builder: (context, constraints) {
             return SizedBox(
                 width: constraints.maxWidth,
-                height: constraints.maxWidth / _cameraController.value.aspectRatio,
+                height:
+                    constraints.maxWidth / _cameraController.value.aspectRatio,
                 child: CameraPreview(_cameraController));
           }),
           Positioned(
@@ -165,10 +169,13 @@ class _CapturePageState extends State<CapturePage> {
 
   Widget _renderMuteButton(BuildContext context, CaptureBlocState state) {
     return RawMaterialButton(
-      onPressed: () {},
+      onPressed: () {
+        _enableAudio = !_enableAudio;
+        _setupCamera();
+      },
       shape: new CircleBorder(),
       child: new Icon(
-        Icons.volume_mute,
+        _enableAudio ? Icons.volume_up : Icons.volume_off,
         color: Colors.white,
         size: 35.0,
       ),
@@ -198,7 +205,7 @@ class _CapturePageState extends State<CapturePage> {
       final String filePath = '$_filePath.jpg';
       await _deleteFileIfExists(filePath);
       await _cameraController.takePicture(filePath);
-      endCapture(state, filePath);
+      _endCapture(state, filePath);
     });
   }
 
@@ -214,7 +221,7 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderStopButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.stop, Colors.red, () async {
       await _cameraController.stopVideoRecording();
-      endCapture(state, '$_filePath.mp4');
+      _endCapture(state, '$_filePath.mp4');
     });
   }
 
@@ -234,21 +241,27 @@ class _CapturePageState extends State<CapturePage> {
     );
   }
 
-  void endCapture(CaptureBlocState state, String filePath) {
+  void _endCapture(CaptureBlocState state, String filePath) {
     BlocProvider.of<MainNavigatorBloc>(context).add(
         MainNavigateToImageCapturePlaybackEvent(filePath, futureFn: (f) async {
-      final dynamic ret = await f;
+      final ret = await f;
       if (ret == null || ret == false) {
+        await _deleteFileIfExists(filePath);
         return;
       }
-      if (state.nextRoute != null) {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(state.nextRoute.copyWith(filePath) as MainNavigatorEvent);
-      } else {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigatorActionPop(param: filePath));
-      }
+      BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreate(filePath));
     }));
+  }
+
+  void _setupCamera() async {
+    CameraController old = _cameraController;
+    if (old != null) {
+      await old.dispose();
+    }
+    _cameraController = CameraController(_cameras[0], ResolutionPreset.medium,
+        enableAudio: _enableAudio);
+    await _cameraController.initialize();
+    setState(() {});
   }
 
   Future _deleteFileIfExists(String filePath) async {

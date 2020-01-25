@@ -52,10 +52,10 @@ class BoxFeedPage extends StatelessWidget {
       overlayColor: Colors.black,
       children: [
         _renderSpeedDialChild(
-            'Video / photo',
+            'Video/pic note',
             Colors.amber,
             _onSpeedDialSelected(context,
-                ({pushAsReplacement = false}) => MainNavigateToImageCaptureEvent(pushAsReplacement: pushAsReplacement, nextRoute: MainNavigateToFeedMediaFormEvent(state.box)))),
+                ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(state.box, pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Watering',
             Colors.blue,

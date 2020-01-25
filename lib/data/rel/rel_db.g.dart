@@ -1651,6 +1651,260 @@ class $FeedEntriesTable extends FeedEntries
   }
 }
 
+class FeedMedia extends DataClass implements Insertable<FeedMedia> {
+  final int id;
+  final int feedEntry;
+  final String filePath;
+  final String thumbnailPath;
+  FeedMedia(
+      {@required this.id,
+      @required this.feedEntry,
+      @required this.filePath,
+      @required this.thumbnailPath});
+  factory FeedMedia.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return FeedMedia(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feedEntry:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}feed_entry']),
+      filePath: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}file_path']),
+      thumbnailPath: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_path']),
+    );
+  }
+  factory FeedMedia.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return FeedMedia(
+      id: serializer.fromJson<int>(json['id']),
+      feedEntry: serializer.fromJson<int>(json['feedEntry']),
+      filePath: serializer.fromJson<String>(json['filePath']),
+      thumbnailPath: serializer.fromJson<String>(json['thumbnailPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson(
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'feedEntry': serializer.toJson<int>(feedEntry),
+      'filePath': serializer.toJson<String>(filePath),
+      'thumbnailPath': serializer.toJson<String>(thumbnailPath),
+    };
+  }
+
+  @override
+  FeedMediasCompanion createCompanion(bool nullToAbsent) {
+    return FeedMediasCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feedEntry: feedEntry == null && nullToAbsent
+          ? const Value.absent()
+          : Value(feedEntry),
+      filePath: filePath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(filePath),
+      thumbnailPath: thumbnailPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(thumbnailPath),
+    );
+  }
+
+  FeedMedia copyWith(
+          {int id, int feedEntry, String filePath, String thumbnailPath}) =>
+      FeedMedia(
+        id: id ?? this.id,
+        feedEntry: feedEntry ?? this.feedEntry,
+        filePath: filePath ?? this.filePath,
+        thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FeedMedia(')
+          ..write('id: $id, ')
+          ..write('feedEntry: $feedEntry, ')
+          ..write('filePath: $filePath, ')
+          ..write('thumbnailPath: $thumbnailPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(feedEntry.hashCode,
+          $mrjc(filePath.hashCode, thumbnailPath.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is FeedMedia &&
+          other.id == this.id &&
+          other.feedEntry == this.feedEntry &&
+          other.filePath == this.filePath &&
+          other.thumbnailPath == this.thumbnailPath);
+}
+
+class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
+  final Value<int> id;
+  final Value<int> feedEntry;
+  final Value<String> filePath;
+  final Value<String> thumbnailPath;
+  const FeedMediasCompanion({
+    this.id = const Value.absent(),
+    this.feedEntry = const Value.absent(),
+    this.filePath = const Value.absent(),
+    this.thumbnailPath = const Value.absent(),
+  });
+  FeedMediasCompanion.insert({
+    this.id = const Value.absent(),
+    @required int feedEntry,
+    @required String filePath,
+    @required String thumbnailPath,
+  })  : feedEntry = Value(feedEntry),
+        filePath = Value(filePath),
+        thumbnailPath = Value(thumbnailPath);
+  FeedMediasCompanion copyWith(
+      {Value<int> id,
+      Value<int> feedEntry,
+      Value<String> filePath,
+      Value<String> thumbnailPath}) {
+    return FeedMediasCompanion(
+      id: id ?? this.id,
+      feedEntry: feedEntry ?? this.feedEntry,
+      filePath: filePath ?? this.filePath,
+      thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+    );
+  }
+}
+
+class $FeedMediasTable extends FeedMedias
+    with TableInfo<$FeedMediasTable, FeedMedia> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $FeedMediasTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _feedEntryMeta = const VerificationMeta('feedEntry');
+  GeneratedIntColumn _feedEntry;
+  @override
+  GeneratedIntColumn get feedEntry => _feedEntry ??= _constructFeedEntry();
+  GeneratedIntColumn _constructFeedEntry() {
+    return GeneratedIntColumn(
+      'feed_entry',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _filePathMeta = const VerificationMeta('filePath');
+  GeneratedTextColumn _filePath;
+  @override
+  GeneratedTextColumn get filePath => _filePath ??= _constructFilePath();
+  GeneratedTextColumn _constructFilePath() {
+    return GeneratedTextColumn(
+      'file_path',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _thumbnailPathMeta =
+      const VerificationMeta('thumbnailPath');
+  GeneratedTextColumn _thumbnailPath;
+  @override
+  GeneratedTextColumn get thumbnailPath =>
+      _thumbnailPath ??= _constructThumbnailPath();
+  GeneratedTextColumn _constructThumbnailPath() {
+    return GeneratedTextColumn(
+      'thumbnail_path',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, feedEntry, filePath, thumbnailPath];
+  @override
+  $FeedMediasTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'feed_medias';
+  @override
+  final String actualTableName = 'feed_medias';
+  @override
+  VerificationContext validateIntegrity(FeedMediasCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    } else if (id.isRequired && isInserting) {
+      context.missing(_idMeta);
+    }
+    if (d.feedEntry.present) {
+      context.handle(_feedEntryMeta,
+          feedEntry.isAcceptableValue(d.feedEntry.value, _feedEntryMeta));
+    } else if (feedEntry.isRequired && isInserting) {
+      context.missing(_feedEntryMeta);
+    }
+    if (d.filePath.present) {
+      context.handle(_filePathMeta,
+          filePath.isAcceptableValue(d.filePath.value, _filePathMeta));
+    } else if (filePath.isRequired && isInserting) {
+      context.missing(_filePathMeta);
+    }
+    if (d.thumbnailPath.present) {
+      context.handle(
+          _thumbnailPathMeta,
+          thumbnailPath.isAcceptableValue(
+              d.thumbnailPath.value, _thumbnailPathMeta));
+    } else if (thumbnailPath.isRequired && isInserting) {
+      context.missing(_thumbnailPathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FeedMedia map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return FeedMedia.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(FeedMediasCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.feedEntry.present) {
+      map['feed_entry'] = Variable<int, IntType>(d.feedEntry.value);
+    }
+    if (d.filePath.present) {
+      map['file_path'] = Variable<String, StringType>(d.filePath.value);
+    }
+    if (d.thumbnailPath.present) {
+      map['thumbnail_path'] =
+          Variable<String, StringType>(d.thumbnailPath.value);
+    }
+    return map;
+  }
+
+  @override
+  $FeedMediasTable createAlias(String alias) {
+    return $FeedMediasTable(_db, alias);
+  }
+}
+
 abstract class _$RelDB extends GeneratedDatabase {
   _$RelDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $DevicesTable _devices;
@@ -1665,6 +1919,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
   $FeedEntriesTable _feedEntries;
   $FeedEntriesTable get feedEntries => _feedEntries ??= $FeedEntriesTable(this);
+  $FeedMediasTable _feedMedias;
+  $FeedMediasTable get feedMedias => _feedMedias ??= $FeedMediasTable(this);
   DevicesDAO _devicesDAO;
   DevicesDAO get devicesDAO => _devicesDAO ??= DevicesDAO(this as RelDB);
   BoxesDAO _boxesDAO;
@@ -1673,5 +1929,5 @@ abstract class _$RelDB extends GeneratedDatabase {
   FeedsDAO get feedsDAO => _feedsDAO ??= FeedsDAO(this as RelDB);
   @override
   List<TableInfo> get allTables =>
-      [devices, modules, params, boxes, feeds, feedEntries];
+      [devices, modules, params, boxes, feeds, feedEntries, feedMedias];
 }

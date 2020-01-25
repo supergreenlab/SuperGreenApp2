@@ -9,4 +9,5 @@ part of 'feeds.dart';
 mixin _$FeedsDAOMixin on DatabaseAccessor<RelDB> {
   $FeedsTable get feeds => db.feeds;
   $FeedEntriesTable get feedEntries => db.feedEntries;
+  $FeedMediasTable get feedMedias => db.feedMedias;
 }
