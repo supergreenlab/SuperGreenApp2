@@ -35,8 +35,10 @@ import 'package:super_green_app/pages/feed_entries/feed_water/form/ui/feed_water
 import 'package:super_green_app/pages/home/bloc/home_bloc.dart';
 import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/ui/home_page.dart';
-import 'package:super_green_app/pages/image_capture/bloc/image_capture_bloc.dart';
-import 'package:super_green_app/pages/image_capture/ui/image_capture_page.dart';
+import 'package:super_green_app/pages/image_capture/capture/bloc/capture_bloc.dart';
+import 'package:super_green_app/pages/image_capture/capture/ui/capture_page.dart';
+import 'package:super_green_app/pages/image_capture/playback/bloc/playback_bloc.dart';
+import 'package:super_green_app/pages/image_capture/playback/ui/playback_page.dart';
 import 'package:super_green_app/pages/tip/bloc/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/ui/tip_page.dart';
 
@@ -194,8 +196,16 @@ class MainPage extends StatelessWidget {
       case '/capture':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
-            create: (context) => ImageCaptureBloc(settings.arguments),
-            child: _wrapBg(context, ImageCapturePage()),
+            create: (context) => CaptureBloc(settings.arguments),
+            child: _wrapBg(context, CapturePage()),
+          ),
+          fullscreenDialog: true,
+        );
+      case '/capture/playback':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => PlaybackBloc(settings.arguments),
+            child: _wrapBg(context, PlaybackPage()),
           ),
           fullscreenDialog: true,
         );

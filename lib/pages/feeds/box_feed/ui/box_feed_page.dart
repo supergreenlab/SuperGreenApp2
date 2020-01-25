@@ -55,37 +55,37 @@ class BoxFeedPage extends StatelessWidget {
             'Video / photo',
             Colors.amber,
             _onSpeedDialSelected(context,
-                ({fromTip = false}) => MainNavigateToImageCaptureEvent(fromTip: fromTip, nextRoute: MainNavigateToFeedMediaFormEvent(state.box, fromTip: fromTip)))),
+                ({pushAsReplacement = false}) => MainNavigateToImageCaptureEvent(pushAsReplacement: pushAsReplacement, nextRoute: MainNavigateToFeedMediaFormEvent(state.box)))),
         _renderSpeedDialChild(
             'Watering',
             Colors.blue,
             _onSpeedDialSelected(
-                context, ({fromTip = false}) => MainNavigateToFeedWaterFormEvent(state.box, fromTip: fromTip))),
+                context, ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(state.box, pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Light dimming',
             Colors.yellow,
             _onSpeedDialSelected(
-                context, ({fromTip = false}) => MainNavigateToFeedLightFormEvent(state.box, fromTip: fromTip))),
+                context, ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(state.box, pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Ventilation',
             Colors.grey,
             _onSpeedDialSelected(
-                context, ({fromTip = false}) => MainNavigateToFeedVentilationFormEvent(state.box, fromTip: fromTip))),
+                context, ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(state.box, pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Defoliation',
             Colors.green,
             _onSpeedDialSelected(
-                context, ({fromTip = false}) => MainNavigateToFeedDefoliationFormEvent(state.box, fromTip: fromTip))),
+                context, ({pushAsReplacement = false}) => MainNavigateToFeedDefoliationFormEvent(state.box, pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Topping',
             Colors.blueGrey,
             _onSpeedDialSelected(
-                context, ({fromTip = false}) => MainNavigateToFeedToppingFormEvent(state.box, fromTip: fromTip))),
+                context, ({pushAsReplacement = false}) => MainNavigateToFeedToppingFormEvent(state.box, pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Veg/Bloom',
             Colors.orange,
             _onSpeedDialSelected(
-                context, ({fromTip = false}) => MainNavigateToFeedScheduleFormEvent(state.box, fromTip: fromTip))),
+                context, ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(state.box, pushAsReplacement: pushAsReplacement))),
       ],
     );
   }
@@ -100,9 +100,9 @@ class BoxFeedPage extends StatelessWidget {
   }
 
   void Function() _onSpeedDialSelected(
-      BuildContext context, MainNavigatorEvent Function({bool fromTip}) navigatorEvent) {
+      BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent) {
     return () =>
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(navigatorEvent(fromTip: true)));
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {

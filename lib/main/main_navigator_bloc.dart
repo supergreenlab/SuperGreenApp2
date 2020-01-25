@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class MainNavigatorEvent extends Equatable {
-  final void Function(Future future) futureFn;
+  final void Function(Future<Object> future) futureFn;
 
   MainNavigatorEvent({this.futureFn});
 
@@ -109,8 +109,8 @@ class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
 class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedLightFormEvent(this.box, {fromTip = false})
-      : super(fromTip);
+  MainNavigateToFeedLightFormEvent(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
 
   @override
   List<Object> get props => [];
@@ -119,8 +119,8 @@ class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
 class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedWaterFormEvent(this.box, {fromTip = false})
-      : super(fromTip);
+  MainNavigateToFeedWaterFormEvent(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
 
   @override
   List<Object> get props => [];
@@ -130,8 +130,8 @@ class MainNavigateToFeedVentilationFormEvent
     extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedVentilationFormEvent(this.box, {fromTip = false})
-      : super(fromTip);
+  MainNavigateToFeedVentilationFormEvent(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
 
   @override
   List<Object> get props => [];
@@ -142,8 +142,9 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent
   final Box box;
   final String fp;
 
-  MainNavigateToFeedMediaFormEvent(this.box, {fromTip = false, this.fp})
-      : super(fromTip);
+  MainNavigateToFeedMediaFormEvent(this.box,
+      {pushAsReplacement = false, this.fp})
+      : super(pushAsReplacement);
 
   @override
   List<Object> get props => [box, fp];
@@ -151,7 +152,7 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent
   @override
   ImageCaptureNextRouteEvent copyWith(String filePath) {
     return MainNavigateToFeedMediaFormEvent(box,
-        fromTip: pushAsReplacement, fp: filePath);
+        pushAsReplacement: pushAsReplacement, fp: filePath);
   }
 
   @override
@@ -162,8 +163,8 @@ class MainNavigateToFeedDefoliationFormEvent
     extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedDefoliationFormEvent(this.box, {fromTip = false})
-      : super(fromTip);
+  MainNavigateToFeedDefoliationFormEvent(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
 
   @override
   List<Object> get props => [];
@@ -172,8 +173,8 @@ class MainNavigateToFeedDefoliationFormEvent
 class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedScheduleFormEvent(this.box, {fromTip = false})
-      : super(fromTip);
+  MainNavigateToFeedScheduleFormEvent(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
 
   @override
   List<Object> get props => [];
@@ -182,8 +183,8 @@ class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
 class MainNavigateToFeedToppingFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedToppingFormEvent(this.box, {fromTip = false})
-      : super(fromTip);
+  MainNavigateToFeedToppingFormEvent(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
 
   @override
   List<Object> get props => [];
@@ -201,8 +202,19 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
 class MainNavigateToImageCaptureEvent extends MainNavigateToFeedFormEvent {
   final ImageCaptureNextRouteEvent nextRoute;
 
-  MainNavigateToImageCaptureEvent({this.nextRoute, fromTip = false})
-      : super(fromTip);
+  MainNavigateToImageCaptureEvent({this.nextRoute, pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
+  final String filePath;
+  final ImageCaptureNextRouteEvent nextRoute;
+
+  MainNavigateToImageCapturePlaybackEvent(this.filePath, {this.nextRoute, Function(Future<Object> f) futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [];
@@ -279,6 +291,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {
       future = _pushOrReplace('/capture', event);
+    } else if (event is MainNavigateToImageCapturePlaybackEvent) {
+      future = _navigatorKey.currentState.pushNamed('/capture/playback', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);
