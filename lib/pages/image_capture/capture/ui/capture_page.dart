@@ -200,7 +200,7 @@ class _CapturePageState extends State<CapturePage> {
         () async {
       final String filePath = '$_filePath.jpg';
       await _deleteFileIfExists(filePath);
-      _cameraController.takePicture(filePath);
+      await _cameraController.takePicture(filePath);
       endCapture(state, filePath);
     });
   }

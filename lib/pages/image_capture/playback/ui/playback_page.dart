@@ -118,15 +118,11 @@ class _PlaybackPageState extends State<PlaybackPage> {
         child:
             Text('NEXT', style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
-          _onCaptureDone(context, state);
+          BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigatorActionPop(param: true));
         },
       ),
     ];
-  }
-
-  void _onCaptureDone(BuildContext context, PlaybackBlocState state) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigatorActionPop(param: true));
   }
 
   @override
