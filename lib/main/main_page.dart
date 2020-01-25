@@ -197,7 +197,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => CaptureBloc(settings.arguments),
-            child: _wrapBg(context, CapturePage()),
+            child: CapturePage(),
           ),
           fullscreenDialog: true,
         );
@@ -205,7 +205,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => PlaybackBloc(settings.arguments),
-            child: _wrapBg(context, PlaybackPage()),
+            child: PlaybackPage(),
           ),
           fullscreenDialog: true,
         );

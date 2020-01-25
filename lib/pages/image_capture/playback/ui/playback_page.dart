@@ -51,12 +51,9 @@ class _PlaybackPageState extends State<PlaybackPage> {
         LayoutBuilder(builder: (context, constraints) {
           return FittedBox(
             fit: BoxFit.cover,
-            child: SizedBox(
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-                child: state.isVideo
-                    ? VideoPlayer(_videoPlayerController)
-                    : Image.file(File(state.filePath))),
+            child: state.isVideo
+                ? _renderVideoPlayer(context, state, constraints)
+                : _renderPicturePlayer(context, state, constraints),
           );
         }),
         Positioned(
@@ -86,6 +83,22 @@ class _PlaybackPageState extends State<PlaybackPage> {
         )
       ],
     );
+  }
+
+  Widget _renderVideoPlayer(BuildContext context, PlaybackBlocState state,
+      BoxConstraints constraints) {
+    return SizedBox(
+        width: constraints.maxHeight * _videoPlayerController.value.aspectRatio,
+        height: constraints.maxHeight,
+        child: VideoPlayer(_videoPlayerController));
+  }
+
+  Widget _renderPicturePlayer(BuildContext context, PlaybackBlocState state,
+      BoxConstraints constraints) {
+    return SizedBox(
+        width: constraints.maxWidth,
+        height: constraints.maxHeight,
+        child: Image.file(File(state.filePath)));
   }
 
   Widget _renderCloseButton(BuildContext context) {
@@ -119,7 +132,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
             Text('NEXT', style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
           BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigatorActionPop(param: true));
+              .add(MainNavigatorActionPop(param: true));
         },
       ),
     ];

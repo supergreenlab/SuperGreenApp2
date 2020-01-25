@@ -63,7 +63,7 @@ class _CapturePageState extends State<CapturePage> {
               fit: BoxFit.cover,
               child: SizedBox(
                   width: constraints.maxWidth,
-                  height: constraints.maxHeight,
+                  height: constraints.maxWidth / _cameraController.value.aspectRatio,
                   child: CameraPreview(_cameraController)),
             );
           }),
@@ -116,13 +116,10 @@ class _CapturePageState extends State<CapturePage> {
       child: Stack(
         children: [
           LayoutBuilder(builder: (context, constraints) {
-            return FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                  width: constraints.maxWidth,
-                  height: constraints.maxHeight,
-                  child: CameraPreview(_cameraController)),
-            );
+            return SizedBox(
+                width: constraints.maxWidth,
+                height: constraints.maxWidth / _cameraController.value.aspectRatio,
+                child: CameraPreview(_cameraController));
           }),
           Positioned(
             bottom: 0,
