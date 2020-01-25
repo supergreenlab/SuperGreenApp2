@@ -51,16 +51,25 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      title: 'SuperGreenLab',
-      onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-      ),
-      home: BlocProvider<AppInitBloc>(
-        create: (context) => AppInitBloc(),
-        child: AppInitPage(),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: MaterialApp(
+        navigatorKey: _navigatorKey,
+        title: 'SuperGreenLab',
+        onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
+        theme: ThemeData(
+          fontFamily: 'Roboto',
+        ),
+        home: BlocProvider<AppInitBloc>(
+          create: (context) => AppInitBloc(),
+          child: AppInitPage(),
+        ),
       ),
     );
   }
