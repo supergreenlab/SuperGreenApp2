@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 abstract class CaptureBlocEvent extends Equatable {}
 
@@ -57,8 +58,21 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
     if (event is CaptureBlocEventInit) {
       yield CaptureBlocStateInit();
     } else if (event is CaptureBlocEventCreate) {
+      String thumbnailPath = event.filePath;
+      if (thumbnailPath.endsWith('mp4')) {
+        thumbnailPath = thumbnailPath.replaceAll('.mp4', '.jpg');
+        await VideoThumbnail.thumbnailFile(
+          video: event.filePath,
+          thumbnailPath: thumbnailPath,
+          imageFormat: ImageFormat.JPEG,
+          maxHeight:
+              200, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+          quality: 75,
+        );
+      }
       final feedMedia = FeedMediasCompanion(
         filePath: Value(event.filePath),
+        thumbnailPath: Value(thumbnailPath),
       );
       yield CaptureBlocStateDone(feedMedia);
     }

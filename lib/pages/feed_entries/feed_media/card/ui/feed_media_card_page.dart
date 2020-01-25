@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +13,20 @@ class FeedMediaCardPage extends StatelessWidget {
         builder: (context, state) => Card(
                 color: Color.fromARGB(40, 255, 255, 255),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ListTile(
-                      leading: Icon(Icons.album, color: Colors.white,),
-                      title: const Text('Feed Media', style: TextStyle(color: Colors.white)),
+                      leading: state.medias.length == 0 ? Icon(Icons.album) : Image.file(File(state.medias[0].thumbnailPath)),
+                      title: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: const Text('Note', style: TextStyle(color: Colors.white)),
+                      ),
+                      subtitle: Text(state.feedEntry.date.toString()),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(state.params == null ? '' : state.params['message'], style: TextStyle(color: Colors.white70, fontSize: 17)),
+                    )
                   ],
                 ),
               ));

@@ -187,9 +187,10 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
-class MainNavigateToImageCaptureEvent extends MainNavigateToFeedFormEvent {
-  MainNavigateToImageCaptureEvent({pushAsReplacement = false})
-      : super(pushAsReplacement);
+class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
+  MainNavigateToImageCaptureEvent(
+      {Function(Future<Object> f) futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [];
@@ -280,7 +281,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToTipEvent) {
       future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {
-      future = _pushOrReplace('/capture', event);
+      future = _navigatorKey.currentState.pushNamed('/capture', arguments: event);
     } else if (event is MainNavigateToImageCapturePlaybackEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/capture/playback', arguments: event);

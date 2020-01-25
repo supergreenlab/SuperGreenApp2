@@ -27,7 +27,6 @@ class FeedMedias extends Table {
 
 @UseDao(tables: [Feeds, FeedEntries, FeedMedias])
 class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
-
   FeedsDAO(RelDB db) : super(db);
 
   Future<int> addFeed(FeedsCompanion feed) {
@@ -37,12 +36,26 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   Future<Feed> getFeed(int feedID) {
     return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
   }
-  
+
   Stream<List<FeedEntry>> watchEntries(int feedID) {
-    return (select(feedEntries)..where((fe) => fe.feed.equals(feedID))..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)])).watch();
+    return (select(feedEntries)
+          ..where((fe) => fe.feed.equals(feedID))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
+          ]))
+        .watch();
   }
 
   Future<int> addFeedEntry(FeedEntriesCompanion feedEntry) {
     return into(feedEntries).insert(feedEntry);
+  }
+
+  Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {
+    return into(feedMedias).insert(feedMediaEntry);
+  }
+
+  Future<List<FeedMedia>> getFeedMedias(int feedEntryID) {
+    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID)))
+        .get();
   }
 }

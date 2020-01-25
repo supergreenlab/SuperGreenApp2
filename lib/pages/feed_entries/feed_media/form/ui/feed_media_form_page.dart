@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:provider/provider.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/bloc/feed_media_form_bloc.dart';
 
@@ -74,14 +77,37 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         child: RaisedButton(
           color: Color(0xff3bb30b),
           child: Text('OK', style: TextStyle(color: Colors.white)),
-          onPressed: () => BlocProvider.of<FeedMediaFormBloc>(context)
-              .add(FeedMediaFormBlocEventCreate('Test')),
+          onPressed: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
+              FeedMediaFormBlocEventCreate(
+                  _textController.text, _private, _helpRequest)),
         ),
       ),
     ];
   }
 
   Widget _renderMedias(BuildContext context, FeedMediaFormBlocState state) {
+    List<Widget> medias = state.medias
+        .map((m) => _renderMedia(
+              context,
+              state,
+              () {},
+              Image.file(File(m.thumbnailPath.value)),
+            ))
+        .toList();
+    medias.add(_renderMedia(context, state, () {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
+        FeedMediasCompanion fm = await f;
+        if (fm != null) {
+          BlocProvider.of<FeedMediaFormBloc>(context)
+              .add(FeedMediaFormBlocPushMedia(fm));
+        }
+      }));
+    },
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SvgPicture.asset('assets/feed_form/icon_add.svg'),
+        )));
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       child: Column(
@@ -102,17 +128,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                 ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    _renderMedia(context, state, () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToImageCaptureEvent());
-                    },
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child:
-                              SvgPicture.asset('assets/feed_form/icon_add.svg'),
-                        )),
-                  ],
+                  children: medias,
                 )
               ],
             ),
