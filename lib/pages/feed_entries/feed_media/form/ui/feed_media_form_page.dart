@@ -33,7 +33,16 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
 
     _listener = _keyboardVisibility.addNewListener(
       onChange: (bool visible) {
-        _keyboardVisible = visible;
+        setState(() {
+          _keyboardVisible = visible;
+        });
+        if (!_keyboardVisible) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        }
       },
     );
   }
@@ -87,8 +96,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           color: Color(0xff3bb30b),
           child: Text('OK', style: TextStyle(color: Colors.white)),
           onPressed: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
-              FeedMediaFormBlocEventCreate(
-                  _textController.text, _helpRequest)),
+              FeedMediaFormBlocEventCreate(_textController.text, _helpRequest)),
         ),
       ),
     ];
@@ -97,7 +105,10 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   Widget _renderTextrea(BuildContext context, FeedMediaFormBlocState state) {
     return Expanded(
       key: Key('TEXTAREA'),
-      child: FeedFormTextarea(title: 'Observations', textEditingController: _textController,),
+      child: FeedFormTextarea(
+        title: 'Observations',
+        textEditingController: _textController,
+      ),
     );
   }
 

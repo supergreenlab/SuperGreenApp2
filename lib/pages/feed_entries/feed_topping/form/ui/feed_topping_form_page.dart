@@ -30,7 +30,9 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
 
     _listener = _keyboardVisibility.addNewListener(
       onChange: (bool visible) {
-        _keyboardVisible = visible;
+        setState(() {
+          _keyboardVisible = visible;
+        });
         if (!_keyboardVisible) {
           FocusScopeNode currentFocus = FocusScope.of(context);
 

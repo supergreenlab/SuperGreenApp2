@@ -20,7 +20,7 @@ class FeedPage extends StatelessWidget {
 
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
     return Container(
-      color: Color(0xffefefef),
+      color: Color(0xfffafafa),
       child: ListView.builder(
         itemCount: state.entries.length,
         itemBuilder: (context, i) {
