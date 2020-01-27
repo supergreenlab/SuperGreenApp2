@@ -2,12 +2,25 @@ PODS:
   - camera (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - keyboard_visibility (0.5.0):
+    - Flutter
+    - Reachability
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
   - moor_ffi (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
   - permission_handler (4.1.0):
     - Flutter
+  - Reachability (3.2)
   - url_launcher (0.0.1):
     - Flutter
   - url_launcher_macos (0.0.1):
@@ -18,12 +31,16 @@ PODS:
     - Flutter
   - video_player_web (0.0.1):
     - Flutter
+  - video_thumbnail (0.0.1):
+    - Flutter
+    - libwebp
   - wifi_iot (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - camera (from `.symlinks/plugins/camera/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
+  - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - moor_ffi (from `.symlinks/plugins/moor_ffi/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -32,13 +49,21 @@ DEPENDENCIES:
   - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - video_player_web (from `.symlinks/plugins/video_player_web/ios`)
+  - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
   - wifi_iot (from `.symlinks/plugins/wifi_iot/ios`)
+
+SPEC REPOS:
+  trunk:
+    - libwebp
+    - Reachability
 
 EXTERNAL SOURCES:
   camera:
     :path: ".symlinks/plugins/camera/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
+  keyboard_visibility:
+    :path: ".symlinks/plugins/keyboard_visibility/ios"
   moor_ffi:
     :path: ".symlinks/plugins/moor_ffi/ios"
   path_provider:
@@ -55,20 +80,26 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player/ios"
   video_player_web:
     :path: ".symlinks/plugins/video_player_web/ios"
+  video_thumbnail:
+    :path: ".symlinks/plugins/video_thumbnail/ios"
   wifi_iot:
     :path: ".symlinks/plugins/wifi_iot/ios"
 
 SPEC CHECKSUMS:
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   moor_ffi: d66c9470c18e9cb333423bbcb493c105c6c774c6
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   permission_handler: b41310bab60fffbf8b5732cd9b4f565671d14762
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
   video_player: 69c5f029fac4ffe4fc8a85ea7f7b793709661549
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
+  video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
 
 PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
