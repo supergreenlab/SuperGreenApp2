@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/bloc/box_infos_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class BoxInfosPage extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
       child: BlocBuilder<BoxInfosBloc, BoxInfosBlocState>(
           bloc: Provider.of<BoxInfosBloc>(context),
           builder: (context, state) => Scaffold(
-              appBar: AppBar(title: Text('New Box infos')),
+              appBar: SGLAppBar('New Box infos'),
               body: Row(
                 children: <Widget>[
                   Expanded(

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/bloc/select_device_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class SelectDevicePage extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class SelectDevicePage extends StatelessWidget {
       child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
           bloc: Provider.of<SelectDeviceBloc>(context),
           builder: (context, state) => Scaffold(
-              appBar: AppBar(title: Text('Select Box device')),
+              appBar: SGLAppBar('Select Box device'),
               body: Column(
                 children: [
                   Expanded(child: _deviceList(context)),

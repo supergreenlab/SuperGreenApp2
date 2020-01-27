@@ -3,28 +3,45 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class FeedToppingFormBlocEvent extends Equatable {}
 
-class FeedToppingFormBlocEventCreate extends FeedToppingFormBlocEvent {
-  final String name;
+class FeedToppingFormBlocPushMedia extends FeedToppingFormBlocEvent {
+  final bool before;
+  final FeedMediasCompanion feedTopping;
 
-  FeedToppingFormBlocEventCreate(this.name);
+  FeedToppingFormBlocPushMedia(this.before, this.feedTopping);
 
   @override
-  List<Object> get props => [name];
+  List<Object> get props => [feedTopping];
 }
 
-abstract class FeedToppingFormBlocState extends Equatable {}
+class FeedToppingFormBlocEventCreate extends FeedToppingFormBlocEvent {
+  final String message;
+  final bool helpRequest;
 
-class FeedToppingFormBlocStateIdle extends FeedToppingFormBlocState {
+  FeedToppingFormBlocEventCreate(this.message, this.helpRequest);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [message, helpRequest];
+}
+
+class FeedToppingFormBlocState extends Equatable {
+  final List<FeedMediasCompanion> beforeMedias;
+  final List<FeedMediasCompanion> afterMedias;
+
+  FeedToppingFormBlocState(this.beforeMedias, this.afterMedias);
+
+  @override
+  List<Object> get props => [beforeMedias, afterMedias];
 }
 
 class FeedToppingFormBlocStateDone extends FeedToppingFormBlocState {
+  FeedToppingFormBlocStateDone(List<FeedMediasCompanion> beforeMedias, List<FeedMediasCompanion> afterMedias) : super(beforeMedias, afterMedias);
+
   @override
   List<Object> get props => [];
 }
@@ -33,23 +50,40 @@ class FeedToppingFormBloc
     extends Bloc<FeedToppingFormBlocEvent, FeedToppingFormBlocState> {
   final MainNavigateToFeedToppingFormEvent _args;
 
+  List<FeedMediasCompanion> _beforeMedias = [];
+  List<FeedMediasCompanion> _afterMedias = [];
+
   @override
-  FeedToppingFormBlocState get initialState => FeedToppingFormBlocStateIdle();
+  FeedToppingFormBlocState get initialState => FeedToppingFormBlocState(_beforeMedias, _afterMedias);
 
   FeedToppingFormBloc(this._args);
 
   @override
   Stream<FeedToppingFormBlocState> mapEventToState(
       FeedToppingFormBlocEvent event) async* {
-    if (event is FeedToppingFormBlocEventCreate) {
+    if (event is FeedToppingFormBlocPushMedia) {
+      if (event.before) {
+        _beforeMedias.add(event.feedTopping);
+      } else {
+        _afterMedias.add(event.feedTopping);
+      }
+      yield FeedToppingFormBlocState(_beforeMedias, _afterMedias);
+    } else if (event is FeedToppingFormBlocEventCreate) {
       final db = RelDB.get();
-      await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID =
+          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_TOPPING',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'}),
+        params: Value(JsonEncoder().convert({'message': event.message})),
       ));
-      yield FeedToppingFormBlocStateDone();
+      for (FeedMediasCompanion m in _beforeMedias) {
+        await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': true}))));
+      }
+      for (FeedMediasCompanion m in _afterMedias) {
+        await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
+      }
+      yield FeedToppingFormBlocStateDone(_beforeMedias, _afterMedias);
     }
   }
 }

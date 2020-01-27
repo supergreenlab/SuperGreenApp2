@@ -9,12 +9,11 @@ class FeedDefoliationCardPage extends StatelessWidget {
     return BlocBuilder<FeedDefoliationCardBloc, FeedDefoliationCardBlocState>(
         bloc: Provider.of<FeedDefoliationCardBloc>(context),
         builder: (context, state) => Card(
-                color: Color.fromARGB(40, 255, 255, 255),
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.album, color: Colors.white,),
-                      title: const Text('Feed Defoliation', style: TextStyle(color: Colors.white)),
+                      leading: Icon(Icons.album),
+                      title: const Text('Feed Defoliation', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

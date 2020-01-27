@@ -11,24 +11,40 @@ class FeedMediaCardPage extends StatelessWidget {
     return BlocBuilder<FeedMediaCardBloc, FeedMediaCardBlocState>(
         bloc: Provider.of<FeedMediaCardBloc>(context),
         builder: (context, state) => Card(
-                color: Color.fromARGB(40, 255, 255, 255),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ListTile(
-                      leading: state.medias.length == 0 ? Icon(Icons.album) : Image.file(File(state.medias[0].thumbnailPath)),
-                      title: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: const Text('Note', style: TextStyle(color: Colors.white)),
-                      ),
-                      subtitle: Text(state.feedEntry.date.toString(), style: TextStyle(color: Colors.white60)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ListTile(
+                    leading: state.medias.length == 0
+                        ? Icon(Icons.album)
+                        : _renderImage(context, state),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: const Text('Note', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(state.params == null ? '' : state.params['message'], style: TextStyle(color: Colors.white70, fontSize: 17)),
-                    )
-                  ],
-                ),
-              ));
+                    subtitle: Text(state.feedEntry.date.toString(),
+                        style: TextStyle(color: Colors.black54)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                        state.params == null ? '' : state.params['message'],
+                        style: TextStyle(color: Colors.black54, fontSize: 17)),
+                  )
+                ],
+              ),
+            ));
+  }
+
+  Widget _renderImage(BuildContext context, FeedMediaCardBlocState state) {
+    return Container(
+        width: 45.0,
+        height: 45.0,
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(5),
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: Image.file(File(state.medias[0].thumbnailPath)).image)));
   }
 }

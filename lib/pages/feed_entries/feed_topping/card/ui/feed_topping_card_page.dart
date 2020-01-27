@@ -9,12 +9,11 @@ class FeedToppingCardPage extends StatelessWidget {
     return BlocBuilder<FeedToppingCardBloc, FeedToppingCardBlocState>(
         bloc: Provider.of<FeedToppingCardBloc>(context),
         builder: (context, state) => Card(
-                color: Color.fromARGB(40, 255, 255, 255),
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.album, color: Colors.white,),
-                      title: const Text('Feed Topping', style: TextStyle(color: Colors.white)),
+                      leading: Icon(Icons.album),
+                      title: const Text('Feed Topping', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

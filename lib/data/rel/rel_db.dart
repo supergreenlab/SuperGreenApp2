@@ -22,7 +22,19 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [Devices, Modules, Params, Boxes, Feeds, FeedEntries, FeedMedias,], daos: [DevicesDAO, BoxesDAO, FeedsDAO])
+@UseMoor(tables: [
+  Devices,
+  Modules,
+  Params,
+  Boxes,
+  Feeds,
+  FeedEntries,
+  FeedMedias,
+], daos: [
+  DevicesDAO,
+  BoxesDAO,
+  FeedsDAO
+])
 class RelDB extends _$RelDB {
   static RelDB _instance;
 
@@ -40,22 +52,20 @@ class RelDB extends _$RelDB {
   // are covered later in this readme.
   @override
   int get schemaVersion => 1;
-  
+
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    beforeOpen: (details) async {
-      if (details.wasCreated) {
-        int feed = await this.feedsDAO.addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
-        await this.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-          type: 'FE_TOWELIE_INFO',
-          feed: feed,
-          date: DateTime.now(),
-          params: JsonEncoder().convert({
-            'test': 'pouet',
-            'toto': 'tutu'
-          }),
-        ));
-      }
-    },
-  );
+        beforeOpen: (details) async {
+          if (details.wasCreated) {
+            int feed = await this
+                .feedsDAO
+                .addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
+            await this.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+                  type: 'FE_TOWELIE_INFO',
+                  feed: feed,
+                  date: DateTime.now(),
+                ));
+          }
+        },
+      );
 }

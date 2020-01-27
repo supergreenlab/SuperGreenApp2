@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -115,7 +116,7 @@ class FeedVentilationFormBloc
         type: 'FE_VENTILATION',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({
+        params: Value(JsonEncoder().convert({
           'initialValues': {
             'blowerDay': _initialBlowerDay,
             'blowerNight': _initialBlowerNight
@@ -124,7 +125,7 @@ class FeedVentilationFormBloc
             'blowerDay': event.blowerDay,
             'blowerNight': event.blowerNight
           }
-        }),
+        })),
       ));
       yield FeedVentilationFormBlocStateDone();
     }

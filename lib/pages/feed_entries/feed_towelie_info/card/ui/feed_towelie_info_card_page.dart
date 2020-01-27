@@ -10,26 +10,22 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     return BlocBuilder<FeedTowelieInfoCardBloc, FeedTowelieInfoCardBlocState>(
         bloc: Provider.of<FeedTowelieInfoCardBloc>(context),
         builder: (context, state) => Card(
-              color: Color.fromARGB(40, 255, 255, 255),
               child: Column(
                 children: [
                   ListTile(
                     leading: Icon(
                       Icons.album,
-                      color: Colors.white,
                     ),
-                    title: const Text('Feed',
-                        style: TextStyle(color: Colors.white)),
-                    subtitle: Text(state.feedEntry.date.toIso8601String(),
-                        style: TextStyle(color: Colors.white)),
+                    title: const Text('Feed', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(state.feedEntry.date.toIso8601String()),
                   ),
-                  Text(state.feedEntry.params, style: TextStyle(color: Colors.white)),
+                  Text(state.feedEntry.params),
                   ButtonBar(
                     alignment: MainAxisAlignment.start,
                     children: <Widget>[
                       FlatButton(
                         child: const Text('CREATE BOX',
-                            style: TextStyle(color: Color(0xFF3BB30B))),
+                            style: TextStyle(color: Colors.blue)),
                         onPressed: () {
                           BlocProvider.of<MainNavigatorBloc>(context)
                               .add(MainNavigateToNewBoxInfosEvent());

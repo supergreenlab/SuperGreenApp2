@@ -26,11 +26,9 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.white30,
-        selectedItemColor: Colors.white,
-        backgroundColor: Colors.transparent,
+        unselectedItemColor: Colors.black38,
+        selectedItemColor: Colors.black,
         onTap: (i) => this._onNavigationBarItemSelect(context, i),
         elevation: 0,
         currentIndex: _navigationIndex,

@@ -10,14 +10,13 @@ class FeedWaterCardPage extends StatelessWidget {
     return BlocBuilder<FeedWaterCardBloc, FeedWaterCardBlocState>(
         bloc: Provider.of<FeedWaterCardBloc>(context),
         builder: (context, state) => Card(
-                color: Color.fromARGB(40, 255, 255, 255),
                 child: Column(
                   children: [
                     ListTile(
                       leading: SvgPicture.asset('assets/feed_card/watering.svg'),
-                      title: const Text('Feed Water', style: TextStyle(color: Colors.white)),
+                      title: const Text('Feed Water', style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(state.feedEntry.date.toIso8601String(),
-                        style: TextStyle(color: Colors.white54)),
+                        style: TextStyle(color: Colors.black54)),
                     ),
                   ],
                 ),

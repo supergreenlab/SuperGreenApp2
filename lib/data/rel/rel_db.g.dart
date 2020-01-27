@@ -1492,11 +1492,10 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
     @required int feed,
     @required DateTime date,
     @required String type,
-    @required String params,
+    this.params = const Value.absent(),
   })  : feed = Value(feed),
         date = Value(date),
-        type = Value(type),
-        params = Value(params);
+        type = Value(type);
   FeedEntriesCompanion copyWith(
       {Value<int> id,
       Value<int> feed,
@@ -1565,11 +1564,8 @@ class $FeedEntriesTable extends FeedEntries
   @override
   GeneratedTextColumn get params => _params ??= _constructParams();
   GeneratedTextColumn _constructParams() {
-    return GeneratedTextColumn(
-      'params',
-      $tableName,
-      false,
-    );
+    return GeneratedTextColumn('params', $tableName, false,
+        defaultValue: Constant('{}'));
   }
 
   @override
@@ -1656,11 +1652,13 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   final int feedEntry;
   final String filePath;
   final String thumbnailPath;
+  final String params;
   FeedMedia(
       {@required this.id,
       @required this.feedEntry,
       @required this.filePath,
-      @required this.thumbnailPath});
+      @required this.thumbnailPath,
+      @required this.params});
   factory FeedMedia.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1674,6 +1672,8 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           .mapFromDatabaseResponse(data['${effectivePrefix}file_path']),
       thumbnailPath: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_path']),
+      params:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
     );
   }
   factory FeedMedia.fromJson(Map<String, dynamic> json,
@@ -1683,6 +1683,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       feedEntry: serializer.fromJson<int>(json['feedEntry']),
       filePath: serializer.fromJson<String>(json['filePath']),
       thumbnailPath: serializer.fromJson<String>(json['thumbnailPath']),
+      params: serializer.fromJson<String>(json['params']),
     );
   }
   @override
@@ -1693,6 +1694,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       'feedEntry': serializer.toJson<int>(feedEntry),
       'filePath': serializer.toJson<String>(filePath),
       'thumbnailPath': serializer.toJson<String>(thumbnailPath),
+      'params': serializer.toJson<String>(params),
     };
   }
 
@@ -1709,16 +1711,23 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       thumbnailPath: thumbnailPath == null && nullToAbsent
           ? const Value.absent()
           : Value(thumbnailPath),
+      params:
+          params == null && nullToAbsent ? const Value.absent() : Value(params),
     );
   }
 
   FeedMedia copyWith(
-          {int id, int feedEntry, String filePath, String thumbnailPath}) =>
+          {int id,
+          int feedEntry,
+          String filePath,
+          String thumbnailPath,
+          String params}) =>
       FeedMedia(
         id: id ?? this.id,
         feedEntry: feedEntry ?? this.feedEntry,
         filePath: filePath ?? this.filePath,
         thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+        params: params ?? this.params,
       );
   @override
   String toString() {
@@ -1726,7 +1735,8 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           ..write('id: $id, ')
           ..write('feedEntry: $feedEntry, ')
           ..write('filePath: $filePath, ')
-          ..write('thumbnailPath: $thumbnailPath')
+          ..write('thumbnailPath: $thumbnailPath, ')
+          ..write('params: $params')
           ..write(')'))
         .toString();
   }
@@ -1734,8 +1744,10 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(feedEntry.hashCode,
-          $mrjc(filePath.hashCode, thumbnailPath.hashCode))));
+      $mrjc(
+          feedEntry.hashCode,
+          $mrjc(filePath.hashCode,
+              $mrjc(thumbnailPath.hashCode, params.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1743,7 +1755,8 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           other.id == this.id &&
           other.feedEntry == this.feedEntry &&
           other.filePath == this.filePath &&
-          other.thumbnailPath == this.thumbnailPath);
+          other.thumbnailPath == this.thumbnailPath &&
+          other.params == this.params);
 }
 
 class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
@@ -1751,17 +1764,20 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   final Value<int> feedEntry;
   final Value<String> filePath;
   final Value<String> thumbnailPath;
+  final Value<String> params;
   const FeedMediasCompanion({
     this.id = const Value.absent(),
     this.feedEntry = const Value.absent(),
     this.filePath = const Value.absent(),
     this.thumbnailPath = const Value.absent(),
+    this.params = const Value.absent(),
   });
   FeedMediasCompanion.insert({
     this.id = const Value.absent(),
     @required int feedEntry,
     @required String filePath,
     @required String thumbnailPath,
+    this.params = const Value.absent(),
   })  : feedEntry = Value(feedEntry),
         filePath = Value(filePath),
         thumbnailPath = Value(thumbnailPath);
@@ -1769,12 +1785,14 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
       {Value<int> id,
       Value<int> feedEntry,
       Value<String> filePath,
-      Value<String> thumbnailPath}) {
+      Value<String> thumbnailPath,
+      Value<String> params}) {
     return FeedMediasCompanion(
       id: id ?? this.id,
       feedEntry: feedEntry ?? this.feedEntry,
       filePath: filePath ?? this.filePath,
       thumbnailPath: thumbnailPath ?? this.thumbnailPath,
+      params: params ?? this.params,
     );
   }
 }
@@ -1831,9 +1849,18 @@ class $FeedMediasTable extends FeedMedias
     );
   }
 
+  final VerificationMeta _paramsMeta = const VerificationMeta('params');
+  GeneratedTextColumn _params;
+  @override
+  GeneratedTextColumn get params => _params ??= _constructParams();
+  GeneratedTextColumn _constructParams() {
+    return GeneratedTextColumn('params', $tableName, false,
+        defaultValue: Constant('{}'));
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feedEntry, filePath, thumbnailPath];
+      [id, feedEntry, filePath, thumbnailPath, params];
   @override
   $FeedMediasTable get asDslTable => this;
   @override
@@ -1869,6 +1896,12 @@ class $FeedMediasTable extends FeedMedias
     } else if (thumbnailPath.isRequired && isInserting) {
       context.missing(_thumbnailPathMeta);
     }
+    if (d.params.present) {
+      context.handle(
+          _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
+    } else if (params.isRequired && isInserting) {
+      context.missing(_paramsMeta);
+    }
     return context;
   }
 
@@ -1895,6 +1928,9 @@ class $FeedMediasTable extends FeedMedias
     if (d.thumbnailPath.present) {
       map['thumbnail_path'] =
           Variable<String, StringType>(d.thumbnailPath.value);
+    }
+    if (d.params.present) {
+      map['params'] = Variable<String, StringType>(d.params.value);
     }
     return map;
   }

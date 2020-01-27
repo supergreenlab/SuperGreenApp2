@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/bloc/feed_schedule_form_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class FeedScheduleFormPage extends StatelessWidget {
   @override
@@ -18,18 +19,9 @@ class FeedScheduleFormPage extends StatelessWidget {
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
           bloc: Provider.of<FeedScheduleFormBloc>(context),
           builder: (context, state) => Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                title: Text(
-                  'Add schedule',
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-              ),
+              appBar: SGLAppBar('Add schedule'),
               body: Column(children: [
-                Text('ScheduleChange',
-                    style: TextStyle(color: Colors.white)),
+                Text('ScheduleChange'),
                 RaisedButton(
                   child: Text('OK'),
                   onPressed: () =>

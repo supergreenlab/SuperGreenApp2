@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/bloc/select_device_box_bloc.dart';
 import 'package:super_green_app/pages/home/bloc/home_navigator_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class SelectDeviceBoxPage extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
       child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
           bloc: Provider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) => Scaffold(
-              appBar: AppBar(title: Text('New Box device box')),
+              appBar: SGLAppBar('New Box device box'),
               body: Row(
                 children: <Widget>[
                   RaisedButton(

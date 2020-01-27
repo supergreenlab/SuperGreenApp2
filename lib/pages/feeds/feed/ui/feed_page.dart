@@ -13,16 +13,19 @@ class FeedPage extends StatelessWidget {
         if (state is FeedBlocStateLoaded) {
           return _renderCards(context, state);
         }
-        return Text('FeedPage loading', style: TextStyle(color: Colors.white));
+        return Text('FeedPage loading');
       },
     );
   }
 
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
-    return ListView.builder(
-      itemCount: state.entries.length,
-      itemBuilder: (context, i) {
-        return FeedEntriesHelper.cardForFeedEntry(state.feed, state.entries[i]);
-      });
+    return Container(
+      color: Color(0xffefefef),
+      child: ListView.builder(
+        itemCount: state.entries.length,
+        itemBuilder: (context, i) {
+          return FeedEntriesHelper.cardForFeedEntry(state.feed, state.entries[i]);
+        }),
+    );
   }
 }

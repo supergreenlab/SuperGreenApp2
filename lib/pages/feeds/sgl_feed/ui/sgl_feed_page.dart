@@ -4,17 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/ui/feed_page.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/bloc/sgl_feed_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class SGLFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Center(child: Text('Towelie', style: TextStyle(color: Colors.white))),
-      ),
+      appBar: SGLAppBar('Towelie'),
       body: BlocBuilder<SGLFeedBloc, SGLFeedBlocState>(
         bloc: Provider.of<SGLFeedBloc>(context),
         builder: (BuildContext context, SGLFeedBlocState state) {

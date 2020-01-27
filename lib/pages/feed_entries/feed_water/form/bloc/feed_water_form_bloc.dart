@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -49,11 +50,11 @@ class FeedWaterFormBloc
         type: 'FE_WATER',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({
+        params: Value(JsonEncoder().convert({
           'tooDry': event.tooDry,
           'volume': event.volume,
           'nutrient': event.nutrient,
-        }),
+        })),
       ));
       yield FeedWaterFormBlocStateDone();
     }

@@ -15,7 +15,7 @@ class FeedEntries extends Table {
   DateTimeColumn get date => dateTime()();
   TextColumn get type => text().withLength(min: 1, max: 24)();
 
-  TextColumn get params => text()();
+  TextColumn get params => text().withDefault(Constant('{}'))();
 }
 
 class FeedMedias extends Table {
@@ -23,6 +23,8 @@ class FeedMedias extends Table {
   IntColumn get feedEntry => integer()();
   TextColumn get filePath => text()();
   TextColumn get thumbnailPath => text()();
+
+  TextColumn get params => text().withDefault(Constant('{}'))();
 }
 
 @UseDao(tables: [Feeds, FeedEntries, FeedMedias])

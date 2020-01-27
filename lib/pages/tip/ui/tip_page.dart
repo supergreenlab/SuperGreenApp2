@@ -4,6 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/tip/bloc/tip_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class TipPage extends StatefulWidget {
   @override
@@ -18,36 +19,23 @@ class _TipPageState extends State<TipPage> {
     return BlocBuilder<TipBloc, TipBlocState>(
         bloc: Provider.of<TipBloc>(context),
         builder: (context, state) => Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                title: Text(
-                  'Watering tips',
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-              ),
+              appBar: SGLAppBar('Watering tips'),
               body: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'How to tell when a plant is thirsty?',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Expanded(
                     child: Container(
-                      color: Colors.white10,
                       child: SingleChildScrollView(
                           child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Html(
-                            data: "<h1>hello</h1><br />pouet",
-                            defaultTextStyle: TextStyle(color: Colors.white)),
+                        child: Html(data: "<h1>hello</h1><br />pouet"),
                       )),
                     ),
                   ),
@@ -57,16 +45,19 @@ class _TipPageState extends State<TipPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Theme(
-                          data: ThemeData(unselectedWidgetColor: Colors.white),
+                          data: ThemeData(unselectedWidgetColor: Colors.black),
                           child: Checkbox(
-                            activeColor: Colors.white,
-                            checkColor: Colors.white,
-                            value: dontShow,
-                            onChanged: (bool value) {setState(() {dontShow = value;});}
-                          ),
+                              activeColor: Colors.black,
+                              checkColor: Colors.black,
+                              value: dontShow,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  dontShow = value;
+                                });
+                              }),
                         ),
                         Text('Don’t show me this again',
-                            style: TextStyle(color: Colors.white)),
+                            style: TextStyle(color: Colors.black)),
                       ],
                     ),
                   ),

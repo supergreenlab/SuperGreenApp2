@@ -88,61 +88,61 @@ class MainPage extends StatelessWidget {
                       create: (context) => HomeBloc(),
                     )
                   ],
-                  child: _wrapBg(context, HomePage(_homeNavigatorKey)),
+                  child: HomePage(_homeNavigatorKey),
                 ));
       case '/box/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => BoxInfosBloc(),
-                  child: _wrapBg(context, BoxInfosPage()),
+                  child: BoxInfosPage(),
                 ));
       case '/box/device':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SelectDeviceBloc(settings.arguments),
-                  child: _wrapBg(context, SelectDevicePage()),
+                  child: SelectDevicePage(),
                 ));
       case '/box/device/box':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SelectDeviceBoxBloc(settings.arguments),
-                  child: _wrapBg(context, SelectDeviceBoxPage()),
+                  child: SelectDeviceBoxPage(),
                 ));
       case '/device/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => NewDeviceBloc(settings.arguments),
-                  child: _wrapBg(context, NewDevicePage()),
+                  child: NewDevicePage(),
                 ));
       case '/device/add':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => ExistingDeviceBloc(settings.arguments),
-                  child: _wrapBg(context, ExistingDevicePage()),
+                  child: ExistingDevicePage(),
                 ));
       case '/device/load':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceSetupBloc(settings.arguments),
-                  child: _wrapBg(context, DeviceSetupPage()),
+                  child: DeviceSetupPage(),
                 ));
       case '/device/name':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceNameBloc(settings.arguments),
-                  child: _wrapBg(context, DeviceNamePage()),
+                  child: DeviceNamePage(),
                 ));
       case '/device/done':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => DeviceDoneBloc(settings.arguments),
-                  child: _wrapBg(context, DeviceDonePage()),
+                  child: DeviceDonePage(),
                 ));
       case '/feed/form/defoliation':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => FeedDefoliationFormBloc(settings.arguments),
-            child: _wrapBg(context, FeedDefoliationFormPage()),
+            child: FeedDefoliationFormPage(),
           ),
           fullscreenDialog: true,
         );
@@ -150,7 +150,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => FeedLightFormBloc(settings.arguments),
-            child: _wrapBg(context, FeedLightFormPage()),
+            child: FeedLightFormPage(),
           ),
           fullscreenDialog: true,
         );
@@ -158,7 +158,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => FeedMediaFormBloc(settings.arguments),
-            child: _wrapBg(context, FeedMediaFormPage()),
+            child: FeedMediaFormPage(),
           ),
           fullscreenDialog: true,
         );
@@ -166,7 +166,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => FeedScheduleFormBloc(settings.arguments),
-            child: _wrapBg(context, FeedScheduleFormPage()),
+            child: FeedScheduleFormPage(),
           ),
           fullscreenDialog: true,
         );
@@ -174,7 +174,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => FeedToppingFormBloc(settings.arguments),
-            child: _wrapBg(context, FeedToppingFormPage()),
+            child: FeedToppingFormPage(),
           ),
           fullscreenDialog: true,
         );
@@ -182,7 +182,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => FeedVentilationFormBloc(settings.arguments),
-            child: _wrapBg(context, FeedVentilationFormPage()),
+            child: FeedVentilationFormPage(),
           ),
           fullscreenDialog: true,
         );
@@ -190,7 +190,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => FeedWaterFormBloc(settings.arguments),
-            child: _wrapBg(context, FeedWaterFormPage()),
+            child: FeedWaterFormPage(),
           ),
           fullscreenDialog: true,
         );
@@ -198,7 +198,7 @@ class MainPage extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => TipBloc(settings.arguments),
-            child: _wrapBg(context, TipPage()),
+            child: TipPage(),
           ),
           fullscreenDialog: true,
         );
@@ -220,24 +220,5 @@ class MainPage extends StatelessWidget {
         );
     }
     return MaterialPageRoute(builder: (context) => Text('Unknown route'));
-  }
-
-  Widget _wrapBg(BuildContext context, Widget w) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        colors: [
-          Color(0xFF103A3A),
-          Color(0xFF0D3735),
-          Color(0xFF022C22),
-          Color(0xFF1F6C77)
-        ],
-        begin: Alignment(-0.25, 1),
-        end: Alignment(0.25, -1),
-      )),
-      child: w,
-    );
   }
 }

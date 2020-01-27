@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class FeedFormLayout extends StatelessWidget {
   final Widget body;
@@ -15,15 +16,7 @@ class FeedFormLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-            title,
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
+        appBar: SGLAppBar(title),
         body: Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 24.0),
             child: Column(

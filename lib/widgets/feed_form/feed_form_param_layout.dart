@@ -21,7 +21,6 @@ class FeedFormParamLayout extends StatelessWidget {
               Text(
                 this.title,
                 style: TextStyle(
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 22),
               ),
@@ -38,7 +37,7 @@ class FeedFormParamLayout extends StatelessWidget {
       padding: const EdgeInsets.only(right: 16.0),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white10,
+            color: Colors.black12,
             borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),

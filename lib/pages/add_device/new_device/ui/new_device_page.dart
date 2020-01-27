@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/new_device/bloc/new_device_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class NewDevicePage extends StatelessWidget {
   @override
@@ -18,10 +19,9 @@ class NewDevicePage extends StatelessWidget {
       child: BlocBuilder<NewDeviceBloc, NewDeviceBlocState>(
           bloc: Provider.of<NewDeviceBloc>(context),
           builder: (context, state) => Scaffold(
-              appBar: AppBar(title: Text('Add device')),
-              body: Text(state.toString()),
-            )
-          ),
+                appBar: SGLAppBar('Add device'),
+                body: Text(state.toString()),
+              )),
     );
   }
 }

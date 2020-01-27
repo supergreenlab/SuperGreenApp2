@@ -9,12 +9,11 @@ class FeedScheduleCardPage extends StatelessWidget {
     return BlocBuilder<FeedScheduleCardBloc, FeedScheduleCardBlocState>(
         bloc: Provider.of<FeedScheduleCardBloc>(context),
         builder: (context, state) => Card(
-                color: Color.fromARGB(40, 255, 255, 255),
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.album, color: Colors.white,),
-                      title: const Text('Feed Schedule', style: TextStyle(color: Colors.white)),
+                      leading: Icon(Icons.album),
+                      title: const Text('Feed Schedule', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

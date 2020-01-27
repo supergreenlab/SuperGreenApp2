@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -97,7 +98,7 @@ class FeedLightFormBloc
         type: 'FE_LIGHT',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: JsonEncoder().convert({'initialValues': _initialValues, 'values': event.values}),
+        params: Value(JsonEncoder().convert({'initialValues': _initialValues, 'values': event.values})),
       ));
       yield FeedLightFormBlocStateDone();
     }

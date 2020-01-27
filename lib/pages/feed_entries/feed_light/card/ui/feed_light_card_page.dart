@@ -10,12 +10,11 @@ class FeedLightCardPage extends StatelessWidget {
     return BlocBuilder<FeedLightCardBloc, FeedLightCardBlocState>(
         bloc: Provider.of<FeedLightCardBloc>(context),
         builder: (context, state) => Card(
-                color: Color.fromARGB(40, 255, 255, 255),
                 child: Column(
                   children: [
                     ListTile(
                       leading: SvgPicture.asset('assets/feed_card/light.svg'),
-                      title: const Text('Feed Light', style: TextStyle(color: Colors.white)),
+                      title: const Text('Feed Light', style: TextStyle(fontWeight: FontWeight.bold),),
                     ),
                   ],
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/bloc/device_name_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 
 class DeviceNamePage extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
           bloc: Provider.of<DeviceNameBloc>(context),
           builder: (context, state) => Scaffold(
-              appBar: AppBar(title: Text('Add device')),
+              appBar: SGLAppBar('Add device'),
               body: Row(
                 children: <Widget>[
                   Expanded(
