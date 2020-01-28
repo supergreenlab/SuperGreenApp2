@@ -32,14 +32,20 @@ class FeedScheduleFormPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         this._renderSchedule('Vegetative schedule',
-                            'assets/feed_form/icon_veg.svg', true, () {}),
+                            'assets/feed_form/icon_veg.svg', state.schedule == 'VEG', () {
+                          BlocProvider.of<FeedScheduleFormBloc>(context)
+                              .add(FeedScheduleFormBlocEventSetSchedule('VEG'));
+                        }),
                         this._renderSchedule('Blooming schedule',
-                            'assets/feed_form/icon_bloom.svg', false, () {}),
-                        this._renderSchedule(
-                            'Auto flower schedule',
-                            'assets/feed_form/icon_autoflower.svg',
-                            false,
-                            () {}),
+                            'assets/feed_form/icon_bloom.svg', state.schedule == 'BLOOM', () {
+                          BlocProvider.of<FeedScheduleFormBloc>(context).add(
+                              FeedScheduleFormBlocEventSetSchedule('BLOOM'));
+                        }),
+                        this._renderSchedule('Auto flower schedule',
+                            'assets/feed_form/icon_autoflower.svg', state.schedule == 'AUTO', () {
+                          BlocProvider.of<FeedScheduleFormBloc>(context)
+                              .add(FeedScheduleFormBlocEventSetSchedule('AUTO'));
+                        }),
                       ],
                     ),
                   ),
@@ -49,7 +55,7 @@ class FeedScheduleFormPage extends StatelessWidget {
                       title: 'DONE',
                       onPressed: () =>
                           BlocProvider.of<FeedScheduleFormBloc>(context)
-                              .add(FeedScheduleFormBlocEventCreate('Test')),
+                              .add(FeedScheduleFormBlocEventCreate()),
                     ),
                   ),
                 ]),
@@ -70,9 +76,7 @@ class FeedScheduleFormPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ButtonTheme(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 4.0),
+                  padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                   minWidth: 0,
                   height: 0,
                   child: RaisedButton(

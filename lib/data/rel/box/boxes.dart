@@ -24,6 +24,10 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
     return (select(boxes)..where((b) => b.id.equals(id))).getSingle();
   }
 
+  Stream<Box> watchBox(int id) {
+    return (select(boxes)..where((b) => b.id.equals(id))).watchSingle();
+  }
+
   Future<int> addBox(BoxesCompanion box) {
     return into(boxes).insert(box);
   }
