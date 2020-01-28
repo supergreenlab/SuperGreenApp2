@@ -48,7 +48,7 @@ class FeedScheduleFormBloc
         type: 'FE_SCHEDULE',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'test': 'pouet', 'toto': 'tutu'})),
+        params: Value(JsonEncoder().convert({})),
       ));
       yield FeedScheduleFormBlocStateDone();
     }

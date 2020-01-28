@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/tip/bloc/tip_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class TipPage extends StatefulWidget {
   @override
@@ -65,13 +66,12 @@ class _TipPageState extends State<TipPage> {
                     alignment: Alignment.centerRight,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                        color: Color(0xff3bb30b),
-                        textColor: Colors.white,
-                        child: Text('OK'),
-                        onPressed: () =>
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(state.nextRoute),
+                      child: GreenButton(
+                        title: 'OK',
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(state.nextRoute);
+                        },
                       ),
                     ),
                   ),

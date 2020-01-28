@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:super_green_app/pages/add_box/box_infos/bloc/box_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/ui/box_infos_page.dart';
 import 'package:super_green_app/pages/add_box/select_device/bloc/select_device_bloc.dart';
@@ -60,6 +61,14 @@ class MainPage extends StatelessWidget {
         }
       },
       child: MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+        ],
         navigatorKey: _navigatorKey,
         title: 'SuperGreenLab',
         onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),

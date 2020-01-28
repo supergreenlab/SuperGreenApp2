@@ -8,6 +8,7 @@ import 'package:super_green_app/pages/feed_entries/feed_topping/form/bloc/feed_t
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class FeedToppingFormPage extends StatefulWidget {
   @override
@@ -106,9 +107,8 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
       _renderOptions(context, state),
       Align(
         alignment: Alignment.centerRight,
-        child: RaisedButton(
-          color: Color(0xff3bb30b),
-          child: Text('OK', style: TextStyle(color: Colors.white)),
+        child: GreenButton(
+          title: 'OK',
           onPressed: () => BlocProvider.of<FeedToppingFormBloc>(context).add(
               FeedToppingFormBlocEventCreate(
                   _textController.text, _helpRequest)),

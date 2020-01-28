@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class FeedFormLayout extends StatelessWidget {
   final Widget body;
@@ -27,10 +28,8 @@ class FeedFormLayout extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          color: Color(0xff3bb30b),
-                          textColor: Colors.white,
-                          child: Text(buttonTitle),
+                        child: GreenButton(
+                          title: buttonTitle,
                           onPressed: onOK,
                         ),
                       ))

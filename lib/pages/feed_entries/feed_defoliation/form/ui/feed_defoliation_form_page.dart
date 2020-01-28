@@ -8,6 +8,7 @@ import 'package:super_green_app/pages/feed_entries/feed_defoliation/form/bloc/fe
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class FeedDefoliationFormPage extends StatefulWidget {
   @override
@@ -107,15 +108,13 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
       _renderTextrea(context, state),
       _renderOptions(context, state),
       Align(
-        alignment: Alignment.centerRight,
-        child: RaisedButton(
-          color: Color(0xff3bb30b),
-          child: Text('OK', style: TextStyle(color: Colors.white)),
-          onPressed: () => BlocProvider.of<FeedDefoliationFormBloc>(context)
-              .add(FeedDefoliationFormBlocEventCreate(
-                  _textController.text, _helpRequest)),
-        ),
-      ),
+          alignment: Alignment.centerRight,
+          child: GreenButton(
+            title: 'OK',
+            onPressed: () => BlocProvider.of<FeedDefoliationFormBloc>(context)
+                .add(FeedDefoliationFormBlocEventCreate(
+                    _textController.text, _helpRequest)),
+          )),
     ];
   }
 
