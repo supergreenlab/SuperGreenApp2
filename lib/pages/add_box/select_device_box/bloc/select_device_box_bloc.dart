@@ -29,7 +29,8 @@ class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
   List<Object> get props => [box];
 }
 
-class SelectDeviceBoxBloc extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
+class SelectDeviceBoxBloc
+    extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
   final MainNavigateToSelectBoxDeviceBoxEvent _args;
 
   SelectDeviceBoxBloc(this._args);
@@ -38,11 +39,16 @@ class SelectDeviceBoxBloc extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBox
   SelectDeviceBoxBlocState get initialState => SelectDeviceBoxBlocStateIdle();
 
   @override
-  Stream<SelectDeviceBoxBlocState> mapEventToState(SelectDeviceBoxBlocEvent event) async* {
+  Stream<SelectDeviceBoxBlocState> mapEventToState(
+      SelectDeviceBoxBlocEvent event) async* {
     if (event is SelectDeviceBoxBlocEventSetDeviceBox) {
       final bdb = RelDB.get().boxesDAO;
-      await bdb.updateBox(_args.box.id, _args.box.createCompanion(true).copyWith(deviceBox: Value(event.deviceBox)));
-      yield SelectDeviceBoxBlocStateDone(_args.box);
+      await bdb.updateBox(
+        _args.box.id,
+        BoxesCompanion(deviceBox: Value(event.deviceBox)),
+      );
+      Box box = await bdb.getBox(_args.box.id);
+      yield SelectDeviceBoxBlocStateDone(box);
     }
   }
 }

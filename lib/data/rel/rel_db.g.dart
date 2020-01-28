@@ -957,12 +957,14 @@ class Box extends DataClass implements Insertable<Box> {
   final int device;
   final int deviceBox;
   final String name;
+  final String settings;
   Box(
       {@required this.id,
       @required this.feed,
       this.device,
       this.deviceBox,
-      @required this.name});
+      @required this.name,
+      @required this.settings});
   factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -975,6 +977,8 @@ class Box extends DataClass implements Insertable<Box> {
       deviceBox:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      settings: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
     );
   }
   factory Box.fromJson(Map<String, dynamic> json,
@@ -985,6 +989,7 @@ class Box extends DataClass implements Insertable<Box> {
       device: serializer.fromJson<int>(json['device']),
       deviceBox: serializer.fromJson<int>(json['deviceBox']),
       name: serializer.fromJson<String>(json['name']),
+      settings: serializer.fromJson<String>(json['settings']),
     );
   }
   @override
@@ -996,6 +1001,7 @@ class Box extends DataClass implements Insertable<Box> {
       'device': serializer.toJson<int>(device),
       'deviceBox': serializer.toJson<int>(deviceBox),
       'name': serializer.toJson<String>(name),
+      'settings': serializer.toJson<String>(settings),
     };
   }
 
@@ -1010,16 +1016,26 @@ class Box extends DataClass implements Insertable<Box> {
           ? const Value.absent()
           : Value(deviceBox),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      settings: settings == null && nullToAbsent
+          ? const Value.absent()
+          : Value(settings),
     );
   }
 
-  Box copyWith({int id, int feed, int device, int deviceBox, String name}) =>
+  Box copyWith(
+          {int id,
+          int feed,
+          int device,
+          int deviceBox,
+          String name,
+          String settings}) =>
       Box(
         id: id ?? this.id,
         feed: feed ?? this.feed,
         device: device ?? this.device,
         deviceBox: deviceBox ?? this.deviceBox,
         name: name ?? this.name,
+        settings: settings ?? this.settings,
       );
   @override
   String toString() {
@@ -1028,7 +1044,8 @@ class Box extends DataClass implements Insertable<Box> {
           ..write('feed: $feed, ')
           ..write('device: $device, ')
           ..write('deviceBox: $deviceBox, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('settings: $settings')
           ..write(')'))
         .toString();
   }
@@ -1036,8 +1053,12 @@ class Box extends DataClass implements Insertable<Box> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(feed.hashCode,
-          $mrjc(device.hashCode, $mrjc(deviceBox.hashCode, name.hashCode)))));
+      $mrjc(
+          feed.hashCode,
+          $mrjc(
+              device.hashCode,
+              $mrjc(deviceBox.hashCode,
+                  $mrjc(name.hashCode, settings.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1046,7 +1067,8 @@ class Box extends DataClass implements Insertable<Box> {
           other.feed == this.feed &&
           other.device == this.device &&
           other.deviceBox == this.deviceBox &&
-          other.name == this.name);
+          other.name == this.name &&
+          other.settings == this.settings);
 }
 
 class BoxesCompanion extends UpdateCompanion<Box> {
@@ -1055,12 +1077,14 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   final Value<int> device;
   final Value<int> deviceBox;
   final Value<String> name;
+  final Value<String> settings;
   const BoxesCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
     this.name = const Value.absent(),
+    this.settings = const Value.absent(),
   });
   BoxesCompanion.insert({
     this.id = const Value.absent(),
@@ -1068,6 +1092,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
     @required String name,
+    this.settings = const Value.absent(),
   })  : feed = Value(feed),
         name = Value(name);
   BoxesCompanion copyWith(
@@ -1075,13 +1100,15 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       Value<int> feed,
       Value<int> device,
       Value<int> deviceBox,
-      Value<String> name}) {
+      Value<String> name,
+      Value<String> settings}) {
     return BoxesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
       device: device ?? this.device,
       deviceBox: deviceBox ?? this.deviceBox,
       name: name ?? this.name,
+      settings: settings ?? this.settings,
     );
   }
 }
@@ -1144,8 +1171,18 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
         minTextLength: 1, maxTextLength: 32);
   }
 
+  final VerificationMeta _settingsMeta = const VerificationMeta('settings');
+  GeneratedTextColumn _settings;
   @override
-  List<GeneratedColumn> get $columns => [id, feed, device, deviceBox, name];
+  GeneratedTextColumn get settings => _settings ??= _constructSettings();
+  GeneratedTextColumn _constructSettings() {
+    return GeneratedTextColumn('settings', $tableName, false,
+        defaultValue: Constant('{}'));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, feed, device, deviceBox, name, settings];
   @override
   $BoxesTable get asDslTable => this;
   @override
@@ -1185,6 +1222,12 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     } else if (name.isRequired && isInserting) {
       context.missing(_nameMeta);
     }
+    if (d.settings.present) {
+      context.handle(_settingsMeta,
+          settings.isAcceptableValue(d.settings.value, _settingsMeta));
+    } else if (settings.isRequired && isInserting) {
+      context.missing(_settingsMeta);
+    }
     return context;
   }
 
@@ -1213,6 +1256,9 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     }
     if (d.name.present) {
       map['name'] = Variable<String, StringType>(d.name.value);
+    }
+    if (d.settings.present) {
+      map['settings'] = Variable<String, StringType>(d.settings.value);
     }
     return map;
   }

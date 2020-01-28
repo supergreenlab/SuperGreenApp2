@@ -15,7 +15,7 @@ class FeedFormButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.black12,
         border: Border.all(
-            color: border ? Colors.white : Colors.transparent, width: 2),
+            color: border ? Color(0xff3bb30b) : Colors.transparent, width: 2),
         borderRadius: BorderRadius.circular(5),
       ),
       child: FlatButton(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -10,6 +12,8 @@ class Boxes extends Table {
   IntColumn get device => integer().nullable()();
   IntColumn get deviceBox => integer().nullable()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
+
+  TextColumn get settings => text().withDefault(Constant('{}'))();
 }
 
 @UseDao(tables: [Boxes])
@@ -30,5 +34,26 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
 
   Stream<List<Box>> watchBoxes() {
     return select(boxes).watch();
+  }
+
+  Map<String, dynamic> boxSettings(Box box) {
+    final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
+    return {
+      'schedule': settings['schedule'] ?? 'VEG',
+      'schedules': {
+        'VEG': {
+          'ON_HOUR': settings['VEG_ON_HOUR'] ?? 3,
+          'OFF_HOUR': settings['VEG_OFF_HOUR'] ?? 21,
+        },
+        'BLOOM': {
+          'ON_HOUR': settings['BLOOM_ON_HOUR'] ?? 6,
+          'OFF_HOUR': settings['BLOOM_OFF_HOUR'] ?? 18,
+        },
+        'AUTO': {
+          'ON_HOUR': settings['AUTO_ON_HOUR'] ?? 0,
+          'OFF_HOUR': settings['AUTO_OFF_HOUR'] ?? 0,
+        },
+      }
+    };
   }
 }

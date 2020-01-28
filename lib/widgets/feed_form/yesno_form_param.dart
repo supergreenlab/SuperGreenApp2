@@ -27,7 +27,6 @@ class YesNoFormParam extends StatelessWidget {
                   this.onPressed(yes == true ? null : true);
                 },
                 textStyle: TextStyle(
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 20)),
             FeedFormButton(
@@ -37,7 +36,6 @@ class YesNoFormParam extends StatelessWidget {
                   this.onPressed(yes == false ? null : false);
                 },
                 textStyle: TextStyle(
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 20)),
           ],

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/bloc/app_init_bloc.dart';
-import 'package:super_green_app/widgets/button_ok.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class WelcomePage extends StatelessWidget {
   final _loading;
@@ -15,7 +15,8 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final widgets = <Widget>[this._logo()];
     if (this._loading == false) {
-      widgets.add(this._nextButton(context));
+      widgets.add(Align(
+          alignment: Alignment.centerRight, child: this._nextButton(context)));
     }
     return Scaffold(
         body: Container(
@@ -52,15 +53,14 @@ class WelcomePage extends StatelessWidget {
             ]),
       );
 
-  Widget _nextButton(BuildContext context) => Center(
-        child: ButtonOK(
-          onPressed: () => _next(context),
-          text: 'Next',
-          themeData: Theme.of(context),
-        ),
-      );
+  Widget _nextButton(BuildContext context) {
+    return GreenButton(
+      onPressed: () => _next(context),
+      title: 'Next',
+    );
+  }
 
-  _next(BuildContext context) {
+  void _next(BuildContext context) {
     BlocProvider.of<AppInitBloc>(context).done();
     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
   }

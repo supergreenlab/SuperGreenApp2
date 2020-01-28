@@ -14,7 +14,7 @@ class FeedWaterCardPage extends StatelessWidget {
                   children: [
                     ListTile(
                       leading: SvgPicture.asset('assets/feed_card/watering.svg'),
-                      title: const Text('Feed Water', style: TextStyle(fontWeight: FontWeight.bold)),
+                      title: const Text('Watered', style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(state.feedEntry.date.toIso8601String(),
                         style: TextStyle(color: Colors.black54)),
                     ),

@@ -23,14 +23,6 @@ class FeedScheduleFormPage extends StatelessWidget {
           builder: (context, state) => Scaffold(
               appBar: SGLAppBar(
                 'Add schedule',
-                actions: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.settings,
-                    ),
-                    onPressed: () {},
-                  )
-                ],
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -40,11 +32,14 @@ class FeedScheduleFormPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         this._renderSchedule('Vegetative schedule',
-                            'assets/feed_form/icon_veg.svg', () {}),
+                            'assets/feed_form/icon_veg.svg', true, () {}),
                         this._renderSchedule('Blooming schedule',
-                            'assets/feed_form/icon_bloom.svg', () {}),
-                        this._renderSchedule('Auto flower schedule',
-                            'assets/feed_form/icon_autoflower.svg', () {}),
+                            'assets/feed_form/icon_bloom.svg', false, () {}),
+                        this._renderSchedule(
+                            'Auto flower schedule',
+                            'assets/feed_form/icon_autoflower.svg',
+                            false,
+                            () {}),
                       ],
                     ),
                   ),
@@ -62,7 +57,8 @@ class FeedScheduleFormPage extends StatelessWidget {
     );
   }
 
-  Widget _renderSchedule(String title, String icon, Function onPressed) {
+  Widget _renderSchedule(
+      String title, String icon, bool selected, Function onPressed) {
     return FeedFormParamLayout(
       title: title,
       icon: icon,
@@ -70,12 +66,27 @@ class FeedScheduleFormPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text('pouet'),
-          Align(
-            alignment: Alignment.centerRight,
-            child: GreenButton(
-              title: 'SET TO VEG',
-              onPressed: () {},
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ButtonTheme(
+                  padding: EdgeInsets.symmetric(
+                      vertical: 4.0,
+                      horizontal: 4.0),
+                  minWidth: 0,
+                  height: 0,
+                  child: RaisedButton(
+                    elevation: 0,
+                    color: Colors.transparent,
+                    child: Icon(Icons.settings),
+                    onPressed: () {},
+                  )),
+              GreenButton(
+                title: selected ? 'SELECTED' : 'SELECT',
+                onPressed: () {},
+                color: selected ? 0xff3bb30b : 0xff777777,
+              )
+            ],
           )
         ],
       ),

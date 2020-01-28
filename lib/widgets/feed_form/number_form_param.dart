@@ -42,7 +42,6 @@ class NumberFormParam extends StatelessWidget {
                     onChange(value - step);
                   },
                   textStyle: TextStyle(
-                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 30),
                 )),
@@ -50,7 +49,6 @@ class NumberFormParam extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text('$value$unit',
                   style: TextStyle(
-                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 22)),
             ),
@@ -68,7 +66,6 @@ class NumberFormParam extends StatelessWidget {
                     onChange(value + step);
                   },
                   textStyle: TextStyle(
-                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 30),
                 )),
