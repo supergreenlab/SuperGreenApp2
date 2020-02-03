@@ -6,6 +6,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_topping/form/bloc/feed_topping_form_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -57,8 +58,11 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
         },
         child: BlocBuilder<FeedToppingFormBloc, FeedToppingFormBlocState>(
           bloc: Provider.of<FeedToppingFormBloc>(context),
-          builder: (context, state) => Scaffold(
-            appBar: SGLAppBar('Topping log'),
+          builder: (context, state) => FeedFormLayout(
+            title: 'Topping log',
+            onOK: () => BlocProvider.of<FeedToppingFormBloc>(context).add(
+              FeedToppingFormBlocEventCreate(
+                  _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _keyboardVisible
@@ -105,15 +109,6 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
       ),
       _renderTextrea(context, state),
       _renderOptions(context, state),
-      Align(
-        alignment: Alignment.centerRight,
-        child: GreenButton(
-          title: 'OK',
-          onPressed: () => BlocProvider.of<FeedToppingFormBloc>(context).add(
-              FeedToppingFormBlocEventCreate(
-                  _textController.text, _helpRequest)),
-        ),
-      ),
     ];
   }
 

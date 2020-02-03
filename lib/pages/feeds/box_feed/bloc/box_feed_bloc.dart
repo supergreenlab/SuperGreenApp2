@@ -12,6 +12,15 @@ class BoxFeedBlocEventLoadBox extends BoxFeedBlocEvent {
   List<Object> get props => [];
 }
 
+class BoxFeedBlocEventBoxUpdated extends BoxFeedBlocEvent {
+  final Box box;
+
+  BoxFeedBlocEventBoxUpdated(this.box);
+
+  @override
+  List<Object> get props => [box];
+}
+
 abstract class BoxFeedBlocState extends Equatable {}
 
 abstract class BoxFeedBlocStateBox extends BoxFeedBlocState {
@@ -51,20 +60,28 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
 
   @override
   Stream<BoxFeedBlocState> mapEventToState(BoxFeedBlocEvent event) async* {
-    AppDB _db = AppDB();
     if (event is BoxFeedBlocEventLoadBox) {
-      Box box = _args.box;
-      if (box == null) {
-        AppData appData = _db.getAppData();
-        if (appData.lastBoxID == null) {
-          yield BoxFeedBlocStateNoBox();
-          return;
+      AppDB _db = AppDB();
+      if (event is BoxFeedBlocEventLoadBox) {
+        Box box = _args.box;
+        if (box == null) {
+          AppData appData = _db.getAppData();
+          if (appData.lastBoxID == null) {
+            yield BoxFeedBlocStateNoBox();
+            return;
+          }
+          box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
+        } else {
+          _db.setLastBox(box.id);
         }
-        box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
-      } else {
-        _db.setLastBox(box.id);
+        RelDB.get().boxesDAO.watchBox(box.id).listen(onBoxUpdated);
       }
-      yield BoxFeedBlocStateBoxLoaded(box);
+    } else if (event is BoxFeedBlocEventBoxUpdated) {
+      yield BoxFeedBlocStateBoxLoaded(event.box);
     }
+  }
+
+  void onBoxUpdated(Box box) {
+    add(BoxFeedBlocEventBoxUpdated(box));
   }
 }

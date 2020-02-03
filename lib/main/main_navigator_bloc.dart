@@ -188,8 +188,7 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
-  MainNavigateToImageCaptureEvent(
-      {Function(Future<Object> f) futureFn})
+  MainNavigateToImageCaptureEvent({Function(Future<Object> f) futureFn})
       : super(futureFn: futureFn);
 
   @override
@@ -209,8 +208,9 @@ class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
+  final bool mustPop;
 
-  MainNavigatorActionPop({this.param});
+  MainNavigatorActionPop({this.param, this.mustPop=false});
 
   @override
   List<Object> get props => [param];
@@ -234,6 +234,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
   Stream<dynamic> mapEventToState(MainNavigatorEvent event) async* {
     Future future;
     if (event is MainNavigatorActionPop) {
+      if (event.mustPop) {
+        _navigatorKey.currentState.pop(event.param);
+      }
       _navigatorKey.currentState.maybePop(event.param);
     } else if (event is MainNavigatorActionPopToRoot) {
       _navigatorKey.currentState.popUntil((route) => route.isFirst);
@@ -281,7 +284,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToTipEvent) {
       future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {
-      future = _navigatorKey.currentState.pushNamed('/capture', arguments: event);
+      future =
+          _navigatorKey.currentState.pushNamed('/capture', arguments: event);
     } else if (event is MainNavigateToImageCapturePlaybackEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/capture/playback', arguments: event);

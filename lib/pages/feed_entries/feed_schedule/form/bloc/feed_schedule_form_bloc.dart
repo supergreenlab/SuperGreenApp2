@@ -33,14 +33,18 @@ class FeedScheduleFormBlocState extends Equatable {
   final String schedule;
   final Map<String, dynamic> schedules;
 
-  FeedScheduleFormBlocState(this.schedule, this.schedules);
+  final String initialSchedule;
+  final Map<String, dynamic> initialSchedules;
+
+  FeedScheduleFormBlocState(this.schedule, this.schedules, this.initialSchedule, this.initialSchedules);
 
   @override
-  List<Object> get props => [schedule, schedules];
+  List<Object> get props => [schedule, schedules, this.initialSchedule, this.initialSchedules];
 }
 
 class FeedScheduleFormBlocStateDone extends FeedScheduleFormBlocState {
-  FeedScheduleFormBlocStateDone(String schedule, Map<String, dynamic> schedules) : super(schedule, schedules);
+  FeedScheduleFormBlocStateDone(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
+      : super(schedule, schedules, initialSchedule, initialSchedules);
 
   @override
   List<Object> get props => [];
@@ -59,7 +63,8 @@ class FeedScheduleFormBloc
   final MainNavigateToFeedScheduleFormEvent _args;
 
   @override
-  FeedScheduleFormBlocState get initialState => FeedScheduleFormBlocState(_schedule, _schedules);
+  FeedScheduleFormBlocState get initialState =>
+      FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);
 
   FeedScheduleFormBloc(this._args) {
     add(FeedScheduleFormBlocEventInit());
@@ -74,22 +79,27 @@ class FeedScheduleFormBloc
       final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
       _initialSchedule = _schedule = settings['schedule'];
       _initialSchedules = _schedules = settings['schedules'];
-      yield FeedScheduleFormBlocState(_schedule, _schedules);
+      yield FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);
     } else if (event is FeedScheduleFormBlocEventSetSchedule) {
       _schedule = event.schedule;
-      yield FeedScheduleFormBlocState(_schedule, _schedules);
+      yield FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);
     } else if (event is FeedScheduleFormBlocEventCreate) {
       final db = RelDB.get();
-      
-      Param onHour = await db.devicesDAO.getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
-      await DeviceHelper.updateIntParam(_device, onHour, _schedules[_schedule]['ON_HOUR']);
-      Param offHour = await db.devicesDAO.getParam(_device.id, 'BOX_${_args.box.deviceBox}_OFF_HOUR');
-      await DeviceHelper.updateIntParam(_device, offHour, _schedules[_schedule]['OFF_HOUR']);
+
+      Param onHour = await db.devicesDAO
+          .getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
+      await DeviceHelper.updateIntParam(
+          _device, onHour, _schedules[_schedule]['ON_HOUR']);
+      Param offHour = await db.devicesDAO
+          .getParam(_device.id, 'BOX_${_args.box.deviceBox}_OFF_HOUR');
+      await DeviceHelper.updateIntParam(
+          _device, offHour, _schedules[_schedule]['OFF_HOUR']);
 
       final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
       settings['schedule'] = _schedule;
       settings['schedules'] = _schedules;
-      await db.boxesDAO.updateBox(_args.box.id, BoxesCompanion(settings: Value(JsonEncoder().convert(settings))));
+      await db.boxesDAO.updateBox(_args.box.id,
+          BoxesCompanion(settings: Value(JsonEncoder().convert(settings))));
 
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_SCHEDULE',
@@ -102,7 +112,7 @@ class FeedScheduleFormBloc
           'schedules': _schedules,
         })),
       ));
-      yield FeedScheduleFormBlocStateDone(_schedule, _schedules);
+      yield FeedScheduleFormBlocStateDone(_schedule, _schedules, _initialSchedule, _initialSchedules);
     }
   }
 }

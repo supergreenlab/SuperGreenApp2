@@ -35,7 +35,6 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           bloc: Provider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
                 title: 'Record creation',
-                buttonTitle: 'ADD RECORD',
                 onOK: () {
                   BlocProvider.of<FeedVentilationFormBloc>(context)
                       .add(FeedVentilationFormBlocEventCreate(_blowerDay, _blowerNight));

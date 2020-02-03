@@ -1,38 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/widgets/appbar.dart';
-import 'package:super_green_app/widgets/green_button.dart';
 
 class FeedFormLayout extends StatelessWidget {
   final Widget body;
+  final bool valid;
+  final bool changed;
   final void Function() onOK;
   final String title;
-  final String buttonTitle;
 
   const FeedFormLayout(
       {@required this.body,
       @required this.onOK,
       @required this.title,
-      @required this.buttonTitle});
+      this.valid = true,
+      this.changed});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: SGLAppBar(title),
-        body: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 24.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(child: this.body),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GreenButton(
-                          title: buttonTitle,
-                          onPressed: onOK,
-                        ),
-                      ))
-                ])));
+    List<Widget> actions = [];
+    if (this.onOK != null) {
+      actions.add(IconButton(
+        icon: Icon(
+          Icons.check,
+          color: Color(this.valid ? 0xff3bb30b : 0xffcdcdcd),
+        ),
+        onPressed: this.valid ? onOK : null,
+      ));
+    }
+    return WillPopScope(
+      onWillPop: () async {
+        if (this.changed) {
+          return await showDialog<bool>(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Unsaved changed'),
+                  content: Text('Changed will not be saved. Continue?'),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context, false);
+                      },
+                      child: Text('NO'),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      child: Text('YES'),
+                    ),
+                  ],
+                );
+              });
+        }
+        return true;
+      },
+      child: Scaffold(
+          appBar: SGLAppBar(
+            title,
+            actions: actions,
+          ),
+          body:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Expanded(child: this.body),
+          ])),
+    );
   }
 }

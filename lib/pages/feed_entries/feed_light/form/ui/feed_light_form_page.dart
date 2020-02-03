@@ -30,7 +30,6 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
           bloc: Provider.of<FeedLightFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
                 title: 'Record creation',
-                buttonTitle: 'ADD RECORD',
                 onOK: () {
                   BlocProvider.of<FeedLightFormBloc>(context)
                       .add(FeedLightFormBlocEventCreate(values));

@@ -9,6 +9,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/bloc/feed_media_form_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -60,8 +61,11 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
           bloc: Provider.of<FeedMediaFormBloc>(context),
-          builder: (context, state) => Scaffold(
-            appBar: SGLAppBar('Note creation'),
+          builder: (context, state) => FeedFormLayout(
+            title: 'Note creation',
+            onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
+                FeedMediaFormBlocEventCreate(
+                    _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _keyboardVisible
@@ -91,14 +95,6 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
       ),
       _renderTextrea(context, state),
       _renderOptions(context, state),
-      Align(
-        alignment: Alignment.centerRight,
-        child: GreenButton(
-          title: 'OK',
-          onPressed: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
-              FeedMediaFormBlocEventCreate(_textController.text, _helpRequest)),
-        ),
-      ),
     ];
   }
 

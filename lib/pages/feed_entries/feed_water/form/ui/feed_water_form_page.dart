@@ -31,7 +31,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           bloc: Provider.of<FeedWaterFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'New watering record',
-            buttonTitle: 'ADD RECORD',
             body: ListView(
               children: <Widget>[
                 YesNoFormParam(
