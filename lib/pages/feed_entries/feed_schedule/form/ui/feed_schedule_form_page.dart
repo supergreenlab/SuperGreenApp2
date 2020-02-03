@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/bloc/feed_schedule_form_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -21,78 +22,97 @@ class FeedScheduleFormPage extends StatelessWidget {
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
           bloc: Provider.of<FeedScheduleFormBloc>(context),
           builder: (context, state) => Scaffold(
+              backgroundColor: Colors.white,
               appBar: SGLAppBar(
                 'Add schedule',
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(children: [
+              body: Column(
+                children: <Widget>[
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        this._renderSchedule('Vegetative schedule',
-                            'assets/feed_form/icon_veg.svg', state.schedule == 'VEG', () {
-                          BlocProvider.of<FeedScheduleFormBloc>(context)
-                              .add(FeedScheduleFormBlocEventSetSchedule('VEG'));
-                        }),
-                        this._renderSchedule('Blooming schedule',
-                            'assets/feed_form/icon_bloom.svg', state.schedule == 'BLOOM', () {
-                          BlocProvider.of<FeedScheduleFormBloc>(context).add(
-                              FeedScheduleFormBlocEventSetSchedule('BLOOM'));
-                        }),
-                        this._renderSchedule('Auto flower schedule',
-                            'assets/feed_form/icon_autoflower.svg', state.schedule == 'AUTO', () {
-                          BlocProvider.of<FeedScheduleFormBloc>(context)
-                              .add(FeedScheduleFormBlocEventSetSchedule('AUTO'));
-                        }),
-                      ],
-                    ),
+                    child: ListView(children: [
+                      this._renderSchedule(
+                          context,
+                          'Vegetative schedule',
+                          'assets/feed_form/icon_veg.svg',
+                          SGLLocalizations.of(context).vegScheduleHelper,
+                          state.schedule == 'VEG', () {
+                        BlocProvider.of<FeedScheduleFormBloc>(context)
+                            .add(FeedScheduleFormBlocEventSetSchedule('VEG'));
+                      }),
+                      this._renderSchedule(
+                          context,
+                          'Blooming schedule',
+                          'assets/feed_form/icon_bloom.svg',
+                          SGLLocalizations.of(context).bloomScheduleHelper,
+                          state.schedule == 'BLOOM', () {
+                        BlocProvider.of<FeedScheduleFormBloc>(context)
+                            .add(FeedScheduleFormBlocEventSetSchedule('BLOOM'));
+                      }),
+                      this._renderSchedule(
+                          context,
+                          'Auto flower schedule',
+                          'assets/feed_form/icon_autoflower.svg',
+                          SGLLocalizations.of(context).autoScheduleHelper,
+                          state.schedule == 'AUTO', () {
+                        BlocProvider.of<FeedScheduleFormBloc>(context)
+                            .add(FeedScheduleFormBlocEventSetSchedule('AUTO'));
+                      }),
+                    ]),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: GreenButton(
-                      title: 'DONE',
-                      onPressed: () =>
-                          BlocProvider.of<FeedScheduleFormBloc>(context)
-                              .add(FeedScheduleFormBlocEventCreate()),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GreenButton(
+                        title: 'DONE',
+                        onPressed: () =>
+                            BlocProvider.of<FeedScheduleFormBloc>(context)
+                                .add(FeedScheduleFormBlocEventCreate()),
+                      ),
                     ),
                   ),
-                ]),
+                ],
               ))),
     );
   }
 
-  Widget _renderSchedule(
-      String title, String icon, bool selected, Function onPressed) {
-    return FeedFormParamLayout(
-      title: title,
-      icon: icon,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('pouet'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+  Widget _renderSchedule(BuildContext context, String title, String icon, String helper,
+      bool selected, Function onPressed) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: FeedFormParamLayout(
+        title: title,
+        icon: icon,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ButtonTheme(
-                  padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
-                  minWidth: 0,
-                  height: 0,
-                  child: RaisedButton(
-                    elevation: 0,
-                    color: Colors.transparent,
-                    child: Icon(Icons.settings),
+              Text(helper),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ButtonTheme(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
+                      minWidth: 0,
+                      height: 0,
+                      child: RaisedButton(
+                        elevation: 0,
+                        color: Colors.transparent,
+                        child: Icon(Icons.settings),
+                        onPressed: () {},
+                      )),
+                  GreenButton(
+                    title: selected ? 'SELECTED' : 'SELECT',
                     onPressed: () {},
-                  )),
-              GreenButton(
-                title: selected ? 'SELECTED' : 'SELECT',
-                onPressed: () {},
-                color: selected ? 0xff3bb30b : 0xff777777,
+                    color: selected ? 0xff3bb30b : 0xff777777,
+                  )
+                ],
               )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

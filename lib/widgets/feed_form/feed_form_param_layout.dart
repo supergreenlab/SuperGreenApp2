@@ -10,37 +10,38 @@ class FeedFormParamLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        _renderIcon(),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          color: Color(0xFFECECEC),
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              _renderIcon(),
               Text(
                 this.title,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
-              Container(child: this.child),
-            ],
+            ]),
           ),
-        )
-      ]),
+        ),
+        Container(child: this.child),
+      ],
     );
   }
 
   Widget _renderIcon() {
     return Padding(
-      padding: const EdgeInsets.only(right: 16.0),
+      padding: const EdgeInsets.only(right: 8.0),
       child: Container(
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(25))),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           child: SvgPicture.asset(this.icon),
         ),
       ),
