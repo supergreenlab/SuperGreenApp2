@@ -93,6 +93,8 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
                 if (fm != null) {
                   BlocProvider.of<FeedToppingFormBloc>(context)
                       .add(FeedToppingFormBlocPushMedia(true, fm));
+                  setState(
+                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
                 }
               }));
             }
