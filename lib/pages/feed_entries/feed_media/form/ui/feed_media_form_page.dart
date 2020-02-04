@@ -52,7 +52,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         listener: (BuildContext context, FeedMediaFormBlocState state) {
           if (state is FeedMediaFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPop(mustPop: true));
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(

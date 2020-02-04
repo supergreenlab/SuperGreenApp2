@@ -53,7 +53,7 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
         listener: (BuildContext context, FeedDefoliationFormBlocState state) {
           if (state is FeedDefoliationFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPop(mustPop: true));
           }
         },
         child:

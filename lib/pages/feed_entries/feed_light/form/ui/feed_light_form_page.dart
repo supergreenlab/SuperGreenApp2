@@ -25,7 +25,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
           setState(() => values = List.from(state.values));
         } else if (state is FeedLightFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(

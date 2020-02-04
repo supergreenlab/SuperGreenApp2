@@ -26,7 +26,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
         listener: (BuildContext context, FeedWaterFormBlocState state) {
           if (state is FeedWaterFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPop(mustPop: true));
           }
         },
         child: BlocBuilder<FeedWaterFormBloc, FeedWaterFormBlocState>(

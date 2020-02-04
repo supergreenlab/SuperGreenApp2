@@ -30,7 +30,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           });
         } else if (state is FeedVentilationFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(

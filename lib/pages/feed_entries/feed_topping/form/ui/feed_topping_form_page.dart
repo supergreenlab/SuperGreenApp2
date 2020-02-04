@@ -52,7 +52,7 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
         listener: (BuildContext context, FeedToppingFormBlocState state) {
           if (state is FeedToppingFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPop(mustPop: true));
           }
         },
         child: BlocBuilder<FeedToppingFormBloc, FeedToppingFormBlocState>(
