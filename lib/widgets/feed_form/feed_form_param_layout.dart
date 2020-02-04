@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedFormParamLayout extends StatelessWidget {
   final Widget child;
@@ -8,45 +8,17 @@ class FeedFormParamLayout extends StatelessWidget {
 
   FeedFormParamLayout(
       {@required this.child, @required this.icon, @required this.title});
-
+  
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          color: Color(0xFFECECEC),
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child:
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-              _renderIcon(),
-              Text(
-                this.title,
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-              ),
-            ]),
-          ),
-        ),
+        SectionTitle(title: title, icon: icon),
         this.child,
       ],
     );
   }
 
-  Widget _renderIcon() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0, left: 4.0),
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(25))),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          child: SvgPicture.asset(this.icon),
-        ),
-      ),
-    );
-  }
+
 }

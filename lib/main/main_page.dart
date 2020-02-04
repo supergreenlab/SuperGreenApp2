@@ -8,6 +8,8 @@ import 'package:super_green_app/pages/add_box/select_device/select_device_bloc.d
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_page.dart';
+import 'package:super_green_app/pages/add_device/add_device/add_device_bloc.dart';
+import 'package:super_green_app/pages/add_device/add_device/add_device_page.dart';
 import 'package:super_green_app/pages/add_device/device_done/device_done_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_done/device_done_page.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
@@ -120,13 +122,19 @@ class MainPage extends StatelessWidget {
                   create: (context) => SelectDeviceBoxBloc(settings.arguments),
                   child: SelectDeviceBoxPage(),
                 ));
+      case '/device/add':
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => AddDeviceBloc(settings.arguments),
+                  child: AddDevicePage(),
+                ));
       case '/device/new':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => NewDeviceBloc(settings.arguments),
                   child: NewDevicePage(),
                 ));
-      case '/device/add':
+      case '/device/existing':
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => ExistingDeviceBloc(settings.arguments),

@@ -97,6 +97,14 @@ class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
   List<Object> get props => [box, device];
 }
 
+class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
+  final Box box;
+  MainNavigateToAddDeviceEvent(this.box);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
   final bool pushAsReplacement;
 
@@ -252,12 +260,15 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSelectBoxDeviceBoxEvent) {
       future = _navigatorKey.currentState
           .pushReplacementNamed('/box/device/box', arguments: event);
+    } else if (event is MainNavigateToAddDeviceEvent) {
+      future = _navigatorKey.currentState
+          .pushReplacementNamed('/device/add', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
       future =
           _navigatorKey.currentState.pushNamed('/device/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {
       future =
-          _navigatorKey.currentState.pushNamed('/device/add', arguments: event);
+          _navigatorKey.currentState.pushNamed('/device/existing', arguments: event);
     } else if (event is MainNavigateToDeviceSetupEvent) {
       future = _navigatorKey.currentState
           .pushReplacementNamed('/device/load', arguments: event);

@@ -55,17 +55,13 @@ class ExistingDeviceBloc
   Stream<ExistingDeviceBlocState> mapEventToState(
       ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
-      yield* this._startSearch(event);
+      final ip = await DeviceAPI.resolveLocalName(event.query);
+      if (ip == "") {
+        yield ExistingDeviceBlocStateNotFound();
+        return;
+      }
+      yield ExistingDeviceBlocStateFound(_args.box, ip);
     }
   }
 
-  Stream<ExistingDeviceBlocState> _startSearch(
-      ExistingDeviceBlocEventStartSearch event) async* {
-    final ip = await DeviceAPI.resolveLocalName(event.query);
-    if (ip == "") {
-      yield ExistingDeviceBlocStateNotFound();
-      return;
-    }
-    yield ExistingDeviceBlocStateFound(_args.box, ip);
-  }
 }
