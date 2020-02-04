@@ -19,7 +19,7 @@ class _CapturePageState extends State<CapturePage> {
   List<CameraDescription> _cameras;
   CameraController _cameraController;
 
-  bool _deleteFileOnPop = true;
+  bool _popDone = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _CapturePageState extends State<CapturePage> {
             _setupCamera();
           }
         } else if (state is CaptureBlocStateDone) {
-          _deleteFileOnPop = false;
+          _popDone = true;
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(param: state.feedMedia));
         }
@@ -57,7 +57,7 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderCamera(BuildContext context, CaptureBlocState state) {
     return WillPopScope(
       onWillPop: () async {
-        if (_deleteFileOnPop) {
+        if (!_popDone) {
           await _deleteFileIfExists('$_filePath.mp4');
           await _deleteFileIfExists('$_filePath.jpg');
         }
@@ -117,9 +117,11 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderCameraRecording(BuildContext context, CaptureBlocState state) {
     return WillPopScope(
       onWillPop: () async {
-        _cameraController.stopVideoRecording();
-        setState(() {});
-        return false;
+        if (_cameraController.value.isRecordingVideo) {
+          await _cameraController.stopVideoRecording();
+          setState(() {});
+        }
+        return _popDone;
       },
       child: Stack(
         children: [

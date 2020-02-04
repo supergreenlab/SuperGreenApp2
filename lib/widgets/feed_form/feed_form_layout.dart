@@ -13,7 +13,7 @@ class FeedFormLayout extends StatelessWidget {
       @required this.onOK,
       @required this.title,
       this.valid = true,
-      this.changed});
+      this.changed = false});
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,7 @@ class FeedFormTextarea extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(title),
+            child: Text(title, style: TextStyle(fontWeight: FontWeight.bold),),
           ),
           Expanded(
             child: Padding(

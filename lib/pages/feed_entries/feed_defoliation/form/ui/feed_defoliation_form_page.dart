@@ -60,6 +60,8 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
           bloc: Provider.of<FeedDefoliationFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Defoliation log',
+            changed: state.afterMedias.length != 0 || state.beforeMedias.length != 0 || _textController.value.text != '',
+            valid: state.afterMedias.length != 0 || state.beforeMedias.length != 0 || _textController.value.text != '',
             onOK: () => BlocProvider.of<FeedDefoliationFormBloc>(context).add(
                 FeedDefoliationFormBlocEventCreate(
                     _textController.text, _helpRequest)),

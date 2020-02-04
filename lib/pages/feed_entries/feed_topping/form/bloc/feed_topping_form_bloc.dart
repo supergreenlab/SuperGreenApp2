@@ -11,12 +11,12 @@ abstract class FeedToppingFormBlocEvent extends Equatable {}
 
 class FeedToppingFormBlocPushMedia extends FeedToppingFormBlocEvent {
   final bool before;
-  final FeedMediasCompanion feedTopping;
+  final FeedMediasCompanion feedMedia;
 
-  FeedToppingFormBlocPushMedia(this.before, this.feedTopping);
+  FeedToppingFormBlocPushMedia(this.before, this.feedMedia);
 
   @override
-  List<Object> get props => [feedTopping];
+  List<Object> get props => [before, feedMedia];
 }
 
 class FeedToppingFormBlocEventCreate extends FeedToppingFormBlocEvent {
@@ -41,9 +41,6 @@ class FeedToppingFormBlocState extends Equatable {
 
 class FeedToppingFormBlocStateDone extends FeedToppingFormBlocState {
   FeedToppingFormBlocStateDone(List<FeedMediasCompanion> beforeMedias, List<FeedMediasCompanion> afterMedias) : super(beforeMedias, afterMedias);
-
-  @override
-  List<Object> get props => [];
 }
 
 class FeedToppingFormBloc
@@ -63,9 +60,9 @@ class FeedToppingFormBloc
       FeedToppingFormBlocEvent event) async* {
     if (event is FeedToppingFormBlocPushMedia) {
       if (event.before) {
-        _beforeMedias.add(event.feedTopping);
+        _beforeMedias.add(event.feedMedia);
       } else {
-        _afterMedias.add(event.feedTopping);
+        _afterMedias.add(event.feedMedia);
       }
       yield FeedToppingFormBlocState(_beforeMedias, _afterMedias);
     } else if (event is FeedToppingFormBlocEventCreate) {

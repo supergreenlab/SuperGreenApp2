@@ -11,12 +11,12 @@ abstract class FeedDefoliationFormBlocEvent extends Equatable {}
 
 class FeedDefoliationFormBlocPushMedia extends FeedDefoliationFormBlocEvent {
   final bool before;
-  final FeedMediasCompanion feedDefoliation;
+  final FeedMediasCompanion feedMedia;
 
-  FeedDefoliationFormBlocPushMedia(this.before, this.feedDefoliation);
+  FeedDefoliationFormBlocPushMedia(this.before, this.feedMedia);
 
   @override
-  List<Object> get props => [feedDefoliation];
+  List<Object> get props => [before, feedMedia];
 }
 
 class FeedDefoliationFormBlocEventCreate extends FeedDefoliationFormBlocEvent {
@@ -41,9 +41,6 @@ class FeedDefoliationFormBlocState extends Equatable {
 
 class FeedDefoliationFormBlocStateDone extends FeedDefoliationFormBlocState {
   FeedDefoliationFormBlocStateDone(List<FeedMediasCompanion> beforeMedias, List<FeedMediasCompanion> afterMedias) : super(beforeMedias, afterMedias);
-
-  @override
-  List<Object> get props => [];
 }
 
 class FeedDefoliationFormBloc
@@ -63,9 +60,9 @@ class FeedDefoliationFormBloc
       FeedDefoliationFormBlocEvent event) async* {
     if (event is FeedDefoliationFormBlocPushMedia) {
       if (event.before) {
-        _beforeMedias.add(event.feedDefoliation);
+        _beforeMedias.add(event.feedMedia);
       } else {
-        _afterMedias.add(event.feedDefoliation);
+        _afterMedias.add(event.feedMedia);
       }
       yield FeedDefoliationFormBlocState(_beforeMedias, _afterMedias);
     } else if (event is FeedDefoliationFormBlocEventCreate) {

@@ -17,7 +17,8 @@ class FeedFormMediaList extends StatelessWidget {
   }
 
   Widget _renderMedias(BuildContext context) {
-    List<Widget> medias = this.medias
+    List<Widget> medias = this
+        .medias
         .map((m) => _renderMedia(
               context,
               () {},
@@ -47,21 +48,14 @@ class FeedFormMediaList extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(title),
+            child: Text(title, style: TextStyle(fontWeight: FontWeight.bold),),
           ),
           SizedBox(
             height: 100,
-            child: Stack(
-              children: [
-                Container(
-                  color: Colors.black12,
-                ),
-                ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: medias,
-                )
-              ],
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: medias,
             ),
           ),
         ],
