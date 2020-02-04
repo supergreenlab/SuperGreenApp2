@@ -6,7 +6,8 @@ class FeedFormParamLayout extends StatelessWidget {
   final String title;
   final String icon;
 
-  FeedFormParamLayout({this.child, this.icon, this.title});
+  FeedFormParamLayout(
+      {@required this.child, @required this.icon, @required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,8 @@ class FeedFormParamLayout extends StatelessWidget {
           color: Color(0xFFECECEC),
           child: Padding(
             padding: const EdgeInsets.all(3.0),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            child:
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               _renderIcon(),
               Text(
                 this.title,
@@ -26,7 +28,7 @@ class FeedFormParamLayout extends StatelessWidget {
             ]),
           ),
         ),
-        Container(child: this.child),
+        this.child,
       ],
     );
   }

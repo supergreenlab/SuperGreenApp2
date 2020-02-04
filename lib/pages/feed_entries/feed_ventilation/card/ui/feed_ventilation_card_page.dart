@@ -14,7 +14,7 @@ class FeedVentilationCardPage extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: SvgPicture.asset('assets/feed_card/blower.svg'),
+                      leading: SvgPicture.asset('assets/feed_card/icon_blower.svg'),
                       title: const Text('Feed Ventilation', style: TextStyle(color: Colors.white)),
                     ),
                   ],

@@ -1,18 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/bloc/feed_media_form_bloc.dart';
-import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
-import 'package:super_green_app/widgets/green_button.dart';
 
 class FeedMediaFormPage extends StatefulWidget {
   @override
@@ -77,21 +73,24 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
 
   List<Widget> _renderBody(BuildContext context, FeedMediaFormBlocState state) {
     return [
-      FeedFormMediaList(
+      FeedFormParamLayout(
         title: 'Attached medias',
-        medias: state.medias,
-        onPressed: (FeedMediasCompanion media) {
-          if (media == null) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-              FeedMediasCompanion fm = await f;
-              if (fm != null) {
-                BlocProvider.of<FeedMediaFormBloc>(context)
-                    .add(FeedMediaFormBlocPushMedia(fm));
-              }
-            }));
-          }
-        },
+        icon: 'assets/feed_form/icon_after_pic.svg',
+        child: FeedFormMediaList(
+          medias: state.medias,
+          onPressed: (FeedMediasCompanion media) {
+            if (media == null) {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
+                FeedMediasCompanion fm = await f;
+                if (fm != null) {
+                  BlocProvider.of<FeedMediaFormBloc>(context)
+                      .add(FeedMediaFormBlocPushMedia(fm));
+                }
+              }));
+            }
+          },
+        ),
       ),
       _renderTextrea(context, state),
       _renderOptions(context, state),
@@ -101,9 +100,14 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   Widget _renderTextrea(BuildContext context, FeedMediaFormBlocState state) {
     return Expanded(
       key: Key('TEXTAREA'),
-      child: FeedFormTextarea(
+      child: FeedFormParamLayout(
         title: 'Observations',
-        textEditingController: _textController,
+        icon: 'assets/feed_form/icon_note.svg',
+        child: Expanded(
+          child: FeedFormTextarea(
+            textEditingController: _textController,
+          ),
+        ),
       ),
     );
   }

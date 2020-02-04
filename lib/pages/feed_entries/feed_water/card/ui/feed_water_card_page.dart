@@ -13,7 +13,7 @@ class FeedWaterCardPage extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: SvgPicture.asset('assets/feed_card/watering.svg'),
+                      leading: SvgPicture.asset('assets/feed_card/icon_watering.svg'),
                       title: const Text('Watered', style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(state.feedEntry.date.toIso8601String(),
                         style: TextStyle(color: Colors.black54)),

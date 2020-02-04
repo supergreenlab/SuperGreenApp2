@@ -17,6 +17,8 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   double volume = 1;
   bool nutrient;
 
+  bool changed = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -31,6 +33,8 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           bloc: Provider.of<FeedWaterFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'New watering record',
+            changed: changed,
+            valid: changed,
             body: ListView(
               children: <Widget>[
                 YesNoFormParam(
@@ -40,6 +44,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                     onPressed: (yes) {
                       setState(() {
                         tooDry = yes;
+                        changed = true;
                       });
                     }),
                 NumberFormParam(
@@ -51,6 +56,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                       setState(() {
                         if (newValue > 0) {
                           volume = newValue;
+                          changed = true;
                         }
                       });
                     }),
@@ -61,6 +67,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                     onPressed: (yes) {
                       setState(() {
                         nutrient = yes;
+                        changed = true;
                       });
                     }),
               ],

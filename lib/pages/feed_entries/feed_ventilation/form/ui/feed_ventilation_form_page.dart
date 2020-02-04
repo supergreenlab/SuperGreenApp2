@@ -16,6 +16,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
 
+  bool _changed = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -35,6 +37,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           bloc: Provider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
                 title: 'Record creation',
+                changed: state is FeedVentilationFormBlocStateVentilationLoaded && (state.blowerDay != state.initialBlowerDay || state.blowerNight != state.initialBlowerNight),
+                valid: state is FeedVentilationFormBlocStateVentilationLoaded && (state.blowerDay != state.initialBlowerDay || state.blowerNight != state.initialBlowerNight),
                 onOK: () {
                   BlocProvider.of<FeedVentilationFormBloc>(context)
                       .add(FeedVentilationFormBlocEventCreate(_blowerDay, _blowerNight));

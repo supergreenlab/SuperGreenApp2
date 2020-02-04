@@ -62,9 +62,12 @@ class FeedFormLayout extends StatelessWidget {
             actions: actions,
           ),
           body:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Expanded(child: this.body),
-          ])),
+          ]),
+              )),
     );
   }
 }

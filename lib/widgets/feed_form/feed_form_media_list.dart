@@ -6,10 +6,9 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedFormMediaList extends StatelessWidget {
   final List<FeedMediasCompanion> medias;
-  final String title;
   final void Function(FeedMediasCompanion) onPressed;
 
-  const FeedFormMediaList({this.medias, this.title, this.onPressed});
+  const FeedFormMediaList({this.medias, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +22,8 @@ class FeedFormMediaList extends StatelessWidget {
               context,
               () {},
               Container(
-                  width: 85.0,
-                  height: 85.0,
+                  width: 60.0,
+                  height: 60.0,
                   decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
@@ -38,27 +37,15 @@ class FeedFormMediaList extends StatelessWidget {
       onPressed(null);
     },
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
           child: SvgPicture.asset('assets/feed_form/icon_add.svg'),
         )));
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(title, style: TextStyle(fontWeight: FontWeight.bold),),
-          ),
-          SizedBox(
-            height: 100,
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              children: medias,
-            ),
-          ),
-        ],
+    return SizedBox(
+      height: 80,
+      child: ListView(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        children: medias,
       ),
     );
   }
@@ -66,6 +53,8 @@ class FeedFormMediaList extends StatelessWidget {
   Widget _renderMedia(
       BuildContext context, Function onPressed, Widget content) {
     return SizedBox(
+        width: 90,
+        height: 80,
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: RawMaterialButton(
@@ -76,8 +65,6 @@ class FeedFormMediaList extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 child: content),
           ),
-        ),
-        height: 100,
-        width: 100);
+        ));
   }
 }

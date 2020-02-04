@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/bloc/feed_media_card_bloc.dart';
 
@@ -16,7 +17,7 @@ class FeedMediaCardPage extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: state.medias.length == 0
-                        ? Icon(Icons.album)
+                        ? SvgPicture.asset('assets/feed_card/icon_dimming.svg')
                         : _renderImage(context, state),
                     title: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),

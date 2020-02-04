@@ -41,14 +41,14 @@ class BoxFeedPage extends StatelessWidget {
       marginBottom: 10,
       animationSpeed: 50,
       curve: Curves.bounceIn,
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color(0xff414166),
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
-      overlayOpacity: 0.4,
+      overlayOpacity: 0.8,
       children: [
         _renderSpeedDialChild(
             'Video/pic note',
-            Colors.amber,
+            'assets/feed_card/icon_media.svg',
             _onSpeedDialSelected(
                 context,
                 ({pushAsReplacement = false}) =>
@@ -56,7 +56,7 @@ class BoxFeedPage extends StatelessWidget {
                         pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Watering',
-            Colors.blue,
+            'assets/feed_card/icon_watering.svg',
             _onSpeedDialSelected(
                 context,
                 ({pushAsReplacement = false}) =>
@@ -64,7 +64,7 @@ class BoxFeedPage extends StatelessWidget {
                         pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Light dimming',
-            Colors.yellow,
+            'assets/feed_card/icon_dimming.svg',
             _onSpeedDialSelected(
                 context,
                 ({pushAsReplacement = false}) =>
@@ -72,7 +72,7 @@ class BoxFeedPage extends StatelessWidget {
                         pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Ventilation',
-            Colors.grey,
+            'assets/feed_card/icon_blower.svg',
             _onSpeedDialSelected(
                 context,
                 ({pushAsReplacement = false}) =>
@@ -80,7 +80,7 @@ class BoxFeedPage extends StatelessWidget {
                         pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Defoliation',
-            Colors.green,
+            'assets/feed_card/icon_defoliation.svg',
             _onSpeedDialSelected(
                 context,
                 ({pushAsReplacement = false}) =>
@@ -88,7 +88,7 @@ class BoxFeedPage extends StatelessWidget {
                         pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Topping',
-            Colors.blueGrey,
+            'assets/feed_card/icon_topping.svg',
             _onSpeedDialSelected(
                 context,
                 ({pushAsReplacement = false}) =>
@@ -96,7 +96,7 @@ class BoxFeedPage extends StatelessWidget {
                         pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
             'Veg/Bloom',
-            Colors.orange,
+            'assets/feed_card/icon_schedule.svg',
             _onSpeedDialSelected(
                 context,
                 ({pushAsReplacement = false}) =>
@@ -107,9 +107,9 @@ class BoxFeedPage extends StatelessWidget {
   }
 
   SpeedDialChild _renderSpeedDialChild(
-      String label, Color color, void Function() navigateTo) {
+      String label, String icon, void Function() navigateTo) {
     return SpeedDialChild(
-      backgroundColor: color,
+      child: SvgPicture.asset(icon),
       label: label,
       labelStyle: TextStyle(fontWeight: FontWeight.bold),
       onTap: navigateTo,

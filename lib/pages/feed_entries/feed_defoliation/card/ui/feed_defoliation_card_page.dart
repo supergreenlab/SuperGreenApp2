@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/card/bloc/feed_defoliation_card_bloc.dart';
 
@@ -12,7 +13,7 @@ class FeedDefoliationCardPage extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.album),
+                      leading: SvgPicture.asset('assets/feed_card/icon_defoliation.svg'),
                       title: const Text('Feed Defoliation', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],

@@ -10,5 +10,6 @@ class SGLAppBar extends AppBar {
           actions: actions,
           centerTitle: true,
           backgroundColor: Colors.white,
+          elevation: 1.0,
         );
 }

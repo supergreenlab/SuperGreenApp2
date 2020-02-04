@@ -14,6 +14,8 @@ class FeedLightFormPage extends StatefulWidget {
 class _FeedLightFormPageState extends State<FeedLightFormPage> {
   List<int> values = List();
 
+  bool changed = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -30,6 +32,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
           bloc: Provider.of<FeedLightFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
                 title: 'Record creation',
+                changed: changed,
+                valid: changed,
                 onOK: () {
                   BlocProvider.of<FeedLightFormBloc>(context)
                       .add(FeedLightFormBlocEventCreate(values));
@@ -54,6 +58,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       onChanged: (double newValue) {
         setState(() {
           values[i] = newValue.round();
+          changed = true;
         });
       },
       onChangeEnd: (double value) {

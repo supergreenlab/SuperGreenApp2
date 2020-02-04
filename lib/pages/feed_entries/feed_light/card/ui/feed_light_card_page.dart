@@ -13,7 +13,7 @@ class FeedLightCardPage extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: SvgPicture.asset('assets/feed_card/light.svg'),
+                      leading: SvgPicture.asset('assets/feed_card/icon_light.svg'),
                       title: const Text('Feed Light', style: TextStyle(fontWeight: FontWeight.bold),),
                     ),
                   ],

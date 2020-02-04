@@ -7,6 +7,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_topping/form/bloc/feed_topping_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class FeedToppingFormPage extends StatefulWidget {
@@ -58,9 +59,15 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
           bloc: Provider.of<FeedToppingFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Topping log',
+            changed: state.afterMedias.length != 0 ||
+                state.beforeMedias.length != 0 ||
+                _textController.value.text != '',
+            valid: state.afterMedias.length != 0 ||
+                state.beforeMedias.length != 0 ||
+                _textController.value.text != '',
             onOK: () => BlocProvider.of<FeedToppingFormBloc>(context).add(
-              FeedToppingFormBlocEventCreate(
-                  _textController.text, _helpRequest)),
+                FeedToppingFormBlocEventCreate(
+                    _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _keyboardVisible
@@ -73,37 +80,43 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
   List<Widget> _renderBody(
       BuildContext context, FeedToppingFormBlocState state) {
     return [
-      FeedFormMediaList(
+      FeedFormParamLayout(
         title: 'Before pics',
-        medias: state.beforeMedias,
-        onPressed: (FeedMediasCompanion media) {
-          if (media == null) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-              FeedMediasCompanion fm = await f;
-              if (fm != null) {
-                BlocProvider.of<FeedToppingFormBloc>(context)
-                    .add(FeedToppingFormBlocPushMedia(true, fm));
-              }
-            }));
-          }
-        },
+        icon: 'assets/feed_form/icon_before_pic.svg',
+        child: FeedFormMediaList(
+          medias: state.beforeMedias,
+          onPressed: (FeedMediasCompanion media) {
+            if (media == null) {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
+                FeedMediasCompanion fm = await f;
+                if (fm != null) {
+                  BlocProvider.of<FeedToppingFormBloc>(context)
+                      .add(FeedToppingFormBlocPushMedia(true, fm));
+                }
+              }));
+            }
+          },
+        ),
       ),
-      FeedFormMediaList(
+      FeedFormParamLayout(
         title: 'After pics',
-        medias: state.afterMedias,
-        onPressed: (FeedMediasCompanion media) {
-          if (media == null) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-              FeedMediasCompanion fm = await f;
-              if (fm != null) {
-                BlocProvider.of<FeedToppingFormBloc>(context)
-                    .add(FeedToppingFormBlocPushMedia(false, fm));
-              }
-            }));
-          }
-        },
+        icon: 'assets/feed_form/icon_after_pic.svg',
+        child: FeedFormMediaList(
+          medias: state.afterMedias,
+          onPressed: (FeedMediasCompanion media) {
+            if (media == null) {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
+                FeedMediasCompanion fm = await f;
+                if (fm != null) {
+                  BlocProvider.of<FeedToppingFormBloc>(context)
+                      .add(FeedToppingFormBlocPushMedia(false, fm));
+                }
+              }));
+            }
+          },
+        ),
       ),
       _renderTextrea(context, state),
       _renderOptions(context, state),
@@ -113,9 +126,14 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
   Widget _renderTextrea(BuildContext context, FeedToppingFormBlocState state) {
     return Expanded(
       key: Key('TEXTAREA'),
-      child: FeedFormTextarea(
+      child: FeedFormParamLayout(
         title: 'Observations',
-        textEditingController: _textController,
+        icon: 'assets/feed_form/icon_note.svg',
+        child: Expanded(
+          child: FeedFormTextarea(
+            textEditingController: _textController,
+          ),
+        ),
       ),
     );
   }
