@@ -114,6 +114,8 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
                 if (fm != null) {
                   BlocProvider.of<FeedDefoliationFormBloc>(context)
                       .add(FeedDefoliationFormBlocPushMedia(false, fm));
+                  setState(
+                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
                 }
               }));
             }
@@ -145,23 +147,6 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
       BuildContext context, FeedDefoliationFormBlocState state) {
     return Row(
       children: <Widget>[],
-    );
-  }
-
-  Widget _renderOptionCheckbx(
-      BuildContext context,
-      FeedDefoliationFormBlocState state,
-      String text,
-      Function onChanged,
-      bool value) {
-    return Row(
-      children: <Widget>[
-        Checkbox(
-          onChanged: onChanged,
-          value: value,
-        ),
-        Text(text),
-      ],
     );
   }
 

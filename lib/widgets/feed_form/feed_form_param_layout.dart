@@ -23,7 +23,7 @@ class FeedFormParamLayout extends StatelessWidget {
               _renderIcon(),
               Text(
                 this.title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
               ),
             ]),
           ),
@@ -35,10 +35,10 @@ class FeedFormParamLayout extends StatelessWidget {
 
   Widget _renderIcon() {
     return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
+      padding: const EdgeInsets.only(right: 8.0, left: 4.0),
       child: Container(
-        width: 50,
-        height: 50,
+        width: 40,
+        height: 40,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(25))),

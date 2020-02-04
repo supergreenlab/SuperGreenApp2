@@ -53,10 +53,10 @@ class FeedFormMediaList extends StatelessWidget {
   Widget _renderMedia(
       BuildContext context, Function onPressed, Widget content) {
     return SizedBox(
-        width: 90,
+        width: 70,
         height: 80,
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
           child: RawMaterialButton(
             onPressed: onPressed,
             child: Container(

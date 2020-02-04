@@ -112,6 +112,8 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
                 if (fm != null) {
                   BlocProvider.of<FeedToppingFormBloc>(context)
                       .add(FeedToppingFormBlocPushMedia(false, fm));
+                  setState(
+                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
                 }
               }));
             }
@@ -141,23 +143,6 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
   Widget _renderOptions(BuildContext context, FeedToppingFormBlocState state) {
     return Row(
       children: <Widget>[],
-    );
-  }
-
-  Widget _renderOptionCheckbx(
-      BuildContext context,
-      FeedToppingFormBlocState state,
-      String text,
-      Function onChanged,
-      bool value) {
-    return Row(
-      children: <Widget>[
-        Checkbox(
-          onChanged: onChanged,
-          value: value,
-        ),
-        Text(text),
-      ],
     );
   }
 

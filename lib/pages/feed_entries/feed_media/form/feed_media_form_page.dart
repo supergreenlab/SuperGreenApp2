@@ -59,6 +59,9 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           bloc: Provider.of<FeedMediaFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Note creation',
+            changed:
+                state.medias.length != 0 || _textController.value.text != '',
+            valid: state.medias.length != 0 || _textController.value.text != '',
             onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
                 FeedMediaFormBlocEventCreate(
                     _textController.text, _helpRequest)),
@@ -86,6 +89,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                 if (fm != null) {
                   BlocProvider.of<FeedMediaFormBloc>(context)
                       .add(FeedMediaFormBlocPushMedia(fm));
+                  setState(() {}); // Why? no idea, but it wont refresh on bloc's state change without that.
                 }
               }));
             }
