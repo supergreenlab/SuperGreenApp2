@@ -69,7 +69,7 @@ class HomePageState extends State<HomePage> {
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
     if (settings.arguments == null) {
-      setState(() => _navigationIndex = 0);
+      _navigationIndex = 0;
       return MaterialPageRoute(
           builder: (context) => BlocProvider(
                 create: (context) => SGLFeedBloc(),
@@ -78,14 +78,14 @@ class HomePageState extends State<HomePage> {
     }
     switch (settings.name) {
       case '/feed/sgl':
-        setState(() => _navigationIndex = 0);
+        _navigationIndex = 0;
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
                   child: SGLFeedPage(),
                 ));
       case '/feed/box':
-        setState(() => _navigationIndex = 1);
+        _navigationIndex = 1;
         return MaterialPageRoute(
             builder: (context) => MultiBlocProvider(
                   providers: [
@@ -98,7 +98,7 @@ class HomePageState extends State<HomePage> {
                   child: BoxFeedPage(),
                 ));
       default:
-        setState(() => _navigationIndex = 0);
+        _navigationIndex = 0;
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
