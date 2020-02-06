@@ -1,20 +1,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class BoxInfosBlocEvent extends Equatable {}
 
 class BoxInfosBlocEventCreateBox extends BoxInfosBlocEvent {
   final String name;
-  BoxInfosBlocEventCreateBox(this.name);
+  final Device device;
+  final int deviceBox;
+  BoxInfosBlocEventCreateBox(this.name, {this.device, this.deviceBox});
 
   @override
   List<Object> get props => [];
 }
 
-abstract class BoxInfosBlocState extends Equatable {}
-
-class BoxInfosBlocStateIdle extends BoxInfosBlocState {
+class BoxInfosBlocState extends Equatable {
   @override
   List<Object> get props => [];
 }
@@ -29,7 +30,7 @@ class BoxInfosBlocStateDone extends BoxInfosBlocState {
 
 class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
   @override
-  BoxInfosBlocState get initialState => BoxInfosBlocStateIdle();
+  BoxInfosBlocState get initialState => BoxInfosBlocState();
 
   @override
   Stream<BoxInfosBlocState> mapEventToState(BoxInfosBlocEvent event) async* {
@@ -38,7 +39,12 @@ class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
       final fdb = RelDB.get().feedsDAO;
       final feed = FeedsCompanion.insert(name: event.name);
       final feedID = await fdb.addFeed(feed);
-      final box = BoxesCompanion.insert(feed: feedID, name: event.name);
+      BoxesCompanion box;
+      if (event.device == null || event.deviceBox == null) {
+        box = BoxesCompanion.insert(feed: feedID, name: event.name);
+      } else {
+        box = BoxesCompanion.insert(feed: feedID, name: event.name, device: Value(event.device.id), deviceBox: Value(event.deviceBox));
+      }
       final boxID = await bdb.addBox(box);
       final b = await bdb.getBox(boxID);
       yield BoxInfosBlocStateDone(b);

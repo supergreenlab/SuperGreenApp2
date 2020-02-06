@@ -16,32 +16,30 @@ class DeviceNameBlocEventSetName extends DeviceNameBlocEvent {
   List<Object> get props => [];
 }
 
-abstract class DeviceNameBlocState extends Equatable {}
-
-class DeviceNameBlocStateIdle extends DeviceNameBlocState {
-  @override
-  List<Object> get props => [];
-}
-
-class DeviceNameBlocStateDone extends DeviceNameBlocState {
+class DeviceNameBlocState extends Equatable {
   final Box box;
   final Device device;
-  DeviceNameBlocStateDone(this.box, this.device);
+  DeviceNameBlocState(this.box, this.device);
 
   @override
   List<Object> get props => [box, device];
+}
+
+class DeviceNameBlocStateDone extends DeviceNameBlocState {
+  DeviceNameBlocStateDone(Box box, Device device) : super(box, device);
 }
 
 class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   final MainNavigateToDeviceNameEvent _args;
 
   @override
-  DeviceNameBlocState get initialState => DeviceNameBlocStateIdle();
+  DeviceNameBlocState get initialState => DeviceNameBlocState(_args.box, _args.device);
 
   DeviceNameBloc(this._args);
 
   @override
-  Stream<DeviceNameBlocState> mapEventToState(DeviceNameBlocEvent event) async* {
+  Stream<DeviceNameBlocState> mapEventToState(
+      DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventSetName) {
       await DeviceHelper.updateDeviceName(_args.device, event.name);
       yield DeviceNameBlocStateDone(_args.box, _args.device);

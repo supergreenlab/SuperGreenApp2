@@ -13,31 +13,21 @@ class SelectDeviceBoxPage extends StatefulWidget {
 class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: Provider.of<SelectDeviceBoxBloc>(context),
-      listener: (BuildContext context, SelectDeviceBoxBlocState state) {
-        if (state is SelectDeviceBoxBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
-        }
-      },
-      child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-          bloc: Provider.of<SelectDeviceBoxBloc>(context),
-          builder: (context, state) => Scaffold(
-              appBar: SGLAppBar('New Box device box'),
-              body: Row(
-                children: <Widget>[
-                  RaisedButton(
-                    onPressed: () => _handleInput(context),
-                    child: Text('CREATE BOX'),
-                  ),
-                ],
-              ))),
-    );
+    return BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
+        bloc: Provider.of<SelectDeviceBoxBloc>(context),
+        builder: (context, state) => Scaffold(
+            appBar: SGLAppBar('Device configuration'),
+            body: Row(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () => _handleInput(context),
+                  child: Text('CREATE BOX'),
+                ),
+              ],
+            )));
   }
 
   void _handleInput(BuildContext context) {
-    Provider.of<SelectDeviceBoxBloc>(context, listen: false)
-        .add(SelectDeviceBoxBlocEventSetDeviceBox(0));
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: 0));
   }
 }

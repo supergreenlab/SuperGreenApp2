@@ -16,17 +16,13 @@ class TipBlocState extends Equatable {
 
 }
 
-class TipBlocStateIdle extends TipBlocState {
-  TipBlocStateIdle(MainNavigatorEvent nextRoute) : super(nextRoute);
-}
-
 class TipBloc extends Bloc<TipBlocEvent,TipBlocState> {
   final MainNavigateToTipEvent _args;
 
   TipBloc(this._args);
 
   @override
-  TipBlocState get initialState => TipBlocStateIdle(_args.nextRoute);
+  TipBlocState get initialState => TipBlocState(_args.nextRoute);
 
   @override
   Stream<TipBlocState> mapEventToState(TipBlocEvent event) async* {}

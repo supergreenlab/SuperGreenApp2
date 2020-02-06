@@ -16,27 +16,22 @@ class DeviceSetupBlocEventStartSetup extends DeviceSetupBlocEvent {
   List<Object> get props => [];
 }
 
-class DeviceSetupBlocEventReset extends DeviceSetupBlocEvent {
-  @override
-  List<Object> get props => [];
-}
+class DeviceSetupBlocState extends Equatable {
+  final Box box;
+  DeviceSetupBlocState(this.box);
 
-abstract class DeviceSetupBlocState extends Equatable {}
-
-class DeviceSetupBlocStateIdle extends DeviceSetupBlocState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class DeviceSetupBlocStateOutdated extends DeviceSetupBlocState {
-  @override
-  List<Object> get props => [];
+  DeviceSetupBlocStateOutdated(Box box) : super(box);
 }
 
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
-  final Box box;
   final Device device;
-  DeviceSetupBlocStateDone(this.box, this.device);
+
+  DeviceSetupBlocStateDone(Box box, this.device) : super(box);
 
   @override
   List<Object> get props => [device];
@@ -46,7 +41,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
   final MainNavigateToDeviceSetupEvent _args;
 
   @override
-  DeviceSetupBlocState get initialState => DeviceSetupBlocStateIdle();
+  DeviceSetupBlocState get initialState =>
+      DeviceSetupBlocState(_args.box);
 
   DeviceSetupBloc(this._args) {
     Future.delayed(const Duration(seconds: 1),
@@ -58,22 +54,27 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       DeviceSetupBlocEvent event) async* {
     if (event is DeviceSetupBlocEventStartSetup) {
       yield* this._startSearch(event);
-    } else if (event is DeviceSetupBlocEventReset) {
-      yield DeviceSetupBlocStateIdle();
     }
   }
 
   Stream<DeviceSetupBlocState> _startSearch(
       DeviceSetupBlocEventStartSetup event) async* {
-
-    final deviceName = await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
-    final deviceId = await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
-    final mdnsDomain = await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
+    final deviceName =
+        await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
+    final deviceId =
+        await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
+    final mdnsDomain =
+        await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
     final config = await DeviceAPI.fetchConfig(_args.ip);
     final keys = json.decode(config);
 
     final db = RelDB.get().devicesDAO;
-    final device = DevicesCompanion.insert(identifier: deviceId, name: deviceName, config: config, ip: _args.ip, mdns: mdnsDomain);
+    final device = DevicesCompanion.insert(
+        identifier: deviceId,
+        name: deviceName,
+        config: config,
+        ip: _args.ip,
+        mdns: mdnsDomain);
     final deviceID = await db.addDevice(device);
     final Map<String, int> modules = Map();
 
@@ -81,7 +82,11 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       var moduleName = k['module'];
       if (modules.containsKey(moduleName) == false) {
         bool isArray = k.containsKey('array');
-        ModulesCompanion module = ModulesCompanion.insert(device: deviceID, name: moduleName, isArray: isArray, arrayLen: isArray ? k['array']['len'] : 0);
+        ModulesCompanion module = ModulesCompanion.insert(
+            device: deviceID,
+            name: moduleName,
+            isArray: isArray,
+            arrayLen: isArray ? k['array']['len'] : 0);
         final moduleID = await db.addModule(module);
         modules[moduleName] = moduleID;
       }
@@ -89,10 +94,21 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       ParamsCompanion param;
       if (type == INTEGER_TYPE) {
         final value = await DeviceAPI.fetchIntParam(_args.ip, k['caps_name']);
-        param = ParamsCompanion.insert(device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, ivalue: Value(value));
+        param = ParamsCompanion.insert(
+            device: deviceID,
+            module: modules[moduleName],
+            key: k['caps_name'],
+            type: type,
+            ivalue: Value(value));
       } else {
-        final value = await DeviceAPI.fetchStringParam(_args.ip, k['caps_name']);
-        param = ParamsCompanion.insert(device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, svalue: Value(value));
+        final value =
+            await DeviceAPI.fetchStringParam(_args.ip, k['caps_name']);
+        param = ParamsCompanion.insert(
+            device: deviceID,
+            module: modules[moduleName],
+            key: k['caps_name'],
+            type: type,
+            svalue: Value(value));
       }
       await db.addParam(param);
     }

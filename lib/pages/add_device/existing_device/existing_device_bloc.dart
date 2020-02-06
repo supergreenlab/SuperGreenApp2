@@ -16,30 +16,30 @@ class ExistingDeviceBlocEventStartSearch extends ExistingDeviceBlocEvent {
   List<Object> get props => [query];
 }
 
-abstract class ExistingDeviceBlocState extends Equatable {}
+class ExistingDeviceBlocState extends Equatable {
+    final Box box;
 
-class ExistingDeviceBlocStateIdle extends ExistingDeviceBlocState {
+  ExistingDeviceBlocState(this.box);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [this.box];
+
 }
 
 class ExistingDeviceBlocStateResolving extends ExistingDeviceBlocState {
-  @override
-  List<Object> get props => [];
+  ExistingDeviceBlocStateResolving(Box box) : super(box);
 }
 
 class ExistingDeviceBlocStateFound extends ExistingDeviceBlocState {
-  final Box box;
   final String ip;
-  ExistingDeviceBlocStateFound(this.box, this.ip);
+  ExistingDeviceBlocStateFound(Box box, this.ip) : super(box);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [this.box, this.ip];
 }
 
 class ExistingDeviceBlocStateNotFound extends ExistingDeviceBlocState {
-  @override
-  List<Object> get props => [];
+  ExistingDeviceBlocStateNotFound(Box box) : super(box);
 }
 
 class ExistingDeviceBloc
@@ -49,7 +49,7 @@ class ExistingDeviceBloc
   ExistingDeviceBloc(this._args);
 
   @override
-  ExistingDeviceBlocState get initialState => ExistingDeviceBlocStateIdle();
+  ExistingDeviceBlocState get initialState => ExistingDeviceBlocState(_args.box);
 
   @override
   Stream<ExistingDeviceBlocState> mapEventToState(
@@ -57,7 +57,7 @@ class ExistingDeviceBloc
     if (event is ExistingDeviceBlocEventStartSearch) {
       final ip = await DeviceAPI.resolveLocalName(event.query);
       if (ip == "") {
-        yield ExistingDeviceBlocStateNotFound();
+        yield ExistingDeviceBlocStateNotFound(_args.box);
         return;
       }
       yield ExistingDeviceBlocStateFound(_args.box, ip);

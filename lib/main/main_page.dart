@@ -75,7 +75,8 @@ class MainPage extends StatelessWidget {
           const Locale('fr'),
         ],
         navigatorKey: _navigatorKey,
-        onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context).title,
+        onGenerateTitle: (BuildContext context) =>
+            SGLLocalizations.of(context).title,
         onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
         theme: ThemeData(
           fontFamily: 'Roboto',
@@ -93,6 +94,7 @@ class MainPage extends StatelessWidget {
     switch (settings.name) {
       case '/home':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => MultiBlocProvider(
                   providers: [
                     BlocProvider<HomeNavigatorBloc>(
@@ -106,60 +108,70 @@ class MainPage extends StatelessWidget {
                 ));
       case '/box/new':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => BoxInfosBloc(),
                   child: BoxInfosPage(),
                 ));
       case '/box/device':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SelectDeviceBloc(settings.arguments),
                   child: SelectDevicePage(),
                 ));
       case '/box/device/box':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SelectDeviceBoxBloc(settings.arguments),
                   child: SelectDeviceBoxPage(),
                 ));
       case '/device/add':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => AddDeviceBloc(settings.arguments),
                   child: AddDevicePage(),
                 ));
       case '/device/new':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => NewDeviceBloc(settings.arguments),
                   child: NewDevicePage(),
                 ));
       case '/device/existing':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => ExistingDeviceBloc(settings.arguments),
                   child: ExistingDevicePage(),
                 ));
       case '/device/load':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => DeviceSetupBloc(settings.arguments),
                   child: DeviceSetupPage(),
                 ));
       case '/device/name':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => DeviceNameBloc(settings.arguments),
                   child: DeviceNamePage(),
                 ));
       case '/device/done':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => DeviceDoneBloc(settings.arguments),
                   child: DeviceDonePage(),
                 ));
       case '/feed/form/defoliation':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedDefoliationFormBloc(settings.arguments),
             child: FeedDefoliationFormPage(),
@@ -168,6 +180,7 @@ class MainPage extends StatelessWidget {
         );
       case '/feed/form/light':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedLightFormBloc(settings.arguments),
             child: FeedLightFormPage(),
@@ -176,6 +189,7 @@ class MainPage extends StatelessWidget {
         );
       case '/feed/form/media':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedMediaFormBloc(settings.arguments),
             child: FeedMediaFormPage(),
@@ -184,6 +198,7 @@ class MainPage extends StatelessWidget {
         );
       case '/feed/form/schedule':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedScheduleFormBloc(settings.arguments),
             child: FeedScheduleFormPage(),
@@ -192,6 +207,7 @@ class MainPage extends StatelessWidget {
         );
       case '/feed/form/topping':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedToppingFormBloc(settings.arguments),
             child: FeedToppingFormPage(),
@@ -200,6 +216,7 @@ class MainPage extends StatelessWidget {
         );
       case '/feed/form/ventilation':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedVentilationFormBloc(settings.arguments),
             child: FeedVentilationFormPage(),
@@ -208,6 +225,7 @@ class MainPage extends StatelessWidget {
         );
       case '/feed/form/water':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedWaterFormBloc(settings.arguments),
             child: FeedWaterFormPage(),
@@ -216,6 +234,7 @@ class MainPage extends StatelessWidget {
         );
       case '/tip':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => TipBloc(settings.arguments),
             child: TipPage(),
@@ -224,6 +243,7 @@ class MainPage extends StatelessWidget {
         );
       case '/capture':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => CaptureBloc(settings.arguments),
             child: CapturePage(),
@@ -232,6 +252,7 @@ class MainPage extends StatelessWidget {
         );
       case '/capture/playback':
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => PlaybackBloc(settings.arguments),
             child: PlaybackPage(),

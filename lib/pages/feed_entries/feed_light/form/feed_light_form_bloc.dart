@@ -36,9 +36,7 @@ class FeedLightFormBlocValueChangedEvent extends FeedLightFormBlocEvent {
   List<Object> get props => [i, value];
 }
 
-abstract class FeedLightFormBlocState extends Equatable {}
-
-class FeedLightFormBlocStateIdle extends FeedLightFormBlocState {
+class FeedLightFormBlocState extends Equatable {
   @override
   List<Object> get props => [];
 }
@@ -66,7 +64,7 @@ class FeedLightFormBloc
   List<int> _initialValues;
 
   @override
-  FeedLightFormBlocState get initialState => FeedLightFormBlocStateIdle();
+  FeedLightFormBlocState get initialState => FeedLightFormBlocState();
 
   FeedLightFormBloc(this._args) {
     add(FeedLightFormBlocEventLoadLights());

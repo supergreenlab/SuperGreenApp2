@@ -24,48 +24,36 @@ class SelectDeviceBlocEventDeviceListUpdated extends SelectDeviceBlocEvent {
   List<Object> get props => [devices];
 }
 
-class SelectDeviceBlocEventSelectDevice extends SelectDeviceBlocEvent {
-  final Device device;
-
-  SelectDeviceBlocEventSelectDevice(this.device) : super();
-
-  @override
-  List<Object> get props => [device];
-}
-
 class SelectDeviceBlocState extends Equatable {
-  final Box box;
+  final List<Device> devices;
 
-  SelectDeviceBlocState(this.box);
+  SelectDeviceBlocState(this.devices);
 
   @override
-  List<Object> get props => [box];
-}
-
-class SelectDeviceBlocStateIdle extends SelectDeviceBlocState {
-  SelectDeviceBlocStateIdle(Box box) : super(box);
+  List<Object> get props => [devices];
 }
 
 class SelectDeviceBlocStateDeviceListUpdated extends SelectDeviceBlocState {
-  final List<Device> devices;
-
-  SelectDeviceBlocStateDeviceListUpdated(Box box, this.devices) : super(box);
-
-  @override
-  List<Object> get props => [box, devices];
+  SelectDeviceBlocStateDeviceListUpdated(List<Device> devices) : super(devices);
 }
 
 class SelectDeviceBlocStateDone extends SelectDeviceBlocState {
-  SelectDeviceBlocStateDone(Box box) : super(box);
+  final Device device;
+
+  SelectDeviceBlocStateDone(List<Device> devices, this.device) : super(devices);
+
+  @override
+  List<Object> get props => [devices, device];
 }
 
 class SelectDeviceBloc
     extends Bloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
+  List<Device> _devices = [];
+
   final MainNavigateToSelectBoxDeviceEvent _args;
 
   @override
-  SelectDeviceBlocState get initialState =>
-      SelectDeviceBlocStateIdle(_args.box);
+  SelectDeviceBlocState get initialState => SelectDeviceBlocState(_devices);
 
   SelectDeviceBloc(this._args) {
     this.add(SelectDeviceBlocEventLoadDevices());
@@ -79,13 +67,8 @@ class SelectDeviceBloc
       final watcher = ddb.watchDevices();
       watcher.listen(_onDeviceListChanged);
     } else if (event is SelectDeviceBlocEventDeviceListUpdated) {
-      yield SelectDeviceBlocStateDeviceListUpdated(_args.box, event.devices);
-    } else if (event is SelectDeviceBlocEventSelectDevice) {
-      final bdb = RelDB.get().boxesDAO;
-      await bdb.updateBox(
-          _args.box.id, BoxesCompanion(device: Value(event.device.id)));
-      Box box = await bdb.getBox(_args.box.id);
-      yield SelectDeviceBlocStateDone(box);
+      _devices = event.devices;
+      yield SelectDeviceBlocStateDeviceListUpdated(_devices);
     }
   }
 

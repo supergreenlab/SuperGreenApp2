@@ -13,27 +13,20 @@ class DeviceDoneBlocEventSetBox extends DeviceDoneBlocEvent {
   List<Object> get props => [];
 }
 
-abstract class DeviceDoneBlocState extends Equatable {}
-
-class DeviceDoneBlocStateIdle extends DeviceDoneBlocState {
+class DeviceDoneBlocState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
 class DeviceDoneBlocStateDone extends DeviceDoneBlocState {
-  final Box box;
-
-  DeviceDoneBlocStateDone(this.box);
-
-  @override
-  List<Object> get props => [box];
+  DeviceDoneBlocStateDone();
 }
 
 class DeviceDoneBloc extends Bloc<DeviceDoneBlocEvent, DeviceDoneBlocState> {
   final MainNavigateToDeviceDoneEvent _args;
 
   @override
-  DeviceDoneBlocState get initialState => DeviceDoneBlocStateIdle();
+  DeviceDoneBlocState get initialState => DeviceDoneBlocState();
 
   DeviceDoneBloc(this._args) {
     Timer(Duration(seconds: 1), () => add(DeviceDoneBlocEventSetBox()));
@@ -44,7 +37,7 @@ class DeviceDoneBloc extends Bloc<DeviceDoneBlocEvent, DeviceDoneBlocState> {
     if (event is DeviceDoneBlocEventSetBox) {
       final db = RelDB.get();
       await db.boxesDAO.updateBox(_args.box.id, _args.box.createCompanion(true).copyWith(device: Value(_args.device.id)));
-      yield DeviceDoneBlocStateDone(_args.box);
+      yield DeviceDoneBlocStateDone();
     }
   }
 }

@@ -16,8 +16,6 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
 
-  bool _changed = false;
-
   @override
   Widget build(BuildContext context) {
     return BlocListener(

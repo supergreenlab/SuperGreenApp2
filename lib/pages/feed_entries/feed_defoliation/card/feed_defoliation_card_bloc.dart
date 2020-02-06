@@ -6,23 +6,28 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class FeedDefoliationCardBlocEvent extends Equatable {}
 
-abstract class FeedDefoliationCardBlocState extends Equatable {}
+class FeedDefoliationCardBlocState extends Equatable {
+  final Feed feed;
+  final FeedEntry feedEntry;
 
-class FeedDefoliationCardBlocStateIdle extends FeedDefoliationCardBlocState {
+  FeedDefoliationCardBlocState(this.feed, this.feedEntry);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [feed, feedEntry];
 }
 
-class FeedDefoliationCardBloc extends Bloc<FeedDefoliationCardBlocEvent, FeedDefoliationCardBlocState> {
+class FeedDefoliationCardBloc
+    extends Bloc<FeedDefoliationCardBlocEvent, FeedDefoliationCardBlocState> {
   final Feed _feed;
   final FeedEntry _feedEntry;
 
   @override
-  FeedDefoliationCardBlocState get initialState => FeedDefoliationCardBlocStateIdle();
+  FeedDefoliationCardBlocState get initialState =>
+      FeedDefoliationCardBlocState(_feed, _feedEntry);
 
   FeedDefoliationCardBloc(this._feed, this._feedEntry);
 
   @override
-  Stream<FeedDefoliationCardBlocState> mapEventToState(FeedDefoliationCardBlocEvent event) async* {
-  }
+  Stream<FeedDefoliationCardBlocState> mapEventToState(
+      FeedDefoliationCardBlocEvent event) async* {}
 }

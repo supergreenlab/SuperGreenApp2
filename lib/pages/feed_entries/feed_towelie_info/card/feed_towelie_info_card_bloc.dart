@@ -16,11 +16,6 @@ class FeedTowelieInfoCardBlocState extends Equatable {
   List<Object> get props => [feed, feedEntry];
 }
 
-class FeedTowelieInfoCardBlocStateIdle extends FeedTowelieInfoCardBlocState {
-  FeedTowelieInfoCardBlocStateIdle(Feed feed, FeedEntry feedEntry)
-      : super(feed, feedEntry);
-}
-
 class FeedTowelieInfoCardBloc
     extends Bloc<FeedTowelieInfoCardBlocEvent, FeedTowelieInfoCardBlocState> {
   final Feed _feed;
@@ -28,7 +23,7 @@ class FeedTowelieInfoCardBloc
 
   @override
   FeedTowelieInfoCardBlocState get initialState =>
-      FeedTowelieInfoCardBlocStateIdle(_feed, _feedEntry);
+      FeedTowelieInfoCardBlocState(_feed, _feedEntry);
 
   FeedTowelieInfoCardBloc(this._feed, this._feedEntry);
 

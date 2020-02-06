@@ -7,64 +7,64 @@ import 'package:super_green_app/pages/add_box/select_device/select_device_bloc.d
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
+class SelectBoxDeviceData {
+  final Device device;
+  final int deviceBox;
+
+  SelectBoxDeviceData(this.device, this.deviceBox);
+}
+
 class SelectDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: Provider.of<SelectDeviceBloc>(context),
-      listener: (BuildContext context, SelectDeviceBlocState state) {
-        if (state is SelectDeviceBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToSelectBoxDeviceBoxEvent(state.box));
-        }
-      },
-      child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
-          bloc: Provider.of<SelectDeviceBloc>(context),
-          builder: (context, state) => Scaffold(
-              appBar: SGLAppBar('Select Box device', hideBackButton: true,),
-              body: Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Column(
-                  children: [
-                    SectionTitle(
-                        title: 'Select the device below',
-                        icon: 'assets/box_setup/icon_controller.svg'),
-                    Expanded(child: _deviceList(context)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        FlatButton(
-                          textColor: Colors.red,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.close),
-                              Text('NO SGL DEVICE'),
-                            ],
-                          ),
-                          onPressed: () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigatorActionPop());
-                          },
+    return BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
+        bloc: Provider.of<SelectDeviceBloc>(context),
+        builder: (context, state) => Scaffold(
+            appBar: SGLAppBar(
+              'Select Box device',
+            ),
+            body: Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Column(
+                children: [
+                  SectionTitle(
+                      title: 'Select the device below',
+                      icon: 'assets/box_setup/icon_controller.svg'),
+                  Expanded(child: _deviceList(context)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      FlatButton(
+                        textColor: Colors.red,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.close),
+                            Text('NO SGL DEVICE'),
+                          ],
                         ),
-                        FlatButton(
-                          textColor: Colors.blue,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.add),
-                              Text('ADD NEW DEVICE'),
-                            ],
-                          ),
-                          onPressed: () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToAddDeviceEvent(state.box));
-                          },
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigatorActionPop(param: false));
+                        },
+                      ),
+                      FlatButton(
+                        textColor: Colors.blue,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.add),
+                            Text('ADD NEW DEVICE'),
+                          ],
                         ),
-                      ],
-                    )
-                  ],
-                ),
-              ))),
-    );
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToAddDeviceEvent());
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )));
   }
 
   Widget _deviceList(BuildContext context) {
@@ -79,11 +79,17 @@ class SelectDevicePage extends StatelessWidget {
         }
         int i = 1;
         return ListView(
-
           children: devices
-              .map((d,) => ListTile(
+              .map((
+                d,
+              ) =>
+                  ListTile(
                     onTap: () => _selectDevice(context, d),
-                    title: Text('${i++} - ${d.name}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+                    title: Text(
+                      '${i++} - ${d.name}',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
                   ))
               .toList(),
         );
@@ -92,7 +98,13 @@ class SelectDevicePage extends StatelessWidget {
   }
 
   void _selectDevice(BuildContext context, Device device) {
-    BlocProvider.of<SelectDeviceBloc>(context)
-        .add(SelectDeviceBlocEventSelectDevice(device));
+    BlocProvider.of<MainNavigatorBloc>(context).add(
+        MainNavigateToSelectBoxDeviceBoxEvent(device, futureFn: (future) async {
+      dynamic deviceBox = await future;
+      if (deviceBox is int) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigatorActionPop(param: SelectBoxDeviceData(device, deviceBox)));
+      }
+    }));
   }
 }

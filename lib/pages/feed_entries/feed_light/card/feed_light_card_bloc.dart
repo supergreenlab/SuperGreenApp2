@@ -16,17 +16,13 @@ class FeedLightCardBlocState extends Equatable {
   List<Object> get props => [feed, feedEntry];
 }
 
-class FeedLightCardBlocStateIdle extends FeedLightCardBlocState {
-  FeedLightCardBlocStateIdle(Feed feed, FeedEntry feedEntry) : super(feed, feedEntry);
-}
-
 class FeedLightCardBloc
     extends Bloc<FeedLightCardBlocEvent, FeedLightCardBlocState> {
   final Feed _feed;
   final FeedEntry _feedEntry;
 
   @override
-  FeedLightCardBlocState get initialState => FeedLightCardBlocStateIdle(_feed, _feedEntry);
+  FeedLightCardBlocState get initialState => FeedLightCardBlocState(_feed, _feedEntry);
 
   FeedLightCardBloc(this._feed, this._feedEntry);
 

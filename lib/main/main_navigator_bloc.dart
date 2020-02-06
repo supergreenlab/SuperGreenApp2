@@ -9,7 +9,7 @@ class MainNavigatorEvent extends Equatable {
   MainNavigatorEvent({this.futureFn});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [futureFn];
 }
 
 class MainNavigateToHomeEvent extends MainNavigatorEvent {
@@ -34,21 +34,17 @@ class MainNavigateToNewBoxInfosEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToSelectBoxDeviceEvent extends MainNavigatorEvent {
-  final Box box;
-
-  MainNavigateToSelectBoxDeviceEvent(this.box);
-
-  @override
-  List<Object> get props => [box];
+  MainNavigateToSelectBoxDeviceEvent({futureFn})
+      : super(futureFn: futureFn);
 }
 
 class MainNavigateToSelectBoxDeviceBoxEvent extends MainNavigatorEvent {
-  final Box box;
+  final Device device;
 
-  MainNavigateToSelectBoxDeviceBoxEvent(this.box);
+  MainNavigateToSelectBoxDeviceBoxEvent(this.device, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [device];
 }
 
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
@@ -98,11 +94,10 @@ class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
-  final Box box;
-  MainNavigateToAddDeviceEvent(this.box);
+  MainNavigateToAddDeviceEvent();
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [];
 }
 
 class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
@@ -198,9 +193,6 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
 class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
   MainNavigateToImageCaptureEvent({Function(Future<Object> f) futureFn})
       : super(futureFn: futureFn);
-
-  @override
-  List<Object> get props => [];
 }
 
 class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
@@ -211,14 +203,25 @@ class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
       : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [futureFn, filePath];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
 
-  MainNavigatorActionPop({this.param, this.mustPop=false});
+  MainNavigatorActionPop({this.param, this.mustPop = false});
+
+  @override
+  List<Object> get props => [param];
+}
+
+class MainNavigatorActionPopToRoute extends MainNavigatorEvent {
+  final String route;
+  final dynamic param;
+  final bool mustPop;
+
+  MainNavigatorActionPopToRoute(this.route, {this.param, this.mustPop = false});
 
   @override
   List<Object> get props => [param];
@@ -246,6 +249,13 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
         _navigatorKey.currentState.pop(event.param);
       }
       _navigatorKey.currentState.maybePop(event.param);
+    } else if (event is MainNavigatorActionPopToRoute) {
+      _navigatorKey.currentState.popUntil((r) {
+        if (r.settings.name == event.route) {
+          return true;
+        }
+        return false;
+      });
     } else if (event is MainNavigatorActionPopToRoot) {
       _navigatorKey.currentState.popUntil((route) => route.isFirst);
     } else if (event is MainNavigateToHomeEvent) {
@@ -255,23 +265,23 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future =
           _navigatorKey.currentState.pushNamed('/box/new', arguments: event);
     } else if (event is MainNavigateToSelectBoxDeviceEvent) {
-      future = _navigatorKey.currentState
-          .pushReplacementNamed('/box/device', arguments: event);
+      future =
+          _navigatorKey.currentState.pushNamed('/box/device', arguments: event);
     } else if (event is MainNavigateToSelectBoxDeviceBoxEvent) {
       future = _navigatorKey.currentState
-          .pushReplacementNamed('/box/device/box', arguments: event);
+          .pushNamed('/box/device/box', arguments: event);
     } else if (event is MainNavigateToAddDeviceEvent) {
-      future = _navigatorKey.currentState
-          .pushReplacementNamed('/device/add', arguments: event);
+      future =
+          _navigatorKey.currentState.pushNamed('/device/add', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
       future =
           _navigatorKey.currentState.pushNamed('/device/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {
-      future =
-          _navigatorKey.currentState.pushNamed('/device/existing', arguments: event);
+      future = _navigatorKey.currentState
+          .pushNamed('/device/existing', arguments: event);
     } else if (event is MainNavigateToDeviceSetupEvent) {
       future = _navigatorKey.currentState
-          .pushReplacementNamed('/device/load', arguments: event);
+          .pushNamed('/device/load', arguments: event);
     } else if (event is MainNavigateToDeviceNameEvent) {
       future = _navigatorKey.currentState
           .pushReplacementNamed('/device/name', arguments: event);

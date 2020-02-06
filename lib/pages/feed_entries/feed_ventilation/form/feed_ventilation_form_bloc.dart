@@ -48,9 +48,7 @@ class FeedVentilationFormBlocBlowerNightChangedEvent
   List<Object> get props => [blowerNight];
 }
 
-abstract class FeedVentilationFormBlocState extends Equatable {}
-
-class FeedVentilationFormBlocStateIdle extends FeedVentilationFormBlocState {
+class FeedVentilationFormBlocState extends Equatable {
   @override
   List<Object> get props => [];
 }
@@ -66,7 +64,8 @@ class FeedVentilationFormBlocStateVentilationLoaded
       this.initialBlowerNight, this.blowerDay, this.blowerNight);
 
   @override
-  List<Object> get props => [initialBlowerDay, initialBlowerNight, blowerDay, blowerNight];
+  List<Object> get props =>
+      [initialBlowerDay, initialBlowerNight, blowerDay, blowerNight];
 }
 
 class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
@@ -86,7 +85,7 @@ class FeedVentilationFormBloc
 
   @override
   FeedVentilationFormBlocState get initialState =>
-      FeedVentilationFormBlocStateIdle();
+      FeedVentilationFormBlocState();
 
   FeedVentilationFormBloc(this._args) {
     add(FeedVentilationFormBlocEventLoadVentilations());

@@ -20,9 +20,7 @@ class FeedWaterFormBlocEventCreate extends FeedWaterFormBlocEvent {
   List<Object> get props => [tooDry, volume, nutrient];
 }
 
-abstract class FeedWaterFormBlocState extends Equatable {}
-
-class FeedWaterFormBlocStateIdle extends FeedWaterFormBlocState {
+class FeedWaterFormBlocState extends Equatable {
   @override
   List<Object> get props => [];
 }
@@ -37,7 +35,7 @@ class FeedWaterFormBloc
   final MainNavigateToFeedWaterFormEvent _args;
 
   @override
-  FeedWaterFormBlocState get initialState => FeedWaterFormBlocStateIdle();
+  FeedWaterFormBlocState get initialState => FeedWaterFormBlocState();
 
   FeedWaterFormBloc(this._args);
 

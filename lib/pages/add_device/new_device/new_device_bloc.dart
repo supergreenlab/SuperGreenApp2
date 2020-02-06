@@ -18,9 +18,7 @@ class NewDeviceBlocEventStartSearch extends NewDeviceBlocEvent {
   List<Object> get props => [];
 }
 
-abstract class NewDeviceBlocState extends Equatable {}
-
-class NewDeviceBlocStateIdle extends NewDeviceBlocState {
+class NewDeviceBlocState extends Equatable {
   @override
   List<Object> get props => [];
 }
@@ -63,7 +61,7 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   final PermissionHandler _permissionHandler = PermissionHandler();
 
   @override
-  NewDeviceBlocState get initialState => NewDeviceBlocStateIdle();
+  NewDeviceBlocState get initialState => NewDeviceBlocState();
 
   NewDeviceBloc(this._args) {
     Future.delayed(const Duration(seconds: 1), () => this.add(NewDeviceBlocEventStartSearch()));

@@ -1,10 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SelectDeviceBoxBlocEvent extends Equatable {}
+
+class SelectDeviceBoxBlocEventInitialize extends SelectDeviceBoxBlocEvent {
+  @override
+  List<Object> get props => [];
+}
 
 class SelectDeviceBoxBlocEventSetDeviceBox extends SelectDeviceBoxBlocEvent {
   final int deviceBox;
@@ -14,19 +18,9 @@ class SelectDeviceBoxBlocEventSetDeviceBox extends SelectDeviceBoxBlocEvent {
   List<Object> get props => [deviceBox];
 }
 
-abstract class SelectDeviceBoxBlocState extends Equatable {}
-
-class SelectDeviceBoxBlocStateIdle extends SelectDeviceBoxBlocState {
+class SelectDeviceBoxBlocState extends Equatable {
   @override
   List<Object> get props => [];
-}
-
-class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
-  final Box box;
-  SelectDeviceBoxBlocStateDone(this.box);
-
-  @override
-  List<Object> get props => [box];
 }
 
 class SelectDeviceBoxBloc
@@ -36,19 +30,30 @@ class SelectDeviceBoxBloc
   SelectDeviceBoxBloc(this._args);
 
   @override
-  SelectDeviceBoxBlocState get initialState => SelectDeviceBoxBlocStateIdle();
+  SelectDeviceBoxBlocState get initialState =>
+      SelectDeviceBoxBlocState();
 
   @override
   Stream<SelectDeviceBoxBlocState> mapEventToState(
       SelectDeviceBoxBlocEvent event) async* {
-    if (event is SelectDeviceBoxBlocEventSetDeviceBox) {
-      final bdb = RelDB.get().boxesDAO;
-      await bdb.updateBox(
-        _args.box.id,
-        BoxesCompanion(deviceBox: Value(event.deviceBox)),
-      );
-      Box box = await bdb.getBox(_args.box.id);
-      yield SelectDeviceBoxBlocStateDone(box);
+    if (event is SelectDeviceBoxBlocEventInitialize) {
+      final ddb = RelDB.get().devicesDAO;
+      final boxModule = await ddb.getModule(_args.device.id, 'box');
+      final availableBoxes = List<int>();
+      for (int i = 0; i < boxModule.arrayLen; ++i) {
+        final boxEnabled = await ddb.getParam(_args.device.id, 'BOX_${i}_ENABLED');
+        if (boxEnabled.ivalue != 0) {
+          availableBoxes.add(i);
+        }
+      }
+      final ledModule = await ddb.getModule(_args.device.id, 'led');
+      final availableLeds = List<int>();
+      for (int i = 0; i < ledModule.arrayLen; ++i) {
+        final ledBox = await ddb.getParam(_args.device.id, 'LED_${i}_BOX');
+        if (availableBoxes.contains(ledBox.ivalue)) {
+          availableLeds.add(i);
+        }
+      }
     }
   }
 }
