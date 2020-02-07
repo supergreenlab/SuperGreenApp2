@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device_api.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class ExistingDeviceBlocEvent extends Equatable {}
@@ -17,29 +16,25 @@ class ExistingDeviceBlocEventStartSearch extends ExistingDeviceBlocEvent {
 }
 
 class ExistingDeviceBlocState extends Equatable {
-    final Box box;
-
-  ExistingDeviceBlocState(this.box);
-
   @override
-  List<Object> get props => [this.box];
+  List<Object> get props => [];
 
 }
 
 class ExistingDeviceBlocStateResolving extends ExistingDeviceBlocState {
-  ExistingDeviceBlocStateResolving(Box box) : super(box);
+  ExistingDeviceBlocStateResolving() : super();
 }
 
 class ExistingDeviceBlocStateFound extends ExistingDeviceBlocState {
   final String ip;
-  ExistingDeviceBlocStateFound(Box box, this.ip) : super(box);
+  ExistingDeviceBlocStateFound(this.ip) : super();
 
   @override
-  List<Object> get props => [this.box, this.ip];
+  List<Object> get props => [this.ip];
 }
 
 class ExistingDeviceBlocStateNotFound extends ExistingDeviceBlocState {
-  ExistingDeviceBlocStateNotFound(Box box) : super(box);
+  ExistingDeviceBlocStateNotFound();
 }
 
 class ExistingDeviceBloc
@@ -49,18 +44,19 @@ class ExistingDeviceBloc
   ExistingDeviceBloc(this._args);
 
   @override
-  ExistingDeviceBlocState get initialState => ExistingDeviceBlocState(_args.box);
+  ExistingDeviceBlocState get initialState => ExistingDeviceBlocState();
 
   @override
   Stream<ExistingDeviceBlocState> mapEventToState(
       ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
+      yield ExistingDeviceBlocStateResolving();
       final ip = await DeviceAPI.resolveLocalName(event.query);
-      if (ip == "") {
-        yield ExistingDeviceBlocStateNotFound(_args.box);
+      if (ip == "" || ip == null) {
+        yield ExistingDeviceBlocStateNotFound();
         return;
       }
-      yield ExistingDeviceBlocStateFound(_args.box, ip);
+      yield ExistingDeviceBlocStateFound(ip);
     }
   }
 

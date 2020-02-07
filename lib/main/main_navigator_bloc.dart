@@ -48,49 +48,38 @@ class MainNavigateToSelectBoxDeviceBoxEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
-  final Box box;
-
-  MainNavigateToNewDeviceEvent(this.box);
-
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [];
 }
 
 class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {
-  final Box box;
-
-  MainNavigateToExistingDeviceEvent(this.box);
-
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [];
 }
 
 class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
   final ip;
-  final Box box;
 
-  MainNavigateToDeviceSetupEvent(this.box, this.ip);
+  MainNavigateToDeviceSetupEvent(this.ip);
 
   @override
   List<Object> get props => [ip];
 }
 
 class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
-  final Box box;
   final Device device;
-  MainNavigateToDeviceNameEvent(this.box, this.device);
+  MainNavigateToDeviceNameEvent(this.device);
 
   @override
-  List<Object> get props => [box, device];
+  List<Object> get props => [device];
 }
 
 class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
-  final Box box;
   final Device device;
-  MainNavigateToDeviceDoneEvent(this.box, this.device);
+  MainNavigateToDeviceDoneEvent(this.device);
 
   @override
-  List<Object> get props => [box, device];
+  List<Object> get props => [device];
 }
 
 class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {

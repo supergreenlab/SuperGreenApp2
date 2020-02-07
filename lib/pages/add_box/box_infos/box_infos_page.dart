@@ -9,6 +9,7 @@ import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
+import 'package:super_green_app/widgets/textfield.dart';
 
 class BoxInfosPage extends StatefulWidget {
   @override
@@ -46,30 +47,12 @@ class BoxInfosPageState extends State<BoxInfosPage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(width: 1, color: Colors.black26),
-                                borderRadius: BorderRadius.circular(3)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 0.0),
-                              child: TextField(
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                autofocus: true,
-                                decoration: InputDecoration(
-                                  hintText: 'Ex: BedroomGrow',
-                                  border: InputBorder.none,
-                                ),
-                                style: TextStyle(fontSize: 15),
-                                controller: _nameController,
-                                onChanged: (_) {
-                                  setState(() {});
-                                },
-                              ),
-                            ),
-                          ),
+                          child: SGLTextField(
+                              hintText: 'Ex: BedroomGrow',
+                              controller: _nameController,
+                              onChanged: (_) {
+                                setState(() {});
+                              }),
                         ),
                       ],
                     )),
@@ -96,7 +79,8 @@ class BoxInfosPageState extends State<BoxInfosPage> {
         .add(MainNavigateToSelectBoxDeviceEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
-        if (!await confirmCreate(device: res.device, deviceBox: res.deviceBox)) {
+        if (!await confirmCreate(
+            device: res.device, deviceBox: res.deviceBox)) {
           return;
         }
         Provider.of<BoxInfosBloc>(context, listen: false).add(

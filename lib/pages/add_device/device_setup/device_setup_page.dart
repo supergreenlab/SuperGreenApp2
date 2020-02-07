@@ -13,7 +13,7 @@ class DeviceSetupPage extends StatelessWidget {
       listener: (BuildContext context, DeviceSetupBlocState state) {
         if (state is DeviceSetupBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceNameEvent(state.box, state.device));
+              .add(MainNavigateToDeviceNameEvent(state.device));
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(

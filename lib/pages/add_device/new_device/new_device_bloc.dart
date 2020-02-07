@@ -39,18 +39,13 @@ class NewDeviceBlocStateConnectionToSSIDFailed extends NewDeviceBlocState {
 }
 
 class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
-  final Box box;
-
-  NewDeviceBlocStateConnectionToSSIDSuccess(this.box);
-
   @override
   List<Object> get props => [];
 }
 
 class NewDeviceBlocStateDone extends NewDeviceBlocState {
-  final Box box;
   final Device device;
-  NewDeviceBlocStateDone(this.box, this.device);
+  NewDeviceBlocStateDone(this.device);
 
   @override
   List<Object> get props => [device];
@@ -98,6 +93,6 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
         return;
       }
     }
-    yield NewDeviceBlocStateConnectionToSSIDSuccess(_args.box);
+    yield NewDeviceBlocStateConnectionToSSIDSuccess();
   }
 }

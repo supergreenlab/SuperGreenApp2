@@ -13,7 +13,7 @@ class NewDevicePage extends StatelessWidget {
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceSetupEvent(state.box, '192.168.4.1'));
+              .add(MainNavigateToDeviceSetupEvent('192.168.4.1'));
         }
       },
       child: BlocBuilder<NewDeviceBloc, NewDeviceBlocState>(

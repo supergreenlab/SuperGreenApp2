@@ -20,7 +20,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
       listener: (BuildContext context, DeviceNameBlocState state) {
         if (state is DeviceNameBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceDoneEvent(state.box, state.device));
+              .add(MainNavigateToDeviceDoneEvent(state.device));
         }
       },
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(

@@ -17,21 +17,20 @@ class DeviceSetupBlocEventStartSetup extends DeviceSetupBlocEvent {
 }
 
 class DeviceSetupBlocState extends Equatable {
-  final Box box;
-  DeviceSetupBlocState(this.box);
+  DeviceSetupBlocState();
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [];
 }
 
 class DeviceSetupBlocStateOutdated extends DeviceSetupBlocState {
-  DeviceSetupBlocStateOutdated(Box box) : super(box);
+  DeviceSetupBlocStateOutdated() : super();
 }
 
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
   final Device device;
 
-  DeviceSetupBlocStateDone(Box box, this.device) : super(box);
+  DeviceSetupBlocStateDone(this.device);
 
   @override
   List<Object> get props => [device];
@@ -42,7 +41,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
 
   @override
   DeviceSetupBlocState get initialState =>
-      DeviceSetupBlocState(_args.box);
+      DeviceSetupBlocState();
 
   DeviceSetupBloc(this._args) {
     Future.delayed(const Duration(seconds: 1),
@@ -114,6 +113,6 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     }
 
     final d = await db.getDevice(deviceID);
-    yield DeviceSetupBlocStateDone(_args.box, d);
+    yield DeviceSetupBlocStateDone(d);
   }
 }

@@ -35,9 +35,9 @@ class DeviceDoneBloc extends Bloc<DeviceDoneBlocEvent, DeviceDoneBlocState> {
   @override
   Stream<DeviceDoneBlocState> mapEventToState(DeviceDoneBlocEvent event) async* {
     if (event is DeviceDoneBlocEventSetBox) {
-      final db = RelDB.get();
-      await db.boxesDAO.updateBox(_args.box.id, _args.box.createCompanion(true).copyWith(device: Value(_args.device.id)));
-      yield DeviceDoneBlocStateDone();
+      //final db = RelDB.get();
+      //await db.boxesDAO.updateBox(_args.box.id, _args.box.createCompanion(true).copyWith(device: Value(_args.device.id)));
+      //yield DeviceDoneBlocStateDone();
     }
   }
 }
