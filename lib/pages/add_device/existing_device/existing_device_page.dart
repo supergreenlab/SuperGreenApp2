@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/existing_device/existing_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -22,8 +23,13 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
       bloc: Provider.of<ExistingDeviceBloc>(context),
       listener: (BuildContext context, ExistingDeviceBlocState state) {
         if (state is ExistingDeviceBlocStateFound) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceSetupEvent(state.ip));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToDeviceSetupEvent(state.ip,
+                  futureFn: (future) async {
+            Device device = await future;
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: device));
+          }));
         }
       },
       child: BlocBuilder<ExistingDeviceBloc, ExistingDeviceBlocState>(
@@ -105,7 +111,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
 
   Widget _renderButton() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
       child: Align(
         alignment: Alignment.centerRight,
         child: GreenButton(

@@ -40,7 +40,10 @@ class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   Stream<DeviceNameBlocState> mapEventToState(
       DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventSetName) {
+      var ddb = RelDB.get().devicesDAO;
       await DeviceHelper.updateDeviceName(_args.device, event.name);
+      Param mdns = await ddb.getParam(_args.device.id, 'MDNS_DOMAIN');
+      await DeviceHelper.updateStringParam(_args.device, mdns, event.name.toLowerCase());
       yield DeviceNameBlocStateDone(_args.device);
     }
   }

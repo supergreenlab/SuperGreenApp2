@@ -34,25 +34,36 @@ class MainNavigateToNewBoxInfosEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToSelectBoxDeviceEvent extends MainNavigatorEvent {
-  MainNavigateToSelectBoxDeviceEvent({futureFn})
-      : super(futureFn: futureFn);
+  MainNavigateToSelectBoxDeviceEvent({futureFn}) : super(futureFn: futureFn);
 }
 
 class MainNavigateToSelectBoxDeviceBoxEvent extends MainNavigatorEvent {
   final Device device;
 
-  MainNavigateToSelectBoxDeviceBoxEvent(this.device, {futureFn}) : super(futureFn: futureFn);
+  MainNavigateToSelectBoxDeviceBoxEvent(this.device, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [device];
 }
 
+class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
+  MainNavigateToAddDeviceEvent({futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
+  MainNavigateToNewDeviceEvent({futureFn}) : super(futureFn: futureFn);
+
   @override
   List<Object> get props => [];
 }
 
 class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {
+  MainNavigateToExistingDeviceEvent({futureFn}) : super(futureFn: futureFn);
+
   @override
   List<Object> get props => [];
 }
@@ -60,7 +71,7 @@ class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {
 class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
   final ip;
 
-  MainNavigateToDeviceSetupEvent(this.ip);
+  MainNavigateToDeviceSetupEvent(this.ip, {futureFn}) : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [ip];
@@ -68,7 +79,7 @@ class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
 
 class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
   final Device device;
-  MainNavigateToDeviceNameEvent(this.device);
+  MainNavigateToDeviceNameEvent(this.device, {futureFn}) : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [device];
@@ -76,17 +87,10 @@ class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
 
 class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
   final Device device;
-  MainNavigateToDeviceDoneEvent(this.device);
+  MainNavigateToDeviceDoneEvent(this.device, {futureFn}) : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [device];
-}
-
-class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
-  MainNavigateToAddDeviceEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
@@ -273,10 +277,10 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
           .pushNamed('/device/load', arguments: event);
     } else if (event is MainNavigateToDeviceNameEvent) {
       future = _navigatorKey.currentState
-          .pushReplacementNamed('/device/name', arguments: event);
+          .pushNamed('/device/name', arguments: event);
     } else if (event is MainNavigateToDeviceDoneEvent) {
       future = _navigatorKey.currentState
-          .pushReplacementNamed('/device/done', arguments: event);
+          .pushNamed('/device/done', arguments: event);
     } else if (event is MainNavigateToFeedDefoliationFormEvent) {
       future = _pushOrReplace('/feed/form/defoliation', event);
     } else if (event is MainNavigateToFeedLightFormEvent) {

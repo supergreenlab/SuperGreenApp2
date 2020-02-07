@@ -56,8 +56,14 @@ class SelectDevicePage extends StatelessWidget {
                           ],
                         ),
                         onPressed: () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToAddDeviceEvent());
+                          BlocProvider.of<MainNavigatorBloc>(context).add(
+                              MainNavigateToAddDeviceEvent(
+                                  futureFn: (future) async {
+                            Device device = await future;
+                            if (device != null) {
+                              _selectDevice(context, device);
+                            }
+                          }));
                         },
                       ),
                     ],
@@ -102,8 +108,8 @@ class SelectDevicePage extends StatelessWidget {
         MainNavigateToSelectBoxDeviceBoxEvent(device, futureFn: (future) async {
       dynamic deviceBox = await future;
       if (deviceBox is int) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigatorActionPop(param: SelectBoxDeviceData(device, deviceBox)));
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(
+            param: SelectBoxDeviceData(device, deviceBox)));
       }
     }));
   }

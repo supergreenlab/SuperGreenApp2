@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -14,19 +13,23 @@ class DeviceDoneBlocEventSetBox extends DeviceDoneBlocEvent {
 }
 
 class DeviceDoneBlocState extends Equatable {
+  final Device device;
+
+  DeviceDoneBlocState(this.device);
+
   @override
   List<Object> get props => [];
 }
 
 class DeviceDoneBlocStateDone extends DeviceDoneBlocState {
-  DeviceDoneBlocStateDone();
+  DeviceDoneBlocStateDone(Device device) : super(device);
 }
 
 class DeviceDoneBloc extends Bloc<DeviceDoneBlocEvent, DeviceDoneBlocState> {
   final MainNavigateToDeviceDoneEvent _args;
 
   @override
-  DeviceDoneBlocState get initialState => DeviceDoneBlocState();
+  DeviceDoneBlocState get initialState => DeviceDoneBlocState(_args.device);
 
   DeviceDoneBloc(this._args) {
     Timer(Duration(seconds: 1), () => add(DeviceDoneBlocEventSetBox()));
@@ -35,9 +38,7 @@ class DeviceDoneBloc extends Bloc<DeviceDoneBlocEvent, DeviceDoneBlocState> {
   @override
   Stream<DeviceDoneBlocState> mapEventToState(DeviceDoneBlocEvent event) async* {
     if (event is DeviceDoneBlocEventSetBox) {
-      //final db = RelDB.get();
-      //await db.boxesDAO.updateBox(_args.box.id, _args.box.createCompanion(true).copyWith(device: Value(_args.device.id)));
-      //yield DeviceDoneBlocStateDone();
+      yield DeviceDoneBlocStateDone(_args.device);
     }
   }
 }

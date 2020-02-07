@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -22,8 +23,14 @@ class AddDevicePage extends StatelessWidget {
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the device is brand new or using it\'s own wifi.',
                     'CONNECT DEVICE', () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToNewDeviceEvent());
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToNewDeviceEvent(futureFn: (future) async {
+                    Device device = await future;
+                    if (device != null) {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorActionPop(param: device));
+                    }
+                  }));
                 }),
                 _renderChoice(
                     context,
@@ -31,8 +38,15 @@ class AddDevicePage extends StatelessWidget {
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the device is already running and connected to your home wifi.',
                     'SEARCH DEVICE', () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToExistingDeviceEvent());
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToExistingDeviceEvent(
+                          futureFn: (future) async {
+                    Device device = await future;
+                    if (device != null) {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorActionPop(param: device));
+                    }
+                  }));
                 }),
               ],
             )));

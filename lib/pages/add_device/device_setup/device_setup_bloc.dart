@@ -17,20 +17,21 @@ class DeviceSetupBlocEventStartSetup extends DeviceSetupBlocEvent {
 }
 
 class DeviceSetupBlocState extends Equatable {
-  DeviceSetupBlocState();
+  final double percent;
+  DeviceSetupBlocState(this.percent);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [percent];
 }
 
 class DeviceSetupBlocStateOutdated extends DeviceSetupBlocState {
-  DeviceSetupBlocStateOutdated() : super();
+  DeviceSetupBlocStateOutdated() : super(0);
 }
 
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
   final Device device;
 
-  DeviceSetupBlocStateDone(this.device);
+  DeviceSetupBlocStateDone(this.device) : super(1);
 
   @override
   List<Object> get props => [device];
@@ -40,8 +41,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
   final MainNavigateToDeviceSetupEvent _args;
 
   @override
-  DeviceSetupBlocState get initialState =>
-      DeviceSetupBlocState();
+  DeviceSetupBlocState get initialState => DeviceSetupBlocState(0);
 
   DeviceSetupBloc(this._args) {
     Future.delayed(const Duration(seconds: 1),
@@ -77,6 +77,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     final deviceID = await db.addDevice(device);
     final Map<String, int> modules = Map();
 
+    double total = keys['keys'].length.toDouble(), done = 0;
     for (Map<String, dynamic> k in keys['keys']) {
       var moduleName = k['module'];
       if (modules.containsKey(moduleName) == false) {
@@ -110,6 +111,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
             svalue: Value(value));
       }
       await db.addParam(param);
+      ++done;
+      yield DeviceSetupBlocState(done / total);
     }
 
     final d = await db.getDevice(deviceID);

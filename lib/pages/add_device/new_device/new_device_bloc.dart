@@ -43,14 +43,6 @@ class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
   List<Object> get props => [];
 }
 
-class NewDeviceBlocStateDone extends NewDeviceBlocState {
-  final Device device;
-  NewDeviceBlocStateDone(this.device);
-
-  @override
-  List<Object> get props => [device];
-}
-
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   MainNavigateToNewDeviceEvent _args;
   final PermissionHandler _permissionHandler = PermissionHandler();

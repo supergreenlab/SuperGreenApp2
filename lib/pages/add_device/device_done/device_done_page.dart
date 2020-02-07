@@ -8,18 +8,38 @@ import 'package:super_green_app/widgets/appbar.dart';
 class DeviceDonePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<DeviceDoneBloc, DeviceDoneBlocState>(
-      listener: (context, DeviceDoneBlocState state) {
-        if (state is DeviceDoneBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
-        }
-      },
-      child: BlocBuilder<DeviceDoneBloc, DeviceDoneBlocState>(
-          bloc: Provider.of<DeviceDoneBloc>(context),
-          builder: (context, state) => Scaffold(
-              appBar: SGLAppBar('Add device'),
-              body: Text('DeviceDone'))),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: BlocListener<DeviceDoneBloc, DeviceDoneBlocState>(
+        listener: (context, DeviceDoneBlocState state) {
+          if (state is DeviceDoneBlocStateDone) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: state.device, mustPop: true));
+          }
+        },
+        child: BlocBuilder<DeviceDoneBloc, DeviceDoneBlocState>(
+            bloc: Provider.of<DeviceDoneBloc>(context),
+            builder: (context, state) => Scaffold(
+                appBar: SGLAppBar(
+                  'Add device',
+                  hideBackButton: true,
+                ),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Center(
+                        child: Column(
+                      children: <Widget>[
+                        Icon(Icons.check, color: Color(0xff3bb30b), size: 100),
+                        Text('Done!',
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.w500)),
+                      ],
+                    )),
+                  ],
+                ))),
+      ),
     );
   }
 }
