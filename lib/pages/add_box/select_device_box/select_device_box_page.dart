@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
@@ -14,64 +13,116 @@ class SelectDeviceBoxPage extends StatefulWidget {
 }
 
 class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
+  List<int> _selectedLeds;
+
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-        bloc: Provider.of<SelectDeviceBoxBloc>(context),
-        builder: (context, state) => Scaffold(
-            appBar: SGLAppBar('Device configuration'),
-            body: Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: SectionTitle(
-                        title: 'Available LED channels',
-                        icon: 'assets/box_setup/icon_controller.svg',
-                      ),
-                    ),
-                    _renderBoxes(state),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: GreenButton(
-                          title: 'CREATE BOX',
-                          onPressed: () => _handleInput(context),
-                        ),
-                      ),
-                    ),
-                  ],
-                ))));
+  void initState() {
+    _selectedLeds = [];
+    super.initState();
   }
 
-  Widget _renderBoxes(state) {
-    return Row(
-      children: state.leds
-          .map<Widget>((led) => _renderBox(
-              context,
-              () {},
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-                child: SvgPicture.asset('assets/feed_form/icon_add.svg'),
-              )))
-          .toList(),
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
+      bloc: Provider.of<SelectDeviceBoxBloc>(context),
+      listener: (context, state) {
+        if (state is SelectDeviceBoxBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.box));
+        }
+      },
+      child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
+          bloc: Provider.of<SelectDeviceBoxBloc>(context),
+          builder: (context, state) => Scaffold(
+              appBar: SGLAppBar('Device configuration'),
+              body: Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: SectionTitle(
+                          title: 'Available LED channels',
+                          icon: 'assets/box_setup/icon_controller.svg',
+                        ),
+                      ),
+                      _renderLeds(
+                          state.leds
+                              .where((l) => !_selectedLeds.contains(l))
+                              .toList(), (int led) {
+                        setState(() {
+                          _selectedLeds.add(led);
+                        });
+                      }),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: SectionTitle(
+                          title: 'Selected LED channels',
+                          icon: 'assets/box_setup/icon_controller.svg',
+                        ),
+                      ),
+                      _renderLeds(_selectedLeds, (int led) {
+                        setState(() {
+                          _selectedLeds.remove(led);
+                        });
+                      }),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: GreenButton(
+                            title: 'SETUP BOX',
+                            onPressed: _selectedLeds.length == 0
+                                ? null
+                                : () => _handleInput(context),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )))),
+    );
+  }
+
+  Widget _renderLeds(List<int> leds, Function(int) onSelected) {
+    return Container(
+      height: 91,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: leds
+            .map<Widget>((led) => _renderBox(Key('$led'), context, () {
+                  onSelected(led);
+                },
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text('channel', style: TextStyle(fontSize: 10)),
+                          Text(
+                            '${led + 1}',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )))
+            .toList(),
+      ),
     );
   }
 
   void _handleInput(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigatorActionPop(param: 0));
+    BlocProvider.of<SelectDeviceBoxBloc>(context)
+        .add(SelectDeviceBoxBlocEventSelectLeds(_selectedLeds));
   }
 
-  Widget _renderBox(BuildContext context, Function onPressed, Widget content) {
+  Widget _renderBox(
+      Key key, BuildContext context, Function onPressed, Widget content) {
     return SizedBox(
-        width: 70,
+        key: key,
+        width: 100,
         height: 80,
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),

@@ -79,24 +79,25 @@ class BoxInfosPageState extends State<BoxInfosPage> {
         .add(MainNavigateToSelectBoxDeviceEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
-        if (!await confirmCreate(
+        if (!await _confirmCreate(
             device: res.device, deviceBox: res.deviceBox)) {
           return;
         }
-        Provider.of<BoxInfosBloc>(context, listen: false).add(
-            BoxInfosBlocEventCreateBox(_nameController.text,
-                device: res.device, deviceBox: res.deviceBox));
+        BlocProvider.of<BoxInfosBloc>(context).add(BoxInfosBlocEventCreateBox(
+            _nameController.text,
+            device: res.device,
+            deviceBox: res.deviceBox));
       } else if (res == false) {
-        if (!await confirmCreate()) {
+        if (!await _confirmCreate()) {
           return;
         }
-        Provider.of<BoxInfosBloc>(context, listen: false)
+        BlocProvider.of<BoxInfosBloc>(context)
             .add(BoxInfosBlocEventCreateBox(_nameController.text));
       }
     }));
   }
 
-  Future<bool> confirmCreate({Device device, int deviceBox}) async {
+  Future<bool> _confirmCreate({Device device, int deviceBox}) async {
     String msg;
     if (device == null && deviceBox == null) {
       msg = 'Create box ${_nameController.value.text}?';

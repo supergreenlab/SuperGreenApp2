@@ -123,4 +123,10 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
       ),
     );
   }
+
+    @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 }

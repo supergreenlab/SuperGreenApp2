@@ -12,7 +12,7 @@ class SectionTitle extends StatelessWidget {
     return Container(
       color: Color(0xFFECECEC),
       child: Padding(
-        padding: const EdgeInsets.all(3.0),
+        padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 8.0),
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           _renderIcon(),
           Text(

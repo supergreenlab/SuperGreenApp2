@@ -19,7 +19,6 @@ class SGLTextField extends StatelessWidget {
         child: TextField(
           enabled: enabled,
           textCapitalization: TextCapitalization.sentences,
-          autofocus: true,
           decoration: InputDecoration(
             hintText: hintText,
             border: InputBorder.none,

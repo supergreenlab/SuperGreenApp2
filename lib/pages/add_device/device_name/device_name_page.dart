@@ -84,9 +84,15 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   }
 
   void _handleInput(BuildContext context) {
-    Provider.of<DeviceNameBloc>(context, listen: false)
+    Provider.of<DeviceNameBloc>(context)
         .add(DeviceNameBlocEventSetName(
       _nameController.text,
     ));
+  }
+
+    @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 }
