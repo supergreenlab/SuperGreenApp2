@@ -30,7 +30,7 @@ class HomeNavigatorEventPop extends HomeNavigatorEvent {
 
 class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
   static final eventBus = EventBus();
-  
+
   final MainNavigatorEvent _args;
   final GlobalKey<NavigatorState> _navigatorKey;
 
@@ -38,7 +38,9 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
     if (_args is MainNavigateToHomeBoxEvent) {
       this.add(HomeNavigateToBoxFeedEvent((_args as MainNavigateToHomeBoxEvent).box));
     }
-    eventBus.on<HomeNavigatorEvent>().listen((e) => this.add(e));
+    eventBus.on<HomeNavigatorEvent>().listen((e) {
+      this.add(e);
+    });
   }
 
   @override
@@ -54,5 +56,4 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
       _navigatorKey.currentState.pushReplacementNamed('/feed/sgl', arguments: event);
     }
   }
-
 }

@@ -77,26 +77,28 @@ class FeedLightFormBloc
       final db = RelDB.get();
       _device = await db.devicesDAO.getDevice(_args.box.device);
       Module lightModule = await db.devicesDAO.getModule(_device.id, "led");
-      _lightParams = List(lightModule.arrayLen);
+      _lightParams = [];
       for (int i = 0; i < lightModule.arrayLen; ++i) {
         Param box = await db.devicesDAO.getParam(_device.id, "LED_${i}_BOX");
         if (box.ivalue == _args.box.deviceBox) {
-          _lightParams[i] =
-              await db.devicesDAO.getParam(_device.id, "LED_${i}_DIM");
+          _lightParams
+              .add(await db.devicesDAO.getParam(_device.id, "LED_${i}_DIM"));
         }
       }
       List<int> values = _lightParams.map((l) => l.ivalue).toList();
       _initialValues = values;
       yield FeedLightFormBlocStateLightsLoaded(values);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
-      await DeviceHelper.updateIntParam(_device, _lightParams[event.i], (event.value).toInt());
+      await DeviceHelper.updateIntParam(
+          _device, _lightParams[event.i], (event.value).toInt());
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_LIGHT',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'initialValues': _initialValues, 'values': event.values})),
+        params: Value(JsonEncoder().convert(
+            {'initialValues': _initialValues, 'values': event.values})),
       ));
       yield FeedLightFormBlocStateDone();
     }

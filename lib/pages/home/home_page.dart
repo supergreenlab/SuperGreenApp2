@@ -14,42 +14,44 @@ class HomePage extends StatefulWidget {
   HomePage(this._navigatorKey);
 
   @override
-  State<StatefulWidget> createState() => HomePageState(_navigatorKey);
+  State<StatefulWidget> createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  final GlobalKey<NavigatorState> _navigatorKey;
   int _navigationIndex = 0;
 
-  HomePageState(this._navigatorKey);
+  HomePageState();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.black38,
-        selectedItemColor: Colors.black,
-        onTap: (i) => this._onNavigationBarItemSelect(context, i),
-        elevation: 0,
-        currentIndex: _navigationIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.feedback),
-            title: Text('Towelie'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            title: Text('Explore'),
-          ),
-        ],
-      ),
-      body: Navigator(
-        key: _navigatorKey,
-        onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
+    return BlocBuilder<HomeNavigatorBloc, dynamic>(
+      builder: (context, state) => Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          unselectedItemColor: Colors.black38,
+          selectedItemColor: Colors.black,
+          onTap: (i) => this._onNavigationBarItemSelect(context, i),
+          elevation: 0,
+          currentIndex: _navigationIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.feedback),
+              title: Text('Towelie'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.explore),
+              title: Text('Explore'),
+            ),
+          ],
+        ),
+        body: Navigator(
+          key: widget._navigatorKey,
+          onGenerateRoute: (settings) =>
+              this._onGenerateRoute(context, settings),
+        ),
       ),
     );
   }

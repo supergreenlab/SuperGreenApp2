@@ -35,55 +35,80 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           bloc: Provider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) => Scaffold(
               appBar: SGLAppBar('Device configuration'),
-              body: Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: SectionTitle(
-                          title: 'Available LED channels',
-                          icon: 'assets/box_setup/icon_controller.svg',
-                        ),
-                      ),
-                      _renderLeds(
-                          state.leds
-                              .where((l) => !_selectedLeds.contains(l))
-                              .toList(), (int led) {
-                        setState(() {
-                          _selectedLeds.add(led);
-                        });
-                      }),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: SectionTitle(
-                          title: 'Selected LED channels',
-                          icon: 'assets/box_setup/icon_controller.svg',
-                        ),
-                      ),
-                      _renderLeds(_selectedLeds, (int led) {
-                        setState(() {
-                          _selectedLeds.remove(led);
-                        });
-                      }),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: GreenButton(
-                            title: 'SETUP BOX',
-                            onPressed: _selectedLeds.length == 0
-                                ? null
-                                : () => _handleInput(context),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )))),
+              body: state.leds.length != 0
+                  ? _renderLedSelection(context, state)
+                  : _renderNoLedsAvailable(context, state))),
     );
+  }
+
+  Widget _renderNoLedsAvailable(context, state) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Center(
+            child: Column(
+          children: <Widget>[
+            Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
+            Text(
+              'Device can\'t handle\nmore box!',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        )),
+      ],
+    );
+  }
+
+  Widget _renderLedSelection(context, state) {
+    return Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SectionTitle(
+                title: 'Available LED channels',
+                icon: 'assets/box_setup/icon_controller.svg',
+              ),
+            ),
+            _renderLeds(
+                state.leds.where((l) => !_selectedLeds.contains(l)).toList(),
+                (int led) {
+              setState(() {
+                _selectedLeds.add(led);
+              });
+            }),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SectionTitle(
+                title: 'Selected LED channels',
+                icon: 'assets/box_setup/icon_controller.svg',
+              ),
+            ),
+            _renderLeds(_selectedLeds, (int led) {
+              setState(() {
+                _selectedLeds.remove(led);
+              });
+            }),
+            Expanded(
+              child: Container(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: GreenButton(
+                  title: 'SETUP BOX',
+                  onPressed: _selectedLeds.length == 0
+                      ? null
+                      : () => _handleInput(context),
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _renderLeds(List<int> leds, Function(int) onSelected) {

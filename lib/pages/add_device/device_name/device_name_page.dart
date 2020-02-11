@@ -25,15 +25,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         bloc: Provider.of<DeviceNameBloc>(context),
         listener: (BuildContext context, DeviceNameBlocState state) {
           if (state is DeviceNameBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToDeviceDoneEvent(state.device,
-                    futureFn: (future) async {
-              Device device = await future;
-              if (device != null) {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigatorActionPop(param: device, mustPop: true));
-              }
-            }));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: state.device, mustPop: true));
           }
         },
         child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
@@ -84,8 +77,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   }
 
   void _handleInput(BuildContext context) {
-    BlocProvider.of<DeviceNameBloc>(context)
-        .add(DeviceNameBlocEventSetName(
+    BlocProvider.of<DeviceNameBloc>(context).add(DeviceNameBlocEventSetName(
       _nameController.text,
     ));
   }

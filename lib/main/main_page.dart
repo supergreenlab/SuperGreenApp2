@@ -100,7 +100,7 @@ class MainPage extends StatelessWidget {
                     BlocProvider<HomeNavigatorBloc>(
                         create: (context) => HomeNavigatorBloc(
                             settings.arguments, _homeNavigatorKey)),
-                    BlocProvider<HomeBloc>(
+                    BlocProvider<HomeBloc>( 
                       create: (context) => HomeBloc(),
                     )
                   ],

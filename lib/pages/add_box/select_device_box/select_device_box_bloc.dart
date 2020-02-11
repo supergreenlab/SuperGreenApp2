@@ -33,6 +33,10 @@ class SelectDeviceBoxBlocStateLoaded extends SelectDeviceBoxBlocState {
   SelectDeviceBoxBlocStateLoaded(List<int> leds) : super(leds);
 }
 
+class SelectDeviceBoxBlocStateDeviceFull extends SelectDeviceBoxBlocState {
+  SelectDeviceBoxBlocStateDeviceFull(List<int> leds) : super(leds);
+}
+
 class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
   final int box;
 
@@ -67,6 +71,10 @@ class SelectDeviceBoxBloc
         if (boxEnabled.ivalue == 0) {
           _boxes.add(i);
         }
+      }
+      if (_boxes.length == 0) {
+        yield SelectDeviceBoxBlocStateDeviceFull(_leds);
+        return;
       }
       final ledModule = await ddb.getModule(_args.device.id, 'led');
       for (int i = 0; i < ledModule.arrayLen; ++i) {
