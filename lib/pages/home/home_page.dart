@@ -8,30 +8,21 @@ import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   HomePage(this._navigatorKey);
 
   @override
-  State<StatefulWidget> createState() => HomePageState();
-}
-
-class HomePageState extends State<HomePage> {
-  int _navigationIndex = 0;
-
-  HomePageState();
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeNavigatorBloc, dynamic>(
+    return BlocBuilder<HomeNavigatorBloc, HomeNavigatorState>(
       builder: (context, state) => Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           unselectedItemColor: Colors.black38,
           selectedItemColor: Colors.black,
-          onTap: (i) => this._onNavigationBarItemSelect(context, i),
+          onTap: (i) => this._onNavigationBarItemSelect(context, i, state),
           elevation: 0,
-          currentIndex: _navigationIndex,
+          currentIndex: state.index,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.feedback),
@@ -48,7 +39,7 @@ class HomePageState extends State<HomePage> {
           ],
         ),
         body: Navigator(
-          key: widget._navigatorKey,
+          key: _navigatorKey,
           onGenerateRoute: (settings) =>
               this._onGenerateRoute(context, settings),
         ),
@@ -56,9 +47,8 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  void _onNavigationBarItemSelect(BuildContext context, int i) {
-    if (i == _navigationIndex) return;
-    setState(() => _navigationIndex = i);
+  void _onNavigationBarItemSelect(BuildContext context, int i, HomeNavigatorState state) {
+    if (i == state.index) return;
     if (i == 0) {
       BlocProvider.of<HomeNavigatorBloc>(context)
           .add(HomeNavigateToSGLFeedEvent());
@@ -71,7 +61,6 @@ class HomePageState extends State<HomePage> {
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
     if (settings.arguments == null) {
-      _navigationIndex = 0;
       return MaterialPageRoute(
           builder: (context) => BlocProvider(
                 create: (context) => SGLFeedBloc(),
@@ -80,14 +69,12 @@ class HomePageState extends State<HomePage> {
     }
     switch (settings.name) {
       case '/feed/sgl':
-        _navigationIndex = 0;
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
                   child: SGLFeedPage(),
                 ));
       case '/feed/box':
-        _navigationIndex = 1;
         return MaterialPageRoute(
             builder: (context) => MultiBlocProvider(
                   providers: [
@@ -100,7 +87,6 @@ class HomePageState extends State<HomePage> {
                   child: BoxFeedPage(),
                 ));
       default:
-        _navigationIndex = 0;
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),

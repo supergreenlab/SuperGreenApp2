@@ -28,7 +28,15 @@ class HomeNavigatorEventPop extends HomeNavigatorEvent {
   List<Object> get props => [];
 }
 
-class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
+class HomeNavigatorState extends Equatable {
+  final int index;
+  HomeNavigatorState(this.index);
+
+  @override
+  List<Object> get props => [index];
+}
+
+class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   static final eventBus = EventBus();
 
   final MainNavigatorEvent _args;
@@ -44,16 +52,18 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, dynamic> {
   }
 
   @override
-  dynamic get initialState => 0;
+  HomeNavigatorState get initialState => HomeNavigatorState(0);
 
   @override
-  Stream<dynamic> mapEventToState(HomeNavigatorEvent event) async* {
-    if (event is HomeNavigatorEventPop) {
-      _navigatorKey.currentState.pop();
-    } else if (event is HomeNavigateToBoxFeedEvent) {
+  Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
+    if (event is HomeNavigateToBoxFeedEvent) {
       _navigatorKey.currentState.pushReplacementNamed('/feed/box', arguments: event);
+      yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToSGLFeedEvent) {
       _navigatorKey.currentState.pushReplacementNamed('/feed/sgl', arguments: event);
+      yield HomeNavigatorState(0);
+    } else {
+      yield HomeNavigatorState(0);      
     }
   }
 }
