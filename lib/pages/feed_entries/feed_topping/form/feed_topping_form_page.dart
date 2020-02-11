@@ -50,7 +50,7 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: Provider.of<FeedToppingFormBloc>(context),
+        bloc: BlocProvider.of<FeedToppingFormBloc>(context),
         listener: (BuildContext context, FeedToppingFormBlocState state) {
           if (state is FeedToppingFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
@@ -58,7 +58,7 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
           }
         },
         child: BlocBuilder<FeedToppingFormBloc, FeedToppingFormBlocState>(
-          bloc: Provider.of<FeedToppingFormBloc>(context),
+          bloc: BlocProvider.of<FeedToppingFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Topping log',
             changed: _afterMedias.length != 0 ||

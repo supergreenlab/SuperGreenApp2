@@ -13,7 +13,7 @@ class DeviceSetupPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocListener(
-        bloc: Provider.of<DeviceSetupBloc>(context),
+        bloc: BlocProvider.of<DeviceSetupBloc>(context),
         listener: (BuildContext context, DeviceSetupBlocState state) {
           if (state is DeviceSetupBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context).add(

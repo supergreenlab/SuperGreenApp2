@@ -22,7 +22,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: Provider.of<FeedWaterFormBloc>(context),
+        bloc: BlocProvider.of<FeedWaterFormBloc>(context),
         listener: (BuildContext context, FeedWaterFormBlocState state) {
           if (state is FeedWaterFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
@@ -30,7 +30,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           }
         },
         child: BlocBuilder<FeedWaterFormBloc, FeedWaterFormBlocState>(
-          bloc: Provider.of<FeedWaterFormBloc>(context),
+          bloc: BlocProvider.of<FeedWaterFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'New watering record',
             changed: changed,

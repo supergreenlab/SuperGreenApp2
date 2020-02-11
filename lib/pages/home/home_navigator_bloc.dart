@@ -23,6 +23,20 @@ class HomeNavigateToSGLFeedEvent extends HomeNavigatorEvent {
   List<Object> get props => [];
 }
 
+class HomeNavigateToExplorerEvent extends HomeNavigatorEvent {
+  HomeNavigateToExplorerEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class HomeNavigateToSettingsEvent extends HomeNavigatorEvent {
+  HomeNavigateToSettingsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class HomeNavigatorEventPop extends HomeNavigatorEvent {
   @override
   List<Object> get props => [];
@@ -56,12 +70,18 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
 
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
-    if (event is HomeNavigateToBoxFeedEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/feed/box', arguments: event);
-      yield HomeNavigatorState(1);
-    } else if (event is HomeNavigateToSGLFeedEvent) {
+    if (event is HomeNavigateToSGLFeedEvent) {
       _navigatorKey.currentState.pushReplacementNamed('/feed/sgl', arguments: event);
       yield HomeNavigatorState(0);
+    } else if (event is HomeNavigateToBoxFeedEvent) {
+      _navigatorKey.currentState.pushReplacementNamed('/feed/box', arguments: event);
+      yield HomeNavigatorState(1);
+    } else if (event is HomeNavigateToExplorerEvent) {
+      _navigatorKey.currentState.pushReplacementNamed('/explorer', arguments: event);
+      yield HomeNavigatorState(2);
+    } else if (event is HomeNavigateToSettingsEvent) {
+      _navigatorKey.currentState.pushReplacementNamed('/settings', arguments: event);
+      yield HomeNavigatorState(3);
     } else {
       yield HomeNavigatorState(0);      
     }

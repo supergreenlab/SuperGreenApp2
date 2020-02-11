@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -18,7 +17,7 @@ class _TipPageState extends State<TipPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TipBloc, TipBlocState>(
-        bloc: Provider.of<TipBloc>(context),
+        bloc: BlocProvider.of<TipBloc>(context),
         builder: (context, state) => Scaffold(
               appBar: SGLAppBar('Watering tips'),
               body: Column(

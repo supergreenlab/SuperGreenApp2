@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_bloc.dart';
 
 class FeedMediaCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedMediaCardBloc, FeedMediaCardBlocState>(
-        bloc: Provider.of<FeedMediaCardBloc>(context),
+        bloc: BlocProvider.of<FeedMediaCardBloc>(context),
         builder: (context, state) => Card(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

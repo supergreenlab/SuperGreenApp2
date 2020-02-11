@@ -48,7 +48,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: Provider.of<FeedMediaFormBloc>(context),
+        bloc: BlocProvider.of<FeedMediaFormBloc>(context),
         listener: (BuildContext context, FeedMediaFormBlocState state) {
           if (state is FeedMediaFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
@@ -56,7 +56,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
-          bloc: Provider.of<FeedMediaFormBloc>(context),
+          bloc: BlocProvider.of<FeedMediaFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Note creation',
             changed: _medias.length != 0 || _textController.value.text != '',

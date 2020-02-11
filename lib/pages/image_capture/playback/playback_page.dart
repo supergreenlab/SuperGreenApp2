@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:video_player/video_player.dart';
@@ -18,7 +17,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: Provider.of<PlaybackBloc>(context),
+      bloc: BlocProvider.of<PlaybackBloc>(context),
       listener: (context, state) async {
         if (state is PlaybackBlocStateInit) {
           if (state.isVideo && _videoPlayerController == null) {
@@ -32,7 +31,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
         }
       },
       child: BlocBuilder<PlaybackBloc, PlaybackBlocState>(
-          bloc: Provider.of<PlaybackBloc>(context),
+          bloc: BlocProvider.of<PlaybackBloc>(context),
           builder: (context, state) {
             return _renderPlayer(context, state);
           }),

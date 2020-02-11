@@ -51,7 +51,7 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: Provider.of<FeedDefoliationFormBloc>(context),
+        bloc: BlocProvider.of<FeedDefoliationFormBloc>(context),
         listener: (BuildContext context, FeedDefoliationFormBlocState state) {
           if (state is FeedDefoliationFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
@@ -60,7 +60,7 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
         },
         child:
             BlocBuilder<FeedDefoliationFormBloc, FeedDefoliationFormBlocState>(
-          bloc: Provider.of<FeedDefoliationFormBloc>(context),
+          bloc: BlocProvider.of<FeedDefoliationFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Defoliation log',
             changed: _afterMedias.length != 0 ||

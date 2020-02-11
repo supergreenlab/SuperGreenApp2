@@ -22,7 +22,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: Provider.of<BoxInfosBloc>(context),
+      bloc: BlocProvider.of<BoxInfosBloc>(context),
       listener: (BuildContext context, BoxInfosBlocState state) async {
         if (state is BoxInfosBlocStateDone) {
           HomeNavigatorBloc.eventBus
@@ -32,7 +32,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
         }
       },
       child: BlocBuilder<BoxInfosBloc, BoxInfosBlocState>(
-          bloc: Provider.of<BoxInfosBloc>(context),
+          bloc: BlocProvider.of<BoxInfosBloc>(context),
           builder: (context, state) => Scaffold(
               appBar: SGLAppBar('New Box infos'),
               body: Padding(

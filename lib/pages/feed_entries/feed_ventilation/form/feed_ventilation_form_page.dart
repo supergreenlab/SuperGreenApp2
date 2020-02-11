@@ -19,7 +19,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: Provider.of<FeedVentilationFormBloc>(context),
+      bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
         if (state is FeedVentilationFormBlocStateVentilationLoaded) {
           setState(() {
@@ -32,7 +32,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         }
       },
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
-          bloc: Provider.of<FeedVentilationFormBloc>(context),
+          bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
                 title: 'Record creation',
                 changed: state is FeedVentilationFormBlocStateVentilationLoaded && (state.blowerDay != state.initialBlowerDay || state.blowerNight != state.initialBlowerNight),

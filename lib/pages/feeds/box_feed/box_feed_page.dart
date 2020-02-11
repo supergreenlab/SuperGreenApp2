@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
@@ -19,7 +18,7 @@ class BoxFeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
-      bloc: Provider.of<BoxFeedBloc>(context),
+      bloc: BlocProvider.of<BoxFeedBloc>(context),
       builder: (BuildContext context, BoxFeedBlocState state) {
         String name = 'SuperGreenLab';
         if (state is BoxFeedBlocStateBox) {
@@ -63,7 +62,7 @@ class BoxFeedPage extends StatelessWidget {
                     MainNavigateToFeedWaterFormEvent(state.box,
                         pushAsReplacement: pushAsReplacement))),
         _renderSpeedDialChild(
-            'Light dimming',
+            'Stretch control',
             'assets/feed_card/icon_dimming.svg',
             _onSpeedDialSelected(
                 context,
@@ -178,7 +177,7 @@ class BoxFeedPage extends StatelessWidget {
 
   Widget _boxList(BuildContext context) {
     return BlocBuilder<BoxDrawerBloc, BoxDrawerBlocState>(
-      bloc: Provider.of<BoxDrawerBloc>(context),
+      bloc: BlocProvider.of<BoxDrawerBloc>(context),
       condition: (previousState, state) =>
           state is BoxDrawerBlocStateLoadingBoxList ||
           state is BoxDrawerBlocStateBoxListUpdated,

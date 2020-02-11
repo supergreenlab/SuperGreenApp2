@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_bloc.dart';
 
@@ -8,7 +7,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedTowelieInfoCardBloc, FeedTowelieInfoCardBlocState>(
-        bloc: Provider.of<FeedTowelieInfoCardBloc>(context),
+        bloc: BlocProvider.of<FeedTowelieInfoCardBloc>(context),
         builder: (context, state) => Card(
               child: Column(
                 children: [

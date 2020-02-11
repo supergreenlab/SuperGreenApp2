@@ -24,7 +24,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-      bloc: Provider.of<SelectDeviceBoxBloc>(context),
+      bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
       listener: (context, state) {
         if (state is SelectDeviceBoxBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -32,7 +32,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         }
       },
       child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-          bloc: Provider.of<SelectDeviceBoxBloc>(context),
+          bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) => Scaffold(
               appBar: SGLAppBar('Device configuration'),
               body: state.leds.length != 0

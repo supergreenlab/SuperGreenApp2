@@ -19,7 +19,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: Provider.of<FeedLightFormBloc>(context),
+      bloc: BlocProvider.of<FeedLightFormBloc>(context),
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
           setState(() => values = List.from(state.values));
@@ -29,7 +29,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         }
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
-          bloc: Provider.of<FeedLightFormBloc>(context),
+          bloc: BlocProvider.of<FeedLightFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
                 title: 'Record creation',
                 changed: changed,

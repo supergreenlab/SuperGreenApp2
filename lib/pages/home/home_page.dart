@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
+import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_page.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/pages/settings/settings_bloc.dart';
+import 'package:super_green_app/pages/settings/settings_page.dart';
 
 class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
@@ -36,6 +40,10 @@ class HomePage extends StatelessWidget {
               icon: Icon(Icons.explore),
               title: Text('Explore'),
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              title: Text('Settings'),
+            ),
           ],
         ),
         body: Navigator(
@@ -47,7 +55,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void _onNavigationBarItemSelect(BuildContext context, int i, HomeNavigatorState state) {
+  void _onNavigationBarItemSelect(
+      BuildContext context, int i, HomeNavigatorState state) {
     if (i == state.index) return;
     if (i == 0) {
       BlocProvider.of<HomeNavigatorBloc>(context)
@@ -55,6 +64,12 @@ class HomePage extends StatelessWidget {
     } else if (i == 1) {
       BlocProvider.of<HomeNavigatorBloc>(context)
           .add(HomeNavigateToBoxFeedEvent(null));
+    } else if (i == 2) {
+      BlocProvider.of<HomeNavigatorBloc>(context)
+          .add(HomeNavigateToExplorerEvent());
+    } else if (i == 3) {
+      BlocProvider.of<HomeNavigatorBloc>(context)
+          .add(HomeNavigateToSettingsEvent());
     }
   }
 
@@ -85,6 +100,18 @@ class HomePage extends StatelessWidget {
                     )
                   ],
                   child: BoxFeedPage(),
+                ));
+      case '/explorer':
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => ExplorerBloc(),
+                  child: ExplorerPage(),
+                ));
+      case '/settings':
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => SettingsBloc(),
+                  child: SettingsPage(),
                 ));
       default:
         return MaterialPageRoute(

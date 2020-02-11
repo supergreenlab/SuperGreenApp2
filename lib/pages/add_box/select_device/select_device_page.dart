@@ -23,7 +23,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
-        bloc: Provider.of<SelectDeviceBloc>(context),
+        bloc: BlocProvider.of<SelectDeviceBloc>(context),
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
               'Select Box device',
@@ -80,7 +80,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
 
   Widget _deviceList(BuildContext context) {
     return BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
-      bloc: Provider.of<SelectDeviceBloc>(context),
+      bloc: BlocProvider.of<SelectDeviceBloc>(context),
       condition: (previousState, state) =>
           state is SelectDeviceBlocStateDeviceListUpdated,
       builder: (BuildContext context, SelectDeviceBlocState state) {

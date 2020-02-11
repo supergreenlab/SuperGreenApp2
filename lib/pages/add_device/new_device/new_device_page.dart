@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart';
@@ -12,7 +11,7 @@ class NewDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: Provider.of<NewDeviceBloc>(context),
+      bloc: BlocProvider.of<NewDeviceBloc>(context),
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
           BlocProvider.of<MainNavigatorBloc>(context).add(
@@ -25,7 +24,7 @@ class NewDevicePage extends StatelessWidget {
         }
       },
       child: BlocBuilder<NewDeviceBloc, NewDeviceBlocState>(
-          bloc: Provider.of<NewDeviceBloc>(context),
+          bloc: BlocProvider.of<NewDeviceBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is NewDeviceBlocStateConnectingToSSID) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -22,7 +21,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocListener(
-        bloc: Provider.of<DeviceNameBloc>(context),
+        bloc: BlocProvider.of<DeviceNameBloc>(context),
         listener: (BuildContext context, DeviceNameBlocState state) {
           if (state is DeviceNameBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
@@ -30,7 +29,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           }
         },
         child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
-            bloc: Provider.of<DeviceNameBloc>(context),
+            bloc: BlocProvider.of<DeviceNameBloc>(context),
             builder: (context, state) => Scaffold(
                 appBar: SGLAppBar(
                   'Add device',

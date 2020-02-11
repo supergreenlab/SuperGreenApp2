@@ -12,7 +12,7 @@ class FeedScheduleFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: Provider.of<FeedScheduleFormBloc>(context),
+      bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
       listener: (BuildContext context, FeedScheduleFormBlocState state) {
         if (state is FeedScheduleFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -20,7 +20,7 @@ class FeedScheduleFormPage extends StatelessWidget {
         }
       },
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
-          bloc: Provider.of<FeedScheduleFormBloc>(context),
+          bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
                 title: 'Add schedule',
                 changed: state.schedule != state.initialSchedule,
