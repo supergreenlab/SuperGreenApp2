@@ -36,14 +36,14 @@ class DeviceAPI {
 
   static Future<String> setStringParam(
       String controllerIP, String paramName, String value) async {
-    Response r = await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value');
-    return r.body;
+    await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value');
+    return fetchStringParam(controllerIP, paramName);
   }
 
   static Future<int> setIntParam(
       String controllerIP, String paramName, int value) async {
-    Response r = await get('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value');
-    return int.parse(r.body);
+    await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value');
+    return fetchIntParam(controllerIP, paramName);
   }
 
 }

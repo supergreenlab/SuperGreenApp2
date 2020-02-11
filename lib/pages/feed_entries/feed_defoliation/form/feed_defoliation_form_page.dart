@@ -17,6 +17,8 @@ class FeedDefoliationFormPage extends StatefulWidget {
 }
 
 class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
+  final List<FeedMediasCompanion> _beforeMedias = [];
+  final List<FeedMediasCompanion> _afterMedias = [];
   final TextEditingController _textController = TextEditingController();
 
   bool _helpRequest = false;
@@ -61,14 +63,14 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
           bloc: Provider.of<FeedDefoliationFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Defoliation log',
-            changed: state.afterMedias.length != 0 ||
-                state.beforeMedias.length != 0 ||
+            changed: _afterMedias.length != 0 ||
+                _beforeMedias.length != 0 ||
                 _textController.value.text != '',
-            valid: state.afterMedias.length != 0 ||
-                state.beforeMedias.length != 0 ||
+            valid: _afterMedias.length != 0 ||
+                _beforeMedias.length != 0 ||
                 _textController.value.text != '',
             onOK: () => BlocProvider.of<FeedDefoliationFormBloc>(context).add(
-                FeedDefoliationFormBlocEventCreate(
+                FeedDefoliationFormBlocEventCreate(_beforeMedias, _afterMedias,
                     _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -86,17 +88,16 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
         title: 'Before pics',
         icon: 'assets/feed_form/icon_before_pic.svg',
         child: FeedFormMediaList(
-          medias: state.beforeMedias,
+          medias: _beforeMedias,
           onPressed: (FeedMediasCompanion media) {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
                 FeedMediasCompanion fm = await f;
                 if (fm != null) {
-                  BlocProvider.of<FeedDefoliationFormBloc>(context)
-                      .add(FeedDefoliationFormBlocPushMedia(true, fm));
-                  setState(
-                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
+                  setState(() {
+                    _beforeMedias.add(fm);
+                  }); // Why? no idea, but it wont refresh on bloc's state change without that.
                 }
               }));
             }
@@ -107,17 +108,16 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
         title: 'After pics',
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
-          medias: state.afterMedias,
+          medias: _afterMedias,
           onPressed: (FeedMediasCompanion media) {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
                 FeedMediasCompanion fm = await f;
                 if (fm != null) {
-                  BlocProvider.of<FeedDefoliationFormBloc>(context)
-                      .add(FeedDefoliationFormBlocPushMedia(false, fm));
-                  setState(
-                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
+                  setState(() {
+                    _afterMedias.add(fm);
+                  });
                 }
               }));
             }

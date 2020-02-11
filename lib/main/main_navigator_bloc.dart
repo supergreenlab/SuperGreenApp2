@@ -71,7 +71,8 @@ class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {
 class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
   final ip;
 
-  MainNavigateToDeviceSetupEvent(this.ip, {futureFn}) : super(futureFn: futureFn);
+  MainNavigateToDeviceSetupEvent(this.ip, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [ip];
@@ -79,7 +80,8 @@ class MainNavigateToDeviceSetupEvent extends MainNavigatorEvent {
 
 class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
   final Device device;
-  MainNavigateToDeviceNameEvent(this.device, {futureFn}) : super(futureFn: futureFn);
+  MainNavigateToDeviceNameEvent(this.device, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [device];
@@ -87,7 +89,8 @@ class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
 
 class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
   final Device device;
-  MainNavigateToDeviceDoneEvent(this.device, {futureFn}) : super(futureFn: futureFn);
+  MainNavigateToDeviceDoneEvent(this.device, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [device];
@@ -240,8 +243,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     if (event is MainNavigatorActionPop) {
       if (event.mustPop) {
         _navigatorKey.currentState.pop(event.param);
+      } else {
+        _navigatorKey.currentState.maybePop(event.param);
       }
-      _navigatorKey.currentState.maybePop(event.param);
     } else if (event is MainNavigatorActionPopToRoute) {
       _navigatorKey.currentState.popUntil((r) {
         if (r.settings.name == event.route) {

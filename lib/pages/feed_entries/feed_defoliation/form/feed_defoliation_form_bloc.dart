@@ -9,63 +9,42 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class FeedDefoliationFormBlocEvent extends Equatable {}
 
-class FeedDefoliationFormBlocPushMedia extends FeedDefoliationFormBlocEvent {
-  final bool before;
-  final FeedMediasCompanion feedMedia;
-
-  FeedDefoliationFormBlocPushMedia(this.before, this.feedMedia);
-
-  @override
-  List<Object> get props => [before, feedMedia];
-}
-
 class FeedDefoliationFormBlocEventCreate extends FeedDefoliationFormBlocEvent {
+  final List<FeedMediasCompanion> beforeMedias;
+  final List<FeedMediasCompanion> afterMedias;
   final String message;
   final bool helpRequest;
 
-  FeedDefoliationFormBlocEventCreate(this.message, this.helpRequest);
+  FeedDefoliationFormBlocEventCreate(this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
 
   @override
   List<Object> get props => [message, helpRequest];
 }
 
 class FeedDefoliationFormBlocState extends Equatable {
-  final List<FeedMediasCompanion> beforeMedias;
-  final List<FeedMediasCompanion> afterMedias;
-
-  FeedDefoliationFormBlocState(this.beforeMedias, this.afterMedias);
+  FeedDefoliationFormBlocState();
 
   @override
-  List<Object> get props => [beforeMedias, afterMedias];
+  List<Object> get props => [];
 }
 
 class FeedDefoliationFormBlocStateDone extends FeedDefoliationFormBlocState {
-  FeedDefoliationFormBlocStateDone(List<FeedMediasCompanion> beforeMedias, List<FeedMediasCompanion> afterMedias) : super(beforeMedias, afterMedias);
+  FeedDefoliationFormBlocStateDone();
 }
 
 class FeedDefoliationFormBloc
     extends Bloc<FeedDefoliationFormBlocEvent, FeedDefoliationFormBlocState> {
   final MainNavigateToFeedDefoliationFormEvent _args;
 
-  List<FeedMediasCompanion> _beforeMedias = [];
-  List<FeedMediasCompanion> _afterMedias = [];
-
   @override
-  FeedDefoliationFormBlocState get initialState => FeedDefoliationFormBlocState(_beforeMedias, _afterMedias);
+  FeedDefoliationFormBlocState get initialState => FeedDefoliationFormBlocState();
 
   FeedDefoliationFormBloc(this._args);
 
   @override
   Stream<FeedDefoliationFormBlocState> mapEventToState(
       FeedDefoliationFormBlocEvent event) async* {
-    if (event is FeedDefoliationFormBlocPushMedia) {
-      if (event.before) {
-        _beforeMedias.add(event.feedMedia);
-      } else {
-        _afterMedias.add(event.feedMedia);
-      }
-      yield FeedDefoliationFormBlocState(_beforeMedias, _afterMedias);
-    } else if (event is FeedDefoliationFormBlocEventCreate) {
+    if (event is FeedDefoliationFormBlocEventCreate) {
       final db = RelDB.get();
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
@@ -74,13 +53,13 @@ class FeedDefoliationFormBloc
         date: DateTime.now(),
         params: Value(JsonEncoder().convert({'message': event.message})),
       ));
-      for (FeedMediasCompanion m in _beforeMedias) {
+      for (FeedMediasCompanion m in event.beforeMedias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': true}))));
       }
-      for (FeedMediasCompanion m in _afterMedias) {
+      for (FeedMediasCompanion m in event.afterMedias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
       }
-      yield FeedDefoliationFormBlocStateDone(_beforeMedias, _afterMedias);
+      yield FeedDefoliationFormBlocStateDone();
     }
   }
 }

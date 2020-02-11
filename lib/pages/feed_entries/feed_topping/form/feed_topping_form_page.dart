@@ -16,6 +16,8 @@ class FeedToppingFormPage extends StatefulWidget {
 }
 
 class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
+  final List<FeedMediasCompanion> _beforeMedias = [];
+  final List<FeedMediasCompanion> _afterMedias = [];
   final TextEditingController _textController = TextEditingController();
 
   bool _helpRequest = false;
@@ -59,14 +61,14 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
           bloc: Provider.of<FeedToppingFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Topping log',
-            changed: state.afterMedias.length != 0 ||
-                state.beforeMedias.length != 0 ||
+            changed: _afterMedias.length != 0 ||
+                _beforeMedias.length != 0 ||
                 _textController.value.text != '',
-            valid: state.afterMedias.length != 0 ||
-                state.beforeMedias.length != 0 ||
+            valid: _afterMedias.length != 0 ||
+                _beforeMedias.length != 0 ||
                 _textController.value.text != '',
             onOK: () => BlocProvider.of<FeedToppingFormBloc>(context).add(
-                FeedToppingFormBlocEventCreate(
+                FeedToppingFormBlocEventCreate(_beforeMedias, _afterMedias,
                     _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,17 +86,16 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
         title: 'Before pics',
         icon: 'assets/feed_form/icon_before_pic.svg',
         child: FeedFormMediaList(
-          medias: state.beforeMedias,
+          medias: _beforeMedias,
           onPressed: (FeedMediasCompanion media) {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
                 FeedMediasCompanion fm = await f;
                 if (fm != null) {
-                  BlocProvider.of<FeedToppingFormBloc>(context)
-                      .add(FeedToppingFormBlocPushMedia(true, fm));
-                  setState(
-                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
+                  setState(() {
+                    _beforeMedias.add(fm);
+                  }); // Why? no idea, but it wont refresh on bloc's state change without that.
                 }
               }));
             }
@@ -105,17 +106,16 @@ class _FeedToppingFormPageState extends State<FeedToppingFormPage> {
         title: 'After pics',
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
-          medias: state.afterMedias,
+          medias: _afterMedias,
           onPressed: (FeedMediasCompanion media) {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
                 FeedMediasCompanion fm = await f;
                 if (fm != null) {
-                  BlocProvider.of<FeedToppingFormBloc>(context)
-                      .add(FeedToppingFormBlocPushMedia(false, fm));
-                  setState(
-                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
+                  setState(() {
+                    _afterMedias.add(fm);
+                  }); // Why? no idea, but it wont refresh on bloc's state change without that.
                 }
               }));
             }

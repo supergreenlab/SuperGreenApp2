@@ -16,6 +16,7 @@ class FeedMediaFormPage extends StatefulWidget {
 }
 
 class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
+  final List<FeedMediasCompanion> _medias = [];
   final TextEditingController _textController = TextEditingController();
 
   bool _helpRequest = false;
@@ -28,7 +29,6 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   @protected
   void initState() {
     super.initState();
-
     _listener = _keyboardVisibility.addNewListener(
       onChange: (bool visible) {
         setState(() {
@@ -59,12 +59,11 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           bloc: Provider.of<FeedMediaFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'Note creation',
-            changed:
-                state.medias.length != 0 || _textController.value.text != '',
-            valid: state.medias.length != 0 || _textController.value.text != '',
+            changed: _medias.length != 0 || _textController.value.text != '',
+            valid: _medias.length != 0 || _textController.value.text != '',
             onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
                 FeedMediaFormBlocEventCreate(
-                    _textController.text, _helpRequest)),
+                    _medias, _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _keyboardVisible
@@ -80,17 +79,16 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         title: 'Attached medias',
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
-          medias: state.medias,
+          medias: _medias,
           onPressed: (FeedMediasCompanion media) {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
                 FeedMediasCompanion fm = await f;
                 if (fm != null) {
-                  BlocProvider.of<FeedMediaFormBloc>(context)
-                      .add(FeedMediaFormBlocPushMedia(fm));
-                  setState(
-                      () {}); // Why? no idea, but it wont refresh on bloc's state change without that.
+                  setState(() {
+                    _medias.add(fm);
+                  });
                 }
               }));
             }

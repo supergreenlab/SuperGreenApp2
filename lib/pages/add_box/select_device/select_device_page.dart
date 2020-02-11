@@ -14,7 +14,12 @@ class SelectBoxDeviceData {
   SelectBoxDeviceData(this.device, this.deviceBox);
 }
 
-class SelectDevicePage extends StatelessWidget {
+class SelectDevicePage extends StatefulWidget {
+  @override
+  _SelectDevicePageState createState() => _SelectDevicePageState();
+}
+
+class _SelectDevicePageState extends State<SelectDevicePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(

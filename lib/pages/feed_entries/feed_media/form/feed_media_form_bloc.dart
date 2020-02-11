@@ -9,36 +9,26 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class FeedMediaFormBlocEvent extends Equatable {}
 
-class FeedMediaFormBlocPushMedia extends FeedMediaFormBlocEvent {
-  final FeedMediasCompanion feedMedia;
-
-  FeedMediaFormBlocPushMedia(this.feedMedia);
-
-  @override
-  List<Object> get props => [feedMedia];
-}
-
 class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
+  final List<FeedMediasCompanion> medias;
   final String message;
   final bool helpRequest;
 
-  FeedMediaFormBlocEventCreate(this.message, this.helpRequest);
+  FeedMediaFormBlocEventCreate(this.medias, this.message, this.helpRequest);
 
   @override
   List<Object> get props => [message, helpRequest];
 }
 
 class FeedMediaFormBlocState extends Equatable {
-  final List<FeedMediasCompanion> medias;
-
-  FeedMediaFormBlocState(this.medias);
+  FeedMediaFormBlocState();
 
   @override
-  List<Object> get props => [medias];
+  List<Object> get props => [];
 }
 
 class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
-  FeedMediaFormBlocStateDone(List<FeedMediasCompanion> medias) : super(medias);
+  FeedMediaFormBlocStateDone();
 
   @override
   List<Object> get props => [];
@@ -48,20 +38,15 @@ class FeedMediaFormBloc
     extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent _args;
 
-  List<FeedMediasCompanion> _medias = [];
-
   @override
-  FeedMediaFormBlocState get initialState => FeedMediaFormBlocState(_medias);
+  FeedMediaFormBlocState get initialState => FeedMediaFormBlocState();
 
   FeedMediaFormBloc(this._args);
 
   @override
   Stream<FeedMediaFormBlocState> mapEventToState(
       FeedMediaFormBlocEvent event) async* {
-    if (event is FeedMediaFormBlocPushMedia) {
-      _medias.add(event.feedMedia);
-      yield FeedMediaFormBlocState(_medias);
-    } else if (event is FeedMediaFormBlocEventCreate) {
+    if (event is FeedMediaFormBlocEventCreate) {
       final db = RelDB.get();
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
@@ -70,10 +55,10 @@ class FeedMediaFormBloc
         date: DateTime.now(),
         params: Value(JsonEncoder().convert({'message': event.message})),
       ));
-      for (FeedMediasCompanion m in _medias) {
+      for (FeedMediasCompanion m in event.medias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID)));
       }
-      yield FeedMediaFormBlocStateDone(_medias);
+      yield FeedMediaFormBlocStateDone();
     }
   }
 }
