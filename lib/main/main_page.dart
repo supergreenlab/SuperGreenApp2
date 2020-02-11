@@ -10,8 +10,6 @@ import 'package:super_green_app/pages/add_box/select_device_box/select_device_bo
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_page.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_bloc.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_page.dart';
-import 'package:super_green_app/pages/add_device/device_done/device_done_bloc.dart';
-import 'package:super_green_app/pages/add_device/device_done/device_done_page.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_page.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
@@ -161,13 +159,6 @@ class MainPage extends StatelessWidget {
             builder: (context) => BlocProvider(
                   create: (context) => DeviceNameBloc(settings.arguments),
                   child: DeviceNamePage(),
-                ));
-      case '/device/done':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => DeviceDoneBloc(settings.arguments),
-                  child: DeviceDonePage(),
                 ));
       case '/feed/form/defoliation':
         return MaterialPageRoute(
