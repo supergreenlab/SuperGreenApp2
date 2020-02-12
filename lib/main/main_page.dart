@@ -14,6 +14,8 @@ import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.da
 import 'package:super_green_app/pages/add_device/device_name/device_name_page.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_page.dart';
+import 'package:super_green_app/pages/add_device/device_wifi/device_wifi_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_wifi/device_wifi_page.dart';
 import 'package:super_green_app/pages/add_device/existing_device/existing_device_bloc.dart';
 import 'package:super_green_app/pages/add_device/existing_device/existing_device_page.dart';
 import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart';
@@ -98,7 +100,7 @@ class MainPage extends StatelessWidget {
                     BlocProvider<HomeNavigatorBloc>(
                         create: (context) => HomeNavigatorBloc(
                             settings.arguments, _homeNavigatorKey)),
-                    BlocProvider<HomeBloc>( 
+                    BlocProvider<HomeBloc>(
                       create: (context) => HomeBloc(),
                     )
                   ],
@@ -160,6 +162,15 @@ class MainPage extends StatelessWidget {
                   create: (context) => DeviceNameBloc(settings.arguments),
                   child: DeviceNamePage(),
                 ));
+      case '/device/wifi':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (context) => DeviceWifiBloc(settings.arguments),
+            child: DeviceWifiPage(),
+          ),
+          fullscreenDialog: true,
+        );
       case '/feed/form/defoliation':
         return MaterialPageRoute(
           settings: settings,

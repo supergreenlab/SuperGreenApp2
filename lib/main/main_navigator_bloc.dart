@@ -87,15 +87,6 @@ class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
-class MainNavigateToDeviceDoneEvent extends MainNavigatorEvent {
-  final Device device;
-  MainNavigateToDeviceDoneEvent(this.device, {futureFn})
-      : super(futureFn: futureFn);
-
-  @override
-  List<Object> get props => [device];
-}
-
 class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
   final bool pushAsReplacement;
 
@@ -202,6 +193,16 @@ class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
   List<Object> get props => [futureFn, filePath];
 }
 
+class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
+  final Device device;
+
+  MainNavigateToDeviceWifiEvent(this.device,
+      {Function(Future<Object> f) futureFn});
+
+  @override
+  List<Object> get props => [futureFn, device];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -282,9 +283,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToDeviceNameEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/device/name', arguments: event);
-    } else if (event is MainNavigateToDeviceDoneEvent) {
+    } else if (event is MainNavigateToDeviceWifiEvent) {
       future = _navigatorKey.currentState
-          .pushNamed('/device/done', arguments: event);
+          .pushNamed('/device/wifi', arguments: event);
     } else if (event is MainNavigateToFeedDefoliationFormEvent) {
       future = _pushOrReplace('/feed/form/defoliation', event);
     } else if (event is MainNavigateToFeedLightFormEvent) {

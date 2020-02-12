@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -24,8 +23,13 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         bloc: BlocProvider.of<DeviceNameBloc>(context),
         listener: (BuildContext context, DeviceNameBlocState state) {
           if (state is DeviceNameBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(param: state.device, mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToDeviceWifiEvent(state.device,
+                    futureFn: (future) async {
+              await future;
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigatorActionPop(param: state.device, mustPop: true));
+            }));
           }
         },
         child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(

@@ -7,9 +7,10 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsBlocState>(
-          bloc: BlocProvider.of<SettingsBloc>(context),
-          builder: (context, state) => Scaffold(
+        bloc: BlocProvider.of<SettingsBloc>(context),
+        builder: (context, state) => Scaffold(
               appBar: SGLAppBar('Settings'),
-              body: Text('pouet')));
+              body: Text('WiFi settings'),
+            ));
   }
 }
