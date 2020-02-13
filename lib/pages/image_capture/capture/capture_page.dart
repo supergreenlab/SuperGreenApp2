@@ -229,6 +229,7 @@ class _CapturePageState extends State<CapturePage> {
     return _renderBottomButton(context, Icons.stop, Colors.red, () async {
       await _cameraController.stopVideoRecording();
       _endCapture(state, '$_filePath.mp4');
+      setState(() {});
     });
   }
 

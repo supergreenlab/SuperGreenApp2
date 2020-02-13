@@ -3,6 +3,7 @@ import 'package:multicast_dns/multicast_dns.dart';
 
 class DeviceAPI {
   static Future<String> resolveLocalName(String name) async {
+    name = '${name.toLowerCase()}.local';
     final MDnsClient client = MDnsClient();
     await client.start();
 

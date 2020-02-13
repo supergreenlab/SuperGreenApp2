@@ -62,7 +62,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GreenButton(
-              onPressed: () => _handleInput(context),
+              onPressed: _ssidController.text.length != 0 && _passController.text.length != 0 ? () => _handleInput(context) : null,
               title: 'OK',
             ),
           ),
@@ -88,7 +88,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('Search please wait..'),
+                child: Text('Searching please wait..'),
               ),
             ],
           ),

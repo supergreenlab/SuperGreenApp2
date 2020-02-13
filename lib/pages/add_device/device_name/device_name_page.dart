@@ -23,6 +23,10 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         bloc: BlocProvider.of<DeviceNameBloc>(context),
         listener: (BuildContext context, DeviceNameBlocState state) {
           if (state is DeviceNameBlocStateDone) {
+            if (!state.requiresWifiSetup) {
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigatorActionPop(param: state.device, mustPop: true));
+            }
             BlocProvider.of<MainNavigatorBloc>(context).add(
                 MainNavigateToDeviceWifiEvent(state.device,
                     futureFn: (future) async {

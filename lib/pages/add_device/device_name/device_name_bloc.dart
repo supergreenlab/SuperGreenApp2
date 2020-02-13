@@ -25,7 +25,9 @@ class DeviceNameBlocState extends Equatable {
 }
 
 class DeviceNameBlocStateDone extends DeviceNameBlocState {
-  DeviceNameBlocStateDone(Device device) : super(device);
+  final bool requiresWifiSetup;
+
+  DeviceNameBlocStateDone(Device device, this.requiresWifiSetup) : super(device);
 }
 
 class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
@@ -43,8 +45,10 @@ class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
       var ddb = RelDB.get().devicesDAO;
       await DeviceHelper.updateDeviceName(_args.device, event.name);
       Param mdns = await ddb.getParam(_args.device.id, 'MDNS_DOMAIN');
-      await DeviceHelper.updateStringParam(_args.device, mdns, event.name.toLowerCase());
-      yield DeviceNameBlocStateDone(_args.device);
+      await DeviceHelper.updateStringParam(
+          _args.device, mdns, event.name.toLowerCase());
+      Param wifiStatus = await ddb.getParam(_args.device.id, 'WIFI_STATUS');
+      yield DeviceNameBlocStateDone(_args.device, wifiStatus.ivalue != 3);
     }
   }
 }
