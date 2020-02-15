@@ -28,6 +28,10 @@ class DeviceSetupBlocStateOutdated extends DeviceSetupBlocState {
   DeviceSetupBlocStateOutdated() : super(0);
 }
 
+class DeviceSetupBlocStateAlreadyExists extends DeviceSetupBlocState {
+  DeviceSetupBlocStateAlreadyExists() : super(0);
+}
+
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
   final Device device;
 
@@ -58,18 +62,24 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
 
   Stream<DeviceSetupBlocState> _startSearch(
       DeviceSetupBlocEventStartSetup event) async* {
+    final db = RelDB.get().devicesDAO;
+    final deviceIdentifier =
+        await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
+
+    if (await db.getDeviceByIdentifier(deviceIdentifier) != null) {
+      yield DeviceSetupBlocStateAlreadyExists();
+      return;
+    }
+
     final deviceName =
         await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
-    final deviceId =
-        await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
     final mdnsDomain =
         await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
     final config = await DeviceAPI.fetchConfig(_args.ip);
     final keys = json.decode(config);
 
-    final db = RelDB.get().devicesDAO;
     final device = DevicesCompanion.insert(
-        identifier: deviceId,
+        identifier: deviceIdentifier,
         name: deviceName,
         config: config,
         ip: _args.ip,

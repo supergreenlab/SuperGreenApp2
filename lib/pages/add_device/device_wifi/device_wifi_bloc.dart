@@ -65,8 +65,8 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
       yield DeviceWifiBlocStateSearching();
 
       String ip;
-      for (int i = 0; i < 3; ++i) {
-        await new Future.delayed(const Duration(seconds : 2));
+      for (int i = 0; i < 4; ++i) {
+        await new Future.delayed(const Duration(seconds: 2));
         Param mdns = await ddb.getParam(_args.device.id, 'MDNS_DOMAIN');
         ip = await DeviceAPI.resolveLocalName(mdns.svalue);
         if (ip == "" || ip == null) {
@@ -78,6 +78,16 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
         yield DeviceWifiBlocStateNotFound();
         return;
       }
+
+      Device device = _args.device.copyWith(ip: ip);
+      await RelDB.get().devicesDAO.updateDevice(device);
+
+      Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
+      await ddb.updateParam(ipParam.copyWith(svalue: ip));
+
+      Param wifiStatusParam =
+          await ddb.getParam(_args.device.id, 'WIFI_STATUS');
+      await DeviceHelper.refreshIntParam(device, wifiStatusParam);
 
       yield DeviceWifiBlocStateDone();
     }

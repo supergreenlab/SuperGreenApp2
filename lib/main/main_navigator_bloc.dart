@@ -197,7 +197,7 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
   final Device device;
 
   MainNavigateToDeviceWifiEvent(this.device,
-      {Function(Future<Object> f) futureFn});
+      {Function(Future<Object> f) futureFn}) : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [futureFn, device];

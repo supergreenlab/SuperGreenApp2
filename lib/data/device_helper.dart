@@ -6,14 +6,25 @@ class DeviceHelper {
     await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name);
     await RelDB.get().devicesDAO.updateDevice(device.copyWith(name: name));
   }
-
-  static Future updateStringParam(Device device, Param param, String value) async {
+  
+  static Future updateStringParam(
+      Device device, Param param, String value) async {
     await DeviceAPI.setStringParam(device.ip, param.key, value);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
   }
 
   static Future updateIntParam(Device device, Param param, int value) async {
     await DeviceAPI.setIntParam(device.ip, param.key, value);
+    await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
+  }
+
+  static Future refreshStringParam(Device device, Param param) async {
+    String value = await DeviceAPI.fetchStringParam(device.ip, param.key);
+    await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
+  }
+
+  static Future refreshIntParam(Device device, Param param) async {
+    int value = await DeviceAPI.fetchIntParam(device.ip, param.key);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
   }
 }

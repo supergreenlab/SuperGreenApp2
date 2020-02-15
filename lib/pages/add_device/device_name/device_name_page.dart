@@ -17,69 +17,70 @@ class DeviceNamePageState extends State<DeviceNamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: BlocListener(
-        bloc: BlocProvider.of<DeviceNameBloc>(context),
-        listener: (BuildContext context, DeviceNameBlocState state) {
-          if (state is DeviceNameBlocStateDone) {
-            if (!state.requiresWifiSetup) {
-              BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigatorActionPop(param: state.device, mustPop: true));
-            }
+    return BlocListener(
+      bloc: BlocProvider.of<DeviceNameBloc>(context),
+      listener: (BuildContext context, DeviceNameBlocState state) {
+        if (state is DeviceNameBlocStateDone) {
+          if (!state.requiresWifiSetup) {
             BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToDeviceWifiEvent(state.device,
-                    futureFn: (future) async {
-              await future;
-              BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigatorActionPop(param: state.device, mustPop: true));
-            }));
+                MainNavigatorActionPop(param: state.device, mustPop: true));
+            return;
           }
-        },
-        child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
-            bloc: BlocProvider.of<DeviceNameBloc>(context),
-            builder: (context, state) => Scaffold(
-                appBar: SGLAppBar(
-                  'Add device',
-                  hideBackButton: true,
-                ),
-                body: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: SectionTitle(
-                          title: 'Set device\'s name',
-                          icon: 'assets/box_setup/icon_controller.svg'),
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToDeviceWifiEvent(state.device,
+                  futureFn: (future) async {
+            await future;
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigatorActionPop(param: state.device, mustPop: true));
+          }));
+        }
+      },
+      child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
+          bloc: BlocProvider.of<DeviceNameBloc>(context),
+          builder: (context, state) => WillPopScope(
+                onWillPop: () async => false,
+                child: Scaffold(
+                    appBar: SGLAppBar(
+                      'Add device',
+                      hideBackButton: true,
                     ),
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
+                    body: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: SectionTitle(
+                              title: 'Set device\'s name',
+                              icon: 'assets/box_setup/icon_controller.svg'),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SGLTextField(
+                                  hintText: 'ex: Bob',
+                                  controller: _nameController,
+                                  onChanged: (_) {
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: SGLTextField(
-                              hintText: 'ex: Bob',
-                              controller: _nameController,
-                              onChanged: (_) {
-                                setState(() {});
-                              },
+                            child: GreenButton(
+                              onPressed: () => _handleInput(context),
+                              title: 'OK',
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GreenButton(
-                          onPressed: () => _handleInput(context),
-                          title: 'OK',
                         ),
-                      ),
-                    ),
-                  ],
-                ))),
-      ),
+                      ],
+                    )),
+              )),
     );
   }
 

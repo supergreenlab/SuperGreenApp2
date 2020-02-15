@@ -24,6 +24,10 @@ class DeviceNameBlocState extends Equatable {
   List<Object> get props => [device];
 }
 
+class DeviceNameBlocStateLoading extends DeviceNameBlocState {
+  DeviceNameBlocStateLoading(Device device) : super(device);
+}
+
 class DeviceNameBlocStateDone extends DeviceNameBlocState {
   final bool requiresWifiSetup;
 
@@ -42,6 +46,7 @@ class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   Stream<DeviceNameBlocState> mapEventToState(
       DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventSetName) {
+      yield DeviceNameBlocStateLoading(_args.device);
       var ddb = RelDB.get().devicesDAO;
       await DeviceHelper.updateDeviceName(_args.device, event.name);
       Param mdns = await ddb.getParam(_args.device.id, 'MDNS_DOMAIN');

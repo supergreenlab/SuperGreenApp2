@@ -47,6 +47,10 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
     return (select(devices)..where((d) => d.id.equals(id))).getSingle();
   }
 
+  Future<Device> getDeviceByIdentifier(String identifier) {
+    return (select(devices)..where((d) => d.identifier.equals(identifier))).getSingle();
+  }
+
   Future<List<Device>> getDevices() {
     return select(devices).get();
   }

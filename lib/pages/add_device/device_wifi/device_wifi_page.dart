@@ -30,11 +30,42 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
       },
       child: BlocBuilder<DeviceWifiBloc, DeviceWifiBlocState>(
           bloc: BlocProvider.of<DeviceWifiBloc>(context),
-          builder: (context, state) => Scaffold(
-              appBar: SGLAppBar('DeviceWifi'),
-              body: state is DeviceWifiBlocStateSearching
-                  ? _renderSearching()
-                  : _renderForm(context))),
+          builder: (context, state) {
+            Widget body;
+            if (state is DeviceWifiBlocStateNotFound) {
+              body = _renderNotfound();
+            } else if (state is DeviceWifiBlocStateSearching) {
+              body = _renderSearching();
+            } else {
+              body = _renderForm(context);
+            }
+            return Scaffold(
+                appBar: SGLAppBar(
+                  'Device Wifi setup',
+                  hideBackButton: (state is DeviceWifiBlocStateSearching),
+                ),
+                body: body);
+          }),
+    );
+  }
+
+  Widget _renderNotfound() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Center(
+            child: Column(
+          children: <Widget>[
+            Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
+            Text(
+              'This device is already added!',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        )),
+      ],
     );
   }
 
@@ -62,7 +93,10 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GreenButton(
-              onPressed: _ssidController.text.length != 0 && _passController.text.length != 0 ? () => _handleInput(context) : null,
+              onPressed: _ssidController.text.length != 0 &&
+                      _passController.text.length != 0
+                  ? () => _handleInput(context)
+                  : null,
               title: 'OK',
             ),
           ),

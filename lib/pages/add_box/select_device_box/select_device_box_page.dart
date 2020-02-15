@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -33,11 +32,47 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
       },
       child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
           bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
-          builder: (context, state) => Scaffold(
-              appBar: SGLAppBar('Device configuration'),
-              body: state.leds.length != 0
-                  ? _renderLedSelection(context, state)
-                  : _renderNoLedsAvailable(context, state))),
+          builder: (context, state) {
+            Widget body;
+            if (state is SelectDeviceBoxBlocStateLoading) {
+              body = _renderLoading(context, state);
+            } else if (state is SelectDeviceBoxBlocStateDeviceFull) {
+              body = _renderNoLedsAvailable(context, state);
+            } else {
+              body = _renderLedSelection(context, state);
+            }
+            return Scaffold(
+                appBar: SGLAppBar('Device configuration'), body: body);
+          }),
+    );
+  }
+
+  Widget _renderLoading(context, state) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Center(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(
+                  strokeWidth: 4.0,
+                ),
+              ),
+            ),
+            Text(
+              'Setting up...',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        )),
+      ],
     );
   }
 
