@@ -14,13 +14,7 @@ class NewDevicePage extends StatelessWidget {
       bloc: BlocProvider.of<NewDeviceBloc>(context),
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(
-              MainNavigateToDeviceSetupEvent('192.168.4.1',
-                  futureFn: (future) async {
-            Device device = await future;
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(param: device));
-          }));
+          _startSetup(context);
         }
       },
       child: BlocBuilder<NewDeviceBloc, NewDeviceBlocState>(
@@ -90,8 +84,7 @@ class NewDevicePage extends StatelessWidget {
               child: GreenButton(
                 title: 'DONE',
                 onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToDeviceSetupEvent('192.168.4.1'));
+                  _startSetup(context);
                 },
               ),
             ),
@@ -122,5 +115,14 @@ class NewDevicePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _startSetup(BuildContext context) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(
+        MainNavigateToDeviceSetupEvent('192.168.4.1', futureFn: (future) async {
+      Device device = await future;
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigatorActionPop(param: device));
+    }));
   }
 }

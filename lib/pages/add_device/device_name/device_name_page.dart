@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
@@ -22,65 +23,81 @@ class DeviceNamePageState extends State<DeviceNamePage> {
       listener: (BuildContext context, DeviceNameBlocState state) {
         if (state is DeviceNameBlocStateDone) {
           if (!state.requiresWifiSetup) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigatorActionPop(param: state.device, mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: state.device, mustPop: true));
             return;
           }
           BlocProvider.of<MainNavigatorBloc>(context).add(
               MainNavigateToDeviceWifiEvent(state.device,
                   futureFn: (future) async {
             await future;
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigatorActionPop(param: state.device, mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: state.device, mustPop: true));
           }));
         }
       },
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
           bloc: BlocProvider.of<DeviceNameBloc>(context),
-          builder: (context, state) => WillPopScope(
-                onWillPop: () async => false,
-                child: Scaffold(
-                    appBar: SGLAppBar(
-                      'Add device',
-                      hideBackButton: true,
-                    ),
-                    body: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: SectionTitle(
-                              title: 'Set device\'s name',
-                              icon: 'assets/box_setup/icon_controller.svg'),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SGLTextField(
-                                  hintText: 'ex: Bob',
-                                  controller: _nameController,
-                                  onChanged: (_) {
-                                    setState(() {});
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GreenButton(
-                              onPressed: () => _handleInput(context),
-                              title: 'OK',
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              )),
+          builder: (context, state) {
+            Widget body;
+            if (state is DeviceNameBlocStateLoading) {
+              body = _renderLoading();
+            } else {
+              body = _renderForm();
+            }
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: Scaffold(
+                  appBar: SGLAppBar(
+                    'Add device',
+                    hideBackButton: true,
+                  ),
+                  body: body),
+            );
+          }),
+    );
+  }
+
+  Widget _renderLoading() {
+    return FullscreenLoading(title: 'Setting device name..');
+  }
+
+  Widget _renderForm() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: SectionTitle(
+              title: 'Set device\'s name',
+              icon: 'assets/box_setup/icon_controller.svg'),
+        ),
+        Expanded(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SGLTextField(
+                  hintText: 'ex: Bob',
+                  controller: _nameController,
+                  onChanged: (_) {
+                    setState(() {});
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GreenButton(
+              onPressed: () => _handleInput(context),
+              title: 'OK',
+            ),
+          ),
+        ),
+      ],
     );
   }
 

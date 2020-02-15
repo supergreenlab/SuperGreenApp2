@@ -88,6 +88,10 @@ class SelectDeviceBoxBloc
           _leds.add(i);
         }
       }
+      if (_leds.length == 0) {
+        yield SelectDeviceBoxBlocStateDeviceFull(_leds);
+        return;
+      }
       yield SelectDeviceBoxBlocStateLoaded(_leds);
     } else if (event is SelectDeviceBoxBlocEventSelectLeds) {
       yield SelectDeviceBoxBlocStateLoading(_leds);

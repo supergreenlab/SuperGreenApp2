@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_wifi/device_wifi_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
@@ -31,6 +32,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
       child: BlocBuilder<DeviceWifiBloc, DeviceWifiBlocState>(
           bloc: BlocProvider.of<DeviceWifiBloc>(context),
           builder: (context, state) {
+            bool canGoBack = !(state is DeviceWifiBlocStateSearching || state is DeviceWifiBlocStateLoading);
             Widget body;
             if (state is DeviceWifiBlocStateNotFound) {
               body = _renderNotfound();
@@ -42,7 +44,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             return Scaffold(
                 appBar: SGLAppBar(
                   'Device Wifi setup',
-                  hideBackButton: (state is DeviceWifiBlocStateSearching),
+                  hideBackButton: !canGoBack,
                 ),
                 body: body);
           }),
@@ -106,29 +108,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   }
 
   Widget _renderSearching() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Center(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: CircularProgressIndicator(
-                  strokeWidth: 4.0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Searching please wait..'),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return FullscreenLoading(title: 'Searching device on network\nplease wait..');
   }
 
   Widget _renderInput(BuildContext context, String title, String hint,

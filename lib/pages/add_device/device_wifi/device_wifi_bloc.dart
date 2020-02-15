@@ -25,6 +25,11 @@ class DeviceWifiBlocState extends Equatable {
   List<Object> get props => [];
 }
 
+class DeviceWifiBlocStateLoading extends DeviceWifiBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class DeviceWifiBlocStateSearching extends DeviceWifiBlocState {
   @override
   List<Object> get props => [];
@@ -52,6 +57,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
   Stream<DeviceWifiBlocState> mapEventToState(
       DeviceWifiBlocEvent event) async* {
     if (event is DeviceWifiBlocEventSetup) {
+      yield DeviceWifiBlocStateLoading();
       var ddb = RelDB.get().devicesDAO;
       Param ssid = await ddb.getParam(_args.device.id, 'WIFI_SSID');
       await DeviceHelper.updateStringParam(_args.device, ssid, event.ssid);

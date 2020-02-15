@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class DeviceSetupPage extends StatelessWidget {
@@ -28,40 +31,39 @@ class DeviceSetupPage extends StatelessWidget {
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
           bloc: Provider.of<DeviceSetupBloc>(context),
           builder: (context, state) {
+            bool canGoBack = state is DeviceSetupBlocStateAlreadyExists || state is DeviceSetupBlocStateLoadingError;
+            Widget body;
+            if (state is DeviceSetupBlocStateAlreadyExists) {
+              body = _renderAlreadyAdded(context);
+            } else if (state is DeviceSetupBlocStateLoadingError) {
+              body = _renderLoadingError(context);
+            } else {
+              body = _renderLoading(context, state);
+            }
             return WillPopScope(
-              onWillPop: () async => state is DeviceSetupBlocStateAlreadyExists,
+              onWillPop: () async => canGoBack,
               child: Scaffold(
                 appBar: SGLAppBar(
                   'Add device',
-                  hideBackButton: !(state is DeviceSetupBlocStateAlreadyExists),
+                  hideBackButton: !canGoBack,
                 ),
-                body: state is DeviceSetupBlocStateAlreadyExists
-                    ? _renderAlreadyAdded(context)
-                    : _renderLoading(context, state),
+                body: body,
               ),
             );
           }),
     );
   }
 
+  Widget _renderLoadingError(BuildContext context) {
+    return Fullscreen(
+        title: 'Oops looks like the device is unreachable!',
+        child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
+  }
+
   Widget _renderAlreadyAdded(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Center(
-            child: Column(
-          children: <Widget>[
-            Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
-            Text(
-              'This device is already added!',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        )),
-      ],
-    );
+    return Fullscreen(
+        title: 'This device is already added!',
+        child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
   Widget _renderLoading(BuildContext context, DeviceSetupBlocState state) {
@@ -74,31 +76,8 @@ class DeviceSetupPage extends StatelessWidget {
               icon: 'assets/box_setup/icon_controller.svg'),
         ),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Center(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: CircularProgressIndicator(
-                        value: state.percent,
-                        strokeWidth: 4.0,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Loading please wait..'),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+            child: FullscreenLoading(
+                title: 'Loading please wait..', percent: state.percent)),
       ],
     );
   }

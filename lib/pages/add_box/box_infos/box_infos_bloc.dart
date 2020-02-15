@@ -12,7 +12,7 @@ class BoxInfosBlocEventCreateBox extends BoxInfosBlocEvent {
   BoxInfosBlocEventCreateBox(this.name, {this.device, this.deviceBox});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [name, device, deviceBox];
 }
 
 class BoxInfosBlocState extends Equatable {
@@ -22,10 +22,12 @@ class BoxInfosBlocState extends Equatable {
 
 class BoxInfosBlocStateDone extends BoxInfosBlocState {
   final Box box;
-  BoxInfosBlocStateDone(this.box);
+  final Device device;
+  final int deviceBox;
+  BoxInfosBlocStateDone(this.box, {this.device, this.deviceBox});
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [box, device, deviceBox];
 }
 
 class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
@@ -43,11 +45,15 @@ class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
       if (event.device == null || event.deviceBox == null) {
         box = BoxesCompanion.insert(feed: feedID, name: event.name);
       } else {
-        box = BoxesCompanion.insert(feed: feedID, name: event.name, device: Value(event.device.id), deviceBox: Value(event.deviceBox));
+        box = BoxesCompanion.insert(
+            feed: feedID,
+            name: event.name,
+            device: Value(event.device.id),
+            deviceBox: Value(event.deviceBox));
       }
       final boxID = await bdb.addBox(box);
       final b = await bdb.getBox(boxID);
-      yield BoxInfosBlocStateDone(b);
+      yield BoxInfosBlocStateDone(b, device: event.device, deviceBox: event.deviceBox);
     }
   }
 }

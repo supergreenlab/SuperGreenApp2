@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
@@ -77,23 +78,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   }
 
   Widget _renderNoLedsAvailable(context, state) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Center(
-            child: Column(
-          children: <Widget>[
-            Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
-            Text(
-              'Device can\'t handle\nmore box!',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        )),
-      ],
-    );
+    return Fullscreen(title: 'Device can\'t handle\nmore box!', child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
   Widget _renderLedSelection(context, state) {
