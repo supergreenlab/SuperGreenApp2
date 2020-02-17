@@ -12,7 +12,6 @@ import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
-import 'package:super_green_app/widgets/appbar.dart';
 
 class BoxFeedPage extends StatelessWidget {
   @override
@@ -20,12 +19,7 @@ class BoxFeedPage extends StatelessWidget {
     return BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
       bloc: BlocProvider.of<BoxFeedBloc>(context),
       builder: (BuildContext context, BoxFeedBlocState state) {
-        String name = 'SuperGreenLab';
-        if (state is BoxFeedBlocStateBox) {
-          name = StringUtils.capitalize(state.box.name);
-        }
         return Scaffold(
-            appBar: SGLAppBar(name),
             drawer: Drawer(child: this._drawerContent(context)),
             body: _renderFeed(context, state),
             floatingActionButton: state is BoxFeedBlocStateBox
@@ -123,15 +117,19 @@ class BoxFeedPage extends StatelessWidget {
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
     if (state is BoxFeedBlocStateBox) {
+      String name = 'SuperGreenLab';
+      if (state is BoxFeedBlocStateBox) {
+        name = StringUtils.capitalize(state.box.name);
+      }
       return BlocProvider(
         create: (context) => FeedBloc(state.box.feed),
-        child: FeedPage(),
+        child: FeedPage(name, Colors.cyan),
       );
     } else if (state is BoxFeedBlocStateNoBox) {
       return Text('No box yet');
     }
     return Text(
-      'Box loading',
+      'Box loading..',
     );
   }
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/feed_entries/feed_topping/card/feed_topping_card_bloc.dart';
-import 'package:super_green_app/widgets/feed_card_date.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card_observations.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 class FeedToppingCardPage extends StatelessWidget {
@@ -10,17 +12,11 @@ class FeedToppingCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FeedToppingCardBloc, FeedToppingCardBlocState>(
         bloc: BlocProvider.of<FeedToppingCardBloc>(context),
-        builder: (context, state) => Card(
+        builder: (context, state) => FeedCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ListTile(
-                    leading:
-                        SvgPicture.asset('assets/feed_card/icon_topping.svg'),
-                    title: const Text('Feed Topping',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: FeedCardDate(state.feedEntry),
-                  ),
+                  FeedCardTitle('assets/feed_card/icon_topping.svg', 'Topping', state.feedEntry),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: MediaList(state.beforeMedias, prefix: 'Before '),
@@ -30,11 +26,10 @@ class FeedToppingCardPage extends StatelessWidget {
                     child: MediaList(state.afterMedias, prefix: 'After '),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: 16.0),
-                    child: Text(
-                        state.params['message'] ?? '',
-                        style: TextStyle(color: Colors.black54, fontSize: 17)),
+                    padding: const EdgeInsets.all(8.0),
+                    child: FeedCardDate(state.feedEntry),
                   ),
+                  FeedCardObservations(state.params['message'] ?? '')
                 ],
               ),
             ));
