@@ -23,22 +23,28 @@ class FeedVentilationCardPage extends StatelessWidget {
                   Container(
                     height: 150,
                     alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          'From:',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        _renderValues(state.params['initialValues']),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: Text(
-                            'To:',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        _renderValues(state.params['values']),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'From:',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              _renderValues(state.params['initialValues']),
+                            ]),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'To:',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              _renderValues(state.params['values']),
+                            ]),
                       ],
                     ),
                   ),
@@ -49,7 +55,7 @@ class FeedVentilationCardPage extends StatelessWidget {
 
   Widget _renderValues(Map<String, dynamic> values) {
     return Text(
-      'Night: ${values['blowerNight']}% Day: ${values['blowerDay']}%',
+      'Night: ${values['blowerNight']}%\nDay: ${values['blowerDay']}%',
       style: TextStyle(
           fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
     );

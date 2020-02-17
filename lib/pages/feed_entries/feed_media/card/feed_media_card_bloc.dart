@@ -28,15 +28,15 @@ class FeedMediaCardBloc
     extends Bloc<FeedMediaCardBlocEvent, FeedMediaCardBlocState> {
   final Feed _feed;
   final FeedEntry _feedEntry;
-  Map<String, dynamic> _params;
+  final Map<String, dynamic> _params = {};
 
-  List<FeedMedia> _medias;
+  final List<FeedMedia> _medias = [];
 
   @override
-  FeedMediaCardBlocState get initialState => FeedMediaCardBlocState(_feed, _feedEntry, _params, []);
+  FeedMediaCardBlocState get initialState => FeedMediaCardBlocState(_feed, _feedEntry, {}, []);
 
   FeedMediaCardBloc(this._feed, this._feedEntry) {
-    _params = JsonDecoder().convert(_feedEntry.params);
+    _params.addAll(JsonDecoder().convert(_feedEntry.params));
     add(FeedMediaCardBlocEventInit());
   }
 
@@ -45,7 +45,7 @@ class FeedMediaCardBloc
       FeedMediaCardBlocEvent event) async* {
     if (event is FeedMediaCardBlocEventInit) {
       RelDB db = RelDB.get();
-      _medias = await db.feedsDAO.getFeedMedias(_feedEntry.id);
+      _medias.addAll(await db.feedsDAO.getFeedMedias(_feedEntry.id));
       yield FeedMediaCardBlocState(_feed, _feedEntry, _params, _medias);
     }
   }
