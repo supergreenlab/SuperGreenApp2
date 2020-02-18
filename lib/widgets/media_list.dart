@@ -41,16 +41,23 @@ class MediaList extends StatelessWidget {
   Widget _renderImage(BuildContext context, BoxConstraints constraints,
       FeedMedia media, String label) {
     return InkWell(
-      onTap: onMediaTapped != null ? () { onMediaTapped(media); } : null,
-          child: Stack(children: [
-        Container(
-            width: constraints.maxWidth,
-            height: constraints.maxHeight,
-            decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: Image.file(File(media.thumbnailPath)).image))),
+      onTap: onMediaTapped != null
+          ? () {
+              onMediaTapped(media);
+            }
+          : null,
+      child: Stack(children: [
+        Hero(
+          tag: 'FeedMedia:${media.filePath}',
+          child: Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: Image.file(File(media.thumbnailPath)).image))),
+        ),
         Positioned(
             child: BorderedText(
               strokeWidth: 3,
