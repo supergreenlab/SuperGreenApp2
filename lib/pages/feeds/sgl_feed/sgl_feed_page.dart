@@ -20,7 +20,7 @@ class SGLFeedPage extends StatelessWidget {
   Widget _renderFeed(BuildContext context, SGLFeedBlocState state) {
     return BlocProvider(
       create: (context) => FeedBloc(1),
-      child: FeedPage('Towelie', Colors.deepPurple),
+      child: FeedPage(title: 'Towelie', color: Colors.deepPurple),
     );
   }
 }

@@ -18,8 +18,8 @@ class FeedCardTitle extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: SizedBox(
-                width: 50,
-                height: 50,
+                width: 40,
+                height: 40,
                 child: icon.endsWith('svg')
                     ? SvgPicture.asset(icon)
                     : Image.asset(icon)),

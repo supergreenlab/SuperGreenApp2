@@ -6,8 +6,9 @@ import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 class FeedPage extends StatelessWidget {
   final Color color;
   final String title;
+  final Widget appBar;
 
-  const FeedPage(this.title, this.color);
+  const FeedPage({ this.title, @required this.color, this.appBar });
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +35,13 @@ class FeedPage extends StatelessWidget {
             backgroundColor: color,
             expandedHeight: 150.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(title),
+              background: this.appBar,
+              title: this.appBar == null ? Text(title) : null,
             ),
           ),
           SliverList(
               delegate: SliverChildListDelegate(state.entries
-                  .map((e) => FeedEntriesHelper.cardForFeedEntry(
-                      state.feed, e))
+                  .map((e) => FeedEntriesHelper.cardForFeedEntry(state.feed, e))
                   .toList()))
         ],
       ),

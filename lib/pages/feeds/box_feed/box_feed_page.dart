@@ -123,7 +123,26 @@ class BoxFeedPage extends StatelessWidget {
       }
       return BlocProvider(
         create: (context) => FeedBloc(state.box.feed),
-        child: FeedPage(name, Colors.cyan),
+        child: FeedPage(
+          color: Colors.cyan,
+          appBar: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 64.0, top: 12.0),
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       );
     } else if (state is BoxFeedBlocStateNoBox) {
       return Text('No box yet');
