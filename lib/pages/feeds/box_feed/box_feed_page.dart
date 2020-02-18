@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:basic_utils/basic_utils.dart';
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -34,7 +35,6 @@ class BoxFeedPage extends StatelessWidget {
       marginBottom: 10,
       animationSpeed: 50,
       curve: Curves.bounceIn,
-      backgroundColor: Color(0xff414166),
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       overlayOpacity: 0.8,
@@ -117,31 +117,11 @@ class BoxFeedPage extends StatelessWidget {
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
     if (state is BoxFeedBlocStateBox) {
-      String name = 'SuperGreenLab';
-      if (state is BoxFeedBlocStateBox) {
-        name = StringUtils.capitalize(state.box.name);
-      }
       return BlocProvider(
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
           color: Colors.cyan,
-          appBar: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 64.0, top: 12.0),
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          appBar: _renderAppBar(context, state),
         ),
       );
     } else if (state is BoxFeedBlocStateNoBox) {
@@ -184,7 +164,7 @@ class BoxFeedPage extends StatelessWidget {
                   children: <Widget>[
                     ListTile(
                         leading: Icon(Icons.add_circle),
-                        title: Text('Add new box'),
+                        title: Text('Add box'),
                         onTap: () => _onAddBox(context)),
                   ],
                 ))))
@@ -228,4 +208,94 @@ class BoxFeedPage extends StatelessWidget {
     BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToNewBoxInfosEvent());
   }
+
+  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBox state) {
+    String name = 'SuperGreenLab';
+    if (state is BoxFeedBlocStateBox) {
+      name = StringUtils.capitalize(state.box.name);
+    }
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 64.0, top: 12.0),
+            child: Text(
+              name,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: NumericComboChart(_createSampleData(),
+                  animate: true,
+                  defaultRenderer: LineRendererConfig(),
+                  customSeriesRenderers: [
+                    PointRendererConfig(customRendererId: 'customPoint')
+                  ]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Series<LinearSales, int>> _createSampleData() {
+    final desktopSalesData = [
+      LinearSales(0, 5),
+      LinearSales(1, 25),
+      LinearSales(2, 100),
+      LinearSales(3, 75),
+    ];
+
+    final tableSalesData = [
+      LinearSales(0, 10),
+      LinearSales(1, 50),
+      LinearSales(2, 200),
+      LinearSales(3, 150),
+    ];
+
+    final mobileSalesData = [
+      LinearSales(0, 10),
+      LinearSales(1, 50),
+      LinearSales(2, 200),
+      LinearSales(3, 150),
+    ];
+
+    return [
+      Series<LinearSales, int>(
+        id: 'Desktop',
+        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        domainFn: (LinearSales sales, _) => sales.year,
+        measureFn: (LinearSales sales, _) => sales.sales,
+        data: desktopSalesData,
+      ),
+      Series<LinearSales, int>(
+        id: 'Tablet',
+        colorFn: (_, __) => MaterialPalette.red.shadeDefault,
+        domainFn: (LinearSales sales, _) => sales.year,
+        measureFn: (LinearSales sales, _) => sales.sales,
+        data: tableSalesData,
+      ),
+      Series<LinearSales, int>(
+          id: 'Mobile',
+          colorFn: (_, __) => MaterialPalette.green.shadeDefault,
+          domainFn: (LinearSales sales, _) => sales.year,
+          measureFn: (LinearSales sales, _) => sales.sales,
+          data: mobileSalesData)
+        // Configure our custom point renderer for this series.
+        ..setAttribute(rendererIdKey, 'customPoint'),
+    ];
+  }
+}
+
+class LinearSales {
+  final int year;
+  final int sales;
+
+  LinearSales(this.year, this.sales);
 }

@@ -7,8 +7,9 @@ class FeedPage extends StatelessWidget {
   final Color color;
   final String title;
   final Widget appBar;
+  final double appBarHeight;
 
-  const FeedPage({ this.title, @required this.color, this.appBar });
+  const FeedPage({ this.title, @required this.color, this.appBar, this.appBarHeight });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class FeedPage extends StatelessWidget {
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor: color,
-            expandedHeight: 150.0,
+            expandedHeight: appBarHeight ?? 200.0,
             flexibleSpace: FlexibleSpaceBar(
               background: this.appBar,
               title: this.appBar == null ? Text(title) : null,
