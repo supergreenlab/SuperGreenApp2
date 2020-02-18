@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:charts_flutter/flutter.dart';
@@ -245,50 +246,25 @@ class BoxFeedPage extends StatelessWidget {
   }
 
   List<Series<LinearSales, int>> _createSampleData() {
-    final desktopSalesData = [
-      LinearSales(0, 5),
-      LinearSales(1, 25),
-      LinearSales(2, 100),
-      LinearSales(3, 75),
-    ];
+    final desktopSalesData = List.generate(50, (index) => LinearSales(index, (cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20));
 
-    final tableSalesData = [
-      LinearSales(0, 10),
-      LinearSales(1, 50),
-      LinearSales(2, 200),
-      LinearSales(3, 150),
-    ];
-
-    final mobileSalesData = [
-      LinearSales(0, 10),
-      LinearSales(1, 50),
-      LinearSales(2, 200),
-      LinearSales(3, 150),
-    ];
+    final tableSalesData = List.generate(50, (index) => LinearSales(index, (sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20));
 
     return [
       Series<LinearSales, int>(
-        id: 'Desktop',
+        id: 'Temperature',
         colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: desktopSalesData,
       ),
       Series<LinearSales, int>(
-        id: 'Tablet',
+        id: 'Humidity',
         colorFn: (_, __) => MaterialPalette.red.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: tableSalesData,
       ),
-      Series<LinearSales, int>(
-          id: 'Mobile',
-          colorFn: (_, __) => MaterialPalette.green.shadeDefault,
-          domainFn: (LinearSales sales, _) => sales.year,
-          measureFn: (LinearSales sales, _) => sales.sales,
-          data: mobileSalesData)
-        // Configure our custom point renderer for this series.
-        ..setAttribute(rendererIdKey, 'customPoint'),
     ];
   }
 }

@@ -8,8 +8,9 @@ import 'package:super_green_app/widgets/bordered_text.dart';
 class MediaList extends StatelessWidget {
   final List<FeedMedia> _medias;
   final String prefix;
+  final Function(FeedMedia media) onMediaTapped;
 
-  const MediaList(this._medias, {this.prefix = ''});
+  const MediaList(this._medias, {this.prefix = '', this.onMediaTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -39,29 +40,32 @@ class MediaList extends StatelessWidget {
 
   Widget _renderImage(BuildContext context, BoxConstraints constraints,
       FeedMedia media, String label) {
-    return Stack(children: [
-      Container(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight,
-          decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: Image.file(File(media.thumbnailPath)).image))),
-      Positioned(
-          child: BorderedText(
-            strokeWidth: 3,
-            strokeColor: Colors.black,
-            child: Text(
-              label,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
+    return InkWell(
+      onTap: onMediaTapped != null ? () { onMediaTapped(media); } : null,
+          child: Stack(children: [
+        Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: Image.file(File(media.thumbnailPath)).image))),
+        Positioned(
+            child: BorderedText(
+              strokeWidth: 3,
+              strokeColor: Colors.black,
+              child: Text(
+                label,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
             ),
-          ),
-          right: 8.0,
-          bottom: 8.0)
-    ]);
+            right: 8.0,
+            bottom: 8.0)
+      ]),
+    );
   }
 }

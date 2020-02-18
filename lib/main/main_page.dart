@@ -36,6 +36,8 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
+import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
+import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_page.dart';
 import 'package:super_green_app/pages/home/home_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_page.dart';
@@ -258,6 +260,15 @@ class MainPage extends StatelessWidget {
           builder: (context) => BlocProvider(
             create: (context) => PlaybackBloc(settings.arguments),
             child: PlaybackPage(),
+          ),
+          fullscreenDialog: true,
+        );
+      case '/media':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (context) => FullscreenMediaBloc(settings.arguments),
+            child: FullscreenMediaPage(),
           ),
           fullscreenDialog: true,
         );

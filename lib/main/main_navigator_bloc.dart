@@ -197,10 +197,20 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
   final Device device;
 
   MainNavigateToDeviceWifiEvent(this.device,
-      {Function(Future<Object> f) futureFn}) : super(futureFn: futureFn);
+      {Function(Future<Object> f) futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [futureFn, device];
+}
+
+class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
+  final FeedMedia feedMedia;
+
+  MainNavigateToFullscreenMedia(this.feedMedia);
+
+  @override
+  List<Object> get props => [feedMedia];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
@@ -308,6 +318,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToImageCapturePlaybackEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/capture/playback', arguments: event);
+    } else if (event is MainNavigateToFullscreenMedia) {
+      future = future = _navigatorKey.currentState
+          .pushNamed('/media', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);
