@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
       builder: (context, state) => Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           unselectedItemColor: Colors.black38,
-          selectedItemColor: Colors.black,
+          selectedItemColor: Colors.green,
           onTap: (i) => this._onNavigationBarItemSelect(context, i, state),
           elevation: 0,
           currentIndex: state.index,

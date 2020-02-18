@@ -19,11 +19,11 @@ class FeedDefoliationCardPage extends StatelessWidget {
                   FeedCardTitle('assets/feed_card/icon_defoliation.svg', 'Defoliation', state.feedEntry),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: MediaList(state.beforeMedias, prefix: 'Before '),
+                    child: MediaList(state.afterMedias, prefix: 'After '),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: MediaList(state.afterMedias, prefix: 'After '),
+                    child: MediaList(state.beforeMedias, prefix: 'Before '),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
