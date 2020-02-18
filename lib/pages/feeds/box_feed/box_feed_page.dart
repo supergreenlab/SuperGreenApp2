@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:basic_utils/basic_utils.dart';
-import 'package:charts_flutter/flutter.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -36,6 +36,7 @@ class BoxFeedPage extends StatelessWidget {
       marginBottom: 10,
       animationSpeed: 50,
       curve: Curves.bounceIn,
+      backgroundColor: Color(0xff414166),
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       overlayOpacity: 0.8,
@@ -232,11 +233,11 @@ class BoxFeedPage extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: NumericComboChart(_createSampleData(),
+              child: charts.NumericComboChart(_createSampleData(),
                   animate: true,
-                  defaultRenderer: LineRendererConfig(),
+                  defaultRenderer: charts.LineRendererConfig(),
                   customSeriesRenderers: [
-                    PointRendererConfig(customRendererId: 'customPoint')
+                    charts.PointRendererConfig(customRendererId: 'customPoint')
                   ]),
             ),
           ),
@@ -245,22 +246,22 @@ class BoxFeedPage extends StatelessWidget {
     );
   }
 
-  List<Series<LinearSales, int>> _createSampleData() {
+  List<charts.Series<LinearSales, int>> _createSampleData() {
     final desktopSalesData = List.generate(50, (index) => LinearSales(index, (cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20));
 
     final tableSalesData = List.generate(50, (index) => LinearSales(index, (sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20));
 
     return [
-      Series<LinearSales, int>(
+      charts.Series<LinearSales, int>(
         id: 'Temperature',
-        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: desktopSalesData,
       ),
-      Series<LinearSales, int>(
+      charts.Series<LinearSales, int>(
         id: 'Humidity',
-        colorFn: (_, __) => MaterialPalette.red.shadeDefault,
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: tableSalesData,
