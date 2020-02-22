@@ -171,7 +171,6 @@ class MainPage extends StatelessWidget {
             create: (context) => DeviceWifiBloc(settings.arguments),
             child: DeviceWifiPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/feed/form/defoliation':
         return MaterialPageRoute(
@@ -180,7 +179,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FeedDefoliationFormBloc(settings.arguments),
             child: FeedDefoliationFormPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/feed/form/light':
         return MaterialPageRoute(
@@ -189,7 +187,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FeedLightFormBloc(settings.arguments),
             child: FeedLightFormPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/feed/form/media':
         return MaterialPageRoute(
@@ -198,7 +195,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FeedMediaFormBloc(settings.arguments),
             child: FeedMediaFormPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/feed/form/schedule':
         return MaterialPageRoute(
@@ -207,7 +203,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FeedScheduleFormBloc(settings.arguments),
             child: FeedScheduleFormPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/feed/form/topping':
         return MaterialPageRoute(
@@ -216,7 +211,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FeedToppingFormBloc(settings.arguments),
             child: FeedToppingFormPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/feed/form/ventilation':
         return MaterialPageRoute(
@@ -225,7 +219,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FeedVentilationFormBloc(settings.arguments),
             child: FeedVentilationFormPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/feed/form/water':
         return MaterialPageRoute(
@@ -234,7 +227,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FeedWaterFormBloc(settings.arguments),
             child: FeedWaterFormPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/tip':
         return MaterialPageRoute(
@@ -243,7 +235,6 @@ class MainPage extends StatelessWidget {
             create: (context) => TipBloc(settings.arguments),
             child: TipPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/capture':
         return MaterialPageRoute(
@@ -252,7 +243,6 @@ class MainPage extends StatelessWidget {
             create: (context) => CaptureBloc(settings.arguments),
             child: CapturePage(),
           ),
-          fullscreenDialog: true,
         );
       case '/capture/playback':
         return MaterialPageRoute(
@@ -261,7 +251,6 @@ class MainPage extends StatelessWidget {
             create: (context) => PlaybackBloc(settings.arguments),
             child: PlaybackPage(),
           ),
-          fullscreenDialog: true,
         );
       case '/media':
         return MaterialPageRoute(
@@ -270,7 +259,6 @@ class MainPage extends StatelessWidget {
             create: (context) => FullscreenMediaBloc(settings.arguments),
             child: FullscreenMediaPage(),
           ),
-          fullscreenDialog: true,
         );
     }
     return MaterialPageRoute(builder: (context) => Text('Unknown route'));

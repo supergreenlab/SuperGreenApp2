@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/card/feed_defoliation_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
@@ -16,14 +17,29 @@ class FeedDefoliationCardPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  FeedCardTitle('assets/feed_card/icon_defoliation.svg', 'Defoliation', state.feedEntry),
+                  FeedCardTitle('assets/feed_card/icon_defoliation.svg',
+                      'Defoliation', state.feedEntry),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: MediaList(state.afterMedias, prefix: 'After '),
+                    child: MediaList(
+                      state.afterMedias,
+                      prefix: 'After ',
+                      onMediaTapped: (media) {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigateToFullscreenMedia(media));
+                      },
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: MediaList(state.beforeMedias, prefix: 'Before '),
+                    child: MediaList(
+                      state.beforeMedias,
+                      prefix: 'Before ',
+                      onMediaTapped: (media) {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigateToFullscreenMedia(media));
+                      },
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

@@ -11,14 +11,26 @@ class FullscreenMediaPage extends StatelessWidget {
     return BlocBuilder<FullscreenMediaBloc, FullscreenMediaBlocState>(
         bloc: BlocProvider.of<FullscreenMediaBloc>(context),
         builder: (context, state) {
-          return Scaffold(
-            body: Hero(
-                tag: 'FeedMedia:${state.feedMedia.filePath}',
-                child: GestureDetector(
-                  onDoubleTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
-                  },
-                  child: Image.file(File(state.feedMedia.filePath)))),
+          return LayoutBuilder(
+            builder: (context, constraint) {
+              return Hero(
+                  tag: 'FeedMedia:${state.feedMedia.filePath}',
+                  child: GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigatorActionPop());
+                      },
+                      child: FittedBox(
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                              width: constraint.maxWidth,
+                              height: constraint.maxHeight,
+                              child: Container(
+                                color: Colors.black,
+                                child: Image.file(
+                                    File(state.feedMedia.filePath)),
+                              )))));
+            },
           );
         });
   }

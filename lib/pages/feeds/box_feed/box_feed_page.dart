@@ -248,20 +248,20 @@ class BoxFeedPage extends StatelessWidget {
 
   List<charts.Series<LinearSales, int>> _createSampleData() {
     final desktopSalesData = List.generate(50, (index) => LinearSales(index, (cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20));
-
     final tableSalesData = List.generate(50, (index) => LinearSales(index, (sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20));
 
     return [
       charts.Series<LinearSales, int>(
         id: 'Temperature',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        strokeWidthPxFn: (_, __) => 2,
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: desktopSalesData,
       ),
       charts.Series<LinearSales, int>(
         id: 'Humidity',
-        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: tableSalesData,
