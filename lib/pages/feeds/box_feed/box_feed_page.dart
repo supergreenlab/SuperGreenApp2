@@ -14,7 +14,9 @@ import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class BoxFeedPage extends StatelessWidget {
   @override
@@ -129,7 +131,15 @@ class BoxFeedPage extends StatelessWidget {
         ),
       );
     } else if (state is BoxFeedBlocStateNoBox) {
-      return Text('No box yet');
+      return Fullscreen(
+          title: 'No box yet.',
+          childFirst: false,
+          child: GreenButton(
+              title: 'Create Box',
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToNewBoxInfosEvent());
+              }));
     }
     return FullscreenLoading(title: 'Box loading...');
   }
@@ -166,7 +176,6 @@ class BoxFeedPage extends StatelessWidget {
                   children: <Widget>[
                     ListTile(
                         leading: Icon(Icons.add_circle),
-                        title: Text('Add box'),
                         onTap: () => _onAddBox(context)),
                   ],
                 ))))
@@ -189,7 +198,6 @@ class BoxFeedPage extends StatelessWidget {
           children: boxes
               .map((b) => ListTile(
                     onTap: () => _selectBox(context, b),
-                    title: Text('${b.name}'),
                   ))
               .toList(),
         );
