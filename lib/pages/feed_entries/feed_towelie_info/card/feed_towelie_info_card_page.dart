@@ -12,9 +12,14 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         bloc: BlocProvider.of<FeedTowelieInfoCardBloc>(context),
         builder: (context, state) => FeedCard(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie', state.feedEntry),
-                  Text(state.feedEntry.params),
+                  FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
+                      state.feedEntry),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: _renderBody(context, state),
+                  ),
                   ButtonBar(
                     alignment: MainAxisAlignment.start,
                     children: <Widget>[
@@ -31,5 +36,14 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
                 ],
               ),
             ));
+  }
+
+  Widget _renderBody(BuildContext context, FeedTowelieInfoCardBlocState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Text(state.feedEntry.params),
+      ],
+    );
   }
 }

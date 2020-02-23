@@ -14,6 +14,7 @@ import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class BoxFeedPage extends StatelessWidget {
   @override
@@ -122,6 +123,7 @@ class BoxFeedPage extends StatelessWidget {
       return BlocProvider(
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          appBarHeight: 300,
           color: Colors.cyan,
           appBar: _renderAppBar(context, state),
         ),
@@ -129,9 +131,7 @@ class BoxFeedPage extends StatelessWidget {
     } else if (state is BoxFeedBlocStateNoBox) {
       return Text('No box yet');
     }
-    return Text(
-      'Box loading..',
-    );
+    return FullscreenLoading(title: 'Box loading...');
   }
 
   Widget _drawerContent(BuildContext context) {
@@ -233,12 +233,37 @@ class BoxFeedPage extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: charts.NumericComboChart(_createSampleData(),
-                  animate: true,
-                  defaultRenderer: charts.LineRendererConfig(),
-                  customSeriesRenderers: [
-                    charts.PointRendererConfig(customRendererId: 'customPoint')
-                  ]),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white24),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          _renderMetric(
+                              Colors.green, 'Temp', '25°', '19°', '25°'),
+                          _renderMetric(
+                              Colors.blue, 'Humi', '80%', '80%', '45%'),
+                          _renderMetric(Colors.yellow, 'Light', '64%', '', ''),
+                        ],
+                      ),
+                      Expanded(
+                        child: charts.NumericComboChart(_createSampleData(),
+                            animate: true,
+                            defaultRenderer: charts.LineRendererConfig(),
+                            customSeriesRenderers: [
+                              charts.PointRendererConfig(
+                                  customRendererId: 'customPoint')
+                            ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -246,25 +271,68 @@ class BoxFeedPage extends StatelessWidget {
     );
   }
 
+  Widget _renderMetric(
+      Color color, String name, String value, String min, String max) {
+    return Column(
+      children: <Widget>[
+        Text(name),
+        Row(
+          children: <Widget>[
+            Text(value,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 30,
+                )),
+            Column(
+              children: <Widget>[
+                Text(max, style: TextStyle(color: Color(0xff787878))),
+                Text(min, style: TextStyle(color: Color(0xff787878))),
+              ],
+            )
+          ],
+        )
+      ],
+    );
+  }
+
   List<charts.Series<LinearSales, int>> _createSampleData() {
-    final desktopSalesData = List.generate(50, (index) => LinearSales(index, (cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20));
-    final tableSalesData = List.generate(50, (index) => LinearSales(index, (sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20));
+    final tempData = List.generate(
+        50,
+        (index) => LinearSales(
+            index, (cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20));
+    final humiData = List.generate(
+        50,
+        (index) => LinearSales(
+            index, (sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20));
+    final lightData = List.generate(
+        50,
+        (index) => LinearSales(
+            index, (cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20));
 
     return [
       charts.Series<LinearSales, int>(
         id: 'Temperature',
-        strokeWidthPxFn: (_, __) => 2,
+        strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
-        data: desktopSalesData,
+        data: tempData,
       ),
       charts.Series<LinearSales, int>(
         id: 'Humidity',
+        strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
-        data: tableSalesData,
+        data: humiData,
+      ),
+      charts.Series<LinearSales, int>(
+        id: 'Light',
+        strokeWidthPxFn: (_, __) => 3,
+        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
+        domainFn: (LinearSales sales, _) => sales.year,
+        measureFn: (LinearSales sales, _) => sales.sales,
+        data: lightData,
       ),
     ];
   }
