@@ -137,31 +137,38 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   List<Object> get props => [box];
 }
 
-class MainNavigateToFeedDefoliationFormEvent
-    extends MainNavigateToFeedFormEvent {
+class MainNavigateToFeedTrainingFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedDefoliationFormEvent(this.box, {pushAsReplacement = false})
+  MainNavigateToFeedTrainingFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
+}
+
+class MainNavigateToFeedDefoliationFormEvent
+    extends MainNavigateToFeedTrainingFormEvent {
+  MainNavigateToFeedDefoliationFormEvent(Box box, {pushAsReplacement = false})
+      : super(box, pushAsReplacement: pushAsReplacement);
+}
+
+class MainNavigateToFeedToppingFormEvent
+    extends MainNavigateToFeedTrainingFormEvent {
+  MainNavigateToFeedToppingFormEvent(Box box, {pushAsReplacement = false})
+      : super(box, pushAsReplacement: pushAsReplacement);
+}
+
+class MainNavigateToFeedFimmingFormEvent
+    extends MainNavigateToFeedTrainingFormEvent {
+  MainNavigateToFeedFimmingFormEvent(Box box, {pushAsReplacement = false})
+      : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
   MainNavigateToFeedScheduleFormEvent(this.box, {pushAsReplacement = false})
-      : super(pushAsReplacement);
-
-  @override
-  List<Object> get props => [];
-}
-
-class MainNavigateToFeedToppingFormEvent extends MainNavigateToFeedFormEvent {
-  final Box box;
-
-  MainNavigateToFeedToppingFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -296,8 +303,6 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToDeviceWifiEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/device/wifi', arguments: event);
-    } else if (event is MainNavigateToFeedDefoliationFormEvent) {
-      future = _pushOrReplace('/feed/form/defoliation', event);
     } else if (event is MainNavigateToFeedLightFormEvent) {
       future = _pushOrReplace('/feed/form/light', event);
     } else if (event is MainNavigateToFeedMediaFormEvent) {
@@ -306,6 +311,10 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/feed/form/schedule', event);
     } else if (event is MainNavigateToFeedToppingFormEvent) {
       future = _pushOrReplace('/feed/form/topping', event);
+    } else if (event is MainNavigateToFeedDefoliationFormEvent) {
+      future = _pushOrReplace('/feed/form/defoliation', event);
+    } else if (event is MainNavigateToFeedFimmingFormEvent) {
+      future = _pushOrReplace('/feed/form/fimming', event);
     } else if (event is MainNavigateToFeedVentilationFormEvent) {
       future = _pushOrReplace('/feed/form/ventilation', event);
     } else if (event is MainNavigateToFeedWaterFormEvent) {
@@ -319,8 +328,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState
           .pushNamed('/capture/playback', arguments: event);
     } else if (event is MainNavigateToFullscreenMedia) {
-      future = future = _navigatorKey.currentState
-          .pushNamed('/media', arguments: event);
+      future = future =
+          _navigatorKey.currentState.pushNamed('/media', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

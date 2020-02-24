@@ -1,7 +1,7 @@
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_training/card/feed_training_card_bloc.dart';
 
-class FeedToppingCardBloc
+class FeedFimmingCardBloc
     extends FeedTrainingCardBloc {
-  FeedToppingCardBloc(Feed feed, FeedEntry feedEntry) : super(feed, feedEntry);
+  FeedFimmingCardBloc(Feed feed, FeedEntry feedEntry) : super(feed, feedEntry);
 }

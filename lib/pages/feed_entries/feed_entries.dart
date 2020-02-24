@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/card/feed_defoliation_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/card/feed_defoliation_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_fimming/card/feed_fimming_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_fimming/card/feed_fimming_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_bloc.dart';
@@ -20,11 +22,6 @@ import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_ca
 
 class FeedEntriesHelper {
   static Map<String, Widget Function(Feed feed, FeedEntry feedEntry)> _cards = {
-    'FE_DEFOLIATION': (feed, feedEntry) => BlocProvider(
-          key: Key('{$feedEntry.id}'),
-          create: (context) => FeedDefoliationCardBloc(feed, feedEntry),
-          child: FeedDefoliationCardPage(),
-        ),
     'FE_LIGHT': (feed, feedEntry) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedLightCardBloc(feed, feedEntry),
@@ -44,6 +41,16 @@ class FeedEntriesHelper {
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedToppingCardBloc(feed, feedEntry),
           child: FeedToppingCardPage(),
+        ),
+    'FE_DEFOLIATION': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
+          create: (context) => FeedDefoliationCardBloc(feed, feedEntry),
+          child: FeedDefoliationCardPage(),
+        ),
+    'FE_FIMMING': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
+          create: (context) => FeedFimmingCardBloc(feed, feedEntry),
+          child: FeedFimmingCardPage(),
         ),
     'FE_VENTILATION': (feed, feedEntry) => BlocProvider(
           key: Key('{$feedEntry.id}'),

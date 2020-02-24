@@ -65,8 +65,6 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           video: event.filePath,
           thumbnailPath: thumbnailPath,
           imageFormat: ImageFormat.JPEG,
-          maxHeight:
-              200, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
           quality: 75,
         );
       }

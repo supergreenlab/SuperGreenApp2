@@ -120,6 +120,14 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedToppingFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Fimming',
+          'assets/feed_card/icon_fimming.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedFimmingFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement))),
     ];
   }
 

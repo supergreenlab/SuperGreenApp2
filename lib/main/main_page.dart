@@ -24,6 +24,8 @@ import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/form/feed_defoliation_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_defoliation/form/feed_defoliation_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_fimming/form/feed_fimming_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_fimming/form/feed_fimming_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
@@ -172,14 +174,6 @@ class MainPage extends StatelessWidget {
             child: DeviceWifiPage(),
           ),
         );
-      case '/feed/form/defoliation':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedDefoliationFormBloc(settings.arguments),
-            child: FeedDefoliationFormPage(),
-          ),
-        );
       case '/feed/form/light':
         return MaterialPageRoute(
           settings: settings,
@@ -204,12 +198,28 @@ class MainPage extends StatelessWidget {
             child: FeedScheduleFormPage(),
           ),
         );
+      case '/feed/form/defoliation':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (context) => FeedDefoliationFormBloc(settings.arguments),
+            child: FeedDefoliationFormPage(),
+          ),
+        );
       case '/feed/form/topping':
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => BlocProvider(
             create: (context) => FeedToppingFormBloc(settings.arguments),
             child: FeedToppingFormPage(),
+          ),
+        );
+      case '/feed/form/fimming':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (context) => FeedFimmingFormBloc(settings.arguments),
+            child: FeedFimmingFormPage(),
           ),
         );
       case '/feed/form/ventilation':
