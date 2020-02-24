@@ -25,7 +25,7 @@ class BoxFeedPage extends StatelessWidget {
       bloc: BlocProvider.of<BoxFeedBloc>(context),
       builder: (BuildContext context, BoxFeedBlocState state) {
         return Scaffold(
-            drawer: Drawer(child: this._drawerContent(context)),
+            drawer: Drawer(child: this._drawerContent(context, state)),
             body: _renderFeed(context, state),
             floatingActionButton: state is BoxFeedBlocStateBox
                 ? _renderSpeedDial(context, state)
@@ -144,7 +144,7 @@ class BoxFeedPage extends StatelessWidget {
     return FullscreenLoading(title: 'Box loading...');
   }
 
-  Widget _drawerContent(BuildContext context) {
+  Widget _drawerContent(BuildContext context, BoxFeedBlocState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -165,7 +165,7 @@ class BoxFeedPage extends StatelessWidget {
           ])),
         ),
         Expanded(
-          child: _boxList(context),
+          child: _boxList(context, state),
         ),
         Divider(),
         Container(
@@ -176,6 +176,7 @@ class BoxFeedPage extends StatelessWidget {
                   children: <Widget>[
                     ListTile(
                         leading: Icon(Icons.add_circle),
+                        title: Text('Add new box'),
                         onTap: () => _onAddBox(context)),
                   ],
                 ))))
@@ -183,7 +184,7 @@ class BoxFeedPage extends StatelessWidget {
     );
   }
 
-  Widget _boxList(BuildContext context) {
+  Widget _boxList(BuildContext context, BoxFeedBlocState boxFeedState) {
     return BlocBuilder<BoxDrawerBloc, BoxDrawerBlocState>(
       bloc: BlocProvider.of<BoxDrawerBloc>(context),
       condition: (previousState, state) =>
@@ -197,6 +198,8 @@ class BoxFeedPage extends StatelessWidget {
         return ListView(
           children: boxes
               .map((b) => ListTile(
+                    leading: (boxFeedState is BoxFeedBlocStateBox && boxFeedState.box.id == b.id) ? Icon(Icons.check_box, color: Colors.green,) : Icon(Icons.crop_square),
+                    title: Text(b.name),
                     onTap: () => _selectBox(context, b),
                   ))
               .toList(),
@@ -224,7 +227,7 @@ class BoxFeedPage extends StatelessWidget {
     if (state is BoxFeedBlocStateBox) {
       name = StringUtils.capitalize(state.box.name);
     }
-    
+
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

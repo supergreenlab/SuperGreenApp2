@@ -44,7 +44,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
               body = _renderForm();
             }
             return Scaffold(
-                appBar: SGLAppBar('New Box infos'),
+                appBar: SGLAppBar('New Box infos', hideBackButton: state is BoxInfosBlocStateDone,),
                 body: Padding(
                     padding: const EdgeInsets.only(top: 16.0), child: body));
           }),

@@ -73,8 +73,7 @@ class SGLLocalizations {
 
   String get towelieWelcomeBox {
     return Intl.message(
-      '''Welcome to your box feed!\n\nThis is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, it will log a card here, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.\n\nThis is also where you will log the actions you want to
-remember: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity heads up and reminders you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, and that’s awesome.''',
+      '''Welcome to your box feed!\n\nThis is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, it will log a card here, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.\n\nThis is also where you will log the actions you want to remember: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity heads up and reminders you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, and that’s awesome.''',
       name: 'towelieWelcomeBox',
       desc: 'Towelie Welcome Box',
       locale: localeName,

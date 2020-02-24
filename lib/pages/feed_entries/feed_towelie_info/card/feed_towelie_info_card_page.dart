@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -32,19 +33,25 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   }
 
   Widget _renderBody(BuildContext context, FeedTowelieInfoCardBlocState state) {
+    final body = <Widget>[
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8.0),
+        child: Text(state.params['text']),
+      ),
+    ];
+    if (state.params['top_pic'] != null) {
+      body.insert(0, Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24.0),
+        child: SvgPicture.asset(state.params['top_pic']),
+      ));
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8.0),
-          child: Text(state.params['text']),
-        ),
-      ],
+      children: body,
     );
   }
 
-  ButtonBar _renderButtonBar(
-      BuildContext context, List buttons) {
+  ButtonBar _renderButtonBar(BuildContext context, List buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       children: buttons.map((b) => _renderButtonFromName(context, b)).toList(),

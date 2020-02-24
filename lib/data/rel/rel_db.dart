@@ -67,10 +67,13 @@ class RelDB extends _$RelDB {
                   date: DateTime.now(),
                   params: Value(JsonEncoder().convert({
                     'text': SGLLocalizations.current.towelieWelcomeApp,
-                    'buttons': [{
-                      'type': 'CREATE_BOX',
-                      'title': 'CREATE FIRST BOX'
-                    }],
+                    'top_pic': 'assets/feed_card/logo_sgl.svg',
+                    'buttons': [
+                      {
+                        'type': 'CREATE_BOX',
+                        'title': 'CREATE FIRST BOX',
+                      }
+                    ],
                   })),
                 ));
           }
