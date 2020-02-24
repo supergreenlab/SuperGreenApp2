@@ -16,7 +16,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
             FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
                 state.feedEntry),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: _renderBody(context, state),
             ),
           ];
@@ -54,6 +54,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   ButtonBar _renderButtonBar(BuildContext context, List buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
+      buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       children: buttons.map((b) => _renderButtonFromName(context, b)).toList(),
     );
   }
