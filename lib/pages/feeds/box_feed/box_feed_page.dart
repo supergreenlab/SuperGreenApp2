@@ -224,6 +224,7 @@ class BoxFeedPage extends StatelessWidget {
     if (state is BoxFeedBlocStateBox) {
       name = StringUtils.capitalize(state.box.name);
     }
+    
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -239,42 +240,44 @@ class BoxFeedPage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white24),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          _renderMetric(
-                              Colors.green, 'Temp', '25°', '19°', '25°'),
-                          _renderMetric(
-                              Colors.blue, 'Humi', '80%', '80%', '45%'),
-                          _renderMetric(Colors.yellow, 'Light', '64%', '', ''),
-                        ],
-                      ),
-                      Expanded(
-                        child: charts.NumericComboChart(_createSampleData(),
-                            animate: true,
-                            defaultRenderer: charts.LineRendererConfig(),
-                            customSeriesRenderers: [
-                              charts.PointRendererConfig(
-                                  customRendererId: 'customPoint')
-                            ]),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            child: _renderGraphs(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _renderGraphs() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5), color: Colors.white24),
+        child: Padding(
+          padding: const EdgeInsets.only(
+              top: 16.0, left: 8.0, right: 8.0, bottom: 8.0),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  _renderMetric(Colors.green, 'Temp', '25°', '19°', '25°'),
+                  _renderMetric(Colors.blue, 'Humi', '80%', '80%', '45%'),
+                  _renderMetric(Colors.yellow, 'Light', '64%', '', ''),
+                ],
+              ),
+              Expanded(
+                child: charts.NumericComboChart(_createSampleData(),
+                    animate: true,
+                    defaultRenderer: charts.LineRendererConfig(),
+                    customSeriesRenderers: [
+                      charts.PointRendererConfig(
+                          customRendererId: 'customPoint')
+                    ]),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

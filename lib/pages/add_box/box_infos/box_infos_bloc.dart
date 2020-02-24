@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -51,9 +53,18 @@ class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
             device: Value(event.device.id),
             deviceBox: Value(event.deviceBox));
       }
+      await fdb.addFeedEntry(FeedEntriesCompanion.insert(
+        type: 'FE_TOWELIE_INFO',
+        feed: feedID,
+        date: DateTime.now(),
+        params: Value(JsonEncoder().convert({
+          'text': '',
+        })),
+      ));
       final boxID = await bdb.addBox(box);
       final b = await bdb.getBox(boxID);
-      yield BoxInfosBlocStateDone(b, device: event.device, deviceBox: event.deviceBox);
+      yield BoxInfosBlocStateDone(b,
+          device: event.device, deviceBox: event.deviceBox);
     }
   }
 }

@@ -42,7 +42,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Text(state.feedEntry.params),
+        Text(state.params.toString()),
       ],
     );
   }

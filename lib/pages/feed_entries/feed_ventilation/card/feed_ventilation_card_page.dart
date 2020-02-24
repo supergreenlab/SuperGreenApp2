@@ -5,7 +5,6 @@ import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
-//{"initialValues":{"blowerDay":40,"blowerNight":20},"values":{"blowerDay":52,"blowerNight":30}}
 class FeedVentilationCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

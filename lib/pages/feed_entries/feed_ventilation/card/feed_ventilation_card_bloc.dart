@@ -15,7 +15,7 @@ class FeedVentilationCardBlocState extends Equatable {
   FeedVentilationCardBlocState(this.feed, this.feedEntry, this.params);
 
   @override
-  List<Object> get props => [feed, feedEntry];
+  List<Object> get props => [feed, feedEntry, params];
 }
 
 class FeedVentilationCardBloc

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_entries.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedPage extends StatelessWidget {
   final Color color;
@@ -19,10 +20,7 @@ class FeedPage extends StatelessWidget {
         if (state is FeedBlocStateLoaded) {
           return _renderCards(context, state);
         }
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[Text('Loading feed...')]);
+        return FullscreenLoading(title: 'Loading feed...');
       },
     );
   }
