@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:basic_utils/basic_utils.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -18,16 +16,46 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
-class BoxFeedPage extends StatelessWidget {
+class BoxFeedPage extends StatefulWidget {
+  @override
+  _BoxFeedPageState createState() => _BoxFeedPageState();
+}
+
+enum SpeedDialType {
+  general,
+  trainings,
+}
+
+class _BoxFeedPageState extends State<BoxFeedPage> {
+  SpeedDialType _speedDialType = SpeedDialType.general;
+  bool _speedDialOpen = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
       bloc: BlocProvider.of<BoxFeedBloc>(context),
       builder: (BuildContext context, BoxFeedBlocState state) {
+        Widget body;
+        if (_speedDialOpen) {
+          body = Stack(
+            children: <Widget>[
+              _renderFeed(context, state),
+              _renderOverlay(context),
+            ],
+          );
+        } else {
+          body = Stack(
+            children: <Widget>[
+              _renderFeed(context, state),
+            ],
+          );
+        }
+
         return Scaffold(
             drawer: Drawer(child: this._drawerContent(context, state)),
-            body: _renderFeed(context, state),
+            body: body,
             floatingActionButton: state is BoxFeedBlocStateBox
                 ? _renderSpeedDial(context, state)
                 : null);
@@ -37,6 +65,8 @@ class BoxFeedPage extends StatelessWidget {
 
   SpeedDial _renderSpeedDial(BuildContext context, BoxFeedBlocStateBox state) {
     return SpeedDial(
+      tooltip: 'Speed Dial',
+      heroTag: 'speed-dial-hero-tag',
       marginBottom: 10,
       animationSpeed: 50,
       curve: Curves.bounceIn,
@@ -44,65 +74,108 @@ class BoxFeedPage extends StatelessWidget {
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       overlayOpacity: 0.8,
-      children: [
-        _renderSpeedDialChild(
-            'Video/pic note',
-            'assets/feed_card/icon_media.svg',
-            _onSpeedDialSelected(
-                context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedMediaFormEvent(state.box,
-                        pushAsReplacement: pushAsReplacement))),
-        _renderSpeedDialChild(
-            'Watering',
-            'assets/feed_card/icon_watering.svg',
-            _onSpeedDialSelected(
-                context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedWaterFormEvent(state.box,
-                        pushAsReplacement: pushAsReplacement))),
-        _renderSpeedDialChild(
-            'Stretch control',
-            'assets/feed_card/icon_dimming.svg',
-            _onSpeedDialSelected(
-                context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedLightFormEvent(state.box,
-                        pushAsReplacement: pushAsReplacement))),
-        _renderSpeedDialChild(
-            'Ventilation',
-            'assets/feed_card/icon_blower.svg',
-            _onSpeedDialSelected(
-                context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedVentilationFormEvent(state.box,
-                        pushAsReplacement: pushAsReplacement))),
-        _renderSpeedDialChild(
-            'Defoliation',
-            'assets/feed_card/icon_defoliation.svg',
-            _onSpeedDialSelected(
-                context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedDefoliationFormEvent(state.box,
-                        pushAsReplacement: pushAsReplacement))),
-        _renderSpeedDialChild(
-            'Topping',
-            'assets/feed_card/icon_topping.svg',
-            _onSpeedDialSelected(
-                context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedToppingFormEvent(state.box,
-                        pushAsReplacement: pushAsReplacement))),
-        _renderSpeedDialChild(
-            'Veg/Bloom',
-            'assets/feed_card/icon_schedule.svg',
-            _onSpeedDialSelected(
-                context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedScheduleFormEvent(state.box,
-                        pushAsReplacement: pushAsReplacement))),
-      ],
+      closeManually: true,
+      onOpen: () {
+        setState(() {
+          _speedDialType = SpeedDialType.general;
+          _speedDialOpen = true;
+        });
+      },
+      onClose: () {
+        setState(() {
+          _speedDialOpen = false;
+        });
+      },
+      children: _speedDialType == SpeedDialType.general
+          ? _renderGeneralSpeedDials(context, state)
+          : _renderTrimSpeedDials(context, state),
     );
+  }
+
+  List<SpeedDialChild> _renderTrimSpeedDials(
+      BuildContext context, BoxFeedBlocStateBox state) {
+    return [
+      SpeedDialChild(
+          child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
+          label: 'None',
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          onTap: () {
+            setState(() {
+              _speedDialType = SpeedDialType.general;
+            });
+          }),
+      _renderSpeedDialChild(
+          'Defoliation',
+          'assets/feed_card/icon_defoliation.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedDefoliationFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Topping',
+          'assets/feed_card/icon_topping.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedToppingFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement))),
+    ];
+  }
+
+  List<SpeedDialChild> _renderGeneralSpeedDials(
+      BuildContext context, BoxFeedBlocStateBox state) {
+    return [
+      SpeedDialChild(
+          child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
+          label: 'Plant training',
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          onTap: () {
+            setState(() {
+              _speedDialType = SpeedDialType.trainings;
+            });
+          }),
+      _renderSpeedDialChild(
+          'Video/pic note',
+          'assets/feed_card/icon_media.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.box,
+                  pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Watering',
+          'assets/feed_card/icon_watering.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
+                  state.box,
+                  pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Stretch control',
+          'assets/feed_card/icon_dimming.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(
+                  state.box,
+                  pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Ventilation control',
+          'assets/feed_card/icon_blower.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedVentilationFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Veg/Bloom',
+          'assets/feed_card/icon_schedule.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedScheduleFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement))),
+    ];
   }
 
   SpeedDialChild _renderSpeedDialChild(
@@ -124,6 +197,7 @@ class BoxFeedPage extends StatelessWidget {
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
     if (state is BoxFeedBlocStateBox) {
       return BlocProvider(
+        key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
           appBarHeight: 300,
@@ -143,6 +217,17 @@ class BoxFeedPage extends StatelessWidget {
               }));
     }
     return FullscreenLoading(title: 'Box loading...');
+  }
+
+  Widget _renderOverlay(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            color: Colors.white60);
+      },
+    );
   }
 
   Widget _drawerContent(BuildContext context, BoxFeedBlocState state) {
@@ -237,10 +322,10 @@ class BoxFeedPage extends StatelessWidget {
 
     Widget graphBody;
     if (state.box.device != null) {
-      graphBody = _renderGraphs();
+      graphBody = Stack(children: [_renderGraphs(context, state)]);
     } else {
       graphBody = Stack(children: [
-        _renderGraphs(),
+        _renderGraphs(context, state),
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: Colors.white60),
@@ -283,7 +368,7 @@ class BoxFeedPage extends StatelessWidget {
     );
   }
 
-  Widget _renderGraphs() {
+  Widget _renderGraphs(BuildContext context, BoxFeedBlocStateBox state) {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: Colors.white24),
@@ -301,8 +386,8 @@ class BoxFeedPage extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: charts.NumericComboChart(_createDummyData(),
-                  animate: true,
+              child: charts.NumericComboChart(state.graphData,
+                  animate: false,
                   defaultRenderer: charts.LineRendererConfig(),
                   customSeriesRenderers: [
                     charts.PointRendererConfig(customRendererId: 'customPoint')
@@ -337,53 +422,4 @@ class BoxFeedPage extends StatelessWidget {
       ],
     );
   }
-
-  List<charts.Series<LinearSales, int>> _createDummyData() {
-    final tempData = List.generate(
-        50,
-        (index) => LinearSales(
-            index, (cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20));
-    final humiData = List.generate(
-        50,
-        (index) => LinearSales(
-            index, (sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20));
-    final lightData = List.generate(
-        50,
-        (index) => LinearSales(
-            index, (cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20));
-
-    return [
-      charts.Series<LinearSales, int>(
-        id: 'Temperature',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: tempData,
-      ),
-      charts.Series<LinearSales, int>(
-        id: 'Humidity',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: humiData,
-      ),
-      charts.Series<LinearSales, int>(
-        id: 'Light',
-        strokeWidthPxFn: (_, __) => 3,
-        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: lightData,
-      ),
-    ];
-  }
-}
-
-class LinearSales {
-  final int year;
-  final int sales;
-
-  LinearSales(this.year, this.sales);
 }
