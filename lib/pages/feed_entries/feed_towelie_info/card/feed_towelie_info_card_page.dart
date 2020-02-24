@@ -10,40 +10,58 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FeedTowelieInfoCardBloc, FeedTowelieInfoCardBlocState>(
         bloc: BlocProvider.of<FeedTowelieInfoCardBloc>(context),
-        builder: (context, state) => FeedCard(
+        builder: (context, state) {
+          List<Widget> content = [
+            FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
+                state.feedEntry),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: _renderBody(context, state),
+            ),
+          ];
+          if (state.params['buttons'] != null &&
+              state.params['buttons'].length > 0) {
+            content.add(_renderButtonBar(context, state.params['buttons']));
+          }
+          return FeedCard(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
-                      state.feedEntry),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: _renderBody(context, state),
-                  ),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      FlatButton(
-                        child: const Text('CREATE BOX',
-                            style: TextStyle(color: Colors.blue)),
-                        onPressed: () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToNewBoxInfosEvent());
-                        },
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ));
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: content,
+          ));
+        });
   }
 
   Widget _renderBody(BuildContext context, FeedTowelieInfoCardBlocState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Text(state.params.toString()),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8.0),
+          child: Text(state.params['text']),
+        ),
       ],
     );
+  }
+
+  ButtonBar _renderButtonBar(
+      BuildContext context, List buttons) {
+    return ButtonBar(
+      alignment: MainAxisAlignment.start,
+      children: buttons.map((b) => _renderButtonFromName(context, b)).toList(),
+    );
+  }
+
+  Widget _renderButtonFromName(
+      BuildContext context, Map<String, dynamic> button) {
+    if (button['type'] == 'CREATE_BOX') {
+      return FlatButton(
+        child: Text(button['title'], style: TextStyle(color: Colors.blue)),
+        onPressed: () {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToNewBoxInfosEvent());
+        },
+      );
+    }
+    return Text('NO_SUCH_BUTTON');
   }
 }

@@ -10,7 +10,8 @@ class FeedPage extends StatelessWidget {
   final Widget appBar;
   final double appBarHeight;
 
-  const FeedPage({ this.title, @required this.color, this.appBar, this.appBarHeight });
+  const FeedPage(
+      {this.title, @required this.color, this.appBar, this.appBarHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,10 @@ class FeedPage extends StatelessWidget {
   }
 
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
+    List<Widget> entries = state.entries
+        .map((e) => FeedEntriesHelper.cardForFeedEntry(state.feed, e))
+        .toList();
+    entries.add(Container(height: 76));
     return Container(
       color: color,
       child: CustomScrollView(
@@ -38,10 +43,7 @@ class FeedPage extends StatelessWidget {
               title: this.appBar == null ? Text(title) : null,
             ),
           ),
-          SliverList(
-              delegate: SliverChildListDelegate(state.entries
-                  .map((e) => FeedEntriesHelper.cardForFeedEntry(state.feed, e))
-                  .toList()))
+          SliverList(delegate: SliverChildListDelegate(entries))
         ],
       ),
     );

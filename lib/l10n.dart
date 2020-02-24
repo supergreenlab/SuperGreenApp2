@@ -6,13 +6,17 @@ import 'l10n/messages_all.dart';
 class SGLLocalizations {
   SGLLocalizations(this.localeName);
 
+  static SGLLocalizations current;
+
   static Future<SGLLocalizations> load(Locale locale) {
-    final String name =
-        locale.countryCode == null || locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+    final String name = locale.countryCode == null || locale.countryCode.isEmpty
+        ? locale.languageCode
+        : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((_) {
-      return SGLLocalizations(localeName);
+      current = SGLLocalizations(localeName);
+      return current;
     });
   }
 
@@ -57,18 +61,35 @@ class SGLLocalizations {
       locale: localeName,
     );
   }
+
+  String get towelieWelcomeApp {
+    return Intl.message(
+      '''Hey man, welcome here, my name’s Towelie, I’m here to make sure you don’t forget anything about your plant.\n\nBut first, let’s create a box feed. Press the “ADD A FIRST BOX” button below.''',
+      name: 'towelieWelcomeApp',
+      desc: 'Towelie Welcome App',
+      locale: localeName,
+    );
+  }
+
+  String get towelieWelcomeBox {
+    return Intl.message(
+      '''Welcome to your box feed!\n\nThis is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, it will log a card here, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.\n\nThis is also where you will log the actions you want to
+remember: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity heads up and reminders you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, and that’s awesome.''',
+      name: 'towelieWelcomeBox',
+      desc: 'Towelie Welcome Box',
+      locale: localeName,
+    );
+  }
 }
 
-class SGLLocalizationsDelegate
-    extends LocalizationsDelegate<SGLLocalizations> {
+class SGLLocalizationsDelegate extends LocalizationsDelegate<SGLLocalizations> {
   const SGLLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
-  Future<SGLLocalizations> load(Locale locale) =>
-      SGLLocalizations.load(locale);
+  Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale);
 
   @override
   bool shouldReload(SGLLocalizationsDelegate old) => false;

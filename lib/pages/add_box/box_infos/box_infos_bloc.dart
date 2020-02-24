@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
 
 abstract class BoxInfosBlocEvent extends Equatable {}
 
@@ -58,7 +61,7 @@ class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
         feed: feedID,
         date: DateTime.now(),
         params: Value(JsonEncoder().convert({
-          'text': '',
+          'text': SGLLocalizations.current.towelieWelcomeBox,
         })),
       ));
       final boxID = await bdb.addBox(box);

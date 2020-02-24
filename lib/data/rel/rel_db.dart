@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:moor/moor.dart';
@@ -7,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:super_green_app/data/rel/box/boxes.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
+import 'package:super_green_app/l10n.dart';
 
 part 'rel_db.g.dart';
 
@@ -63,6 +65,13 @@ class RelDB extends _$RelDB {
                   type: 'FE_TOWELIE_INFO',
                   feed: feed,
                   date: DateTime.now(),
+                  params: Value(JsonEncoder().convert({
+                    'text': SGLLocalizations.current.towelieWelcomeApp,
+                    'buttons': [{
+                      'type': 'CREATE_BOX',
+                      'title': 'CREATE FIRST BOX'
+                    }],
+                  })),
                 ));
           }
         },
