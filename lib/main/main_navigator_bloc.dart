@@ -137,10 +137,10 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   List<Object> get props => [box];
 }
 
-class MainNavigateToFeedTrainingFormEvent extends MainNavigateToFeedFormEvent {
+class MainNavigateToFeedCareCommonFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
-  MainNavigateToFeedTrainingFormEvent(this.box, {pushAsReplacement = false})
+  MainNavigateToFeedCareCommonFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -148,19 +148,19 @@ class MainNavigateToFeedTrainingFormEvent extends MainNavigateToFeedFormEvent {
 }
 
 class MainNavigateToFeedDefoliationFormEvent
-    extends MainNavigateToFeedTrainingFormEvent {
+    extends MainNavigateToFeedCareCommonFormEvent {
   MainNavigateToFeedDefoliationFormEvent(Box box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedToppingFormEvent
-    extends MainNavigateToFeedTrainingFormEvent {
+    extends MainNavigateToFeedCareCommonFormEvent {
   MainNavigateToFeedToppingFormEvent(Box box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedFimmingFormEvent
-    extends MainNavigateToFeedTrainingFormEvent {
+    extends MainNavigateToFeedCareCommonFormEvent {
   MainNavigateToFeedFimmingFormEvent(Box box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }

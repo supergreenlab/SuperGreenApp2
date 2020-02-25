@@ -20,8 +20,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
       bloc: BlocProvider.of<FullscreenMediaBloc>(context),
       listener: (context, state) async {
         if (state is FullscreenMediaBlocStateInit) {
-          if (state.isVideo &&
-              _videoPlayerController == null) {
+          if (state.isVideo && _videoPlayerController == null) {
             _videoPlayerController =
                 VideoPlayerController.file(File(state.feedMedia.filePath));
             await _videoPlayerController.initialize();
@@ -43,13 +42,39 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                           .add(MainNavigatorActionPop());
                     }, child: LayoutBuilder(
                       builder: (context, constraints) {
-                        return FittedBox(
-                            fit: BoxFit.cover,
-                            child: _videoPlayerController != null
-                                ? _renderVideoPlayer(
-                                    context, state, constraints)
-                                : _renderPicturePlayer(
-                                    context, state, constraints));
+                        Widget body;
+                        if (state.isVideo) {
+                          if (_videoPlayerController != null &&
+                              _videoPlayerController.value.isPlaying) {
+                            body = Stack(
+                              children: <Widget>[
+                                _renderPicturePlayer(
+                                    context, state, constraints),
+                                _renderVideoPlayer(context, state, constraints)
+                              ],
+                            );
+                          } else {
+                            body = Stack(
+                              children: <Widget>[
+                                _renderPicturePlayer(
+                                    context, state, constraints),
+                                Positioned(
+                                  top: constraints.maxHeight/2-20,
+                                  height: 40,
+                                  left: constraints.maxWidth/2-20,
+                                  width: 40,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 4.0,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        } else {
+                          body =
+                              _renderPicturePlayer(context, state, constraints);
+                        }
+                        return FittedBox(fit: BoxFit.cover, child: body);
                       },
                     )));
               },
@@ -71,6 +96,8 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
     return SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child: Image.file(File(state.isVideo ? state.feedMedia.thumbnailPath : state.feedMedia.filePath)));
+        child: Image.file(File(state.isVideo
+            ? state.feedMedia.thumbnailPath
+            : state.feedMedia.filePath)));
   }
 }

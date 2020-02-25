@@ -7,44 +7,44 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
-abstract class FeedTrainingFormBlocEvent extends Equatable {}
+abstract class FeedCareCommonFormBlocEvent extends Equatable {}
 
-class FeedTrainingFormBlocEventCreate extends FeedTrainingFormBlocEvent {
+class FeedCareCommonFormBlocEventCreate extends FeedCareCommonFormBlocEvent {
   final List<FeedMediasCompanion> beforeMedias;
   final List<FeedMediasCompanion> afterMedias;
   final String message;
   final bool helpRequest;
 
-  FeedTrainingFormBlocEventCreate(this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
+  FeedCareCommonFormBlocEventCreate(this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
 
   @override
   List<Object> get props => [message, helpRequest];
 }
 
-class FeedTrainingFormBlocState extends Equatable {
-  FeedTrainingFormBlocState();
+class FeedCareCommonFormBlocState extends Equatable {
+  FeedCareCommonFormBlocState();
 
   @override
   List<Object> get props => [];
 }
 
-class FeedTrainingFormBlocStateDone extends FeedTrainingFormBlocState {
-  FeedTrainingFormBlocStateDone();
+class FeedCareCommonFormBlocStateDone extends FeedCareCommonFormBlocState {
+  FeedCareCommonFormBlocStateDone();
 }
 
-abstract class FeedTrainingFormBloc
-    extends Bloc<FeedTrainingFormBlocEvent, FeedTrainingFormBlocState> {
-  final MainNavigateToFeedTrainingFormEvent _args;
+abstract class FeedCareCommonFormBloc
+    extends Bloc<FeedCareCommonFormBlocEvent, FeedCareCommonFormBlocState> {
+  final MainNavigateToFeedCareCommonFormEvent _args;
 
   @override
-  FeedTrainingFormBlocState get initialState => FeedTrainingFormBlocState();
+  FeedCareCommonFormBlocState get initialState => FeedCareCommonFormBlocState();
 
-  FeedTrainingFormBloc(this._args);
+  FeedCareCommonFormBloc(this._args);
 
   @override
-  Stream<FeedTrainingFormBlocState> mapEventToState(
-      FeedTrainingFormBlocEvent event) async* {
-    if (event is FeedTrainingFormBlocEventCreate) {
+  Stream<FeedCareCommonFormBlocState> mapEventToState(
+      FeedCareCommonFormBlocEvent event) async* {
+    if (event is FeedCareCommonFormBlocEventCreate) {
       final db = RelDB.get();
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
@@ -59,7 +59,7 @@ abstract class FeedTrainingFormBloc
       for (FeedMediasCompanion m in event.afterMedias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
       }
-      yield FeedTrainingFormBlocStateDone();
+      yield FeedCareCommonFormBlocStateDone();
     }
   }
 

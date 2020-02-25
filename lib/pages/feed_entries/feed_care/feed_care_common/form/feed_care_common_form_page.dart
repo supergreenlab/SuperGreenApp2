@@ -3,23 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_training/form/feed_training_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
-abstract class FeedTrainingFormPage<FormBloc extends FeedTrainingFormBloc>
+abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc>
     extends StatefulWidget {
   @override
-  _FeedTrainingFormPageState<FormBloc> createState() =>
-      _FeedTrainingFormPageState<FormBloc>(title());
+  _FeedCareCommonFormPageState<FormBloc> createState() =>
+      _FeedCareCommonFormPageState<FormBloc>(title());
 
   String title();
 }
 
-class _FeedTrainingFormPageState<FormBloc extends FeedTrainingFormBloc>
-    extends State<FeedTrainingFormPage> {
+class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
+    extends State<FeedCareCommonFormPage> {
   final String title;
   final List<FeedMediasCompanion> _beforeMedias = [];
   final List<FeedMediasCompanion> _afterMedias = [];
@@ -32,7 +32,7 @@ class _FeedTrainingFormPageState<FormBloc extends FeedTrainingFormBloc>
   int _listener;
   bool _keyboardVisible = false;
 
-  _FeedTrainingFormPageState(this.title);
+  _FeedCareCommonFormPageState(this.title);
 
   @protected
   void initState() {
@@ -58,13 +58,13 @@ class _FeedTrainingFormPageState<FormBloc extends FeedTrainingFormBloc>
   Widget build(BuildContext context) {
     return BlocListener(
         bloc: BlocProvider.of<FormBloc>(context),
-        listener: (BuildContext context, FeedTrainingFormBlocState state) {
-          if (state is FeedTrainingFormBlocStateDone) {
+        listener: (BuildContext context, FeedCareCommonFormBlocState state) {
+          if (state is FeedCareCommonFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }
         },
-        child: BlocBuilder<FeedTrainingFormBloc, FeedTrainingFormBlocState>(
+        child: BlocBuilder<FeedCareCommonFormBloc, FeedCareCommonFormBlocState>(
           bloc: BlocProvider.of<FormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: title,
@@ -75,7 +75,7 @@ class _FeedTrainingFormPageState<FormBloc extends FeedTrainingFormBloc>
                 _beforeMedias.length != 0 ||
                 _textController.value.text != '',
             onOK: () => BlocProvider.of<FormBloc>(context).add(
-                FeedTrainingFormBlocEventCreate(_beforeMedias, _afterMedias,
+                FeedCareCommonFormBlocEventCreate(_beforeMedias, _afterMedias,
                     _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -87,7 +87,7 @@ class _FeedTrainingFormPageState<FormBloc extends FeedTrainingFormBloc>
   }
 
   List<Widget> _renderBody(
-      BuildContext context, FeedTrainingFormBlocState state) {
+      BuildContext context, FeedCareCommonFormBlocState state) {
     return [
       FeedFormParamLayout(
         title: 'Before pics',
@@ -134,7 +134,7 @@ class _FeedTrainingFormPageState<FormBloc extends FeedTrainingFormBloc>
     ];
   }
 
-  Widget _renderTextrea(BuildContext context, FeedTrainingFormBlocState state) {
+  Widget _renderTextrea(BuildContext context, FeedCareCommonFormBlocState state) {
     return Expanded(
       key: Key('TEXTAREA'),
       child: FeedFormParamLayout(
@@ -149,7 +149,7 @@ class _FeedTrainingFormPageState<FormBloc extends FeedTrainingFormBloc>
     );
   }
 
-  Widget _renderOptions(BuildContext context, FeedTrainingFormBlocState state) {
+  Widget _renderOptions(BuildContext context, FeedCareCommonFormBlocState state) {
     return Row(
       children: <Widget>[],
     );

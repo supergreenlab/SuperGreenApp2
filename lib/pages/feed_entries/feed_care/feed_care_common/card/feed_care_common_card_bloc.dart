@@ -5,21 +5,21 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
-abstract class FeedTrainingCardBlocEvent extends Equatable {}
+abstract class FeedCareCommonCardBlocEvent extends Equatable {}
 
-class FeedTrainingCardBlocEventInit extends FeedTrainingCardBlocEvent {
+class FeedCareCommonCardBlocEventInit extends FeedCareCommonCardBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class FeedTrainingCardBlocState extends Equatable {
+class FeedCareCommonCardBlocState extends Equatable {
   final Feed feed;
   final FeedEntry feedEntry;
   final Map<String, dynamic> params;
   final List<FeedMedia> beforeMedias;
   final List<FeedMedia> afterMedias;
 
-  FeedTrainingCardBlocState(this.feed, this.feedEntry, this.params,
+  FeedCareCommonCardBlocState(this.feed, this.feedEntry, this.params,
       this.beforeMedias, this.afterMedias);
 
   @override
@@ -32,8 +32,8 @@ class FeedTrainingCardBlocState extends Equatable {
       ];
 }
 
-class FeedTrainingCardBloc
-    extends Bloc<FeedTrainingCardBlocEvent, FeedTrainingCardBlocState> {
+class FeedCareCommonCardBloc
+    extends Bloc<FeedCareCommonCardBlocEvent, FeedCareCommonCardBlocState> {
   final Feed _feed;
   final FeedEntry _feedEntry;
   final Map<String, dynamic> _params = {};
@@ -42,18 +42,18 @@ class FeedTrainingCardBloc
   final List<FeedMedia> _afterMedias = [];
 
   @override
-  FeedTrainingCardBlocState get initialState => FeedTrainingCardBlocState(
+  FeedCareCommonCardBlocState get initialState => FeedCareCommonCardBlocState(
       _feed, _feedEntry, {}, [], []);
 
-  FeedTrainingCardBloc(this._feed, this._feedEntry) {
+  FeedCareCommonCardBloc(this._feed, this._feedEntry) {
     _params.addAll(JsonDecoder().convert(_feedEntry.params));
-    add(FeedTrainingCardBlocEventInit());
+    add(FeedCareCommonCardBlocEventInit());
   }
 
   @override
-  Stream<FeedTrainingCardBlocState> mapEventToState(
-      FeedTrainingCardBlocEvent event) async* {
-    if (event is FeedTrainingCardBlocEventInit) {
+  Stream<FeedCareCommonCardBlocState> mapEventToState(
+      FeedCareCommonCardBlocEvent event) async* {
+    if (event is FeedCareCommonCardBlocEventInit) {
       RelDB db = RelDB.get();
       List<FeedMedia> medias = await db.feedsDAO.getFeedMedias(_feedEntry.id);
       _beforeMedias.addAll(medias.where((m) {
@@ -64,7 +64,7 @@ class FeedTrainingCardBloc
         final Map<String, dynamic> params = JsonDecoder().convert(m.params);
         return !params['before'];
       }));
-      yield FeedTrainingCardBlocState(
+      yield FeedCareCommonCardBlocState(
           _feed, _feedEntry, _params, _beforeMedias, _afterMedias);
     }
   }
