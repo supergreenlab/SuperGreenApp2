@@ -183,6 +183,12 @@ class MainNavigateToFeedFimmingFormEvent
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
+class MainNavigateToFeedBendingFormEvent
+    extends MainNavigateToFeedCareCommonFormEvent {
+  MainNavigateToFeedBendingFormEvent(Box box, {pushAsReplacement = false})
+      : super(box, pushAsReplacement: pushAsReplacement);
+}
+
 class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
@@ -333,6 +339,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/feed/form/defoliation', event);
     } else if (event is MainNavigateToFeedFimmingFormEvent) {
       future = _pushOrReplace('/feed/form/fimming', event);
+    } else if (event is MainNavigateToFeedBendingFormEvent) {
+      future = _pushOrReplace('/feed/form/bending', event);
     } else if (event is MainNavigateToFeedVentilationFormEvent) {
       future = _pushOrReplace('/feed/form/ventilation', event);
     } else if (event is MainNavigateToFeedWaterFormEvent) {

@@ -16,21 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/card/feed_bending_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
 
-class FeedCardText extends StatelessWidget {
-  final String message;
+class FeedBendingCardPage extends FeedCareCommonCardPage<FeedBendingCardBloc> {
 
-  const FeedCardText(this.message);
+  String iconPath() {
+    return 'assets/feed_card/icon_bending.svg';
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 16.0, left: 8.0, right: 8.0, bottom: 16.0),
-                    child: Text(message,
-                        style: TextStyle(color: Colors.black, fontSize: 16)),
-                  );
+  String title() {
+    return "Bending";
   }
 
 }

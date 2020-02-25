@@ -16,21 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_page.dart';
 
-class FeedCardText extends StatelessWidget {
-  final String message;
-
-  const FeedCardText(this.message);
-
+class FeedBendingFormPage extends FeedCareCommonFormPage<FeedBendingFormBloc> {
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 16.0, left: 8.0, right: 8.0, bottom: 16.0),
-                    child: Text(message,
-                        style: TextStyle(color: Colors.black, fontSize: 16)),
-                  );
+  String title() {
+    return 'Bending log';
   }
-
 }

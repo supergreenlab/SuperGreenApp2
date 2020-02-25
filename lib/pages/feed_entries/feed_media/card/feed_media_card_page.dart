@@ -48,7 +48,7 @@ class FeedMediaCardPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: FeedCardDate(state.feedEntry),
                   ),
-                  FeedCardObservations(state.params['message'] ?? ''),
+                  FeedCardText(state.params['message'] ?? ''),
                 ],
               ),
             ));

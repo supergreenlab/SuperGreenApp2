@@ -22,6 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card_observations.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedTowelieInfoCardPage extends StatelessWidget {
@@ -52,10 +53,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
 
   Widget _renderBody(BuildContext context, FeedTowelieInfoCardBlocState state) {
     final body = <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8.0),
-        child: Text(state.params['text']),
-      ),
+      FeedCardText(state.params['text']),
     ];
     if (state.params['top_pic'] != null) {
       body.insert(0, Padding(

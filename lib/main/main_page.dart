@@ -40,6 +40,8 @@ import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart
 import 'package:super_green_app/pages/add_device/new_device/new_device_page.dart';
 import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/form/feed_defoliation_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/form/feed_defoliation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/form/feed_fimming_form_bloc.dart';
@@ -238,6 +240,14 @@ class MainPage extends StatelessWidget {
           builder: (context) => BlocProvider(
             create: (context) => FeedFimmingFormBloc(settings.arguments),
             child: FeedFimmingFormPage(),
+          ),
+        );
+      case '/feed/form/bending':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => BlocProvider(
+            create: (context) => FeedBendingFormBloc(settings.arguments),
+            child: FeedBendingFormPage(),
           ),
         );
       case '/feed/form/ventilation':

@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/card/feed_bending_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/card/feed_bending_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/card/feed_defoliation_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/card/feed_defoliation_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/card/feed_fimming_card_bloc.dart';
@@ -69,6 +71,11 @@ class FeedEntriesHelper {
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedFimmingCardBloc(feed, feedEntry),
           child: FeedFimmingCardPage(),
+        ),
+    'FE_BENDING': (feed, feedEntry) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
+          create: (context) => FeedBendingCardBloc(feed, feedEntry),
+          child: FeedBendingCardPage(),
         ),
     'FE_VENTILATION': (feed, feedEntry) => BlocProvider(
           key: Key('{$feedEntry.id}'),
