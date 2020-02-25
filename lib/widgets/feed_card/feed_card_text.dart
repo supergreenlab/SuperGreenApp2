@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class FeedCardText extends StatelessWidget {
   final String message;
@@ -28,8 +29,7 @@ class FeedCardText extends StatelessWidget {
     return Padding(
                     padding: const EdgeInsets.only(
                         top: 16.0, left: 8.0, right: 8.0, bottom: 16.0),
-                    child: Text(message,
-                        style: TextStyle(color: Colors.black, fontSize: 16)),
+                    child: MarkdownBody(data: message, styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),),
                   );
   }
 

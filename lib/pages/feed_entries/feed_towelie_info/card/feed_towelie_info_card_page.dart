@@ -22,7 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
-import 'package:super_green_app/widgets/feed_card/feed_card_observations.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedTowelieInfoCardPage extends StatelessWidget {
@@ -35,7 +35,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
             FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
                 state.feedEntry),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+              padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
               child: _renderBody(context, state),
             ),
           ];

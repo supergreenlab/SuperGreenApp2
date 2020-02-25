@@ -48,6 +48,7 @@ dependencies:
   intl_translation:
   flutter_swiper:
   charts_flutter:
+  flutter_markdown:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

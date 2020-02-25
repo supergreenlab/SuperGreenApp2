@@ -1,0 +1,39 @@
+{
+  "@@last_modified": "2020-02-25T18:39:12.877790",
+  "title": "SuperGreenLab",
+  "@title": {
+    "description": "App title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "vegScheduleHelper": "Vegetative stage is the phase between germination and blooming, the plant grows and develops it’s branches. It requires at least 13h lights per days, usual setting is 18h per day.",
+  "@vegScheduleHelper": {
+    "description": "Veg schedule helper",
+    "type": "text",
+    "placeholders": {}
+  },
+  "bloomScheduleHelper": "Bloom stage is the phase between germination and blooming, the plant grows and develops it’s branches. It requires at least 13h lights per days, usual setting is 18h per day.",
+  "@bloomScheduleHelper": {
+    "description": "Bloom schedule helper",
+    "type": "text",
+    "placeholders": {}
+  },
+  "autoScheduleHelper": "Auto flower plants are a special type of strain that won’t require light schedule change in order to start flowering. Their vegetative stage duration can’t be controlled, and varies from one plant to another.",
+  "@autoScheduleHelper": {
+    "description": "Auto schedule helper",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieWelcomeApp": "Hey man, welcome here, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant.\n\nBut first, let’s create a box feed. Press the **ADD A FIRST BOX** button below.",
+  "@towelieWelcomeApp": {
+    "description": "Towelie Welcome App",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieWelcomeBox": "**Welcome to your box feed!**\n\nThis is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.",
+  "@towelieWelcomeBox": {
+    "description": "Towelie Welcome Box",
+    "type": "text",
+    "placeholders": {}
+  }
+}
