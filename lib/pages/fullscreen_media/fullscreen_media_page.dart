@@ -59,9 +59,9 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                                 _renderPicturePlayer(
                                     context, state, constraints),
                                 Positioned(
-                                  top: constraints.maxHeight/2-20,
+                                  top: constraints.maxHeight / 2 - 20,
                                   height: 40,
-                                  left: constraints.maxWidth/2-20,
+                                  left: constraints.maxWidth / 2 - 20,
                                   width: 40,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 4.0,
@@ -99,5 +99,13 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         child: Image.file(File(state.isVideo
             ? state.feedMedia.thumbnailPath
             : state.feedMedia.filePath)));
+  }
+
+  @override
+  void dispose() {
+    if (_videoPlayerController != null) {
+      _videoPlayerController.dispose();
+    }
+    super.dispose();
   }
 }
