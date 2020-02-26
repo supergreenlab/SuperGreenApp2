@@ -88,7 +88,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
       marginBottom: 10,
       animationSpeed: 50,
       curve: Curves.bounceIn,
-      backgroundColor: Color(0xff414166),
+      backgroundColor: Color(0xff3bb30b),
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       overlayOpacity: 0.8,
