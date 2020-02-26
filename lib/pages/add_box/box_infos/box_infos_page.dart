@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
@@ -37,6 +38,30 @@ class BoxInfosPage extends StatefulWidget {
 
 class BoxInfosPageState extends State<BoxInfosPage> {
   final _nameController = TextEditingController();
+
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
+  int _listener;
+  bool _keyboardVisible = false;
+
+  @protected
+  void initState() {
+    super.initState();
+    _listener = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardVisible = visible;
+        });
+        if (!_keyboardVisible) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +87,15 @@ class BoxInfosPageState extends State<BoxInfosPage> {
               body = _renderForm();
             }
             return Scaffold(
-                appBar: SGLAppBar('New Box infos', hideBackButton: state is BoxInfosBlocStateDone,),
-                body: Padding(
-                    padding: const EdgeInsets.only(top: 16.0), child: body));
+                appBar: SGLAppBar(
+                  'NEW BOX SETUP',
+                  hideBackButton: state is BoxInfosBlocStateDone,
+                  backgroundColor: Colors.orange,
+                  titleColor: Colors.white,
+                  iconColor: Colors.white,
+                ),
+                backgroundColor: Colors.white,
+                body: body);
           }),
     );
   }
@@ -86,14 +117,24 @@ class BoxInfosPageState extends State<BoxInfosPage> {
   Widget _renderForm() {
     return Column(
       children: <Widget>[
+        AnimatedContainer(
+          duration: Duration(milliseconds: 100),
+          height: _keyboardVisible ? 0 : 100,
+          color: Colors.orange,
+        ),
         SectionTitle(
-            title: 'Give a name to your new box:',
-            icon: 'assets/box_setup/icon_box_name.svg'),
+          title: 'Let\'s name your new box:',
+          icon: 'assets/box_setup/icon_box_name.svg',
+          backgroundColor: Colors.orange,
+          titleColor: Colors.white,
+          large: true,
+        ),
         Expanded(
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: SGLTextField(
                   hintText: 'Ex: BedroomGrow',
                   controller: _nameController,
@@ -104,7 +145,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
           ],
         )),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
           child: Align(
             alignment: Alignment.centerRight,
             child: GreenButton(
@@ -137,6 +178,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
 
   @override
   void dispose() {
+    _keyboardVisibility.removeListener(_listener);
     _nameController.dispose();
     super.dispose();
   }
