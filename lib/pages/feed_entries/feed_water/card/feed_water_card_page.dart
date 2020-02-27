@@ -28,53 +28,64 @@ class FeedWaterCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FeedWaterCardBloc, FeedWaterCardBlocState>(
         bloc: BlocProvider.of<FeedWaterCardBloc>(context),
-        builder: (context, state) => FeedCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  FeedCardTitle('assets/feed_card/icon_watering.svg',
-                      'Watering', state.feedEntry),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FeedCardDate(state.feedEntry),
+        builder: (context, state) {
+          List<Widget> body = [
+            Text(
+              '${state.params['volume']}L',
+              style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff3bb30b)),
+            ),
+          ];
+          if (state.params['tooDry'] != null ||
+              state.params['nutrient'] != null) {
+            List<Widget> rowBody = [];
+            if (state.params['tooDry'] != null) {
+              rowBody.add(Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Dried: ${state.params['tooDry'] == true ? 'yes' : 'no'}',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ));
+            }
+            if (state.params['nutrient'] != null) {
+              rowBody.add(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Nutes: ${state.params['nutrient'] == true ? 'yes' : 'no'}',
+                    style: TextStyle(fontSize: 20),
                   ),
-                  Container(
-                    height: 150,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          '${state.params['volume']}L',
-                          style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff3bb30b)),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Dried: ${state.params['tooDry'] ? 'yes' : 'no'}',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Nutes: ${state.params['nutrient'] ? 'yes' : 'no'}',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              );
+            }
+            body.add(Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: rowBody,
             ));
+          }
+          return FeedCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FeedCardTitle('assets/feed_card/icon_watering.svg', 'Watering',
+                    state.feedEntry),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FeedCardDate(state.feedEntry),
+                ),
+                Container(
+                  height: 150,
+                  alignment: Alignment.center,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: body),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
