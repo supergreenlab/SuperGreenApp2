@@ -90,14 +90,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                         ],
                       ),
                       onPressed: () {
-                        BlocProvider.of<MainNavigatorBloc>(context).add(
-                            MainNavigateToAddDeviceEvent(
-                                futureFn: (future) async {
-                          Device device = await future;
-                          if (device != null) {
-                            _selectDevice(context, device);
-                          }
-                        }));
+                        _addNewDevice(context);
                       },
                     ),
                   ],
@@ -120,7 +113,9 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         if (devices.length == 0) {
           return Fullscreen(
             title: 'No device yet',
-            child: GreenButton(title: 'ADD ONE', onPressed: () {}),
+            child: GreenButton(title: 'ADD ONE', onPressed: () {
+              _addNewDevice(context);
+            }),
             childFirst: false,
           );
         }
@@ -141,6 +136,16 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         );
       },
     );
+  }
+
+  void _addNewDevice(BuildContext context) {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToAddDeviceEvent(futureFn: (future) async {
+      Device device = await future;
+      if (device != null) {
+        _selectDevice(context, device);
+      }
+    }));
   }
 
   void _selectDevice(BuildContext context, Device device) {

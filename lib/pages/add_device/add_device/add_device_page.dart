@@ -31,7 +31,12 @@ class AddDevicePage extends StatelessWidget {
     return BlocBuilder<AddDeviceBloc, AddDeviceBlocState>(
         bloc: BlocProvider.of<AddDeviceBloc>(context),
         builder: (context, state) => Scaffold(
-            appBar: SGLAppBar('Add new device'),
+            appBar: SGLAppBar(
+              'Add new device',
+              backgroundColor: Colors.orange,
+              titleColor: Colors.white,
+              iconColor: Colors.white,
+            ),
             body: Column(
               children: <Widget>[
                 _renderChoice(
@@ -72,12 +77,11 @@ class AddDevicePage extends StatelessWidget {
   Widget _renderChoice(BuildContext context, String title, String icon,
       String description, String buttonTitle, Function onPressed) {
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: SectionTitle(
-          title: title,
-          icon: icon,
-        ),
+      SectionTitle(
+        title: title,
+        icon: icon,
+        backgroundColor: Colors.orange,
+        titleColor: Colors.white,
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),

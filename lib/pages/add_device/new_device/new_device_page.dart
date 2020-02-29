@@ -22,6 +22,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
@@ -47,18 +48,29 @@ class NewDevicePage extends StatelessWidget {
               body = _renderLoading();
             }
             return Scaffold(
-              appBar: SGLAppBar('Add device'),
-              body: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    SectionTitle(
-                        title: 'Connecting to controller\'s wifi',
-                        icon: 'assets/box_setup/icon_search.svg'),
-                    body,
-                  ],
-                ),
+              appBar: SGLAppBar(
+                'Add device',
+                backgroundColor: Colors.orange,
+                titleColor: Colors.white,
+                iconColor: Colors.white,
+              ),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 100),
+                    height: 50,
+                    color: Colors.orange,
+                  ),
+                  SectionTitle(
+                    title: 'Connecting to controller\'s wifi',
+                    icon: 'assets/box_setup/icon_search.svg',
+                    backgroundColor: Colors.orange,
+                    titleColor: Colors.white,
+                    large: true,
+                  ),
+                  body,
+                ],
               ),
             );
           }),
@@ -71,7 +83,7 @@ class NewDevicePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Text(
                 'Couldn\'t connect to the 🤖🍁 wifi! Please go to your mobile phone settings to connect manually with the following credentials:'),
           ),
@@ -114,25 +126,7 @@ class NewDevicePage extends StatelessWidget {
 
   Widget _renderLoading() {
     return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(
-              value: null,
-              strokeWidth: 4.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Trying to connect\nautomatically',
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+      child: FullscreenLoading(title: 'Trying to connect\nautomatically'));
   }
 
   void _startSetup(BuildContext context) async {

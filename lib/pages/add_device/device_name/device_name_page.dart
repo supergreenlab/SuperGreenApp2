@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -34,6 +35,30 @@ class DeviceNamePage extends StatefulWidget {
 class DeviceNamePageState extends State<DeviceNamePage> {
   final _nameController = TextEditingController();
 
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
+  int _listener;
+  bool _keyboardVisible = false;
+
+  @protected
+  void initState() {
+    super.initState();
+    _listener = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardVisible = visible;
+        });
+        if (!_keyboardVisible) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -41,16 +66,16 @@ class DeviceNamePageState extends State<DeviceNamePage> {
       listener: (BuildContext context, DeviceNameBlocState state) {
         if (state is DeviceNameBlocStateDone) {
           if (!state.requiresWifiSetup) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(param: state.device, mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigatorActionPop(param: state.device, mustPop: true));
             return;
           }
           BlocProvider.of<MainNavigatorBloc>(context).add(
               MainNavigateToDeviceWifiEvent(state.device,
                   futureFn: (future) async {
             await future;
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(param: state.device, mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigatorActionPop(param: state.device, mustPop: true));
           }));
         }
       },
@@ -69,6 +94,9 @@ class DeviceNamePageState extends State<DeviceNamePage> {
                   appBar: SGLAppBar(
                     'Add device',
                     hideBackButton: true,
+                    backgroundColor: Colors.orange,
+                    titleColor: Colors.white,
+                    iconColor: Colors.white,
                   ),
                   body: body),
             );
@@ -83,17 +111,23 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   Widget _renderForm() {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: SectionTitle(
-              title: 'Set device\'s name',
-              icon: 'assets/box_setup/icon_controller.svg'),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 100),
+          height: _keyboardVisible ? 0 : 100,
+          color: Colors.orange,
+        ),
+        SectionTitle(
+          title: 'Set device\'s name',
+          icon: 'assets/box_setup/icon_controller.svg',
+          backgroundColor: Colors.orange,
+          titleColor: Colors.white,
+          large: true,
         ),
         Expanded(
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
                   hintText: 'ex: Bob',
                   controller: _nameController,
