@@ -22,6 +22,9 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/green_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeedLightFormPage extends StatefulWidget {
   @override
@@ -53,21 +56,50 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         },
         child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
             bloc: BlocProvider.of<FeedLightFormBloc>(context),
-            builder: (context, state) => FeedFormLayout(
-                  title: 'Record creation',
-                  changed: changed,
-                  valid: changed,
-                  onOK: () {
-                    BlocProvider.of<FeedLightFormBloc>(context)
-                        .add(FeedLightFormBlocEventCreate(values));
-                  },
-                  body: ListView.builder(
-                    itemCount: values.length,
-                    itemBuilder: (context, i) {
-                      return _renderLightParam(context, i);
-                    },
-                  ),
-                )),
+            builder: (context, state) {
+              Widget body;
+              if (state is FeedLightFormBlocStateNoDevice) {
+                body = Stack(
+                  children: <Widget>[
+                    ListView.builder(
+                      itemCount: values.length,
+                      itemBuilder: _renderLightParam,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white60),
+                      child: Fullscreen(
+                        title:
+                            'Stretch control\nrequires an SGL controller',
+                        child: GreenButton(
+                          title: 'SHOP NOW',
+                          onPressed: () {
+                            launch('https://www.supergreenlab.com');
+                          },
+                        ),
+                        childFirst: false,
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                body = ListView.builder(
+                  itemCount: values.length,
+                  itemBuilder: _renderLightParam,
+                );
+              }
+              return FeedFormLayout(
+                title: 'Record creation',
+                changed: changed,
+                valid: changed,
+                onOK: () {
+                  BlocProvider.of<FeedLightFormBloc>(context)
+                      .add(FeedLightFormBlocEventCreate(values));
+                },
+                body: body,
+              );
+            }),
       ),
     );
   }

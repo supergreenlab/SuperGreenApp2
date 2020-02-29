@@ -106,14 +106,16 @@ class FeedScheduleFormBloc
     } else if (event is FeedScheduleFormBlocEventCreate) {
       final db = RelDB.get();
 
-      Param onHour = await db.devicesDAO
-          .getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
-      await DeviceHelper.updateIntParam(
-          _device, onHour, _schedules[_schedule]['ON_HOUR']);
-      Param offHour = await db.devicesDAO
-          .getParam(_device.id, 'BOX_${_args.box.deviceBox}_OFF_HOUR');
-      await DeviceHelper.updateIntParam(
-          _device, offHour, _schedules[_schedule]['OFF_HOUR']);
+      if (_device != null) {
+        Param onHour = await db.devicesDAO
+            .getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
+        await DeviceHelper.updateIntParam(
+            _device, onHour, _schedules[_schedule]['ON_HOUR']);
+        Param offHour = await db.devicesDAO
+            .getParam(_device.id, 'BOX_${_args.box.deviceBox}_OFF_HOUR');
+        await DeviceHelper.updateIntParam(
+            _device, offHour, _schedules[_schedule]['OFF_HOUR']);
+      }
 
       final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
       settings['schedule'] = _schedule;
