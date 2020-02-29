@@ -29,8 +29,7 @@ class FeedCard extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       child: Container(
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.yellow, width: 3),
-              boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 2, offset: Offset(4, 4))],
+              border: Border.all(color: Color(0xffdedede), width: 2),
               color: Colors.white, borderRadius: BorderRadius.circular(8)),
           child: child),
     );

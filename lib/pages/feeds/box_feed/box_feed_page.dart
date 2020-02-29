@@ -386,7 +386,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
             child: Text(
               name,
               style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xff505050),
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold),
             ),

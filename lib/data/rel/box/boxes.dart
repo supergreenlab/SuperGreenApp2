@@ -65,15 +65,21 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
       'schedules': {
         'VEG': {
           'ON_HOUR': settings['VEG_ON_HOUR'] ?? 3,
+          'ON_MIN': settings['VEG_ON_MIN'] ?? 0,
           'OFF_HOUR': settings['VEG_OFF_HOUR'] ?? 21,
+          'OFF_MIN': settings['VEG_OFF_MIN'] ?? 0,
         },
         'BLOOM': {
           'ON_HOUR': settings['BLOOM_ON_HOUR'] ?? 6,
+          'ON_MIN': settings['BLOOM_ON_MIN'] ?? 0,
           'OFF_HOUR': settings['BLOOM_OFF_HOUR'] ?? 18,
+          'OFF_MIN': settings['BLOOM_OFF_MIN'] ?? 0,
         },
         'AUTO': {
           'ON_HOUR': settings['AUTO_ON_HOUR'] ?? 0,
+          'ON_MIN': settings['AUTO_ON_MIN'] ?? 0,
           'OFF_HOUR': settings['AUTO_OFF_HOUR'] ?? 0,
+          'OFF_MIN': settings['AUTO_OFF_MIN'] ?? 0,
         },
       }
     };

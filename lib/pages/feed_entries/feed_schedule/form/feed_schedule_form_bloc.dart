@@ -60,12 +60,14 @@ class FeedScheduleFormBlocState extends Equatable {
   List<Object> get props => [schedule, schedules, this.initialSchedule, this.initialSchedules];
 }
 
+class FeedScheduleFormBlocStateUnInitialized extends FeedScheduleFormBlocState {
+  FeedScheduleFormBlocStateUnInitialized(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
+      : super(schedule, schedules, initialSchedule, initialSchedules);
+}
+
 class FeedScheduleFormBlocStateDone extends FeedScheduleFormBlocState {
   FeedScheduleFormBlocStateDone(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
       : super(schedule, schedules, initialSchedule, initialSchedules);
-
-  @override
-  List<Object> get props => [];
 }
 
 class FeedScheduleFormBloc
@@ -76,13 +78,13 @@ class FeedScheduleFormBloc
   Map<String, dynamic> _schedules = {};
 
   String _initialSchedule;
-  Map<String, dynamic> _initialSchedules;
+  Map<String, dynamic> _initialSchedules = {};
 
   final MainNavigateToFeedScheduleFormEvent _args;
 
   @override
   FeedScheduleFormBlocState get initialState =>
-      FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);
+      FeedScheduleFormBlocStateUnInitialized(_schedule, _schedules, _initialSchedule, _initialSchedules);
 
   FeedScheduleFormBloc(this._args) {
     add(FeedScheduleFormBlocEventInit());
@@ -94,7 +96,7 @@ class FeedScheduleFormBloc
     if (event is FeedScheduleFormBlocEventInit) {
       final db = RelDB.get();
       _device = await db.devicesDAO.getDevice(_args.box.device);
-      final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
+      Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
       _initialSchedule = _schedule = settings['schedule'];
       _initialSchedules = _schedules = settings['schedules'];
       yield FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);

@@ -50,15 +50,16 @@ class FeedPage extends StatelessWidget {
         .toList();
     entries.add(Container(height: 76));
     return Container(
-      color: color,
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            backgroundColor: color,
+            backgroundColor: Colors.white,
             expandedHeight: appBarHeight ?? 200.0,
+            iconTheme: IconThemeData(color: Color(0xff404040)),
             flexibleSpace: FlexibleSpaceBar(
               background: this.appBar,
-              title: this.appBar == null ? Text(title) : null,
+              centerTitle: this.appBar == null,
+              title: this.appBar == null ? Text(title, style: TextStyle(color: Color(0xff404040))) : null,
             ),
           ),
           SliverList(delegate: SliverChildListDelegate(entries))
