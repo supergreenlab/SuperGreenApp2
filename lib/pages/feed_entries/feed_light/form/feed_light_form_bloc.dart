@@ -35,6 +35,13 @@ class FeedLightFormBlocEventLoadLights extends FeedLightFormBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedLightFormBlocEventCancel extends FeedLightFormBlocEvent {
+  FeedLightFormBlocEventCancel();
+
+  @override
+  List<Object> get props => [];
+}
+
 class FeedLightFormBlocEventCreate extends FeedLightFormBlocEvent {
   final List<int> values;
 
@@ -118,6 +125,12 @@ class FeedLightFormBloc
         params: Value(JsonEncoder().convert(
             {'initialValues': _initialValues, 'values': event.values})),
       ));
+      yield FeedLightFormBlocStateDone();
+    } else if (event is FeedLightFormBlocEventCancel) {
+      for (int i = 0; i < _lightParams.length; ++i) {
+        await DeviceHelper.updateIntParam(
+          _device, _lightParams[i], _initialValues[i]);
+      }
       yield FeedLightFormBlocStateDone();
     }
   }

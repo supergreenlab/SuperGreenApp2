@@ -35,33 +35,40 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: BlocProvider.of<FeedLightFormBloc>(context),
-      listener: (BuildContext context, FeedLightFormBlocState state) {
-        if (state is FeedLightFormBlocStateLightsLoaded) {
-          setState(() => values = List.from(state.values));
-        } else if (state is FeedLightFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(mustPop: true));
-        }
+    return WillPopScope(
+      onWillPop: () async {
+        BlocProvider.of<FeedLightFormBloc>(context)
+            .add(FeedLightFormBlocEventCancel());
+        return false;
       },
-      child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
-          bloc: BlocProvider.of<FeedLightFormBloc>(context),
-          builder: (context, state) => FeedFormLayout(
-                title: 'Record creation',
-                changed: changed,
-                valid: changed,
-                onOK: () {
-                  BlocProvider.of<FeedLightFormBloc>(context)
-                      .add(FeedLightFormBlocEventCreate(values));
-                },
-                body: ListView.builder(
-                  itemCount: values.length,
-                  itemBuilder: (context, i) {
-                    return _renderLightParam(context, i);
+      child: BlocListener(
+        bloc: BlocProvider.of<FeedLightFormBloc>(context),
+        listener: (BuildContext context, FeedLightFormBlocState state) {
+          if (state is FeedLightFormBlocStateLightsLoaded) {
+            setState(() => values = List.from(state.values));
+          } else if (state is FeedLightFormBlocStateDone) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(mustPop: true));
+          }
+        },
+        child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
+            bloc: BlocProvider.of<FeedLightFormBloc>(context),
+            builder: (context, state) => FeedFormLayout(
+                  title: 'Record creation',
+                  changed: changed,
+                  valid: changed,
+                  onOK: () {
+                    BlocProvider.of<FeedLightFormBloc>(context)
+                        .add(FeedLightFormBlocEventCreate(values));
                   },
-                ),
-              )),
+                  body: ListView.builder(
+                    itemCount: values.length,
+                    itemBuilder: (context, i) {
+                      return _renderLightParam(context, i);
+                    },
+                  ),
+                )),
+      ),
     );
   }
 
