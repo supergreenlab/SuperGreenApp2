@@ -32,17 +32,25 @@ class DeviceSetupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: BlocProvider.of<DeviceSetupBloc>(context),
-      listener: (BuildContext context, DeviceSetupBlocState state) {
+      listener: (BuildContext context, DeviceSetupBlocState state) async {
         if (state is DeviceSetupBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(
-              MainNavigateToDeviceNameEvent(state.device,
-                  futureFn: (future) async {
-            Device device = await future;
-            if (device != null) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigatorActionPop(param: device, mustPop: true));
-            }
-          }));
+          Device device = state.device;
+          if (state.requiresInititalSetup) {
+            FutureFn ff1 =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
+            device = await ff1.future;
+          }
+          if (!state.requiresWifiSetup) {
+            FutureFn ff2 =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToDeviceWifiEvent(device, futureFn: ff2.future));
+            device = await ff2.future;
+          }
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: device));
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
@@ -64,7 +72,7 @@ class DeviceSetupPage extends StatelessWidget {
                 appBar: SGLAppBar(
                   'Add device',
                   hideBackButton: !canGoBack,
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
@@ -93,12 +101,12 @@ class DeviceSetupPage extends StatelessWidget {
         AnimatedContainer(
           duration: Duration(milliseconds: 100),
           height: 50,
-          color: Colors.orange,
+          color: Color(0xff0b6ab3),
         ),
         SectionTitle(
           title: 'Loading device params',
           icon: 'assets/box_setup/icon_controller.svg',
-          backgroundColor: Colors.orange,
+          backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
           large: true,
         ),

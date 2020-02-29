@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +107,15 @@ class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
+class MainNavigateToDeviceTestEvent extends MainNavigatorEvent {
+  final Device device;
+  MainNavigateToDeviceTestEvent(this.device, {futureFn})
+      : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [device];
+}
+
 class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
   final bool pushAsReplacement;
 
@@ -155,7 +166,8 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   List<Object> get props => [box];
 }
 
-class MainNavigateToFeedCareCommonFormEvent extends MainNavigateToFeedFormEvent {
+class MainNavigateToFeedCareCommonFormEvent
+    extends MainNavigateToFeedFormEvent {
   final Box box;
 
   MainNavigateToFeedCareCommonFormEvent(this.box, {pushAsReplacement = false})
@@ -227,8 +239,7 @@ class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
 class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
   final Device device;
 
-  MainNavigateToDeviceWifiEvent(this.device,
-      {Function(Future<Object> f) futureFn})
+  MainNavigateToDeviceWifiEvent(this.device, {futureFn})
       : super(futureFn: futureFn);
 
   @override
@@ -324,6 +335,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToDeviceNameEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/device/name', arguments: event);
+    } else if (event is MainNavigateToDeviceTestEvent) {
+      future = _navigatorKey.currentState
+          .pushNamed('/device/test', arguments: event);
     } else if (event is MainNavigateToDeviceWifiEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/device/wifi', arguments: event);
@@ -369,4 +383,21 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     }
     return _navigatorKey.currentState.pushNamed(url, arguments: event);
   }
+
+  FutureFn futureFn() {
+    Completer f = Completer();
+    Function(Future) futureFn = (Future<dynamic> fu) async {
+      var o = await fu;
+      f.complete(o);
+    };
+
+    return FutureFn(futureFn, f.future);
+  }
+}
+
+class FutureFn {
+  final Function(Future) futureFn;
+  final Future future;
+
+  FutureFn(this.futureFn, this.future);
 }

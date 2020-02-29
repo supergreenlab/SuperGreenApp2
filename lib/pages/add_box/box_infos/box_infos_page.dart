@@ -90,7 +90,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
                 appBar: SGLAppBar(
                   'NEW BOX SETUP',
                   hideBackButton: state is BoxInfosBlocStateDone,
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
@@ -111,7 +111,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
     return Fullscreen(
         title: 'Done!',
         subtitle: subtitle,
-        child: Icon(Icons.done, color: Color(0xff3bb30b), size: 100));
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm() {
@@ -120,12 +120,12 @@ class BoxInfosPageState extends State<BoxInfosPage> {
         AnimatedContainer(
           duration: Duration(milliseconds: 100),
           height: _keyboardVisible ? 0 : 100,
-          color: Colors.orange,
+          color: Color(0xff0bb354),
         ),
         SectionTitle(
           title: 'Let\'s name your new box:',
           icon: 'assets/box_setup/icon_box_name.svg',
-          backgroundColor: Colors.orange,
+          backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
           large: true,
         ),
@@ -136,7 +136,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: SGLTextField(
-                  hintText: 'Ex: BedroomGrow',
+                  hintText: 'Ex: IkeHigh',
                   controller: _nameController,
                   onChanged: (_) {
                     setState(() {});

@@ -25,6 +25,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
+import 'package:super_green_app/data/rel/device/devices.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 
@@ -76,6 +78,8 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
     Hive.registerAdapter(AppDataAdapter());
 
     await _db.init();
+
+    await RelDB.get().devicesDAO.deleteDrafts();
 
     AppData appData = _db.getAppData();
     add(AppInitBlocEventLoaded(appData));

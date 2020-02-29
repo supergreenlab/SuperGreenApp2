@@ -59,6 +59,10 @@ class DeviceWifiBlocStateNotFound extends DeviceWifiBlocState {
 }
 
 class DeviceWifiBlocStateDone extends DeviceWifiBlocState {
+  final Device device;
+
+  DeviceWifiBlocStateDone(this.device);
+
   @override
   List<Object> get props => [];
 }
@@ -113,7 +117,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
           await ddb.getParam(_args.device.id, 'WIFI_STATUS');
       await DeviceHelper.refreshIntParam(device, wifiStatusParam);
 
-      yield DeviceWifiBlocStateDone();
+      yield DeviceWifiBlocStateDone(device);
     }
   }
 }

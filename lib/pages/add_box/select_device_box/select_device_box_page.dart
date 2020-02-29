@@ -63,7 +63,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             return Scaffold(
                 appBar: SGLAppBar(
                   'Device configuration',
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
@@ -113,12 +113,12 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         AnimatedContainer(
           duration: Duration(milliseconds: 100),
           height: 20,
-          color: Colors.orange,
+          color: Color(0xff0bb354),
         ),
         SectionTitle(
           title: 'Available LED channels',
           icon: 'assets/box_setup/icon_controller.svg',
-          backgroundColor: Colors.orange,
+          backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
         ),
         _renderLeds(
@@ -133,7 +133,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           child: SectionTitle(
             title: 'Selected LED channels',
             icon: 'assets/box_setup/icon_controller.svg',
-            backgroundColor: Colors.orange,
+            backgroundColor: Color(0xff0bb354),
             titleColor: Colors.white,
           ),
         ),

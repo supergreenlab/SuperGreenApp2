@@ -56,8 +56,10 @@ class DeviceSetupBlocStateLoadingError extends DeviceSetupBlocState {
 
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
   final Device device;
+  final bool requiresInititalSetup;
+  final bool requiresWifiSetup;
 
-  DeviceSetupBlocStateDone(this.device) : super(1);
+  DeviceSetupBlocStateDone(this.device, this.requiresInititalSetup, this.requiresWifiSetup) : super(1);
 
   @override
   List<Object> get props => [device];
@@ -148,8 +150,10 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         yield DeviceSetupBlocState(done / total);
       }
 
+      Param state = await db.getParam(deviceID, 'STATE');
+      Param wifi = await db.getParam(deviceID, 'WIFI_STATUS');
       final d = await db.getDevice(deviceID);
-      yield DeviceSetupBlocStateDone(d);
+      yield DeviceSetupBlocStateDone(d, state.ivalue == 0, wifi.ivalue != 3);
     } catch (e) {
       yield DeviceSetupBlocStateLoadingError();
     }

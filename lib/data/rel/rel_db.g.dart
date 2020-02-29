@@ -14,18 +14,21 @@ class Device extends DataClass implements Insertable<Device> {
   final String config;
   final String ip;
   final String mdns;
+  final bool isDraft;
   Device(
       {@required this.id,
       @required this.identifier,
       @required this.name,
       @required this.config,
       @required this.ip,
-      @required this.mdns});
+      @required this.mdns,
+      @required this.isDraft});
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return Device(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       identifier: stringType
@@ -35,10 +38,13 @@ class Device extends DataClass implements Insertable<Device> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}config']),
       ip: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ip']),
       mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
+      isDraft:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_draft']),
     );
   }
   factory Device.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return Device(
       id: serializer.fromJson<int>(json['id']),
       identifier: serializer.fromJson<String>(json['identifier']),
@@ -46,11 +52,12 @@ class Device extends DataClass implements Insertable<Device> {
       config: serializer.fromJson<String>(json['config']),
       ip: serializer.fromJson<String>(json['ip']),
       mdns: serializer.fromJson<String>(json['mdns']),
+      isDraft: serializer.fromJson<bool>(json['isDraft']),
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'identifier': serializer.toJson<String>(identifier),
@@ -58,6 +65,7 @@ class Device extends DataClass implements Insertable<Device> {
       'config': serializer.toJson<String>(config),
       'ip': serializer.toJson<String>(ip),
       'mdns': serializer.toJson<String>(mdns),
+      'isDraft': serializer.toJson<bool>(isDraft),
     };
   }
 
@@ -73,6 +81,9 @@ class Device extends DataClass implements Insertable<Device> {
           config == null && nullToAbsent ? const Value.absent() : Value(config),
       ip: ip == null && nullToAbsent ? const Value.absent() : Value(ip),
       mdns: mdns == null && nullToAbsent ? const Value.absent() : Value(mdns),
+      isDraft: isDraft == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isDraft),
     );
   }
 
@@ -82,7 +93,8 @@ class Device extends DataClass implements Insertable<Device> {
           String name,
           String config,
           String ip,
-          String mdns}) =>
+          String mdns,
+          bool isDraft}) =>
       Device(
         id: id ?? this.id,
         identifier: identifier ?? this.identifier,
@@ -90,6 +102,7 @@ class Device extends DataClass implements Insertable<Device> {
         config: config ?? this.config,
         ip: ip ?? this.ip,
         mdns: mdns ?? this.mdns,
+        isDraft: isDraft ?? this.isDraft,
       );
   @override
   String toString() {
@@ -99,7 +112,8 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('name: $name, ')
           ..write('config: $config, ')
           ..write('ip: $ip, ')
-          ..write('mdns: $mdns')
+          ..write('mdns: $mdns, ')
+          ..write('isDraft: $isDraft')
           ..write(')'))
         .toString();
   }
@@ -109,8 +123,12 @@ class Device extends DataClass implements Insertable<Device> {
       id.hashCode,
       $mrjc(
           identifier.hashCode,
-          $mrjc(name.hashCode,
-              $mrjc(config.hashCode, $mrjc(ip.hashCode, mdns.hashCode))))));
+          $mrjc(
+              name.hashCode,
+              $mrjc(
+                  config.hashCode,
+                  $mrjc(
+                      ip.hashCode, $mrjc(mdns.hashCode, isDraft.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -120,7 +138,8 @@ class Device extends DataClass implements Insertable<Device> {
           other.name == this.name &&
           other.config == this.config &&
           other.ip == this.ip &&
-          other.mdns == this.mdns);
+          other.mdns == this.mdns &&
+          other.isDraft == this.isDraft);
 }
 
 class DevicesCompanion extends UpdateCompanion<Device> {
@@ -130,6 +149,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<String> config;
   final Value<String> ip;
   final Value<String> mdns;
+  final Value<bool> isDraft;
   const DevicesCompanion({
     this.id = const Value.absent(),
     this.identifier = const Value.absent(),
@@ -137,6 +157,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.config = const Value.absent(),
     this.ip = const Value.absent(),
     this.mdns = const Value.absent(),
+    this.isDraft = const Value.absent(),
   });
   DevicesCompanion.insert({
     this.id = const Value.absent(),
@@ -145,6 +166,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     @required String config,
     @required String ip,
     @required String mdns,
+    this.isDraft = const Value.absent(),
   })  : identifier = Value(identifier),
         name = Value(name),
         config = Value(config),
@@ -156,7 +178,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<String> name,
       Value<String> config,
       Value<String> ip,
-      Value<String> mdns}) {
+      Value<String> mdns,
+      Value<bool> isDraft}) {
     return DevicesCompanion(
       id: id ?? this.id,
       identifier: identifier ?? this.identifier,
@@ -164,6 +187,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       config: config ?? this.config,
       ip: ip ?? this.ip,
       mdns: mdns ?? this.mdns,
+      isDraft: isDraft ?? this.isDraft,
     );
   }
 }
@@ -229,9 +253,18 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         minTextLength: 1, maxTextLength: 64);
   }
 
+  final VerificationMeta _isDraftMeta = const VerificationMeta('isDraft');
+  GeneratedBoolColumn _isDraft;
+  @override
+  GeneratedBoolColumn get isDraft => _isDraft ??= _constructIsDraft();
+  GeneratedBoolColumn _constructIsDraft() {
+    return GeneratedBoolColumn('is_draft', $tableName, false,
+        defaultValue: Constant(true));
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, identifier, name, config, ip, mdns];
+      [id, identifier, name, config, ip, mdns, isDraft];
   @override
   $DevicesTable get asDslTable => this;
   @override
@@ -244,37 +277,39 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.identifier.present) {
       context.handle(_identifierMeta,
           identifier.isAcceptableValue(d.identifier.value, _identifierMeta));
-    } else if (identifier.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_identifierMeta);
     }
     if (d.name.present) {
       context.handle(
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
-    } else if (name.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (d.config.present) {
       context.handle(
           _configMeta, config.isAcceptableValue(d.config.value, _configMeta));
-    } else if (config.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_configMeta);
     }
     if (d.ip.present) {
       context.handle(_ipMeta, ip.isAcceptableValue(d.ip.value, _ipMeta));
-    } else if (ip.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_ipMeta);
     }
     if (d.mdns.present) {
       context.handle(
           _mdnsMeta, mdns.isAcceptableValue(d.mdns.value, _mdnsMeta));
-    } else if (mdns.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_mdnsMeta);
+    }
+    if (d.isDraft.present) {
+      context.handle(_isDraftMeta,
+          isDraft.isAcceptableValue(d.isDraft.value, _isDraftMeta));
     }
     return context;
   }
@@ -307,6 +342,9 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     }
     if (d.mdns.present) {
       map['mdns'] = Variable<String, StringType>(d.mdns.value);
+    }
+    if (d.isDraft.present) {
+      map['is_draft'] = Variable<bool, BoolType>(d.isDraft.value);
     }
     return map;
   }
@@ -346,7 +384,8 @@ class Module extends DataClass implements Insertable<Module> {
     );
   }
   factory Module.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return Module(
       id: serializer.fromJson<int>(json['id']),
       device: serializer.fromJson<int>(json['device']),
@@ -356,8 +395,8 @@ class Module extends DataClass implements Insertable<Module> {
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'device': serializer.toJson<int>(device),
@@ -531,31 +570,29 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.device.present) {
       context.handle(
           _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
-    } else if (device.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_deviceMeta);
     }
     if (d.name.present) {
       context.handle(
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
-    } else if (name.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (d.isArray.present) {
       context.handle(_isArrayMeta,
           isArray.isAcceptableValue(d.isArray.value, _isArrayMeta));
-    } else if (isArray.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_isArrayMeta);
     }
     if (d.arrayLen.present) {
       context.handle(_arrayLenMeta,
           arrayLen.isAcceptableValue(d.arrayLen.value, _arrayLenMeta));
-    } else if (arrayLen.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_arrayLenMeta);
     }
     return context;
@@ -629,7 +666,8 @@ class Param extends DataClass implements Insertable<Param> {
     );
   }
   factory Param.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return Param(
       id: serializer.fromJson<int>(json['id']),
       device: serializer.fromJson<int>(json['device']),
@@ -641,8 +679,8 @@ class Param extends DataClass implements Insertable<Param> {
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'device': serializer.toJson<int>(device),
@@ -869,43 +907,37 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.device.present) {
       context.handle(
           _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
-    } else if (device.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_deviceMeta);
     }
     if (d.module.present) {
       context.handle(
           _moduleMeta, module.isAcceptableValue(d.module.value, _moduleMeta));
-    } else if (module.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_moduleMeta);
     }
     if (d.key.present) {
       context.handle(_keyMeta, key.isAcceptableValue(d.key.value, _keyMeta));
-    } else if (key.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_keyMeta);
     }
     if (d.type.present) {
       context.handle(
           _typeMeta, type.isAcceptableValue(d.type.value, _typeMeta));
-    } else if (type.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_typeMeta);
     }
     if (d.svalue.present) {
       context.handle(
           _svalueMeta, svalue.isAcceptableValue(d.svalue.value, _svalueMeta));
-    } else if (svalue.isRequired && isInserting) {
-      context.missing(_svalueMeta);
     }
     if (d.ivalue.present) {
       context.handle(
           _ivalueMeta, ivalue.isAcceptableValue(d.ivalue.value, _ivalueMeta));
-    } else if (ivalue.isRequired && isInserting) {
-      context.missing(_ivalueMeta);
     }
     return context;
   }
@@ -982,7 +1014,8 @@ class Box extends DataClass implements Insertable<Box> {
     );
   }
   factory Box.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return Box(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
@@ -993,8 +1026,8 @@ class Box extends DataClass implements Insertable<Box> {
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
@@ -1195,38 +1228,30 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.feed.present) {
       context.handle(
           _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
-    } else if (feed.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_feedMeta);
     }
     if (d.device.present) {
       context.handle(
           _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
-    } else if (device.isRequired && isInserting) {
-      context.missing(_deviceMeta);
     }
     if (d.deviceBox.present) {
       context.handle(_deviceBoxMeta,
           deviceBox.isAcceptableValue(d.deviceBox.value, _deviceBoxMeta));
-    } else if (deviceBox.isRequired && isInserting) {
-      context.missing(_deviceBoxMeta);
     }
     if (d.name.present) {
       context.handle(
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
-    } else if (name.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (d.settings.present) {
       context.handle(_settingsMeta,
           settings.isAcceptableValue(d.settings.value, _settingsMeta));
-    } else if (settings.isRequired && isInserting) {
-      context.missing(_settingsMeta);
     }
     return context;
   }
@@ -1284,15 +1309,16 @@ class Feed extends DataClass implements Insertable<Feed> {
     );
   }
   factory Feed.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return Feed(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
@@ -1383,13 +1409,11 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.name.present) {
       context.handle(
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
-    } else if (name.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_nameMeta);
     }
     return context;
@@ -1450,7 +1474,8 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
     );
   }
   factory FeedEntry.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return FeedEntry(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
@@ -1460,8 +1485,8 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
@@ -1628,32 +1653,28 @@ class $FeedEntriesTable extends FeedEntries
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.feed.present) {
       context.handle(
           _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
-    } else if (feed.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_feedMeta);
     }
     if (d.date.present) {
       context.handle(
           _dateMeta, date.isAcceptableValue(d.date.value, _dateMeta));
-    } else if (date.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_dateMeta);
     }
     if (d.type.present) {
       context.handle(
           _typeMeta, type.isAcceptableValue(d.type.value, _typeMeta));
-    } else if (type.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_typeMeta);
     }
     if (d.params.present) {
       context.handle(
           _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
-    } else if (params.isRequired && isInserting) {
-      context.missing(_paramsMeta);
     }
     return context;
   }
@@ -1723,7 +1744,8 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
     );
   }
   factory FeedMedia.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return FeedMedia(
       id: serializer.fromJson<int>(json['id']),
       feedEntry: serializer.fromJson<int>(json['feedEntry']),
@@ -1733,8 +1755,8 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
     );
   }
   @override
-  Map<String, dynamic> toJson(
-      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feedEntry': serializer.toJson<int>(feedEntry),
@@ -1919,19 +1941,17 @@ class $FeedMediasTable extends FeedMedias
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    } else if (id.isRequired && isInserting) {
-      context.missing(_idMeta);
     }
     if (d.feedEntry.present) {
       context.handle(_feedEntryMeta,
           feedEntry.isAcceptableValue(d.feedEntry.value, _feedEntryMeta));
-    } else if (feedEntry.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_feedEntryMeta);
     }
     if (d.filePath.present) {
       context.handle(_filePathMeta,
           filePath.isAcceptableValue(d.filePath.value, _filePathMeta));
-    } else if (filePath.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_filePathMeta);
     }
     if (d.thumbnailPath.present) {
@@ -1939,14 +1959,12 @@ class $FeedMediasTable extends FeedMedias
           _thumbnailPathMeta,
           thumbnailPath.isAcceptableValue(
               d.thumbnailPath.value, _thumbnailPathMeta));
-    } else if (thumbnailPath.isRequired && isInserting) {
+    } else if (isInserting) {
       context.missing(_thumbnailPathMeta);
     }
     if (d.params.present) {
       context.handle(
           _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
-    } else if (params.isRequired && isInserting) {
-      context.missing(_paramsMeta);
     }
     return context;
   }
@@ -2010,6 +2028,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   FeedsDAO _feedsDAO;
   FeedsDAO get feedsDAO => _feedsDAO ??= FeedsDAO(this as RelDB);
   @override
-  List<TableInfo> get allTables =>
+  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  @override
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
       [devices, modules, params, boxes, feeds, feedEntries, feedMedias];
 }

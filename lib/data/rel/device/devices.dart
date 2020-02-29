@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -29,6 +28,7 @@ class Devices extends Table {
   TextColumn get config => text()();
   TextColumn get ip => text().withLength(min: 7, max: 15)();
   TextColumn get mdns => text().withLength(min: 1, max: 64)();
+  BoolColumn get isDraft => boolean().withDefault(Constant(true))();
 }
 
 class Modules extends Table {
@@ -54,7 +54,6 @@ class Params extends Table {
 
 @UseDao(tables: [Devices, Modules, Params])
 class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
-
   DevicesDAO(RelDB db) : super(db);
 
   Future<int> addDevice(DevicesCompanion device) {
@@ -66,7 +65,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future<Device> getDeviceByIdentifier(String identifier) {
-    return (select(devices)..where((d) => d.identifier.equals(identifier))).getSingle();
+    return (select(devices)..where((d) => d.identifier.equals(identifier)))
+        .getSingle();
   }
 
   Future<List<Device>> getDevices() {
@@ -81,6 +81,10 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
     await update(devices).replace(device);
   }
 
+  Future deleteDevice(Device device) {
+    return delete(devices).delete(device);
+  }
+
   Future<int> addModule(ModulesCompanion module) {
     return into(modules).insert(module);
   }
@@ -89,6 +93,10 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
     return (select(modules)
           ..where((m) => m.device.equals(deviceID) & m.name.equals(name)))
         .getSingle();
+  }
+
+  Future deleteModules(int deviceID) {
+    return (delete(modules)..where((m) => m.device.equals(deviceID))).go();
   }
 
   Future<int> addParam(ParamsCompanion param) {
@@ -110,5 +118,19 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
 
   Future updateParam(Param param) {
     return update(params).replace(param);
+  }
+
+  Future deleteParams(int deviceID) {
+    return (delete(params)..where((p) => p.device.equals(deviceID))).go();
+  }
+
+  Future deleteDrafts() async {
+    List<Device> devs =
+        await (select(devices)..where((d) => d.isDraft.equals(true))).get();
+    for (int i = 0; i < devs.length; ++i) {
+      await deleteParams(devs[i].id);
+      await deleteModules(devs[i].id);
+      await deleteDevice(devs[i]);
+    }
   }
 }

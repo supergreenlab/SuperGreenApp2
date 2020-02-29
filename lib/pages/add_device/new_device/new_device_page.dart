@@ -50,7 +50,7 @@ class NewDevicePage extends StatelessWidget {
             return Scaffold(
               appBar: SGLAppBar(
                 'Add device',
-                backgroundColor: Colors.orange,
+                backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
               ),
@@ -60,12 +60,12 @@ class NewDevicePage extends StatelessWidget {
                   AnimatedContainer(
                     duration: Duration(milliseconds: 100),
                     height: 50,
-                    color: Colors.orange,
+                    color: Color(0xff0b6ab3),
                   ),
                   SectionTitle(
                     title: 'Connecting to controller\'s wifi',
                     icon: 'assets/box_setup/icon_search.svg',
-                    backgroundColor: Colors.orange,
+                    backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
                     large: true,
                   ),

@@ -81,7 +81,12 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
               ));
             }
             return Scaffold(
-              appBar: SGLAppBar('Add device'),
+              appBar: SGLAppBar(
+                'Add device',
+                backgroundColor: Color(0xff0b6ab3),
+                titleColor: Colors.white,
+                iconColor: Colors.white,
+              ),
               body: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Column(
@@ -141,7 +146,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
     );
   }
 
-    @override
+  @override
   void dispose() {
     _nameController.dispose();
     super.dispose();

@@ -33,7 +33,7 @@ class AddDevicePage extends StatelessWidget {
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
               'Add new device',
-              backgroundColor: Colors.orange,
+              backgroundColor: Color(0xff0b6ab3),
               titleColor: Colors.white,
               iconColor: Colors.white,
             ),
@@ -80,7 +80,7 @@ class AddDevicePage extends StatelessWidget {
       SectionTitle(
         title: title,
         icon: icon,
-        backgroundColor: Colors.orange,
+        backgroundColor: Color(0xff0b6ab3),
         titleColor: Colors.white,
       ),
       Padding(

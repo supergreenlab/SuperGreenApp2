@@ -28,6 +28,8 @@ import 'package:super_green_app/pages/add_box/select_device_box/select_device_bo
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_page.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_bloc.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_page.dart';
+import 'package:super_green_app/pages/add_device/device_init/device_test_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_init/device_test_page.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_page.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
@@ -185,6 +187,13 @@ class MainPage extends StatelessWidget {
             builder: (context) => BlocProvider(
                   create: (context) => DeviceNameBloc(settings.arguments),
                   child: DeviceNamePage(),
+                ));
+      case '/device/test':
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (context) => BlocProvider(
+                  create: (context) => DeviceTestBloc(settings.arguments),
+                  child: DeviceTestPage(),
                 ));
       case '/device/wifi':
         return MaterialPageRoute(

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_wifi/device_wifi_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -37,6 +38,30 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   final FocusNode _ssidFocusNode = FocusNode();
   final FocusNode _passFocusNode = FocusNode();
 
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
+  int _listener;
+  bool _keyboardVisible = false;
+
+  @protected
+  void initState() {
+    super.initState();
+    _listener = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardVisible = visible;
+        });
+        if (!_keyboardVisible) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -44,13 +69,14 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
       listener: (BuildContext context, DeviceWifiBlocState state) {
         if (state is DeviceWifiBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
+              .add(MainNavigatorActionPop(param: state.device));
         }
       },
       child: BlocBuilder<DeviceWifiBloc, DeviceWifiBlocState>(
           bloc: BlocProvider.of<DeviceWifiBloc>(context),
           builder: (context, state) {
-            bool canGoBack = !(state is DeviceWifiBlocStateSearching || state is DeviceWifiBlocStateLoading);
+            bool canGoBack = !(state is DeviceWifiBlocStateSearching ||
+                state is DeviceWifiBlocStateLoading);
             Widget body;
             if (state is DeviceWifiBlocStateNotFound) {
               body = _renderNotfound();
@@ -62,6 +88,9 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             return Scaffold(
                 appBar: SGLAppBar(
                   'Device Wifi setup',
+                  backgroundColor: Color(0xff0b6ab3),
+                  titleColor: Colors.white,
+                  iconColor: Colors.white,
                   hideBackButton: !canGoBack,
                 ),
                 body: body);
@@ -95,6 +124,11 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
         Expanded(
           child: ListView(
             children: <Widget>[
+              AnimatedContainer(
+                duration: Duration(milliseconds: 100),
+                height: _keyboardVisible ? 0 : 100,
+                color: Color(0xff0b6ab3),
+              ),
               _renderInput(
                   context, 'Enter your home wifi SSID', '...', _ssidController,
                   onFieldSubmitted: (term) {
@@ -126,17 +160,19 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   }
 
   Widget _renderSearching() {
-    return FullscreenLoading(title: 'Searching device on network\nplease wait..');
+    return FullscreenLoading(
+        title: 'Searching device on network\nplease wait..');
   }
 
   Widget _renderInput(BuildContext context, String title, String hint,
       TextEditingController controller,
       {Function(String) onFieldSubmitted, FocusNode focusNode}) {
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: SectionTitle(
-            title: title, icon: 'assets/box_setup/icon_controller.svg'),
+      SectionTitle(
+        title: title,
+        icon: 'assets/box_setup/icon_controller.svg',
+        backgroundColor: Color(0xff0b6ab3),
+        titleColor: Colors.white,
       ),
       Column(
         children: <Widget>[
@@ -167,6 +203,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
 
   @override
   void dispose() {
+    _keyboardVisibility.removeListener(_listener);
     _ssidController.dispose();
     _passController.dispose();
     super.dispose();

@@ -65,18 +65,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
       bloc: BlocProvider.of<DeviceNameBloc>(context),
       listener: (BuildContext context, DeviceNameBlocState state) {
         if (state is DeviceNameBlocStateDone) {
-          if (!state.requiresWifiSetup) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigatorActionPop(param: state.device, mustPop: true));
-            return;
-          }
-          BlocProvider.of<MainNavigatorBloc>(context).add(
-              MainNavigateToDeviceWifiEvent(state.device,
-                  futureFn: (future) async {
-            await future;
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigatorActionPop(param: state.device, mustPop: true));
-          }));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToDeviceTestEvent(state.device));
         }
       },
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
@@ -94,7 +83,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
                   appBar: SGLAppBar(
                     'Add device',
                     hideBackButton: true,
-                    backgroundColor: Colors.orange,
+                    backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
                     iconColor: Colors.white,
                   ),
@@ -114,12 +103,12 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         AnimatedContainer(
           duration: Duration(milliseconds: 100),
           height: _keyboardVisible ? 0 : 100,
-          color: Colors.orange,
+          color: Color(0xff0b6ab3),
         ),
         SectionTitle(
           title: 'Set device\'s name',
           icon: 'assets/box_setup/icon_controller.svg',
-          backgroundColor: Colors.orange,
+          backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
           large: true,
         ),
@@ -129,7 +118,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
-                  hintText: 'ex: Bob',
+                  hintText: 'ex: Controller1',
                   controller: _nameController,
                   onChanged: (_) {
                     setState(() {});
@@ -161,6 +150,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
 
   @override
   void dispose() {
+    _keyboardVisibility.removeListener(_listener);
     _nameController.dispose();
     super.dispose();
   }

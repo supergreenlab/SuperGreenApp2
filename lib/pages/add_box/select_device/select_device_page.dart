@@ -46,7 +46,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
               'SELECT BOX\'S DEVICE',
-              backgroundColor: Colors.orange,
+              backgroundColor: Color(0xff0bb354),
               titleColor: Colors.white,
               iconColor: Colors.white,
             ),
@@ -55,12 +55,12 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                 AnimatedContainer(
                   duration: Duration(milliseconds: 100),
                   height: 100,
-                  color: Colors.orange,
+                  color: Color(0xff0bb354),
                 ),
                 SectionTitle(
                   title: 'Select the device below',
                   icon: 'assets/box_setup/icon_controller.svg',
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   large: true,
                 ),
