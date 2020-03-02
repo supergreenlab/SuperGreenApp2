@@ -75,26 +75,6 @@ class RelDB extends _$RelDB {
   @override
   MigrationStrategy get migration => MigrationStrategy(
         beforeOpen: (details) async {
-          if (details.wasCreated) {
-            int feed = await this
-                .feedsDAO
-                .addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
-            await this.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-                  type: 'FE_TOWELIE_INFO',
-                  feed: feed,
-                  date: DateTime.now(),
-                  params: Value(JsonEncoder().convert({
-                    'text': SGLLocalizations.current.towelieWelcomeApp,
-                    'top_pic': 'assets/feed_card/logo_sgl.svg',
-                    'buttons': [
-                      {
-                        'type': 'CREATE_BOX',
-                        'title': 'CREATE FIRST BOX',
-                      }
-                    ],
-                  })),
-                ));
-          }
         },
       );
 }

@@ -17,10 +17,8 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -74,14 +72,6 @@ class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
             device: Value(event.device.id),
             deviceBox: Value(event.deviceBox));
       }
-      await fdb.addFeedEntry(FeedEntriesCompanion.insert(
-        type: 'FE_TOWELIE_INFO',
-        feed: feedID,
-        date: DateTime.now(),
-        params: Value(JsonEncoder().convert({
-          'text': SGLLocalizations.current.towelieWelcomeBox,
-        })),
-      ));
       final boxID = await bdb.addBox(box);
       final b = await bdb.getBox(boxID);
       yield BoxInfosBlocStateDone(b,

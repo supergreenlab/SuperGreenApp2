@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
@@ -69,6 +70,8 @@ class BoxInfosPageState extends State<BoxInfosPage> {
       bloc: BlocProvider.of<BoxInfosBloc>(context),
       listener: (BuildContext context, BoxInfosBlocState state) async {
         if (state is BoxInfosBlocStateDone) {
+          BlocProvider.of<TowelieBloc>(context)
+                  .add(TowelieBlocEventBoxCreated(state.box));
           Timer(const Duration(milliseconds: 1500), () {
             HomeNavigatorBloc.eventBus
                 .fire(HomeNavigateToBoxFeedEvent(state.box));

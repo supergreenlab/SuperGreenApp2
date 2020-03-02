@@ -18,13 +18,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
 void main() async {
-  runApp(BlocProvider<MainNavigatorBloc>(
-      create: (context) => MainNavigatorBloc(navigatorKey),
-      child: MainPage(navigatorKey)));
+  runApp(MultiBlocProvider(providers: <BlocProvider>[
+    BlocProvider<MainNavigatorBloc>(
+        create: (context) => MainNavigatorBloc(navigatorKey)),
+    BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
+  ], child: MainPage(navigatorKey)));
 }

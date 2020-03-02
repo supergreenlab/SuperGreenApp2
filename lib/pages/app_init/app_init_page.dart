@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/welcome_page.dart';
@@ -32,6 +33,9 @@ class AppInitPage extends StatelessWidget {
             if (state.firstStart == false) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToHomeEvent());
+            } else {
+              BlocProvider.of<TowelieBloc>(context)
+                  .add(TowelieBlocEventAppInit());
             }
           }
         },
