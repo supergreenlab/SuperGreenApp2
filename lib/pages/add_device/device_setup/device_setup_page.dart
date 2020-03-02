@@ -50,7 +50,7 @@ class DeviceSetupPage extends StatelessWidget {
             device = await ff2.future;
           }
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: device));
+              .add(MainNavigatorActionPop(param: device, mustPop: true));
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(

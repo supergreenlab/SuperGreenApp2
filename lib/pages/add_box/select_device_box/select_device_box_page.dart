@@ -126,6 +126,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             (int led) {
           setState(() {
             _selectedLeds.add(led);
+            BlocProvider.of<SelectDeviceBoxBloc>(context)
+                .add(SelectDeviceBoxBlocEventSelectLed(led));
           });
         }),
         Padding(
@@ -140,6 +142,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         _renderLeds(_selectedLeds, (int led) {
           setState(() {
             _selectedLeds.remove(led);
+            BlocProvider.of<SelectDeviceBoxBloc>(context)
+                .add(SelectDeviceBoxBlocEventUnselectLed(led));
           });
         }),
         Expanded(
@@ -174,7 +178,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: <Widget>[
-                          Text('channel', style: TextStyle(fontSize: 10)),
+                          Text('LED chan', style: TextStyle(fontSize: 10)),
                           Text(
                             '${led + 1}',
                             style: TextStyle(

@@ -22,6 +22,7 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
@@ -63,9 +64,21 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: BlocProvider.of<DeviceNameBloc>(context),
-      listener: (BuildContext context, DeviceNameBlocState state) {
+      listener: (BuildContext context, DeviceNameBlocState state) async {
         if (state is DeviceNameBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToDeviceTestEvent(state.device));
+          await Future.delayed(Duration(seconds: 1));
+          FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToDeviceTestEvent(state.device,
+                  futureFn: ff.futureFn));
+          bool done = await ff.future;
+          if (done == true) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(mustPop: true, param: state.device));
+          } else {
+            BlocProvider.of<DeviceNameBloc>(context)
+                .add(DeviceNameBlocEventReset());
+          }
         }
       },
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
@@ -74,6 +87,15 @@ class DeviceNamePageState extends State<DeviceNamePage> {
             Widget body;
             if (state is DeviceNameBlocStateLoading) {
               body = _renderLoading();
+            } else if (state is DeviceNameBlocStateDone) {
+              body = Fullscreen(
+                title: 'Done',
+                child: Icon(
+                  Icons.check,
+                  color: Color(0xff3bb30b),
+                  size: 100,
+                ),
+              );
             } else {
               body = _renderForm();
             }
@@ -116,7 +138,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
                   hintText: 'ex: Controller1',
                   controller: _nameController,

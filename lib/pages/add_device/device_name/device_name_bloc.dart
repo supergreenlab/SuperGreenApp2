@@ -26,12 +26,19 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class DeviceNameBlocEvent extends Equatable {}
 
+class DeviceNameBlocEventReset extends DeviceNameBlocEvent {
+  DeviceNameBlocEventReset();
+
+  @override
+  List<Object> get props => [];
+}
+
 class DeviceNameBlocEventSetName extends DeviceNameBlocEvent {
   final String name;
   DeviceNameBlocEventSetName(this.name);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [name];
 }
 
 class DeviceNameBlocState extends Equatable {
@@ -49,7 +56,8 @@ class DeviceNameBlocStateLoading extends DeviceNameBlocState {
 class DeviceNameBlocStateDone extends DeviceNameBlocState {
   final bool requiresWifiSetup;
 
-  DeviceNameBlocStateDone(Device device, this.requiresWifiSetup) : super(device);
+  DeviceNameBlocStateDone(Device device, this.requiresWifiSetup)
+      : super(device);
 }
 
 class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
@@ -63,7 +71,9 @@ class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   @override
   Stream<DeviceNameBlocState> mapEventToState(
       DeviceNameBlocEvent event) async* {
-    if (event is DeviceNameBlocEventSetName) {
+    if (event is DeviceNameBlocEventReset) {
+      yield DeviceNameBlocState(_args.device);
+    } else if (event is DeviceNameBlocEventSetName) {
       yield DeviceNameBlocStateLoading(_args.device);
       var ddb = RelDB.get().devicesDAO;
       await DeviceHelper.updateDeviceName(_args.device, event.name);
