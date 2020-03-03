@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class TowelieBlocEvent extends Equatable {}
 
@@ -36,6 +37,15 @@ class TowelieBlocEventCardButton extends TowelieBlocEvent {
 class TowelieBlocState extends Equatable {
   @override
   List<Object> get props => [];
+}
+
+class TowelieBlocStateMainNavigation extends TowelieBlocState {
+  final MainNavigatorEvent mainNavigatorEvent;
+
+  TowelieBlocStateMainNavigation(this.mainNavigatorEvent);
+
+  @override
+  List<Object> get props => [mainNavigatorEvent];
 }
 
 class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
@@ -74,6 +84,10 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
           'text': SGLLocalizations.current.towelieWelcomeBox,
         })),
       ));
-    } else if (event is TowelieBlocEventCardButton) {}
+    } else if (event is TowelieBlocEventCardButton) {
+      if (event.params['ID'] == 'CREATE_BOX') {
+        yield TowelieBlocStateMainNavigation(MainNavigateToNewBoxInfosEvent());
+      }
+    }
   }
 }

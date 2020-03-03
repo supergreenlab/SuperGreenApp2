@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -56,10 +57,12 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
       FeedCardText(state.params['text']),
     ];
     if (state.params['top_pic'] != null) {
-      body.insert(0, Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24.0),
-        child: SvgPicture.asset(state.params['top_pic']),
-      ));
+      body.insert(
+          0,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24.0),
+            child: SvgPicture.asset(state.params['top_pic']),
+          ));
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -77,15 +80,12 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
 
   Widget _renderButtonFromName(
       BuildContext context, Map<String, dynamic> button) {
-    if (button['type'] == 'CREATE_BOX') {
-      return FlatButton(
-        child: Text(button['title'], style: TextStyle(color: Colors.blue)),
-        onPressed: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToNewBoxInfosEvent());
-        },
-      );
-    }
-    return Text('NO_SUCH_BUTTON');
+    return FlatButton(
+      child: Text(button['title'], style: TextStyle(color: Colors.blue)),
+      onPressed: () {
+        BlocProvider.of<TowelieBloc>(context)
+            .add(TowelieBlocEventCardButton(button));
+      },
+    );
   }
 }

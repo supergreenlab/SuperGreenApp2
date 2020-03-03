@@ -19,7 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_page.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_bloc.dart';
@@ -89,27 +91,36 @@ class MainPage extends StatelessWidget {
           currentFocus.unfocus();
         }
       },
-      child: MaterialApp(
-        localizationsDelegates: [
-          const SGLLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en'),
-          const Locale('es'),
-          const Locale('fr'),
-        ],
-        navigatorKey: _navigatorKey,
-        onGenerateTitle: (BuildContext context) =>
-            SGLLocalizations.of(context).title,
-        onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
-        theme: ThemeData(
-          fontFamily: 'Roboto',
-        ),
-        home: BlocProvider<AppInitBloc>(
-          create: (context) => AppInitBloc(),
-          child: AppInitPage(),
+      child: BlocListener<TowelieBloc, TowelieBlocState>(
+        listener: (BuildContext context, state) {
+          if (state is TowelieBlocStateMainNavigation) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(state.mainNavigatorEvent);
+          }
+        },
+        child: MaterialApp(
+          localizationsDelegates: [
+            const SGLLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en'),
+            const Locale('es'),
+            const Locale('fr'),
+          ],
+          navigatorKey: _navigatorKey,
+          onGenerateTitle: (BuildContext context) =>
+              SGLLocalizations.of(context).title,
+          onGenerateRoute: (settings) =>
+              this._onGenerateRoute(context, settings),
+          theme: ThemeData(
+            fontFamily: 'Roboto',
+          ),
+          home: BlocProvider<AppInitBloc>(
+            create: (context) => AppInitBloc(),
+            child: AppInitPage(),
+          ),
         ),
       ),
     );
