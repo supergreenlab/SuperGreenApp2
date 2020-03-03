@@ -82,16 +82,50 @@ class SGLLocalizations {
 
   String get towelieWelcomeApp {
     return Intl.message(
-      'Hey man, welcome here, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant.\n\nBut first, let’s create a box feed. Press the **ADD A FIRST BOX** button below.',
+      '''Hey man, welcome here, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant.
+      
+Welcome to **SuperGreenLab\'s** grow diary app!
+While it can be used without, this app has been optimized to be used with a **Ninja bundle**.
+Do you own one?''',
       name: 'towelieWelcomeApp',
       desc: 'Towelie Welcome App',
       locale: localeName,
     );
   }
 
+  String get towelieWelcomeAppHasBundle {
+    return Intl.message(
+      '''Have you received it yet?''',
+      name: 'towelieWelcomeAppHasBundle',
+      desc: 'Towelie Welcome App - Has bundle',
+      locale: localeName,
+    );
+  }
+
+  String get towelieWelcomeAppNoBundle {
+    return Intl.message(
+      '''With 6 full spectrum LED grow lights providing dense light and little heat. This complete grow box bundle lets you build a grow box out of almost anything.
+
+With these lights we successfully grew and harvested from space buckets, TV stands, office storages and custom built grow boxes. Some of our users even grew in toolboxes or suitcase ! What will you build ?
+
+Coming with a sensor, ventilation, a controller and a companion App. The ninja grow bundle is fully controllable from your smartphone and can be split into 3 different chambers with different light dimming, schedules and ventilation setups.''',
+      name: 'towelieWelcomeAppNoBundle',
+      desc: 'Towelie Welcome App - No bundle',
+      locale: localeName,
+    );
+  }
+
   String get towelieWelcomeBox {
     return Intl.message(
-      '**Welcome to your box feed!**\n\nThis is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.',
+      '''**Welcome to your box feed!**
+This is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.
+
+This is also where you will log the actions **you want to remember**: last time you watered for example.
+
+The app will also add log entries for temperature or humidity **heads up and reminders** you can set or
+receive from the app.
+
+And all this feed can be reviewed, shared or replayed later, **and that’s awesome**.''',
       name: 'towelieWelcomeBox',
       desc: 'Towelie Welcome Box',
       locale: localeName,
@@ -103,7 +137,8 @@ class SGLLocalizationsDelegate extends LocalizationsDelegate<SGLLocalizations> {
   const SGLLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en', 'es', 'fr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      ['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
   Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale);

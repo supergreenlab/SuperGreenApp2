@@ -57,6 +57,10 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
               body = _renderLoading(context, state);
             } else if (state is SelectDeviceBoxBlocStateDeviceFull) {
               body = _renderNoLedsAvailable(context, state);
+            } else if (state is SelectDeviceBoxBlocStateDone) {
+              body = Fullscreen(
+                  title: 'Done!',
+                  child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
             } else {
               body = _renderLedSelection(context, state);
             }

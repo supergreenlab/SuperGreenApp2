@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/towelie/towelie_bloc.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
@@ -42,7 +41,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
           ];
           if (state.params['buttons'] != null &&
               state.params['buttons'].length > 0) {
-            content.add(_renderButtonBar(context, state.params['buttons']));
+            content.add(_renderButtonBar(context, state, state.params['buttons']));
           }
           return FeedCard(
               child: Column(
@@ -70,21 +69,21 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  ButtonBar _renderButtonBar(BuildContext context, List buttons) {
+  ButtonBar _renderButtonBar(BuildContext context, FeedTowelieInfoCardBlocState state, List buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-      children: buttons.map((b) => _renderButtonFromName(context, b)).toList(),
+      children: buttons.map((b) => _renderButtonFromName(context, state, b)).toList(),
     );
   }
 
   Widget _renderButtonFromName(
-      BuildContext context, Map<String, dynamic> button) {
+      BuildContext context, FeedTowelieInfoCardBlocState state, Map<String, dynamic> button) {
     return FlatButton(
       child: Text(button['title'], style: TextStyle(color: Colors.blue)),
       onPressed: () {
         BlocProvider.of<TowelieBloc>(context)
-            .add(TowelieBlocEventCardButton(button));
+            .add(TowelieBlocEventCardButton(button, state.feed, state.feedEntry));
       },
     );
   }

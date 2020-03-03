@@ -73,8 +73,6 @@ class BoxInfosPageState extends State<BoxInfosPage> {
           BlocProvider.of<TowelieBloc>(context)
                   .add(TowelieBlocEventBoxCreated(state.box));
           Timer(const Duration(milliseconds: 1500), () {
-            HomeNavigatorBloc.eventBus
-                .fire(HomeNavigateToBoxFeedEvent(state.box));
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop());
           });

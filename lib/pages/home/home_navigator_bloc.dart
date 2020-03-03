@@ -69,8 +69,6 @@ class HomeNavigatorState extends Equatable {
 }
 
 class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
-  static final eventBus = EventBus();
-
   final MainNavigatorEvent _args;
   final GlobalKey<NavigatorState> _navigatorKey;
 
@@ -78,9 +76,6 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
     if (_args is MainNavigateToHomeBoxEvent) {
       this.add(HomeNavigateToBoxFeedEvent((_args as MainNavigateToHomeBoxEvent).box));
     }
-    eventBus.on<HomeNavigatorEvent>().listen((e) {
-      this.add(e);
-    });
   }
 
   @override

@@ -27,16 +27,37 @@ class FullscreenLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget child;
+    if (percent != null) {
+      child = Stack(
+        children: [
+          SizedBox(
+              width: 60,
+              height: 60,
+              child: CircularProgressIndicator(
+                value: percent,
+                strokeWidth: 4.0,
+              )),
+          SizedBox(
+              width: 60,
+              height: 60,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('${(percent * 100).toInt()}%', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: Color(0xffababab))),
+                ],
+              )),
+        ],
+      );
+    } else {
+      child = CircularProgressIndicator(
+        value: percent,
+        strokeWidth: 4.0,
+      );
+    }
     return Fullscreen(
       title: title,
-      child: SizedBox(
-        width: 40,
-        height: 40,
-        child: CircularProgressIndicator(
-          value: percent,
-          strokeWidth: 4.0,
-        ),
-      ),
+      child: child,
     );
   }
 }
