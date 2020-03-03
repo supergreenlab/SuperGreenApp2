@@ -16,13 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_entries.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class FeedPage extends StatelessWidget {
+class FeedPage extends StatefulWidget {
   final Color color;
   final String title;
   final Widget appBar;
@@ -30,6 +32,14 @@ class FeedPage extends StatelessWidget {
 
   const FeedPage(
       {this.title, @required this.color, this.appBar, this.appBarHeight});
+
+  @override
+  _FeedPageState createState() => _FeedPageState();
+}
+
+class _FeedPageState extends State<FeedPage> {
+  int _nEntries = -1;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,21 +55,38 @@ class FeedPage extends StatelessWidget {
   }
 
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
-    List<Widget> entries = state.entries
-        .map((e) => FeedEntriesHelper.cardForFeedEntry(state.feed, e))
-        .toList();
+    int i = 0;
+    List<Widget> entries = state.entries.map((e) {
+      bool hasNewEntry =
+          _nEntries != -1 && _nEntries != state.entries.length && i++ == 0;
+      _nEntries = state.entries.length;
+      if (hasNewEntry) {
+        Timer(
+            Duration(milliseconds: 1),
+            () => _scrollController.animateTo(
+                  widget.appBarHeight ?? 0,
+                  curve: Curves.easeOut,
+                  duration: const Duration(milliseconds: 800),
+                ));
+      }
+      return FeedEntriesHelper.cardForFeedEntry(state.feed, e, hasNewEntry);
+    }).toList();
     entries.add(Container(height: 76));
     return Container(
       child: CustomScrollView(
+        controller: _scrollController,
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor: Colors.white,
-            expandedHeight: appBarHeight ?? 200.0,
+            expandedHeight: widget.appBarHeight ?? 200.0,
             iconTheme: IconThemeData(color: Color(0xff404040)),
             flexibleSpace: FlexibleSpaceBar(
-              background: this.appBar,
-              centerTitle: this.appBar == null,
-              title: this.appBar == null ? Text(title, style: TextStyle(color: Color(0xff404040))) : null,
+              background: this.widget.appBar,
+              centerTitle: this.widget.appBar == null,
+              title: this.widget.appBar == null
+                  ? Text(widget.title,
+                      style: TextStyle(color: Color(0xff404040)))
+                  : null,
             ),
           ),
           SliverList(delegate: SliverChildListDelegate(entries))

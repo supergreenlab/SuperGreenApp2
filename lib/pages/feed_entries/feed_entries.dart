@@ -41,60 +41,60 @@ import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_ca
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_card_page.dart';
 
 class FeedEntriesHelper {
-  static Map<String, Widget Function(Feed feed, FeedEntry feedEntry)> _cards = {
-    'FE_LIGHT': (feed, feedEntry) => BlocProvider(
+  static Map<String, Widget Function(Feed feed, FeedEntry feedEntry, bool animate)> _cards = {
+    'FE_LIGHT': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedLightCardBloc(feed, feedEntry),
-          child: FeedLightCardPage(),
+          child: FeedLightCardPage(animate),
         ),
-    'FE_MEDIA': (feed, feedEntry) => BlocProvider(
+    'FE_MEDIA': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedMediaCardBloc(feed, feedEntry),
-          child: FeedMediaCardPage(),
+          child: FeedMediaCardPage(animate),
         ),
-    'FE_SCHEDULE': (feed, feedEntry) => BlocProvider(
+    'FE_SCHEDULE': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedScheduleCardBloc(feed, feedEntry),
-          child: FeedScheduleCardPage(),
+          child: FeedScheduleCardPage(animate),
         ),
-    'FE_TOPPING': (feed, feedEntry) => BlocProvider(
+    'FE_TOPPING': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedToppingCardBloc(feed, feedEntry),
-          child: FeedToppingCardPage(),
+          child: FeedToppingCardPage(animate),
         ),
-    'FE_DEFOLIATION': (feed, feedEntry) => BlocProvider(
+    'FE_DEFOLIATION': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedDefoliationCardBloc(feed, feedEntry),
-          child: FeedDefoliationCardPage(),
+          child: FeedDefoliationCardPage(animate),
         ),
-    'FE_FIMMING': (feed, feedEntry) => BlocProvider(
+    'FE_FIMMING': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedFimmingCardBloc(feed, feedEntry),
-          child: FeedFimmingCardPage(),
+          child: FeedFimmingCardPage(animate),
         ),
-    'FE_BENDING': (feed, feedEntry) => BlocProvider(
+    'FE_BENDING': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedBendingCardBloc(feed, feedEntry),
-          child: FeedBendingCardPage(),
+          child: FeedBendingCardPage(animate),
         ),
-    'FE_VENTILATION': (feed, feedEntry) => BlocProvider(
+    'FE_VENTILATION': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedVentilationCardBloc(feed, feedEntry),
-          child: FeedVentilationCardPage(),
+          child: FeedVentilationCardPage(animate),
         ),
-    'FE_TOWELIE_INFO': (feed, feedEntry) => BlocProvider(
+    'FE_TOWELIE_INFO': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedTowelieInfoCardBloc(feed, feedEntry),
-          child: FeedTowelieInfoCardPage(),
+          child: FeedTowelieInfoCardPage(animate),
         ),
-    'FE_WATER': (feed, feedEntry) => BlocProvider(
+    'FE_WATER': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedWaterCardBloc(feed, feedEntry),
-          child: FeedWaterCardPage(),
+          child: FeedWaterCardPage(animate),
         ),
   };
 
-  static Widget cardForFeedEntry(Feed feed, FeedEntry feedEntry) {
-    return _cards[feedEntry.type](feed, feedEntry);
+  static Widget cardForFeedEntry(Feed feed, FeedEntry feedEntry, bool animate) {
+    return _cards[feedEntry.type](feed, feedEntry, animate);
   }
 }

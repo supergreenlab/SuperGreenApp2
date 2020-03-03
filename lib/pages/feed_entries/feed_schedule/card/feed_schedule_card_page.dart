@@ -24,11 +24,17 @@ import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedScheduleCardPage extends StatelessWidget {
+
+  final bool animate;
+
+  const FeedScheduleCardPage(this.animate, {Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedScheduleCardBloc, FeedScheduleCardBlocState>(
         bloc: BlocProvider.of<FeedScheduleCardBloc>(context),
         builder: (context, state) => FeedCard(
+              animate: animate,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

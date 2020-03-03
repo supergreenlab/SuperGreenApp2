@@ -28,6 +28,10 @@ import 'package:super_green_app/widgets/media_list.dart';
 
 abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
     extends StatelessWidget {
+  final bool animate;
+
+  const FeedCareCommonCardPage(this.animate, {Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CardBloc, FeedCareCommonCardBlocState>(
@@ -73,6 +77,7 @@ abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
                 ));
           }
           return FeedCard(
+            animate: animate,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: body,

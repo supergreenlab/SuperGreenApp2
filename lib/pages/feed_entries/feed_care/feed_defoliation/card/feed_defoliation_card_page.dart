@@ -22,6 +22,8 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/ca
 
 class FeedDefoliationCardPage extends FeedCareCommonCardPage<FeedDefoliationCardBloc> {
 
+  FeedDefoliationCardPage(bool animate) : super(animate);
+
   String iconPath() {
     return 'assets/feed_card/icon_defoliation.svg';
   }

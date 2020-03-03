@@ -147,7 +147,7 @@ class FeedVentilationFormBloc
       if (_args.box.device == null) {
         return;
       }
-      _blowerNight = _blowerDay.copyWith(ivalue: event.blowerNight);
+      _blowerNight = _blowerNight.copyWith(ivalue: event.blowerNight);
       await DeviceHelper.updateIntParam(
           _device, _blowerNight, (event.blowerNight).toInt());
       yield FeedVentilationFormBlocStateVentilationLoaded(_initialBlowerDay,

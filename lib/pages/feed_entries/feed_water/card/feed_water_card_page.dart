@@ -24,6 +24,10 @@ import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedWaterCardPage extends StatelessWidget {
+  final bool animate;
+
+  const FeedWaterCardPage(this.animate, {Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedWaterCardBloc, FeedWaterCardBlocState>(
@@ -67,6 +71,7 @@ class FeedWaterCardPage extends StatelessWidget {
             ));
           }
           return FeedCard(
+            animate: animate,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

@@ -27,11 +27,16 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 class FeedMediaCardPage extends StatelessWidget {
+  final bool animate;
+
+  const FeedMediaCardPage(this.animate, {Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedMediaCardBloc, FeedMediaCardBlocState>(
         bloc: BlocProvider.of<FeedMediaCardBloc>(context),
         builder: (context, state) => FeedCard(
+              animate: animate,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
