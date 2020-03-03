@@ -78,7 +78,7 @@ class _FeedPageState extends State<FeedPage> {
         slivers: <Widget>[
           SliverAppBar(
             backgroundColor: Colors.white,
-            expandedHeight: widget.appBarHeight ?? 200.0,
+            expandedHeight: widget.appBarHeight ?? 56.0,
             iconTheme: IconThemeData(color: Color(0xff404040)),
             flexibleSpace: FlexibleSpaceBar(
               background: this.widget.appBar,

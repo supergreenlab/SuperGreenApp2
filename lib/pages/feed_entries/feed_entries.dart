@@ -45,52 +45,52 @@ class FeedEntriesHelper {
     'FE_LIGHT': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedLightCardBloc(feed, feedEntry),
-          child: FeedLightCardPage(animate),
+          child: FeedLightCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_MEDIA': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedMediaCardBloc(feed, feedEntry),
-          child: FeedMediaCardPage(animate),
+          child: FeedMediaCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_SCHEDULE': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedScheduleCardBloc(feed, feedEntry),
-          child: FeedScheduleCardPage(animate),
+          child: FeedScheduleCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_TOPPING': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedToppingCardBloc(feed, feedEntry),
-          child: FeedToppingCardPage(animate),
+          child: FeedToppingCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_DEFOLIATION': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedDefoliationCardBloc(feed, feedEntry),
-          child: FeedDefoliationCardPage(animate),
+          child: FeedDefoliationCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_FIMMING': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedFimmingCardBloc(feed, feedEntry),
-          child: FeedFimmingCardPage(animate),
+          child: FeedFimmingCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_BENDING': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedBendingCardBloc(feed, feedEntry),
-          child: FeedBendingCardPage(animate),
+          child: FeedBendingCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_VENTILATION': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedVentilationCardBloc(feed, feedEntry),
-          child: FeedVentilationCardPage(animate),
+          child: FeedVentilationCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_TOWELIE_INFO': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedTowelieInfoCardBloc(feed, feedEntry),
-          child: FeedTowelieInfoCardPage(animate),
+          child: FeedTowelieInfoCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
     'FE_WATER': (feed, feedEntry, animate) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedWaterCardBloc(feed, feedEntry),
-          child: FeedWaterCardPage(animate),
+          child: FeedWaterCardPage(animate, key: Key('{$feedEntry.id}')),
         ),
   };
 
