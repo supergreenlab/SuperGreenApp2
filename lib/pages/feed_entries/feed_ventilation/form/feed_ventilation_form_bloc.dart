@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -73,6 +91,13 @@ class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
   List<Object> get props => [];
 }
 
+class FeedVentilationFormBlocStateNoDevice
+    extends FeedVentilationFormBlocStateVentilationLoaded {
+  FeedVentilationFormBlocStateNoDevice(int initialBlowerDay,
+      int initialBlowerNight, int blowerDay, int blowerNight)
+      : super(initialBlowerDay, initialBlowerNight, blowerDay, blowerNight);
+}
+
 class FeedVentilationFormBloc
     extends Bloc<FeedVentilationFormBlocEvent, FeedVentilationFormBlocState> {
   final MainNavigateToFeedVentilationFormEvent _args;
@@ -96,6 +121,10 @@ class FeedVentilationFormBloc
       FeedVentilationFormBlocEvent event) async* {
     if (event is FeedVentilationFormBlocEventLoadVentilations) {
       final db = RelDB.get();
+      if (_args.box.device == null) {
+        yield FeedVentilationFormBlocStateNoDevice(15, 5, 15, 5);
+        return;
+      }
       _device = await db.devicesDAO.getDevice(_args.box.device);
       _blowerDay = await db.devicesDAO
           .getParam(_device.id, "BOX_${_args.box.deviceBox}_BLOWER_DAY");
@@ -106,18 +135,27 @@ class FeedVentilationFormBloc
       yield FeedVentilationFormBlocStateVentilationLoaded(_initialBlowerDay,
           _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue);
     } else if (event is FeedVentilationFormBlocBlowerDayChangedEvent) {
+      if (_args.box.device == null) {
+        return;
+      }
       _blowerDay = _blowerDay.copyWith(ivalue: event.blowerDay);
       await DeviceHelper.updateIntParam(
           _device, _blowerDay, (event.blowerDay).toInt());
       yield FeedVentilationFormBlocStateVentilationLoaded(_initialBlowerDay,
           _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue);
     } else if (event is FeedVentilationFormBlocBlowerNightChangedEvent) {
-      _blowerNight = _blowerDay.copyWith(ivalue: event.blowerNight);
+      if (_args.box.device == null) {
+        return;
+      }
+      _blowerNight = _blowerNight.copyWith(ivalue: event.blowerNight);
       await DeviceHelper.updateIntParam(
           _device, _blowerNight, (event.blowerNight).toInt());
       yield FeedVentilationFormBlocStateVentilationLoaded(_initialBlowerDay,
           _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue);
     } else if (event is FeedVentilationFormBlocEventCreate) {
+      if (_args.box.device == null) {
+        return;
+      }
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_VENTILATION',

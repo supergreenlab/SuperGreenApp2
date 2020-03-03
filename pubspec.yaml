@@ -46,6 +46,9 @@ dependencies:
   flutter_cupertino_localizations: ^1.0.1
   intl:
   intl_translation:
+  flutter_swiper:
+  charts_flutter:
+  flutter_markdown:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

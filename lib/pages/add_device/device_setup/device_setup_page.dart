@@ -1,9 +1,26 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -15,23 +32,32 @@ class DeviceSetupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: BlocProvider.of<DeviceSetupBloc>(context),
-      listener: (BuildContext context, DeviceSetupBlocState state) {
+      listener: (BuildContext context, DeviceSetupBlocState state) async {
         if (state is DeviceSetupBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(
-              MainNavigateToDeviceNameEvent(state.device,
-                  futureFn: (future) async {
-            Device device = await future;
-            if (device != null) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigatorActionPop(param: device, mustPop: true));
-            }
-          }));
+          Device device = state.device;
+          if (state.requiresInititalSetup) {
+            FutureFn ff1 =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
+            device = await ff1.future;
+          }
+          if (!state.requiresWifiSetup) {
+            FutureFn ff2 =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToDeviceWifiEvent(device, futureFn: ff2.future));
+            device = await ff2.future;
+          }
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: device, mustPop: true));
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
           bloc: Provider.of<DeviceSetupBloc>(context),
           builder: (context, state) {
-            bool canGoBack = state is DeviceSetupBlocStateAlreadyExists || state is DeviceSetupBlocStateLoadingError;
+            bool canGoBack = state is DeviceSetupBlocStateAlreadyExists ||
+                state is DeviceSetupBlocStateLoadingError;
             Widget body;
             if (state is DeviceSetupBlocStateAlreadyExists) {
               body = _renderAlreadyAdded(context);
@@ -46,6 +72,9 @@ class DeviceSetupPage extends StatelessWidget {
                 appBar: SGLAppBar(
                   'Add device',
                   hideBackButton: !canGoBack,
+                  backgroundColor: Color(0xff0b6ab3),
+                  titleColor: Colors.white,
+                  iconColor: Colors.white,
                 ),
                 body: body,
               ),
@@ -69,11 +98,17 @@ class DeviceSetupPage extends StatelessWidget {
   Widget _renderLoading(BuildContext context, DeviceSetupBlocState state) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: SectionTitle(
-              title: 'Loading device params',
-              icon: 'assets/box_setup/icon_controller.svg'),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 100),
+          height: 50,
+          color: Color(0xff0b6ab3),
+        ),
+        SectionTitle(
+          title: 'Loading device params',
+          icon: 'assets/box_setup/icon_controller.svg',
+          backgroundColor: Color(0xff0b6ab3),
+          titleColor: Colors.white,
+          large: true,
         ),
         Expanded(
             child: FullscreenLoading(

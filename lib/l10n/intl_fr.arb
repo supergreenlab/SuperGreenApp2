@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-02-03T14:19:29.437723",
+  "@@last_modified": "2020-03-03T16:48:17.500937",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -21,6 +21,30 @@
   "autoScheduleHelper": "Auto flower plants are a special type of strain that won’t require light schedule change in order to start flowering. Their vegetative stage duration can’t be controlled, and varies from one plant to another.",
   "@autoScheduleHelper": {
     "description": "Auto schedule helper",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieWelcomeApp": "Hey man, welcome here, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant.\n      \nWelcome to **SuperGreenLab's** grow diary app!\nWhile it can be used without, this app has been optimized to be used with a **Ninja bundle**.\nDo you own one?",
+  "@towelieWelcomeApp": {
+    "description": "Towelie Welcome App",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieWelcomeAppHasBundle": "Have you received it yet?",
+  "@towelieWelcomeAppHasBundle": {
+    "description": "Towelie Welcome App - Has bundle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieWelcomeAppNoBundle": "With 6 full spectrum LED grow lights providing dense light and little heat. This complete grow box bundle lets you build a grow box out of almost anything.\n\nWith these lights we successfully grew and harvested from space buckets, TV stands, office storages and custom built grow boxes. Some of our users even grew in toolboxes or suitcase ! What will you build ?\n\nComing with a sensor, ventilation, a controller and a companion App. The ninja grow bundle is fully controllable from your smartphone and can be split into 3 different chambers with different light dimming, schedules and ventilation setups.",
+  "@towelieWelcomeAppNoBundle": {
+    "description": "Towelie Welcome App - No bundle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieWelcomeBox": "**Welcome to your box feed!**\nThis is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.",
+  "@towelieWelcomeBox": {
+    "description": "Towelie Welcome Box",
     "type": "text",
     "placeholders": {}
   }

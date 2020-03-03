@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -39,11 +57,21 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
               body = _renderLoading(context, state);
             } else if (state is SelectDeviceBoxBlocStateDeviceFull) {
               body = _renderNoLedsAvailable(context, state);
+            } else if (state is SelectDeviceBoxBlocStateDone) {
+              body = Fullscreen(
+                  title: 'Done!',
+                  child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
             } else {
               body = _renderLedSelection(context, state);
             }
             return Scaffold(
-                appBar: SGLAppBar('Device configuration'), body: body);
+                appBar: SGLAppBar(
+                  'Device configuration',
+                  backgroundColor: Color(0xff0bb354),
+                  titleColor: Colors.white,
+                  iconColor: Colors.white,
+                ),
+                body: body);
           }),
     );
   }
@@ -78,57 +106,67 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   }
 
   Widget _renderNoLedsAvailable(context, state) {
-    return Fullscreen(title: 'Device can\'t handle\nmore box!', child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
+    return Fullscreen(
+        title: 'Device can\'t handle\nmore box!',
+        child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
   Widget _renderLedSelection(context, state) {
-    return Padding(
-        padding: const EdgeInsets.only(top: 16.0),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: SectionTitle(
-                title: 'Available LED channels',
-                icon: 'assets/box_setup/icon_controller.svg',
-              ),
+    return Column(
+      children: <Widget>[
+        AnimatedContainer(
+          duration: Duration(milliseconds: 100),
+          height: 20,
+          color: Color(0xff0bb354),
+        ),
+        SectionTitle(
+          title: 'Available LED channels',
+          icon: 'assets/box_setup/icon_controller.svg',
+          backgroundColor: Color(0xff0bb354),
+          titleColor: Colors.white,
+        ),
+        _renderLeds(
+            state.leds.where((l) => !_selectedLeds.contains(l)).toList(),
+            (int led) {
+          setState(() {
+            _selectedLeds.add(led);
+            BlocProvider.of<SelectDeviceBoxBloc>(context)
+                .add(SelectDeviceBoxBlocEventSelectLed(led));
+          });
+        }),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: SectionTitle(
+            title: 'Selected LED channels',
+            icon: 'assets/box_setup/icon_controller.svg',
+            backgroundColor: Color(0xff0bb354),
+            titleColor: Colors.white,
+          ),
+        ),
+        _renderLeds(_selectedLeds, (int led) {
+          setState(() {
+            _selectedLeds.remove(led);
+            BlocProvider.of<SelectDeviceBoxBloc>(context)
+                .add(SelectDeviceBoxBlocEventUnselectLed(led));
+          });
+        }),
+        Expanded(
+          child: Container(),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: GreenButton(
+              title: 'SETUP BOX',
+              onPressed: _selectedLeds.length == 0
+                  ? null
+                  : () => _handleInput(context),
             ),
-            _renderLeds(
-                state.leds.where((l) => !_selectedLeds.contains(l)).toList(),
-                (int led) {
-              setState(() {
-                _selectedLeds.add(led);
-              });
-            }),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: SectionTitle(
-                title: 'Selected LED channels',
-                icon: 'assets/box_setup/icon_controller.svg',
-              ),
-            ),
-            _renderLeds(_selectedLeds, (int led) {
-              setState(() {
-                _selectedLeds.remove(led);
-              });
-            }),
-            Expanded(
-              child: Container(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: GreenButton(
-                  title: 'SETUP BOX',
-                  onPressed: _selectedLeds.length == 0
-                      ? null
-                      : () => _handleInput(context),
-                ),
-              ),
-            ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _renderLeds(List<int> leds, Function(int) onSelected) {
@@ -144,7 +182,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: <Widget>[
-                          Text('channel', style: TextStyle(fontSize: 10)),
+                          Text('LED chan', style: TextStyle(fontSize: 10)),
                           Text(
                             '${led + 1}',
                             style: TextStyle(

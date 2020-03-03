@@ -1,6 +1,23 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
@@ -17,8 +34,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   double volume = 1;
   bool nutrient;
 
-  bool changed = false;
-
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -33,8 +48,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           bloc: BlocProvider.of<FeedWaterFormBloc>(context),
           builder: (context, state) => FeedFormLayout(
             title: 'New watering record',
-            changed: changed,
-            valid: changed,
             body: ListView(
               children: <Widget>[
                 YesNoFormParam(
@@ -44,7 +57,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                     onPressed: (yes) {
                       setState(() {
                         tooDry = yes;
-                        changed = true;
                       });
                     }),
                 NumberFormParam(
@@ -56,7 +68,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                       setState(() {
                         if (newValue > 0) {
                           volume = newValue;
-                          changed = true;
                         }
                       });
                     }),
@@ -67,7 +78,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                     onPressed: (yes) {
                       setState(() {
                         nutrient = yes;
-                        changed = true;
                       });
                     }),
               ],

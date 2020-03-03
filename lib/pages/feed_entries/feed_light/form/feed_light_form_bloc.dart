@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -12,6 +30,13 @@ abstract class FeedLightFormBlocEvent extends Equatable {}
 
 class FeedLightFormBlocEventLoadLights extends FeedLightFormBlocEvent {
   FeedLightFormBlocEventLoadLights();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FeedLightFormBlocEventCancel extends FeedLightFormBlocEvent {
+  FeedLightFormBlocEventCancel();
 
   @override
   List<Object> get props => [];
@@ -50,6 +75,11 @@ class FeedLightFormBlocStateLightsLoaded extends FeedLightFormBlocState {
   List<Object> get props => [values];
 }
 
+class FeedLightFormBlocStateNoDevice
+    extends FeedLightFormBlocStateLightsLoaded {
+  FeedLightFormBlocStateNoDevice(List<int> values) : super(values);
+}
+
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
   @override
   List<Object> get props => [];
@@ -75,6 +105,10 @@ class FeedLightFormBloc
       FeedLightFormBlocEvent event) async* {
     if (event is FeedLightFormBlocEventLoadLights) {
       final db = RelDB.get();
+      if (_args.box.device == null) {
+        yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65]);
+        return;
+      }
       _device = await db.devicesDAO.getDevice(_args.box.device);
       Module lightModule = await db.devicesDAO.getModule(_device.id, "led");
       _lightParams = [];
@@ -89,9 +123,15 @@ class FeedLightFormBloc
       _initialValues = values;
       yield FeedLightFormBlocStateLightsLoaded(values);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
+      if (_args.box.device == null) {
+        return;
+      }
       await DeviceHelper.updateIntParam(
           _device, _lightParams[event.i], (event.value).toInt());
     } else if (event is FeedLightFormBlocEventCreate) {
+      if (_args.box.device == null) {
+        return;
+      }
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_LIGHT',
@@ -100,6 +140,16 @@ class FeedLightFormBloc
         params: Value(JsonEncoder().convert(
             {'initialValues': _initialValues, 'values': event.values})),
       ));
+      yield FeedLightFormBlocStateDone();
+    } else if (event is FeedLightFormBlocEventCancel) {
+      if (_args.box.device == null) {
+        yield FeedLightFormBlocStateDone();
+        return;
+      }
+      for (int i = 0; i < _lightParams.length; ++i) {
+        await DeviceHelper.updateIntParam(
+            _device, _lightParams[i], _initialValues[i]);
+      }
       yield FeedLightFormBlocStateDone();
     }
   }

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,6 +26,7 @@ import 'package:path/path.dart' as p;
 import 'package:super_green_app/data/rel/box/boxes.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
+import 'package:super_green_app/l10n.dart';
 
 part 'rel_db.g.dart';
 
@@ -56,16 +75,6 @@ class RelDB extends _$RelDB {
   @override
   MigrationStrategy get migration => MigrationStrategy(
         beforeOpen: (details) async {
-          if (details.wasCreated) {
-            int feed = await this
-                .feedsDAO
-                .addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
-            await this.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-                  type: 'FE_TOWELIE_INFO',
-                  feed: feed,
-                  date: DateTime.now(),
-                ));
-          }
         },
       );
 }

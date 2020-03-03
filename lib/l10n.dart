@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,13 +24,17 @@ import 'l10n/messages_all.dart';
 class SGLLocalizations {
   SGLLocalizations(this.localeName);
 
+  static SGLLocalizations current;
+
   static Future<SGLLocalizations> load(Locale locale) {
-    final String name =
-        locale.countryCode == null || locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+    final String name = locale.countryCode == null || locale.countryCode.isEmpty
+        ? locale.languageCode
+        : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((_) {
-      return SGLLocalizations(localeName);
+      current = SGLLocalizations(localeName);
+      return current;
     });
   }
 
@@ -57,18 +79,69 @@ class SGLLocalizations {
       locale: localeName,
     );
   }
+
+  String get towelieWelcomeApp {
+    return Intl.message(
+      '''Hey man, welcome here, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant.
+      
+Welcome to **SuperGreenLab\'s** grow diary app!
+While it can be used without, this app has been optimized to be used with a **Ninja bundle**.
+Do you own one?''',
+      name: 'towelieWelcomeApp',
+      desc: 'Towelie Welcome App',
+      locale: localeName,
+    );
+  }
+
+  String get towelieWelcomeAppHasBundle {
+    return Intl.message(
+      '''Have you received it yet?''',
+      name: 'towelieWelcomeAppHasBundle',
+      desc: 'Towelie Welcome App - Has bundle',
+      locale: localeName,
+    );
+  }
+
+  String get towelieWelcomeAppNoBundle {
+    return Intl.message(
+      '''With 6 full spectrum LED grow lights providing dense light and little heat. This complete grow box bundle lets you build a grow box out of almost anything.
+
+With these lights we successfully grew and harvested from space buckets, TV stands, office storages and custom built grow boxes. Some of our users even grew in toolboxes or suitcase ! What will you build ?
+
+Coming with a sensor, ventilation, a controller and a companion App. The ninja grow bundle is fully controllable from your smartphone and can be split into 3 different chambers with different light dimming, schedules and ventilation setups.''',
+      name: 'towelieWelcomeAppNoBundle',
+      desc: 'Towelie Welcome App - No bundle',
+      locale: localeName,
+    );
+  }
+
+  String get towelieWelcomeBox {
+    return Intl.message(
+      '''**Welcome to your box feed!**
+This is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.
+
+This is also where you will log the actions **you want to remember**: last time you watered for example.
+
+The app will also add log entries for temperature or humidity **heads up and reminders** you can set or
+receive from the app.
+
+And all this feed can be reviewed, shared or replayed later, **and that’s awesome**.''',
+      name: 'towelieWelcomeBox',
+      desc: 'Towelie Welcome Box',
+      locale: localeName,
+    );
+  }
 }
 
-class SGLLocalizationsDelegate
-    extends LocalizationsDelegate<SGLLocalizations> {
+class SGLLocalizationsDelegate extends LocalizationsDelegate<SGLLocalizations> {
   const SGLLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      ['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
-  Future<SGLLocalizations> load(Locale locale) =>
-      SGLLocalizations.load(locale);
+  Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale);
 
   @override
   bool shouldReload(SGLLocalizationsDelegate old) => false;

@@ -1,6 +1,25 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
@@ -19,37 +38,45 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeNavigatorBloc, HomeNavigatorState>(
-      builder: (context, state) => Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          unselectedItemColor: Colors.black38,
-          selectedItemColor: Colors.black,
-          onTap: (i) => this._onNavigationBarItemSelect(context, i, state),
-          elevation: 0,
-          currentIndex: state.index,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.feedback),
-              title: Text('Towelie'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
-              title: Text('Explore'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              title: Text('Settings'),
-            ),
-          ],
-        ),
-        body: Navigator(
-          key: _navigatorKey,
-          onGenerateRoute: (settings) =>
-              this._onGenerateRoute(context, settings),
+    return BlocListener<TowelieBloc, TowelieBlocState>(
+      listener: (BuildContext context, state) {
+        if (state is TowelieBlocStateHomeNavigation) {
+          BlocProvider.of<HomeNavigatorBloc>(context)
+              .add(state.homeNavigatorEvent);
+        }
+      },
+      child: BlocBuilder<HomeNavigatorBloc, HomeNavigatorState>(
+        builder: (context, state) => Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            unselectedItemColor: Colors.black38,
+            selectedItemColor: Colors.green,
+            onTap: (i) => this._onNavigationBarItemSelect(context, i, state),
+            elevation: 0,
+            currentIndex: state.index,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.feedback),
+                title: Text('Towelie'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text('Home'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.explore),
+                title: Text('Explore'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                title: Text('Settings'),
+              ),
+            ],
+          ),
+          body: Navigator(
+            key: _navigatorKey,
+            onGenerateRoute: (settings) =>
+                this._onGenerateRoute(context, settings),
+          ),
         ),
       ),
     );

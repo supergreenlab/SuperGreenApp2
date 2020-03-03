@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:async';
 import 'dart:io';
 
@@ -7,6 +25,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
+import 'package:super_green_app/data/rel/device/devices.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 
@@ -58,6 +78,8 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
     Hive.registerAdapter(AppDataAdapter());
 
     await _db.init();
+
+    await RelDB.get().devicesDAO.deleteDrafts();
 
     AppData appData = _db.getAppData();
     add(AppInitBlocEventLoaded(appData));

@@ -1,7 +1,27 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
@@ -20,15 +40,39 @@ class BoxInfosPage extends StatefulWidget {
 class BoxInfosPageState extends State<BoxInfosPage> {
   final _nameController = TextEditingController();
 
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
+  int _listener;
+  bool _keyboardVisible = false;
+
+  @protected
+  void initState() {
+    super.initState();
+    _listener = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardVisible = visible;
+        });
+        if (!_keyboardVisible) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: BlocProvider.of<BoxInfosBloc>(context),
       listener: (BuildContext context, BoxInfosBlocState state) async {
         if (state is BoxInfosBlocStateDone) {
+          BlocProvider.of<TowelieBloc>(context)
+                  .add(TowelieBlocEventBoxCreated(state.box));
           Timer(const Duration(milliseconds: 1500), () {
-            HomeNavigatorBloc.eventBus
-                .fire(HomeNavigateToBoxFeedEvent(state.box));
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop());
           });
@@ -44,9 +88,15 @@ class BoxInfosPageState extends State<BoxInfosPage> {
               body = _renderForm();
             }
             return Scaffold(
-                appBar: SGLAppBar('New Box infos'),
-                body: Padding(
-                    padding: const EdgeInsets.only(top: 16.0), child: body));
+                appBar: SGLAppBar(
+                  'NEW BOX SETUP',
+                  hideBackButton: state is BoxInfosBlocStateDone,
+                  backgroundColor: Color(0xff0bb354),
+                  titleColor: Colors.white,
+                  iconColor: Colors.white,
+                ),
+                backgroundColor: Colors.white,
+                body: body);
           }),
     );
   }
@@ -62,22 +112,32 @@ class BoxInfosPageState extends State<BoxInfosPage> {
     return Fullscreen(
         title: 'Done!',
         subtitle: subtitle,
-        child: Icon(Icons.done, color: Color(0xff3bb30b), size: 100));
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm() {
     return Column(
       children: <Widget>[
+        AnimatedContainer(
+          duration: Duration(milliseconds: 100),
+          height: _keyboardVisible ? 0 : 100,
+          color: Color(0xff0bb354),
+        ),
         SectionTitle(
-            title: 'Give a name to your new box:',
-            icon: 'assets/box_setup/icon_box_name.svg'),
+          title: 'Let\'s name your new box:',
+          icon: 'assets/box_setup/icon_box_name.svg',
+          backgroundColor: Color(0xff0bb354),
+          titleColor: Colors.white,
+          large: true,
+        ),
         Expanded(
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: SGLTextField(
-                  hintText: 'Ex: BedroomGrow',
+                  hintText: 'Ex: IkeHigh',
                   controller: _nameController,
                   onChanged: (_) {
                     setState(() {});
@@ -86,7 +146,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
           ],
         )),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
           child: Align(
             alignment: Alignment.centerRight,
             child: GreenButton(
@@ -119,6 +179,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
 
   @override
   void dispose() {
+    _keyboardVisibility.removeListener(_listener);
     _nameController.dispose();
     super.dispose();
   }

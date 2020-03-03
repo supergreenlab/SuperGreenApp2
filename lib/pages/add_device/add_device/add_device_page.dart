@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -13,7 +31,12 @@ class AddDevicePage extends StatelessWidget {
     return BlocBuilder<AddDeviceBloc, AddDeviceBlocState>(
         bloc: BlocProvider.of<AddDeviceBloc>(context),
         builder: (context, state) => Scaffold(
-            appBar: SGLAppBar('Add new device'),
+            appBar: SGLAppBar(
+              'Add new device',
+              backgroundColor: Color(0xff0b6ab3),
+              titleColor: Colors.white,
+              iconColor: Colors.white,
+            ),
             body: Column(
               children: <Widget>[
                 _renderChoice(
@@ -54,12 +77,11 @@ class AddDevicePage extends StatelessWidget {
   Widget _renderChoice(BuildContext context, String title, String icon,
       String description, String buttonTitle, Function onPressed) {
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: SectionTitle(
-          title: title,
-          icon: icon,
-        ),
+      SectionTitle(
+        title: title,
+        icon: icon,
+        backgroundColor: Color(0xff0b6ab3),
+        titleColor: Colors.white,
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),

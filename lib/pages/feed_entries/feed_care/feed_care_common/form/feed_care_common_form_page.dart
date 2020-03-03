@@ -1,21 +1,44 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_defoliation/form/feed_defoliation_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
-class FeedDefoliationFormPage extends StatefulWidget {
+abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc>
+    extends StatefulWidget {
   @override
-  _FeedDefoliationFormPageState createState() =>
-      _FeedDefoliationFormPageState();
+  _FeedCareCommonFormPageState<FormBloc> createState() =>
+      _FeedCareCommonFormPageState<FormBloc>(title());
+
+  String title();
 }
 
-class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
+class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
+    extends State<FeedCareCommonFormPage> {
+  final String title;
   final List<FeedMediasCompanion> _beforeMedias = [];
   final List<FeedMediasCompanion> _afterMedias = [];
   final TextEditingController _textController = TextEditingController();
@@ -26,6 +49,8 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
       KeyboardVisibilityNotification();
   int _listener;
   bool _keyboardVisible = false;
+
+  _FeedCareCommonFormPageState(this.title);
 
   @protected
   void initState() {
@@ -50,26 +75,25 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: BlocProvider.of<FeedDefoliationFormBloc>(context),
-        listener: (BuildContext context, FeedDefoliationFormBlocState state) {
-          if (state is FeedDefoliationFormBlocStateDone) {
+        bloc: BlocProvider.of<FormBloc>(context),
+        listener: (BuildContext context, FeedCareCommonFormBlocState state) {
+          if (state is FeedCareCommonFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }
         },
-        child:
-            BlocBuilder<FeedDefoliationFormBloc, FeedDefoliationFormBlocState>(
-          bloc: BlocProvider.of<FeedDefoliationFormBloc>(context),
+        child: BlocBuilder<FeedCareCommonFormBloc, FeedCareCommonFormBlocState>(
+          bloc: BlocProvider.of<FormBloc>(context),
           builder: (context, state) => FeedFormLayout(
-            title: 'Defoliation log',
+            title: title,
             changed: _afterMedias.length != 0 ||
                 _beforeMedias.length != 0 ||
                 _textController.value.text != '',
             valid: _afterMedias.length != 0 ||
                 _beforeMedias.length != 0 ||
                 _textController.value.text != '',
-            onOK: () => BlocProvider.of<FeedDefoliationFormBloc>(context).add(
-                FeedDefoliationFormBlocEventCreate(_beforeMedias, _afterMedias,
+            onOK: () => BlocProvider.of<FormBloc>(context).add(
+                FeedCareCommonFormBlocEventCreate(_beforeMedias, _afterMedias,
                     _textController.text, _helpRequest)),
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -81,7 +105,7 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
   }
 
   List<Widget> _renderBody(
-      BuildContext context, FeedDefoliationFormBlocState state) {
+      BuildContext context, FeedCareCommonFormBlocState state) {
     return [
       FeedFormParamLayout(
         title: 'Before pics',
@@ -128,8 +152,7 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
     ];
   }
 
-  Widget _renderTextrea(
-      BuildContext context, FeedDefoliationFormBlocState state) {
+  Widget _renderTextrea(BuildContext context, FeedCareCommonFormBlocState state) {
     return Expanded(
       key: Key('TEXTAREA'),
       child: FeedFormParamLayout(
@@ -144,8 +167,7 @@ class _FeedDefoliationFormPageState extends State<FeedDefoliationFormPage> {
     );
   }
 
-  Widget _renderOptions(
-      BuildContext context, FeedDefoliationFormBlocState state) {
+  Widget _renderOptions(BuildContext context, FeedCareCommonFormBlocState state) {
     return Row(
       children: <Widget>[],
     );
