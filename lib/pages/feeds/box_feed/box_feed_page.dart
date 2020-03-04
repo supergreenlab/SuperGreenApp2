@@ -47,6 +47,7 @@ enum SpeedDialType {
 }
 
 class _BoxFeedPageState extends State<BoxFeedPage> {
+  final _openCloseDial = ValueNotifier<bool>(true);
   SpeedDialType _speedDialType = SpeedDialType.general;
   bool _speedDialOpen = false;
 
@@ -92,6 +93,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       overlayOpacity: 0.8,
+      openCloseDial: _openCloseDial,
       closeManually: true,
       onOpen: () {
         setState(() {
@@ -224,8 +226,11 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   void Function() _onSpeedDialSelected(BuildContext context,
       MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent) {
-    return () => BlocProvider.of<MainNavigatorBloc>(context)
+    return () {
+      _openCloseDial.notifyListeners();
+      BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
+    };
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
@@ -260,7 +265,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         return Container(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
-            color: Colors.white24);
+            color: Colors.white12);
       },
     );
   }

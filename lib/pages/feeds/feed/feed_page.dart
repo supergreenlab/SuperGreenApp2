@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,17 +55,26 @@ class _FeedPageState extends State<FeedPage> {
         if (state is FeedBlocStateLoaded) {
           if (_entries != null) {
             if (state.entries.length > _entries.length) {
+              int millis = min(
+                  1500,
+                  max(
+                      600,
+                      ((widget.appBarHeight - 56.0) - _scrollController.offset)
+                              .abs()
+                              .toInt() *
+                          10));
               _entries = state.entries;
               _listKey.currentState
-                  .insertItem(0, duration: Duration(milliseconds: 500));
+                  .insertItem(0, duration: Duration(milliseconds: millis));
               if (_scrollController.offset == 0) {
                 // this is to prevent a bug with animateTo not triggering when offset == 0
                 _scrollController.jumpTo(30);
               }
+
               Timer(
                   Duration(milliseconds: 100),
                   () => _scrollController.animateTo(widget.appBarHeight - 56.0,
-                      duration: Duration(milliseconds: 1000),
+                      duration: Duration(milliseconds: millis),
                       curve: ElasticInOutCurve()));
             } else if (state.entries.length < _entries.length) {
               for (int i = 0; i < _entries.length; ++i) {

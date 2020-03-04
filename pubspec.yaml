@@ -36,6 +36,7 @@ dependencies:
   url_launcher:
   basic_utils:
   flutter_speed_dial:
+    path: ./vendor/flutter_speed_dial
   event_bus:
   flutter_html:
   video_player:
