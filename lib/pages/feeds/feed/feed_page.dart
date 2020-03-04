@@ -56,13 +56,13 @@ class _FeedPageState extends State<FeedPage> {
           if (_entries != null) {
             if (state.entries.length > _entries.length) {
               int millis = min(
-                  1500,
+                  1000,
                   max(
                       600,
                       ((widget.appBarHeight - 56.0) - _scrollController.offset)
                               .abs()
                               .toInt() *
-                          10));
+                          7));
               _entries = state.entries;
               _listKey.currentState
                   .insertItem(0, duration: Duration(milliseconds: millis));
