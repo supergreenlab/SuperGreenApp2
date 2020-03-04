@@ -580,7 +580,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.0"
+    version: "1.8.0+1"
   permission_handler:
     dependency: "direct main"
     description:
@@ -753,7 +753,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.14"
+    version: "0.2.11"
   time:
     dependency: transitive
     description:
