@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ enum SpeedDialType {
 }
 
 class _BoxFeedPageState extends State<BoxFeedPage> {
-  final _openCloseDial = ValueNotifier<bool>(true);
+  final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
   bool _speedDialOpen = false;
 
@@ -227,7 +228,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   void Function() _onSpeedDialSelected(BuildContext context,
       MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent) {
     return () {
-      _openCloseDial.notifyListeners();
+      _openCloseDial.value = Random().nextInt(1<<32);
       BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
     };
