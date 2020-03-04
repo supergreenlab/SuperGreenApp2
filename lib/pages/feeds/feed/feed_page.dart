@@ -31,7 +31,7 @@ class FeedPage extends StatefulWidget {
   final double appBarHeight;
 
   const FeedPage(
-      {this.title, @required this.color, this.appBar, this.appBarHeight});
+      {@required this.title, @required this.color, this.appBar, @required this.appBarHeight});
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -61,13 +61,16 @@ class _FeedPageState extends State<FeedPage> {
           _nEntries != -1 && _nEntries != state.entries.length && i++ == 0;
       _nEntries = state.entries.length;
       if (hasNewEntry) {
-        Timer(
-            Duration(milliseconds: 1),
-            () => _scrollController.animateTo(
-                  widget.appBarHeight ?? 0,
-                  curve: Curves.easeOut,
-                  duration: const Duration(milliseconds: 800),
-                ));
+        Timer(Duration(milliseconds: 1), () {
+          if (_scrollController.offset > widget.appBarHeight) {
+            return;
+          }
+          _scrollController.animateTo(
+            widget.appBarHeight,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 800),
+          );
+        });
       }
       return FeedEntriesHelper.cardForFeedEntry(state.feed, e, hasNewEntry);
     }).toList();

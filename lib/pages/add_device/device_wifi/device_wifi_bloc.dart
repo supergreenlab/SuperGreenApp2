@@ -108,7 +108,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
       }
 
       Device device = _args.device.copyWith(ip: ip);
-      await RelDB.get().devicesDAO.updateDevice(device);
+      await RelDB.get().devicesDAO.updateDevice(device.createCompanion(true));
 
       Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
       await ddb.updateParam(ipParam.copyWith(svalue: ip));

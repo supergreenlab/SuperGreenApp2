@@ -8,4 +8,9 @@ part of 'boxes.dart';
 
 mixin _$BoxesDAOMixin on DatabaseAccessor<RelDB> {
   $BoxesTable get boxes => db.boxes;
+  Selectable<int> nBoxes() {
+    return customSelectQuery('SELECT COUNT(*) FROM boxes',
+        variables: [],
+        readsFrom: {boxes}).map((QueryRow row) => row.readInt('COUNT(*)'));
+  }
 }

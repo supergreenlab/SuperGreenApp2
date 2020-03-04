@@ -77,8 +77,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
     return select(devices).watch();
   }
 
-  Future updateDevice(device) async {
-    await update(devices).replace(device);
+  Future updateDevice(DevicesCompanion device) {
+    return update(devices).replace(device);
   }
 
   Future deleteDevice(Device device) {

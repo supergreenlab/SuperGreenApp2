@@ -70,6 +70,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return into(feedEntries).insert(feedEntry);
   }
 
+  Future updateFeedEntry(FeedEntriesCompanion feedEntry) {
+    return update(feedEntries).replace(feedEntry);
+  }
+
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {
     return into(feedMedias).insert(feedMediaEntry);
   }

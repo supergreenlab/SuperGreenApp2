@@ -234,6 +234,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          title: '',
           appBarHeight: 300,
           color: Colors.cyan,
           appBar: _renderAppBar(context, state),
