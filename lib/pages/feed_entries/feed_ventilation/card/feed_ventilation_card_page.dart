@@ -25,16 +25,16 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedVentilationCardPage extends StatelessWidget {
 
-  final bool animate;
+  final Animation animation;
 
-  const FeedVentilationCardPage(this.animate, {Key key}) : super(key: key);
+  const FeedVentilationCardPage(this.animation, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedVentilationCardBloc, FeedVentilationCardBlocState>(
         bloc: BlocProvider.of<FeedVentilationCardBloc>(context),
         builder: (context, state) => FeedCard(
-              animate: animate,
+              animation: animation,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

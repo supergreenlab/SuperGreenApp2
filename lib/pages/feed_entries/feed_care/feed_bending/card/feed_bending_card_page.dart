@@ -22,7 +22,7 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/ca
 
 class FeedBendingCardPage extends FeedCareCommonCardPage<FeedBendingCardBloc> {
 
-  FeedBendingCardPage(bool animate, {Key key}) : super(animate, key: key);
+  FeedBendingCardPage(Animation animation, {Key key}) : super(animation, key: key);
 
   String iconPath() {
     return 'assets/feed_card/icon_bending.svg';

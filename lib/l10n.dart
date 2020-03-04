@@ -121,12 +121,12 @@ Coming with a sensor, ventilation, a controller and a companion App. The ninja g
 
 The app works like this:
 - you create a box
-- attach it (or not) to a SuperGreenController
-- configure the led channels used to light it up
+- attach it (or not) to a **SuperGreenController**
+- configure the led channels used to **light it up**
 
-Once this is done, you will have access to it's feed, it's like a timeline of the box's life.
+Once this is done, you will have access to it's **feed**, it's like a timeline of the **box's life**.
 Whenever you water, change light parameters, or train the plant, or any other action,
-it will log it in the box's feed, so you can share it, or replay it later.
+it will log it in the box's feed, so you can **share it**, or **replay it** for your next grow!
 
 Press the **Create box** button below.
 ''',
@@ -135,7 +135,6 @@ Press the **Create box** button below.
       locale: localeName,
     );
   }
-
 
   String get towelieBoxCreated {
     return Intl.message(

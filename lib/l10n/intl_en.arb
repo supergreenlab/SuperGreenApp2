@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-04T12:50:13.638451",
+  "@@last_modified": "2020-03-04T13:46:06.788004",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -42,7 +42,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieCreateBox": "Alright we're ready to create your **first box!**\n\nThe app works like this:\n- you create a box\n- attach it (or not) to a SuperGreenController\n- configure the led channels used to light it up\n\nOnce this is done, you will have access to it's feed, it's like a timeline of the box's life.\nWhenever you water, change light parameters, or train the plant, or any other action,\nit will log it in the box's feed, so you can share it, or replay it later.\n\nPress the **Create box** button below.\n",
+  "towelieCreateBox": "Alright we're ready to create your **first box!**\n\nThe app works like this:\n- you create a box\n- attach it (or not) to a **SuperGreenController**\n- configure the led channels used to **light it up**\n\nOnce this is done, you will have access to it's **feed**, it's like a timeline of the **box's life**.\nWhenever you water, change light parameters, or train the plant, or any other action,\nit will log it in the box's feed, so you can **share it**, or **replay it** for your next grow!\n\nPress the **Create box** button below.\n",
   "@towelieCreateBox": {
     "description": "Towelie Create Box",
     "type": "text",
