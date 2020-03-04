@@ -260,7 +260,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         return Container(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
-            color: Colors.white60);
+            color: Colors.white24);
       },
     );
   }
