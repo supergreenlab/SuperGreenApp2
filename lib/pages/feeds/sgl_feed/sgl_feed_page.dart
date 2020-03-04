@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
@@ -38,7 +39,17 @@ class SGLFeedPage extends StatelessWidget {
   Widget _renderFeed(BuildContext context, SGLFeedBlocState state) {
     return BlocProvider(
       create: (context) => FeedBloc(1),
-      child: FeedPage(title: 'SuperGreenLab', color: Colors.deepPurple, appBarHeight: 200,),
+      child: FeedPage(
+        title: '',
+        color: Colors.deepPurple,
+        appBarHeight: 200,
+        appBar: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: SvgPicture.asset('assets/feed_card/logo_sgl.svg'),
+          ),
+        ),
+      ),
     );
   }
 }

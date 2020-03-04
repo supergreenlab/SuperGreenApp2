@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:convert';
 import 'dart:math';
 
@@ -79,25 +97,41 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
       await _welcomeAppCard(feed);
     } else if (event is TowelieBlocEventBoxCreated) {
       final fdb = RelDB.get().feedsDAO;
+      final bdb = RelDB.get().boxesDAO;
       Feed feed = await fdb.getFeed(event.box.feed);
-      await _boxCreatedCard(feed);
+      _welcomeBoxCard(feed);
+      int nBoxes = await bdb.nBoxes().getSingle();
+      if (nBoxes == 1) {
+        Feed sglFeed = await fdb.getFeed(1);
+        await _boxCreatedCard(sglFeed, event.box);
+      }
       yield TowelieBlocStateHomeNavigation(
           HomeNavigateToBoxFeedEvent(event.box));
     } else if (event is TowelieBlocEventCardButton) {
       if (event.params['ID'] == 'NO_SGL_BUNDLE') {
         await _noSGLBundleCard(event.feed);
+        await _removeButtons(event.feedEntry);
       } else if (event.params['ID'] == 'GOT_SGL_BUNDLE') {
         await _gotSGLBundleCard(event.feed);
+        await _removeButtons(event.feedEntry);
       } else if (event.params['ID'] == 'YES_RECEIVED') {
+        await _createBoxCard(event.feed);
+        await _removeButtons(event.feedEntry);
       } else if (event.params['ID'] == 'NOT_RECEIVED_YET') {
         launch('https://www.supergreenlab.com/discord');
       } else if (event.params['ID'] == 'I_WANT_ONE') {
         launch('https://www.supergreenlab.com');
       } else if (event.params['ID'] == 'I_ORDERED_ONE') {
         await _gotSGLBundleCard(event.feed);
+        await _removeButtons(event.feedEntry);
       } else if (event.params['ID'] == 'NO_THANKS') {
       } else if (event.params['ID'] == 'CREATE_BOX') {
         yield TowelieBlocStateMainNavigation(MainNavigateToNewBoxInfosEvent());
+      } else if (event.params['ID'] == 'VIEW_BOX') {
+        final bdb = RelDB.get().boxesDAO;
+        Box box = await bdb.getBox(event.params['boxID']);
+        yield TowelieBlocStateHomeNavigation(
+            HomeNavigateToBoxFeedEvent(box));
       }
     }
   }
@@ -110,7 +144,6 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
       date: DateTime.now(),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeApp,
-        'top_pic': 'assets/feed_card/logo_sgl.svg',
         'buttons': [
           {
             'ID': 'GOT_SGL_BUNDLE',
@@ -133,7 +166,6 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
       date: DateTime.now(),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeAppNoBundle,
-        'top_pic': 'assets/feed_card/logo_sgl.svg',
         'buttons': [
           {
             'ID': 'I_WANT_ONE',
@@ -160,7 +192,6 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
       date: DateTime.now(),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeAppHasBundle,
-        'top_pic': 'assets/feed_card/logo_sgl.svg',
         'buttons': [
           {
             'ID': 'YES_RECEIVED',
@@ -175,7 +206,44 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     ));
   }
 
-  _boxCreatedCard(Feed feed) async {
+  _createBoxCard(Feed feed) async {
+    final fdb = RelDB.get().feedsDAO;
+    await fdb.addFeedEntry(FeedEntriesCompanion.insert(
+      type: 'FE_TOWELIE_INFO',
+      feed: feed.id,
+      date: DateTime.now(),
+      params: Value(JsonEncoder().convert({
+        'text': SGLLocalizations.current.towelieCreateBox,
+        'buttons': [
+          {
+            'ID': 'CREATE_BOX',
+            'title': 'Create box',
+          },
+        ],
+      })),
+    ));
+  }
+
+  _boxCreatedCard(Feed feed, Box box) async {
+    final fdb = RelDB.get().feedsDAO;
+    await fdb.addFeedEntry(FeedEntriesCompanion.insert(
+      type: 'FE_TOWELIE_INFO',
+      feed: feed.id,
+      date: DateTime.now(),
+      params: Value(JsonEncoder().convert({
+        'text': SGLLocalizations.current.towelieBoxCreated,
+        'buttons': [
+          {
+            'ID': 'VIEW_BOX',
+            'title': 'View box',
+            'boxID': box.id,
+          },
+        ]
+      })),
+    ));
+  }
+
+  _welcomeBoxCard(Feed feed) async {
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_TOWELIE_INFO',
@@ -183,7 +251,18 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
       date: DateTime.now(),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeBox,
+        'buttons': [
+        ],
       })),
     ));
+  }
+
+  _removeButtons(FeedEntry feedEntry) async {
+    final fdb = RelDB.get().feedsDAO;
+    final Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
+    params['buttons'] = [];
+    await fdb.updateFeedEntry(feedEntry
+        .createCompanion(true)
+        .copyWith(params: Value(JsonEncoder().convert(params))));
   }
 }

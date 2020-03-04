@@ -24,16 +24,16 @@ import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedLightCardPage extends StatelessWidget {
-  final bool animate;
+  final Animation animation;
 
-  const FeedLightCardPage(this.animate, {Key key}) : super(key: key);
+  const FeedLightCardPage(this.animation, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedLightCardBloc, FeedLightCardBlocState>(
         bloc: BlocProvider.of<FeedLightCardBloc>(context),
         builder: (context, state) => FeedCard(
-              animate: animate,
+              animation: animation,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

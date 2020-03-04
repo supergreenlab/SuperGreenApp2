@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-03T16:48:17.500937",
+  "@@last_modified": "2020-03-04T13:46:06.788004",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -39,6 +39,18 @@
   "towelieWelcomeAppNoBundle": "With 6 full spectrum LED grow lights providing dense light and little heat. This complete grow box bundle lets you build a grow box out of almost anything.\n\nWith these lights we successfully grew and harvested from space buckets, TV stands, office storages and custom built grow boxes. Some of our users even grew in toolboxes or suitcase ! What will you build ?\n\nComing with a sensor, ventilation, a controller and a companion App. The ninja grow bundle is fully controllable from your smartphone and can be split into 3 different chambers with different light dimming, schedules and ventilation setups.",
   "@towelieWelcomeAppNoBundle": {
     "description": "Towelie Welcome App - No bundle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieCreateBox": "Alright we're ready to create your **first box!**\n\nThe app works like this:\n- you create a box\n- attach it (or not) to a **SuperGreenController**\n- configure the led channels used to **light it up**\n\nOnce this is done, you will have access to it's **feed**, it's like a timeline of the **box's life**.\nWhenever you water, change light parameters, or train the plant, or any other action,\nit will log it in the box's feed, so you can **share it**, or **replay it** for your next grow!\n\nPress the **Create box** button below.\n",
+  "@towelieCreateBox": {
+    "description": "Towelie Create Box",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieBoxCreated": "Awesome, you created your first box!\n\nYou can access your newly box feed either by pressing the home button below, or the **View box** button below.\n",
+  "@towelieBoxCreated": {
+    "description": "Towelie Box Created",
     "type": "text",
     "placeholders": {}
   },

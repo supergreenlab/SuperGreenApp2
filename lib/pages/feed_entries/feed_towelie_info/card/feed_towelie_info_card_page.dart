@@ -27,9 +27,9 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedTowelieInfoCardPage extends StatelessWidget {
 
-  final bool animate;
+  final Animation animation;
 
-  const FeedTowelieInfoCardPage(this.animate, {Key key}) : super(key: key);
+  const FeedTowelieInfoCardPage(this.animation, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
             content.add(_renderButtonBar(context, state, state.params['buttons']));
           }
           return FeedCard(
-              animate: animate,
+              animation: animation,
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: content,

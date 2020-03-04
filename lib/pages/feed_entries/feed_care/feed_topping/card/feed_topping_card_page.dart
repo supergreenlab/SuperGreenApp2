@@ -23,7 +23,7 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/f
 
 class FeedToppingCardPage extends FeedCareCommonCardPage<FeedToppingCardBloc> {
 
-  FeedToppingCardPage(bool animate, {Key key}) : super(animate, key: key);
+  FeedToppingCardPage(Animation animation, {Key key}) : super(animation, key: key);
 
   String iconPath() {
     return 'assets/feed_card/icon_topping.svg';

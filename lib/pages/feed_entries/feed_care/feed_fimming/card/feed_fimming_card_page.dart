@@ -22,7 +22,7 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/card/f
 
 class FeedFimmingCardPage extends FeedCareCommonCardPage<FeedFimmingCardBloc> {
 
-  FeedFimmingCardPage(bool animate, {Key key}) : super(animate, key: key);
+  FeedFimmingCardPage(Animation animation, {Key key}) : super(animation, key: key);
 
   String iconPath() {
     return 'assets/feed_card/icon_fimming.svg';

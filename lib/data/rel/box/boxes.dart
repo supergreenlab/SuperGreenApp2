@@ -34,7 +34,11 @@ class Boxes extends Table {
   TextColumn get settings => text().withDefault(Constant('{}'))();
 }
 
-@UseDao(tables: [Boxes])
+@UseDao(tables: [
+  Boxes
+], queries: {
+  'nBoxes': 'SELECT COUNT(*) FROM boxes',
+})
 class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
   BoxesDAO(RelDB db) : super(db);
 

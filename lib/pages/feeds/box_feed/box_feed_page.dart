@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,7 @@ enum SpeedDialType {
 }
 
 class _BoxFeedPageState extends State<BoxFeedPage> {
+  final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
   bool _speedDialOpen = false;
 
@@ -92,6 +94,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
       animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       overlayOpacity: 0.8,
+      openCloseDial: _openCloseDial,
       closeManually: true,
       onOpen: () {
         setState(() {
@@ -224,8 +227,11 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   void Function() _onSpeedDialSelected(BuildContext context,
       MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent) {
-    return () => BlocProvider.of<MainNavigatorBloc>(context)
+    return () {
+      _openCloseDial.value = Random().nextInt(1<<32);
+      BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
+    };
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
@@ -234,6 +240,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          title: '',
           appBarHeight: 300,
           color: Colors.cyan,
           appBar: _renderAppBar(context, state),
@@ -259,7 +266,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         return Container(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
-            color: Colors.white60);
+            color: Colors.white12);
       },
     );
   }
