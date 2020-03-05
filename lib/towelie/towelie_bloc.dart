@@ -21,21 +21,21 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/data/towelie/actions/towelie_action.dart';
-import 'package:super_green_app/data/towelie/actions/towelie_action_box_created.dart';
-import 'package:super_green_app/data/towelie/actions/towelie_appinit.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_create_box.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_dont_want_to_buy.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_got_sgl_bundle.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_i_ordered_one.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_i_want_one.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_no_sgl_bundle.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_not_received.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_view_box.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_yes_received.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/towelie/actions/towelie_action.dart';
+import 'package:super_green_app/towelie/actions/towelie_action_box_created.dart';
+import 'package:super_green_app/towelie/actions/towelie_appinit.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_create_box.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_dont_want_to_buy.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_got_sgl_bundle.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_i_ordered_one.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_i_want_one.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_no_sgl_bundle.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_not_received.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_view_box.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 
 abstract class TowelieBlocEvent extends Equatable {}
 

@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_create_box.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_dont_want_to_buy.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_got_sgl_bundle.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_i_ordered_one.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_i_want_one.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_no_sgl_bundle.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_not_received.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_view_box.dart';
-import 'package:super_green_app/data/towelie/buttons/towelie_button_yes_received.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_create_box.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_dont_want_to_buy.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_got_sgl_bundle.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_i_ordered_one.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_i_want_one.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_no_sgl_bundle.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_not_received.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_view_box.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 
 class TowelieCardsFactory {
   static Future createWelcomeAppCard(Feed feed) async {

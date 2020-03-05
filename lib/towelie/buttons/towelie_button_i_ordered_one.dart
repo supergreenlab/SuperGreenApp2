@@ -1,6 +1,7 @@
-import 'package:super_green_app/data/towelie/buttons/towelie_button.dart';
-import 'package:super_green_app/data/towelie/cards/towelie_cards_factory.dart';
-import 'package:super_green_app/data/towelie/towelie_bloc.dart';
+
+import 'package:super_green_app/towelie/buttons/towelie_button.dart';
+import 'package:super_green_app/towelie/cards/towelie_cards_factory.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieButtonIOrderedOne extends TowelieButton {
   static Map<String, dynamic> createButton() {

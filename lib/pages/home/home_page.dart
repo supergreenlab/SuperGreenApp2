@@ -19,7 +19,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
@@ -30,6 +29,7 @@ import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_page.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;

@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
@@ -73,6 +72,7 @@ import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart'
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 

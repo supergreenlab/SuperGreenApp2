@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/data/towelie/towelie_bloc.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 abstract class TowelieButton {
   Stream<TowelieBlocState> buttonPressed(TowelieBlocEventCardButtonPressed event);
