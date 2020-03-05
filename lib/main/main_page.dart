@@ -73,13 +73,21 @@ import 'package:super_green_app/pages/image_capture/playback/playback_page.dart'
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
+import 'package:super_green_app/towelie/towelie_helper.dart';
 
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   MainPage(this._navigatorKey);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  String lastRoute = '';
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +107,7 @@ class MainPage extends StatelessWidget {
           }
         },
         child: MaterialApp(
+          navigatorObservers: [],
           localizationsDelegates: [
             const SGLLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
@@ -109,11 +118,13 @@ class MainPage extends StatelessWidget {
             const Locale('es'),
             const Locale('fr'),
           ],
-          navigatorKey: _navigatorKey,
+          navigatorKey: widget._navigatorKey,
           onGenerateTitle: (BuildContext context) =>
               SGLLocalizations.of(context).title,
-          onGenerateRoute: (settings) =>
-              this._onGenerateRoute(context, settings),
+          onGenerateRoute: (settings) => MaterialPageRoute(
+              settings: settings,
+              builder: (context) => TowelieHelper.wrapWidget(
+                  settings, context, _onGenerateRoute(context, settings))),
           theme: ThemeData(
             fontFamily: 'Roboto',
           ),
@@ -126,199 +137,142 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  Route<dynamic> _onGenerateRoute(
-      BuildContext context, RouteSettings settings) {
+  Widget _onGenerateRoute(BuildContext context, RouteSettings settings) {
+    if (lastRoute != settings.name) {
+      BlocProvider.of<TowelieBloc>(context)
+          .add(TowelieBlocEventRoute(settings, false));
+      lastRoute = settings.name;
+    }
     switch (settings.name) {
       case '/home':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider<HomeNavigatorBloc>(
-                        create: (context) => HomeNavigatorBloc(
-                            settings.arguments, _homeNavigatorKey)),
-                    BlocProvider<HomeBloc>(
-                      create: (context) => HomeBloc(),
-                    )
-                  ],
-                  child: HomePage(_homeNavigatorKey),
-                ));
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<HomeNavigatorBloc>(
+                create: (context) =>
+                    HomeNavigatorBloc(settings.arguments, _homeNavigatorKey)),
+            BlocProvider<HomeBloc>(
+              create: (context) => HomeBloc(),
+            )
+          ],
+          child: HomePage(_homeNavigatorKey),
+        );
       case '/box/new':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => BoxInfosBloc(),
-                  child: BoxInfosPage(),
-                ));
+        return BlocProvider(
+          create: (context) => BoxInfosBloc(),
+          child: BoxInfosPage(),
+        );
       case '/box/device':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => SelectDeviceBloc(settings.arguments),
-                  child: SelectDevicePage(),
-                ));
+        return BlocProvider(
+          create: (context) => SelectDeviceBloc(settings.arguments),
+          child: SelectDevicePage(),
+        );
       case '/box/device/box':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => SelectDeviceBoxBloc(settings.arguments),
-                  child: SelectDeviceBoxPage(),
-                ));
+        return BlocProvider(
+          create: (context) => SelectDeviceBoxBloc(settings.arguments),
+          child: SelectDeviceBoxPage(),
+        );
       case '/device/add':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => AddDeviceBloc(settings.arguments),
-                  child: AddDevicePage(),
-                ));
+        return BlocProvider(
+          create: (context) => AddDeviceBloc(settings.arguments),
+          child: AddDevicePage(),
+        );
       case '/device/new':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => NewDeviceBloc(settings.arguments),
-                  child: NewDevicePage(),
-                ));
+        return BlocProvider(
+          create: (context) => NewDeviceBloc(settings.arguments),
+          child: NewDevicePage(),
+        );
       case '/device/existing':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => ExistingDeviceBloc(settings.arguments),
-                  child: ExistingDevicePage(),
-                ));
+        return BlocProvider(
+          create: (context) => ExistingDeviceBloc(settings.arguments),
+          child: ExistingDevicePage(),
+        );
       case '/device/load':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => DeviceSetupBloc(settings.arguments),
-                  child: DeviceSetupPage(),
-                ));
+        return BlocProvider(
+          create: (context) => DeviceSetupBloc(settings.arguments),
+          child: DeviceSetupPage(),
+        );
       case '/device/name':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => DeviceNameBloc(settings.arguments),
-                  child: DeviceNamePage(),
-                ));
+        return BlocProvider(
+          create: (context) => DeviceNameBloc(settings.arguments),
+          child: DeviceNamePage(),
+        );
       case '/device/test':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => DeviceTestBloc(settings.arguments),
-                  child: DeviceTestPage(),
-                ));
+        return BlocProvider(
+          create: (context) => DeviceTestBloc(settings.arguments),
+          child: DeviceTestPage(),
+        );
       case '/device/wifi':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => DeviceWifiBloc(settings.arguments),
-            child: DeviceWifiPage(),
-          ),
+        return BlocProvider(
+          create: (context) => DeviceWifiBloc(settings.arguments),
+          child: DeviceWifiPage(),
         );
       case '/feed/form/light':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedLightFormBloc(settings.arguments),
-            child: FeedLightFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedLightFormBloc(settings.arguments),
+          child: FeedLightFormPage(),
         );
       case '/feed/form/media':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedMediaFormBloc(settings.arguments),
-            child: FeedMediaFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedMediaFormBloc(settings.arguments),
+          child: FeedMediaFormPage(),
         );
       case '/feed/form/schedule':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedScheduleFormBloc(settings.arguments),
-            child: FeedScheduleFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedScheduleFormBloc(settings.arguments),
+          child: FeedScheduleFormPage(),
         );
       case '/feed/form/defoliation':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedDefoliationFormBloc(settings.arguments),
-            child: FeedDefoliationFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedDefoliationFormBloc(settings.arguments),
+          child: FeedDefoliationFormPage(),
         );
       case '/feed/form/topping':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedToppingFormBloc(settings.arguments),
-            child: FeedToppingFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedToppingFormBloc(settings.arguments),
+          child: FeedToppingFormPage(),
         );
       case '/feed/form/fimming':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedFimmingFormBloc(settings.arguments),
-            child: FeedFimmingFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedFimmingFormBloc(settings.arguments),
+          child: FeedFimmingFormPage(),
         );
+
       case '/feed/form/bending':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedBendingFormBloc(settings.arguments),
-            child: FeedBendingFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedBendingFormBloc(settings.arguments),
+          child: FeedBendingFormPage(),
         );
       case '/feed/form/ventilation':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedVentilationFormBloc(settings.arguments),
-            child: FeedVentilationFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedVentilationFormBloc(settings.arguments),
+          child: FeedVentilationFormPage(),
         );
       case '/feed/form/water':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FeedWaterFormBloc(settings.arguments),
-            child: FeedWaterFormPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FeedWaterFormBloc(settings.arguments),
+          child: FeedWaterFormPage(),
         );
       case '/tip':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => TipBloc(settings.arguments),
-            child: TipPage(),
-          ),
+        return BlocProvider(
+          create: (context) => TipBloc(settings.arguments),
+          child: TipPage(),
         );
       case '/capture':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => CaptureBloc(settings.arguments),
-            child: CapturePage(),
-          ),
+        return BlocProvider(
+          create: (context) => CaptureBloc(settings.arguments),
+          child: CapturePage(),
         );
       case '/capture/playback':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => PlaybackBloc(settings.arguments),
-            child: PlaybackPage(),
-          ),
+        return BlocProvider(
+          create: (context) => PlaybackBloc(settings.arguments),
+          child: PlaybackPage(),
         );
       case '/media':
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => BlocProvider(
-            create: (context) => FullscreenMediaBloc(settings.arguments),
-            child: FullscreenMediaPage(),
-          ),
+        return BlocProvider(
+          create: (context) => FullscreenMediaBloc(settings.arguments),
+          child: FullscreenMediaPage(),
         );
     }
-    return MaterialPageRoute(builder: (context) => Text('Unknown route'));
+    return Text('Unknown route');
   }
 }

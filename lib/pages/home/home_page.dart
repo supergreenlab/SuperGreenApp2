@@ -31,10 +31,17 @@ import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   HomePage(this._navigatorKey);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String lastRoute = '';
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +80,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           body: Navigator(
-            key: _navigatorKey,
+            key: widget._navigatorKey,
             onGenerateRoute: (settings) =>
                 this._onGenerateRoute(context, settings),
           ),
@@ -102,6 +109,11 @@ class HomePage extends StatelessWidget {
 
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
+    if (lastRoute != settings.name) {
+      BlocProvider.of<TowelieBloc>(context)
+          .add(TowelieBlocEventRoute(settings, false));
+      lastRoute = settings.name;
+    }
     if (settings.arguments == null) {
       return MaterialPageRoute(
           builder: (context) => BlocProvider(

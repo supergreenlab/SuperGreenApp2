@@ -19,12 +19,14 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/actions/towelie_action.dart';
 import 'package:super_green_app/towelie/actions/towelie_action_box_created.dart';
+import 'package:super_green_app/towelie/actions/towelie_action_help_create_box.dart';
 import 'package:super_green_app/towelie/actions/towelie_appinit.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_create_box.dart';
@@ -44,6 +46,17 @@ class TowelieBlocEventAppInit extends TowelieBlocEvent {
 
   @override
   List<Object> get props => [];
+}
+
+class TowelieBlocEventRoute extends TowelieBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+  final RouteSettings settings;
+  final bool popping;
+
+  TowelieBlocEventRoute(this.settings, this.popping);
+
+  @override
+  List<Object> get props => [rand, settings, popping];
 }
 
 class TowelieBlocEventBoxCreated extends TowelieBlocEvent {
@@ -92,10 +105,22 @@ class TowelieBlocStateHomeNavigation extends TowelieBlocState {
   List<Object> get props => [rand, homeNavigatorEvent];
 }
 
+class TowelieBlocStateHelper extends TowelieBlocState {
+  final int rand = Random().nextInt(1 << 32);
+  final RouteSettings settings;
+  final String text;
+
+  TowelieBlocStateHelper(this.settings, this.text);
+
+  @override
+  List<Object> get props => [rand, settings, text];
+}
+
 class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
     TowelieActionAppInit(),
     TowelieActionBoxCreated(),
+    TowelieActionHelpCreateBox(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),
