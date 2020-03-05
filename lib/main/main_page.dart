@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -77,17 +79,10 @@ import 'package:super_green_app/towelie/towelie_helper.dart';
 
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   MainPage(this._navigatorKey);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  String lastRoute = '';
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +113,7 @@ class _MainPageState extends State<MainPage> {
             const Locale('es'),
             const Locale('fr'),
           ],
-          navigatorKey: widget._navigatorKey,
+          navigatorKey: _navigatorKey,
           onGenerateTitle: (BuildContext context) =>
               SGLLocalizations.of(context).title,
           onGenerateRoute: (settings) => MaterialPageRoute(
@@ -138,11 +133,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _onGenerateRoute(BuildContext context, RouteSettings settings) {
-    if (lastRoute != settings.name) {
+    Timer(Duration(seconds: 1), () {
       BlocProvider.of<TowelieBloc>(context)
           .add(TowelieBlocEventRoute(settings, false));
-      lastRoute = settings.name;
-    }
+    });
     switch (settings.name) {
       case '/home':
         return MultiBlocProvider(

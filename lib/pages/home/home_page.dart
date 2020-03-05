@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,17 +33,10 @@ import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   HomePage(this._navigatorKey);
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  String lastRoute = '';
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +75,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           body: Navigator(
-            key: widget._navigatorKey,
+            key: _navigatorKey,
             onGenerateRoute: (settings) =>
                 this._onGenerateRoute(context, settings),
           ),
@@ -109,11 +104,10 @@ class _HomePageState extends State<HomePage> {
 
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
-    if (lastRoute != settings.name) {
+    Timer(Duration(seconds: 1), () {
       BlocProvider.of<TowelieBloc>(context)
           .add(TowelieBlocEventRoute(settings, false));
-      lastRoute = settings.name;
-    }
+    });
     if (settings.arguments == null) {
       return MaterialPageRoute(
           builder: (context) => BlocProvider(
