@@ -79,7 +79,7 @@ class DeviceTestBloc extends Bloc<DeviceTestBlocEvent, DeviceTestBlocState> {
       yield DeviceTestBlocStateTestingLed(_nLedChannels, event.ledID);
       Param ledParam = await ddb.getParam(_args.device.id, "LED_${event.ledID}_DUTY");
       await DeviceHelper.updateIntParam(_args.device, ledParam, 100);
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 2));
       await DeviceHelper.updateIntParam(_args.device, ledParam, 0);
       yield DeviceTestBlocState(_nLedChannels);
     } else if (event is DeviceTestBlocEventDone) {

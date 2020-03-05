@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class MainNavigatorEvent extends Equatable {
-  final void Function(Future<Object> future) futureFn;
+  final void Function(Future<dynamic> future) futureFn;
 
   MainNavigatorEvent({this.futureFn});
 
@@ -397,7 +397,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
 
 class FutureFn {
   final Function(Future) futureFn;
-  final Future future;
+  final Future<dynamic> future;
 
   FutureFn(this.futureFn, this.future);
 }

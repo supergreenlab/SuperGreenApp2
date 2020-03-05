@@ -16,10 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -46,7 +48,7 @@ abstract class BoxFeedBlocState extends Equatable {}
 
 abstract class BoxFeedBlocStateBox extends BoxFeedBlocState {
   final Box box;
-  final List<charts.Series<LinearSales, int>> graphData;
+  final List<charts.Series<Metric, int>> graphData;
 
   BoxFeedBlocStateBox(this.box, this.graphData);
 }
@@ -64,7 +66,8 @@ class BoxFeedBlocStateNoBox extends BoxFeedBlocState {
 }
 
 class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
-  BoxFeedBlocStateBoxLoaded(Box box, List<charts.Series<LinearSales, int>> graphData) : super(box, graphData);
+  BoxFeedBlocStateBoxLoaded(Box box, List<charts.Series<Metric, int>> graphData)
+      : super(box, graphData);
 
   @override
   List<Object> get props => [box, graphData];
@@ -72,7 +75,7 @@ class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
 
 class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent _args;
-  final List<charts.Series<LinearSales, int>> _graphData = [];
+  final List<charts.Series<Metric, int>> _graphData = [];
 
   BoxFeedBloc(this._args) {
     this.add(BoxFeedBlocEventLoadBox());
@@ -84,78 +87,115 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   @override
   Stream<BoxFeedBlocState> mapEventToState(BoxFeedBlocEvent event) async* {
     if (event is BoxFeedBlocEventLoadBox) {
-      _graphData.addAll(_createDummyData());
-
       AppDB _db = AppDB();
-      if (event is BoxFeedBlocEventLoadBox) {
-        Box box = _args.box;
-        if (box == null) {
-          AppData appData = _db.getAppData();
-          if (appData.lastBoxID == null) {
-            yield BoxFeedBlocStateNoBox();
-            return;
-          }
-          box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
-        } else {
-          _db.setLastBox(box.id);
+      Box box = _args.box;
+      if (box == null) {
+        AppData appData = _db.getAppData();
+        if (appData.lastBoxID == null) {
+          yield BoxFeedBlocStateNoBox();
+          return;
         }
-        RelDB.get().boxesDAO.watchBox(box.id).listen(_onBoxUpdated);
+        box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
+      } else {
+        _db.setLastBox(box.id);
       }
+      if (box.device == null) {
+        _graphData.addAll(_createDummyData());
+      } else {
+        Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+        charts.Series<Metric, int> temp = await getMetricsName(
+            device.identifier,
+            'BOX_${box.deviceBox}_TEMP',
+            charts.MaterialPalette.green.shadeDefault);
+        charts.Series<Metric, int> humi = await getMetricsName(
+            device.identifier,
+            'BOX_${box.deviceBox}_HUMI',
+            charts.MaterialPalette.blue.shadeDefault);
+        charts.Series<Metric, int> light = await getMetricsName(
+            device.identifier,
+            'BOX_${box.deviceBox}_TIMER_OUTPUT',
+            charts.MaterialPalette.yellow.shadeDefault);
+        _graphData.addAll([temp, humi, light]);
+      }
+      RelDB.get().boxesDAO.watchBox(box.id).listen(_onBoxUpdated);
     } else if (event is BoxFeedBlocEventBoxUpdated) {
       yield BoxFeedBlocStateBoxLoaded(event.box, _graphData);
     }
+  }
+
+  Future<charts.Series<Metric, int>> getMetricsName(
+      String controllerID, String name, charts.Color color) async {
+    Response resp = await get(
+        'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
+    Map<String, dynamic> data = JsonDecoder().convert(resp.body);
+    return charts.Series<Metric, int>(
+      id: 'Temperature',
+      strokeWidthPxFn: (_, __) => 3,
+      colorFn: (_, __) => color,
+      domainFn: (Metric metric, _) => metric.year,
+      measureFn: (Metric metric, _) => metric.metric,
+      data: data['metrics'].map<Metric>((values) {
+        return Metric(values[0], values[1].toDouble());
+      }).toList(),
+    );
   }
 
   void _onBoxUpdated(Box box) {
     add(BoxFeedBlocEventBoxUpdated(box));
   }
 
-  List<charts.Series<LinearSales, int>> _createDummyData() {
+  List<charts.Series<Metric, int>> _createDummyData() {
     final tempData = List.generate(
         50,
-        (index) => LinearSales(
-            index, (cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20));
+        (index) => Metric(
+            index,
+            ((cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20)
+                .toDouble()));
     final humiData = List.generate(
         50,
-        (index) => LinearSales(
-            index, (sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20));
+        (index) => Metric(
+            index,
+            ((sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20)
+                .toDouble()));
     final lightData = List.generate(
         50,
-        (index) => LinearSales(
-            index, (cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20));
+        (index) => Metric(
+            index,
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
+                .toDouble()));
 
     return [
-      charts.Series<LinearSales, int>(
+      charts.Series<Metric, int>(
         id: 'Temperature',
         strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
+        domainFn: (Metric metric, _) => metric.year,
+        measureFn: (Metric metric, _) => metric.metric,
         data: tempData,
       ),
-      charts.Series<LinearSales, int>(
+      charts.Series<Metric, int>(
         id: 'Humidity',
         strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
+        domainFn: (Metric metric, _) => metric.year,
+        measureFn: (Metric metric, _) => metric.metric,
         data: humiData,
       ),
-      charts.Series<LinearSales, int>(
+      charts.Series<Metric, int>(
         id: 'Light',
         strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
+        domainFn: (Metric metric, _) => metric.year,
+        measureFn: (Metric metric, _) => metric.metric,
         data: lightData,
       ),
     ];
   }
 }
 
-class LinearSales {
+class Metric {
   final int year;
-  final int sales;
+  final double metric;
 
-  LinearSales(this.year, this.sales);
+  Metric(this.year, this.metric);
 }

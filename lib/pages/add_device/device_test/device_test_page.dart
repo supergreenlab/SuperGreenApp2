@@ -32,7 +32,7 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
                 .add(MainNavigatorActionPop(param: true));
           });
         } else if (state is DeviceTestBlocStateTestingLed) {
-          millis = 1000;
+          millis = 2000;
           timer = Timer.periodic(new Duration(milliseconds: 100), (timer) {
             setState(() {
               millis -= 100;
