@@ -97,10 +97,14 @@ class _FeedPageState extends State<FeedPage> {
       child: BlocBuilder<FeedBloc, FeedBlocState>(
         bloc: BlocProvider.of<FeedBloc>(context),
         builder: (BuildContext context, FeedBlocState state) {
+          Widget body;
           if (state is FeedBlocStateLoaded) {
-            return _renderCards(context, state);
+            body = _renderCards(context, state);
+          } else {
+            body = FullscreenLoading(title: 'Loading feed...');
           }
-          return FullscreenLoading(title: 'Loading feed...');
+          return AnimatedSwitcher(
+              child: body, duration: Duration(milliseconds: 200));
         },
       ),
     );

@@ -40,18 +40,24 @@ class FeedScheduleFormPage extends StatelessWidget {
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
           bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
           builder: (BuildContext context, FeedScheduleFormBlocState state) {
+            Widget body;
             if (state is FeedScheduleFormBlocStateUnInitialized) {
-              return FullscreenLoading(
+              body = FullscreenLoading(
                 title: 'Loading..',
               );
+            } else {
+              body = FeedFormLayout(
+                title: 'Add schedule',
+                changed: state.schedule != state.initialSchedule,
+                valid: state.schedule != state.initialSchedule,
+                onOK: () => BlocProvider.of<FeedScheduleFormBloc>(context)
+                    .add(FeedScheduleFormBlocEventCreate()),
+                body: _renderSchedules(context, state),
+              );
             }
-            return FeedFormLayout(
-              title: 'Add schedule',
-              changed: state.schedule != state.initialSchedule,
-              valid: state.schedule != state.initialSchedule,
-              onOK: () => BlocProvider.of<FeedScheduleFormBloc>(context)
-                  .add(FeedScheduleFormBlocEventCreate()),
-              body: _renderSchedules(context, state),
+            return AnimatedSwitcher(
+              child: body,
+              duration: Duration(milliseconds: 200),
             );
           }),
     );

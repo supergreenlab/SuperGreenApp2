@@ -93,7 +93,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                   iconColor: Colors.white,
                   hideBackButton: !canGoBack,
                 ),
-                body: body);
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

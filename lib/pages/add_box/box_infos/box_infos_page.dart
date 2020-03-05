@@ -71,7 +71,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
       listener: (BuildContext context, BoxInfosBlocState state) async {
         if (state is BoxInfosBlocStateDone) {
           BlocProvider.of<TowelieBloc>(context)
-                  .add(TowelieBlocEventBoxCreated(state.box));
+              .add(TowelieBlocEventBoxCreated(state.box));
           Timer(const Duration(milliseconds: 1500), () {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop());
@@ -96,7 +96,8 @@ class BoxInfosPageState extends State<BoxInfosPage> {
                   iconColor: Colors.white,
                 ),
                 backgroundColor: Colors.white,
-                body: body);
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

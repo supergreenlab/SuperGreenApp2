@@ -70,8 +70,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.white60),
                       child: Fullscreen(
-                        title:
-                            'Stretch control\nrequires an SGL controller',
+                        title: 'Stretch control\nrequires an SGL controller',
                         child: GreenButton(
                           title: 'SHOP NOW',
                           onPressed: () {
@@ -97,7 +96,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   BlocProvider.of<FeedLightFormBloc>(context)
                       .add(FeedLightFormBlocEventCreate(values));
                 },
-                body: body,
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body),
               );
             }),
       ),

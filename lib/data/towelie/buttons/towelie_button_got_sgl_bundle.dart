@@ -1,0 +1,22 @@
+
+import 'package:super_green_app/data/towelie/buttons/towelie_button.dart';
+import 'package:super_green_app/data/towelie/cards/towelie_cards_factory.dart';
+import 'package:super_green_app/data/towelie/towelie_bloc.dart';
+
+class TowelieButtonGotSGLBundle extends TowelieButton {
+  static Map<String, dynamic> createButton() {
+    return {
+      'ID': 'GOT_SGL_BUNDLE',
+      'title': 'Yes I got one!',
+    };
+  }
+
+  @override
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventCardButtonPressed event) async* {
+    if (event.params['ID'] == 'GOT_SGL_BUNDLE') {
+      await TowelieCardsFactory.createGotSGLBundleCard(event.feed);
+      await removeButtons(event.feedEntry);
+    }
+  }
+}

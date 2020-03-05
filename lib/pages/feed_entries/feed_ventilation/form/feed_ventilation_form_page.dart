@@ -93,7 +93,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                       FeedVentilationFormBlocEventCreate(
                           _blowerDay, _blowerNight));
                 },
-                body: body);
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

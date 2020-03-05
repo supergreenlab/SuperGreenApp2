@@ -75,7 +75,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
         return Scaffold(
             drawer: Drawer(child: this._drawerContent(context, state)),
-            body: body,
+            body: AnimatedSwitcher(
+                child: body, duration: Duration(milliseconds: 200)),
             floatingActionButton: state is BoxFeedBlocStateBox
                 ? _renderSpeedDial(context, state)
                 : null);
@@ -228,9 +229,9 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   void Function() _onSpeedDialSelected(BuildContext context,
       MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent) {
     return () {
-      _openCloseDial.value = Random().nextInt(1<<32);
+      _openCloseDial.value = Random().nextInt(1 << 32);
       BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
+          .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
     };
   }
 

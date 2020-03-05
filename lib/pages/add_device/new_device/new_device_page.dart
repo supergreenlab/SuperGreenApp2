@@ -69,7 +69,8 @@ class NewDevicePage extends StatelessWidget {
                     titleColor: Colors.white,
                     large: true,
                   ),
-                  body,
+                  AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body),
                 ],
               ),
             );
@@ -126,7 +127,7 @@ class NewDevicePage extends StatelessWidget {
 
   Widget _renderLoading() {
     return Expanded(
-      child: FullscreenLoading(title: 'Trying to connect\nautomatically'));
+        child: FullscreenLoading(title: 'Trying to connect\nautomatically'));
   }
 
   void _startSetup(BuildContext context) async {

@@ -71,7 +71,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: body);
+                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
