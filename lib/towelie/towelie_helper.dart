@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieHelper extends StatefulWidget {
@@ -53,9 +54,9 @@ class _TowelieHelperState extends State<TowelieHelper> {
       },
       child: BlocBuilder<TowelieBloc, TowelieBlocState>(
         condition: (context, state) => state is TowelieBlocStateHelper,
-        builder: (BuildContext context, state) {
+        builder: (BuildContext context, TowelieBlocState state) {
           if (visible) {
-            return _renderBody();
+            return _renderBody(state as TowelieBlocStateHelper);
           }
           return Container();
         },
@@ -63,17 +64,18 @@ class _TowelieHelperState extends State<TowelieHelper> {
     );
   }
 
-  Widget _renderBody() {
+  Widget _renderBody(TowelieBlocStateHelper state) {
     return Positioned(
       bottom: 0,
       left: 0,
       child: Material(
         color: Colors.transparent,
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 1000),
+          curve: Curves.elasticInOut,
+          duration: Duration(milliseconds: 1500),
           transform: Matrix4.translationValues(0, y, 0),
           width: MediaQuery.of(context).size.width,
-          color: Colors.white38,
+          color: Colors.transparent,
           child: Dismissible(
             direction: DismissDirection.down,
             key: Key('Towelie'),
@@ -93,10 +95,8 @@ class _TowelieHelperState extends State<TowelieHelper> {
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        'Hi! my name is towelie and I\'m here to help!',
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
+                      child: MarkdownBody(data: state.text, styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),)
                     ),
                   ),
                 )),

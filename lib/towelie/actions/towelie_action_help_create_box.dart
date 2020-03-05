@@ -5,7 +5,7 @@ class TowelieActionHelpCreateBox extends TowelieAction {
   @override
   Stream<TowelieBlocState> eventReceived(TowelieBlocEvent event) async* {
     if (event is TowelieBlocEventRoute && event.settings.name == '/box/new') {
-      yield TowelieBlocStateHelper(event.settings, 'Lol de ouf');
+      yield TowelieBlocStateHelper(event.settings, 'Lol de **ouf**');
     }
   }
 }

@@ -69,8 +69,7 @@ class NewDevicePage extends StatelessWidget {
                     titleColor: Colors.white,
                     large: true,
                   ),
-                  AnimatedSwitcher(
-                      duration: Duration(milliseconds: 200), child: body),
+                  body,
                 ],
               ),
             );

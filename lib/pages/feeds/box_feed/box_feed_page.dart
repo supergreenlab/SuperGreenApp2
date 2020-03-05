@@ -54,33 +54,42 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
-      bloc: BlocProvider.of<BoxFeedBloc>(context),
-      builder: (BuildContext context, BoxFeedBlocState state) {
-        Widget body;
+    return WillPopScope(
+      onWillPop: () async {
         if (_speedDialOpen) {
-          body = Stack(
-            children: <Widget>[
-              _renderFeed(context, state),
-              _renderOverlay(context),
-            ],
-          );
-        } else {
-          body = Stack(
-            children: <Widget>[
-              _renderFeed(context, state),
-            ],
-          );
+          _openCloseDial.value = Random().nextInt(1 << 32);
+          return false;
         }
-
-        return Scaffold(
-            drawer: Drawer(child: this._drawerContent(context, state)),
-            body: AnimatedSwitcher(
-                child: body, duration: Duration(milliseconds: 200)),
-            floatingActionButton: state is BoxFeedBlocStateBox
-                ? _renderSpeedDial(context, state)
-                : null);
+        return true;
       },
+      child: BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
+        bloc: BlocProvider.of<BoxFeedBloc>(context),
+        builder: (BuildContext context, BoxFeedBlocState state) {
+          Widget body;
+          if (_speedDialOpen) {
+            body = Stack(
+              children: <Widget>[
+                _renderFeed(context, state),
+                _renderOverlay(context),
+              ],
+            );
+          } else {
+            body = Stack(
+              children: <Widget>[
+                _renderFeed(context, state),
+              ],
+            );
+          }
+
+          return Scaffold(
+              drawer: Drawer(child: this._drawerContent(context, state)),
+              body: AnimatedSwitcher(
+                  child: body, duration: Duration(milliseconds: 200)),
+              floatingActionButton: state is BoxFeedBlocStateBox
+                  ? _renderSpeedDial(context, state)
+                  : null);
+        },
+      ),
     );
   }
 
