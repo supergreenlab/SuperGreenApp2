@@ -274,8 +274,10 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return InkWell(
-          onTap: () {_openCloseDial.value = Random().nextInt(1 << 32);},
-                  child: Container(
+          onTap: () {
+            _openCloseDial.value = Random().nextInt(1 << 32);
+          },
+          child: Container(
               width: constraints.maxWidth,
               height: constraints.maxHeight,
               color: Colors.white60),
@@ -463,9 +465,24 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _renderMetric(Colors.green, 'Temp', '${state.graphData[0].data[0].metric.toInt()}°', '${this._min(state.graphData[0].data).metric.toInt()}°', '${this._max(state.graphData[0].data).metric.toInt()}°'),
-                _renderMetric(Colors.blue, 'Humi', '${state.graphData[1].data[0].metric.toInt()}%', '${this._min(state.graphData[1].data).metric.toInt()}%', '${this._max(state.graphData[1].data).metric.toInt()}%'),
-                _renderMetric(Colors.yellow, 'Light', '${state.graphData[2].data[0].metric.toInt()}%', '${this._min(state.graphData[2].data).metric.toInt()}%', '${this._max(state.graphData[2].data).metric.toInt()}%'),
+                _renderMetric(
+                    Colors.green,
+                    'Temp',
+                    '${state.graphData[0].data[0].metric.toInt()}°',
+                    '${this._min(state.graphData[0].data).metric.toInt()}°',
+                    '${this._max(state.graphData[0].data).metric.toInt()}°'),
+                _renderMetric(
+                    Colors.blue,
+                    'Humi',
+                    '${state.graphData[1].data[0].metric.toInt()}%',
+                    '${this._min(state.graphData[1].data).metric.toInt()}%',
+                    '${this._max(state.graphData[1].data).metric.toInt()}%'),
+                _renderMetric(
+                    Colors.yellow,
+                    'Light',
+                    '${state.graphData[2].data[0].metric.toInt()}%',
+                    '${this._min(state.graphData[2].data).metric.toInt()}%',
+                    '${this._max(state.graphData[2].data).metric.toInt()}%'),
               ],
             ),
             Expanded(

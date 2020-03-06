@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -31,6 +32,11 @@ import 'package:charts_flutter/flutter.dart' as charts;
 abstract class BoxFeedBlocEvent extends Equatable {}
 
 class BoxFeedBlocEventLoadBox extends BoxFeedBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class BoxFeedBlocEventReloadChart extends BoxFeedBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -75,6 +81,7 @@ class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
 }
 
 class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
+  Timer _timer;
   final HomeNavigateToBoxFeedEvent _args;
 
   final List<charts.Series<Metric, DateTime>> _graphData = [];
@@ -102,51 +109,58 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
         _db.setLastBox(box.id);
       }
 
-      if (box.device == null) {
-        _graphData.addAll(_createDummyData());
-      } else {
-        Device device = await RelDB.get().devicesDAO.getDevice(box.device);
-        String identifier = device.identifier;
-        int deviceBox = box.deviceBox;
-        charts.Series<Metric, DateTime> temp = await getMetricsName(identifier,
-            'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault);
-        charts.Series<Metric, DateTime> humi = await getMetricsName(identifier,
-            'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
-        List<dynamic> duty =
-            await getMetricRequest(identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
-        List<int> dims = [];
-        int n = 0;
-        Module lightModule =
-            await RelDB.get().devicesDAO.getModule(device.id, "led");
-        for (int i = 0; i < lightModule.arrayLen; ++i) {
-          Param boxParam =
-              await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
-          if (boxParam.ivalue != box.deviceBox) {
-            continue;
-          }
-          List<dynamic> dim = await getMetricRequest(
-              identifier, 'LED_${i}_DIM');
-          for (int i = 0; i < dim.length; ++i) {
-            int d = dim[i][1];
-            if (dims.length < i + 1) {
-              dims.add(d);
-            } else {
-              dims.setAll(i, [dims[i] + d]);
-            }
-          }
-          ++n;
-        }
-        dims = dims.map<int>((a) => a ~/ n).toList();
-        int i = 0;
-        charts.Series<Metric, DateTime> light = getTimeSeries(
-            duty.map<dynamic>((d) => [d[0], d[1] * dims[i++] / 100]).toList(),
-            'Light',
-            charts.MaterialPalette.yellow.shadeDefault);
-        _graphData.addAll([temp, humi, light]);
-      }
+      await updateChart(box);
+      _timer = Timer.periodic(Duration(seconds: 60), (timer) { this.add(BoxFeedBlocEventReloadChart()); });
       RelDB.get().boxesDAO.watchBox(box.id).listen(_onBoxUpdated);
+      yield BoxFeedBlocStateBoxLoaded(box, _graphData);
     } else if (event is BoxFeedBlocEventBoxUpdated) {
       yield BoxFeedBlocStateBoxLoaded(event.box, _graphData);
+    } else if (event is BoxFeedBlocEventReloadChart) {
+      yield BoxFeedBlocStateBoxLoaded((this.state as BoxFeedBlocStateBoxLoaded).box, _graphData);
+    }
+  }
+
+  Future updateChart(box) async {
+    if (box.device == null) {
+      _graphData.addAll(_createDummyData());
+    } else {
+      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+      String identifier = device.identifier;
+      int deviceBox = box.deviceBox;
+      charts.Series<Metric, DateTime> temp = await getMetricsName(identifier,
+          'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault);
+      charts.Series<Metric, DateTime> humi = await getMetricsName(identifier,
+          'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
+      List<dynamic> duty =
+          await getMetricRequest(identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+      List<int> dims = [];
+      int n = 0;
+      Module lightModule =
+          await RelDB.get().devicesDAO.getModule(device.id, "led");
+      for (int i = 0; i < lightModule.arrayLen; ++i) {
+        Param boxParam =
+            await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
+        if (boxParam.ivalue != box.deviceBox) {
+          continue;
+        }
+        List<dynamic> dim = await getMetricRequest(identifier, 'LED_${i}_DIM');
+        for (int i = 0; i < dim.length; ++i) {
+          int d = dim[i][1];
+          if (dims.length < i + 1) {
+            dims.add(d);
+          } else {
+            dims.setAll(i, [dims[i] + d]);
+          }
+        }
+        ++n;
+      }
+      dims = dims.map<int>((a) => a ~/ n).toList();
+      int i = 0;
+      charts.Series<Metric, DateTime> light = getTimeSeries(
+          duty.map<dynamic>((d) => [d[0], d[1] * dims[i++] / 100]).toList(),
+          'Light',
+          charts.MaterialPalette.yellow.shadeDefault);
+      _graphData.addAll([temp, humi, light]);
     }
   }
 
@@ -235,6 +249,11 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
         data: lightData,
       ),
     ];
+  }
+  @override
+  Future<void> close() async {
+    _timer.cancel();
+    super.close();
   }
 }
 
