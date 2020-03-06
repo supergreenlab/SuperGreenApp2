@@ -31,12 +31,14 @@ class FeedPage extends StatefulWidget {
   final String title;
   final Widget appBar;
   final double appBarHeight;
+  final bool bottomPadding;
 
   const FeedPage(
       {@required this.title,
       @required this.color,
       this.appBar,
-      @required this.appBarHeight});
+      @required this.appBarHeight,
+      this.bottomPadding = false});
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -133,7 +135,9 @@ class _FeedPageState extends State<FeedPage> {
             key: _listKey,
             itemBuilder:
                 (BuildContext context, int index, Animation<double> animation) {
-              if (index == entries.length) {
+              if (!widget.bottomPadding && index >= entries.length) {
+                return null;
+              } else if (index == entries.length) {
                 return Container(height: 76);
               } else if (index > entries.length) {
                 return null;

@@ -71,11 +71,22 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                           color: Colors.white60),
                       child: Fullscreen(
                         title: 'Stretch control\nrequires an SGL controller',
-                        child: GreenButton(
-                          title: 'SHOP NOW',
-                          onPressed: () {
-                            launch('https://www.supergreenlab.com');
-                          },
+                        child: Column(
+                          children: <Widget>[
+                            GreenButton(
+                              title: 'SHOP NOW',
+                              onPressed: () {
+                                launch('https://www.supergreenlab.com');
+                              },
+                            ),
+                            Text('or'),
+                            GreenButton(
+                              title: 'DIY NOW',
+                              onPressed: () {
+                                launch('https://github.com/supergreenlab');
+                              },
+                            ),
+                          ],
                         ),
                         childFirst: false,
                       ),

@@ -110,13 +110,17 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
       }
 
       await updateChart(box);
-      _timer = Timer.periodic(Duration(seconds: 60), (timer) { this.add(BoxFeedBlocEventReloadChart()); });
+      _timer = Timer.periodic(Duration(seconds: 60), (timer) {
+        this.add(BoxFeedBlocEventReloadChart());
+      });
       RelDB.get().boxesDAO.watchBox(box.id).listen(_onBoxUpdated);
       yield BoxFeedBlocStateBoxLoaded(box, _graphData);
     } else if (event is BoxFeedBlocEventBoxUpdated) {
       yield BoxFeedBlocStateBoxLoaded(event.box, _graphData);
     } else if (event is BoxFeedBlocEventReloadChart) {
-      yield BoxFeedBlocStateBoxLoaded((this.state as BoxFeedBlocStateBoxLoaded).box, _graphData);
+      Box box = (this.state as BoxFeedBlocStateBoxLoaded).box;
+      await updateChart(box);
+      yield BoxFeedBlocStateBoxLoaded(box, _graphData);
     }
   }
 
@@ -127,9 +131,9 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
       String identifier = device.identifier;
       int deviceBox = box.deviceBox;
-      charts.Series<Metric, DateTime> temp = await getMetricsName(identifier,
+      charts.Series<Metric, DateTime> temp = await getMetricsName(identifier, 'Temperature',
           'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault);
-      charts.Series<Metric, DateTime> humi = await getMetricsName(identifier,
+      charts.Series<Metric, DateTime> humi = await getMetricsName(identifier, 'Humidity',
           'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
       List<dynamic> duty =
           await getMetricRequest(identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
@@ -165,9 +169,9 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   }
 
   Future<charts.Series<Metric, DateTime>> getMetricsName(
-      String controllerID, String name, charts.Color color) async {
+      String controllerID, String graphID, String name, charts.Color color) async {
     List<dynamic> values = await getMetricRequest(controllerID, name);
-    return getTimeSeries(values, 'Temperature', color);
+    return getTimeSeries(values, graphID, color);
   }
 
   Future<List<dynamic>> getMetricRequest(
@@ -250,9 +254,12 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
       ),
     ];
   }
+
   @override
   Future<void> close() async {
-    _timer.cancel();
+    if (_timer != null) {
+      _timer.cancel();
+    }
     super.close();
   }
 }
