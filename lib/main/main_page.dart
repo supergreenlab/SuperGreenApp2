@@ -135,7 +135,7 @@ class MainPage extends StatelessWidget {
   Widget _onGenerateRoute(BuildContext context, RouteSettings settings) {
     Timer(Duration(seconds: 1), () {
       BlocProvider.of<TowelieBloc>(context)
-          .add(TowelieBlocEventRoute(settings, false));
+          .add(TowelieBlocEventRoute(settings));
     });
     switch (settings.name) {
       case '/home':

@@ -106,7 +106,7 @@ class HomePage extends StatelessWidget {
       BuildContext context, RouteSettings settings) {
     Timer(Duration(seconds: 1), () {
       BlocProvider.of<TowelieBloc>(context)
-          .add(TowelieBlocEventRoute(settings, false));
+          .add(TowelieBlocEventRoute(settings));
     });
     if (settings.arguments == null) {
       return MaterialPageRoute(

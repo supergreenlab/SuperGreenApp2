@@ -74,7 +74,7 @@ class FeedScheduleFormPage extends StatelessWidget {
                 state.schedules['VEG'],
                 'Vegetative schedule',
                 'assets/feed_form/icon_veg.svg',
-                SGLLocalizations.of(context).vegScheduleHelper,
+                SGLLocalizations.of(context).instructionsVegScheduleHelper,
                 state.schedule == 'VEG', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('VEG'));
@@ -84,7 +84,7 @@ class FeedScheduleFormPage extends StatelessWidget {
                 state.schedules['BLOOM'],
                 'Blooming schedule',
                 'assets/feed_form/icon_bloom.svg',
-                SGLLocalizations.of(context).bloomScheduleHelper,
+                SGLLocalizations.of(context).instructionsBloomScheduleHelper,
                 state.schedule == 'BLOOM', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('BLOOM'));
@@ -94,7 +94,7 @@ class FeedScheduleFormPage extends StatelessWidget {
                 state.schedules['AUTO'],
                 'Auto flower schedule',
                 'assets/feed_form/icon_autoflower.svg',
-                SGLLocalizations.of(context).autoScheduleHelper,
+                SGLLocalizations.of(context).instructionsAutoScheduleHelper,
                 state.schedule == 'AUTO', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('AUTO'));

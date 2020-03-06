@@ -1,8 +1,8 @@
 
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
-import 'package:super_green_app/towelie/actions/towelie_action.dart';
-import 'package:super_green_app/towelie/cards/towelie_cards_factory.dart';
+import 'package:super_green_app/towelie/towelie_action.dart';
+import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieActionBoxCreated extends TowelieAction {

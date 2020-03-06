@@ -24,11 +24,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
-import 'package:super_green_app/towelie/actions/towelie_action.dart';
-import 'package:super_green_app/towelie/actions/towelie_action_box_created.dart';
-import 'package:super_green_app/towelie/actions/towelie_action_help_create_box.dart';
-import 'package:super_green_app/towelie/actions/towelie_appinit.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_create_box.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_dont_want_to_buy.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_got_sgl_bundle.dart';
@@ -38,6 +33,16 @@ import 'package:super_green_app/towelie/buttons/towelie_button_no_sgl_bundle.dar
 import 'package:super_green_app/towelie/buttons/towelie_button_not_received.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_view_box.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
+import 'package:super_green_app/towelie/feed/towelie_action_box_created.dart';
+import 'package:super_green_app/towelie/feed/towelie_appinit.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_add_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_select_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_test_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_wifi.dart';
+import 'package:super_green_app/towelie/towelie_action.dart';
+import 'package:super_green_app/towelie/towelie_button.dart';
 
 abstract class TowelieBlocEvent extends Equatable {}
 
@@ -51,12 +56,21 @@ class TowelieBlocEventAppInit extends TowelieBlocEvent {
 class TowelieBlocEventRoute extends TowelieBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final RouteSettings settings;
-  final bool popping;
 
-  TowelieBlocEventRoute(this.settings, this.popping);
+  TowelieBlocEventRoute(this.settings);
 
   @override
-  List<Object> get props => [rand, settings, popping];
+  List<Object> get props => [rand, settings];
+}
+
+class TowelieBlocEventRoutePop extends TowelieBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+  final RouteSettings settings;
+
+  TowelieBlocEventRoutePop(this.settings);
+
+  @override
+  List<Object> get props => [rand, settings];
 }
 
 class TowelieBlocEventBoxCreated extends TowelieBlocEvent {
@@ -116,11 +130,26 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   List<Object> get props => [rand, settings, text];
 }
 
+class TowelieBlocStateHelperPop extends TowelieBlocState {
+  final int rand = Random().nextInt(1 << 32);
+  final RouteSettings settings;
+
+  TowelieBlocStateHelperPop(this.settings);
+
+  @override
+  List<Object> get props => [rand, settings];
+}
+
 class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
     TowelieActionAppInit(),
     TowelieActionBoxCreated(),
     TowelieActionHelpCreateBox(),
+    TowelieActionHelpSelectDevice(),
+    TowelieActionHelpAddDevice(),
+    TowelieActionHelpAddExistingDevice(),
+    TowelieActionHelpTestDevice(),
+    TowelieActionHelpWifi(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),

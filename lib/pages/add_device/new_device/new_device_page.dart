@@ -18,7 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -84,8 +86,11 @@ class NewDevicePage extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(
-                'Couldn\'t connect to the 🤖🍁 wifi! Please go to your mobile phone settings to connect manually with the following credentials:'),
+            child: MarkdownBody(
+              data: SGLLocalizations.current.instructionsNewDeviceWifiFailed,
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
           ),
           Expanded(
             child: Column(
@@ -102,7 +107,12 @@ class NewDevicePage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Then press the DONE button below'),
+                  child: MarkdownBody(
+                    data: SGLLocalizations
+                        .current.instructionsNewDeviceWifiFailed2,
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Colors.black, fontSize: 16)),
+                  ),
                 ),
               ],
             ),

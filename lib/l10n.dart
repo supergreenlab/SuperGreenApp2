@@ -53,29 +53,66 @@ class SGLLocalizations {
     );
   }
 
-  String get vegScheduleHelper {
+  String get instructionsVegScheduleHelper {
     return Intl.message(
-      'Vegetative stage is the phase between germination and blooming, the plant grows and develops it’s branches. It requires at least 13h lights per days, usual setting is 18h per day.',
-      name: 'vegScheduleHelper',
+      '**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day.',
+      name: 'instructionsVegScheduleHelper',
       desc: 'Veg schedule helper',
       locale: localeName,
     );
   }
 
-  String get bloomScheduleHelper {
+  String get instructionsBloomScheduleHelper {
     return Intl.message(
-      'Bloom stage is the phase between germination and blooming, the plant grows and develops it’s branches. It requires at least 13h lights per days, usual setting is 18h per day.',
-      name: 'bloomScheduleHelper',
+      '**Bloom stage** is the phase between germination and blooming, the plant grows and develops it’s branches. It requires **at most 12h lights per days**, usual setting is **12h** per day.',
+      name: 'instructionsBloomScheduleHelper',
       desc: 'Bloom schedule helper',
       locale: localeName,
     );
   }
 
-  String get autoScheduleHelper {
+  String get instructionsAutoScheduleHelper {
     return Intl.message(
-      'Auto flower plants are a special type of strain that won’t require light schedule change in order to start flowering. Their vegetative stage duration can’t be controlled, and varies from one plant to another.',
-      name: 'autoScheduleHelper',
+      'Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another.',
+      name: 'instructionsAutoScheduleHelper',
       desc: 'Auto schedule helper',
+      locale: localeName,
+    );
+  }
+
+  String get instructionsExistingDeviceTitle {
+    return Intl.message(
+      '''Enter device name or IP''',
+      name: 'instructionsExistingDeviceTitle',
+      desc: 'Instructions existing device title',
+      locale: localeName,
+    );
+  }
+
+  String get instructionsExistingDevice {
+    return Intl.message(
+      '''Please make sure your **mobile phone** is **connected to your home wifi**.
+Then we\'ll search for it **by name** or **by IP**, please **fill** the following text field.''',
+      name: 'instructionsExistingDevice',
+      desc: 'Instructions existing device',
+      locale: localeName,
+    );
+  }
+
+  String get instructionsNewDeviceWifiFailed {
+    return Intl.message(
+      '''**Couldn\'t connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:''',
+      name: 'instructionsNewDeviceWifiFailed',
+      desc: 'Instructions new device wifi failed',
+      locale: localeName,
+    );
+  }
+
+  String get instructionsNewDeviceWifiFailed2 {
+    return Intl.message(
+      '''Then press the **DONE** button below''',
+      name: 'instructionsNewDeviceWifiFailed2',
+      desc: 'Instructions new device wifi failed2',
       locale: localeName,
     );
   }
@@ -86,7 +123,7 @@ class SGLLocalizations {
       
 Welcome to **SuperGreenLab\'s** grow diary app!
 While it can be used without, this app has been optimized to be used with a **Ninja bundle**.
-Do you own one?''',
+**Do you own one?**''',
       name: 'towelieWelcomeApp',
       desc: 'Towelie Welcome App',
       locale: localeName,
@@ -95,7 +132,7 @@ Do you own one?''',
 
   String get towelieWelcomeAppHasBundle {
     return Intl.message(
-      '''Have you received it yet?''',
+      '''Have you **received it** yet?''',
       name: 'towelieWelcomeAppHasBundle',
       desc: 'Towelie Welcome App - Has bundle',
       locale: localeName,
@@ -104,11 +141,11 @@ Do you own one?''',
 
   String get towelieWelcomeAppNoBundle {
     return Intl.message(
-      '''With 6 full spectrum LED grow lights providing dense light and little heat. This complete grow box bundle lets you build a grow box out of almost anything.
+      '''With **6 full spectrum LED grow lights** providing dense light and **little heat**. This complete grow box bundle lets you **build a grow box** out of **almost anything**.
 
-With these lights we successfully grew and harvested from space buckets, TV stands, office storages and custom built grow boxes. Some of our users even grew in toolboxes or suitcase ! What will you build ?
+With these lights we successfully grew and harvested from **space buckets, TV stands, office storages** and custom built grow boxes. Some of our users even grew in **toolboxes or suitcase** ! What will you build ?
 
-Coming with a sensor, ventilation, a controller and a companion App. The ninja grow bundle is fully controllable from your smartphone and can be split into 3 different chambers with different light dimming, schedules and ventilation setups.''',
+Coming with a **sensor, ventilation, a controller and a companion App**. The **ninja** grow bundle is fully controllable from your smartphone and can be split into **3 different chambers** with different **light dimming, schedules and ventilation setups**.''',
       name: 'towelieWelcomeAppNoBundle',
       desc: 'Towelie Welcome App - No bundle',
       locale: localeName,
@@ -120,7 +157,7 @@ Coming with a sensor, ventilation, a controller and a companion App. The ninja g
       '''Alright we're ready to create your **first box!**
 
 The app works like this:
-- you create a box
+- you **create a box**
 - attach it (or not) to a **SuperGreenController**
 - configure the led channels used to **light it up**
 
@@ -138,9 +175,9 @@ Press the **Create box** button below.
 
   String get towelieBoxCreated {
     return Intl.message(
-      '''Awesome, you created your first box!
+      '''Awesome, **you created your first box**!
 
-You can access your newly box feed either by pressing the home button below, or the **View box** button below.
+You can access your newly box feed either by **pressing the home button below**, or the **View box** button below.
 ''',
       name: 'towelieBoxCreated',
       desc: 'Towelie Box Created',
@@ -151,7 +188,7 @@ You can access your newly box feed either by pressing the home button below, or 
   String get towelieWelcomeBox {
     return Intl.message(
       '''**Welcome to your box feed!**
-This is where you will modify your box’s parameters, everytime you change your light dimming, change from veg to bloom, or change your ventilation, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.
+This is where you will modify your box’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.
 
 This is also where you will log the actions **you want to remember**: last time you watered for example.
 
@@ -161,6 +198,82 @@ receive from the app.
 And all this feed can be reviewed, shared or replayed later, **and that’s awesome**.''',
       name: 'towelieWelcomeBox',
       desc: 'Towelie Welcome Box',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperCreateBox {
+    return Intl.message(
+      '''Hey man, **welcome to the box creation process**, I\'ll be there to guide you through it.
+First step is to **give your new box a name**.''',
+      name: 'towelieHelperCreateBox',
+      desc: 'Towelie Helper Create Box',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperSelectDevice {
+    return Intl.message(
+      '''Alright, now that your box has a name we can **start its configuration**:)
+If you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the box lights, ventilation and sensors**.
+Because it\'s all brand new, let\'s first **setup a new controller**.
+If you don\'t own a bundle, you can skip this by pressing "NO SGL DEVICE".''',
+      name: 'towelieHelperSelectDevice',
+      desc: 'Towelie Helper Select box device',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperAddDevice {
+    return Intl.message(
+      '''Good.
+Now this is when you should **plug the device to it\'s power supply** if not already.
+Then we\'ll choose one of the options above to **connect to the controller**.''',
+      name: 'towelieHelperAddDevice',
+      desc: 'Towelie Helper Add device',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperAddExistingDevice {
+    return Intl.message(
+      '''Ok, so your device is **already running** and **connected to your home wifi**, let\'s search for it over the network!
+Enter the **name you gave it last time** (default is **supergreencontroller**), if you can\'t remember it, you can also type its **IP address**.
+The **IP address** can be easily found on your **router\'s home page**.
+To **access your router's homepage**: take the **IP** address of your **mobile phone** or **laptop**, replace the last digit by **1** and **type that** in a browser.''',
+      name: 'towelieHelperAddExistingDevice',
+      desc: 'Towelie Helper Add existing device',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperDeviceWifi {
+    return Intl.message(
+      '''While not mandatory, connecting your device to your home wifi has a few benefits:
+- receive software upgrade and bug fixes
+- remote monitoring
+- remote control (coming soon)''',
+      name: 'towelieHelperDeviceWifi',
+      desc: 'Towelie Helper Device wifi',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperSelectBoxDevice {
+    return Intl.message(
+      '''Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.
+To **better understand** you should have your LED panels **connected to the controller**.''',
+      name: 'towelieHelperSelectBoxDevice',
+      desc: 'Towelie Helper box Device box',
+      locale: localeName,
+    );
+  }
+
+    String get towelieHelperTestDevice {
+    return Intl.message(
+      '''This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.''',
+      name: 'towelieHelperSelectBoxDevice',
+      desc: 'Towelie Helper box Device box',
       locale: localeName,
     );
   }

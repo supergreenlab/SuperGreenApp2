@@ -1,6 +1,6 @@
 
-import 'package:super_green_app/towelie/buttons/towelie_button.dart';
-import 'package:super_green_app/towelie/cards/towelie_cards_factory.dart';
+import 'package:super_green_app/towelie/towelie_button.dart';
+import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieButtonNoSGLBundle extends TowelieButton {

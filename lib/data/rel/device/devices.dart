@@ -52,7 +52,13 @@ class Params extends Table {
   IntColumn get ivalue => integer().nullable()();
 }
 
-@UseDao(tables: [Devices, Modules, Params])
+@UseDao(tables: [
+  Devices,
+  Modules,
+  Params
+], queries: {
+  'nDevices': 'SELECT COUNT(*) FROM devices',
+})
 class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   DevicesDAO(RelDB db) : super(db);
 

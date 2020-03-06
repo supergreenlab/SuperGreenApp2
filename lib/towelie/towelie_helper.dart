@@ -14,11 +14,12 @@ class TowelieHelper extends StatefulWidget {
   @override
   _TowelieHelperState createState() => _TowelieHelperState();
 
-  static Widget wrapWidget(RouteSettings settings, BuildContext context, Widget widget) {
+  static Widget wrapWidget(
+      RouteSettings settings, BuildContext context, Widget widget) {
     return WillPopScope(
       onWillPop: () async {
         BlocProvider.of<TowelieBloc>(context)
-            .add(TowelieBlocEventRoute(settings, false));
+            .add(TowelieBlocEventRoutePop(settings));
         return true;
       },
       child: Stack(children: [
@@ -40,20 +41,14 @@ class _TowelieHelperState extends State<TowelieHelper> {
       listener: (BuildContext context, TowelieBlocState state) {
         if (state is TowelieBlocStateHelper &&
             state.settings.name == widget.settings.name) {
-          setState(() {
-            text = state.text;
-            visible = true;
-            y = 300;
-          });
-          Timer(Duration(milliseconds: 10), () {
-            setState(() {
-              y = 0;
-            });
-          });
+          _prepareShow(state);
+        } else if (state is TowelieBlocStateHelperPop &&
+            state.settings.name == widget.settings.name) {
+          _prepareHide();
         }
       },
       child: BlocBuilder<TowelieBloc, TowelieBlocState>(
-        condition: (context, state) => state is TowelieBlocStateHelper,
+        condition: (context, state) => state is TowelieBlocStateHelper && state.settings.name == widget.settings.name,
         builder: (BuildContext context, TowelieBlocState state) {
           if (visible) {
             return _renderBody(state as TowelieBlocStateHelper);
@@ -85,6 +80,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
               });
             },
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                     child: Padding(
@@ -95,9 +91,13 @@ class _TowelieHelperState extends State<TowelieHelper> {
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
-                      child: MarkdownBody(data: state.text, styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),)
-                    ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 16),
+                        child: MarkdownBody(
+                          data: state.text,
+                          styleSheet: MarkdownStyleSheet(
+                              p: TextStyle(color: Colors.black, fontSize: 16)),
+                        )),
                   ),
                 )),
                 Padding(
@@ -123,5 +123,29 @@ class _TowelieHelperState extends State<TowelieHelper> {
         ),
       ),
     );
+  }
+
+  void _prepareShow(TowelieBlocStateHelper state) {
+    setState(() {
+      text = state.text;
+      visible = true;
+      y = 300;
+    });
+    Timer(Duration(milliseconds: 300), () {
+      setState(() {
+        y = 0;
+      });
+    });
+  }
+
+  void _prepareHide() {
+    setState(() {
+      y = 300;
+    });
+    Timer(Duration(milliseconds: 1500), () {
+      setState(() {
+        visible = false;
+      });
+    });
   }
 }
