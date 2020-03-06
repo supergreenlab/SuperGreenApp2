@@ -11,7 +11,7 @@ class TowelieActionHelpTestDevice extends TowelieActionHelp {
   Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
-    if (nDevices == 0) {
+    if (nDevices == 1) {
       yield TowelieBlocStateHelper(
           event.settings, SGLLocalizations.current.towelieHelperTestDevice);
     }

@@ -226,7 +226,7 @@ If you don\'t own a bundle, you can skip this by pressing "NO SGL DEVICE".''',
 
   String get towelieHelperAddDevice {
     return Intl.message(
-      '''Good.
+      '''**Good**.
 Now this is when you should **plug the device to it\'s power supply** if not already.
 Then we\'ll choose one of the options above to **connect to the controller**.''',
       name: 'towelieHelperAddDevice',
@@ -272,8 +272,8 @@ To **better understand** you should have your LED panels **connected to the cont
     String get towelieHelperTestDevice {
     return Intl.message(
       '''This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.''',
-      name: 'towelieHelperSelectBoxDevice',
-      desc: 'Towelie Helper box Device box',
+      name: 'towelieHelperTestDevice',
+      desc: 'Towelie Helper test device',
       locale: localeName,
     );
   }

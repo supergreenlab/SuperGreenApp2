@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-06T10:47:57.977799",
+  "@@last_modified": "2020-03-06T11:37:58.282665",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -84,13 +84,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperCreateBox": "Hey man, **welcome to the box creation process**,\nI'll be there to guide you through it.\nFirst step is to **give your new box a name**.",
+  "towelieHelperCreateBox": "Hey man, **welcome to the box creation process**, I'll be there to guide you through it.\nFirst step is to **give your new box a name**.",
   "@towelieHelperCreateBox": {
     "description": "Towelie Helper Create Box",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectDevice": "Alright, now that your box has a name we can **start it's configuration**:)\nIf you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the box lights, ventilation and sensors**.\nBecause it's all brand new, let's first **setup a new controller**.\nIf you don't own a bundle, you can skip this by pressing \"NO SGL DEVICE\".",
+  "towelieHelperSelectDevice": "Alright, now that your box has a name we can **start its configuration**:)\nIf you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the box lights, ventilation and sensors**.\nBecause it's all brand new, let's first **setup a new controller**.\nIf you don't own a bundle, you can skip this by pressing \"NO SGL DEVICE\".",
   "@towelieHelperSelectDevice": {
     "description": "Towelie Helper Select box device",
     "type": "text",
@@ -105,6 +105,24 @@
   "towelieHelperAddExistingDevice": "Ok, so your device is **already running** and **connected to your home wifi**, let's search for it over the network!\nEnter the **name you gave it last time** (default is **supergreencontroller**), if you can't remember it, you can also type its **IP address**.\nThe **IP address** can be easily found on your **router's home page**.\nTo **access your router's homepage**: take the **IP** address of your **mobile phone** or **laptop**, replace the last digit by **1** and **type that** in a browser.",
   "@towelieHelperAddExistingDevice": {
     "description": "Towelie Helper Add existing device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperDeviceWifi": "While not mandatory, connecting your device to your home wifi has a few benefits:\n- receive software upgrade and bug fixes\n- remote monitoring\n- remote control (coming soon)",
+  "@towelieHelperDeviceWifi": {
+    "description": "Towelie Helper Device wifi",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperSelectBoxDevice": "Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.\nTo **better understand** you should have your LED panels **connected to the controller**.",
+  "@towelieHelperSelectBoxDevice": {
+    "description": "Towelie Helper box Device box",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperTestDevice": "This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.",
+  "@towelieHelperTestDevice": {
+    "description": "Towelie Helper test device",
     "type": "text",
     "placeholders": {}
   }

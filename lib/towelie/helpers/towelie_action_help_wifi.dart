@@ -3,7 +3,7 @@ import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpSelectDevice extends TowelieActionHelp {
+class TowelieActionHelpWifi extends TowelieActionHelp {
   @override
   String get route => '/device/wifi';
 

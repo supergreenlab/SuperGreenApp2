@@ -84,7 +84,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
               children: [
                 Expanded(
                     child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Color(0xffdedede), width: 2),
@@ -101,7 +101,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
                   ),
                 )),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(right: 4.0, bottom: 8.0, left: 2.0),
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Color(0xffdedede), width: 2),
@@ -129,9 +129,9 @@ class _TowelieHelperState extends State<TowelieHelper> {
     setState(() {
       text = state.text;
       visible = true;
-      y = 300;
+      y = 350;
     });
-    Timer(Duration(milliseconds: 300), () {
+    Timer(Duration(milliseconds: 50), () {
       setState(() {
         y = 0;
       });
@@ -140,7 +140,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
 
   void _prepareHide() {
     setState(() {
-      y = 300;
+      y = 350;
     });
     Timer(Duration(milliseconds: 1500), () {
       setState(() {
