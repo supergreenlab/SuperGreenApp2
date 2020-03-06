@@ -273,10 +273,13 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   Widget _renderOverlay(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return Container(
-            width: constraints.maxWidth,
-            height: constraints.maxHeight,
-            color: Colors.white12);
+        return InkWell(
+          onTap: () {_openCloseDial.value = Random().nextInt(1 << 32);},
+                  child: Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              color: Colors.white60),
+        );
       },
     );
   }
@@ -373,7 +376,25 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
     Widget graphBody;
     if (state.box.device != null) {
-      graphBody = Stack(children: [_renderGraphs(context, state)]);
+      if (state.graphData[0].data.length < 4 &&
+          state.graphData[1].data.length < 4 &&
+          state.graphData[2].data.length < 4) {
+        graphBody = Stack(children: [
+          _renderGraphs(context, state),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5), color: Colors.white60),
+            child: Fullscreen(
+              title: 'Not enough data to display yet',
+              subtitle: 'try again in a few minutes',
+              child: Container(),
+              childFirst: false,
+            ),
+          ),
+        ]);
+      } else {
+        graphBody = Stack(children: [_renderGraphs(context, state)]);
+      }
     } else {
       graphBody = Stack(children: [
         _renderGraphs(context, state),
@@ -382,11 +403,22 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               borderRadius: BorderRadius.circular(5), color: Colors.white60),
           child: Fullscreen(
             title: 'Monitoring feature\nrequires an SGL controller',
-            child: GreenButton(
-              title: 'SHOP NOW',
-              onPressed: () {
-                launch('https://www.supergreenlab.com');
-              },
+            child: Column(
+              children: <Widget>[
+                GreenButton(
+                  title: 'SHOP NOW',
+                  onPressed: () {
+                    launch('https://www.supergreenlab.com');
+                  },
+                ),
+                Text('or'),
+                GreenButton(
+                  title: 'DIY NOW',
+                  onPressed: () {
+                    launch('https://github.com/supergreenlab');
+                  },
+                ),
+              ],
             ),
             childFirst: false,
           ),
@@ -425,19 +457,19 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           borderRadius: BorderRadius.circular(5), color: Colors.white24),
       child: Padding(
         padding: const EdgeInsets.only(
-            top: 16.0, left: 8.0, right: 8.0, bottom: 8.0),
+            top: 16.0, left: 4.5, right: 4.5, bottom: 8.0),
         child: Column(
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _renderMetric(Colors.green, 'Temp', '25°', '19°', '25°'),
-                _renderMetric(Colors.blue, 'Humi', '80%', '80%', '45%'),
-                _renderMetric(Colors.yellow, 'Light', '64%', '', ''),
+                _renderMetric(Colors.green, 'Temp', '${state.graphData[0].data[0].metric.toInt()}°', '${this._min(state.graphData[0].data).metric.toInt()}°', '${this._max(state.graphData[0].data).metric.toInt()}°'),
+                _renderMetric(Colors.blue, 'Humi', '${state.graphData[1].data[0].metric.toInt()}%', '${this._min(state.graphData[1].data).metric.toInt()}%', '${this._max(state.graphData[1].data).metric.toInt()}%'),
+                _renderMetric(Colors.yellow, 'Light', '${state.graphData[2].data[0].metric.toInt()}%', '${this._min(state.graphData[2].data).metric.toInt()}%', '${this._max(state.graphData[2].data).metric.toInt()}%'),
               ],
             ),
             Expanded(
-              child: charts.NumericComboChart(state.graphData,
+              child: charts.TimeSeriesChart(state.graphData,
                   animate: false,
                   defaultRenderer: charts.LineRendererConfig(),
                   customSeriesRenderers: [
@@ -448,6 +480,14 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         ),
       ),
     );
+  }
+
+  Metric _min(List<Metric> values) {
+    return values.reduce((acc, v) => acc.metric < v.metric ? acc : v);
+  }
+
+  Metric _max(List<Metric> values) {
+    return values.reduce((acc, v) => acc.metric > v.metric ? acc : v);
   }
 
   Widget _renderMetric(

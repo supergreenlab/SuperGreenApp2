@@ -48,7 +48,7 @@ abstract class BoxFeedBlocState extends Equatable {}
 
 abstract class BoxFeedBlocStateBox extends BoxFeedBlocState {
   final Box box;
-  final List<charts.Series<Metric, int>> graphData;
+  final List<charts.Series<Metric, DateTime>> graphData;
 
   BoxFeedBlocStateBox(this.box, this.graphData);
 }
@@ -66,7 +66,8 @@ class BoxFeedBlocStateNoBox extends BoxFeedBlocState {
 }
 
 class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
-  BoxFeedBlocStateBoxLoaded(Box box, List<charts.Series<Metric, int>> graphData)
+  BoxFeedBlocStateBoxLoaded(
+      Box box, List<charts.Series<Metric, DateTime>> graphData)
       : super(box, graphData);
 
   @override
@@ -75,7 +76,8 @@ class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocStateBox {
 
 class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent _args;
-  final List<charts.Series<Metric, int>> _graphData = [];
+
+  final List<charts.Series<Metric, DateTime>> _graphData = [];
 
   BoxFeedBloc(this._args) {
     this.add(BoxFeedBlocEventLoadBox());
@@ -99,21 +101,46 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
       } else {
         _db.setLastBox(box.id);
       }
+
       if (box.device == null) {
         _graphData.addAll(_createDummyData());
       } else {
         Device device = await RelDB.get().devicesDAO.getDevice(box.device);
-        charts.Series<Metric, int> temp = await getMetricsName(
-            device.identifier,
-            'BOX_${box.deviceBox}_TEMP',
-            charts.MaterialPalette.green.shadeDefault);
-        charts.Series<Metric, int> humi = await getMetricsName(
-            device.identifier,
-            'BOX_${box.deviceBox}_HUMI',
-            charts.MaterialPalette.blue.shadeDefault);
-        charts.Series<Metric, int> light = await getMetricsName(
-            device.identifier,
-            'BOX_${box.deviceBox}_TIMER_OUTPUT',
+        String identifier = device.identifier;
+        int deviceBox = box.deviceBox;
+        charts.Series<Metric, DateTime> temp = await getMetricsName(identifier,
+            'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault);
+        charts.Series<Metric, DateTime> humi = await getMetricsName(identifier,
+            'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
+        List<dynamic> duty =
+            await getMetricRequest(identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+        List<int> dims = [];
+        int n = 0;
+        Module lightModule =
+            await RelDB.get().devicesDAO.getModule(device.id, "led");
+        for (int i = 0; i < lightModule.arrayLen; ++i) {
+          Param boxParam =
+              await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
+          if (boxParam.ivalue != box.deviceBox) {
+            continue;
+          }
+          List<dynamic> dim = await getMetricRequest(
+              identifier, 'LED_${i}_DIM');
+          for (int i = 0; i < dim.length; ++i) {
+            int d = dim[i][1];
+            if (dims.length < i + 1) {
+              dims.add(d);
+            } else {
+              dims.setAll(i, [dims[i] + d]);
+            }
+          }
+          ++n;
+        }
+        dims = dims.map<int>((a) => a ~/ n).toList();
+        int i = 0;
+        charts.Series<Metric, DateTime> light = getTimeSeries(
+            duty.map<dynamic>((d) => [d[0], d[1] * dims[i++] / 100]).toList(),
+            'Light',
             charts.MaterialPalette.yellow.shadeDefault);
         _graphData.addAll([temp, humi, light]);
       }
@@ -123,19 +150,31 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
     }
   }
 
-  Future<charts.Series<Metric, int>> getMetricsName(
+  Future<charts.Series<Metric, DateTime>> getMetricsName(
       String controllerID, String name, charts.Color color) async {
+    List<dynamic> values = await getMetricRequest(controllerID, name);
+    return getTimeSeries(values, 'Temperature', color);
+  }
+
+  Future<List<dynamic>> getMetricRequest(
+      String controllerID, String name) async {
     Response resp = await get(
         'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
-    return charts.Series<Metric, int>(
-      id: 'Temperature',
+    return data['metrics'];
+  }
+
+  charts.Series<Metric, DateTime> getTimeSeries(
+      List<dynamic> values, String graphID, charts.Color color) {
+    return charts.Series<Metric, DateTime>(
+      id: graphID,
       strokeWidthPxFn: (_, __) => 3,
       colorFn: (_, __) => color,
-      domainFn: (Metric metric, _) => metric.year,
+      domainFn: (Metric metric, _) => metric.time,
       measureFn: (Metric metric, _) => metric.metric,
-      data: data['metrics'].map<Metric>((values) {
-        return Metric(values[0], values[1].toDouble());
+      data: values.map<Metric>((v) {
+        return Metric(
+            DateTime.fromMillisecondsSinceEpoch(v[0] * 1000), v[1].toDouble());
       }).toList(),
     );
   }
@@ -144,48 +183,54 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
     add(BoxFeedBlocEventBoxUpdated(box));
   }
 
-  List<charts.Series<Metric, int>> _createDummyData() {
+  List<charts.Series<Metric, DateTime>> _createDummyData() {
     final tempData = List.generate(
         50,
         (index) => Metric(
-            index,
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
             ((cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20)
                 .toDouble()));
     final humiData = List.generate(
         50,
         (index) => Metric(
-            index,
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
             ((sin(index / 100) * 5).toInt() + Random().nextInt(3) + 20)
                 .toDouble()));
     final lightData = List.generate(
         50,
         (index) => Metric(
-            index,
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
             ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
                 .toDouble()));
 
     return [
-      charts.Series<Metric, int>(
+      charts.Series<Metric, DateTime>(
         id: 'Temperature',
         strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (Metric metric, _) => metric.year,
+        domainFn: (Metric metric, _) => metric.time,
         measureFn: (Metric metric, _) => metric.metric,
         data: tempData,
       ),
-      charts.Series<Metric, int>(
+      charts.Series<Metric, DateTime>(
         id: 'Humidity',
         strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (Metric metric, _) => metric.year,
+        domainFn: (Metric metric, _) => metric.time,
         measureFn: (Metric metric, _) => metric.metric,
         data: humiData,
       ),
-      charts.Series<Metric, int>(
+      charts.Series<Metric, DateTime>(
         id: 'Light',
         strokeWidthPxFn: (_, __) => 3,
         colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-        domainFn: (Metric metric, _) => metric.year,
+        domainFn: (Metric metric, _) => metric.time,
         measureFn: (Metric metric, _) => metric.metric,
         data: lightData,
       ),
@@ -194,8 +239,8 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
 }
 
 class Metric {
-  final int year;
+  final DateTime time;
   final double metric;
 
-  Metric(this.year, this.metric);
+  Metric(this.time, this.metric);
 }
