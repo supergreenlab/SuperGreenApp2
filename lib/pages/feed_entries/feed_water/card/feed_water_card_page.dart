@@ -34,40 +34,44 @@ class FeedWaterCardPage extends StatelessWidget {
         bloc: BlocProvider.of<FeedWaterCardBloc>(context),
         builder: (context, state) {
           List<Widget> body = [
-            Text(
-              '${state.params['volume']}L',
-              style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff3bb30b)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Text(
+                '${state.params['volume']}L',
+                style: TextStyle(
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff3bb30b)),
+              ),
             ),
           ];
           if (state.params['tooDry'] != null ||
               state.params['nutrient'] != null) {
-            List<Widget> rowBody = [];
+            List<Widget> details = [];
             if (state.params['tooDry'] != null) {
-              rowBody.add(Padding(
+              details.add(Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Dried: ${state.params['tooDry'] == true ? 'yes' : 'no'}',
-                  style: TextStyle(fontSize: 20),
+                  'Was Dry: ${state.params['tooDry'] == true ? 'YES' : 'NO'}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ));
             }
             if (state.params['nutrient'] != null) {
-              rowBody.add(
+              details.add(
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Nutes: ${state.params['nutrient'] == true ? 'yes' : 'no'}',
-                    style: TextStyle(fontSize: 20),
+                    'With nutes: ${state.params['nutrient'] == true ? 'YES' : 'NO'}',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               );
             }
-            body.add(Row(
+            body.add(Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: rowBody,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: details,
             ));
           }
           return FeedCard(
@@ -84,7 +88,7 @@ class FeedWaterCardPage extends StatelessWidget {
                 Container(
                   height: 150,
                   alignment: Alignment.center,
-                  child: Column(
+                  child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: body),
                 ),
