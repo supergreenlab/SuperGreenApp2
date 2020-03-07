@@ -142,6 +142,9 @@ class _FeedPageState extends State<FeedPage> {
               } else if (index > entries.length) {
                 return null;
               }
+              if (entries[index].isNew && ModalRoute.of(context).isCurrent) {
+                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventMarkAsRead(entries[index]));
+              }
               return SlideTransition(
                   position: animation.drive(
                       Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)

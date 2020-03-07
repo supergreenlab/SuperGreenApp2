@@ -36,7 +36,7 @@ class Fullscreen extends StatelessWidget {
     List<Widget> titles = [
       Text(
         title,
-        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: Color(0xff565656)),
         textAlign: TextAlign.center,
       )
     ];

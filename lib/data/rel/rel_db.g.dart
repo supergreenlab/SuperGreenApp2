@@ -1450,12 +1450,14 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   final int feed;
   final DateTime date;
   final String type;
+  final bool isNew;
   final String params;
   FeedEntry(
       {@required this.id,
       @required this.feed,
       @required this.date,
       @required this.type,
+      @required this.isNew,
       @required this.params});
   factory FeedEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -1463,12 +1465,14 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
     final intType = db.typeSystem.forDartType<int>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return FeedEntry(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
       type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      isNew: boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_new']),
       params:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
     );
@@ -1481,6 +1485,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       feed: serializer.fromJson<int>(json['feed']),
       date: serializer.fromJson<DateTime>(json['date']),
       type: serializer.fromJson<String>(json['type']),
+      isNew: serializer.fromJson<bool>(json['isNew']),
       params: serializer.fromJson<String>(json['params']),
     );
   }
@@ -1492,6 +1497,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       'feed': serializer.toJson<int>(feed),
       'date': serializer.toJson<DateTime>(date),
       'type': serializer.toJson<String>(type),
+      'isNew': serializer.toJson<bool>(isNew),
       'params': serializer.toJson<String>(params),
     };
   }
@@ -1503,18 +1509,26 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      isNew:
+          isNew == null && nullToAbsent ? const Value.absent() : Value(isNew),
       params:
           params == null && nullToAbsent ? const Value.absent() : Value(params),
     );
   }
 
   FeedEntry copyWith(
-          {int id, int feed, DateTime date, String type, String params}) =>
+          {int id,
+          int feed,
+          DateTime date,
+          String type,
+          bool isNew,
+          String params}) =>
       FeedEntry(
         id: id ?? this.id,
         feed: feed ?? this.feed,
         date: date ?? this.date,
         type: type ?? this.type,
+        isNew: isNew ?? this.isNew,
         params: params ?? this.params,
       );
   @override
@@ -1524,6 +1538,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           ..write('feed: $feed, ')
           ..write('date: $date, ')
           ..write('type: $type, ')
+          ..write('isNew: $isNew, ')
           ..write('params: $params')
           ..write(')'))
         .toString();
@@ -1532,8 +1547,10 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(feed.hashCode,
-          $mrjc(date.hashCode, $mrjc(type.hashCode, params.hashCode)))));
+      $mrjc(
+          feed.hashCode,
+          $mrjc(date.hashCode,
+              $mrjc(type.hashCode, $mrjc(isNew.hashCode, params.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1542,6 +1559,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           other.feed == this.feed &&
           other.date == this.date &&
           other.type == this.type &&
+          other.isNew == this.isNew &&
           other.params == this.params);
 }
 
@@ -1550,12 +1568,14 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   final Value<int> feed;
   final Value<DateTime> date;
   final Value<String> type;
+  final Value<bool> isNew;
   final Value<String> params;
   const FeedEntriesCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
     this.date = const Value.absent(),
     this.type = const Value.absent(),
+    this.isNew = const Value.absent(),
     this.params = const Value.absent(),
   });
   FeedEntriesCompanion.insert({
@@ -1563,6 +1583,7 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
     @required int feed,
     @required DateTime date,
     @required String type,
+    this.isNew = const Value.absent(),
     this.params = const Value.absent(),
   })  : feed = Value(feed),
         date = Value(date),
@@ -1572,12 +1593,14 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
       Value<int> feed,
       Value<DateTime> date,
       Value<String> type,
+      Value<bool> isNew,
       Value<String> params}) {
     return FeedEntriesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
       date: date ?? this.date,
       type: type ?? this.type,
+      isNew: isNew ?? this.isNew,
       params: params ?? this.params,
     );
   }
@@ -1630,6 +1653,15 @@ class $FeedEntriesTable extends FeedEntries
         minTextLength: 1, maxTextLength: 24);
   }
 
+  final VerificationMeta _isNewMeta = const VerificationMeta('isNew');
+  GeneratedBoolColumn _isNew;
+  @override
+  GeneratedBoolColumn get isNew => _isNew ??= _constructIsNew();
+  GeneratedBoolColumn _constructIsNew() {
+    return GeneratedBoolColumn('is_new', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
   GeneratedTextColumn _params;
   @override
@@ -1640,7 +1672,7 @@ class $FeedEntriesTable extends FeedEntries
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, feed, date, type, params];
+  List<GeneratedColumn> get $columns => [id, feed, date, type, isNew, params];
   @override
   $FeedEntriesTable get asDslTable => this;
   @override
@@ -1672,6 +1704,10 @@ class $FeedEntriesTable extends FeedEntries
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
+    if (d.isNew.present) {
+      context.handle(
+          _isNewMeta, isNew.isAcceptableValue(d.isNew.value, _isNewMeta));
+    }
     if (d.params.present) {
       context.handle(
           _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
@@ -1701,6 +1737,9 @@ class $FeedEntriesTable extends FeedEntries
     }
     if (d.type.present) {
       map['type'] = Variable<String, StringType>(d.type.value);
+    }
+    if (d.isNew.present) {
+      map['is_new'] = Variable<bool, BoolType>(d.isNew.value);
     }
     if (d.params.present) {
       map['params'] = Variable<String, StringType>(d.params.value);

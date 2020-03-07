@@ -250,6 +250,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          bottomPadding: true,
           title: '',
           appBarHeight: 300,
           color: Colors.cyan,
@@ -333,26 +334,73 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           state is BoxDrawerBlocStateLoadingBoxList ||
           state is BoxDrawerBlocStateBoxListUpdated,
       builder: (BuildContext context, BoxDrawerBlocState state) {
-        List<Box> boxes = List();
-        if (state is BoxDrawerBlocStateBoxListUpdated) {
-          boxes = state.boxes;
+        Widget content;
+        if (state is BoxDrawerBlocStateLoadingBoxList) {
+          content = FullscreenLoading(title: 'Loading..');
+        } else if (state is BoxDrawerBlocStateBoxListUpdated) {
+          List<Box> boxes = state.boxes;
+          content = ListView(
+            children: boxes.map((b) {
+              Widget item = ListTile(
+                leading: (boxFeedState is BoxFeedBlocStateBox &&
+                        boxFeedState.box.id == b.id)
+                    ? Icon(
+                        Icons.check_box,
+                        color: Colors.green,
+                      )
+                    : Icon(Icons.crop_square),
+                title: Text(b.name),
+                onTap: () => _selectBox(context, b),
+              );
+              try {
+                int nOthers = state.hasPending
+                    .where((e) => e.id == b.feed)
+                    .map((e) => e.nNew)
+                    .reduce((a, e) => a + e);
+                if (nOthers != null && nOthers > 0) {
+                  item = Stack(
+                    children: [
+                      item,
+                      _renderBadge(nOthers),
+                    ],
+                  );
+                }
+              } catch (e) {}
+              return item;
+            }).toList(),
+          );
         }
-        return ListView(
-          children: boxes
-              .map((b) => ListTile(
-                    leading: (boxFeedState is BoxFeedBlocStateBox &&
-                            boxFeedState.box.id == b.id)
-                        ? Icon(
-                            Icons.check_box,
-                            color: Colors.green,
-                          )
-                        : Icon(Icons.crop_square),
-                    title: Text(b.name),
-                    onTap: () => _selectBox(context, b),
-                  ))
-              .toList(),
+        return AnimatedSwitcher(
+          duration: Duration(milliseconds: 200),
+          child: content,
         );
       },
+    );
+  }
+
+  Widget _renderBadge(int n) {
+    return Positioned(
+      top: 12,
+      right: 10,
+      child: Container(
+        padding: EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        constraints: BoxConstraints(
+          minWidth: 30,
+          minHeight: 30,
+        ),
+        child: Text(
+          '$n',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 
@@ -378,25 +426,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
     Widget graphBody;
     if (state.box.device != null) {
-      if (state.graphData[0].data.length < 4 &&
-          state.graphData[1].data.length < 4 &&
-          state.graphData[2].data.length < 4) {
-        graphBody = Stack(children: [
-          _renderGraphs(context, state),
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5), color: Colors.white60),
-            child: Fullscreen(
-              title: 'Not enough data to display yet',
-              subtitle: 'try again in a few minutes',
-              child: Container(),
-              childFirst: false,
-            ),
-          ),
-        ]);
-      } else {
-        graphBody = Stack(children: [_renderGraphs(context, state)]);
-      }
+      graphBody = Stack(children: [_renderGraphs(context, state)]);
     } else {
       graphBody = Stack(children: [
         _renderGraphs(context, state),
@@ -405,7 +435,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               borderRadius: BorderRadius.circular(5), color: Colors.white60),
           child: Fullscreen(
             title: 'Monitoring feature\nrequires an SGL controller',
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GreenButton(
                   title: 'SHOP NOW',
@@ -413,7 +444,11 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                     launch('https://www.supergreenlab.com');
                   },
                 ),
-                Text('or'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:
+                      Text('or', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
                 GreenButton(
                   title: 'DIY NOW',
                   onPressed: () {
@@ -454,6 +489,29 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   Widget _renderGraphs(BuildContext context, BoxFeedBlocStateBox state) {
+    Widget chart = charts.TimeSeriesChart(state.graphData,
+        animate: false,
+        defaultRenderer: charts.LineRendererConfig(),
+        customSeriesRenderers: [
+          charts.PointRendererConfig(customRendererId: 'customPoint')
+        ]);
+    if (state.graphData[0].data.length < 4 &&
+        state.graphData[1].data.length < 4 &&
+        state.graphData[2].data.length < 4) {
+      chart = Stack(children: [
+        chart,
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5), color: Colors.white60),
+          child: Fullscreen(
+            title: 'Not enough data to display yet',
+            subtitle: 'try again in a few minutes',
+            child: Container(),
+            childFirst: false,
+          ),
+        ),
+      ]);
+    }
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: Colors.white24),
@@ -486,12 +544,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ],
             ),
             Expanded(
-              child: charts.TimeSeriesChart(state.graphData,
-                  animate: false,
-                  defaultRenderer: charts.LineRendererConfig(),
-                  customSeriesRenderers: [
-                    charts.PointRendererConfig(customRendererId: 'customPoint')
-                  ]),
+              child: chart,
             ),
           ],
         ),

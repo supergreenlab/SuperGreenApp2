@@ -50,6 +50,7 @@ dependencies:
   flutter_swiper:
   charts_flutter:
   flutter_markdown:
+  connectivity:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

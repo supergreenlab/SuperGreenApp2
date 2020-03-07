@@ -20,6 +20,7 @@ class TowelieCardsFactory {
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
       date: DateTime.now(),
+      isNew: Value(true),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeApp,
         'buttons': [
@@ -36,6 +37,7 @@ class TowelieCardsFactory {
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
       date: DateTime.now(),
+      isNew: Value(true),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeAppHasBundle,
         'buttons': [
@@ -52,6 +54,7 @@ class TowelieCardsFactory {
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
       date: DateTime.now(),
+      isNew: Value(true),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeAppNoBundle,
         'buttons': [
@@ -69,6 +72,7 @@ class TowelieCardsFactory {
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
       date: DateTime.now(),
+      isNew: Value(true),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieCreateBox,
         'buttons': [
@@ -84,6 +88,7 @@ class TowelieCardsFactory {
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
       date: DateTime.now(),
+      isNew: Value(true),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieWelcomeBox,
         'buttons': [],
@@ -97,6 +102,7 @@ class TowelieCardsFactory {
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
       date: DateTime.now(),
+      isNew: Value(true),
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieBoxCreated,
         'buttons': [

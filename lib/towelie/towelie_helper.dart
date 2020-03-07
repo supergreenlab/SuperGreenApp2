@@ -31,9 +31,10 @@ class TowelieHelper extends StatefulWidget {
 }
 
 class _TowelieHelperState extends State<TowelieHelper> {
+  Timer _timer;
   String text = '';
   bool visible = false;
-  double y = 300;
+  double y = 350;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,9 @@ class _TowelieHelperState extends State<TowelieHelper> {
         }
       },
       child: BlocBuilder<TowelieBloc, TowelieBlocState>(
-        condition: (context, state) => state is TowelieBlocStateHelper && state.settings.name == widget.settings.name,
+        condition: (context, state) =>
+            state is TowelieBlocStateHelper &&
+            state.settings.name == widget.settings.name,
         builder: (BuildContext context, TowelieBlocState state) {
           if (visible) {
             return _renderBody(state as TowelieBlocStateHelper);
@@ -67,7 +70,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
         color: Colors.transparent,
         child: AnimatedContainer(
           curve: Curves.elasticInOut,
-          duration: Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: 1000),
           transform: Matrix4.translationValues(0, y, 0),
           width: MediaQuery.of(context).size.width,
           color: Colors.transparent,
@@ -101,7 +104,8 @@ class _TowelieHelperState extends State<TowelieHelper> {
                   ),
                 )),
                 Padding(
-                  padding: const EdgeInsets.only(right: 4.0, bottom: 8.0, left: 2.0),
+                  padding:
+                      const EdgeInsets.only(right: 4.0, bottom: 8.0, left: 2.0),
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Color(0xffdedede), width: 2),
@@ -131,7 +135,11 @@ class _TowelieHelperState extends State<TowelieHelper> {
       visible = true;
       y = 350;
     });
-    Timer(Duration(milliseconds: 50), () {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: 50), () {
+      _timer = null;
       setState(() {
         y = 0;
       });
@@ -142,10 +150,22 @@ class _TowelieHelperState extends State<TowelieHelper> {
     setState(() {
       y = 350;
     });
-    Timer(Duration(milliseconds: 1500), () {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: 1000), () {
+      _timer = null;
       setState(() {
         visible = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    super.dispose();
   }
 }
