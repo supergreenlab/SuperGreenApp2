@@ -18,7 +18,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
@@ -183,7 +182,7 @@ class HomePage extends StatelessWidget {
           .add(TowelieBlocEventRoute(settings));
     });
     if (settings.arguments == null) {
-      return CupertinoPageRoute(
+      return MaterialPageRoute(
           builder: (context) => BlocProvider(
                 create: (context) => SGLFeedBloc(),
                 child: SGLFeedPage(),
@@ -191,13 +190,13 @@ class HomePage extends StatelessWidget {
     }
     switch (settings.name) {
       case '/feed/sgl':
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
                   child: SGLFeedPage(),
                 ));
       case '/feed/box':
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
             builder: (context) => MultiBlocProvider(
                   providers: [
                     BlocProvider<BoxDrawerBloc>(
@@ -209,19 +208,19 @@ class HomePage extends StatelessWidget {
                   child: BoxFeedPage(),
                 ));
       case '/explorer':
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => ExplorerBloc(),
                   child: ExplorerPage(),
                 ));
       case '/settings':
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SettingsBloc(),
                   child: SettingsPage(),
                 ));
       default:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
                   child: SGLFeedPage(),
