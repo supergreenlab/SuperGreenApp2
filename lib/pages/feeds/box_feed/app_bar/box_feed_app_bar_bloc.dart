@@ -53,8 +53,7 @@ class BoxFeedAppBarBloc
   @override
   Stream<BoxFeedAppBarBlocState> mapEventToState(
       BoxFeedAppBarBlocEvent event) async* {
-    if (event is BoxFeedAppBarBlocEventLoadChart ||
-        event is BoxFeedAppBarBlocEventReloadChart) {
+    if (event is BoxFeedAppBarBlocEventLoadChart) {
       List<charts.Series<Metric, DateTime>> graphData = await updateChart(box);
       yield BoxFeedAppBarBlocStateLoaded(graphData);
       if (event is BoxFeedAppBarBlocEventLoadChart) {
@@ -62,6 +61,9 @@ class BoxFeedAppBarBloc
           this.add(BoxFeedAppBarBlocEventReloadChart());
         });
       }
+    } else if (event is BoxFeedAppBarBlocEventReloadChart) {
+      List<charts.Series<Metric, DateTime>> graphData = await updateChart(box);
+      yield BoxFeedAppBarBlocStateLoaded(graphData);
     }
   }
 
@@ -98,7 +100,7 @@ class BoxFeedAppBarBloc
         List<dynamic> dim = await getMetricRequest(identifier, 'LED_${i}_DIM');
         for (int i = 0; i < dim.length; ++i) {
           int d = dim[i][1];
-          if (dims.length < i + 1) {
+          if (i > dims.length - 1) {
             dims.add(d);
           } else {
             dims.setAll(i, [dims[i] + d]);
@@ -106,10 +108,15 @@ class BoxFeedAppBarBloc
         }
         ++n;
       }
-      dims = dims.map<int>((a) => a ~/ n).toList();
+      if (n > 0) {
+        dims = dims.map<int>((a) => a ~/ n).toList();
+      }
       int i = 0;
       charts.Series<Metric, DateTime> light = getTimeSeries(
-          duty.map<dynamic>((d) => [d[0], d[1] * dims[i++] / 100]).toList(),
+          duty
+              .map<dynamic>(
+                  (d) => [d[0], n == 0 ? d[1] : d[1] * dims[i++] / 100])
+              .toList(),
           'Light',
           charts.MaterialPalette.yellow.shadeDefault);
       return [temp, humi, light];

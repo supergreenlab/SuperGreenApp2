@@ -28,7 +28,9 @@ import 'package:super_green_app/pages/add_box/box_infos/box_infos_page.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
+import 'package:super_green_app/pages/add_box/select_device_new_box/select_device_new_box_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_page.dart';
+import 'package:super_green_app/pages/add_box/select_device_new_box/select_device_new_box_page.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_bloc.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_page.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
@@ -164,6 +166,11 @@ class MainPage extends StatelessWidget {
         return BlocProvider(
           create: (context) => SelectDeviceBoxBloc(settings.arguments),
           child: SelectDeviceBoxPage(),
+        );
+      case '/box/device/new':
+        return BlocProvider(
+          create: (context) => SelectDeviceNewBoxBloc(settings.arguments),
+          child: SelectDeviceNewBoxPage(),
         );
       case '/device/add':
         return BlocProvider(

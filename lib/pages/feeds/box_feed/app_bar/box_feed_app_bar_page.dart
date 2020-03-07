@@ -21,13 +21,11 @@ class BoxFeedAppBarPage extends StatelessWidget {
             body = Stack(children: [
               body,
               Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white60),
+                color: Colors.white60,
                 child: Fullscreen(
                   title: 'Not enough data to display yet',
                   subtitle: 'try again in a few minutes',
-                  fontSize: 15,
+                  fontSize: 20,
                   fontWeight: FontWeight.normal,
                   child: Container(),
                   childFirst: false,

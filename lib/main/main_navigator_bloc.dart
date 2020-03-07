@@ -67,6 +67,16 @@ class MainNavigateToSelectBoxDeviceBoxEvent extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
+class MainNavigateToSelectBoxNewDeviceBoxEvent extends MainNavigatorEvent {
+  final Device device;
+
+  MainNavigateToSelectBoxNewDeviceBoxEvent(this.device, {futureFn})
+      : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [device];
+}
+
 class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
   MainNavigateToAddDeviceEvent({futureFn}) : super(futureFn: futureFn);
 
@@ -320,6 +330,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSelectBoxDeviceBoxEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/box/device/box', arguments: event);
+    } else if (event is MainNavigateToSelectBoxNewDeviceBoxEvent) {
+      future = _navigatorKey.currentState
+          .pushNamed('/box/device/new', arguments: event);
     } else if (event is MainNavigateToAddDeviceEvent) {
       future =
           _navigatorKey.currentState.pushNamed('/device/add', arguments: event);

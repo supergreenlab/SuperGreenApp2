@@ -249,10 +249,10 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
 
   String get towelieHelperDeviceWifi {
     return Intl.message(
-      '''While not mandatory, connecting your device to your home wifi has a few benefits:
-- receive software upgrade and bug fixes
-- remote monitoring
-- remote control (coming soon)''',
+      '''**While not mandatory**, connecting your device to your home wifi has a few benefits:
+- receive software **upgrade** and bug fixes
+- remote **monitoring**
+- remote **control** (coming soon)''',
       name: 'towelieHelperDeviceWifi',
       desc: 'Towelie Helper Device wifi',
       locale: localeName,
@@ -269,11 +269,21 @@ To **better understand** you should have your LED panels **connected to the cont
     );
   }
 
-    String get towelieHelperTestDevice {
+  String get towelieHelperTestDevice {
     return Intl.message(
       '''This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.''',
       name: 'towelieHelperTestDevice',
       desc: 'Towelie Helper test device',
+      locale: localeName,
+    );
+  }
+
+  String get formAllowAnalytics {
+    return Intl.message(
+      '''**Help us** discern what's **useful** from what's
+**useless** by sharing **anonymous** usage data.''',
+      name: 'formAllowAnalytics',
+      desc: 'Form allow analytics',
       locale: localeName,
     );
   }

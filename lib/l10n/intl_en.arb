@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-06T11:37:58.282665",
+  "@@last_modified": "2020-03-07T16:22:50.373487",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -96,7 +96,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperAddDevice": "Good.\nNow this is when you should **plug the device to it's power supply** if not already.\nThen we'll choose one of the options above to **connect to the controller**.",
+  "towelieHelperAddDevice": "**Good**.\nNow this is when you should **plug the device to it's power supply** if not already.\nThen we'll choose one of the options above to **connect to the controller**.",
   "@towelieHelperAddDevice": {
     "description": "Towelie Helper Add device",
     "type": "text",
@@ -108,7 +108,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperDeviceWifi": "While not mandatory, connecting your device to your home wifi has a few benefits:\n- receive software upgrade and bug fixes\n- remote monitoring\n- remote control (coming soon)",
+  "towelieHelperDeviceWifi": "**While not mandatory**, connecting your device to your home wifi has a few benefits:\n- receive software **upgrade** and bug fixes\n- remote **monitoring**\n- remote **control** (coming soon)",
   "@towelieHelperDeviceWifi": {
     "description": "Towelie Helper Device wifi",
     "type": "text",
@@ -123,6 +123,12 @@
   "towelieHelperTestDevice": "This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.",
   "@towelieHelperTestDevice": {
     "description": "Towelie Helper test device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "formAllowAnalytics": "**Help us** discern what's **useful** from what's\n**useless** by sharing **anonymous** usage data.",
+  "@formAllowAnalytics": {
+    "description": "Form allow analytics",
     "type": "text",
     "placeholders": {}
   }
