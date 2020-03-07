@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:moor/moor.dart';
@@ -26,7 +25,6 @@ import 'package:path/path.dart' as p;
 import 'package:super_green_app/data/rel/box/boxes.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
-import 'package:super_green_app/l10n.dart';
 
 part 'rel_db.g.dart';
 
@@ -46,6 +44,7 @@ LazyDatabase _openConnection() {
   Modules,
   Params,
   Boxes,
+  ChartPoints,
   Feeds,
   FeedEntries,
   FeedMedias,

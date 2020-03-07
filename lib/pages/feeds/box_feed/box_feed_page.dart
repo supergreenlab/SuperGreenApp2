@@ -26,6 +26,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
@@ -35,7 +37,6 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class BoxFeedPage extends StatefulWidget {
   @override
@@ -85,7 +86,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               drawer: Drawer(child: this._drawerContent(context, state)),
               body: AnimatedSwitcher(
                   child: body, duration: Duration(milliseconds: 200)),
-              floatingActionButton: state is BoxFeedBlocStateBox
+              floatingActionButton: state is BoxFeedBlocStateBoxLoaded
                   ? _renderSpeedDial(context, state)
                   : null);
         },
@@ -93,7 +94,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     );
   }
 
-  SpeedDial _renderSpeedDial(BuildContext context, BoxFeedBlocStateBox state) {
+  SpeedDial _renderSpeedDial(
+      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return SpeedDial(
       tooltip: 'Speed Dial',
       heroTag: 'speed-dial-hero-tag',
@@ -124,7 +126,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   List<SpeedDialChild> _renderTrimSpeedDials(
-      BuildContext context, BoxFeedBlocStateBox state) {
+      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
@@ -171,7 +173,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   List<SpeedDialChild> _renderGeneralSpeedDials(
-      BuildContext context, BoxFeedBlocStateBox state) {
+      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
@@ -245,7 +247,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
-    if (state is BoxFeedBlocStateBox) {
+    if (state is BoxFeedBlocStateBoxLoaded) {
       return BlocProvider(
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
@@ -342,7 +344,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           content = ListView(
             children: boxes.map((b) {
               Widget item = ListTile(
-                leading: (boxFeedState is BoxFeedBlocStateBox &&
+                leading: (boxFeedState is BoxFeedBlocStateBoxLoaded &&
                         boxFeedState.box.id == b.id)
                     ? Icon(
                         Icons.check_box,
@@ -418,11 +420,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         .add(MainNavigateToNewBoxInfosEvent());
   }
 
-  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBox state) {
-    String name = 'SuperGreenLab';
-    if (state is BoxFeedBlocStateBox) {
-      name = StringUtils.capitalize(state.box.name);
-    }
+  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+    String name = StringUtils.capitalize(state.box.name);
 
     Widget graphBody;
     if (state.box.device != null) {
@@ -432,8 +431,11 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         _renderGraphs(context, state),
         Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Colors.white60),
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white.withAlpha(190)),
           child: Fullscreen(
+            fontSize: 18,
+            fontWeight: FontWeight.normal,
             title: 'Monitoring feature\nrequires an SGL controller',
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -480,7 +482,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(6.0),
-              child: graphBody,
+              child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: graphBody),
             ),
           ),
         ],
@@ -488,99 +491,10 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     );
   }
 
-  Widget _renderGraphs(BuildContext context, BoxFeedBlocStateBox state) {
-    Widget chart = charts.TimeSeriesChart(state.graphData,
-        animate: false,
-        defaultRenderer: charts.LineRendererConfig(),
-        customSeriesRenderers: [
-          charts.PointRendererConfig(customRendererId: 'customPoint')
-        ]);
-    if (state.graphData[0].data.length < 4 &&
-        state.graphData[1].data.length < 4 &&
-        state.graphData[2].data.length < 4) {
-      chart = Stack(children: [
-        chart,
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Colors.white60),
-          child: Fullscreen(
-            title: 'Not enough data to display yet',
-            subtitle: 'try again in a few minutes',
-            child: Container(),
-            childFirst: false,
-          ),
-        ),
-      ]);
-    }
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: Colors.white24),
-      child: Padding(
-        padding: const EdgeInsets.only(
-            top: 16.0, left: 4.5, right: 4.5, bottom: 8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _renderMetric(
-                    Colors.green,
-                    'Temp',
-                    '${state.graphData[0].data[0].metric.toInt()}°',
-                    '${this._min(state.graphData[0].data).metric.toInt()}°',
-                    '${this._max(state.graphData[0].data).metric.toInt()}°'),
-                _renderMetric(
-                    Colors.blue,
-                    'Humi',
-                    '${state.graphData[1].data[0].metric.toInt()}%',
-                    '${this._min(state.graphData[1].data).metric.toInt()}%',
-                    '${this._max(state.graphData[1].data).metric.toInt()}%'),
-                _renderMetric(
-                    Colors.yellow,
-                    'Light',
-                    '${state.graphData[2].data[0].metric.toInt()}%',
-                    '${this._min(state.graphData[2].data).metric.toInt()}%',
-                    '${this._max(state.graphData[2].data).metric.toInt()}%'),
-              ],
-            ),
-            Expanded(
-              child: chart,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Metric _min(List<Metric> values) {
-    return values.reduce((acc, v) => acc.metric < v.metric ? acc : v);
-  }
-
-  Metric _max(List<Metric> values) {
-    return values.reduce((acc, v) => acc.metric > v.metric ? acc : v);
-  }
-
-  Widget _renderMetric(
-      Color color, String name, String value, String min, String max) {
-    return Column(
-      children: <Widget>[
-        Text(name),
-        Row(
-          children: <Widget>[
-            Text(value,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 30,
-                )),
-            Column(
-              children: <Widget>[
-                Text(max, style: TextStyle(color: Color(0xff787878))),
-                Text(min, style: TextStyle(color: Color(0xff787878))),
-              ],
-            )
-          ],
-        )
-      ],
+  Widget _renderGraphs(context, state) {
+    return BlocProvider(
+      create: (context) => BoxFeedAppBarBloc(state.box),
+      child: BoxFeedAppBarPage(),
     );
   }
 }

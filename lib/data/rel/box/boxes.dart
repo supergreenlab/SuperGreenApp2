@@ -34,8 +34,17 @@ class Boxes extends Table {
   TextColumn get settings => text().withDefault(Constant('{}'))();
 }
 
+class ChartPoints extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get box => integer()();
+  TextColumn get name => text().withLength(min: 1, max: 32)();
+  DateTimeColumn get date => dateTime()();
+  IntColumn get value => integer()();
+}
+
 @UseDao(tables: [
-  Boxes
+  Boxes,
+  ChartPoints,
 ], queries: {
   'nBoxes': 'SELECT COUNT(*) FROM boxes',
 })
@@ -60,6 +69,14 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
 
   Stream<List<Box>> watchBoxes() {
     return select(boxes).watch();
+  }
+
+  Future<ChartPoint> getChartPoints(int boxID, String name) {
+    return (select(chartPoints)..where((c) => c.box.equals(boxID) & c.name.equals(name))).getSingle();
+  }
+
+  Stream<List<ChartPoint>> watchChartPoints(int boxID, String name) {
+    return (select(chartPoints)..where((c) => c.box.equals(boxID) & c.name.equals(name))).watch();
   }
 
   Map<String, dynamic> boxSettings(Box box) {

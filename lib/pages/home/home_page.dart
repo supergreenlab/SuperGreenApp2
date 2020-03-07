@@ -139,17 +139,18 @@ class HomePage extends StatelessWidget {
         padding: EdgeInsets.all(1),
         decoration: BoxDecoration(
           color: Colors.red,
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(7),
         ),
         constraints: BoxConstraints(
-          minWidth: 12,
-          minHeight: 12,
+          minWidth: 14,
+          minHeight: 14,
         ),
         child: Text(
           '$n',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 8,
+            fontSize: 11,
+            fontWeight: FontWeight.bold
           ),
           textAlign: TextAlign.center,
         ),

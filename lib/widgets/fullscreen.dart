@@ -23,20 +23,27 @@ class Fullscreen extends StatelessWidget {
   final String subtitle;
   final Widget child;
   final bool childFirst;
+  final double fontSize;
+  final FontWeight fontWeight;
 
-  const Fullscreen(
-      {@required this.title,
-      @required this.child,
-      this.subtitle,
-      this.childFirst = true})
-      : super();
+  const Fullscreen({
+    @required this.title,
+    @required this.child,
+    this.subtitle,
+    this.childFirst = true,
+    this.fontSize = 25,
+    this.fontWeight = FontWeight.w500,
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
     List<Widget> titles = [
       Text(
         title,
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: Color(0xff565656)),
+        style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: Color(0xff565656)),
         textAlign: TextAlign.center,
       )
     ];

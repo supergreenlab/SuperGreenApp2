@@ -1294,6 +1294,279 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   }
 }
 
+class ChartPoint extends DataClass implements Insertable<ChartPoint> {
+  final int id;
+  final int box;
+  final String name;
+  final DateTime date;
+  final int value;
+  ChartPoint(
+      {@required this.id,
+      @required this.box,
+      @required this.name,
+      @required this.date,
+      @required this.value});
+  factory ChartPoint.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    return ChartPoint(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      date:
+          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      value: intType.mapFromDatabaseResponse(data['${effectivePrefix}value']),
+    );
+  }
+  factory ChartPoint.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return ChartPoint(
+      id: serializer.fromJson<int>(json['id']),
+      box: serializer.fromJson<int>(json['box']),
+      name: serializer.fromJson<String>(json['name']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      value: serializer.fromJson<int>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'box': serializer.toJson<int>(box),
+      'name': serializer.toJson<String>(name),
+      'date': serializer.toJson<DateTime>(date),
+      'value': serializer.toJson<int>(value),
+    };
+  }
+
+  @override
+  ChartPointsCompanion createCompanion(bool nullToAbsent) {
+    return ChartPointsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      value:
+          value == null && nullToAbsent ? const Value.absent() : Value(value),
+    );
+  }
+
+  ChartPoint copyWith(
+          {int id, int box, String name, DateTime date, int value}) =>
+      ChartPoint(
+        id: id ?? this.id,
+        box: box ?? this.box,
+        name: name ?? this.name,
+        date: date ?? this.date,
+        value: value ?? this.value,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChartPoint(')
+          ..write('id: $id, ')
+          ..write('box: $box, ')
+          ..write('name: $name, ')
+          ..write('date: $date, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(box.hashCode,
+          $mrjc(name.hashCode, $mrjc(date.hashCode, value.hashCode)))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is ChartPoint &&
+          other.id == this.id &&
+          other.box == this.box &&
+          other.name == this.name &&
+          other.date == this.date &&
+          other.value == this.value);
+}
+
+class ChartPointsCompanion extends UpdateCompanion<ChartPoint> {
+  final Value<int> id;
+  final Value<int> box;
+  final Value<String> name;
+  final Value<DateTime> date;
+  final Value<int> value;
+  const ChartPointsCompanion({
+    this.id = const Value.absent(),
+    this.box = const Value.absent(),
+    this.name = const Value.absent(),
+    this.date = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  ChartPointsCompanion.insert({
+    this.id = const Value.absent(),
+    @required int box,
+    @required String name,
+    @required DateTime date,
+    @required int value,
+  })  : box = Value(box),
+        name = Value(name),
+        date = Value(date),
+        value = Value(value);
+  ChartPointsCompanion copyWith(
+      {Value<int> id,
+      Value<int> box,
+      Value<String> name,
+      Value<DateTime> date,
+      Value<int> value}) {
+    return ChartPointsCompanion(
+      id: id ?? this.id,
+      box: box ?? this.box,
+      name: name ?? this.name,
+      date: date ?? this.date,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class $ChartPointsTable extends ChartPoints
+    with TableInfo<$ChartPointsTable, ChartPoint> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ChartPointsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _boxMeta = const VerificationMeta('box');
+  GeneratedIntColumn _box;
+  @override
+  GeneratedIntColumn get box => _box ??= _constructBox();
+  GeneratedIntColumn _constructBox() {
+    return GeneratedIntColumn(
+      'box',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 32);
+  }
+
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  GeneratedDateTimeColumn _date;
+  @override
+  GeneratedDateTimeColumn get date => _date ??= _constructDate();
+  GeneratedDateTimeColumn _constructDate() {
+    return GeneratedDateTimeColumn(
+      'date',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  GeneratedIntColumn _value;
+  @override
+  GeneratedIntColumn get value => _value ??= _constructValue();
+  GeneratedIntColumn _constructValue() {
+    return GeneratedIntColumn(
+      'value',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, box, name, date, value];
+  @override
+  $ChartPointsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'chart_points';
+  @override
+  final String actualTableName = 'chart_points';
+  @override
+  VerificationContext validateIntegrity(ChartPointsCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    }
+    if (d.box.present) {
+      context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
+    } else if (isInserting) {
+      context.missing(_boxMeta);
+    }
+    if (d.name.present) {
+      context.handle(
+          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (d.date.present) {
+      context.handle(
+          _dateMeta, date.isAcceptableValue(d.date.value, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (d.value.present) {
+      context.handle(
+          _valueMeta, value.isAcceptableValue(d.value.value, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChartPoint map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return ChartPoint.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(ChartPointsCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.box.present) {
+      map['box'] = Variable<int, IntType>(d.box.value);
+    }
+    if (d.name.present) {
+      map['name'] = Variable<String, StringType>(d.name.value);
+    }
+    if (d.date.present) {
+      map['date'] = Variable<DateTime, DateTimeType>(d.date.value);
+    }
+    if (d.value.present) {
+      map['value'] = Variable<int, IntType>(d.value.value);
+    }
+    return map;
+  }
+
+  @override
+  $ChartPointsTable createAlias(String alias) {
+    return $ChartPointsTable(_db, alias);
+  }
+}
+
 class Feed extends DataClass implements Insertable<Feed> {
   final int id;
   final String name;
@@ -2054,6 +2327,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $ParamsTable get params => _params ??= $ParamsTable(this);
   $BoxesTable _boxes;
   $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
+  $ChartPointsTable _chartPoints;
+  $ChartPointsTable get chartPoints => _chartPoints ??= $ChartPointsTable(this);
   $FeedsTable _feeds;
   $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
   $FeedEntriesTable _feedEntries;
@@ -2069,6 +2344,14 @@ abstract class _$RelDB extends GeneratedDatabase {
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [devices, modules, params, boxes, feeds, feedEntries, feedMedias];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        devices,
+        modules,
+        params,
+        boxes,
+        chartPoints,
+        feeds,
+        feedEntries,
+        feedMedias
+      ];
 }
