@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-07T19:14:55.550744",
+  "@@last_modified": "2020-03-07T19:28:38.942148",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -114,15 +114,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectNewBoxDevice": "Your controller can **manage up to 3 boxes**, select an **already configure** box above, or create a **new one**.",
-  "@towelieHelperSelectNewBoxDevice": {
-    "description": "Towelie Helper box new Device box",
+  "towelieHelperSelectBoxDevice": "Your controller can **manage up to 3 boxes**, select an **already configure** box above, or create a **new one**.",
+  "@towelieHelperSelectBoxDevice": {
+    "description": "Towelie Helper box Device box",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectBoxDevice": "Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.\nTo **better understand** you should have your LED panels **connected to the controller**.",
-  "@towelieHelperSelectBoxDevice": {
-    "description": "Towelie Helper box Device box",
+  "towelieHelperSelectNewBoxDevice": "Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.\nTo **better understand** you should have your LED panels **connected to the controller**.",
+  "@towelieHelperSelectNewBoxDevice": {
+    "description": "Towelie Helper box new Device box",
     "type": "text",
     "placeholders": {}
   },

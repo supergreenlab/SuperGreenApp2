@@ -259,21 +259,21 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
     );
   }
 
-  String get towelieHelperSelectNewBoxDevice {
+  String get towelieHelperSelectBoxDevice {
     return Intl.message(
       '''Your controller can **manage up to 3 boxes**, select an **already configure** box above, or create a **new one**.''',
-      name: 'towelieHelperSelectNewBoxDevice',
-      desc: 'Towelie Helper box new Device box',
+      name: 'towelieHelperSelectBoxDevice',
+      desc: 'Towelie Helper box Device box',
       locale: localeName,
     );
   }
 
-  String get towelieHelperSelectBoxDevice {
+  String get towelieHelperSelectNewBoxDevice {
     return Intl.message(
       '''Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.
 To **better understand** you should have your LED panels **connected to the controller**.''',
-      name: 'towelieHelperSelectBoxDevice',
-      desc: 'Towelie Helper box Device box',
+      name: 'towelieHelperSelectNewBoxDevice',
+      desc: 'Towelie Helper box new Device box',
       locale: localeName,
     );
   }
