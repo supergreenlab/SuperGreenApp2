@@ -38,7 +38,9 @@ import 'package:super_green_app/towelie/feed/towelie_appinit.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_select_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_test_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_wifi.dart';
 import 'package:super_green_app/towelie/towelie_action.dart';
@@ -148,6 +150,8 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpSelectDevice(),
     TowelieActionHelpAddDevice(),
     TowelieActionHelpAddExistingDevice(),
+    TowelieActionHelpSelectNewBoxDevice(),
+    TowelieActionHelpSelectBoxDevice(),
     TowelieActionHelpTestDevice(),
     TowelieActionHelpWifi(),
   ];

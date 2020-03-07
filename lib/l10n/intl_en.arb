@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-07T16:22:50.373487",
+  "@@last_modified": "2020-03-07T19:14:55.550744",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -111,6 +111,12 @@
   "towelieHelperDeviceWifi": "**While not mandatory**, connecting your device to your home wifi has a few benefits:\n- receive software **upgrade** and bug fixes\n- remote **monitoring**\n- remote **control** (coming soon)",
   "@towelieHelperDeviceWifi": {
     "description": "Towelie Helper Device wifi",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperSelectNewBoxDevice": "Your controller can **manage up to 3 boxes**, select an **already configure** box above, or create a **new one**.",
+  "@towelieHelperSelectNewBoxDevice": {
+    "description": "Towelie Helper box new Device box",
     "type": "text",
     "placeholders": {}
   },

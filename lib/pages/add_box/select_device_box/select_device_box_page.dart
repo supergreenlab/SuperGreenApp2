@@ -104,11 +104,13 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             if (index >= state.boxes.length + 1) {
               return null;
             } else if (index == state.boxes.length) {
+              if (state.boxes.length > 0) {
               int selectedLeds = state.boxes
                   .map<int>((b) => b.leds.length)
                   .reduce((acc, b) => acc + b);
               if (selectedLeds >= state.nLeds) {
                 return null;
+              }
               }
               return ListTile(
                 onTap: () {

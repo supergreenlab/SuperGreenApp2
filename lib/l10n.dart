@@ -259,6 +259,15 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
     );
   }
 
+  String get towelieHelperSelectNewBoxDevice {
+    return Intl.message(
+      '''Your controller can **manage up to 3 boxes**, select an **already configure** box above, or create a **new one**.''',
+      name: 'towelieHelperSelectNewBoxDevice',
+      desc: 'Towelie Helper box new Device box',
+      locale: localeName,
+    );
+  }
+
   String get towelieHelperSelectBoxDevice {
     return Intl.message(
       '''Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.
