@@ -31,12 +31,14 @@ class FeedPage extends StatefulWidget {
   final String title;
   final Widget appBar;
   final double appBarHeight;
+  final bool bottomPadding;
 
   const FeedPage(
       {@required this.title,
       @required this.color,
       this.appBar,
-      @required this.appBarHeight});
+      @required this.appBarHeight,
+      this.bottomPadding = false});
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -97,10 +99,14 @@ class _FeedPageState extends State<FeedPage> {
       child: BlocBuilder<FeedBloc, FeedBlocState>(
         bloc: BlocProvider.of<FeedBloc>(context),
         builder: (BuildContext context, FeedBlocState state) {
+          Widget body;
           if (state is FeedBlocStateLoaded) {
-            return _renderCards(context, state);
+            body = _renderCards(context, state);
+          } else {
+            body = FullscreenLoading(title: 'Loading feed...');
           }
-          return FullscreenLoading(title: 'Loading feed...');
+          return AnimatedSwitcher(
+              child: body, duration: Duration(milliseconds: 200));
         },
       ),
     );
@@ -129,10 +135,15 @@ class _FeedPageState extends State<FeedPage> {
             key: _listKey,
             itemBuilder:
                 (BuildContext context, int index, Animation<double> animation) {
-              if (index == entries.length) {
+              if (!widget.bottomPadding && index >= entries.length) {
+                return null;
+              } else if (index == entries.length) {
                 return Container(height: 76);
               } else if (index > entries.length) {
                 return null;
+              }
+              if (entries[index].isNew && ModalRoute.of(context).isCurrent) {
+                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventMarkAsRead(entries[index]));
               }
               return SlideTransition(
                   position: animation.drive(

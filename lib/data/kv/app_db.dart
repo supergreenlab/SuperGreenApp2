@@ -48,8 +48,13 @@ class AppDB {
     setAppData(appData);
   }
 
+  void setAllowAnalytics(bool allowAnalytics) {
+    AppData appData = getAppData();
+    appData.allowAnalytics = allowAnalytics;
+    setAppData(appData);
+  }
+
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
   }
-
 }

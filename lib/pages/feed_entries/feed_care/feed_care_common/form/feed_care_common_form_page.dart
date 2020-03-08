@@ -22,10 +22,12 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc>
     extends StatefulWidget {
@@ -83,25 +85,37 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
           }
         },
         child: BlocBuilder<FeedCareCommonFormBloc, FeedCareCommonFormBlocState>(
-          bloc: BlocProvider.of<FormBloc>(context),
-          builder: (context, state) => FeedFormLayout(
-            title: title,
-            changed: _afterMedias.length != 0 ||
-                _beforeMedias.length != 0 ||
-                _textController.value.text != '',
-            valid: _afterMedias.length != 0 ||
-                _beforeMedias.length != 0 ||
-                _textController.value.text != '',
-            onOK: () => BlocProvider.of<FormBloc>(context).add(
-                FeedCareCommonFormBlocEventCreate(_beforeMedias, _afterMedias,
-                    _textController.text, _helpRequest)),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _keyboardVisible
-                    ? [_renderTextrea(context, state)]
-                    : _renderBody(context, state)),
-          ),
-        ));
+            bloc: BlocProvider.of<FormBloc>(context),
+            builder: (context, state) {
+              Widget body;
+              if (state is FeedCareCommonFormBlocStateLoading) {
+                body = Scaffold(
+                    appBar: SGLAppBar(
+                      title,
+                    ),
+                    body: FullscreenLoading(title: 'Saving..'));
+              } else {
+                body = FeedFormLayout(
+                  title: title,
+                  changed: _afterMedias.length != 0 ||
+                      _beforeMedias.length != 0 ||
+                      _textController.value.text != '',
+                  valid: _afterMedias.length != 0 ||
+                      _beforeMedias.length != 0 ||
+                      _textController.value.text != '',
+                  onOK: () => BlocProvider.of<FormBloc>(context).add(
+                      FeedCareCommonFormBlocEventCreate(_beforeMedias,
+                          _afterMedias, _textController.text, _helpRequest)),
+                  body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: _keyboardVisible
+                          ? [_renderTextrea(context, state)]
+                          : _renderBody(context, state)),
+                );
+              }
+              return AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body);
+            }));
   }
 
   List<Widget> _renderBody(
@@ -152,7 +166,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
     ];
   }
 
-  Widget _renderTextrea(BuildContext context, FeedCareCommonFormBlocState state) {
+  Widget _renderTextrea(
+      BuildContext context, FeedCareCommonFormBlocState state) {
     return Expanded(
       key: Key('TEXTAREA'),
       child: FeedFormParamLayout(
@@ -167,7 +182,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
     );
   }
 
-  Widget _renderOptions(BuildContext context, FeedCareCommonFormBlocState state) {
+  Widget _renderOptions(
+      BuildContext context, FeedCareCommonFormBlocState state) {
     return Row(
       children: <Widget>[],
     );

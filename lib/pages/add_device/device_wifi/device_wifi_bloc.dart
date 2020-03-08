@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -91,6 +92,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
       }
 
       yield DeviceWifiBlocStateSearching();
+      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(_args.device.id), isReachable: Value(false)));
 
       String ip;
       for (int i = 0; i < 4; ++i) {
@@ -107,8 +109,8 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
         return;
       }
 
-      Device device = _args.device.copyWith(ip: ip);
-      await RelDB.get().devicesDAO.updateDevice(device.createCompanion(true));
+      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(_args.device.id), ip: Value(ip), isReachable: Value(true)));
+      Device device = await RelDB.get().devicesDAO.getDevice(_args.device.id);
 
       Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
       await ddb.updateParam(ipParam.copyWith(svalue: ip));

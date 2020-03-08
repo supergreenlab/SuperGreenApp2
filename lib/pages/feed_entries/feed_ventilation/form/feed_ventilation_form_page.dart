@@ -23,6 +23,7 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,6 +56,9 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) {
             Widget body;
+            if (state is FeedVentilationFormBlocStateLoading) {
+              body = FullscreenLoading(title: 'Saving..');
+            } else
             if (state is FeedVentilationFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -65,11 +69,22 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                         color: Colors.white60),
                     child: Fullscreen(
                       title: 'Ventilation control\nrequires an SGL controller',
-                      child: GreenButton(
-                        title: 'SHOP NOW',
-                        onPressed: () {
-                          launch('https://www.supergreenlab.com');
-                        },
+                      child: Column(
+                        children: <Widget>[
+                          GreenButton(
+                            title: 'SHOP NOW',
+                            onPressed: () {
+                              launch('https://www.supergreenlab.com');
+                            },
+                          ),
+                          Text('or'),
+                          GreenButton(
+                            title: 'DIY NOW',
+                            onPressed: () {
+                              launch('https://github.com/supergreenlab');
+                            },
+                          ),
+                        ],
                       ),
                       childFirst: false,
                     ),
@@ -93,7 +108,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                       FeedVentilationFormBlocEventCreate(
                           _blowerDay, _blowerNight));
                 },
-                body: body);
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

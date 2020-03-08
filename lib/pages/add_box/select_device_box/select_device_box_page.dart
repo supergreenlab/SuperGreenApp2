@@ -19,10 +19,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
-import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class SelectDeviceBoxPage extends StatefulWidget {
@@ -31,11 +32,8 @@ class SelectDeviceBoxPage extends StatefulWidget {
 }
 
 class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
-  List<int> _selectedLeds;
-
   @override
   void initState() {
-    _selectedLeds = [];
     super.initState();
   }
 
@@ -53,65 +51,32 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) {
             Widget body;
-            if (state is SelectDeviceBoxBlocStateLoading) {
-              body = _renderLoading(context, state);
-            } else if (state is SelectDeviceBoxBlocStateDeviceFull) {
-              body = _renderNoLedsAvailable(context, state);
+            if (state is SelectDeviceBoxBlocStateInit) {
+              body = FullscreenLoading(title: 'Loading..');
+            } else if (state is SelectDeviceBoxBlocStateLoading) {
+              body = FullscreenLoading(title: 'Setting up..');
             } else if (state is SelectDeviceBoxBlocStateDone) {
               body = Fullscreen(
                   title: 'Done!',
                   child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
             } else {
-              body = _renderLedSelection(context, state);
+              body = _renderBoxSelection(context, state);
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Device configuration',
+                  'Box creation',
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: body);
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
-  Widget _renderLoading(context, state) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Center(
-            child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(
-                  strokeWidth: 4.0,
-                ),
-              ),
-            ),
-            Text(
-              'Setting up...',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        )),
-      ],
-    );
-  }
-
-  Widget _renderNoLedsAvailable(context, state) {
-    return Fullscreen(
-        title: 'Device can\'t handle\nmore box!',
-        child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
-  }
-
-  Widget _renderLedSelection(context, state) {
+  Widget _renderBoxSelection(
+      BuildContext context, SelectDeviceBoxBlocStateLoaded state) {
     return Column(
       children: <Widget>[
         AnimatedContainer(
@@ -120,103 +85,72 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           color: Color(0xff0bb354),
         ),
         SectionTitle(
-          title: 'Available LED channels',
+          title: 'Available boxes',
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
         ),
-        _renderLeds(
-            state.leds.where((l) => !_selectedLeds.contains(l)).toList(),
-            (int led) {
-          setState(() {
-            _selectedLeds.add(led);
-            BlocProvider.of<SelectDeviceBoxBloc>(context)
-                .add(SelectDeviceBoxBlocEventSelectLed(led));
-          });
-        }),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: SectionTitle(
-            title: 'Selected LED channels',
-            icon: 'assets/box_setup/icon_controller.svg',
-            backgroundColor: Color(0xff0bb354),
-            titleColor: Colors.white,
-          ),
-        ),
-        _renderLeds(_selectedLeds, (int led) {
-          setState(() {
-            _selectedLeds.remove(led);
-            BlocProvider.of<SelectDeviceBoxBloc>(context)
-                .add(SelectDeviceBoxBlocEventUnselectLed(led));
-          });
-        }),
-        Expanded(
-          child: Container(),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: GreenButton(
-              title: 'SETUP BOX',
-              onPressed: _selectedLeds.length == 0
-                  ? null
-                  : () => _handleInput(context),
-            ),
-          ),
-        ),
+        _renderBoxes(state),
       ],
     );
   }
 
-  Widget _renderLeds(List<int> leds, Function(int) onSelected) {
-    return Container(
-      height: 91,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: leds
-            .map<Widget>((led) => _renderBox(Key('$led'), context, () {
-                  onSelected(led);
+  Widget _renderBoxes(SelectDeviceBoxBlocStateLoaded state) {
+    return Expanded(
+      child: Container(
+        color: Colors.white,
+        child: ListView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            if (index >= state.boxes.length + 1) {
+              return null;
+            } else if (index == state.boxes.length) {
+              if (state.boxes.length > 0) {
+              int selectedLeds = state.boxes
+                  .map<int>((b) => b.leds.length)
+                  .reduce((acc, b) => acc + b);
+              if (selectedLeds >= state.nLeds) {
+                return null;
+              }
+              }
+              return ListTile(
+                onTap: () {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToSelectBoxNewDeviceBoxEvent(state.device,
+                          futureFn: (future) async {
+                    dynamic deviceBox = await future;
+                    if (deviceBox is int) {
+                      BlocProvider.of<MainNavigatorBloc>(context).add(
+                          MainNavigatorActionPop(
+                              param: deviceBox));
+                    }
+                  }));
                 },
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: <Widget>[
-                          Text('LED chan', style: TextStyle(fontSize: 10)),
-                          Text(
-                            '${led + 1}',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    )))
-            .toList(),
+                title: Text('Add new box to device'),
+                leading:
+                    SizedBox(width: 50, height: 50, child: Icon(Icons.add)),
+              );
+            }
+            return ListTile(
+              onTap: () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigatorActionPop(param: state.boxes[index].box));
+              },
+              title: state.boxes[index].enabled
+                  ? Text('Already running', style: TextStyle(color: Colors.red))
+                  : Text('Available', style: TextStyle(color: Colors.green)),
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.home, color: Color(0xff3bb30b)),
+                  Text('Box #${state.boxes[index].box + 1}'),
+                ],
+              ),
+              subtitle: Text(
+                  'Led channels: ${state.boxes[index].leds.map((l) => l + 1).join(', ')}'),
+            );
+          },
+        ),
       ),
     );
-  }
-
-  void _handleInput(BuildContext context) {
-    BlocProvider.of<SelectDeviceBoxBloc>(context)
-        .add(SelectDeviceBoxBlocEventSelectLeds(_selectedLeds));
-  }
-
-  Widget _renderBox(
-      Key key, BuildContext context, Function onPressed, Widget content) {
-    return SizedBox(
-        key: key,
-        width: 100,
-        height: 80,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
-          child: RawMaterialButton(
-            onPressed: onPressed,
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.black12,
-                    borderRadius: BorderRadius.circular(10)),
-                child: content),
-          ),
-        ));
   }
 }

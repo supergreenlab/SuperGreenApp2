@@ -43,7 +43,7 @@ class AddDevicePage extends StatelessWidget {
                     context,
                     'Brand new',
                     'assets/box_setup/icon_controller.svg',
-                    'Choose this option if the device is brand new or using it\'s own wifi.',
+                    'Choose this option if the device is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
                     'CONNECT DEVICE', () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(
                       MainNavigateToNewDeviceEvent(futureFn: (future) async {

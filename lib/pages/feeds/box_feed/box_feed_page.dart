@@ -26,6 +26,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
@@ -35,7 +37,6 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class BoxFeedPage extends StatefulWidget {
   @override
@@ -54,36 +55,47 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
-      bloc: BlocProvider.of<BoxFeedBloc>(context),
-      builder: (BuildContext context, BoxFeedBlocState state) {
-        Widget body;
+    return WillPopScope(
+      onWillPop: () async {
         if (_speedDialOpen) {
-          body = Stack(
-            children: <Widget>[
-              _renderFeed(context, state),
-              _renderOverlay(context),
-            ],
-          );
-        } else {
-          body = Stack(
-            children: <Widget>[
-              _renderFeed(context, state),
-            ],
-          );
+          _openCloseDial.value = Random().nextInt(1 << 32);
+          return false;
         }
-
-        return Scaffold(
-            drawer: Drawer(child: this._drawerContent(context, state)),
-            body: body,
-            floatingActionButton: state is BoxFeedBlocStateBox
-                ? _renderSpeedDial(context, state)
-                : null);
+        return true;
       },
+      child: BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
+        bloc: BlocProvider.of<BoxFeedBloc>(context),
+        builder: (BuildContext context, BoxFeedBlocState state) {
+          Widget body;
+          if (_speedDialOpen) {
+            body = Stack(
+              children: <Widget>[
+                _renderFeed(context, state),
+                _renderOverlay(context),
+              ],
+            );
+          } else {
+            body = Stack(
+              children: <Widget>[
+                _renderFeed(context, state),
+              ],
+            );
+          }
+
+          return Scaffold(
+              drawer: Drawer(child: this._drawerContent(context, state)),
+              body: AnimatedSwitcher(
+                  child: body, duration: Duration(milliseconds: 200)),
+              floatingActionButton: state is BoxFeedBlocStateBoxLoaded
+                  ? _renderSpeedDial(context, state)
+                  : null);
+        },
+      ),
     );
   }
 
-  SpeedDial _renderSpeedDial(BuildContext context, BoxFeedBlocStateBox state) {
+  SpeedDial _renderSpeedDial(
+      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return SpeedDial(
       tooltip: 'Speed Dial',
       heroTag: 'speed-dial-hero-tag',
@@ -114,7 +126,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   List<SpeedDialChild> _renderTrimSpeedDials(
-      BuildContext context, BoxFeedBlocStateBox state) {
+      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
@@ -161,7 +173,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   List<SpeedDialChild> _renderGeneralSpeedDials(
-      BuildContext context, BoxFeedBlocStateBox state) {
+      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
@@ -228,18 +240,19 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   void Function() _onSpeedDialSelected(BuildContext context,
       MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent) {
     return () {
-      _openCloseDial.value = Random().nextInt(1<<32);
+      _openCloseDial.value = Random().nextInt(1 << 32);
       BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
+          .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
     };
   }
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
-    if (state is BoxFeedBlocStateBox) {
+    if (state is BoxFeedBlocStateBoxLoaded) {
       return BlocProvider(
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          bottomPadding: true,
           title: '',
           appBarHeight: 300,
           color: Colors.cyan,
@@ -263,10 +276,15 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   Widget _renderOverlay(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return Container(
-            width: constraints.maxWidth,
-            height: constraints.maxHeight,
-            color: Colors.white12);
+        return InkWell(
+          onTap: () {
+            _openCloseDial.value = Random().nextInt(1 << 32);
+          },
+          child: Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              color: Colors.white60),
+        );
       },
     );
   }
@@ -318,26 +336,73 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           state is BoxDrawerBlocStateLoadingBoxList ||
           state is BoxDrawerBlocStateBoxListUpdated,
       builder: (BuildContext context, BoxDrawerBlocState state) {
-        List<Box> boxes = List();
-        if (state is BoxDrawerBlocStateBoxListUpdated) {
-          boxes = state.boxes;
+        Widget content;
+        if (state is BoxDrawerBlocStateLoadingBoxList) {
+          content = FullscreenLoading(title: 'Loading..');
+        } else if (state is BoxDrawerBlocStateBoxListUpdated) {
+          List<Box> boxes = state.boxes;
+          content = ListView(
+            children: boxes.map((b) {
+              Widget item = ListTile(
+                leading: (boxFeedState is BoxFeedBlocStateBoxLoaded &&
+                        boxFeedState.box.id == b.id)
+                    ? Icon(
+                        Icons.check_box,
+                        color: Colors.green,
+                      )
+                    : Icon(Icons.crop_square),
+                title: Text(b.name),
+                onTap: () => _selectBox(context, b),
+              );
+              try {
+                int nOthers = state.hasPending
+                    .where((e) => e.id == b.feed)
+                    .map((e) => e.nNew)
+                    .reduce((a, e) => a + e);
+                if (nOthers != null && nOthers > 0) {
+                  item = Stack(
+                    children: [
+                      item,
+                      _renderBadge(nOthers),
+                    ],
+                  );
+                }
+              } catch (e) {}
+              return item;
+            }).toList(),
+          );
         }
-        return ListView(
-          children: boxes
-              .map((b) => ListTile(
-                    leading: (boxFeedState is BoxFeedBlocStateBox &&
-                            boxFeedState.box.id == b.id)
-                        ? Icon(
-                            Icons.check_box,
-                            color: Colors.green,
-                          )
-                        : Icon(Icons.crop_square),
-                    title: Text(b.name),
-                    onTap: () => _selectBox(context, b),
-                  ))
-              .toList(),
+        return AnimatedSwitcher(
+          duration: Duration(milliseconds: 200),
+          child: content,
         );
       },
+    );
+  }
+
+  Widget _renderBadge(int n) {
+    return Positioned(
+      top: 12,
+      right: 10,
+      child: Container(
+        padding: EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        constraints: BoxConstraints(
+          minWidth: 30,
+          minHeight: 30,
+        ),
+        child: Text(
+          '$n',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 
@@ -355,11 +420,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         .add(MainNavigateToNewBoxInfosEvent());
   }
 
-  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBox state) {
-    String name = 'SuperGreenLab';
-    if (state is BoxFeedBlocStateBox) {
-      name = StringUtils.capitalize(state.box.name);
-    }
+  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+    String name = StringUtils.capitalize(state.box.name);
 
     Widget graphBody;
     if (state.box.device != null) {
@@ -369,14 +431,33 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         _renderGraphs(context, state),
         Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Colors.white60),
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white.withAlpha(190)),
           child: Fullscreen(
+            fontSize: 18,
+            fontWeight: FontWeight.normal,
             title: 'Monitoring feature\nrequires an SGL controller',
-            child: GreenButton(
-              title: 'SHOP NOW',
-              onPressed: () {
-                launch('https://www.supergreenlab.com');
-              },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GreenButton(
+                  title: 'SHOP NOW',
+                  onPressed: () {
+                    launch('https://www.supergreenlab.com');
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:
+                      Text('or', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                GreenButton(
+                  title: 'DIY NOW',
+                  onPressed: () {
+                    launch('https://github.com/supergreenlab');
+                  },
+                ),
+              ],
             ),
             childFirst: false,
           ),
@@ -401,7 +482,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(6.0),
-              child: graphBody,
+              child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: graphBody),
             ),
           ),
         ],
@@ -409,58 +491,10 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     );
   }
 
-  Widget _renderGraphs(BuildContext context, BoxFeedBlocStateBox state) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: Colors.white24),
-      child: Padding(
-        padding: const EdgeInsets.only(
-            top: 16.0, left: 8.0, right: 8.0, bottom: 8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _renderMetric(Colors.green, 'Temp', '25°', '19°', '25°'),
-                _renderMetric(Colors.blue, 'Humi', '80%', '80%', '45%'),
-                _renderMetric(Colors.yellow, 'Light', '64%', '', ''),
-              ],
-            ),
-            Expanded(
-              child: charts.NumericComboChart(state.graphData,
-                  animate: false,
-                  defaultRenderer: charts.LineRendererConfig(),
-                  customSeriesRenderers: [
-                    charts.PointRendererConfig(customRendererId: 'customPoint')
-                  ]),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _renderMetric(
-      Color color, String name, String value, String min, String max) {
-    return Column(
-      children: <Widget>[
-        Text(name),
-        Row(
-          children: <Widget>[
-            Text(value,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 30,
-                )),
-            Column(
-              children: <Widget>[
-                Text(max, style: TextStyle(color: Color(0xff787878))),
-                Text(min, style: TextStyle(color: Color(0xff787878))),
-              ],
-            )
-          ],
-        )
-      ],
+  Widget _renderGraphs(context, state) {
+    return BlocProvider(
+      create: (context) => BoxFeedAppBarBloc(state.box),
+      child: BoxFeedAppBarPage(),
     );
   }
 }

@@ -14,7 +14,7 @@ class Device extends DataClass implements Insertable<Device> {
   final String config;
   final String ip;
   final String mdns;
-  final bool isDraft;
+  final bool isReachable;
   Device(
       {@required this.id,
       @required this.identifier,
@@ -22,7 +22,7 @@ class Device extends DataClass implements Insertable<Device> {
       @required this.config,
       @required this.ip,
       @required this.mdns,
-      @required this.isDraft});
+      @required this.isReachable});
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -38,8 +38,8 @@ class Device extends DataClass implements Insertable<Device> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}config']),
       ip: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ip']),
       mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
-      isDraft:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_draft']),
+      isReachable: boolType
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable']),
     );
   }
   factory Device.fromJson(Map<String, dynamic> json,
@@ -52,7 +52,7 @@ class Device extends DataClass implements Insertable<Device> {
       config: serializer.fromJson<String>(json['config']),
       ip: serializer.fromJson<String>(json['ip']),
       mdns: serializer.fromJson<String>(json['mdns']),
-      isDraft: serializer.fromJson<bool>(json['isDraft']),
+      isReachable: serializer.fromJson<bool>(json['isReachable']),
     );
   }
   @override
@@ -65,7 +65,7 @@ class Device extends DataClass implements Insertable<Device> {
       'config': serializer.toJson<String>(config),
       'ip': serializer.toJson<String>(ip),
       'mdns': serializer.toJson<String>(mdns),
-      'isDraft': serializer.toJson<bool>(isDraft),
+      'isReachable': serializer.toJson<bool>(isReachable),
     };
   }
 
@@ -81,9 +81,9 @@ class Device extends DataClass implements Insertable<Device> {
           config == null && nullToAbsent ? const Value.absent() : Value(config),
       ip: ip == null && nullToAbsent ? const Value.absent() : Value(ip),
       mdns: mdns == null && nullToAbsent ? const Value.absent() : Value(mdns),
-      isDraft: isDraft == null && nullToAbsent
+      isReachable: isReachable == null && nullToAbsent
           ? const Value.absent()
-          : Value(isDraft),
+          : Value(isReachable),
     );
   }
 
@@ -94,7 +94,7 @@ class Device extends DataClass implements Insertable<Device> {
           String config,
           String ip,
           String mdns,
-          bool isDraft}) =>
+          bool isReachable}) =>
       Device(
         id: id ?? this.id,
         identifier: identifier ?? this.identifier,
@@ -102,7 +102,7 @@ class Device extends DataClass implements Insertable<Device> {
         config: config ?? this.config,
         ip: ip ?? this.ip,
         mdns: mdns ?? this.mdns,
-        isDraft: isDraft ?? this.isDraft,
+        isReachable: isReachable ?? this.isReachable,
       );
   @override
   String toString() {
@@ -113,7 +113,7 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('config: $config, ')
           ..write('ip: $ip, ')
           ..write('mdns: $mdns, ')
-          ..write('isDraft: $isDraft')
+          ..write('isReachable: $isReachable')
           ..write(')'))
         .toString();
   }
@@ -127,8 +127,8 @@ class Device extends DataClass implements Insertable<Device> {
               name.hashCode,
               $mrjc(
                   config.hashCode,
-                  $mrjc(
-                      ip.hashCode, $mrjc(mdns.hashCode, isDraft.hashCode)))))));
+                  $mrjc(ip.hashCode,
+                      $mrjc(mdns.hashCode, isReachable.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -139,7 +139,7 @@ class Device extends DataClass implements Insertable<Device> {
           other.config == this.config &&
           other.ip == this.ip &&
           other.mdns == this.mdns &&
-          other.isDraft == this.isDraft);
+          other.isReachable == this.isReachable);
 }
 
 class DevicesCompanion extends UpdateCompanion<Device> {
@@ -149,7 +149,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<String> config;
   final Value<String> ip;
   final Value<String> mdns;
-  final Value<bool> isDraft;
+  final Value<bool> isReachable;
   const DevicesCompanion({
     this.id = const Value.absent(),
     this.identifier = const Value.absent(),
@@ -157,7 +157,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.config = const Value.absent(),
     this.ip = const Value.absent(),
     this.mdns = const Value.absent(),
-    this.isDraft = const Value.absent(),
+    this.isReachable = const Value.absent(),
   });
   DevicesCompanion.insert({
     this.id = const Value.absent(),
@@ -166,7 +166,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     @required String config,
     @required String ip,
     @required String mdns,
-    this.isDraft = const Value.absent(),
+    this.isReachable = const Value.absent(),
   })  : identifier = Value(identifier),
         name = Value(name),
         config = Value(config),
@@ -179,7 +179,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<String> config,
       Value<String> ip,
       Value<String> mdns,
-      Value<bool> isDraft}) {
+      Value<bool> isReachable}) {
     return DevicesCompanion(
       id: id ?? this.id,
       identifier: identifier ?? this.identifier,
@@ -187,7 +187,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       config: config ?? this.config,
       ip: ip ?? this.ip,
       mdns: mdns ?? this.mdns,
-      isDraft: isDraft ?? this.isDraft,
+      isReachable: isReachable ?? this.isReachable,
     );
   }
 }
@@ -253,18 +253,20 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         minTextLength: 1, maxTextLength: 64);
   }
 
-  final VerificationMeta _isDraftMeta = const VerificationMeta('isDraft');
-  GeneratedBoolColumn _isDraft;
+  final VerificationMeta _isReachableMeta =
+      const VerificationMeta('isReachable');
+  GeneratedBoolColumn _isReachable;
   @override
-  GeneratedBoolColumn get isDraft => _isDraft ??= _constructIsDraft();
-  GeneratedBoolColumn _constructIsDraft() {
-    return GeneratedBoolColumn('is_draft', $tableName, false,
+  GeneratedBoolColumn get isReachable =>
+      _isReachable ??= _constructIsReachable();
+  GeneratedBoolColumn _constructIsReachable() {
+    return GeneratedBoolColumn('is_reachable', $tableName, false,
         defaultValue: Constant(true));
   }
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, identifier, name, config, ip, mdns, isDraft];
+      [id, identifier, name, config, ip, mdns, isReachable];
   @override
   $DevicesTable get asDslTable => this;
   @override
@@ -307,9 +309,9 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     } else if (isInserting) {
       context.missing(_mdnsMeta);
     }
-    if (d.isDraft.present) {
-      context.handle(_isDraftMeta,
-          isDraft.isAcceptableValue(d.isDraft.value, _isDraftMeta));
+    if (d.isReachable.present) {
+      context.handle(_isReachableMeta,
+          isReachable.isAcceptableValue(d.isReachable.value, _isReachableMeta));
     }
     return context;
   }
@@ -343,8 +345,8 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     if (d.mdns.present) {
       map['mdns'] = Variable<String, StringType>(d.mdns.value);
     }
-    if (d.isDraft.present) {
-      map['is_draft'] = Variable<bool, BoolType>(d.isDraft.value);
+    if (d.isReachable.present) {
+      map['is_reachable'] = Variable<bool, BoolType>(d.isReachable.value);
     }
     return map;
   }
@@ -1294,6 +1296,279 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   }
 }
 
+class ChartPoint extends DataClass implements Insertable<ChartPoint> {
+  final int id;
+  final int box;
+  final String name;
+  final DateTime date;
+  final int value;
+  ChartPoint(
+      {@required this.id,
+      @required this.box,
+      @required this.name,
+      @required this.date,
+      @required this.value});
+  factory ChartPoint.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
+    return ChartPoint(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      date:
+          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      value: intType.mapFromDatabaseResponse(data['${effectivePrefix}value']),
+    );
+  }
+  factory ChartPoint.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return ChartPoint(
+      id: serializer.fromJson<int>(json['id']),
+      box: serializer.fromJson<int>(json['box']),
+      name: serializer.fromJson<String>(json['name']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      value: serializer.fromJson<int>(json['value']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'box': serializer.toJson<int>(box),
+      'name': serializer.toJson<String>(name),
+      'date': serializer.toJson<DateTime>(date),
+      'value': serializer.toJson<int>(value),
+    };
+  }
+
+  @override
+  ChartPointsCompanion createCompanion(bool nullToAbsent) {
+    return ChartPointsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      value:
+          value == null && nullToAbsent ? const Value.absent() : Value(value),
+    );
+  }
+
+  ChartPoint copyWith(
+          {int id, int box, String name, DateTime date, int value}) =>
+      ChartPoint(
+        id: id ?? this.id,
+        box: box ?? this.box,
+        name: name ?? this.name,
+        date: date ?? this.date,
+        value: value ?? this.value,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ChartPoint(')
+          ..write('id: $id, ')
+          ..write('box: $box, ')
+          ..write('name: $name, ')
+          ..write('date: $date, ')
+          ..write('value: $value')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(box.hashCode,
+          $mrjc(name.hashCode, $mrjc(date.hashCode, value.hashCode)))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is ChartPoint &&
+          other.id == this.id &&
+          other.box == this.box &&
+          other.name == this.name &&
+          other.date == this.date &&
+          other.value == this.value);
+}
+
+class ChartPointsCompanion extends UpdateCompanion<ChartPoint> {
+  final Value<int> id;
+  final Value<int> box;
+  final Value<String> name;
+  final Value<DateTime> date;
+  final Value<int> value;
+  const ChartPointsCompanion({
+    this.id = const Value.absent(),
+    this.box = const Value.absent(),
+    this.name = const Value.absent(),
+    this.date = const Value.absent(),
+    this.value = const Value.absent(),
+  });
+  ChartPointsCompanion.insert({
+    this.id = const Value.absent(),
+    @required int box,
+    @required String name,
+    @required DateTime date,
+    @required int value,
+  })  : box = Value(box),
+        name = Value(name),
+        date = Value(date),
+        value = Value(value);
+  ChartPointsCompanion copyWith(
+      {Value<int> id,
+      Value<int> box,
+      Value<String> name,
+      Value<DateTime> date,
+      Value<int> value}) {
+    return ChartPointsCompanion(
+      id: id ?? this.id,
+      box: box ?? this.box,
+      name: name ?? this.name,
+      date: date ?? this.date,
+      value: value ?? this.value,
+    );
+  }
+}
+
+class $ChartPointsTable extends ChartPoints
+    with TableInfo<$ChartPointsTable, ChartPoint> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ChartPointsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _boxMeta = const VerificationMeta('box');
+  GeneratedIntColumn _box;
+  @override
+  GeneratedIntColumn get box => _box ??= _constructBox();
+  GeneratedIntColumn _constructBox() {
+    return GeneratedIntColumn(
+      'box',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 32);
+  }
+
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  GeneratedDateTimeColumn _date;
+  @override
+  GeneratedDateTimeColumn get date => _date ??= _constructDate();
+  GeneratedDateTimeColumn _constructDate() {
+    return GeneratedDateTimeColumn(
+      'date',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  GeneratedIntColumn _value;
+  @override
+  GeneratedIntColumn get value => _value ??= _constructValue();
+  GeneratedIntColumn _constructValue() {
+    return GeneratedIntColumn(
+      'value',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, box, name, date, value];
+  @override
+  $ChartPointsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'chart_points';
+  @override
+  final String actualTableName = 'chart_points';
+  @override
+  VerificationContext validateIntegrity(ChartPointsCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    }
+    if (d.box.present) {
+      context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
+    } else if (isInserting) {
+      context.missing(_boxMeta);
+    }
+    if (d.name.present) {
+      context.handle(
+          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (d.date.present) {
+      context.handle(
+          _dateMeta, date.isAcceptableValue(d.date.value, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (d.value.present) {
+      context.handle(
+          _valueMeta, value.isAcceptableValue(d.value.value, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ChartPoint map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return ChartPoint.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(ChartPointsCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.box.present) {
+      map['box'] = Variable<int, IntType>(d.box.value);
+    }
+    if (d.name.present) {
+      map['name'] = Variable<String, StringType>(d.name.value);
+    }
+    if (d.date.present) {
+      map['date'] = Variable<DateTime, DateTimeType>(d.date.value);
+    }
+    if (d.value.present) {
+      map['value'] = Variable<int, IntType>(d.value.value);
+    }
+    return map;
+  }
+
+  @override
+  $ChartPointsTable createAlias(String alias) {
+    return $ChartPointsTable(_db, alias);
+  }
+}
+
 class Feed extends DataClass implements Insertable<Feed> {
   final int id;
   final String name;
@@ -1450,12 +1725,14 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   final int feed;
   final DateTime date;
   final String type;
+  final bool isNew;
   final String params;
   FeedEntry(
       {@required this.id,
       @required this.feed,
       @required this.date,
       @required this.type,
+      @required this.isNew,
       @required this.params});
   factory FeedEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -1463,12 +1740,14 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
     final intType = db.typeSystem.forDartType<int>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return FeedEntry(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
       type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      isNew: boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_new']),
       params:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
     );
@@ -1481,6 +1760,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       feed: serializer.fromJson<int>(json['feed']),
       date: serializer.fromJson<DateTime>(json['date']),
       type: serializer.fromJson<String>(json['type']),
+      isNew: serializer.fromJson<bool>(json['isNew']),
       params: serializer.fromJson<String>(json['params']),
     );
   }
@@ -1492,6 +1772,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       'feed': serializer.toJson<int>(feed),
       'date': serializer.toJson<DateTime>(date),
       'type': serializer.toJson<String>(type),
+      'isNew': serializer.toJson<bool>(isNew),
       'params': serializer.toJson<String>(params),
     };
   }
@@ -1503,18 +1784,26 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      isNew:
+          isNew == null && nullToAbsent ? const Value.absent() : Value(isNew),
       params:
           params == null && nullToAbsent ? const Value.absent() : Value(params),
     );
   }
 
   FeedEntry copyWith(
-          {int id, int feed, DateTime date, String type, String params}) =>
+          {int id,
+          int feed,
+          DateTime date,
+          String type,
+          bool isNew,
+          String params}) =>
       FeedEntry(
         id: id ?? this.id,
         feed: feed ?? this.feed,
         date: date ?? this.date,
         type: type ?? this.type,
+        isNew: isNew ?? this.isNew,
         params: params ?? this.params,
       );
   @override
@@ -1524,6 +1813,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           ..write('feed: $feed, ')
           ..write('date: $date, ')
           ..write('type: $type, ')
+          ..write('isNew: $isNew, ')
           ..write('params: $params')
           ..write(')'))
         .toString();
@@ -1532,8 +1822,10 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(feed.hashCode,
-          $mrjc(date.hashCode, $mrjc(type.hashCode, params.hashCode)))));
+      $mrjc(
+          feed.hashCode,
+          $mrjc(date.hashCode,
+              $mrjc(type.hashCode, $mrjc(isNew.hashCode, params.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1542,6 +1834,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           other.feed == this.feed &&
           other.date == this.date &&
           other.type == this.type &&
+          other.isNew == this.isNew &&
           other.params == this.params);
 }
 
@@ -1550,12 +1843,14 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   final Value<int> feed;
   final Value<DateTime> date;
   final Value<String> type;
+  final Value<bool> isNew;
   final Value<String> params;
   const FeedEntriesCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
     this.date = const Value.absent(),
     this.type = const Value.absent(),
+    this.isNew = const Value.absent(),
     this.params = const Value.absent(),
   });
   FeedEntriesCompanion.insert({
@@ -1563,6 +1858,7 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
     @required int feed,
     @required DateTime date,
     @required String type,
+    this.isNew = const Value.absent(),
     this.params = const Value.absent(),
   })  : feed = Value(feed),
         date = Value(date),
@@ -1572,12 +1868,14 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
       Value<int> feed,
       Value<DateTime> date,
       Value<String> type,
+      Value<bool> isNew,
       Value<String> params}) {
     return FeedEntriesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
       date: date ?? this.date,
       type: type ?? this.type,
+      isNew: isNew ?? this.isNew,
       params: params ?? this.params,
     );
   }
@@ -1630,6 +1928,15 @@ class $FeedEntriesTable extends FeedEntries
         minTextLength: 1, maxTextLength: 24);
   }
 
+  final VerificationMeta _isNewMeta = const VerificationMeta('isNew');
+  GeneratedBoolColumn _isNew;
+  @override
+  GeneratedBoolColumn get isNew => _isNew ??= _constructIsNew();
+  GeneratedBoolColumn _constructIsNew() {
+    return GeneratedBoolColumn('is_new', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
   GeneratedTextColumn _params;
   @override
@@ -1640,7 +1947,7 @@ class $FeedEntriesTable extends FeedEntries
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, feed, date, type, params];
+  List<GeneratedColumn> get $columns => [id, feed, date, type, isNew, params];
   @override
   $FeedEntriesTable get asDslTable => this;
   @override
@@ -1672,6 +1979,10 @@ class $FeedEntriesTable extends FeedEntries
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
+    if (d.isNew.present) {
+      context.handle(
+          _isNewMeta, isNew.isAcceptableValue(d.isNew.value, _isNewMeta));
+    }
     if (d.params.present) {
       context.handle(
           _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
@@ -1701,6 +2012,9 @@ class $FeedEntriesTable extends FeedEntries
     }
     if (d.type.present) {
       map['type'] = Variable<String, StringType>(d.type.value);
+    }
+    if (d.isNew.present) {
+      map['is_new'] = Variable<bool, BoolType>(d.isNew.value);
     }
     if (d.params.present) {
       map['params'] = Variable<String, StringType>(d.params.value);
@@ -2015,6 +2329,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $ParamsTable get params => _params ??= $ParamsTable(this);
   $BoxesTable _boxes;
   $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
+  $ChartPointsTable _chartPoints;
+  $ChartPointsTable get chartPoints => _chartPoints ??= $ChartPointsTable(this);
   $FeedsTable _feeds;
   $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
   $FeedEntriesTable _feedEntries;
@@ -2030,6 +2346,14 @@ abstract class _$RelDB extends GeneratedDatabase {
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [devices, modules, params, boxes, feeds, feedEntries, feedMedias];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        devices,
+        modules,
+        params,
+        boxes,
+        chartPoints,
+        feeds,
+        feedEntries,
+        feedMedias
+      ];
 }

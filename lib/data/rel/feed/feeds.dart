@@ -32,6 +32,7 @@ class FeedEntries extends Table {
   IntColumn get feed => integer()();
   DateTimeColumn get date => dateTime()();
   TextColumn get type => text().withLength(min: 1, max: 24)();
+  BoolColumn get isNew => boolean().withDefault(Constant(false))();
 
   TextColumn get params => text().withDefault(Constant('{}'))();
 }
@@ -45,7 +46,22 @@ class FeedMedias extends Table {
   TextColumn get params => text().withDefault(Constant('{}'))();
 }
 
-@UseDao(tables: [Feeds, FeedEntries, FeedMedias])
+@UseDao(tables: [
+  Feeds,
+  FeedEntries,
+  FeedMedias
+], queries: {
+  'getPendingFeeds': '''
+    select
+      feeds.id,
+      (select
+        count(*)
+        from feed_entries
+        where is_new = true and feed_entries.feed = feeds.id
+      ) as nNew
+    from feeds where nNew > 0
+  ''',
+})
 class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   FeedsDAO(RelDB db) : super(db);
 
@@ -80,7 +96,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future updateFeedEntry(FeedEntriesCompanion feedEntry) {
-    return update(feedEntries).replace(feedEntry);
+    return (update(feedEntries)..where((tbl) => tbl.id.equals(feedEntry.id.value))).write(feedEntry);
   }
 
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {

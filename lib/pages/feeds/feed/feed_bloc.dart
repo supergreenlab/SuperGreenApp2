@@ -18,6 +18,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class FeedBlocEvent extends Equatable {}
@@ -34,6 +35,15 @@ class FeedBlocEventFeedEntriesListUpdated extends FeedBlocEvent {
 
   @override
   List<Object> get props => [_feedEntries];
+}
+
+class FeedBlocEventMarkAsRead extends FeedBlocEvent {
+  final FeedEntry feedEntry;
+
+  FeedBlocEventMarkAsRead(this.feedEntry);
+
+  @override
+  List<Object> get props => [feedEntry];
 }
 
 abstract class FeedBlocState extends Equatable {}
@@ -73,6 +83,9 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       _feed = await fdb.getFeed(_feedID);
       final entries = fdb.watchEntries(_feedID);
       entries.listen(_onFeedEntriesChange);
+    } else if (event is FeedBlocEventMarkAsRead) {
+      final fdb = RelDB.get().feedsDAO;
+      await fdb.updateFeedEntry(event.feedEntry.createCompanion(true).copyWith(isNew: Value(false)));
     } else if (event is FeedBlocEventFeedEntriesListUpdated) {
       yield FeedBlocStateLoaded(_feed, event._feedEntries);
     }

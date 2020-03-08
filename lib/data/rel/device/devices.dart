@@ -28,7 +28,7 @@ class Devices extends Table {
   TextColumn get config => text()();
   TextColumn get ip => text().withLength(min: 7, max: 15)();
   TextColumn get mdns => text().withLength(min: 1, max: 64)();
-  BoolColumn get isDraft => boolean().withDefault(Constant(true))();
+  BoolColumn get isReachable => boolean().withDefault(Constant(true))();
 }
 
 class Modules extends Table {
@@ -52,7 +52,13 @@ class Params extends Table {
   IntColumn get ivalue => integer().nullable()();
 }
 
-@UseDao(tables: [Devices, Modules, Params])
+@UseDao(tables: [
+  Devices,
+  Modules,
+  Params
+], queries: {
+  'nDevices': 'SELECT COUNT(*) FROM devices',
+})
 class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   DevicesDAO(RelDB db) : super(db);
 
@@ -78,7 +84,7 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future updateDevice(DevicesCompanion device) {
-    return update(devices).replace(device);
+    return (update(devices)..where((tbl) => tbl.id.equals(device.id.value))).write(device);
   }
 
   Future deleteDevice(Device device) {
@@ -122,15 +128,5 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
 
   Future deleteParams(int deviceID) {
     return (delete(params)..where((p) => p.device.equals(deviceID))).go();
-  }
-
-  Future deleteDrafts() async {
-    List<Device> devs =
-        await (select(devices)..where((d) => d.isDraft.equals(true))).get();
-    for (int i = 0; i < devs.length; ++i) {
-      await deleteParams(devs[i].id);
-      await deleteModules(devs[i].id);
-      await deleteDevice(devs[i]);
-    }
   }
 }

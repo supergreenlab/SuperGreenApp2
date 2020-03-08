@@ -21,11 +21,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
-import 'package:super_green_app/data/towelie/towelie_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
-import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -71,7 +70,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
       listener: (BuildContext context, BoxInfosBlocState state) async {
         if (state is BoxInfosBlocStateDone) {
           BlocProvider.of<TowelieBloc>(context)
-                  .add(TowelieBlocEventBoxCreated(state.box));
+              .add(TowelieBlocEventBoxCreated(state.box));
           Timer(const Duration(milliseconds: 1500), () {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop());
@@ -89,14 +88,15 @@ class BoxInfosPageState extends State<BoxInfosPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'NEW BOX SETUP',
+                  'Box creation',
                   hideBackButton: state is BoxInfosBlocStateDone,
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
                 backgroundColor: Colors.white,
-                body: body);
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

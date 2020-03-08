@@ -42,11 +42,11 @@ class DeviceSetupPage extends StatelessWidget {
                 MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
             device = await ff1.future;
           }
-          if (!state.requiresWifiSetup) {
+          if (state.requiresWifiSetup) {
             FutureFn ff2 =
                 BlocProvider.of<MainNavigatorBloc>(context).futureFn();
             BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToDeviceWifiEvent(device, futureFn: ff2.future));
+                MainNavigateToDeviceWifiEvent(device, futureFn: ff2.futureFn));
             device = await ff2.future;
           }
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -76,7 +76,8 @@ class DeviceSetupPage extends StatelessWidget {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: body,
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body),
               ),
             );
           }),

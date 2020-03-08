@@ -16,11 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class HomeBlocEvent extends Equatable {}
+
+class HomeBlocEventLoad extends HomeBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class HomeBlocEventLoaded extends HomeBlocEvent {
+  final List<GetPendingFeedsResult> hasPending;
+
+  HomeBlocEventLoaded(this.hasPending);
+
+  @override
+  List<Object> get props => [hasPending];
+}
 
 abstract class HomeBlocState extends Equatable {}
 
@@ -29,10 +44,36 @@ class HomeBlocStateInit extends HomeBlocState {
   List<Object> get props => [];
 }
 
+class HomeBlocStateLoaded extends HomeBlocState {
+  final List<GetPendingFeedsResult> hasPending;
+
+  HomeBlocStateLoaded(this.hasPending);
+
+  @override
+  List<Object> get props => [hasPending];
+}
+
 class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
+  HomeBloc() {
+    add(HomeBlocEventLoad());
+  }
+
   @override
   HomeBlocState get initialState => HomeBlocStateInit();
 
   @override
-  Stream<HomeBlocState> mapEventToState(HomeBlocEvent event) async* {}
+  Stream<HomeBlocState> mapEventToState(HomeBlocEvent event) async* {
+    if (event is HomeBlocEventLoad) {
+      final fdb = RelDB.get().feedsDAO;
+      Stream<List<GetPendingFeedsResult>> hasPending =
+          fdb.getPendingFeeds().watch();
+      hasPending.listen(_hasPendingChange);
+    } else if (event is HomeBlocEventLoaded) {
+      yield HomeBlocStateLoaded(event.hasPending);
+    }
+  }
+
+  void _hasPendingChange(List<GetPendingFeedsResult> hasPending) {
+    add(HomeBlocEventLoaded(hasPending));
+  }
 }

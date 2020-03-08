@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 
-class FeedCard extends StatelessWidget {
+class FeedCard extends StatefulWidget {
   final Widget child;
   final Animation animation;
 
@@ -26,19 +26,54 @@ class FeedCard extends StatelessWidget {
       : super(key: key);
 
   @override
+  _FeedCardState createState() => _FeedCardState();
+}
+
+class _FeedCardState extends State<FeedCard> {
+  double _opacity = 0;
+
+  @override
+  void initState() {
+    if (widget.animation.status == AnimationStatus.completed) {
+      _opacity = 1;
+    } else {
+      widget.animation.addStatusListener(_statusListener);
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
-      child: SizeTransition(
-        axis: Axis.vertical,
-        sizeFactor: animation,
-        child: Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Color(0xffdedede), width: 2),
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8)),
-            child: child),
+      child: AnimatedOpacity(
+        duration: Duration(milliseconds: 200),
+        opacity: _opacity,
+        child: SizeTransition(
+          axis: Axis.vertical,
+          sizeFactor: widget.animation,
+          child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xffdedede), width: 2),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8)),
+              child: widget.child),
+        ),
       ),
     );
+  }
+
+  void _statusListener(status) {
+    if (status == AnimationStatus.completed) {
+      setState(() {
+        _opacity = 1;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.animation.removeStatusListener(_statusListener);
+    super.dispose();
   }
 }

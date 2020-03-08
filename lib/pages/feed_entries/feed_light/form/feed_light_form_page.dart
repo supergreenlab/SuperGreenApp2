@@ -23,6 +23,7 @@ import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_fo
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -58,6 +59,9 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             bloc: BlocProvider.of<FeedLightFormBloc>(context),
             builder: (context, state) {
               Widget body;
+              if (state is FeedLightFormBlocStateLoading) {
+                body = FullscreenLoading(title: 'Saving..');
+              } else
               if (state is FeedLightFormBlocStateNoDevice) {
                 body = Stack(
                   children: <Widget>[
@@ -70,13 +74,23 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.white60),
                       child: Fullscreen(
-                        title:
-                            'Stretch control\nrequires an SGL controller',
-                        child: GreenButton(
-                          title: 'SHOP NOW',
-                          onPressed: () {
-                            launch('https://www.supergreenlab.com');
-                          },
+                        title: 'Stretch control\nrequires an SGL controller',
+                        child: Column(
+                          children: <Widget>[
+                            GreenButton(
+                              title: 'SHOP NOW',
+                              onPressed: () {
+                                launch('https://www.supergreenlab.com');
+                              },
+                            ),
+                            Text('or'),
+                            GreenButton(
+                              title: 'DIY NOW',
+                              onPressed: () {
+                                launch('https://github.com/supergreenlab');
+                              },
+                            ),
+                          ],
                         ),
                         childFirst: false,
                       ),
@@ -97,7 +111,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   BlocProvider.of<FeedLightFormBloc>(context)
                       .add(FeedLightFormBlocEventCreate(values));
                 },
-                body: body,
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body),
               );
             }),
       ),

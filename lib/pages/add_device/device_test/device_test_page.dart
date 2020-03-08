@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,15 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class DeviceTestPage extends StatelessWidget {
+class DeviceTestPage extends StatefulWidget {
+  @override
+  _DeviceTestPageState createState() => _DeviceTestPageState();
+}
+
+class _DeviceTestPageState extends State<DeviceTestPage> {
+  Timer timer;
+  int millis;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -22,6 +31,16 @@ class DeviceTestPage extends StatelessWidget {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(param: true));
           });
+        } else if (state is DeviceTestBlocStateTestingLed) {
+          millis = 2000;
+          timer = Timer.periodic(new Duration(milliseconds: 100), (timer) {
+            setState(() {
+              millis -= 100;
+            });
+          });
+        } else if (state is DeviceTestBlocState && timer != null) {
+          timer.cancel();
+          timer = null;
         }
       },
       child: BlocBuilder<DeviceTestBloc, DeviceTestBlocState>(
@@ -36,7 +55,7 @@ class DeviceTestPage extends StatelessWidget {
               body = Fullscreen(
                 childFirst: false,
                 title: 'Testing LED',
-                subtitle: '(100% power for 1s)',
+                subtitle: '(100% power for ${max(0, (millis / 1000)).toStringAsFixed(1)}s)',
                 child: Text('${state.ledID + 1}',
                     style: TextStyle(
                         fontSize: 40,
@@ -45,7 +64,12 @@ class DeviceTestPage extends StatelessWidget {
               );
             } else if (state is DeviceTestBlocStateDone) {
               body = Fullscreen(
-                title: 'Testing done', child: Icon(Icons.check, color: Color(0xff3bb30b), size: 100,),
+                title: 'Testing done',
+                child: Icon(
+                  Icons.check,
+                  color: Color(0xff3bb30b),
+                  size: 100,
+                ),
               );
             } else {
               body = LayoutBuilder(
@@ -83,13 +107,15 @@ class DeviceTestPage extends StatelessWidget {
             return Scaffold(
                 appBar: SGLAppBar(
                   'NEW BOX SETUP',
-                  hideBackButton: state is DeviceTestBlocStateDone || state is DeviceTestBlocStateTestingLed,
+                  hideBackButton: state is DeviceTestBlocStateDone ||
+                      state is DeviceTestBlocStateTestingLed,
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
                 backgroundColor: Colors.white,
-                body: body);
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

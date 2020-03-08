@@ -69,7 +69,7 @@ class ExistingDeviceBloc
       ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
       yield ExistingDeviceBlocStateResolving();
-      final ip = await DeviceAPI.resolveLocalName(event.query);
+      final ip = await DeviceAPI.resolveLocalName(event.query.toLowerCase());
       if (ip == "" || ip == null) {
         yield ExistingDeviceBlocStateNotFound();
         return;

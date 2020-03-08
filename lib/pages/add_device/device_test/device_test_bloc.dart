@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -42,7 +41,8 @@ class DeviceTestBlocStateLoading extends DeviceTestBlocState {
 class DeviceTestBlocStateTestingLed extends DeviceTestBlocState {
   final int ledID;
 
-  DeviceTestBlocStateTestingLed(int nLedChannels, this.ledID) : super(nLedChannels);
+  DeviceTestBlocStateTestingLed(int nLedChannels, this.ledID)
+      : super(nLedChannels);
 
   @override
   List<Object> get props => [nLedChannels, ledID];
@@ -77,15 +77,18 @@ class DeviceTestBloc extends Bloc<DeviceTestBlocEvent, DeviceTestBlocState> {
     } else if (event is DeviceTestBlocEventTestLed) {
       var ddb = RelDB.get().devicesDAO;
       yield DeviceTestBlocStateTestingLed(_nLedChannels, event.ledID);
-      Param ledParam = await ddb.getParam(_args.device.id, "LED_${event.ledID}_DUTY");
+      Param ledParam =
+          await ddb.getParam(_args.device.id, "LED_${event.ledID}_DUTY");
       await DeviceHelper.updateIntParam(_args.device, ledParam, 100);
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 2));
       await DeviceHelper.updateIntParam(_args.device, ledParam, 0);
       yield DeviceTestBlocState(_nLedChannels);
     } else if (event is DeviceTestBlocEventDone) {
+      yield DeviceTestBlocStateLoading();
       var ddb = RelDB.get().devicesDAO;
-      await ddb.updateDevice(_args.device.createCompanion(true).copyWith(isDraft: Value(false)));
       Device device = await ddb.getDevice(_args.device.id);
+      Param stateParam = await ddb.getParam(_args.device.id, "STATE");
+      await DeviceHelper.updateIntParam(_args.device, stateParam, 2);
       yield DeviceTestBlocStateDone(device, 6);
     }
   }
