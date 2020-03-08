@@ -96,7 +96,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future updateFeedEntry(FeedEntriesCompanion feedEntry) {
-    return update(feedEntries).replace(feedEntry);
+    return (update(feedEntries)..where((tbl) => tbl.id.equals(feedEntry.id.value))).write(feedEntry);
   }
 
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {

@@ -211,7 +211,7 @@ class BoxFeedAppBarBloc
     if (_timer != null) {
       _timer.cancel();
     }
-    super.close();
+    return super.close();
   }
 }
 

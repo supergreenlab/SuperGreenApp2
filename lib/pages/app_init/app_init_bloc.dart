@@ -26,7 +26,6 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 
@@ -87,7 +86,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       _db.setAllowAnalytics(event.allowAnalytics);
       if (event.allowAnalytics) {
         await FlutterMatomo.initializeTracker(
-            'https://analytics.supergreenlab.com/piwik.php', 3);
+            'https://analytics.supergreenlab.com/matomo.php', 3);
       }
       yield AppInitBlocStateDone();
     }
@@ -104,7 +103,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
 
     if (appData.allowAnalytics) {
       await FlutterMatomo.initializeTracker(
-          'https://analytics.supergreenlab.com/piwik.php', 3);
+          'https://analytics.supergreenlab.com/matomo.php', 3);
     }
 
     add(AppInitBlocEventLoaded(appData));

@@ -261,7 +261,7 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
 
   String get towelieHelperSelectBoxDevice {
     return Intl.message(
-      '''Your controller can **manage up to 3 boxes**, select an **already configure** box above, or create a **new one**.''',
+      '''Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.''',
       name: 'towelieHelperSelectBoxDevice',
       desc: 'Towelie Helper box Device box',
       locale: localeName,

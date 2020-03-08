@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/analytics_observer.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -96,6 +97,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<DeviceDaemonBloc>(context); // force-instanciate DeviceDaemonBloc :/
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);

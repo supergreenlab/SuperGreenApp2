@@ -84,7 +84,7 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future updateDevice(DevicesCompanion device) {
-    return update(devices).replace(device);
+    return (update(devices)..where((tbl) => tbl.id.equals(device.id.value))).write(device);
   }
 
   Future deleteDevice(Device device) {
