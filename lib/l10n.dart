@@ -82,7 +82,7 @@ class SGLLocalizations {
 
   String get instructionsExistingDeviceTitle {
     return Intl.message(
-      '''Enter device name or IP''',
+      '''Enter controller name or IP''',
       name: 'instructionsExistingDeviceTitle',
       desc: 'Instructions existing device title',
       locale: localeName,
@@ -227,8 +227,8 @@ If you don\'t own a bundle, you can skip this by pressing "NO SGL DEVICE".''',
   String get towelieHelperAddDevice {
     return Intl.message(
       '''**Good**.
-Now this is when you should **plug the device to it\'s power supply** if not already.
-Then we\'ll choose one of the options above to **connect to the controller**.''',
+Now this is when you should **plug the controller to it\'s power supply** if not already.
+Then you will choose one of the options above to **connect to the controller**.''',
       name: 'towelieHelperAddDevice',
       desc: 'Towelie Helper Add device',
       locale: localeName,
@@ -237,7 +237,7 @@ Then we\'ll choose one of the options above to **connect to the controller**.'''
 
   String get towelieHelperAddExistingDevice {
     return Intl.message(
-      '''Ok, so your device is **already running** and **connected to your home wifi**, let\'s search for it over the network!
+      '''Ok, so your controller is **already running** and **connected to your home wifi**, let\'s search for it over the network!
 Enter the **name you gave it last time** (default is **supergreencontroller**), if you can\'t remember it, you can also type its **IP address**.
 The **IP address** can be easily found on your **router\'s home page**.
 To **access your router's homepage**: take the **IP** address of your **mobile phone** or **laptop**, replace the last digit by **1** and **type that** in a browser.''',
@@ -249,7 +249,7 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
 
   String get towelieHelperDeviceWifi {
     return Intl.message(
-      '''**While not mandatory**, connecting your device to your home wifi has a few benefits:
+      '''**While not mandatory**, connecting your controller to your home wifi has a few benefits:
 - receive software **upgrade** and bug fixes
 - remote **monitoring**
 - remote **control** (coming soon)''',

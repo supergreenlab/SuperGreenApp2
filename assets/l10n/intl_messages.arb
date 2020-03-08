@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-07T19:28:38.942148",
+  "@@last_modified": "2020-03-08T08:35:48.417309",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -24,7 +24,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "instructionsExistingDeviceTitle": "Enter device name or IP",
+  "instructionsExistingDeviceTitle": "Enter controller name or IP",
   "@instructionsExistingDeviceTitle": {
     "description": "Instructions existing device title",
     "type": "text",
@@ -96,19 +96,19 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperAddDevice": "**Good**.\nNow this is when you should **plug the device to it's power supply** if not already.\nThen we'll choose one of the options above to **connect to the controller**.",
+  "towelieHelperAddDevice": "**Good**.\nNow this is when you should **plug the controller to it's power supply** if not already.\nThen you will choose one of the options above to **connect to the controller**.",
   "@towelieHelperAddDevice": {
     "description": "Towelie Helper Add device",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperAddExistingDevice": "Ok, so your device is **already running** and **connected to your home wifi**, let's search for it over the network!\nEnter the **name you gave it last time** (default is **supergreencontroller**), if you can't remember it, you can also type its **IP address**.\nThe **IP address** can be easily found on your **router's home page**.\nTo **access your router's homepage**: take the **IP** address of your **mobile phone** or **laptop**, replace the last digit by **1** and **type that** in a browser.",
+  "towelieHelperAddExistingDevice": "Ok, so your controller is **already running** and **connected to your home wifi**, let's search for it over the network!\nEnter the **name you gave it last time** (default is **supergreencontroller**), if you can't remember it, you can also type its **IP address**.\nThe **IP address** can be easily found on your **router's home page**.\nTo **access your router's homepage**: take the **IP** address of your **mobile phone** or **laptop**, replace the last digit by **1** and **type that** in a browser.",
   "@towelieHelperAddExistingDevice": {
     "description": "Towelie Helper Add existing device",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperDeviceWifi": "**While not mandatory**, connecting your device to your home wifi has a few benefits:\n- receive software **upgrade** and bug fixes\n- remote **monitoring**\n- remote **control** (coming soon)",
+  "towelieHelperDeviceWifi": "**While not mandatory**, connecting your controller to your home wifi has a few benefits:\n- receive software **upgrade** and bug fixes\n- remote **monitoring**\n- remote **control** (coming soon)",
   "@towelieHelperDeviceWifi": {
     "description": "Towelie Helper Device wifi",
     "type": "text",

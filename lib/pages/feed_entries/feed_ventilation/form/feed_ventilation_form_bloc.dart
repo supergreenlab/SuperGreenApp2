@@ -86,6 +86,11 @@ class FeedVentilationFormBlocStateVentilationLoaded
       [initialBlowerDay, initialBlowerNight, blowerDay, blowerNight];
 }
 
+class FeedVentilationFormBlocStateLoading extends FeedVentilationFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
   @override
   List<Object> get props => [];
@@ -156,6 +161,7 @@ class FeedVentilationFormBloc
       if (_args.box.device == null) {
         return;
       }
+      yield FeedVentilationFormBlocStateLoading();
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_VENTILATION',

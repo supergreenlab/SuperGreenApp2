@@ -80,6 +80,11 @@ class FeedLightFormBlocStateNoDevice
   FeedLightFormBlocStateNoDevice(List<int> values) : super(values);
 }
 
+class FeedLightFormBlocStateLoading extends FeedLightFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
   @override
   List<Object> get props => [];
@@ -132,6 +137,7 @@ class FeedLightFormBloc
       if (_args.box.device == null) {
         return;
       }
+      yield FeedLightFormBlocStateLoading();
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_LIGHT',

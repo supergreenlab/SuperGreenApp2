@@ -65,6 +65,11 @@ class FeedScheduleFormBlocStateUnInitialized extends FeedScheduleFormBlocState {
       : super(schedule, schedules, initialSchedule, initialSchedules);
 }
 
+class FeedScheduleFormBlocStateLoading extends FeedScheduleFormBlocState {
+  FeedScheduleFormBlocStateLoading(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
+      : super(schedule, schedules, initialSchedule, initialSchedules);
+}
+
 class FeedScheduleFormBlocStateDone extends FeedScheduleFormBlocState {
   FeedScheduleFormBlocStateDone(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
       : super(schedule, schedules, initialSchedule, initialSchedules);
@@ -104,6 +109,7 @@ class FeedScheduleFormBloc
       _schedule = event.schedule;
       yield FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);
     } else if (event is FeedScheduleFormBlocEventCreate) {
+      yield FeedScheduleFormBlocStateLoading(_schedule, _schedules, _initialSchedule, _initialSchedules);
       final db = RelDB.get();
 
       if (_device != null) {

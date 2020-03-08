@@ -46,6 +46,10 @@ class FeedCareCommonFormBlocState extends Equatable {
   List<Object> get props => [];
 }
 
+class FeedCareCommonFormBlocStateLoading extends FeedCareCommonFormBlocState {
+  FeedCareCommonFormBlocStateLoading();
+}
+
 class FeedCareCommonFormBlocStateDone extends FeedCareCommonFormBlocState {
   FeedCareCommonFormBlocStateDone();
 }
@@ -63,6 +67,7 @@ abstract class FeedCareCommonFormBloc
   Stream<FeedCareCommonFormBlocState> mapEventToState(
       FeedCareCommonFormBlocEvent event) async* {
     if (event is FeedCareCommonFormBlocEventCreate) {
+      yield FeedCareCommonFormBlocStateLoading();
       final db = RelDB.get();
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(

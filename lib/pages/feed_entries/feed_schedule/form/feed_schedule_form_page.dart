@@ -41,6 +41,9 @@ class FeedScheduleFormPage extends StatelessWidget {
           bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
           builder: (BuildContext context, FeedScheduleFormBlocState state) {
             Widget body;
+            if (state is FeedScheduleFormBlocStateLoading) {
+              body = FullscreenLoading(title: 'Saving..',);
+            } else
             if (state is FeedScheduleFormBlocStateUnInitialized) {
               body = FullscreenLoading(
                 title: 'Loading..',
