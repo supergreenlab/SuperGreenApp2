@@ -28,6 +28,7 @@ class Devices extends Table {
   TextColumn get config => text()();
   TextColumn get ip => text().withLength(min: 7, max: 15)();
   TextColumn get mdns => text().withLength(min: 1, max: 64)();
+  BoolColumn get isReachable => boolean().withDefault(Constant(true))();
 }
 
 class Modules extends Table {

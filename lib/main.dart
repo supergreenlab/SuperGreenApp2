@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -29,5 +30,6 @@ void main() async {
     BlocProvider<MainNavigatorBloc>(
         create: (context) => MainNavigatorBloc(navigatorKey)),
     BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
+    BlocProvider<DeviceDaemonBloc>(create: (context) => DeviceDaemonBloc()),
   ], child: MainPage(navigatorKey)));
 }

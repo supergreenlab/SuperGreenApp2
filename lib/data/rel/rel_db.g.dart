@@ -14,18 +14,21 @@ class Device extends DataClass implements Insertable<Device> {
   final String config;
   final String ip;
   final String mdns;
+  final bool isReachable;
   Device(
       {@required this.id,
       @required this.identifier,
       @required this.name,
       @required this.config,
       @required this.ip,
-      @required this.mdns});
+      @required this.mdns,
+      @required this.isReachable});
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return Device(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       identifier: stringType
@@ -35,6 +38,8 @@ class Device extends DataClass implements Insertable<Device> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}config']),
       ip: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ip']),
       mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
+      isReachable: boolType
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable']),
     );
   }
   factory Device.fromJson(Map<String, dynamic> json,
@@ -47,6 +52,7 @@ class Device extends DataClass implements Insertable<Device> {
       config: serializer.fromJson<String>(json['config']),
       ip: serializer.fromJson<String>(json['ip']),
       mdns: serializer.fromJson<String>(json['mdns']),
+      isReachable: serializer.fromJson<bool>(json['isReachable']),
     );
   }
   @override
@@ -59,6 +65,7 @@ class Device extends DataClass implements Insertable<Device> {
       'config': serializer.toJson<String>(config),
       'ip': serializer.toJson<String>(ip),
       'mdns': serializer.toJson<String>(mdns),
+      'isReachable': serializer.toJson<bool>(isReachable),
     };
   }
 
@@ -74,6 +81,9 @@ class Device extends DataClass implements Insertable<Device> {
           config == null && nullToAbsent ? const Value.absent() : Value(config),
       ip: ip == null && nullToAbsent ? const Value.absent() : Value(ip),
       mdns: mdns == null && nullToAbsent ? const Value.absent() : Value(mdns),
+      isReachable: isReachable == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isReachable),
     );
   }
 
@@ -83,7 +93,8 @@ class Device extends DataClass implements Insertable<Device> {
           String name,
           String config,
           String ip,
-          String mdns}) =>
+          String mdns,
+          bool isReachable}) =>
       Device(
         id: id ?? this.id,
         identifier: identifier ?? this.identifier,
@@ -91,6 +102,7 @@ class Device extends DataClass implements Insertable<Device> {
         config: config ?? this.config,
         ip: ip ?? this.ip,
         mdns: mdns ?? this.mdns,
+        isReachable: isReachable ?? this.isReachable,
       );
   @override
   String toString() {
@@ -100,7 +112,8 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('name: $name, ')
           ..write('config: $config, ')
           ..write('ip: $ip, ')
-          ..write('mdns: $mdns')
+          ..write('mdns: $mdns, ')
+          ..write('isReachable: $isReachable')
           ..write(')'))
         .toString();
   }
@@ -110,8 +123,12 @@ class Device extends DataClass implements Insertable<Device> {
       id.hashCode,
       $mrjc(
           identifier.hashCode,
-          $mrjc(name.hashCode,
-              $mrjc(config.hashCode, $mrjc(ip.hashCode, mdns.hashCode))))));
+          $mrjc(
+              name.hashCode,
+              $mrjc(
+                  config.hashCode,
+                  $mrjc(ip.hashCode,
+                      $mrjc(mdns.hashCode, isReachable.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -121,7 +138,8 @@ class Device extends DataClass implements Insertable<Device> {
           other.name == this.name &&
           other.config == this.config &&
           other.ip == this.ip &&
-          other.mdns == this.mdns);
+          other.mdns == this.mdns &&
+          other.isReachable == this.isReachable);
 }
 
 class DevicesCompanion extends UpdateCompanion<Device> {
@@ -131,6 +149,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<String> config;
   final Value<String> ip;
   final Value<String> mdns;
+  final Value<bool> isReachable;
   const DevicesCompanion({
     this.id = const Value.absent(),
     this.identifier = const Value.absent(),
@@ -138,6 +157,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.config = const Value.absent(),
     this.ip = const Value.absent(),
     this.mdns = const Value.absent(),
+    this.isReachable = const Value.absent(),
   });
   DevicesCompanion.insert({
     this.id = const Value.absent(),
@@ -146,6 +166,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     @required String config,
     @required String ip,
     @required String mdns,
+    this.isReachable = const Value.absent(),
   })  : identifier = Value(identifier),
         name = Value(name),
         config = Value(config),
@@ -157,7 +178,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<String> name,
       Value<String> config,
       Value<String> ip,
-      Value<String> mdns}) {
+      Value<String> mdns,
+      Value<bool> isReachable}) {
     return DevicesCompanion(
       id: id ?? this.id,
       identifier: identifier ?? this.identifier,
@@ -165,6 +187,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       config: config ?? this.config,
       ip: ip ?? this.ip,
       mdns: mdns ?? this.mdns,
+      isReachable: isReachable ?? this.isReachable,
     );
   }
 }
@@ -230,9 +253,20 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         minTextLength: 1, maxTextLength: 64);
   }
 
+  final VerificationMeta _isReachableMeta =
+      const VerificationMeta('isReachable');
+  GeneratedBoolColumn _isReachable;
+  @override
+  GeneratedBoolColumn get isReachable =>
+      _isReachable ??= _constructIsReachable();
+  GeneratedBoolColumn _constructIsReachable() {
+    return GeneratedBoolColumn('is_reachable', $tableName, false,
+        defaultValue: Constant(true));
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, identifier, name, config, ip, mdns];
+      [id, identifier, name, config, ip, mdns, isReachable];
   @override
   $DevicesTable get asDslTable => this;
   @override
@@ -275,6 +309,10 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     } else if (isInserting) {
       context.missing(_mdnsMeta);
     }
+    if (d.isReachable.present) {
+      context.handle(_isReachableMeta,
+          isReachable.isAcceptableValue(d.isReachable.value, _isReachableMeta));
+    }
     return context;
   }
 
@@ -306,6 +344,9 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     }
     if (d.mdns.present) {
       map['mdns'] = Variable<String, StringType>(d.mdns.value);
+    }
+    if (d.isReachable.present) {
+      map['is_reachable'] = Variable<bool, BoolType>(d.isReachable.value);
     }
     return map;
   }
