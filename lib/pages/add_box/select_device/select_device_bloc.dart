@@ -25,6 +25,15 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SelectDeviceBlocEvent extends Equatable {}
 
+class SelectDeviceBlocEventDelete extends SelectDeviceBlocEvent {
+  final Device device;
+
+  SelectDeviceBlocEventDelete(this.device);
+
+  @override
+  List<Object> get props => [];
+}
+
 class SelectDeviceBlocEventLoadDevices extends SelectDeviceBlocEvent {
   SelectDeviceBlocEventLoadDevices() : super();
 
@@ -86,6 +95,11 @@ class SelectDeviceBloc
     } else if (event is SelectDeviceBlocEventDeviceListUpdated) {
       _devices = event.devices;
       yield SelectDeviceBlocStateDeviceListUpdated(_devices);
+    } else if (event is SelectDeviceBlocEventDelete) {
+      final ddb = RelDB.get().devicesDAO;
+      ddb.deleteParams(event.device.id);
+      ddb.deleteModules(event.device.id);
+      ddb.deleteDevice(event.device);
     }
   }
 

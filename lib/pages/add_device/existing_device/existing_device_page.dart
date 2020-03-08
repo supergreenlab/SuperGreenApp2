@@ -100,8 +100,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      child: ListView(
                         children: form,
                       ),
                     ),

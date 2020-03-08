@@ -113,9 +113,11 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         if (devices.length == 0) {
           return Fullscreen(
             title: 'No device yet',
-            child: GreenButton(title: 'ADD ONE', onPressed: () {
-              _addNewDevice(context);
-            }),
+            child: GreenButton(
+                title: 'ADD ONE',
+                onPressed: () {
+                  _addNewDevice(context);
+                }),
             childFirst: false,
           );
         }
@@ -126,6 +128,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
               ) =>
                   ListTile(
                     onTap: () => _selectDevice(context, d),
+                    onLongPress: () => _deleteDevice(context, d),
                     title: Text(
                       '${i++} - ${d.name}',
                       style:
@@ -157,5 +160,35 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
             param: SelectBoxDeviceData(device, deviceBox)));
       }
     }));
+  }
+
+  void _deleteDevice(BuildContext context, Device device) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete device ${device.name}?'),
+            content: Text('This can\'t be reverted. Continue?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<SelectDeviceBloc>(context)
+          .add(SelectDeviceBlocEventDelete(device));
+    }
   }
 }

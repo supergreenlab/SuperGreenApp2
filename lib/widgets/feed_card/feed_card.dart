@@ -37,13 +37,7 @@ class _FeedCardState extends State<FeedCard> {
     if (widget.animation.status == AnimationStatus.completed) {
       _opacity = 1;
     } else {
-      widget.animation.addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          setState(() {
-            _opacity = 1;
-          });
-        }
-      });
+      widget.animation.addStatusListener(_statusListener);
     }
     super.initState();
   }
@@ -67,5 +61,19 @@ class _FeedCardState extends State<FeedCard> {
         ),
       ),
     );
+  }
+
+  void _statusListener(status) {
+    if (status == AnimationStatus.completed) {
+      setState(() {
+        _opacity = 1;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.animation.removeStatusListener(_statusListener);
+    super.dispose();
   }
 }
