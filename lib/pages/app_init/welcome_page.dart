@@ -122,10 +122,17 @@ class _WelcomePageState extends State<WelcomePage> {
           onChanged: onChanged,
           value: value,
         ),
-        MarkdownBody(
-          data: text,
-          styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Colors.black, fontSize: 16)),
+        InkWell(
+          onTap: () {
+            setState(() {
+              _allowAnalytics = !_allowAnalytics;
+            });
+          },
+          child: MarkdownBody(
+            data: text,
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
         ),
       ],
     );
