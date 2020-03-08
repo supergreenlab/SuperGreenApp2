@@ -54,7 +54,7 @@ class _WelcomePageState extends State<WelcomePage> {
       },
       child: Scaffold(
           body: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(4),
         child: AnimatedSwitcher(
             duration: Duration(milliseconds: 250),
             child: Column(
@@ -131,7 +131,7 @@ class _WelcomePageState extends State<WelcomePage> {
           child: MarkdownBody(
             data: text,
             styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 16)),
+                p: TextStyle(color: Colors.black, fontSize: 14)),
           ),
         ),
       ],

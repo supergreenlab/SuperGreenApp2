@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/analytics_observer.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
@@ -33,6 +34,8 @@ import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+
+final RouteObserver<PageRoute> _analyticsObserver = AnalyticsObserver();
 
 class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
@@ -59,6 +62,7 @@ class HomePage extends StatelessWidget {
             );
           } else if (state is HomeBlocStateLoaded) {
             body = Navigator(
+              observers: [_analyticsObserver],
               key: _navigatorKey,
               onGenerateRoute: (settings) =>
                   this._onGenerateRoute(context, settings),
@@ -148,10 +152,7 @@ class HomePage extends StatelessWidget {
         child: Text(
           '$n',
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 11,
-            fontWeight: FontWeight.bold
-          ),
+              color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
       ),
@@ -184,6 +185,7 @@ class HomePage extends StatelessWidget {
     });
     if (settings.arguments == null) {
       return MaterialPageRoute(
+          settings: settings,
           builder: (context) => BlocProvider(
                 create: (context) => SGLFeedBloc(),
                 child: SGLFeedPage(),
@@ -192,12 +194,14 @@ class HomePage extends StatelessWidget {
     switch (settings.name) {
       case '/feed/sgl':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
                   child: SGLFeedPage(),
                 ));
       case '/feed/box':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => MultiBlocProvider(
                   providers: [
                     BlocProvider<BoxDrawerBloc>(
@@ -210,18 +214,21 @@ class HomePage extends StatelessWidget {
                 ));
       case '/explorer':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => ExplorerBloc(),
                   child: ExplorerPage(),
                 ));
       case '/settings':
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SettingsBloc(),
                   child: SettingsPage(),
                 ));
       default:
         return MaterialPageRoute(
+            settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
                   child: SGLFeedPage(),

@@ -82,7 +82,7 @@ import 'package:super_green_app/towelie/towelie_helper.dart';
 
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 
-final RouteObserver<PageRoute> routeObserver = AnalyticsObserver();
+final RouteObserver<PageRoute> _analyticsObserver = AnalyticsObserver();
 
 class MainPage extends StatefulWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
@@ -113,7 +113,7 @@ class _MainPageState extends State<MainPage> {
         },
         child: MaterialApp(
           navigatorObservers: [
-            routeObserver,
+            _analyticsObserver,
           ],
           localizationsDelegates: [
             const SGLLocalizationsDelegate(),

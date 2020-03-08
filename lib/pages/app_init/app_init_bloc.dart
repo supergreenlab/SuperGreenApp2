@@ -100,8 +100,6 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
 
     await _db.init();
 
-    await RelDB.get().devicesDAO.deleteDrafts();
-
     AppData appData = _db.getAppData();
 
     if (appData.allowAnalytics) {

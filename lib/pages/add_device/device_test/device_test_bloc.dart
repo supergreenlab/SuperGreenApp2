@@ -84,7 +84,6 @@ class DeviceTestBloc extends Bloc<DeviceTestBlocEvent, DeviceTestBlocState> {
       yield DeviceTestBlocState(_nLedChannels);
     } else if (event is DeviceTestBlocEventDone) {
       var ddb = RelDB.get().devicesDAO;
-      await ddb.updateDevice(_args.device.createCompanion(true).copyWith(isDraft: Value(false)));
       Device device = await ddb.getDevice(_args.device.id);
       yield DeviceTestBlocStateDone(device, 6);
     }

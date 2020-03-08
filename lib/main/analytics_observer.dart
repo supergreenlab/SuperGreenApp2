@@ -17,7 +17,7 @@ class AnalyticsObserver extends RouteObserver<PageRoute> {
   }
 
   void trackNewRoute(Route<dynamic> route) async {
-    if (route.settings.name == '/') {
+    if (route.settings.name != null && route.settings.name == '/') {
       return;
     }
     AppDB _db = AppDB();

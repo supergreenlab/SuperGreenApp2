@@ -67,7 +67,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Device configuration',
+                  'Box creation',
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,

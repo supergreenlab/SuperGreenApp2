@@ -88,7 +88,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'NEW BOX SETUP',
+                  'Box creation',
                   hideBackButton: state is BoxInfosBlocStateDone,
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,

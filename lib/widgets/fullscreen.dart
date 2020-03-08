@@ -31,7 +31,7 @@ class Fullscreen extends StatelessWidget {
     @required this.child,
     this.subtitle,
     this.childFirst = true,
-    this.fontSize = 25,
+    this.fontSize = 22,
     this.fontWeight = FontWeight.w500,
   }) : super();
 

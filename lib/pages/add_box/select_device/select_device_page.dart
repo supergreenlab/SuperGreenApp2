@@ -45,7 +45,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         bloc: BlocProvider.of<SelectDeviceBloc>(context),
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
-              'SELECT BOX\'S DEVICE',
+              'Box creation',
               backgroundColor: Color(0xff0bb354),
               titleColor: Colors.white,
               iconColor: Colors.white,

@@ -14,21 +14,18 @@ class Device extends DataClass implements Insertable<Device> {
   final String config;
   final String ip;
   final String mdns;
-  final bool isDraft;
   Device(
       {@required this.id,
       @required this.identifier,
       @required this.name,
       @required this.config,
       @required this.ip,
-      @required this.mdns,
-      @required this.isDraft});
+      @required this.mdns});
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Device(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       identifier: stringType
@@ -38,8 +35,6 @@ class Device extends DataClass implements Insertable<Device> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}config']),
       ip: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ip']),
       mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
-      isDraft:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_draft']),
     );
   }
   factory Device.fromJson(Map<String, dynamic> json,
@@ -52,7 +47,6 @@ class Device extends DataClass implements Insertable<Device> {
       config: serializer.fromJson<String>(json['config']),
       ip: serializer.fromJson<String>(json['ip']),
       mdns: serializer.fromJson<String>(json['mdns']),
-      isDraft: serializer.fromJson<bool>(json['isDraft']),
     );
   }
   @override
@@ -65,7 +59,6 @@ class Device extends DataClass implements Insertable<Device> {
       'config': serializer.toJson<String>(config),
       'ip': serializer.toJson<String>(ip),
       'mdns': serializer.toJson<String>(mdns),
-      'isDraft': serializer.toJson<bool>(isDraft),
     };
   }
 
@@ -81,9 +74,6 @@ class Device extends DataClass implements Insertable<Device> {
           config == null && nullToAbsent ? const Value.absent() : Value(config),
       ip: ip == null && nullToAbsent ? const Value.absent() : Value(ip),
       mdns: mdns == null && nullToAbsent ? const Value.absent() : Value(mdns),
-      isDraft: isDraft == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isDraft),
     );
   }
 
@@ -93,8 +83,7 @@ class Device extends DataClass implements Insertable<Device> {
           String name,
           String config,
           String ip,
-          String mdns,
-          bool isDraft}) =>
+          String mdns}) =>
       Device(
         id: id ?? this.id,
         identifier: identifier ?? this.identifier,
@@ -102,7 +91,6 @@ class Device extends DataClass implements Insertable<Device> {
         config: config ?? this.config,
         ip: ip ?? this.ip,
         mdns: mdns ?? this.mdns,
-        isDraft: isDraft ?? this.isDraft,
       );
   @override
   String toString() {
@@ -112,8 +100,7 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('name: $name, ')
           ..write('config: $config, ')
           ..write('ip: $ip, ')
-          ..write('mdns: $mdns, ')
-          ..write('isDraft: $isDraft')
+          ..write('mdns: $mdns')
           ..write(')'))
         .toString();
   }
@@ -123,12 +110,8 @@ class Device extends DataClass implements Insertable<Device> {
       id.hashCode,
       $mrjc(
           identifier.hashCode,
-          $mrjc(
-              name.hashCode,
-              $mrjc(
-                  config.hashCode,
-                  $mrjc(
-                      ip.hashCode, $mrjc(mdns.hashCode, isDraft.hashCode)))))));
+          $mrjc(name.hashCode,
+              $mrjc(config.hashCode, $mrjc(ip.hashCode, mdns.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -138,8 +121,7 @@ class Device extends DataClass implements Insertable<Device> {
           other.name == this.name &&
           other.config == this.config &&
           other.ip == this.ip &&
-          other.mdns == this.mdns &&
-          other.isDraft == this.isDraft);
+          other.mdns == this.mdns);
 }
 
 class DevicesCompanion extends UpdateCompanion<Device> {
@@ -149,7 +131,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<String> config;
   final Value<String> ip;
   final Value<String> mdns;
-  final Value<bool> isDraft;
   const DevicesCompanion({
     this.id = const Value.absent(),
     this.identifier = const Value.absent(),
@@ -157,7 +138,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.config = const Value.absent(),
     this.ip = const Value.absent(),
     this.mdns = const Value.absent(),
-    this.isDraft = const Value.absent(),
   });
   DevicesCompanion.insert({
     this.id = const Value.absent(),
@@ -166,7 +146,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     @required String config,
     @required String ip,
     @required String mdns,
-    this.isDraft = const Value.absent(),
   })  : identifier = Value(identifier),
         name = Value(name),
         config = Value(config),
@@ -178,8 +157,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<String> name,
       Value<String> config,
       Value<String> ip,
-      Value<String> mdns,
-      Value<bool> isDraft}) {
+      Value<String> mdns}) {
     return DevicesCompanion(
       id: id ?? this.id,
       identifier: identifier ?? this.identifier,
@@ -187,7 +165,6 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       config: config ?? this.config,
       ip: ip ?? this.ip,
       mdns: mdns ?? this.mdns,
-      isDraft: isDraft ?? this.isDraft,
     );
   }
 }
@@ -253,18 +230,9 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         minTextLength: 1, maxTextLength: 64);
   }
 
-  final VerificationMeta _isDraftMeta = const VerificationMeta('isDraft');
-  GeneratedBoolColumn _isDraft;
-  @override
-  GeneratedBoolColumn get isDraft => _isDraft ??= _constructIsDraft();
-  GeneratedBoolColumn _constructIsDraft() {
-    return GeneratedBoolColumn('is_draft', $tableName, false,
-        defaultValue: Constant(true));
-  }
-
   @override
   List<GeneratedColumn> get $columns =>
-      [id, identifier, name, config, ip, mdns, isDraft];
+      [id, identifier, name, config, ip, mdns];
   @override
   $DevicesTable get asDslTable => this;
   @override
@@ -307,10 +275,6 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     } else if (isInserting) {
       context.missing(_mdnsMeta);
     }
-    if (d.isDraft.present) {
-      context.handle(_isDraftMeta,
-          isDraft.isAcceptableValue(d.isDraft.value, _isDraftMeta));
-    }
     return context;
   }
 
@@ -342,9 +306,6 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     }
     if (d.mdns.present) {
       map['mdns'] = Variable<String, StringType>(d.mdns.value);
-    }
-    if (d.isDraft.present) {
-      map['is_draft'] = Variable<bool, BoolType>(d.isDraft.value);
     }
     return map;
   }
