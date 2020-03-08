@@ -23,7 +23,7 @@ class AnalyticsObserver extends RouteObserver<PageRoute> {
     AppDB _db = AppDB();
     AppData appData = _db.getAppData();
 
-    if (appData.allowAnalytics) {
+    if (appData.allowAnalytics == true) {
       await FlutterMatomo.trackScreenWithName(route.settings.name, "Route view");
     }
   }

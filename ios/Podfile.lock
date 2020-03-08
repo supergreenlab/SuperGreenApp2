@@ -1,7 +1,15 @@
 PODS:
   - camera (0.0.1):
     - Flutter
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
+  - connectivity_macos (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - flutter_matomo (0.0.1):
+    - Flutter
+    - MatomoTracker (> 7)
   - keyboard_visibility (0.5.0):
     - Flutter
     - Reachability
@@ -14,13 +22,16 @@ PODS:
   - libwebp/mux (1.1.0):
     - libwebp/demux
   - libwebp/webp (1.1.0)
+  - MatomoTracker (7.2.0):
+    - MatomoTracker/Core (= 7.2.0)
+  - MatomoTracker/Core (7.2.0)
   - moor_ffi (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
   - path_provider_macos (0.0.1):
     - Flutter
-  - permission_handler (4.3.0):
+  - permission_handler (4.4.0):
     - Flutter
   - Reachability (3.2)
   - url_launcher (0.0.1):
@@ -41,7 +52,10 @@ PODS:
 
 DEPENDENCIES:
   - camera (from `.symlinks/plugins/camera/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
+  - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_matomo (from `.symlinks/plugins/flutter_matomo/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - moor_ffi (from `.symlinks/plugins/moor_ffi/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -58,13 +72,20 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - libwebp
+    - MatomoTracker
     - Reachability
 
 EXTERNAL SOURCES:
   camera:
     :path: ".symlinks/plugins/camera/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
+  connectivity_macos:
+    :path: ".symlinks/plugins/connectivity_macos/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
+  flutter_matomo:
+    :path: ".symlinks/plugins/flutter_matomo/ios"
   keyboard_visibility:
     :path: ".symlinks/plugins/keyboard_visibility/ios"
   moor_ffi:
@@ -92,13 +113,17 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
+  connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
+  connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_matomo: a4fc9d95faaf6f95124fc1956e892f91791b5fac
   keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
+  MatomoTracker: 6f89e2561083685a360e223fb663e9ccd57c1d1a
   moor_ffi: d66c9470c18e9cb333423bbcb493c105c6c774c6
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
-  permission_handler: 5c75cfde1229eb85f22d367c093900fac03c6c9e
+  permission_handler: f615215121f43c1640d2b8500d4ad749512828a8
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
@@ -108,6 +133,6 @@ SPEC CHECKSUMS:
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
 
-PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
+PODFILE CHECKSUM: d6dc542d74fe43280e46745d843ee5c531f97f19
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.0

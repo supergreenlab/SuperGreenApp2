@@ -322,9 +322,9 @@ packages:
   flutter_matomo:
     dependency: "direct main"
     description:
-      name: flutter_matomo
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "vendor/flutter_matomo"
+      relative: true
+    source: path
     version: "1.2.0"
   flutter_page_indicator:
     dependency: transitive
@@ -440,7 +440,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.1"
+    version: "0.16.0"
   intl_translation:
     dependency: "direct main"
     description:
@@ -622,7 +622,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.0"
+    version: "1.8.0+1"
   permission_handler:
     dependency: "direct main"
     description:
@@ -802,7 +802,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.15"
+    version: "0.2.11"
   time:
     dependency: transitive
     description:
