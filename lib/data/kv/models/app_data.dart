@@ -26,4 +26,6 @@ class AppData {
   bool firstStart = true;
   @HiveField(1)
   int lastBoxID;
+  @HiveField(2)
+  bool allowAnalytics = false;
 }

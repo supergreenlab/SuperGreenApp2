@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-08T08:35:48.417309",
+  "@@last_modified": "2020-03-08T09:11:55.499266",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -132,7 +132,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "formAllowAnalytics": "**Help us** discern what's **useful** from what's\n**useless** by sharing **anonymous** usage data.",
+  "formAllowAnalytics": "**Help us** discern what's **useful** from what's\n**useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..)\nis involved in our data analytics strategy.*",
   "@formAllowAnalytics": {
     "description": "Form allow analytics",
     "type": "text",

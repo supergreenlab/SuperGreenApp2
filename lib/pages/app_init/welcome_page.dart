@@ -19,57 +19,88 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   final _loading;
 
   WelcomePage(this._loading);
 
   @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  bool _allowAnalytics = false;
+
+  @override
   Widget build(BuildContext context) {
     final widgets = <Widget>[this._logo()];
-    if (this._loading == false) {
+    if (this.widget._loading == false) {
       widgets.add(Align(
           alignment: Alignment.centerRight, child: this._nextButton(context)));
     }
-    return Scaffold(
-        body: Container(
-      padding: EdgeInsets.all(10),
-      child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 250),
-          child: Column(
-            key: ValueKey<bool>(_loading),
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: widgets,
-          )),
-    ));
+    return BlocListener<AppInitBloc, AppInitBlocState>(
+      listener: (BuildContext context, AppInitBlocState state) {
+        if (state is AppInitBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToHomeEvent());
+        }
+      },
+      child: Scaffold(
+          body: Container(
+        padding: EdgeInsets.all(10),
+        child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 250),
+            child: Column(
+              key: ValueKey<bool>(widget._loading),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: widgets,
+            )),
+      )),
+    );
   }
 
-  Widget _logo() => Expanded(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                  width: 200,
-                  height: 300,
-                  child:
-                      SvgPicture.asset('assets/super_green_lab_vertical.svg')),
-              Text(
-                _loading ? 'Loading..' : 'Welcome to SuperGreenLab!',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontFamily: 'Roboto',
-                  letterSpacing: 1,
-                  fontSize: 20,
-                ),
-              )
-            ]),
+  Widget _logo() {
+    List<Widget> body = <Widget>[
+      SizedBox(
+          width: 200,
+          height: 300,
+          child: SvgPicture.asset('assets/super_green_lab_vertical.svg')),
+      Text(
+        widget._loading ? 'Loading..' : 'Welcome to SuperGreenLab!',
+        style: TextStyle(
+          fontWeight: FontWeight.w800,
+          fontFamily: 'Roboto',
+          letterSpacing: 1,
+          fontSize: 20,
+        ),
+      ),
+    ];
+    if (!widget._loading) {
+      body.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 24.0),
+          child: _renderOptionCheckbx(
+              context, SGLLocalizations.current.formAllowAnalytics, (newValue) {
+            setState(() {
+              _allowAnalytics = newValue;
+            });
+          }, _allowAnalytics),
+        ),
       );
+    }
+    return Expanded(
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: body),
+    );
+  }
 
   Widget _nextButton(BuildContext context) {
     return GreenButton(
@@ -79,7 +110,24 @@ class WelcomePage extends StatelessWidget {
   }
 
   void _next(BuildContext context) {
-    BlocProvider.of<AppInitBloc>(context).done();
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
+    BlocProvider.of<AppInitBloc>(context)
+        .add(AppInitBlocEventAllowAnalytics(_allowAnalytics));
+  }
+
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
+    return Row(
+      children: <Widget>[
+        Checkbox(
+          onChanged: onChanged,
+          value: value,
+        ),
+        MarkdownBody(
+          data: text,
+          styleSheet: MarkdownStyleSheet(
+              p: TextStyle(color: Colors.black, fontSize: 16)),
+        ),
+      ],
+    );
   }
 }

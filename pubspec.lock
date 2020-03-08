@@ -319,6 +319,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.4"
+  flutter_matomo:
+    dependency: "direct main"
+    description:
+      name: flutter_matomo
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
   flutter_page_indicator:
     dependency: transitive
     description:

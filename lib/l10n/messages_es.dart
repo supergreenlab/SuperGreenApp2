@@ -21,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "formAllowAnalytics" : MessageLookupByLibrary.simpleMessage("**Help us** discern what\'s **useful** from what\'s\n**useless** by sharing **anonymous** usage data."),
+    "formAllowAnalytics" : MessageLookupByLibrary.simpleMessage("**Help us** discern what\'s **useful** from what\'s\n**useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..)\nis involved in our data analytics strategy.*"),
     "instructionsAutoScheduleHelper" : MessageLookupByLibrary.simpleMessage("Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another."),
     "instructionsBloomScheduleHelper" : MessageLookupByLibrary.simpleMessage("**Bloom stage** is the phase between germination and blooming, the plant grows and develops it’s branches. It requires **at most 12h lights per days**, usual setting is **12h** per day."),
     "instructionsExistingDevice" : MessageLookupByLibrary.simpleMessage("Please make sure your **mobile phone** is **connected to your home wifi**.\nThen we\'ll search for it **by name** or **by IP**, please **fill** the following text field."),

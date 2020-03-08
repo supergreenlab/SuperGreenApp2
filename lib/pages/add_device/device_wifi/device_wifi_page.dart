@@ -39,7 +39,6 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   final TextEditingController _passController = TextEditingController();
   final FocusNode _ssidFocusNode = FocusNode();
   final FocusNode _passFocusNode = FocusNode();
-  bool _allowAnalytics = false;
 
   KeyboardVisibilityNotification _keyboardVisibility =
       KeyboardVisibilityNotification();
@@ -143,13 +142,6 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                   _passController, onFieldSubmitted: (term) {
                 _handleInput(context);
               }, focusNode: _passFocusNode),
-              _renderOptionCheckbx(
-                  context, SGLLocalizations.current.formAllowAnalytics,
-                  (newValue) {
-                setState(() {
-                  _allowAnalytics = newValue;
-                });
-              }, _allowAnalytics),
             ],
           ),
         ),
@@ -210,23 +202,6 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
       _ssidController.text,
       _passController.text,
     ));
-  }
-
-  Widget _renderOptionCheckbx(
-      BuildContext context, String text, Function(bool) onChanged, bool value) {
-    return Row(
-      children: <Widget>[
-        Checkbox(
-          onChanged: onChanged,
-          value: value,
-        ),
-        MarkdownBody(
-          data: text,
-          styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Colors.black, fontSize: 16)),
-        ),
-      ],
-    );
   }
 
   @override

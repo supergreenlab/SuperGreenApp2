@@ -21,11 +21,11 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
-import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
@@ -38,6 +38,15 @@ class AppInitBlocEventLoaded extends AppInitBlocEvent {
   List<Object> get props => [appData];
 }
 
+class AppInitBlocEventAllowAnalytics extends AppInitBlocEvent {
+  final bool allowAnalytics;
+
+  AppInitBlocEventAllowAnalytics(this.allowAnalytics);
+
+  @override
+  List<Object> get props => [allowAnalytics];
+}
+
 abstract class AppInitBlocState extends Equatable {}
 
 class AppInitBlocStateLoading extends AppInitBlocState {
@@ -45,14 +54,18 @@ class AppInitBlocStateLoading extends AppInitBlocState {
   List<Object> get props => [];
 }
 
-class AppInitBlocStateReady extends  AppInitBlocState {
+class AppInitBlocStateReady extends AppInitBlocState {
   final bool firstStart;
 
   AppInitBlocStateReady(this.firstStart);
 
   @override
   List<Object> get props => [firstStart];
+}
 
+class AppInitBlocStateDone extends AppInitBlocState {
+  @override
+  List<Object> get props => [];
 }
 
 class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
@@ -69,6 +82,14 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
   Stream<AppInitBlocState> mapEventToState(AppInitBlocEvent event) async* {
     if (event is AppInitBlocEventLoaded) {
       yield AppInitBlocStateReady(event.appData.firstStart);
+    } else if (event is AppInitBlocEventAllowAnalytics) {
+      _db.setFirstStart(false);
+      _db.setAllowAnalytics(event.allowAnalytics);
+      if (event.allowAnalytics) {
+        await FlutterMatomo.initializeTracker(
+            'https://analytics.supergreenlab.com/piwik.php', 3);
+      }
+      yield AppInitBlocStateDone();
     }
   }
 
@@ -82,10 +103,12 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
     await RelDB.get().devicesDAO.deleteDrafts();
 
     AppData appData = _db.getAppData();
-    add(AppInitBlocEventLoaded(appData));
-  }
 
-  done() {
-    _db.setFirstStart(false);
+    if (appData.allowAnalytics) {
+      await FlutterMatomo.initializeTracker(
+          'https://analytics.supergreenlab.com/piwik.php', 3);
+    }
+
+    add(AppInitBlocEventLoaded(appData));
   }
 }

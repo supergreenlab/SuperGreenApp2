@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/main/analytics_observer.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/box_infos/box_infos_page.dart';
@@ -81,11 +82,18 @@ import 'package:super_green_app/towelie/towelie_helper.dart';
 
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 
-class MainPage extends StatelessWidget {
+final RouteObserver<PageRoute> routeObserver = AnalyticsObserver();
+
+class MainPage extends StatefulWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   MainPage(this._navigatorKey);
 
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -104,7 +112,9 @@ class MainPage extends StatelessWidget {
           }
         },
         child: MaterialApp(
-          navigatorObservers: [],
+          navigatorObservers: [
+            routeObserver,
+          ],
           localizationsDelegates: [
             const SGLLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
@@ -115,7 +125,7 @@ class MainPage extends StatelessWidget {
             const Locale('es'),
             const Locale('fr'),
           ],
-          navigatorKey: _navigatorKey,
+          navigatorKey: widget._navigatorKey,
           onGenerateTitle: (BuildContext context) =>
               SGLLocalizations.of(context).title,
           onGenerateRoute: (settings) => MaterialPageRoute(

@@ -290,7 +290,9 @@ To **better understand** you should have your LED panels **connected to the cont
   String get formAllowAnalytics {
     return Intl.message(
       '''**Help us** discern what's **useful** from what's
-**useless** by sharing **anonymous** usage data.''',
+**useless** by sharing **anonymous** usage data.
+*Note: no third party (ie google, facebook..)
+is involved in our data analytics strategy.*''',
       name: 'formAllowAnalytics',
       desc: 'Form allow analytics',
       locale: localeName,
