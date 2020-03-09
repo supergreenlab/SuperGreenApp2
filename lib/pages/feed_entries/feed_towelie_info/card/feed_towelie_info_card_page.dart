@@ -86,7 +86,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   Widget _renderButtonFromName(
       BuildContext context, FeedTowelieInfoCardBlocState state, Map<String, dynamic> button) {
     return FlatButton(
-      child: Text(button['title'].toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 17)),
+      child: Text(button['title'].toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 14)),
       onPressed: () {
         BlocProvider.of<TowelieBloc>(context)
             .add(TowelieBlocEventCardButtonPressed(button, state.feed, state.feedEntry));
