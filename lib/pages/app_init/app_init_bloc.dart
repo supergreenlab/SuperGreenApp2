@@ -86,7 +86,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       _db.setAllowAnalytics(event.allowAnalytics);
       if (event.allowAnalytics == true) {
         await FlutterMatomo.initializeTracker(
-            'https://analytics.supergreenlab.com/matomo.php', 3);
+            'https://analytics.supergreenlab.com/piwik.php', 3);
       }
       yield AppInitBlocStateDone();
     }
@@ -103,7 +103,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
 
     if (appData.allowAnalytics == true) {
       await FlutterMatomo.initializeTracker(
-          'https://analytics.supergreenlab.com/matomo.php', 3);
+          'https://analytics.supergreenlab.com/piwik.php', 3);
     }
 
     add(AppInitBlocEventLoaded(appData));

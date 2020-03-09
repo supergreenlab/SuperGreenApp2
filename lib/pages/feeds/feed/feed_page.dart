@@ -115,6 +115,7 @@ class _FeedPageState extends State<FeedPage> {
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
     List<FeedEntry> entries = _entries == null ? state.entries : _entries;
     return Container(
+      color: Colors.white,
       child: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
