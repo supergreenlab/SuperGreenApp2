@@ -1,4 +1,4 @@
-package com.supergreenlab.super_green_app
+package com.supergreenlab.app2
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

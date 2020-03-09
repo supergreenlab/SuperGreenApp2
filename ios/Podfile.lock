@@ -54,7 +54,7 @@ DEPENDENCIES:
   - camera (from `.symlinks/plugins/camera/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
   - flutter_matomo (from `.symlinks/plugins/flutter_matomo/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - moor_ffi (from `.symlinks/plugins/moor_ffi/ios`)
@@ -83,7 +83,7 @@ EXTERNAL SOURCES:
   connectivity_macos:
     :path: ".symlinks/plugins/connectivity_macos/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   flutter_matomo:
     :path: ".symlinks/plugins/flutter_matomo/ios"
   keyboard_visibility:
@@ -133,6 +133,6 @@ SPEC CHECKSUMS:
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
 
-PODFILE CHECKSUM: d6dc542d74fe43280e46745d843ee5c531f97f19
+PODFILE CHECKSUM: 1c019deae9eeb943376f64565e9388a8605cd58a
 
 COCOAPODS: 1.9.0

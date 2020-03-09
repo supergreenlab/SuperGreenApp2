@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -89,7 +91,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                 form.add(Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      'Device "${_nameController.value.text}" not found!',
+                      'Device "${_nameController.value.text}" not found!${Platform.isIOS ? '\nThis is a known bug on iOS, should be fixed by April 2020.' : ''}',
                       style: TextStyle(
                           color: Colors.red, fontWeight: FontWeight.w500)),
                 ));
@@ -126,6 +128,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
+                hideBackButton: state is ExistingDeviceBlocStateResolving,
               ),
               body: AnimatedSwitcher(
                   duration: Duration(milliseconds: 200), child: body),
