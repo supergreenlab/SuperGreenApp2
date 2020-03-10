@@ -78,7 +78,7 @@ class ExistingDeviceBloc
         ip = event.query;
       } else {
         try {
-          ip = await DeviceAPI.resolveLocalName(event.query.toLowerCase());
+          ip = await DeviceAPI.resolveLocalName(event.query);
         } catch(e) {
           yield ExistingDeviceBlocStateNotFound();
           return;
