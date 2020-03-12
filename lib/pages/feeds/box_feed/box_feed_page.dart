@@ -185,8 +185,16 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
             });
           }),
       _renderSpeedDialChild(
-          'Video/pic note',
+          'Note observation',
           'assets/feed_card/icon_media.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.box,
+                  pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Measure plant',
+          'assets/feed_card/icon_measure.svg',
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
@@ -217,7 +225,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                   MainNavigateToFeedVentilationFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
-          'Veg/Bloom',
+          'Change light schedule',
           'assets/feed_card/icon_schedule.svg',
           _onSpeedDialSelected(
               context,

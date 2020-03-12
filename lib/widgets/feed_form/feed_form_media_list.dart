@@ -55,7 +55,7 @@ class FeedFormMediaList extends StatelessWidget {
       onPressed(null);
     },
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
           child: SvgPicture.asset('assets/feed_form/icon_add.svg'),
         )));
     return SizedBox(
@@ -79,7 +79,6 @@ class FeedFormMediaList extends StatelessWidget {
             onPressed: onPressed,
             child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.black12,
                     borderRadius: BorderRadius.circular(10)),
                 child: content),
           ),
