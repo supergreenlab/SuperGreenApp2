@@ -96,15 +96,35 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future updateFeedEntry(FeedEntriesCompanion feedEntry) {
-    return (update(feedEntries)..where((tbl) => tbl.id.equals(feedEntry.id.value))).write(feedEntry);
+    return (update(feedEntries)
+          ..where((tbl) => tbl.id.equals(feedEntry.id.value)))
+        .write(feedEntry);
   }
 
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {
     return into(feedMedias).insert(feedMediaEntry);
   }
 
+  Future<List<FeedMedia>> getFeedMediasWithType(
+      int feedID, String feedType) async {
+    JoinedSelectStatement<FeedMedias, FeedMedia> query = select(feedMedias)
+        .join([
+      leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
+    ]);
+    query.where(
+        feedEntries.feed.equals(feedID) & feedEntries.type.equals(feedType));
+    return (await query.get())
+        .map<FeedMedia>((e) => e.readTable(feedMedias))
+        .toList();
+  }
+
   Future<List<FeedMedia>> getFeedMedias(int feedEntryID) {
     return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID)))
         .get();
+  }
+
+  Future<FeedMedia> getFeedMedia(int feedMediaID) {
+    return (select(feedMedias)..where((f) => f.id.equals(feedMediaID)))
+        .getSingle();
   }
 }

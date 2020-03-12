@@ -197,7 +197,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           'assets/feed_card/icon_measure.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+              ({pushAsReplacement = false}) => MainNavigateToFeedMeasureFormEvent(
                   state.box,
                   pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(

@@ -22,7 +22,6 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
-import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
@@ -53,7 +52,6 @@ class FeedMediaCardPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: FeedCardDate(state.feedEntry),
                   ),
-                  FeedCardText(state.params['message'] ?? ''),
                 ],
               ),
             ));

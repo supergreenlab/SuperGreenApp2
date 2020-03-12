@@ -31,14 +31,17 @@ class PlaybackBlocState extends Equatable {
   final bool isVideo;
   final String filePath;
 
-  PlaybackBlocState(this.filePath, this.isVideo);
+  final String cancelButton;
+  final String okButton;
+
+  PlaybackBlocState(this.filePath, this.isVideo, this.cancelButton, this.okButton);
   @override
   List<Object> get props => [filePath, isVideo];
 }
 
 class PlaybackBlocStateInit extends PlaybackBlocState {
-  PlaybackBlocStateInit(String filePath, bool isVideo)
-      : super(filePath, isVideo);
+  PlaybackBlocStateInit(String filePath, bool isVideo, String cancelButton, String okButton)
+      : super(filePath, isVideo, cancelButton, okButton);
 }
 
 class PlaybackBloc extends Bloc<PlaybackBlocEvent, PlaybackBlocState> {
@@ -52,12 +55,12 @@ class PlaybackBloc extends Bloc<PlaybackBlocEvent, PlaybackBlocState> {
 
   @override
   PlaybackBlocState get initialState =>
-      PlaybackBlocState(_args.filePath, _isVideo);
+      PlaybackBlocState(_args.filePath, _isVideo, _args.cancelButton, _args.okButton);
 
   @override
   Stream<PlaybackBlocState> mapEventToState(PlaybackBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield PlaybackBlocStateInit(_args.filePath, _isVideo);
+      yield PlaybackBlocStateInit(_args.filePath, _isVideo, _args.cancelButton, _args.okButton);
     }
   }
 }

@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -176,6 +177,16 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   List<Object> get props => [box];
 }
 
+class MainNavigateToFeedMeasureFormEvent extends MainNavigateToFeedFormEvent {
+  final Box box;
+
+  MainNavigateToFeedMeasureFormEvent(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class MainNavigateToFeedCareCommonFormEvent
     extends MainNavigateToFeedFormEvent {
   final Box box;
@@ -236,14 +247,20 @@ class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
+  final String cancelButton;
+  final String okButton;
+
+  final int rand = Random().nextInt(1 << 32);
   final String filePath;
 
   MainNavigateToImageCapturePlaybackEvent(this.filePath,
-      {Function(Future<Object> f) futureFn})
+      {Function(Future<Object> f) futureFn,
+      this.cancelButton = 'RETAKE',
+      this.okButton = 'NEXT'})
       : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [futureFn, filePath];
+  List<Object> get props => [rand, futureFn, filePath];
 }
 
 class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
@@ -263,6 +280,15 @@ class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
 
   @override
   List<Object> get props => [feedMedia];
+}
+
+class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
+  final String path;
+
+  MainNavigateToFullscreenPicture(this.path);
+
+  @override
+  List<Object> get props => [path];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
@@ -358,6 +384,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/feed/form/light', event);
     } else if (event is MainNavigateToFeedMediaFormEvent) {
       future = _pushOrReplace('/feed/form/media', event);
+    } else if (event is MainNavigateToFeedMeasureFormEvent) {
+      future = _pushOrReplace('/feed/form/measure', event);
     } else if (event is MainNavigateToFeedScheduleFormEvent) {
       future = _pushOrReplace('/feed/form/schedule', event);
     } else if (event is MainNavigateToFeedToppingFormEvent) {
@@ -381,6 +409,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState
           .pushNamed('/capture/playback', arguments: event);
     } else if (event is MainNavigateToFullscreenMedia) {
+      future = future =
+          _navigatorKey.currentState.pushNamed('/media', arguments: event);
+    } else if (event is MainNavigateToFullscreenPicture) {
       future = future =
           _navigatorKey.currentState.pushNamed('/media', arguments: event);
     }

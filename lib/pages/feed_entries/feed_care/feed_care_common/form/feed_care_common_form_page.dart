@@ -27,6 +27,7 @@ import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc>
@@ -94,6 +95,15 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                       title,
                     ),
                     body: FullscreenLoading(title: 'Saving..'));
+              } else if (state is FeedCareCommonFormBlocStateDone) {
+                body = Scaffold(
+                    appBar: SGLAppBar(
+                      title,
+                    ),
+                    body: Fullscreen(
+                      title: 'Saving..',
+                      child: Icon(Icons.check, color: Colors.green),
+                    ));
               } else {
                 body = FeedFormLayout(
                   title: title,
@@ -126,7 +136,37 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         icon: 'assets/feed_form/icon_before_pic.svg',
         child: FeedFormMediaList(
           medias: _beforeMedias,
-          onPressed: (FeedMediasCompanion media) {
+          onLongPressed: (FeedMediasCompanion media) async {
+            bool confirm = await showDialog<bool>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Delete this pic?'),
+                    content: Text('This can\'t be reverted. Continue?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: Text('NO'),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: Text('YES'),
+                      ),
+                    ],
+                  );
+                });
+            if (confirm) {
+              setState(() {
+                _beforeMedias.remove(media);
+              });
+            }
+          },
+          onPressed: (FeedMediasCompanion media) async {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
@@ -134,9 +174,26 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 if (fm != null) {
                   setState(() {
                     _beforeMedias.add(fm);
-                  }); // Why? no idea, but it wont refresh on bloc's state change without that.
+                  });
                 }
               }));
+            } else {
+              FutureFn ff =
+                  BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                      futureFn: ff.futureFn, okButton: 'OK'));
+              bool keep = await ff.future;
+              if (keep == true) {
+              } else if (keep == false) {
+                FeedMediasCompanion fm = await _takePic(context);
+                if (fm != null) {
+                  setState(() {
+                    int i = _beforeMedias.indexOf(media);
+                    _beforeMedias.replaceRange(i, i + 1, [fm]);
+                  });
+                }
+              }
             }
           },
         ),
@@ -146,7 +203,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
           medias: _afterMedias,
-          onPressed: (FeedMediasCompanion media) {
+          onPressed: (FeedMediasCompanion media) async {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
@@ -157,6 +214,23 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                   });
                 }
               }));
+            } else {
+              FutureFn ff =
+                  BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                      futureFn: ff.futureFn, okButton: 'OK'));
+              bool keep = await ff.future;
+              if (keep == true) {
+              } else if (keep == false) {
+                FeedMediasCompanion fm = await _takePic(context);
+                if (fm != null) {
+                  setState(() {
+                    int i = _afterMedias.indexOf(media);
+                    _afterMedias.replaceRange(i, i + 1, [fm]);
+                  });
+                }
+              }
             }
           },
         ),
@@ -164,6 +238,14 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
       _renderTextrea(context, state),
       _renderOptions(context, state),
     ];
+  }
+
+  Future<FeedMediasCompanion> _takePic(BuildContext context) async {
+    FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
+    FeedMediasCompanion fm = await futureFn.future;
+    return fm;
   }
 
   Widget _renderTextrea(

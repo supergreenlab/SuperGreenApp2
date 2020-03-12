@@ -124,9 +124,7 @@ class _WelcomePageState extends State<WelcomePage> {
         ),
         InkWell(
           onTap: () {
-            setState(() {
-              _allowAnalytics = !_allowAnalytics;
-            });
+            onChanged(!_allowAnalytics);
           },
           child: MarkdownBody(
             data: text,

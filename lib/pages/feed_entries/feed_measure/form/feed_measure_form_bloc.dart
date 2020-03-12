@@ -25,58 +25,88 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
-abstract class FeedMediaFormBlocEvent extends Equatable {}
+abstract class FeedMeasureFormBlocEvent extends Equatable {}
 
-class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
-  final List<FeedMediasCompanion> medias;
-  final String message;
-  final bool helpRequest;
-
-  FeedMediaFormBlocEventCreate(this.medias, this.message, this.helpRequest);
-
-  @override
-  List<Object> get props => [message, helpRequest];
-}
-
-class FeedMediaFormBlocState extends Equatable {
-  FeedMediaFormBlocState();
+class FeedMeasureFormBlocEventInit extends FeedMeasureFormBlocEvent {
+  FeedMeasureFormBlocEventInit();
 
   @override
   List<Object> get props => [];
 }
 
-class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
-  FeedMediaFormBlocStateDone();
+class FeedMeasureFormBlocEventCreate extends FeedMeasureFormBlocEvent {
+  final FeedMedia previous;
+  final FeedMediasCompanion current;
+
+  FeedMeasureFormBlocEventCreate(this.previous, this.current);
+
+  @override
+  List<Object> get props => [previous, current];
+}
+
+abstract class FeedMeasureFormBlocState extends Equatable {}
+
+class FeedMeasureFormBlocStateInit extends FeedMeasureFormBlocState {
+  FeedMeasureFormBlocStateInit();
 
   @override
   List<Object> get props => [];
 }
 
-class FeedMediaFormBloc
-    extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
-  final MainNavigateToFeedMediaFormEvent _args;
+class FeedMeasureFormBlocStateLoading extends FeedMeasureFormBlocState {
+  FeedMeasureFormBlocStateLoading();
 
   @override
-  FeedMediaFormBlocState get initialState => FeedMediaFormBlocState();
+  List<Object> get props => [];
+}
 
-  FeedMediaFormBloc(this._args);
+class FeedMeasureFormBlocStateLoaded extends FeedMeasureFormBlocState {
+  final List<FeedMedia> measures;
+
+  FeedMeasureFormBlocStateLoaded(this.measures);
 
   @override
-  Stream<FeedMediaFormBlocState> mapEventToState(
-      FeedMediaFormBlocEvent event) async* {
-    if (event is FeedMediaFormBlocEventCreate) {
+  List<Object> get props => [];
+}
+
+class FeedMeasureFormBlocStateDone extends FeedMeasureFormBlocState {
+  FeedMeasureFormBlocStateDone();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FeedMeasureFormBloc
+    extends Bloc<FeedMeasureFormBlocEvent, FeedMeasureFormBlocState> {
+  final MainNavigateToFeedMeasureFormEvent _args;
+
+  @override
+  FeedMeasureFormBlocState get initialState => FeedMeasureFormBlocStateInit();
+
+  FeedMeasureFormBloc(this._args) {
+    add(FeedMeasureFormBlocEventInit());
+  }
+
+  @override
+  Stream<FeedMeasureFormBlocState> mapEventToState(
+      FeedMeasureFormBlocEvent event) async* {
+    if (event is FeedMeasureFormBlocEventInit) {
+      final db = RelDB.get();
+      List<FeedMedia> measures = await db.feedsDAO.getFeedMediasWithType(_args.box.feed, 'FE_MEASURE');
+      yield FeedMeasureFormBlocStateLoaded(measures);
+    } else if (event is FeedMeasureFormBlocEventCreate) {
+      yield FeedMeasureFormBlocStateLoading();
       final db = RelDB.get();
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEASURE',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'message': event.message})),
+        params: Value(JsonEncoder().convert({'previous': event.previous.id})),
       ));
-      for (FeedMediasCompanion m in event.medias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID)));
-      }
-      yield FeedMediaFormBlocStateDone();
+      await db.feedsDAO
+          .addFeedMedia(event.current.copyWith(feedEntry: Value(feedEntryID)));
+      yield FeedMeasureFormBlocStateDone();
     }
   }
 }

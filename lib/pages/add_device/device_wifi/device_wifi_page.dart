@@ -18,9 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
-import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_wifi/device_wifi_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';

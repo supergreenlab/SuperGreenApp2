@@ -25,8 +25,11 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 class FeedFormMediaList extends StatelessWidget {
   final List<FeedMediasCompanion> medias;
   final void Function(FeedMediasCompanion) onPressed;
+  final void Function(FeedMediasCompanion) onLongPressed;
+  final int maxMedias;
 
-  const FeedFormMediaList({this.medias, this.onPressed});
+  const FeedFormMediaList(
+      {this.medias, this.onPressed, this.onLongPressed, this.maxMedias = -1});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,12 @@ class FeedFormMediaList extends StatelessWidget {
         .medias
         .map((m) => _renderMedia(
               context,
-              () {},
+              () {
+                onPressed(m);
+              },
+              () {
+                onLongPressed(m);
+              },
               Container(
                   width: 60.0,
                   height: 60.0,
@@ -51,13 +59,16 @@ class FeedFormMediaList extends StatelessWidget {
                               Image.file(File(m.thumbnailPath.value)).image))),
             ))
         .toList();
-    medias.add(_renderMedia(context, () {
-      onPressed(null);
-    },
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
-          child: SvgPicture.asset('assets/feed_form/icon_add.svg'),
-        )));
+    if (maxMedias == -1 || maxMedias > this.medias.length) {
+      medias.add(_renderMedia(context, () {
+        onPressed(null);
+      },
+          null,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
+            child: SvgPicture.asset('assets/feed_form/icon_add.svg'),
+          )));
+    }
     return SizedBox(
       height: 80,
       child: ListView(
@@ -68,8 +79,8 @@ class FeedFormMediaList extends StatelessWidget {
     );
   }
 
-  Widget _renderMedia(
-      BuildContext context, Function onPressed, Widget content) {
+  Widget _renderMedia(BuildContext context, Function onPressed,
+      Function onLongPressed, Widget content) {
     return SizedBox(
         width: 70,
         height: 80,
@@ -77,9 +88,10 @@ class FeedFormMediaList extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0),
           child: RawMaterialButton(
             onPressed: onPressed,
+            onLongPress: onLongPressed,
             child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10)),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: content),
           ),
         ));

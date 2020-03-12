@@ -45,6 +45,13 @@ class FeedMediaFormBlocState extends Equatable {
   List<Object> get props => [];
 }
 
+class FeedMediaFormBlocStateLoading extends FeedMediaFormBlocState {
+  FeedMediaFormBlocStateLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
 class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
   FeedMediaFormBlocStateDone();
 
@@ -65,6 +72,7 @@ class FeedMediaFormBloc
   Stream<FeedMediaFormBlocState> mapEventToState(
       FeedMediaFormBlocEvent event) async* {
     if (event is FeedMediaFormBlocEventCreate) {
+      yield FeedMediaFormBlocStateLoading();
       final db = RelDB.get();
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(

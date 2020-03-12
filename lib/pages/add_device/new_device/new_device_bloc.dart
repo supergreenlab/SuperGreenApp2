@@ -22,7 +22,6 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 

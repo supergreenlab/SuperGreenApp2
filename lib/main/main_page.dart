@@ -59,6 +59,8 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/form/f
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/form/feed_topping_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_bloc.dart';
@@ -97,7 +99,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<DeviceDaemonBloc>(context); // force-instanciate DeviceDaemonBloc :/
+    BlocProvider.of<DeviceDaemonBloc>(
+        context); // force-instanciate DeviceDaemonBloc :/
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -228,6 +231,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => FeedMediaFormBloc(settings.arguments),
           child: FeedMediaFormPage(),
+        );
+      case '/feed/form/measure':
+        return BlocProvider(
+          create: (context) => FeedMeasureFormBloc(settings.arguments),
+          child: FeedMeasureFormPage(),
         );
       case '/feed/form/schedule':
         return BlocProvider(

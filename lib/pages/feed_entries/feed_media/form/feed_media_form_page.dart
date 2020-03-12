@@ -22,10 +22,13 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedMediaFormPage extends StatefulWidget {
   @override
@@ -73,21 +76,45 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
-          bloc: BlocProvider.of<FeedMediaFormBloc>(context),
-          builder: (context, state) => FeedFormLayout(
-            title: 'Note creation',
-            changed: _medias.length != 0 || _textController.value.text != '',
-            valid: _medias.length != 0 || _textController.value.text != '',
-            onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
-                FeedMediaFormBlocEventCreate(
-                    _medias, _textController.text, _helpRequest)),
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _keyboardVisible
-                    ? [_renderTextrea(context, state)]
-                    : _renderBody(context, state)),
-          ),
-        ));
+            bloc: BlocProvider.of<FeedMediaFormBloc>(context),
+            builder: (context, state) {
+              String title = 'Observation';
+              Widget body;
+              if (state is FeedMediaFormBlocStateLoading) {
+                body = Scaffold(
+                    appBar: SGLAppBar(
+                      title,
+                    ),
+                    body: FullscreenLoading(title: 'Saving..'));
+              } else if (state is FeedMediaFormBlocStateDone) {
+                body = Scaffold(
+                    appBar: SGLAppBar(
+                      title,
+                    ),
+                    body: Fullscreen(
+                      title: 'Done!',
+                      child: Icon(Icons.check, color: Colors.green),
+                    ));
+              } else {
+                body = FeedFormLayout(
+                  title: title,
+                  changed:
+                      _medias.length != 0 || _textController.value.text != '',
+                  valid:
+                      _medias.length != 0 || _textController.value.text != '',
+                  onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
+                      FeedMediaFormBlocEventCreate(
+                          _medias, _textController.text, _helpRequest)),
+                  body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: _keyboardVisible
+                          ? [_renderTextrea(context, state)]
+                          : _renderBody(context, state)),
+                );
+              }
+              return AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body);
+            }));
   }
 
   List<Widget> _renderBody(BuildContext context, FeedMediaFormBlocState state) {
@@ -97,17 +124,61 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
           medias: _medias,
-          onPressed: (FeedMediasCompanion media) {
+          onLongPressed: (FeedMediasCompanion media) async {
+            bool confirm = await showDialog<bool>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Delete this pic?'),
+                    content: Text('This can\'t be reverted. Continue?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: Text('NO'),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: Text('YES'),
+                      ),
+                    ],
+                  );
+                });
+            if (confirm) {
+              setState(() {
+                _medias.remove(media);
+              });
+            }
+          },
+          onPressed: (FeedMediasCompanion media) async {
             if (media == null) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-                FeedMediasCompanion fm = await f;
+              FeedMediasCompanion fm = await _takePic(context);
+              if (fm != null) {
+                setState(() {
+                  _medias.add(fm);
+                });
+              }
+            } else {
+              FutureFn ff =
+                  BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                      futureFn: ff.futureFn, okButton: 'OK'));
+              bool keep = await ff.future;
+              if (keep == true) {
+              } else if (keep == false) {
+                FeedMediasCompanion fm = await _takePic(context);
                 if (fm != null) {
                   setState(() {
-                    _medias.add(fm);
+                    int i = _medias.indexOf(media);
+                    _medias.replaceRange(i, i + 1, [fm]);
                   });
                 }
-              }));
+              }
             }
           },
         ),
@@ -115,6 +186,14 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
       _renderTextrea(context, state),
       _renderOptions(context, state),
     ];
+  }
+
+  Future<FeedMediasCompanion> _takePic(BuildContext context) async {
+    FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
+    FeedMediasCompanion fm = await futureFn.future;
+    return fm;
   }
 
   Widget _renderTextrea(BuildContext context, FeedMediaFormBlocState state) {

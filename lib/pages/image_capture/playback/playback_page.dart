@@ -138,15 +138,15 @@ class _PlaybackPageState extends State<PlaybackPage> {
     return [
       RawMaterialButton(
         child:
-            Text('RETAKE', style: TextStyle(color: Colors.white, fontSize: 20)),
+            Text(state.cancelButton, style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
+              .add(MainNavigatorActionPop(param: false));
         },
       ),
       RawMaterialButton(
         child:
-            Text('NEXT', style: TextStyle(color: Colors.white, fontSize: 20)),
+            Text(state.okButton, style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(param: true));

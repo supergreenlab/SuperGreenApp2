@@ -18,7 +18,6 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
