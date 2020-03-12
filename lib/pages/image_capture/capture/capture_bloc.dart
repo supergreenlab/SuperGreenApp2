@@ -42,20 +42,25 @@ class CaptureBlocEventCreate extends CaptureBlocEvent {
 }
 
 class CaptureBlocState extends Equatable {
-  CaptureBlocState();
+  final bool videoEnabled;
+  final String overlayPath;
+
+  CaptureBlocState(this.videoEnabled, this.overlayPath);
 
   @override
   List<Object> get props => [];
 }
 
 class CaptureBlocStateInit extends CaptureBlocState {
-  CaptureBlocStateInit();
+  CaptureBlocStateInit(bool videoEnabled, String overlayPath)
+      : super(videoEnabled, overlayPath);
 }
 
 class CaptureBlocStateDone extends CaptureBlocState {
   final FeedMediasCompanion feedMedia;
 
-  CaptureBlocStateDone(this.feedMedia);
+  CaptureBlocStateDone(this.feedMedia, bool videoEnabled, String overlayPath)
+      : super(videoEnabled, overlayPath);
 
   @override
   List<Object> get props => [feedMedia];
@@ -65,7 +70,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   final MainNavigateToImageCaptureEvent _args;
 
   @override
-  CaptureBlocState get initialState => CaptureBlocState();
+  CaptureBlocState get initialState =>
+      CaptureBlocState(_args.videoEnabled, _args.overlayPath);
 
   CaptureBloc(this._args) {
     add(CaptureBlocEventInit());
@@ -74,7 +80,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   @override
   Stream<CaptureBlocState> mapEventToState(CaptureBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield CaptureBlocStateInit();
+      yield CaptureBlocStateInit(_args.videoEnabled, _args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
       String thumbnailPath = event.filePath;
       if (thumbnailPath.endsWith('mp4')) {
@@ -90,7 +96,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
         filePath: Value(event.filePath),
         thumbnailPath: Value(thumbnailPath),
       );
-      yield CaptureBlocStateDone(feedMedia);
+      yield CaptureBlocStateDone(
+          feedMedia, _args.videoEnabled, _args.overlayPath);
     }
   }
 }

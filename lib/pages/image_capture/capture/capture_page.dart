@@ -83,13 +83,21 @@ class _CapturePageState extends State<CapturePage> {
       child: Stack(
         children: [
           LayoutBuilder(builder: (context, constraints) {
+            Widget cameraPreview = CameraPreview(_cameraController);
+            if (state.overlayPath != null) {
+              cameraPreview = Stack(children: [
+                cameraPreview,
+                Opacity(
+                    opacity: 0.6, child: Image.file(File(state.overlayPath)))
+              ]);
+            }
             return FittedBox(
               fit: BoxFit.cover,
               child: SizedBox(
                   width: constraints.maxWidth,
                   height: constraints.maxWidth /
                       _cameraController.value.aspectRatio,
-                  child: CameraPreview(_cameraController)),
+                  child: cameraPreview),
             );
           }),
           Positioned(
@@ -208,12 +216,17 @@ class _CapturePageState extends State<CapturePage> {
 
   List<Widget> _renderIdleCameraMode(
       BuildContext context, CaptureBlocState state) {
-    return <Widget>[
+    List<Widget> items = [
       Container(),
       _renderPictureButton(context, state),
-      _renderCameraButton(context, state),
-      Container(),
     ];
+    if (state.videoEnabled) {
+      items.add(_renderCameraButton(context, state));
+    }
+    items.add(
+      Container(),
+    );
+    return items;
   }
 
   List<Widget> _renderRecordingMode(
@@ -268,7 +281,8 @@ class _CapturePageState extends State<CapturePage> {
 
   void _endCapture(CaptureBlocState state, String filePath) {
     BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToImageCapturePlaybackEvent(filePath, futureFn: (f) async {
+        MainNavigateToImageCapturePlaybackEvent(filePath,
+            overlayPath: state.overlayPath, futureFn: (f) async {
       final ret = await f;
       if (ret == null || ret == false) {
         await _deleteFileIfExists(filePath);

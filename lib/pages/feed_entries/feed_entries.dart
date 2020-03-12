@@ -29,6 +29,8 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/f
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/feed_topping_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_card_bloc.dart';
@@ -41,7 +43,9 @@ import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_ca
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_card_page.dart';
 
 class FeedEntriesHelper {
-  static Map<String, Widget Function(Feed feed, FeedEntry feedEntry, Animation animation)> _cards = {
+  static Map<String,
+          Widget Function(Feed feed, FeedEntry feedEntry, Animation animation)>
+      _cards = {
     'FE_LIGHT': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedLightCardBloc(feed, feedEntry),
@@ -51,6 +55,11 @@ class FeedEntriesHelper {
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedMediaCardBloc(feed, feedEntry),
           child: FeedMediaCardPage(animation, key: Key('{$feedEntry.id}')),
+        ),
+    'FE_MEASURE': (feed, feedEntry, animation) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
+          create: (context) => FeedMeasureCardBloc(feed, feedEntry),
+          child: FeedMeasureCardPage(animation, key: Key('{$feedEntry.id}')),
         ),
     'FE_SCHEDULE': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
@@ -65,7 +74,8 @@ class FeedEntriesHelper {
     'FE_DEFOLIATION': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedDefoliationCardBloc(feed, feedEntry),
-          child: FeedDefoliationCardPage(animation, key: Key('{$feedEntry.id}')),
+          child:
+              FeedDefoliationCardPage(animation, key: Key('{$feedEntry.id}')),
         ),
     'FE_FIMMING': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
@@ -80,12 +90,14 @@ class FeedEntriesHelper {
     'FE_VENTILATION': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedVentilationCardBloc(feed, feedEntry),
-          child: FeedVentilationCardPage(animation, key: Key('{$feedEntry.id}')),
+          child:
+              FeedVentilationCardPage(animation, key: Key('{$feedEntry.id}')),
         ),
     'FE_TOWELIE_INFO': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedTowelieInfoCardBloc(feed, feedEntry),
-          child: FeedTowelieInfoCardPage(animation, key: Key('{$feedEntry.id}')),
+          child:
+              FeedTowelieInfoCardPage(animation, key: Key('{$feedEntry.id}')),
         ),
     'FE_WATER': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
@@ -94,7 +106,8 @@ class FeedEntriesHelper {
         ),
   };
 
-  static Widget cardForFeedEntry(Feed feed, FeedEntry feedEntry, Animation animation) {
+  static Widget cardForFeedEntry(
+      Feed feed, FeedEntry feedEntry, Animation animation) {
     return _cards[feedEntry.type](feed, feedEntry, animation);
   }
 }

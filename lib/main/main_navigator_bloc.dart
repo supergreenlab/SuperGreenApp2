@@ -242,8 +242,17 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
-  MainNavigateToImageCaptureEvent({Function(Future<Object> f) futureFn})
+  final bool videoEnabled;
+  final String overlayPath;
+
+  MainNavigateToImageCaptureEvent(
+      {Function(Future<Object> f) futureFn,
+      this.videoEnabled,
+      this.overlayPath})
       : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [videoEnabled, overlayPath, futureFn];
 }
 
 class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
@@ -252,11 +261,13 @@ class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
 
   final int rand = Random().nextInt(1 << 32);
   final String filePath;
+  final String overlayPath;
 
   MainNavigateToImageCapturePlaybackEvent(this.filePath,
       {Function(Future<Object> f) futureFn,
       this.cancelButton = 'RETAKE',
-      this.okButton = 'NEXT'})
+      this.okButton = 'NEXT',
+      this.overlayPath})
       : super(futureFn: futureFn);
 
   @override

@@ -31,28 +31,31 @@ class PlaybackPage extends StatefulWidget {
 
 class _PlaybackPageState extends State<PlaybackPage> {
   VideoPlayerController _videoPlayerController;
+  double _opacity = 0.5;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: BlocProvider.of<PlaybackBloc>(context),
-      listener: (context, state) async {
-        if (state is PlaybackBlocStateInit) {
-          if (state.isVideo && _videoPlayerController == null) {
-            _videoPlayerController =
-                VideoPlayerController.file(File(state.filePath));
-            await _videoPlayerController.initialize();
-            _videoPlayerController.play();
-            _videoPlayerController.setLooping(true);
-            setState(() {});
+    return Material(
+      child: BlocListener(
+        bloc: BlocProvider.of<PlaybackBloc>(context),
+        listener: (context, state) async {
+          if (state is PlaybackBlocStateInit) {
+            if (state.isVideo && _videoPlayerController == null) {
+              _videoPlayerController =
+                  VideoPlayerController.file(File(state.filePath));
+              await _videoPlayerController.initialize();
+              _videoPlayerController.play();
+              _videoPlayerController.setLooping(true);
+              setState(() {});
+            }
           }
-        }
-      },
-      child: BlocBuilder<PlaybackBloc, PlaybackBlocState>(
-          bloc: BlocProvider.of<PlaybackBloc>(context),
-          builder: (context, state) {
-            return _renderPlayer(context, state);
-          }),
+        },
+        child: BlocBuilder<PlaybackBloc, PlaybackBlocState>(
+            bloc: BlocProvider.of<PlaybackBloc>(context),
+            builder: (context, state) {
+              return _renderPlayer(context, state);
+            }),
+      ),
     );
   }
 
@@ -112,10 +115,30 @@ class _PlaybackPageState extends State<PlaybackPage> {
 
   Widget _renderPicturePlayer(BuildContext context, PlaybackBlocState state,
       BoxConstraints constraints) {
+    Widget picture = Image.file(File(state.filePath));
+    if (state.overlayPath != null) {
+      picture = Stack(children: [
+        picture,
+        Opacity(opacity: _opacity, child: Image.file(File(state.overlayPath))),
+        Positioned(
+          left: 30,
+          right: 30,
+          top: constraints.maxHeight * 0.8,
+          child: Slider(
+            onChanged: (double value) {
+              setState(() {
+                _opacity = value;
+              });
+            },
+            value: _opacity,
+          ),
+        )
+      ]);
+    }
     return SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child: Image.file(File(state.filePath)));
+        child: Container(color: Colors.black, child: picture));
   }
 
   Widget _renderCloseButton(BuildContext context) {
@@ -137,16 +160,16 @@ class _PlaybackPageState extends State<PlaybackPage> {
       BuildContext context, PlaybackBlocState state) {
     return [
       RawMaterialButton(
-        child:
-            Text(state.cancelButton, style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(state.cancelButton,
+            style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(param: false));
         },
       ),
       RawMaterialButton(
-        child:
-            Text(state.okButton, style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(state.okButton,
+            style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(param: true));
