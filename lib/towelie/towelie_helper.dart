@@ -81,6 +81,42 @@ class _TowelieHelperState extends State<TowelieHelper> {
   }
 
   Widget _renderBody(TowelieBlocStateHelper state) {
+    List<Widget> content;
+    if (state.hasNext) {
+      content = <Widget>[
+        Padding(
+            padding: const EdgeInsets.only(
+                left: 12.0, right: 12.0, top: 16, bottom: 0),
+            child: MarkdownBody(
+              data: state.text,
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 16)),
+            )),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+            child: FlatButton(
+                onPressed: () {
+                  BlocProvider.of<TowelieBloc>(context)
+                      .add(TowelieBlocEventHelperNext(widget.settings));
+                },
+                child: Text('Next'.toUpperCase(),
+                    style: TextStyle(color: Colors.blue, fontSize: 12))),
+          ),
+        )
+      ];
+    } else {
+      content = content = <Widget>[
+        Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: MarkdownBody(
+              data: state.text,
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 16)),
+            ))
+      ];
+    }
     return Positioned(
       bottom: 0,
       left: 0,
@@ -111,14 +147,9 @@ class _TowelieHelperState extends State<TowelieHelper> {
                         border: Border.all(color: Color(0xffdedede), width: 2),
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12.0, vertical: 16),
-                        child: MarkdownBody(
-                          data: state.text,
-                          styleSheet: MarkdownStyleSheet(
-                              p: TextStyle(color: Colors.black, fontSize: 16)),
-                        )),
+                    child: Column(
+                      children: content,
+                    ),
                   ),
                 )),
                 Padding(

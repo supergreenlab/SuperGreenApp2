@@ -23,6 +23,12 @@ mixin _$FeedsDAOMixin on DatabaseAccessor<RelDB> {
         variables: [],
         readsFrom: {feeds, feedEntries}).map(_rowToGetPendingFeedsResult);
   }
+
+  Selectable<int> getNFeedEntriesWithType(String var1) {
+    return customSelectQuery('select count(*) from feed_entries where type = ?',
+            variables: [Variable.withString(var1)], readsFrom: {feedEntries})
+        .map((QueryRow row) => row.readInt('count(*)'));
+  }
 }
 
 class GetPendingFeedsResult {

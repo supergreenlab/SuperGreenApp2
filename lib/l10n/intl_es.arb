@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-08T09:11:55.499266",
+  "@@last_modified": "2020-03-13T12:20:56.121184",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -114,7 +114,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectBoxDevice": "Your controller can **manage up to 3 boxes**, select an **already configure** box above, or create a **new one**.",
+  "towelieHelperSelectBoxDevice": "Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.",
   "@towelieHelperSelectBoxDevice": {
     "description": "Towelie Helper box Device box",
     "type": "text",
@@ -129,6 +129,18 @@
   "towelieHelperTestDevice": "This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.",
   "@towelieHelperTestDevice": {
     "description": "Towelie Helper test device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperFormMeasure": "This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**.",
+  "@towelieHelperFormMeasure": {
+    "description": "Towelie Helper measure form 2",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperFormMeasure2": "It's the **first time** you're using it, so there is no \"before\" picture **to compare to**. Take a pic of what you **want to measure**, and take a measure again in **a few days** to have a **difference**.",
+  "@towelieHelperFormMeasure2": {
+    "description": "Towelie Helper measure form 2",
     "type": "text",
     "placeholders": {}
   },

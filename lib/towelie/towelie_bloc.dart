@@ -38,6 +38,7 @@ import 'package:super_green_app/towelie/feed/towelie_appinit.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_form_measure.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_box_device.dart';
@@ -53,6 +54,16 @@ class TowelieBlocEventAppInit extends TowelieBlocEvent {
 
   @override
   List<Object> get props => [];
+}
+
+class TowelieBlocEventHelperNext extends TowelieBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+  final RouteSettings settings;
+
+  TowelieBlocEventHelperNext(this.settings);
+
+  @override
+  List<Object> get props => [rand, settings];
 }
 
 class TowelieBlocEventRoute extends TowelieBlocEvent {
@@ -125,8 +136,9 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final int rand = Random().nextInt(1 << 32);
   final RouteSettings settings;
   final String text;
+  final bool hasNext;
 
-  TowelieBlocStateHelper(this.settings, this.text);
+  TowelieBlocStateHelper(this.settings, this.text, { this.hasNext=false });
 
   @override
   List<Object> get props => [rand, settings, text];
@@ -154,6 +166,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpSelectBoxDevice(),
     TowelieActionHelpTestDevice(),
     TowelieActionHelpWifi(),
+    TowelieActionHelpFormMeasure(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),

@@ -61,6 +61,9 @@ class FeedMedias extends Table {
       ) as nNew
     from feeds where nNew > 0
   ''',
+  'getNFeedEntriesWithType': '''
+    select count(*) from feed_entries where type = ?
+  ''',
 })
 class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   FeedsDAO(RelDB db) : super(db);
@@ -116,6 +119,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (await query.get())
         .map<FeedMedia>((e) => e.readTable(feedMedias))
         .toList();
+  }
+
+  Future<int> getNMeasures() {
+    return getNFeedEntriesWithType('FE_MEASURE').getSingle();
   }
 
   Future<List<FeedMedia>> getFeedMedias(int feedEntryID) {

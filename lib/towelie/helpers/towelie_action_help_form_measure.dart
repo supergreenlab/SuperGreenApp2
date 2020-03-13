@@ -16,24 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/towelie/towelie_action.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-abstract class TowelieActionHelp extends TowelieAction {
-  String get route;
-
-  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event);
-  Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {}
+class TowelieActionHelpFormMeasure extends TowelieActionHelp {
+  @override
+  String get route => '/feed/form/measure';
 
   @override
-  Stream<TowelieBlocState> eventReceived(TowelieBlocEvent event) async* {
-    if (event is TowelieBlocEventHelperNext) {
-      yield* getNext(event);
-    } else if (event is TowelieBlocEventRoute && event.settings.name == route) {
-      yield* trigger(event);
-    } else if (event is TowelieBlocEventRoutePop &&
-        event.settings.name == route) {
-      yield TowelieBlocStateHelperPop(event.settings);
+  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
+    if (await RelDB.get().feedsDAO.getNMeasures() == 0) {
+      yield TowelieBlocStateHelper(
+          event.settings, SGLLocalizations.current.towelieHelperFormMeasure,
+          hasNext: true);
+    }
+  }
+
+  @override
+  Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {
+    if (await RelDB.get().feedsDAO.getNMeasures() == 0) {
+      yield TowelieBlocStateHelper(
+          event.settings, SGLLocalizations.current.towelieHelperFormMeasure2);
     }
   }
 }

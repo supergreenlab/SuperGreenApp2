@@ -287,6 +287,24 @@ To **better understand** you should have your LED panels **connected to the cont
     );
   }
 
+  String get towelieHelperFormMeasure {
+    return Intl.message(
+      '''This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**.''',
+      name: 'towelieHelperFormMeasure',
+      desc: 'Towelie Helper measure form 2',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperFormMeasure2 {
+    return Intl.message(
+      '''It's the **first time** you're using it, so there is no "before" picture **to compare to**. Take a pic of what you **want to measure**, and take a measure again in **a few days** to have a **difference**.''',
+      name: 'towelieHelperFormMeasure2',
+      desc: 'Towelie Helper measure form 2',
+      locale: localeName,
+    );
+  }
+
   String get formAllowAnalytics {
     return Intl.message(
       '''**Help us** discern what's **useful** from what's
