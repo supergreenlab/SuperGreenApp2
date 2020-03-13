@@ -1296,42 +1296,43 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   }
 }
 
-class ChartPoint extends DataClass implements Insertable<ChartPoint> {
+class ChartCache extends DataClass implements Insertable<ChartCache> {
   final int id;
   final int box;
   final String name;
   final DateTime date;
-  final int value;
-  ChartPoint(
+  final String values;
+  ChartCache(
       {@required this.id,
       @required this.box,
       @required this.name,
       @required this.date,
-      @required this.value});
-  factory ChartPoint.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      @required this.values});
+  factory ChartCache.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
-    return ChartPoint(
+    return ChartCache(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      value: intType.mapFromDatabaseResponse(data['${effectivePrefix}value']),
+      values:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}values']),
     );
   }
-  factory ChartPoint.fromJson(Map<String, dynamic> json,
+  factory ChartCache.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return ChartPoint(
+    return ChartCache(
       id: serializer.fromJson<int>(json['id']),
       box: serializer.fromJson<int>(json['box']),
       name: serializer.fromJson<String>(json['name']),
       date: serializer.fromJson<DateTime>(json['date']),
-      value: serializer.fromJson<int>(json['value']),
+      values: serializer.fromJson<String>(json['values']),
     );
   }
   @override
@@ -1342,39 +1343,39 @@ class ChartPoint extends DataClass implements Insertable<ChartPoint> {
       'box': serializer.toJson<int>(box),
       'name': serializer.toJson<String>(name),
       'date': serializer.toJson<DateTime>(date),
-      'value': serializer.toJson<int>(value),
+      'values': serializer.toJson<String>(values),
     };
   }
 
   @override
-  ChartPointsCompanion createCompanion(bool nullToAbsent) {
-    return ChartPointsCompanion(
+  ChartCachesCompanion createCompanion(bool nullToAbsent) {
+    return ChartCachesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       box: box == null && nullToAbsent ? const Value.absent() : Value(box),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
-      value:
-          value == null && nullToAbsent ? const Value.absent() : Value(value),
+      values:
+          values == null && nullToAbsent ? const Value.absent() : Value(values),
     );
   }
 
-  ChartPoint copyWith(
-          {int id, int box, String name, DateTime date, int value}) =>
-      ChartPoint(
+  ChartCache copyWith(
+          {int id, int box, String name, DateTime date, String values}) =>
+      ChartCache(
         id: id ?? this.id,
         box: box ?? this.box,
         name: name ?? this.name,
         date: date ?? this.date,
-        value: value ?? this.value,
+        values: values ?? this.values,
       );
   @override
   String toString() {
-    return (StringBuffer('ChartPoint(')
+    return (StringBuffer('ChartCache(')
           ..write('id: $id, ')
           ..write('box: $box, ')
           ..write('name: $name, ')
           ..write('date: $date, ')
-          ..write('value: $value')
+          ..write('values: $values')
           ..write(')'))
         .toString();
   }
@@ -1383,62 +1384,61 @@ class ChartPoint extends DataClass implements Insertable<ChartPoint> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(box.hashCode,
-          $mrjc(name.hashCode, $mrjc(date.hashCode, value.hashCode)))));
+          $mrjc(name.hashCode, $mrjc(date.hashCode, values.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is ChartPoint &&
+      (other is ChartCache &&
           other.id == this.id &&
           other.box == this.box &&
           other.name == this.name &&
           other.date == this.date &&
-          other.value == this.value);
+          other.values == this.values);
 }
 
-class ChartPointsCompanion extends UpdateCompanion<ChartPoint> {
+class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   final Value<int> id;
   final Value<int> box;
   final Value<String> name;
   final Value<DateTime> date;
-  final Value<int> value;
-  const ChartPointsCompanion({
+  final Value<String> values;
+  const ChartCachesCompanion({
     this.id = const Value.absent(),
     this.box = const Value.absent(),
     this.name = const Value.absent(),
     this.date = const Value.absent(),
-    this.value = const Value.absent(),
+    this.values = const Value.absent(),
   });
-  ChartPointsCompanion.insert({
+  ChartCachesCompanion.insert({
     this.id = const Value.absent(),
     @required int box,
     @required String name,
     @required DateTime date,
-    @required int value,
+    this.values = const Value.absent(),
   })  : box = Value(box),
         name = Value(name),
-        date = Value(date),
-        value = Value(value);
-  ChartPointsCompanion copyWith(
+        date = Value(date);
+  ChartCachesCompanion copyWith(
       {Value<int> id,
       Value<int> box,
       Value<String> name,
       Value<DateTime> date,
-      Value<int> value}) {
-    return ChartPointsCompanion(
+      Value<String> values}) {
+    return ChartCachesCompanion(
       id: id ?? this.id,
       box: box ?? this.box,
       name: name ?? this.name,
       date: date ?? this.date,
-      value: value ?? this.value,
+      values: values ?? this.values,
     );
   }
 }
 
-class $ChartPointsTable extends ChartPoints
-    with TableInfo<$ChartPointsTable, ChartPoint> {
+class $ChartCachesTable extends ChartCaches
+    with TableInfo<$ChartCachesTable, ChartCache> {
   final GeneratedDatabase _db;
   final String _alias;
-  $ChartPointsTable(this._db, [this._alias]);
+  $ChartCachesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -1481,28 +1481,25 @@ class $ChartPointsTable extends ChartPoints
     );
   }
 
-  final VerificationMeta _valueMeta = const VerificationMeta('value');
-  GeneratedIntColumn _value;
+  final VerificationMeta _valuesMeta = const VerificationMeta('values');
+  GeneratedTextColumn _values;
   @override
-  GeneratedIntColumn get value => _value ??= _constructValue();
-  GeneratedIntColumn _constructValue() {
-    return GeneratedIntColumn(
-      'value',
-      $tableName,
-      false,
-    );
+  GeneratedTextColumn get values => _values ??= _constructValues();
+  GeneratedTextColumn _constructValues() {
+    return GeneratedTextColumn('values', $tableName, false,
+        defaultValue: Constant('[]'));
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, box, name, date, value];
+  List<GeneratedColumn> get $columns => [id, box, name, date, values];
   @override
-  $ChartPointsTable get asDslTable => this;
+  $ChartCachesTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'chart_points';
+  String get $tableName => _alias ?? 'chart_caches';
   @override
-  final String actualTableName = 'chart_points';
+  final String actualTableName = 'chart_caches';
   @override
-  VerificationContext validateIntegrity(ChartPointsCompanion d,
+  VerificationContext validateIntegrity(ChartCachesCompanion d,
       {bool isInserting = false}) {
     final context = VerificationContext();
     if (d.id.present) {
@@ -1525,11 +1522,9 @@ class $ChartPointsTable extends ChartPoints
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
-    if (d.value.present) {
+    if (d.values.present) {
       context.handle(
-          _valueMeta, value.isAcceptableValue(d.value.value, _valueMeta));
-    } else if (isInserting) {
-      context.missing(_valueMeta);
+          _valuesMeta, values.isAcceptableValue(d.values.value, _valuesMeta));
     }
     return context;
   }
@@ -1537,13 +1532,13 @@ class $ChartPointsTable extends ChartPoints
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ChartPoint map(Map<String, dynamic> data, {String tablePrefix}) {
+  ChartCache map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return ChartPoint.fromData(data, _db, prefix: effectivePrefix);
+    return ChartCache.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  Map<String, Variable> entityToSql(ChartPointsCompanion d) {
+  Map<String, Variable> entityToSql(ChartCachesCompanion d) {
     final map = <String, Variable>{};
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
@@ -1557,15 +1552,15 @@ class $ChartPointsTable extends ChartPoints
     if (d.date.present) {
       map['date'] = Variable<DateTime, DateTimeType>(d.date.value);
     }
-    if (d.value.present) {
-      map['value'] = Variable<int, IntType>(d.value.value);
+    if (d.values.present) {
+      map['values'] = Variable<String, StringType>(d.values.value);
     }
     return map;
   }
 
   @override
-  $ChartPointsTable createAlias(String alias) {
-    return $ChartPointsTable(_db, alias);
+  $ChartCachesTable createAlias(String alias) {
+    return $ChartCachesTable(_db, alias);
   }
 }
 
@@ -2329,8 +2324,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $ParamsTable get params => _params ??= $ParamsTable(this);
   $BoxesTable _boxes;
   $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
-  $ChartPointsTable _chartPoints;
-  $ChartPointsTable get chartPoints => _chartPoints ??= $ChartPointsTable(this);
+  $ChartCachesTable _chartCaches;
+  $ChartCachesTable get chartCaches => _chartCaches ??= $ChartCachesTable(this);
   $FeedsTable _feeds;
   $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
   $FeedEntriesTable _feedEntries;
@@ -2351,7 +2346,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         modules,
         params,
         boxes,
-        chartPoints,
+        chartCaches,
         feeds,
         feedEntries,
         feedMedias

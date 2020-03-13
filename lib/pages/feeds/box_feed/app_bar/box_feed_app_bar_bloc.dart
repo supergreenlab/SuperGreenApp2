@@ -23,6 +23,8 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/rel/box/boxes.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -87,24 +89,24 @@ class BoxFeedAppBarBloc
 
   Future updateChart(Box box) async {
     if (box.device == null) {
-      await Future.delayed(Duration(milliseconds: 2000));
+      await Future.delayed(Duration(milliseconds: 500));
       return _createDummyData();
     } else {
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
       String identifier = device.identifier;
       int deviceBox = box.deviceBox;
-      charts.Series<Metric, DateTime> temp = await getMetricsName(
+      charts.Series<Metric, DateTime> temp = await getMetricsName(box, 
           identifier,
           'Temperature',
           'BOX_${deviceBox}_TEMP',
           charts.MaterialPalette.green.shadeDefault);
-      charts.Series<Metric, DateTime> humi = await getMetricsName(
+      charts.Series<Metric, DateTime> humi = await getMetricsName(box, 
           identifier,
           'Humidity',
           'BOX_${deviceBox}_HUMI',
           charts.MaterialPalette.blue.shadeDefault);
       List<dynamic> duty =
-          await getMetricRequest(identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+          await getMetricRequest(box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
       List<int> dims = [];
       int n = 0;
       Module lightModule =
@@ -115,7 +117,7 @@ class BoxFeedAppBarBloc
         if (boxParam.ivalue != box.deviceBox) {
           continue;
         }
-        List<dynamic> dim = await getMetricRequest(identifier, 'LED_${i}_DIM');
+        List<dynamic> dim = await getMetricRequest(box, identifier, 'LED_${i}_DIM');
         for (int i = 0; i < dim.length; ++i) {
           int d = dim[i][1];
           if (i > dims.length - 1) {
@@ -141,18 +143,34 @@ class BoxFeedAppBarBloc
     }
   }
 
-  Future<charts.Series<Metric, DateTime>> getMetricsName(String controllerID,
+  Future<charts.Series<Metric, DateTime>> getMetricsName(Box box, String controllerID,
       String graphID, String name, charts.Color color) async {
-    List<dynamic> values = await getMetricRequest(controllerID, name);
+    List<dynamic> values = await getMetricRequest(box, controllerID, name);
     return getTimeSeries(values, graphID, color);
   }
 
   Future<List<dynamic>> getMetricRequest(
-      String controllerID, String name) async {
-    Response resp = await get(
-        'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
-    Map<String, dynamic> data = JsonDecoder().convert(resp.body);
-    return data['metrics'];
+      Box box, String controllerID, String name) async {
+    List<dynamic> data;
+    ChartCache cache = await RelDB.get().boxesDAO.getChartCache(box.id, name);
+    Duration diff = cache?.date?.difference(DateTime.now());
+    if (cache == null || diff.inMinutes > 5) {
+      Response resp = await get(
+          'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
+      Map<String, dynamic> res = JsonDecoder().convert(resp.body);
+      data = res['metrics'];
+      if (cache != null) {
+        await RelDB.get().boxesDAO.deleteChartCache(cache);
+      }
+      await RelDB.get().boxesDAO.addChartCache(ChartCachesCompanion.insert(
+          box: box.id,
+          name: name,
+          date: DateTime.now(),
+          values: Value(JsonEncoder().convert(data))));
+    } else {
+      data = JsonDecoder().convert(cache.values);
+    }
+    return data;
   }
 
   charts.Series<Metric, DateTime> getTimeSeries(

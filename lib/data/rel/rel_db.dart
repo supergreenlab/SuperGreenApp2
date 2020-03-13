@@ -44,7 +44,7 @@ LazyDatabase _openConnection() {
   Modules,
   Params,
   Boxes,
-  ChartPoints,
+  ChartCaches,
   Feeds,
   FeedEntries,
   FeedMedias,

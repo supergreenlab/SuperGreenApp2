@@ -34,17 +34,18 @@ class Boxes extends Table {
   TextColumn get settings => text().withDefault(Constant('{}'))();
 }
 
-class ChartPoints extends Table {
+class ChartCaches extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get box => integer()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
   DateTimeColumn get date => dateTime()();
-  IntColumn get value => integer()();
+
+  TextColumn get values => text().withDefault(Constant('[]'))();
 }
 
 @UseDao(tables: [
   Boxes,
-  ChartPoints,
+  ChartCaches,
 ], queries: {
   'nBoxes': 'SELECT COUNT(*) FROM boxes',
 })
@@ -71,12 +72,24 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
     return select(boxes).watch();
   }
 
-  Future<ChartPoint> getChartPoints(int boxID, String name) {
-    return (select(chartPoints)..where((c) => c.box.equals(boxID) & c.name.equals(name))).getSingle();
+  Future<int> addChartCache(ChartCachesCompanion chartCache) {
+    return into(chartCaches).insert(chartCache);
   }
 
-  Stream<List<ChartPoint>> watchChartPoints(int boxID, String name) {
-    return (select(chartPoints)..where((c) => c.box.equals(boxID) & c.name.equals(name))).watch();
+  Future<ChartCache> getChartCache(int boxID, String name) {
+    return (select(chartCaches)
+          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
+        .getSingle();
+  }
+
+  Stream<ChartCache> watchChartCache(int boxID, String name) {
+    return (select(chartCaches)
+          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
+        .watchSingle();
+  }
+
+  Future deleteChartCache(ChartCache chartCache) {
+    return delete(chartCaches).delete(chartCache);
   }
 
   Map<String, dynamic> boxSettings(Box box) {

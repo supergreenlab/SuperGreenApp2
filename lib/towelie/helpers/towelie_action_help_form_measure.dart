@@ -35,7 +35,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
     } else if (nMeasures == 1) {
       yield TowelieBlocStateHelper(
           event.settings, SGLLocalizations.current.towelieHelperFormMeasure3,
-          hasNext: true);
+          hasNext: false);
     }
   }
 
