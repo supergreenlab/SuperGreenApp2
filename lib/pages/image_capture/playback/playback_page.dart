@@ -69,12 +69,9 @@ class _PlaybackPageState extends State<PlaybackPage> {
     return Stack(
       children: [
         LayoutBuilder(builder: (context, constraints) {
-          return FittedBox(
-            fit: BoxFit.cover,
-            child: state.isVideo
-                ? _renderVideoPlayer(context, state, constraints)
-                : _renderPicturePlayer(context, state, constraints),
-          );
+          return state.isVideo
+              ? _renderVideoPlayer(context, state, constraints)
+              : _renderPicturePlayer(context, state, constraints);
         }),
         Positioned(
           top: 25,
@@ -115,11 +112,22 @@ class _PlaybackPageState extends State<PlaybackPage> {
 
   Widget _renderPicturePlayer(BuildContext context, PlaybackBlocState state,
       BoxConstraints constraints) {
-    Widget picture = Image.file(File(state.filePath));
+    Widget picture = SizedBox(
+        width: constraints.maxWidth,
+        height: constraints.maxHeight,
+        child: FittedBox(
+            fit: BoxFit.cover, child: Image.file(File(state.filePath))));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
-        Opacity(opacity: _opacity, child: Image.file(File(state.overlayPath))),
+        Opacity(
+            opacity: _opacity,
+            child: SizedBox(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image.file(File(state.overlayPath))))),
         Positioned(
           left: 30,
           right: 30,
@@ -135,10 +143,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
         )
       ]);
     }
-    return SizedBox(
-        width: constraints.maxWidth,
-        height: constraints.maxHeight,
-        child: Container(color: Colors.black, child: picture));
+    return Container(color: Colors.black, child: picture);
   }
 
   Widget _renderCloseButton(BuildContext context) {

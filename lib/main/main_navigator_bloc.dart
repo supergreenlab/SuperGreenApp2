@@ -247,7 +247,7 @@ class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
 
   MainNavigateToImageCaptureEvent(
       {Function(Future<Object> f) futureFn,
-      this.videoEnabled,
+      this.videoEnabled=true,
       this.overlayPath})
       : super(futureFn: futureFn);
 

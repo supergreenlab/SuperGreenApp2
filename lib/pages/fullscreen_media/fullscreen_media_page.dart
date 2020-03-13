@@ -92,7 +92,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                           body =
                               _renderPicturePlayer(context, state, constraints);
                         }
-                        return FittedBox(fit: BoxFit.cover, child: body);
+                        return body;
                       },
                     )));
               },
@@ -114,9 +114,12 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
     return SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child: Image.file(File(state.isVideo
-            ? state.feedMedia.thumbnailPath
-            : state.feedMedia.filePath)));
+        child: FittedBox(
+          fit: BoxFit.cover,
+          child: Image.file(File(state.isVideo
+              ? state.feedMedia.thumbnailPath
+              : state.feedMedia.filePath)),
+        ));
   }
 
   @override

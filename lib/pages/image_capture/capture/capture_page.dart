@@ -59,8 +59,8 @@ class _CapturePageState extends State<CapturePage> {
           bloc: BlocProvider.of<CaptureBloc>(context),
           builder: (context, state) {
             if (_cameraController != null &&
-                _cameraController.value.isInitialized) {
-              if (_cameraController.value.isRecordingVideo) {
+                _cameraController.value.isInitialized == true) {
+              if (_cameraController.value.isRecordingVideo == true) {
                 return _renderCameraRecording(context, state);
               } else {
                 return _renderCamera(context, state);
@@ -83,22 +83,27 @@ class _CapturePageState extends State<CapturePage> {
       child: Stack(
         children: [
           LayoutBuilder(builder: (context, constraints) {
-            Widget cameraPreview = CameraPreview(_cameraController);
+            double width =
+                constraints.maxHeight * _cameraController.value.aspectRatio;
+            double height = constraints.maxHeight;
+            Widget cameraPreview = SizedBox(
+                width: width,
+                height: height,
+                child: CameraPreview(_cameraController));
             if (state.overlayPath != null) {
               cameraPreview = Stack(children: [
                 cameraPreview,
-                Opacity(
-                    opacity: 0.6, child: Image.file(File(state.overlayPath)))
+                SizedBox(
+                    width: width,
+                    height: height,
+                    child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: Opacity(
+                            opacity: 0.6,
+                            child: Image.file(File(state.overlayPath))))),
               ]);
             }
-            return FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                  width: constraints.maxWidth,
-                  height: constraints.maxWidth /
-                      _cameraController.value.aspectRatio,
-                  child: cameraPreview),
-            );
+            return cameraPreview;
           }),
           Positioned(
             top: 25,
@@ -152,9 +157,9 @@ class _CapturePageState extends State<CapturePage> {
         children: [
           LayoutBuilder(builder: (context, constraints) {
             return SizedBox(
-                width: constraints.maxWidth,
-                height:
-                    constraints.maxWidth / _cameraController.value.aspectRatio,
+                width:
+                    constraints.maxHeight * _cameraController.value.aspectRatio,
+                height: constraints.maxHeight,
                 child: CameraPreview(_cameraController));
           }),
           Positioned(

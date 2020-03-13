@@ -28,7 +28,7 @@ class FeedMeasurePreviousSelector extends StatelessWidget {
                   return SizedBox(
                     width: constraints.maxWidth,
                     height: constraints.maxHeight,
-                    child: Image.file(File(_measures[index].thumbnailPath)),
+                    child: FittedBox(fit: BoxFit.cover, child: Image.file(File(_measures[index].thumbnailPath))),
                   );
                 },
                 pagination: _measures.length > 1
