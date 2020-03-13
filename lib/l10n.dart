@@ -308,8 +308,8 @@ To **better understand** you should have your LED panels **connected to the cont
   String get towelieHelperFormMeasure3 {
     return Intl.message(
       '''Looks like you **already took a measure**, you can select it in the **"Previous measures"** section, then press the **"Today's measure"** button to add a new measure. The previous one will be **displayed as a transparent overlay** for more accuracy.''',
-      name: 'towelieHelperFormMeasure2',
-      desc: 'Towelie Helper measure form 2',
+      name: 'towelieHelperFormMeasure3',
+      desc: 'Towelie Helper measure form 3',
       locale: localeName,
     );
   }

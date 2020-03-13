@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-13T16:23:36.234645",
+  "@@last_modified": "2020-03-13T16:42:24.500501",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -141,6 +141,12 @@
   "towelieHelperFormMeasure2": "It's the **first time** you're using it, so there is no \"before\" picture **to compare to**. Take a pic of what you **want to measure**, and take a measure again in **a few days** to have a **difference**.",
   "@towelieHelperFormMeasure2": {
     "description": "Towelie Helper measure form 2",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperFormMeasure3": "Looks like you **already took a measure**, you can select it in the **\"Previous measures\"** section, then press the **\"Today's measure\"** button to add a new measure. The previous one will be **displayed as a transparent overlay** for more accuracy.",
+  "@towelieHelperFormMeasure3": {
+    "description": "Towelie Helper measure form 3",
     "type": "text",
     "placeholders": {}
   },
