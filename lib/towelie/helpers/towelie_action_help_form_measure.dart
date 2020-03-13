@@ -27,16 +27,22 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
 
   @override
   Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
-    if (await RelDB.get().feedsDAO.getNMeasures() == 0) {
+    int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
+    if (nMeasures == 0) {
       yield TowelieBlocStateHelper(
           event.settings, SGLLocalizations.current.towelieHelperFormMeasure,
+          hasNext: true);
+    } else if (nMeasures == 1) {
+      yield TowelieBlocStateHelper(
+          event.settings, SGLLocalizations.current.towelieHelperFormMeasure3,
           hasNext: true);
     }
   }
 
   @override
   Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {
-    if (await RelDB.get().feedsDAO.getNMeasures() == 0) {
+    int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
+    if (nMeasures == 0) {
       yield TowelieBlocStateHelper(
           event.settings, SGLLocalizations.current.towelieHelperFormMeasure2);
     }

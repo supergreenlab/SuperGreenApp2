@@ -67,14 +67,12 @@ class MediaList extends StatelessWidget {
       child: Stack(children: [
         Hero(
           tag: 'FeedMedia:${media.filePath}',
-          child: Container(
+          child: SizedBox(
               width: constraints.maxWidth,
               height: constraints.maxHeight,
-              decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: Image.file(File(media.thumbnailPath)).image))),
+              child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Image.file(File(media.thumbnailPath)))),
         ),
         Positioned(
             child: BorderedText(
