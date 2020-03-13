@@ -289,7 +289,7 @@ To **better understand** you should have your LED panels **connected to the cont
 
   String get towelieHelperFormMeasure {
     return Intl.message(
-      '''This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**.''',
+      '''This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**. And as a **bonus feature**, it does **timelapses** of all the measures you've taken!''',
       name: 'towelieHelperFormMeasure',
       desc: 'Towelie Helper measure form 2',
       locale: localeName,

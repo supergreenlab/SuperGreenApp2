@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-13T12:20:56.121184",
+  "@@last_modified": "2020-03-13T15:26:59.418990",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -132,7 +132,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperFormMeasure": "This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**.",
+  "towelieHelperFormMeasure": "This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**. And as a **bonus feature**, it does **timelapses** of all the measures you've taken!",
   "@towelieHelperFormMeasure": {
     "description": "Towelie Helper measure form 2",
     "type": "text",
