@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -25,11 +25,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Can I use the camera please?</string>
+	<string>To record and take pictures of your grow's advancement</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Only required for wifi automatic setup. (optionnal)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Only required for wifi automatic setup.</string>
+	<string>Only required for wifi automatic setup. (optionnal)</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Can I use the mic please?</string>
+	<string>If you have anything to record with sound.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
