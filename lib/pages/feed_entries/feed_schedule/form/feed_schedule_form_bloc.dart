@@ -124,6 +124,7 @@ class FeedScheduleFormBloc
       }
 
       final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
+      settings['phase'] = _schedule;
       settings['schedule'] = _schedule;
       settings['schedules'] = _schedules;
       await db.boxesDAO.updateBox(_args.box.id,

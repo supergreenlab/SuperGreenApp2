@@ -17,24 +17,27 @@
  */
 
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieButtonViewBox extends TowelieButton {
-  static Map<String, dynamic> createButton(Box box) => {
-        'ID': 'VIEW_BOX',
-        'title': 'View box',
-        'boxID': box.id,
-      };
+class TowelieButtonTutoTakePic extends TowelieButton {
+  static Map<String, dynamic> createButton() {
+    return {
+      'ID': 'TAKE_PIC',
+      'title': 'Take pic',
+    };
+  }
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'VIEW_BOX') {
-      final bdb = RelDB.get().boxesDAO;
-      Box box = await bdb.getBox(event.params['boxID']);
-      yield TowelieBlocStateHomeNavigation(HomeNavigateToBoxFeedEvent(box));
+    if (event.params['ID'] == 'TAKE_PIC') {
+      final db = RelDB.get();
+      Box box = await db.boxesDAO.getBoxWithFeed(event.feed.id);
+      yield TowelieBlocStateMainNavigation(
+          MainNavigateToFeedMediaFormEvent(box));
+      await removeButtons(event.feedEntry);
     }
   }
 }

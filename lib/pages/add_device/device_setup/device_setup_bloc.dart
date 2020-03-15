@@ -59,7 +59,9 @@ class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
   final bool requiresInititalSetup;
   final bool requiresWifiSetup;
 
-  DeviceSetupBlocStateDone(this.device, this.requiresInititalSetup, this.requiresWifiSetup) : super(1);
+  DeviceSetupBlocStateDone(
+      this.device, this.requiresInititalSetup, this.requiresWifiSetup)
+      : super(1);
 
   @override
   List<Object> get props => [device];
@@ -128,24 +130,34 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
         ParamsCompanion param;
         if (type == INTEGER_TYPE) {
-          final value = await DeviceAPI.fetchIntParam(_args.ip, k['caps_name']);
-          param = ParamsCompanion.insert(
-              device: deviceID,
-              module: modules[moduleName],
-              key: k['caps_name'],
-              type: type,
-              ivalue: Value(value));
+          try {
+            final value =
+                await DeviceAPI.fetchIntParam(_args.ip, k['caps_name']);
+            param = ParamsCompanion.insert(
+                device: deviceID,
+                module: modules[moduleName],
+                key: k['caps_name'],
+                type: type,
+                ivalue: Value(value));
+            await db.addParam(param);
+          } catch (e) {
+            print(e);
+          }
         } else {
-          final value =
-              await DeviceAPI.fetchStringParam(_args.ip, k['caps_name']);
-          param = ParamsCompanion.insert(
-              device: deviceID,
-              module: modules[moduleName],
-              key: k['caps_name'],
-              type: type,
-              svalue: Value(value));
+          try {
+            final value =
+                await DeviceAPI.fetchStringParam(_args.ip, k['caps_name']);
+            param = ParamsCompanion.insert(
+                device: deviceID,
+                module: modules[moduleName],
+                key: k['caps_name'],
+                type: type,
+                svalue: Value(value));
+            await db.addParam(param);
+          } catch (e) {
+            print(e);
+          }
         }
-        await db.addParam(param);
         ++done;
         yield DeviceSetupBlocState(done / total);
       }

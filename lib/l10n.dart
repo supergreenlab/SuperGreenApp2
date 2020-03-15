@@ -202,6 +202,44 @@ And all this feed can be reviewed, shared or replayed later, **and that’s awes
     );
   }
 
+  String get towelieBoxAutoOrPhoto {
+    return Intl.message(
+      '''To better guide to a **successful harvest**, I'll need a bit **more informations** about your box:)
+Is this plant an **auto** or **photo** strain?''',
+      name: 'towelieBoxAutoOrPhoto',
+      desc: 'Towelie Box auto or photo',
+      locale: localeName,
+    );
+  }
+
+  String get towelieBoxAlreadyStarted {
+    return Intl.message(
+      '''Was this box **already started** when you added it to the app?''',
+      name: 'towelieBoxPhase',
+      desc: 'Towelie Box Phase',
+      locale: localeName,
+    );
+  }
+
+  String get towelieBoxVegOrBloom {
+    return Intl.message(
+      '''Is the plant in **veg** or **bloom**?''',
+      name: 'towelieBoxVegOrBloom',
+      desc: 'Towelie Box Veg or bloom',
+      locale: localeName,
+    );
+  }
+
+  String get towelieBoxTutoTakePic {
+    return Intl.message(
+      '''Alright **let's start**!
+One first thing you can do to **start** this journey is to **take a picture** of your **plant**.''',
+      name: 'towelieBoxTutoTakePic',
+      desc: 'Towelie Box tuto take pic',
+      locale: localeName,
+    );
+  }
+
   String get towelieHelperCreateBox {
     return Intl.message(
       '''Hey man, **welcome to the box creation process**, I\'ll be there to guide you through it.
@@ -310,6 +348,15 @@ To **better understand** you should have your LED panels **connected to the cont
       '''Looks like you **already took a measure**, you can select it in the **"Previous measures"** section, then press the **"Today's measure"** button to add a new measure. The previous one will be **displayed as a transparent overlay** for more accuracy.''',
       name: 'towelieHelperFormMeasure3',
       desc: 'Towelie Helper measure form 3',
+      locale: localeName,
+    );
+  }
+
+  String get towelieHelperFormTakePic {
+    return Intl.message(
+      '''Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You'll be glad you took regular pictures on your next grow!**''',
+      name: 'towelieHelperFormTakePic',
+      desc: 'Towelie Helper form take pic',
       locale: localeName,
     );
   }

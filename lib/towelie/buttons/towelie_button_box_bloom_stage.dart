@@ -16,25 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
+import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 
-class TowelieButtonViewBox extends TowelieButton {
-  static Map<String, dynamic> createButton(Box box) => {
-        'ID': 'VIEW_BOX',
-        'title': 'View box',
-        'boxID': box.id,
-      };
+class TowelieButtonBoxBloomStage extends TowelieButton {
+  static Map<String, dynamic> createButton() {
+    return {
+      'ID': 'BOX_BLOOM_STAGE',
+      'title': 'Bloom',
+    };
+  }
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'VIEW_BOX') {
-      final bdb = RelDB.get().boxesDAO;
-      Box box = await bdb.getBox(event.params['boxID']);
-      yield TowelieBlocStateHomeNavigation(HomeNavigateToBoxFeedEvent(box));
+    if (event.params['ID'] == 'BOX_BLOOM_STAGE') {
+      final db = RelDB.get();
+      Box box = await db.boxesDAO.getBoxWithFeed(event.feed.id);
+      Map<String, dynamic> settings = db.boxesDAO.boxSettings(box);
+      settings['phase'] = 'BLOOM';
+      if (settings['plantType'] == 'PHOTO') {
+        settings['schedule'] = 'BLOOM';
+      }
+      await db.boxesDAO.updateBox(box.id,
+          BoxesCompanion(settings: Value(JsonEncoder().convert(settings))));
+      await TowelieCardsFactory.createBoxTutoTakePic(event.feed);
+      await removeButtons(event.feedEntry);
     }
   }
 }

@@ -24,6 +24,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_box_already_started.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_box_auto.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_box_bloom_stage.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_box_not_started.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_box_photo.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_box_veg_stage.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_create_box.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_dont_want_to_buy.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_got_sgl_bundle.dart';
@@ -31,10 +37,11 @@ import 'package:super_green_app/towelie/buttons/towelie_button_i_ordered_one.dar
 import 'package:super_green_app/towelie/buttons/towelie_button_i_want_one.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_no_sgl_bundle.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_not_received.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_view_box.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
+import 'package:super_green_app/towelie/feed/towelie_action_appinit.dart';
 import 'package:super_green_app/towelie/feed/towelie_action_box_created.dart';
-import 'package:super_green_app/towelie/feed/towelie_appinit.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
@@ -42,6 +49,7 @@ import 'package:super_green_app/towelie/helpers/towelie_action_help_form_measure
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_box_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_take_pic.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_test_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_wifi.dart';
 import 'package:super_green_app/towelie/towelie_action.dart';
@@ -61,6 +69,24 @@ class TowelieBlocEventHelperNext extends TowelieBlocEvent {
   final RouteSettings settings;
 
   TowelieBlocEventHelperNext(this.settings);
+
+  @override
+  List<Object> get props => [rand, settings];
+}
+
+class Button {
+  final String title;
+  final Map<String, dynamic> params;
+
+  Button(this.title, this.params);
+}
+
+class TowelieBlocEventHelperButton extends TowelieBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+  final Button button;
+  final RouteSettings settings;
+
+  TowelieBlocEventHelperButton(this.settings, this.button);
 
   @override
   List<Object> get props => [rand, settings];
@@ -137,8 +163,10 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final RouteSettings settings;
   final String text;
   final bool hasNext;
+  final List<Button> buttons;
 
-  TowelieBlocStateHelper(this.settings, this.text, { this.hasNext=false });
+  TowelieBlocStateHelper(this.settings, this.text,
+      {this.hasNext = false, this.buttons});
 
   @override
   List<Object> get props => [rand, settings, text];
@@ -167,6 +195,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpTestDevice(),
     TowelieActionHelpWifi(),
     TowelieActionHelpFormMeasure(),
+    TowelieActionHelpFormTakePic(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),
@@ -178,6 +207,13 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonDontWantToBuy(),
     TowelieButtonCreateBox(),
     TowelieButtonViewBox(),
+    TowelieButtonBoxAlreadyStarted(),
+    TowelieButtonBoxNotStarted(),
+    TowelieButtonBoxVegStage(),
+    TowelieButtonBoxBloomStage(),
+    TowelieButtonBoxAuto(),
+    TowelieButtonBoxPhoto(),
+    TowelieButtonTutoTakePic(),
   ];
 
   @override

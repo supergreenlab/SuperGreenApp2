@@ -56,6 +56,10 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
     return (select(boxes)..where((b) => b.id.equals(id))).getSingle();
   }
 
+  Future<Box> getBoxWithFeed(int feedID) {
+    return (select(boxes)..where((b) => b.feed.equals(feedID))).getSingle();
+  }
+
   Stream<Box> watchBox(int id) {
     return (select(boxes)..where((b) => b.id.equals(id))).watchSingle();
   }
@@ -94,8 +98,12 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
 
   Map<String, dynamic> boxSettings(Box box) {
     final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
+    // TODO make atual enums or constants
     return {
-      'schedule': settings['schedule'] ?? 'VEG',
+      'nPlants': 1,
+      'phase': 'VEG', // VEG or BLOOM
+      'plantType': 'PHOTO', // PHOTO or AUTO
+      'schedule': settings['schedule'] ?? 'VEG', // Any of the schedule keys below
       'schedules': {
         'VEG': {
           'ON_HOUR': settings['VEG_ON_HOUR'] ?? 3,

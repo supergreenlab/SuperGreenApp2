@@ -17,24 +17,20 @@
  */
 
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
-import 'package:super_green_app/towelie/towelie_button.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieButtonViewBox extends TowelieButton {
-  static Map<String, dynamic> createButton(Box box) => {
-        'ID': 'VIEW_BOX',
-        'title': 'View box',
-        'boxID': box.id,
-      };
+class TowelieActionHelpFormTakePic extends TowelieActionHelp {
+  @override
+  String get route => '/feed/form/media';
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'VIEW_BOX') {
-      final bdb = RelDB.get().boxesDAO;
-      Box box = await bdb.getBox(event.params['boxID']);
-      yield TowelieBlocStateHomeNavigation(HomeNavigateToBoxFeedEvent(box));
+  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
+    int nPics = await RelDB.get().feedsDAO.getNFeedEntriesWithType('FE_MEDIA').getSingle();
+    if (nPics == 0) {
+      yield TowelieBlocStateHelper(
+          event.settings, SGLLocalizations.current.towelieHelperFormTakePic);
     }
   }
 }

@@ -81,41 +81,47 @@ class _TowelieHelperState extends State<TowelieHelper> {
   }
 
   Widget _renderBody(TowelieBlocStateHelper state) {
-    List<Widget> content;
+    List<Widget> content = <Widget>[
+      Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: MarkdownBody(
+            data: state.text,
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
+          ))
+    ];
+    List<Widget> buttons = [];
     if (state.hasNext) {
-      content = <Widget>[
-        Padding(
-            padding: const EdgeInsets.only(
-                left: 12.0, right: 12.0, top: 16, bottom: 0),
-            child: MarkdownBody(
-              data: state.text,
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 16)),
-            )),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-            child: FlatButton(
-                onPressed: () {
-                  BlocProvider.of<TowelieBloc>(context)
-                      .add(TowelieBlocEventHelperNext(widget.settings));
-                },
-                child: Text('Next'.toUpperCase(),
-                    style: TextStyle(color: Colors.blue, fontSize: 12))),
+      buttons.add(FlatButton(
+          onPressed: () {
+            BlocProvider.of<TowelieBloc>(context)
+                .add(TowelieBlocEventHelperNext(widget.settings));
+          },
+          child: Text('Next'.toUpperCase(),
+              style: TextStyle(color: Colors.blue, fontSize: 12))));
+    }
+    if (state.buttons != null && state.buttons.length > 0) {
+      for (int i = 0; i < state.buttons.length; ++i) {
+        Button button = state.buttons[i];
+        buttons.add(FlatButton(
+          onPressed: () {
+            BlocProvider.of<TowelieBloc>(context)
+                .add(TowelieBlocEventHelperButton(widget.settings, button));
+          },
+          child: Text(button.title.toUpperCase(),
+              style: TextStyle(color: Colors.blue, fontSize: 12))));
+      }
+    }
+    if (buttons.length > 0) {
+      content.add(Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+          child: Row(
+            children: buttons,
           ),
-        )
-      ];
-    } else {
-      content = content = <Widget>[
-        Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: MarkdownBody(
-              data: state.text,
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 16)),
-            ))
-      ];
+        ),
+      ));
     }
     return Positioned(
       bottom: 0,

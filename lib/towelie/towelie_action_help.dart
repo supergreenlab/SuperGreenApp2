@@ -24,10 +24,14 @@ abstract class TowelieActionHelp extends TowelieAction {
 
   Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event);
   Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {}
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventHelperButton event) async* {}
 
   @override
   Stream<TowelieBlocState> eventReceived(TowelieBlocEvent event) async* {
-    if (event is TowelieBlocEventHelperNext) {
+    if (event is TowelieBlocEventHelperButton && event.settings.name == route) {
+      buttonPressed(event);
+    } else if (event is TowelieBlocEventHelperNext &&
+        event.settings.name == route) {
       yield* getNext(event);
     } else if (event is TowelieBlocEventRoute && event.settings.name == route) {
       yield* trigger(event);

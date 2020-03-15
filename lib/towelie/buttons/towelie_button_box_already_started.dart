@@ -16,25 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
+import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 
-class TowelieButtonViewBox extends TowelieButton {
-  static Map<String, dynamic> createButton(Box box) => {
-        'ID': 'VIEW_BOX',
-        'title': 'View box',
-        'boxID': box.id,
-      };
+class TowelieButtonBoxAlreadyStarted extends TowelieButton {
+  static Map<String, dynamic> createButton() {
+    return {
+      'ID': 'BOX_ALREADY_STARTED',
+      'title': 'Yes',
+    };
+  }
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'VIEW_BOX') {
-      final bdb = RelDB.get().boxesDAO;
-      Box box = await bdb.getBox(event.params['boxID']);
-      yield TowelieBlocStateHomeNavigation(HomeNavigateToBoxFeedEvent(box));
+    if (event.params['ID'] == 'BOX_ALREADY_STARTED') {
+      await TowelieCardsFactory.createBoxVegOrBloom(event.feed);
+      await removeButtons(event.feedEntry);
     }
   }
 }
