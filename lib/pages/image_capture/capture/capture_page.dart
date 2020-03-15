@@ -86,10 +86,13 @@ class _CapturePageState extends State<CapturePage> {
             double width =
                 constraints.maxHeight * _cameraController.value.aspectRatio;
             double height = constraints.maxHeight;
-            Widget cameraPreview = SizedBox(
-                width: width,
-                height: height,
-                child: CameraPreview(_cameraController));
+            Widget cameraPreview = Positioned(
+                left: (constraints.maxWidth - width) / 2,
+                top: (constraints.maxHeight - height) / 2,
+                child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: CameraPreview(_cameraController)));
             if (state.overlayPath != null) {
               cameraPreview = Stack(children: [
                 cameraPreview,
@@ -244,8 +247,9 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderPictureButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.photo_camera, Colors.blue,
         () async {
+      await _deleteFileIfExists('$_filePath.jpg');
+      _filePath = await _makeFilePath();
       final String filePath = '$_filePath.jpg';
-      await _deleteFileIfExists(filePath);
       await _cameraController.takePicture(filePath);
       _endCapture(state, filePath);
     });
@@ -253,6 +257,8 @@ class _CapturePageState extends State<CapturePage> {
 
   Widget _renderCameraButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.videocam, Colors.blue, () async {
+      await _deleteFileIfExists('$_filePath.mp4');
+      _filePath = await _makeFilePath();
       final String filePath = '$_filePath.mp4';
       await _deleteFileIfExists(filePath);
       await _cameraController.startVideoRecording(filePath);
