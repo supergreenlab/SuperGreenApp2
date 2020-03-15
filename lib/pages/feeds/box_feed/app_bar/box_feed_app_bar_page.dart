@@ -56,19 +56,19 @@ class BoxFeedAppBarPage extends StatelessWidget {
                 _renderMetric(
                     Colors.green,
                     'Temp',
-                    '${state.graphData[0].data[0].metric.toInt()}°',
+                    '${state.graphData[0].data[state.graphData[0].data.length-1].metric.toInt()}°',
                     '${this._min(state.graphData[0].data).metric.toInt()}°',
                     '${this._max(state.graphData[0].data).metric.toInt()}°'),
                 _renderMetric(
                     Colors.blue,
                     'Humi',
-                    '${state.graphData[1].data[0].metric.toInt()}%',
+                    '${state.graphData[1].data[state.graphData[1].data.length-1].metric.toInt()}%',
                     '${this._min(state.graphData[1].data).metric.toInt()}%',
                     '${this._max(state.graphData[1].data).metric.toInt()}%'),
                 _renderMetric(
                     Colors.yellow,
                     'Light',
-                    '${state.graphData[2].data[0].metric.toInt()}%',
+                    '${state.graphData[2].data[state.graphData[2].data.length-1].metric.toInt()}%',
                     '${this._min(state.graphData[2].data).metric.toInt()}%',
                     '${this._max(state.graphData[2].data).metric.toInt()}%'),
               ],
