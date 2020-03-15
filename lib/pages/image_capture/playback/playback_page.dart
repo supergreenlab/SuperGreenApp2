@@ -104,16 +104,17 @@ class _PlaybackPageState extends State<PlaybackPage> {
 
   Widget _renderVideoPlayer(BuildContext context, PlaybackBlocState state,
       BoxConstraints constraints) {
-    double width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
+    double width =
+        constraints.maxHeight * _videoPlayerController.value.aspectRatio;
     double height = constraints.maxHeight;
     return Stack(children: [
-              Positioned(
-                  left: (constraints.maxWidth - width) / 2,
-                  top: (constraints.maxHeight - height) / 2,
-                  child: SizedBox(
-        width: width,
-        height: height,
-        child: VideoPlayer(_videoPlayerController))),
+      Positioned(
+          left: (constraints.maxWidth - width) / 2,
+          top: (constraints.maxHeight - height) / 2,
+          child: SizedBox(
+              width: width,
+              height: height,
+              child: VideoPlayer(_videoPlayerController))),
     ]);
   }
 

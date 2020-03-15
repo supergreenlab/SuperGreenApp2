@@ -134,7 +134,7 @@ class BoxFeedAppBarBloc
       charts.Series<Metric, DateTime> light = getTimeSeries(
           duty
               .map<dynamic>(
-                  (d) => [d[0], n == 0 ? d[1] : d[1] * dims[i++] / 100])
+                  (d) => [d[0], n == 0 ? d[1] : d[1] * dims[i >= dims.length ? dims.length-1 : i++] / 100])
               .toList(),
           'Light',
           charts.MaterialPalette.yellow.shadeDefault);
@@ -154,13 +154,13 @@ class BoxFeedAppBarBloc
     ChartCache cache = await RelDB.get().boxesDAO.getChartCache(box.id, name);
     Duration diff = cache?.date?.difference(DateTime.now());
     if (cache == null || -diff.inMinutes >= 2) {
+      if (cache != null) {
+        await RelDB.get().boxesDAO.deleteChartCache(cache);
+      }
       Response resp = await get(
           'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
-      if (cache != null) {
-        await RelDB.get().boxesDAO.deleteChartCache(cache);
-      }
       await RelDB.get().boxesDAO.addChartCache(ChartCachesCompanion.insert(
           box: box.id,
           name: name,
