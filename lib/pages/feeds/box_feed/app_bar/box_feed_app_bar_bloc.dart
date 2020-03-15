@@ -24,7 +24,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/rel/box/boxes.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -154,7 +153,7 @@ class BoxFeedAppBarBloc
     List<dynamic> data;
     ChartCache cache = await RelDB.get().boxesDAO.getChartCache(box.id, name);
     Duration diff = cache?.date?.difference(DateTime.now());
-    if (cache == null || diff.inMinutes > 5) {
+    if (cache == null || -diff.inMinutes >= 2) {
       Response resp = await get(
           'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);

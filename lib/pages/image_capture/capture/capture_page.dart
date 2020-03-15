@@ -105,6 +105,10 @@ class _CapturePageState extends State<CapturePage> {
                             opacity: 0.6,
                             child: Image.file(File(state.overlayPath))))),
               ]);
+            } else {
+              cameraPreview = Stack(children: [
+                cameraPreview,
+              ]);
             }
             return cameraPreview;
           }),
@@ -159,11 +163,18 @@ class _CapturePageState extends State<CapturePage> {
       child: Stack(
         children: [
           LayoutBuilder(builder: (context, constraints) {
-            return SizedBox(
-                width:
-                    constraints.maxHeight * _cameraController.value.aspectRatio,
-                height: constraints.maxHeight,
-                child: CameraPreview(_cameraController));
+            double width =
+                constraints.maxHeight * _cameraController.value.aspectRatio;
+            double height = constraints.maxHeight;
+            return Stack(children: [
+              Positioned(
+                  left: (constraints.maxWidth - width) / 2,
+                  top: (constraints.maxHeight - height) / 2,
+                  child: SizedBox(
+                      width: width,
+                      height: height,
+                      child: CameraPreview(_cameraController))),
+            ]);
           }),
           Positioned(
             bottom: 0,
