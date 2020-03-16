@@ -50,6 +50,7 @@ dependencies:
   flutter_swiper:
   charts_flutter:
   flutter_markdown:
+  flutter_ble_lib:
   flutter_matomo:
     path: ./vendor/flutter_matomo
   connectivity:

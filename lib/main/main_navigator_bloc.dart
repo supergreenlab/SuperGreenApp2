@@ -143,7 +143,7 @@ class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
@@ -153,7 +153,7 @@ class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToFeedVentilationFormEvent
@@ -164,7 +164,7 @@ class MainNavigateToFeedVentilationFormEvent
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
@@ -229,7 +229,7 @@ class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToTipEvent extends MainNavigatorEvent {
@@ -238,7 +238,7 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
   MainNavigateToTipEvent(this.nextRoute);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [nextRoute];
 }
 
 class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
@@ -254,6 +254,7 @@ class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
   @override
   List<Object> get props => [videoEnabled, overlayPath, futureFn];
 }
+
 
 class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
   final String cancelButton;
@@ -300,6 +301,16 @@ class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
 
   @override
   List<Object> get props => [path];
+}
+
+class MainNavigateToTimelapseSetup extends MainNavigateToFeedFormEvent {
+  final Box box;
+
+  MainNavigateToTimelapseSetup(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [box];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
@@ -425,6 +436,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToFullscreenPicture) {
       future = future =
           _navigatorKey.currentState.pushNamed('/media', arguments: event);
+    } else if (event is MainNavigateToTimelapseSetup) {
+      future = future =
+          _navigatorKey.currentState.pushNamed('/timelapse/setup', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

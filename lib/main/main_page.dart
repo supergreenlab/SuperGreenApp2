@@ -78,6 +78,8 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_page.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
+import 'package:super_green_app/pages/timelapse_setup/timelapse_setup_bloc.dart';
+import 'package:super_green_app/pages/timelapse_setup/timelapse_setup_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -292,6 +294,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => FullscreenMediaBloc(settings.arguments),
           child: FullscreenMediaPage(),
+        );
+      case '/timelapse/setup':
+        return BlocProvider(
+          create: (context) => TimelapseSetupBloc(settings.arguments),
+          child: TimelapseSetupPage(),
         );
     }
     return Text('Unknown route');

@@ -32,13 +32,15 @@ class FeedPage extends StatefulWidget {
   final Widget appBar;
   final double appBarHeight;
   final bool bottomPadding;
+  final List<Widget> actions;
 
   const FeedPage(
       {@required this.title,
       @required this.color,
       this.appBar,
       @required this.appBarHeight,
-      this.bottomPadding = false});
+      this.bottomPadding = false,
+      this.actions});
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -120,6 +122,7 @@ class _FeedPageState extends State<FeedPage> {
         controller: _scrollController,
         slivers: <Widget>[
           SliverAppBar(
+            actions: widget.actions,
             backgroundColor: Colors.white,
             expandedHeight: widget.appBarHeight ?? 56.0,
             iconTheme: IconThemeData(color: Color(0xff404040)),

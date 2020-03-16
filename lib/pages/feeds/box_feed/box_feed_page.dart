@@ -197,9 +197,9 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           'assets/feed_card/icon_measure.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedMeasureFormEvent(
-                  state.box,
-                  pushAsReplacement: pushAsReplacement))),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedMeasureFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
           'Watering',
           'assets/feed_card/icon_watering.svg',
@@ -260,6 +260,16 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.remove_red_eye),
+              tooltip: 'View live cam',
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToTimelapseSetup(state.box));
+              },
+            ),
+          ],
           bottomPadding: true,
           title: '',
           appBarHeight: 300,
