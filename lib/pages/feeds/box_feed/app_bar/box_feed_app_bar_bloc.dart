@@ -155,7 +155,7 @@ class BoxFeedAppBarBloc
     Duration diff = cache?.date?.difference(DateTime.now());
     if (cache == null || -diff.inMinutes >= 2) {
       if (cache != null) {
-        await RelDB.get().boxesDAO.deleteChartCache(cache);
+        await RelDB.get().boxesDAO.deleteChartCacheForBox(cache.box);
       }
       Response resp = await get(
           'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');

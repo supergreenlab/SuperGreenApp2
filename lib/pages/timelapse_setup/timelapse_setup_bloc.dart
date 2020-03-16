@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class TimelapseSetupBlocEvent extends Equatable {}
@@ -75,6 +76,10 @@ class TimelapseSetupBlocStateScanning extends TimelapseSetupBlocState {
 }
 
 class TimelapseSetupBlocStateDeviceFound extends TimelapseSetupBlocState {
+  final String controllerid;
+
+  TimelapseSetupBlocStateDeviceFound(this.controllerid);
+
   @override
   List<Object> get props => [];
 }
@@ -114,7 +119,12 @@ class TimelapseSetupBloc
         add(TimelapseSetupBlocEventBleStateChanged(btState));
       });
     } else if (event is TimelapseSetupBlocEventDeviceFound) {
-      yield TimelapseSetupBlocStateDeviceFound();
+      String controllerid;
+      if (_args.box.device != null) {
+        Device device = await RelDB.get().devicesDAO.getDevice(_args.box.device);
+        controllerid = device.identifier;
+      }
+      yield TimelapseSetupBlocStateDeviceFound(controllerid);
     } else if (event is TimelapseSetupBlocEventBleStateChanged) {
       if (event.currentState == BluetoothState.POWERED_OFF) {
         yield TimelapseSetupBlocStateBleOFF();

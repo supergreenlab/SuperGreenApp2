@@ -46,23 +46,13 @@ class FeedLightCardPage extends StatelessWidget {
                   Container(
                     height: 150,
                     alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'From:',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        _renderValues(state.params['initialValues']),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: Text(
-                            'To:',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        _renderValues(state.params['values']),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: _renderValues(state.params['values'],
+                            state.params['initialValues']),
+                      ),
                     ),
                   ),
                 ],
@@ -70,11 +60,51 @@ class FeedLightCardPage extends StatelessWidget {
             ));
   }
 
-  Widget _renderValues(List<dynamic> values) {
-    return Text(
-      '${values.map((v) => '$v%').join(', ')}',
-      style: TextStyle(
-          fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
-    );
+  List<Widget> _renderValues(
+      List<dynamic> values, List<dynamic> initialValues) {
+    int i = 0;
+    return values
+        .map<Map<String, int>>((v) {
+          return {
+            'i': i,
+            'from': initialValues[i++],
+            'to': v,
+          };
+        })
+        .where((v) => v['from'] != v['to'])
+        .map<Widget>((v) {
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('channel'),
+                    Text('${v['i'] + 1}',
+                        style: TextStyle(
+                            fontSize: 55,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey)),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('${v['from']}',
+                        style:
+                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Icon(Icons.arrow_forward),
+                    Text('${v['to']}',
+                        style:
+                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green)),
+                  ],
+                ),
+              ],
+            ),
+          );
+        })
+        .toList();
   }
 }

@@ -80,16 +80,24 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
     return into(chartCaches).insert(chartCache);
   }
 
-  Future<ChartCache> getChartCache(int boxID, String name) {
-    return (select(chartCaches)
+  Future<ChartCache> getChartCache(int boxID, String name) async {
+    List<ChartCache> cs = await(select(chartCaches)
           ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
-        .getSingle();
+        .get();
+    if (cs.length == 0) {
+      return null;
+    }
+    return cs[0];
   }
 
   Stream<ChartCache> watchChartCache(int boxID, String name) {
     return (select(chartCaches)
           ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
         .watchSingle();
+  }
+
+  Future deleteChartCacheForBox(int boxID) {
+    return (delete(chartCaches)..where((cc) => cc.box.equals(boxID))).go();
   }
 
   Future deleteChartCache(ChartCache chartCache) {
@@ -103,7 +111,8 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
       'nPlants': 1,
       'phase': 'VEG', // VEG or BLOOM
       'plantType': 'PHOTO', // PHOTO or AUTO
-      'schedule': settings['schedule'] ?? 'VEG', // Any of the schedule keys below
+      'schedule':
+          settings['schedule'] ?? 'VEG', // Any of the schedule keys below
       'schedules': {
         'VEG': {
           'ON_HOUR': settings['VEG_ON_HOUR'] ?? 3,

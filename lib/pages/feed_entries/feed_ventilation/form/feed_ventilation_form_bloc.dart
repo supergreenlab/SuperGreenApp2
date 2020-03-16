@@ -66,6 +66,12 @@ class FeedVentilationFormBlocBlowerNightChangedEvent
   List<Object> get props => [blowerNight];
 }
 
+class FeedVentilationFormBlocEventCancelEvent
+    extends FeedVentilationFormBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedVentilationFormBlocState extends Equatable {
   @override
   List<Object> get props => [];
@@ -178,6 +184,15 @@ class FeedVentilationFormBloc
           }
         })),
       ));
+      yield FeedVentilationFormBlocStateDone();
+    } else if (event is FeedVentilationFormBlocEventCancelEvent) {
+      if (_args.box.device == null) {
+        return;
+      }
+      await DeviceHelper.updateIntParam(
+          _device, _blowerDay, _initialBlowerDay);
+      await DeviceHelper.updateIntParam(
+          _device, _blowerNight, _initialBlowerNight);
       yield FeedVentilationFormBlocStateDone();
     }
   }

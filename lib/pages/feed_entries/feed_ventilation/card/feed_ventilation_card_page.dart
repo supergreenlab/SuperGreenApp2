@@ -24,7 +24,6 @@ import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedVentilationCardPage extends StatelessWidget {
-
   final Animation animation;
 
   const FeedVentilationCardPage(this.animation, {Key key}) : super(key: key);
@@ -49,27 +48,8 @@ class FeedVentilationCardPage extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'From:',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              _renderValues(state.params['initialValues']),
-                            ]),
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'To:',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              _renderValues(state.params['values']),
-                            ]),
-                      ],
+                      children: _renderValues([state.params['values']['blowerDay'], state.params['values']['blowerNight']],
+                          [state.params['initialValues']['blowerDay'], state.params['initialValues']['blowerNight']]),
                     ),
                   ),
                 ],
@@ -77,11 +57,52 @@ class FeedVentilationCardPage extends StatelessWidget {
             ));
   }
 
-  Widget _renderValues(Map<String, dynamic> values) {
-    return Text(
-      'Night: ${values['blowerNight']}%\nDay: ${values['blowerDay']}%',
-      style: TextStyle(
-          fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b)),
-    );
+  List<Widget> _renderValues(
+      List<dynamic> values, List<dynamic> initialValues) {
+    int i = 0;
+    return values
+        .map<Map<String, int>>((v) {
+          return {
+            'i': i,
+            'from': initialValues[i++],
+            'to': v,
+          };
+        })
+        .where((v) => v['from'] != v['to'])
+        .map<Widget>((v) {
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('${v['i'] == 0 ? 'Day' : 'Night'}',
+                        style: TextStyle(
+                            fontSize: 55,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey)),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('${v['from']}',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    Icon(Icons.arrow_forward),
+                    Text('${v['to']}',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green)),
+                  ],
+                ),
+              ],
+            ),
+          );
+        })
+        .toList();
   }
 }
