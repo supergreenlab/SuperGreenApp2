@@ -100,10 +100,10 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
         _db.setLastBox(_box.id);
       }
 
-      _nTimelapses = await RelDB.get().boxesDAO.nTimelapses().getSingle();
+      _nTimelapses = await RelDB.get().boxesDAO.nTimelapses(_box.id).getSingle();
       RelDB.get()
           .boxesDAO
-          .nTimelapses()
+          .nTimelapses(_box.id)
           .watchSingle()
           .listen(_onNTimelapsesUpdated);
       RelDB.get().boxesDAO.watchBox(_box.id).listen(_onBoxUpdated);

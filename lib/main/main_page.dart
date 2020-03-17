@@ -78,6 +78,8 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_page.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
+import 'package:super_green_app/pages/timelapse_howto/timelapse_howto_bloc.dart';
+import 'package:super_green_app/pages/timelapse_howto/timelapse_howto_page.dart';
 import 'package:super_green_app/pages/timelapse_setup/timelapse_setup_bloc.dart';
 import 'package:super_green_app/pages/timelapse_setup/timelapse_setup_page.dart';
 import 'package:super_green_app/pages/timelapse_viewer/timelapse_viewer_bloc.dart';
@@ -296,6 +298,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => FullscreenMediaBloc(settings.arguments),
           child: FullscreenMediaPage(),
+        );
+      case '/timelapse/howto':
+        return BlocProvider(
+          create: (context) => TimelapseHowtoBloc(settings.arguments),
+          child: TimelapseHowtoPage(),
         );
       case '/timelapse/setup':
         return BlocProvider(

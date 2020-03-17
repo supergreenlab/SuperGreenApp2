@@ -62,7 +62,7 @@ class Timelapses extends Table {
   Timelapses,
 ], queries: {
   'nBoxes': 'SELECT COUNT(*) FROM boxes',
-  'nTimelapses': 'SELECT COUNT(*) FROM timelapses',
+  'nTimelapses': 'SELECT COUNT(*) FROM timelapses WHERE box = ?',
 })
 class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
   BoxesDAO(RelDB db) : super(db);

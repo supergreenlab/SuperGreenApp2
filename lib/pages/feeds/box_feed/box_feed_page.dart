@@ -267,7 +267,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               onPressed: () {
                 if (state.nTimelapses == 0) {
                   BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToTimelapseSetup(state.box));
+                      .add(MainNavigateToTimelapseHowto(state.box));
                 } else {
                   BlocProvider.of<MainNavigatorBloc>(context)
                       .add(MainNavigateToTimelapseViewer(state.box));
