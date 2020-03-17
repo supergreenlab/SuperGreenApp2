@@ -22,8 +22,9 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 class FullscreenLoading extends StatelessWidget {
   final String title;
   final double percent;
+  final Color textColor;
 
-  const FullscreenLoading({this.title, this.percent});
+  const FullscreenLoading({this.title, this.percent, this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class FullscreenLoading extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('${(percent * 100).toInt()}%', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: Color(0xffababab))),
+                  Text('${(percent * 100).toInt()}%', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: textColor ?? Color(0xffababab))),
                 ],
               )),
         ],
@@ -58,6 +59,7 @@ class FullscreenLoading extends StatelessWidget {
     return Fullscreen(
       title: title,
       child: child,
+      textColor: textColor,
     );
   }
 }

@@ -260,6 +260,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          color: Color(0xff063047),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.remove_red_eye),
@@ -278,7 +279,6 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           bottomPadding: true,
           title: '',
           appBarHeight: 300,
-          color: Colors.cyan,
           appBar: _renderAppBar(context, state),
         ),
       );
@@ -497,7 +497,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
             child: Text(
               name,
               style: TextStyle(
-                  color: Color(0xff505050),
+                  color: Colors.white,
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold),
             ),

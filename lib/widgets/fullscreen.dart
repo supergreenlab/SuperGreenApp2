@@ -25,6 +25,7 @@ class Fullscreen extends StatelessWidget {
   final bool childFirst;
   final double fontSize;
   final FontWeight fontWeight;
+  final Color textColor;
 
   const Fullscreen({
     @required this.title,
@@ -33,6 +34,7 @@ class Fullscreen extends StatelessWidget {
     this.childFirst = true,
     this.fontSize = 22,
     this.fontWeight = FontWeight.w500,
+    this.textColor,
   }) : super();
 
   @override
@@ -43,7 +45,7 @@ class Fullscreen extends StatelessWidget {
         style: TextStyle(
             fontSize: fontSize,
             fontWeight: fontWeight,
-            color: Color(0xff565656)),
+            color: textColor ?? Color(0xff565656)),
         textAlign: TextAlign.center,
       )
     ];
@@ -51,7 +53,7 @@ class Fullscreen extends StatelessWidget {
       titles.add(Text(
         subtitle,
         style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.grey),
+            fontSize: 15, fontWeight: FontWeight.w500, color: textColor ?? Colors.grey),
         textAlign: TextAlign.center,
       ));
     }

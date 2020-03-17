@@ -41,7 +41,7 @@ class SGLFeedPage extends StatelessWidget {
       create: (context) => FeedBloc(1),
       child: FeedPage(
         title: '',
-        color: Colors.deepPurple,
+        color: Colors.white,
         appBarHeight: 200,
         appBar: SafeArea(
           child: Padding(
