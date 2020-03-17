@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -31,7 +32,7 @@ class SelectDeviceBlocEventDelete extends SelectDeviceBlocEvent {
   SelectDeviceBlocEventDelete(this.device);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [device];
 }
 
 class SelectDeviceBlocEventLoadDevices extends SelectDeviceBlocEvent {
@@ -50,6 +51,16 @@ class SelectDeviceBlocEventDeviceListUpdated extends SelectDeviceBlocEvent {
   List<Object> get props => [devices];
 }
 
+class SelectDeviceBlocEventSelect extends SelectDeviceBlocEvent {
+  final Device device;
+  final int deviceBox;
+
+  SelectDeviceBlocEventSelect(this.device, this.deviceBox);
+
+  @override
+  List<Object> get props => [device];
+}
+
 class SelectDeviceBlocState extends Equatable {
   final List<Device> devices;
 
@@ -65,8 +76,10 @@ class SelectDeviceBlocStateDeviceListUpdated extends SelectDeviceBlocState {
 
 class SelectDeviceBlocStateDone extends SelectDeviceBlocState {
   final Device device;
+  final int deviceBox;
 
-  SelectDeviceBlocStateDone(List<Device> devices, this.device) : super(devices);
+  SelectDeviceBlocStateDone(List<Device> devices, this.device, this.deviceBox)
+      : super(devices);
 
   @override
   List<Object> get props => [devices, device];
@@ -100,6 +113,16 @@ class SelectDeviceBloc
       ddb.deleteParams(event.device.id);
       ddb.deleteModules(event.device.id);
       ddb.deleteDevice(event.device);
+    } else if (event is SelectDeviceBlocEventSelect) {
+      final ddb = RelDB.get().devicesDAO;
+      final Device device = event.device;
+      final stateParam =
+          await ddb.getParam(device.id, 'STATE');
+      // TODO declare Param enums when possible
+      if (stateParam.ivalue != 2) {
+        await DeviceHelper.updateIntParam(device, stateParam, 2);
+      }
+      yield SelectDeviceBlocStateDone(_devices, event.device, event.deviceBox);
     }
   }
 

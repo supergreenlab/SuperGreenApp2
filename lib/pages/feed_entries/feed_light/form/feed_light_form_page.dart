@@ -39,83 +39,82 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        BlocProvider.of<FeedLightFormBloc>(context)
-            .add(FeedLightFormBlocEventCancel());
-        return false;
+    return BlocListener(
+      bloc: BlocProvider.of<FeedLightFormBloc>(context),
+      listener: (BuildContext context, FeedLightFormBlocState state) {
+        if (state is FeedLightFormBlocStateLightsLoaded) {
+          setState(() => values = List.from(state.values));
+        } else if (state is FeedLightFormBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
+        }
       },
-      child: BlocListener(
-        bloc: BlocProvider.of<FeedLightFormBloc>(context),
-        listener: (BuildContext context, FeedLightFormBlocState state) {
-          if (state is FeedLightFormBlocStateLightsLoaded) {
-            setState(() => values = List.from(state.values));
-          } else if (state is FeedLightFormBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(mustPop: true));
-          }
-        },
-        child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
-            bloc: BlocProvider.of<FeedLightFormBloc>(context),
-            builder: (context, state) {
-              Widget body;
-              if (state is FeedLightFormBlocStateLoading) {
-                body = FullscreenLoading(title: 'Saving..');
-              } else
-              if (state is FeedLightFormBlocStateNoDevice) {
-                body = Stack(
-                  children: <Widget>[
-                    ListView.builder(
-                      itemCount: values.length,
-                      itemBuilder: _renderLightParam,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.white60),
-                      child: Fullscreen(
-                        title: 'Stretch control\nrequires an SGL controller',
-                        child: Column(
-                          children: <Widget>[
-                            GreenButton(
-                              title: 'SHOP NOW',
-                              onPressed: () {
-                                launch('https://www.supergreenlab.com');
-                              },
-                            ),
-                            Text('or'),
-                            GreenButton(
-                              title: 'DIY NOW',
-                              onPressed: () {
-                                launch('https://github.com/supergreenlab');
-                              },
-                            ),
-                          ],
-                        ),
-                        childFirst: false,
+      child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
+          bloc: BlocProvider.of<FeedLightFormBloc>(context),
+          builder: (context, state) {
+            Widget body;
+            if (state is FeedLightFormBlocStateLoading) {
+              body = FullscreenLoading(title: 'Saving..');
+            } else if (state is FeedLightFormBlocStateNoDevice) {
+              body = Stack(
+                children: <Widget>[
+                  ListView.builder(
+                    itemCount: values.length,
+                    itemBuilder: _renderLightParam,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white60),
+                    child: Fullscreen(
+                      title: 'Stretch control\nrequires an SGL controller',
+                      child: Column(
+                        children: <Widget>[
+                          GreenButton(
+                            title: 'SHOP NOW',
+                            onPressed: () {
+                              launch('https://www.supergreenlab.com');
+                            },
+                          ),
+                          Text('or'),
+                          GreenButton(
+                            title: 'DIY NOW',
+                            onPressed: () {
+                              launch('https://github.com/supergreenlab');
+                            },
+                          ),
+                        ],
                       ),
+                      childFirst: false,
                     ),
-                  ],
-                );
-              } else {
-                body = ListView.builder(
-                  itemCount: values.length,
-                  itemBuilder: _renderLightParam,
-                );
-              }
-              return FeedFormLayout(
-                title: 'Record creation',
-                changed: changed,
-                valid: changed,
-                onOK: () {
-                  BlocProvider.of<FeedLightFormBloc>(context)
-                      .add(FeedLightFormBlocEventCreate(values));
-                },
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body),
+                  ),
+                ],
               );
-            }),
-      ),
+            } else {
+              body = ListView.builder(
+                itemCount: values.length,
+                itemBuilder: _renderLightParam,
+              );
+            }
+            return FeedFormLayout(
+              title: 'Record creation',
+              changed: changed,
+              valid: changed,
+              onOK: () {
+                BlocProvider.of<FeedLightFormBloc>(context)
+                    .add(FeedLightFormBlocEventCreate(values));
+              },
+              body: WillPopScope(
+                onWillPop: () async {
+                  BlocProvider.of<FeedLightFormBloc>(context)
+                      .add(FeedLightFormBlocEventCancel());
+                  return false;
+                },
+                child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body),
+              ),
+            );
+          }),
     );
   }
 

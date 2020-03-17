@@ -286,9 +286,10 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
+  final String overlayPath;
   final FeedMedia feedMedia;
 
-  MainNavigateToFullscreenMedia(this.feedMedia);
+  MainNavigateToFullscreenMedia(this.feedMedia, { this.overlayPath });
 
   @override
   List<Object> get props => [feedMedia];
@@ -303,10 +304,30 @@ class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
   List<Object> get props => [path];
 }
 
+class MainNavigateToTimelapseHowto extends MainNavigateToFeedFormEvent {
+  final Box box;
+
+  MainNavigateToTimelapseHowto(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class MainNavigateToTimelapseSetup extends MainNavigateToFeedFormEvent {
   final Box box;
 
   MainNavigateToTimelapseSetup(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [box];
+}
+
+class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
+  final Box box;
+
+  MainNavigateToTimelapseViewer(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -436,9 +457,15 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToFullscreenPicture) {
       future = future =
           _navigatorKey.currentState.pushNamed('/media', arguments: event);
+    } else if (event is MainNavigateToTimelapseHowto) {
+      future = future =
+          _navigatorKey.currentState.pushNamed('/timelapse/howto', arguments: event);
     } else if (event is MainNavigateToTimelapseSetup) {
       future = future =
           _navigatorKey.currentState.pushNamed('/timelapse/setup', arguments: event);
+    } else if (event is MainNavigateToTimelapseViewer) {
+      future = future =
+          _navigatorKey.currentState.pushNamed('/timelapse/viewer', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

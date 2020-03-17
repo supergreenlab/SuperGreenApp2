@@ -45,6 +45,7 @@ LazyDatabase _openConnection() {
   Params,
   Boxes,
   ChartCaches,
+  Timelapses,
   Feeds,
   FeedEntries,
   FeedMedias,

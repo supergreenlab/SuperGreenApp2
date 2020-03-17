@@ -51,6 +51,7 @@ dependencies:
   charts_flutter:
   flutter_markdown:
   flutter_ble_lib:
+  youtube_player_flutter:
   flutter_matomo:
     path: ./vendor/flutter_matomo
   connectivity:

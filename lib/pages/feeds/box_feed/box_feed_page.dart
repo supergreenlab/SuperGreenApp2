@@ -260,20 +260,25 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
+          color: Color(0xff063047),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.remove_red_eye),
-              tooltip: 'View live cam',
+              tooltip: 'View live cams',
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToTimelapseSetup(state.box));
+                if (state.nTimelapses == 0) {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToTimelapseHowto(state.box));
+                } else {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToTimelapseViewer(state.box));
+                }
               },
             ),
           ],
           bottomPadding: true,
           title: '',
           appBarHeight: 300,
-          color: Colors.cyan,
           appBar: _renderAppBar(context, state),
         ),
       );
@@ -492,7 +497,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
             child: Text(
               name,
               style: TextStyle(
-                  color: Color(0xff505050),
+                  color: Colors.white,
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold),
             ),

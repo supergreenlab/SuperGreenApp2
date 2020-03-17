@@ -54,7 +54,7 @@ class _FeedCardState extends State<FeedCard> {
           sizeFactor: widget.animation,
           child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xffdedede), width: 2),
+                  border: Border.all(color: Color(0xffdedede), width: 1),
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8)),
               child: widget.child),

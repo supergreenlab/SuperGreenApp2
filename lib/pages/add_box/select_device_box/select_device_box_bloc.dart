@@ -29,28 +29,19 @@ class SelectDeviceBoxBlocEventInitialize extends SelectDeviceBoxBlocEvent {
   List<Object> get props => [];
 }
 
-class SelectDeviceBoxBlocEventSelectbox extends SelectDeviceBoxBlocEvent {
-  final int boxID;
-
-  SelectDeviceBoxBlocEventSelectbox(this.boxID);
-
-  @override
-  List<Object> get props => [boxID];
-}
-
-class SelectDeviceBoxBlocEventUnselectbox extends SelectDeviceBoxBlocEvent {
-  final int boxID;
-
-  SelectDeviceBoxBlocEventUnselectbox(this.boxID);
-
-  @override
-  List<Object> get props => [boxID];
-}
-
 class SelectDeviceBoxBlocEventSelectBox extends SelectDeviceBoxBlocEvent {
   final int box;
 
   SelectDeviceBoxBlocEventSelectBox(this.box);
+
+  @override
+  List<Object> get props => [box];
+}
+
+class SelectDeviceBoxBlocEventDelete extends SelectDeviceBoxBlocEvent {
+  final int box;
+
+  SelectDeviceBoxBlocEventDelete(this.box);
 
   @override
   List<Object> get props => [box];
@@ -69,10 +60,11 @@ class SelectDeviceBoxBlocStateLoaded extends SelectDeviceBoxBlocState {
   final int nBoxes;
   final Device device;
 
-  SelectDeviceBoxBlocStateLoaded(this.boxes, this.nLeds, this.nBoxes, this.device);
+  SelectDeviceBoxBlocStateLoaded(
+      this.boxes, this.nLeds, this.nBoxes, this.device);
 
   @override
-  List<Object> get props => [boxes, nLeds, nBoxes];
+  List<Object> get props => [boxes, nLeds, nBoxes, device];
 }
 
 class SelectDeviceBoxBlocStateLoading extends SelectDeviceBoxBlocState {
@@ -106,44 +98,58 @@ class SelectDeviceBoxBloc
   Stream<SelectDeviceBoxBlocState> mapEventToState(
       SelectDeviceBoxBlocEvent event) async* {
     if (event is SelectDeviceBoxBlocEventInitialize) {
+      yield* _loadAll();
+    } else if (event is SelectDeviceBoxBlocEventDelete) {
+      // lots of duplicated execution follows.. this needs a proper way to represent a group of Params (ie. ll params for a single LED channel for ex)
       final ddb = RelDB.get().devicesDAO;
       final Device device = await ddb.getDevice(_args.device.id);
-      final boxModule = await ddb.getModule(device.id, 'box');
-      List<SelectData> boxes = [];
-      for (int i = 0; i < boxModule.arrayLen; ++i) {
-        final boxEnabledParam =
-            await ddb.getParam(device.id, 'BOX_${i}_ENABLED');
-        if (boxEnabledParam.ivalue == 1) {
-          boxes.add(SelectData(i, boxEnabledParam.ivalue == 1, []));
-        }
-      }
+      final boxEnabledParam =
+          await ddb.getParam(device.id, 'BOX_${event.box}_ENABLED');
+      await DeviceHelper.updateIntParam(_args.device, boxEnabledParam, 0);
       final ledModule = await ddb.getModule(device.id, 'led');
       for (int i = 0; i < ledModule.arrayLen; ++i) {
         final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
-        if (ledBox.ivalue >= 0) {
-          SelectData selectData =
-              boxes.firstWhere((b) => b.box == ledBox.ivalue);
-          if (selectData != null) {
-            selectData.leds.add(i);
-          }
+        if (ledBox.ivalue == event.box) {
+          await DeviceHelper.updateIntParam(_args.device, ledBox, -1);
         }
       }
-      yield SelectDeviceBoxBlocStateLoaded(
-          boxes, ledModule.arrayLen, boxModule.arrayLen, device);
-    } else if (event is SelectDeviceBoxBlocEventSelectbox) {
-      final ddb = RelDB.get().devicesDAO;
-      final boxDuty =
-          await ddb.getParam(_args.device.id, 'box_${event.boxID}_DUTY');
-      await DeviceHelper.updateIntParam(_args.device, boxDuty, 20);
-    } else if (event is SelectDeviceBoxBlocEventUnselectbox) {
-      final ddb = RelDB.get().devicesDAO;
-      final boxDuty =
-          await ddb.getParam(_args.device.id, 'box_${event.boxID}_DUTY');
-      await DeviceHelper.updateIntParam(_args.device, boxDuty, 0);
+      yield* _loadAll();
     } else if (event is SelectDeviceBoxBlocEventSelectBox) {
-      yield SelectDeviceBoxBlocStateLoading();
+      final ddb = RelDB.get().devicesDAO;
+      final Device device = await ddb.getDevice(_args.device.id);
+      final timerTypeParam =
+          await ddb.getParam(device.id, 'BOX_${event.box}_TIMER_TYPE');
+      // TODO declare Param enums when possible
+      if (timerTypeParam.ivalue != 1) {
+        await DeviceHelper.updateIntParam(_args.device, timerTypeParam, 1);
+      }
       yield SelectDeviceBoxBlocStateDone(event.box);
     }
+  }
+
+  Stream<SelectDeviceBoxBlocState> _loadAll() async* {
+    final ddb = RelDB.get().devicesDAO;
+    final Device device = await ddb.getDevice(_args.device.id);
+    final boxModule = await ddb.getModule(device.id, 'box');
+    List<SelectData> boxes = [];
+    for (int i = 0; i < boxModule.arrayLen; ++i) {
+      final boxEnabledParam = await ddb.getParam(device.id, 'BOX_${i}_ENABLED');
+      if (boxEnabledParam.ivalue == 1) {
+        boxes.add(SelectData(i, boxEnabledParam.ivalue == 1, []));
+      }
+    }
+    final ledModule = await ddb.getModule(device.id, 'led');
+    for (int i = 0; i < ledModule.arrayLen; ++i) {
+      final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
+      if (ledBox.ivalue >= 0) {
+        SelectData selectData = boxes.firstWhere((b) => b.box == ledBox.ivalue);
+        if (selectData != null) {
+          selectData.leds.add(i);
+        }
+      }
+    }
+    yield SelectDeviceBoxBlocStateLoaded(
+        boxes, ledModule.arrayLen, boxModule.arrayLen, device);
   }
 }
 

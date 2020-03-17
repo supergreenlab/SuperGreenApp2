@@ -41,62 +41,71 @@ class SelectDevicePage extends StatefulWidget {
 class _SelectDevicePageState extends State<SelectDevicePage> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
-        bloc: BlocProvider.of<SelectDeviceBloc>(context),
-        builder: (context, state) => Scaffold(
-            appBar: SGLAppBar(
-              'Box creation',
-              backgroundColor: Color(0xff0bb354),
-              titleColor: Colors.white,
-              iconColor: Colors.white,
-            ),
-            body: Column(
-              children: [
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 100),
-                  height: 100,
-                  color: Color(0xff0bb354),
-                ),
-                SectionTitle(
-                  title: 'Select the device below',
-                  icon: 'assets/box_setup/icon_controller.svg',
-                  backgroundColor: Color(0xff0bb354),
-                  titleColor: Colors.white,
-                  large: true,
-                ),
-                Expanded(child: _deviceList(context)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    FlatButton(
-                      textColor: Colors.red,
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.close),
-                          Text('NO SGL DEVICE'),
-                        ],
+    return BlocListener<SelectDeviceBloc, SelectDeviceBlocState>(
+      listener: (BuildContext context, state) {
+        if (state is SelectDeviceBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigatorActionPop(
+                  param: SelectBoxDeviceData(state.device, state.deviceBox)));
+        }
+      },
+      child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
+          bloc: BlocProvider.of<SelectDeviceBloc>(context),
+          builder: (context, state) => Scaffold(
+              appBar: SGLAppBar(
+                'Box creation',
+                backgroundColor: Color(0xff0bb354),
+                titleColor: Colors.white,
+                iconColor: Colors.white,
+              ),
+              body: Column(
+                children: [
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 100),
+                    height: 100,
+                    color: Color(0xff0bb354),
+                  ),
+                  SectionTitle(
+                    title: 'Select the device below',
+                    icon: 'assets/box_setup/icon_controller.svg',
+                    backgroundColor: Color(0xff0bb354),
+                    titleColor: Colors.white,
+                    large: true,
+                  ),
+                  Expanded(child: _deviceList(context)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      FlatButton(
+                        textColor: Colors.red,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.close),
+                            Text('NO SGL DEVICE'),
+                          ],
+                        ),
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigatorActionPop(param: false));
+                        },
                       ),
-                      onPressed: () {
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(MainNavigatorActionPop(param: false));
-                      },
-                    ),
-                    FlatButton(
-                      textColor: Colors.blue,
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.add),
-                          Text('ADD NEW DEVICE'),
-                        ],
+                      FlatButton(
+                        textColor: Colors.blue,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.add),
+                            Text('ADD NEW DEVICE'),
+                          ],
+                        ),
+                        onPressed: () {
+                          _addNewDevice(context);
+                        },
                       ),
-                      onPressed: () {
-                        _addNewDevice(context);
-                      },
-                    ),
-                  ],
-                )
-              ],
-            )));
+                    ],
+                  )
+                ],
+              ))),
+    );
   }
 
   Widget _deviceList(BuildContext context) {
@@ -156,8 +165,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         MainNavigateToSelectBoxDeviceBoxEvent(device, futureFn: (future) async {
       dynamic deviceBox = await future;
       if (deviceBox is int) {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(
-            param: SelectBoxDeviceData(device, deviceBox)));
+        BlocProvider.of<SelectDeviceBloc>(context)
+            .add(SelectDeviceBlocEventSelect(device, deviceBox));
       }
     }));
   }

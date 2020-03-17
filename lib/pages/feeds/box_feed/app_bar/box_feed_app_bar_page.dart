@@ -12,7 +12,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
       builder: (BuildContext context, BoxFeedAppBarBlocState state) {
         Widget body;
         if (state is BoxFeedAppBarBlocStateInit) {
-          body = FullscreenLoading(title: 'Loading..');
+          body = FullscreenLoading(title: 'Loading..', textColor: Colors.white,);
         } else if (state is BoxFeedAppBarBlocStateLoaded) {
           body = _renderGraphs(context, state);
           if (state.graphData[0].data.length < 4 &&
@@ -42,47 +42,52 @@ class BoxFeedAppBarPage extends StatelessWidget {
 
   Widget _renderGraphs(
       BuildContext context, BoxFeedAppBarBlocStateLoaded state) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5), color: Colors.white24),
-      child: Padding(
-        padding: const EdgeInsets.only(
-            top: 16.0, left: 4.5, right: 4.5, bottom: 8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
+    return Padding(
+      padding: const EdgeInsets.only(
+          top: 8, left: 0, right: 0, bottom: 0),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 _renderMetric(
                     Colors.green,
                     'Temp',
-                    '${state.graphData[0].data[state.graphData[0].data.length-1].metric.toInt()}°',
+                    '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}°',
                     '${this._min(state.graphData[0].data).metric.toInt()}°',
                     '${this._max(state.graphData[0].data).metric.toInt()}°'),
                 _renderMetric(
                     Colors.blue,
                     'Humi',
-                    '${state.graphData[1].data[state.graphData[1].data.length-1].metric.toInt()}%',
+                    '${state.graphData[1].data[state.graphData[1].data.length - 1].metric.toInt()}%',
                     '${this._min(state.graphData[1].data).metric.toInt()}%',
                     '${this._max(state.graphData[1].data).metric.toInt()}%'),
                 _renderMetric(
                     Colors.yellow,
                     'Light',
-                    '${state.graphData[2].data[state.graphData[2].data.length-1].metric.toInt()}%',
+                    '${state.graphData[2].data[state.graphData[2].data.length - 1].metric.toInt()}%',
                     '${this._min(state.graphData[2].data).metric.toInt()}%',
                     '${this._max(state.graphData[2].data).metric.toInt()}%'),
               ],
             ),
-            Expanded(
-              child: charts.TimeSeriesChart(state.graphData,
-                  animate: false,
-                  defaultRenderer: charts.LineRendererConfig(),
-                  customSeriesRenderers: [
-                    charts.PointRendererConfig(customRendererId: 'customPoint')
-                  ]),
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white70, border: Border.all(color: Color(0xffdedede), width: 1),),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: charts.TimeSeriesChart(state.graphData,
+                    animate: false,
+                    defaultRenderer: charts.LineRendererConfig(),
+                    customSeriesRenderers: [
+                      charts.PointRendererConfig(customRendererId: 'customPoint')
+                    ]),
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -91,7 +96,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
       Color color, String name, String value, String min, String max) {
     return Column(
       children: <Widget>[
-        Text(name),
+        Text(name, style: TextStyle(color: Colors.white)),
         Row(
           children: <Widget>[
             Text(value,
@@ -101,8 +106,8 @@ class BoxFeedAppBarPage extends StatelessWidget {
                 )),
             Column(
               children: <Widget>[
-                Text(max, style: TextStyle(color: Color(0xff787878))),
-                Text(min, style: TextStyle(color: Color(0xff787878))),
+                Text(max, style: TextStyle(color: Colors.white)),
+                Text(min, style: TextStyle(color: Colors.white)),
               ],
             )
           ],

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -104,12 +105,12 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
               return null;
             } else if (index == state.boxes.length) {
               if (state.boxes.length > 0) {
-              int selectedLeds = state.boxes
-                  .map<int>((b) => b.leds.length)
-                  .reduce((acc, b) => acc + b);
-              if (selectedLeds >= state.nLeds) {
-                return null;
-              }
+                int selectedLeds = state.boxes
+                    .map<int>((b) => b.leds.length)
+                    .reduce((acc, b) => acc + b);
+                if (selectedLeds >= state.nLeds) {
+                  return null;
+                }
               }
               return ListTile(
                 onTap: () {
@@ -118,9 +119,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                           futureFn: (future) async {
                     dynamic deviceBox = await future;
                     if (deviceBox is int) {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(
-                          MainNavigatorActionPop(
-                              param: deviceBox));
+                      BlocProvider.of<SelectDeviceBoxBloc>(context)
+                          .add(SelectDeviceBoxBlocEventSelectBox(deviceBox));
                     }
                   }));
                 },
@@ -131,8 +131,11 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             }
             return ListTile(
               onTap: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigatorActionPop(param: state.boxes[index].box));
+                BlocProvider.of<SelectDeviceBoxBloc>(context).add(
+                    SelectDeviceBoxBlocEventSelectBox(state.boxes[index].box));
+              },
+              onLongPress: () {
+                _deleteBox(state, index);
               },
               title: state.boxes[index].enabled
                   ? Text('Already running', style: TextStyle(color: Colors.red))
@@ -151,5 +154,34 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         ),
       ),
     );
+  }
+
+  void _deleteBox(SelectDeviceBoxBlocStateLoaded state, int index) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Reset box #$index on device ${state.device.name}?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<SelectDeviceBoxBloc>(context)
+          .add(SelectDeviceBoxBlocEventDelete(index));
+    }
   }
 }

@@ -88,11 +88,11 @@ class FeedVentilationCardPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('${v['from']}',
+                    Text('${v['from']}%',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     Icon(Icons.arrow_forward),
-                    Text('${v['to']}',
+                    Text('${v['to']}%',
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

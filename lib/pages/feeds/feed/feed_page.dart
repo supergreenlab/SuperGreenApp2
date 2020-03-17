@@ -117,21 +117,22 @@ class _FeedPageState extends State<FeedPage> {
   Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
     List<FeedEntry> entries = _entries == null ? state.entries : _entries;
     return Container(
-      color: Colors.white,
+      color: Color(0xffeeeeee),
       child: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
           SliverAppBar(
             actions: widget.actions,
-            backgroundColor: Colors.white,
+            backgroundColor: widget.color,
             expandedHeight: widget.appBarHeight ?? 56.0,
-            iconTheme: IconThemeData(color: Color(0xff404040)),
+            iconTheme: IconThemeData(color: Colors.white),
+            elevation: 4,
+            forceElevated: true,
             flexibleSpace: FlexibleSpaceBar(
               background: this.widget.appBar,
               centerTitle: this.widget.appBar == null,
               title: this.widget.appBar == null
-                  ? Text(widget.title,
-                      style: TextStyle(color: Color(0xff404040)))
+                  ? Text(widget.title, style: TextStyle(color: Color(0xff404040)))
                   : null,
             ),
           ),
@@ -139,7 +140,10 @@ class _FeedPageState extends State<FeedPage> {
             key: _listKey,
             itemBuilder:
                 (BuildContext context, int index, Animation<double> animation) {
-              if (!widget.bottomPadding && index >= entries.length) {
+              index = index - 1;
+              if (index == -1) {
+                return Container(height: 10);
+              } else if (!widget.bottomPadding && index >= entries.length) {
                 return null;
               } else if (index == entries.length) {
                 return Container(height: 76);
@@ -147,7 +151,8 @@ class _FeedPageState extends State<FeedPage> {
                 return null;
               }
               if (entries[index].isNew && ModalRoute.of(context).isCurrent) {
-                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventMarkAsRead(entries[index]));
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventMarkAsRead(entries[index]));
               }
               return SlideTransition(
                   position: animation.drive(

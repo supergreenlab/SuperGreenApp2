@@ -39,87 +39,84 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        BlocProvider.of<FeedVentilationFormBloc>(context)
-            .add(FeedVentilationFormBlocEventCancelEvent());
-        return false;
+    return BlocListener(
+      bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
+      listener: (BuildContext context, FeedVentilationFormBlocState state) {
+        if (state is FeedVentilationFormBlocStateVentilationLoaded) {
+          setState(() {
+            _blowerDay = state.blowerDay;
+            _blowerNight = state.blowerNight;
+          });
+        } else if (state is FeedVentilationFormBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
+        }
       },
-      child: BlocListener(
-        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
-        listener: (BuildContext context, FeedVentilationFormBlocState state) {
-          if (state is FeedVentilationFormBlocStateVentilationLoaded) {
-            setState(() {
-              _blowerDay = state.blowerDay;
-              _blowerNight = state.blowerNight;
-            });
-          } else if (state is FeedVentilationFormBlocStateDone) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(mustPop: true));
-          }
-        },
-        child:
-            BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
-                bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
-                builder: (context, state) {
-                  Widget body;
-                  if (state is FeedVentilationFormBlocStateLoading) {
-                    body = FullscreenLoading(title: 'Saving..');
-                  } else if (state is FeedVentilationFormBlocStateNoDevice) {
-                    body = Stack(
-                      children: <Widget>[
-                        _renderParams(context, state),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.white60),
-                          child: Fullscreen(
-                            title:
-                                'Ventilation control\nrequires an SGL controller',
-                            child: Column(
-                              children: <Widget>[
-                                GreenButton(
-                                  title: 'SHOP NOW',
-                                  onPressed: () {
-                                    launch('https://www.supergreenlab.com');
-                                  },
-                                ),
-                                Text('or'),
-                                GreenButton(
-                                  title: 'DIY NOW',
-                                  onPressed: () {
-                                    launch('https://github.com/supergreenlab');
-                                  },
-                                ),
-                              ],
-                            ),
-                            childFirst: false,
+      child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
+          bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
+          builder: (context, state) {
+            Widget body;
+            if (state is FeedVentilationFormBlocStateLoading) {
+              body = FullscreenLoading(title: 'Saving..');
+            } else if (state is FeedVentilationFormBlocStateNoDevice) {
+              body = Stack(
+                children: <Widget>[
+                  _renderParams(context, state),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white60),
+                    child: Fullscreen(
+                      title: 'Ventilation control\nrequires an SGL controller',
+                      child: Column(
+                        children: <Widget>[
+                          GreenButton(
+                            title: 'SHOP NOW',
+                            onPressed: () {
+                              launch('https://www.supergreenlab.com');
+                            },
                           ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    body = _renderParams(context, state);
-                  }
-                  return FeedFormLayout(
-                      title: 'Record creation',
-                      changed: state
-                              is FeedVentilationFormBlocStateVentilationLoaded &&
-                          (state.blowerDay != state.initialBlowerDay ||
-                              state.blowerNight != state.initialBlowerNight),
-                      valid: state
-                              is FeedVentilationFormBlocStateVentilationLoaded &&
-                          (state.blowerDay != state.initialBlowerDay ||
-                              state.blowerNight != state.initialBlowerNight),
-                      onOK: () {
-                        BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                            FeedVentilationFormBlocEventCreate(
-                                _blowerDay, _blowerNight));
-                      },
-                      body: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 200), child: body));
-                }),
-      ),
+                          Text('or'),
+                          GreenButton(
+                            title: 'DIY NOW',
+                            onPressed: () {
+                              launch('https://github.com/supergreenlab');
+                            },
+                          ),
+                        ],
+                      ),
+                      childFirst: false,
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              body = _renderParams(context, state);
+            }
+            return FeedFormLayout(
+                title: 'Record creation',
+                changed:
+                    state is FeedVentilationFormBlocStateVentilationLoaded &&
+                        (state.blowerDay != state.initialBlowerDay ||
+                            state.blowerNight != state.initialBlowerNight),
+                valid: state is FeedVentilationFormBlocStateVentilationLoaded &&
+                    (state.blowerDay != state.initialBlowerDay ||
+                        state.blowerNight != state.initialBlowerNight),
+                onOK: () {
+                  BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                      FeedVentilationFormBlocEventCreate(
+                          _blowerDay, _blowerNight));
+                },
+                body: WillPopScope(
+                  onWillPop: () async {
+                    BlocProvider.of<FeedVentilationFormBloc>(context)
+                        .add(FeedVentilationFormBlocEventCancelEvent());
+                    return false;
+                  },
+                  child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body),
+                ));
+          }),
     );
   }
 
