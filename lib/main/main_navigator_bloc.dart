@@ -286,9 +286,10 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
+  final String overlayPath;
   final FeedMedia feedMedia;
 
-  MainNavigateToFullscreenMedia(this.feedMedia);
+  MainNavigateToFullscreenMedia(this.feedMedia, { this.overlayPath });
 
   @override
   List<Object> get props => [feedMedia];

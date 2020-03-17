@@ -31,73 +31,77 @@ class FullscreenMediaPage extends StatefulWidget {
 
 class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
   VideoPlayerController _videoPlayerController;
+  double _opacity = 0.5;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: BlocProvider.of<FullscreenMediaBloc>(context),
-      listener: (context, state) async {
-        if (state is FullscreenMediaBlocStateInit) {
-          if (state.isVideo && _videoPlayerController == null) {
-            _videoPlayerController =
-                VideoPlayerController.file(File(state.feedMedia.filePath));
-            await _videoPlayerController.initialize();
-            _videoPlayerController.play();
-            _videoPlayerController.setLooping(true);
-            setState(() {});
+    return Material(
+      child: BlocListener(
+        bloc: BlocProvider.of<FullscreenMediaBloc>(context),
+        listener: (context, state) async {
+          if (state is FullscreenMediaBlocStateInit) {
+            if (state.isVideo && _videoPlayerController == null) {
+              _videoPlayerController =
+                  VideoPlayerController.file(File(state.feedMedia.filePath));
+              await _videoPlayerController.initialize();
+              _videoPlayerController.play();
+              _videoPlayerController.setLooping(true);
+              setState(() {});
+            }
           }
-        }
-      },
-      child: BlocBuilder<FullscreenMediaBloc, FullscreenMediaBlocState>(
-          bloc: BlocProvider.of<FullscreenMediaBloc>(context),
-          builder: (context, state) {
-            return LayoutBuilder(
-              builder: (context, constraint) {
-                return Hero(
-                    tag: 'FeedMedia:${state.feedMedia.filePath}',
-                    child: GestureDetector(onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigatorActionPop());
-                    }, child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        Widget body;
-                        if (state.isVideo) {
-                          if (_videoPlayerController != null &&
-                              _videoPlayerController.value.isPlaying) {
-                            body = Stack(
-                              children: <Widget>[
-                                _renderPicturePlayer(
-                                    context, state, constraints),
-                                _renderVideoPlayer(context, state, constraints)
-                              ],
-                            );
-                          } else {
-                            body = Stack(
-                              children: <Widget>[
-                                _renderPicturePlayer(
-                                    context, state, constraints),
-                                Positioned(
-                                  top: constraints.maxHeight / 2 - 20,
-                                  height: 40,
-                                  left: constraints.maxWidth / 2 - 20,
-                                  width: 40,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 4.0,
+        },
+        child: BlocBuilder<FullscreenMediaBloc, FullscreenMediaBlocState>(
+            bloc: BlocProvider.of<FullscreenMediaBloc>(context),
+            builder: (context, state) {
+              return LayoutBuilder(
+                builder: (context, constraint) {
+                  return Hero(
+                      tag: 'FeedMedia:${state.feedMedia.filePath}',
+                      child: GestureDetector(onTap: () {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigatorActionPop());
+                      }, child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          Widget body;
+                          if (state.isVideo) {
+                            if (_videoPlayerController != null &&
+                                _videoPlayerController.value.isPlaying) {
+                              body = Stack(
+                                children: <Widget>[
+                                  _renderPicturePlayer(
+                                      context, state, constraints),
+                                  _renderVideoPlayer(
+                                      context, state, constraints)
+                                ],
+                              );
+                            } else {
+                              body = Stack(
+                                children: <Widget>[
+                                  _renderPicturePlayer(
+                                      context, state, constraints),
+                                  Positioned(
+                                    top: constraints.maxHeight / 2 - 20,
+                                    height: 40,
+                                    left: constraints.maxWidth / 2 - 20,
+                                    width: 40,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 4.0,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
+                                ],
+                              );
+                            }
+                          } else {
+                            body = _renderPicturePlayer(
+                                context, state, constraints);
                           }
-                        } else {
-                          body =
-                              _renderPicturePlayer(context, state, constraints);
-                        }
-                        return body;
-                      },
-                    )));
-              },
-            );
-          }),
+                          return body;
+                        },
+                      )));
+                },
+              );
+            }),
+      ),
     );
   }
 
@@ -119,7 +123,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
 
   Widget _renderPicturePlayer(BuildContext context,
       FullscreenMediaBlocState state, BoxConstraints constraints) {
-    return SizedBox(
+    Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: FittedBox(
@@ -128,6 +132,33 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
               ? state.feedMedia.thumbnailPath
               : state.feedMedia.filePath)),
         ));
+    if (state.overlayPath != null) {
+      picture = Stack(children: [
+        picture,
+        Opacity(
+            opacity: _opacity,
+            child: SizedBox(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image.file(File(state.overlayPath))))),
+        Positioned(
+          left: 30,
+          right: 30,
+          top: constraints.maxHeight - 70,
+          child: Slider(
+            onChanged: (double value) {
+              setState(() {
+                _opacity = value;
+              });
+            },
+            value: _opacity,
+          ),
+        )
+      ]);
+    }
+    return Container(color: Colors.black, child: picture);
   }
 
   @override

@@ -42,10 +42,10 @@ class FeedMeasureCardPage extends StatelessWidget {
                   FeedCardTitle('assets/feed_card/icon_media.svg', 'Note taken',
                       state.feedEntry),
                   MediaList(
-                    [state.current],
+                    [state.current, state.previous],
                     onMediaTapped: (media) {
                       BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToFullscreenMedia(media));
+                          .add(MainNavigateToFullscreenMedia(state.current, overlayPath: state.previous.filePath));
                     },
                   ),
                   Padding(
