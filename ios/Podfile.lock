@@ -7,6 +7,9 @@ PODS:
   - connectivity_macos (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_ble_lib (2.2.3):
+    - Flutter
+    - MultiplatformBleAdapter (= 0.1.5)
   - flutter_matomo (0.0.1):
     - Flutter
     - MatomoTracker (> 7)
@@ -27,6 +30,7 @@ PODS:
   - MatomoTracker/Core (7.2.0)
   - moor_ffi (0.0.1):
     - Flutter
+  - MultiplatformBleAdapter (0.1.5)
   - path_provider (0.0.1):
     - Flutter
   - path_provider_macos (0.0.1):
@@ -55,6 +59,7 @@ DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
   - Flutter (from `Flutter`)
+  - flutter_ble_lib (from `.symlinks/plugins/flutter_ble_lib/ios`)
   - flutter_matomo (from `.symlinks/plugins/flutter_matomo/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - moor_ffi (from `.symlinks/plugins/moor_ffi/ios`)
@@ -73,6 +78,7 @@ SPEC REPOS:
   trunk:
     - libwebp
     - MatomoTracker
+    - MultiplatformBleAdapter
     - Reachability
 
 EXTERNAL SOURCES:
@@ -84,6 +90,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity_macos/ios"
   Flutter:
     :path: Flutter
+  flutter_ble_lib:
+    :path: ".symlinks/plugins/flutter_ble_lib/ios"
   flutter_matomo:
     :path: ".symlinks/plugins/flutter_matomo/ios"
   keyboard_visibility:
@@ -116,11 +124,13 @@ SPEC CHECKSUMS:
   connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
   connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
   flutter_matomo: a4fc9d95faaf6f95124fc1956e892f91791b5fac
   keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   MatomoTracker: 6f89e2561083685a360e223fb663e9ccd57c1d1a
   moor_ffi: d66c9470c18e9cb333423bbcb493c105c6c774c6
+  MultiplatformBleAdapter: 3c4391d428382738a47662ae1f665a29ce78ff39
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   permission_handler: f615215121f43c1640d2b8500d4ad749512828a8
