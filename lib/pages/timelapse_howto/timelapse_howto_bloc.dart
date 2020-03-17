@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class TimelapseHowtoBlocEvent extends Equatable {}
 
-abstract class TimelapseHowtoBlocState extends Equatable {}
+class TimelapseHowtoBlocState extends Equatable {
+  final Box box;
 
-class TimelapseHowtoBlocStateInit extends TimelapseHowtoBlocState {
+  TimelapseHowtoBlocState(this.box);
+  
   @override
   List<Object> get props => [];
 }
@@ -19,7 +22,7 @@ class TimelapseHowtoBloc
   TimelapseHowtoBloc(this._args);
 
   @override
-  TimelapseHowtoBlocState get initialState => TimelapseHowtoBlocStateInit();
+  TimelapseHowtoBlocState get initialState => TimelapseHowtoBlocState(_args.box);
 
   @override
   Stream<TimelapseHowtoBlocState> mapEventToState(
