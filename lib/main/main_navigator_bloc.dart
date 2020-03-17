@@ -313,6 +313,16 @@ class MainNavigateToTimelapseSetup extends MainNavigateToFeedFormEvent {
   List<Object> get props => [box];
 }
 
+class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
+  final Box box;
+
+  MainNavigateToTimelapseViewer(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -439,6 +449,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToTimelapseSetup) {
       future = future =
           _navigatorKey.currentState.pushNamed('/timelapse/setup', arguments: event);
+    } else if (event is MainNavigateToTimelapseViewer) {
+      future = future =
+          _navigatorKey.currentState.pushNamed('/timelapse/viewer', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

@@ -1564,6 +1564,494 @@ class $ChartCachesTable extends ChartCaches
   }
 }
 
+class Timelapse extends DataClass implements Insertable<Timelapse> {
+  final int id;
+  final int box;
+  final String ssid;
+  final String password;
+  final String controllerID;
+  final String rotate;
+  final String name;
+  final String strain;
+  final String dropboxToken;
+  final String uploadName;
+  Timelapse(
+      {@required this.id,
+      @required this.box,
+      @required this.ssid,
+      @required this.password,
+      @required this.controllerID,
+      @required this.rotate,
+      @required this.name,
+      @required this.strain,
+      @required this.dropboxToken,
+      @required this.uploadName});
+  factory Timelapse.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Timelapse(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      ssid: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
+      password: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}password']),
+      controllerID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}controller_i_d']),
+      rotate:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}rotate']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      strain:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}strain']),
+      dropboxToken: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}dropbox_token']),
+      uploadName: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}upload_name']),
+    );
+  }
+  factory Timelapse.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Timelapse(
+      id: serializer.fromJson<int>(json['id']),
+      box: serializer.fromJson<int>(json['box']),
+      ssid: serializer.fromJson<String>(json['ssid']),
+      password: serializer.fromJson<String>(json['password']),
+      controllerID: serializer.fromJson<String>(json['controllerID']),
+      rotate: serializer.fromJson<String>(json['rotate']),
+      name: serializer.fromJson<String>(json['name']),
+      strain: serializer.fromJson<String>(json['strain']),
+      dropboxToken: serializer.fromJson<String>(json['dropboxToken']),
+      uploadName: serializer.fromJson<String>(json['uploadName']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'box': serializer.toJson<int>(box),
+      'ssid': serializer.toJson<String>(ssid),
+      'password': serializer.toJson<String>(password),
+      'controllerID': serializer.toJson<String>(controllerID),
+      'rotate': serializer.toJson<String>(rotate),
+      'name': serializer.toJson<String>(name),
+      'strain': serializer.toJson<String>(strain),
+      'dropboxToken': serializer.toJson<String>(dropboxToken),
+      'uploadName': serializer.toJson<String>(uploadName),
+    };
+  }
+
+  @override
+  TimelapsesCompanion createCompanion(bool nullToAbsent) {
+    return TimelapsesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
+      ssid: ssid == null && nullToAbsent ? const Value.absent() : Value(ssid),
+      password: password == null && nullToAbsent
+          ? const Value.absent()
+          : Value(password),
+      controllerID: controllerID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(controllerID),
+      rotate:
+          rotate == null && nullToAbsent ? const Value.absent() : Value(rotate),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      strain:
+          strain == null && nullToAbsent ? const Value.absent() : Value(strain),
+      dropboxToken: dropboxToken == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dropboxToken),
+      uploadName: uploadName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(uploadName),
+    );
+  }
+
+  Timelapse copyWith(
+          {int id,
+          int box,
+          String ssid,
+          String password,
+          String controllerID,
+          String rotate,
+          String name,
+          String strain,
+          String dropboxToken,
+          String uploadName}) =>
+      Timelapse(
+        id: id ?? this.id,
+        box: box ?? this.box,
+        ssid: ssid ?? this.ssid,
+        password: password ?? this.password,
+        controllerID: controllerID ?? this.controllerID,
+        rotate: rotate ?? this.rotate,
+        name: name ?? this.name,
+        strain: strain ?? this.strain,
+        dropboxToken: dropboxToken ?? this.dropboxToken,
+        uploadName: uploadName ?? this.uploadName,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Timelapse(')
+          ..write('id: $id, ')
+          ..write('box: $box, ')
+          ..write('ssid: $ssid, ')
+          ..write('password: $password, ')
+          ..write('controllerID: $controllerID, ')
+          ..write('rotate: $rotate, ')
+          ..write('name: $name, ')
+          ..write('strain: $strain, ')
+          ..write('dropboxToken: $dropboxToken, ')
+          ..write('uploadName: $uploadName')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          box.hashCode,
+          $mrjc(
+              ssid.hashCode,
+              $mrjc(
+                  password.hashCode,
+                  $mrjc(
+                      controllerID.hashCode,
+                      $mrjc(
+                          rotate.hashCode,
+                          $mrjc(
+                              name.hashCode,
+                              $mrjc(
+                                  strain.hashCode,
+                                  $mrjc(dropboxToken.hashCode,
+                                      uploadName.hashCode))))))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Timelapse &&
+          other.id == this.id &&
+          other.box == this.box &&
+          other.ssid == this.ssid &&
+          other.password == this.password &&
+          other.controllerID == this.controllerID &&
+          other.rotate == this.rotate &&
+          other.name == this.name &&
+          other.strain == this.strain &&
+          other.dropboxToken == this.dropboxToken &&
+          other.uploadName == this.uploadName);
+}
+
+class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
+  final Value<int> id;
+  final Value<int> box;
+  final Value<String> ssid;
+  final Value<String> password;
+  final Value<String> controllerID;
+  final Value<String> rotate;
+  final Value<String> name;
+  final Value<String> strain;
+  final Value<String> dropboxToken;
+  final Value<String> uploadName;
+  const TimelapsesCompanion({
+    this.id = const Value.absent(),
+    this.box = const Value.absent(),
+    this.ssid = const Value.absent(),
+    this.password = const Value.absent(),
+    this.controllerID = const Value.absent(),
+    this.rotate = const Value.absent(),
+    this.name = const Value.absent(),
+    this.strain = const Value.absent(),
+    this.dropboxToken = const Value.absent(),
+    this.uploadName = const Value.absent(),
+  });
+  TimelapsesCompanion.insert({
+    this.id = const Value.absent(),
+    @required int box,
+    @required String ssid,
+    @required String password,
+    @required String controllerID,
+    @required String rotate,
+    @required String name,
+    @required String strain,
+    @required String dropboxToken,
+    @required String uploadName,
+  })  : box = Value(box),
+        ssid = Value(ssid),
+        password = Value(password),
+        controllerID = Value(controllerID),
+        rotate = Value(rotate),
+        name = Value(name),
+        strain = Value(strain),
+        dropboxToken = Value(dropboxToken),
+        uploadName = Value(uploadName);
+  TimelapsesCompanion copyWith(
+      {Value<int> id,
+      Value<int> box,
+      Value<String> ssid,
+      Value<String> password,
+      Value<String> controllerID,
+      Value<String> rotate,
+      Value<String> name,
+      Value<String> strain,
+      Value<String> dropboxToken,
+      Value<String> uploadName}) {
+    return TimelapsesCompanion(
+      id: id ?? this.id,
+      box: box ?? this.box,
+      ssid: ssid ?? this.ssid,
+      password: password ?? this.password,
+      controllerID: controllerID ?? this.controllerID,
+      rotate: rotate ?? this.rotate,
+      name: name ?? this.name,
+      strain: strain ?? this.strain,
+      dropboxToken: dropboxToken ?? this.dropboxToken,
+      uploadName: uploadName ?? this.uploadName,
+    );
+  }
+}
+
+class $TimelapsesTable extends Timelapses
+    with TableInfo<$TimelapsesTable, Timelapse> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $TimelapsesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _boxMeta = const VerificationMeta('box');
+  GeneratedIntColumn _box;
+  @override
+  GeneratedIntColumn get box => _box ??= _constructBox();
+  GeneratedIntColumn _constructBox() {
+    return GeneratedIntColumn(
+      'box',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ssidMeta = const VerificationMeta('ssid');
+  GeneratedTextColumn _ssid;
+  @override
+  GeneratedTextColumn get ssid => _ssid ??= _constructSsid();
+  GeneratedTextColumn _constructSsid() {
+    return GeneratedTextColumn('ssid', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  final VerificationMeta _passwordMeta = const VerificationMeta('password');
+  GeneratedTextColumn _password;
+  @override
+  GeneratedTextColumn get password => _password ??= _constructPassword();
+  GeneratedTextColumn _constructPassword() {
+    return GeneratedTextColumn('password', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  final VerificationMeta _controllerIDMeta =
+      const VerificationMeta('controllerID');
+  GeneratedTextColumn _controllerID;
+  @override
+  GeneratedTextColumn get controllerID =>
+      _controllerID ??= _constructControllerID();
+  GeneratedTextColumn _constructControllerID() {
+    return GeneratedTextColumn('controller_i_d', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  final VerificationMeta _rotateMeta = const VerificationMeta('rotate');
+  GeneratedTextColumn _rotate;
+  @override
+  GeneratedTextColumn get rotate => _rotate ??= _constructRotate();
+  GeneratedTextColumn _constructRotate() {
+    return GeneratedTextColumn('rotate', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  final VerificationMeta _strainMeta = const VerificationMeta('strain');
+  GeneratedTextColumn _strain;
+  @override
+  GeneratedTextColumn get strain => _strain ??= _constructStrain();
+  GeneratedTextColumn _constructStrain() {
+    return GeneratedTextColumn('strain', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  final VerificationMeta _dropboxTokenMeta =
+      const VerificationMeta('dropboxToken');
+  GeneratedTextColumn _dropboxToken;
+  @override
+  GeneratedTextColumn get dropboxToken =>
+      _dropboxToken ??= _constructDropboxToken();
+  GeneratedTextColumn _constructDropboxToken() {
+    return GeneratedTextColumn('dropbox_token', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  final VerificationMeta _uploadNameMeta = const VerificationMeta('uploadName');
+  GeneratedTextColumn _uploadName;
+  @override
+  GeneratedTextColumn get uploadName => _uploadName ??= _constructUploadName();
+  GeneratedTextColumn _constructUploadName() {
+    return GeneratedTextColumn('upload_name', $tableName, false,
+        minTextLength: 1, maxTextLength: 64);
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        box,
+        ssid,
+        password,
+        controllerID,
+        rotate,
+        name,
+        strain,
+        dropboxToken,
+        uploadName
+      ];
+  @override
+  $TimelapsesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'timelapses';
+  @override
+  final String actualTableName = 'timelapses';
+  @override
+  VerificationContext validateIntegrity(TimelapsesCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    }
+    if (d.box.present) {
+      context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
+    } else if (isInserting) {
+      context.missing(_boxMeta);
+    }
+    if (d.ssid.present) {
+      context.handle(
+          _ssidMeta, ssid.isAcceptableValue(d.ssid.value, _ssidMeta));
+    } else if (isInserting) {
+      context.missing(_ssidMeta);
+    }
+    if (d.password.present) {
+      context.handle(_passwordMeta,
+          password.isAcceptableValue(d.password.value, _passwordMeta));
+    } else if (isInserting) {
+      context.missing(_passwordMeta);
+    }
+    if (d.controllerID.present) {
+      context.handle(
+          _controllerIDMeta,
+          controllerID.isAcceptableValue(
+              d.controllerID.value, _controllerIDMeta));
+    } else if (isInserting) {
+      context.missing(_controllerIDMeta);
+    }
+    if (d.rotate.present) {
+      context.handle(
+          _rotateMeta, rotate.isAcceptableValue(d.rotate.value, _rotateMeta));
+    } else if (isInserting) {
+      context.missing(_rotateMeta);
+    }
+    if (d.name.present) {
+      context.handle(
+          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (d.strain.present) {
+      context.handle(
+          _strainMeta, strain.isAcceptableValue(d.strain.value, _strainMeta));
+    } else if (isInserting) {
+      context.missing(_strainMeta);
+    }
+    if (d.dropboxToken.present) {
+      context.handle(
+          _dropboxTokenMeta,
+          dropboxToken.isAcceptableValue(
+              d.dropboxToken.value, _dropboxTokenMeta));
+    } else if (isInserting) {
+      context.missing(_dropboxTokenMeta);
+    }
+    if (d.uploadName.present) {
+      context.handle(_uploadNameMeta,
+          uploadName.isAcceptableValue(d.uploadName.value, _uploadNameMeta));
+    } else if (isInserting) {
+      context.missing(_uploadNameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Timelapse map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Timelapse.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(TimelapsesCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.box.present) {
+      map['box'] = Variable<int, IntType>(d.box.value);
+    }
+    if (d.ssid.present) {
+      map['ssid'] = Variable<String, StringType>(d.ssid.value);
+    }
+    if (d.password.present) {
+      map['password'] = Variable<String, StringType>(d.password.value);
+    }
+    if (d.controllerID.present) {
+      map['controller_i_d'] =
+          Variable<String, StringType>(d.controllerID.value);
+    }
+    if (d.rotate.present) {
+      map['rotate'] = Variable<String, StringType>(d.rotate.value);
+    }
+    if (d.name.present) {
+      map['name'] = Variable<String, StringType>(d.name.value);
+    }
+    if (d.strain.present) {
+      map['strain'] = Variable<String, StringType>(d.strain.value);
+    }
+    if (d.dropboxToken.present) {
+      map['dropbox_token'] = Variable<String, StringType>(d.dropboxToken.value);
+    }
+    if (d.uploadName.present) {
+      map['upload_name'] = Variable<String, StringType>(d.uploadName.value);
+    }
+    return map;
+  }
+
+  @override
+  $TimelapsesTable createAlias(String alias) {
+    return $TimelapsesTable(_db, alias);
+  }
+}
+
 class Feed extends DataClass implements Insertable<Feed> {
   final int id;
   final String name;
@@ -2326,6 +2814,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
   $ChartCachesTable _chartCaches;
   $ChartCachesTable get chartCaches => _chartCaches ??= $ChartCachesTable(this);
+  $TimelapsesTable _timelapses;
+  $TimelapsesTable get timelapses => _timelapses ??= $TimelapsesTable(this);
   $FeedsTable _feeds;
   $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
   $FeedEntriesTable _feedEntries;
@@ -2347,6 +2837,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         params,
         boxes,
         chartCaches,
+        timelapses,
         feeds,
         feedEntries,
         feedMedias

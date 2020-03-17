@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -38,12 +39,12 @@ class BoxFeedBlocEventReloadChart extends BoxFeedBlocEvent {
 }
 
 class BoxFeedBlocEventBoxUpdated extends BoxFeedBlocEvent {
-  final Box box;
+  final int rand = Random().nextInt(1 << 32);
 
-  BoxFeedBlocEventBoxUpdated(this.box);
+  BoxFeedBlocEventBoxUpdated();
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [rand];
 }
 
 abstract class BoxFeedBlocState extends Equatable {}
@@ -62,15 +63,19 @@ class BoxFeedBlocStateNoBox extends BoxFeedBlocState {
 
 class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocState {
   final Box box;
+  final int nTimelapses;
 
-  BoxFeedBlocStateBoxLoaded(this.box);
+  BoxFeedBlocStateBoxLoaded(this.box, this.nTimelapses);
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [box, nTimelapses];
 }
 
 class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent _args;
+
+  Box _box;
+  int _nTimelapses;
 
   BoxFeedBloc(this._args) {
     this.add(BoxFeedBlocEventLoadBox());
@@ -83,26 +88,38 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   Stream<BoxFeedBlocState> mapEventToState(BoxFeedBlocEvent event) async* {
     if (event is BoxFeedBlocEventLoadBox) {
       AppDB _db = AppDB();
-      Box box = _args.box;
-      if (box == null) {
+      _box = _args.box;
+      if (_box == null) {
         AppData appData = _db.getAppData();
         if (appData.lastBoxID == null) {
           yield BoxFeedBlocStateNoBox();
           return;
         }
-        box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
+        _box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
       } else {
-        _db.setLastBox(box.id);
+        _db.setLastBox(_box.id);
       }
 
-      RelDB.get().boxesDAO.watchBox(box.id).listen(_onBoxUpdated);
-      yield BoxFeedBlocStateBoxLoaded(box);
+      _nTimelapses = await RelDB.get().boxesDAO.nTimelapses().getSingle();
+      RelDB.get()
+          .boxesDAO
+          .nTimelapses()
+          .watchSingle()
+          .listen(_onNTimelapsesUpdated);
+      RelDB.get().boxesDAO.watchBox(_box.id).listen(_onBoxUpdated);
+      yield BoxFeedBlocStateBoxLoaded(_box, _nTimelapses);
     } else if (event is BoxFeedBlocEventBoxUpdated) {
-      yield BoxFeedBlocStateBoxLoaded(event.box);
+      yield BoxFeedBlocStateBoxLoaded(_box, _nTimelapses);
     }
   }
 
   void _onBoxUpdated(Box box) {
-    add(BoxFeedBlocEventBoxUpdated(box));
+    _box = box;
+    add(BoxFeedBlocEventBoxUpdated());
+  }
+
+  void _onNTimelapsesUpdated(int nTimelapses) {
+    _nTimelapses = nTimelapses;
+    add(BoxFeedBlocEventBoxUpdated());
   }
 }

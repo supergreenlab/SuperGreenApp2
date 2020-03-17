@@ -43,11 +43,26 @@ class ChartCaches extends Table {
   TextColumn get values => text().withDefault(Constant('[]'))();
 }
 
+class Timelapses extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get box => integer()();
+  TextColumn get ssid => text().withLength(min: 1, max: 64)();
+  TextColumn get password => text().withLength(min: 1, max: 64)();
+  TextColumn get controllerID => text().withLength(min: 1, max: 64)();
+  TextColumn get rotate => text().withLength(min: 1, max: 64)();
+  TextColumn get name => text().withLength(min: 1, max: 64)();
+  TextColumn get strain => text().withLength(min: 1, max: 64)();
+  TextColumn get dropboxToken => text().withLength(min: 1, max: 64)();
+  TextColumn get uploadName => text().withLength(min: 1, max: 64)();
+}
+
 @UseDao(tables: [
   Boxes,
   ChartCaches,
+  Timelapses,
 ], queries: {
   'nBoxes': 'SELECT COUNT(*) FROM boxes',
+  'nTimelapses': 'SELECT COUNT(*) FROM timelapses',
 })
 class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
   BoxesDAO(RelDB db) : super(db);
@@ -81,7 +96,7 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
   }
 
   Future<ChartCache> getChartCache(int boxID, String name) async {
-    List<ChartCache> cs = await(select(chartCaches)
+    List<ChartCache> cs = await (select(chartCaches)
           ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
         .get();
     if (cs.length == 0) {
@@ -104,9 +119,17 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
     return delete(chartCaches).delete(chartCache);
   }
 
+  Future<List<Timelapse>> getTimelapses(int boxID) {
+    return (select(timelapses)..where((t) => t.box.equals(boxID))).get();
+  }
+
+  Future<int> addTimelapse(TimelapsesCompanion timelapse) {
+    return into(timelapses).insert(timelapse);
+  }
+
   Map<String, dynamic> boxSettings(Box box) {
     final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
-    // TODO make atual enums or constants
+    // TODO make actual enums or constants
     return {
       'nPlants': 1,
       'phase': 'VEG', // VEG or BLOOM

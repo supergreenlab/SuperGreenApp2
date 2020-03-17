@@ -94,6 +94,9 @@ class TimelapseSetupBlocStateDone extends TimelapseSetupBlocState {
   List<Object> get props => [];
 }
 
+const ServiceUUID = "7bfdeb0b-f06d-480f-a82c-cde56ab3d686";
+const CharacteristicUUID = "ec0e";
+
 class TimelapseSetupBloc
     extends Bloc<TimelapseSetupBlocEvent, TimelapseSetupBlocState> {
   final BleManager _bleManager = BleManager();
@@ -121,7 +124,8 @@ class TimelapseSetupBloc
     } else if (event is TimelapseSetupBlocEventDeviceFound) {
       String controllerid;
       if (_args.box.device != null) {
-        Device device = await RelDB.get().devicesDAO.getDevice(_args.box.device);
+        Device device =
+            await RelDB.get().devicesDAO.getDevice(_args.box.device);
         controllerid = device.identifier;
       }
       yield TimelapseSetupBlocStateDeviceFound(controllerid);
@@ -140,6 +144,7 @@ class TimelapseSetupBloc
         }
       }
     } else if (event is TimelapseSetpuBlocEventSetConfig) {
+      yield TimelapseSetupBlocStateSettingParams();
       String value =
           '${event.ssid};|;${event.password};|;${event.controllerID};|;${event.dropboxToken};|;${event.name};|;${event.strain};|;${event.uploadName};|;${event.rotate}';
       Peripheral peripheral = _scanResult.peripheral;
@@ -147,19 +152,28 @@ class TimelapseSetupBloc
         await peripheral.connect();
       }
       await peripheral.discoverAllServicesAndCharacteristics();
-      await peripheral.writeCharacteristic(
-          "ffffffff-ffff-ffff-ffff-fffffffffff0",
-          "ec0e",
-          Uint8List.fromList(value.codeUnits),
-          true);
+      await peripheral.writeCharacteristic(ServiceUUID, CharacteristicUUID,
+          Uint8List.fromList(value.codeUnits), true);
       await peripheral.disconnectOrCancelConnection();
+
+      await RelDB.get().boxesDAO.addTimelapse(TimelapsesCompanion.insert(
+          box: _args.box.id,
+          ssid: event.ssid,
+          password: event.password,
+          controllerID: event.controllerID,
+          rotate: event.rotate,
+          name: event.name,
+          strain: event.strain,
+          dropboxToken: event.dropboxToken,
+          uploadName: event.uploadName));
+
       yield TimelapseSetupBlocStateDone();
     }
   }
 
   void startScan() {
     _bleManager.startPeripheralScan(
-      uuids: ["ffffffff-ffff-ffff-ffff-fffffffffff0"],
+      uuids: [ServiceUUID],
     ).listen((scanResult) {
       _scanResult = scanResult;
       print(

@@ -263,10 +263,15 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.remove_red_eye),
-              tooltip: 'View live cam',
+              tooltip: 'View live cams',
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToTimelapseSetup(state.box));
+                if (state.nTimelapses == 0) {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToTimelapseSetup(state.box));
+                } else {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToTimelapseViewer(state.box));
+                }
               },
             ),
           ],
