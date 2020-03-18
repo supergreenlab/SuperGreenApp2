@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
+import 'package:moor/moor.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -24,7 +25,7 @@ class TimelapseSetupBlocEventBleStateChanged extends TimelapseSetupBlocEvent {
   List<Object> get props => [];
 }
 
-class TimelapseSetpuBlocEventSetConfig extends TimelapseSetupBlocEvent {
+class TimelapseSetupBlocEventSetConfig extends TimelapseSetupBlocEvent {
   final String ssid;
   final String password;
   final String controllerID;
@@ -34,7 +35,7 @@ class TimelapseSetpuBlocEventSetConfig extends TimelapseSetupBlocEvent {
   final String uploadName;
   final String rotate;
 
-  TimelapseSetpuBlocEventSetConfig(
+  TimelapseSetupBlocEventSetConfig(
       {this.ssid,
       this.password,
       this.controllerID,
@@ -90,6 +91,10 @@ class TimelapseSetupBlocStateSettingParams extends TimelapseSetupBlocState {
 }
 
 class TimelapseSetupBlocStateDone extends TimelapseSetupBlocState {
+  final Box box;
+
+  TimelapseSetupBlocStateDone(this.box);
+
   @override
   List<Object> get props => [];
 }
@@ -143,7 +148,7 @@ class TimelapseSetupBloc
           print(e);
         }
       }
-    } else if (event is TimelapseSetpuBlocEventSetConfig) {
+    } else if (event is TimelapseSetupBlocEventSetConfig) {
       yield TimelapseSetupBlocStateSettingParams();
       String value =
           '${event.ssid};|;${event.password};|;${event.controllerID};|;${event.dropboxToken};|;${event.name};|;${event.strain};|;${event.uploadName};|;${event.rotate}';
@@ -158,16 +163,16 @@ class TimelapseSetupBloc
 
       await RelDB.get().boxesDAO.addTimelapse(TimelapsesCompanion.insert(
           box: _args.box.id,
-          ssid: event.ssid,
-          password: event.password,
-          controllerID: event.controllerID,
-          rotate: event.rotate,
-          name: event.name,
-          strain: event.strain,
-          dropboxToken: event.dropboxToken,
-          uploadName: event.uploadName));
+          ssid: Value(event.ssid),
+          password: Value(event.password),
+          controllerID: Value(event.controllerID),
+          rotate: Value(event.rotate),
+          name: Value(event.name),
+          strain: Value(event.strain),
+          dropboxToken: Value(event.dropboxToken),
+          uploadName: Value(event.uploadName)));
 
-      yield TimelapseSetupBlocStateDone();
+      yield TimelapseSetupBlocStateDone(_args.box);
     }
   }
 

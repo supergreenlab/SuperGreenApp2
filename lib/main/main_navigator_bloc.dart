@@ -324,6 +324,16 @@ class MainNavigateToTimelapseSetup extends MainNavigateToFeedFormEvent {
   List<Object> get props => [box];
 }
 
+class MainNavigateToTimelapseConnect extends MainNavigateToFeedFormEvent {
+  final Box box;
+
+  MainNavigateToTimelapseConnect(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
   final Box box;
 
@@ -458,14 +468,13 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = future =
           _navigatorKey.currentState.pushNamed('/media', arguments: event);
     } else if (event is MainNavigateToTimelapseHowto) {
-      future = future =
-          _navigatorKey.currentState.pushNamed('/timelapse/howto', arguments: event);
+      future = _pushOrReplace('/timelapse/howto', event);
     } else if (event is MainNavigateToTimelapseSetup) {
-      future = future =
-          _navigatorKey.currentState.pushNamed('/timelapse/setup', arguments: event);
+      future = _pushOrReplace('/timelapse/setup', event);
+    } else if (event is MainNavigateToTimelapseConnect) {
+      future = _pushOrReplace('/timelapse/connect', event);
     } else if (event is MainNavigateToTimelapseViewer) {
-      future = future =
-          _navigatorKey.currentState.pushNamed('/timelapse/viewer', arguments: event);
+      future = _pushOrReplace('/timelapse/viewer', event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

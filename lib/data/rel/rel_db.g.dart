@@ -1578,14 +1578,14 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   Timelapse(
       {@required this.id,
       @required this.box,
-      @required this.ssid,
-      @required this.password,
-      @required this.controllerID,
-      @required this.rotate,
-      @required this.name,
-      @required this.strain,
-      @required this.dropboxToken,
-      @required this.uploadName});
+      this.ssid,
+      this.password,
+      this.controllerID,
+      this.rotate,
+      this.name,
+      this.strain,
+      this.dropboxToken,
+      this.uploadName});
   factory Timelapse.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1770,23 +1770,15 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   TimelapsesCompanion.insert({
     this.id = const Value.absent(),
     @required int box,
-    @required String ssid,
-    @required String password,
-    @required String controllerID,
-    @required String rotate,
-    @required String name,
-    @required String strain,
-    @required String dropboxToken,
-    @required String uploadName,
-  })  : box = Value(box),
-        ssid = Value(ssid),
-        password = Value(password),
-        controllerID = Value(controllerID),
-        rotate = Value(rotate),
-        name = Value(name),
-        strain = Value(strain),
-        dropboxToken = Value(dropboxToken),
-        uploadName = Value(uploadName);
+    this.ssid = const Value.absent(),
+    this.password = const Value.absent(),
+    this.controllerID = const Value.absent(),
+    this.rotate = const Value.absent(),
+    this.name = const Value.absent(),
+    this.strain = const Value.absent(),
+    this.dropboxToken = const Value.absent(),
+    this.uploadName = const Value.absent(),
+  }) : box = Value(box);
   TimelapsesCompanion copyWith(
       {Value<int> id,
       Value<int> box,
@@ -1844,7 +1836,7 @@ class $TimelapsesTable extends Timelapses
   @override
   GeneratedTextColumn get ssid => _ssid ??= _constructSsid();
   GeneratedTextColumn _constructSsid() {
-    return GeneratedTextColumn('ssid', $tableName, false,
+    return GeneratedTextColumn('ssid', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1853,7 +1845,7 @@ class $TimelapsesTable extends Timelapses
   @override
   GeneratedTextColumn get password => _password ??= _constructPassword();
   GeneratedTextColumn _constructPassword() {
-    return GeneratedTextColumn('password', $tableName, false,
+    return GeneratedTextColumn('password', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1864,7 +1856,7 @@ class $TimelapsesTable extends Timelapses
   GeneratedTextColumn get controllerID =>
       _controllerID ??= _constructControllerID();
   GeneratedTextColumn _constructControllerID() {
-    return GeneratedTextColumn('controller_i_d', $tableName, false,
+    return GeneratedTextColumn('controller_i_d', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1873,7 +1865,7 @@ class $TimelapsesTable extends Timelapses
   @override
   GeneratedTextColumn get rotate => _rotate ??= _constructRotate();
   GeneratedTextColumn _constructRotate() {
-    return GeneratedTextColumn('rotate', $tableName, false,
+    return GeneratedTextColumn('rotate', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1882,7 +1874,7 @@ class $TimelapsesTable extends Timelapses
   @override
   GeneratedTextColumn get name => _name ??= _constructName();
   GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
+    return GeneratedTextColumn('name', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1891,7 +1883,7 @@ class $TimelapsesTable extends Timelapses
   @override
   GeneratedTextColumn get strain => _strain ??= _constructStrain();
   GeneratedTextColumn _constructStrain() {
-    return GeneratedTextColumn('strain', $tableName, false,
+    return GeneratedTextColumn('strain', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1902,7 +1894,7 @@ class $TimelapsesTable extends Timelapses
   GeneratedTextColumn get dropboxToken =>
       _dropboxToken ??= _constructDropboxToken();
   GeneratedTextColumn _constructDropboxToken() {
-    return GeneratedTextColumn('dropbox_token', $tableName, false,
+    return GeneratedTextColumn('dropbox_token', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1911,7 +1903,7 @@ class $TimelapsesTable extends Timelapses
   @override
   GeneratedTextColumn get uploadName => _uploadName ??= _constructUploadName();
   GeneratedTextColumn _constructUploadName() {
-    return GeneratedTextColumn('upload_name', $tableName, false,
+    return GeneratedTextColumn('upload_name', $tableName, true,
         minTextLength: 1, maxTextLength: 64);
   }
 
@@ -1949,54 +1941,38 @@ class $TimelapsesTable extends Timelapses
     if (d.ssid.present) {
       context.handle(
           _ssidMeta, ssid.isAcceptableValue(d.ssid.value, _ssidMeta));
-    } else if (isInserting) {
-      context.missing(_ssidMeta);
     }
     if (d.password.present) {
       context.handle(_passwordMeta,
           password.isAcceptableValue(d.password.value, _passwordMeta));
-    } else if (isInserting) {
-      context.missing(_passwordMeta);
     }
     if (d.controllerID.present) {
       context.handle(
           _controllerIDMeta,
           controllerID.isAcceptableValue(
               d.controllerID.value, _controllerIDMeta));
-    } else if (isInserting) {
-      context.missing(_controllerIDMeta);
     }
     if (d.rotate.present) {
       context.handle(
           _rotateMeta, rotate.isAcceptableValue(d.rotate.value, _rotateMeta));
-    } else if (isInserting) {
-      context.missing(_rotateMeta);
     }
     if (d.name.present) {
       context.handle(
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
     }
     if (d.strain.present) {
       context.handle(
           _strainMeta, strain.isAcceptableValue(d.strain.value, _strainMeta));
-    } else if (isInserting) {
-      context.missing(_strainMeta);
     }
     if (d.dropboxToken.present) {
       context.handle(
           _dropboxTokenMeta,
           dropboxToken.isAcceptableValue(
               d.dropboxToken.value, _dropboxTokenMeta));
-    } else if (isInserting) {
-      context.missing(_dropboxTokenMeta);
     }
     if (d.uploadName.present) {
       context.handle(_uploadNameMeta,
           uploadName.isAcceptableValue(d.uploadName.value, _uploadNameMeta));
-    } else if (isInserting) {
-      context.missing(_uploadNameMeta);
     }
     return context;
   }

@@ -78,12 +78,14 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_page.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
-import 'package:super_green_app/pages/timelapse_howto/timelapse_howto_bloc.dart';
-import 'package:super_green_app/pages/timelapse_howto/timelapse_howto_page.dart';
-import 'package:super_green_app/pages/timelapse_setup/timelapse_setup_bloc.dart';
-import 'package:super_green_app/pages/timelapse_setup/timelapse_setup_page.dart';
-import 'package:super_green_app/pages/timelapse_viewer/timelapse_viewer_bloc.dart';
-import 'package:super_green_app/pages/timelapse_viewer/timelapse_viewer_page.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_bloc.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_page.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_howto/timelapse_howto_bloc.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_howto/timelapse_howto_page.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_setup/timelapse_setup_bloc.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_setup/timelapse_setup_page.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_bloc.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -308,6 +310,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => TimelapseSetupBloc(settings.arguments),
           child: TimelapseSetupPage(),
+        );
+      case '/timelapse/connect':
+        return BlocProvider(
+          create: (context) => TimelapseConnectBloc(settings.arguments),
+          child: TimelapseConnectPage(),
         );
       case '/timelapse/viewer':
         return BlocProvider(

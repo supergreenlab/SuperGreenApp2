@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/timelapse_setup/timelapse_setup_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_setup/timelapse_setup_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -28,6 +31,12 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
       listener: (BuildContext context, TimelapseSetupBlocState state) {
         if (state is TimelapseSetupBlocStateDeviceFound) {
           _controllerid = TextEditingController(text: state.controllerid);
+        } else if (state is TimelapseSetupBlocStateDone) {
+          Timer(Duration(seconds: 3), () {
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToTimelapseViewer(state.box,
+                    pushAsReplacement: true));
+          });
         }
       },
       child: BlocBuilder<TimelapseSetupBloc, TimelapseSetupBlocState>(
@@ -84,7 +93,7 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
                             title: 'OK',
                             onPressed: () {
                               BlocProvider.of<TimelapseSetupBloc>(context).add(
-                                  TimelapseSetpuBlocEventSetConfig(
+                                  TimelapseSetupBlocEventSetConfig(
                                       ssid: _ssid.value.text,
                                       password: _password.value.text,
                                       controllerID: _controllerid.value.text,

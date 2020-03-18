@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -37,6 +39,24 @@ class DeviceWifiBlocEventSetup extends DeviceWifiBlocEvent {
 
   @override
   List<Object> get props => [ssid, pass];
+}
+
+class DeviceWifiBlocEventRetrySearch extends DeviceWifiBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
+  DeviceWifiBlocEventRetrySearch();
+
+  @override
+  List<Object> get props => [rand];
+}
+
+class DeviceWifiBlocEventRetypeCredentials extends DeviceWifiBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
+  DeviceWifiBlocEventRetypeCredentials();
+
+  @override
+  List<Object> get props => [rand];
 }
 
 class DeviceWifiBlocState extends Equatable {
@@ -91,35 +111,47 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
         print(e);
       }
 
-      yield DeviceWifiBlocStateSearching();
-      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(_args.device.id), isReachable: Value(false)));
-
-      String ip;
-      for (int i = 0; i < 4; ++i) {
-        await new Future.delayed(const Duration(seconds: 2));
-        Param mdns = await ddb.getParam(_args.device.id, 'MDNS_DOMAIN');
-        ip = await DeviceAPI.resolveLocalName(mdns.svalue);
-        if (ip == "" || ip == null) {
-          continue;
-        }
-        break;
-      }
-      if (ip == "" || ip == null) {
-        yield DeviceWifiBlocStateNotFound();
-        return;
-      }
-
-      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(_args.device.id), ip: Value(ip), isReachable: Value(true)));
-      Device device = await RelDB.get().devicesDAO.getDevice(_args.device.id);
-
-      Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
-      await ddb.updateParam(ipParam.copyWith(svalue: ip));
-
-      Param wifiStatusParam =
-          await ddb.getParam(_args.device.id, 'WIFI_STATUS');
-      await DeviceHelper.refreshIntParam(device, wifiStatusParam);
-
-      yield DeviceWifiBlocStateDone(device);
+      yield* _researchDevice();
+    } else if (event is DeviceWifiBlocEventRetrySearch) {
+      yield* _researchDevice();
+    } else if (event is DeviceWifiBlocEventRetypeCredentials) {
+      yield DeviceWifiBlocState();
     }
+  }
+
+  Stream<DeviceWifiBlocState> _researchDevice() async* {
+    var ddb = RelDB.get().devicesDAO;
+
+    yield DeviceWifiBlocStateSearching();
+    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+        id: Value(_args.device.id), isReachable: Value(false)));
+
+    String ip;
+    for (int i = 0; i < 4; ++i) {
+      await new Future.delayed(const Duration(seconds: 2));
+      Param mdns = await ddb.getParam(_args.device.id, 'MDNS_DOMAIN');
+      ip = await DeviceAPI.resolveLocalName(mdns.svalue);
+      if (ip == "" || ip == null) {
+        continue;
+      }
+      break;
+    }
+
+    if (ip == "" || ip == null) {
+      yield DeviceWifiBlocStateNotFound();
+      return;
+    }
+
+    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+        id: Value(_args.device.id), ip: Value(ip), isReachable: Value(true)));
+    Device device = await RelDB.get().devicesDAO.getDevice(_args.device.id);
+
+    Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
+    await ddb.updateParam(ipParam.copyWith(svalue: ip));
+
+    Param wifiStatusParam = await ddb.getParam(_args.device.id, 'WIFI_STATUS');
+    await DeviceHelper.refreshIntParam(device, wifiStatusParam);
+
+    yield DeviceWifiBlocStateDone(device);
   }
 }

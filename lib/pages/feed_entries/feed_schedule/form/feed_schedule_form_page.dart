@@ -42,11 +42,16 @@ class FeedScheduleFormPage extends StatelessWidget {
           builder: (BuildContext context, FeedScheduleFormBlocState state) {
             Widget body;
             if (state is FeedScheduleFormBlocStateLoading) {
-              body = FullscreenLoading(title: 'Saving..',);
-            } else
-            if (state is FeedScheduleFormBlocStateUnInitialized) {
-              body = FullscreenLoading(
-                title: 'Loading..',
+              body = Material(
+                child: FullscreenLoading(
+                  title: 'Saving..',
+                ),
+              );
+            } else if (state is FeedScheduleFormBlocStateUnInitialized) {
+              body = Material(
+                child: FullscreenLoading(
+                  title: 'Loading..',
+                ),
               );
             } else {
               body = FeedFormLayout(

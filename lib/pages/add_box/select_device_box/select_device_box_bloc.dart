@@ -142,7 +142,7 @@ class SelectDeviceBoxBloc
     for (int i = 0; i < ledModule.arrayLen; ++i) {
       final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
       if (ledBox.ivalue >= 0) {
-        SelectData selectData = boxes.firstWhere((b) => b.box == ledBox.ivalue);
+        SelectData selectData = boxes.firstWhere((b) => b.box == ledBox.ivalue, orElse: () => null);
         if (selectData != null) {
           selectData.leds.add(i);
         }
