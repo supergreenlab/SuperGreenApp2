@@ -161,14 +161,19 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
       ]);
     }
     return MatrixGestureDetector(
-      onMatrixUpdate: (Matrix4 m, Matrix4 tm, Matrix4 sm, Matrix4 rm) {
-        setState(() {
-          _matrix = m;
-        });
-      },
-      child: Transform(
-        transform: _matrix,
-        child: Container(color: Colors.black, child: picture)));
+        onMatrixUpdate: (Matrix4 m, Matrix4 tm, Matrix4 sm, Matrix4 rm) {
+          setState(() {
+            _matrix = MatrixGestureDetector.compose(_matrix, tm, sm, null);
+          });
+        },
+        onGestureEnd: () {
+          setState(() {
+            _matrix = Matrix4.identity();
+          });
+        },
+        child: Transform(
+            transform: _matrix,
+            child: Container(color: Colors.black, child: picture)));
   }
 
   @override

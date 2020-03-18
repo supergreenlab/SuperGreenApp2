@@ -22,7 +22,8 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
     return BlocListener<TimelapseViewerBloc, TimelapseViewerBlocState>(
         listener: (BuildContext context, TimelapseViewerBlocState state) {
           if (state is TimelapseViewerBlocStateLoaded) {
-            _matrix = state.images.map<Matrix4>((_) => Matrix4.identity()).toList();
+            _matrix =
+                state.images.map<Matrix4>((_) => Matrix4.identity()).toList();
           }
         },
         child: BlocBuilder<TimelapseViewerBloc, TimelapseViewerBlocState>(
@@ -66,11 +67,18 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
         return MatrixGestureDetector(
             onMatrixUpdate: (Matrix4 m, Matrix4 tm, Matrix4 sm, Matrix4 rm) {
               setState(() {
-                _matrix[index] = m;
+                _matrix[index] =
+                    MatrixGestureDetector.compose(_matrix[index], tm, sm, null);
+              });
+            },
+            onGestureEnd: () {
+              setState(() {
+                _matrix[index] = Matrix4.identity();
               });
             },
             child: Transform(
-                transform: _matrix[index], child: Image.memory(state.images[index])));
+                transform: _matrix[index],
+                child: Image.memory(state.images[index])));
       },
     );
   }
