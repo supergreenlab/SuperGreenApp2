@@ -75,11 +75,9 @@ class BoxFeedAppBarBloc
     if (event is BoxFeedAppBarBlocEventLoadChart) {
       List<charts.Series<Metric, DateTime>> graphData = await updateChart(box);
       yield BoxFeedAppBarBlocStateLoaded(graphData);
-      if (event is BoxFeedAppBarBlocEventLoadChart) {
-        _timer = Timer.periodic(Duration(seconds: 60), (timer) {
-          this.add(BoxFeedAppBarBlocEventReloadChart());
-        });
-      }
+      _timer = Timer.periodic(Duration(seconds: 60), (timer) {
+        this.add(BoxFeedAppBarBlocEventReloadChart());
+      });
     } else if (event is BoxFeedAppBarBlocEventReloadChart) {
       List<charts.Series<Metric, DateTime>> graphData = await updateChart(box);
       yield BoxFeedAppBarBlocStateLoaded(graphData);
@@ -94,18 +92,20 @@ class BoxFeedAppBarBloc
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
       String identifier = device.identifier;
       int deviceBox = box.deviceBox;
-      charts.Series<Metric, DateTime> temp = await getMetricsName(box, 
+      charts.Series<Metric, DateTime> temp = await getMetricsName(
+          box,
           identifier,
           'Temperature',
           'BOX_${deviceBox}_TEMP',
           charts.MaterialPalette.green.shadeDefault);
-      charts.Series<Metric, DateTime> humi = await getMetricsName(box, 
+      charts.Series<Metric, DateTime> humi = await getMetricsName(
+          box,
           identifier,
           'Humidity',
           'BOX_${deviceBox}_HUMI',
           charts.MaterialPalette.blue.shadeDefault);
-      List<dynamic> duty =
-          await getMetricRequest(box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+      List<dynamic> duty = await getMetricRequest(
+          box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
       List<int> dims = [];
       int n = 0;
       Module lightModule =
@@ -116,7 +116,8 @@ class BoxFeedAppBarBloc
         if (boxParam.ivalue != box.deviceBox) {
           continue;
         }
-        List<dynamic> dim = await getMetricRequest(box, identifier, 'LED_${i}_DIM');
+        List<dynamic> dim =
+            await getMetricRequest(box, identifier, 'LED_${i}_DIM');
         for (int i = 0; i < dim.length; ++i) {
           int d = dim[i][1];
           if (i > dims.length - 1) {
@@ -133,8 +134,14 @@ class BoxFeedAppBarBloc
       int i = 0;
       charts.Series<Metric, DateTime> light = getTimeSeries(
           duty
-              .map<dynamic>(
-                  (d) => [d[0], n == 0 ? d[1] : d[1] * dims[i >= dims.length ? dims.length-1 : i++] / 100])
+              .map<dynamic>((d) => [
+                    d[0],
+                    n == 0
+                        ? d[1]
+                        : d[1] *
+                            dims[i >= dims.length ? dims.length - 1 : i++] /
+                            100
+                  ])
               .toList(),
           'Light',
           charts.MaterialPalette.yellow.shadeDefault);
@@ -142,8 +149,12 @@ class BoxFeedAppBarBloc
     }
   }
 
-  Future<charts.Series<Metric, DateTime>> getMetricsName(Box box, String controllerID,
-      String graphID, String name, charts.Color color) async {
+  Future<charts.Series<Metric, DateTime>> getMetricsName(
+      Box box,
+      String controllerID,
+      String graphID,
+      String name,
+      charts.Color color) async {
     List<dynamic> values = await getMetricRequest(box, controllerID, name);
     return getTimeSeries(values, graphID, color);
   }
