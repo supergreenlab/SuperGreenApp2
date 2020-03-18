@@ -79,7 +79,11 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                 state is DeviceWifiBlocStateLoading ||
                 state is DeviceWifiBlocStateNotFound);
             Widget body;
-            if (state is DeviceWifiBlocStateNotFound) {
+            if (state is DeviceWifiBlocStateLoading) {
+              body = FullscreenLoading(
+                title: 'Setting parameters..'
+              );
+            } else if (state is DeviceWifiBlocStateNotFound) {
               body = _renderNotfound();
             } else if (state is DeviceWifiBlocStateSearching) {
               body = _renderSearching();
@@ -110,15 +114,15 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           children: <Widget>[
             Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
             Text(
-              'Couldn\'t find the device on your network!',
+              'Couldn\'t find the device\non your network.',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 24.0, left: 8.0, right: 8.0),
               child: Text(
-                'Sometime it just takes a bit more time, try retry search:',
-                style: TextStyle(fontSize: 20, color: Colors.grey),
+                'Sometime it just takes a bit more time,\nretry search:',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -130,10 +134,10 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 24.0, left: 8.0, right: 8.0),
               child: Text(
-                'Is the emoji wifi back? Tap this button:',
-                style: TextStyle(fontSize: 20, color: Colors.grey),
+                'Is the emoji wifi back?\nConnect to it, then tap this button:',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ),
