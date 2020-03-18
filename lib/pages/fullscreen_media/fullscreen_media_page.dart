@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
 import 'package:video_player/video_player.dart';
@@ -32,6 +33,7 @@ class FullscreenMediaPage extends StatefulWidget {
 class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
   VideoPlayerController _videoPlayerController;
   double _opacity = 0.5;
+  Matrix4 _matrix = Matrix4.identity();
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +160,15 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         )
       ]);
     }
-    return Container(color: Colors.black, child: picture);
+    return MatrixGestureDetector(
+      onMatrixUpdate: (Matrix4 m, Matrix4 tm, Matrix4 sm, Matrix4 rm) {
+        setState(() {
+          _matrix = m;
+        });
+      },
+      child: Transform(
+        transform: _matrix,
+        child: Container(color: Colors.black, child: picture)));
   }
 
   @override

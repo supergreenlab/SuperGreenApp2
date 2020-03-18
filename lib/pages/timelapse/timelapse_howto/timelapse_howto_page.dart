@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/timelapse_howto/timelapse_howto_bloc.dart';
+import 'package:super_green_app/pages/timelapse/timelapse_howto/timelapse_howto_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,12 +65,22 @@ class _TimelapseHowtoPageState extends State<TimelapseHowtoPage> {
                         child: FlatButton(
                           onPressed: () {
                             BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToTimelapseSetup(state.box));
+                                .add(MainNavigateToTimelapseSetup(state.box, pushAsReplacement: true));
                           },
                           child: Text(
                             'ADD A NEW ONE',
                             style: TextStyle(color: Colors.blue, fontSize: 22),
                           ),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToTimelapseConnect(state.box, pushAsReplacement: true));
+                        },
+                        child: Text(
+                          'CONNECT ONE',
+                          style: TextStyle(color: Colors.blue, fontSize: 20),
                         ),
                       ),
                     ],

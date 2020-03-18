@@ -76,7 +76,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           bloc: BlocProvider.of<DeviceWifiBloc>(context),
           builder: (context, state) {
             bool canGoBack = !(state is DeviceWifiBlocStateSearching ||
-                state is DeviceWifiBlocStateLoading);
+                state is DeviceWifiBlocStateLoading ||
+                state is DeviceWifiBlocStateNotFound);
             Widget body;
             if (state is DeviceWifiBlocStateNotFound) {
               body = _renderNotfound();
@@ -109,10 +110,40 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           children: <Widget>[
             Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
             Text(
-              'This device is already added!',
+              'Couldn\'t find the device on your network!',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Sometime it just takes a bit more time, try retry search:',
+                style: TextStyle(fontSize: 20, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            GreenButton(
+              title: 'RETRY SEARCH',
+              onPressed: () {
+                BlocProvider.of<DeviceWifiBloc>(context)
+                    .add(DeviceWifiBlocEventRetrySearch());
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Is the emoji wifi back? Tap this button:',
+                style: TextStyle(fontSize: 20, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            GreenButton(
+              title: 'RETYPE CREDENTIALS',
+              onPressed: () {
+                BlocProvider.of<DeviceWifiBloc>(context)
+                    .add(DeviceWifiBlocEventRetypeCredentials());
+              },
+            )
           ],
         )),
       ],

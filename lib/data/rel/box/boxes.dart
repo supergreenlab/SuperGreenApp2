@@ -46,14 +46,14 @@ class ChartCaches extends Table {
 class Timelapses extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get box => integer()();
-  TextColumn get ssid => text().withLength(min: 1, max: 64)();
-  TextColumn get password => text().withLength(min: 1, max: 64)();
-  TextColumn get controllerID => text().withLength(min: 1, max: 64)();
-  TextColumn get rotate => text().withLength(min: 1, max: 64)();
-  TextColumn get name => text().withLength(min: 1, max: 64)();
-  TextColumn get strain => text().withLength(min: 1, max: 64)();
-  TextColumn get dropboxToken => text().withLength(min: 1, max: 64)();
-  TextColumn get uploadName => text().withLength(min: 1, max: 64)();
+  TextColumn get ssid => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get password => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get controllerID => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get rotate => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get name => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get strain => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get dropboxToken => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get uploadName => text().withLength(min: 1, max: 64).nullable()();
 }
 
 @UseDao(tables: [
