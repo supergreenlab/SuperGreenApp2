@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
@@ -25,6 +29,36 @@ class DeviceAPI {
       name.replaceAll('.local', '');
     }
     name = '${name.toLowerCase()}.local';
+    // Temporary workaround, mdns discovery fails on the current version of the lib
+    String ip;
+    if (Platform.isAndroid) {
+      ip = await DeviceAPI.resolveLocalNameMDNS(name);
+    } else if (Platform.isIOS) {
+      final client = new HttpClient();
+      client.connectionTimeout = const Duration(seconds: 5);
+      for (int i = 0; i < 4; ++i) {
+        try {
+          final req = await client.getUrl(Uri.parse('http://$name/s?k=WIFI_IP'));
+          final resp = await req.close();
+          final completer = Completer();
+          resp.transform(utf8.decoder).listen((contents) {
+            completer.complete(contents);
+          });
+          ip = await completer.future;
+          break;
+        } catch(e) {
+          print(e);
+        }
+        await Future.delayed(Duration(seconds: 5));
+      }
+      if (ip == null) {
+        throw Error();
+      }
+    }
+    return ip;
+  }
+
+  static Future<String> resolveLocalNameMDNS(String name) async {
     final MDnsClient client = MDnsClient();
     await client.start();
 
@@ -46,19 +80,26 @@ class DeviceAPI {
 
   static Future<String> fetchStringParam(
       String controllerIP, String paramName) async {
-    Response r = await get('http://$controllerIP/s?k=${paramName.toUpperCase()}');
+    Response r =
+        await get('http://$controllerIP/s?k=${paramName.toUpperCase()}');
     return r.body;
   }
 
   static Future<int> fetchIntParam(
       String controllerIP, String paramName) async {
-    Response r = await get('http://$controllerIP/i?k=${paramName.toUpperCase()}');
+    Response r =
+        await get('http://$controllerIP/i?k=${paramName.toUpperCase()}');
     return int.parse(r.body);
   }
 
   static Future<String> setStringParam(
-      String controllerIP, String paramName, String value) async {
-    await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value');
+      String controllerIP, String paramName, String value, { int timeout }) async {
+    final client = new HttpClient();
+    if (timeout != null) {
+      client.connectionTimeout = Duration(seconds: timeout);
+    }
+    final req = await client.postUrl(Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value'));
+    await req.close();
     return fetchStringParam(controllerIP, paramName);
   }
 
@@ -67,5 +108,4 @@ class DeviceAPI {
     await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value');
     return fetchIntParam(controllerIP, paramName);
   }
-
 }

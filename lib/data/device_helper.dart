@@ -27,8 +27,8 @@ class DeviceHelper {
   }
   
   static Future updateStringParam(
-      Device device, Param param, String value) async {
-    await DeviceAPI.setStringParam(device.ip, param.key, value);
+      Device device, Param param, String value, { int timeout }) async {
+    await DeviceAPI.setStringParam(device.ip, param.key, value, timeout: timeout);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
   }
 
