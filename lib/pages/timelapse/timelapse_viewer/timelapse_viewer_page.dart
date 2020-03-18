@@ -84,7 +84,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
   }
 
   Widget _renderAdd(
-      BuildContext context, TimelapseViewerBlocStateLoaded state) {
+      BuildContext context, TimelapseViewerBlocStateLoaded state) { 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
