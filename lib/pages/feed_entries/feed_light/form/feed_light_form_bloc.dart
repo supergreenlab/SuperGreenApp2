@@ -85,6 +85,16 @@ class FeedLightFormBlocStateLoading extends FeedLightFormBlocState {
   List<Object> get props => [];
 }
 
+class FeedLightFormBlocStateNotReachable extends FeedLightFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class FeedLightFormBlocStateCancelling extends FeedLightFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
   @override
   List<Object> get props => [];
@@ -115,6 +125,10 @@ class FeedLightFormBloc
         return;
       }
       _device = await db.devicesDAO.getDevice(_args.box.device);
+      if (_device.isReachable == false) {
+        yield FeedLightFormBlocStateNotReachable();
+        return;
+      }
       Module lightModule = await db.devicesDAO.getModule(_device.id, "led");
       _lightParams = [];
       for (int i = 0; i < lightModule.arrayLen; ++i) {
@@ -131,8 +145,16 @@ class FeedLightFormBloc
       if (_args.box.device == null) {
         return;
       }
-      await DeviceHelper.updateIntParam(
-          _device, _lightParams[event.i], (event.value).toInt());
+      if (_device.isReachable == false) {
+        yield FeedLightFormBlocStateNotReachable();
+        return;
+      }
+      try {
+        await DeviceHelper.updateIntParam(
+            _device, _lightParams[event.i], (event.value).toInt());
+      } catch (e) {
+        yield FeedLightFormBlocStateNotReachable();
+      }
     } else if (event is FeedLightFormBlocEventCreate) {
       if (_args.box.device == null) {
         return;
@@ -152,9 +174,19 @@ class FeedLightFormBloc
         yield FeedLightFormBlocStateDone();
         return;
       }
+      if (_device.isReachable == false) {
+        yield FeedLightFormBlocStateNotReachable();
+        return;
+      }
+      yield FeedLightFormBlocStateCancelling();
       for (int i = 0; i < _lightParams.length; ++i) {
-        await DeviceHelper.updateIntParam(
-            _device, _lightParams[i], _initialValues[i]);
+        try {
+          await DeviceHelper.updateIntParam(
+              _device, _lightParams[i], _initialValues[i]);
+        } catch (e) {
+          yield FeedLightFormBlocStateNotReachable();
+          return;
+        }
       }
       yield FeedLightFormBlocStateDone();
     }

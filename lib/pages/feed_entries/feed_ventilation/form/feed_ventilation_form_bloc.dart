@@ -92,6 +92,12 @@ class FeedVentilationFormBlocStateVentilationLoaded
       [initialBlowerDay, initialBlowerNight, blowerDay, blowerNight];
 }
 
+class FeedVentilationFormBlocStateNotReachable
+    extends FeedVentilationFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedVentilationFormBlocStateLoading extends FeedVentilationFormBlocState {
   @override
   List<Object> get props => [];
@@ -137,6 +143,10 @@ class FeedVentilationFormBloc
         return;
       }
       _device = await db.devicesDAO.getDevice(_args.box.device);
+      if (_device.isReachable == false) {
+        yield FeedVentilationFormBlocStateNotReachable();
+        return;
+      }
       _blowerDay = await db.devicesDAO
           .getParam(_device.id, "BOX_${_args.box.deviceBox}_BLOWER_DAY");
       _initialBlowerDay = _blowerDay.ivalue;
@@ -189,8 +199,7 @@ class FeedVentilationFormBloc
       if (_args.box.device == null) {
         return;
       }
-      await DeviceHelper.updateIntParam(
-          _device, _blowerDay, _initialBlowerDay);
+      await DeviceHelper.updateIntParam(_device, _blowerDay, _initialBlowerDay);
       await DeviceHelper.updateIntParam(
           _device, _blowerNight, _initialBlowerNight);
       yield FeedVentilationFormBlocStateDone();

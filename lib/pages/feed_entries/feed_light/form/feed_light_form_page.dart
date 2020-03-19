@@ -55,6 +55,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             Widget body;
             if (state is FeedLightFormBlocStateLoading) {
               body = FullscreenLoading(title: 'Saving..');
+            } else if (state is FeedLightFormBlocStateCancelling) {
+              body = FullscreenLoading(title: 'Cancelling..');
+            } else if (state is FeedLightFormBlocStateNotReachable) {
+              body = Fullscreen(
+                  title: 'Device not reachable:/',
+                  subtitle:
+                      'Make sure you are on the same network.\nRemote control is coming soon:)',
+                  child: Icon(Icons.offline_bolt));
             } else if (state is FeedLightFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -100,6 +108,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               title: 'Record creation',
               changed: changed,
               valid: changed,
+              hideBackButton: (state is FeedLightFormBlocStateLoading || state is FeedLightFormBlocStateCancelling),
               onOK: () {
                 BlocProvider.of<FeedLightFormBloc>(context)
                     .add(FeedLightFormBlocEventCreate(values));

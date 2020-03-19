@@ -70,6 +70,10 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
     return (select(devices)..where((d) => d.id.equals(id))).getSingle();
   }
 
+  Stream<Device> watchDevice(int id) {
+    return (select(devices)..where((d) => d.id.equals(id))).watchSingle();
+  }
+
   Future<Device> getDeviceByIdentifier(String identifier) {
     return (select(devices)..where((d) => d.identifier.equals(identifier)))
         .getSingle();
@@ -84,7 +88,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future updateDevice(DevicesCompanion device) {
-    return (update(devices)..where((tbl) => tbl.id.equals(device.id.value))).write(device);
+    return (update(devices)..where((tbl) => tbl.id.equals(device.id.value)))
+        .write(device);
   }
 
   Future deleteDevice(Device device) {

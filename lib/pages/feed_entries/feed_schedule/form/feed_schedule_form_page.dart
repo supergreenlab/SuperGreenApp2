@@ -18,11 +18,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
@@ -41,38 +43,42 @@ class FeedScheduleFormPage extends StatelessWidget {
           bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
           builder: (BuildContext context, FeedScheduleFormBlocState state) {
             Widget body;
+            bool changed = false;
+            bool valid = false;
             if (state is FeedScheduleFormBlocStateLoading) {
-              body = Material(
-                child: FullscreenLoading(
-                  title: 'Saving..',
-                ),
+              body = FullscreenLoading(
+                title: 'Saving..',
               );
             } else if (state is FeedScheduleFormBlocStateUnInitialized) {
-              body = Material(
-                child: FullscreenLoading(
-                  title: 'Loading..',
-                ),
+              body = FullscreenLoading(
+                title: 'Loading..',
               );
-            } else {
-              body = FeedFormLayout(
+            } else if (state is FeedScheduleFormBlocStateNotReachable) {
+              body = Fullscreen(
+                  title: 'Device not reachable:/',
+                  subtitle:
+                      'Make sure you are on the same network.\nRemote control is coming soon:)',
+                  child: Icon(Icons.offline_bolt));
+            } else if (state is FeedScheduleFormBlocStateLoaded) {
+              changed = valid = state.schedule != state.initialSchedule;
+              body = _renderSchedules(context, state);
+            }
+            return FeedFormLayout(
                 title: 'Add schedule',
-                changed: state.schedule != state.initialSchedule,
-                valid: state.schedule != state.initialSchedule,
+                changed: changed,
+                valid: valid,
                 onOK: () => BlocProvider.of<FeedScheduleFormBloc>(context)
                     .add(FeedScheduleFormBlocEventCreate()),
-                body: _renderSchedules(context, state),
-              );
-            }
-            return AnimatedSwitcher(
-              child: body,
-              duration: Duration(milliseconds: 200),
-            );
+                body: AnimatedSwitcher(
+                  child: body,
+                  duration: Duration(milliseconds: 200),
+                ));
           }),
     );
   }
 
   Widget _renderSchedules(
-      BuildContext context, FeedScheduleFormBlocState state) {
+      BuildContext context, FeedScheduleFormBlocStateLoaded state) {
     return Column(
       children: <Widget>[
         Expanded(
@@ -131,7 +137,11 @@ class FeedScheduleFormPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(helper),
+              MarkdownBody(
+                data: helper,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

@@ -47,32 +47,50 @@ class FeedScheduleFormBlocEventCreate extends FeedScheduleFormBlocEvent {
   List<Object> get props => [];
 }
 
-class FeedScheduleFormBlocState extends Equatable {
+abstract class FeedScheduleFormBlocState extends Equatable {}
+
+class FeedScheduleFormBlocStateLoaded extends FeedScheduleFormBlocState {
   final String schedule;
   final Map<String, dynamic> schedules;
 
   final String initialSchedule;
   final Map<String, dynamic> initialSchedules;
 
-  FeedScheduleFormBlocState(this.schedule, this.schedules, this.initialSchedule, this.initialSchedules);
+  FeedScheduleFormBlocStateLoaded(this.schedule, this.schedules,
+      this.initialSchedule, this.initialSchedules);
 
   @override
-  List<Object> get props => [schedule, schedules, this.initialSchedule, this.initialSchedules];
+  List<Object> get props =>
+      [schedule, schedules, this.initialSchedule, this.initialSchedules];
 }
 
 class FeedScheduleFormBlocStateUnInitialized extends FeedScheduleFormBlocState {
-  FeedScheduleFormBlocStateUnInitialized(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
-      : super(schedule, schedules, initialSchedule, initialSchedules);
+  FeedScheduleFormBlocStateUnInitialized();
+
+  @override
+  List<Object> get props => [];
 }
 
 class FeedScheduleFormBlocStateLoading extends FeedScheduleFormBlocState {
-  FeedScheduleFormBlocStateLoading(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
-      : super(schedule, schedules, initialSchedule, initialSchedules);
+  FeedScheduleFormBlocStateLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FeedScheduleFormBlocStateNotReachable
+    extends FeedScheduleFormBlocState {
+  FeedScheduleFormBlocStateNotReachable();
+
+  @override
+  List<Object> get props => [];
 }
 
 class FeedScheduleFormBlocStateDone extends FeedScheduleFormBlocState {
-  FeedScheduleFormBlocStateDone(String schedule, Map<String, dynamic> schedules, String initialSchedule, Map<String, dynamic> initialSchedules)
-      : super(schedule, schedules, initialSchedule, initialSchedules);
+  FeedScheduleFormBlocStateDone();
+
+  @override
+  List<Object> get props => [];
 }
 
 class FeedScheduleFormBloc
@@ -89,7 +107,7 @@ class FeedScheduleFormBloc
 
   @override
   FeedScheduleFormBlocState get initialState =>
-      FeedScheduleFormBlocStateUnInitialized(_schedule, _schedules, _initialSchedule, _initialSchedules);
+      FeedScheduleFormBlocStateUnInitialized();
 
   FeedScheduleFormBloc(this._args) {
     add(FeedScheduleFormBlocEventInit());
@@ -104,15 +122,22 @@ class FeedScheduleFormBloc
       Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
       _initialSchedule = _schedule = settings['schedule'];
       _initialSchedules = _schedules = settings['schedules'];
-      yield FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);
+      yield FeedScheduleFormBlocStateLoaded(
+          _schedule, _schedules, _initialSchedule, _initialSchedules);
     } else if (event is FeedScheduleFormBlocEventSetSchedule) {
       _schedule = event.schedule;
-      yield FeedScheduleFormBlocState(_schedule, _schedules, _initialSchedule, _initialSchedules);
+      yield FeedScheduleFormBlocStateLoaded(
+          _schedule, _schedules, _initialSchedule, _initialSchedules);
     } else if (event is FeedScheduleFormBlocEventCreate) {
-      yield FeedScheduleFormBlocStateLoading(_schedule, _schedules, _initialSchedule, _initialSchedules);
+      yield FeedScheduleFormBlocStateLoading();
       final db = RelDB.get();
 
       if (_device != null) {
+        _device = await db.devicesDAO.getDevice(_args.box.device);
+        if (_device.isReachable == false) {
+          yield FeedScheduleFormBlocStateNotReachable();
+          return;
+        }
         Param onHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
         await DeviceHelper.updateIntParam(
@@ -141,7 +166,7 @@ class FeedScheduleFormBloc
           'schedules': _schedules,
         })),
       ));
-      yield FeedScheduleFormBlocStateDone(_schedule, _schedules, _initialSchedule, _initialSchedules);
+      yield FeedScheduleFormBlocStateDone();
     }
   }
 }

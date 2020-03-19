@@ -25,13 +25,15 @@ class FeedFormLayout extends StatelessWidget {
   final bool changed;
   final void Function() onOK;
   final String title;
+  final bool hideBackButton;
 
   const FeedFormLayout(
       {@required this.body,
       @required this.onOK,
       @required this.title,
       this.valid = true,
-      this.changed = false});
+      this.changed = false,
+      this.hideBackButton=false});
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +80,16 @@ class FeedFormLayout extends StatelessWidget {
           appBar: SGLAppBar(
             title,
             actions: actions,
+            hideBackButton: hideBackButton,
           ),
-          body:
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Expanded(child: this.body),
-          ]),
-              )),
+          body: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: this.body),
+                ]),
+          )),
     );
   }
 }

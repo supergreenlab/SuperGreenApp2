@@ -51,7 +51,7 @@ class DeviceDaemonBloc
       String identifier =
           await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID');
       if (identifier == device.identifier) {
-        print('Device ${device.identifier} found.');
+        print('Device ${device.name} (${device.identifier}) found.');
         await ddb.updateDevice(DevicesCompanion(
             id: Value(device.id), isReachable: Value(found = true)));
       }
@@ -73,14 +73,14 @@ class DeviceDaemonBloc
               await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
           if (identifier == device.identifier) {
             print(
-                'Device ${device.identifier} found after $nTries mdns lookup.');
+                'Device ${device.name} (${device.identifier}) found after $nTries mdns lookup.');
             await ddb.updateDevice(DevicesCompanion(
                 id: Value(device.id),
                 isReachable: Value(found = true),
                 ip: Value(ip)));
           }
         } catch (e) {
-          print('Device ${device.identifier} not found, aborting.');
+          print('Device ${device.name} (${device.identifier}) not found, aborting.');
           RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
               id: Value(device.id), isReachable: Value(found = false)));
         }

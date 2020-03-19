@@ -58,6 +58,12 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             Widget body;
             if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: 'Saving..');
+            } else if (state is FeedVentilationFormBlocStateNotReachable) {
+              body = Fullscreen(
+                  title: 'Device not reachable:/',
+                  subtitle:
+                      'Make sure you are on the same network.\nRemote control is coming soon:)',
+                  child: Icon(Icons.offline_bolt));
             } else if (state is FeedVentilationFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
