@@ -46,6 +46,7 @@ class BoxFeedPage extends StatefulWidget {
 enum SpeedDialType {
   general,
   trainings,
+  environment,
 }
 
 class _BoxFeedPageState extends State<BoxFeedPage> {
@@ -97,32 +98,33 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   SpeedDial _renderSpeedDial(
       BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return SpeedDial(
-      tooltip: 'Speed Dial',
-      heroTag: 'speed-dial-hero-tag',
-      marginBottom: 10,
-      animationSpeed: 50,
-      curve: Curves.bounceIn,
-      backgroundColor: Color(0xff3bb30b),
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(size: 22.0),
-      overlayOpacity: 0.8,
-      openCloseDial: _openCloseDial,
-      closeManually: true,
-      onOpen: () {
-        setState(() {
-          _speedDialType = SpeedDialType.general;
-          _speedDialOpen = true;
-        });
-      },
-      onClose: () {
-        setState(() {
-          _speedDialOpen = false;
-        });
-      },
-      children: _speedDialType == SpeedDialType.general
-          ? _renderGeneralSpeedDials(context, state)
-          : _renderTrimSpeedDials(context, state),
-    );
+        tooltip: 'Speed Dial',
+        heroTag: 'speed-dial-hero-tag',
+        marginBottom: 10,
+        animationSpeed: 50,
+        curve: Curves.bounceIn,
+        backgroundColor: Color(0xff3bb30b),
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        overlayOpacity: 0.8,
+        openCloseDial: _openCloseDial,
+        closeManually: true,
+        onOpen: () {
+          setState(() {
+            _speedDialType = SpeedDialType.general;
+            _speedDialOpen = true;
+          });
+        },
+        onClose: () {
+          setState(() {
+            _speedDialOpen = false;
+          });
+        },
+        children: [
+          _renderGeneralSpeedDials(context, state),
+          _renderTrimSpeedDials(context, state),
+          _renderEnvironmentSpeedDials(context, state)
+        ][_speedDialType.index]);
   }
 
   List<SpeedDialChild> _renderTrimSpeedDials(
@@ -130,7 +132,6 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
-          label: 'None',
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
           onTap: () {
             setState(() {
@@ -172,42 +173,17 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     ];
   }
 
-  List<SpeedDialChild> _renderGeneralSpeedDials(
+  List<SpeedDialChild> _renderEnvironmentSpeedDials(
       BuildContext context, BoxFeedBlocStateBoxLoaded state) {
     return [
       SpeedDialChild(
-          child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
-          label: 'Plant training',
+          child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
           onTap: () {
             setState(() {
-              _speedDialType = SpeedDialType.trainings;
+              _speedDialType = SpeedDialType.general;
             });
           }),
-      _renderSpeedDialChild(
-          'Note observation',
-          'assets/feed_card/icon_media.svg',
-          _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
-                  state.box,
-                  pushAsReplacement: pushAsReplacement))),
-      _renderSpeedDialChild(
-          'Measure plant',
-          'assets/feed_card/icon_measure.svg',
-          _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedMeasureFormEvent(state.box,
-                      pushAsReplacement: pushAsReplacement))),
-      _renderSpeedDialChild(
-          'Watering',
-          'assets/feed_card/icon_watering.svg',
-          _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
-                  state.box,
-                  pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
           'Stretch control',
           'assets/feed_card/icon_dimming.svg',
@@ -225,13 +201,61 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                   MainNavigateToFeedVentilationFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
-          'Change light schedule',
+          'Light schedule',
           'assets/feed_card/icon_schedule.svg',
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedScheduleFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement))),
+    ];
+  }
+
+  List<SpeedDialChild> _renderGeneralSpeedDials(
+      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+    return [
+      _renderSpeedDialChild(
+          'Grow log',
+          'assets/feed_card/icon_media.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.box,
+                  pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Measure',
+          'assets/feed_card/icon_measure.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedMeasureFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement))),
+      _renderSpeedDialChild(
+          'Watering',
+          'assets/feed_card/icon_watering.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
+                  state.box,
+                  pushAsReplacement: pushAsReplacement))),
+      SpeedDialChild(
+          child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
+          label: 'Plant training',
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          onTap: () {
+            setState(() {
+              _speedDialType = SpeedDialType.trainings;
+            });
+          }),
+      SpeedDialChild(
+          child: SvgPicture.asset('assets/feed_card/icon_schedule.svg'),
+          label: 'Environment',
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          onTap: () {
+            setState(() {
+              _speedDialType = SpeedDialType.environment;
+            });
+          }),
     ];
   }
 
