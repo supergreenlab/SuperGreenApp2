@@ -146,7 +146,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedDefoliationFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
-              tipPaths: ['/20_veg/20_mid/30_how_to_defoliate'])),
+              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'])),
       _renderSpeedDialChild(
           'Topping',
           'assets/feed_card/icon_topping.svg',
@@ -156,8 +156,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                   MainNavigateToFeedToppingFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
-                '/20_veg/30_late/10_when_to_top',
-                '/20_veg/30_late/20_how_to_top'
+                't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
+                't/supergreenlab/SuperGreenTips/master/s/how_to_top/l/en'
               ])),
       _renderSpeedDialChild(
           'Fimming',
@@ -168,8 +168,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                   MainNavigateToFeedFimmingFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
-                '/20_veg/30_late/10_when_to_top',
-                '/20_veg/30_late/20_how_to_top'
+                't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
+                't/supergreenlab/SuperGreenTips/master/s/how_to_top/l/en'
               ])),
       _renderSpeedDialChild(
           'Bending',
@@ -179,7 +179,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedBendingFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
-              tipPaths: ['/20_veg/20_mid/20_how_to_low_stress_training_LST'])),
+              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'])),
     ];
   }
 
@@ -202,7 +202,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(
                   state.box,
                   pushAsReplacement: pushAsReplacement),
-              tipPaths: ['/10_seedling/30_late/10_how_to_control_stretch'])),
+              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch/l/en'])),
       _renderSpeedDialChild(
           'Ventilation control',
           'assets/feed_card/icon_blower.svg',
@@ -219,7 +219,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedScheduleFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
-              tipPaths: ['/20_veg/30_late/30_when_to_switch_to_bloom'])),
+              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'])),
     ];
   }
 
@@ -251,8 +251,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                   state.box,
                   pushAsReplacement: pushAsReplacement),
               tipPaths: [
-                '/10_seedling/20_mid/10_when_to_water_seedling',
-                '/10_seedling/20_mid/40_how_to_water'
+                't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+                't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
               ])),
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_training.svg'),

@@ -17,11 +17,19 @@
  */
 
 
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class TipBlocEvent extends Equatable {}
+
+class TipBlocEventInit extends TipBlocEvent {
+  @override
+  List<Object> get props => [];
+}
 
 class TipBlocState extends Equatable {
 
@@ -31,18 +39,37 @@ class TipBlocState extends Equatable {
 
   @override
   List<Object> get props => [nextRoute];
+}
 
+class TipBlocStateInit extends TipBlocState {
+  TipBlocStateInit(MainNavigateToFeedFormEvent nextRoute) : super(nextRoute);
+}
+
+class TipBlocStateLoaded extends TipBlocState {
+  final Map<String, dynamic> body;
+
+  TipBlocStateLoaded(MainNavigateToFeedFormEvent nextRoute, this.body) : super(nextRoute);
+  
+  @override
+  List<Object> get props => [nextRoute];
 }
 
 class TipBloc extends Bloc<TipBlocEvent,TipBlocState> {
   final MainNavigateToTipEvent _args;
 
-  TipBloc(this._args);
+  TipBloc(this._args) {
+    add(TipBlocEventInit());
+  }
 
   @override
-  TipBlocState get initialState => TipBlocState(_args.nextRoute);
+  TipBlocState get initialState => TipBlocStateInit(_args.nextRoute);
 
   @override
-  Stream<TipBlocState> mapEventToState(TipBlocEvent event) async* {}
-
+  Stream<TipBlocState> mapEventToState(TipBlocEvent event) async* {
+    if (event is TipBlocEventInit) {
+      Response resp = await get('https://tipapi.supergreenlab.com/${_args.paths[0]}');
+      Map<String, dynamic> body = JsonDecoder().convert(resp.body);
+      yield TipBlocStateLoaded(_args.nextRoute, body);
+    }
+  }
 }
