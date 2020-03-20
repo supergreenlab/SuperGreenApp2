@@ -90,8 +90,22 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       DeviceSetupBlocEventStartSetup event) async* {
     try {
       final db = RelDB.get().devicesDAO;
-      final deviceIdentifier =
-          await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
+      String deviceIdentifier;
+
+      for (int i = 0; i < 4; ++i) {
+        try {
+          deviceIdentifier =
+            await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
+          break;
+        } catch(e) {
+          await Future.delayed(Duration(seconds: 2));
+        }
+      }
+
+      if (deviceIdentifier == null) {
+        yield DeviceSetupBlocStateLoadingError();
+        return;
+      }
 
       if (await db.getDeviceByIdentifier(deviceIdentifier) != null) {
         yield DeviceSetupBlocStateAlreadyExists();

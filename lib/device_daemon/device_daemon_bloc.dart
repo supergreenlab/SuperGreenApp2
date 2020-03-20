@@ -64,6 +64,9 @@ class DeviceDaemonBloc
       for (int i = 0; i < 4; ++i) {
         await new Future.delayed(const Duration(seconds: 2));
         Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
+        if (mdns == null) {
+          return;
+        }
         ip = await DeviceAPI.resolveLocalName(mdns.svalue);
         ++nTries;
       }

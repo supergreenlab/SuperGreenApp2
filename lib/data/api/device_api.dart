@@ -100,7 +100,7 @@ class DeviceAPI {
     }
     final req = await client.postUrl(Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value'));
     await req.close();
-    return fetchStringParam(controllerIP, paramName);
+    return await fetchStringParam(controllerIP, paramName);
   }
 
   static Future<int> setIntParam(

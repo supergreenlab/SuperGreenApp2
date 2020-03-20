@@ -10,6 +10,8 @@ PODS:
   - flutter_ble_lib (2.2.3):
     - Flutter
     - MultiplatformBleAdapter (= 0.1.5)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_matomo (0.0.1):
     - Flutter
     - MatomoTracker (> 7)
@@ -62,6 +64,7 @@ DEPENDENCIES:
   - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
   - Flutter (from `Flutter`)
   - flutter_ble_lib (from `.symlinks/plugins/flutter_ble_lib/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_matomo (from `.symlinks/plugins/flutter_matomo/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - moor_ffi (from `.symlinks/plugins/moor_ffi/ios`)
@@ -95,6 +98,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_ble_lib:
     :path: ".symlinks/plugins/flutter_ble_lib/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_matomo:
     :path: ".symlinks/plugins/flutter_matomo/ios"
   keyboard_visibility:
@@ -130,6 +135,7 @@ SPEC CHECKSUMS:
   connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
+  flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_matomo: a4fc9d95faaf6f95124fc1956e892f91791b5fac
   keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
