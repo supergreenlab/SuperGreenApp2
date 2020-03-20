@@ -78,8 +78,7 @@ class FeedScheduleFormBlocStateLoading extends FeedScheduleFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedScheduleFormBlocStateNotReachable
-    extends FeedScheduleFormBlocState {
+class FeedScheduleFormBlocStateNotReachable extends FeedScheduleFormBlocState {
   FeedScheduleFormBlocStateNotReachable();
 
   @override
@@ -155,17 +154,19 @@ class FeedScheduleFormBloc
       await db.boxesDAO.updateBox(_args.box.id,
           BoxesCompanion(settings: Value(JsonEncoder().convert(settings))));
 
-      await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-        type: 'FE_SCHEDULE',
-        feed: _args.box.feed,
-        date: DateTime.now(),
-        params: Value(JsonEncoder().convert({
-          'initialSchedule': _initialSchedule,
-          'initialSchedules': _initialSchedules,
-          'schedule': _schedule,
-          'schedules': _schedules,
-        })),
-      ));
+      if (_schedule == 'BLOOM') {
+        await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          type: 'FE_SCHEDULE',
+          feed: _args.box.feed,
+          date: DateTime.now(),
+          params: Value(JsonEncoder().convert({
+            'initialSchedule': _initialSchedule,
+            'initialSchedules': _initialSchedules,
+            'schedule': _schedule,
+            'schedules': _schedules,
+          })),
+        ));
+      }
       yield FeedScheduleFormBlocStateDone();
     }
   }
