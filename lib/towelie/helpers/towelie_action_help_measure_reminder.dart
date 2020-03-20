@@ -34,7 +34,8 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
         RouteSettings(name: '/feed/box', arguments: null),
         SGLLocalizations.current.towelieHelperMeasureReminder,
         reminders: [
-          TowelieHelperReminder('1 min', event.feedEntry.id, 'Take the next measure', notificationText, 1),
+          //TowelieHelperReminder('1 min', event.feedEntry.id, 'Take the next measure', notificationText, 1),
+          TowelieHelperReminder('1 day', event.feedEntry.id, 'Take the next measure', notificationText, 60 * 24),
           TowelieHelperReminder('2 days', event.feedEntry.id, 'Take the next measure', notificationText, 60 * 48),
           TowelieHelperReminder('3 days', event.feedEntry.id, 'Take the next measure', notificationText, 60 * 72),
           TowelieHelperReminder('4 days', event.feedEntry.id, 'Take the next measure', notificationText, 60 * 96),
