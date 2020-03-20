@@ -44,6 +44,11 @@ class FeedWaterFormBlocState extends Equatable {
 }
 
 class FeedWaterFormBlocStateDone extends FeedWaterFormBlocState {
+  final Box box;
+  final FeedEntry feedEntry;
+
+  FeedWaterFormBlocStateDone(this.box, this.feedEntry);
+
   @override
   List<Object> get props => [];
 }
@@ -62,7 +67,8 @@ class FeedWaterFormBloc
       FeedWaterFormBlocEvent event) async* {
     if (event is FeedWaterFormBlocEventCreate) {
       final db = RelDB.get();
-      await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID =
+          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_WATER',
         feed: _args.box.feed,
         date: DateTime.now(),
@@ -72,7 +78,8 @@ class FeedWaterFormBloc
           'nutrient': event.nutrient,
         })),
       ));
-      yield FeedWaterFormBlocStateDone();
+      FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      yield FeedWaterFormBlocStateDone(_args.box, feedEntry);
     }
   }
 }

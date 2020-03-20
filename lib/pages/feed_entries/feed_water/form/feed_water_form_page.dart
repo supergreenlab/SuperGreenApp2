@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/feed_form/yesno_form_param.dart';
@@ -40,6 +41,8 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
         bloc: BlocProvider.of<FeedWaterFormBloc>(context),
         listener: (BuildContext context, FeedWaterFormBlocState state) {
           if (state is FeedWaterFormBlocStateDone) {
+            BlocProvider.of<TowelieBloc>(context).add(
+                TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }
