@@ -320,7 +320,7 @@ class _CapturePageState extends State<CapturePage> {
     if (old != null) {
       await old.dispose();
     }
-    _cameraController = CameraController(_cameras[0], ResolutionPreset.medium,
+    _cameraController = CameraController(_cameras[0], ResolutionPreset.veryHigh,
         enableAudio: _enableAudio);
     await _cameraController.initialize();
     setState(() {});
