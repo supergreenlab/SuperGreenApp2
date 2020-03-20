@@ -36,7 +36,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-final RouteObserver<PageRoute> _analyticsObserver = AnalyticsObserver();
+//final RouteObserver<PageRoute> _analyticsObserver = AnalyticsObserver();
 
 class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
             );
           } else if (state is HomeBlocStateLoaded) {
             body = Navigator(
-              observers: [_analyticsObserver],
+              //observers: [_analyticsObserver],
               key: _navigatorKey,
               onGenerateRoute: (settings) =>
                   this._onGenerateRoute(context, settings),
