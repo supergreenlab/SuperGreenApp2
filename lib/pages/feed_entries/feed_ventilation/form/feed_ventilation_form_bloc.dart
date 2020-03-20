@@ -199,6 +199,10 @@ class FeedVentilationFormBloc
       if (_args.box.device == null) {
         return;
       }
+      if (_device.isReachable == false) {
+        yield FeedVentilationFormBlocStateNotReachable();
+        return;
+      }
       await DeviceHelper.updateIntParam(_device, _blowerDay, _initialBlowerDay);
       await DeviceHelper.updateIntParam(
           _device, _blowerNight, _initialBlowerNight);

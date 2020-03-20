@@ -29,20 +29,54 @@ class SliderFormParam extends StatelessWidget {
   final double min;
   final double max;
 
-  const SliderFormParam({Key key, @required this.title, @required this.icon, @required this.value, @required this.onChanged, @required this.onChangeEnd, @required this.color, this.min=0, this.max=100}) : super(key: key);
+  const SliderFormParam(
+      {Key key,
+      @required this.title,
+      @required this.icon,
+      @required this.value,
+      @required this.onChanged,
+      @required this.onChangeEnd,
+      @required this.color,
+      this.min = 0,
+      this.max = 100})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FeedFormParamLayout(
       title: title,
       icon: icon,
-      child: Slider(
-        min: min,
-        max: max,
-        onChangeEnd: onChangeEnd,
-        value: value,
-        activeColor: color,
-        onChanged: onChanged,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Center(
+                child: Text('$value%',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff3bb30b)))),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: [
+                Text('0%'),
+                Expanded(
+                  child: Slider(
+                    min: min,
+                    max: max,
+                    onChangeEnd: onChangeEnd,
+                    value: value,
+                    activeColor: color,
+                    onChanged: onChanged,
+                  ),
+                ),
+                Text('100%'),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

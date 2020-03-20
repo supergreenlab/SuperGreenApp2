@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
@@ -32,7 +31,6 @@ class TipBlocEventInit extends TipBlocEvent {
 }
 
 class TipBlocState extends Equatable {
-
   final MainNavigateToFeedFormEvent nextRoute;
 
   TipBlocState(this.nextRoute);
@@ -46,15 +44,16 @@ class TipBlocStateInit extends TipBlocState {
 }
 
 class TipBlocStateLoaded extends TipBlocState {
-  final Map<String, dynamic> body;
+  final List<Map<String, dynamic>> tips;
 
-  TipBlocStateLoaded(MainNavigateToFeedFormEvent nextRoute, this.body) : super(nextRoute);
-  
+  TipBlocStateLoaded(MainNavigateToFeedFormEvent nextRoute, this.tips)
+      : super(nextRoute);
+
   @override
   List<Object> get props => [nextRoute];
 }
 
-class TipBloc extends Bloc<TipBlocEvent,TipBlocState> {
+class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
   final MainNavigateToTipEvent _args;
 
   TipBloc(this._args) {
@@ -67,9 +66,16 @@ class TipBloc extends Bloc<TipBlocEvent,TipBlocState> {
   @override
   Stream<TipBlocState> mapEventToState(TipBlocEvent event) async* {
     if (event is TipBlocEventInit) {
-      Response resp = await get('https://tipapi.supergreenlab.com/${_args.paths[0]}');
-      Map<String, dynamic> body = JsonDecoder().convert(resp.body);
-      yield TipBlocStateLoaded(_args.nextRoute, body);
+      List<Map<String, dynamic>> tips = [];
+      for (int i = 0; i < _args.paths.length; i += 1) {
+        Response resp =
+            await get('https://tipapi.supergreenlab.com/${_args.paths[i]}');
+        Map<String, dynamic> body = JsonDecoder().convert(resp.body);
+        if (body != null && body.length > 0) {
+          tips.add(body);
+        }
+      }
+      yield TipBlocStateLoaded(_args.nextRoute, tips);
     }
   }
 }

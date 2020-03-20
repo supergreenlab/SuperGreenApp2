@@ -62,7 +62,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   title: 'Device not reachable:/',
                   subtitle:
                       'Make sure you are on the same network.\nRemote control is coming soon:)',
-                  child: Icon(Icons.offline_bolt));
+                  child: Icon(Icons.offline_bolt, size: 100, color: Colors.red));
             } else if (state is FeedLightFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -115,6 +115,9 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               },
               body: WillPopScope(
                 onWillPop: () async {
+                  if (state is FeedLightFormBlocStateNotReachable) {
+                    return true;
+                  }
                   BlocProvider.of<FeedLightFormBloc>(context)
                       .add(FeedLightFormBlocEventCancel());
                   return false;

@@ -63,7 +63,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   title: 'Device not reachable:/',
                   subtitle:
                       'Make sure you are on the same network.\nRemote control is coming soon:)',
-                  child: Icon(Icons.offline_bolt));
+                  child: Icon(Icons.offline_bolt, size: 100, color: Colors.red));
             } else if (state is FeedVentilationFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -115,6 +115,9 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 },
                 body: WillPopScope(
                   onWillPop: () async {
+                    if (state is FeedVentilationFormBlocStateNotReachable) {
+                      return true;
+                    }
                     BlocProvider.of<FeedVentilationFormBloc>(context)
                         .add(FeedVentilationFormBlocEventCancelEvent());
                     return false;

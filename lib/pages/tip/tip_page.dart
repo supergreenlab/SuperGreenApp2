@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:super_green_app/l10n.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -44,10 +44,53 @@ class _TipPageState extends State<TipPage> {
           if (state is TipBlocStateInit) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TipBlocStateLoaded) {
-            body = _renderBody(context, state);
+            body = Column(
+              children: <Widget>[
+                Expanded(
+                  child: Swiper(
+                    itemCount: state.tips.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _renderArticle(
+                          context, state.tips[index]['article']);
+                    },
+                    pagination: state.tips.length > 1
+                        ? SwiperPagination(
+                            builder: new DotSwiperPaginationBuilder(
+                                color: Color(0xffdedede),
+                                activeColor: Color(0xff3bb30b)),
+                          )
+                        : null,
+                    loop: false,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Theme(
+                        data: ThemeData(unselectedWidgetColor: Colors.black),
+                        child: Checkbox(
+                            activeColor: Colors.black,
+                            checkColor: Colors.black,
+                            value: dontShow,
+                            onChanged: (bool value) {
+                              setState(() {
+                                dontShow = value;
+                              });
+                            }),
+                      ),
+                      Text('Don’t show me this again',
+                          style: TextStyle(color: Colors.black)),
+                    ],
+                  ),
+                ),
+              ],
+            );
           }
           return Scaffold(
-            appBar: SGLAppBar('Watering tips'),
+            appBar: SGLAppBar('Tips'),
             body: Column(
               children: <Widget>[
                 Expanded(
@@ -57,7 +100,7 @@ class _TipPageState extends State<TipPage> {
                 Container(
                   alignment: Alignment.centerRight,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
                     child: GreenButton(
                       title: state is TipBlocStateLoaded ? 'OK' : 'SKIP',
                       onPressed: () {
@@ -73,11 +116,11 @@ class _TipPageState extends State<TipPage> {
         });
   }
 
-  Widget _renderBody(BuildContext context, TipBlocStateLoaded state) {
+  Widget _renderArticle(BuildContext context, Map<String, dynamic> article) {
     List<Widget> sections = [
-      _renderSection(state.body['article']['intro']),
+      _renderSection(article['intro']),
     ];
-    List<Map<String, dynamic>> ss = state.body['article']['sections'];
+    List<Map<String, dynamic>> ss = article['sections'];
     if (ss != null) {
       sections.addAll(ss.map((e) => _renderSection(e)));
     }
@@ -85,7 +128,7 @@ class _TipPageState extends State<TipPage> {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          state.body['article']['title'],
+          article['title'],
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
@@ -95,39 +138,18 @@ class _TipPageState extends State<TipPage> {
           child: ListView(children: sections),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Theme(
-              data: ThemeData(unselectedWidgetColor: Colors.black),
-              child: Checkbox(
-                  activeColor: Colors.black,
-                  checkColor: Colors.black,
-                  value: dontShow,
-                  onChanged: (bool value) {
-                    setState(() {
-                      dontShow = value;
-                    });
-                  }),
-            ),
-            Text('Don’t show me this again',
-                style: TextStyle(color: Colors.black)),
-          ],
-        ),
-      ),
     ]);
   }
 
   Widget _renderSection(Map<String, dynamic> section) {
     return Column(
       children: <Widget>[
-        Text(section['title'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        Text(section['title'],
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         MarkdownBody(
           data: section['text'],
-          styleSheet:
-              MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          styleSheet: MarkdownStyleSheet(
+              p: TextStyle(color: Colors.black, fontSize: 16)),
         ),
       ],
     );
