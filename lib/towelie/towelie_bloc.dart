@@ -52,6 +52,7 @@ import 'package:super_green_app/towelie/helpers/towelie_action_help_select_devic
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_take_pic.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_test_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_water_reminder.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_wifi.dart';
 import 'package:super_green_app/towelie/towelie_action.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
@@ -203,6 +204,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpFormMeasure(),
     TowelieActionHelpFormTakePic(),
     TowelieActionHelpMeasureReminder(),
+    TowelieActionHelpWaterReminder(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),
