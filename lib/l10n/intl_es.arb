@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-13T16:42:24.500501",
+  "@@last_modified": "2020-03-20T09:34:33.864441",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -84,6 +84,30 @@
     "type": "text",
     "placeholders": {}
   },
+  "towelieBoxAutoOrPhoto": "To better guide to a **successful harvest**, I'll need a bit **more informations** about your box:)\nIs this plant an **auto** or **photo** strain?",
+  "@towelieBoxAutoOrPhoto": {
+    "description": "Towelie Box auto or photo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieBoxAlreadyStarted": "Was this box **already started** when you added it to the app?",
+  "@towelieBoxAlreadyStarted": {
+    "description": "Towelie Box already started",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieBoxVegOrBloom": "Is the plant in **veg** or **bloom**?",
+  "@towelieBoxVegOrBloom": {
+    "description": "Towelie Box Veg or bloom",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieBoxTutoTakePic": "Alright **let's start**!\nOne first thing you can do to **start** this journey is to **take a picture** of your **plant**.",
+  "@towelieBoxTutoTakePic": {
+    "description": "Towelie Box tuto take pic",
+    "type": "text",
+    "placeholders": {}
+  },
   "towelieHelperCreateBox": "Hey man, **welcome to the box creation process**, I'll be there to guide you through it.\nFirst step is to **give your new box a name**.",
   "@towelieHelperCreateBox": {
     "description": "Towelie Helper Create Box",
@@ -138,6 +162,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "towelieHelperMeasureReminder": "Do you want me to **set a reminder** so you don't forget to take a measure again soon?",
+  "@towelieHelperMeasureReminder": {
+    "description": "Towelie Helper measure reminder",
+    "type": "text",
+    "placeholders": {}
+  },
   "towelieHelperFormMeasure2": "It's the **first time** you're using it, so there is no \"before\" picture **to compare to**. Take a pic of what you **want to measure**, and take a measure again in **a few days** to have a **difference**.",
   "@towelieHelperFormMeasure2": {
     "description": "Towelie Helper measure form 2",
@@ -147,6 +177,12 @@
   "towelieHelperFormMeasure3": "Looks like you **already took a measure**, you can select it in the **\"Previous measures\"** section, then press the **\"Today's measure\"** button to add a new measure. The previous one will be **displayed as a transparent overlay** for more accuracy.",
   "@towelieHelperFormMeasure3": {
     "description": "Towelie Helper measure form 3",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperFormTakePic": "Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You'll be glad you took regular pictures on your next grow!**",
+  "@towelieHelperFormTakePic": {
+    "description": "Towelie Helper form take pic",
     "type": "text",
     "placeholders": {}
   },

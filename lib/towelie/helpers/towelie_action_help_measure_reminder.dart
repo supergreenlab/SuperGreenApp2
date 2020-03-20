@@ -29,8 +29,7 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
   @override
   Stream<TowelieBlocState> feedEntryTrigger(
       TowelieBlocEventFeedEntryCreated event) async* {
-    String notificationText =
-        SGLLocalizations.current.towelieHelperMeasureReminder;
+    String notificationText = 'Don\'t forget to take the next measure!';
     yield TowelieBlocStateHelper(
         RouteSettings(name: '/feed/box', arguments: null),
         SGLLocalizations.current.towelieHelperMeasureReminder,
