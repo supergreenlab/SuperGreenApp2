@@ -70,7 +70,10 @@ class FeedMeasureFormBlocStateLoaded extends FeedMeasureFormBlocState {
 }
 
 class FeedMeasureFormBlocStateDone extends FeedMeasureFormBlocState {
-  FeedMeasureFormBlocStateDone();
+  final Box box;
+  final FeedEntry feedEntry;
+
+  FeedMeasureFormBlocStateDone(this.box, this.feedEntry);
 
   @override
   List<Object> get props => [];
@@ -92,7 +95,8 @@ class FeedMeasureFormBloc
       FeedMeasureFormBlocEvent event) async* {
     if (event is FeedMeasureFormBlocEventInit) {
       final db = RelDB.get();
-      List<FeedMedia> measures = await db.feedsDAO.getFeedMediasWithType(_args.box.feed, 'FE_MEASURE');
+      List<FeedMedia> measures =
+          await db.feedsDAO.getFeedMediasWithType(_args.box.feed, 'FE_MEASURE');
       yield FeedMeasureFormBlocStateLoaded(measures);
     } else if (event is FeedMeasureFormBlocEventCreate) {
       yield FeedMeasureFormBlocStateLoading();
@@ -102,11 +106,13 @@ class FeedMeasureFormBloc
         type: 'FE_MEASURE',
         feed: _args.box.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'previous': event.previous != null ? event.previous.id : null})),
+        params: Value(JsonEncoder().convert(
+            {'previous': event.previous != null ? event.previous.id : null})),
       ));
       await db.feedsDAO
           .addFeedMedia(event.current.copyWith(feedEntry: Value(feedEntryID)));
-      yield FeedMeasureFormBlocStateDone();
+      FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      yield FeedMeasureFormBlocStateDone(_args.box, feedEntry);
     }
   }
 }

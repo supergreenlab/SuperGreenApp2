@@ -26,7 +26,7 @@ class TowelieActionHelpSelectNewBoxDevice extends TowelieActionHelp {
   String get route => '/box/device/new';
 
   @override
-  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
+  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     final bdb = RelDB.get().boxesDAO;
     int nBoxes = await bdb.nBoxes().getSingle();
     if (nBoxes == 0) {

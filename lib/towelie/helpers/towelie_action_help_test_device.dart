@@ -26,7 +26,7 @@ class TowelieActionHelpTestDevice extends TowelieActionHelp {
   String get route => '/device/test';
 
   @override
-  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
+  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 1) {

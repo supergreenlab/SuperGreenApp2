@@ -16,22 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:flutter/material.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
+import 'package:super_green_app/towelie/towelie_helper.dart';
 
-class TowelieActionHelpCreateBox extends TowelieActionHelp {
+class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
   @override
-  String get route => '/box/new';
+  String get feedEntryType => 'FE_MEASURE';
 
   @override
-  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
-    final bdb = RelDB.get().boxesDAO;
-    int nBoxes = await bdb.nBoxes().getSingle();
-    if (nBoxes == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperCreateBox);
-    }
+  Stream<TowelieBlocState> feedEntryTrigger(
+      TowelieBlocEventFeedEntryCreated event) async* {
+    String notificationText =
+        SGLLocalizations.current.towelieHelperMeasureReminder;
+    yield TowelieBlocStateHelper(
+        RouteSettings(name: '/feed/box', arguments: null),
+        SGLLocalizations.current.towelieHelperMeasureReminder,
+        reminders: [
+          TowelieHelperReminder('1 min', notificationText, 1),
+          TowelieHelperReminder('2 days', notificationText, 60 * 48),
+          TowelieHelperReminder('3 days', notificationText, 60 * 72),
+          TowelieHelperReminder('4 days', notificationText, 60 * 96),
+          TowelieHelperReminder('6 days', notificationText, 60 * 144)
+        ]);
   }
 }

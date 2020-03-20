@@ -26,7 +26,7 @@ class TowelieActionHelpFormTakePic extends TowelieActionHelp {
   String get route => '/feed/form/media';
 
   @override
-  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
+  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     int nPics = await RelDB.get().feedsDAO.getNFeedEntriesWithType('FE_MEDIA').getSingle();
     if (nPics == 0) {
       yield TowelieBlocStateHelper(

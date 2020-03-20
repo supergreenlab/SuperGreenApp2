@@ -51,7 +51,10 @@ class FeedCareCommonFormBlocStateLoading extends FeedCareCommonFormBlocState {
 }
 
 class FeedCareCommonFormBlocStateDone extends FeedCareCommonFormBlocState {
-  FeedCareCommonFormBlocStateDone();
+  final Box box;
+  final FeedEntry feedEntry;
+
+  FeedCareCommonFormBlocStateDone(this.box, this.feedEntry);
 }
 
 abstract class FeedCareCommonFormBloc
@@ -82,7 +85,8 @@ abstract class FeedCareCommonFormBloc
       for (FeedMediasCompanion m in event.afterMedias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
       }
-      yield FeedCareCommonFormBlocStateDone();
+      FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      yield FeedCareCommonFormBlocStateDone(_args.box, feedEntry);
     }
   }
 

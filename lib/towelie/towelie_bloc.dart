@@ -46,6 +46,7 @@ import 'package:super_green_app/towelie/helpers/towelie_action_help_add_device.d
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_form_measure.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_measure_reminder.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_box_device.dart';
@@ -54,6 +55,7 @@ import 'package:super_green_app/towelie/helpers/towelie_action_help_test_device.
 import 'package:super_green_app/towelie/helpers/towelie_action_help_wifi.dart';
 import 'package:super_green_app/towelie/towelie_action.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
+import 'package:super_green_app/towelie/towelie_helper.dart';
 
 abstract class TowelieBlocEvent extends Equatable {}
 
@@ -121,6 +123,16 @@ class TowelieBlocEventBoxCreated extends TowelieBlocEvent {
   List<Object> get props => [box];
 }
 
+class TowelieBlocEventFeedEntryCreated extends TowelieBlocEvent {
+  final Box box;
+  final FeedEntry feedEntry;
+
+  TowelieBlocEventFeedEntryCreated(this.box, this.feedEntry);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class TowelieBlocEventCardButtonPressed extends TowelieBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final Map<String, dynamic> params;
@@ -164,9 +176,10 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final String text;
   final bool hasNext;
   final List<Button> buttons;
+  final List<TowelieHelperReminder> reminders;
 
   TowelieBlocStateHelper(this.settings, this.text,
-      {this.hasNext = false, this.buttons});
+      {this.hasNext = false, this.buttons, this.reminders});
 
   @override
   List<Object> get props => [rand, settings, text];
@@ -196,6 +209,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpWifi(),
     TowelieActionHelpFormMeasure(),
     TowelieActionHelpFormTakePic(),
+    TowelieActionHelpMeasureReminder(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),

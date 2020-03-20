@@ -26,7 +26,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
   String get route => '/feed/form/measure';
 
   @override
-  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event) async* {
+  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
     if (nMeasures == 0) {
       yield TowelieBlocStateHelper(

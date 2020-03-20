@@ -135,6 +135,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           title: 'Blower day',
           icon: 'assets/feed_form/icon_blower.svg',
           value: _blowerDay.toDouble(),
+          min: 0,
+          max: 60,
           color: Colors.yellow,
           onChanged: (double newValue) {
             setState(() {
@@ -151,6 +153,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           title: 'Blower night',
           icon: 'assets/feed_form/icon_blower.svg',
           value: _blowerNight.toDouble(),
+          min: 0,
+          max: 60,
           color: Colors.blue,
           onChanged: (double newValue) {
             setState(() {

@@ -57,6 +57,7 @@ dependencies:
   flutter_matomo:
     path: ./vendor/flutter_matomo
   connectivity:
+  flutter_local_notifications:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

@@ -22,6 +22,7 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_bloc.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
@@ -81,6 +82,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         bloc: BlocProvider.of<FormBloc>(context),
         listener: (BuildContext context, FeedCareCommonFormBlocState state) {
           if (state is FeedCareCommonFormBlocStateDone) {
+            BlocProvider.of<TowelieBloc>(context)
+                .add(TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }

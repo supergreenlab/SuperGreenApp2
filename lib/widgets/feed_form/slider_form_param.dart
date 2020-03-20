@@ -26,8 +26,10 @@ class SliderFormParam extends StatelessWidget {
   final String title;
   final String icon;
   final Color color;
+  final double min;
+  final double max;
 
-  const SliderFormParam({Key key, @required this.title, @required this.icon, @required this.value, @required this.onChanged, @required this.onChangeEnd, @required this.color}) : super(key: key);
+  const SliderFormParam({Key key, @required this.title, @required this.icon, @required this.value, @required this.onChanged, @required this.onChangeEnd, @required this.color, this.min=0, this.max=100}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,8 @@ class SliderFormParam extends StatelessWidget {
       title: title,
       icon: icon,
       child: Slider(
-        min: 0,
-        max: 100,
+        min: min,
+        max: max,
         onChangeEnd: onChangeEnd,
         value: value,
         activeColor: color,

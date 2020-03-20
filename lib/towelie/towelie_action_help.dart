@@ -20,11 +20,14 @@ import 'package:super_green_app/towelie/towelie_action.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 abstract class TowelieActionHelp extends TowelieAction {
-  String get route;
+  String get route => null;
+  String get feedEntryType => null;
 
-  Stream<TowelieBlocState> trigger(TowelieBlocEventRoute event);
+  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {}
+  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {}
   Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {}
-  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventHelperButton event) async* {}
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventHelperButton event) async* {}
 
   @override
   Stream<TowelieBlocState> eventReceived(TowelieBlocEvent event) async* {
@@ -34,7 +37,9 @@ abstract class TowelieActionHelp extends TowelieAction {
         event.settings.name == route) {
       yield* getNext(event);
     } else if (event is TowelieBlocEventRoute && event.settings.name == route) {
-      yield* trigger(event);
+      yield* routeTrigger(event);
+    } else if (event is TowelieBlocEventFeedEntryCreated && event.feedEntry.type == feedEntryType) {
+      yield* feedEntryTrigger(event);
     } else if (event is TowelieBlocEventRoutePop &&
         event.settings.name == route) {
       yield TowelieBlocStateHelperPop(event.settings);

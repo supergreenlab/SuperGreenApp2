@@ -23,6 +23,7 @@ import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measur
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 class FeedMeasureCardPage extends StatelessWidget {
@@ -34,26 +35,32 @@ class FeedMeasureCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FeedMeasureCardBloc, FeedMeasureCardBlocState>(
         bloc: BlocProvider.of<FeedMeasureCardBloc>(context),
-        builder: (context, state) => FeedCard(
-              animation: animation,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  FeedCardTitle('assets/feed_card/icon_media.svg', 'Note taken',
-                      state.feedEntry),
-                  MediaList(
-                    [state.current],
-                    onMediaTapped: (media) {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToFullscreenMedia(state.current, overlayPath: state.previous.filePath));
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FeedCardDate(state.feedEntry),
-                  ),
-                ],
-              ),
-            ));
+        builder: (context, state) {
+          if (state.current == null) {
+            return FullscreenLoading(title: 'loading');
+          }
+          return FeedCard(
+            animation: animation,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FeedCardTitle('assets/feed_card/icon_media.svg', 'Measure',
+                    state.feedEntry),
+                MediaList(
+                  [state.current],
+                  onMediaTapped: (media) {
+                    BlocProvider.of<MainNavigatorBloc>(context).add(
+                        MainNavigateToFullscreenMedia(state.current,
+                            overlayPath: state.previous?.filePath));
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FeedCardDate(state.feedEntry),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

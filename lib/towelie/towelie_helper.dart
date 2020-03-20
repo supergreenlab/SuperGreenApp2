@@ -22,7 +22,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
+
+class TowelieHelperReminder {
+  final String text;
+  final String notificationText;
+  final int afterMinutes;
+
+  TowelieHelperReminder(this.text, this.notificationText, this.afterMinutes);
+}
 
 class TowelieHelper extends StatefulWidget {
   final RouteSettings settings;
@@ -91,8 +100,37 @@ class _TowelieHelperState extends State<TowelieHelper> {
           ))
     ];
     List<Widget> buttons = [];
+    if (state.reminders != null) {
+      state.reminders.forEach((reminder) {
+        buttons.add(FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            onPressed: () async {
+              if (await LocalNotification.get().checkPermissions()) {
+                LocalNotification.get()
+                    .scheduleNotification(reminder.afterMinutes);
+                _prepareHide();
+              }
+            },
+            child: Text(reminder.text.toUpperCase(),
+                style: TextStyle(color: Colors.blue, fontSize: 12))));
+      });
+    }
+    if (state.buttons != null && state.buttons.length > 0) {
+      for (int i = 0; i < state.buttons.length; ++i) {
+        Button button = state.buttons[i];
+        buttons.add(FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            onPressed: () {
+              BlocProvider.of<TowelieBloc>(context)
+                  .add(TowelieBlocEventHelperButton(widget.settings, button));
+            },
+            child: Text(button.title.toUpperCase(),
+                style: TextStyle(color: Colors.blue, fontSize: 12))));
+      }
+    }
     if (state.hasNext) {
       buttons.add(FlatButton(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           onPressed: () {
             BlocProvider.of<TowelieBloc>(context)
                 .add(TowelieBlocEventHelperNext(widget.settings));
@@ -100,28 +138,18 @@ class _TowelieHelperState extends State<TowelieHelper> {
           child: Text('Next'.toUpperCase(),
               style: TextStyle(color: Colors.blue, fontSize: 12))));
     }
-    if (state.buttons != null && state.buttons.length > 0) {
-      for (int i = 0; i < state.buttons.length; ++i) {
-        Button button = state.buttons[i];
-        buttons.add(FlatButton(
-          onPressed: () {
-            BlocProvider.of<TowelieBloc>(context)
-                .add(TowelieBlocEventHelperButton(widget.settings, button));
-          },
-          child: Text(button.title.toUpperCase(),
-              style: TextStyle(color: Colors.blue, fontSize: 12))));
-      }
-    }
     if (buttons.length > 0) {
-      content.add(Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-          child: Row(
-            children: buttons,
-          ),
+      content.add(Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Container(
+              height: 40,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: buttons,
+                ),
         ),
-      ));
+      ),
+      );
     }
     return Positioned(
       bottom: 0,

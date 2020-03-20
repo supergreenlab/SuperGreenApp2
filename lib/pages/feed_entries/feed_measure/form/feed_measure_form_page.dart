@@ -22,6 +22,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_previous_selector.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
@@ -56,6 +57,8 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
           bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
           listener: (BuildContext context, FeedMeasureFormBlocState state) {
             if (state is FeedMeasureFormBlocStateDone) {
+              BlocProvider.of<TowelieBloc>(context).add(
+                  TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigatorActionPop(mustPop: true));
             }
@@ -190,7 +193,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
     BlocProvider.of<MainNavigatorBloc>(context).add(
         MainNavigateToImageCaptureEvent(
             futureFn: futureFn.futureFn,
-            overlayPath: _previous != null ? _previous.filePath : null,
+            overlayPath: _previous?.filePath,
             videoEnabled: false));
     FeedMediasCompanion fm = await futureFn.future;
     return fm;
@@ -247,7 +250,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
             BlocProvider.of<MainNavigatorBloc>(context).add(
                 MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
                     futureFn: ff.futureFn,
-                    overlayPath: _previous != null ? _previous.filePath : null,
+                    overlayPath:  _previous?.filePath,
                     okButton: 'OK'));
             bool keep = await ff.future;
             if (keep == true) {

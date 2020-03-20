@@ -33,6 +33,7 @@ import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
+import 'package:super_green_app/towelie/towelie_helper.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 final RouteObserver<PageRoute> _analyticsObserver = AnalyticsObserver();
@@ -197,7 +198,8 @@ class HomePage extends StatelessWidget {
             settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
-                  child: SGLFeedPage(),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, SGLFeedPage()),
                 ));
       case '/feed/box':
         return MaterialPageRoute(
@@ -210,21 +212,24 @@ class HomePage extends StatelessWidget {
                       create: (context) => BoxFeedBloc(settings.arguments),
                     )
                   ],
-                  child: BoxFeedPage(),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, BoxFeedPage()),
                 ));
       case '/explorer':
         return MaterialPageRoute(
             settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => ExplorerBloc(),
-                  child: ExplorerPage(),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, ExplorerPage()),
                 ));
       case '/settings':
         return MaterialPageRoute(
             settings: settings,
             builder: (context) => BlocProvider(
                   create: (context) => SettingsBloc(),
-                  child: SettingsPage(),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, SettingsPage()),
                 ));
       default:
         return MaterialPageRoute(
