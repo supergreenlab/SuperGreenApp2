@@ -44,7 +44,7 @@ class FeedMeasureCardPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                FeedCardTitle('assets/feed_card/icon_media.svg', 'Measure',
+                FeedCardTitle('assets/feed_card/icon_measure.svg', 'Measure',
                     state.feedEntry),
                 MediaList(
                   [state.current],

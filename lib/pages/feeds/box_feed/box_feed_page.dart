@@ -145,7 +145,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedDefoliationFormEvent(state.box,
-                      pushAsReplacement: pushAsReplacement))),
+                      pushAsReplacement: pushAsReplacement),
+              tipPaths: ['/20_veg/20_mid/30_how_to_defoliate'])),
       _renderSpeedDialChild(
           'Topping',
           'assets/feed_card/icon_topping.svg',
@@ -153,7 +154,11 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedToppingFormEvent(state.box,
-                      pushAsReplacement: pushAsReplacement))),
+                      pushAsReplacement: pushAsReplacement),
+              tipPaths: [
+                '/20_veg/30_late/10_when_to_top',
+                '/20_veg/30_late/20_how_to_top'
+              ])),
       _renderSpeedDialChild(
           'Fimming',
           'assets/feed_card/icon_fimming.svg',
@@ -161,7 +166,11 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedFimmingFormEvent(state.box,
-                      pushAsReplacement: pushAsReplacement))),
+                      pushAsReplacement: pushAsReplacement),
+              tipPaths: [
+                '/20_veg/30_late/10_when_to_top',
+                '/20_veg/30_late/20_how_to_top'
+              ])),
       _renderSpeedDialChild(
           'Bending',
           'assets/feed_card/icon_bending.svg',
@@ -169,7 +178,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedBendingFormEvent(state.box,
-                      pushAsReplacement: pushAsReplacement))),
+                      pushAsReplacement: pushAsReplacement),
+              tipPaths: ['/20_veg/20_mid/20_how_to_low_stress_training_LST'])),
     ];
   }
 
@@ -191,7 +201,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(
                   state.box,
-                  pushAsReplacement: pushAsReplacement))),
+                  pushAsReplacement: pushAsReplacement),
+              tipPaths: ['/10_seedling/30_late/10_how_to_control_stretch'])),
       _renderSpeedDialChild(
           'Ventilation control',
           'assets/feed_card/icon_blower.svg',
@@ -207,7 +218,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedScheduleFormEvent(state.box,
-                      pushAsReplacement: pushAsReplacement))),
+                      pushAsReplacement: pushAsReplacement),
+              tipPaths: ['/20_veg/30_late/30_when_to_switch_to_bloom'])),
     ];
   }
 
@@ -237,7 +249,11 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
                   state.box,
-                  pushAsReplacement: pushAsReplacement))),
+                  pushAsReplacement: pushAsReplacement),
+              tipPaths: [
+                '/10_seedling/20_mid/10_when_to_water_seedling',
+                '/10_seedling/20_mid/40_how_to_water'
+              ])),
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
           label: 'Plant training',
@@ -270,11 +286,16 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   void Function() _onSpeedDialSelected(BuildContext context,
-      MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent) {
+      MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
+      {List<String> tipPaths}) {
     return () {
       _openCloseDial.value = Random().nextInt(1 << 32);
-      BlocProvider.of<MainNavigatorBloc>(context)
-          .add(MainNavigateToTipEvent(navigatorEvent(pushAsReplacement: true)));
+      if (tipPaths != null) {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
+            tipPaths, navigatorEvent(pushAsReplacement: true)));
+      } else {
+        BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
+      }
     };
   }
 
