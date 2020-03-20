@@ -6,7 +6,6 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
-import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
@@ -16,14 +15,8 @@ class TimelapseConnectPage extends StatefulWidget {
 }
 
 class _TimelapseConnectPageState extends State<TimelapseConnectPage> {
-  final TextEditingController _ssid = TextEditingController();
-  final TextEditingController _password = TextEditingController();
-  TextEditingController _controllerid = TextEditingController();
   final TextEditingController _dropboxToken = TextEditingController();
-  final TextEditingController _name = TextEditingController();
-  final TextEditingController _strain = TextEditingController();
   final TextEditingController _uploadName = TextEditingController();
-  final TextEditingController _rotate = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

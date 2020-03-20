@@ -76,16 +76,9 @@ class TowelieBlocEventHelperNext extends TowelieBlocEvent {
   List<Object> get props => [rand, settings];
 }
 
-class Button {
-  final String title;
-  final Map<String, dynamic> params;
-
-  Button(this.title, this.params);
-}
-
 class TowelieBlocEventHelperButton extends TowelieBlocEvent {
   final int rand = Random().nextInt(1 << 32);
-  final Button button;
+  final TowelieHelperButton button;
   final RouteSettings settings;
 
   TowelieBlocEventHelperButton(this.settings, this.button);
@@ -175,7 +168,7 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final RouteSettings settings;
   final String text;
   final bool hasNext;
-  final List<Button> buttons;
+  final List<TowelieHelperButton> buttons;
   final List<TowelieHelperReminder> reminders;
 
   TowelieBlocStateHelper(this.settings, this.text,

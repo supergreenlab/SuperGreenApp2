@@ -336,7 +336,7 @@ To **better understand** you should have your LED panels **connected to the cont
 
   String get towelieHelperMeasureReminder {
     return Intl.message(
-      '''Do you want me to set a reminder so you don't forget to take a measure again soon?''',
+      '''Do you want me to **set a reminder** so you don't forget to take a measure again soon?''',
       name: 'towelieHelperMeasureReminder',
       desc: 'Towelie Helper measure reminder',
       locale: localeName,

@@ -25,12 +25,22 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
+class TowelieHelperButton {
+  final String title;
+  final Map<String, dynamic> params;
+
+  TowelieHelperButton(this.title, this.params);
+}
+
 class TowelieHelperReminder {
   final String text;
-  final String notificationText;
+  final int notificationId;
+  final String notificationTitle;
+  final String notificationBody;
   final int afterMinutes;
 
-  TowelieHelperReminder(this.text, this.notificationText, this.afterMinutes);
+  TowelieHelperReminder(this.text, this.notificationId, this.notificationTitle,
+      this.notificationBody, this.afterMinutes);
 }
 
 class TowelieHelper extends StatefulWidget {
@@ -105,11 +115,13 @@ class _TowelieHelperState extends State<TowelieHelper> {
         buttons.add(FlatButton(
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             onPressed: () async {
-              if (await LocalNotification.get().checkPermissions()) {
-                LocalNotification.get()
-                    .scheduleNotification(reminder.afterMinutes);
-                _prepareHide();
-              }
+              BlocProvider.of<LocalNotificationBloc>(context).add(
+                  LocalNotificationBlocEventReminder(
+                      reminder.notificationId,
+                      reminder.afterMinutes,
+                      reminder.notificationTitle,
+                      reminder.notificationBody));
+              _prepareHide();
             },
             child: Text(reminder.text.toUpperCase(),
                 style: TextStyle(color: Colors.blue, fontSize: 12))));
@@ -117,7 +129,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
     }
     if (state.buttons != null && state.buttons.length > 0) {
       for (int i = 0; i < state.buttons.length; ++i) {
-        Button button = state.buttons[i];
+        TowelieHelperButton button = state.buttons[i];
         buttons.add(FlatButton(
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             onPressed: () {
@@ -139,16 +151,17 @@ class _TowelieHelperState extends State<TowelieHelper> {
               style: TextStyle(color: Colors.blue, fontSize: 12))));
     }
     if (buttons.length > 0) {
-      content.add(Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Container(
-              height: 40,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: buttons,
-                ),
+      content.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Container(
+            height: 40,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: buttons,
+            ),
+          ),
         ),
-      ),
       );
     }
     return Positioned(
