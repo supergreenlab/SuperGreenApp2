@@ -55,6 +55,18 @@ class LocalNotificationBlocStateInit extends LocalNotificationBlocState {
   List<Object> get props => [];
 }
 
+class LocalNotificationBlocStateNotification extends LocalNotificationBlocState {
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+
+  LocalNotificationBlocStateNotification(this.id, this.title, this.body, this.payload);
+
+  @override
+  List<Object> get props => [];
+}
+
 class LocalNotificationBlocStateMainNavigation
     extends LocalNotificationBlocState {
   final int rand = Random().nextInt(1 << 32);
@@ -87,7 +99,7 @@ class LocalNotificationBloc
       await this.reminderNotification(
           event.id, event.afterMinutes, event.title, event.body);
     } else if (event is LocalNotificationBlocEventNotificationReceived) {
-
+      yield LocalNotificationBlocStateNotification(event.id, event.title, event.body, event.payload);
     } else if (event is LocalNotificationBlocEventNotificationSelected) {
 
     }

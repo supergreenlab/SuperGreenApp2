@@ -140,11 +140,11 @@ class FeedScheduleFormBloc
         Param onHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
         await DeviceHelper.updateIntParam(
-            _device, onHour, _schedules[_schedule]['ON_HOUR']);
+            _device, onHour, _schedules[_schedule]['ON_HOUR'] - DateTime.now().timeZoneOffset.inHours);
         Param offHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${_args.box.deviceBox}_OFF_HOUR');
         await DeviceHelper.updateIntParam(
-            _device, offHour, _schedules[_schedule]['OFF_HOUR']);
+            _device, offHour, _schedules[_schedule]['OFF_HOUR'] - DateTime.now().timeZoneOffset.inHours);
       }
 
       final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);

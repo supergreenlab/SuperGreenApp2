@@ -48,11 +48,13 @@ class Timelapses extends Table {
   IntColumn get box => integer()();
   TextColumn get ssid => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get password => text().withLength(min: 1, max: 64).nullable()();
-  TextColumn get controllerID => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get controllerID =>
+      text().withLength(min: 1, max: 64).nullable()();
   TextColumn get rotate => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get name => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get strain => text().withLength(min: 1, max: 64).nullable()();
-  TextColumn get dropboxToken => text().withLength(min: 1, max: 64).nullable()();
+  TextColumn get dropboxToken =>
+      text().withLength(min: 1, max: 64).nullable()();
   TextColumn get uploadName => text().withLength(min: 1, max: 64).nullable()();
 }
 
@@ -85,6 +87,10 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
 
   Future updateBox(int boxID, BoxesCompanion box) {
     return (update(boxes)..where((b) => b.id.equals(boxID))).write(box);
+  }
+
+  Future cleanDeviceIDs(int deviceID) {
+    return (update(boxes)..where((b) => b.device.equals(deviceID))).write(BoxesCompanion(device: Value(null)));
   }
 
   Stream<List<Box>> watchBoxes() {

@@ -22,17 +22,27 @@ import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
 void main() async {
-  runApp(MultiBlocProvider(providers: <BlocProvider>[
-    BlocProvider<MainNavigatorBloc>(
-        create: (context) => MainNavigatorBloc(navigatorKey)),
-    BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
-    BlocProvider<DeviceDaemonBloc>(create: (context) => DeviceDaemonBloc()),
-    BlocProvider<LocalNotificationBloc>(
-        create: (context) => LocalNotificationBloc()),
-  ], child: MainPage(navigatorKey)));
+  runApp(MultiBlocProvider(
+      providers: <BlocProvider>[
+        BlocProvider<MainNavigatorBloc>(
+            create: (context) => MainNavigatorBloc(navigatorKey)),
+        BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
+        BlocProvider<DeviceDaemonBloc>(create: (context) => DeviceDaemonBloc()),
+        BlocProvider<LocalNotificationBloc>(
+            create: (context) => LocalNotificationBloc()),
+      ],
+      child: BlocListener<LocalNotificationBloc, LocalNotificationBlocState>(
+          listener: (BuildContext context, LocalNotificationBlocState state) {
+            if (state is LocalNotificationBlocStateNotification) {
+              BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventTrigger(
+                  TowelieActionHelpNotification.id, state, ModalRoute.of(context).settings.name));
+            }
+          },
+          child: MainPage(navigatorKey))));
 }

@@ -47,6 +47,7 @@ import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing
 import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_form_measure.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_measure_reminder.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_box_device.dart';
@@ -127,6 +128,17 @@ class TowelieBlocEventFeedEntryCreated extends TowelieBlocEvent {
   List<Object> get props => [box];
 }
 
+class TowelieBlocEventTrigger extends TowelieBlocEvent {
+  final String currentRoute;
+  final String triggerID;
+  final dynamic parameters;
+
+  TowelieBlocEventTrigger(this.triggerID, this.parameters, this.currentRoute);
+
+  @override
+  List<Object> get props => [triggerID, parameters];
+}
+
 class TowelieBlocEventCardButtonPressed extends TowelieBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final Map<String, dynamic> params;
@@ -205,6 +217,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpFormTakePic(),
     TowelieActionHelpMeasureReminder(),
     TowelieActionHelpWaterReminder(),
+    TowelieActionHelpNotification(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),

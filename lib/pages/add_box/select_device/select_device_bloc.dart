@@ -110,9 +110,10 @@ class SelectDeviceBloc
       yield SelectDeviceBlocStateDeviceListUpdated(_devices);
     } else if (event is SelectDeviceBlocEventDelete) {
       final ddb = RelDB.get().devicesDAO;
-      ddb.deleteParams(event.device.id);
-      ddb.deleteModules(event.device.id);
-      ddb.deleteDevice(event.device);
+      await RelDB.get().boxesDAO.cleanDeviceIDs(event.device.id);
+      await ddb.deleteDevice(event.device);
+      await ddb.deleteParams(event.device.id);
+      await ddb.deleteModules(event.device.id);
     } else if (event is SelectDeviceBlocEventSelect) {
       final ddb = RelDB.get().devicesDAO;
       final Device device = event.device;
