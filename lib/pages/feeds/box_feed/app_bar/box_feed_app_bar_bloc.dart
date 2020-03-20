@@ -84,12 +84,16 @@ class BoxFeedAppBarBloc
     }
   }
 
-  Future updateChart(Box box) async {
+  Future<List<charts.Series<Metric, DateTime>>> updateChart(Box box) async {
     if (box.device == null) {
       await Future.delayed(Duration(milliseconds: 500));
       return _createDummyData();
     } else {
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+      if (device == null) {
+        _timer.cancel();
+        return _createDummyData();
+      }
       String identifier = device.identifier;
       int deviceBox = box.deviceBox;
       charts.Series<Metric, DateTime> temp = await getMetricsName(
