@@ -27,10 +27,23 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
-    extends StatelessWidget {
+    extends StatefulWidget {
   final Animation animation;
 
   const FeedCareCommonCardPage(this.animation, {Key key}) : super(key: key);
+
+  @override
+  _FeedCareCommonCardPageState<CardBloc> createState() =>
+      _FeedCareCommonCardPageState<CardBloc>();
+
+  String title();
+
+  String iconPath();
+}
+
+class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
+    extends State<FeedCareCommonCardPage<CardBloc>> {
+  bool editText;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +51,31 @@ abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
         bloc: BlocProvider.of<CardBloc>(context),
         builder: (context, state) {
           List<Widget> body = [
-            FeedCardTitle(iconPath(), title(), state.feedEntry),
+            FeedCardTitle(
+              widget.iconPath(),
+              widget.title(),
+              state.feedEntry,
+              onEdit: () {
+                setState(() {
+                  editText = true;
+                });
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FeedCardDate(state.feedEntry),
             ),
-            FeedCardText(state.params['message'] ?? '')
+            FeedCardText(
+              state.params['message'] ?? '',
+              edit: editText,
+              onEdited: (value) {
+                BlocProvider.of<CardBloc>(context)
+                    .add(FeedCareCommonCardBlocEventEdit(value));
+                setState(() {
+                  editText = false;
+                });
+              },
+            )
           ];
           if (state.beforeMedias.length > 0) {
             body.insert(
@@ -77,7 +109,7 @@ abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
                 ));
           }
           return FeedCard(
-            animation: animation,
+            animation: widget.animation,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: body,
@@ -85,7 +117,4 @@ abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
           );
         });
   }
-
-  String title();
-  String iconPath();
 }

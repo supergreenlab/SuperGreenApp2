@@ -24,30 +24,47 @@ class FeedCardTitle extends StatelessWidget {
   final String icon;
   final String title;
   final FeedEntry feedEntry;
+  final Function onEdit;
 
-  const FeedCardTitle(this.icon, this.title, this.feedEntry);
+  const FeedCardTitle(this.icon, this.title, this.feedEntry,
+      {this.onEdit});
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> content = <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: SizedBox(
+            width: 40,
+            height: 40,
+            child: icon.endsWith('svg')
+                ? SvgPicture.asset(icon)
+                : Image.asset(icon)),
+      ),
+      Text(title,
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w300,
+              color: Colors.black87)),
+    ];
+    if (onEdit != null) {
+      content.addAll([
+        Expanded(
+          child: Container(),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.edit,
+            color: Colors.grey,
+          ),
+          onPressed: onEdit,
+        ),
+      ]);
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 3.0),
       child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(
-                width: 40,
-                height: 40,
-                child: icon.endsWith('svg')
-                    ? SvgPicture.asset(icon)
-                    : Image.asset(icon)),
-          ),
-          Text(title,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.black87)),
-        ],
+        children: content,
       ),
     );
   }

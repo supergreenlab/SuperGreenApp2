@@ -21,11 +21,21 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class FeedCareCommonCardBlocEvent extends Equatable {}
 
 class FeedCareCommonCardBlocEventInit extends FeedCareCommonCardBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FeedCareCommonCardBlocEventEdit extends FeedCareCommonCardBlocEvent {
+  final String message;
+
+  FeedCareCommonCardBlocEventEdit(this.message);
+
   @override
   List<Object> get props => [];
 }
@@ -53,15 +63,15 @@ class FeedCareCommonCardBlocState extends Equatable {
 class FeedCareCommonCardBloc
     extends Bloc<FeedCareCommonCardBlocEvent, FeedCareCommonCardBlocState> {
   final Feed _feed;
-  final FeedEntry _feedEntry;
+  FeedEntry _feedEntry;
   final Map<String, dynamic> _params = {};
 
   final List<FeedMedia> _beforeMedias = [];
   final List<FeedMedia> _afterMedias = [];
 
   @override
-  FeedCareCommonCardBlocState get initialState => FeedCareCommonCardBlocState(
-      _feed, _feedEntry, {}, [], []);
+  FeedCareCommonCardBlocState get initialState =>
+      FeedCareCommonCardBlocState(_feed, _feedEntry, {}, [], []);
 
   FeedCareCommonCardBloc(this._feed, this._feedEntry) {
     _params.addAll(JsonDecoder().convert(_feedEntry.params));
@@ -84,6 +94,15 @@ class FeedCareCommonCardBloc
       }));
       yield FeedCareCommonCardBlocState(
           _feed, _feedEntry, _params, _beforeMedias, _afterMedias);
+    } else if (event is FeedCareCommonCardBlocEventEdit) {
+      RelDB db = RelDB.get();
+      Map<String, dynamic> params = JsonDecoder().convert(_feedEntry.params);
+      params['message'] = event.message;
+      db.feedsDAO.updateFeedEntry(_feedEntry
+          .createCompanion(true)
+          .copyWith(params: Value(JsonEncoder().convert(params))));
+      _feedEntry = await db.feedsDAO.getFeedEntry(_feedEntry.id);
+      yield FeedCareCommonCardBlocState(_feed, _feedEntry, _params, _beforeMedias, _afterMedias);
     }
   }
 }

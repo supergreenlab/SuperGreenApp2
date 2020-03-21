@@ -18,19 +18,67 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
-class FeedCardText extends StatelessWidget {
-  final String message;
+class FeedCardText extends StatefulWidget {
+  final String text;
+  final Function(String) onEdited;
+  final bool edit;
 
-  const FeedCardText(this.message);
+  const FeedCardText(this.text, {this.edit = false, this.onEdited});
+
+  @override
+  _FeedCardTextState createState() => _FeedCardTextState();
+}
+
+class _FeedCardTextState extends State<FeedCardText> {
+  TextEditingController _textEditingController;
 
   @override
   Widget build(BuildContext context) {
+    Widget text;
+    if (widget.edit != true) {
+      if (_textEditingController != null) {
+        _textEditingController = null;
+      }
+      text = MarkdownBody(
+        data: widget.text,
+        styleSheet: MarkdownStyleSheet(
+            p: TextStyle(color: Colors.black, fontSize: 16)),
+      );
+    } else {
+      if (_textEditingController == null) {
+        _textEditingController = TextEditingController(text: widget.text);
+      }
+      text = Column(
+        children: <Widget>[
+          TextField(
+            autofocus: true,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            controller: _textEditingController,
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GreenButton(
+                title: 'OK',
+                onPressed: () {
+                  setState(() {
+                    widget.onEdited(_textEditingController.value.text);
+                  });
+                },
+              ),
+            ),
+          )
+        ],
+      );
+    }
     return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 16.0, left: 8.0, right: 8.0, bottom: 16.0),
-                    child: MarkdownBody(data: message, styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),),
-                  );
+      padding:
+          const EdgeInsets.only(top: 4.0, left: 16.0, right: 16.0, bottom: 16.0),
+      child: text,
+    );
   }
-
 }

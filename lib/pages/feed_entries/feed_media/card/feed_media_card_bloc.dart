@@ -21,11 +21,21 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class FeedMediaCardBlocEvent extends Equatable {}
 
 class FeedMediaCardBlocEventInit extends FeedMediaCardBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FeedMediaCardBlocEventEdit extends FeedMediaCardBlocEvent {
+  final String message;
+
+  FeedMediaCardBlocEventEdit(this.message);
+
   @override
   List<Object> get props => [];
 }
@@ -39,19 +49,21 @@ class FeedMediaCardBlocState extends Equatable {
   FeedMediaCardBlocState(this.feed, this.feedEntry, this.params, this.medias);
 
   @override
-  List<Object> get props => [this.feed, this.feedEntry, this.params, this.medias];
+  List<Object> get props =>
+      [this.feed, this.feedEntry, this.params, this.medias];
 }
 
 class FeedMediaCardBloc
     extends Bloc<FeedMediaCardBlocEvent, FeedMediaCardBlocState> {
   final Feed _feed;
-  final FeedEntry _feedEntry;
+  FeedEntry _feedEntry;
   final Map<String, dynamic> _params = {};
 
   final List<FeedMedia> _medias = [];
 
   @override
-  FeedMediaCardBlocState get initialState => FeedMediaCardBlocState(_feed, _feedEntry, {}, []);
+  FeedMediaCardBlocState get initialState =>
+      FeedMediaCardBlocState(_feed, _feedEntry, {}, []);
 
   FeedMediaCardBloc(this._feed, this._feedEntry) {
     _params.addAll(JsonDecoder().convert(_feedEntry.params));
@@ -64,6 +76,15 @@ class FeedMediaCardBloc
     if (event is FeedMediaCardBlocEventInit) {
       RelDB db = RelDB.get();
       _medias.addAll(await db.feedsDAO.getFeedMedias(_feedEntry.id));
+      yield FeedMediaCardBlocState(_feed, _feedEntry, _params, _medias);
+    } else if (event is FeedMediaCardBlocEventEdit) {
+      RelDB db = RelDB.get();
+      Map<String, dynamic> params = JsonDecoder().convert(_feedEntry.params);
+      params['message'] = event.message;
+      db.feedsDAO.updateFeedEntry(_feedEntry
+          .createCompanion(true)
+          .copyWith(params: Value(JsonEncoder().convert(params))));
+      _feedEntry = await db.feedsDAO.getFeedEntry(_feedEntry.id);
       yield FeedMediaCardBlocState(_feed, _feedEntry, _params, _medias);
     }
   }

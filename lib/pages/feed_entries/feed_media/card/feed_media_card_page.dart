@@ -26,36 +26,66 @@ import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
-class FeedMediaCardPage extends StatelessWidget {
+class FeedMediaCardPage extends StatefulWidget {
   final Animation animation;
 
   const FeedMediaCardPage(this.animation, {Key key}) : super(key: key);
 
   @override
+  _FeedMediaCardPageState createState() => _FeedMediaCardPageState();
+}
+
+class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
+  bool editText = false;
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<FeedMediaCardBloc, FeedMediaCardBlocState>(
         bloc: BlocProvider.of<FeedMediaCardBloc>(context),
-        builder: (context, state) => FeedCard(
-              animation: animation,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  FeedCardTitle('assets/feed_card/icon_media.svg', 'Note taken',
-                      state.feedEntry),
-                  MediaList(
-                    state.medias,
-                    onMediaTapped: (media) {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToFullscreenMedia(media));
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FeedCardDate(state.feedEntry),
-                  ),
-                  FeedCardText(state.params['message'] ?? ''),
-                ],
-              ),
-            ));
+        builder: (context, state) {
+          return FeedCard(
+            animation: widget.animation,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FeedCardTitle(
+                  'assets/feed_card/icon_media.svg',
+                  'Note taken',
+                  state.feedEntry,
+                  onEdit: () {
+                    setState(() {
+                      editText = true;
+                    });
+                  },
+                ),
+                state.medias.length > 0
+                    ? MediaList(
+                        state.medias,
+                        onMediaTapped: (media) {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToFullscreenMedia(media));
+                        },
+                      )
+                    : Container(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: FeedCardDate(state.feedEntry),
+                ),
+                FeedCardText(
+                  state.params['message'] ?? '',
+                  edit: editText,
+                  onEdited: (value) {
+                    BlocProvider.of<FeedMediaCardBloc>(context)
+                        .add(FeedMediaCardBlocEventEdit(value));
+                    setState(() {
+                      editText = false;
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
