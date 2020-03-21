@@ -99,8 +99,12 @@ class FeedVentilationFormBlocStateNotReachable
 }
 
 class FeedVentilationFormBlocStateLoading extends FeedVentilationFormBlocState {
+  final String text;
+
+  FeedVentilationFormBlocStateLoading(this.text);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [text];
 }
 
 class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
@@ -168,6 +172,10 @@ class FeedVentilationFormBloc
       if (_args.box.device == null) {
         return;
       }
+      if (_device.isReachable == false) {
+        yield FeedVentilationFormBlocStateNotReachable();
+        return;
+      }
       _blowerNight = _blowerNight.copyWith(ivalue: event.blowerNight);
       await DeviceHelper.updateIntParam(
           _device, _blowerNight, (event.blowerNight).toInt());
@@ -177,7 +185,7 @@ class FeedVentilationFormBloc
       if (_args.box.device == null) {
         return;
       }
-      yield FeedVentilationFormBlocStateLoading();
+      yield FeedVentilationFormBlocStateLoading('Saving..');
       final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_VENTILATION',
@@ -203,9 +211,13 @@ class FeedVentilationFormBloc
         yield FeedVentilationFormBlocStateNotReachable();
         return;
       }
-      await DeviceHelper.updateIntParam(_device, _blowerDay, _initialBlowerDay);
-      await DeviceHelper.updateIntParam(
-          _device, _blowerNight, _initialBlowerNight);
+      yield FeedVentilationFormBlocStateLoading('Cancelling..');
+      try {
+        await DeviceHelper.updateIntParam(
+            _device, _blowerDay, _initialBlowerDay);
+        await DeviceHelper.updateIntParam(
+            _device, _blowerNight, _initialBlowerNight);
+      } catch (e) {}
       yield FeedVentilationFormBlocStateDone();
     }
   }

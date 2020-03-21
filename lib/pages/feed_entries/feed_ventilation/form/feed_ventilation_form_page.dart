@@ -57,7 +57,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           builder: (context, state) {
             Widget body;
             if (state is FeedVentilationFormBlocStateLoading) {
-              body = FullscreenLoading(title: 'Saving..');
+              body = FullscreenLoading(title: state.text);
             } else if (state is FeedVentilationFormBlocStateNotReachable) {
               body = Fullscreen(
                   title: 'Device not reachable:/',
