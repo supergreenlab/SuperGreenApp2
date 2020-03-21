@@ -12,26 +12,31 @@ class BoxFeedAppBarPage extends StatelessWidget {
       builder: (BuildContext context, BoxFeedAppBarBlocState state) {
         Widget body;
         if (state is BoxFeedAppBarBlocStateInit) {
-          body = FullscreenLoading(title: 'Loading..', textColor: Colors.white,);
+          body = FullscreenLoading(
+            title: 'Loading..',
+            textColor: Colors.white,
+          );
         } else if (state is BoxFeedAppBarBlocStateLoaded) {
-          body = _renderGraphs(context, state);
-          if (state.graphData[0].data.length < 4 &&
-              state.graphData[1].data.length < 4 &&
-              state.graphData[2].data.length < 4) {
-            body = Stack(children: [
-              body,
-              Container(
+          if (state.graphData[0].data.length == 0 &&
+              state.graphData[1].data.length == 0 &&
+              state.graphData[2].data.length == 0) {
+            body = Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
                 color: Colors.white60,
-                child: Fullscreen(
-                  title: 'Not enough data to display yet',
-                  subtitle: 'try again in a few minutes',
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                  child: Container(),
-                  childFirst: false,
-                ),
+                border: Border.all(color: Color(0xffdedede), width: 1),
               ),
-            ]);
+              child: Fullscreen(
+                title: 'Not enough data to display graphs yet',
+                subtitle: 'try again in a few minutes',
+                fontSize: 20,
+                fontWeight: FontWeight.normal,
+                child: Container(),
+                childFirst: false,
+              ),
+            );
+          } else {
+            body = _renderGraphs(context, state);
           }
         }
         return AnimatedSwitcher(
@@ -42,9 +47,46 @@ class BoxFeedAppBarPage extends StatelessWidget {
 
   Widget _renderGraphs(
       BuildContext context, BoxFeedAppBarBlocStateLoaded state) {
+    Widget graphs = Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: Colors.white70,
+        border: Border.all(color: Color(0xffdedede), width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: charts.TimeSeriesChart(state.graphData,
+            animate: false,
+            defaultRenderer: charts.LineRendererConfig(),
+            customSeriesRenderers: [
+              charts.PointRendererConfig(customRendererId: 'customPoint')
+            ]),
+      ),
+    );
+    if (state.graphData[0].data.length < 4 &&
+        state.graphData[1].data.length < 4 &&
+        state.graphData[2].data.length < 4) {
+      graphs = Stack(children: [
+        graphs,
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white60,
+            border: Border.all(color: Color(0xffdedede), width: 1),
+          ),
+          child: Fullscreen(
+            title: 'Still not enough data\nto show a graphs',
+            subtitle: 'try again in a few hours',
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+            child: Container(),
+            childFirst: false,
+          ),
+        ),
+      ]);
+    }
     return Padding(
-      padding: const EdgeInsets.only(
-          top: 8, left: 0, right: 0, bottom: 0),
+      padding: const EdgeInsets.only(top: 8, left: 0, right: 0, bottom: 0),
       child: Column(
         children: <Widget>[
           Padding(
@@ -74,18 +116,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white70, border: Border.all(color: Color(0xffdedede), width: 1),),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: charts.TimeSeriesChart(state.graphData,
-                    animate: false,
-                    defaultRenderer: charts.LineRendererConfig(),
-                    customSeriesRenderers: [
-                      charts.PointRendererConfig(customRendererId: 'customPoint')
-                    ]),
-              ),
-            ),
+            child: graphs,
           ),
         ],
       ),
