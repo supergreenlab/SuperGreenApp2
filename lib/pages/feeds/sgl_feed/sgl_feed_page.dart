@@ -41,12 +41,12 @@ class SGLFeedPage extends StatelessWidget {
       create: (context) => FeedBloc(1),
       child: FeedPage(
         title: '',
-        color: Colors.white,
+        color: Colors.indigo,
         appBarHeight: 200,
         appBar: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(32.0),
-            child: SvgPicture.asset('assets/feed_card/logo_sgl.svg'),
+            child: SvgPicture.asset('assets/feed_card/logo_sgl_white.svg'),
           ),
         ),
       ),

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 
@@ -27,8 +28,37 @@ class SettingsPage extends StatelessWidget {
     return BlocBuilder<SettingsBloc, SettingsBlocState>(
         bloc: BlocProvider.of<SettingsBloc>(context),
         builder: (context, state) => Scaffold(
-              appBar: SGLAppBar('Settings'),
-              body: Text('WiFi settings'),
-            ));
+            appBar: SGLAppBar(
+              'Settings',
+              backgroundColor: Colors.deepOrange,
+              titleColor: Colors.white,
+              iconColor: Colors.white,
+            ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: SvgPicture.asset(
+                                'assets/feed_card/logo_sgl.svg')),
+                      ),
+                      Text(
+                        'COMING SOON',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )));
   }
 }

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 
@@ -25,9 +26,29 @@ class ExplorerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExplorerBloc, ExplorerBlocState>(
-          bloc: BlocProvider.of<ExplorerBloc>(context),
-          builder: (context, state) => Scaffold(
-              appBar: SGLAppBar('Explorer'),
-              body: Text('pouet')));
+        bloc: BlocProvider.of<ExplorerBloc>(context),
+        builder: (context, state) => Scaffold(
+            appBar: SGLAppBar(
+              'Explorer',
+              backgroundColor: Colors.deepPurple,
+              titleColor: Colors.yellow,
+              iconColor: Colors.white,
+            ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SizedBox(height: 100, width: 100, child: SvgPicture.asset('assets/feed_card/logo_sgl.svg')),
+                      ),
+                      Text('COMING SOON', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.grey),),
+                    ],
+                  ),
+                )
+              ],
+            )));
   }
 }

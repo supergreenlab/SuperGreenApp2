@@ -33,7 +33,7 @@ class FeedFormLayout extends StatelessWidget {
       @required this.title,
       this.valid = true,
       this.changed = false,
-      this.hideBackButton=false});
+      this.hideBackButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,8 @@ class FeedFormLayout extends StatelessWidget {
       actions.add(IconButton(
         icon: Icon(
           Icons.check,
-          color: Color(this.valid ? 0xff3bb30b : 0xffcdcdcd),
+          color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff),
+          size: 40
         ),
         onPressed: this.valid ? onOK : null,
       ));
@@ -81,6 +82,9 @@ class FeedFormLayout extends StatelessWidget {
             title,
             actions: actions,
             hideBackButton: hideBackButton,
+            backgroundColor: Colors.blueGrey,
+            titleColor: Colors.white,
+            iconColor: Colors.white,
           ),
           body: Padding(
             padding: const EdgeInsets.only(top: 8.0),
