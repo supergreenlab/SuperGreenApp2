@@ -38,7 +38,7 @@ class FeedWaterCardPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
-                AppDB().getAppData().freedomUnits
+                AppDB().getAppData().freedomUnits == true
                     ? '${state.params['volume'] * 4} gal'
                     : '${state.params['volume']} L',
                 style: TextStyle(

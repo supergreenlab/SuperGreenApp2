@@ -27,6 +27,8 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/card/f
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/card/feed_fimming_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/feed_topping_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/feed_topping_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/card/feed_transplant_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/card/feed_transplant_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_card_bloc.dart';
@@ -86,6 +88,11 @@ class FeedEntriesHelper {
           key: Key('{$feedEntry.id}'),
           create: (context) => FeedBendingCardBloc(feed, feedEntry),
           child: FeedBendingCardPage(animation, key: Key('{$feedEntry.id}')),
+        ),
+    'FE_TRANSPLANT': (feed, feedEntry, animation) => BlocProvider(
+          key: Key('{$feedEntry.id}'),
+          create: (context) => FeedTransplantCardBloc(feed, feedEntry),
+          child: FeedTransplantCardPage(animation, key: Key('{$feedEntry.id}')),
         ),
     'FE_VENTILATION': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),

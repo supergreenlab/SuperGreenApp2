@@ -57,6 +57,8 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/form/f
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/form/feed_fimming_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/form/feed_topping_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/form/feed_topping_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/form/feed_transplant_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/form/feed_transplant_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_form_bloc.dart';
@@ -271,11 +273,15 @@ class _MainPageState extends State<MainPage> {
           create: (context) => FeedFimmingFormBloc(settings.arguments),
           child: FeedFimmingFormPage(),
         );
-
       case '/feed/form/bending':
         return BlocProvider(
           create: (context) => FeedBendingFormBloc(settings.arguments),
           child: FeedBendingFormPage(),
+        );
+      case '/feed/form/transplant':
+        return BlocProvider(
+          create: (context) => FeedTransplantFormBloc(settings.arguments),
+          child: FeedTransplantFormPage(),
         );
       case '/feed/form/ventilation':
         return BlocProvider(

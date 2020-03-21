@@ -146,7 +146,9 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedDefoliationFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'
+              ])),
       _renderSpeedDialChild(
           'Topping',
           'assets/feed_card/icon_topping.svg',
@@ -179,7 +181,9 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedBendingFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'
+              ])),
     ];
   }
 
@@ -202,7 +206,9 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(
                   state.box,
                   pushAsReplacement: pushAsReplacement),
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch/l/en'
+              ])),
       _renderSpeedDialChild(
           'Ventilation control',
           'assets/feed_card/icon_blower.svg',
@@ -219,7 +225,21 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedScheduleFormEvent(state.box,
                       pushAsReplacement: pushAsReplacement),
-              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'])),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
+              ])),
+      _renderSpeedDialChild(
+          'Transplant',
+          'assets/feed_card/icon_transplant.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedTransplantFormEvent(state.box,
+                      pushAsReplacement: pushAsReplacement),
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_to_repot_your_seedling/l/en',
+                't/supergreenlab/SuperGreenTips/master/s/how_to_transplant_your_seedling/l/en'
+              ])),
     ];
   }
 
