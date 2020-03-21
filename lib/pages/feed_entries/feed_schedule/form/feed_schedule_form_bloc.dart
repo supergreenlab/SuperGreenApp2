@@ -47,6 +47,16 @@ class FeedScheduleFormBlocEventCreate extends FeedScheduleFormBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedScheduleFormBlocEventUpdatePreset extends FeedScheduleFormBlocEvent {
+  final String schedule;
+  final Map<String, int> values;
+
+  FeedScheduleFormBlocEventUpdatePreset(this.schedule, this.values);
+
+  @override
+  List<Object> get props => [schedule, values];
+}
+
 abstract class FeedScheduleFormBlocState extends Equatable {}
 
 class FeedScheduleFormBlocStateLoaded extends FeedScheduleFormBlocState {
@@ -127,6 +137,10 @@ class FeedScheduleFormBloc
       _schedule = event.schedule;
       yield FeedScheduleFormBlocStateLoaded(
           _schedule, _schedules, _initialSchedule, _initialSchedules);
+    } else if (event is FeedScheduleFormBlocEventUpdatePreset) {
+      _schedules[event.schedule] = event.values;
+      yield FeedScheduleFormBlocStateLoaded(
+          _schedule, _schedules, _initialSchedule, _initialSchedules);
     } else if (event is FeedScheduleFormBlocEventCreate) {
       yield FeedScheduleFormBlocStateLoading();
       final db = RelDB.get();
@@ -140,11 +154,17 @@ class FeedScheduleFormBloc
         Param onHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
         await DeviceHelper.updateIntParam(
-            _device, onHour, _schedules[_schedule]['ON_HOUR'] - DateTime.now().timeZoneOffset.inHours);
+            _device,
+            onHour,
+            _schedules[_schedule]['ON_HOUR'] -
+                DateTime.now().timeZoneOffset.inHours);
         Param offHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${_args.box.deviceBox}_OFF_HOUR');
         await DeviceHelper.updateIntParam(
-            _device, offHour, _schedules[_schedule]['OFF_HOUR'] - DateTime.now().timeZoneOffset.inHours);
+            _device,
+            offHour,
+            _schedules[_schedule]['OFF_HOUR'] -
+                DateTime.now().timeZoneOffset.inHours);
       }
 
       final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);

@@ -28,7 +28,18 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class FeedScheduleFormPage extends StatelessWidget {
+class FeedScheduleFormPage extends StatefulWidget {
+  @override
+  _FeedScheduleFormPageState createState() => _FeedScheduleFormPageState();
+}
+
+class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
+  TextEditingController onHourEditingController;
+  TextEditingController onMinEditingController;
+  TextEditingController offHourEditingController;
+  TextEditingController offMinEditingController;
+  String scheduleChange;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -62,6 +73,14 @@ class FeedScheduleFormPage extends StatelessWidget {
             } else if (state is FeedScheduleFormBlocStateLoaded) {
               changed = valid = state.schedule != state.initialSchedule;
               body = _renderSchedules(context, state);
+              if (scheduleChange != null) {
+                body = Stack(
+                  children: <Widget>[
+                    body,
+                    _renderScheduleChange(context, state),
+                  ],
+                );
+              }
             }
             return FeedFormLayout(
                 title: 'Add schedule',
@@ -92,6 +111,11 @@ class FeedScheduleFormPage extends StatelessWidget {
                 state.schedule == 'VEG', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('VEG'));
+            }, () {
+              setState(() {
+                scheduleChange = 'VEG';
+                _setupEditingControllers(state);
+              });
             }),
             this._renderSchedule(
                 context,
@@ -102,6 +126,11 @@ class FeedScheduleFormPage extends StatelessWidget {
                 state.schedule == 'BLOOM', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('BLOOM'));
+            }, () {
+              setState(() {
+                scheduleChange = 'BLOOM';
+                _setupEditingControllers(state);
+              });
             }),
             this._renderSchedule(
                 context,
@@ -112,6 +141,11 @@ class FeedScheduleFormPage extends StatelessWidget {
                 state.schedule == 'AUTO', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('AUTO'));
+            }, () {
+              setState(() {
+                scheduleChange = 'AUTO';
+                _setupEditingControllers(state);
+              });
             }),
           ]),
         ),
@@ -126,7 +160,8 @@ class FeedScheduleFormPage extends StatelessWidget {
       String icon,
       String helper,
       bool selected,
-      Function onPressed) {
+      Function onPressed,
+      Function onEdit) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: FeedFormParamLayout(
@@ -156,7 +191,7 @@ class FeedScheduleFormPage extends StatelessWidget {
                             elevation: 0,
                             color: Colors.transparent,
                             child: Icon(Icons.settings),
-                            onPressed: () {},
+                            onPressed: onEdit,
                           )),
                       _renderScheduleTimes(context, schedule),
                     ],
@@ -197,5 +232,109 @@ class FeedScheduleFormPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _renderScheduleChange(
+      BuildContext context, FeedScheduleFormBlocStateLoaded state) {
+    return Container(
+      color: Colors.white54,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Container(
+              width: 250,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Colors.grey)),
+              child: Form(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: Text('Edit $scheduleChange schedules', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          width: 80,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'ON hour'),
+                            controller: onHourEditingController,
+                          ),
+                        ),
+                        Text(':'),
+                        Container(
+                          width: 80,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'ON min'),
+                            controller: onMinEditingController,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          width: 80,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'OFF hour'),
+                            controller: offHourEditingController,
+                          ),
+                        ),
+                        Text(':'),
+                        Container(
+                          width: 80,
+                          child: TextFormField(
+                            decoration: InputDecoration(labelText: 'OFF min'),
+                            controller: offMinEditingController,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: GreenButton(
+                        title: 'SET',
+                        onPressed: () {
+                          BlocProvider.of<FeedScheduleFormBloc>(context).add(FeedScheduleFormBlocEventUpdatePreset(
+                            scheduleChange,
+                            {
+                              "ON_HOUR": int.parse(onHourEditingController.value.text),
+                              "ON_MIN": int.parse(onMinEditingController.value.text),
+                              "OFF_HOUR": int.parse(offHourEditingController.value.text),
+                              "OFF_MIN": int.parse(offMinEditingController.value.text),
+                            }
+                          ));
+                          setState(() {
+                            scheduleChange = null;
+                          });
+                        },
+                      ),
+                    )
+                  ]),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _setupEditingControllers(FeedScheduleFormBlocStateLoaded state) {
+    onHourEditingController = TextEditingController(
+        text: state.schedules[scheduleChange]['ON_HOUR'].toString());
+    onMinEditingController = TextEditingController(
+        text: state.schedules[scheduleChange]['ON_MIN'].toString());
+    offHourEditingController = TextEditingController(
+        text: state.schedules[scheduleChange]['OFF_HOUR'].toString());
+    offMinEditingController = TextEditingController(
+        text: state.schedules[scheduleChange]['OFF_MIN'].toString());
   }
 }
