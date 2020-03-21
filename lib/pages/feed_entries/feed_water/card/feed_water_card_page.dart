@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_card_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
@@ -37,7 +38,9 @@ class FeedWaterCardPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
-                '${state.params['volume']}L',
+                AppDB().getAppData().freedomUnits
+                    ? '${state.params['volume'] * 4} gal'
+                    : '${state.params['volume']} L',
                 style: TextStyle(
                     fontSize: 60,
                     fontWeight: FontWeight.bold,
