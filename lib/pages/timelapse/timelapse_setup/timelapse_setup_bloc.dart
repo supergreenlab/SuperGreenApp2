@@ -22,7 +22,7 @@ class TimelapseSetupBlocEventBleStateChanged extends TimelapseSetupBlocEvent {
   TimelapseSetupBlocEventBleStateChanged(this.currentState);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [currentState];
 }
 
 class TimelapseSetupBlocEventSetConfig extends TimelapseSetupBlocEvent {
@@ -46,7 +46,14 @@ class TimelapseSetupBlocEventSetConfig extends TimelapseSetupBlocEvent {
       this.rotate});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [this.ssid,
+      this.password,
+      this.controllerID,
+      this.dropboxToken,
+      this.name,
+      this.strain,
+      this.uploadName,
+      this.rotate];
 }
 
 class TimelapseSetupBlocEventDeviceFound extends TimelapseSetupBlocEvent {
@@ -96,7 +103,7 @@ class TimelapseSetupBlocStateDone extends TimelapseSetupBlocState {
   TimelapseSetupBlocStateDone(this.box);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 const ServiceUUID = "7bfdeb0b-f06d-480f-a82c-cde56ab3d686";
@@ -177,13 +184,17 @@ class TimelapseSetupBloc
   }
 
   void startScan() {
+    _scanResult = null;
     _bleManager.startPeripheralScan(
       uuids: [ServiceUUID],
     ).listen((scanResult) {
-      _scanResult = scanResult;
+      if (_scanResult != null) {
+        return;
+      }
       print(
           '${scanResult.peripheral.name} ${scanResult.peripheral.identifier}');
-      if (scanResult.peripheral.name == 'sgl-cam') {
+      if (scanResult.peripheral.name == 'sgl-cam' || scanResult.peripheral.name == 'supergreenlivepi') {
+        _scanResult = scanResult;
         add(TimelapseSetupBlocEventDeviceFound());
         _bleManager.stopPeripheralScan();
       }
@@ -205,8 +216,8 @@ class TimelapseSetupBloc
   }
 
   @override
-  Future<void> close() {
-    _bleManager.destroyClient();
+  Future<void> close() async {
+    await _bleManager.destroyClient();
     return super.close();
   }
 }
