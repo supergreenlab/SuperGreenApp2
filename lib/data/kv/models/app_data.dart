@@ -28,4 +28,6 @@ class AppData {
   int lastBoxID;
   @HiveField(2)
   bool allowAnalytics = false;
+  @HiveField(3)
+  bool freedomUnits = true;
 }

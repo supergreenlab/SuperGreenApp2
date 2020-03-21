@@ -19,18 +19,21 @@ class AppDataAdapter extends TypeAdapter<AppData> {
     return AppData()
       ..firstStart = fields[0] as bool
       ..lastBoxID = fields[1] as int
-      ..allowAnalytics = fields[2] as bool;
+      ..allowAnalytics = fields[2] as bool
+      ..freedomUnits = fields[3] as bool;
   }
 
   @override
   void write(BinaryWriter writer, AppData obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.firstStart)
       ..writeByte(1)
       ..write(obj.lastBoxID)
       ..writeByte(2)
-      ..write(obj.allowAnalytics);
+      ..write(obj.allowAnalytics)
+      ..writeByte(3)
+      ..write(obj.freedomUnits);
   }
 }

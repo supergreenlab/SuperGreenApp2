@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -34,6 +35,13 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   bool tooDry;
   double volume = 1;
   bool nutrient;
+  bool freedomUnits;
+
+  @override
+  initState() {
+    freedomUnits = AppDB().getAppData().freedomUnits;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,47 +56,49 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           }
         },
         child: BlocBuilder<FeedWaterFormBloc, FeedWaterFormBlocState>(
-          bloc: BlocProvider.of<FeedWaterFormBloc>(context),
-          builder: (context, state) => FeedFormLayout(
-            title: 'New watering record',
-            body: ListView(
-              children: <Widget>[
-                YesNoFormParam(
-                    icon: 'assets/feed_form/icon_dry.svg',
-                    title: 'Was it too dry?',
-                    yes: tooDry,
-                    onPressed: (yes) {
-                      setState(() {
-                        tooDry = yes;
-                      });
-                    }),
-                NumberFormParam(
-                    icon: 'assets/feed_form/icon_volume.svg',
-                    title: 'Approx. volume',
-                    value: volume,
-                    unit: 'L',
-                    onChange: (newValue) {
-                      setState(() {
-                        if (newValue > 0) {
-                          volume = newValue;
-                        }
-                      });
-                    }),
-                YesNoFormParam(
-                    icon: 'assets/feed_form/icon_nutrient.svg',
-                    title: 'Nutrient?',
-                    yes: nutrient,
-                    onPressed: (yes) {
-                      setState(() {
-                        nutrient = yes;
-                      });
-                    }),
-              ],
-            ),
-            onOK: () => BlocProvider.of<FeedWaterFormBloc>(context).add(
-              FeedWaterFormBlocEventCreate(tooDry, volume, nutrient),
-            ),
-          ),
-        ));
+            bloc: BlocProvider.of<FeedWaterFormBloc>(context),
+            builder: (context, state) {
+              return FeedFormLayout(
+                title: 'New watering record',
+                body: ListView(
+                  children: <Widget>[
+                    YesNoFormParam(
+                        icon: 'assets/feed_form/icon_dry.svg',
+                        title: 'Was it too dry?',
+                        yes: tooDry,
+                        onPressed: (yes) {
+                          setState(() {
+                            tooDry = yes;
+                          });
+                        }),
+                    NumberFormParam(
+                        icon: 'assets/feed_form/icon_volume.svg',
+                        title: 'Approx. volume',
+                        value: volume,
+                        displayMultiplier: freedomUnits ? 4 : 1,
+                        unit: freedomUnits ? ' gal' : ' L',
+                        onChange: (newValue) {
+                          setState(() {
+                            if (newValue > 0) {
+                              volume = newValue;
+                            }
+                          });
+                        }),
+                    YesNoFormParam(
+                        icon: 'assets/feed_form/icon_nutrient.svg',
+                        title: 'Nutrient?',
+                        yes: nutrient,
+                        onPressed: (yes) {
+                          setState(() {
+                            nutrient = yes;
+                          });
+                        }),
+                  ],
+                ),
+                onOK: () => BlocProvider.of<FeedWaterFormBloc>(context).add(
+                  FeedWaterFormBlocEventCreate(tooDry, volume, nutrient),
+                ),
+              );
+            }));
   }
 }

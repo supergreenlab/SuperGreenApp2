@@ -27,6 +27,7 @@ class NumberFormParam extends StatelessWidget {
   final String unit;
   final double step;
   final void Function(double) onChange;
+  final double displayMultiplier;
 
   const NumberFormParam(
       {this.title,
@@ -34,7 +35,8 @@ class NumberFormParam extends StatelessWidget {
       this.value,
       this.step = 0.5,
       this.onChange,
-      this.unit = ''});
+      this.unit = '',
+      this.displayMultiplier = 1});
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +61,13 @@ class NumberFormParam extends StatelessWidget {
                   onPressed: () {
                     onChange(value - step);
                   },
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                 )),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('$value$unit',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22)),
+              child: Text('${value * displayMultiplier}$unit',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
             ),
             ButtonTheme(
                 padding: EdgeInsets.symmetric(
@@ -83,9 +82,8 @@ class NumberFormParam extends StatelessWidget {
                   onPressed: () {
                     onChange(value + step);
                   },
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
+                  textStyle:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                 )),
           ],
         ),
