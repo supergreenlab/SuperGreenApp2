@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -45,6 +46,10 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         if (state is FeedLightFormBlocStateLightsLoaded) {
           setState(() => values = List.from(state.values));
         } else if (state is FeedLightFormBlocStateDone) {
+          if (state.feedEntry != null) {
+            BlocProvider.of<TowelieBloc>(context).add(
+                TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
+          }
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(mustPop: true));
         }
@@ -62,7 +67,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   title: 'Device not reachable:/',
                   subtitle:
                       'Make sure you are on the same network.\nRemote control is coming soon:)',
-                  child: Icon(Icons.offline_bolt, size: 100, color: Colors.red));
+                  child:
+                      Icon(Icons.offline_bolt, size: 100, color: Colors.red));
             } else if (state is FeedLightFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -108,7 +114,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               title: 'Record creation',
               changed: changed,
               valid: changed,
-              hideBackButton: (state is FeedLightFormBlocStateLoading || state is FeedLightFormBlocStateCancelling),
+              hideBackButton: (state is FeedLightFormBlocStateLoading ||
+                  state is FeedLightFormBlocStateCancelling),
               onOK: () {
                 BlocProvider.of<FeedLightFormBloc>(context)
                     .add(FeedLightFormBlocEventCreate(values));

@@ -342,6 +342,15 @@ To **better understand** you should have your LED panels **connected to the cont
       locale: localeName,
     );
   }
+  
+    String get towelieHelperMeasureAfterStretch {
+    return Intl.message(
+      '''**Hey**! it might be a good idea to **take a measure** of your plant to **monitor the stretch**.''',
+      name: 'towelieHelperMeasureAfterStretch',
+      desc: 'Towelie Helper measure after stretch',
+      locale: localeName,
+    );
+  }
 
   String get towelieHelperWaterReminder {
     return Intl.message(

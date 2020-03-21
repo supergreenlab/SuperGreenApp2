@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieHelperButton {
@@ -41,6 +42,13 @@ class TowelieHelperReminder {
 
   TowelieHelperReminder(this.text, this.notificationId, this.notificationTitle,
       this.notificationBody, this.afterMinutes);
+}
+
+class TowelieHelperPushRoute {
+  final String title;
+  final MainNavigatorEvent route;
+
+  TowelieHelperPushRoute(this.title, this.route);
 }
 
 class TowelieHelper extends StatefulWidget {
@@ -139,6 +147,16 @@ class _TowelieHelperState extends State<TowelieHelper> {
             child: Text(button.title.toUpperCase(),
                 style: TextStyle(color: Colors.blue, fontSize: 12))));
       }
+    }
+    if (state.pushRoute != null) {
+      buttons.add(FlatButton(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onPressed: () {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(state.pushRoute.route);
+          },
+          child: Text(state.pushRoute.title.toUpperCase(),
+              style: TextStyle(color: Colors.blue, fontSize: 12))));
     }
     if (state.hasNext) {
       buttons.add(FlatButton(

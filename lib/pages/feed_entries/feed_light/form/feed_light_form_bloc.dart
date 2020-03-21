@@ -96,6 +96,11 @@ class FeedLightFormBlocStateCancelling extends FeedLightFormBlocState {
 }
 
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
+  final Box box;
+  final FeedEntry feedEntry;
+
+  FeedLightFormBlocStateDone(this.box, this.feedEntry);
+
   @override
   List<Object> get props => [];
 }
@@ -161,17 +166,18 @@ class FeedLightFormBloc
       }
       yield FeedLightFormBlocStateLoading();
       final db = RelDB.get();
-      await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID = await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_LIGHT',
         feed: _args.box.feed,
         date: DateTime.now(),
         params: Value(JsonEncoder().convert(
             {'initialValues': _initialValues, 'values': event.values})),
       ));
-      yield FeedLightFormBlocStateDone();
+      FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      yield FeedLightFormBlocStateDone(_args.box, feedEntry);
     } else if (event is FeedLightFormBlocEventCancel) {
       if (_args.box.device == null) {
-        yield FeedLightFormBlocStateDone();
+        yield FeedLightFormBlocStateDone(_args.box, null);
         return;
       }
       if (_device.isReachable == false) {
@@ -188,7 +194,7 @@ class FeedLightFormBloc
           return;
         }
       }
-      yield FeedLightFormBlocStateDone();
+      yield FeedLightFormBlocStateDone(_args.box, null);
     }
   }
 }

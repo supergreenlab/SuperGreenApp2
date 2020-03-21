@@ -46,6 +46,7 @@ import 'package:super_green_app/towelie/helpers/towelie_action_help_add_device.d
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_form_measure.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_measure_after_stretch.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_measure_reminder.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_box_device.dart';
@@ -183,9 +184,10 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final bool hasNext;
   final List<TowelieHelperButton> buttons;
   final List<TowelieHelperReminder> reminders;
+  final TowelieHelperPushRoute pushRoute;
 
   TowelieBlocStateHelper(this.settings, this.text,
-      {this.hasNext = false, this.buttons, this.reminders});
+      {this.hasNext = false, this.buttons, this.reminders, this.pushRoute});
 
   @override
   List<Object> get props => [rand, settings, text];
@@ -218,6 +220,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpMeasureReminder(),
     TowelieActionHelpWaterReminder(),
     TowelieActionHelpNotification(),
+    TowelieActionHelpMeasureAfterStretch(),
   ];
   static List<TowelieButton> buttons = [
     TowelieButtonGotSGLBundle(),
