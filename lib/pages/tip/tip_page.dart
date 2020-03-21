@@ -168,10 +168,13 @@ class _TipPageState extends State<TipPage> {
                     child: Image.network(imagePath),
                   )),
         ),
-        MarkdownBody(
-          data: section['text'],
-          styleSheet: MarkdownStyleSheet(
-              p: TextStyle(color: Colors.black, fontSize: 16)),
+        Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: MarkdownBody(
+            data: section['text'],
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
         ),
       ],
     );
