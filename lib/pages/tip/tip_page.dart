@@ -34,16 +34,19 @@ class TipPage extends StatefulWidget {
 
 class _TipPageState extends State<TipPage> {
   bool dontShow = false;
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TipBloc, TipBlocState>(
         bloc: BlocProvider.of<TipBloc>(context),
         builder: (BuildContext context, TipBlocState state) {
+          String title = '';
           Widget body;
           if (state is TipBlocStateInit) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TipBlocStateLoaded) {
+            title = state.tips[currentIndex]['article']['title'];
             body = Column(
               children: <Widget>[
                 Expanded(
@@ -53,6 +56,11 @@ class _TipPageState extends State<TipPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return _renderArticle(context, state.tips[index],
                           state.tips[index]['article']);
+                    },
+                    onIndexChanged: (index) {
+                      setState(() {
+                        currentIndex = index;
+                      });
                     },
                     pagination: state.tips.length > 1
                         ? SwiperPagination(
@@ -90,7 +98,12 @@ class _TipPageState extends State<TipPage> {
             );
           }
           return Scaffold(
-            appBar: SGLAppBar('Tips'),
+            appBar: SGLAppBar(
+              title,
+              backgroundColor: Colors.teal,
+              titleColor: Colors.white,
+              iconColor: Colors.white,
+            ),
             body: Column(
               children: <Widget>[
                 Expanded(
@@ -127,13 +140,6 @@ class _TipPageState extends State<TipPage> {
     }
     sections.add(Container(height: 30));
     return Column(children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          article['title'],
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-      ),
       Expanded(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
