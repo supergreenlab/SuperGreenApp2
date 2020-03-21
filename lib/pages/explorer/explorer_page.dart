@@ -33,6 +33,7 @@ class ExplorerPage extends StatelessWidget {
               backgroundColor: Colors.deepPurple,
               titleColor: Colors.yellow,
               iconColor: Colors.white,
+              elevation: 10,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,

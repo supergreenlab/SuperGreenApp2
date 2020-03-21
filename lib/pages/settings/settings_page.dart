@@ -33,6 +33,7 @@ class SettingsPage extends StatelessWidget {
               backgroundColor: Colors.deepOrange,
               titleColor: Colors.white,
               iconColor: Colors.white,
+              elevation: 10,
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.center,

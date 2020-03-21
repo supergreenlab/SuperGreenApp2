@@ -51,8 +51,8 @@ class _TipPageState extends State<TipPage> {
                     itemCount: state.tips.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      return _renderArticle(
-                          context, state.tips[index]['article']);
+                      return _renderArticle(context, state.tips[index],
+                          state.tips[index]['article']);
                     },
                     pagination: state.tips.length > 1
                         ? SwiperPagination(
@@ -116,14 +116,16 @@ class _TipPageState extends State<TipPage> {
         });
   }
 
-  Widget _renderArticle(BuildContext context, Map<String, dynamic> article) {
+  Widget _renderArticle(BuildContext context, Map<String, dynamic> tip,
+      Map<String, dynamic> article) {
     List<Widget> sections = [
-      _renderSection(article['intro']),
+      _renderSection(tip, article, article['intro']),
     ];
     List<Map<String, dynamic>> ss = article['sections'];
     if (ss != null) {
-      sections.addAll(ss.map((e) => _renderSection(e)));
+      sections.addAll(ss.map((e) => _renderSection(tip, article, e)));
     }
+    sections.add(Container(height: 30));
     return Column(children: <Widget>[
       Padding(
         padding: const EdgeInsets.all(8.0),
@@ -141,11 +143,25 @@ class _TipPageState extends State<TipPage> {
     ]);
   }
 
-  Widget _renderSection(Map<String, dynamic> section) {
+  Widget _renderSection(Map<String, dynamic> tip, Map<String, dynamic> article,
+      Map<String, dynamic> section) {
+    String slug = _slug(article);
+    String imagePath =
+        'https://tipapi.supergreenlab.com/a/${tip['user']}/${tip['repo']}/${tip['branch']}/s/${slug}/${section['image']['url']}';
     return Column(
       children: <Widget>[
         Text(section['title'],
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) =>
+              SizedBox(
+                  width: constraints.maxWidth,
+                  height: 300,
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: Image.network(imagePath),
+                  )),
+        ),
         MarkdownBody(
           data: section['text'],
           styleSheet: MarkdownStyleSheet(
@@ -153,5 +169,11 @@ class _TipPageState extends State<TipPage> {
         ),
       ],
     );
+  }
+
+  String _slug(Map<String, dynamic> article) {
+    List<String> slug = article['name'].split('_');
+    slug = slug.skip(1).toList();
+    return slug.join('_');
   }
 }
