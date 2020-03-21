@@ -156,8 +156,8 @@ class _TipPageState extends State<TipPage> {
         'https://tipapi.supergreenlab.com/a/${tip['user']}/${tip['repo']}/${tip['branch']}/s/${slug}/${section['image']['url']}';
     return Column(
       children: <Widget>[
-        Text(section['title'],
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        (section['title'] != null && section['title'].length > 0) ? Text(section['title'],
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)) : Container(),
         LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) =>
               SizedBox(
