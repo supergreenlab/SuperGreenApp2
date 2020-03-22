@@ -194,7 +194,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
         MainNavigateToImageCaptureEvent(
             futureFn: futureFn.futureFn,
             overlayPath: _previous?.filePath,
-            videoEnabled: false));
+            videoEnabled: false, pickerEnabled: false));
     FeedMediasCompanion fm = await futureFn.future;
     return fm;
   }

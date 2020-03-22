@@ -45,24 +45,25 @@ class CaptureBlocEventCreate extends CaptureBlocEvent {
 
 class CaptureBlocState extends Equatable {
   final bool videoEnabled;
+  final bool pickerEnabled;
   final String overlayPath;
 
-  CaptureBlocState(this.videoEnabled, this.overlayPath);
+  CaptureBlocState(this.videoEnabled, this.pickerEnabled, this.overlayPath);
 
   @override
   List<Object> get props => [];
 }
 
 class CaptureBlocStateInit extends CaptureBlocState {
-  CaptureBlocStateInit(bool videoEnabled, String overlayPath)
-      : super(videoEnabled, overlayPath);
+  CaptureBlocStateInit(bool videoEnabled, bool pickerEnabled, String overlayPath)
+      : super(videoEnabled, pickerEnabled, overlayPath);
 }
 
 class CaptureBlocStateDone extends CaptureBlocState {
   final FeedMediasCompanion feedMedia;
 
-  CaptureBlocStateDone(this.feedMedia, bool videoEnabled, String overlayPath)
-      : super(videoEnabled, overlayPath);
+  CaptureBlocStateDone(this.feedMedia, bool videoEnabled, bool pickerEnabled, String overlayPath)
+      : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
   List<Object> get props => [feedMedia];
@@ -73,7 +74,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
 
   @override
   CaptureBlocState get initialState =>
-      CaptureBlocState(_args.videoEnabled, _args.overlayPath);
+      CaptureBlocState(_args.videoEnabled, _args.pickerEnabled, _args.overlayPath);
 
   CaptureBloc(this._args) {
     add(CaptureBlocEventInit());
@@ -82,7 +83,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   @override
   Stream<CaptureBlocState> mapEventToState(CaptureBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield CaptureBlocStateInit(_args.videoEnabled, _args.overlayPath);
+      yield CaptureBlocStateInit(_args.videoEnabled, _args.pickerEnabled, _args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
       String thumbnailPath = event.filePath;
       if (thumbnailPath.endsWith('mp4')) {
@@ -99,7 +100,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
         thumbnailPath: Value(thumbnailPath),
       );
       yield CaptureBlocStateDone(
-          feedMedia, _args.videoEnabled, _args.overlayPath);
+          feedMedia, _args.videoEnabled, _args.pickerEnabled, _args.overlayPath);
     }
   }
 }

@@ -21,6 +21,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
@@ -83,9 +84,9 @@ class _CapturePageState extends State<CapturePage> {
       child: Stack(
         children: [
           LayoutBuilder(builder: (context, constraints) {
-            double width =
-                constraints.maxWidth;
-            double height = constraints.maxWidth / _cameraController.value.aspectRatio;
+            double width = constraints.maxWidth;
+            double height =
+                constraints.maxWidth / _cameraController.value.aspectRatio;
             Widget cameraPreview = Positioned(
                 left: (constraints.maxWidth - width) / 2,
                 top: (constraints.maxHeight - height) / 2,
@@ -95,13 +96,13 @@ class _CapturePageState extends State<CapturePage> {
                     child: CameraPreview(_cameraController)));
             if (state.overlayPath != null) {
               Widget overlay = SizedBox(
-                    width: width,
-                    height: height,
-                    child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: Opacity(
-                            opacity: 0.6,
-                            child: Image.file(File(state.overlayPath)))));
+                  width: width,
+                  height: height,
+                  child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Opacity(
+                          opacity: 0.6,
+                          child: Image.file(File(state.overlayPath)))));
               cameraPreview = Stack(children: [
                 cameraPreview,
                 overlay,
@@ -237,15 +238,29 @@ class _CapturePageState extends State<CapturePage> {
   List<Widget> _renderIdleCameraMode(
       BuildContext context, CaptureBlocState state) {
     List<Widget> items = [
-      Container(),
+      Container(width: state.pickerEnabled ? 50 : null),
       _renderPictureButton(context, state),
     ];
     if (state.videoEnabled) {
       items.add(_renderCameraButton(context, state));
     }
-    items.add(
-      Container(),
-    );
+    if (state.pickerEnabled) {
+      items.add(FlatButton(
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Icon(Icons.library_books, color: Colors.white54),
+        onPressed: () async {
+          var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+          if (image != null) {
+            image.copy(_filePath);
+            _endCapture(state, _filePath);
+          }
+        },
+      ));
+    } else {
+      items.add(
+        Container(),
+      );
+    }
     return items;
   }
 

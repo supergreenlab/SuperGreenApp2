@@ -250,11 +250,13 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
 
 class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
   final bool videoEnabled;
+  final bool pickerEnabled;
   final String overlayPath;
 
   MainNavigateToImageCaptureEvent(
       {Function(Future<Object> f) futureFn,
       this.videoEnabled=true,
+      this.pickerEnabled=true,
       this.overlayPath})
       : super(futureFn: futureFn);
 
