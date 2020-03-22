@@ -24,6 +24,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -101,7 +102,8 @@ class BoxFeedAppBarBloc
           identifier,
           'Temperature',
           'BOX_${deviceBox}_TEMP',
-          charts.MaterialPalette.green.shadeDefault);
+          charts.MaterialPalette.green.shadeDefault,
+          transform: _tempUnit);
       charts.Series<Metric, DateTime> humi = await getMetricsName(
           box,
           identifier,
@@ -143,8 +145,9 @@ class BoxFeedAppBarBloc
                     n == 0
                         ? d[1]
                         : d[1] *
-                            dims[i >= dims.length ? dims.length - 1 : i++] /
-                            100
+                            dims[i >= dims.length ? dims.length - 1 : i++]
+                                .toDouble() /
+                            100.0
                   ])
               .toList(),
           'Light',
@@ -153,14 +156,11 @@ class BoxFeedAppBarBloc
     }
   }
 
-  Future<charts.Series<Metric, DateTime>> getMetricsName(
-      Box box,
-      String controllerID,
-      String graphID,
-      String name,
-      charts.Color color) async {
+  Future<charts.Series<Metric, DateTime>> getMetricsName(Box box,
+      String controllerID, String graphID, String name, charts.Color color,
+      {Function(double) transform}) async {
     List<dynamic> values = await getMetricRequest(box, controllerID, name);
-    return getTimeSeries(values, graphID, color);
+    return getTimeSeries(values, graphID, color, transform: transform);
   }
 
   Future<List<dynamic>> getMetricRequest(
@@ -188,7 +188,8 @@ class BoxFeedAppBarBloc
   }
 
   charts.Series<Metric, DateTime> getTimeSeries(
-      List<dynamic> values, String graphID, charts.Color color) {
+      List<dynamic> values, String graphID, charts.Color color,
+      {Function(double) transform}) {
     return charts.Series<Metric, DateTime>(
       id: graphID,
       strokeWidthPxFn: (_, __) => 3,
@@ -196,8 +197,12 @@ class BoxFeedAppBarBloc
       domainFn: (Metric metric, _) => metric.time,
       measureFn: (Metric metric, _) => metric.metric,
       data: values.map<Metric>((v) {
+        double value = v[1].toDouble();
+        if (transform != null) {
+          value = transform(value);
+        }
         return Metric(
-            DateTime.fromMillisecondsSinceEpoch(v[0] * 1000), v[1].toDouble());
+            DateTime.fromMillisecondsSinceEpoch(v[0] * 1000), value.toDouble());
       }).toList(),
     );
   }
@@ -209,7 +214,8 @@ class BoxFeedAppBarBloc
             DateTime.now()
                 .subtract(Duration(hours: 72))
                 .add(Duration(hours: index * 72 ~/ 50)),
-            ((cos(index / 100) * 20).toInt() + Random().nextInt(7) + 20)
+            _tempUnit(
+                    (cos(index / 100) * 20) + Random().nextInt(7) + 20)
                 .toDouble()));
     final humiData = List.generate(
         50,
@@ -254,6 +260,13 @@ class BoxFeedAppBarBloc
         data: lightData,
       ),
     ];
+  }
+
+  double _tempUnit(double temp) {
+    if (AppDB().getAppData().freedomUnits == true) {
+      return temp * 9 / 5 + 32;
+    }
+    return temp;
   }
 
   @override

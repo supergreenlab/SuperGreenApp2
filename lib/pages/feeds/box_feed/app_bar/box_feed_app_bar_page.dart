@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -85,6 +86,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
         ),
       ]);
     }
+    String tempUnit = AppDB().getAppData().freedomUnits ? '°F' : '°C';
     return Padding(
       padding: const EdgeInsets.only(top: 8, left: 0, right: 0, bottom: 0),
       child: Column(
@@ -97,9 +99,9 @@ class BoxFeedAppBarPage extends StatelessWidget {
                 _renderMetric(
                     Colors.green,
                     'Temp',
-                    '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}°',
-                    '${this._min(state.graphData[0].data).metric.toInt()}°',
-                    '${this._max(state.graphData[0].data).metric.toInt()}°'),
+                    '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
+                    '${this._min(state.graphData[0].data).metric.toInt()}$tempUnit',
+                    '${this._max(state.graphData[0].data).metric.toInt()}$tempUnit'),
                 _renderMetric(
                     Colors.blue,
                     'Humi',
