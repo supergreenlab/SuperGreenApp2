@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -34,6 +35,17 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
   VideoPlayerController _videoPlayerController;
   double _opacity = 0.5;
   Matrix4 _matrix = Matrix4.identity();
+
+  @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,11 +140,11 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child: FittedBox(
-          fit: BoxFit.cover,
-          child: Image.file(File(state.isVideo
+        child: Image.file(
+          File(state.isVideo
               ? state.feedMedia.thumbnailPath
-              : state.feedMedia.filePath)),
+              : state.feedMedia.filePath),
+          fit: BoxFit.cover,
         ));
     if (state.overlayPath != null) {
       picture = Stack(children: [
@@ -142,9 +154,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             child: SizedBox(
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
-                child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image.file(File(state.overlayPath))))),
+                child: Image.file(File(state.overlayPath), fit: BoxFit.cover))),
         Positioned(
           left: 30,
           right: 30,
@@ -181,6 +191,10 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
     if (_videoPlayerController != null) {
       _videoPlayerController.dispose();
     }
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 }

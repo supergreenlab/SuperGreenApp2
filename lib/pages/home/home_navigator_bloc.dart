@@ -89,15 +89,11 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   }
 
   @override
-  HomeNavigatorState get initialState => HomeNavigatorState(0);
+  HomeNavigatorState get initialState => HomeNavigatorState(AppDB().getAppData().lastBoxID != null ? 1 : 0);
 
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
-    if (event is HomeNavigateEventInit) {
-      if (AppDB().getAppData().lastBoxID != null) {
-        add(HomeNavigateToBoxFeedEvent(null));
-      }
-    } else if (event is HomeNavigateToSGLFeedEvent) {
+    if (event is HomeNavigateToSGLFeedEvent) {
       _navigatorKey.currentState
           .pushReplacementNamed('/feed/sgl', arguments: event);
       yield HomeNavigatorState(0);

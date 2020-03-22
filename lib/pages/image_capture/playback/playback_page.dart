@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
@@ -32,6 +33,17 @@ class PlaybackPage extends StatefulWidget {
 class _PlaybackPageState extends State<PlaybackPage> {
   VideoPlayerController _videoPlayerController;
   double _opacity = 0.5;
+
+    @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +208,10 @@ class _PlaybackPageState extends State<PlaybackPage> {
     if (_videoPlayerController != null) {
       _videoPlayerController.dispose();
     }
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 }

@@ -214,7 +214,7 @@ Is this plant an **auto** or **photo** strain?''',
 
   String get towelieBoxAlreadyStarted {
     return Intl.message(
-      '''Was this box **already started** when you added it to the app?''',
+      '''Is this box mid grow cycle?''',
       name: 'towelieBoxAlreadyStarted',
       desc: 'Towelie Box already started',
       locale: localeName,

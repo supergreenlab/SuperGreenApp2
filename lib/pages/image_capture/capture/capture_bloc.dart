@@ -17,9 +17,11 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:exif/exif.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -89,7 +91,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           video: event.filePath,
           thumbnailPath: thumbnailPath,
           imageFormat: ImageFormat.JPEG,
-          quality: 75,
+          quality: 50,
         );
       }
       final feedMedia = FeedMediasCompanion(

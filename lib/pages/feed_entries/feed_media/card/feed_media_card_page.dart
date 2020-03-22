@@ -50,7 +50,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               children: [
                 FeedCardTitle(
                   'assets/feed_card/icon_media.svg',
-                  'Note taken',
+                  'Grow log',
                   state.feedEntry,
                   onEdit: () {
                     setState(() {
