@@ -34,7 +34,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
   VideoPlayerController _videoPlayerController;
   double _opacity = 0.5;
 
-    @override
+  @override
   void initState() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -136,7 +136,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: FittedBox(
-            fit: BoxFit.cover, child: Image.file(File(state.filePath))));
+            fit: BoxFit.contain, child: Image.file(File(state.filePath))));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
@@ -146,7 +146,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: FittedBox(
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                     child: Image.file(File(state.overlayPath))))),
         Positioned(
           left: 30,

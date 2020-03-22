@@ -144,7 +144,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
           File(state.isVideo
               ? state.feedMedia.thumbnailPath
               : state.feedMedia.filePath),
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         ));
     if (state.overlayPath != null) {
       picture = Stack(children: [
@@ -154,7 +154,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             child: SizedBox(
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
-                child: Image.file(File(state.overlayPath), fit: BoxFit.cover))),
+                child: Image.file(File(state.overlayPath), fit: BoxFit.contain))),
         Positioned(
           left: 30,
           right: 30,
