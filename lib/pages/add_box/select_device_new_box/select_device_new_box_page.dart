@@ -96,6 +96,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
+          elevation: 5,
         ),
         _renderLeds(
             state.leds.where((l) => !_selectedLeds.contains(l)).toList(),
@@ -113,6 +114,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
             icon: 'assets/box_setup/icon_controller.svg',
             backgroundColor: Color(0xff0bb354),
             titleColor: Colors.white,
+            elevation: 5,
           ),
         ),
         _renderLeds(_selectedLeds, (int led) {

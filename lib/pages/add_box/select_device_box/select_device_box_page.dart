@@ -88,6 +88,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
+          elevation: 5,
         ),
         _renderBoxes(state),
       ],

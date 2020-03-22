@@ -71,6 +71,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                     backgroundColor: Color(0xff0bb354),
                     titleColor: Colors.white,
                     large: true,
+                    elevation: 5,
                   ),
                   Expanded(child: _deviceList(context)),
                   Row(

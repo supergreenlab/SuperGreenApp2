@@ -103,7 +103,7 @@ class HomePage extends StatelessWidget {
               selectedItemColor: Colors.green,
               onTap: (i) =>
                   this._onNavigationBarItemSelect(context, i, navigatorState),
-              elevation: 0,
+              elevation: 10,
               currentIndex: navigatorState.index,
               items: [
                 BottomNavigationBarItem(

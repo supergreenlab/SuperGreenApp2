@@ -70,6 +70,7 @@ class NewDevicePage extends StatelessWidget {
                     backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
                     large: true,
+                    elevation: 5,
                   ),
                   body,
                 ],

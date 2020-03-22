@@ -19,6 +19,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -73,29 +74,37 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
 
   HomeNavigatorBloc(this._args, this._navigatorKey) {
     if (_args is MainNavigateToHomeBoxEvent) {
-      this.add(HomeNavigateToBoxFeedEvent((_args as MainNavigateToHomeBoxEvent).box));
+      this.add(HomeNavigateToBoxFeedEvent(
+          (_args as MainNavigateToHomeBoxEvent).box));
     }
   }
 
   @override
-  HomeNavigatorState get initialState => HomeNavigatorState(0);
+  HomeNavigatorState get initialState {
+    int index = AppDB().getAppData().lastBoxID != null ? 1 : 0;
+    return HomeNavigatorState(index);
+  }
 
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
     if (event is HomeNavigateToSGLFeedEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/feed/sgl', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/feed/sgl', arguments: event);
       yield HomeNavigatorState(0);
     } else if (event is HomeNavigateToBoxFeedEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/feed/box', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/feed/box', arguments: event);
       yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToExplorerEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/explorer', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/explorer', arguments: event);
       yield HomeNavigatorState(2);
     } else if (event is HomeNavigateToSettingsEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/settings', arguments: event);
+      _navigatorKey.currentState
+          .pushReplacementNamed('/settings', arguments: event);
       yield HomeNavigatorState(3);
     } else {
-      yield HomeNavigatorState(0);      
+      yield HomeNavigatorState(0);
     }
   }
 }

@@ -134,6 +134,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
           large: true,
+          elevation: 5,
         ),
         Expanded(
           child: Column(

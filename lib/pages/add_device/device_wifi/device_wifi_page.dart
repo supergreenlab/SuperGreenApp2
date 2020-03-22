@@ -209,6 +209,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
         icon: 'assets/box_setup/icon_controller.svg',
         backgroundColor: Color(0xff0b6ab3),
         titleColor: Colors.white,
+        elevation: 5,
       ),
       Column(
         children: <Widget>[

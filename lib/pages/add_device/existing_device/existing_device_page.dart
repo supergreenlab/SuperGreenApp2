@@ -66,9 +66,14 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
             } else {
               final form = <Widget>[
                 SectionTitle(
-                    title: SGLLocalizations
-                        .current.instructionsExistingDeviceTitle,
-                    icon: 'assets/box_setup/icon_search.svg'),
+                  title:
+                      SGLLocalizations.current.instructionsExistingDeviceTitle,
+                  icon: 'assets/box_setup/icon_search.svg',
+                  backgroundColor: Color(0xff0b6ab3),
+                  titleColor: Colors.white,
+                  large: true,
+                  elevation: 5,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
@@ -96,30 +101,27 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                           color: Colors.red, fontWeight: FontWeight.w500)),
                 ));
               }
-              body = Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Expanded(
-                      child: ListView(
-                        children: form,
+              body = Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: ListView(
+                      children: form,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: GreenButton(
+                        title: 'SEARCH DEVICE',
+                        onPressed: _nameController.value.text != ''
+                            ? () => _handleInput(context)
+                            : null,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: GreenButton(
-                          title: 'SEARCH DEVICE',
-                          onPressed: _nameController.value.text != ''
-                              ? () => _handleInput(context)
-                              : null,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               );
             }
             return Scaffold(

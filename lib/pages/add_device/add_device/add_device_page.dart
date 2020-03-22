@@ -82,6 +82,7 @@ class AddDevicePage extends StatelessWidget {
         icon: icon,
         backgroundColor: Color(0xff0b6ab3),
         titleColor: Colors.white,
+        elevation: 5,
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),

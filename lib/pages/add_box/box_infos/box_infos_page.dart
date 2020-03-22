@@ -129,6 +129,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
           backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
           large: true,
+          elevation: 5,
         ),
         Expanded(
             child: Column(

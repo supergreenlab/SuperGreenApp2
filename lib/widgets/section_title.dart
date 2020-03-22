@@ -25,20 +25,26 @@ class SectionTitle extends StatelessWidget {
   final Color backgroundColor;
   final Color titleColor;
   final bool large;
+  final double elevation;
 
   const SectionTitle(
       {@required this.title,
       @required this.icon,
-      this.large=false,
+      this.large = false,
       this.backgroundColor,
-      this.titleColor = Colors.black});
+      this.titleColor = Colors.black,
+      this.elevation});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundColor ?? Color(0xFFECECEC),
+      decoration: BoxDecoration(
+        boxShadow: elevation != null ? [BoxShadow(offset: Offset(0, elevation), color: Colors.black12, blurRadius: elevation)] : null,
+        color: backgroundColor ?? Color(0xFFECECEC),
+      ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: large ? 16.0 : 8.0),
+        padding:
+            EdgeInsets.symmetric(horizontal: 3.0, vertical: large ? 16.0 : 8.0),
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           _renderIcon(),
           Text(

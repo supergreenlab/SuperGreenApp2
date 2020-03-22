@@ -81,6 +81,7 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
                         icon: 'assets/feed_card/icon_light.svg',
                         backgroundColor: Color(0xff0b6ab3),
                         titleColor: Colors.white,
+                        elevation: 5,
                       ),
                       Expanded(
                         child: _renderChannels(context, state.nLedChannels,
