@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,13 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class HomeNavigatorEvent extends Equatable {}
+
+class HomeNavigateEventInit extends HomeNavigatorEvent {
+  HomeNavigateEventInit();
+
+  @override
+  List<Object> get props => [];
+}
 
 class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {
   final Box box;
@@ -73,21 +82,22 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   HomeNavigatorBloc(this._args, this._navigatorKey) {
-    if (_args is MainNavigateToHomeBoxEvent) {
+    /*if (_args is MainNavigateToHomeBoxEvent) {
       this.add(HomeNavigateToBoxFeedEvent(
           (_args as MainNavigateToHomeBoxEvent).box));
-    }
+    } else */
   }
 
   @override
-  HomeNavigatorState get initialState {
-    int index = AppDB().getAppData().lastBoxID != null ? 1 : 0;
-    return HomeNavigatorState(index);
-  }
+  HomeNavigatorState get initialState => HomeNavigatorState(0);
 
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
-    if (event is HomeNavigateToSGLFeedEvent) {
+    if (event is HomeNavigateEventInit) {
+      if (AppDB().getAppData().lastBoxID != null) {
+        add(HomeNavigateToBoxFeedEvent(null));
+      }
+    } else if (event is HomeNavigateToSGLFeedEvent) {
       _navigatorKey.currentState
           .pushReplacementNamed('/feed/sgl', arguments: event);
       yield HomeNavigatorState(0);

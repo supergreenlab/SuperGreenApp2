@@ -40,14 +40,14 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
-class MainNavigateToHomeBoxEvent extends MainNavigateToHomeEvent {
+/*class MainNavigateToHomeBoxEvent extends MainNavigateToHomeEvent {
   final Box box;
 
   MainNavigateToHomeBoxEvent(this.box);
 
   @override
   List<Object> get props => [box];
-}
+}*/
 
 class MainNavigateToNewBoxInfosEvent extends MainNavigatorEvent {
   @override

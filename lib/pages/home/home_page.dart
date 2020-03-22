@@ -51,87 +51,98 @@ class HomePage extends StatelessWidget {
               .add(state.homeNavigatorEvent);
         }
       },
-      child: BlocBuilder<HomeNavigatorBloc, HomeNavigatorState>(
-        builder: (context, navigatorState) =>
-            BlocBuilder<HomeBloc, HomeBlocState>(builder: (context, state) {
-          Widget body;
-          Widget navbar;
-          if (state is HomeBlocStateInit) {
-            body = FullscreenLoading(
-              title: 'Loading..',
-            );
-          } else if (state is HomeBlocStateLoaded) {
-            body = Navigator(
-              //observers: [_analyticsObserver],
-              key: _navigatorKey,
-              onGenerateRoute: (settings) =>
-                  this._onGenerateRoute(context, settings),
-            );
-
-            Widget sglIcon = Icon(Icons.feedback);
-            try {
-              int nSgl = state.hasPending
-                  .where((e) => e.id == 1)
-                  .map((e) => e.nNew)
-                  .reduce((a, e) => a + e);
-              if (nSgl != null && nSgl > 0) {
-                sglIcon = Stack(
-                  children: [
-                    sglIcon,
-                    _renderBadge(nSgl),
-                  ],
-                );
-              }
-            } catch (e) {}
-            Widget homeIcon = Icon(Icons.home);
-            try {
-              int nOthers = state.hasPending
-                  .where((e) => e.id != 1)
-                  .map((e) => e.nNew)
-                  .reduce((a, e) => a + e);
-              if (nOthers != null && nOthers > 0) {
-                homeIcon = Stack(
-                  children: [
-                    homeIcon,
-                    _renderBadge(nOthers),
-                  ],
-                );
-              }
-            } catch (e) {}
-            navbar = BottomNavigationBar(
-              unselectedItemColor: Colors.black38,
-              selectedItemColor: Colors.green,
-              onTap: (i) =>
-                  this._onNavigationBarItemSelect(context, i, navigatorState),
-              elevation: 10,
-              currentIndex: navigatorState.index,
-              items: [
-                BottomNavigationBarItem(
-                  icon: sglIcon,
-                  title: Text('Towelie'),
-                ),
-                BottomNavigationBarItem(
-                  icon: homeIcon,
-                  title: Text('Home'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.explore),
-                  title: Text('Explore'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  title: Text('Settings'),
-                ),
-              ],
-            );
+      child: BlocListener<HomeBloc, HomeBlocState>(
+        listener: (BuildContext context, HomeBlocState state) {
+          if (state is HomeBlocStateLoaded) {
+            // UI needs some time to be ready, there has to be a better way tho..
+            Timer(Duration(milliseconds: 100), () {
+              BlocProvider.of<HomeNavigatorBloc>(context)
+                  .add(HomeNavigateEventInit());
+            });
           }
+        },
+        child: BlocBuilder<HomeNavigatorBloc, HomeNavigatorState>(
+          builder: (context, navigatorState) =>
+              BlocBuilder<HomeBloc, HomeBlocState>(builder: (context, state) {
+            Widget body;
+            Widget navbar;
+            if (state is HomeBlocStateInit) {
+              body = FullscreenLoading(
+                title: 'Loading..',
+              );
+            } else if (state is HomeBlocStateLoaded) {
+              body = Navigator(
+                //observers: [_analyticsObserver],
+                key: _navigatorKey,
+                onGenerateRoute: (settings) =>
+                    this._onGenerateRoute(context, settings),
+              );
 
-          return Scaffold(
-            bottomNavigationBar: navbar,
-            body: AnimatedSwitcher(
-                duration: Duration(milliseconds: 200), child: body),
-          );
-        }),
+              Widget sglIcon = Icon(Icons.feedback);
+              try {
+                int nSgl = state.hasPending
+                    .where((e) => e.id == 1)
+                    .map((e) => e.nNew)
+                    .reduce((a, e) => a + e);
+                if (nSgl != null && nSgl > 0) {
+                  sglIcon = Stack(
+                    children: [
+                      sglIcon,
+                      _renderBadge(nSgl),
+                    ],
+                  );
+                }
+              } catch (e) {}
+              Widget homeIcon = Icon(Icons.home);
+              try {
+                int nOthers = state.hasPending
+                    .where((e) => e.id != 1)
+                    .map((e) => e.nNew)
+                    .reduce((a, e) => a + e);
+                if (nOthers != null && nOthers > 0) {
+                  homeIcon = Stack(
+                    children: [
+                      homeIcon,
+                      _renderBadge(nOthers),
+                    ],
+                  );
+                }
+              } catch (e) {}
+              navbar = BottomNavigationBar(
+                unselectedItemColor: Colors.black38,
+                selectedItemColor: Colors.green,
+                onTap: (i) =>
+                    this._onNavigationBarItemSelect(context, i, navigatorState),
+                elevation: 10,
+                currentIndex: navigatorState.index,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: sglIcon,
+                    title: Text('Towelie'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: homeIcon,
+                    title: Text('Home'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.explore),
+                    title: Text('Explore'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.settings),
+                    title: Text('Settings'),
+                  ),
+                ],
+              );
+            }
+
+            return Scaffold(
+              bottomNavigationBar: navbar,
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body),
+            );
+          }),
+        ),
       ),
     );
   }
