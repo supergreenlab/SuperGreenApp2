@@ -49,35 +49,56 @@ class MetricsPage extends StatelessWidget {
               backgroundColor: Color(0xff063047),
               titleColor: Colors.white,
               iconColor: Colors.white,
-              elevation: 10,
             ),
             body: Column(
               children: <Widget>[
                 Container(
                     height: 200,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.white70,
-                      border: Border.all(color: Color(0xffdedede), width: 1),
+                      color: Color(0xff063047),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 5),
+                            color: Colors.black12,
+                            blurRadius: 5)
+                      ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Hero(
                         tag: 'graphs',
-                        child: charts.TimeSeriesChart(state.graphData,
-                            animate: false,
-                            defaultRenderer: charts.LineRendererConfig(),
-                            behaviors: [
-                              charts.RangeAnnotation([
-                                new charts.LineAnnotationSegment(
-                                    DateTime.now().add(Duration(hours: -24)), charts.RangeAnnotationAxisType.domain,
-                                    startLabel: 'Domain 1', color: charts.MaterialPalette.gray.shade500),
-                              ])
-                            ],
-                            customSeriesRenderers: [
-                              charts.PointRendererConfig(
-                                  customRendererId: 'customPoint')
-                            ]),
+                        child: charts.TimeSeriesChart(
+                          state.graphData,
+                          animate: false,
+                          defaultRenderer: charts.LineRendererConfig(),
+                          behaviors: [
+                            charts.RangeAnnotation([
+                              charts.LineAnnotationSegment(
+                                  DateTime.now().add(Duration(hours: -24)),
+                                  charts.RangeAnnotationAxisType.domain,
+                                  startLabel: 'Domain 1',
+                                  labelStyleSpec: charts.TextStyleSpec(
+                                      color: charts.MaterialPalette.white),
+                                  color: charts.MaterialPalette.gray.shade500),
+                            ])
+                          ],
+                          customSeriesRenderers: [
+                            charts.PointRendererConfig(
+                                customRendererId: 'customPoint')
+                          ],
+                          domainAxis: charts.DateTimeAxisSpec(
+                              renderSpec: charts.SmallTickRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                                      color: charts.MaterialPalette.white),
+                                  lineStyle: charts.LineStyleSpec(
+                                      color: charts.MaterialPalette.white))),
+                          primaryMeasureAxis: charts.NumericAxisSpec(
+                              renderSpec: charts.GridlineRendererSpec(
+                                  labelStyle: charts.TextStyleSpec(
+                                      color: charts.MaterialPalette.white),
+                                  lineStyle: charts.LineStyleSpec(
+                                      color: charts.MaterialPalette.white))),
+                        ),
                       ),
                     )),
                 Expanded(child: body),
