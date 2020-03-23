@@ -73,7 +73,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
           ),
           Positioned(
               bottom: 0,
-              right: 0,
+              right: -3,
               child: IconButton(
                   icon: Icon(Icons.fullscreen, color: Colors.white70, size: 30),
                   onPressed: () {
