@@ -190,7 +190,7 @@ class TowelieBlocStateHelper extends TowelieBlocState {
       {this.hasNext = false, this.buttons, this.reminders, this.pushRoute});
 
   @override
-  List<Object> get props => [rand, settings, text];
+  List<Object> get props => [rand, settings, text, buttons, reminders, pushRoute];
 }
 
 class TowelieBlocStateHelperPop extends TowelieBlocState {

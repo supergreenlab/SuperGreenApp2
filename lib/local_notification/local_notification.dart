@@ -108,7 +108,7 @@ class LocalNotificationBloc
   Future init() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_notification');
     var initializationSettingsIOS = IOSInitializationSettings(
         requestSoundPermission: false,
         requestBadgePermission: false,
