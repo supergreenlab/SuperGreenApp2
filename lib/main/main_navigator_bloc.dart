@@ -22,7 +22,9 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/backend/time_series/time_series.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class MainNavigatorEvent extends Equatable {
   final void Function(Future<dynamic> future) futureFn;
@@ -255,15 +257,14 @@ class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
 
   MainNavigateToImageCaptureEvent(
       {Function(Future<Object> f) futureFn,
-      this.videoEnabled=true,
-      this.pickerEnabled=true,
+      this.videoEnabled = true,
+      this.pickerEnabled = true,
       this.overlayPath})
       : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [videoEnabled, overlayPath, futureFn];
 }
-
 
 class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
   final String cancelButton;
@@ -298,7 +299,7 @@ class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
   final String overlayPath;
   final FeedMedia feedMedia;
 
-  MainNavigateToFullscreenMedia(this.feedMedia, { this.overlayPath });
+  MainNavigateToFullscreenMedia(this.feedMedia, {this.overlayPath});
 
   @override
   List<Object> get props => [feedMedia];
@@ -347,6 +348,17 @@ class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
   final Box box;
 
   MainNavigateToTimelapseViewer(this.box, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [box];
+}
+
+class MainNavigateToMetrics extends MainNavigateToFeedFormEvent {
+  final List<charts.Series<Metric, DateTime>> graphData;
+  final Box box;
+
+  MainNavigateToMetrics(this.box, this.graphData, {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -486,6 +498,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/timelapse/connect', event);
     } else if (event is MainNavigateToTimelapseViewer) {
       future = _pushOrReplace('/timelapse/viewer', event);
+    } else if (event is MainNavigateToMetrics) {
+      future = _pushOrReplace('/metrics', event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

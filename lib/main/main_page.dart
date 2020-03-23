@@ -73,6 +73,8 @@ import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_fo
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_page.dart';
+import 'package:super_green_app/pages/graphs/metrics_bloc.dart';
+import 'package:super_green_app/pages/graphs/metrics_page.dart';
 import 'package:super_green_app/pages/home/home_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_page.dart';
@@ -166,7 +168,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _onGenerateRoute(BuildContext context, RouteSettings settings) {
-    Timer(Duration(milliseconds: 500), () {
+    Timer(Duration(milliseconds: 10), () {
       BlocProvider.of<TowelieBloc>(context)
           .add(TowelieBlocEventRoute(settings));
     });
@@ -332,6 +334,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => TimelapseViewerBloc(settings.arguments),
           child: TimelapseViewerPage(),
+        );
+      case '/metrics':
+        return BlocProvider(
+          create: (context) => MetricsBloc(settings.arguments),
+          child: MetricsPage(),
         );
     }
     return Text('Unknown route');

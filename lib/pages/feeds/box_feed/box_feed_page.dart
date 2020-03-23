@@ -19,7 +19,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -509,7 +508,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state) {
-    String name = StringUtils.capitalize(state.box.name);
+    String name = state.box.name;//StringUtils.capitalize(state.box.name);
 
     Widget graphBody;
     if (state.box.device != null) {

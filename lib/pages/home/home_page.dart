@@ -180,7 +180,7 @@ class HomePage extends StatelessWidget {
 
   Route<dynamic> _onGenerateRoute(
       BuildContext context, RouteSettings settings) {
-    Timer(Duration(milliseconds: 200), () {
+    Timer(Duration(milliseconds: 10), () {
       BlocProvider.of<TowelieBloc>(context)
           .add(TowelieBlocEventRoute(settings));
     });

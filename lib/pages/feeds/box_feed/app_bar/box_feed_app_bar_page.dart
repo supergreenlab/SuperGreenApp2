@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:super_green_app/data/backend/time_series/time_series.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -54,14 +56,31 @@ class BoxFeedAppBarPage extends StatelessWidget {
         color: Colors.white70,
         border: Border.all(color: Color(0xffdedede), width: 1),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: charts.TimeSeriesChart(state.graphData,
-            animate: false,
-            defaultRenderer: charts.LineRendererConfig(),
-            customSeriesRenderers: [
-              charts.PointRendererConfig(customRendererId: 'customPoint')
-            ]),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Hero(
+              tag: 'graphs',
+              child: charts.TimeSeriesChart(state.graphData,
+                  animate: false,
+                  defaultRenderer: charts.LineRendererConfig(),
+                  customSeriesRenderers: [
+                    charts.PointRendererConfig(
+                        customRendererId: 'customPoint')
+                  ]),
+            ),
+          ),
+          Positioned(
+              bottom: 0,
+              right: 0,
+              child: IconButton(
+                  icon: Icon(Icons.fullscreen, color: Colors.white70, size: 30),
+                  onPressed: () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToMetrics(state.box, state.graphData));
+                  })),
+        ],
       ),
     );
     if (state.graphData[0].data.length < 4 &&
@@ -76,7 +95,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
             border: Border.all(color: Color(0xffdedede), width: 1),
           ),
           child: Fullscreen(
-            title: 'Still not enough data\nto show a graphs',
+            title: 'Still not enough data\nto show a graph',
             subtitle: 'try again in a few hours',
             fontSize: 20,
             fontWeight: FontWeight.normal,
@@ -100,20 +119,20 @@ class BoxFeedAppBarPage extends StatelessWidget {
                     Colors.green,
                     'Temp',
                     '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
-                    '${this._min(state.graphData[0].data).metric.toInt()}$tempUnit',
-                    '${this._max(state.graphData[0].data).metric.toInt()}$tempUnit'),
+                    '${TimeSeries.min(state.graphData[0].data).metric.toInt()}$tempUnit',
+                    '${TimeSeries.max(state.graphData[0].data).metric.toInt()}$tempUnit'),
                 _renderMetric(
                     Colors.blue,
                     'Humi',
                     '${state.graphData[1].data[state.graphData[1].data.length - 1].metric.toInt()}%',
-                    '${this._min(state.graphData[1].data).metric.toInt()}%',
-                    '${this._max(state.graphData[1].data).metric.toInt()}%'),
+                    '${TimeSeries.min(state.graphData[1].data).metric.toInt()}%',
+                    '${TimeSeries.max(state.graphData[1].data).metric.toInt()}%'),
                 _renderMetric(
                     Colors.yellow,
                     'Light',
                     '${state.graphData[2].data[state.graphData[2].data.length - 1].metric.toInt()}%',
-                    '${this._min(state.graphData[2].data).metric.toInt()}%',
-                    '${this._max(state.graphData[2].data).metric.toInt()}%'),
+                    '${TimeSeries.min(state.graphData[2].data).metric.toInt()}%',
+                    '${TimeSeries.max(state.graphData[2].data).metric.toInt()}%'),
               ],
             ),
           ),
@@ -147,13 +166,5 @@ class BoxFeedAppBarPage extends StatelessWidget {
         )
       ],
     );
-  }
-
-  Metric _min(List<Metric> values) {
-    return values.reduce((acc, v) => acc.metric < v.metric ? acc : v);
-  }
-
-  Metric _max(List<Metric> values) {
-    return values.reduce((acc, v) => acc.metric > v.metric ? acc : v);
   }
 }
