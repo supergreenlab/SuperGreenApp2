@@ -155,16 +155,25 @@ class _TipPageState extends State<TipPage> {
         'https://tipapi.supergreenlab.com/a/${tip['user']}/${tip['repo']}/${tip['branch']}/s/${slug}/${section['image']['url']}';
     return Column(
       children: <Widget>[
-        (section['title'] != null && section['title'].length > 0) ? Text(section['title'],
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)) : Container(),
+        (section['title'] != null && section['title'].length > 0)
+            ? Text(section['title'],
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+            : Container(),
         LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) =>
               SizedBox(
                   width: constraints.maxWidth,
                   height: 300,
-                  child: FittedBox(
+                  child: Image.network(
+                    imagePath,
                     fit: BoxFit.cover,
-                    child: Image.network(imagePath),
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   )),
         ),
         Padding(
