@@ -76,22 +76,30 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
   }
 
-  Future<List<FeedEntry>> getEntries(int feedID) {
+  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(int feedID) {
     return (select(feedEntries)
-          ..where((fe) => fe.feed.equals(feedID))
+      ..where((fe) => fe.feed.equals(feedID))
+      ..orderBy(
+          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]));
+  }
+
+  Future<List<FeedEntry>> getEntries(int feedID) {
+    return _selectEntries(feedID).get();
+  }
+
+  Stream<List<FeedEntry>> watchEntries(int feedID) {
+    return _selectEntries(feedID).watch();
+  }
+
+  Future<List<FeedEntry>> getEnvironmentEntries(int feedID) {
+    return (select(feedEntries)
+          ..where((fe) =>
+              fe.feed.equals(feedID) &
+              fe.type.isIn(['FE_LIGHT', 'FE_VENTILATION', 'FE_SCHEDULE', 'FE_WATER', 'FE_TRANSPLANT']))
           ..orderBy([
             (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
           ]))
         .get();
-  }
-
-  Stream<List<FeedEntry>> watchEntries(int feedID) {
-    return (select(feedEntries)
-          ..where((fe) => fe.feed.equals(feedID))
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
-          ]))
-        .watch();
   }
 
   Future<int> addFeedEntry(FeedEntriesCompanion feedEntry) {
@@ -122,7 +130,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     query.where(
         feedEntries.feed.equals(feedID) & feedEntries.type.equals(feedType));
     query.orderBy(
-          [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
+        [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
     return (await query.get())
         .map<FeedMedia>((e) => e.readTable(feedMedias))
         .toList();

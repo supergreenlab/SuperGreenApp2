@@ -1,20 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/graphs/metrics_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class MetricsPage extends StatelessWidget {
+class MetricsPage extends StatefulWidget {
+  @override
+  _MetricsPageState createState() => _MetricsPageState();
+}
+
+class _MetricsPageState extends State<MetricsPage> {
+  bool _showTemp = true;
+  bool _showHumi = true;
+  bool _showLight = true;
+  int _fromTime =
+      DateTime.now().add(Duration(hours: -72)).millisecondsSinceEpoch ~/ 1000;
+  int _toTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+
+  Map<String, String> _titles = {
+    'FE_LIGHT': 'Light change',
+    'FE_VENTILATION': 'Ventilation change',
+    'FE_SCHEDULE': 'Schedule change',
+    'FE_WATER': 'Watering',
+    'FE_TRANSPLANT': 'Transplant',
+  };
+
+  Map<String, String> _icons = {
+    'FE_LIGHT': 'assets/feed_card/icon_dimming.svg',
+    'FE_VENTILATION': 'assets/feed_card/icon_blower.svg',
+    'FE_SCHEDULE': 'assets/feed_card/icon_schedule.svg',
+    'FE_WATER': 'assets/feed_card/icon_watering.svg',
+    'FE_TRANSPLANT': 'assets/feed_card/icon_transplant.svg',
+  };
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MetricsBloc, MetricsBlocState>(
         bloc: BlocProvider.of<MetricsBloc>(context),
         builder: (BuildContext context, MetricsBlocState state) {
           Widget body;
+          List annotations;
           if (state is MetricsBlocStateInit) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is MetricsBlocStateLoaded) {
+            annotations = state.entries
+                .map(
+                  (e) => charts.LineAnnotationSegment(
+                      e.date, charts.RangeAnnotationAxisType.domain,
+                      startLabel: _titles[e.type],
+                      labelStyleSpec: charts.TextStyleSpec(
+                          color: charts.MaterialPalette.white),
+                      color: charts.MaterialPalette.gray.shade500),
+                )
+                .toList();
+
             body = DefaultTabController(
               length: 2,
               child: Column(
@@ -34,8 +77,8 @@ class MetricsPage extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: <Widget>[
-                        Text('Show/hide metrics'),
-                        Text('Show events'),
+                        _renderMetrics(context, state),
+                        _renderEvents(context, state),
                       ],
                     ),
                   ),
@@ -71,17 +114,12 @@ class MetricsPage extends StatelessWidget {
                           state.graphData,
                           animate: false,
                           defaultRenderer: charts.LineRendererConfig(),
-                          behaviors: [
-                            charts.RangeAnnotation([
-                              charts.LineAnnotationSegment(
-                                  DateTime.now().add(Duration(hours: -24)),
-                                  charts.RangeAnnotationAxisType.domain,
-                                  startLabel: 'Domain 1',
-                                  labelStyleSpec: charts.TextStyleSpec(
-                                      color: charts.MaterialPalette.white),
-                                  color: charts.MaterialPalette.gray.shade500),
-                            ])
-                          ],
+                          behaviors:
+                              annotations != null && annotations.length > 0
+                                  ? [
+                                      charts.RangeAnnotation(annotations),
+                                    ]
+                                  : null,
                           customSeriesRenderers: [
                             charts.PointRendererConfig(
                                 customRendererId: 'customPoint')
@@ -106,5 +144,70 @@ class MetricsPage extends StatelessWidget {
             ),
           );
         });
+  }
+
+  Widget _renderMetrics(BuildContext context, MetricsBlocStateLoaded state) {
+    return Column(
+      children: [
+        _renderOptionCheckbx(context, 'Temperature', (value) {
+          setState(() {
+            _showTemp = value;
+            BlocProvider.of<MetricsBloc>(context).add(
+                MetricsBlocEventChartParams(
+                    _showTemp, _showHumi, _showLight, _fromTime, _toTime));
+          });
+        }, _showTemp),
+        _renderOptionCheckbx(context, 'Humidity', (value) {
+          setState(() {
+            _showHumi = value;
+            BlocProvider.of<MetricsBloc>(context).add(
+                MetricsBlocEventChartParams(
+                    _showTemp, _showHumi, _showLight, _fromTime, _toTime));
+          });
+        }, _showHumi),
+        _renderOptionCheckbx(context, 'Light', (value) {
+          setState(() {
+            _showLight = value;
+            BlocProvider.of<MetricsBloc>(context).add(
+                MetricsBlocEventChartParams(
+                    _showTemp, _showHumi, _showLight, _fromTime, _toTime));
+          });
+        }, _showLight),
+      ],
+    );
+  }
+
+  Widget _renderEvents(BuildContext context, MetricsBlocStateLoaded state) {
+    return ListView.builder(
+        itemCount: state.entries.length,
+        itemBuilder: (BuildContext context, int i) {
+          return ListTile(
+            leading: SvgPicture.asset(_icons[state.entries[i].type]),
+            title: Text(_titles[state.entries[i].type]),
+            subtitle: FeedCardDate(state.entries[i]),
+          );
+        });
+  }
+
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
+    return Row(
+      children: <Widget>[
+        Checkbox(
+          onChanged: onChanged,
+          value: value,
+        ),
+        InkWell(
+          onTap: () {
+            onChanged(!value);
+          },
+          child: MarkdownBody(
+            data: text,
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 14)),
+          ),
+        ),
+      ],
+    );
   }
 }

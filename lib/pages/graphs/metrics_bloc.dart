@@ -11,6 +11,20 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 abstract class MetricsBlocEvent extends Equatable {}
 
+class MetricsBlocEventChartParams extends MetricsBlocEvent {
+  final bool showTemp;
+  final bool showHumi;
+  final bool showLight;
+  final int fromTime;
+  final int toTime;
+
+  MetricsBlocEventChartParams(
+      this.showTemp, this.showHumi, this.showLight, this.fromTime, this.toTime);
+
+  @override
+  List<Object> get props => [showTemp, showHumi, showLight];
+}
+
 class MetricsBlocEventLoadChart extends MetricsBlocEvent {
   @override
   List<Object> get props => [];
@@ -33,14 +47,27 @@ class MetricsBlocState extends Equatable {
 }
 
 class MetricsBlocStateInit extends MetricsBlocState {
-  MetricsBlocStateInit(List<charts.Series<Metric, DateTime>> graphData) : super(graphData);
+  MetricsBlocStateInit(List<charts.Series<Metric, DateTime>> graphData)
+      : super(graphData);
 }
 
 class MetricsBlocStateLoaded extends MetricsBlocState {
-  MetricsBlocStateLoaded(List<charts.Series<Metric, DateTime>> graphData) : super(graphData);
+
+  final List<FeedEntry> entries;
+
+  MetricsBlocStateLoaded(List<charts.Series<Metric, DateTime>> graphData, this.entries)
+      : super(graphData);
 }
 
 class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
+  bool showTemp = true;
+  bool showHumi = true;
+  bool showLight = true;
+  int fromTime =
+      DateTime.now().add(Duration(hours: -72)).millisecondsSinceEpoch ~/ 1000;
+  int toTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  List<FeedEntry> _events;
+
   final MainNavigateToMetrics _args;
 
   Timer _timer;
@@ -57,14 +84,24 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
     if (event is MetricsBlocEventLoadChart) {
       List<charts.Series<Metric, DateTime>> graphData =
           await updateChart(_args.box);
-      yield MetricsBlocStateLoaded(graphData);
+      _events = await RelDB.get().feedsDAO.getEnvironmentEntries(_args.box.feed);
+      yield MetricsBlocStateLoaded(graphData, _events);
       _timer = Timer.periodic(Duration(seconds: 60), (timer) {
         this.add(MetricsBlocEventReloadChart());
       });
     } else if (event is MetricsBlocEventReloadChart) {
       List<charts.Series<Metric, DateTime>> graphData =
           await updateChart(_args.box);
-      yield MetricsBlocStateLoaded(graphData);
+      yield MetricsBlocStateLoaded(graphData, _events);
+    } else if (event is MetricsBlocEventChartParams) {
+      showTemp = event.showTemp;
+      showHumi = event.showHumi;
+      showLight = event.showLight;
+      fromTime = event.fromTime;
+      toTime = event.toTime;
+      List<charts.Series<Metric, DateTime>> graphData =
+          await updateChart(_args.box);
+      yield MetricsBlocStateLoaded(graphData, _events);
     }
   }
 
@@ -72,19 +109,34 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
     Device device = await RelDB.get().devicesDAO.getDevice(box.device);
     String identifier = device.identifier;
     int deviceBox = box.deviceBox;
-    charts.Series<Metric, DateTime> temp = await TimeSeries.fetchTimeSeries(
-        box,
-        identifier,
-        'Temperature',
-        'BOX_${deviceBox}_TEMP',
-        charts.MaterialPalette.green.shadeDefault,
+    List<charts.Series<Metric, DateTime>> chs = [];
+    if (showTemp) {
+      chs.add(await getTempSeries(box, identifier, deviceBox));
+    }
+    if (showHumi) {
+      chs.add(await getHumiSeries(box, identifier, deviceBox));
+    }
+    if (showLight) {
+      chs.add(await getLightSeries(box, device, identifier, deviceBox));
+    }
+    return chs;
+  }
+
+  Future<charts.Series<Metric, DateTime>> getTempSeries(
+      Box box, String identifier, int deviceBox) async {
+    return await TimeSeries.fetchTimeSeries(box, identifier, 'Temperature',
+        'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault,
         transform: _tempUnit);
-    charts.Series<Metric, DateTime> humi = await TimeSeries.fetchTimeSeries(
-        box,
-        identifier,
-        'Humidity',
-        'BOX_${deviceBox}_HUMI',
-        charts.MaterialPalette.blue.shadeDefault);
+  }
+
+  Future<charts.Series<Metric, DateTime>> getHumiSeries(
+      Box box, String identifier, int deviceBox) async {
+    return await TimeSeries.fetchTimeSeries(box, identifier, 'Humidity',
+        'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
+  }
+
+  Future<charts.Series<Metric, DateTime>> getLightSeries(
+      Box box, Device device, String identifier, int deviceBox) async {
     List<dynamic> timerOutput = await TimeSeries.fetchMetric(
         box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
     List<List<dynamic>> dims = [];
@@ -101,11 +153,10 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
       dims.add(dim);
     }
     List<int> avgDims = TimeSeries.avgMetrics(dims);
-    charts.Series<Metric, DateTime> light = TimeSeries.toTimeSeries(
+    return TimeSeries.toTimeSeries(
         TimeSeries.multiplyMetric(timerOutput, avgDims),
         'Light',
         charts.MaterialPalette.yellow.shadeDefault);
-    return [temp, humi, light];
   }
 
   double _tempUnit(double temp) {
