@@ -168,7 +168,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _onGenerateRoute(BuildContext context, RouteSettings settings) {
-    Timer(Duration(milliseconds: 10), () {
+    Timer(Duration(milliseconds: 100), () {
       BlocProvider.of<TowelieBloc>(context)
           .add(TowelieBlocEventRoute(settings));
     });
