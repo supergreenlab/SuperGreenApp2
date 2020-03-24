@@ -206,7 +206,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                   state.box,
                   pushAsReplacement: pushAsReplacement),
               tipPaths: [
-                't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch/l/en'
+                't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
+                't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
               ])),
       _renderSpeedDialChild(
           'Ventilation control',
@@ -320,26 +321,39 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
     if (state is BoxFeedBlocStateBoxLoaded) {
+      List<Widget> actions = [
+        IconButton(
+          icon: Icon(Icons.remove_red_eye),
+          tooltip: 'View live cams',
+          onPressed: () {
+            if (state.nTimelapses == 0) {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToTimelapseHowto(state.box));
+            } else {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToTimelapseViewer(state.box));
+            }
+          },
+        ),
+      ];
+      if (state.box.device != null) {
+        actions.insert(
+            0,
+            IconButton(
+              icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
+              tooltip: 'Sunglasses mode',
+              onPressed: () {
+                BlocProvider.of<BoxFeedBloc>(context)
+                    .add(BoxFeedBlocEventSunglasses());
+              },
+            ));
+      }
       return BlocProvider(
         key: Key('feed'),
         create: (context) => FeedBloc(state.box.feed),
         child: FeedPage(
           color: Color(0xff063047),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.remove_red_eye),
-              tooltip: 'View live cams',
-              onPressed: () {
-                if (state.nTimelapses == 0) {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToTimelapseHowto(state.box));
-                } else {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToTimelapseViewer(state.box));
-                }
-              },
-            ),
-          ],
+          actions: actions,
           bottomPadding: true,
           title: '',
           appBarHeight: 300,
@@ -508,7 +522,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state) {
-    String name = state.box.name;//StringUtils.capitalize(state.box.name);
+    String name = state.box.name; //StringUtils.capitalize(state.box.name);
 
     Widget graphBody;
     if (state.box.device != null) {

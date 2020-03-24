@@ -21,6 +21,8 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/device_api.dart';
+import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -42,6 +44,13 @@ class BoxFeedBlocEventBoxUpdated extends BoxFeedBlocEvent {
   final int rand = Random().nextInt(1 << 32);
 
   BoxFeedBlocEventBoxUpdated();
+
+  @override
+  List<Object> get props => [rand];
+}
+
+class BoxFeedBlocEventSunglasses extends BoxFeedBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
 
   @override
   List<Object> get props => [rand];
@@ -100,7 +109,8 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
         _db.setLastBox(_box.id);
       }
 
-      _nTimelapses = await RelDB.get().boxesDAO.nTimelapses(_box.id).getSingle();
+      _nTimelapses =
+          await RelDB.get().boxesDAO.nTimelapses(_box.id).getSingle();
       RelDB.get()
           .boxesDAO
           .nTimelapses(_box.id)
@@ -110,6 +120,22 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
       yield BoxFeedBlocStateBoxLoaded(_box, _nTimelapses);
     } else if (event is BoxFeedBlocEventBoxUpdated) {
       yield BoxFeedBlocStateBoxLoaded(_box, _nTimelapses);
+    } else if (event is BoxFeedBlocEventSunglasses) {
+      if (_box.device == null) {
+        return;
+      }
+      Device device = await RelDB.get().devicesDAO.getDevice(_box.device);
+      Param dimParam = await RelDB.get()
+          .devicesDAO
+          .getParam(device.id, 'BOX_${_box.deviceBox}_LED_DIM');
+      if (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 -
+              dimParam.ivalue >
+          1200) {
+        await DeviceHelper.updateIntParam(device, dimParam,
+            DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+      } else {
+        await DeviceHelper.updateIntParam(device, dimParam, 0);
+      }
     }
   }
 
