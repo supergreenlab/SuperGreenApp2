@@ -128,13 +128,17 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
       Param dimParam = await RelDB.get()
           .devicesDAO
           .getParam(device.id, 'BOX_${_box.deviceBox}_LED_DIM');
-      if (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 -
-              dimParam.ivalue >
-          1200) {
-        await DeviceHelper.updateIntParam(device, dimParam,
-            DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
-      } else {
-        await DeviceHelper.updateIntParam(device, dimParam, 0);
+      try {
+        if (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 -
+                dimParam.ivalue >
+            1200) {
+          await DeviceHelper.updateIntParam(device, dimParam,
+              DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+        } else {
+          await DeviceHelper.updateIntParam(device, dimParam, 0);
+        }
+      } catch (e) {
+        print(e);
       }
     }
   }

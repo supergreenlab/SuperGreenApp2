@@ -24,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_page.dart';
@@ -566,29 +567,52 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
       ]);
     }
 
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 64.0, top: 12.0),
-            child: Text(
-              name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold),
-            ),
+    return BlocBuilder<DeviceDaemonBloc, DeviceDaemonBlocState>(
+      condition:
+          (DeviceDaemonBlocState oldState, DeviceDaemonBlocState newState) {
+        return newState is DeviceDaemonBlocStateDeviceReachable &&
+            newState.device.id == state.box.device;
+      },
+      builder: (BuildContext context, DeviceDaemonBlocState daemonState) {
+        bool reachable = false;
+        if (daemonState is DeviceDaemonBlocStateDeviceReachable) {
+          reachable = daemonState.reachable;
+        }
+        return SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 64.0, top: 12.0),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Icon(Icons.offline_bolt,
+                          color: reachable ? Colors.green : Colors.grey,
+                          size: 20),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: graphBody),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: graphBody),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 

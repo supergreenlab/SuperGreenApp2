@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +14,43 @@ class DeviceDaemonBlocEventInit extends DeviceDaemonBlocEvent {
   List<Object> get props => [];
 }
 
+class DeviceDaemonBlocEventLoadDevice extends DeviceDaemonBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+  final int deviceID;
+
+  DeviceDaemonBlocEventLoadDevice(this.deviceID);
+
+  @override
+  List<Object> get props => [rand, deviceID];
+}
+
+class DeviceDaemonBlocEventDeviceReachable extends DeviceDaemonBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+  final Device device;
+  final bool reachable;
+
+  DeviceDaemonBlocEventDeviceReachable(this.device, this.reachable);
+
+  @override
+  List<Object> get props => [rand, device, reachable];
+}
+
 abstract class DeviceDaemonBlocState extends Equatable {}
 
 class DeviceDaemonBlocStateInit extends DeviceDaemonBlocState {
   @override
   List<Object> get props => [];
+}
+
+class DeviceDaemonBlocStateDeviceReachable extends DeviceDaemonBlocState {
+  final int rand = Random().nextInt(1 << 32);
+  final Device device;
+  final bool reachable;
+
+  DeviceDaemonBlocStateDeviceReachable(this.device, this.reachable);
+
+  @override
+  List<Object> get props => [rand, device, reachable];
 }
 
 class DeviceDaemonBloc
@@ -54,11 +87,13 @@ class DeviceDaemonBloc
         print('Device ${device.name} (${device.identifier}) found.');
         await ddb.updateDevice(DevicesCompanion(
             id: Value(device.id), isReachable: Value(found = true)));
+        add(DeviceDaemonBlocEventDeviceReachable(device, true));
       }
     } catch (e) {
       print('Device ${device.identifier} not found, trying mdns lookup.');
       RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
           id: Value(device.id), isReachable: Value(found = false)));
+      add(DeviceDaemonBlocEventDeviceReachable(device, false));
       String ip;
       int nTries = 0;
       for (int i = 0; i < 4; ++i) {
@@ -68,6 +103,9 @@ class DeviceDaemonBloc
           return;
         }
         ip = await DeviceAPI.resolveLocalName(mdns.svalue);
+        if (ip != null && ip != "") {
+          break;
+        }
         ++nTries;
       }
       if (ip != null && ip != "") {
@@ -81,11 +119,14 @@ class DeviceDaemonBloc
                 id: Value(device.id),
                 isReachable: Value(found = true),
                 ip: Value(ip)));
+            add(DeviceDaemonBlocEventDeviceReachable(device, true));
           }
         } catch (e) {
-          print('Device ${device.name} (${device.identifier}) not found, aborting.');
+          print(
+              'Device ${device.name} (${device.identifier}) not found, aborting.');
           RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
               id: Value(device.id), isReachable: Value(found = false)));
+          add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
       }
     }
@@ -103,6 +144,11 @@ class DeviceDaemonBloc
       DeviceDaemonBlocEvent event) async* {
     if (event is DeviceDaemonBlocEventInit) {
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
+    } else if (event is DeviceDaemonBlocEventLoadDevice) {
+      Device device = _devices.firstWhere((d) => d.id == event.deviceID);
+      yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable);
+    } else if (event is DeviceDaemonBlocEventDeviceReachable) {
+      yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable);
     }
   }
 
