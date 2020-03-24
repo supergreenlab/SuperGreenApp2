@@ -73,14 +73,20 @@ class BoxFeedAppBarBloc
   Stream<BoxFeedAppBarBlocState> mapEventToState(
       BoxFeedAppBarBlocEvent event) async* {
     if (event is BoxFeedAppBarBlocEventLoadChart) {
-      List<charts.Series<Metric, DateTime>> graphData = await updateChart(box);
-      yield BoxFeedAppBarBlocStateLoaded(graphData, box);
-      _timer = Timer.periodic(Duration(seconds: 60), (timer) {
-        this.add(BoxFeedAppBarBlocEventReloadChart());
-      });
+      try {
+        List<charts.Series<Metric, DateTime>> graphData =
+            await updateChart(box);
+        yield BoxFeedAppBarBlocStateLoaded(graphData, box);
+        _timer = Timer.periodic(Duration(seconds: 60), (timer) {
+          this.add(BoxFeedAppBarBlocEventReloadChart());
+        });
+      } catch (e) {}
     } else if (event is BoxFeedAppBarBlocEventReloadChart) {
-      List<charts.Series<Metric, DateTime>> graphData = await updateChart(box);
-      yield BoxFeedAppBarBlocStateLoaded(graphData, box);
+      try {
+        List<charts.Series<Metric, DateTime>> graphData =
+            await updateChart(box);
+        yield BoxFeedAppBarBlocStateLoaded(graphData, box);
+      } catch (e) {}
     }
   }
 

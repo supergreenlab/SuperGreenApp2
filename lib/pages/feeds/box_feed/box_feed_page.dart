@@ -64,33 +64,43 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         }
         return true;
       },
-      child: BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
-        bloc: BlocProvider.of<BoxFeedBloc>(context),
-        builder: (BuildContext context, BoxFeedBlocState state) {
-          Widget body;
-          if (_speedDialOpen) {
-            body = Stack(
-              children: <Widget>[
-                _renderFeed(context, state),
-                _renderOverlay(context),
-              ],
-            );
-          } else {
-            body = Stack(
-              children: <Widget>[
-                _renderFeed(context, state),
-              ],
-            );
+      child: BlocListener<BoxFeedBloc, BoxFeedBlocState>(
+        listener: (BuildContext context, state) {
+          if (state is BoxFeedBlocStateBoxLoaded) {
+            if (state.box.device != null) {
+              BlocProvider.of<DeviceDaemonBloc>(context)
+                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+            }
           }
-
-          return Scaffold(
-              drawer: Drawer(child: this._drawerContent(context, state)),
-              body: AnimatedSwitcher(
-                  child: body, duration: Duration(milliseconds: 200)),
-              floatingActionButton: state is BoxFeedBlocStateBoxLoaded
-                  ? _renderSpeedDial(context, state)
-                  : null);
         },
+        child: BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
+          bloc: BlocProvider.of<BoxFeedBloc>(context),
+          builder: (BuildContext context, BoxFeedBlocState state) {
+            Widget body;
+            if (_speedDialOpen) {
+              body = Stack(
+                children: <Widget>[
+                  _renderFeed(context, state),
+                  _renderOverlay(context),
+                ],
+              );
+            } else {
+              body = Stack(
+                children: <Widget>[
+                  _renderFeed(context, state),
+                ],
+              );
+            }
+
+            return Scaffold(
+                drawer: Drawer(child: this._drawerContent(context, state)),
+                body: AnimatedSwitcher(
+                    child: body, duration: Duration(milliseconds: 200)),
+                floatingActionButton: state is BoxFeedBlocStateBoxLoaded
+                    ? _renderSpeedDial(context, state)
+                    : null);
+          },
+        ),
       ),
     );
   }
