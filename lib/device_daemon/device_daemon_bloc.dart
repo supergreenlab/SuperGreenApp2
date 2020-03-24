@@ -77,61 +77,48 @@ class DeviceDaemonBloc
     }
     _deviceWorker[device.id] = true;
 
-    bool found = false;
     var ddb = RelDB.get().devicesDAO;
 
     try {
       String identifier =
-          await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID');
+          await DeviceAPI.pingSGLHost(device.ip, 'BROKER_CLIENTID', nTries: 1);
       if (identifier == device.identifier) {
         print('Device ${device.name} (${device.identifier}) found.');
-        await ddb.updateDevice(DevicesCompanion(
-            id: Value(device.id), isReachable: Value(found = true)));
+        await ddb.updateDevice(
+            DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
         add(DeviceDaemonBlocEventDeviceReachable(device, true));
       }
     } catch (e) {
       print('Device ${device.identifier} not found, trying mdns lookup.');
-      RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-          id: Value(device.id), isReachable: Value(found = false)));
+      RelDB.get().devicesDAO.updateDevice(
+          DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
       add(DeviceDaemonBlocEventDeviceReachable(device, false));
       String ip;
-      int nTries = 0;
-      for (int i = 0; i < 4; ++i) {
-        await new Future.delayed(const Duration(seconds: 2));
-        Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
-        if (mdns == null) {
-          return;
-        }
-        ip = await DeviceAPI.resolveLocalName(mdns.svalue);
-        if (ip != null && ip != "") {
-          break;
-        }
-        ++nTries;
+      await new Future.delayed(const Duration(seconds: 2));
+      Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
+      if (mdns == null) {
+        return;
       }
+      ip = await DeviceAPI.resolveLocalName(mdns.svalue);
       if (ip != null && ip != "") {
         try {
           String identifier =
               await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
           if (identifier == device.identifier) {
             print(
-                'Device ${device.name} (${device.identifier}) found after $nTries mdns lookup.');
+                'Device ${device.name} (${device.identifier}) found with mdns lookup.');
             await ddb.updateDevice(DevicesCompanion(
-                id: Value(device.id),
-                isReachable: Value(found = true),
-                ip: Value(ip)));
+                id: Value(device.id), isReachable: Value(true), ip: Value(ip)));
             add(DeviceDaemonBlocEventDeviceReachable(device, true));
           }
         } catch (e) {
           print(
               'Device ${device.name} (${device.identifier}) not found, aborting.');
           RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-              id: Value(device.id), isReachable: Value(found = false)));
+              id: Value(device.id), isReachable: Value(false)));
           add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
       }
-    }
-    if (found) {
-      await Future.delayed(Duration(seconds: 15));
     }
     _deviceWorker[device.id] = false;
   }

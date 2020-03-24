@@ -322,45 +322,55 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
     if (state is BoxFeedBlocStateBoxLoaded) {
-      List<Widget> actions = [
-        IconButton(
-          icon: Icon(Icons.remove_red_eye),
-          tooltip: 'View live cams',
-          onPressed: () {
-            if (state.nTimelapses == 0) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToTimelapseHowto(state.box));
-            } else {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToTimelapseViewer(state.box));
-            }
-          },
-        ),
-      ];
-      if (state.box.device != null) {
-        actions.insert(
-            0,
-            IconButton(
-              icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
-              tooltip: 'Sunglasses mode',
-              onPressed: () {
-                BlocProvider.of<BoxFeedBloc>(context)
-                    .add(BoxFeedBlocEventSunglasses());
-              },
-            ));
-      }
-      return BlocProvider(
-        key: Key('feed'),
-        create: (context) => FeedBloc(state.box.feed),
-        child: FeedPage(
-          color: Color(0xff063047),
-          actions: actions,
-          bottomPadding: true,
-          title: '',
-          appBarHeight: 300,
-          appBar: _renderAppBar(context, state),
-        ),
-      );
+      return BlocBuilder<DeviceDaemonBloc, DeviceDaemonBlocState>(condition:
+          (DeviceDaemonBlocState oldState, DeviceDaemonBlocState newState) {
+        return newState is DeviceDaemonBlocStateDeviceReachable &&
+            newState.device.id == state.box.device;
+      }, builder: (BuildContext context, DeviceDaemonBlocState daemonState) {
+        bool reachable = false;
+        if (daemonState is DeviceDaemonBlocStateDeviceReachable) {
+          reachable = daemonState.reachable;
+        }
+        List<Widget> actions = [
+          IconButton(
+            icon: Icon(Icons.remove_red_eye),
+            tooltip: 'View live cams',
+            onPressed: () {
+              if (state.nTimelapses == 0) {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToTimelapseHowto(state.box));
+              } else {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToTimelapseViewer(state.box));
+              }
+            },
+          ),
+        ];
+        if (state.box.device != null && reachable) {
+          actions.insert(
+              0,
+              IconButton(
+                icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
+                tooltip: 'Sunglasses mode',
+                onPressed: () {
+                  BlocProvider.of<BoxFeedBloc>(context)
+                      .add(BoxFeedBlocEventSunglasses());
+                },
+              ));
+        }
+        return BlocProvider(
+          key: Key('feed'),
+          create: (context) => FeedBloc(state.box.feed),
+          child: FeedPage(
+            color: Color(0xff063047),
+            actions: actions,
+            bottomPadding: true,
+            title: '',
+            appBarHeight: 300,
+            appBar: _renderAppBar(context, state, reachable),
+          ),
+        );
+      });
     } else if (state is BoxFeedBlocStateNoBox) {
       return Fullscreen(
           title: 'No box yet.',
@@ -522,7 +532,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         .add(MainNavigateToNewBoxInfosEvent());
   }
 
-  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+  Widget _renderAppBar(
+      BuildContext context, BoxFeedBlocStateBoxLoaded state, bool reachable) {
     String name = state.box.name; //StringUtils.capitalize(state.box.name);
 
     Widget graphBody;
@@ -567,52 +578,38 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
       ]);
     }
 
-    return BlocBuilder<DeviceDaemonBloc, DeviceDaemonBlocState>(
-      condition:
-          (DeviceDaemonBlocState oldState, DeviceDaemonBlocState newState) {
-        return newState is DeviceDaemonBlocStateDeviceReachable &&
-            newState.device.id == state.box.device;
-      },
-      builder: (BuildContext context, DeviceDaemonBlocState daemonState) {
-        bool reachable = false;
-        if (daemonState is DeviceDaemonBlocStateDeviceReachable) {
-          reachable = daemonState.reachable;
-        }
-        return SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 64.0, top: 12.0),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      name,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Icon(Icons.offline_bolt,
-                          color: reachable ? Colors.green : Colors.grey,
-                          size: 20),
-                    ),
-                  ],
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 64.0, top: 12.0),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  name,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 200), child: graphBody),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Icon(Icons.offline_bolt,
+                      color: reachable ? Colors.green : Colors.grey, size: 20),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        );
-      },
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: graphBody),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
