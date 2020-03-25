@@ -53,6 +53,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
   bool _speedDialOpen = false;
+  bool _showIP = false;
 
   @override
   Widget build(BuildContext context) {
@@ -377,7 +378,12 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
             bottomPadding: true,
             title: '',
             appBarHeight: 300,
-            appBar: _renderAppBar(context, state, reachable),
+            appBar: _renderAppBar(
+                context,
+                state,
+                daemonState is DeviceDaemonBlocStateDeviceReachable
+                    ? daemonState
+                    : null),
           ),
         );
       });
@@ -542,8 +548,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         .add(MainNavigateToNewBoxInfosEvent());
   }
 
-  Widget _renderAppBar(
-      BuildContext context, BoxFeedBlocStateBoxLoaded state, bool reachable) {
+  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state,
+      DeviceDaemonBlocStateDeviceReachable daemonState) {
     String name = state.box.name; //StringUtils.capitalize(state.box.name);
 
     Widget graphBody;
@@ -588,27 +594,56 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
       ]);
     }
 
+    Widget nameText;
+    if (daemonState != null && daemonState.reachable && _showIP) {
+      nameText = Column(
+        children: <Widget>[
+          Text(
+            name,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(daemonState.device.ip,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey,
+              ))
+        ],
+      );
+    } else {
+      nameText = Text(
+        name,
+        style: TextStyle(
+            color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.bold),
+      );
+    }
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 64.0, top: 12.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  name,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.offline_bolt,
-                      color: reachable ? Colors.green : Colors.grey, size: 20),
-                ),
-              ],
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _showIP = !_showIP;
+                });
+              },
+              child: Row(
+                children: <Widget>[
+                  nameText,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Icon(Icons.offline_bolt,
+                        color: daemonState != null && daemonState.reachable
+                            ? Colors.green
+                            : Colors.grey,
+                        size: 20),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
