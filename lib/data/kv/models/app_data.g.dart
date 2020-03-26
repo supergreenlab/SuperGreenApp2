@@ -18,7 +18,7 @@ class AppDataAdapter extends TypeAdapter<AppData> {
     };
     return AppData()
       ..firstStart = fields[0] as bool
-      ..lastBoxID = fields[1] as int
+      ..lastPlantID = fields[1] as int
       ..allowAnalytics = fields[2] as bool
       ..freedomUnits = fields[3] as bool;
   }
@@ -30,7 +30,7 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..writeByte(0)
       ..write(obj.firstStart)
       ..writeByte(1)
-      ..write(obj.lastBoxID)
+      ..write(obj.lastPlantID)
       ..writeByte(2)
       ..write(obj.allowAnalytics)
       ..writeByte(3)

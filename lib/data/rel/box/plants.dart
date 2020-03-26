@@ -133,7 +133,7 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   // TODO move this to the kv store, separate from the plant concept
-  Map<String, dynamic> boxSettings(Plant box) {
+  Map<String, dynamic> plantSettings(Plant box) {
     final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
     // TODO make actual enums or constants
     return {

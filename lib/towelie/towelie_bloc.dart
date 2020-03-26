@@ -24,19 +24,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_box_already_started.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_box_auto.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_box_bloom_stage.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_box_not_started.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_box_photo.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_box_veg_stage.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_create_box.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_create_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_dont_want_to_buy.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_got_sgl_bundle.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_i_ordered_one.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_i_want_one.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_no_sgl_bundle.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_not_received.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_plant_already_started.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_plant_auto.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_plant_bloom_stage.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_plant_not_started.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_plant_photo.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_plant_veg_stage.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
@@ -230,14 +230,14 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonIWantOne(),
     TowelieButtonIOrderedOne(),
     TowelieButtonDontWantToBuy(),
-    TowelieButtonCreateBox(),
+    TowelieButtonCreatePlant(),
     TowelieButtonViewPlant(),
-    TowelieButtonBoxAlreadyStarted(),
-    TowelieButtonBoxNotStarted(),
-    TowelieButtonBoxVegStage(),
-    TowelieButtonBoxBloomStage(),
-    TowelieButtonBoxAuto(),
-    TowelieButtonBoxPhoto(),
+    TowelieButtonPlantAlreadyStarted(),
+    TowelieButtonPlantNotStarted(),
+    TowelieButtonPlantVegStage(),
+    TowelieButtonPlantBloomStage(),
+    TowelieButtonPlantAuto(),
+    TowelieButtonPlantPhoto(),
     TowelieButtonTutoTakePic(),
   ];
 

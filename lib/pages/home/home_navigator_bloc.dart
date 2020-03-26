@@ -34,13 +34,13 @@ class HomeNavigateEventInit extends HomeNavigatorEvent {
   List<Object> get props => [];
 }
 
-class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {
-  final Plant box;
+class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent {
+  final Plant plant;
 
-  HomeNavigateToBoxFeedEvent(this.box);
+  HomeNavigateToPlantFeedEvent(this.plant);
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [plant];
 }
 
 class HomeNavigateToSGLFeedEvent extends HomeNavigatorEvent {
@@ -89,7 +89,7 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   }
 
   @override
-  HomeNavigatorState get initialState => HomeNavigatorState(AppDB().getAppData().lastBoxID != null ? 1 : 0);
+  HomeNavigatorState get initialState => HomeNavigatorState(AppDB().getAppData().lastPlantID != null ? 1 : 0);
 
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
@@ -97,7 +97,7 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
       _navigatorKey.currentState
           .pushReplacementNamed('/feed/sgl', arguments: event);
       yield HomeNavigatorState(0);
-    } else if (event is HomeNavigateToBoxFeedEvent) {
+    } else if (event is HomeNavigateToPlantFeedEvent) {
       _navigatorKey.currentState
           .pushReplacementNamed('/feed/box', arguments: event);
       yield HomeNavigatorState(1);

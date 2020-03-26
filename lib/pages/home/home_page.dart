@@ -168,7 +168,7 @@ class HomePage extends StatelessWidget {
           .add(HomeNavigateToSGLFeedEvent());
     } else if (i == 1) {
       BlocProvider.of<HomeNavigatorBloc>(context)
-          .add(HomeNavigateToBoxFeedEvent(null));
+          .add(HomeNavigateToPlantFeedEvent(null));
     } else if (i == 2) {
       BlocProvider.of<HomeNavigatorBloc>(context)
           .add(HomeNavigateToExplorerEvent());
@@ -186,7 +186,7 @@ class HomePage extends StatelessWidget {
     });
     if (settings.arguments == null) {
       // TODO find a better way to start on box feed..
-      if (AppDB().getAppData().lastBoxID == null) {
+      if (AppDB().getAppData().lastPlantID == null) {
         return MaterialPageRoute(
             settings: settings,
             builder: (context) => BlocProvider(
@@ -194,7 +194,7 @@ class HomePage extends StatelessWidget {
                   child: SGLFeedPage(),
                 ));
       } else {
-        return _boxFeedRoute(context, settings, HomeNavigateToBoxFeedEvent(null));
+        return _boxFeedRoute(context, settings, HomeNavigateToPlantFeedEvent(null));
       }
     }
     switch (settings.name) {
@@ -234,15 +234,15 @@ class HomePage extends StatelessWidget {
     }
   }
 
-  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToBoxFeedEvent event) {
+  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
               providers: [
                 BlocProvider<PlantDrawerBloc>(
                     create: (context) => PlantDrawerBloc()),
-                BlocProvider<BoxFeedBloc>(
-                  create: (context) => BoxFeedBloc(event),
+                BlocProvider<PlantFeedBloc>(
+                  create: (context) => PlantFeedBloc(event),
                 )
               ],
               child: TowelieHelper.wrapWidget(settings, context, BoxFeedPage()),

@@ -65,18 +65,18 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         }
         return true;
       },
-      child: BlocListener<BoxFeedBloc, BoxFeedBlocState>(
+      child: BlocListener<PlantFeedBloc, PlantFeedBlocState>(
         listener: (BuildContext context, state) {
-          if (state is BoxFeedBlocStateBoxLoaded) {
-            if (state.box.device != null) {
+          if (state is PlantFeedBlocStateLoaded) {
+            if (state.plant.device != null) {
               BlocProvider.of<DeviceDaemonBloc>(context)
-                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+                  .add(DeviceDaemonBlocEventLoadDevice(state.plant.device));
             }
           }
         },
-        child: BlocBuilder<BoxFeedBloc, BoxFeedBlocState>(
-          bloc: BlocProvider.of<BoxFeedBloc>(context),
-          builder: (BuildContext context, BoxFeedBlocState state) {
+        child: BlocBuilder<PlantFeedBloc, PlantFeedBlocState>(
+          bloc: BlocProvider.of<PlantFeedBloc>(context),
+          builder: (BuildContext context, PlantFeedBlocState state) {
             Widget body;
             if (_speedDialOpen) {
               body = Stack(
@@ -97,7 +97,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
                 drawer: Drawer(child: this._drawerContent(context, state)),
                 body: AnimatedSwitcher(
                     child: body, duration: Duration(milliseconds: 200)),
-                floatingActionButton: state is BoxFeedBlocStateBoxLoaded
+                floatingActionButton: state is PlantFeedBlocStateLoaded
                     ? _renderSpeedDial(context, state)
                     : null);
           },
@@ -107,7 +107,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   SpeedDial _renderSpeedDial(
-      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return SpeedDial(
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
@@ -139,7 +139,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   List<SpeedDialChild> _renderTrimSpeedDials(
-      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
@@ -155,7 +155,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedDefoliationFormEvent(state.box,
+                  MainNavigateToFeedDefoliationFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'
@@ -166,7 +166,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedToppingFormEvent(state.box,
+                  MainNavigateToFeedToppingFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
@@ -178,7 +178,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedFimmingFormEvent(state.box,
+                  MainNavigateToFeedFimmingFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
@@ -190,7 +190,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedBendingFormEvent(state.box,
+                  MainNavigateToFeedBendingFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'
@@ -199,7 +199,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   List<SpeedDialChild> _renderEnvironmentSpeedDials(
-      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
@@ -215,7 +215,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(
-                  state.box,
+                  state.plant,
                   pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
@@ -227,7 +227,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedVentilationFormEvent(state.box,
+                  MainNavigateToFeedVentilationFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
           'Light schedule',
@@ -235,7 +235,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedScheduleFormEvent(state.box,
+                  MainNavigateToFeedScheduleFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
@@ -246,7 +246,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedTransplantFormEvent(state.box,
+                  MainNavigateToFeedTransplantFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_repot_your_seedling/l/en',
@@ -256,7 +256,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   List<SpeedDialChild> _renderGeneralSpeedDials(
-      BuildContext context, BoxFeedBlocStateBoxLoaded state) {
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
       _renderSpeedDialChild(
           'Grow log',
@@ -264,7 +264,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
-                  state.box,
+                  state.plant,
                   pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
           'Measure',
@@ -272,7 +272,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedMeasureFormEvent(state.box,
+                  MainNavigateToFeedMeasureFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
           'Watering',
@@ -280,7 +280,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
-                  state.box,
+                  state.plant,
                   pushAsReplacement: pushAsReplacement),
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
@@ -331,12 +331,12 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     };
   }
 
-  Widget _renderFeed(BuildContext context, BoxFeedBlocState state) {
-    if (state is BoxFeedBlocStateBoxLoaded) {
+  Widget _renderFeed(BuildContext context, PlantFeedBlocState state) {
+    if (state is PlantFeedBlocStateLoaded) {
       return BlocBuilder<DeviceDaemonBloc, DeviceDaemonBlocState>(condition:
           (DeviceDaemonBlocState oldState, DeviceDaemonBlocState newState) {
         return newState is DeviceDaemonBlocStateDeviceReachable &&
-            newState.device.id == state.box.device;
+            newState.device.id == state.plant.device;
       }, builder: (BuildContext context, DeviceDaemonBlocState daemonState) {
         bool reachable = false;
         if (daemonState is DeviceDaemonBlocStateDeviceReachable) {
@@ -349,29 +349,29 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
             onPressed: () {
               if (state.nTimelapses == 0) {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToTimelapseHowto(state.box));
+                    .add(MainNavigateToTimelapseHowto(state.plant));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToTimelapseViewer(state.box));
+                    .add(MainNavigateToTimelapseViewer(state.plant));
               }
             },
           ),
         ];
-        if (state.box.device != null && reachable) {
+        if (state.plant.device != null && reachable) {
           actions.insert(
               0,
               IconButton(
                 icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
                 tooltip: 'Sunglasses mode',
                 onPressed: () {
-                  BlocProvider.of<BoxFeedBloc>(context)
-                      .add(BoxFeedBlocEventSunglasses());
+                  BlocProvider.of<PlantFeedBloc>(context)
+                      .add(PlantFeedBlocEventSunglasses());
                 },
               ));
         }
         return BlocProvider(
           key: Key('feed'),
-          create: (context) => FeedBloc(state.box.feed),
+          create: (context) => FeedBloc(state.plant.feed),
           child: FeedPage(
             color: Color(0xff063047),
             actions: actions,
@@ -387,7 +387,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           ),
         );
       });
-    } else if (state is BoxFeedBlocStateNoBox) {
+    } else if (state is PlantFeedBlocStateNoPlant) {
       return Fullscreen(
           title: 'No box yet.',
           childFirst: false,
@@ -417,7 +417,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     );
   }
 
-  Widget _drawerContent(BuildContext context, BoxFeedBlocState state) {
+  Widget _drawerContent(BuildContext context, PlantFeedBlocState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -457,7 +457,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     );
   }
 
-  Widget _boxList(BuildContext context, BoxFeedBlocState boxFeedState) {
+  Widget _boxList(BuildContext context, PlantFeedBlocState boxFeedState) {
     return BlocBuilder<PlantDrawerBloc, PlantDrawerBlocState>(
       bloc: BlocProvider.of<PlantDrawerBloc>(context),
       condition: (previousState, state) =>
@@ -472,8 +472,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
           content = ListView(
             children: boxes.map((b) {
               Widget item = ListTile(
-                leading: (boxFeedState is BoxFeedBlocStateBoxLoaded &&
-                        boxFeedState.box.id == b.id)
+                leading: (boxFeedState is PlantFeedBlocStateLoaded &&
+                        boxFeedState.plant.id == b.id)
                     ? Icon(
                         Icons.check_box,
                         color: Colors.green,
@@ -540,7 +540,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         BlocProvider.of<HomeNavigatorBloc>(context);
     Navigator.pop(context);
     Timer(Duration(milliseconds: 250),
-        () => navigatorBloc.add(HomeNavigateToBoxFeedEvent(box)));
+        () => navigatorBloc.add(HomeNavigateToPlantFeedEvent(box)));
   }
 
   void _onAddBox(BuildContext context) {
@@ -548,12 +548,12 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
         .add(MainNavigateToNewPlantInfosEvent());
   }
 
-  Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state,
+  Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state,
       DeviceDaemonBlocStateDeviceReachable daemonState) {
-    String name = state.box.name; //StringUtils.capitalize(state.box.name);
+    String name = state.plant.name; //StringUtils.capitalize(state.box.name);
 
     Widget graphBody;
-    if (state.box.device != null) {
+    if (state.plant.device != null) {
       graphBody = Stack(children: [_renderGraphs(context, state)]);
     } else {
       graphBody = Stack(children: [

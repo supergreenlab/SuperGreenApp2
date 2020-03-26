@@ -32,7 +32,7 @@ class TowelieButtonYesReceived extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
     if (event.params['ID'] == 'YES_RECEIVED') {
-      await TowelieCardsFactory.createCreateBoxCard(event.feed);
+      await TowelieCardsFactory.createCreatePlantCard(event.feed);
       await removeButtons(event.feedEntry);
     }
   }
