@@ -99,7 +99,7 @@ class TowelieCardsFactory {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': SGLLocalizations.current.towelieCreateBox,
+        'text': SGLLocalizations.current.towelieCreatePlant,
         'buttons': [
           TowelieButtonCreatePlant.createButton(),
         ],
@@ -115,7 +115,7 @@ class TowelieCardsFactory {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': SGLLocalizations.current.towelieWelcomeBox,
+        'text': SGLLocalizations.current.towelieWelcomePlant,
         'buttons': [],
       })),
     ));
@@ -129,7 +129,7 @@ class TowelieCardsFactory {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': SGLLocalizations.current.towelieBoxCreated,
+        'text': SGLLocalizations.current.toweliePlantCreated,
         'buttons': [
           TowelieButtonViewPlant.createButton(box),
         ]
@@ -145,7 +145,7 @@ class TowelieCardsFactory {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': SGLLocalizations.current.towelieBoxAlreadyStarted,
+        'text': SGLLocalizations.current.toweliePlantAlreadyStarted,
         'buttons': [
           TowelieButtonPlantAlreadyStarted.createButton(),
           TowelieButtonPlantNotStarted.createButton(),
@@ -162,7 +162,7 @@ class TowelieCardsFactory {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': SGLLocalizations.current.towelieBoxAutoOrPhoto,
+        'text': SGLLocalizations.current.toweliePlantAutoOrPhoto,
         'buttons': [
           TowelieButtonPlantAuto.createButton(),
           TowelieButtonPlantPhoto.createButton(),
@@ -179,7 +179,7 @@ class TowelieCardsFactory {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': SGLLocalizations.current.towelieBoxVegOrBloom,
+        'text': SGLLocalizations.current.toweliePlantVegOrBloom,
         'buttons': [
           TowelieButtonPlantVegStage.createButton(),
           TowelieButtonPlantBloomStage.createButton(),
@@ -196,7 +196,7 @@ class TowelieCardsFactory {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': SGLLocalizations.current.towelieBoxTutoTakePic,
+        'text': SGLLocalizations.current.toweliePlantTutoTakePic,
         'buttons': [
           TowelieButtonTutoTakePic.createButton(),
         ]

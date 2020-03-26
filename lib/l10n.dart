@@ -152,43 +152,43 @@ Coming with a **sensor, ventilation, a controller and a companion App**. The **n
     );
   }
 
-  String get towelieCreateBox {
+  String get towelieCreatePlant {
     return Intl.message(
-      '''Alright we're ready to create your **first box!**
+      '''Alright we're ready to started your **first plant!**
 
 The app works like this:
-- you **create a box**
+- you **create a plant**
 - attach it (or not) to a **SuperGreenController**
 - configure the led channels used to **light it up**
 
-Once this is done, you will have access to it's **feed**, it's like a timeline of the **box's life**.
+Once this is done, you will have access to it's **feed**, it's like a timeline of the **plant's life**.
 Whenever you water, change light parameters, or train the plant, or any other action,
-it will log it in the box's feed, so you can **share it**, or **replay it** for your next grow!
+it will log it in the plant's feed, so you can **share it**, or **replay it** for your next grow!
 
-Press the **Create box** button below.
+Press the **Create plant** button below.
 ''',
-      name: 'towelieCreateBox',
-      desc: 'Towelie Create Box',
+      name: 'towelieCreatePlant',
+      desc: 'Towelie Create Plant',
       locale: localeName,
     );
   }
 
-  String get towelieBoxCreated {
+  String get toweliePlantCreated {
     return Intl.message(
-      '''Awesome, **you created your first box**!
+      '''Awesome, **you created your first plant**!
 
-You can access your newly box feed either by **pressing the home button below**, or the **View box** button below.
+You can access your newly plant feed either by **pressing the home button below**, or the **View plant** button below.
 ''',
-      name: 'towelieBoxCreated',
-      desc: 'Towelie Box Created',
+      name: 'toweliePlantCreated',
+      desc: 'Towelie Plant Created',
       locale: localeName,
     );
   }
 
-  String get towelieWelcomeBox {
+  String get towelieWelcomePlant {
     return Intl.message(
-      '''**Welcome to your box feed!**
-This is where you will modify your box’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.
+      '''**Welcome to your plant feed!**
+This is where you will modify your plant’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the plant’s environment.
 
 This is also where you will log the actions **you want to remember**: last time you watered for example.
 
@@ -196,68 +196,68 @@ The app will also add log entries for temperature or humidity **heads up and rem
 receive from the app.
 
 And all this feed can be reviewed, shared or replayed later, **and that’s awesome**.''',
-      name: 'towelieWelcomeBox',
-      desc: 'Towelie Welcome Box',
+      name: 'towelieWelcomePlant',
+      desc: 'Towelie Welcome Plant',
       locale: localeName,
     );
   }
 
-  String get towelieBoxAutoOrPhoto {
+  String get toweliePlantAutoOrPhoto {
     return Intl.message(
-      '''To better guide to a **successful harvest**, I'll need a bit **more informations** about your box:)
+      '''To better guide you to a **successful harvest**, I'll need a bit **more informations** about your plant:)
 Is this plant an **auto** or **photo** strain?''',
-      name: 'towelieBoxAutoOrPhoto',
-      desc: 'Towelie Box auto or photo',
+      name: 'toweliePlantAutoOrPhoto',
+      desc: 'Towelie Plant auto or photo',
       locale: localeName,
     );
   }
 
-  String get towelieBoxAlreadyStarted {
+  String get toweliePlantAlreadyStarted {
     return Intl.message(
-      '''Is this box mid grow cycle?''',
-      name: 'towelieBoxAlreadyStarted',
-      desc: 'Towelie Box already started',
+      '''Is this plant mid grow cycle?''',
+      name: 'toweliePlantAlreadyStarted',
+      desc: 'Towelie Plant already started',
       locale: localeName,
     );
   }
 
-  String get towelieBoxVegOrBloom {
+  String get toweliePlantVegOrBloom {
     return Intl.message(
       '''Is the plant in **veg** or **bloom**?''',
-      name: 'towelieBoxVegOrBloom',
-      desc: 'Towelie Box Veg or bloom',
+      name: 'toweliePlantVegOrBloom',
+      desc: 'Towelie Plant Veg or bloom',
       locale: localeName,
     );
   }
 
-  String get towelieBoxTutoTakePic {
+  String get toweliePlantTutoTakePic {
     return Intl.message(
       '''Alright **let's start**!
 One first thing you can do to **start** this journey is to **take a picture** of your **plant**.''',
-      name: 'towelieBoxTutoTakePic',
-      desc: 'Towelie Box tuto take pic',
+      name: 'toweliePlantTutoTakePic',
+      desc: 'Towelie Plant tuto take pic',
       locale: localeName,
     );
   }
 
-  String get towelieHelperCreateBox {
+  String get towelieHelperCreatePlant {
     return Intl.message(
-      '''Hey man, **welcome to the box creation process**, I\'ll be there to guide you through it.
-First step is to **give your new box a name**.''',
-      name: 'towelieHelperCreateBox',
-      desc: 'Towelie Helper Create Box',
+      '''Hey man, **welcome to the plant creation process**, I\'ll be there to guide you through it.
+First step is to **give your new plant a name**.''',
+      name: 'towelieHelperCreatePlant',
+      desc: 'Towelie Helper Create Plant',
       locale: localeName,
     );
   }
 
   String get towelieHelperSelectDevice {
     return Intl.message(
-      '''Alright, now that your box has a name we can **start its configuration**:)
-If you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the box lights, ventilation and sensors**.
+      '''Alright, now that your plant has a name we can **start its configuration**:)
+If you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the plant's lights, ventilation and sensors**.
 Because it\'s all brand new, let\'s first **setup a new controller**.
 If you don\'t own a bundle, you can skip this by pressing "NO SGL DEVICE".''',
       name: 'towelieHelperSelectDevice',
-      desc: 'Towelie Helper Select box device',
+      desc: 'Towelie Helper Select plant device',
       locale: localeName,
     );
   }
@@ -297,21 +297,21 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
     );
   }
 
-  String get towelieHelperSelectBoxDevice {
+  String get towelieHelperSelectPlantDeviceBox {
     return Intl.message(
       '''Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.''',
-      name: 'towelieHelperSelectBoxDevice',
-      desc: 'Towelie Helper box Device box',
+      name: 'towelieHelperSelectPlantDeviceBox',
+      desc: 'Towelie Helper plant Device box',
       locale: localeName,
     );
   }
 
-  String get towelieHelperSelectNewBoxDevice {
+  String get towelieHelperSelectNewPlantDeviceBox {
     return Intl.message(
       '''Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.
 To **better understand** you should have your LED panels **connected to the controller**.''',
-      name: 'towelieHelperSelectNewBoxDevice',
-      desc: 'Towelie Helper box new Device box',
+      name: 'towelieHelperSelectNewPlantDeviceBox',
+      desc: 'Towelie Helper new plant Device box',
       locale: localeName,
     );
   }

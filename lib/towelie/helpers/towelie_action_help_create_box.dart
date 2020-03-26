@@ -31,7 +31,7 @@ class TowelieActionHelpCreateBox extends TowelieActionHelp {
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperCreateBox);
+          event.settings, SGLLocalizations.current.towelieHelperCreatePlant);
     }
   }
 }

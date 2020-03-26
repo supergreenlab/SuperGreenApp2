@@ -39,10 +39,10 @@ class TimeSeries {
     return result;
   }
 
-  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(Plant box,
+  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(Plant plant,
       String controllerID, String graphID, String name, charts.Color color,
       {Function(double) transform}) async {
-    List<dynamic> values = await fetchMetric(box, controllerID, name);
+    List<dynamic> values = await fetchMetric(plant, controllerID, name);
     return toTimeSeries(values, graphID, color, transform: transform);
   }
 

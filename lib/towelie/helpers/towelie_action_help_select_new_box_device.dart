@@ -31,7 +31,7 @@ class TowelieActionHelpSelectNewBoxDevice extends TowelieActionHelp {
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperSelectNewBoxDevice);
+          event.settings, SGLLocalizations.current.towelieHelperSelectNewPlantDeviceBox);
     }
   }
 }

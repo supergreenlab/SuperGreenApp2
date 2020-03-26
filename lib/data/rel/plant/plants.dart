@@ -100,9 +100,9 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return into(chartCaches).insert(chartCache);
   }
 
-  Future<ChartCache> getChartCache(int boxID, String name) async {
+  Future<ChartCache> getChartCache(int plantID, String name) async {
     List<ChartCache> cs = await (select(chartCaches)
-          ..where((c) => c.plant.equals(boxID) & c.name.equals(name)))
+          ..where((c) => c.plant.equals(plantID) & c.name.equals(name)))
         .get();
     if (cs.length == 0) {
       return null;
@@ -110,22 +110,22 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return cs[0];
   }
 
-  Stream<ChartCache> watchChartCache(int boxID, String name) {
+  Stream<ChartCache> watchChartCache(int plantID, String name) {
     return (select(chartCaches)
-          ..where((c) => c.plant.equals(boxID) & c.name.equals(name)))
+          ..where((c) => c.plant.equals(plantID) & c.name.equals(name)))
         .watchSingle();
   }
 
-  Future deleteChartCacheForPlant(int boxID) {
-    return (delete(chartCaches)..where((cc) => cc.plant.equals(boxID))).go();
+  Future deleteChartCacheForPlant(int plantID) {
+    return (delete(chartCaches)..where((cc) => cc.plant.equals(plantID))).go();
   }
 
   Future deleteChartCache(ChartCache chartCache) {
     return delete(chartCaches).delete(chartCache);
   }
 
-  Future<List<Timelapse>> getTimelapses(int boxID) {
-    return (select(timelapses)..where((t) => t.plant.equals(boxID))).get();
+  Future<List<Timelapse>> getTimelapses(int plantID) {
+    return (select(timelapses)..where((t) => t.plant.equals(plantID))).get();
   }
 
   Future<int> addTimelapse(TimelapsesCompanion timelapse) {
@@ -133,8 +133,8 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   // TODO move this to the kv store, separate from the plant concept
-  Map<String, dynamic> plantSettings(Plant box) {
-    final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
+  Map<String, dynamic> plantSettings(Plant plant) {
+    final Map<String, dynamic> settings = JsonDecoder().convert(plant.settings);
     // TODO make actual enums or constants
     return {
       'nPlants': 1,
