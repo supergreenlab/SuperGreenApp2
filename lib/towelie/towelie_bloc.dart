@@ -111,22 +111,22 @@ class TowelieBlocEventRoutePop extends TowelieBlocEvent {
 }
 
 class TowelieBlocEventPlantCreated extends TowelieBlocEvent {
-  final Plant box;
+  final Plant plant;
 
-  TowelieBlocEventPlantCreated(this.box);
+  TowelieBlocEventPlantCreated(this.plant);
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [plant];
 }
 
 class TowelieBlocEventFeedEntryCreated extends TowelieBlocEvent {
-  final Plant box;
+  final Plant plant;
   final FeedEntry feedEntry;
 
-  TowelieBlocEventFeedEntryCreated(this.box, this.feedEntry);
+  TowelieBlocEventFeedEntryCreated(this.plant, this.feedEntry);
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [plant];
 }
 
 class TowelieBlocEventTrigger extends TowelieBlocEvent {
@@ -207,7 +207,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
     TowelieActionAppInit(),
     TowelieActionPlantCreated(),
-    TowelieActionHelpCreateBox(),
+    TowelieActionHelpCreatePlant(),
     TowelieActionHelpSelectDevice(),
     TowelieActionHelpAddDevice(),
     TowelieActionHelpAddExistingDevice(),

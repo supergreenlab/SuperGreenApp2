@@ -34,7 +34,7 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
         } else if (state is TimelapseSetupBlocStateDone) {
           Timer(Duration(seconds: 3), () {
             BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToTimelapseViewer(state.box,
+                MainNavigateToTimelapseViewer(state.plant,
                     pushAsReplacement: true));
           });
         }

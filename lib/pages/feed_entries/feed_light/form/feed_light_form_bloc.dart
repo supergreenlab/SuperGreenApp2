@@ -96,10 +96,10 @@ class FeedLightFormBlocStateCancelling extends FeedLightFormBlocState {
 }
 
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
-  final Plant box;
+  final Plant plant;
   final FeedEntry feedEntry;
 
-  FeedLightFormBlocStateDone(this.box, this.feedEntry);
+  FeedLightFormBlocStateDone(this.plant, this.feedEntry);
 
   @override
   List<Object> get props => [];

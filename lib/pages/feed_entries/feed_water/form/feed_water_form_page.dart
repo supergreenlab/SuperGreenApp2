@@ -50,7 +50,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
         listener: (BuildContext context, FeedWaterFormBlocState state) {
           if (state is FeedWaterFormBlocStateDone) {
             BlocProvider.of<TowelieBloc>(context).add(
-                TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
+                TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }

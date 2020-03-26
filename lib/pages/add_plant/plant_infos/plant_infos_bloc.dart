@@ -60,18 +60,18 @@ class PlantInfosBloc extends Bloc<PlantInfosBlocEvent, PlantInfosBlocState> {
       final fdb = RelDB.get().feedsDAO;
       final feed = FeedsCompanion.insert(name: event.name);
       final feedID = await fdb.addFeed(feed);
-      PlantsCompanion box;
+      PlantsCompanion plant;
       if (event.device == null || event.deviceBox == null) {
-        box = PlantsCompanion.insert(feed: feedID, name: event.name);
+        plant = PlantsCompanion.insert(feed: feedID, name: event.name);
       } else {
-        box = PlantsCompanion.insert(
+        plant = PlantsCompanion.insert(
             feed: feedID,
             name: event.name,
             device: Value(event.device.id),
             deviceBox: Value(event.deviceBox));
       }
-      final boxID = await bdb.addPlant(box);
-      final b = await bdb.getPlant(boxID);
+      final plantID = await bdb.addPlant(plant);
+      final b = await bdb.getPlant(plantID);
       yield PlantInfosBlocStateDone(b,
           device: event.device, deviceBox: event.deviceBox);
     }

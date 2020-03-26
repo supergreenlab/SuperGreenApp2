@@ -6,9 +6,9 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 abstract class TimelapseHowtoBlocEvent extends Equatable {}
 
 class TimelapseHowtoBlocState extends Equatable {
-  final Plant box;
+  final Plant plant;
 
-  TimelapseHowtoBlocState(this.box);
+  TimelapseHowtoBlocState(this.plant);
   
   @override
   List<Object> get props => [];

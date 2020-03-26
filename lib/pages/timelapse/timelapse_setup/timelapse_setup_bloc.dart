@@ -98,12 +98,12 @@ class TimelapseSetupBlocStateSettingParams extends TimelapseSetupBlocState {
 }
 
 class TimelapseSetupBlocStateDone extends TimelapseSetupBlocState {
-  final Plant box;
+  final Plant plant;
 
-  TimelapseSetupBlocStateDone(this.box);
+  TimelapseSetupBlocStateDone(this.plant);
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [plant];
 }
 
 const ServiceUUID = "7bfdeb0b-f06d-480f-a82c-cde56ab3d686";

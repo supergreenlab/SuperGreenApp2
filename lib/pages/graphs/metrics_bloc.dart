@@ -105,51 +105,51 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
     }
   }
 
-  Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant box) async {
-    Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+  Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant plant) async {
+    Device device = await RelDB.get().devicesDAO.getDevice(plant.device);
     String identifier = device.identifier;
-    int deviceBox = box.deviceBox;
+    int deviceBox = plant.deviceBox;
     List<charts.Series<Metric, DateTime>> chs = [];
     if (showTemp) {
-      chs.add(await getTempSeries(box, identifier, deviceBox));
+      chs.add(await getTempSeries(plant, identifier, deviceBox));
     }
     if (showHumi) {
-      chs.add(await getHumiSeries(box, identifier, deviceBox));
+      chs.add(await getHumiSeries(plant, identifier, deviceBox));
     }
     if (showLight) {
-      chs.add(await getLightSeries(box, device, identifier, deviceBox));
+      chs.add(await getLightSeries(plant, device, identifier, deviceBox));
     }
     return chs;
   }
 
   Future<charts.Series<Metric, DateTime>> getTempSeries(
-      Plant box, String identifier, int deviceBox) async {
-    return await TimeSeries.fetchTimeSeries(box, identifier, 'Temperature',
+      Plant plant, String identifier, int deviceBox) async {
+    return await TimeSeries.fetchTimeSeries(plant, identifier, 'Temperature',
         'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault,
         transform: _tempUnit);
   }
 
   Future<charts.Series<Metric, DateTime>> getHumiSeries(
-      Plant box, String identifier, int deviceBox) async {
-    return await TimeSeries.fetchTimeSeries(box, identifier, 'Humidity',
+      Plant plant, String identifier, int deviceBox) async {
+    return await TimeSeries.fetchTimeSeries(plant, identifier, 'Humidity',
         'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
   }
 
   Future<charts.Series<Metric, DateTime>> getLightSeries(
-      Plant box, Device device, String identifier, int deviceBox) async {
+      Plant plant, Device device, String identifier, int deviceBox) async {
     List<dynamic> timerOutput = await TimeSeries.fetchMetric(
-        box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+        plant, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
     List<List<dynamic>> dims = [];
     Module lightModule =
         await RelDB.get().devicesDAO.getModule(device.id, "led");
     for (int i = 0; i < lightModule.arrayLen; ++i) {
       Param boxParam =
           await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
-      if (boxParam.ivalue != box.deviceBox) {
+      if (boxParam.ivalue != plant.deviceBox) {
         continue;
       }
       List<dynamic> dim =
-          await TimeSeries.fetchMetric(box, identifier, 'LED_${i}_DIM');
+          await TimeSeries.fetchMetric(plant, identifier, 'LED_${i}_DIM');
       dims.add(dim);
     }
     List<int> avgDims = TimeSeries.avgMetrics(dims);

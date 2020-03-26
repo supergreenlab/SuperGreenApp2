@@ -40,7 +40,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                     icon: Icon(Icons.add),
                     onPressed: () {
                       BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToTimelapseSetup(state.box));
+                          .add(MainNavigateToTimelapseSetup(state.plant));
                     },
                   ),
                 ];
@@ -111,7 +111,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                 child: FlatButton(
                   onPressed: () {
                     BlocProvider.of<MainNavigatorBloc>(context).add(
-                        MainNavigateToTimelapseSetup(state.box,
+                        MainNavigateToTimelapseSetup(state.plant,
                             pushAsReplacement: true));
                   },
                   child: Text(
@@ -123,7 +123,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
               FlatButton(
                 onPressed: () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToTimelapseConnect(state.box,
+                      MainNavigateToTimelapseConnect(state.plant,
                           pushAsReplacement: true));
                 },
                 child: Text(

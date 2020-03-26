@@ -25,7 +25,7 @@ class _TimelapseConnectPageState extends State<TimelapseConnectPage> {
         if (state is TimelapseConnectBlocStateDone) {
           Timer(Duration(seconds: 3), () {
             BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToTimelapseViewer(state.box,
+                MainNavigateToTimelapseViewer(state.plant,
                     pushAsReplacement: true));
           });
         }

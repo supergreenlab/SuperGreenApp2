@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-03-26T18:50:03.092398",
+  "@@last_modified": "2020-03-26T18:55:22.081165",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -66,57 +66,57 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieCreateBox": "Alright we're ready to create your **first box!**\n\nThe app works like this:\n- you **create a box**\n- attach it (or not) to a **SuperGreenController**\n- configure the led channels used to **light it up**\n\nOnce this is done, you will have access to it's **feed**, it's like a timeline of the **box's life**.\nWhenever you water, change light parameters, or train the plant, or any other action,\nit will log it in the box's feed, so you can **share it**, or **replay it** for your next grow!\n\nPress the **Create box** button below.\n",
-  "@towelieCreateBox": {
-    "description": "Towelie Create Box",
+  "towelieCreatePlant": "Alright we're ready to started your **first plant!**\n\nThe app works like this:\n- you **create a plant**\n- attach it (or not) to a **SuperGreenController**\n- configure the led channels used to **light it up**\n\nOnce this is done, you will have access to it's **feed**, it's like a timeline of the **plant's life**.\nWhenever you water, change light parameters, or train the plant, or any other action,\nit will log it in the plant's feed, so you can **share it**, or **replay it** for your next grow!\n\nPress the **Create plant** button below.\n",
+  "@towelieCreatePlant": {
+    "description": "Towelie Create Plant",
     "type": "text",
     "placeholders": {}
   },
-  "towelieBoxCreated": "Awesome, **you created your first box**!\n\nYou can access your newly box feed either by **pressing the home button below**, or the **View box** button below.\n",
-  "@towelieBoxCreated": {
-    "description": "Towelie Box Created",
+  "toweliePlantCreated": "Awesome, **you created your first plant**!\n\nYou can access your newly plant feed either by **pressing the home button below**, or the **View plant** button below.\n",
+  "@toweliePlantCreated": {
+    "description": "Towelie Plant Created",
     "type": "text",
     "placeholders": {}
   },
-  "towelieWelcomeBox": "**Welcome to your box feed!**\nThis is where you will modify your box’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the box’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.",
-  "@towelieWelcomeBox": {
-    "description": "Towelie Welcome Box",
+  "towelieWelcomePlant": "**Welcome to your plant feed!**\nThis is where you will modify your plant’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the plant’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.",
+  "@towelieWelcomePlant": {
+    "description": "Towelie Welcome Plant",
     "type": "text",
     "placeholders": {}
   },
-  "towelieBoxAutoOrPhoto": "To better guide to a **successful harvest**, I'll need a bit **more informations** about your box:)\nIs this plant an **auto** or **photo** strain?",
-  "@towelieBoxAutoOrPhoto": {
-    "description": "Towelie Box auto or photo",
+  "toweliePlantAutoOrPhoto": "To better guide you to a **successful harvest**, I'll need a bit **more informations** about your plant:)\nIs this plant an **auto** or **photo** strain?",
+  "@toweliePlantAutoOrPhoto": {
+    "description": "Towelie Plant auto or photo",
     "type": "text",
     "placeholders": {}
   },
-  "towelieBoxAlreadyStarted": "Is this box mid grow cycle?",
-  "@towelieBoxAlreadyStarted": {
-    "description": "Towelie Box already started",
+  "toweliePlantAlreadyStarted": "Is this plant mid grow cycle?",
+  "@toweliePlantAlreadyStarted": {
+    "description": "Towelie Plant already started",
     "type": "text",
     "placeholders": {}
   },
-  "towelieBoxVegOrBloom": "Is the plant in **veg** or **bloom**?",
-  "@towelieBoxVegOrBloom": {
-    "description": "Towelie Box Veg or bloom",
+  "toweliePlantVegOrBloom": "Is the plant in **veg** or **bloom**?",
+  "@toweliePlantVegOrBloom": {
+    "description": "Towelie Plant Veg or bloom",
     "type": "text",
     "placeholders": {}
   },
-  "towelieBoxTutoTakePic": "Alright **let's start**!\nOne first thing you can do to **start** this journey is to **take a picture** of your **plant**.",
-  "@towelieBoxTutoTakePic": {
-    "description": "Towelie Box tuto take pic",
+  "toweliePlantTutoTakePic": "Alright **let's start**!\nOne first thing you can do to **start** this journey is to **take a picture** of your **plant**.",
+  "@toweliePlantTutoTakePic": {
+    "description": "Towelie Plant tuto take pic",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperCreateBox": "Hey man, **welcome to the box creation process**, I'll be there to guide you through it.\nFirst step is to **give your new box a name**.",
-  "@towelieHelperCreateBox": {
-    "description": "Towelie Helper Create Box",
+  "towelieHelperCreatePlant": "Hey man, **welcome to the plant creation process**, I'll be there to guide you through it.\nFirst step is to **give your new plant a name**.",
+  "@towelieHelperCreatePlant": {
+    "description": "Towelie Helper Create Plant",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectDevice": "Alright, now that your box has a name we can **start its configuration**:)\nIf you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the box lights, ventilation and sensors**.\nBecause it's all brand new, let's first **setup a new controller**.\nIf you don't own a bundle, you can skip this by pressing \"NO SGL DEVICE\".",
+  "towelieHelperSelectDevice": "Alright, now that your plant has a name we can **start its configuration**:)\nIf you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the plant's lights, ventilation and sensors**.\nBecause it's all brand new, let's first **setup a new controller**.\nIf you don't own a bundle, you can skip this by pressing \"NO SGL DEVICE\".",
   "@towelieHelperSelectDevice": {
-    "description": "Towelie Helper Select box device",
+    "description": "Towelie Helper Select plant device",
     "type": "text",
     "placeholders": {}
   },
@@ -138,15 +138,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectBoxDevice": "Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.",
-  "@towelieHelperSelectBoxDevice": {
-    "description": "Towelie Helper box Device box",
+  "towelieHelperSelectPlantDeviceBox": "Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.",
+  "@towelieHelperSelectPlantDeviceBox": {
+    "description": "Towelie Helper plant Device box",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectNewBoxDevice": "Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.\nTo **better understand** you should have your LED panels **connected to the controller**.",
-  "@towelieHelperSelectNewBoxDevice": {
-    "description": "Towelie Helper box new Device box",
+  "towelieHelperSelectNewPlantDeviceBox": "Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.\nTo **better understand** you should have your LED panels **connected to the controller**.",
+  "@towelieHelperSelectNewPlantDeviceBox": {
+    "description": "Towelie Helper new plant Device box",
     "type": "text",
     "placeholders": {}
   },

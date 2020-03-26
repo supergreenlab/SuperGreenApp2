@@ -65,7 +65,7 @@ class _TimelapseHowtoPageState extends State<TimelapseHowtoPage> {
                         child: FlatButton(
                           onPressed: () {
                             BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToTimelapseSetup(state.box, pushAsReplacement: true));
+                                .add(MainNavigateToTimelapseSetup(state.plant, pushAsReplacement: true));
                           },
                           child: Text(
                             'ADD A NEW ONE',
@@ -76,7 +76,7 @@ class _TimelapseHowtoPageState extends State<TimelapseHowtoPage> {
                       FlatButton(
                         onPressed: () {
                           BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToTimelapseConnect(state.box, pushAsReplacement: true));
+                              .add(MainNavigateToTimelapseConnect(state.plant, pushAsReplacement: true));
                         },
                         child: Text(
                           'CONNECT ONE',

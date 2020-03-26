@@ -25,12 +25,12 @@ class TimelapseConnectBlocState extends Equatable {
 }
 
 class TimelapseConnectBlocStateDone extends TimelapseConnectBlocState {
-  final Plant box;
+  final Plant plant;
 
-  TimelapseConnectBlocStateDone(this.box);
+  TimelapseConnectBlocStateDone(this.plant);
 
   @override
-  List<Object> get props => [box];
+  List<Object> get props => [plant];
 }
 
 class TimelapseConnectBloc

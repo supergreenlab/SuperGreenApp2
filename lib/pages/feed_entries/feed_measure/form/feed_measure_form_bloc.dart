@@ -70,10 +70,10 @@ class FeedMeasureFormBlocStateLoaded extends FeedMeasureFormBlocState {
 }
 
 class FeedMeasureFormBlocStateDone extends FeedMeasureFormBlocState {
-  final Plant box;
+  final Plant plant;
   final FeedEntry feedEntry;
 
-  FeedMeasureFormBlocStateDone(this.box, this.feedEntry);
+  FeedMeasureFormBlocStateDone(this.plant, this.feedEntry);
 
   @override
   List<Object> get props => [];

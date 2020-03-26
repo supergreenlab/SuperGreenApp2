@@ -25,14 +25,14 @@ class TimelapseViewerBlocStateLoading extends TimelapseViewerBlocState {
 }
 
 class TimelapseViewerBlocStateLoaded extends TimelapseViewerBlocState {
-  final Plant box;
+  final Plant plant;
   final List<Timelapse> timelapses;
   final List<Uint8List> images;
 
-  TimelapseViewerBlocStateLoaded(this.box, this.timelapses, this.images);
+  TimelapseViewerBlocStateLoaded(this.plant, this.timelapses, this.images);
 
   @override
-  List<Object> get props => [box, timelapses, images];
+  List<Object> get props => [plant, timelapses, images];
 }
 
 class TimelapseViewerBloc

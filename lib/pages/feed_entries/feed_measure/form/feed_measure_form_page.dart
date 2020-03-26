@@ -58,7 +58,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
           listener: (BuildContext context, FeedMeasureFormBlocState state) {
             if (state is FeedMeasureFormBlocStateDone) {
               BlocProvider.of<TowelieBloc>(context).add(
-                  TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
+                  TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigatorActionPop(mustPop: true));
             }

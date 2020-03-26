@@ -42,15 +42,6 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
-/*class MainNavigateToHomeBoxEvent extends MainNavigateToHomeEvent {
-  final Box box;
-
-  MainNavigateToHomeBoxEvent(this.box);
-
-  @override
-  List<Object> get props => [box];
-}*/
-
 class MainNavigateToNewPlantInfosEvent extends MainNavigatorEvent {
   @override
   List<Object> get props => [];
@@ -432,7 +423,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
           .pushNamed('/plant/device/box', arguments: event);
     } else if (event is MainNavigateToSelectPlantNewDeviceBoxEvent) {
       future = _navigatorKey.currentState
-          .pushNamed('/plant/device/new', arguments: event);
+          .pushNamed('/plant/device/box/new', arguments: event);
     } else if (event is MainNavigateToAddDeviceEvent) {
       future =
           _navigatorKey.currentState.pushNamed('/device/add', arguments: event);

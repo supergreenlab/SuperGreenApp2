@@ -48,7 +48,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         } else if (state is FeedLightFormBlocStateDone) {
           if (state.feedEntry != null) {
             BlocProvider.of<TowelieBloc>(context).add(
-                TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
+                TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
           }
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(mustPop: true));

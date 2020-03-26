@@ -35,7 +35,7 @@ class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
       SGLLocalizations.current.towelieHelperMeasureAfterStretch,
       pushRoute: TowelieHelperPushRoute(
         'Take measure',
-        MainNavigateToFeedMeasureFormEvent(event.box),
+        MainNavigateToFeedMeasureFormEvent(event.plant),
       ),
     );
   }

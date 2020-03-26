@@ -44,10 +44,10 @@ class FeedWaterFormBlocState extends Equatable {
 }
 
 class FeedWaterFormBlocStateDone extends FeedWaterFormBlocState {
-  final Plant box;
+  final Plant plant;
   final FeedEntry feedEntry;
 
-  FeedWaterFormBlocStateDone(this.box, this.feedEntry);
+  FeedWaterFormBlocStateDone(this.plant, this.feedEntry);
 
   @override
   List<Object> get props => [];
