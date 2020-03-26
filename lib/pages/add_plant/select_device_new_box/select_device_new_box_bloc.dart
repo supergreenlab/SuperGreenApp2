@@ -90,7 +90,7 @@ class SelectDeviceNewBoxBloc
     extends Bloc<SelectDeviceNewBoxBlocEvent, SelectDeviceNewBoxBlocState> {
   List<int> _boxes = [];
   List<int> _leds = [];
-  final MainNavigateToSelectBoxNewDeviceBoxEvent _args;
+  final MainNavigateToSelectPlantNewDeviceBoxEvent _args;
 
   SelectDeviceNewBoxBloc(this._args) {
     add(SelectDeviceNewBoxBlocEventInitialize());

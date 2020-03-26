@@ -83,7 +83,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         listener: (BuildContext context, FeedCareCommonFormBlocState state) {
           if (state is FeedCareCommonFormBlocStateDone) {
             BlocProvider.of<TowelieBloc>(context)
-                .add(TowelieBlocEventFeedEntryCreated(state.box, state.feedEntry));
+                .add(TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }

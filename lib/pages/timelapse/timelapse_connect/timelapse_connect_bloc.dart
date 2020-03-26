@@ -47,11 +47,11 @@ class TimelapseConnectBloc
       TimelapseConnectBlocEvent event) async* {
     if (event is TimelapseConnectBlocEventSaveConfig) {
       await RelDB.get().plantsDAO.addTimelapse(TimelapsesCompanion.insert(
-          plant: _args.box.id,
+          plant: _args.plant.id,
           dropboxToken: Value(event.dropboxToken),
           uploadName: Value(event.uploadName)));
 
-      yield TimelapseConnectBlocStateDone(_args.box);
+      yield TimelapseConnectBlocStateDone(_args.plant);
     }
   }
 }

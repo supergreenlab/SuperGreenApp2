@@ -89,7 +89,7 @@ class SelectDeviceBloc
     extends Bloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
   List<Device> _devices = [];
 
-  final MainNavigateToSelectBoxDeviceEvent _args;
+  final MainNavigateToSelectPlantDeviceEvent _args;
 
   @override
   SelectDeviceBlocState get initialState => SelectDeviceBlocState(_devices);

@@ -77,7 +77,7 @@ class FeedMediaFormBloc
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEDIA',
-        feed: _args.box.feed,
+        feed: _args.plant.feed,
         date: DateTime.now(),
         params: Value(JsonEncoder().convert({'message': event.message})),
       ));

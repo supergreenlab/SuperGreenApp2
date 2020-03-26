@@ -22,7 +22,7 @@ class TimelapseHowtoBloc
   TimelapseHowtoBloc(this._args);
 
   @override
-  TimelapseHowtoBlocState get initialState => TimelapseHowtoBlocState(_args.box);
+  TimelapseHowtoBlocState get initialState => TimelapseHowtoBlocState(_args.plant);
 
   @override
   Stream<TimelapseHowtoBlocState> mapEventToState(

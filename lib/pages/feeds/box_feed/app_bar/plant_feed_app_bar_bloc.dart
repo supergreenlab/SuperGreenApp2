@@ -90,44 +90,44 @@ class PlantFeedAppBarBloc
     }
   }
 
-  Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant box) async {
-    if (box.device == null) {
+  Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant plant) async {
+    if (plant.device == null) {
       await Future.delayed(Duration(milliseconds: 500));
       return _createDummyData();
     } else {
-      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+      Device device = await RelDB.get().devicesDAO.getDevice(plant.device);
       if (device == null) {
         _timer.cancel();
         return _createDummyData();
       }
       String identifier = device.identifier;
-      int deviceBox = box.deviceBox;
+      int deviceBox = plant.deviceBox;
       charts.Series<Metric, DateTime> temp = await TimeSeries.fetchTimeSeries(
-          box,
+          plant,
           identifier,
           'Temperature',
           'BOX_${deviceBox}_TEMP',
           charts.MaterialPalette.green.shadeDefault,
           transform: _tempUnit);
       charts.Series<Metric, DateTime> humi = await TimeSeries.fetchTimeSeries(
-          box,
+          plant,
           identifier,
           'Humidity',
           'BOX_${deviceBox}_HUMI',
           charts.MaterialPalette.blue.shadeDefault);
       List<dynamic> timerOutput = await TimeSeries.fetchMetric(
-          box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+          plant, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
       List<List<dynamic>> dims = [];
       Module lightModule =
           await RelDB.get().devicesDAO.getModule(device.id, "led");
       for (int i = 0; i < lightModule.arrayLen; ++i) {
         Param boxParam =
             await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
-        if (boxParam.ivalue != box.deviceBox) {
+        if (boxParam.ivalue != plant.deviceBox) {
           continue;
         }
         List<dynamic> dim =
-            await TimeSeries.fetchMetric(box, identifier, 'LED_${i}_DIM');
+            await TimeSeries.fetchMetric(plant, identifier, 'LED_${i}_DIM');
         dims.add(dim);
       }
       List<int> avgDims = TimeSeries.avgMetrics(dims);

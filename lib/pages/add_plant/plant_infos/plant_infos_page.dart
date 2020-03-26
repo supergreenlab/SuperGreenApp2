@@ -22,8 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_box/plant_infos/plant_infos_bloc.dart';
-import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
+import 'package:super_green_app/pages/add_plant/plant_infos/plant_infos_bloc.dart';
+import 'package:super_green_app/pages/add_plant/select_device/select_device_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -164,7 +164,7 @@ class PlantInfosPageState extends State<PlantInfosPage> {
 
   void _handleInput(BuildContext context) async {
     BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToSelectBoxDeviceEvent(futureFn: (future) async {
+        .add(MainNavigateToSelectPlantDeviceEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
         BlocProvider.of<PlantInfosBloc>(context).add(PlantInfosBlocEventCreateBox(

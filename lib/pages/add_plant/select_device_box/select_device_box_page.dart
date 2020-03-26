@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
+import 'package:super_green_app/pages/add_plant/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -115,7 +115,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
               return ListTile(
                 onTap: () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToSelectBoxNewDeviceBoxEvent(state.device,
+                      MainNavigateToSelectPlantNewDeviceBoxEvent(state.device,
                           futureFn: (future) async {
                     dynamic deviceBox = await future;
                     if (deviceBox is int) {

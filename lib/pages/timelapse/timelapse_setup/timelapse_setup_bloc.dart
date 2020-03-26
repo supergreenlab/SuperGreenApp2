@@ -135,9 +135,9 @@ class TimelapseSetupBloc
       });
     } else if (event is TimelapseSetupBlocEventDeviceFound) {
       String controllerid;
-      if (_args.box.device != null) {
+      if (_args.plant.device != null) {
         Device device =
-            await RelDB.get().devicesDAO.getDevice(_args.box.device);
+            await RelDB.get().devicesDAO.getDevice(_args.plant.device);
         controllerid = device.identifier;
       }
       yield TimelapseSetupBlocStateDeviceFound(controllerid);
@@ -169,7 +169,7 @@ class TimelapseSetupBloc
       await peripheral.disconnectOrCancelConnection();
 
       await RelDB.get().plantsDAO.addTimelapse(TimelapsesCompanion.insert(
-          plant: _args.box.id,
+          plant: _args.plant.id,
           ssid: Value(event.ssid),
           password: Value(event.password),
           controllerID: Value(event.controllerID),
@@ -179,7 +179,7 @@ class TimelapseSetupBloc
           dropboxToken: Value(event.dropboxToken),
           uploadName: Value(event.uploadName)));
 
-      yield TimelapseSetupBlocStateDone(_args.box);
+      yield TimelapseSetupBlocStateDone(_args.plant);
     }
   }
 

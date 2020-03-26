@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_box/select_device/select_device_bloc.dart';
+import 'package:super_green_app/pages/add_plant/select_device/select_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -163,7 +163,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
 
   void _selectDevice(BuildContext context, Device device) {
     BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToSelectBoxDeviceBoxEvent(device, futureFn: (future) async {
+        MainNavigateToSelectPlantDeviceBoxEvent(device, futureFn: (future) async {
       dynamic deviceBox = await future;
       if (deviceBox is int) {
         BlocProvider.of<SelectDeviceBloc>(context)

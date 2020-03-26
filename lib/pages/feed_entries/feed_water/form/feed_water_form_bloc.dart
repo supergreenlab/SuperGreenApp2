@@ -70,7 +70,7 @@ class FeedWaterFormBloc
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_WATER',
-        feed: _args.box.feed,
+        feed: _args.plant.feed,
         date: DateTime.now(),
         params: Value(JsonEncoder().convert({
           'tooDry': event.tooDry,
@@ -79,7 +79,7 @@ class FeedWaterFormBloc
         })),
       ));
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
-      yield FeedWaterFormBlocStateDone(_args.box, feedEntry);
+      yield FeedWaterFormBlocStateDone(_args.plant, feedEntry);
     }
   }
 }

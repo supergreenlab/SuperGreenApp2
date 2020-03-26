@@ -127,8 +127,8 @@ class FeedScheduleFormBloc
       FeedScheduleFormBlocEvent event) async* {
     if (event is FeedScheduleFormBlocEventInit) {
       final db = RelDB.get();
-      _device = await db.devicesDAO.getDevice(_args.box.device);
-      Map<String, dynamic> settings = db.plantsDAO.boxSettings(_args.box);
+      _device = await db.devicesDAO.getDevice(_args.plant.device);
+      Map<String, dynamic> settings = db.plantsDAO.boxSettings(_args.plant);
       _initialSchedule = _schedule = settings['schedule'];
       _initialSchedules = _schedules = settings['schedules'];
       yield FeedScheduleFormBlocStateLoaded(
@@ -146,36 +146,36 @@ class FeedScheduleFormBloc
       final db = RelDB.get();
 
       if (_device != null) {
-        _device = await db.devicesDAO.getDevice(_args.box.device);
+        _device = await db.devicesDAO.getDevice(_args.plant.device);
         if (_device.isReachable == false) {
           yield FeedScheduleFormBlocStateNotReachable();
           return;
         }
         Param onHour = await db.devicesDAO
-            .getParam(_device.id, 'BOX_${_args.box.deviceBox}_ON_HOUR');
+            .getParam(_device.id, 'BOX_${_args.plant.deviceBox}_ON_HOUR');
         await DeviceHelper.updateIntParam(
             _device,
             onHour,
             timezone(_schedules[_schedule]['ON_HOUR']));
         Param offHour = await db.devicesDAO
-            .getParam(_device.id, 'BOX_${_args.box.deviceBox}_OFF_HOUR');
+            .getParam(_device.id, 'BOX_${_args.plant.deviceBox}_OFF_HOUR');
         await DeviceHelper.updateIntParam(
             _device,
             offHour,
             timezone(_schedules[_schedule]['OFF_HOUR']));
       }
 
-      final Map<String, dynamic> settings = db.plantsDAO.boxSettings(_args.box);
+      final Map<String, dynamic> settings = db.plantsDAO.boxSettings(_args.plant);
       settings['phase'] = _schedule;
       settings['schedule'] = _schedule;
       settings['schedules'] = _schedules;
-      await db.plantsDAO.updatePlant(_args.box.id,
+      await db.plantsDAO.updatePlant(_args.plant.id,
           PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
 
       if (_schedule == 'BLOOM') {
         await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_SCHEDULE',
-          feed: _args.box.feed,
+          feed: _args.plant.feed,
           date: DateTime.now(),
           params: Value(JsonEncoder().convert({
             'initialSchedule': _initialSchedule,

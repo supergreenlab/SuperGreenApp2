@@ -83,15 +83,15 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
   Stream<MetricsBlocState> mapEventToState(MetricsBlocEvent event) async* {
     if (event is MetricsBlocEventLoadChart) {
       List<charts.Series<Metric, DateTime>> graphData =
-          await updateChart(_args.box);
-      _events = await RelDB.get().feedsDAO.getEnvironmentEntries(_args.box.feed);
+          await updateChart(_args.plant);
+      _events = await RelDB.get().feedsDAO.getEnvironmentEntries(_args.plant.feed);
       yield MetricsBlocStateLoaded(graphData, _events);
       _timer = Timer.periodic(Duration(seconds: 60), (timer) {
         this.add(MetricsBlocEventReloadChart());
       });
     } else if (event is MetricsBlocEventReloadChart) {
       List<charts.Series<Metric, DateTime>> graphData =
-          await updateChart(_args.box);
+          await updateChart(_args.plant);
       yield MetricsBlocStateLoaded(graphData, _events);
     } else if (event is MetricsBlocEventChartParams) {
       showTemp = event.showTemp;
@@ -100,7 +100,7 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
       fromTime = event.fromTime;
       toTime = event.toTime;
       List<charts.Series<Metric, DateTime>> graphData =
-          await updateChart(_args.box);
+          await updateChart(_args.plant);
       yield MetricsBlocStateLoaded(graphData, _events);
     }
   }

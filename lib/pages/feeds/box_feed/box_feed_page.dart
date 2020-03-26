@@ -28,8 +28,8 @@ import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/app_bar/plant_feed_app_bar_page.dart';
-import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
@@ -395,7 +395,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
               title: 'Create Box',
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToNewBoxInfosEvent());
+                    .add(MainNavigateToNewPlantInfosEvent());
               }));
     }
     return FullscreenLoading(title: 'Box loading...');
@@ -462,13 +462,13 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
       bloc: BlocProvider.of<PlantDrawerBloc>(context),
       condition: (previousState, state) =>
           state is PlantDrawerBlocStateLoadingBoxList ||
-          state is BoxDrawerBlocStateBoxListUpdated,
+          state is PlantDrawerBlocStatePlantListUpdated,
       builder: (BuildContext context, PlantDrawerBlocState state) {
         Widget content;
         if (state is PlantDrawerBlocStateLoadingBoxList) {
           content = FullscreenLoading(title: 'Loading..');
-        } else if (state is BoxDrawerBlocStateBoxListUpdated) {
-          List<Plant> boxes = state.boxes;
+        } else if (state is PlantDrawerBlocStatePlantListUpdated) {
+          List<Plant> boxes = state.plants;
           content = ListView(
             children: boxes.map((b) {
               Widget item = ListTile(
@@ -545,7 +545,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   void _onAddBox(BuildContext context) {
     BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToNewBoxInfosEvent());
+        .add(MainNavigateToNewPlantInfosEvent());
   }
 
   Widget _renderAppBar(BuildContext context, BoxFeedBlocStateBoxLoaded state,
