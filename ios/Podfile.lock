@@ -15,6 +15,10 @@ PODS:
   - flutter_matomo (0.0.1):
     - Flutter
     - MatomoTracker (> 7)
+  - flutter_plugin_android_lifecycle (0.0.1):
+    - Flutter
+  - image_picker (0.0.1):
+    - Flutter
   - keyboard_visibility (0.5.0):
     - Flutter
     - Reachability
@@ -66,6 +70,8 @@ DEPENDENCIES:
   - flutter_ble_lib (from `.symlinks/plugins/flutter_ble_lib/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_matomo (from `.symlinks/plugins/flutter_matomo/ios`)
+  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - moor_ffi (from `.symlinks/plugins/moor_ffi/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -102,6 +108,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_matomo:
     :path: ".symlinks/plugins/flutter_matomo/ios"
+  flutter_plugin_android_lifecycle:
+    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
   keyboard_visibility:
     :path: ".symlinks/plugins/keyboard_visibility/ios"
   moor_ffi:
@@ -137,6 +147,8 @@ SPEC CHECKSUMS:
   flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_matomo: a4fc9d95faaf6f95124fc1956e892f91791b5fac
+  flutter_plugin_android_lifecycle: 47de533a02850f070f5696a623995e93eddcdb9b
+  image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   MatomoTracker: 6f89e2561083685a360e223fb663e9ccd57c1d1a

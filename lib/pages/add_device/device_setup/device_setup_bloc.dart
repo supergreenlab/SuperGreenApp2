@@ -105,20 +105,28 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         return;
       }
 
-      final deviceName =
-          await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
-      final mdnsDomain =
-          await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
-      final config = await DeviceAPI.fetchConfig(_args.ip);
-      final keys = json.decode(config);
+      Map<String, dynamic> keys;
+      int deviceID;
 
-      final device = DevicesCompanion.insert(
-          identifier: deviceIdentifier,
-          name: deviceName,
-          config: config,
-          ip: _args.ip,
-          mdns: mdnsDomain);
-      final deviceID = await db.addDevice(device);
+      try {
+        final deviceName =
+            await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
+        final mdnsDomain =
+            await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
+        final config = await DeviceAPI.fetchConfig(_args.ip);
+        keys = json.decode(config);
+
+        final device = DevicesCompanion.insert(
+            identifier: deviceIdentifier,
+            name: deviceName,
+            config: config,
+            ip: _args.ip,
+            mdns: mdnsDomain);
+        deviceID = await db.addDevice(device);
+      } catch (e) {
+        yield DeviceSetupBlocStateLoadingError();
+        return;
+      }
       final Map<String, int> modules = Map();
 
       double total = keys['keys'].length.toDouble(), done = 0;
@@ -149,6 +157,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
             await db.addParam(param);
           } catch (e) {
             print(e);
+            yield DeviceSetupBlocStateLoadingError();
+            return;
           }
         } else {
           try {
@@ -163,6 +173,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
             await db.addParam(param);
           } catch (e) {
             print(e);
+            yield DeviceSetupBlocStateLoadingError();
+            return;
           }
         }
         ++done;

@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -94,6 +95,11 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
   }
 
   _init() async {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     Directory appDocDir = await getApplicationDocumentsDirectory();
     Hive.init(appDocDir.path);
     Hive.registerAdapter(AppDataAdapter());

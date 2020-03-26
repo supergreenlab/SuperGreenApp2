@@ -23,27 +23,36 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 class DeviceHelper {
   static Future updateDeviceName(Device device, String name) async {
     await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name);
-    await RelDB.get().devicesDAO.updateDevice(device.createCompanion(true).copyWith(name: Value(name)));
+    await RelDB.get()
+        .devicesDAO
+        .updateDevice(device.createCompanion(true).copyWith(name: Value(name)));
   }
-  
-  static Future updateStringParam(
-      Device device, Param param, String value, { int timeout }) async {
-    await DeviceAPI.setStringParam(device.ip, param.key, value, timeout: timeout);
+
+  static Future updateStringParam(Device device, Param param, String value,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    await DeviceAPI.setStringParam(device.ip, param.key, value,
+        timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
   }
 
-  static Future updateIntParam(Device device, Param param, int value) async {
-    await DeviceAPI.setIntParam(device.ip, param.key, value);
+  static Future updateIntParam(Device device, Param param, int value,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    await DeviceAPI.setIntParam(device.ip, param.key, value,
+        timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
   }
 
-  static Future refreshStringParam(Device device, Param param) async {
-    String value = await DeviceAPI.fetchStringParam(device.ip, param.key);
+  static Future refreshStringParam(Device device, Param param,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    String value = await DeviceAPI.fetchStringParam(device.ip, param.key,
+        timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
   }
 
-  static Future refreshIntParam(Device device, Param param) async {
-    int value = await DeviceAPI.fetchIntParam(device.ip, param.key);
+  static Future refreshIntParam(Device device, Param param,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
+        timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
   }
 }

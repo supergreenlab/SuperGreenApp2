@@ -105,12 +105,8 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
       Param ssid = await ddb.getParam(_args.device.id, 'WIFI_SSID');
       await DeviceHelper.updateStringParam(_args.device, ssid, event.ssid);
       Param pass = await ddb.getParam(_args.device.id, 'WIFI_PASSWORD');
-      try {
-        await DeviceHelper.updateStringParam(_args.device, pass, event.pass, timeout: 5);
-      } catch (e) {
-        print(e);
-      }
-
+      await DeviceHelper.updateStringParam(_args.device, pass, event.pass,
+          timeout: 5, nRetries: 1);
       yield* _researchDevice();
     } else if (event is DeviceWifiBlocEventRetrySearch) {
       yield* _researchDevice();

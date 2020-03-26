@@ -78,10 +78,6 @@ class DeviceAPI {
         }
         final completer = Completer<String>();
         resp.transform(utf8.decoder).listen((contents) {
-          print('$paramName');
-          if (paramName == 'WIFI_SSID') {
-            print(contents);
-          }
           completer.complete(contents);
         }, onError: completer.completeError);
         return completer.future;
