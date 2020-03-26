@@ -31,7 +31,7 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
       TowelieBlocEventFeedEntryCreated event) async* {
     String notificationText = 'Don\'t forget to water your plant!';
     yield TowelieBlocStateHelper(
-        RouteSettings(name: '/feed/box', arguments: null),
+        RouteSettings(name: '/feed/plant', arguments: null),
         SGLLocalizations.current.towelieHelperWaterReminder,
         reminders: [
           //TowelieHelperReminder('1 min', event.feedEntry.id, 'Water your plant', notificationText, 1),

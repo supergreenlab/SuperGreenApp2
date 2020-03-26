@@ -31,7 +31,7 @@ class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
   Stream<TowelieBlocState> feedEntryTrigger(
       TowelieBlocEventFeedEntryCreated event) async* {
     yield TowelieBlocStateHelper(
-      RouteSettings(name: '/feed/box', arguments: null),
+      RouteSettings(name: '/feed/plant', arguments: null),
       SGLLocalizations.current.towelieHelperMeasureAfterStretch,
       pushRoute: TowelieHelperPushRoute(
         'Take measure',

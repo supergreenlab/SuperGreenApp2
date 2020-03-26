@@ -41,17 +41,17 @@ import 'package:super_green_app/towelie/buttons/towelie_button_tuto_take_pic.dar
 import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 import 'package:super_green_app/towelie/feed/towelie_action_appinit.dart';
-import 'package:super_green_app/towelie/feed/towelie_action_box_created.dart';
+import 'package:super_green_app/towelie/feed/towelie_action_plant_created.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_add_existing_device.dart';
-import 'package:super_green_app/towelie/helpers/towelie_action_help_create_box.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_create_plant.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_form_measure.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_measure_after_stretch.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_measure_reminder.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_notification.dart';
-import 'package:super_green_app/towelie/helpers/towelie_action_help_select_box_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_select_device.dart';
-import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_box_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_select_new_plant_device.dart';
+import 'package:super_green_app/towelie/helpers/towelie_action_help_select_plant_device_box.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_take_pic.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_test_device.dart';
 import 'package:super_green_app/towelie/helpers/towelie_action_help_water_reminder.dart';
@@ -211,8 +211,8 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpSelectDevice(),
     TowelieActionHelpAddDevice(),
     TowelieActionHelpAddExistingDevice(),
-    TowelieActionHelpSelectNewBoxDevice(),
-    TowelieActionHelpSelectBoxDevice(),
+    TowelieActionHelpSelectNewPlantDevice(),
+    TowelieActionHelpSelectPlantDeviceBox(),
     TowelieActionHelpTestDevice(),
     TowelieActionHelpWifi(),
     TowelieActionHelpFormMeasure(),

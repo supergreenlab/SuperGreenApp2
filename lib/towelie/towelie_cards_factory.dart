@@ -121,7 +121,7 @@ class TowelieCardsFactory {
     ));
   }
 
-  static Future createBoxCreatedCard(Feed feed, Plant box) async {
+  static Future createPlantCreatedCard(Feed feed, Plant plant) async {
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_TOWELIE_INFO',
@@ -131,7 +131,7 @@ class TowelieCardsFactory {
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.toweliePlantCreated,
         'buttons': [
-          TowelieButtonViewPlant.createButton(box),
+          TowelieButtonViewPlant.createButton(plant),
         ]
       })),
     ));

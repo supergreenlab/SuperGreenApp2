@@ -23,7 +23,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieActionHelpSelectDevice extends TowelieActionHelp {
   @override
-  String get route => '/box/device';
+  String get route => '/plant/device';
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {

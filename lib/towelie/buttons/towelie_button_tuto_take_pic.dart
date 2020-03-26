@@ -34,9 +34,9 @@ class TowelieButtonTutoTakePic extends TowelieButton {
       TowelieBlocEventCardButtonPressed event) async* {
     if (event.params['ID'] == 'TAKE_PIC') {
       final db = RelDB.get();
-      Plant box = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+      Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
       yield TowelieBlocStateMainNavigation(
-          MainNavigateToFeedMediaFormEvent(box));
+          MainNavigateToFeedMediaFormEvent(plant));
       await removeButtons(event.feedEntry);
     }
   }

@@ -31,7 +31,7 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
       TowelieBlocEventFeedEntryCreated event) async* {
     String notificationText = 'Don\'t forget to take the next measure!';
     yield TowelieBlocStateHelper(
-        RouteSettings(name: '/feed/box', arguments: null),
+        RouteSettings(name: '/feed/plant', arguments: null),
         SGLLocalizations.current.towelieHelperMeasureReminder,
         reminders: [
           //TowelieHelperReminder('1 min', event.feedEntry.id, 'Take the next measure', notificationText, 1),

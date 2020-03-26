@@ -32,7 +32,7 @@ class AddDevicePage extends StatelessWidget {
         bloc: BlocProvider.of<AddDeviceBloc>(context),
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
-              'Add new device',
+              'Add new controller',
               backgroundColor: Color(0xff0b6ab3),
               titleColor: Colors.white,
               iconColor: Colors.white,
