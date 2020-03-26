@@ -34,38 +34,9 @@ class DeviceAPI {
     if (Platform.isAndroid) {
       ip = await DeviceAPI.resolveLocalNameMDNS(name);
     } else if (Platform.isIOS) {
-      ip = await DeviceAPI.pingSGLHost(name, 'WIFI_IP');
+      ip = await DeviceAPI.fetchStringParam(name, 'WIFI_IP', wait: 5);
     }
     return ip;
-  }
-
-  static Future pingSGLHost(String name, String parameter,
-      {int nTries = 4}) async {
-    String paramValue;
-    final client = new HttpClient();
-    client.connectionTimeout = const Duration(seconds: 5);
-    for (int i = 0; i < nTries; ++i) {
-      if (i != 0) {
-        await Future.delayed(Duration(seconds: 5));
-      }
-      try {
-        final req =
-            await client.getUrl(Uri.parse('http://$name/s?k=$parameter'));
-        final resp = await req.close();
-        final completer = Completer();
-        resp.transform(utf8.decoder).listen((contents) {
-          completer.complete(contents);
-        });
-        paramValue = await completer.future;
-        break;
-      } catch (e) {
-        print(e);
-      }
-    }
-    if (paramValue == null) {
-      throw Error();
-    }
-    return paramValue;
   }
 
   static Future<String> resolveLocalNameMDNS(String name) async {
@@ -88,36 +59,120 @@ class DeviceAPI {
     return r.body;
   }
 
-  static Future<String> fetchStringParam(
-      String controllerIP, String paramName) async {
-    Response r =
-        await get('http://$controllerIP/s?k=${paramName.toUpperCase()}');
-    return r.body;
-  }
-
-  static Future<int> fetchIntParam(
-      String controllerIP, String paramName) async {
-    Response r =
-        await get('http://$controllerIP/i?k=${paramName.toUpperCase()}');
-    return int.parse(r.body);
-  }
-
-  static Future<String> setStringParam(
-      String controllerIP, String paramName, String value,
-      {int timeout}) async {
+  static Future<String> fetchStringParam(String controllerIP, String paramName,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
     }
-    final req = await client.postUrl(Uri.parse(
-        'http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value'));
-    await req.close();
+    for (int i = 0; i < nRetries; ++i) {
+      if (i != 0 && wait > 0) {
+        await Future.delayed(Duration(seconds: wait));
+      }
+      try {
+        final req = await client.getUrl(
+            Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}'));
+        final HttpClientResponse resp = await req.close();
+        if (resp.contentLength == 0) {
+          return '';
+        }
+        final completer = Completer<String>();
+        resp.transform(utf8.decoder).listen((contents) {
+          print('$paramName');
+          if (paramName == 'WIFI_SSID') {
+            print(contents);
+          }
+          completer.complete(contents);
+        }, onError: completer.completeError);
+        return completer.future;
+      } catch (e) {
+        print(e);
+        if (i == nRetries - 1) {
+          throw e;
+        }
+      }
+    }
+    return null;
+  }
+
+  static Future<int> fetchIntParam(String controllerIP, String paramName,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    final client = new HttpClient();
+    if (timeout != null) {
+      client.connectionTimeout = Duration(seconds: timeout);
+    }
+    for (int i = 0; i < nRetries; ++i) {
+      if (i != 0 && wait > 0) {
+        await Future.delayed(Duration(seconds: wait));
+      }
+      try {
+        final req = await client.getUrl(
+            Uri.parse('http://$controllerIP/i?k=${paramName.toUpperCase()}'));
+        final resp = await req.close();
+        final completer = Completer<int>();
+        resp.transform(utf8.decoder).listen((contents) {
+          completer.complete(int.parse(contents));
+        }, onError: completer.completeError);
+        return completer.future;
+      } catch (e) {
+        print(e);
+        if (i == nRetries - 1) {
+          throw e;
+        }
+      }
+    }
+    return null;
+  }
+
+  static Future<String> setStringParam(
+      String controllerIP, String paramName, String value,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    final client = new HttpClient();
+    if (timeout != null) {
+      client.connectionTimeout = Duration(seconds: timeout);
+    }
+    for (int i = 0; i < nRetries; ++i) {
+      if (i != 0 && wait > 0) {
+        await Future.delayed(Duration(seconds: wait));
+      }
+      try {
+        final req = await client.postUrl(Uri.parse(
+            'http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value'));
+        await req.close();
+        break;
+      } catch (e) {
+        print(e);
+        if (i == nRetries - 1) {
+          throw e;
+        }
+      }
+    }
     return await fetchStringParam(controllerIP, paramName);
   }
 
   static Future<int> setIntParam(
-      String controllerIP, String paramName, int value) async {
-    await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value');
+      String controllerIP, String paramName, int value,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    final client = new HttpClient();
+    if (timeout != null) {
+      client.connectionTimeout = Duration(seconds: timeout);
+    }
+    for (int i = 0; i < nRetries; ++i) {
+      if (i != 0 && wait > 0) {
+        await Future.delayed(Duration(seconds: wait));
+      }
+      try {
+        final req = await client.postUrl(Uri.parse(
+            'http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value'));
+        await req.close();
+        break;
+      } catch (e) {
+        print(e);
+        if (i == nRetries - 1) {
+          throw e;
+        }
+      }
+    }
     return fetchIntParam(controllerIP, paramName);
   }
 }

@@ -81,7 +81,7 @@ class DeviceDaemonBloc
 
     try {
       String identifier =
-          await DeviceAPI.pingSGLHost(device.ip, 'BROKER_CLIENTID', nTries: 1);
+          await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1);
       if (identifier == device.identifier) {
         print('Device ${device.name} (${device.identifier}) found.');
         await ddb.updateDevice(
