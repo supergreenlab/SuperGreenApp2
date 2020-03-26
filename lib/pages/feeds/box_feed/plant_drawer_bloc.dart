@@ -40,7 +40,7 @@ class PlantDrawerBlocEventBoxListUpdated extends PlantDrawerBlocEvent {
 
 abstract class PlantDrawerBlocState extends Equatable {}
 
-class PlantDrawerBlocStateLoadingBoxList extends PlantDrawerBlocState {
+class PlantDrawerBlocStateLoadingPlantList extends PlantDrawerBlocState {
   @override
   List<Object> get props => [];
 }
@@ -60,7 +60,7 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   List<GetPendingFeedsResult> _hasPending = [];
 
   @override
-  PlantDrawerBlocState get initialState => PlantDrawerBlocStateLoadingBoxList();
+  PlantDrawerBlocState get initialState => PlantDrawerBlocStateLoadingPlantList();
 
   PlantDrawerBloc() {
     add(PlantDrawerBlocEventLoadPlants());

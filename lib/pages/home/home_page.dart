@@ -23,9 +23,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
-import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/box_feed/box_feed_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/plant_drawer_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/plant_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/plant_feed_page.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/home_bloc.dart';
@@ -194,7 +194,7 @@ class HomePage extends StatelessWidget {
                   child: SGLFeedPage(),
                 ));
       } else {
-        return _boxFeedRoute(context, settings, HomeNavigateToPlantFeedEvent(null));
+        return _plantFeedRoute(context, settings, HomeNavigateToPlantFeedEvent(null));
       }
     }
     switch (settings.name) {
@@ -206,8 +206,8 @@ class HomePage extends StatelessWidget {
                   child: TowelieHelper.wrapWidget(
                       settings, context, SGLFeedPage()),
                 ));
-      case '/feed/box':
-        return _boxFeedRoute(context, settings, settings.arguments);
+      case '/feed/plant':
+        return _plantFeedRoute(context, settings, settings.arguments);
       case '/explorer':
         return MaterialPageRoute(
             settings: settings,
@@ -234,7 +234,7 @@ class HomePage extends StatelessWidget {
     }
   }
 
-  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event) {
+  MaterialPageRoute _plantFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
@@ -245,7 +245,7 @@ class HomePage extends StatelessWidget {
                   create: (context) => PlantFeedBloc(event),
                 )
               ],
-              child: TowelieHelper.wrapWidget(settings, context, BoxFeedPage()),
+              child: TowelieHelper.wrapWidget(settings, context, PlantFeedPage()),
             ));
   }
 }

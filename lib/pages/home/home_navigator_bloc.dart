@@ -99,7 +99,7 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
       yield HomeNavigatorState(0);
     } else if (event is HomeNavigateToPlantFeedEvent) {
       _navigatorKey.currentState
-          .pushReplacementNamed('/feed/box', arguments: event);
+          .pushReplacementNamed('/feed/plant', arguments: event);
       yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToExplorerEvent) {
       _navigatorKey.currentState
