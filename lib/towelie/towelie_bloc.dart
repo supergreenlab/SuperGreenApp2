@@ -38,7 +38,7 @@ import 'package:super_green_app/towelie/buttons/towelie_button_i_want_one.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_no_sgl_bundle.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_not_received.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_tuto_take_pic.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_view_box.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 import 'package:super_green_app/towelie/feed/towelie_action_appinit.dart';
 import 'package:super_green_app/towelie/feed/towelie_action_box_created.dart';
@@ -206,7 +206,7 @@ class TowelieBlocStateHelperPop extends TowelieBlocState {
 class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
     TowelieActionAppInit(),
-    TowelieActionBoxCreated(),
+    TowelieActionPlantCreated(),
     TowelieActionHelpCreateBox(),
     TowelieActionHelpSelectDevice(),
     TowelieActionHelpAddDevice(),
@@ -231,7 +231,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonIOrderedOne(),
     TowelieButtonDontWantToBuy(),
     TowelieButtonCreateBox(),
-    TowelieButtonViewBox(),
+    TowelieButtonViewPlant(),
     TowelieButtonBoxAlreadyStarted(),
     TowelieButtonBoxNotStarted(),
     TowelieButtonBoxVegStage(),

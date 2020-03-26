@@ -21,92 +21,91 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 
-abstract class BoxFeedBlocEvent extends Equatable {}
+abstract class PlantFeedBlocEvent extends Equatable {}
 
-class BoxFeedBlocEventLoadBox extends BoxFeedBlocEvent {
+class PlantFeedBlocEventLoad extends PlantFeedBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class BoxFeedBlocEventReloadChart extends BoxFeedBlocEvent {
+class PlantFeedBlocEventReloadChart extends PlantFeedBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class BoxFeedBlocEventBoxUpdated extends BoxFeedBlocEvent {
+class PlantFeedBlocEventUpdated extends PlantFeedBlocEvent {
   final int rand = Random().nextInt(1 << 32);
 
-  BoxFeedBlocEventBoxUpdated();
+  PlantFeedBlocEventUpdated();
 
   @override
   List<Object> get props => [rand];
 }
 
-class BoxFeedBlocEventSunglasses extends BoxFeedBlocEvent {
+class PlantFeedBlocEventSunglasses extends PlantFeedBlocEvent {
   final int rand = Random().nextInt(1 << 32);
 
   @override
   List<Object> get props => [rand];
 }
 
-abstract class BoxFeedBlocState extends Equatable {}
+abstract class PlantFeedBlocState extends Equatable {}
 
-class BoxFeedBlocStateInit extends BoxFeedBlocState {
+class PlantFeedBlocStateInit extends PlantFeedBlocState {
   @override
   List<Object> get props => [];
 }
 
-class BoxFeedBlocStateNoBox extends BoxFeedBlocState {
-  BoxFeedBlocStateNoBox() : super();
+class PlantFeedBlocStateNoPlant extends PlantFeedBlocState {
+  PlantFeedBlocStateNoPlant() : super();
 
   @override
   List<Object> get props => [];
 }
 
-class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocState {
-  final Plant box;
+class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
+  final Plant plant;
   final int nTimelapses;
 
-  BoxFeedBlocStateBoxLoaded(this.box, this.nTimelapses);
+  PlantFeedBlocStateLoaded(this.plant, this.nTimelapses);
 
   @override
-  List<Object> get props => [box, nTimelapses];
+  List<Object> get props => [plant, nTimelapses];
 }
 
-class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
-  final HomeNavigateToBoxFeedEvent _args;
+class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
+  final HomeNavigateToPlantFeedEvent _args;
 
   Plant _plant;
   int _nTimelapses;
 
-  BoxFeedBloc(this._args) {
-    this.add(BoxFeedBlocEventLoadBox());
+  PlantFeedBloc(this._args) {
+    this.add(PlantFeedBlocEventLoad());
   }
 
   @override
-  BoxFeedBlocState get initialState => BoxFeedBlocStateInit();
+  PlantFeedBlocState get initialState => PlantFeedBlocStateInit();
 
   @override
-  Stream<BoxFeedBlocState> mapEventToState(BoxFeedBlocEvent event) async* {
-    if (event is BoxFeedBlocEventLoadBox) {
+  Stream<PlantFeedBlocState> mapEventToState(PlantFeedBlocEvent event) async* {
+    if (event is PlantFeedBlocEventLoad) {
       AppDB _db = AppDB();
-      _plant = _args.box;
+      _plant = _args.plant;
       if (_plant == null) {
         AppData appData = _db.getAppData();
-        if (appData.lastBoxID == null) {
-          yield BoxFeedBlocStateNoBox();
+        if (appData.lastPlantID == null) {
+          yield PlantFeedBlocStateNoPlant();
           return;
         }
-        _plant = await RelDB.get().plantsDAO.getPlant(appData.lastBoxID);
+        _plant = await RelDB.get().plantsDAO.getPlant(appData.lastPlantID);
       } else {
-        _db.setLastBox(_plant.id);
+        _db.setLastPlant(_plant.id);
       }
 
       _nTimelapses =
@@ -116,11 +115,11 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
           .nTimelapses(_plant.id)
           .watchSingle()
           .listen(_onNTimelapsesUpdated);
-      RelDB.get().plantsDAO.watchPlant(_plant.id).listen(_onBoxUpdated);
-      yield BoxFeedBlocStateBoxLoaded(_plant, _nTimelapses);
-    } else if (event is BoxFeedBlocEventBoxUpdated) {
-      yield BoxFeedBlocStateBoxLoaded(_plant, _nTimelapses);
-    } else if (event is BoxFeedBlocEventSunglasses) {
+      RelDB.get().plantsDAO.watchPlant(_plant.id).listen(_onPlantUpdated);
+      yield PlantFeedBlocStateLoaded(_plant, _nTimelapses);
+    } else if (event is PlantFeedBlocEventUpdated) {
+      yield PlantFeedBlocStateLoaded(_plant, _nTimelapses);
+    } else if (event is PlantFeedBlocEventSunglasses) {
       if (_plant.device == null) {
         return;
       }
@@ -143,13 +142,13 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
     }
   }
 
-  void _onBoxUpdated(Plant box) {
+  void _onPlantUpdated(Plant box) {
     _plant = box;
-    add(BoxFeedBlocEventBoxUpdated());
+    add(PlantFeedBlocEventUpdated());
   }
 
   void _onNTimelapsesUpdated(int nTimelapses) {
     _nTimelapses = nTimelapses;
-    add(BoxFeedBlocEventBoxUpdated());
+    add(PlantFeedBlocEventUpdated());
   }
 }

@@ -35,7 +35,7 @@ import 'package:super_green_app/towelie/buttons/towelie_button_i_want_one.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_no_sgl_bundle.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_not_received.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_tuto_take_pic.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_view_box.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 
 class TowelieCardsFactory {
@@ -107,7 +107,7 @@ class TowelieCardsFactory {
     ));
   }
 
-  static Future createWelcomeBoxCard(Feed feed) async {
+  static Future createWelcomePlantCard(Feed feed) async {
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_TOWELIE_INFO',
@@ -131,7 +131,7 @@ class TowelieCardsFactory {
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.towelieBoxCreated,
         'buttons': [
-          TowelieButtonViewBox.createButton(box),
+          TowelieButtonViewPlant.createButton(box),
         ]
       })),
     ));
@@ -154,7 +154,7 @@ class TowelieCardsFactory {
     ));
   }
 
-  static Future createBoxAutoOrPhoto(Feed feed) async {
+  static Future createPlantAutoOrPhoto(Feed feed) async {
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_TOWELIE_INFO',

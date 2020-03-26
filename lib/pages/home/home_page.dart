@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
-import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/plant_drawer_bloc.dart';

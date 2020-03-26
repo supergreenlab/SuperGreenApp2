@@ -42,9 +42,9 @@ class AppDB {
     setAppData(appData);
   }
 
-  void setLastBox(int boxID) {
+  void setLastPlant(int plantID) {
     AppData appData = getAppData();
-    appData.lastBoxID = boxID;
+    appData.lastPlantID = plantID;
     setAppData(appData);
   }
 
