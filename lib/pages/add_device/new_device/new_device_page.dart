@@ -51,7 +51,7 @@ class NewDevicePage extends StatelessWidget {
             }
             return Scaffold(
               appBar: SGLAppBar(
-                'Add device',
+                'Add controller',
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,

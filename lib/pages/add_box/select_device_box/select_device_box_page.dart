@@ -63,7 +63,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Box creation',
+                  'Plant creation',
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
@@ -124,7 +124,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                     }
                   }));
                 },
-                title: Text('Add new box to device'),
+                title: Text('Add new box to controller'),
                 leading:
                     SizedBox(width: 50, height: 50, child: Icon(Icons.add)),
               );
@@ -162,7 +162,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Reset box #$index on device ${state.device.name}?'),
+            title: Text('Reset box #$index on controller ${state.device.name}?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {

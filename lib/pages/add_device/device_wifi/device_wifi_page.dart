@@ -92,7 +92,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Device Wifi setup',
+                  'Controller Wifi setup',
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
@@ -114,7 +114,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           children: <Widget>[
             Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
             Text(
-              'Couldn\'t find the device\non your network.',
+              'Couldn\'t find the controller\non your network.',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               textAlign: TextAlign.center,
             ),
@@ -197,7 +197,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
 
   Widget _renderSearching() {
     return FullscreenLoading(
-        title: 'Searching device on network\nplease wait..');
+        title: 'Searching controller on network\nplease wait..');
   }
 
   Widget _renderInput(BuildContext context, String title, String hint,

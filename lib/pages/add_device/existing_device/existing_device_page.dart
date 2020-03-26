@@ -61,7 +61,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
 
             if (state is ExistingDeviceBlocStateResolving) {
               body = FullscreenLoading(
-                title: 'Searching device..',
+                title: 'Searching controller..',
               );
             } else {
               final form = <Widget>[
@@ -96,7 +96,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                 form.add(Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      'Device "${_nameController.value.text}" not found!${Platform.isIOS ? '\nThis is a known bug on iOS, should be fixed by April 2020.' : ''}',
+                      'Controller "${_nameController.value.text}" not found!${Platform.isIOS ? '\nThis is a known bug on iOS, should be fixed by April 2020.' : ''}',
                       style: TextStyle(
                           color: Colors.red, fontWeight: FontWeight.w500)),
                 ));
@@ -114,7 +114,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: GreenButton(
-                        title: 'SEARCH DEVICE',
+                        title: 'SEARCH CONTROLLER',
                         onPressed: _nameController.value.text != ''
                             ? () => _handleInput(context)
                             : null,
@@ -126,7 +126,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
             }
             return Scaffold(
               appBar: SGLAppBar(
-                'Add device',
+                'Add controller',
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,

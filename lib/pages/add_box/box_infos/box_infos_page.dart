@@ -88,7 +88,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Box creation',
+                  'Plant creation',
                   hideBackButton: state is BoxInfosBlocStateDone,
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
@@ -107,7 +107,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
       subtitle = 'Box ${_nameController.value.text} created:)';
     } else {
       subtitle =
-          'Box ${_nameController.value.text} on device ${state.device.name} created:)';
+          'Box ${_nameController.value.text} on plant ${state.device.name} created:)';
     }
     return Fullscreen(
         title: 'Done!',
@@ -124,7 +124,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
           color: Color(0xff0bb354),
         ),
         SectionTitle(
-          title: 'Let\'s name your new box:',
+          title: 'Let\'s name your new plant:',
           icon: 'assets/box_setup/icon_box_name.svg',
           backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,

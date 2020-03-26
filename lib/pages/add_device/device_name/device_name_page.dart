@@ -103,7 +103,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
               onWillPop: () async => false,
               child: Scaffold(
                   appBar: SGLAppBar(
-                    'Add device',
+                    'Add controller',
                     hideBackButton: true,
                     backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
@@ -117,7 +117,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   }
 
   Widget _renderLoading() {
-    return FullscreenLoading(title: 'Setting device name..');
+    return FullscreenLoading(title: 'Setting controller name..');
   }
 
   Widget _renderForm() {
@@ -129,7 +129,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: 'Set device\'s name',
+          title: 'Set controller\'s name',
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,

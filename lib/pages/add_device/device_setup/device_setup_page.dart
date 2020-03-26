@@ -70,7 +70,7 @@ class DeviceSetupPage extends StatelessWidget {
               onWillPop: () async => canGoBack,
               child: Scaffold(
                 appBar: SGLAppBar(
-                  'Add device',
+                  'Add controller',
                   hideBackButton: !canGoBack,
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
@@ -86,13 +86,13 @@ class DeviceSetupPage extends StatelessWidget {
 
   Widget _renderLoadingError(BuildContext context) {
     return Fullscreen(
-        title: 'Oops looks like the device is unreachable!',
+        title: 'Oops looks like the controller is unreachable!',
         child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
   Widget _renderAlreadyAdded(BuildContext context) {
     return Fullscreen(
-        title: 'This device is already added!',
+        title: 'This controller is already added!',
         child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
@@ -105,7 +105,7 @@ class DeviceSetupPage extends StatelessWidget {
           color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: 'Loading device params',
+          title: 'Loading controller params',
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,

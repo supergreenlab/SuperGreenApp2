@@ -43,8 +43,8 @@ class AddDevicePage extends StatelessWidget {
                     context,
                     'Brand new',
                     'assets/box_setup/icon_controller.svg',
-                    'Choose this option if the device is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
-                    'CONNECT DEVICE', () {
+                    'Choose this option if the controller is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
+                    'CONNECT CONTROLLER', () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(
                       MainNavigateToNewDeviceEvent(futureFn: (future) async {
                     Device device = await future;
@@ -58,8 +58,8 @@ class AddDevicePage extends StatelessWidget {
                     context,
                     'Already running',
                     'assets/box_setup/icon_controller.svg',
-                    'Choose this option if the device is already running and connected to your home wifi.',
-                    'SEARCH DEVICE', () {
+                    'Choose this option if the controller is already running and connected to your home wifi.',
+                    'SEARCH CONTROLLER', () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(
                       MainNavigateToExistingDeviceEvent(
                           futureFn: (future) async {

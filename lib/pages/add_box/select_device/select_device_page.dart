@@ -53,7 +53,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
           bloc: BlocProvider.of<SelectDeviceBloc>(context),
           builder: (context, state) => Scaffold(
               appBar: SGLAppBar(
-                'Box creation',
+                'Plant creation',
                 backgroundColor: Color(0xff0bb354),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
@@ -66,7 +66,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                     color: Color(0xff0bb354),
                   ),
                   SectionTitle(
-                    title: 'Select the device below',
+                    title: 'Select the controller below',
                     icon: 'assets/box_setup/icon_controller.svg',
                     backgroundColor: Color(0xff0bb354),
                     titleColor: Colors.white,
@@ -122,7 +122,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         int i = 1;
         if (devices.length == 0) {
           return Fullscreen(
-            title: 'No device yet',
+            title: 'No controller yet',
             child: GreenButton(
                 title: 'ADD ONE',
                 onPressed: () {
@@ -178,7 +178,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Delete device ${device.name}?'),
+            title: Text('Delete controller ${device.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
               FlatButton(
