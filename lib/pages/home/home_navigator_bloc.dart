@@ -35,7 +35,7 @@ class HomeNavigateEventInit extends HomeNavigatorEvent {
 }
 
 class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {
-  final Box box;
+  final Plant box;
 
   HomeNavigateToBoxFeedEvent(this.box);
 

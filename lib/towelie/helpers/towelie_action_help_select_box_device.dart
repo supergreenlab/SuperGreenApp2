@@ -27,9 +27,9 @@ class TowelieActionHelpSelectBoxDevice extends TowelieActionHelp {
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
-    final bdb = RelDB.get().boxesDAO;
-    int nBoxes = await bdb.nBoxes().getSingle();
-    if (nBoxes == 0) {
+    final bdb = RelDB.get().plantsDAO;
+    int nPlants = await bdb.nPlants().getSingle();
+    if (nPlants == 0) {
       yield TowelieBlocStateHelper(
           event.settings, SGLLocalizations.current.towelieHelperSelectBoxDevice);
     }

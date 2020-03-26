@@ -39,7 +39,7 @@ class TimeSeries {
     return result;
   }
 
-  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(Box box,
+  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(Plant box,
       String controllerID, String graphID, String name, charts.Color color,
       {Function(double) transform}) async {
     List<dynamic> values = await fetchMetric(box, controllerID, name);
@@ -47,20 +47,20 @@ class TimeSeries {
   }
 
   static Future<List<dynamic>> fetchMetric(
-      Box box, String controllerID, String name) async {
+      Plant plant, String controllerID, String name) async {
     List<dynamic> data;
-    ChartCache cache = await RelDB.get().boxesDAO.getChartCache(box.id, name);
+    ChartCache cache = await RelDB.get().plantsDAO.getChartCache(plant.id, name);
     Duration diff = cache?.date?.difference(DateTime.now());
     if (cache == null || -diff.inMinutes >= 2) {
       if (cache != null) {
-        await RelDB.get().boxesDAO.deleteChartCacheForBox(cache.box);
+        await RelDB.get().plantsDAO.deleteChartCacheForPlant(cache.plant);
       }
       Response resp = await get(
           'https://api.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
-      await RelDB.get().boxesDAO.addChartCache(ChartCachesCompanion.insert(
-          box: box.id,
+      await RelDB.get().plantsDAO.addChartCache(ChartCachesCompanion.insert(
+          plant: plant.id,
           name: name,
           date: DateTime.now(),
           values: Value(JsonEncoder().convert(data))));

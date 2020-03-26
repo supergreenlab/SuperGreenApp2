@@ -71,7 +71,7 @@ class BoxFeedBlocStateNoBox extends BoxFeedBlocState {
 }
 
 class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocState {
-  final Box box;
+  final Plant box;
   final int nTimelapses;
 
   BoxFeedBlocStateBoxLoaded(this.box, this.nTimelapses);
@@ -83,7 +83,7 @@ class BoxFeedBlocStateBoxLoaded extends BoxFeedBlocState {
 class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent _args;
 
-  Box _box;
+  Plant _plant;
   int _nTimelapses;
 
   BoxFeedBloc(this._args) {
@@ -97,37 +97,37 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
   Stream<BoxFeedBlocState> mapEventToState(BoxFeedBlocEvent event) async* {
     if (event is BoxFeedBlocEventLoadBox) {
       AppDB _db = AppDB();
-      _box = _args.box;
-      if (_box == null) {
+      _plant = _args.box;
+      if (_plant == null) {
         AppData appData = _db.getAppData();
         if (appData.lastBoxID == null) {
           yield BoxFeedBlocStateNoBox();
           return;
         }
-        _box = await RelDB.get().boxesDAO.getBox(appData.lastBoxID);
+        _plant = await RelDB.get().plantsDAO.getPlant(appData.lastBoxID);
       } else {
-        _db.setLastBox(_box.id);
+        _db.setLastBox(_plant.id);
       }
 
       _nTimelapses =
-          await RelDB.get().boxesDAO.nTimelapses(_box.id).getSingle();
+          await RelDB.get().plantsDAO.nTimelapses(_plant.id).getSingle();
       RelDB.get()
-          .boxesDAO
-          .nTimelapses(_box.id)
+          .plantsDAO
+          .nTimelapses(_plant.id)
           .watchSingle()
           .listen(_onNTimelapsesUpdated);
-      RelDB.get().boxesDAO.watchBox(_box.id).listen(_onBoxUpdated);
-      yield BoxFeedBlocStateBoxLoaded(_box, _nTimelapses);
+      RelDB.get().plantsDAO.watchPlant(_plant.id).listen(_onBoxUpdated);
+      yield BoxFeedBlocStateBoxLoaded(_plant, _nTimelapses);
     } else if (event is BoxFeedBlocEventBoxUpdated) {
-      yield BoxFeedBlocStateBoxLoaded(_box, _nTimelapses);
+      yield BoxFeedBlocStateBoxLoaded(_plant, _nTimelapses);
     } else if (event is BoxFeedBlocEventSunglasses) {
-      if (_box.device == null) {
+      if (_plant.device == null) {
         return;
       }
-      Device device = await RelDB.get().devicesDAO.getDevice(_box.device);
+      Device device = await RelDB.get().devicesDAO.getDevice(_plant.device);
       Param dimParam = await RelDB.get()
           .devicesDAO
-          .getParam(device.id, 'BOX_${_box.deviceBox}_LED_DIM');
+          .getParam(device.id, 'BOX_${_plant.deviceBox}_LED_DIM');
       try {
         if (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 -
                 dimParam.ivalue >
@@ -143,8 +143,8 @@ class BoxFeedBloc extends Bloc<BoxFeedBlocEvent, BoxFeedBlocState> {
     }
   }
 
-  void _onBoxUpdated(Box box) {
-    _box = box;
+  void _onBoxUpdated(Plant box) {
+    _plant = box;
     add(BoxFeedBlocEventBoxUpdated());
   }
 

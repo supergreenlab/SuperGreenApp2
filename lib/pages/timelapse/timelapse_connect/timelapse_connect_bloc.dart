@@ -25,7 +25,7 @@ class TimelapseConnectBlocState extends Equatable {
 }
 
 class TimelapseConnectBlocStateDone extends TimelapseConnectBlocState {
-  final Box box;
+  final Plant box;
 
   TimelapseConnectBlocStateDone(this.box);
 
@@ -46,8 +46,8 @@ class TimelapseConnectBloc
   Stream<TimelapseConnectBlocState> mapEventToState(
       TimelapseConnectBlocEvent event) async* {
     if (event is TimelapseConnectBlocEventSaveConfig) {
-      await RelDB.get().boxesDAO.addTimelapse(TimelapsesCompanion.insert(
-          box: _args.box.id,
+      await RelDB.get().plantsDAO.addTimelapse(TimelapsesCompanion.insert(
+          plant: _args.box.id,
           dropboxToken: Value(event.dropboxToken),
           uploadName: Value(event.uploadName)));
 

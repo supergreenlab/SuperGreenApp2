@@ -25,8 +25,8 @@ import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
-import 'package:super_green_app/pages/add_box/box_infos/box_infos_page.dart';
+import 'package:super_green_app/pages/add_box/plant_infos/plant_infos_bloc.dart';
+import 'package:super_green_app/pages/add_box/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/add_box/select_device_box/select_device_box_bloc.dart';
@@ -187,8 +187,8 @@ class _MainPageState extends State<MainPage> {
         );
       case '/box/new':
         return BlocProvider(
-          create: (context) => BoxInfosBloc(),
-          child: BoxInfosPage(),
+          create: (context) => PlantInfosBloc(),
+          child: PlantInfosPage(),
         );
       case '/box/device':
         return BlocProvider(

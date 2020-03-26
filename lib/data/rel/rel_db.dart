@@ -22,7 +22,7 @@ import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:super_green_app/data/rel/box/boxes.dart';
+import 'package:super_green_app/data/rel/box/plants.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 
@@ -43,7 +43,7 @@ LazyDatabase _openConnection() {
   Devices,
   Modules,
   Params,
-  Boxes,
+  Plants,
   ChartCaches,
   Timelapses,
   Feeds,
@@ -51,7 +51,7 @@ LazyDatabase _openConnection() {
   FeedMedias,
 ], daos: [
   DevicesDAO,
-  BoxesDAO,
+  PlantsDAO,
   FeedsDAO
 ])
 class RelDB extends _$RelDB {

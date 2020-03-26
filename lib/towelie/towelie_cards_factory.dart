@@ -121,7 +121,7 @@ class TowelieCardsFactory {
     ));
   }
 
-  static Future createBoxCreatedCard(Feed feed, Box box) async {
+  static Future createBoxCreatedCard(Feed feed, Plant box) async {
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_TOWELIE_INFO',

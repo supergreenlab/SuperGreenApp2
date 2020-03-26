@@ -105,7 +105,7 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
     }
   }
 
-  Future<List<charts.Series<Metric, DateTime>>> updateChart(Box box) async {
+  Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant box) async {
     Device device = await RelDB.get().devicesDAO.getDevice(box.device);
     String identifier = device.identifier;
     int deviceBox = box.deviceBox;
@@ -123,20 +123,20 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
   }
 
   Future<charts.Series<Metric, DateTime>> getTempSeries(
-      Box box, String identifier, int deviceBox) async {
+      Plant box, String identifier, int deviceBox) async {
     return await TimeSeries.fetchTimeSeries(box, identifier, 'Temperature',
         'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault,
         transform: _tempUnit);
   }
 
   Future<charts.Series<Metric, DateTime>> getHumiSeries(
-      Box box, String identifier, int deviceBox) async {
+      Plant box, String identifier, int deviceBox) async {
     return await TimeSeries.fetchTimeSeries(box, identifier, 'Humidity',
         'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
   }
 
   Future<charts.Series<Metric, DateTime>> getLightSeries(
-      Box box, Device device, String identifier, int deviceBox) async {
+      Plant box, Device device, String identifier, int deviceBox) async {
     List<dynamic> timerOutput = await TimeSeries.fetchMetric(
         box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
     List<List<dynamic>> dims = [];

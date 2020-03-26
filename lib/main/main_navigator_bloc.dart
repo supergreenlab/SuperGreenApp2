@@ -139,7 +139,7 @@ class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToFeedLightFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -149,7 +149,7 @@ class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
 }
 
 class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToFeedWaterFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -160,7 +160,7 @@ class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
 
 class MainNavigateToFeedVentilationFormEvent
     extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToFeedVentilationFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -170,7 +170,7 @@ class MainNavigateToFeedVentilationFormEvent
 }
 
 class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToFeedMediaFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -180,7 +180,7 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
 }
 
 class MainNavigateToFeedMeasureFormEvent extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToFeedMeasureFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -191,7 +191,7 @@ class MainNavigateToFeedMeasureFormEvent extends MainNavigateToFeedFormEvent {
 
 class MainNavigateToFeedCareCommonFormEvent
     extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToFeedCareCommonFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -202,36 +202,36 @@ class MainNavigateToFeedCareCommonFormEvent
 
 class MainNavigateToFeedDefoliationFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedDefoliationFormEvent(Box box, {pushAsReplacement = false})
+  MainNavigateToFeedDefoliationFormEvent(Plant box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedToppingFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedToppingFormEvent(Box box, {pushAsReplacement = false})
+  MainNavigateToFeedToppingFormEvent(Plant box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedFimmingFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedFimmingFormEvent(Box box, {pushAsReplacement = false})
+  MainNavigateToFeedFimmingFormEvent(Plant box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedBendingFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedBendingFormEvent(Box box, {pushAsReplacement = false})
+  MainNavigateToFeedBendingFormEvent(Plant box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedTransplantFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedTransplantFormEvent(Box box, {pushAsReplacement = false})
+  MainNavigateToFeedTransplantFormEvent(Plant box, {pushAsReplacement = false})
       : super(box, pushAsReplacement: pushAsReplacement);
 }
 
 class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToFeedScheduleFormEvent(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -315,7 +315,7 @@ class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
 }
 
 class MainNavigateToTimelapseHowto extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToTimelapseHowto(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -325,7 +325,7 @@ class MainNavigateToTimelapseHowto extends MainNavigateToFeedFormEvent {
 }
 
 class MainNavigateToTimelapseSetup extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToTimelapseSetup(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -335,7 +335,7 @@ class MainNavigateToTimelapseSetup extends MainNavigateToFeedFormEvent {
 }
 
 class MainNavigateToTimelapseConnect extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToTimelapseConnect(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -345,7 +345,7 @@ class MainNavigateToTimelapseConnect extends MainNavigateToFeedFormEvent {
 }
 
 class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
-  final Box box;
+  final Plant box;
 
   MainNavigateToTimelapseViewer(this.box, {pushAsReplacement = false})
       : super(pushAsReplacement);
@@ -356,7 +356,7 @@ class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
 
 class MainNavigateToMetrics extends MainNavigateToFeedFormEvent {
   final List<charts.Series<Metric, DateTime>> graphData;
-  final Box box;
+  final Plant box;
 
   MainNavigateToMetrics(this.box, this.graphData, {pushAsReplacement = false})
       : super(pushAsReplacement);

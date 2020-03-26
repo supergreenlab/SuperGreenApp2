@@ -22,7 +22,7 @@ import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieButtonViewBox extends TowelieButton {
-  static Map<String, dynamic> createButton(Box box) => {
+  static Map<String, dynamic> createButton(Plant box) => {
         'ID': 'VIEW_BOX',
         'title': 'View box',
         'boxID': box.id,
@@ -32,8 +32,8 @@ class TowelieButtonViewBox extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
     if (event.params['ID'] == 'VIEW_BOX') {
-      final bdb = RelDB.get().boxesDAO;
-      Box box = await bdb.getBox(event.params['boxID']);
+      final bdb = RelDB.get().plantsDAO;
+      Plant box = await bdb.getPlant(event.params['boxID']);
       yield TowelieBlocStateHomeNavigation(HomeNavigateToBoxFeedEvent(box));
     }
   }

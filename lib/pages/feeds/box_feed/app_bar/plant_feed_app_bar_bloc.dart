@@ -26,71 +26,71 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-abstract class BoxFeedAppBarBlocEvent extends Equatable {}
+abstract class PlantFeedAppBarBlocEvent extends Equatable {}
 
-class BoxFeedAppBarBlocEventLoadChart extends BoxFeedAppBarBlocEvent {
+class PlantFeedAppBarBlocEventLoadChart extends PlantFeedAppBarBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class BoxFeedAppBarBlocEventReloadChart extends BoxFeedAppBarBlocEvent {
+class PlantFeedAppBarBlocEventReloadChart extends PlantFeedAppBarBlocEvent {
   final int rand = Random().nextInt(1 << 32);
 
   @override
   List<Object> get props => [rand];
 }
 
-abstract class BoxFeedAppBarBlocState extends Equatable {}
+abstract class PlantFeedAppBarBlocState extends Equatable {}
 
-class BoxFeedAppBarBlocStateInit extends BoxFeedAppBarBlocState {
+class PlantFeedAppBarBlocStateInit extends PlantFeedAppBarBlocState {
   @override
   List<Object> get props => [];
 }
 
-class BoxFeedAppBarBlocStateLoaded extends BoxFeedAppBarBlocState {
+class PlantFeedAppBarBlocStateLoaded extends PlantFeedAppBarBlocState {
   final List<charts.Series<Metric, DateTime>> graphData;
-  final Box box;
+  final Plant plant;
 
-  BoxFeedAppBarBlocStateLoaded(this.graphData, this.box);
+  PlantFeedAppBarBlocStateLoaded(this.graphData, this.plant);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [graphData, plant];
 }
 
-class BoxFeedAppBarBloc
-    extends Bloc<BoxFeedAppBarBlocEvent, BoxFeedAppBarBlocState> {
+class PlantFeedAppBarBloc
+    extends Bloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
   Timer _timer;
-  final Box box;
+  final Plant plant;
 
-  BoxFeedAppBarBloc(this.box) {
-    add(BoxFeedAppBarBlocEventLoadChart());
+  PlantFeedAppBarBloc(this.plant) {
+    add(PlantFeedAppBarBlocEventLoadChart());
   }
 
   @override
-  BoxFeedAppBarBlocState get initialState => BoxFeedAppBarBlocStateInit();
+  PlantFeedAppBarBlocState get initialState => PlantFeedAppBarBlocStateInit();
 
   @override
-  Stream<BoxFeedAppBarBlocState> mapEventToState(
-      BoxFeedAppBarBlocEvent event) async* {
-    if (event is BoxFeedAppBarBlocEventLoadChart) {
+  Stream<PlantFeedAppBarBlocState> mapEventToState(
+      PlantFeedAppBarBlocEvent event) async* {
+    if (event is PlantFeedAppBarBlocEventLoadChart) {
       try {
         List<charts.Series<Metric, DateTime>> graphData =
-            await updateChart(box);
-        yield BoxFeedAppBarBlocStateLoaded(graphData, box);
+            await updateChart(plant);
+        yield PlantFeedAppBarBlocStateLoaded(graphData, plant);
         _timer = Timer.periodic(Duration(seconds: 60), (timer) {
-          this.add(BoxFeedAppBarBlocEventReloadChart());
+          this.add(PlantFeedAppBarBlocEventReloadChart());
         });
       } catch (e) {}
-    } else if (event is BoxFeedAppBarBlocEventReloadChart) {
+    } else if (event is PlantFeedAppBarBlocEventReloadChart) {
       try {
         List<charts.Series<Metric, DateTime>> graphData =
-            await updateChart(box);
-        yield BoxFeedAppBarBlocStateLoaded(graphData, box);
+            await updateChart(plant);
+        yield PlantFeedAppBarBlocStateLoaded(graphData, plant);
       } catch (e) {}
     }
   }
 
-  Future<List<charts.Series<Metric, DateTime>>> updateChart(Box box) async {
+  Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant box) async {
     if (box.device == null) {
       await Future.delayed(Duration(milliseconds: 500));
       return _createDummyData();

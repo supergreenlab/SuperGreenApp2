@@ -26,8 +26,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_bloc.dart';
-import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_page.dart';
+import 'package:super_green_app/pages/feeds/box_feed/app_bar/plant_feed_app_bar_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/app_bar/plant_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/box_feed/box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
@@ -458,17 +458,17 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
   }
 
   Widget _boxList(BuildContext context, BoxFeedBlocState boxFeedState) {
-    return BlocBuilder<BoxDrawerBloc, BoxDrawerBlocState>(
-      bloc: BlocProvider.of<BoxDrawerBloc>(context),
+    return BlocBuilder<PlantDrawerBloc, PlantDrawerBlocState>(
+      bloc: BlocProvider.of<PlantDrawerBloc>(context),
       condition: (previousState, state) =>
-          state is BoxDrawerBlocStateLoadingBoxList ||
+          state is PlantDrawerBlocStateLoadingBoxList ||
           state is BoxDrawerBlocStateBoxListUpdated,
-      builder: (BuildContext context, BoxDrawerBlocState state) {
+      builder: (BuildContext context, PlantDrawerBlocState state) {
         Widget content;
-        if (state is BoxDrawerBlocStateLoadingBoxList) {
+        if (state is PlantDrawerBlocStateLoadingBoxList) {
           content = FullscreenLoading(title: 'Loading..');
         } else if (state is BoxDrawerBlocStateBoxListUpdated) {
-          List<Box> boxes = state.boxes;
+          List<Plant> boxes = state.boxes;
           content = ListView(
             children: boxes.map((b) {
               Widget item = ListTile(
@@ -534,7 +534,7 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
     );
   }
 
-  void _selectBox(BuildContext context, Box box) {
+  void _selectBox(BuildContext context, Plant box) {
     //ignore: close_sinks
     HomeNavigatorBloc navigatorBloc =
         BlocProvider.of<HomeNavigatorBloc>(context);
@@ -660,8 +660,8 @@ class _BoxFeedPageState extends State<BoxFeedPage> {
 
   Widget _renderGraphs(context, state) {
     return BlocProvider(
-      create: (context) => BoxFeedAppBarBloc(state.box),
-      child: BoxFeedAppBarPage(),
+      create: (context) => PlantFeedAppBarBloc(state.plant),
+      child: PlantFeedAppBarPage(),
     );
   }
 }

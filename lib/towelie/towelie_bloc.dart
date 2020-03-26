@@ -110,17 +110,17 @@ class TowelieBlocEventRoutePop extends TowelieBlocEvent {
   List<Object> get props => [rand, settings];
 }
 
-class TowelieBlocEventBoxCreated extends TowelieBlocEvent {
-  final Box box;
+class TowelieBlocEventPlantCreated extends TowelieBlocEvent {
+  final Plant box;
 
-  TowelieBlocEventBoxCreated(this.box);
+  TowelieBlocEventPlantCreated(this.box);
 
   @override
   List<Object> get props => [box];
 }
 
 class TowelieBlocEventFeedEntryCreated extends TowelieBlocEvent {
-  final Box box;
+  final Plant box;
   final FeedEntry feedEntry;
 
   TowelieBlocEventFeedEntryCreated(this.box, this.feedEntry);

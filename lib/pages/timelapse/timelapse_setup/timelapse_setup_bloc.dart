@@ -98,7 +98,7 @@ class TimelapseSetupBlocStateSettingParams extends TimelapseSetupBlocState {
 }
 
 class TimelapseSetupBlocStateDone extends TimelapseSetupBlocState {
-  final Box box;
+  final Plant box;
 
   TimelapseSetupBlocStateDone(this.box);
 
@@ -168,8 +168,8 @@ class TimelapseSetupBloc
           Uint8List.fromList(value.codeUnits), true);
       await peripheral.disconnectOrCancelConnection();
 
-      await RelDB.get().boxesDAO.addTimelapse(TimelapsesCompanion.insert(
-          box: _args.box.id,
+      await RelDB.get().plantsDAO.addTimelapse(TimelapsesCompanion.insert(
+          plant: _args.box.id,
           ssid: Value(event.ssid),
           password: Value(event.password),
           controllerID: Value(event.controllerID),

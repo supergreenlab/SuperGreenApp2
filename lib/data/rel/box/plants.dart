@@ -21,10 +21,9 @@ import 'dart:convert';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
-part 'boxes.g.dart';
+part 'plants.g.dart';
 
-@DataClassName("Box")
-class Boxes extends Table {
+class Plants extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
   IntColumn get device => integer().nullable()();
@@ -36,7 +35,7 @@ class Boxes extends Table {
 
 class ChartCaches extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get box => integer()();
+  IntColumn get plant => integer()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
   DateTimeColumn get date => dateTime()();
 
@@ -45,7 +44,7 @@ class ChartCaches extends Table {
 
 class Timelapses extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get box => integer()();
+  IntColumn get plant => integer()();
   TextColumn get ssid => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get password => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get controllerID =>
@@ -59,42 +58,42 @@ class Timelapses extends Table {
 }
 
 @UseDao(tables: [
-  Boxes,
+  Plants,
   ChartCaches,
   Timelapses,
 ], queries: {
-  'nBoxes': 'SELECT COUNT(*) FROM boxes',
-  'nTimelapses': 'SELECT COUNT(*) FROM timelapses WHERE box = ?',
+  'nPlants': 'SELECT COUNT(*) FROM plants',
+  'nTimelapses': 'SELECT COUNT(*) FROM timelapses WHERE plant = ?',
 })
-class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
-  BoxesDAO(RelDB db) : super(db);
+class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
+  PlantsDAO(RelDB db) : super(db);
 
-  Future<Box> getBox(int id) {
-    return (select(boxes)..where((b) => b.id.equals(id))).getSingle();
+  Future<Plant> getPlant(int id) {
+    return (select(plants)..where((p) => p.id.equals(id))).getSingle();
   }
 
-  Future<Box> getBoxWithFeed(int feedID) {
-    return (select(boxes)..where((b) => b.feed.equals(feedID))).getSingle();
+  Future<Plant> getPlantWithFeed(int feedID) {
+    return (select(plants)..where((p) => p.feed.equals(feedID))).getSingle();
   }
 
-  Stream<Box> watchBox(int id) {
-    return (select(boxes)..where((b) => b.id.equals(id))).watchSingle();
+  Stream<Plant> watchPlant(int id) {
+    return (select(plants)..where((p) => p.id.equals(id))).watchSingle();
   }
 
-  Future<int> addBox(BoxesCompanion box) {
-    return into(boxes).insert(box);
+  Future<int> addPlant(PlantsCompanion plant) {
+    return into(plants).insert(plant);
   }
 
-  Future updateBox(int boxID, BoxesCompanion box) {
-    return (update(boxes)..where((b) => b.id.equals(boxID))).write(box);
+  Future updatePlant(int plantID, PlantsCompanion plant) {
+    return (update(plants)..where((b) => b.id.equals(plantID))).write(plant);
   }
 
   Future cleanDeviceIDs(int deviceID) {
-    return (update(boxes)..where((b) => b.device.equals(deviceID))).write(BoxesCompanion(device: Value(null)));
+    return (update(plants)..where((b) => b.device.equals(deviceID))).write(PlantsCompanion(device: Value(null)));
   }
 
-  Stream<List<Box>> watchBoxes() {
-    return select(boxes).watch();
+  Stream<List<Plant>> watchPlants() {
+    return select(plants).watch();
   }
 
   Future<int> addChartCache(ChartCachesCompanion chartCache) {
@@ -103,7 +102,7 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
 
   Future<ChartCache> getChartCache(int boxID, String name) async {
     List<ChartCache> cs = await (select(chartCaches)
-          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
+          ..where((c) => c.plant.equals(boxID) & c.name.equals(name)))
         .get();
     if (cs.length == 0) {
       return null;
@@ -113,12 +112,12 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
 
   Stream<ChartCache> watchChartCache(int boxID, String name) {
     return (select(chartCaches)
-          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
+          ..where((c) => c.plant.equals(boxID) & c.name.equals(name)))
         .watchSingle();
   }
 
-  Future deleteChartCacheForBox(int boxID) {
-    return (delete(chartCaches)..where((cc) => cc.box.equals(boxID))).go();
+  Future deleteChartCacheForPlant(int boxID) {
+    return (delete(chartCaches)..where((cc) => cc.plant.equals(boxID))).go();
   }
 
   Future deleteChartCache(ChartCache chartCache) {
@@ -126,14 +125,15 @@ class BoxesDAO extends DatabaseAccessor<RelDB> with _$BoxesDAOMixin {
   }
 
   Future<List<Timelapse>> getTimelapses(int boxID) {
-    return (select(timelapses)..where((t) => t.box.equals(boxID))).get();
+    return (select(timelapses)..where((t) => t.plant.equals(boxID))).get();
   }
 
   Future<int> addTimelapse(TimelapsesCompanion timelapse) {
     return into(timelapses).insert(timelapse);
   }
 
-  Map<String, dynamic> boxSettings(Box box) {
+  // TODO move this to the kv store, separate from the plant concept
+  Map<String, dynamic> boxSettings(Plant box) {
     final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
     // TODO make actual enums or constants
     return {

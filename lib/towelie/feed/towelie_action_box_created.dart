@@ -27,16 +27,16 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class TowelieActionBoxCreated extends TowelieAction {
   @override
   Stream<TowelieBlocState> eventReceived(TowelieBlocEvent event) async* {
-    if (event is TowelieBlocEventBoxCreated) {
+    if (event is TowelieBlocEventPlantCreated) {
       final fdb = RelDB.get().feedsDAO;
-      final bdb = RelDB.get().boxesDAO;
+      final bdb = RelDB.get().plantsDAO;
       Feed feed = await fdb.getFeed(event.box.feed);
       await TowelieCardsFactory.createWelcomeBoxCard(feed);
       Timer(Duration(seconds: 10), () async {
         await TowelieCardsFactory.createBoxAutoOrPhoto(feed);
       });
-      int nBoxes = await bdb.nBoxes().getSingle();
-      if (nBoxes == 1) {
+      int nPlants = await bdb.nPlants().getSingle();
+      if (nPlants == 1) {
         Feed sglFeed = await fdb.getFeed(1);
         await TowelieCardsFactory.createBoxCreatedCard(sglFeed, event.box);
       }

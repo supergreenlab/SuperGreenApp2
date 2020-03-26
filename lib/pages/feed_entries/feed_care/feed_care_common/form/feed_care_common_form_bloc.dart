@@ -51,7 +51,7 @@ class FeedCareCommonFormBlocStateLoading extends FeedCareCommonFormBlocState {
 }
 
 class FeedCareCommonFormBlocStateDone extends FeedCareCommonFormBlocState {
-  final Box box;
+  final Plant box;
   final FeedEntry feedEntry;
 
   FeedCareCommonFormBlocStateDone(this.box, this.feedEntry);

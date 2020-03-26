@@ -22,57 +22,57 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
-abstract class BoxInfosBlocEvent extends Equatable {}
+abstract class PlantInfosBlocEvent extends Equatable {}
 
-class BoxInfosBlocEventCreateBox extends BoxInfosBlocEvent {
+class PlantInfosBlocEventCreateBox extends PlantInfosBlocEvent {
   final String name;
   final Device device;
   final int deviceBox;
-  BoxInfosBlocEventCreateBox(this.name, {this.device, this.deviceBox});
+  PlantInfosBlocEventCreateBox(this.name, {this.device, this.deviceBox});
 
   @override
   List<Object> get props => [name, device, deviceBox];
 }
 
-class BoxInfosBlocState extends Equatable {
+class PlantInfosBlocState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class BoxInfosBlocStateDone extends BoxInfosBlocState {
-  final Box box;
+class PlantInfosBlocStateDone extends PlantInfosBlocState {
+  final Plant plant;
   final Device device;
   final int deviceBox;
-  BoxInfosBlocStateDone(this.box, {this.device, this.deviceBox});
+  PlantInfosBlocStateDone(this.plant, {this.device, this.deviceBox});
 
   @override
-  List<Object> get props => [box, device, deviceBox];
+  List<Object> get props => [plant, device, deviceBox];
 }
 
-class BoxInfosBloc extends Bloc<BoxInfosBlocEvent, BoxInfosBlocState> {
+class PlantInfosBloc extends Bloc<PlantInfosBlocEvent, PlantInfosBlocState> {
   @override
-  BoxInfosBlocState get initialState => BoxInfosBlocState();
+  PlantInfosBlocState get initialState => PlantInfosBlocState();
 
   @override
-  Stream<BoxInfosBlocState> mapEventToState(BoxInfosBlocEvent event) async* {
-    if (event is BoxInfosBlocEventCreateBox) {
-      final bdb = RelDB.get().boxesDAO;
+  Stream<PlantInfosBlocState> mapEventToState(PlantInfosBlocEvent event) async* {
+    if (event is PlantInfosBlocEventCreateBox) {
+      final bdb = RelDB.get().plantsDAO;
       final fdb = RelDB.get().feedsDAO;
       final feed = FeedsCompanion.insert(name: event.name);
       final feedID = await fdb.addFeed(feed);
-      BoxesCompanion box;
+      PlantsCompanion box;
       if (event.device == null || event.deviceBox == null) {
-        box = BoxesCompanion.insert(feed: feedID, name: event.name);
+        box = PlantsCompanion.insert(feed: feedID, name: event.name);
       } else {
-        box = BoxesCompanion.insert(
+        box = PlantsCompanion.insert(
             feed: feedID,
             name: event.name,
             device: Value(event.device.id),
             deviceBox: Value(event.deviceBox));
       }
-      final boxID = await bdb.addBox(box);
-      final b = await bdb.getBox(boxID);
-      yield BoxInfosBlocStateDone(b,
+      final boxID = await bdb.addPlant(box);
+      final b = await bdb.getPlant(boxID);
+      yield PlantInfosBlocStateDone(b,
           device: event.device, deviceBox: event.deviceBox);
     }
   }

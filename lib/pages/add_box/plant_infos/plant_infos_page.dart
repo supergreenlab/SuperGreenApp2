@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_box/box_infos/box_infos_bloc.dart';
+import 'package:super_green_app/pages/add_box/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/add_box/select_device/select_device_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -31,12 +31,12 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
-class BoxInfosPage extends StatefulWidget {
+class PlantInfosPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => BoxInfosPageState();
+  State<StatefulWidget> createState() => PlantInfosPageState();
 }
 
-class BoxInfosPageState extends State<BoxInfosPage> {
+class PlantInfosPageState extends State<PlantInfosPage> {
   final _nameController = TextEditingController();
 
   KeyboardVisibilityNotification _keyboardVisibility =
@@ -66,22 +66,22 @@ class BoxInfosPageState extends State<BoxInfosPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<BoxInfosBloc>(context),
-      listener: (BuildContext context, BoxInfosBlocState state) async {
-        if (state is BoxInfosBlocStateDone) {
+      bloc: BlocProvider.of<PlantInfosBloc>(context),
+      listener: (BuildContext context, PlantInfosBlocState state) async {
+        if (state is PlantInfosBlocStateDone) {
           BlocProvider.of<TowelieBloc>(context)
-              .add(TowelieBlocEventBoxCreated(state.box));
+              .add(TowelieBlocEventPlantCreated(state.plant));
           Timer(const Duration(milliseconds: 1500), () {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop());
           });
         }
       },
-      child: BlocBuilder<BoxInfosBloc, BoxInfosBlocState>(
-          bloc: BlocProvider.of<BoxInfosBloc>(context),
+      child: BlocBuilder<PlantInfosBloc, PlantInfosBlocState>(
+          bloc: BlocProvider.of<PlantInfosBloc>(context),
           builder: (context, state) {
             Widget body;
-            if (state is BoxInfosBlocStateDone) {
+            if (state is PlantInfosBlocStateDone) {
               body = _renderDone(state);
             } else {
               body = _renderForm();
@@ -89,7 +89,7 @@ class BoxInfosPageState extends State<BoxInfosPage> {
             return Scaffold(
                 appBar: SGLAppBar(
                   'Plant creation',
-                  hideBackButton: state is BoxInfosBlocStateDone,
+                  hideBackButton: state is PlantInfosBlocStateDone,
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
@@ -101,13 +101,13 @@ class BoxInfosPageState extends State<BoxInfosPage> {
     );
   }
 
-  Widget _renderDone(BoxInfosBlocStateDone state) {
+  Widget _renderDone(PlantInfosBlocStateDone state) {
     String subtitle;
     if (state.device == null && state.deviceBox == null) {
-      subtitle = 'Box ${_nameController.value.text} created:)';
+      subtitle = 'Plant ${_nameController.value.text} created:)';
     } else {
       subtitle =
-          'Box ${_nameController.value.text} on plant ${state.device.name} created:)';
+          'Plant ${_nameController.value.text} on controller ${state.device.name} created:)';
     }
     return Fullscreen(
         title: 'Done!',
@@ -167,13 +167,13 @@ class BoxInfosPageState extends State<BoxInfosPage> {
         .add(MainNavigateToSelectBoxDeviceEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
-        BlocProvider.of<BoxInfosBloc>(context).add(BoxInfosBlocEventCreateBox(
+        BlocProvider.of<PlantInfosBloc>(context).add(PlantInfosBlocEventCreateBox(
             _nameController.text,
             device: res.device,
             deviceBox: res.deviceBox));
       } else if (res == false) {
-        BlocProvider.of<BoxInfosBloc>(context)
-            .add(BoxInfosBlocEventCreateBox(_nameController.text));
+        BlocProvider.of<PlantInfosBloc>(context)
+            .add(PlantInfosBlocEventCreateBox(_nameController.text));
       }
     }));
   }

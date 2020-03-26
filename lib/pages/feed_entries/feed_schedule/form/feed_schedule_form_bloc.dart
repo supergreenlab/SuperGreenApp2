@@ -128,7 +128,7 @@ class FeedScheduleFormBloc
     if (event is FeedScheduleFormBlocEventInit) {
       final db = RelDB.get();
       _device = await db.devicesDAO.getDevice(_args.box.device);
-      Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
+      Map<String, dynamic> settings = db.plantsDAO.boxSettings(_args.box);
       _initialSchedule = _schedule = settings['schedule'];
       _initialSchedules = _schedules = settings['schedules'];
       yield FeedScheduleFormBlocStateLoaded(
@@ -165,12 +165,12 @@ class FeedScheduleFormBloc
             timezone(_schedules[_schedule]['OFF_HOUR']));
       }
 
-      final Map<String, dynamic> settings = db.boxesDAO.boxSettings(_args.box);
+      final Map<String, dynamic> settings = db.plantsDAO.boxSettings(_args.box);
       settings['phase'] = _schedule;
       settings['schedule'] = _schedule;
       settings['schedules'] = _schedules;
-      await db.boxesDAO.updateBox(_args.box.id,
-          BoxesCompanion(settings: Value(JsonEncoder().convert(settings))));
+      await db.plantsDAO.updatePlant(_args.box.id,
+          PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
 
       if (_schedule == 'BLOOM') {
         await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(

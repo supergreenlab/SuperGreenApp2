@@ -96,7 +96,7 @@ class FeedLightFormBlocStateCancelling extends FeedLightFormBlocState {
 }
 
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
-  final Box box;
+  final Plant box;
   final FeedEntry feedEntry;
 
   FeedLightFormBlocStateDone(this.box, this.feedEntry);

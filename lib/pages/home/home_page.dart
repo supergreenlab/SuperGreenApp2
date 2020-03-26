@@ -239,8 +239,8 @@ class HomePage extends StatelessWidget {
         settings: settings,
         builder: (context) => MultiBlocProvider(
               providers: [
-                BlocProvider<BoxDrawerBloc>(
-                    create: (context) => BoxDrawerBloc()),
+                BlocProvider<PlantDrawerBloc>(
+                    create: (context) => PlantDrawerBloc()),
                 BlocProvider<BoxFeedBloc>(
                   create: (context) => BoxFeedBloc(event),
                 )

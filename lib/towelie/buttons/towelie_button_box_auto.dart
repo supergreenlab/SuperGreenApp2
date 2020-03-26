@@ -37,12 +37,12 @@ class TowelieButtonBoxAuto extends TowelieButton {
       TowelieBlocEventCardButtonPressed event) async* {
     if (event.params['ID'] == 'BOX_AUTO') {
       final db = RelDB.get();
-      Box box = await db.boxesDAO.getBoxWithFeed(event.feed.id);
-      Map<String, dynamic> settings = db.boxesDAO.boxSettings(box);
+      Plant box = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+      Map<String, dynamic> settings = db.plantsDAO.boxSettings(box);
       settings['plantType'] = 'AUTO';
       settings['schedule'] = 'AUTO';
-      await db.boxesDAO.updateBox(box.id,
-          BoxesCompanion(settings: Value(JsonEncoder().convert(settings))));
+      await db.plantsDAO.updatePlant(box.id,
+          PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
       await TowelieCardsFactory.createBoxAlreadyStartedCard(event.feed);
       await removeButtons(event.feedEntry);
     }

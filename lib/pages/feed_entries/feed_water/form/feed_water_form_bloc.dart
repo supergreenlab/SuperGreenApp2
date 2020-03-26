@@ -44,7 +44,7 @@ class FeedWaterFormBlocState extends Equatable {
 }
 
 class FeedWaterFormBlocStateDone extends FeedWaterFormBlocState {
-  final Box box;
+  final Plant box;
   final FeedEntry feedEntry;
 
   FeedWaterFormBlocStateDone(this.box, this.feedEntry);

@@ -985,26 +985,26 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   }
 }
 
-class Box extends DataClass implements Insertable<Box> {
+class Plant extends DataClass implements Insertable<Plant> {
   final int id;
   final int feed;
   final int device;
   final int deviceBox;
   final String name;
   final String settings;
-  Box(
+  Plant(
       {@required this.id,
       @required this.feed,
       this.device,
       this.deviceBox,
       @required this.name,
       @required this.settings});
-  factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory Plant.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    return Box(
+    return Plant(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
       device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
@@ -1015,10 +1015,10 @@ class Box extends DataClass implements Insertable<Box> {
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
     );
   }
-  factory Box.fromJson(Map<String, dynamic> json,
+  factory Plant.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Box(
+    return Plant(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
       device: serializer.fromJson<int>(json['device']),
@@ -1041,8 +1041,8 @@ class Box extends DataClass implements Insertable<Box> {
   }
 
   @override
-  BoxesCompanion createCompanion(bool nullToAbsent) {
-    return BoxesCompanion(
+  PlantsCompanion createCompanion(bool nullToAbsent) {
+    return PlantsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       device:
@@ -1057,14 +1057,14 @@ class Box extends DataClass implements Insertable<Box> {
     );
   }
 
-  Box copyWith(
+  Plant copyWith(
           {int id,
           int feed,
           int device,
           int deviceBox,
           String name,
           String settings}) =>
-      Box(
+      Plant(
         id: id ?? this.id,
         feed: feed ?? this.feed,
         device: device ?? this.device,
@@ -1074,7 +1074,7 @@ class Box extends DataClass implements Insertable<Box> {
       );
   @override
   String toString() {
-    return (StringBuffer('Box(')
+    return (StringBuffer('Plant(')
           ..write('id: $id, ')
           ..write('feed: $feed, ')
           ..write('device: $device, ')
@@ -1097,7 +1097,7 @@ class Box extends DataClass implements Insertable<Box> {
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is Box &&
+      (other is Plant &&
           other.id == this.id &&
           other.feed == this.feed &&
           other.device == this.device &&
@@ -1106,14 +1106,14 @@ class Box extends DataClass implements Insertable<Box> {
           other.settings == this.settings);
 }
 
-class BoxesCompanion extends UpdateCompanion<Box> {
+class PlantsCompanion extends UpdateCompanion<Plant> {
   final Value<int> id;
   final Value<int> feed;
   final Value<int> device;
   final Value<int> deviceBox;
   final Value<String> name;
   final Value<String> settings;
-  const BoxesCompanion({
+  const PlantsCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
     this.device = const Value.absent(),
@@ -1121,7 +1121,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.name = const Value.absent(),
     this.settings = const Value.absent(),
   });
-  BoxesCompanion.insert({
+  PlantsCompanion.insert({
     this.id = const Value.absent(),
     @required int feed,
     this.device = const Value.absent(),
@@ -1130,14 +1130,14 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.settings = const Value.absent(),
   })  : feed = Value(feed),
         name = Value(name);
-  BoxesCompanion copyWith(
+  PlantsCompanion copyWith(
       {Value<int> id,
       Value<int> feed,
       Value<int> device,
       Value<int> deviceBox,
       Value<String> name,
       Value<String> settings}) {
-    return BoxesCompanion(
+    return PlantsCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
       device: device ?? this.device,
@@ -1148,10 +1148,10 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   }
 }
 
-class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
+class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   final GeneratedDatabase _db;
   final String _alias;
-  $BoxesTable(this._db, [this._alias]);
+  $PlantsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -1219,13 +1219,13 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   List<GeneratedColumn> get $columns =>
       [id, feed, device, deviceBox, name, settings];
   @override
-  $BoxesTable get asDslTable => this;
+  $PlantsTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'boxes';
+  String get $tableName => _alias ?? 'plants';
   @override
-  final String actualTableName = 'boxes';
+  final String actualTableName = 'plants';
   @override
-  VerificationContext validateIntegrity(BoxesCompanion d,
+  VerificationContext validateIntegrity(PlantsCompanion d,
       {bool isInserting = false}) {
     final context = VerificationContext();
     if (d.id.present) {
@@ -1261,13 +1261,13 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Box map(Map<String, dynamic> data, {String tablePrefix}) {
+  Plant map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Box.fromData(data, _db, prefix: effectivePrefix);
+    return Plant.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  Map<String, Variable> entityToSql(BoxesCompanion d) {
+  Map<String, Variable> entityToSql(PlantsCompanion d) {
     final map = <String, Variable>{};
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
@@ -1291,20 +1291,20 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   }
 
   @override
-  $BoxesTable createAlias(String alias) {
-    return $BoxesTable(_db, alias);
+  $PlantsTable createAlias(String alias) {
+    return $PlantsTable(_db, alias);
   }
 }
 
 class ChartCache extends DataClass implements Insertable<ChartCache> {
   final int id;
-  final int box;
+  final int plant;
   final String name;
   final DateTime date;
   final String values;
   ChartCache(
       {@required this.id,
-      @required this.box,
+      @required this.plant,
       @required this.name,
       @required this.date,
       @required this.values});
@@ -1316,7 +1316,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return ChartCache(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      plant: intType.mapFromDatabaseResponse(data['${effectivePrefix}plant']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
@@ -1329,7 +1329,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return ChartCache(
       id: serializer.fromJson<int>(json['id']),
-      box: serializer.fromJson<int>(json['box']),
+      plant: serializer.fromJson<int>(json['plant']),
       name: serializer.fromJson<String>(json['name']),
       date: serializer.fromJson<DateTime>(json['date']),
       values: serializer.fromJson<String>(json['values']),
@@ -1340,7 +1340,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'box': serializer.toJson<int>(box),
+      'plant': serializer.toJson<int>(plant),
       'name': serializer.toJson<String>(name),
       'date': serializer.toJson<DateTime>(date),
       'values': serializer.toJson<String>(values),
@@ -1351,7 +1351,8 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   ChartCachesCompanion createCompanion(bool nullToAbsent) {
     return ChartCachesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
+      plant:
+          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       values:
@@ -1360,10 +1361,10 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   }
 
   ChartCache copyWith(
-          {int id, int box, String name, DateTime date, String values}) =>
+          {int id, int plant, String name, DateTime date, String values}) =>
       ChartCache(
         id: id ?? this.id,
-        box: box ?? this.box,
+        plant: plant ?? this.plant,
         name: name ?? this.name,
         date: date ?? this.date,
         values: values ?? this.values,
@@ -1372,7 +1373,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   String toString() {
     return (StringBuffer('ChartCache(')
           ..write('id: $id, ')
-          ..write('box: $box, ')
+          ..write('plant: $plant, ')
           ..write('name: $name, ')
           ..write('date: $date, ')
           ..write('values: $values')
@@ -1383,14 +1384,14 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(box.hashCode,
+      $mrjc(plant.hashCode,
           $mrjc(name.hashCode, $mrjc(date.hashCode, values.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is ChartCache &&
           other.id == this.id &&
-          other.box == this.box &&
+          other.plant == this.plant &&
           other.name == this.name &&
           other.date == this.date &&
           other.values == this.values);
@@ -1398,35 +1399,35 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
 
 class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   final Value<int> id;
-  final Value<int> box;
+  final Value<int> plant;
   final Value<String> name;
   final Value<DateTime> date;
   final Value<String> values;
   const ChartCachesCompanion({
     this.id = const Value.absent(),
-    this.box = const Value.absent(),
+    this.plant = const Value.absent(),
     this.name = const Value.absent(),
     this.date = const Value.absent(),
     this.values = const Value.absent(),
   });
   ChartCachesCompanion.insert({
     this.id = const Value.absent(),
-    @required int box,
+    @required int plant,
     @required String name,
     @required DateTime date,
     this.values = const Value.absent(),
-  })  : box = Value(box),
+  })  : plant = Value(plant),
         name = Value(name),
         date = Value(date);
   ChartCachesCompanion copyWith(
       {Value<int> id,
-      Value<int> box,
+      Value<int> plant,
       Value<String> name,
       Value<DateTime> date,
       Value<String> values}) {
     return ChartCachesCompanion(
       id: id ?? this.id,
-      box: box ?? this.box,
+      plant: plant ?? this.plant,
       name: name ?? this.name,
       date: date ?? this.date,
       values: values ?? this.values,
@@ -1448,13 +1449,13 @@ class $ChartCachesTable extends ChartCaches
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
-  final VerificationMeta _boxMeta = const VerificationMeta('box');
-  GeneratedIntColumn _box;
+  final VerificationMeta _plantMeta = const VerificationMeta('plant');
+  GeneratedIntColumn _plant;
   @override
-  GeneratedIntColumn get box => _box ??= _constructBox();
-  GeneratedIntColumn _constructBox() {
+  GeneratedIntColumn get plant => _plant ??= _constructPlant();
+  GeneratedIntColumn _constructPlant() {
     return GeneratedIntColumn(
-      'box',
+      'plant',
       $tableName,
       false,
     );
@@ -1491,7 +1492,7 @@ class $ChartCachesTable extends ChartCaches
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, box, name, date, values];
+  List<GeneratedColumn> get $columns => [id, plant, name, date, values];
   @override
   $ChartCachesTable get asDslTable => this;
   @override
@@ -1505,10 +1506,11 @@ class $ChartCachesTable extends ChartCaches
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
     }
-    if (d.box.present) {
-      context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
+    if (d.plant.present) {
+      context.handle(
+          _plantMeta, plant.isAcceptableValue(d.plant.value, _plantMeta));
     } else if (isInserting) {
-      context.missing(_boxMeta);
+      context.missing(_plantMeta);
     }
     if (d.name.present) {
       context.handle(
@@ -1543,8 +1545,8 @@ class $ChartCachesTable extends ChartCaches
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
     }
-    if (d.box.present) {
-      map['box'] = Variable<int, IntType>(d.box.value);
+    if (d.plant.present) {
+      map['plant'] = Variable<int, IntType>(d.plant.value);
     }
     if (d.name.present) {
       map['name'] = Variable<String, StringType>(d.name.value);
@@ -1566,7 +1568,7 @@ class $ChartCachesTable extends ChartCaches
 
 class Timelapse extends DataClass implements Insertable<Timelapse> {
   final int id;
-  final int box;
+  final int plant;
   final String ssid;
   final String password;
   final String controllerID;
@@ -1577,7 +1579,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   final String uploadName;
   Timelapse(
       {@required this.id,
-      @required this.box,
+      @required this.plant,
       this.ssid,
       this.password,
       this.controllerID,
@@ -1593,7 +1595,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     final stringType = db.typeSystem.forDartType<String>();
     return Timelapse(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      plant: intType.mapFromDatabaseResponse(data['${effectivePrefix}plant']),
       ssid: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
       password: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}password']),
@@ -1615,7 +1617,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Timelapse(
       id: serializer.fromJson<int>(json['id']),
-      box: serializer.fromJson<int>(json['box']),
+      plant: serializer.fromJson<int>(json['plant']),
       ssid: serializer.fromJson<String>(json['ssid']),
       password: serializer.fromJson<String>(json['password']),
       controllerID: serializer.fromJson<String>(json['controllerID']),
@@ -1631,7 +1633,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'box': serializer.toJson<int>(box),
+      'plant': serializer.toJson<int>(plant),
       'ssid': serializer.toJson<String>(ssid),
       'password': serializer.toJson<String>(password),
       'controllerID': serializer.toJson<String>(controllerID),
@@ -1647,7 +1649,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   TimelapsesCompanion createCompanion(bool nullToAbsent) {
     return TimelapsesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
+      plant:
+          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
       ssid: ssid == null && nullToAbsent ? const Value.absent() : Value(ssid),
       password: password == null && nullToAbsent
           ? const Value.absent()
@@ -1671,7 +1674,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
 
   Timelapse copyWith(
           {int id,
-          int box,
+          int plant,
           String ssid,
           String password,
           String controllerID,
@@ -1682,7 +1685,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
           String uploadName}) =>
       Timelapse(
         id: id ?? this.id,
-        box: box ?? this.box,
+        plant: plant ?? this.plant,
         ssid: ssid ?? this.ssid,
         password: password ?? this.password,
         controllerID: controllerID ?? this.controllerID,
@@ -1696,7 +1699,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   String toString() {
     return (StringBuffer('Timelapse(')
           ..write('id: $id, ')
-          ..write('box: $box, ')
+          ..write('plant: $plant, ')
           ..write('ssid: $ssid, ')
           ..write('password: $password, ')
           ..write('controllerID: $controllerID, ')
@@ -1713,7 +1716,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          box.hashCode,
+          plant.hashCode,
           $mrjc(
               ssid.hashCode,
               $mrjc(
@@ -1733,7 +1736,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       identical(this, other) ||
       (other is Timelapse &&
           other.id == this.id &&
-          other.box == this.box &&
+          other.plant == this.plant &&
           other.ssid == this.ssid &&
           other.password == this.password &&
           other.controllerID == this.controllerID &&
@@ -1746,7 +1749,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
 
 class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   final Value<int> id;
-  final Value<int> box;
+  final Value<int> plant;
   final Value<String> ssid;
   final Value<String> password;
   final Value<String> controllerID;
@@ -1757,7 +1760,7 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   final Value<String> uploadName;
   const TimelapsesCompanion({
     this.id = const Value.absent(),
-    this.box = const Value.absent(),
+    this.plant = const Value.absent(),
     this.ssid = const Value.absent(),
     this.password = const Value.absent(),
     this.controllerID = const Value.absent(),
@@ -1769,7 +1772,7 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   });
   TimelapsesCompanion.insert({
     this.id = const Value.absent(),
-    @required int box,
+    @required int plant,
     this.ssid = const Value.absent(),
     this.password = const Value.absent(),
     this.controllerID = const Value.absent(),
@@ -1778,10 +1781,10 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     this.strain = const Value.absent(),
     this.dropboxToken = const Value.absent(),
     this.uploadName = const Value.absent(),
-  }) : box = Value(box);
+  }) : plant = Value(plant);
   TimelapsesCompanion copyWith(
       {Value<int> id,
-      Value<int> box,
+      Value<int> plant,
       Value<String> ssid,
       Value<String> password,
       Value<String> controllerID,
@@ -1792,7 +1795,7 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
       Value<String> uploadName}) {
     return TimelapsesCompanion(
       id: id ?? this.id,
-      box: box ?? this.box,
+      plant: plant ?? this.plant,
       ssid: ssid ?? this.ssid,
       password: password ?? this.password,
       controllerID: controllerID ?? this.controllerID,
@@ -1819,13 +1822,13 @@ class $TimelapsesTable extends Timelapses
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
-  final VerificationMeta _boxMeta = const VerificationMeta('box');
-  GeneratedIntColumn _box;
+  final VerificationMeta _plantMeta = const VerificationMeta('plant');
+  GeneratedIntColumn _plant;
   @override
-  GeneratedIntColumn get box => _box ??= _constructBox();
-  GeneratedIntColumn _constructBox() {
+  GeneratedIntColumn get plant => _plant ??= _constructPlant();
+  GeneratedIntColumn _constructPlant() {
     return GeneratedIntColumn(
-      'box',
+      'plant',
       $tableName,
       false,
     );
@@ -1910,7 +1913,7 @@ class $TimelapsesTable extends Timelapses
   @override
   List<GeneratedColumn> get $columns => [
         id,
-        box,
+        plant,
         ssid,
         password,
         controllerID,
@@ -1933,10 +1936,11 @@ class $TimelapsesTable extends Timelapses
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
     }
-    if (d.box.present) {
-      context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
+    if (d.plant.present) {
+      context.handle(
+          _plantMeta, plant.isAcceptableValue(d.plant.value, _plantMeta));
     } else if (isInserting) {
-      context.missing(_boxMeta);
+      context.missing(_plantMeta);
     }
     if (d.ssid.present) {
       context.handle(
@@ -1991,8 +1995,8 @@ class $TimelapsesTable extends Timelapses
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
     }
-    if (d.box.present) {
-      map['box'] = Variable<int, IntType>(d.box.value);
+    if (d.plant.present) {
+      map['plant'] = Variable<int, IntType>(d.plant.value);
     }
     if (d.ssid.present) {
       map['ssid'] = Variable<String, StringType>(d.ssid.value);
@@ -2786,8 +2790,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $ModulesTable get modules => _modules ??= $ModulesTable(this);
   $ParamsTable _params;
   $ParamsTable get params => _params ??= $ParamsTable(this);
-  $BoxesTable _boxes;
-  $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
+  $PlantsTable _plants;
+  $PlantsTable get plants => _plants ??= $PlantsTable(this);
   $ChartCachesTable _chartCaches;
   $ChartCachesTable get chartCaches => _chartCaches ??= $ChartCachesTable(this);
   $TimelapsesTable _timelapses;
@@ -2800,8 +2804,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $FeedMediasTable get feedMedias => _feedMedias ??= $FeedMediasTable(this);
   DevicesDAO _devicesDAO;
   DevicesDAO get devicesDAO => _devicesDAO ??= DevicesDAO(this as RelDB);
-  BoxesDAO _boxesDAO;
-  BoxesDAO get boxesDAO => _boxesDAO ??= BoxesDAO(this as RelDB);
+  PlantsDAO _plantsDAO;
+  PlantsDAO get plantsDAO => _plantsDAO ??= PlantsDAO(this as RelDB);
   FeedsDAO _feedsDAO;
   FeedsDAO get feedsDAO => _feedsDAO ??= FeedsDAO(this as RelDB);
   @override
@@ -2811,7 +2815,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         devices,
         modules,
         params,
-        boxes,
+        plants,
         chartCaches,
         timelapses,
         feeds,

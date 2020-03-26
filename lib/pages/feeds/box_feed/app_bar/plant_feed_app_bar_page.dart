@@ -4,22 +4,22 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:super_green_app/data/backend/time_series/time_series.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/box_feed/app_bar/box_feed_app_bar_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class BoxFeedAppBarPage extends StatelessWidget {
+class PlantFeedAppBarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BoxFeedAppBarBloc, BoxFeedAppBarBlocState>(
-      builder: (BuildContext context, BoxFeedAppBarBlocState state) {
+    return BlocBuilder<PlantFeedAppBarBloc, PlantFeedAppBarBlocState>(
+      builder: (BuildContext context, PlantFeedAppBarBlocState state) {
         Widget body;
-        if (state is BoxFeedAppBarBlocStateInit) {
+        if (state is PlantFeedAppBarBlocStateInit) {
           body = FullscreenLoading(
             title: 'Loading..',
             textColor: Colors.white,
           );
-        } else if (state is BoxFeedAppBarBlocStateLoaded) {
+        } else if (state is PlantFeedAppBarBlocStateLoaded) {
           if (state.graphData[0].data.length == 0 &&
               state.graphData[1].data.length == 0 &&
               state.graphData[2].data.length == 0) {
@@ -49,7 +49,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
   }
 
   Widget _renderGraphs(
-      BuildContext context, BoxFeedAppBarBlocStateLoaded state) {
+      BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
     Widget graphs = Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -78,7 +78,7 @@ class BoxFeedAppBarPage extends StatelessWidget {
                   icon: Icon(Icons.fullscreen, color: Colors.white70, size: 30),
                   onPressed: () {
                     BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToMetrics(state.box, state.graphData));
+                        .add(MainNavigateToMetrics(state.plant, state.graphData));
                   })),
         ],
       ),

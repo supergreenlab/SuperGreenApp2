@@ -25,7 +25,7 @@ class TimelapseViewerBlocStateLoading extends TimelapseViewerBlocState {
 }
 
 class TimelapseViewerBlocStateLoaded extends TimelapseViewerBlocState {
-  final Box box;
+  final Plant box;
   final List<Timelapse> timelapses;
   final List<Uint8List> images;
 
@@ -52,7 +52,7 @@ class TimelapseViewerBloc
     if (event is TimelapseViewerBlocEventInit) {
       yield TimelapseViewerBlocStateLoading();
       List<Timelapse> timelapses =
-          await RelDB.get().boxesDAO.getTimelapses(_args.box.id);
+          await RelDB.get().plantsDAO.getTimelapses(_args.box.id);
       List<Uint8List> pictures = [];
       for (int i = 0; i < timelapses.length; ++i) {
         Response res = await post(

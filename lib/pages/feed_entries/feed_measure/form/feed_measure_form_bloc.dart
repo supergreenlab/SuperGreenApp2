@@ -70,7 +70,7 @@ class FeedMeasureFormBlocStateLoaded extends FeedMeasureFormBlocState {
 }
 
 class FeedMeasureFormBlocStateDone extends FeedMeasureFormBlocState {
-  final Box box;
+  final Plant box;
   final FeedEntry feedEntry;
 
   FeedMeasureFormBlocStateDone(this.box, this.feedEntry);
