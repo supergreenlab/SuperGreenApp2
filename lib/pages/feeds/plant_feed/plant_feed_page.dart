@@ -449,7 +449,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   children: <Widget>[
                     ListTile(
                         leading: Icon(Icons.add_circle),
-                        title: Text('Add new boplantx'),
+                        title: Text('Add new plant'),
                         onTap: () => _onAddPlant(context)),
                   ],
                 ))))
