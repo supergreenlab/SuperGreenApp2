@@ -51,16 +51,22 @@ class FeedsAPI {
   }
 
   Future<String> createUserEnd() async {
+    return await _insert('/userend', {});
+  }
+
+  Future<String> _insert(String path, Map<String, dynamic> obj) async {
     Response resp = await post('$_serverHost/userend',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
         },
-        body: '{}');
+        body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {
       throw 'createUserEnd failed';
     }
-    AppDB().setJWT(resp.headers['x-sgl-token']);
+    if (resp.headers['x-sgl-token'] != null) {
+      AppDB().setJWT(resp.headers['x-sgl-token']);
+    }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data['id'];
   }
