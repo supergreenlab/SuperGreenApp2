@@ -94,6 +94,7 @@ flutter:
     - assets/feed_card/
     - assets/box_setup/
     - assets/home/
+    - assets/settings/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

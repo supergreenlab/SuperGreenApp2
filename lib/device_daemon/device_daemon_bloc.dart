@@ -57,6 +57,7 @@ class DeviceDaemonBloc
     extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
   Timer _timer;
   List<Device> _devices = [];
+  Map<int, bool> _deviceWorker = {};
 
   DeviceDaemonBloc() {
     add(DeviceDaemonBlocEventInit());
@@ -69,7 +70,21 @@ class DeviceDaemonBloc
     });
   }
 
-  Map<int, bool> _deviceWorker = {};
+  @override
+  DeviceDaemonBlocState get initialState => DeviceDaemonBlocStateInit();
+
+  @override
+  Stream<DeviceDaemonBlocState> mapEventToState(
+      DeviceDaemonBlocEvent event) async* {
+    if (event is DeviceDaemonBlocEventInit) {
+      RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
+    } else if (event is DeviceDaemonBlocEventLoadDevice) {
+      Device device = _devices.firstWhere((d) => d.id == event.deviceID);
+      yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable);
+    } else if (event is DeviceDaemonBlocEventDeviceReachable) {
+      yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable);
+    }
+  }
 
   void _updateDeviceStatus(Device device) async {
     if (_deviceWorker[device.id] == true) {
@@ -80,8 +95,9 @@ class DeviceDaemonBloc
     var ddb = RelDB.get().devicesDAO;
 
     try {
-      String identifier =
-          await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1);
+      String identifier = await DeviceAPI.fetchStringParam(
+          device.ip, 'BROKER_CLIENTID',
+          nRetries: 1);
       if (identifier == device.identifier) {
         print('Device ${device.name} (${device.identifier}) found.');
         await ddb.updateDevice(
@@ -121,22 +137,6 @@ class DeviceDaemonBloc
       }
     }
     _deviceWorker[device.id] = false;
-  }
-
-  @override
-  DeviceDaemonBlocState get initialState => DeviceDaemonBlocStateInit();
-
-  @override
-  Stream<DeviceDaemonBlocState> mapEventToState(
-      DeviceDaemonBlocEvent event) async* {
-    if (event is DeviceDaemonBlocEventInit) {
-      RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
-    } else if (event is DeviceDaemonBlocEventLoadDevice) {
-      Device device = _devices.firstWhere((d) => d.id == event.deviceID);
-      yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable);
-    } else if (event is DeviceDaemonBlocEventDeviceReachable) {
-      yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable);
-    }
   }
 
   void _deviceListChanged(List<Device> devices) {

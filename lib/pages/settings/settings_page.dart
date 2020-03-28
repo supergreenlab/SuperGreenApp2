@@ -18,7 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 
@@ -35,29 +36,21 @@ class SettingsPage extends StatelessWidget {
               iconColor: Colors.white,
               elevation: 10,
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            body: ListView(
               children: <Widget>[
-                Center(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: SvgPicture.asset(
-                                'assets/feed_card/logo_sgl.svg')),
-                      ),
-                      Text(
-                        'COMING SOON',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            color: Colors.grey),
-                      ),
-                    ],
-                  ),
+                ListTile(
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsAuth());
+                  },
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child:
+                          SvgPicture.asset('assets/settings/icon_account.svg')),
+                  title: Text('SGL Account',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Enable backups and sharing'),
                 )
               ],
             )));

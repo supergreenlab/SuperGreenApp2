@@ -15,6 +15,8 @@ class Device extends DataClass implements Insertable<Device> {
   final String ip;
   final String mdns;
   final bool isReachable;
+  final String serverID;
+  final bool synced;
   Device(
       {@required this.id,
       @required this.identifier,
@@ -22,7 +24,9 @@ class Device extends DataClass implements Insertable<Device> {
       @required this.config,
       @required this.ip,
       @required this.mdns,
-      @required this.isReachable});
+      @required this.isReachable,
+      this.serverID,
+      @required this.synced});
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -40,6 +44,10 @@ class Device extends DataClass implements Insertable<Device> {
       mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
       isReachable: boolType
           .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   factory Device.fromJson(Map<String, dynamic> json,
@@ -53,6 +61,8 @@ class Device extends DataClass implements Insertable<Device> {
       ip: serializer.fromJson<String>(json['ip']),
       mdns: serializer.fromJson<String>(json['mdns']),
       isReachable: serializer.fromJson<bool>(json['isReachable']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
@@ -66,6 +76,8 @@ class Device extends DataClass implements Insertable<Device> {
       'ip': serializer.toJson<String>(ip),
       'mdns': serializer.toJson<String>(mdns),
       'isReachable': serializer.toJson<bool>(isReachable),
+      'serverID': serializer.toJson<String>(serverID),
+      'synced': serializer.toJson<bool>(synced),
     };
   }
 
@@ -84,6 +96,11 @@ class Device extends DataClass implements Insertable<Device> {
       isReachable: isReachable == null && nullToAbsent
           ? const Value.absent()
           : Value(isReachable),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
     );
   }
 
@@ -94,7 +111,9 @@ class Device extends DataClass implements Insertable<Device> {
           String config,
           String ip,
           String mdns,
-          bool isReachable}) =>
+          bool isReachable,
+          String serverID,
+          bool synced}) =>
       Device(
         id: id ?? this.id,
         identifier: identifier ?? this.identifier,
@@ -103,6 +122,8 @@ class Device extends DataClass implements Insertable<Device> {
         ip: ip ?? this.ip,
         mdns: mdns ?? this.mdns,
         isReachable: isReachable ?? this.isReachable,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
       );
   @override
   String toString() {
@@ -113,7 +134,9 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('config: $config, ')
           ..write('ip: $ip, ')
           ..write('mdns: $mdns, ')
-          ..write('isReachable: $isReachable')
+          ..write('isReachable: $isReachable, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
           ..write(')'))
         .toString();
   }
@@ -127,8 +150,12 @@ class Device extends DataClass implements Insertable<Device> {
               name.hashCode,
               $mrjc(
                   config.hashCode,
-                  $mrjc(ip.hashCode,
-                      $mrjc(mdns.hashCode, isReachable.hashCode)))))));
+                  $mrjc(
+                      ip.hashCode,
+                      $mrjc(
+                          mdns.hashCode,
+                          $mrjc(isReachable.hashCode,
+                              $mrjc(serverID.hashCode, synced.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -139,7 +166,9 @@ class Device extends DataClass implements Insertable<Device> {
           other.config == this.config &&
           other.ip == this.ip &&
           other.mdns == this.mdns &&
-          other.isReachable == this.isReachable);
+          other.isReachable == this.isReachable &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
 }
 
 class DevicesCompanion extends UpdateCompanion<Device> {
@@ -150,6 +179,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<String> ip;
   final Value<String> mdns;
   final Value<bool> isReachable;
+  final Value<String> serverID;
+  final Value<bool> synced;
   const DevicesCompanion({
     this.id = const Value.absent(),
     this.identifier = const Value.absent(),
@@ -158,6 +189,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.ip = const Value.absent(),
     this.mdns = const Value.absent(),
     this.isReachable = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   });
   DevicesCompanion.insert({
     this.id = const Value.absent(),
@@ -167,6 +200,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     @required String ip,
     @required String mdns,
     this.isReachable = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   })  : identifier = Value(identifier),
         name = Value(name),
         config = Value(config),
@@ -179,7 +214,9 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<String> config,
       Value<String> ip,
       Value<String> mdns,
-      Value<bool> isReachable}) {
+      Value<bool> isReachable,
+      Value<String> serverID,
+      Value<bool> synced}) {
     return DevicesCompanion(
       id: id ?? this.id,
       identifier: identifier ?? this.identifier,
@@ -188,6 +225,8 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       ip: ip ?? this.ip,
       mdns: mdns ?? this.mdns,
       isReachable: isReachable ?? this.isReachable,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
     );
   }
 }
@@ -264,9 +303,27 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         defaultValue: Constant(true));
   }
 
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
+  @override
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, true,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  GeneratedBoolColumn _synced;
+  @override
+  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
+  GeneratedBoolColumn _constructSynced() {
+    return GeneratedBoolColumn('synced', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, identifier, name, config, ip, mdns, isReachable];
+      [id, identifier, name, config, ip, mdns, isReachable, serverID, synced];
   @override
   $DevicesTable get asDslTable => this;
   @override
@@ -313,6 +370,14 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
       context.handle(_isReachableMeta,
           isReachable.isAcceptableValue(d.isReachable.value, _isReachableMeta));
     }
+    if (d.serverID.present) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+    }
+    if (d.synced.present) {
+      context.handle(
+          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    }
     return context;
   }
 
@@ -347,6 +412,12 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     }
     if (d.isReachable.present) {
       map['is_reachable'] = Variable<bool, BoolType>(d.isReachable.value);
+    }
+    if (d.serverID.present) {
+      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
+    }
+    if (d.synced.present) {
+      map['synced'] = Variable<bool, BoolType>(d.synced.value);
     }
     return map;
   }
@@ -992,18 +1063,23 @@ class Plant extends DataClass implements Insertable<Plant> {
   final int deviceBox;
   final String name;
   final String settings;
+  final String serverID;
+  final bool synced;
   Plant(
       {@required this.id,
       @required this.feed,
       this.device,
       this.deviceBox,
       @required this.name,
-      @required this.settings});
+      @required this.settings,
+      this.serverID,
+      @required this.synced});
   factory Plant.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return Plant(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
@@ -1013,6 +1089,10 @@ class Plant extends DataClass implements Insertable<Plant> {
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       settings: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   factory Plant.fromJson(Map<String, dynamic> json,
@@ -1025,6 +1105,8 @@ class Plant extends DataClass implements Insertable<Plant> {
       deviceBox: serializer.fromJson<int>(json['deviceBox']),
       name: serializer.fromJson<String>(json['name']),
       settings: serializer.fromJson<String>(json['settings']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
@@ -1037,6 +1119,8 @@ class Plant extends DataClass implements Insertable<Plant> {
       'deviceBox': serializer.toJson<int>(deviceBox),
       'name': serializer.toJson<String>(name),
       'settings': serializer.toJson<String>(settings),
+      'serverID': serializer.toJson<String>(serverID),
+      'synced': serializer.toJson<bool>(synced),
     };
   }
 
@@ -1054,6 +1138,11 @@ class Plant extends DataClass implements Insertable<Plant> {
       settings: settings == null && nullToAbsent
           ? const Value.absent()
           : Value(settings),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
     );
   }
 
@@ -1063,7 +1152,9 @@ class Plant extends DataClass implements Insertable<Plant> {
           int device,
           int deviceBox,
           String name,
-          String settings}) =>
+          String settings,
+          String serverID,
+          bool synced}) =>
       Plant(
         id: id ?? this.id,
         feed: feed ?? this.feed,
@@ -1071,6 +1162,8 @@ class Plant extends DataClass implements Insertable<Plant> {
         deviceBox: deviceBox ?? this.deviceBox,
         name: name ?? this.name,
         settings: settings ?? this.settings,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
       );
   @override
   String toString() {
@@ -1080,7 +1173,9 @@ class Plant extends DataClass implements Insertable<Plant> {
           ..write('device: $device, ')
           ..write('deviceBox: $deviceBox, ')
           ..write('name: $name, ')
-          ..write('settings: $settings')
+          ..write('settings: $settings, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
           ..write(')'))
         .toString();
   }
@@ -1092,8 +1187,12 @@ class Plant extends DataClass implements Insertable<Plant> {
           feed.hashCode,
           $mrjc(
               device.hashCode,
-              $mrjc(deviceBox.hashCode,
-                  $mrjc(name.hashCode, settings.hashCode))))));
+              $mrjc(
+                  deviceBox.hashCode,
+                  $mrjc(
+                      name.hashCode,
+                      $mrjc(settings.hashCode,
+                          $mrjc(serverID.hashCode, synced.hashCode))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1103,7 +1202,9 @@ class Plant extends DataClass implements Insertable<Plant> {
           other.device == this.device &&
           other.deviceBox == this.deviceBox &&
           other.name == this.name &&
-          other.settings == this.settings);
+          other.settings == this.settings &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
 }
 
 class PlantsCompanion extends UpdateCompanion<Plant> {
@@ -1113,6 +1214,8 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   final Value<int> deviceBox;
   final Value<String> name;
   final Value<String> settings;
+  final Value<String> serverID;
+  final Value<bool> synced;
   const PlantsCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
@@ -1120,6 +1223,8 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     this.deviceBox = const Value.absent(),
     this.name = const Value.absent(),
     this.settings = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   });
   PlantsCompanion.insert({
     this.id = const Value.absent(),
@@ -1128,6 +1233,8 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     this.deviceBox = const Value.absent(),
     @required String name,
     this.settings = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   })  : feed = Value(feed),
         name = Value(name);
   PlantsCompanion copyWith(
@@ -1136,7 +1243,9 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       Value<int> device,
       Value<int> deviceBox,
       Value<String> name,
-      Value<String> settings}) {
+      Value<String> settings,
+      Value<String> serverID,
+      Value<bool> synced}) {
     return PlantsCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
@@ -1144,6 +1253,8 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       deviceBox: deviceBox ?? this.deviceBox,
       name: name ?? this.name,
       settings: settings ?? this.settings,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
     );
   }
 }
@@ -1215,9 +1326,27 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
         defaultValue: Constant('{}'));
   }
 
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
+  @override
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, true,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  GeneratedBoolColumn _synced;
+  @override
+  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
+  GeneratedBoolColumn _constructSynced() {
+    return GeneratedBoolColumn('synced', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feed, device, deviceBox, name, settings];
+      [id, feed, device, deviceBox, name, settings, serverID, synced];
   @override
   $PlantsTable get asDslTable => this;
   @override
@@ -1255,6 +1384,14 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
       context.handle(_settingsMeta,
           settings.isAcceptableValue(d.settings.value, _settingsMeta));
     }
+    if (d.serverID.present) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+    }
+    if (d.synced.present) {
+      context.handle(
+          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    }
     return context;
   }
 
@@ -1286,6 +1423,12 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
     }
     if (d.settings.present) {
       map['settings'] = Variable<String, StringType>(d.settings.value);
+    }
+    if (d.serverID.present) {
+      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
+    }
+    if (d.synced.present) {
+      map['synced'] = Variable<bool, BoolType>(d.synced.value);
     }
     return map;
   }
@@ -1577,6 +1720,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   final String strain;
   final String dropboxToken;
   final String uploadName;
+  final String serverID;
+  final bool synced;
   Timelapse(
       {@required this.id,
       @required this.plant,
@@ -1587,12 +1732,15 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       this.name,
       this.strain,
       this.dropboxToken,
-      this.uploadName});
+      this.uploadName,
+      this.serverID,
+      @required this.synced});
   factory Timelapse.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return Timelapse(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       plant: intType.mapFromDatabaseResponse(data['${effectivePrefix}plant']),
@@ -1610,6 +1758,10 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
           .mapFromDatabaseResponse(data['${effectivePrefix}dropbox_token']),
       uploadName: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}upload_name']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   factory Timelapse.fromJson(Map<String, dynamic> json,
@@ -1626,6 +1778,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       strain: serializer.fromJson<String>(json['strain']),
       dropboxToken: serializer.fromJson<String>(json['dropboxToken']),
       uploadName: serializer.fromJson<String>(json['uploadName']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
@@ -1642,6 +1796,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       'strain': serializer.toJson<String>(strain),
       'dropboxToken': serializer.toJson<String>(dropboxToken),
       'uploadName': serializer.toJson<String>(uploadName),
+      'serverID': serializer.toJson<String>(serverID),
+      'synced': serializer.toJson<bool>(synced),
     };
   }
 
@@ -1669,6 +1825,11 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       uploadName: uploadName == null && nullToAbsent
           ? const Value.absent()
           : Value(uploadName),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
     );
   }
 
@@ -1682,7 +1843,9 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
           String name,
           String strain,
           String dropboxToken,
-          String uploadName}) =>
+          String uploadName,
+          String serverID,
+          bool synced}) =>
       Timelapse(
         id: id ?? this.id,
         plant: plant ?? this.plant,
@@ -1694,6 +1857,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
         strain: strain ?? this.strain,
         dropboxToken: dropboxToken ?? this.dropboxToken,
         uploadName: uploadName ?? this.uploadName,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
       );
   @override
   String toString() {
@@ -1707,7 +1872,9 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
           ..write('name: $name, ')
           ..write('strain: $strain, ')
           ..write('dropboxToken: $dropboxToken, ')
-          ..write('uploadName: $uploadName')
+          ..write('uploadName: $uploadName, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
           ..write(')'))
         .toString();
   }
@@ -1729,8 +1896,12 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
                               name.hashCode,
                               $mrjc(
                                   strain.hashCode,
-                                  $mrjc(dropboxToken.hashCode,
-                                      uploadName.hashCode))))))))));
+                                  $mrjc(
+                                      dropboxToken.hashCode,
+                                      $mrjc(
+                                          uploadName.hashCode,
+                                          $mrjc(serverID.hashCode,
+                                              synced.hashCode))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1744,7 +1915,9 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
           other.name == this.name &&
           other.strain == this.strain &&
           other.dropboxToken == this.dropboxToken &&
-          other.uploadName == this.uploadName);
+          other.uploadName == this.uploadName &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
 }
 
 class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
@@ -1758,6 +1931,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   final Value<String> strain;
   final Value<String> dropboxToken;
   final Value<String> uploadName;
+  final Value<String> serverID;
+  final Value<bool> synced;
   const TimelapsesCompanion({
     this.id = const Value.absent(),
     this.plant = const Value.absent(),
@@ -1769,6 +1944,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     this.strain = const Value.absent(),
     this.dropboxToken = const Value.absent(),
     this.uploadName = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   });
   TimelapsesCompanion.insert({
     this.id = const Value.absent(),
@@ -1781,6 +1958,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     this.strain = const Value.absent(),
     this.dropboxToken = const Value.absent(),
     this.uploadName = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   }) : plant = Value(plant);
   TimelapsesCompanion copyWith(
       {Value<int> id,
@@ -1792,7 +1971,9 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
       Value<String> name,
       Value<String> strain,
       Value<String> dropboxToken,
-      Value<String> uploadName}) {
+      Value<String> uploadName,
+      Value<String> serverID,
+      Value<bool> synced}) {
     return TimelapsesCompanion(
       id: id ?? this.id,
       plant: plant ?? this.plant,
@@ -1804,6 +1985,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
       strain: strain ?? this.strain,
       dropboxToken: dropboxToken ?? this.dropboxToken,
       uploadName: uploadName ?? this.uploadName,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
     );
   }
 }
@@ -1910,6 +2093,24 @@ class $TimelapsesTable extends Timelapses
         minTextLength: 1, maxTextLength: 64);
   }
 
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
+  @override
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, true,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  GeneratedBoolColumn _synced;
+  @override
+  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
+  GeneratedBoolColumn _constructSynced() {
+    return GeneratedBoolColumn('synced', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1921,7 +2122,9 @@ class $TimelapsesTable extends Timelapses
         name,
         strain,
         dropboxToken,
-        uploadName
+        uploadName,
+        serverID,
+        synced
       ];
   @override
   $TimelapsesTable get asDslTable => this;
@@ -1978,6 +2181,14 @@ class $TimelapsesTable extends Timelapses
       context.handle(_uploadNameMeta,
           uploadName.isAcceptableValue(d.uploadName.value, _uploadNameMeta));
     }
+    if (d.serverID.present) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+    }
+    if (d.synced.present) {
+      context.handle(
+          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    }
     return context;
   }
 
@@ -2023,6 +2234,12 @@ class $TimelapsesTable extends Timelapses
     if (d.uploadName.present) {
       map['upload_name'] = Variable<String, StringType>(d.uploadName.value);
     }
+    if (d.serverID.present) {
+      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
+    }
+    if (d.synced.present) {
+      map['synced'] = Variable<bool, BoolType>(d.synced.value);
+    }
     return map;
   }
 
@@ -2035,15 +2252,26 @@ class $TimelapsesTable extends Timelapses
 class Feed extends DataClass implements Insertable<Feed> {
   final int id;
   final String name;
-  Feed({@required this.id, @required this.name});
+  final String serverID;
+  final bool synced;
+  Feed(
+      {@required this.id,
+      @required this.name,
+      this.serverID,
+      @required this.synced});
   factory Feed.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return Feed(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   factory Feed.fromJson(Map<String, dynamic> json,
@@ -2052,6 +2280,8 @@ class Feed extends DataClass implements Insertable<Feed> {
     return Feed(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
@@ -2060,6 +2290,8 @@ class Feed extends DataClass implements Insertable<Feed> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'serverID': serializer.toJson<String>(serverID),
+      'synced': serializer.toJson<bool>(synced),
     };
   }
 
@@ -2068,45 +2300,71 @@ class Feed extends DataClass implements Insertable<Feed> {
     return FeedsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
     );
   }
 
-  Feed copyWith({int id, String name}) => Feed(
+  Feed copyWith({int id, String name, String serverID, bool synced}) => Feed(
         id: id ?? this.id,
         name: name ?? this.name,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
       );
   @override
   String toString() {
     return (StringBuffer('Feed(')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode, name.hashCode));
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(name.hashCode, $mrjc(serverID.hashCode, synced.hashCode))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is Feed && other.id == this.id && other.name == this.name);
+      (other is Feed &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
 }
 
 class FeedsCompanion extends UpdateCompanion<Feed> {
   final Value<int> id;
   final Value<String> name;
+  final Value<String> serverID;
+  final Value<bool> synced;
   const FeedsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   });
   FeedsCompanion.insert({
     this.id = const Value.absent(),
     @required String name,
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   }) : name = Value(name);
-  FeedsCompanion copyWith({Value<int> id, Value<String> name}) {
+  FeedsCompanion copyWith(
+      {Value<int> id,
+      Value<String> name,
+      Value<String> serverID,
+      Value<bool> synced}) {
     return FeedsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
     );
   }
 }
@@ -2133,8 +2391,26 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
         minTextLength: 1, maxTextLength: 24);
   }
 
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
   @override
-  List<GeneratedColumn> get $columns => [id, name];
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, true,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  GeneratedBoolColumn _synced;
+  @override
+  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
+  GeneratedBoolColumn _constructSynced() {
+    return GeneratedBoolColumn('synced', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, name, serverID, synced];
   @override
   $FeedsTable get asDslTable => this;
   @override
@@ -2153,6 +2429,14 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (d.serverID.present) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+    }
+    if (d.synced.present) {
+      context.handle(
+          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
     }
     return context;
   }
@@ -2174,6 +2458,12 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
     if (d.name.present) {
       map['name'] = Variable<String, StringType>(d.name.value);
     }
+    if (d.serverID.present) {
+      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
+    }
+    if (d.synced.present) {
+      map['synced'] = Variable<bool, BoolType>(d.synced.value);
+    }
     return map;
   }
 
@@ -2190,13 +2480,17 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   final String type;
   final bool isNew;
   final String params;
+  final String serverID;
+  final bool synced;
   FeedEntry(
       {@required this.id,
       @required this.feed,
       @required this.date,
       @required this.type,
       @required this.isNew,
-      @required this.params});
+      @required this.params,
+      this.serverID,
+      @required this.synced});
   factory FeedEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -2213,6 +2507,10 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       isNew: boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_new']),
       params:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   factory FeedEntry.fromJson(Map<String, dynamic> json,
@@ -2225,6 +2523,8 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       type: serializer.fromJson<String>(json['type']),
       isNew: serializer.fromJson<bool>(json['isNew']),
       params: serializer.fromJson<String>(json['params']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
@@ -2237,6 +2537,8 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       'type': serializer.toJson<String>(type),
       'isNew': serializer.toJson<bool>(isNew),
       'params': serializer.toJson<String>(params),
+      'serverID': serializer.toJson<String>(serverID),
+      'synced': serializer.toJson<bool>(synced),
     };
   }
 
@@ -2251,6 +2553,11 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           isNew == null && nullToAbsent ? const Value.absent() : Value(isNew),
       params:
           params == null && nullToAbsent ? const Value.absent() : Value(params),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
     );
   }
 
@@ -2260,7 +2567,9 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           DateTime date,
           String type,
           bool isNew,
-          String params}) =>
+          String params,
+          String serverID,
+          bool synced}) =>
       FeedEntry(
         id: id ?? this.id,
         feed: feed ?? this.feed,
@@ -2268,6 +2577,8 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
         type: type ?? this.type,
         isNew: isNew ?? this.isNew,
         params: params ?? this.params,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
       );
   @override
   String toString() {
@@ -2277,7 +2588,9 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           ..write('date: $date, ')
           ..write('type: $type, ')
           ..write('isNew: $isNew, ')
-          ..write('params: $params')
+          ..write('params: $params, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
           ..write(')'))
         .toString();
   }
@@ -2287,8 +2600,14 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       id.hashCode,
       $mrjc(
           feed.hashCode,
-          $mrjc(date.hashCode,
-              $mrjc(type.hashCode, $mrjc(isNew.hashCode, params.hashCode))))));
+          $mrjc(
+              date.hashCode,
+              $mrjc(
+                  type.hashCode,
+                  $mrjc(
+                      isNew.hashCode,
+                      $mrjc(params.hashCode,
+                          $mrjc(serverID.hashCode, synced.hashCode))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -2298,7 +2617,9 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           other.date == this.date &&
           other.type == this.type &&
           other.isNew == this.isNew &&
-          other.params == this.params);
+          other.params == this.params &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
 }
 
 class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
@@ -2308,6 +2629,8 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   final Value<String> type;
   final Value<bool> isNew;
   final Value<String> params;
+  final Value<String> serverID;
+  final Value<bool> synced;
   const FeedEntriesCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
@@ -2315,6 +2638,8 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
     this.type = const Value.absent(),
     this.isNew = const Value.absent(),
     this.params = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   });
   FeedEntriesCompanion.insert({
     this.id = const Value.absent(),
@@ -2323,6 +2648,8 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
     @required String type,
     this.isNew = const Value.absent(),
     this.params = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   })  : feed = Value(feed),
         date = Value(date),
         type = Value(type);
@@ -2332,7 +2659,9 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
       Value<DateTime> date,
       Value<String> type,
       Value<bool> isNew,
-      Value<String> params}) {
+      Value<String> params,
+      Value<String> serverID,
+      Value<bool> synced}) {
     return FeedEntriesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
@@ -2340,6 +2669,8 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
       type: type ?? this.type,
       isNew: isNew ?? this.isNew,
       params: params ?? this.params,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
     );
   }
 }
@@ -2409,8 +2740,27 @@ class $FeedEntriesTable extends FeedEntries
         defaultValue: Constant('{}'));
   }
 
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
   @override
-  List<GeneratedColumn> get $columns => [id, feed, date, type, isNew, params];
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, true,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  GeneratedBoolColumn _synced;
+  @override
+  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
+  GeneratedBoolColumn _constructSynced() {
+    return GeneratedBoolColumn('synced', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, feed, date, type, isNew, params, serverID, synced];
   @override
   $FeedEntriesTable get asDslTable => this;
   @override
@@ -2450,6 +2800,14 @@ class $FeedEntriesTable extends FeedEntries
       context.handle(
           _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
     }
+    if (d.serverID.present) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+    }
+    if (d.synced.present) {
+      context.handle(
+          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    }
     return context;
   }
 
@@ -2482,6 +2840,12 @@ class $FeedEntriesTable extends FeedEntries
     if (d.params.present) {
       map['params'] = Variable<String, StringType>(d.params.value);
     }
+    if (d.serverID.present) {
+      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
+    }
+    if (d.synced.present) {
+      map['synced'] = Variable<bool, BoolType>(d.synced.value);
+    }
     return map;
   }
 
@@ -2497,17 +2861,22 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   final String filePath;
   final String thumbnailPath;
   final String params;
+  final String serverID;
+  final bool synced;
   FeedMedia(
       {@required this.id,
       @required this.feedEntry,
       @required this.filePath,
       @required this.thumbnailPath,
-      @required this.params});
+      @required this.params,
+      this.serverID,
+      @required this.synced});
   factory FeedMedia.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return FeedMedia(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feedEntry:
@@ -2518,6 +2887,10 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_path']),
       params:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   factory FeedMedia.fromJson(Map<String, dynamic> json,
@@ -2529,6 +2902,8 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       filePath: serializer.fromJson<String>(json['filePath']),
       thumbnailPath: serializer.fromJson<String>(json['thumbnailPath']),
       params: serializer.fromJson<String>(json['params']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
@@ -2540,6 +2915,8 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       'filePath': serializer.toJson<String>(filePath),
       'thumbnailPath': serializer.toJson<String>(thumbnailPath),
       'params': serializer.toJson<String>(params),
+      'serverID': serializer.toJson<String>(serverID),
+      'synced': serializer.toJson<bool>(synced),
     };
   }
 
@@ -2558,6 +2935,11 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           : Value(thumbnailPath),
       params:
           params == null && nullToAbsent ? const Value.absent() : Value(params),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
     );
   }
 
@@ -2566,13 +2948,17 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           int feedEntry,
           String filePath,
           String thumbnailPath,
-          String params}) =>
+          String params,
+          String serverID,
+          bool synced}) =>
       FeedMedia(
         id: id ?? this.id,
         feedEntry: feedEntry ?? this.feedEntry,
         filePath: filePath ?? this.filePath,
         thumbnailPath: thumbnailPath ?? this.thumbnailPath,
         params: params ?? this.params,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
       );
   @override
   String toString() {
@@ -2581,7 +2967,9 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           ..write('feedEntry: $feedEntry, ')
           ..write('filePath: $filePath, ')
           ..write('thumbnailPath: $thumbnailPath, ')
-          ..write('params: $params')
+          ..write('params: $params, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
           ..write(')'))
         .toString();
   }
@@ -2591,8 +2979,12 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       id.hashCode,
       $mrjc(
           feedEntry.hashCode,
-          $mrjc(filePath.hashCode,
-              $mrjc(thumbnailPath.hashCode, params.hashCode)))));
+          $mrjc(
+              filePath.hashCode,
+              $mrjc(
+                  thumbnailPath.hashCode,
+                  $mrjc(params.hashCode,
+                      $mrjc(serverID.hashCode, synced.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -2601,7 +2993,9 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           other.feedEntry == this.feedEntry &&
           other.filePath == this.filePath &&
           other.thumbnailPath == this.thumbnailPath &&
-          other.params == this.params);
+          other.params == this.params &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
 }
 
 class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
@@ -2610,12 +3004,16 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   final Value<String> filePath;
   final Value<String> thumbnailPath;
   final Value<String> params;
+  final Value<String> serverID;
+  final Value<bool> synced;
   const FeedMediasCompanion({
     this.id = const Value.absent(),
     this.feedEntry = const Value.absent(),
     this.filePath = const Value.absent(),
     this.thumbnailPath = const Value.absent(),
     this.params = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   });
   FeedMediasCompanion.insert({
     this.id = const Value.absent(),
@@ -2623,6 +3021,8 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
     @required String filePath,
     @required String thumbnailPath,
     this.params = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
   })  : feedEntry = Value(feedEntry),
         filePath = Value(filePath),
         thumbnailPath = Value(thumbnailPath);
@@ -2631,13 +3031,17 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
       Value<int> feedEntry,
       Value<String> filePath,
       Value<String> thumbnailPath,
-      Value<String> params}) {
+      Value<String> params,
+      Value<String> serverID,
+      Value<bool> synced}) {
     return FeedMediasCompanion(
       id: id ?? this.id,
       feedEntry: feedEntry ?? this.feedEntry,
       filePath: filePath ?? this.filePath,
       thumbnailPath: thumbnailPath ?? this.thumbnailPath,
       params: params ?? this.params,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
     );
   }
 }
@@ -2703,9 +3107,27 @@ class $FeedMediasTable extends FeedMedias
         defaultValue: Constant('{}'));
   }
 
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
+  @override
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, true,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  GeneratedBoolColumn _synced;
+  @override
+  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
+  GeneratedBoolColumn _constructSynced() {
+    return GeneratedBoolColumn('synced', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feedEntry, filePath, thumbnailPath, params];
+      [id, feedEntry, filePath, thumbnailPath, params, serverID, synced];
   @override
   $FeedMediasTable get asDslTable => this;
   @override
@@ -2743,6 +3165,14 @@ class $FeedMediasTable extends FeedMedias
       context.handle(
           _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
     }
+    if (d.serverID.present) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+    }
+    if (d.synced.present) {
+      context.handle(
+          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    }
     return context;
   }
 
@@ -2772,6 +3202,12 @@ class $FeedMediasTable extends FeedMedias
     }
     if (d.params.present) {
       map['params'] = Variable<String, StringType>(d.params.value);
+    }
+    if (d.serverID.present) {
+      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
+    }
+    if (d.synced.present) {
+      map['synced'] = Variable<bool, BoolType>(d.synced.value);
     }
     return map;
   }

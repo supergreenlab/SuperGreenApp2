@@ -30,4 +30,6 @@ class AppData {
   bool allowAnalytics = false;
   @HiveField(3)
   bool freedomUnits = true;
+  @HiveField(4)
+  String jwt;
 }

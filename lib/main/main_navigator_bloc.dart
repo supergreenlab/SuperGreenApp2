@@ -153,7 +153,8 @@ class MainNavigateToFeedVentilationFormEvent
     extends MainNavigateToFeedFormEvent {
   final Plant plant;
 
-  MainNavigateToFeedVentilationFormEvent(this.plant, {pushAsReplacement = false})
+  MainNavigateToFeedVentilationFormEvent(this.plant,
+      {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -193,7 +194,8 @@ class MainNavigateToFeedCareCommonFormEvent
 
 class MainNavigateToFeedDefoliationFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedDefoliationFormEvent(Plant plant, {pushAsReplacement = false})
+  MainNavigateToFeedDefoliationFormEvent(Plant plant,
+      {pushAsReplacement = false})
       : super(plant, pushAsReplacement: pushAsReplacement);
 }
 
@@ -217,7 +219,8 @@ class MainNavigateToFeedBendingFormEvent
 
 class MainNavigateToFeedTransplantFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedTransplantFormEvent(Plant plant, {pushAsReplacement = false})
+  MainNavigateToFeedTransplantFormEvent(Plant plant,
+      {pushAsReplacement = false})
       : super(plant, pushAsReplacement: pushAsReplacement);
 }
 
@@ -356,6 +359,13 @@ class MainNavigateToMetrics extends MainNavigateToFeedFormEvent {
   List<Object> get props => [plant];
 }
 
+class MainNavigateToSettingsAuth extends MainNavigatorEvent {
+  MainNavigateToSettingsAuth();
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -416,8 +426,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future =
           _navigatorKey.currentState.pushNamed('/plant/new', arguments: event);
     } else if (event is MainNavigateToSelectPlantDeviceEvent) {
-      future =
-          _navigatorKey.currentState.pushNamed('/plant/device', arguments: event);
+      future = _navigatorKey.currentState
+          .pushNamed('/plant/device', arguments: event);
     } else if (event is MainNavigateToSelectPlantDeviceBoxEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/plant/device/box', arguments: event);
@@ -476,11 +486,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState
           .pushNamed('/capture/playback', arguments: event);
     } else if (event is MainNavigateToFullscreenMedia) {
-      future = future =
-          _navigatorKey.currentState.pushNamed('/media', arguments: event);
+      future = _navigatorKey.currentState.pushNamed('/media', arguments: event);
     } else if (event is MainNavigateToFullscreenPicture) {
-      future = future =
-          _navigatorKey.currentState.pushNamed('/media', arguments: event);
+      future = _navigatorKey.currentState.pushNamed('/media', arguments: event);
     } else if (event is MainNavigateToTimelapseHowto) {
       future = _pushOrReplace('/timelapse/howto', event);
     } else if (event is MainNavigateToTimelapseSetup) {
@@ -491,6 +499,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/timelapse/viewer', event);
     } else if (event is MainNavigateToMetrics) {
       future = _pushOrReplace('/metrics', event);
+    } else if (event is MainNavigateToSettingsAuth) {
+      future = _navigatorKey.currentState
+          .pushNamed('/settings/auth', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

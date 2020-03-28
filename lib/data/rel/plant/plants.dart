@@ -31,6 +31,9 @@ class Plants extends Table {
   TextColumn get name => text().withLength(min: 1, max: 32)();
 
   TextColumn get settings => text().withDefault(Constant('{}'))();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+  BoolColumn get synced => boolean().withDefault(Constant(false))();
 }
 
 class ChartCaches extends Table {
@@ -55,6 +58,9 @@ class Timelapses extends Table {
   TextColumn get dropboxToken =>
       text().withLength(min: 1, max: 64).nullable()();
   TextColumn get uploadName => text().withLength(min: 1, max: 64).nullable()();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+  BoolColumn get synced => boolean().withDefault(Constant(false))();
 }
 
 @UseDao(tables: [

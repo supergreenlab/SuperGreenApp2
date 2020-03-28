@@ -24,6 +24,9 @@ part 'feeds.g.dart';
 class Feeds extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 24)();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+  BoolColumn get synced => boolean().withDefault(Constant(false))();
 }
 
 @DataClassName("FeedEntry")
@@ -35,6 +38,9 @@ class FeedEntries extends Table {
   BoolColumn get isNew => boolean().withDefault(Constant(false))();
 
   TextColumn get params => text().withDefault(Constant('{}'))();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+  BoolColumn get synced => boolean().withDefault(Constant(false))();
 }
 
 class FeedMedias extends Table {
@@ -44,6 +50,9 @@ class FeedMedias extends Table {
   TextColumn get thumbnailPath => text()();
 
   TextColumn get params => text().withDefault(Constant('{}'))();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+  BoolColumn get synced => boolean().withDefault(Constant(false))();
 }
 
 @UseDao(tables: [
