@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
-class TimeSeries {
+class TimeSeriesAPI {
   static List<dynamic> multiplyMetric(List<dynamic> metric, List<int> values) {
     int i = 0;
     return metric

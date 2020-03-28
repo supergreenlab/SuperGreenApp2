@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:super_green_app/data/backend/time_series/time_series.dart';
+import 'package:super_green_app/data/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_bar_bloc.dart';
@@ -119,20 +119,20 @@ class PlantFeedAppBarPage extends StatelessWidget {
                     Colors.green,
                     'Temp',
                     '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
-                    '${TimeSeries.min(state.graphData[0].data).metric.toInt()}$tempUnit',
-                    '${TimeSeries.max(state.graphData[0].data).metric.toInt()}$tempUnit'),
+                    '${TimeSeriesAPI.min(state.graphData[0].data).metric.toInt()}$tempUnit',
+                    '${TimeSeriesAPI.max(state.graphData[0].data).metric.toInt()}$tempUnit'),
                 _renderMetric(
                     Colors.blue,
                     'Humi',
                     '${state.graphData[1].data[state.graphData[1].data.length - 1].metric.toInt()}%',
-                    '${TimeSeries.min(state.graphData[1].data).metric.toInt()}%',
-                    '${TimeSeries.max(state.graphData[1].data).metric.toInt()}%'),
+                    '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
+                    '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%'),
                 _renderMetric(
                     Colors.yellow,
                     'Light',
                     '${state.graphData[2].data[state.graphData[2].data.length - 1].metric.toInt()}%',
-                    '${TimeSeries.min(state.graphData[2].data).metric.toInt()}%',
-                    '${TimeSeries.max(state.graphData[2].data).metric.toInt()}%'),
+                    '${TimeSeriesAPI.min(state.graphData[2].data).metric.toInt()}%',
+                    '${TimeSeriesAPI.max(state.graphData[2].data).metric.toInt()}%'),
               ],
             ),
           ),

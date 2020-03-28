@@ -20,13 +20,13 @@ import 'package:hive/hive.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 
 class AppDB {
-  static final AppDB _instance = AppDB.newInstance();
+  static final AppDB _instance = AppDB._newInstance();
 
   Box _settingsDB;
 
   factory AppDB() => _instance;
 
-  AppDB.newInstance();
+  AppDB._newInstance();
 
   Future<void> init() async {
     _settingsDB = await Hive.openBox('settings');
@@ -51,6 +51,12 @@ class AppDB {
   void setAllowAnalytics(bool allowAnalytics) {
     AppData appData = getAppData();
     appData.allowAnalytics = allowAnalytics;
+    setAppData(appData);
+  }
+
+  void setJWT(String jwt) {
+    AppData appData = getAppData();
+    appData.jwt = jwt;
     setAppData(appData);
   }
 

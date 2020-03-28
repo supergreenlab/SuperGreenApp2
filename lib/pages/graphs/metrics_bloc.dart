@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/backend/time_series/time_series.dart';
+import 'package:super_green_app/data/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -124,20 +124,20 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
 
   Future<charts.Series<Metric, DateTime>> getTempSeries(
       Plant plant, String identifier, int deviceBox) async {
-    return await TimeSeries.fetchTimeSeries(plant, identifier, 'Temperature',
+    return await TimeSeriesAPI.fetchTimeSeries(plant, identifier, 'Temperature',
         'BOX_${deviceBox}_TEMP', charts.MaterialPalette.green.shadeDefault,
         transform: _tempUnit);
   }
 
   Future<charts.Series<Metric, DateTime>> getHumiSeries(
       Plant plant, String identifier, int deviceBox) async {
-    return await TimeSeries.fetchTimeSeries(plant, identifier, 'Humidity',
+    return await TimeSeriesAPI.fetchTimeSeries(plant, identifier, 'Humidity',
         'BOX_${deviceBox}_HUMI', charts.MaterialPalette.blue.shadeDefault);
   }
 
   Future<charts.Series<Metric, DateTime>> getLightSeries(
       Plant plant, Device device, String identifier, int deviceBox) async {
-    List<dynamic> timerOutput = await TimeSeries.fetchMetric(
+    List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(
         plant, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
     List<List<dynamic>> dims = [];
     Module lightModule =
@@ -149,12 +149,12 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
         continue;
       }
       List<dynamic> dim =
-          await TimeSeries.fetchMetric(plant, identifier, 'LED_${i}_DIM');
+          await TimeSeriesAPI.fetchMetric(plant, identifier, 'LED_${i}_DIM');
       dims.add(dim);
     }
-    List<int> avgDims = TimeSeries.avgMetrics(dims);
-    return TimeSeries.toTimeSeries(
-        TimeSeries.multiplyMetric(timerOutput, avgDims),
+    List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
+    return TimeSeriesAPI.toTimeSeries(
+        TimeSeriesAPI.multiplyMetric(timerOutput, avgDims),
         'Light',
         charts.MaterialPalette.yellow.shadeDefault);
   }

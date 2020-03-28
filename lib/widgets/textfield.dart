@@ -26,15 +26,17 @@ class SGLTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final Function(String) onFieldSubmitted;
   final FocusNode focusNode;
+  final bool obscureText;
 
   SGLTextField(
       {this.hintText,
       this.controller,
       this.onChanged,
       this.enabled,
-      this.textInputAction,
+      this.textInputAction = TextInputAction.next,
       this.onFieldSubmitted,
-      this.focusNode});
+      this.focusNode,
+      this.obscureText=false});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class SGLTextField extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
         child: TextField(
-          textInputAction: TextInputAction.next,
+          textInputAction: textInputAction,
           onSubmitted: onFieldSubmitted,
           enabled: enabled,
           textCapitalization: TextCapitalization.sentences,
@@ -57,6 +59,7 @@ class SGLTextField extends StatelessWidget {
           controller: controller,
           onChanged: onChanged,
           focusNode: focusNode,
+          obscureText: obscureText,
         ),
       ),
     );
