@@ -21,11 +21,17 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class TipBlocEvent extends Equatable {}
 
 class TipBlocEventInit extends TipBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class TipBlocEventDone extends TipBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -76,6 +82,8 @@ class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
         }
       }
       yield TipBlocStateLoaded(_args.nextRoute, tips);
+    } else if (event is TipBlocEventDone) {
+      AppDB().setTipDone(_args.tipID);
     }
   }
 }

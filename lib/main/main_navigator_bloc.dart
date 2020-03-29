@@ -236,9 +236,10 @@ class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
 
 class MainNavigateToTipEvent extends MainNavigatorEvent {
   final List<String> paths;
+  final String tipID;
   final MainNavigateToFeedFormEvent nextRoute;
 
-  MainNavigateToTipEvent(this.paths, this.nextRoute);
+  MainNavigateToTipEvent(this.tipID, this.paths, this.nextRoute);
 
   @override
   List<Object> get props => [nextRoute];

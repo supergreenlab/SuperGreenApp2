@@ -71,26 +71,33 @@ class _TipPageState extends State<TipPage> {
                     loop: false,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Theme(
-                        data: ThemeData(unselectedWidgetColor: Colors.black),
-                        child: Checkbox(
-                            activeColor: Colors.black,
-                            checkColor: Colors.black,
-                            value: dontShow,
-                            onChanged: (bool value) {
-                              setState(() {
-                                dontShow = value;
-                              });
-                            }),
-                      ),
-                      Text('Don’t show me this again',
-                          style: TextStyle(color: Colors.black)),
-                    ],
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      dontShow = !dontShow;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Theme(
+                          data: ThemeData(unselectedWidgetColor: Colors.black),
+                          child: Checkbox(
+                              activeColor: Colors.black,
+                              checkColor: Colors.black,
+                              value: dontShow,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  dontShow = value;
+                                });
+                              }),
+                        ),
+                        Text('Don’t show me this again',
+                            style: TextStyle(color: Colors.black)),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -116,6 +123,10 @@ class _TipPageState extends State<TipPage> {
                     child: GreenButton(
                       title: state is TipBlocStateLoaded ? 'OK' : 'SKIP',
                       onPressed: () {
+                        if (dontShow) {
+                          BlocProvider.of<TipBloc>(context)
+                              .add(TipBlocEventDone());
+                        }
                         BlocProvider.of<MainNavigatorBloc>(context)
                             .add(state.nextRoute);
                       },

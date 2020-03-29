@@ -23,6 +23,7 @@ class AppDB {
   static final AppDB _instance = AppDB._newInstance();
 
   Box _settingsDB;
+  Box _miscDB;
 
   factory AppDB() => _instance;
 
@@ -30,6 +31,7 @@ class AppDB {
 
   Future<void> init() async {
     _settingsDB = await Hive.openBox('settings');
+    _miscDB = await Hive.openBox('misc');
   }
 
   AppData getAppData() {
@@ -68,5 +70,13 @@ class AppDB {
 
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
+  }
+
+  void setTipDone(String tipID) {
+    _miscDB.put('$tipID.done', true);
+  }
+
+  bool isTipDone(String tipID) {
+    return _miscDB.get('$tipID.done', defaultValue: false);
   }
 }

@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -157,6 +158,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedDefoliationFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_DEFOLIATION',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'
               ])),
@@ -168,6 +170,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedToppingFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_TOPPING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
                 't/supergreenlab/SuperGreenTips/master/s/how_to_top/l/en'
@@ -180,6 +183,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedFimmingFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_FIMMING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
                 't/supergreenlab/SuperGreenTips/master/s/how_to_top/l/en'
@@ -192,6 +196,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedBendingFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_BENDING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'
               ])),
@@ -217,6 +222,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(
                   state.plant,
                   pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_STRETCH',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
                 't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
@@ -237,6 +243,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedScheduleFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_BLOOM',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
               ])),
@@ -248,6 +255,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedTransplantFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_TRANSPLANT',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_repot_your_seedling/l/en',
                 't/supergreenlab/SuperGreenTips/master/s/how_to_transplant_your_seedling/l/en'
@@ -282,6 +290,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
                   state.plant,
                   pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_WATERING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
                 't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
@@ -319,12 +328,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   void Function() _onSpeedDialSelected(BuildContext context,
       MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
-      {List<String> tipPaths}) {
+      {String, tipID, List<String> tipPaths}) {
     return () {
       _openCloseDial.value = Random().nextInt(1 << 32);
-      if (tipPaths != null) {
+      if (tipPaths != null && !AppDB().isTipDone(tipID)) {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
-            tipPaths, navigatorEvent(pushAsReplacement: true)));
+            tipID, tipPaths, navigatorEvent(pushAsReplacement: true)));
       } else {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }
@@ -551,7 +560,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state,
       DeviceDaemonBlocStateDeviceReachable daemonState) {
     String name = state.plant.name;
-    
+
     Widget graphBody;
     if (state.plant.device != null) {
       graphBody = Stack(children: [_renderGraphs(context, state)]);
