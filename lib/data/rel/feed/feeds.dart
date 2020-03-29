@@ -81,6 +81,11 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return into(feeds).insert(feed);
   }
 
+  Future updateFeed(FeedsCompanion feed) {
+    return (update(feeds)..where((tbl) => tbl.id.equals(feed.id.value)))
+        .write(feed);
+  }
+
   Future<Feed> getFeed(int feedID) {
     return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
   }
@@ -104,7 +109,13 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (select(feedEntries)
           ..where((fe) =>
               fe.feed.equals(feedID) &
-              fe.type.isIn(['FE_LIGHT', 'FE_VENTILATION', 'FE_SCHEDULE', 'FE_WATER', 'FE_TRANSPLANT']))
+              fe.type.isIn([
+                'FE_LIGHT',
+                'FE_VENTILATION',
+                'FE_SCHEDULE',
+                'FE_WATER',
+                'FE_TRANSPLANT'
+              ]))
           ..orderBy([
             (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
           ]))
@@ -128,6 +139,12 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {
     return into(feedMedias).insert(feedMediaEntry);
+  }
+
+  Future updateFeedMedia(FeedMediasCompanion feedMedia) {
+    return (update(feedMedias)
+          ..where((tbl) => tbl.id.equals(feedMedia.id.value)))
+        .write(feedMedia);
   }
 
   Future<List<FeedMedia>> getFeedMediasWithType(

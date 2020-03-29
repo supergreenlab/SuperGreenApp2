@@ -90,12 +90,13 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return into(plants).insert(plant);
   }
 
-  Future updatePlant(int plantID, PlantsCompanion plant) {
-    return (update(plants)..where((b) => b.id.equals(plantID))).write(plant);
+  Future updatePlant(PlantsCompanion plant) {
+    return (update(plants)..where((b) => b.id.equals(plant.id.value))).write(plant);
   }
 
   Future cleanDeviceIDs(int deviceID) {
-    return (update(plants)..where((b) => b.device.equals(deviceID))).write(PlantsCompanion(device: Value(null)));
+    return (update(plants)..where((b) => b.device.equals(deviceID)))
+        .write(PlantsCompanion(device: Value(null)));
   }
 
   Stream<List<Plant>> watchPlants() {
@@ -136,6 +137,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
 
   Future<int> addTimelapse(TimelapsesCompanion timelapse) {
     return into(timelapses).insert(timelapse);
+  }
+
+  Future updateTimelapse(TimelapsesCompanion timelapse) {
+    return (update(timelapses)..where((t) => t.id.equals(timelapse.id.value))).write(timelapse);
   }
 
   // TODO move this to the kv store, separate from the plant concept
