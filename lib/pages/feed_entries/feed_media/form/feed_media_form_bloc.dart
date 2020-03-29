@@ -82,7 +82,7 @@ class FeedMediaFormBloc
         params: Value(JsonEncoder().convert({'message': event.message})),
       ));
       for (FeedMediasCompanion m in event.medias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID)));
+        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
       }
       yield FeedMediaFormBlocStateDone();
     }

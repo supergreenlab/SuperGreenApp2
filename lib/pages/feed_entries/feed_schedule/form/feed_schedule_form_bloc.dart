@@ -154,22 +154,19 @@ class FeedScheduleFormBloc
         Param onHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${_args.plant.deviceBox}_ON_HOUR');
         await DeviceHelper.updateIntParam(
-            _device,
-            onHour,
-            timezone(_schedules[_schedule]['ON_HOUR']));
+            _device, onHour, timezone(_schedules[_schedule]['ON_HOUR']));
         Param offHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${_args.plant.deviceBox}_OFF_HOUR');
         await DeviceHelper.updateIntParam(
-            _device,
-            offHour,
-            timezone(_schedules[_schedule]['OFF_HOUR']));
+            _device, offHour, timezone(_schedules[_schedule]['OFF_HOUR']));
       }
 
-      final Map<String, dynamic> settings = db.plantsDAO.plantSettings(_args.plant);
+      final Map<String, dynamic> settings =
+          db.plantsDAO.plantSettings(_args.plant);
       settings['phase'] = _schedule;
       settings['schedule'] = _schedule;
       settings['schedules'] = _schedules;
-      await db.plantsDAO.updatePlant(_args.plant.id,
+      await db.plantsDAO.updatePlant(
           PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
 
       if (_schedule == 'BLOOM') {

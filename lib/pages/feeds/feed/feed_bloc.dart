@@ -28,6 +28,15 @@ class FeedBlocEventLoadFeed extends FeedBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedBlocEventDeleteFeedEntry extends FeedBlocEvent {
+  final FeedEntry feedEntry;
+
+  FeedBlocEventDeleteFeedEntry(this.feedEntry);
+
+  @override
+  List<Object> get props => [feedEntry];
+}
+
 class FeedBlocEventFeedEntriesListUpdated extends FeedBlocEvent {
   final List<FeedEntry> _feedEntries;
 
@@ -85,9 +94,15 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       entries.listen(_onFeedEntriesChange);
     } else if (event is FeedBlocEventMarkAsRead) {
       final fdb = RelDB.get().feedsDAO;
-      await fdb.updateFeedEntry(event.feedEntry.createCompanion(true).copyWith(isNew: Value(false)));
+      await fdb.updateFeedEntry(
+          event.feedEntry.createCompanion(true).copyWith(isNew: Value(false)));
     } else if (event is FeedBlocEventFeedEntriesListUpdated) {
       yield FeedBlocStateLoaded(_feed, event._feedEntries);
+    } else if (event is FeedBlocEventDeleteFeedEntry) {
+      await RelDB.get().feedsDAO.deleteFeedEntry(event.feedEntry);
+      await RelDB.get()
+          .feedsDAO
+          .deleteFeedMediasForFeedEntry(event.feedEntry.id);
     }
   }
 

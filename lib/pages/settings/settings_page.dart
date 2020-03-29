@@ -40,6 +40,20 @@ class SettingsPage extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   onTap: () {
+                    BlocProvider.of<SettingsBloc>(context)
+                        .add(SettingsBlocEventSetFreedomUnit(!state.freedomUnits));
+                  },
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child:
+                          SvgPicture.asset(state.freedomUnits ? 'assets/settings/icon_imperial.svg' : 'assets/settings/icon_metric.svg')),
+                  title: Text(state.freedomUnits ? 'Imperial unit system' : 'Metric unit system',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Tap to change to imperial'),
+                ),
+                ListTile(
+                  onTap: () {
                     BlocProvider.of<MainNavigatorBloc>(context)
                         .add(MainNavigateToSettingsAuth());
                   },
@@ -50,7 +64,22 @@ class SettingsPage extends StatelessWidget {
                           SvgPicture.asset('assets/settings/icon_account.svg')),
                   title: Text('SGL Account',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Enable backups and sharing'),
+                  subtitle:
+                      Text('Enable backups, remote control, sharing, etc..'),
+                ),
+                ListTile(
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsPlants());
+                  },
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child:
+                          SvgPicture.asset('assets/settings/icon_plants.svg')),
+                  title: Text('Plants',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Edit config, manage & delete plants.'),
                 )
               ],
             )));

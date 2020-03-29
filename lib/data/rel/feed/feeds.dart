@@ -45,6 +45,7 @@ class FeedEntries extends Table {
 
 class FeedMedias extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get feed => integer()();
   IntColumn get feedEntry => integer()();
   TextColumn get filePath => text()();
   TextColumn get thumbnailPath => text()();
@@ -88,6 +89,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   Future<Feed> getFeed(int feedID) {
     return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
+  }
+
+  Future deleteFeed(Feed feed) {
+    return delete(feeds).delete(feed);
   }
 
   SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(int feedID) {
@@ -137,6 +142,14 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .write(feedEntry);
   }
 
+  Future deleteFeedEntry(FeedEntry feedEntry) {
+    return delete(feedEntries).delete(feedEntry);
+  }
+
+  Future deleteFeedEntriesForFeed(int feedID) {
+    return (delete(feedEntries)..where((fe) => fe.feed.equals(feedID))).go();
+  }
+
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {
     return into(feedMedias).insert(feedMediaEntry);
   }
@@ -174,5 +187,18 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   Future<FeedMedia> getFeedMedia(int feedMediaID) {
     return (select(feedMedias)..where((f) => f.id.equals(feedMediaID)))
         .getSingle();
+  }
+
+  Future deleteFeedMedia(FeedMedia feedMedia) {
+    return delete(feedMedias).delete(feedMedia);
+  }
+
+  Future deleteFeedMediasForFeed(int feedID) {
+    return (delete(feedMedias)..where((fm) => fm.feed.equals(feedID))).go();
+  }
+
+  Future deleteFeedMediasForFeedEntry(int feedEntryID) {
+    return (delete(feedMedias)..where((fm) => fm.feedEntry.equals(feedEntryID)))
+        .go();
   }
 }

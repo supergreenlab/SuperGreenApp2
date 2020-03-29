@@ -2857,6 +2857,7 @@ class $FeedEntriesTable extends FeedEntries
 
 class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   final int id;
+  final int feed;
   final int feedEntry;
   final String filePath;
   final String thumbnailPath;
@@ -2865,6 +2866,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   final bool synced;
   FeedMedia(
       {@required this.id,
+      @required this.feed,
       @required this.feedEntry,
       @required this.filePath,
       @required this.thumbnailPath,
@@ -2879,6 +2881,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
     final boolType = db.typeSystem.forDartType<bool>();
     return FeedMedia(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
       feedEntry:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}feed_entry']),
       filePath: stringType
@@ -2898,6 +2901,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return FeedMedia(
       id: serializer.fromJson<int>(json['id']),
+      feed: serializer.fromJson<int>(json['feed']),
       feedEntry: serializer.fromJson<int>(json['feedEntry']),
       filePath: serializer.fromJson<String>(json['filePath']),
       thumbnailPath: serializer.fromJson<String>(json['thumbnailPath']),
@@ -2911,6 +2915,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'feed': serializer.toJson<int>(feed),
       'feedEntry': serializer.toJson<int>(feedEntry),
       'filePath': serializer.toJson<String>(filePath),
       'thumbnailPath': serializer.toJson<String>(thumbnailPath),
@@ -2924,6 +2929,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   FeedMediasCompanion createCompanion(bool nullToAbsent) {
     return FeedMediasCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       feedEntry: feedEntry == null && nullToAbsent
           ? const Value.absent()
           : Value(feedEntry),
@@ -2945,6 +2951,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
 
   FeedMedia copyWith(
           {int id,
+          int feed,
           int feedEntry,
           String filePath,
           String thumbnailPath,
@@ -2953,6 +2960,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           bool synced}) =>
       FeedMedia(
         id: id ?? this.id,
+        feed: feed ?? this.feed,
         feedEntry: feedEntry ?? this.feedEntry,
         filePath: filePath ?? this.filePath,
         thumbnailPath: thumbnailPath ?? this.thumbnailPath,
@@ -2964,6 +2972,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   String toString() {
     return (StringBuffer('FeedMedia(')
           ..write('id: $id, ')
+          ..write('feed: $feed, ')
           ..write('feedEntry: $feedEntry, ')
           ..write('filePath: $filePath, ')
           ..write('thumbnailPath: $thumbnailPath, ')
@@ -2978,18 +2987,21 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          feedEntry.hashCode,
+          feed.hashCode,
           $mrjc(
-              filePath.hashCode,
+              feedEntry.hashCode,
               $mrjc(
-                  thumbnailPath.hashCode,
-                  $mrjc(params.hashCode,
-                      $mrjc(serverID.hashCode, synced.hashCode)))))));
+                  filePath.hashCode,
+                  $mrjc(
+                      thumbnailPath.hashCode,
+                      $mrjc(params.hashCode,
+                          $mrjc(serverID.hashCode, synced.hashCode))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is FeedMedia &&
           other.id == this.id &&
+          other.feed == this.feed &&
           other.feedEntry == this.feedEntry &&
           other.filePath == this.filePath &&
           other.thumbnailPath == this.thumbnailPath &&
@@ -3000,6 +3012,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
 
 class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   final Value<int> id;
+  final Value<int> feed;
   final Value<int> feedEntry;
   final Value<String> filePath;
   final Value<String> thumbnailPath;
@@ -3008,6 +3021,7 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   final Value<bool> synced;
   const FeedMediasCompanion({
     this.id = const Value.absent(),
+    this.feed = const Value.absent(),
     this.feedEntry = const Value.absent(),
     this.filePath = const Value.absent(),
     this.thumbnailPath = const Value.absent(),
@@ -3017,17 +3031,20 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   });
   FeedMediasCompanion.insert({
     this.id = const Value.absent(),
+    @required int feed,
     @required int feedEntry,
     @required String filePath,
     @required String thumbnailPath,
     this.params = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
-  })  : feedEntry = Value(feedEntry),
+  })  : feed = Value(feed),
+        feedEntry = Value(feedEntry),
         filePath = Value(filePath),
         thumbnailPath = Value(thumbnailPath);
   FeedMediasCompanion copyWith(
       {Value<int> id,
+      Value<int> feed,
       Value<int> feedEntry,
       Value<String> filePath,
       Value<String> thumbnailPath,
@@ -3036,6 +3053,7 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
       Value<bool> synced}) {
     return FeedMediasCompanion(
       id: id ?? this.id,
+      feed: feed ?? this.feed,
       feedEntry: feedEntry ?? this.feedEntry,
       filePath: filePath ?? this.filePath,
       thumbnailPath: thumbnailPath ?? this.thumbnailPath,
@@ -3058,6 +3076,18 @@ class $FeedMediasTable extends FeedMedias
   GeneratedIntColumn _constructId() {
     return GeneratedIntColumn('id', $tableName, false,
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+  GeneratedIntColumn _feed;
+  @override
+  GeneratedIntColumn get feed => _feed ??= _constructFeed();
+  GeneratedIntColumn _constructFeed() {
+    return GeneratedIntColumn(
+      'feed',
+      $tableName,
+      false,
+    );
   }
 
   final VerificationMeta _feedEntryMeta = const VerificationMeta('feedEntry');
@@ -3127,7 +3157,7 @@ class $FeedMediasTable extends FeedMedias
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feedEntry, filePath, thumbnailPath, params, serverID, synced];
+      [id, feed, feedEntry, filePath, thumbnailPath, params, serverID, synced];
   @override
   $FeedMediasTable get asDslTable => this;
   @override
@@ -3140,6 +3170,12 @@ class $FeedMediasTable extends FeedMedias
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    }
+    if (d.feed.present) {
+      context.handle(
+          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
+    } else if (isInserting) {
+      context.missing(_feedMeta);
     }
     if (d.feedEntry.present) {
       context.handle(_feedEntryMeta,
@@ -3189,6 +3225,9 @@ class $FeedMediasTable extends FeedMedias
     final map = <String, Variable>{};
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.feed.present) {
+      map['feed'] = Variable<int, IntType>(d.feed.value);
     }
     if (d.feedEntry.present) {
       map['feed_entry'] = Variable<int, IntType>(d.feedEntry.value);

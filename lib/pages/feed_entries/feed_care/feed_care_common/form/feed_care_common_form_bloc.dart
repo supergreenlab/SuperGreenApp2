@@ -80,10 +80,10 @@ abstract class FeedCareCommonFormBloc
         params: Value(JsonEncoder().convert({'message': event.message})),
       ));
       for (FeedMediasCompanion m in event.beforeMedias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': true}))));
+        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': true}))));
       }
       for (FeedMediasCompanion m in event.afterMedias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
+        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
       }
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
       yield FeedCareCommonFormBlocStateDone(_args.plant, feedEntry);

@@ -42,8 +42,8 @@ class FeedWaterCardPage extends StatelessWidget {
                     ? '${state.params['volume'] * 4} gal'
                     : '${state.params['volume']} L',
                 style: TextStyle(
-                    fontSize: 60,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 45,
+                    fontWeight: FontWeight.w300,
                     color: Color(0xff3bb30b)),
               ),
             ),
@@ -53,20 +53,20 @@ class FeedWaterCardPage extends StatelessWidget {
             List<Widget> details = [];
             if (state.params['tooDry'] != null) {
               details.add(Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Text(
                   'Was Dry: ${state.params['tooDry'] == true ? 'YES' : 'NO'}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                 ),
               ));
             }
             if (state.params['nutrient'] != null) {
               details.add(
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Text(
                     'With nutes: ${state.params['nutrient'] == true ? 'YES' : 'NO'}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                   ),
                 ),
               );
@@ -89,7 +89,7 @@ class FeedWaterCardPage extends StatelessWidget {
                   child: FeedCardDate(state.feedEntry),
                 ),
                 Container(
-                  height: 110,
+                  height: 70,
                   alignment: Alignment.center,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

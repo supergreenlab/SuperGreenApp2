@@ -54,6 +54,12 @@ class AppDB {
     setAppData(appData);
   }
 
+  void setFreedomUnits(bool freedomUnits) {
+    AppData appData = getAppData();
+    appData.freedomUnits = freedomUnits;
+    setAppData(appData);
+  }
+
   void setJWT(String jwt) {
     AppData appData = getAppData();
     appData.jwt = jwt;

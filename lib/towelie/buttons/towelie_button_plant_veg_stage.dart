@@ -43,7 +43,7 @@ class TowelieButtonPlantVegStage extends TowelieButton {
       if (settings['plantType'] == 'PHOTO') {
         settings['schedule'] = 'VEG';
       }
-      await db.plantsDAO.updatePlant(plant.id,
+      await db.plantsDAO.updatePlant(
           PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
       await TowelieCardsFactory.createPlantTutoTakePic(event.feed);
       await removeButtons(event.feedEntry);

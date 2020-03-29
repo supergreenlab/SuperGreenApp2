@@ -366,6 +366,13 @@ class MainNavigateToSettingsAuth extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
+class MainNavigateToSettingsPlants extends MainNavigatorEvent {
+  MainNavigateToSettingsPlants();
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -502,6 +509,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSettingsAuth) {
       future = _navigatorKey.currentState
           .pushNamed('/settings/auth', arguments: event);
+    } else if (event is MainNavigateToSettingsPlants) {
+      future = _navigatorKey.currentState
+          .pushNamed('/settings/plants', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

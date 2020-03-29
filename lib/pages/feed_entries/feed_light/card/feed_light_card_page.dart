@@ -44,7 +44,7 @@ class FeedLightCardPage extends StatelessWidget {
                     child: FeedCardDate(state.feedEntry),
                   ),
                   Container(
-                    height: 150,
+                    height: 130,
                     alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -84,8 +84,8 @@ class FeedLightCardPage extends StatelessWidget {
                     Text('channel'),
                     Text('${v['i'] + 1}',
                         style: TextStyle(
-                            fontSize: 55,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 45,
+                            fontWeight: FontWeight.w300,
                             color: Colors.grey)),
                   ],
                 ),
@@ -94,11 +94,11 @@ class FeedLightCardPage extends StatelessWidget {
                   children: <Widget>[
                     Text('${v['from']}%',
                         style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                    Icon(Icons.arrow_forward),
+                            TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+                    Icon(Icons.arrow_forward, size: 18),
                     Text('${v['to']}%',
                         style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green)),
+                            TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.green)),
                   ],
                 ),
               ],

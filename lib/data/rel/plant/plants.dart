@@ -78,6 +78,14 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return (select(plants)..where((p) => p.id.equals(id))).getSingle();
   }
 
+  Future<List<Plant>> getPlants() {
+    return select(plants).get();
+  }
+
+  Stream<List<Plant>> watchPlants() {
+    return select(plants).watch();
+  }
+
   Future<Plant> getPlantWithFeed(int feedID) {
     return (select(plants)..where((p) => p.feed.equals(feedID))).getSingle();
   }
@@ -91,16 +99,17 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future updatePlant(PlantsCompanion plant) {
-    return (update(plants)..where((b) => b.id.equals(plant.id.value))).write(plant);
+    return (update(plants)..where((b) => b.id.equals(plant.id.value)))
+        .write(plant);
+  }
+
+  Future deletePlant(Plant plant) {
+    return delete(plants).delete(plant);
   }
 
   Future cleanDeviceIDs(int deviceID) {
     return (update(plants)..where((b) => b.device.equals(deviceID)))
         .write(PlantsCompanion(device: Value(null)));
-  }
-
-  Stream<List<Plant>> watchPlants() {
-    return select(plants).watch();
   }
 
   Future<int> addChartCache(ChartCachesCompanion chartCache) {
@@ -140,7 +149,8 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future updateTimelapse(TimelapsesCompanion timelapse) {
-    return (update(timelapses)..where((t) => t.id.equals(timelapse.id.value))).write(timelapse);
+    return (update(timelapses)..where((t) => t.id.equals(timelapse.id.value)))
+        .write(timelapse);
   }
 
   // TODO move this to the kv store, separate from the plant concept

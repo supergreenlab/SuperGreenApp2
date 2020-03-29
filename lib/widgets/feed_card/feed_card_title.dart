@@ -17,17 +17,20 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 
 class FeedCardTitle extends StatelessWidget {
   final String icon;
   final String title;
   final FeedEntry feedEntry;
   final Function onEdit;
+  final bool canDelete;
 
   const FeedCardTitle(this.icon, this.title, this.feedEntry,
-      {this.onEdit});
+      {this.onEdit, this.canDelete = true});
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +49,12 @@ class FeedCardTitle extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.w300,
               color: Colors.black87)),
+      Expanded(
+        child: Container(),
+      ),
     ];
     if (onEdit != null) {
-      content.addAll([
-        Expanded(
-          child: Container(),
-        ),
+      content.add(
         IconButton(
           icon: Icon(
             Icons.edit,
@@ -59,7 +62,20 @@ class FeedCardTitle extends StatelessWidget {
           ),
           onPressed: onEdit,
         ),
-      ]);
+      );
+    }
+    if (canDelete == true) {
+      content.add(
+        IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: Colors.grey,
+          ),
+          onPressed: () {
+            _deleteFeedEntry(context);
+          },
+        ),
+      );
     }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 3.0),
@@ -67,5 +83,35 @@ class FeedCardTitle extends StatelessWidget {
         children: content,
       ),
     );
+  }
+
+  Future _deleteFeedEntry(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete this card?'),
+            content: Text('This can\'t be reverted. Continue?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<FeedBloc>(context)
+          .add(FeedBlocEventDeleteFeedEntry(feedEntry));
+    }
   }
 }

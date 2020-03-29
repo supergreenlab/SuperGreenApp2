@@ -18,23 +18,37 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 
-class SettingsBlocEvent extends Equatable {
+abstract class SettingsBlocEvent extends Equatable {}
+
+class SettingsBlocEventSetFreedomUnit extends SettingsBlocEvent {
+  final bool freedomUnits;
+
+  SettingsBlocEventSetFreedomUnit(this.freedomUnits);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [freedomUnits];
 }
 
 class SettingsBlocState extends Equatable {
+  final bool freedomUnits;
+
+  SettingsBlocState(this.freedomUnits);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [freedomUnits];
 }
 
 class SettingsBloc extends Bloc<SettingsBlocEvent, SettingsBlocState> {
   @override
-  SettingsBlocState get initialState => SettingsBlocState();
+  SettingsBlocState get initialState => SettingsBlocState(AppDB().getAppData().freedomUnits);
 
   @override
   Stream<SettingsBlocState> mapEventToState(SettingsBlocEvent event) async* {
+    if (event is SettingsBlocEventSetFreedomUnit) {
+      AppDB().setFreedomUnits(event.freedomUnits);
+      yield SettingsBlocState(event.freedomUnits);
+    }
   }
-
 }
