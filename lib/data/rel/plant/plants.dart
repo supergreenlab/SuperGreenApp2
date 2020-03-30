@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'plants.g.dart';
@@ -153,7 +154,6 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
         .write(timelapse);
   }
 
-  // TODO move this to the kv store, separate from the plant concept
   Map<String, dynamic> plantSettings(Plant plant) {
     final Map<String, dynamic> settings = JsonDecoder().convert(plant.settings);
     // TODO make actual enums or constants
@@ -161,28 +161,15 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
       'nPlants': 1,
       'phase': 'VEG', // VEG or BLOOM
       'plantType': 'PHOTO', // PHOTO or AUTO
-      'schedule':
-          settings['schedule'] ?? 'VEG', // Any of the schedule keys below
-      'schedules': {
-        'VEG': {
-          'ON_HOUR': settings['VEG_ON_HOUR'] ?? 3,
-          'ON_MIN': settings['VEG_ON_MIN'] ?? 0,
-          'OFF_HOUR': settings['VEG_OFF_HOUR'] ?? 21,
-          'OFF_MIN': settings['VEG_OFF_MIN'] ?? 0,
-        },
-        'BLOOM': {
-          'ON_HOUR': settings['BLOOM_ON_HOUR'] ?? 6,
-          'ON_MIN': settings['BLOOM_ON_MIN'] ?? 0,
-          'OFF_HOUR': settings['BLOOM_OFF_HOUR'] ?? 18,
-          'OFF_MIN': settings['BLOOM_OFF_MIN'] ?? 0,
-        },
-        'AUTO': {
-          'ON_HOUR': settings['AUTO_ON_HOUR'] ?? 0,
-          'ON_MIN': settings['AUTO_ON_MIN'] ?? 0,
-          'OFF_HOUR': settings['AUTO_OFF_HOUR'] ?? 0,
-          'OFF_MIN': settings['AUTO_OFF_MIN'] ?? 0,
-        },
-      }
     };
+  }
+
+  Future<String> boxSettingsID(Plant plant) async {
+    String boxID = '${plant.name}.${plant.id}';
+    if (plant.device != null) {
+      Device device = await RelDB.get().devicesDAO.getDevice(plant.device);
+      boxID = '${device.identifier}.${plant.deviceBox}';
+    }
+    return boxID;
   }
 }

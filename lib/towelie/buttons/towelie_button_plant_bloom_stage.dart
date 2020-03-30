@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -38,13 +39,18 @@ class TowelieButtonPlantBloomStage extends TowelieButton {
     if (event.params['ID'] == 'PLANT_BLOOM_STAGE') {
       final db = RelDB.get();
       Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
-      Map<String, dynamic> settings = db.plantsDAO.plantSettings(plant);
-      settings['phase'] = 'BLOOM';
-      if (settings['plantType'] == 'PHOTO') {
-        settings['schedule'] = 'BLOOM';
+      Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
+      plantSettings['phase'] = 'BLOOM';
+      await db.plantsDAO.updatePlant(PlantsCompanion(
+          settings: Value(JsonEncoder().convert(plantSettings))));
+
+      String boxID = await db.plantsDAO.boxSettingsID(plant);
+      final Map<String, dynamic> boxSettings = AppDB().getBoxSettings(boxID);
+      if (plantSettings['plantType'] == 'PHOTO') {
+        boxSettings['schedule'] = 'BLOOM';
       }
-      await db.plantsDAO.updatePlant(
-          PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
+      AppDB().setBoxSettings(boxID, boxSettings);
+
       await TowelieCardsFactory.createPlantTutoTakePic(event.feed);
       await removeButtons(event.feedEntry);
     }

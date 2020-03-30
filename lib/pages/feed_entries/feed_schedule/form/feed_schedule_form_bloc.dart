@@ -23,6 +23,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -128,9 +129,10 @@ class FeedScheduleFormBloc
     if (event is FeedScheduleFormBlocEventInit) {
       final db = RelDB.get();
       _device = await db.devicesDAO.getDevice(_args.plant.device);
-      Map<String, dynamic> settings = db.plantsDAO.plantSettings(_args.plant);
-      _initialSchedule = _schedule = settings['schedule'];
-      _initialSchedules = _schedules = settings['schedules'];
+      String boxID = await db.plantsDAO.boxSettingsID(_args.plant);
+      final Map<String, dynamic> boxSettings = AppDB().getBoxSettings(boxID);
+      _initialSchedule = _schedule = boxSettings['schedule'];
+      _initialSchedules = _schedules = boxSettings['schedules'];
       yield FeedScheduleFormBlocStateLoaded(
           _schedule, _schedules, _initialSchedule, _initialSchedules);
     } else if (event is FeedScheduleFormBlocEventSetSchedule) {
@@ -161,13 +163,17 @@ class FeedScheduleFormBloc
             _device, offHour, timezone(_schedules[_schedule]['OFF_HOUR']));
       }
 
-      final Map<String, dynamic> settings =
+      final Map<String, dynamic> plantSettings =
           db.plantsDAO.plantSettings(_args.plant);
-      settings['phase'] = _schedule;
-      settings['schedule'] = _schedule;
-      settings['schedules'] = _schedules;
-      await db.plantsDAO.updatePlant(
-          PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
+      plantSettings['phase'] = _schedule;
+      await db.plantsDAO.updatePlant(PlantsCompanion(
+          settings: Value(JsonEncoder().convert(plantSettings))));
+
+      String boxID = await db.plantsDAO.boxSettingsID(_args.plant);
+      final Map<String, dynamic> boxSettings = AppDB().getBoxSettings(boxID);
+      boxSettings['schedule'] = _schedule;
+      boxSettings['schedules'] = _schedules;
+      await AppDB().setBoxSettings(boxID, boxSettings);
 
       if (_schedule == 'BLOOM') {
         await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(

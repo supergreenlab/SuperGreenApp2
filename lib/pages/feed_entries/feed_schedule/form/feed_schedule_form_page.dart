@@ -39,6 +39,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
   TextEditingController offHourEditingController;
   TextEditingController offMinEditingController;
   String scheduleChange;
+  bool editedSchedule = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                       'Make sure you are on the same network.\nRemote control is coming soon:)',
                   child: Icon(Icons.offline_bolt));
             } else if (state is FeedScheduleFormBlocStateLoaded) {
-              changed = valid = state.schedule != state.initialSchedule;
+              changed = valid = state.schedule != state.initialSchedule || editedSchedule;
               body = _renderSchedules(context, state);
               if (scheduleChange != null) {
                 body = Stack(
@@ -313,6 +314,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                           ));
                           setState(() {
                             scheduleChange = null;
+                            editedSchedule = true;
                           });
                         },
                       ),

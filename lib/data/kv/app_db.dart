@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 
@@ -24,6 +26,7 @@ class AppDB {
 
   Box _settingsDB;
   Box _miscDB;
+  Box _boxDB;
 
   factory AppDB() => _instance;
 
@@ -32,6 +35,7 @@ class AppDB {
   Future<void> init() async {
     _settingsDB = await Hive.openBox('settings');
     _miscDB = await Hive.openBox('misc');
+    _boxDB = await Hive.openBox('box');
   }
 
   AppData getAppData() {
@@ -78,5 +82,39 @@ class AppDB {
 
   bool isTipDone(String tipID) {
     return _miscDB.get('$tipID.done', defaultValue: false);
+  }
+
+  Future setBoxSettings(String boxID, Map<String, dynamic> settings) async {
+    await _boxDB.put('$boxID.settings', JsonEncoder().convert(settings));
+    await _boxDB.put('$boxID.dirty', true);
+  }
+
+  Map<String, dynamic> getBoxSettings(String boxID) {
+    Map<String, dynamic> settings = JsonDecoder()
+        .convert(_boxDB.get('$boxID.settings', defaultValue: '{}'));
+    return {
+      'schedule':
+          settings['schedule'] ?? 'VEG', // Any of the schedule keys below
+      'schedules': {
+        'VEG': {
+          'ON_HOUR': settings['schedules']['VEG']['ON_HOUR'] ?? 3,
+          'ON_MIN': settings['schedules']['VEG']['ON_MIN'] ?? 0,
+          'OFF_HOUR': settings['schedules']['VEG']['OFF_HOUR'] ?? 21,
+          'OFF_MIN': settings['schedules']['VEG']['OFF_MIN'] ?? 0,
+        },
+        'BLOOM': {
+          'ON_HOUR': settings['schedules']['BLOOM']['ON_HOUR'] ?? 6,
+          'ON_MIN': settings['schedules']['BLOOM']['ON_MIN'] ?? 0,
+          'OFF_HOUR': settings['schedules']['BLOOM']['OFF_HOUR'] ?? 18,
+          'OFF_MIN': settings['schedules']['BLOOM']['OFF_MIN'] ?? 0,
+        },
+        'AUTO': {
+          'ON_HOUR': settings['schedules']['AUTO']['ON_HOUR'] ?? 0,
+          'ON_MIN': settings['schedules']['AUTO']['ON_MIN'] ?? 0,
+          'OFF_HOUR': settings['schedules']['AUTO']['OFF_HOUR'] ?? 0,
+          'OFF_MIN': settings['schedules']['AUTO']['OFF_MIN'] ?? 0,
+        },
+      }
+    };
   }
 }
