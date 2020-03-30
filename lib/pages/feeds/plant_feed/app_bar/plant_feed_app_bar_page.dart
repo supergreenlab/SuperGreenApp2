@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:super_green_app/data/backend/time_series/time_series_api.dart';
@@ -66,8 +67,7 @@ class PlantFeedAppBarPage extends StatelessWidget {
                   animate: false,
                   defaultRenderer: charts.LineRendererConfig(),
                   customSeriesRenderers: [
-                    charts.PointRendererConfig(
-                        customRendererId: 'customPoint')
+                    charts.PointRendererConfig(customRendererId: 'customPoint')
                   ]),
             ),
           ),
@@ -77,8 +77,8 @@ class PlantFeedAppBarPage extends StatelessWidget {
               child: IconButton(
                   icon: Icon(Icons.fullscreen, color: Colors.white70, size: 30),
                   onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToMetrics(state.plant, state.graphData));
+                    BlocProvider.of<MainNavigatorBloc>(context).add(
+                        MainNavigateToMetrics(state.plant, state.graphData));
                   })),
         ],
       ),
@@ -112,28 +112,40 @@ class PlantFeedAppBarPage extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _renderMetric(
-                    Colors.green,
-                    'Temp',
-                    '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
-                    '${TimeSeriesAPI.min(state.graphData[0].data).metric.toInt()}$tempUnit',
-                    '${TimeSeriesAPI.max(state.graphData[0].data).metric.toInt()}$tempUnit'),
-                _renderMetric(
-                    Colors.blue,
-                    'Humi',
-                    '${state.graphData[1].data[state.graphData[1].data.length - 1].metric.toInt()}%',
-                    '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
-                    '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%'),
-                _renderMetric(
-                    Colors.yellow,
-                    'Light',
-                    '${state.graphData[2].data[state.graphData[2].data.length - 1].metric.toInt()}%',
-                    '${TimeSeriesAPI.min(state.graphData[2].data).metric.toInt()}%',
-                    '${TimeSeriesAPI.max(state.graphData[2].data).metric.toInt()}%'),
-              ],
+            child: Container(
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  Container(width: 4),
+                  _renderMetric(
+                      Colors.green,
+                      'Temp',
+                      '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
+                      '${TimeSeriesAPI.min(state.graphData[0].data).metric.toInt()}$tempUnit',
+                      '${TimeSeriesAPI.max(state.graphData[0].data).metric.toInt()}$tempUnit'),
+                  _renderMetric(
+                      Colors.blue,
+                      'Humi',
+                      '${state.graphData[1].data[state.graphData[1].data.length - 1].metric.toInt()}%',
+                      '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
+                      '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%'),
+                  _renderMetric(
+                      Colors.cyan,
+                      'Ventilation',
+                      '${state.graphData[3].data[state.graphData[3].data.length - 1].metric.toInt()}%',
+                      '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
+                      '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%'),
+                  _renderMetric(
+                      Colors.yellow,
+                      'Light',
+                      '${state.graphData[2].data[state.graphData[2].data.length - 1].metric.toInt()}%',
+                      '${TimeSeriesAPI.min(state.graphData[2].data).metric.toInt()}%',
+                      '${TimeSeriesAPI.max(state.graphData[2].data).metric.toInt()}%'),
+                  Container(width: 4),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -146,26 +158,33 @@ class PlantFeedAppBarPage extends StatelessWidget {
 
   Widget _renderMetric(
       Color color, String name, String value, String min, String max) {
-    return Column(
-      children: <Widget>[
-        Text(name, style: TextStyle(color: Colors.white)),
-        Row(
-          children: <Widget>[
-            Text(value,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w300,
-                )),
-            Column(
-              children: <Widget>[
-                Text(max, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
-                Text(min, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
-              ],
-            )
-          ],
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: <Widget>[
+          Text(name, style: TextStyle(color: Colors.white)),
+          Row(
+            children: <Widget>[
+              Text(value,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w300,
+                  )),
+              Column(
+                children: <Widget>[
+                  Text(max,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w300)),
+                  Text(min,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w300)),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }

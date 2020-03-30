@@ -102,19 +102,28 @@ class PlantFeedAppBarBloc
       }
       String identifier = device.identifier;
       int deviceBox = plant.deviceBox;
-      charts.Series<Metric, DateTime> temp = await TimeSeriesAPI.fetchTimeSeries(
-          plant,
-          identifier,
-          'Temperature',
-          'BOX_${deviceBox}_TEMP',
-          charts.MaterialPalette.green.shadeDefault,
-          transform: _tempUnit);
-      charts.Series<Metric, DateTime> humi = await TimeSeriesAPI.fetchTimeSeries(
-          plant,
-          identifier,
-          'Humidity',
-          'BOX_${deviceBox}_HUMI',
-          charts.MaterialPalette.blue.shadeDefault);
+      charts.Series<Metric, DateTime> temp =
+          await TimeSeriesAPI.fetchTimeSeries(
+              plant,
+              identifier,
+              'Temperature',
+              'BOX_${deviceBox}_TEMP',
+              charts.MaterialPalette.green.shadeDefault,
+              transform: _tempUnit);
+      charts.Series<Metric, DateTime> humi =
+          await TimeSeriesAPI.fetchTimeSeries(
+              plant,
+              identifier,
+              'Humidity',
+              'BOX_${deviceBox}_HUMI',
+              charts.MaterialPalette.blue.shadeDefault);
+      charts.Series<Metric, DateTime> ventilation =
+          await TimeSeriesAPI.fetchTimeSeries(
+              plant,
+              identifier,
+              'Ventilation',
+              'BOX_${deviceBox}_BLOWER_DUTY',
+              charts.MaterialPalette.cyan.shadeDefault);
       List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(
           plant, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
       List<List<dynamic>> dims = [];
@@ -135,7 +144,7 @@ class PlantFeedAppBarBloc
           TimeSeriesAPI.multiplyMetric(timerOutput, avgDims),
           'Light',
           charts.MaterialPalette.yellow.shadeDefault);
-      return [temp, humi, light];
+      return [temp, humi, light, ventilation];
     }
   }
 
