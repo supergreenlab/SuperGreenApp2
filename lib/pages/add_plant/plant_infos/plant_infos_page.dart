@@ -151,7 +151,7 @@ class PlantInfosPageState extends State<PlantInfosPage> {
           child: Align(
             alignment: Alignment.centerRight,
             child: GreenButton(
-              title: 'CREATE BOX',
+              title: 'CREATE PLANT',
               onPressed: _nameController.value.text != ''
                   ? () => _handleInput(context)
                   : null,

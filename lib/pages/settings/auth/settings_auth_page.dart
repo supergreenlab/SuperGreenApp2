@@ -121,7 +121,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: GreenButton(
-                      title: 'CREATE BOX',
+                      title: 'CREATE ACCOUNT',
                       onPressed: _nicknameController.value.text != '' &&
                               _passwordController.value.text != ''
                           ? () => _handleInput(context)
