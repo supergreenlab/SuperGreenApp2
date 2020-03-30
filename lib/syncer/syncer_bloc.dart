@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/kv/models/app_data.dart';
 
 abstract class SyncerBlocEvent extends Equatable {}
 

@@ -122,7 +122,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               },
               body: WillPopScope(
                 onWillPop: () async {
-                  if (state is FeedLightFormBlocStateNotReachable) {
+                  if (state is FeedLightFormBlocStateNotReachable ||
+                      state is FeedLightFormBlocStateNoDevice) {
                     return true;
                   }
                   BlocProvider.of<FeedLightFormBloc>(context)

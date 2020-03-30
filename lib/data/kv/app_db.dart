@@ -20,6 +20,7 @@ import 'dart:convert';
 
 import 'package:hive/hive.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
+import 'package:super_green_app/misc/map_utils.dart';
 
 class AppDB {
   static final AppDB _instance = AppDB._newInstance();
@@ -97,22 +98,22 @@ class AppDB {
           settings['schedule'] ?? 'VEG', // Any of the schedule keys below
       'schedules': {
         'VEG': {
-          'ON_HOUR': settings['schedules']['VEG']['ON_HOUR'] ?? 3,
-          'ON_MIN': settings['schedules']['VEG']['ON_MIN'] ?? 0,
-          'OFF_HOUR': settings['schedules']['VEG']['OFF_HOUR'] ?? 21,
-          'OFF_MIN': settings['schedules']['VEG']['OFF_MIN'] ?? 0,
+          'ON_HOUR': MapUtils.valuePath(settings, 'schedules.VEG.ON_HOUR') ?? 3,
+          'ON_MIN': MapUtils.valuePath(settings, 'schedules.VEG.ON_MIN') ?? 0,
+          'OFF_HOUR': MapUtils.valuePath(settings, 'schedules.VEG.OFF_HOUR') ?? 21,
+          'OFF_MIN': MapUtils.valuePath(settings, 'schedules.VEG.OFF_MIN') ?? 0,
         },
         'BLOOM': {
-          'ON_HOUR': settings['schedules']['BLOOM']['ON_HOUR'] ?? 6,
-          'ON_MIN': settings['schedules']['BLOOM']['ON_MIN'] ?? 0,
-          'OFF_HOUR': settings['schedules']['BLOOM']['OFF_HOUR'] ?? 18,
-          'OFF_MIN': settings['schedules']['BLOOM']['OFF_MIN'] ?? 0,
+          'ON_HOUR': MapUtils.valuePath(settings, 'schedules.BLOOM.ON_HOUR') ?? 6,
+          'ON_MIN': MapUtils.valuePath(settings, 'schedules.BLOOM.ON_MIN') ?? 0,
+          'OFF_HOUR': MapUtils.valuePath(settings, 'schedules.BLOOM.OFF_HOUR') ?? 18,
+          'OFF_MIN': MapUtils.valuePath(settings, 'schedules.BLOOM.OFF_MIN') ?? 0,
         },
         'AUTO': {
-          'ON_HOUR': settings['schedules']['AUTO']['ON_HOUR'] ?? 0,
-          'ON_MIN': settings['schedules']['AUTO']['ON_MIN'] ?? 0,
-          'OFF_HOUR': settings['schedules']['AUTO']['OFF_HOUR'] ?? 0,
-          'OFF_MIN': settings['schedules']['AUTO']['OFF_MIN'] ?? 0,
+          'ON_HOUR': MapUtils.valuePath(settings, 'schedules.AUTO.ON_HOUR') ?? 0,
+          'ON_MIN': MapUtils.valuePath(settings, 'schedules.AUTO.ON_MIN') ?? 0,
+          'OFF_HOUR': MapUtils.valuePath(settings, 'schedules.AUTO.OFF_HOUR') ?? 0,
+          'OFF_MIN': MapUtils.valuePath(settings, 'schedules.AUTO.OFF_MIN') ?? 0,
         },
       }
     };
