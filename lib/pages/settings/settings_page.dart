@@ -50,7 +50,7 @@ class SettingsPage extends StatelessWidget {
                           SvgPicture.asset(state.freedomUnits ? 'assets/settings/icon_imperial.svg' : 'assets/settings/icon_metric.svg')),
                   title: Text(state.freedomUnits ? 'Imperial unit system' : 'Metric unit system',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Tap to change to imperial'),
+                  subtitle: Text('Tap to change to ${state.freedomUnits ? 'metric' : 'imperial'}'),
                 ),
                 ListTile(
                   onTap: () {
