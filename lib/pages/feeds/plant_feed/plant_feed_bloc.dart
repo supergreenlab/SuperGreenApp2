@@ -105,9 +105,14 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
         }
         _plant = await RelDB.get().plantsDAO.getPlant(appData.lastPlantID);
         if (_plant == null) {
-          _db.setLastPlant(null);
-          yield PlantFeedBlocStateNoPlant();
-          return;
+          List<Plant> plants = await RelDB.get().plantsDAO.getPlants();
+          if (plants.length == 0) {
+            _db.setLastPlant(null);
+            yield PlantFeedBlocStateNoPlant();
+            return;
+          }
+          _plant = plants[0];
+          _db.setLastPlant(_plant.id);
         }
       } else {
         _db.setLastPlant(_plant.id);
