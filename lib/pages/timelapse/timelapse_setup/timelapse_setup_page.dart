@@ -23,7 +23,9 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _strain = TextEditingController();
   final TextEditingController _uploadName = TextEditingController();
-  final TextEditingController _rotate = TextEditingController();
+  final TextEditingController _rotate = TextEditingController(text: 'false');
+
+  bool _valid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +93,8 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
                           alignment: Alignment.centerRight,
                           child: GreenButton(
                             title: 'OK',
-                            onPressed: () {
+                            onPressed: _valid ? () {
+                              if (!_valid) return;
                               BlocProvider.of<TimelapseSetupBloc>(context).add(
                                   TimelapseSetupBlocEventSetConfig(
                                       ssid: _ssid.value.text,
@@ -102,7 +105,7 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
                                       strain: _strain.value.text,
                                       uploadName: _uploadName.value.text,
                                       rotate: _rotate.value.text));
-                            },
+                            } : null,
                           ),
                         ),
                         Container(height: 50),
@@ -140,10 +143,26 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
       child: TextFormField(
+        onChanged: (_) {
+          setState(() {
+            _valid = _isValid();
+          });
+        },
         style: TextStyle(fontSize: 18),
         decoration: InputDecoration(labelText: name),
         controller: controller,
       ),
     );
+  }
+
+  bool _isValid() {
+    return _ssid.value.text != '' &&
+        _password.value.text != '' &&
+        _controllerid.value.text != '' &&
+        _dropboxToken.value.text != '' &&
+        _name.value.text != '' &&
+        _strain.value.text != '' &&
+        _uploadName.value.text != '' &&
+        _rotate.value.text != '';
   }
 }

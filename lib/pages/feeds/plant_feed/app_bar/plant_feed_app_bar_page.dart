@@ -155,11 +155,12 @@ class PlantFeedAppBarPage extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontSize: 30,
+                  fontWeight: FontWeight.w300,
                 )),
             Column(
               children: <Widget>[
-                Text(max, style: TextStyle(color: Colors.white)),
-                Text(min, style: TextStyle(color: Colors.white)),
+                Text(max, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
+                Text(min, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
               ],
             )
           ],
