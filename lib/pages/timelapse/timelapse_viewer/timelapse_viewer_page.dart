@@ -76,15 +76,42 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                 _matrix[index] = Matrix4.identity();
               });
             },
-            child: Transform(
-                transform: _matrix[index],
-                child: Image.memory(state.images[index])));
+            child: SizedBox(
+                height: 270,
+                child: Stack(children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                          child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 4.0,
+                            ),
+                          ),
+                          Text(
+                              'Pictures are uploaded every 10min,\nPlease wait..',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey)),
+                        ],
+                      ))
+                    ],
+                  ),
+                  Transform(
+                      transform: _matrix[index],
+                      child: Image.memory(
+                        state.images[index],
+                        fit: BoxFit.cover,
+                      )),
+                ])));
       },
     );
   }
 
   Widget _renderAdd(
-      BuildContext context, TimelapseViewerBlocStateLoaded state) { 
+      BuildContext context, TimelapseViewerBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

@@ -53,7 +53,7 @@ class FullscreenMediaBloc
   get _isVideo => _args.feedMedia.filePath.endsWith('mp4');
 
   FullscreenMediaBloc(this._args) {
-    Timer(Duration(seconds: 1), () => add(FullscreenMediaBlocEventInit()));
+    add(FullscreenMediaBlocEventInit());
   }
 
   @override

@@ -95,7 +95,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                         child: Row(
                           children: <Widget>[
                             Icon(Icons.add),
-                            Text('ADD NEW CONTROLLER'),
+                            Text('NEW CONTROLLER'),
                           ],
                         ),
                         onPressed: () {
