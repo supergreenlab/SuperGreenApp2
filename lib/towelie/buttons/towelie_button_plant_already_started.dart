@@ -31,7 +31,7 @@ class TowelieButtonPlantAlreadyStarted extends TowelieButton {
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'PLAN_ALREADY_STARTED') {
+    if (event.params['ID'] == 'PLANT_ALREADY_STARTED') {
       await TowelieCardsFactory.createPlantVegOrBloom(event.feed);
       await removeButtons(event.feedEntry);
     }
