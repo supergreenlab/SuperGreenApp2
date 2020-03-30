@@ -55,6 +55,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   SpeedDialType _speedDialType = SpeedDialType.general;
   bool _speedDialOpen = false;
   bool _showIP = false;
+  bool _reachable = false;
+  String _deviceIP = '';
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         return true;
       },
       child: BlocListener<PlantFeedBloc, PlantFeedBlocState>(
-        listener: (BuildContext context, state) {
+        listener: (BuildContext context, PlantFeedBlocState state) {
           if (state is PlantFeedBlocStateLoaded) {
             if (state.plant.device != null) {
               BlocProvider.of<DeviceDaemonBloc>(context)
@@ -94,13 +96,27 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               );
             }
 
-            return Scaffold(
-                drawer: Drawer(child: this._drawerContent(context, state)),
-                body: AnimatedSwitcher(
-                    child: body, duration: Duration(milliseconds: 200)),
-                floatingActionButton: state is PlantFeedBlocStateLoaded
-                    ? _renderSpeedDial(context, state)
-                    : null);
+            return BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
+              listener:
+                  (BuildContext context, DeviceDaemonBlocState daemonState) {
+                if (state is PlantFeedBlocStateLoaded) {
+                  if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
+                      daemonState.device.id == state.plant.device) {
+                    setState(() {
+                      _reachable = daemonState.reachable;
+                      _deviceIP = daemonState.device.ip;
+                    });
+                  }
+                }
+              },
+              child: Scaffold(
+                  drawer: Drawer(child: this._drawerContent(context, state)),
+                  body: AnimatedSwitcher(
+                      child: body, duration: Duration(milliseconds: 200)),
+                  floatingActionButton: state is PlantFeedBlocStateLoaded
+                      ? _renderSpeedDial(context, state)
+                      : null),
+            );
           },
         ),
       ),
@@ -328,7 +344,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   void Function() _onSpeedDialSelected(BuildContext context,
       MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
-      {String, tipID, List<String> tipPaths}) {
+      {String tipID, List<String> tipPaths}) {
     return () {
       _openCloseDial.value = Random().nextInt(1 << 32);
       if (tipPaths != null && !AppDB().isTipDone(tipID)) {
@@ -342,60 +358,45 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   Widget _renderFeed(BuildContext context, PlantFeedBlocState state) {
     if (state is PlantFeedBlocStateLoaded) {
-      return BlocBuilder<DeviceDaemonBloc, DeviceDaemonBlocState>(condition:
-          (DeviceDaemonBlocState oldState, DeviceDaemonBlocState newState) {
-        return newState is DeviceDaemonBlocStateDeviceReachable &&
-            newState.device.id == state.plant.device;
-      }, builder: (BuildContext context, DeviceDaemonBlocState daemonState) {
-        bool reachable = false;
-        if (daemonState is DeviceDaemonBlocStateDeviceReachable) {
-          reachable = daemonState.reachable;
-        }
-        List<Widget> actions = [
-          IconButton(
-            icon: Icon(Icons.remove_red_eye),
-            tooltip: 'View live cams',
-            onPressed: () {
-              if (state.nTimelapses == 0) {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToTimelapseHowto(state.plant));
-              } else {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToTimelapseViewer(state.plant));
-              }
-            },
-          ),
-        ];
-        if (state.plant.device != null && reachable) {
-          actions.insert(
-              0,
-              IconButton(
-                icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
-                tooltip: 'Sunglasses mode',
-                onPressed: () {
-                  BlocProvider.of<PlantFeedBloc>(context)
-                      .add(PlantFeedBlocEventSunglasses());
-                },
-              ));
-        }
-        return BlocProvider(
-          key: Key('feed'),
-          create: (context) => FeedBloc(state.plant.feed),
-          child: FeedPage(
-            color: Color(0xff063047),
-            actions: actions,
-            bottomPadding: true,
-            title: '',
-            appBarHeight: 300,
-            appBar: _renderAppBar(
-                context,
-                state,
-                daemonState is DeviceDaemonBlocStateDeviceReachable
-                    ? daemonState
-                    : null),
-          ),
-        );
-      });
+      List<Widget> actions = [
+        IconButton(
+          icon: Icon(Icons.remove_red_eye),
+          tooltip: 'View live cams',
+          onPressed: () {
+            if (state.nTimelapses == 0) {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToTimelapseHowto(state.plant));
+            } else {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToTimelapseViewer(state.plant));
+            }
+          },
+        ),
+      ];
+      if (state.plant.device != null && _reachable) {
+        actions.insert(
+            0,
+            IconButton(
+              icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
+              tooltip: 'Sunglasses mode',
+              onPressed: () {
+                BlocProvider.of<PlantFeedBloc>(context)
+                    .add(PlantFeedBlocEventSunglasses());
+              },
+            ));
+      }
+      return BlocProvider(
+        key: Key('feed'),
+        create: (context) => FeedBloc(state.plant.feed),
+        child: FeedPage(
+          color: Color(0xff063047),
+          actions: actions,
+          bottomPadding: true,
+          title: '',
+          appBarHeight: 300,
+          appBar: _renderAppBar(context, state),
+        ),
+      );
     } else if (state is PlantFeedBlocStateNoPlant) {
       return Fullscreen(
           title: 'No plant yet.',
@@ -557,8 +558,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         .add(MainNavigateToNewPlantInfosEvent());
   }
 
-  Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state,
-      DeviceDaemonBlocStateDeviceReachable daemonState) {
+  Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state) {
     String name = state.plant.name;
 
     Widget graphBody;
@@ -604,7 +604,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     }
 
     Widget nameText;
-    if (daemonState != null && daemonState.reachable && _showIP) {
+    if (_reachable && _showIP) {
       nameText = Column(
         children: <Widget>[
           Text(
@@ -614,7 +614,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 fontSize: 15.0,
                 fontWeight: FontWeight.bold),
           ),
-          Text(daemonState.device.ip,
+          Text(_deviceIP,
               style: TextStyle(
                 fontSize: 10,
                 color: Colors.grey,
@@ -628,6 +628,18 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.bold),
       );
     }
+    if (state.plant.device != null) {
+      nameText = Row(
+        children: <Widget>[
+          nameText,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Icon(Icons.offline_bolt,
+                color: _reachable ? Colors.green : Colors.grey, size: 20),
+          ),
+        ],
+      );
+    }
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -636,23 +648,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             padding: const EdgeInsets.only(left: 64.0, top: 12.0),
             child: InkWell(
               onTap: () {
+                if (state.plant.device == null) {
+                  return;
+                }
                 setState(() {
                   _showIP = !_showIP;
                 });
               },
-              child: Row(
-                children: <Widget>[
-                  nameText,
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Icon(Icons.offline_bolt,
-                        color: daemonState != null && daemonState.reachable
-                            ? Colors.green
-                            : Colors.grey,
-                        size: 20),
-                  ),
-                ],
-              ),
+              child: nameText,
             ),
           ),
           Expanded(
