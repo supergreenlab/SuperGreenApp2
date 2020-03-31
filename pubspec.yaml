@@ -22,7 +22,7 @@ dependencies:
   http:
   rxdart:
   flutter_svg:
-  permission_handler:
+  permission_handler: 4.4.0+hotfix.2
   moor:
   moor_ffi:
   path_provider:
