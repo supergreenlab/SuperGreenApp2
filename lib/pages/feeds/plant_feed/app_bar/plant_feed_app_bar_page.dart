@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +11,23 @@ import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_ba
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class PlantFeedAppBarPage extends StatelessWidget {
+class PlantFeedAppBarPage extends StatefulWidget {
+  @override
+  _PlantFeedAppBarPageState createState() => _PlantFeedAppBarPageState();
+}
+
+class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    Timer(Duration(milliseconds: 500), () {
+      _scrollController.animateTo(200,
+          duration: Duration(seconds: 15), curve: Curves.linear);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlantFeedAppBarBloc, PlantFeedAppBarBlocState>(
@@ -117,6 +135,7 @@ class PlantFeedAppBarPage extends StatelessWidget {
               child: Center(
                 child: ListView(
                   shrinkWrap: true,
+                  controller: _scrollController,
                   //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
