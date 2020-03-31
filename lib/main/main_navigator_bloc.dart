@@ -18,6 +18,7 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -301,12 +302,13 @@ class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
 }
 
 class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
-  final String path;
+  final int id;
+  final Uint8List image;
 
-  MainNavigateToFullscreenPicture(this.path);
+  MainNavigateToFullscreenPicture(this.id, this.image);
 
   @override
-  List<Object> get props => [path];
+  List<Object> get props => [id, image];
 }
 
 class MainNavigateToTimelapseHowto extends MainNavigateToFeedFormEvent {
@@ -496,7 +498,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToFullscreenMedia) {
       future = _navigatorKey.currentState.pushNamed('/media', arguments: event);
     } else if (event is MainNavigateToFullscreenPicture) {
-      future = _navigatorKey.currentState.pushNamed('/media', arguments: event);
+      future =
+          _navigatorKey.currentState.pushNamed('/picture', arguments: event);
     } else if (event is MainNavigateToTimelapseHowto) {
       future = _pushOrReplace('/timelapse/howto', event);
     } else if (event is MainNavigateToTimelapseSetup) {

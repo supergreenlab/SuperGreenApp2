@@ -114,37 +114,40 @@ class PlantFeedAppBarPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Container(
               height: 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  Container(width: 4),
-                  _renderMetric(
-                      Colors.green,
-                      'Temp',
-                      '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
-                      '${TimeSeriesAPI.min(state.graphData[0].data).metric.toInt()}$tempUnit',
-                      '${TimeSeriesAPI.max(state.graphData[0].data).metric.toInt()}$tempUnit'),
-                  _renderMetric(
-                      Colors.blue,
-                      'Humi',
-                      '${state.graphData[1].data[state.graphData[1].data.length - 1].metric.toInt()}%',
-                      '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
-                      '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%'),
-                  _renderMetric(
-                      Colors.cyan,
-                      'Ventilation',
-                      '${state.graphData[3].data[state.graphData[3].data.length - 1].metric.toInt()}%',
-                      '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
-                      '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%'),
-                  _renderMetric(
-                      Colors.yellow,
-                      'Light',
-                      '${state.graphData[2].data[state.graphData[2].data.length - 1].metric.toInt()}%',
-                      '${TimeSeriesAPI.min(state.graphData[2].data).metric.toInt()}%',
-                      '${TimeSeriesAPI.max(state.graphData[2].data).metric.toInt()}%'),
-                  Container(width: 4),
-                ],
+              child: Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    Container(width: 4),
+                    _renderMetric(
+                        Colors.green,
+                        'Temp',
+                        '${state.graphData[0].data[state.graphData[0].data.length - 1].metric.toInt()}$tempUnit',
+                        '${TimeSeriesAPI.min(state.graphData[0].data).metric.toInt()}$tempUnit',
+                        '${TimeSeriesAPI.max(state.graphData[0].data).metric.toInt()}$tempUnit'),
+                    _renderMetric(
+                        Colors.blue,
+                        'Humi',
+                        '${state.graphData[1].data[state.graphData[1].data.length - 1].metric.toInt()}%',
+                        '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
+                        '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%'),
+                    _renderMetric(
+                        Colors.cyan,
+                        'Ventilation',
+                        '${state.graphData[3].data[state.graphData[3].data.length - 1].metric.toInt()}%',
+                        '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
+                        '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%'),
+                    _renderMetric(
+                        Colors.yellow,
+                        'Light',
+                        '${state.graphData[2].data[state.graphData[2].data.length - 1].metric.toInt()}%',
+                        '${TimeSeriesAPI.min(state.graphData[2].data).metric.toInt()}%',
+                        '${TimeSeriesAPI.max(state.graphData[2].data).metric.toInt()}%'),
+                    Container(width: 4),
+                  ],
+                ),
               ),
             ),
           ),
