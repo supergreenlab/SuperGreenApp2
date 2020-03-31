@@ -48,17 +48,31 @@ class SliderFormParam extends StatelessWidget {
       icon: icon,
       child: Column(
         children: <Widget>[
+          Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  onChanged(value - 1);
+                },
+                child: Text('-', style: TextStyle(fontSize: 50, color: Colors.grey)),
+              ),
+              Text('$value%',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff3bb30b))),
+              FlatButton(
+                onPressed: () {
+                  onChanged(value + 1);
+                },
+                child: Text('+', style: TextStyle(fontSize: 30, color: Colors.grey)),
+              ),
+            ],
+          )),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Center(
-                child: Text('$value%',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff3bb30b)))),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               children: [
                 Text('0%'),
