@@ -52,7 +52,7 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
       bloc: BlocProvider.of<CreateBoxBloc>(context),
       listener: (BuildContext context, CreateBoxBlocState state) async {
         if (state is CreateBoxBlocStateDone) {
-          Timer(const Duration(milliseconds: 1500), () {
+          Timer(const Duration(milliseconds: 2000), () {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(param: state.box));
           });

@@ -168,12 +168,14 @@ class FeedScheduleFormBloc
           db.plantsDAO.plantSettings(_args.plant);
       plantSettings['phase'] = _schedule;
       await db.plantsDAO.updatePlant(PlantsCompanion(
+          id: Value(_args.plant.id),
           settings: Value(JsonEncoder().convert(plantSettings))));
 
       final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
       boxSettings['schedule'] = _schedule;
       boxSettings['schedules'] = _schedules;
       await db.plantsDAO.updateBox(BoxesCompanion(
+          id: Value(box.id),
           settings: Value(JsonEncoder().convert(boxSettings))));
 
       if (_schedule == 'BLOOM') {

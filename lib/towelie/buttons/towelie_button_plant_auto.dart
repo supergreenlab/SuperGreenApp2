@@ -40,14 +40,16 @@ class TowelieButtonPlantAuto extends TowelieButton {
       Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
       Map<String, dynamic> settings = db.plantsDAO.plantSettings(plant);
       settings['plantType'] = 'AUTO';
-      await db.plantsDAO.updatePlant(
-          PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
+      await db.plantsDAO.updatePlant(PlantsCompanion(
+          id: Value(plant.id),
+          settings: Value(JsonEncoder().convert(settings))));
 
       Box box = await db.plantsDAO.getBox(plant.box);
       final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
       boxSettings['schedule'] = 'AUTO';
-      await db.plantsDAO.updatePlant(
-          PlantsCompanion(settings: Value(JsonEncoder().convert(boxSettings))));
+      await db.plantsDAO.updatePlant(PlantsCompanion(
+          id: Value(box.id),
+          settings: Value(JsonEncoder().convert(boxSettings))));
 
       await TowelieCardsFactory.createPlantAlreadyStartedCard(event.feed);
       await removeButtons(event.feedEntry);
