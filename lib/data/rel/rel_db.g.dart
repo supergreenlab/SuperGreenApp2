@@ -1067,7 +1067,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   Plant(
       {@required this.id,
       @required this.feed,
-      @required this.box,
+      this.box,
       @required this.name,
       @required this.settings,
       this.serverID,
@@ -1211,13 +1211,12 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   PlantsCompanion.insert({
     this.id = const Value.absent(),
     @required int feed,
-    @required int box,
+    this.box = const Value.absent(),
     @required String name,
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   })  : feed = Value(feed),
-        box = Value(box),
         name = Value(name);
   PlantsCompanion copyWith(
       {Value<int> id,
@@ -1272,7 +1271,7 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
     return GeneratedIntColumn(
       'box',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -1336,8 +1335,6 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
     }
     if (d.box.present) {
       context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
-    } else if (isInserting) {
-      context.missing(_boxMeta);
     }
     if (d.name.present) {
       context.handle(
