@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -32,6 +33,10 @@ class SettingsPlantsPage extends StatelessWidget {
                           SvgPicture.asset('assets/settings/icon_plants.svg')),
                   onLongPress: () {
                     _deletePlant(context, state.plants[index]);
+                  },
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsPlant(state.plants[index]));
                   },
                   title: Text('${index + 1}. ${state.plants[index].name}',
                       style: TextStyle(fontWeight: FontWeight.bold)),

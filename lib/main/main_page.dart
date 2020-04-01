@@ -94,6 +94,8 @@ import 'package:super_green_app/pages/settings/boxes/settings_boxes_bloc.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_page.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_page.dart';
+import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_bloc.dart';
+import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_page.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_page.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_bloc.dart';
@@ -378,6 +380,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => SettingsPlantsBloc(settings.arguments),
           child: SettingsPlantsPage(),
+        );
+      case '/settings/plant':
+        return BlocProvider(
+          create: (context) => SettingsPlantBloc(settings.arguments),
+          child: SettingsPlantPage(),
         );
       case '/settings/boxes':
         return BlocProvider(

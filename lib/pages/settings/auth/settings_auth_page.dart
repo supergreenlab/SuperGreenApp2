@@ -66,7 +66,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
             body = Column(
               children: <Widget>[
                 Expanded(
-                                  child: ListView(
+                  child: ListView(
                     children: <Widget>[
                       SectionTitle(
                         title: 'Enter you nickname:',
