@@ -87,7 +87,7 @@ class RelDB extends _$RelDB {
           for (int i = 0; i < tmpBoxes.length; ++i) {
             Plant plant =
                 await plantsDAO.getPlant(int.parse(tmpBoxes[i].settings));
-            plantsDAO.updatePlant(plant
+            await plantsDAO.updatePlant(plant
                 .createCompanion(true)
                 .copyWith(box: Value(tmpBoxes[i].id)));
           }
