@@ -63,57 +63,59 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
               ),
             );
           } else if (state is SettingsAuthBlocStateLoaded) {
-            body = ListView(
+            body = Column(
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    SectionTitle(
-                      title: 'Enter you nickname:',
-                      icon: 'assets/settings/icon_account.svg',
-                      backgroundColor: Colors.deepOrange,
-                      titleColor: Colors.white,
-                      large: true,
-                      elevation: 5,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 24.0),
-                      child: SGLTextField(
-                          focusNode: _nicknameFocusNode,
-                          onFieldSubmitted: (_) {
-                            _nicknameFocusNode.unfocus();
-                            FocusScope.of(context)
-                                .requestFocus(_passwordFocusNode);
-                          },
-                          hintText: 'Ex: Bob',
-                          controller: _nicknameController,
-                          onChanged: (_) {
-                            setState(() {});
-                          }),
-                    ),
-                    SectionTitle(
-                      title: 'Enter your password:',
-                      icon: 'assets/box_setup/icon_box_name.svg',
-                      backgroundColor: Colors.deepOrange,
-                      titleColor: Colors.white,
-                      large: true,
-                      elevation: 5,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 24.0),
-                      child: SGLTextField(
-                          focusNode: _passwordFocusNode,
-                          onFieldSubmitted: (_) {
-                            _handleInput(context);
-                          },
-                          controller: _passwordController,
-                          obscureText: true,
-                          onChanged: (_) {
-                            setState(() {});
-                          }),
-                    ),
-                  ],
+                Expanded(
+                                  child: ListView(
+                    children: <Widget>[
+                      SectionTitle(
+                        title: 'Enter you nickname:',
+                        icon: 'assets/settings/icon_account.svg',
+                        backgroundColor: Colors.deepOrange,
+                        titleColor: Colors.white,
+                        large: true,
+                        elevation: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 24.0),
+                        child: SGLTextField(
+                            focusNode: _nicknameFocusNode,
+                            onFieldSubmitted: (_) {
+                              _nicknameFocusNode.unfocus();
+                              FocusScope.of(context)
+                                  .requestFocus(_passwordFocusNode);
+                            },
+                            hintText: 'Ex: Bob',
+                            controller: _nicknameController,
+                            onChanged: (_) {
+                              setState(() {});
+                            }),
+                      ),
+                      SectionTitle(
+                        title: 'Enter your password:',
+                        icon: 'assets/box_setup/icon_box_name.svg',
+                        backgroundColor: Colors.deepOrange,
+                        titleColor: Colors.white,
+                        large: true,
+                        elevation: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 24.0),
+                        child: SGLTextField(
+                            focusNode: _passwordFocusNode,
+                            onFieldSubmitted: (_) {
+                              _handleInput(context);
+                            },
+                            controller: _passwordController,
+                            obscureText: true,
+                            onChanged: (_) {
+                              setState(() {});
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
