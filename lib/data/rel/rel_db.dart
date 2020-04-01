@@ -71,8 +71,23 @@ class RelDB extends _$RelDB {
   int get schemaVersion => 2;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-        beforeOpen: (details) async {
-        },
-      );
+  MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
+        return m.createAll();
+      }, onUpgrade: (Migrator m, int from, int to) async {
+        if (from == 1) {
+          await m.addColumn(plants, plants.box);
+          await m.createTable(boxes);
+          await m.issueCustomQuery(
+              "insert into boxes (name, device, device_box, settings) select name, device, device_box, id as settings from plants");
+        }
+      }, beforeOpen: (details) async {
+        if (details.versionBefore == 1) {
+          List<Box> tmpBoxes = await plantsDAO.getBoxes();
+          List<Box> realBoxes = [];
+
+          for (int i = 0; i < tmpBoxes.length; ++i) {
+            Plant plant = await plantsDAO.getPlant(int.parse(tmpBoxes[i].settings));
+          }
+        }
+      });
 }

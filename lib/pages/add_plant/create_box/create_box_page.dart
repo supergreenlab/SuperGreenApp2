@@ -52,10 +52,8 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
       bloc: BlocProvider.of<CreateBoxBloc>(context),
       listener: (BuildContext context, CreateBoxBlocState state) async {
         if (state is CreateBoxBlocStateDone) {
-          Timer(const Duration(milliseconds: 2000), () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(param: state.box));
-          });
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.box));
         }
       },
       child: BlocBuilder<CreateBoxBloc, CreateBoxBlocState>(
@@ -83,11 +81,8 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
   }
 
   Widget _renderDone(CreateBoxBlocStateDone state) {
-    String subtitle =
-        'Plant ${_nameController.value.text} on controller ${state.box.name} created:)';
     return Fullscreen(
         title: 'Done!',
-        subtitle: subtitle,
         child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
