@@ -84,6 +84,7 @@ class Timelapses extends Table {
 ], queries: {
   'nPlants': 'SELECT COUNT(*) FROM plants',
   'nTimelapses': 'SELECT COUNT(*) FROM timelapses WHERE plant = ?',
+  'nPlantsInBox': 'SELECT COUNT(*) FROM plants WHERE box = ?',
 })
 class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   PlantsDAO(RelDB db) : super(db);

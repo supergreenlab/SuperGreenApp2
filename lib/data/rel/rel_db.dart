@@ -90,6 +90,9 @@ class RelDB extends _$RelDB {
             await plantsDAO.updatePlant(plant
                 .createCompanion(true)
                 .copyWith(box: Value(tmpBoxes[i].id)));
+            await plantsDAO.updateBox(tmpBoxes[i]
+                .createCompanion(true)
+                .copyWith(settings: Value('{}')));
           }
         }
       });

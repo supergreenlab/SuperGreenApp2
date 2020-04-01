@@ -670,7 +670,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  Widget _renderGraphs(context, state) {
+  Widget _renderGraphs(BuildContext context, PlantFeedBlocStateLoaded state) {
     return BlocProvider(
       create: (context) => PlantFeedAppBarBloc(state.plant),
       child: PlantFeedAppBarPage(),

@@ -40,17 +40,22 @@ class SettingsPage extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<SettingsBloc>(context)
-                        .add(SettingsBlocEventSetFreedomUnit(!state.freedomUnits));
+                    BlocProvider.of<SettingsBloc>(context).add(
+                        SettingsBlocEventSetFreedomUnit(!state.freedomUnits));
                   },
                   leading: SizedBox(
                       width: 40,
                       height: 40,
-                      child:
-                          SvgPicture.asset(state.freedomUnits ? 'assets/settings/icon_imperial.svg' : 'assets/settings/icon_metric.svg')),
-                  title: Text(state.freedomUnits ? 'Imperial unit system' : 'Metric unit system',
+                      child: SvgPicture.asset(state.freedomUnits
+                          ? 'assets/settings/icon_imperial.svg'
+                          : 'assets/settings/icon_metric.svg')),
+                  title: Text(
+                      state.freedomUnits
+                          ? 'Imperial unit system'
+                          : 'Metric unit system',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Tap to change to ${state.freedomUnits ? 'metric' : 'imperial'}'),
+                  subtitle: Text(
+                      'Tap to change to ${state.freedomUnits ? 'metric' : 'imperial'}'),
                 ),
                 ListTile(
                   onTap: () {
@@ -80,6 +85,20 @@ class SettingsPage extends StatelessWidget {
                   title: Text('Plants',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Edit config, manage & delete plants.'),
+                ),
+                ListTile(
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsBoxes());
+                  },
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child:
+                          SvgPicture.asset('assets/settings/icon_box.svg')),
+                  title: Text('Boxes',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Edit config, manage & delete boxes.'),
                 )
               ],
             )));

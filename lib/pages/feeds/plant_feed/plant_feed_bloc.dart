@@ -77,7 +77,7 @@ class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
   PlantFeedBlocStateLoaded(this.box, this.plant, this.nTimelapses);
 
   @override
-  List<Object> get props => [plant, nTimelapses];
+  List<Object> get props => [box, plant, nTimelapses];
 }
 
 class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
