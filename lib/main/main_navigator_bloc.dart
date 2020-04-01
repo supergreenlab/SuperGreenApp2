@@ -397,6 +397,13 @@ class MainNavigateToSettingsBoxes extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
+class MainNavigateToSettingsDevices extends MainNavigatorEvent {
+  MainNavigateToSettingsDevices();
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -546,6 +553,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSettingsBoxes) {
       future = _navigatorKey.currentState
           .pushNamed('/settings/boxes', arguments: event);
+    } else if (event is MainNavigateToSettingsDevices) {
+      future = _navigatorKey.currentState
+          .pushNamed('/settings/devices', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

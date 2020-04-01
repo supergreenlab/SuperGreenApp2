@@ -84,7 +84,7 @@ class SettingsPage extends StatelessWidget {
                           SvgPicture.asset('assets/settings/icon_plants.svg')),
                   title: Text('Plants',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Edit config, manage & delete plants.'),
+                  subtitle: Text('Move to new box & delete plants.'),
                 ),
                 ListTile(
                   onTap: () {
@@ -94,11 +94,23 @@ class SettingsPage extends StatelessWidget {
                   leading: SizedBox(
                       width: 40,
                       height: 40,
-                      child:
-                          SvgPicture.asset('assets/settings/icon_box.svg')),
+                      child: SvgPicture.asset('assets/settings/icon_box.svg')),
                   title: Text('Boxes',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Edit config, manage & delete boxes.'),
+                  subtitle: Text('Edit config & delete boxes.'),
+                ),
+                ListTile(
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsDevices());
+                  },
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset('assets/settings/icon_controller.svg')),
+                  title: Text('Controllers',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Edit config & delete controllers.'),
                 )
               ],
             )));

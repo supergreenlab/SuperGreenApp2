@@ -65,8 +65,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
           } else if (state is SettingsAuthBlocStateLoaded) {
             body = ListView(
               children: <Widget>[
-                Expanded(
-                    child: Column(
+                Column(
                   children: <Widget>[
                     SectionTitle(
                       title: 'Enter you nickname:',
@@ -115,7 +114,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                           }),
                     ),
                   ],
-                )),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
                   child: Align(

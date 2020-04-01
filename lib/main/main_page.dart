@@ -92,6 +92,8 @@ import 'package:super_green_app/pages/settings/auth/settings_auth_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_page.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_bloc.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_page.dart';
+import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/settings_devices_page.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_page.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_bloc.dart';
@@ -381,6 +383,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => SettingsBoxesBloc(settings.arguments),
           child: SettingsBoxesPage(),
+        );
+      case '/settings/devices':
+        return BlocProvider(
+          create: (context) => SettingsDevicesBloc(settings.arguments),
+          child: SettingsDevicesPage(),
         );
     }
     return Text('Unknown route');
