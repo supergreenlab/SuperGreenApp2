@@ -86,7 +86,8 @@ class RelDB extends _$RelDB {
           List<Box> realBoxes = [];
 
           for (int i = 0; i < tmpBoxes.length; ++i) {
-            Plant plant = await plantsDAO.getPlant(int.parse(tmpBoxes[i].settings));
+            Plant plant =
+                await plantsDAO.getPlant(int.parse(tmpBoxes[i].settings));
           }
         }
       });
