@@ -54,6 +54,8 @@ class SettingsAuthBlocStateError extends SettingsAuthBlocState {
 
 class SettingsAuthBloc
     extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
+
+  //ignore: unused_field
   final MainNavigateToSettingsAuth _args;
   bool _isAuth;
 

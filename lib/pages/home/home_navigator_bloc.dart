@@ -78,6 +78,8 @@ class HomeNavigatorState extends Equatable {
 }
 
 class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
+
+  //ignore: unused_field
   final MainNavigatorEvent _args;
   final GlobalKey<NavigatorState> _navigatorKey;
 

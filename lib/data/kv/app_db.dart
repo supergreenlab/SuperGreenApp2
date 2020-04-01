@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert';
-
 import 'package:hive/hive.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 

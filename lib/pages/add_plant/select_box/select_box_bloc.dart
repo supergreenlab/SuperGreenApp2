@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -39,6 +38,7 @@ class SelectBoxBlocStateLoaded extends SelectBoxBlocState {
 }
 
 class SelectBoxBloc extends Bloc<SelectBoxBlocEvent, SelectBoxBlocState> {
+  //ignore: unused_field
   MainNavigateToSelectBoxEvent _args;
 
   SelectBoxBloc(this._args) {

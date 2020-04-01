@@ -58,6 +58,7 @@ class SettingsBoxesBloc
     extends Bloc<SettingsBoxesBlocEvent, SettingsBoxesBlocState> {
   List<Box> _boxes;
 
+  //ignore: unused_field
   final MainNavigateToSettingsBoxes _args;
 
   SettingsBoxesBloc(this._args) {

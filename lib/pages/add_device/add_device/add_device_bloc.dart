@@ -28,6 +28,7 @@ class AddDeviceBlocState extends Equatable {
 }
 
 class AddDeviceBloc extends Bloc<AddDeviceBlocEvent, AddDeviceBlocState> {
+  //ignore: unused_field
   final MainNavigateToAddDeviceEvent _args;
 
   AddDeviceBloc(this._args);

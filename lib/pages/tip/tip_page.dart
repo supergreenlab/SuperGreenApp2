@@ -163,7 +163,7 @@ class _TipPageState extends State<TipPage> {
       Map<String, dynamic> section) {
     String slug = _slug(article);
     String imagePath =
-        'https://tipapi.supergreenlab.com/a/${tip['user']}/${tip['repo']}/${tip['branch']}/s/${slug}/${section['image']['url']}';
+        'https://tipapi.supergreenlab.com/a/${tip['user']}/${tip['repo']}/${tip['branch']}/s/$slug/${section['image']['url']}';
     return Column(
       children: <Widget>[
         (section['title'] != null && section['title'].length > 0)

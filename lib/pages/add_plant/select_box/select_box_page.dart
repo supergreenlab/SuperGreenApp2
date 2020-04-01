@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_plant/select_box/select_box_bloc.dart';
-import 'package:super_green_app/pages/add_plant/select_device/select_device_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';

@@ -34,6 +34,7 @@ class CreateBoxBlocStateDone extends CreateBoxBlocState {
 }
 
 class CreateBoxBloc extends Bloc<CreateBoxBlocEvent, CreateBoxBlocState> {
+  //ignore: unused_field
   final MainNavigateToCreateBoxEvent _args;
 
   CreateBoxBloc(this._args);

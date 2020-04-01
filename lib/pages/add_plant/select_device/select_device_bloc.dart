@@ -89,6 +89,7 @@ class SelectDeviceBloc
     extends Bloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
   List<Device> _devices = [];
 
+  //ignore: unused_field
   final MainNavigateToSelectDeviceEvent _args;
 
   @override

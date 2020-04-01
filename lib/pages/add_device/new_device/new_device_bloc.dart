@@ -61,6 +61,7 @@ class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
 }
 
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
+  //ignore: unused_field
   MainNavigateToNewDeviceEvent _args;
   final PermissionHandler _permissionHandler = PermissionHandler();
 

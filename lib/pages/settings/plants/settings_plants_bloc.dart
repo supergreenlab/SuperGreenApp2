@@ -53,6 +53,7 @@ class SettingsPlantsBloc
     extends Bloc<SettingsPlantsBlocEvent, SettingsPlantsBlocState> {
   List<Plant> _plants;
 
+  //ignore: unused_field
   final MainNavigateToSettingsPlants _args;
 
   SettingsPlantsBloc(this._args) {

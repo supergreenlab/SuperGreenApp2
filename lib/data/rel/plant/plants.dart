@@ -200,9 +200,9 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     final Map<String, dynamic> settings = JsonDecoder().convert(plant.settings);
     // TODO make actual enums or constants
     return {
-      'nPlants': 1,
-      'phase': 'VEG', // VEG or BLOOM
-      'plantType': 'PHOTO', // PHOTO or AUTO
+      'nPlants': settings['nPlants'] ?? 1,
+      'phase': settings['phase'] ?? 'VEG', // VEG or BLOOM
+      'plantType': settings['plantType'] ?? 'PHOTO', // PHOTO or AUTO
     };
   }
 

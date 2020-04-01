@@ -118,7 +118,7 @@ abstract class TraceableState<T extends TraceableStatefulWidget> extends State {
 
   @override
   void dispose() {
-    int secondsSpent = DateTime.now().difference(openedAt).inSeconds;
+    //int secondsSpent = DateTime.now().difference(openedAt).inSeconds;
     super.dispose();
   }
 }
