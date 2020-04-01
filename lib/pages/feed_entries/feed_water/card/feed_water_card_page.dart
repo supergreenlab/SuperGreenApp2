@@ -89,7 +89,7 @@ class FeedWaterCardPage extends StatelessWidget {
                   child: FeedCardDate(state.feedEntry),
                 ),
                 Container(
-                  height: 70,
+                  height: 90,
                   alignment: Alignment.center,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

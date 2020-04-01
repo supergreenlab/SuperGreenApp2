@@ -125,11 +125,12 @@ class FeedLightFormBloc
       FeedLightFormBlocEvent event) async* {
     if (event is FeedLightFormBlocEventLoadLights) {
       final db = RelDB.get();
-      if (_args.plant.device == null) {
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65]);
         return;
       }
-      _device = await db.devicesDAO.getDevice(_args.plant.device);
+      _device = await db.devicesDAO.getDevice(box.device);
       if (_device.isReachable == false) {
         yield FeedLightFormBlocStateNotReachable();
         return;
@@ -137,8 +138,9 @@ class FeedLightFormBloc
       Module lightModule = await db.devicesDAO.getModule(_device.id, "led");
       _lightParams = [];
       for (int i = 0; i < lightModule.arrayLen; ++i) {
-        Param box = await db.devicesDAO.getParam(_device.id, "LED_${i}_BOX");
-        if (box.ivalue == _args.plant.deviceBox) {
+        Param boxParam =
+            await db.devicesDAO.getParam(_device.id, "LED_${i}_BOX");
+        if (boxParam.ivalue == box.deviceBox) {
           _lightParams
               .add(await db.devicesDAO.getParam(_device.id, "LED_${i}_DIM"));
         }
@@ -147,7 +149,9 @@ class FeedLightFormBloc
       _initialValues = values;
       yield FeedLightFormBlocStateLightsLoaded(values);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
-      if (_args.plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         return;
       }
       if (_device.isReachable == false) {
@@ -161,12 +165,14 @@ class FeedLightFormBloc
         yield FeedLightFormBlocStateNotReachable();
       }
     } else if (event is FeedLightFormBlocEventCreate) {
-      if (_args.plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         return;
       }
       yield FeedLightFormBlocStateLoading();
-      final db = RelDB.get();
-      int feedEntryID = await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID =
+          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_LIGHT',
         feed: _args.plant.feed,
         date: DateTime.now(),
@@ -176,7 +182,9 @@ class FeedLightFormBloc
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
       yield FeedLightFormBlocStateDone(_args.plant, feedEntry);
     } else if (event is FeedLightFormBlocEventCancel) {
-      if (_args.plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         yield FeedLightFormBlocStateDone(_args.plant, null);
         return;
       }

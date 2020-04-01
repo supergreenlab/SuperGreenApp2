@@ -71,9 +71,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       child: BlocListener<PlantFeedBloc, PlantFeedBlocState>(
         listener: (BuildContext context, PlantFeedBlocState state) {
           if (state is PlantFeedBlocStateLoaded) {
-            if (state.plant.device != null) {
+            if (state.box.device != null) {
               BlocProvider.of<DeviceDaemonBloc>(context)
-                  .add(DeviceDaemonBlocEventLoadDevice(state.plant.device));
+                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
             }
           }
         },
@@ -101,7 +101,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   (BuildContext context, DeviceDaemonBlocState daemonState) {
                 if (state is PlantFeedBlocStateLoaded) {
                   if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
-                      daemonState.device.id == state.plant.device) {
+                      daemonState.device.id == state.box.device) {
                     setState(() {
                       _reachable = daemonState.reachable;
                       _deviceIP = daemonState.device.ip;
@@ -373,7 +373,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           },
         ),
       ];
-      if (state.plant.device != null && _reachable) {
+      if (state.box.device != null && _reachable) {
         actions.insert(
             0,
             IconButton(
@@ -405,7 +405,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               title: 'Create plant',
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToNewPlantInfosEvent());
+                    .add(MainNavigateToCreatePlantEvent());
               }));
     }
     return FullscreenLoading(title: 'Loading plant..');
@@ -555,14 +555,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   void _onAddPlant(BuildContext context) {
     BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToNewPlantInfosEvent());
+        .add(MainNavigateToCreatePlantEvent());
   }
 
   Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state) {
     String name = state.plant.name;
 
     Widget graphBody;
-    if (state.plant.device != null) {
+    if (state.box.device != null) {
       graphBody = Stack(children: [_renderGraphs(context, state)]);
     } else {
       graphBody = Stack(children: [
@@ -628,7 +628,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.bold),
       );
     }
-    if (state.plant.device != null) {
+    if (state.box.device != null) {
       nameText = Row(
         children: <Widget>[
           nameText,
@@ -648,7 +648,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             padding: const EdgeInsets.only(left: 64.0, top: 12.0),
             child: InkWell(
               onTap: () {
-                if (state.plant.device == null) {
+                if (state.box.device == null) {
                   return;
                 }
                 setState(() {

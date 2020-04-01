@@ -56,17 +56,14 @@ class FeedsAPI {
 
   Future syncPlant(Plant plant) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
+    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
     Map<String, dynamic> obj = {
       'id': plant.serverID,
       'feedID': feed.serverID,
+      'boxID': box.serverID,
       'name': plant.name,
       'settings': plant.settings,
     };
-    if (plant.device != null) {
-      Device device = await RelDB.get().devicesDAO.getDevice(plant.device);
-      obj['deviceID'] = device.serverID;
-      obj['deviceBox'] = plant.deviceBox;
-    }
     String id = await _postPut('/plant', obj);
 
     PlantsCompanion plantsCompanion = plant
@@ -76,6 +73,28 @@ class FeedsAPI {
       plantsCompanion = plantsCompanion.copyWith(serverID: Value(id));
     }
     RelDB.get().plantsDAO.updatePlant(plantsCompanion);
+  }
+
+  Future syncBox(Box box) async {
+    Map<String, dynamic> obj = {
+      'id': box.serverID,
+      'name': box.name,
+      'settings': box.settings,
+    };
+    if (box.device != null) {
+      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+      obj['deviceID'] = device.serverID;
+      obj['deviceBox'] = box.deviceBox;
+    }
+    String id = await _postPut('/box', obj);
+
+    BoxesCompanion boxesCompanion = box
+        .createCompanion(true)
+        .copyWith(id: Value(box.id), synced: Value(true));
+    if (id != null) {
+      boxesCompanion = boxesCompanion.copyWith(serverID: Value(id));
+    }
+    RelDB.get().plantsDAO.updateBox(boxesCompanion);
   }
 
   Future syncTimelapse(Timelapse timelapse) async {

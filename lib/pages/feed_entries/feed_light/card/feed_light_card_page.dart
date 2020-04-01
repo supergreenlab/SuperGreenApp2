@@ -49,6 +49,7 @@ class FeedLightCardPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListView(
+                        shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         children: _renderValues(state.params['values'],
                             state.params['initialValues']),

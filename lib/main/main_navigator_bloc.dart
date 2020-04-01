@@ -43,29 +43,43 @@ class MainNavigateToHomeEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
-class MainNavigateToNewPlantInfosEvent extends MainNavigatorEvent {
+class MainNavigateToCreatePlantEvent extends MainNavigatorEvent {
   @override
   List<Object> get props => [];
 }
 
-class MainNavigateToSelectPlantDeviceEvent extends MainNavigatorEvent {
-  MainNavigateToSelectPlantDeviceEvent({futureFn}) : super(futureFn: futureFn);
+class MainNavigateToSelectBoxEvent extends MainNavigatorEvent {
+  MainNavigateToSelectBoxEvent({futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [];
 }
 
-class MainNavigateToSelectPlantDeviceBoxEvent extends MainNavigatorEvent {
+class MainNavigateToCreateBoxEvent extends MainNavigatorEvent {
+  MainNavigateToCreateBoxEvent({futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToSelectDeviceEvent extends MainNavigatorEvent {
+  MainNavigateToSelectDeviceEvent({futureFn}) : super(futureFn: futureFn);
+}
+
+class MainNavigateToSelectDeviceBoxEvent extends MainNavigatorEvent {
   final Device device;
 
-  MainNavigateToSelectPlantDeviceBoxEvent(this.device, {futureFn})
+  MainNavigateToSelectDeviceBoxEvent(this.device, {futureFn})
       : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [device];
 }
 
-class MainNavigateToSelectPlantNewDeviceBoxEvent extends MainNavigatorEvent {
+class MainNavigateToSelectNewDeviceBoxEvent extends MainNavigatorEvent {
   final Device device;
 
-  MainNavigateToSelectPlantNewDeviceBoxEvent(this.device, {futureFn})
+  MainNavigateToSelectNewDeviceBoxEvent(this.device, {futureFn})
       : super(futureFn: futureFn);
 
   @override
@@ -432,18 +446,24 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToHomeEvent) {
       future = _navigatorKey.currentState
           .pushReplacementNamed('/home', arguments: event);
-    } else if (event is MainNavigateToNewPlantInfosEvent) {
+    } else if (event is MainNavigateToCreatePlantEvent) {
       future =
           _navigatorKey.currentState.pushNamed('/plant/new', arguments: event);
-    } else if (event is MainNavigateToSelectPlantDeviceEvent) {
+    } else if (event is MainNavigateToSelectBoxEvent) {
+      future =
+          _navigatorKey.currentState.pushNamed('/plant/box', arguments: event);
+    } else if (event is MainNavigateToCreateBoxEvent) {
       future = _navigatorKey.currentState
-          .pushNamed('/plant/device', arguments: event);
-    } else if (event is MainNavigateToSelectPlantDeviceBoxEvent) {
+          .pushNamed('/plant/box/new', arguments: event);
+    } else if (event is MainNavigateToSelectDeviceEvent) {
+      future =
+          _navigatorKey.currentState.pushNamed('/box/device', arguments: event);
+    } else if (event is MainNavigateToSelectDeviceBoxEvent) {
       future = _navigatorKey.currentState
-          .pushNamed('/plant/device/box', arguments: event);
-    } else if (event is MainNavigateToSelectPlantNewDeviceBoxEvent) {
+          .pushNamed('/box/device/box', arguments: event);
+    } else if (event is MainNavigateToSelectNewDeviceBoxEvent) {
       future = _navigatorKey.currentState
-          .pushNamed('/plant/device/box/new', arguments: event);
+          .pushNamed('/box/device/box/new', arguments: event);
     } else if (event is MainNavigateToAddDeviceEvent) {
       future =
           _navigatorKey.currentState.pushNamed('/device/add', arguments: event);

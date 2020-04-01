@@ -115,7 +115,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
               return ListTile(
                 onTap: () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToSelectPlantNewDeviceBoxEvent(state.device,
+                      MainNavigateToSelectNewDeviceBoxEvent(state.device,
                           futureFn: (future) async {
                     dynamic deviceBox = await future;
                     if (deviceBox is int) {

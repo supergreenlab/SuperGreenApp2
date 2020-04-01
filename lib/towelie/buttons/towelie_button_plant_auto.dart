@@ -19,7 +19,6 @@
 import 'dart:convert';
 
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -44,10 +43,11 @@ class TowelieButtonPlantAuto extends TowelieButton {
       await db.plantsDAO.updatePlant(
           PlantsCompanion(settings: Value(JsonEncoder().convert(settings))));
 
-      String boxID = await db.plantsDAO.boxSettingsID(plant);
-      final Map<String, dynamic> boxSettings = AppDB().getBoxSettings(boxID);
+      Box box = await db.plantsDAO.getBox(plant.box);
+      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
       boxSettings['schedule'] = 'AUTO';
-      AppDB().setBoxSettings(boxID, boxSettings);
+      await db.plantsDAO.updatePlant(
+          PlantsCompanion(settings: Value(JsonEncoder().convert(boxSettings))));
 
       await TowelieCardsFactory.createPlantAlreadyStartedCard(event.feed);
       await removeButtons(event.feedEntry);

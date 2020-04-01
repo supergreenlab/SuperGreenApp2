@@ -46,14 +46,16 @@ class TimelapseSetupBlocEventSetConfig extends TimelapseSetupBlocEvent {
       this.rotate});
 
   @override
-  List<Object> get props => [this.ssid,
-      this.password,
-      this.controllerID,
-      this.dropboxToken,
-      this.name,
-      this.strain,
-      this.uploadName,
-      this.rotate];
+  List<Object> get props => [
+        this.ssid,
+        this.password,
+        this.controllerID,
+        this.dropboxToken,
+        this.name,
+        this.strain,
+        this.uploadName,
+        this.rotate
+      ];
 }
 
 class TimelapseSetupBlocEventDeviceFound extends TimelapseSetupBlocEvent {
@@ -134,10 +136,12 @@ class TimelapseSetupBloc
         add(TimelapseSetupBlocEventBleStateChanged(btState));
       });
     } else if (event is TimelapseSetupBlocEventDeviceFound) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
       String controllerid;
-      if (_args.plant.device != null) {
+      if (box.device != null) {
         Device device =
-            await RelDB.get().devicesDAO.getDevice(_args.plant.device);
+            await db.devicesDAO.getDevice(box.device);
         controllerid = device.identifier;
       }
       yield TimelapseSetupBlocStateDeviceFound(controllerid);
@@ -193,7 +197,8 @@ class TimelapseSetupBloc
       }
       print(
           '${scanResult.peripheral.name} ${scanResult.peripheral.identifier}');
-      if (scanResult.peripheral.name == 'sgl-cam' || scanResult.peripheral.name == 'supergreenlivepi') {
+      if (scanResult.peripheral.name == 'sgl-cam' ||
+          scanResult.peripheral.name == 'supergreenlivepi') {
         _scanResult = scanResult;
         add(TimelapseSetupBlocEventDeviceFound());
         _bleManager.stopPeripheralScan();

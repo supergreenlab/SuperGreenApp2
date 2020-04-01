@@ -70,10 +70,11 @@ class PlantFeedBlocStateNoPlant extends PlantFeedBlocState {
 }
 
 class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
+  final Box box;
   final Plant plant;
   final int nTimelapses;
 
-  PlantFeedBlocStateLoaded(this.plant, this.nTimelapses);
+  PlantFeedBlocStateLoaded(this.box, this.plant, this.nTimelapses);
 
   @override
   List<Object> get props => [plant, nTimelapses];
@@ -82,6 +83,7 @@ class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
 class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   final HomeNavigateToPlantFeedEvent _args;
 
+  Box _box;
   Plant _plant;
   int _nTimelapses;
 
@@ -118,6 +120,8 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
         _db.setLastPlant(_plant.id);
       }
 
+      final db = RelDB.get();
+      _box = await db.plantsDAO.getBox(_plant.box);
       _nTimelapses =
           await RelDB.get().plantsDAO.nTimelapses(_plant.id).getSingle();
       RelDB.get()
@@ -126,17 +130,19 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
           .watchSingle()
           .listen(_onNTimelapsesUpdated);
       RelDB.get().plantsDAO.watchPlant(_plant.id).listen(_onPlantUpdated);
-      yield PlantFeedBlocStateLoaded(_plant, _nTimelapses);
+      yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
     } else if (event is PlantFeedBlocEventUpdated) {
-      yield PlantFeedBlocStateLoaded(_plant, _nTimelapses);
+      yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
     } else if (event is PlantFeedBlocEventSunglasses) {
-      if (_plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         return;
       }
-      Device device = await RelDB.get().devicesDAO.getDevice(_plant.device);
+      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
       Param dimParam = await RelDB.get()
           .devicesDAO
-          .getParam(device.id, 'BOX_${_plant.deviceBox}_LED_DIM');
+          .getParam(device.id, 'BOX_${box.deviceBox}_LED_DIM');
       try {
         if (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 -
                 dimParam.ivalue >

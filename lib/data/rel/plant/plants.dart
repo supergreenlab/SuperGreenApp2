@@ -20,12 +20,25 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/misc/map_utils.dart';
 
 part 'plants.g.dart';
 
 class Plants extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
+  IntColumn get box => integer()();
+  TextColumn get name => text().withLength(min: 1, max: 32)();
+
+  TextColumn get settings => text().withDefault(Constant('{}'))();
+
+  TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
+  BoolColumn get synced => boolean().withDefault(Constant(false))();
+}
+
+@DataClassName("Box")
+class Boxes extends Table {
+  IntColumn get id => integer().autoIncrement()();
   IntColumn get device => integer().nullable()();
   IntColumn get deviceBox => integer().nullable()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
@@ -65,6 +78,7 @@ class Timelapses extends Table {
 
 @UseDao(tables: [
   Plants,
+  Boxes,
   ChartCaches,
   Timelapses,
 ], queries: {
@@ -99,7 +113,7 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future updatePlant(PlantsCompanion plant) {
-    return (update(plants)..where((b) => b.id.equals(plant.id.value)))
+    return (update(plants)..where((p) => p.id.equals(plant.id.value)))
         .write(plant);
   }
 
@@ -107,9 +121,37 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return delete(plants).delete(plant);
   }
 
+  Future<Box> getBox(int id) {
+    return (select(boxes)..where((b) => b.id.equals(id))).getSingle();
+  }
+
+  Future<List<Box>> getBoxes() {
+    return select(boxes).get();
+  }
+
+  Stream<List<Box>> watchBoxes() {
+    return select(boxes).watch();
+  }
+
+  Stream<Box> watchBox(int id) {
+    return (select(boxes)..where((b) => b.id.equals(id))).watchSingle();
+  }
+
+  Future<int> addBox(BoxesCompanion box) {
+    return into(boxes).insert(box);
+  }
+
+  Future updateBox(BoxesCompanion box) {
+    return (update(boxes)..where((b) => b.id.equals(box.id.value))).write(box);
+  }
+
+  Future deleteBox(Box box) {
+    return delete(boxes).delete(box);
+  }
+
   Future cleanDeviceIDs(int deviceID) {
-    return (update(plants)..where((b) => b.device.equals(deviceID)))
-        .write(PlantsCompanion(device: Value(null)));
+    return (update(boxes)..where((b) => b.device.equals(deviceID)))
+        .write(BoxesCompanion(device: Value(null)));
   }
 
   Future<int> addChartCache(ChartCachesCompanion chartCache) {
@@ -163,12 +205,39 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     };
   }
 
-  Future<String> boxSettingsID(Plant plant) async {
-    String boxID = '${plant.name}.${plant.id}';
-    if (plant.device != null) {
-      Device device = await RelDB.get().devicesDAO.getDevice(plant.device);
-      boxID = '${device.identifier}.${plant.deviceBox}';
-    }
-    return boxID;
+  Map<String, dynamic> boxSettings(Box box) {
+    final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
+    // TODO make actual enums or constants
+    return {
+      'schedule':
+          settings['schedule'] ?? 'VEG', // Any of the schedule keys below
+      'schedules': {
+        'VEG': {
+          'ON_HOUR': MapUtils.valuePath(settings, 'schedules.VEG.ON_HOUR') ?? 3,
+          'ON_MIN': MapUtils.valuePath(settings, 'schedules.VEG.ON_MIN') ?? 0,
+          'OFF_HOUR':
+              MapUtils.valuePath(settings, 'schedules.VEG.OFF_HOUR') ?? 21,
+          'OFF_MIN': MapUtils.valuePath(settings, 'schedules.VEG.OFF_MIN') ?? 0,
+        },
+        'BLOOM': {
+          'ON_HOUR':
+              MapUtils.valuePath(settings, 'schedules.BLOOM.ON_HOUR') ?? 6,
+          'ON_MIN': MapUtils.valuePath(settings, 'schedules.BLOOM.ON_MIN') ?? 0,
+          'OFF_HOUR':
+              MapUtils.valuePath(settings, 'schedules.BLOOM.OFF_HOUR') ?? 18,
+          'OFF_MIN':
+              MapUtils.valuePath(settings, 'schedules.BLOOM.OFF_MIN') ?? 0,
+        },
+        'AUTO': {
+          'ON_HOUR':
+              MapUtils.valuePath(settings, 'schedules.AUTO.ON_HOUR') ?? 0,
+          'ON_MIN': MapUtils.valuePath(settings, 'schedules.AUTO.ON_MIN') ?? 0,
+          'OFF_HOUR':
+              MapUtils.valuePath(settings, 'schedules.AUTO.OFF_HOUR') ?? 0,
+          'OFF_MIN':
+              MapUtils.valuePath(settings, 'schedules.AUTO.OFF_MIN') ?? 0,
+        },
+      }
+    };
   }
 }

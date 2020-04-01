@@ -8,6 +8,7 @@ part of 'plants.dart';
 
 mixin _$PlantsDAOMixin on DatabaseAccessor<RelDB> {
   $PlantsTable get plants => db.plants;
+  $BoxesTable get boxes => db.boxes;
   $ChartCachesTable get chartCaches => db.chartCaches;
   $TimelapsesTable get timelapses => db.timelapses;
   Selectable<int> nPlants() {

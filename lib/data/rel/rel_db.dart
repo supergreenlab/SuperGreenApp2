@@ -44,6 +44,7 @@ LazyDatabase _openConnection() {
   Modules,
   Params,
   Plants,
+  Boxes,
   ChartCaches,
   Timelapses,
   Feeds,
@@ -64,13 +65,10 @@ class RelDB extends _$RelDB {
     return _instance;
   }
 
-  // we tell the database where to store the data with this constructor
   RelDB() : super(_openConnection());
 
-  // you should bump this number whenever you change or add a table definition. Migrations
-  // are covered later in this readme.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(

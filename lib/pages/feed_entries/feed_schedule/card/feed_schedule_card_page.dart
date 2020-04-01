@@ -44,7 +44,7 @@ class FeedScheduleCardPage extends StatelessWidget {
                     child: FeedCardDate(state.feedEntry),
                   ),
                   Container(
-                    height: 150,
+                    height: 100,
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -53,8 +53,8 @@ class FeedScheduleCardPage extends StatelessWidget {
                           'Flipped to\n${state.params['schedule']}!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w300,
                               color: Color(0xff3bb30b)),
                         ),
                       ],

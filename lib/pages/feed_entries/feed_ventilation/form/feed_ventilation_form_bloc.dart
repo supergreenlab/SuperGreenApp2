@@ -142,25 +142,28 @@ class FeedVentilationFormBloc
       FeedVentilationFormBlocEvent event) async* {
     if (event is FeedVentilationFormBlocEventLoadVentilations) {
       final db = RelDB.get();
-      if (_args.plant.device == null) {
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         yield FeedVentilationFormBlocStateNoDevice(15, 5, 15, 5);
         return;
       }
-      _device = await db.devicesDAO.getDevice(_args.plant.device);
+      _device = await db.devicesDAO.getDevice(box.device);
       if (_device.isReachable == false) {
         yield FeedVentilationFormBlocStateNotReachable();
         return;
       }
       _blowerDay = await db.devicesDAO
-          .getParam(_device.id, "BOX_${_args.plant.deviceBox}_BLOWER_DAY");
+          .getParam(_device.id, "BOX_${box.deviceBox}_BLOWER_DAY");
       _initialBlowerDay = _blowerDay.ivalue;
       _blowerNight = await db.devicesDAO
-          .getParam(_device.id, "BOX_${_args.plant.deviceBox}_BLOWER_NIGHT");
+          .getParam(_device.id, "BOX_${box.deviceBox}_BLOWER_NIGHT");
       _initialBlowerNight = _blowerNight.ivalue;
       yield FeedVentilationFormBlocStateVentilationLoaded(_initialBlowerDay,
           _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue);
     } else if (event is FeedVentilationFormBlocBlowerDayChangedEvent) {
-      if (_args.plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         return;
       }
       _blowerDay = _blowerDay.copyWith(ivalue: event.blowerDay);
@@ -169,7 +172,9 @@ class FeedVentilationFormBloc
       yield FeedVentilationFormBlocStateVentilationLoaded(_initialBlowerDay,
           _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue);
     } else if (event is FeedVentilationFormBlocBlowerNightChangedEvent) {
-      if (_args.plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         return;
       }
       if (_device.isReachable == false) {
@@ -182,11 +187,12 @@ class FeedVentilationFormBloc
       yield FeedVentilationFormBlocStateVentilationLoaded(_initialBlowerDay,
           _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue);
     } else if (event is FeedVentilationFormBlocEventCreate) {
-      if (_args.plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         return;
       }
       yield FeedVentilationFormBlocStateLoading('Saving..');
-      final db = RelDB.get();
       await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_VENTILATION',
         feed: _args.plant.feed,
@@ -204,7 +210,9 @@ class FeedVentilationFormBloc
       ));
       yield FeedVentilationFormBlocStateDone();
     } else if (event is FeedVentilationFormBlocEventCancelEvent) {
-      if (_args.plant.device == null) {
+      final db = RelDB.get();
+      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      if (box.device == null) {
         return;
       }
       if (_device.isReachable == false) {

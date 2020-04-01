@@ -25,8 +25,12 @@ import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_plant/plant_infos/plant_infos_bloc.dart';
-import 'package:super_green_app/pages/add_plant/plant_infos/plant_infos_page.dart';
+import 'package:super_green_app/pages/add_plant/create_box/create_box_bloc.dart';
+import 'package:super_green_app/pages/add_plant/create_box/create_box_page.dart';
+import 'package:super_green_app/pages/add_plant/create_plant/create_plant_bloc.dart';
+import 'package:super_green_app/pages/add_plant/create_plant/create_plant_page.dart';
+import 'package:super_green_app/pages/add_plant/select_box/select_box_bloc.dart';
+import 'package:super_green_app/pages/add_plant/select_box/select_box_page.dart';
 import 'package:super_green_app/pages/add_plant/select_device/select_device_bloc.dart';
 import 'package:super_green_app/pages/add_plant/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/add_plant/select_device_box/select_device_box_bloc.dart';
@@ -193,20 +197,30 @@ class _MainPageState extends State<MainPage> {
         );
       case '/plant/new':
         return BlocProvider(
-          create: (context) => PlantInfosBloc(),
-          child: PlantInfosPage(),
+          create: (context) => CreatePlantBloc(),
+          child: CreatePlantPage(),
         );
-      case '/plant/device':
+      case '/plant/box':
+        return BlocProvider(
+          create: (context) => SelectBoxBloc(settings.arguments),
+          child: SelectBoxPage(),
+        );
+      case '/plant/box/new':
+        return BlocProvider(
+          create: (context) => CreateBoxBloc(settings.arguments),
+          child: CreateBoxPage(),
+        );
+      case '/box/device':
         return BlocProvider(
           create: (context) => SelectDeviceBloc(settings.arguments),
           child: SelectDevicePage(),
         );
-      case '/plant/device/box':
+      case '/box/device/box':
         return BlocProvider(
           create: (context) => SelectDeviceBoxBloc(settings.arguments),
           child: SelectDeviceBoxPage(),
         );
-      case '/plant/device/box/new':
+      case '/box/device/box/new':
         return BlocProvider(
           create: (context) => SelectDeviceNewBoxBloc(settings.arguments),
           child: SelectDeviceNewBoxPage(),

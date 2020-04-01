@@ -32,7 +32,7 @@ class TowelieButtonCreatePlant extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
     if (event.params['ID'] == 'CREATE_PLANT') {
-      yield TowelieBlocStateMainNavigation(MainNavigateToNewPlantInfosEvent());
+      yield TowelieBlocStateMainNavigation(MainNavigateToCreatePlantEvent());
     }
   }
 }

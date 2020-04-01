@@ -38,18 +38,23 @@ class FeedVentilationCardPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   FeedCardTitle('assets/feed_card/icon_blower.svg',
-                      'Feed Ventilation', state.feedEntry),
+                      'Ventilation change', state.feedEntry),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FeedCardDate(state.feedEntry),
                   ),
                   Container(
-                    height: 150,
+                    height: 120,
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: _renderValues([state.params['values']['blowerDay'], state.params['values']['blowerNight']],
-                          [state.params['initialValues']['blowerDay'], state.params['initialValues']['blowerNight']]),
+                      children: _renderValues([
+                        state.params['values']['blowerDay'],
+                        state.params['values']['blowerNight']
+                      ], [
+                        state.params['initialValues']['blowerDay'],
+                        state.params['initialValues']['blowerNight']
+                      ]),
                     ),
                   ),
                 ],
@@ -71,7 +76,7 @@ class FeedVentilationCardPage extends StatelessWidget {
         .where((v) => v['from'] != v['to'])
         .map<Widget>((v) {
           return Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -80,8 +85,8 @@ class FeedVentilationCardPage extends StatelessWidget {
                   children: <Widget>[
                     Text('${v['i'] == 0 ? 'Day' : 'Night'}',
                         style: TextStyle(
-                            fontSize: 55,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 45,
+                            fontWeight: FontWeight.w300,
                             color: Colors.grey)),
                   ],
                 ),
@@ -90,12 +95,12 @@ class FeedVentilationCardPage extends StatelessWidget {
                   children: <Widget>[
                     Text('${v['from']}%',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    Icon(Icons.arrow_forward),
+                            fontSize: 20, fontWeight: FontWeight.w300)),
+                    Icon(Icons.arrow_forward, size: 18),
                     Text('${v['to']}%',
                         style: TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w300,
                             color: Colors.green)),
                   ],
                 ),

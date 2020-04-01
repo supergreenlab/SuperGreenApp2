@@ -53,8 +53,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
           bloc: BlocProvider.of<SelectDeviceBloc>(context),
           builder: (context, state) => Scaffold(
               appBar: SGLAppBar(
-                'Plant creation',
-                backgroundColor: Color(0xff0bb354),
+                'Select controller',
+                backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
               ),
@@ -63,12 +63,12 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                   AnimatedContainer(
                     duration: Duration(milliseconds: 100),
                     height: 100,
-                    color: Color(0xff0bb354),
+                    color: Color(0xff0b6ab3),
                   ),
                   SectionTitle(
                     title: 'Select the controller below',
                     icon: 'assets/box_setup/icon_controller.svg',
-                    backgroundColor: Color(0xff0bb354),
+                    backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
                     large: true,
                     elevation: 5,
@@ -163,7 +163,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
 
   void _selectDevice(BuildContext context, Device device) {
     BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToSelectPlantDeviceBoxEvent(device, futureFn: (future) async {
+        MainNavigateToSelectDeviceBoxEvent(device, futureFn: (future) async {
       dynamic deviceBox = await future;
       if (deviceBox is int) {
         BlocProvider.of<SelectDeviceBloc>(context)

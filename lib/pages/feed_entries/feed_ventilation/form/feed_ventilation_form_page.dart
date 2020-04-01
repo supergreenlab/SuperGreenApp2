@@ -100,15 +100,14 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             } else {
               body = _renderParams(context, state);
             }
+            bool changed =
+                state is FeedVentilationFormBlocStateVentilationLoaded &&
+                    (state.blowerDay != state.initialBlowerDay ||
+                        state.blowerNight != state.initialBlowerNight);
             return FeedFormLayout(
                 title: 'Record creation',
-                changed:
-                    state is FeedVentilationFormBlocStateVentilationLoaded &&
-                        (state.blowerDay != state.initialBlowerDay ||
-                            state.blowerNight != state.initialBlowerNight),
-                valid: state is FeedVentilationFormBlocStateVentilationLoaded &&
-                    (state.blowerDay != state.initialBlowerDay ||
-                        state.blowerNight != state.initialBlowerNight),
+                changed: changed,
+                valid: changed,
                 onOK: () {
                   BlocProvider.of<FeedVentilationFormBloc>(context).add(
                       FeedVentilationFormBlocEventCreate(
@@ -141,7 +140,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           icon: 'assets/feed_form/icon_blower.svg',
           value: _blowerDay.toDouble(),
           min: 0,
-          max: 60,
+          max: 100,
           color: Colors.yellow,
           onChanged: (double newValue) {
             setState(() {

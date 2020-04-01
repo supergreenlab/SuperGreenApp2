@@ -1059,8 +1059,7 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
 class Plant extends DataClass implements Insertable<Plant> {
   final int id;
   final int feed;
-  final int device;
-  final int deviceBox;
+  final int box;
   final String name;
   final String settings;
   final String serverID;
@@ -1068,8 +1067,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   Plant(
       {@required this.id,
       @required this.feed,
-      this.device,
-      this.deviceBox,
+      @required this.box,
       @required this.name,
       @required this.settings,
       this.serverID,
@@ -1083,9 +1081,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return Plant(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      deviceBox:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
+      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       settings: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
@@ -1101,8 +1097,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return Plant(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
-      device: serializer.fromJson<int>(json['device']),
-      deviceBox: serializer.fromJson<int>(json['deviceBox']),
+      box: serializer.fromJson<int>(json['box']),
       name: serializer.fromJson<String>(json['name']),
       settings: serializer.fromJson<String>(json['settings']),
       serverID: serializer.fromJson<String>(json['serverID']),
@@ -1115,8 +1110,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
-      'device': serializer.toJson<int>(device),
-      'deviceBox': serializer.toJson<int>(deviceBox),
+      'box': serializer.toJson<int>(box),
       'name': serializer.toJson<String>(name),
       'settings': serializer.toJson<String>(settings),
       'serverID': serializer.toJson<String>(serverID),
@@ -1129,11 +1123,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return PlantsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
-      device:
-          device == null && nullToAbsent ? const Value.absent() : Value(device),
-      deviceBox: deviceBox == null && nullToAbsent
-          ? const Value.absent()
-          : Value(deviceBox),
+      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       settings: settings == null && nullToAbsent
           ? const Value.absent()
@@ -1149,8 +1139,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   Plant copyWith(
           {int id,
           int feed,
-          int device,
-          int deviceBox,
+          int box,
           String name,
           String settings,
           String serverID,
@@ -1158,8 +1147,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       Plant(
         id: id ?? this.id,
         feed: feed ?? this.feed,
-        device: device ?? this.device,
-        deviceBox: deviceBox ?? this.deviceBox,
+        box: box ?? this.box,
         name: name ?? this.name,
         settings: settings ?? this.settings,
         serverID: serverID ?? this.serverID,
@@ -1170,8 +1158,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return (StringBuffer('Plant(')
           ..write('id: $id, ')
           ..write('feed: $feed, ')
-          ..write('device: $device, ')
-          ..write('deviceBox: $deviceBox, ')
+          ..write('box: $box, ')
           ..write('name: $name, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')
@@ -1186,21 +1173,18 @@ class Plant extends DataClass implements Insertable<Plant> {
       $mrjc(
           feed.hashCode,
           $mrjc(
-              device.hashCode,
+              box.hashCode,
               $mrjc(
-                  deviceBox.hashCode,
-                  $mrjc(
-                      name.hashCode,
-                      $mrjc(settings.hashCode,
-                          $mrjc(serverID.hashCode, synced.hashCode))))))));
+                  name.hashCode,
+                  $mrjc(settings.hashCode,
+                      $mrjc(serverID.hashCode, synced.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Plant &&
           other.id == this.id &&
           other.feed == this.feed &&
-          other.device == this.device &&
-          other.deviceBox == this.deviceBox &&
+          other.box == this.box &&
           other.name == this.name &&
           other.settings == this.settings &&
           other.serverID == this.serverID &&
@@ -1210,8 +1194,7 @@ class Plant extends DataClass implements Insertable<Plant> {
 class PlantsCompanion extends UpdateCompanion<Plant> {
   final Value<int> id;
   final Value<int> feed;
-  final Value<int> device;
-  final Value<int> deviceBox;
+  final Value<int> box;
   final Value<String> name;
   final Value<String> settings;
   final Value<String> serverID;
@@ -1219,8 +1202,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   const PlantsCompanion({
     this.id = const Value.absent(),
     this.feed = const Value.absent(),
-    this.device = const Value.absent(),
-    this.deviceBox = const Value.absent(),
+    this.box = const Value.absent(),
     this.name = const Value.absent(),
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
@@ -1229,19 +1211,18 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   PlantsCompanion.insert({
     this.id = const Value.absent(),
     @required int feed,
-    this.device = const Value.absent(),
-    this.deviceBox = const Value.absent(),
+    @required int box,
     @required String name,
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   })  : feed = Value(feed),
+        box = Value(box),
         name = Value(name);
   PlantsCompanion copyWith(
       {Value<int> id,
       Value<int> feed,
-      Value<int> device,
-      Value<int> deviceBox,
+      Value<int> box,
       Value<String> name,
       Value<String> settings,
       Value<String> serverID,
@@ -1249,8 +1230,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     return PlantsCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
-      device: device ?? this.device,
-      deviceBox: deviceBox ?? this.deviceBox,
+      box: box ?? this.box,
       name: name ?? this.name,
       settings: settings ?? this.settings,
       serverID: serverID ?? this.serverID,
@@ -1282,6 +1262,341 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
       $tableName,
       false,
     );
+  }
+
+  final VerificationMeta _boxMeta = const VerificationMeta('box');
+  GeneratedIntColumn _box;
+  @override
+  GeneratedIntColumn get box => _box ??= _constructBox();
+  GeneratedIntColumn _constructBox() {
+    return GeneratedIntColumn(
+      'box',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  GeneratedTextColumn _name;
+  @override
+  GeneratedTextColumn get name => _name ??= _constructName();
+  GeneratedTextColumn _constructName() {
+    return GeneratedTextColumn('name', $tableName, false,
+        minTextLength: 1, maxTextLength: 32);
+  }
+
+  final VerificationMeta _settingsMeta = const VerificationMeta('settings');
+  GeneratedTextColumn _settings;
+  @override
+  GeneratedTextColumn get settings => _settings ??= _constructSettings();
+  GeneratedTextColumn _constructSettings() {
+    return GeneratedTextColumn('settings', $tableName, false,
+        defaultValue: Constant('{}'));
+  }
+
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
+  @override
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, true,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _syncedMeta = const VerificationMeta('synced');
+  GeneratedBoolColumn _synced;
+  @override
+  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
+  GeneratedBoolColumn _constructSynced() {
+    return GeneratedBoolColumn('synced', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, feed, box, name, settings, serverID, synced];
+  @override
+  $PlantsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'plants';
+  @override
+  final String actualTableName = 'plants';
+  @override
+  VerificationContext validateIntegrity(PlantsCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    }
+    if (d.feed.present) {
+      context.handle(
+          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
+    } else if (isInserting) {
+      context.missing(_feedMeta);
+    }
+    if (d.box.present) {
+      context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
+    } else if (isInserting) {
+      context.missing(_boxMeta);
+    }
+    if (d.name.present) {
+      context.handle(
+          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (d.settings.present) {
+      context.handle(_settingsMeta,
+          settings.isAcceptableValue(d.settings.value, _settingsMeta));
+    }
+    if (d.serverID.present) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+    }
+    if (d.synced.present) {
+      context.handle(
+          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Plant map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Plant.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(PlantsCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<int, IntType>(d.id.value);
+    }
+    if (d.feed.present) {
+      map['feed'] = Variable<int, IntType>(d.feed.value);
+    }
+    if (d.box.present) {
+      map['box'] = Variable<int, IntType>(d.box.value);
+    }
+    if (d.name.present) {
+      map['name'] = Variable<String, StringType>(d.name.value);
+    }
+    if (d.settings.present) {
+      map['settings'] = Variable<String, StringType>(d.settings.value);
+    }
+    if (d.serverID.present) {
+      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
+    }
+    if (d.synced.present) {
+      map['synced'] = Variable<bool, BoolType>(d.synced.value);
+    }
+    return map;
+  }
+
+  @override
+  $PlantsTable createAlias(String alias) {
+    return $PlantsTable(_db, alias);
+  }
+}
+
+class Box extends DataClass implements Insertable<Box> {
+  final int id;
+  final int device;
+  final int deviceBox;
+  final String name;
+  final String settings;
+  final String serverID;
+  final bool synced;
+  Box(
+      {@required this.id,
+      this.device,
+      this.deviceBox,
+      @required this.name,
+      @required this.settings,
+      this.serverID,
+      @required this.synced});
+  factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    final boolType = db.typeSystem.forDartType<bool>();
+    return Box(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
+      deviceBox:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
+      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      settings: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      synced:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+    );
+  }
+  factory Box.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Box(
+      id: serializer.fromJson<int>(json['id']),
+      device: serializer.fromJson<int>(json['device']),
+      deviceBox: serializer.fromJson<int>(json['deviceBox']),
+      name: serializer.fromJson<String>(json['name']),
+      settings: serializer.fromJson<String>(json['settings']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      synced: serializer.fromJson<bool>(json['synced']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'device': serializer.toJson<int>(device),
+      'deviceBox': serializer.toJson<int>(deviceBox),
+      'name': serializer.toJson<String>(name),
+      'settings': serializer.toJson<String>(settings),
+      'serverID': serializer.toJson<String>(serverID),
+      'synced': serializer.toJson<bool>(synced),
+    };
+  }
+
+  @override
+  BoxesCompanion createCompanion(bool nullToAbsent) {
+    return BoxesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      device:
+          device == null && nullToAbsent ? const Value.absent() : Value(device),
+      deviceBox: deviceBox == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceBox),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      settings: settings == null && nullToAbsent
+          ? const Value.absent()
+          : Value(settings),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
+  }
+
+  Box copyWith(
+          {int id,
+          int device,
+          int deviceBox,
+          String name,
+          String settings,
+          String serverID,
+          bool synced}) =>
+      Box(
+        id: id ?? this.id,
+        device: device ?? this.device,
+        deviceBox: deviceBox ?? this.deviceBox,
+        name: name ?? this.name,
+        settings: settings ?? this.settings,
+        serverID: serverID ?? this.serverID,
+        synced: synced ?? this.synced,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Box(')
+          ..write('id: $id, ')
+          ..write('device: $device, ')
+          ..write('deviceBox: $deviceBox, ')
+          ..write('name: $name, ')
+          ..write('settings: $settings, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          device.hashCode,
+          $mrjc(
+              deviceBox.hashCode,
+              $mrjc(
+                  name.hashCode,
+                  $mrjc(settings.hashCode,
+                      $mrjc(serverID.hashCode, synced.hashCode)))))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Box &&
+          other.id == this.id &&
+          other.device == this.device &&
+          other.deviceBox == this.deviceBox &&
+          other.name == this.name &&
+          other.settings == this.settings &&
+          other.serverID == this.serverID &&
+          other.synced == this.synced);
+}
+
+class BoxesCompanion extends UpdateCompanion<Box> {
+  final Value<int> id;
+  final Value<int> device;
+  final Value<int> deviceBox;
+  final Value<String> name;
+  final Value<String> settings;
+  final Value<String> serverID;
+  final Value<bool> synced;
+  const BoxesCompanion({
+    this.id = const Value.absent(),
+    this.device = const Value.absent(),
+    this.deviceBox = const Value.absent(),
+    this.name = const Value.absent(),
+    this.settings = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  });
+  BoxesCompanion.insert({
+    this.id = const Value.absent(),
+    this.device = const Value.absent(),
+    this.deviceBox = const Value.absent(),
+    @required String name,
+    this.settings = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.synced = const Value.absent(),
+  }) : name = Value(name);
+  BoxesCompanion copyWith(
+      {Value<int> id,
+      Value<int> device,
+      Value<int> deviceBox,
+      Value<String> name,
+      Value<String> settings,
+      Value<String> serverID,
+      Value<bool> synced}) {
+    return BoxesCompanion(
+      id: id ?? this.id,
+      device: device ?? this.device,
+      deviceBox: deviceBox ?? this.deviceBox,
+      name: name ?? this.name,
+      settings: settings ?? this.settings,
+      serverID: serverID ?? this.serverID,
+      synced: synced ?? this.synced,
+    );
+  }
+}
+
+class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $BoxesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
   final VerificationMeta _deviceMeta = const VerificationMeta('device');
@@ -1346,25 +1661,19 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feed, device, deviceBox, name, settings, serverID, synced];
+      [id, device, deviceBox, name, settings, serverID, synced];
   @override
-  $PlantsTable get asDslTable => this;
+  $BoxesTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'plants';
+  String get $tableName => _alias ?? 'boxes';
   @override
-  final String actualTableName = 'plants';
+  final String actualTableName = 'boxes';
   @override
-  VerificationContext validateIntegrity(PlantsCompanion d,
+  VerificationContext validateIntegrity(BoxesCompanion d,
       {bool isInserting = false}) {
     final context = VerificationContext();
     if (d.id.present) {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
-    }
-    if (d.feed.present) {
-      context.handle(
-          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
-    } else if (isInserting) {
-      context.missing(_feedMeta);
     }
     if (d.device.present) {
       context.handle(
@@ -1398,19 +1707,16 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Plant map(Map<String, dynamic> data, {String tablePrefix}) {
+  Box map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Plant.fromData(data, _db, prefix: effectivePrefix);
+    return Box.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  Map<String, Variable> entityToSql(PlantsCompanion d) {
+  Map<String, Variable> entityToSql(BoxesCompanion d) {
     final map = <String, Variable>{};
     if (d.id.present) {
       map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.feed.present) {
-      map['feed'] = Variable<int, IntType>(d.feed.value);
     }
     if (d.device.present) {
       map['device'] = Variable<int, IntType>(d.device.value);
@@ -1434,8 +1740,8 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   }
 
   @override
-  $PlantsTable createAlias(String alias) {
-    return $PlantsTable(_db, alias);
+  $BoxesTable createAlias(String alias) {
+    return $BoxesTable(_db, alias);
   }
 }
 
@@ -3267,6 +3573,8 @@ abstract class _$RelDB extends GeneratedDatabase {
   $ParamsTable get params => _params ??= $ParamsTable(this);
   $PlantsTable _plants;
   $PlantsTable get plants => _plants ??= $PlantsTable(this);
+  $BoxesTable _boxes;
+  $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
   $ChartCachesTable _chartCaches;
   $ChartCachesTable get chartCaches => _chartCaches ??= $ChartCachesTable(this);
   $TimelapsesTable _timelapses;
@@ -3291,6 +3599,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         modules,
         params,
         plants,
+        boxes,
         chartCaches,
         timelapses,
         feeds,

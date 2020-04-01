@@ -85,7 +85,7 @@ class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
 
 class SelectDeviceBoxBloc
     extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
-  final MainNavigateToSelectPlantDeviceBoxEvent _args;
+  final MainNavigateToSelectDeviceBoxEvent _args;
 
   SelectDeviceBoxBloc(this._args) {
     add(SelectDeviceBoxBlocEventInitialize());

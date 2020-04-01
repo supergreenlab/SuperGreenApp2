@@ -39,17 +39,18 @@ class TowelieButtonPlantBloomStage extends TowelieButton {
     if (event.params['ID'] == 'PLANT_BLOOM_STAGE') {
       final db = RelDB.get();
       Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+      Box box = await db.plantsDAO.getBox(plant.box);
       Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
       plantSettings['phase'] = 'BLOOM';
       await db.plantsDAO.updatePlant(PlantsCompanion(
           settings: Value(JsonEncoder().convert(plantSettings))));
 
-      String boxID = await db.plantsDAO.boxSettingsID(plant);
-      final Map<String, dynamic> boxSettings = AppDB().getBoxSettings(boxID);
+      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
       if (plantSettings['plantType'] == 'PHOTO') {
         boxSettings['schedule'] = 'BLOOM';
       }
-      AppDB().setBoxSettings(boxID, boxSettings);
+      await db.plantsDAO.updateBox(
+          BoxesCompanion(settings: Value(JsonEncoder().convert(boxSettings))));
 
       await TowelieCardsFactory.createPlantTutoTakePic(event.feed);
       await removeButtons(event.feedEntry);

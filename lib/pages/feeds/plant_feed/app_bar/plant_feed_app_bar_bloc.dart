@@ -91,17 +91,19 @@ class PlantFeedAppBarBloc
   }
 
   Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant plant) async {
-    if (plant.device == null) {
+    final db = RelDB.get();
+    Box box = await db.plantsDAO.getBox(plant.box);
+    if (box.device == null) {
       await Future.delayed(Duration(milliseconds: 500));
       return _createDummyData();
     } else {
-      Device device = await RelDB.get().devicesDAO.getDevice(plant.device);
+      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
       if (device == null) {
         _timer.cancel();
         return _createDummyData();
       }
       String identifier = device.identifier;
-      int deviceBox = plant.deviceBox;
+      int deviceBox = box.deviceBox;
       charts.Series<Metric, DateTime> temp =
           await TimeSeriesAPI.fetchTimeSeries(
               plant,
@@ -132,7 +134,7 @@ class PlantFeedAppBarBloc
       for (int i = 0; i < lightModule.arrayLen; ++i) {
         Param boxParam =
             await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
-        if (boxParam.ivalue != plant.deviceBox) {
+        if (boxParam.ivalue != box.deviceBox) {
           continue;
         }
         List<dynamic> dim =
@@ -173,6 +175,14 @@ class PlantFeedAppBarBloc
                 .add(Duration(hours: index * 72 ~/ 50)),
             ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
                 .toDouble()));
+    final ventilationData = List.generate(
+        50,
+        (index) => Metric(
+            DateTime.now()
+                .subtract(Duration(hours: 72))
+                .add(Duration(hours: index * 72 ~/ 50)),
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20)
+                .toDouble()));
 
     return [
       charts.Series<Metric, DateTime>(
@@ -198,6 +208,14 @@ class PlantFeedAppBarBloc
         domainFn: (Metric metric, _) => metric.time,
         measureFn: (Metric metric, _) => metric.metric,
         data: lightData,
+      ),
+      charts.Series<Metric, DateTime>(
+        id: 'Ventilation',
+        strokeWidthPxFn: (_, __) => 3,
+        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
+        domainFn: (Metric metric, _) => metric.time,
+        measureFn: (Metric metric, _) => metric.metric,
+        data: ventilationData,
       ),
     ];
   }

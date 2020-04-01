@@ -21,9 +21,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_plant/plant_infos/plant_infos_bloc.dart';
-import 'package:super_green_app/pages/add_plant/select_device/select_device_page.dart';
+import 'package:super_green_app/pages/add_plant/create_plant/create_plant_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -31,12 +31,12 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
-class PlantInfosPage extends StatefulWidget {
+class CreatePlantPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => PlantInfosPageState();
+  State<StatefulWidget> createState() => CreatePlantPageState();
 }
 
-class PlantInfosPageState extends State<PlantInfosPage> {
+class CreatePlantPageState extends State<CreatePlantPage> {
   final _nameController = TextEditingController();
 
   KeyboardVisibilityNotification _keyboardVisibility =
@@ -66,9 +66,9 @@ class PlantInfosPageState extends State<PlantInfosPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<PlantInfosBloc>(context),
-      listener: (BuildContext context, PlantInfosBlocState state) async {
-        if (state is PlantInfosBlocStateDone) {
+      bloc: BlocProvider.of<CreatePlantBloc>(context),
+      listener: (BuildContext context, CreatePlantBlocState state) async {
+        if (state is CreatePlantBlocStateDone) {
           BlocProvider.of<TowelieBloc>(context)
               .add(TowelieBlocEventPlantCreated(state.plant));
           Timer(const Duration(milliseconds: 1500), () {
@@ -77,11 +77,11 @@ class PlantInfosPageState extends State<PlantInfosPage> {
           });
         }
       },
-      child: BlocBuilder<PlantInfosBloc, PlantInfosBlocState>(
-          bloc: BlocProvider.of<PlantInfosBloc>(context),
+      child: BlocBuilder<CreatePlantBloc, CreatePlantBlocState>(
+          bloc: BlocProvider.of<CreatePlantBloc>(context),
           builder: (context, state) {
             Widget body;
-            if (state is PlantInfosBlocStateDone) {
+            if (state is CreatePlantBlocStateDone) {
               body = _renderDone(state);
             } else {
               body = _renderForm();
@@ -89,7 +89,7 @@ class PlantInfosPageState extends State<PlantInfosPage> {
             return Scaffold(
                 appBar: SGLAppBar(
                   'Plant creation',
-                  hideBackButton: state is PlantInfosBlocStateDone,
+                  hideBackButton: state is CreatePlantBlocStateDone,
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
@@ -101,14 +101,9 @@ class PlantInfosPageState extends State<PlantInfosPage> {
     );
   }
 
-  Widget _renderDone(PlantInfosBlocStateDone state) {
-    String subtitle;
-    if (state.device == null && state.deviceBox == null) {
-      subtitle = 'Plant ${_nameController.value.text} created:)';
-    } else {
-      subtitle =
-          'Plant ${_nameController.value.text} on controller ${state.device.name} created:)';
-    }
+  Widget _renderDone(CreatePlantBlocStateDone state) {
+    String subtitle =
+        'Plant ${_nameController.value.text} on box ${state.box.name} created:)';
     return Fullscreen(
         title: 'Done!',
         subtitle: subtitle,
@@ -138,7 +133,7 @@ class PlantInfosPageState extends State<PlantInfosPage> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: SGLTextField(
-                  hintText: 'Ex: IkeHigh',
+                  hintText: 'Ex: Gorilla Kush',
                   controller: _nameController,
                   onChanged: (_) {
                     setState(() {});
@@ -164,16 +159,14 @@ class PlantInfosPageState extends State<PlantInfosPage> {
 
   void _handleInput(BuildContext context) async {
     BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToSelectPlantDeviceEvent(futureFn: (future) async {
+        .add(MainNavigateToSelectBoxEvent(futureFn: (future) async {
       dynamic res = await future;
-      if (res is SelectBoxDeviceData) {
-        BlocProvider.of<PlantInfosBloc>(context).add(PlantInfosBlocEventCreateBox(
-            _nameController.text,
-            device: res.device,
-            deviceBox: res.deviceBox));
-      } else if (res == false) {
-        BlocProvider.of<PlantInfosBloc>(context)
-            .add(PlantInfosBlocEventCreateBox(_nameController.text));
+      if (res is Box) {
+        BlocProvider.of<CreatePlantBloc>(context)
+            .add(CreatePlantBlocEventCreate(
+          _nameController.text,
+          res.id,
+        ));
       }
     }));
   }
