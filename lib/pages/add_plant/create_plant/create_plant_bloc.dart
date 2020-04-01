@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class CreatePlantBlocEvent extends Equatable {}
@@ -59,7 +60,7 @@ class CreatePlantBloc extends Bloc<CreatePlantBlocEvent, CreatePlantBlocState> {
       final feedID = await fdb.addFeed(feed);
       PlantsCompanion plant;
       plant = PlantsCompanion.insert(
-          feed: feedID, name: event.name, box: event.box);
+          feed: feedID, name: event.name, box: Value(event.box));
       final plantID = await bdb.addPlant(plant);
       final p = await bdb.getPlant(plantID);
       final b = await bdb.getBox(event.box);
