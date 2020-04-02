@@ -97,42 +97,46 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   }
 
   Widget _renderForm(BuildContext context, SettingsPlantBlocStateLoaded state) {
-    return ListView(
+    return Column(
       children: <Widget>[
-        SectionTitle(
-          title: 'Plant name',
-          icon: 'assets/box_setup/icon_box_name.svg',
-          backgroundColor: Color(0xff0bb354),
-          titleColor: Colors.white,
-          elevation: 5,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
-          child: SGLTextField(
-              hintText: 'Ex: Gorilla Kush',
-              controller: _nameController,
-              onChanged: (_) {
-                setState(() {});
-              }),
-        ),
-        SectionTitle(
-          title: 'Plant box',
-          icon: 'assets/box_setup/icon_box.svg',
-          backgroundColor: Color(0xff0bb354),
-          titleColor: Colors.white,
-          elevation: 5,
-        ),
-        ListTile(
-          leading: SvgPicture.asset('assets/box_setup/icon_box.svg'),
-          title: Text(_box.name),
-          subtitle: Text('Tap to change'),
-          trailing: Icon(Icons.edit),
-          onTap: () {
-            _handleChangeBox(context);
-          },
-        ),
         Expanded(
-          child: Container(),
+          child: ListView(
+            children: <Widget>[
+              SectionTitle(
+                title: 'Plant name',
+                icon: 'assets/box_setup/icon_box_name.svg',
+                backgroundColor: Color(0xff0bb354),
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                child: SGLTextField(
+                    hintText: 'Ex: Gorilla Kush',
+                    controller: _nameController,
+                    onChanged: (_) {
+                      setState(() {});
+                    }),
+              ),
+              SectionTitle(
+                title: 'Plant box',
+                icon: 'assets/box_setup/icon_box.svg',
+                backgroundColor: Color(0xff0bb354),
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              ListTile(
+                leading: SvgPicture.asset('assets/box_setup/icon_box.svg'),
+                title: Text(_box.name),
+                subtitle: Text('Tap to change'),
+                trailing: Icon(Icons.edit),
+                onTap: () {
+                  _handleChangeBox(context);
+                },
+              ),
+            ],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),

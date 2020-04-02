@@ -73,7 +73,6 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                         icon: 'assets/settings/icon_account.svg',
                         backgroundColor: Colors.deepOrange,
                         titleColor: Colors.white,
-                        large: true,
                         elevation: 5,
                       ),
                       Padding(
@@ -94,10 +93,9 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                       ),
                       SectionTitle(
                         title: 'Enter your password:',
-                        icon: 'assets/box_setup/icon_box_name.svg',
+                        icon: 'assets/settings/icon_password.svg',
                         backgroundColor: Colors.deepOrange,
                         titleColor: Colors.white,
-                        large: true,
                         elevation: 5,
                       ),
                       Padding(
@@ -110,6 +108,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                             },
                             controller: _passwordController,
                             obscureText: true,
+                            hintText: '***',
                             onChanged: (_) {
                               setState(() {});
                             }),

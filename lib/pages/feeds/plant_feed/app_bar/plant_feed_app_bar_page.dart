@@ -20,50 +20,51 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
   final ScrollController _scrollController = ScrollController();
 
   @override
-  void initState() {
-    Timer(Duration(milliseconds: 500), () {
-      _scrollController.animateTo(200,
-          duration: Duration(seconds: 15), curve: Curves.linear);
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlantFeedAppBarBloc, PlantFeedAppBarBlocState>(
-      builder: (BuildContext context, PlantFeedAppBarBlocState state) {
-        Widget body;
-        if (state is PlantFeedAppBarBlocStateInit) {
-          body = FullscreenLoading(
-            title: 'Loading..',
-            textColor: Colors.white,
-          );
-        } else if (state is PlantFeedAppBarBlocStateLoaded) {
-          if (state.graphData[0].data.length == 0 &&
-              state.graphData[1].data.length == 0 &&
-              state.graphData[2].data.length == 0) {
-            body = Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.white60,
-                border: Border.all(color: Color(0xffdedede), width: 1),
-              ),
-              child: Fullscreen(
-                title: 'Not enough data to display graphs yet',
-                subtitle: 'try again in a few minutes',
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
-                child: Container(),
-                childFirst: false,
-              ),
-            );
-          } else {
-            body = _renderGraphs(context, state);
-          }
+    return BlocListener<PlantFeedAppBarBloc, PlantFeedAppBarBlocState>(
+      listener: (BuildContext context, PlantFeedAppBarBlocState state) {
+        if (state is PlantFeedAppBarBlocStateLoaded) {
+          Timer(Duration(milliseconds: 500), () {
+            _scrollController.animateTo(200,
+                duration: Duration(seconds: 15), curve: Curves.linear);
+          });
         }
-        return AnimatedSwitcher(
-            duration: Duration(milliseconds: 200), child: body);
       },
+      child: BlocBuilder<PlantFeedAppBarBloc, PlantFeedAppBarBlocState>(
+        builder: (BuildContext context, PlantFeedAppBarBlocState state) {
+          Widget body;
+          if (state is PlantFeedAppBarBlocStateInit) {
+            body = FullscreenLoading(
+              title: 'Loading..',
+              textColor: Colors.white,
+            );
+          } else if (state is PlantFeedAppBarBlocStateLoaded) {
+            if (state.graphData[0].data.length == 0 &&
+                state.graphData[1].data.length == 0 &&
+                state.graphData[2].data.length == 0) {
+              body = Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white60,
+                  border: Border.all(color: Color(0xffdedede), width: 1),
+                ),
+                child: Fullscreen(
+                  title: 'Not enough data to display graphs yet',
+                  subtitle: 'try again in a few minutes',
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  child: Container(),
+                  childFirst: false,
+                ),
+              );
+            } else {
+              body = _renderGraphs(context, state);
+            }
+          }
+          return AnimatedSwitcher(
+              duration: Duration(milliseconds: 200), child: body);
+        },
+      ),
     );
   }
 
