@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -35,6 +36,7 @@ class FeedLightFormPage extends StatefulWidget {
 
 class _FeedLightFormPageState extends State<FeedLightFormPage> {
   List<int> values = List();
+  bool _reachable = true;
 
   bool changed = false;
 
@@ -44,6 +46,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       bloc: BlocProvider.of<FeedLightFormBloc>(context),
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
+          BlocProvider.of<DeviceDaemonBloc>(context)
+              .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
           setState(() => values = List.from(state.values));
         } else if (state is FeedLightFormBlocStateDone) {
           if (state.feedEntry != null) {
@@ -62,13 +66,6 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               body = FullscreenLoading(title: 'Saving..');
             } else if (state is FeedLightFormBlocStateCancelling) {
               body = FullscreenLoading(title: 'Cancelling..');
-            } else if (state is FeedLightFormBlocStateNotReachable) {
-              body = Fullscreen(
-                  title: 'Device not reachable:/',
-                  subtitle:
-                      'Make sure you are on the same network.\nRemote control is coming soon:)',
-                  child:
-                      Icon(Icons.offline_bolt, size: 100, color: Colors.red));
             } else if (state is FeedLightFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -104,17 +101,43 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   ),
                 ],
               );
-            } else {
-              body = ListView.builder(
+            } else if (state is FeedLightFormBlocStateLightsLoaded) {
+              Widget content = ListView.builder(
                 itemCount: values.length,
                 itemBuilder: _renderLightParam,
               );
+              if (_reachable == false) {
+                content = Stack(
+                  children: <Widget>[
+                    content,
+                    Fullscreen(
+                        title: 'Device unreachable!',
+                        backgroundColor: Colors.white54,
+                        child: Icon(Icons.error, color: Colors.red, size: 100)),
+                  ],
+                );
+              }
+              body = BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
+                  listener: (BuildContext context,
+                      DeviceDaemonBlocState daemonState) {
+                    if (state is FeedLightFormBlocStateLightsLoaded) {
+                      if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
+                          daemonState.device.id == state.box.device) {
+                        setState(() {
+                          _reachable = daemonState.reachable;
+                        });
+                      }
+                    }
+                  },
+                  child: content);
             }
             return FeedFormLayout(
-              title: 'Record creation',
+              title: '⛅',
+              fontSize: 35,
               changed: changed,
-              valid: changed,
-              hideBackButton: (state is FeedLightFormBlocStateLoading ||
+              valid: changed && _reachable,
+              hideBackButton: (_reachable == false ||
+                  state is FeedLightFormBlocStateLoading ||
                   state is FeedLightFormBlocStateCancelling),
               onOK: () {
                 BlocProvider.of<FeedLightFormBloc>(context)
@@ -122,8 +145,10 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               },
               body: WillPopScope(
                 onWillPop: () async {
-                  if (state is FeedLightFormBlocStateNotReachable ||
-                      state is FeedLightFormBlocStateNoDevice) {
+                  if (_reachable == false) {
+                    return false;
+                  }
+                  if (state is FeedLightFormBlocStateNoDevice) {
                     return true;
                   }
                   BlocProvider.of<FeedLightFormBloc>(context)

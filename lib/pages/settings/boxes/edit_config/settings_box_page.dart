@@ -8,8 +8,10 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/settings/boxes/edit_config/settings_box_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
@@ -70,9 +72,11 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
           bloc: BlocProvider.of<SettingsBoxBloc>(context),
           builder: (BuildContext context, SettingsBoxBlocState state) {
             Widget body;
-            if (state is SettingsBoxBlocStateDone) {
+            if (state is SettingsDeviceBlocStateLoading) {
+              body = FullscreenLoading(title: 'Loading..',);
+            } else if (state is SettingsBoxBlocStateDone) {
               body = _renderDone(state);
-            } else {
+            } else if (state is SettingsBoxBlocStateLoaded) {
               body = _renderForm(context, state);
             }
             return Scaffold(

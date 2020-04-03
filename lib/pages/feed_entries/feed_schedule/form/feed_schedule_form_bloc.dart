@@ -66,12 +66,14 @@ class FeedScheduleFormBlocStateLoaded extends FeedScheduleFormBlocState {
   final String initialSchedule;
   final Map<String, dynamic> initialSchedules;
 
+  final Box box;
+
   FeedScheduleFormBlocStateLoaded(this.schedule, this.schedules,
-      this.initialSchedule, this.initialSchedules);
+      this.initialSchedule, this.initialSchedules, this.box);
 
   @override
   List<Object> get props =>
-      [schedule, schedules, this.initialSchedule, this.initialSchedules];
+      [schedule, schedules, this.initialSchedule, this.initialSchedules, box];
 }
 
 class FeedScheduleFormBlocStateUnInitialized extends FeedScheduleFormBlocState {
@@ -83,13 +85,6 @@ class FeedScheduleFormBlocStateUnInitialized extends FeedScheduleFormBlocState {
 
 class FeedScheduleFormBlocStateLoading extends FeedScheduleFormBlocState {
   FeedScheduleFormBlocStateLoading();
-
-  @override
-  List<Object> get props => [];
-}
-
-class FeedScheduleFormBlocStateNotReachable extends FeedScheduleFormBlocState {
-  FeedScheduleFormBlocStateNotReachable();
 
   @override
   List<Object> get props => [];
@@ -111,6 +106,8 @@ class FeedScheduleFormBloc
 
   String _initialSchedule;
   Map<String, dynamic> _initialSchedules = {};
+  
+  Box _box;
 
   final MainNavigateToFeedScheduleFormEvent _args;
 
@@ -127,21 +124,21 @@ class FeedScheduleFormBloc
       FeedScheduleFormBlocEvent event) async* {
     if (event is FeedScheduleFormBlocEventInit) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
-      _device = await db.devicesDAO.getDevice(box.device);
-      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
+      _box = await db.plantsDAO.getBox(_args.plant.box);
+      _device = await db.devicesDAO.getDevice(_box.device);
+      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(_box);
       _initialSchedule = _schedule = boxSettings['schedule'];
       _initialSchedules = _schedules = boxSettings['schedules'];
       yield FeedScheduleFormBlocStateLoaded(
-          _schedule, _schedules, _initialSchedule, _initialSchedules);
+          _schedule, _schedules, _initialSchedule, _initialSchedules, _box);
     } else if (event is FeedScheduleFormBlocEventSetSchedule) {
       _schedule = event.schedule;
       yield FeedScheduleFormBlocStateLoaded(
-          _schedule, _schedules, _initialSchedule, _initialSchedules);
+          _schedule, _schedules, _initialSchedule, _initialSchedules, _box);
     } else if (event is FeedScheduleFormBlocEventUpdatePreset) {
       _schedules[event.schedule] = event.values;
       yield FeedScheduleFormBlocStateLoaded(
-          _schedule, _schedules, _initialSchedule, _initialSchedules);
+          _schedule, _schedules, _initialSchedule, _initialSchedules, _box);
     } else if (event is FeedScheduleFormBlocEventCreate) {
       yield FeedScheduleFormBlocStateLoading();
       final db = RelDB.get();
@@ -149,10 +146,6 @@ class FeedScheduleFormBloc
 
       if (_device != null) {
         _device = await db.devicesDAO.getDevice(box.device);
-        if (_device.isReachable == false) {
-          yield FeedScheduleFormBlocStateNotReachable();
-          return;
-        }
         Param onHour = await db.devicesDAO
             .getParam(_device.id, 'BOX_${box.deviceBox}_ON_HOUR');
         await DeviceHelper.updateIntParam(

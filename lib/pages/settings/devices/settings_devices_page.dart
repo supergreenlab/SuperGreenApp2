@@ -47,8 +47,8 @@ class SettingsDevicesPage extends StatelessWidget {
                       _deleteBox(context, state.devices[index]);
                     },
                     onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToSettingsDevice(state.devices[index]));
+                      BlocProvider.of<MainNavigatorBloc>(context).add(
+                          MainNavigateToSettingsDevice(state.devices[index]));
                     },
                     title: Text('${index + 1}. ${state.devices[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -66,6 +66,7 @@ class SettingsDevicesPage extends StatelessWidget {
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsDevicesBlocStateLoaded),
+                elevation: 10,
               ),
               body: AnimatedSwitcher(
                   duration: Duration(milliseconds: 200), child: body));
@@ -131,7 +132,7 @@ class SettingsDevicesPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GreenButton(
-                        title: 'SHOW NOW',
+                        title: 'SHOP NOW',
                         onPressed: () {
                           launch('https://www.supergreelab.com');
                         },

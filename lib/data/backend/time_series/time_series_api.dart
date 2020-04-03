@@ -51,7 +51,7 @@ class TimeSeriesAPI {
     List<dynamic> data;
     ChartCache cache = await RelDB.get().plantsDAO.getChartCache(plant.id, name);
     Duration diff = cache?.date?.difference(DateTime.now());
-    if (cache == null || -diff.inMinutes >= 2) {
+    if (cache == null || -diff.inSeconds >= 30) {
       if (cache != null) {
         await RelDB.get().plantsDAO.deleteChartCacheForPlant(cache.plant);
       }

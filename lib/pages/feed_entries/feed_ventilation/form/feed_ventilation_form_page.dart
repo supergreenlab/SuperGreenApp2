@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
@@ -36,13 +37,14 @@ class FeedVentilationFormPage extends StatefulWidget {
 class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
+  bool _reachable = true;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
       bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
-        if (state is FeedVentilationFormBlocStateVentilationLoaded) {
+        if (state is FeedVentilationFormBlocStateLoaded) {
           setState(() {
             _blowerDay = state.blowerDay;
             _blowerNight = state.blowerNight;
@@ -58,13 +60,6 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             Widget body;
             if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: state.text);
-            } else if (state is FeedVentilationFormBlocStateNotReachable) {
-              body = Fullscreen(
-                  title: 'Device not reachable:/',
-                  subtitle:
-                      'Make sure you are on the same network.\nRemote control is coming soon:)',
-                  child:
-                      Icon(Icons.offline_bolt, size: 100, color: Colors.red));
             } else if (state is FeedVentilationFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -97,17 +92,41 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   ),
                 ],
               );
-            } else {
-              body = _renderParams(context, state);
+            } else if (state is FeedVentilationFormBlocStateLoaded) {
+              Widget content = _renderParams(context, state);
+              if (_reachable == false) {
+                content = Stack(
+                  children: <Widget>[
+                    content,
+                    Fullscreen(
+                        title: 'Device unreachable!',
+                        backgroundColor: Colors.white54,
+                        child: Icon(Icons.error, color: Colors.red, size: 100)),
+                  ],
+                );
+              }
+              body = BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
+                  listener: (BuildContext context,
+                      DeviceDaemonBlocState daemonState) {
+                    if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
+                        daemonState.device.id == state.box.device) {
+                      setState(() {
+                        _reachable = daemonState.reachable;
+                      });
+                    }
+                  },
+                  child: content);
             }
-            bool changed =
-                state is FeedVentilationFormBlocStateVentilationLoaded &&
-                    (state.blowerDay != state.initialBlowerDay ||
-                        state.blowerNight != state.initialBlowerNight);
+            bool changed = state is FeedVentilationFormBlocStateLoaded &&
+                (state.blowerDay != state.initialBlowerDay ||
+                    state.blowerNight != state.initialBlowerNight);
             return FeedFormLayout(
-                title: 'Record creation',
+                title: '💨',
+                fontSize: 35,
                 changed: changed,
-                valid: changed,
+                valid: changed && _reachable,
+                hideBackButton: (_reachable == false ||
+                    state is FeedVentilationFormBlocStateLoading),
                 onOK: () {
                   BlocProvider.of<FeedVentilationFormBloc>(context).add(
                       FeedVentilationFormBlocEventCreate(
@@ -115,8 +134,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 },
                 body: WillPopScope(
                   onWillPop: () async {
-                    if (state is FeedVentilationFormBlocStateNotReachable ||
-                        state is FeedVentilationFormBlocStateNoDevice) {
+                    if (_reachable == false) {
+                      return false;
+                    }
+                    if (state is FeedVentilationFormBlocStateNoDevice) {
                       return true;
                     }
                     BlocProvider.of<FeedVentilationFormBloc>(context)

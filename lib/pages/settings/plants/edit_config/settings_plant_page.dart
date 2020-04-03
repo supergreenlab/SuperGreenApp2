@@ -6,9 +6,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
@@ -67,9 +69,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
           bloc: BlocProvider.of<SettingsPlantBloc>(context),
           builder: (BuildContext context, SettingsPlantBlocState state) {
             Widget body;
-            if (state is SettingsPlantBlocStateDone) {
+            if (state is SettingsDeviceBlocStateLoading) {
+              body = FullscreenLoading(
+                title: 'Loading..',
+              );
+            } else if (state is SettingsPlantBlocStateDone) {
               body = _renderDone(state);
-            } else {
+            } else if (state is SettingsPlantBlocStateLoaded) {
               body = _renderForm(context, state);
             }
             return Scaffold(

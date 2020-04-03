@@ -9,6 +9,7 @@ import 'package:super_green_app/pages/add_device/select_device/select_device_pag
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
@@ -65,9 +66,11 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
           bloc: BlocProvider.of<SettingsDeviceBloc>(context),
           builder: (BuildContext context, SettingsDeviceBlocState state) {
             Widget body;
-            if (state is SettingsDeviceBlocStateDone) {
+            if (state is SettingsDeviceBlocStateLoading) {
+              body = FullscreenLoading(title: 'Loading..',);
+            } else if (state is SettingsDeviceBlocStateDone) {
               body = _renderDone(state);
-            } else {
+            } else if (state is SettingsDeviceBlocStateLoaded) {
               body = _renderForm(context, state);
             }
             return Scaffold(
@@ -132,8 +135,8 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     child: GreenButton(
                       title: 'View slots',
                       onPressed: () {
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(MainNavigateToSelectDeviceBoxEvent(state.device));
+                        BlocProvider.of<MainNavigatorBloc>(context).add(
+                            MainNavigateToSelectDeviceBoxEvent(state.device));
                       },
                     ),
                   ),

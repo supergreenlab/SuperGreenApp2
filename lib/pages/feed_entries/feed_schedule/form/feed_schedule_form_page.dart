@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_bloc.dart';
@@ -40,6 +41,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
   TextEditingController offMinEditingController;
   String scheduleChange;
   bool editedSchedule = false;
+  bool _reachable = true;
 
   @override
   Widget build(BuildContext context) {
@@ -65,22 +67,44 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
               body = FullscreenLoading(
                 title: 'Loading..',
               );
-            } else if (state is FeedScheduleFormBlocStateNotReachable) {
-              body = Fullscreen(
-                  title: 'Device not reachable:/',
-                  subtitle:
-                      'Make sure you are on the same network.\nRemote control is coming soon:)',
-                  child: Icon(Icons.offline_bolt));
             } else if (state is FeedScheduleFormBlocStateLoaded) {
-              changed = valid = state.schedule != state.initialSchedule || editedSchedule;
-              body = _renderSchedules(context, state);
+              changed = valid =
+                  state.schedule != state.initialSchedule || editedSchedule;
+              Widget content = _renderSchedules(context, state);
               if (scheduleChange != null) {
-                body = Stack(
+                content = Stack(
                   children: <Widget>[
-                    body,
+                    content,
                     _renderScheduleChange(context, state),
                   ],
                 );
+              }
+              if (state.box.device == null) {
+                body = content;
+              } else {
+                if (_reachable == false) {
+                  content = Stack(
+                    children: <Widget>[
+                      content,
+                      Fullscreen(
+                          title: 'Device unreachable!',
+                          backgroundColor: Colors.white54,
+                          child:
+                              Icon(Icons.error, color: Colors.red, size: 100)),
+                    ],
+                  );
+                }
+                body = BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
+                    listener: (BuildContext context,
+                        DeviceDaemonBlocState daemonState) {
+                      if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
+                          daemonState.device.id == state.box.device) {
+                        setState(() {
+                          _reachable = daemonState.reachable;
+                        });
+                      }
+                    },
+                    child: content);
               }
             }
             return FeedFormLayout(
@@ -256,7 +280,8 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                   child: Column(children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12.0),
-                      child: Text('Edit $scheduleChange schedules', style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Edit $scheduleChange schedules',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -303,15 +328,18 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                       child: GreenButton(
                         title: 'SET',
                         onPressed: () {
-                          BlocProvider.of<FeedScheduleFormBloc>(context).add(FeedScheduleFormBlocEventUpdatePreset(
-                            scheduleChange,
-                            {
-                              "ON_HOUR": int.parse(onHourEditingController.value.text),
-                              "ON_MIN": int.parse(onMinEditingController.value.text),
-                              "OFF_HOUR": int.parse(offHourEditingController.value.text),
-                              "OFF_MIN": int.parse(offMinEditingController.value.text),
-                            }
-                          ));
+                          BlocProvider.of<FeedScheduleFormBloc>(context).add(
+                              FeedScheduleFormBlocEventUpdatePreset(
+                                  scheduleChange, {
+                            "ON_HOUR":
+                                int.parse(onHourEditingController.value.text),
+                            "ON_MIN":
+                                int.parse(onMinEditingController.value.text),
+                            "OFF_HOUR":
+                                int.parse(offHourEditingController.value.text),
+                            "OFF_MIN":
+                                int.parse(offMinEditingController.value.text),
+                          }));
                           setState(() {
                             scheduleChange = null;
                             editedSchedule = true;

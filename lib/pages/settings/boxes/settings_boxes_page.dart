@@ -46,8 +46,8 @@ class SettingsBoxesPage extends StatelessWidget {
                       _deleteBox(context, state.boxes[index]);
                     },
                     onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(
-                          MainNavigateToSettingsBox(state.boxes[index]));
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToSettingsBox(state.boxes[index]));
                     },
                     title: Text('${index + 1}. ${state.boxes[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -65,6 +65,7 @@ class SettingsBoxesPage extends StatelessWidget {
                 titleColor: Colors.green,
                 iconColor: Colors.green,
                 hideBackButton: !(state is SettingsBoxesBlocStateLoaded),
+                elevation: 10,
               ),
               body: AnimatedSwitcher(
                   duration: Duration(milliseconds: 200), child: body));

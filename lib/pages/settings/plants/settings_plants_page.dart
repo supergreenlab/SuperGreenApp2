@@ -58,6 +58,7 @@ class SettingsPlantsPage extends StatelessWidget {
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsPlantsBlocStateLoaded),
+                elevation: 10,
               ),
               body: AnimatedSwitcher(
                   duration: Duration(milliseconds: 200), child: body));
@@ -80,9 +81,13 @@ class SettingsPlantsPage extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('You have no plant yet.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                    child: Text('You have no plant yet.',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
-                  Text('Add your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                  Text('Add your first',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('PLANT',
                       style: TextStyle(
                           fontSize: 50,

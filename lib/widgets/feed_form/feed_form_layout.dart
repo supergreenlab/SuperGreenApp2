@@ -26,6 +26,7 @@ class FeedFormLayout extends StatelessWidget {
   final void Function() onOK;
   final String title;
   final bool hideBackButton;
+  final double fontSize;
 
   const FeedFormLayout(
       {@required this.body,
@@ -33,18 +34,16 @@ class FeedFormLayout extends StatelessWidget {
       @required this.title,
       this.valid = true,
       this.changed = false,
-      this.hideBackButton = false});
+      this.hideBackButton = false,
+      this.fontSize});
 
   @override
   Widget build(BuildContext context) {
     List<Widget> actions = [];
     if (this.onOK != null) {
       actions.add(IconButton(
-        icon: Icon(
-          Icons.check,
-          color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff),
-          size: 40
-        ),
+        icon: Icon(Icons.check,
+            color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
         onPressed: this.valid ? onOK : null,
       ));
     }
@@ -80,6 +79,7 @@ class FeedFormLayout extends StatelessWidget {
       child: Scaffold(
           appBar: SGLAppBar(
             title,
+            fontSize: fontSize,
             actions: actions,
             hideBackButton: hideBackButton,
             backgroundColor: Colors.blueGrey,

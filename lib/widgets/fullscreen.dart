@@ -26,6 +26,7 @@ class Fullscreen extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final Color textColor;
+  final Color backgroundColor;
 
   const Fullscreen({
     @required this.title,
@@ -35,6 +36,7 @@ class Fullscreen extends StatelessWidget {
     this.fontSize = 22,
     this.fontWeight = FontWeight.w500,
     this.textColor,
+    this.backgroundColor,
   }) : super();
 
   @override
@@ -53,7 +55,9 @@ class Fullscreen extends StatelessWidget {
       titles.add(Text(
         subtitle,
         style: TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w500, color: textColor ?? Colors.grey),
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: textColor ?? Colors.grey),
         textAlign: TextAlign.center,
       ));
     }
@@ -77,12 +81,15 @@ class Fullscreen extends StatelessWidget {
         child,
       ];
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Center(child: Column(children: children)),
-      ],
+    return Container(
+      color: backgroundColor,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Center(child: Column(children: children)),
+        ],
+      ),
     );
   }
 }

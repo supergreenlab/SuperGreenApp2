@@ -68,24 +68,20 @@ class FeedLightFormBlocState extends Equatable {
 
 class FeedLightFormBlocStateLightsLoaded extends FeedLightFormBlocState {
   final List<int> values;
+  final Box box;
 
-  FeedLightFormBlocStateLightsLoaded(this.values);
+  FeedLightFormBlocStateLightsLoaded(this.values, this.box);
 
   @override
-  List<Object> get props => [values];
+  List<Object> get props => [values, box];
 }
 
 class FeedLightFormBlocStateNoDevice
     extends FeedLightFormBlocStateLightsLoaded {
-  FeedLightFormBlocStateNoDevice(List<int> values) : super(values);
+  FeedLightFormBlocStateNoDevice(List<int> values, Box box) : super(values, box);
 }
 
 class FeedLightFormBlocStateLoading extends FeedLightFormBlocState {
-  @override
-  List<Object> get props => [];
-}
-
-class FeedLightFormBlocStateNotReachable extends FeedLightFormBlocState {
   @override
   List<Object> get props => [];
 }
@@ -127,14 +123,10 @@ class FeedLightFormBloc
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(_args.plant.box);
       if (box.device == null) {
-        yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65]);
+        yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65], box);
         return;
       }
       _device = await db.devicesDAO.getDevice(box.device);
-      if (_device.isReachable == false) {
-        yield FeedLightFormBlocStateNotReachable();
-        return;
-      }
       Module lightModule = await db.devicesDAO.getModule(_device.id, "led");
       _lightParams = [];
       for (int i = 0; i < lightModule.arrayLen; ++i) {
@@ -147,22 +139,18 @@ class FeedLightFormBloc
       }
       List<int> values = _lightParams.map((l) => l.ivalue).toList();
       _initialValues = values;
-      yield FeedLightFormBlocStateLightsLoaded(values);
+      yield FeedLightFormBlocStateLightsLoaded(values, box);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(_args.plant.box);
       if (box.device == null) {
         return;
       }
-      if (_device.isReachable == false) {
-        yield FeedLightFormBlocStateNotReachable();
-        return;
-      }
       try {
         await DeviceHelper.updateIntParam(
             _device, _lightParams[event.i], (event.value).toInt());
       } catch (e) {
-        yield FeedLightFormBlocStateNotReachable();
+        print(e);
       }
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
@@ -188,17 +176,13 @@ class FeedLightFormBloc
         yield FeedLightFormBlocStateDone(_args.plant, null);
         return;
       }
-      if (_device.isReachable == false) {
-        yield FeedLightFormBlocStateNotReachable();
-        return;
-      }
       yield FeedLightFormBlocStateCancelling();
       for (int i = 0; i < _lightParams.length; ++i) {
         try {
           await DeviceHelper.updateIntParam(
               _device, _lightParams[i], _initialValues[i]);
         } catch (e) {
-          yield FeedLightFormBlocStateNotReachable();
+          print(e);
           return;
         }
       }
