@@ -114,7 +114,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: _renderNoController(context));
+                body: body);
           }),
     );
   }
