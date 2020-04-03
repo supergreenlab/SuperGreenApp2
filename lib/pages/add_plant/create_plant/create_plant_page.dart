@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -38,6 +39,7 @@ class CreatePlantPage extends StatefulWidget {
 
 class CreatePlantPageState extends State<CreatePlantPage> {
   final _nameController = TextEditingController();
+  bool _single = true;
 
   KeyboardVisibilityNotification _keyboardVisibility =
       KeyboardVisibilityNotification();
@@ -88,7 +90,8 @@ class CreatePlantPageState extends State<CreatePlantPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Plant creation',
+                  '🍁',
+                  fontSize: 40,
                   hideBackButton: state is CreatePlantBlocStateDone,
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
@@ -126,21 +129,25 @@ class CreatePlantPageState extends State<CreatePlantPage> {
           large: true,
           elevation: 5,
         ),
-        Expanded(
-            child: Column(
-          children: <Widget>[
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
-              child: SGLTextField(
-                  hintText: 'Ex: Gorilla Kush',
-                  controller: _nameController,
-                  onChanged: (_) {
-                    setState(() {});
-                  }),
-            ),
-          ],
-        )),
+        Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+          child: SGLTextField(
+              hintText: 'Ex: Gorilla Kush',
+              controller: _nameController,
+              onChanged: (_) {
+                setState(() {});
+              }),
+        ),
+        SectionTitle(
+          title: 'Is this a single or multiple plant grow diary?',
+          icon: 'assets/settings/icon_plants.svg',
+          backgroundColor: Color(0xff0bb354),
+          titleColor: Colors.white,
+          elevation: 5,
+        ),
+        _renderOptionCheckbx(context, 'Single plant grow diary', (newValue) {setState(() {_single = newValue;});}, _single),
+        Expanded(child: Container()),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
           child: Align(
@@ -157,6 +164,29 @@ class CreatePlantPageState extends State<CreatePlantPage> {
     );
   }
 
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
+    return Row(
+      children: <Widget>[
+        Checkbox(
+          onChanged: onChanged,
+          value: value,
+        ),
+        InkWell(
+          onTap: () {
+            onChanged(!value);
+          },
+          child: MarkdownBody(
+            fitContent: true,
+            data: text,
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 14)),
+          ),
+        ),
+      ],
+    );
+  }
+
   void _handleInput(BuildContext context) async {
     BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToSelectBoxEvent(futureFn: (future) async {
@@ -165,6 +195,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
         BlocProvider.of<CreatePlantBloc>(context)
             .add(CreatePlantBlocEventCreate(
           _nameController.text,
+          _single,
           res.id,
         ));
       }

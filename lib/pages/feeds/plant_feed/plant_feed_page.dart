@@ -398,17 +398,47 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         ),
       );
     } else if (state is PlantFeedBlocStateNoPlant) {
-      return Fullscreen(
-          title: 'No plant yet.',
-          childFirst: false,
-          child: GreenButton(
-              title: 'Create plant',
+      return _renderNoBox(context);
+    }
+    return FullscreenLoading(title: 'Loading plant..');
+  }
+
+  Widget _renderNoBox(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Center(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24.0),
+                    child: Text('Add first',
+                        style: TextStyle(fontSize: 25)),
+                  ),
+                  Text('PLANT',
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w200,
+                          color: Color(0xff3bb30b))),
+                ],
+              ),
+            ),
+            GreenButton(
+              title: 'START',
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context)
                     .add(MainNavigateToCreatePlantEvent());
-              }));
-    }
-    return FullscreenLoading(title: 'Loading plant..');
+              },
+            ),
+          ],
+        )),
+      ],
+    );
   }
 
   Widget _renderOverlay(BuildContext context) {

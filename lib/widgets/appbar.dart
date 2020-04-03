@@ -19,10 +19,10 @@
 import 'package:flutter/material.dart';
 
 class SGLAppBar extends AppBar {
-  SGLAppBar(String title, {List<Widget> actions, bool hideBackButton=false, titleColor=Colors.black, iconColor=Colors.black, backgroundColor=Colors.white, double elevation=0})
+  SGLAppBar(String title, {List<Widget> actions, bool hideBackButton=false, titleColor=Colors.black, iconColor=Colors.black, backgroundColor=Colors.white, double elevation=0, double fontSize=23})
       : super(
           automaticallyImplyLeading: !hideBackButton,
-          title: Text(title, style: TextStyle(color: titleColor)),
+          title: Text(title, style: TextStyle(color: titleColor, fontSize: fontSize)),
           iconTheme: IconThemeData(
             color: iconColor,
           ),

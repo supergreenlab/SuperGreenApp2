@@ -25,8 +25,9 @@ abstract class CreatePlantBlocEvent extends Equatable {}
 
 class CreatePlantBlocEventCreate extends CreatePlantBlocEvent {
   final String name;
+  final bool single;
   final int box;
-  CreatePlantBlocEventCreate(this.name, this.box);
+  CreatePlantBlocEventCreate(this.name, this.single, this.box);
 
   @override
   List<Object> get props => [name, box];

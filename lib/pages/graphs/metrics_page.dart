@@ -113,7 +113,6 @@ class _MetricsPageState extends State<MetricsPage> {
                         child: charts.TimeSeriesChart(
                           state.graphData,
                           animate: false,
-                          defaultRenderer: charts.LineRendererConfig(),
                           behaviors:
                               annotations != null && annotations.length > 0
                                   ? [

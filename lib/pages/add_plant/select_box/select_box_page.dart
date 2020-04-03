@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -28,10 +29,11 @@ class SelectBoxPage extends StatelessWidget {
           }
           return Scaffold(
               appBar: SGLAppBar(
-                'Select plant\'s box',
-                backgroundColor: Colors.pink,
-                titleColor: Colors.white,
-                iconColor: Colors.white,
+                '🧪',
+                fontSize: 35,
+                backgroundColor: Colors.yellow,
+                titleColor: Colors.green,
+                iconColor: Colors.green,
                 elevation: 10,
               ),
               body: AnimatedSwitcher(
@@ -48,9 +50,23 @@ class SelectBoxPage extends StatelessWidget {
         Center(
             child: Column(
           children: <Widget>[
-            Text('No box yet.'),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24.0),
+                    child: Text('Create your first', style: TextStyle(fontSize: 25)),
+                  ),
+                  Text('GREEN LAB',
+                      style:
+                          TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
+                ],
+              ),
+            ),
             GreenButton(
-              title: 'Create box',
+              title: 'CREATE',
               onPressed: () {
                 _createNewBox(context);
               },
@@ -68,7 +84,7 @@ class SelectBoxPage extends StatelessWidget {
         if (index >= state.boxes.length) {
           return ListTile(
             leading: Icon(Icons.add),
-            title: Text('Add new box'),
+            title: Text('Add new green lab'),
             onTap: () {
               _createNewBox(context);
             },

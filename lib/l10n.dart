@@ -154,12 +154,12 @@ Coming with a **sensor, ventilation, a controller and a companion App**. The **n
 
   String get towelieCreatePlant {
     return Intl.message(
-      '''Alright we're ready to started your **first plant!**
+      '''Alright we're ready to start your **first plant!**
 
 The app works like this:
 - you **create a plant**
-- attach it (or not) to a **SuperGreenController**
-- configure the led channels used to **light it up**
+- setup **your green lab**
+- control and monitor it with a **SuperGreenController** (optional)
 
 Once this is done, you will have access to it's **feed**, it's like a timeline of the **plant's life**.
 Whenever you water, change light parameters, or train the plant, or any other action,

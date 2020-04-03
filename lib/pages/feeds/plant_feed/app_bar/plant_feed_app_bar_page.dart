@@ -11,6 +11,8 @@ import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_ba
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
+const minCharPoints = 10;
+
 class PlantFeedAppBarPage extends StatefulWidget {
   @override
   _PlantFeedAppBarPageState createState() => _PlantFeedAppBarPageState();
@@ -84,7 +86,6 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
               tag: 'graphs',
               child: charts.TimeSeriesChart(state.graphData,
                   animate: false,
-                  defaultRenderer: charts.LineRendererConfig(),
                   customSeriesRenderers: [
                     charts.PointRendererConfig(customRendererId: 'customPoint')
                   ]),
@@ -102,9 +103,9 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
         ],
       ),
     );
-    if (state.graphData[0].data.length < 4 &&
-        state.graphData[1].data.length < 4 &&
-        state.graphData[2].data.length < 4) {
+    if (state.graphData[0].data.length < minCharPoints &&
+        state.graphData[1].data.length < minCharPoints &&
+        state.graphData[2].data.length < minCharPoints) {
       graphs = Stack(children: [
         graphs,
         Container(

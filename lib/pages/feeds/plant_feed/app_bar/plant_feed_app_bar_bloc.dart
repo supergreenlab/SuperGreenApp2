@@ -77,7 +77,7 @@ class PlantFeedAppBarBloc
         List<charts.Series<Metric, DateTime>> graphData =
             await updateChart(plant);
         yield PlantFeedAppBarBlocStateLoaded(graphData, plant);
-        _timer = Timer.periodic(Duration(seconds: 60), (timer) {
+        _timer = Timer.periodic(Duration(seconds: 30), (timer) {
           this.add(PlantFeedAppBarBlocEventReloadChart());
         });
       } catch (e) {}
@@ -94,7 +94,6 @@ class PlantFeedAppBarBloc
     final db = RelDB.get();
     Box box = await db.plantsDAO.getBox(plant.box);
     if (box.device == null) {
-      await Future.delayed(Duration(milliseconds: 500));
       return _createDummyData();
     } else {
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);

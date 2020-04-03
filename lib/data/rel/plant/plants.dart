@@ -29,6 +29,7 @@ class Plants extends Table {
   IntColumn get feed => integer()();
   IntColumn get box => integer().nullable()(); // TODO remove nullable() for the next version
   TextColumn get name => text().withLength(min: 1, max: 32)();
+  BoolColumn get single => boolean().withDefault(Constant(false))();
 
   TextColumn get settings => text().withDefault(Constant('{}'))();
 

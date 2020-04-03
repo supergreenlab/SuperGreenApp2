@@ -31,8 +31,8 @@ import 'package:super_green_app/pages/add_plant/create_plant/create_plant_bloc.d
 import 'package:super_green_app/pages/add_plant/create_plant/create_plant_page.dart';
 import 'package:super_green_app/pages/add_plant/select_box/select_box_bloc.dart';
 import 'package:super_green_app/pages/add_plant/select_box/select_box_page.dart';
-import 'package:super_green_app/pages/add_plant/select_device/select_device_bloc.dart';
-import 'package:super_green_app/pages/add_plant/select_device/select_device_page.dart';
+import 'package:super_green_app/pages/add_device/select_device/select_device_bloc.dart';
+import 'package:super_green_app/pages/add_device/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/add_plant/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/pages/add_plant/select_device_new_box/select_device_new_box_bloc.dart';
 import 'package:super_green_app/pages/add_plant/select_device_box/select_device_box_page.dart';

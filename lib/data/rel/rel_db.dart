@@ -76,6 +76,7 @@ class RelDB extends _$RelDB {
       }, onUpgrade: (Migrator m, int from, int to) async {
         if (from == 1) {
           await m.addColumn(plants, plants.box);
+          await m.addColumn(plants, plants.single);
           await m.createTable(boxes);
           await m.issueCustomQuery(
               "insert into boxes (name, device, device_box, settings) select name, device, device_box, id as settings from plants");

@@ -60,7 +60,6 @@ class _WelcomePageState extends State<WelcomePage> {
             child: Column(
               key: ValueKey<bool>(widget._loading),
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: widgets,
             )),
       )),
@@ -116,23 +115,27 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Widget _renderOptionCheckbx(
       BuildContext context, String text, Function(bool) onChanged, bool value) {
-    return Row(
-      children: <Widget>[
-        Checkbox(
-          onChanged: onChanged,
-          value: value,
-        ),
-        InkWell(
-          onTap: () {
-            onChanged(!_allowAnalytics);
-          },
-          child: MarkdownBody(
-            data: text,
-            styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 14)),
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Checkbox(
+            onChanged: onChanged,
+            value: value,
           ),
-        ),
-      ],
+          InkWell(
+            onTap: () {
+              onChanged(!value);
+            },
+            child: MarkdownBody(
+              fitContent: true,
+              data: text,
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 14)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -84,7 +84,7 @@ class HomePage extends StatelessWidget {
                 );
               }
             } catch (e) {}
-            Widget homeIcon = Icon(Icons.home);
+            Widget homeIcon = Icon(Icons.event_note);
             try {
               int nOthers = state.hasPending
                   .where((e) => e.id != 1)
@@ -113,7 +113,7 @@ class HomePage extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: homeIcon,
-                  title: Text('Home'),
+                  title: Text('Lab'),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.explore),

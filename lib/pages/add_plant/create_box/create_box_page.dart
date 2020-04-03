@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/add_device/select_device/select_device_page.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_bloc.dart';
-import 'package:super_green_app/pages/add_plant/select_device/select_device_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -65,11 +65,12 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Box creation',
+                  '💬',
+                  fontSize: 40,
                   hideBackButton: state is CreateBoxBlocStateDone,
-                  backgroundColor: Colors.pink,
-                  titleColor: Colors.white,
-                  iconColor: Colors.white,
+                  backgroundColor: Colors.yellow,
+                  titleColor: Colors.green,
+                  iconColor: Colors.green,
                 ),
                 backgroundColor: Colors.white,
                 body: AnimatedSwitcher(
@@ -90,13 +91,13 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
         AnimatedContainer(
           duration: Duration(milliseconds: 100),
           height: _keyboardVisible ? 0 : 100,
-          color: Colors.pink,
+          color: Colors.yellow,
         ),
         SectionTitle(
-          title: 'Give this box a name:',
+          title: 'New green lab\'s name:',
           icon: 'assets/box_setup/icon_box.svg',
-          backgroundColor: Colors.pink,
-          titleColor: Colors.white,
+          backgroundColor: Colors.yellow,
+          titleColor: Colors.green,
           large: true,
           elevation: 5,
         ),
@@ -120,7 +121,7 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
           child: Align(
             alignment: Alignment.centerRight,
             child: GreenButton(
-              title: 'CREATE BOX',
+              title: 'CREATE LAB',
               onPressed: _nameController.value.text != ''
                   ? () => _handleInput(context)
                   : null,
