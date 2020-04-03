@@ -642,7 +642,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 15.0,
-                fontWeight: FontWeight.bold),
+                fontWeight: FontWeight.normal),
           ),
           Text(_deviceIP,
               style: TextStyle(
@@ -655,7 +655,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       nameText = Text(
         name,
         style: TextStyle(
-            color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.bold),
+            color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.w200),
       );
     }
     if (state.box.device != null) {

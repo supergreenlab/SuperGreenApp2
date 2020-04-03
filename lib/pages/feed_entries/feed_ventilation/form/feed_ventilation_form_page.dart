@@ -112,7 +112,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                       DeviceDaemonBlocState daemonState) {
                     if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
                         daemonState.device.id == state.box.device) {
-                    if (_reachable == daemonState.reachable) return;
+                      if (_reachable == daemonState.reachable) return;
                       setState(() {
                         _reachable = daemonState.reachable;
                       });

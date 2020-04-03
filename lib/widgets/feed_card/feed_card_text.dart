@@ -44,7 +44,14 @@ class _FeedCardTextState extends State<FeedCardText> {
       text = MarkdownBody(
         data: widget.text,
         styleSheet: MarkdownStyleSheet(
-            p: TextStyle(color: Colors.black, fontSize: 16)),
+            strong: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.normal),
+            p: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w300)),
       );
     } else {
       if (_textEditingController == null) {
@@ -76,8 +83,8 @@ class _FeedCardTextState extends State<FeedCardText> {
       );
     }
     return Padding(
-      padding:
-          const EdgeInsets.only(top: 4.0, left: 16.0, right: 16.0, bottom: 16.0),
+      padding: const EdgeInsets.only(
+          top: 4.0, left: 16.0, right: 16.0, bottom: 16.0),
       child: text,
     );
   }

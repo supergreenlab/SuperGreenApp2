@@ -108,7 +108,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
               }
             }
             return FeedFormLayout(
-                title: 'Add schedule',
+                title: '🌞🌙',
                 changed: changed,
                 valid: valid,
                 onOK: () => BlocProvider.of<FeedScheduleFormBloc>(context)
@@ -200,7 +200,14 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
               MarkdownBody(
                 data: helper,
                 styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: Colors.black, fontSize: 16)),
+                    strong: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal),
+                    p: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
