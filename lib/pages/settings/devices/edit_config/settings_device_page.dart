@@ -13,6 +13,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsDevicePage extends StatefulWidget {
   @override
@@ -67,7 +68,9 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
           builder: (BuildContext context, SettingsDeviceBlocState state) {
             Widget body;
             if (state is SettingsDeviceBlocStateLoading) {
-              body = FullscreenLoading(title: 'Loading..',);
+              body = FullscreenLoading(
+                title: 'Loading..',
+              );
             } else if (state is SettingsDeviceBlocStateDone) {
               body = _renderDone(state);
             } else if (state is SettingsDeviceBlocStateLoaded) {
@@ -137,6 +140,27 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                       onPressed: () {
                         BlocProvider.of<MainNavigatorBloc>(context).add(
                             MainNavigateToSelectDeviceBoxEvent(state.device));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SectionTitle(
+                title: 'Admin interface',
+                icon: 'assets/box_setup/icon_controller.svg',
+                backgroundColor: Colors.red,
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GreenButton(
+                      color: 0xffff0000,
+                      title: 'Access admin',
+                      onPressed: () {
+                        launch('http://${state.device.ip}/fs/app.html');
                       },
                     ),
                   ),
