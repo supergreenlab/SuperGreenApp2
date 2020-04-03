@@ -74,11 +74,12 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Plant creation',
-                  hideBackButton: state is SettingsPlantBlocStateDone,
+                  '🍁',
+                  fontSize: 40,
                   backgroundColor: Color(0xff0bb354),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
+                  hideBackButton: state is SettingsPlantBlocStateDone,
                 ),
                 backgroundColor: Colors.white,
                 body: AnimatedSwitcher(

@@ -6,6 +6,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class SettingsPlantsPage extends StatelessWidget {
   @override
@@ -22,33 +23,38 @@ class SettingsPlantsPage extends StatelessWidget {
               title: 'Loading..',
             );
           } else if (state is SettingsPlantsBlocStateLoaded) {
-            body = ListView.builder(
-              itemCount: state.plants.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child:
-                          SvgPicture.asset('assets/settings/icon_plants.svg')),
-                  onLongPress: () {
-                    _deletePlant(context, state.plants[index]);
-                  },
-                  onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsPlant(state.plants[index]));
-                  },
-                  title: Text('${index + 1}. ${state.plants[index].name}',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Long tap to delete.'),
-                );
-              },
-            );
+            if (state.plants.length == 0) {
+              body = _renderNoPlant(context);
+            } else {
+              body = ListView.builder(
+                itemCount: state.plants.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: SvgPicture.asset(
+                            'assets/settings/icon_plants.svg')),
+                    onLongPress: () {
+                      _deletePlant(context, state.plants[index]);
+                    },
+                    onTap: () {
+                      BlocProvider.of<MainNavigatorBloc>(context).add(
+                          MainNavigateToSettingsPlant(state.plants[index]));
+                    },
+                    title: Text('${index + 1}. ${state.plants[index].name}',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Long tap to delete.'),
+                  );
+                },
+              );
+            }
           }
           return Scaffold(
               appBar: SGLAppBar(
-                'Plants settings',
-                backgroundColor: Colors.deepOrange,
+                '🍁',
+                fontSize: 40,
+                backgroundColor: Color(0xff0bb354),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsPlantsBlocStateLoaded),
@@ -57,6 +63,44 @@ class SettingsPlantsPage extends StatelessWidget {
                   duration: Duration(milliseconds: 200), child: body));
         },
       ),
+    );
+  }
+
+  Widget _renderNoPlant(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Center(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24.0),
+                    child: Text('You have no plant yet.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                  ),
+                  Text('Add your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                  Text('PLANT',
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w200,
+                          color: Color(0xff3bb30b))),
+                ],
+              ),
+            ),
+            GreenButton(
+              title: 'START',
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToCreatePlantEvent());
+              },
+            ),
+          ],
+        )),
+      ],
     );
   }
 

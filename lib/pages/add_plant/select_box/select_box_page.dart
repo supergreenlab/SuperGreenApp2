@@ -57,18 +57,24 @@ class SelectBoxPage extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('Create your first', style: TextStyle(fontSize: 25)),
+                    child: Text('You have no lab yet',
+                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
+                  Text('Create your first',
+                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('GREEN LAB',
-                      style:
-                          TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w200,
+                          color: Color(0xff3bb30b))),
                 ],
               ),
             ),
             GreenButton(
               title: 'CREATE',
               onPressed: () {
-                _createNewBox(context);
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToCreateBoxEvent());
               },
             ),
           ],

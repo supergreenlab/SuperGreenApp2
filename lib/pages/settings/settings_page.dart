@@ -95,9 +95,9 @@ class SettingsPage extends StatelessWidget {
                       width: 40,
                       height: 40,
                       child: SvgPicture.asset('assets/settings/icon_box.svg')),
-                  title: Text('Boxes',
+                  title: Text('Labs',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Change controller & delete boxes.'),
+                  subtitle: Text('Change controller & delete labs.'),
                 ),
                 ListTile(
                   onTap: () {

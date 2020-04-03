@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsDevicesPage extends StatelessWidget {
   @override
@@ -28,28 +31,34 @@ class SettingsDevicesPage extends StatelessWidget {
               subtitle: 'Move all plants to another box first.',
             );
           } else if (state is SettingsDevicesBlocStateLoaded) {
-            body = ListView.builder(
-              itemCount: state.devices.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: SvgPicture.asset('assets/settings/icon_controller.svg')),
-                  onLongPress: () {
-                    _deleteBox(context, state.devices[index]);
-                  },
-                  title: Text('${index + 1}. ${state.devices[index].name}',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Long tap to delete.'),
-                );
-              },
-            );
+            if (state.devices.length == 0) {
+              body = _renderNoController(context);
+            } else {
+              body = ListView.builder(
+                itemCount: state.devices.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: SvgPicture.asset(
+                            'assets/settings/icon_controller.svg')),
+                    onLongPress: () {
+                      _deleteBox(context, state.devices[index]);
+                    },
+                    title: Text('${index + 1}. ${state.devices[index].name}',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('Long tap to delete.'),
+                  );
+                },
+              );
+            }
           }
           return Scaffold(
               appBar: SGLAppBar(
-                'Devices settings',
-                backgroundColor: Colors.deepOrange,
+                '🤖',
+                fontSize: 40,
+                backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsDevicesBlocStateLoaded),
@@ -58,6 +67,89 @@ class SettingsDevicesPage extends StatelessWidget {
                   duration: Duration(milliseconds: 200), child: body));
         },
       ),
+    );
+  }
+
+  Widget _renderNoController(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                  child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32.0, vertical: 24),
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          child: Text(
+                            'You have no controller yet.',
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.w200),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Text(
+                          'Add a first',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w300),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text('CONTROLLER',
+                            style: TextStyle(
+                                fontSize: 50,
+                                fontWeight: FontWeight.w200,
+                                color: Color(0xff3bb30b))),
+                      ],
+                    ),
+                  ),
+                  GreenButton(
+                    title: 'ADD',
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToAddDeviceEvent());
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'OR',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GreenButton(
+                        title: 'SHOW NOW',
+                        onPressed: () {
+                          launch('https://www.supergreelab.com');
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('/'),
+                      ),
+                      GreenButton(
+                        title: 'DIY NOW',
+                        onPressed: () {
+                          launch('https://github.com/supergreenlab/');
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

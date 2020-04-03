@@ -71,7 +71,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                       SectionTitle(
                         title: 'Enter you nickname:',
                         icon: 'assets/settings/icon_account.svg',
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: Colors.indigo,
                         titleColor: Colors.white,
                         elevation: 5,
                       ),
@@ -94,7 +94,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                       SectionTitle(
                         title: 'Enter your password:',
                         icon: 'assets/settings/icon_password.svg',
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: Colors.indigo,
                         titleColor: Colors.white,
                         elevation: 5,
                       ),
@@ -134,8 +134,9 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
           }
           return Scaffold(
               appBar: SGLAppBar(
-                'Create your account',
-                backgroundColor: Colors.deepOrange,
+                '🔐',
+                fontSize: 35,
+                backgroundColor: Colors.indigo,
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsAuthBlocStateLoaded),

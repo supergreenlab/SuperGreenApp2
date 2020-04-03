@@ -398,12 +398,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         ),
       );
     } else if (state is PlantFeedBlocStateNoPlant) {
-      return _renderNoBox(context);
+      return _renderNoPlant(context);
     }
     return FullscreenLoading(title: 'Loading plant..');
   }
 
-  Widget _renderNoBox(BuildContext context) {
+  Widget _renderNoPlant(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -417,9 +417,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('Add first',
-                        style: TextStyle(fontSize: 25)),
+                    child: Text('You have no plant yet.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
+                  Text('Add your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('PLANT',
                       style: TextStyle(
                           fontSize: 50,
