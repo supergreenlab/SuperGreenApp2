@@ -123,6 +123,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                     if (state is FeedLightFormBlocStateLightsLoaded) {
                       if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
                           daemonState.device.id == state.box.device) {
+                        if (_reachable == daemonState.reachable) return;
+                        if (_reachable == daemonState.reachable) return;
                         setState(() {
                           _reachable = daemonState.reachable;
                         });
@@ -151,9 +153,12 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   if (state is FeedLightFormBlocStateNoDevice) {
                     return true;
                   }
-                  BlocProvider.of<FeedLightFormBloc>(context)
-                      .add(FeedLightFormBlocEventCancel());
-                  return false;
+                  if (changed) {
+                    BlocProvider.of<FeedLightFormBloc>(context)
+                        .add(FeedLightFormBlocEventCancel());
+                    return false;
+                  }
+                  return true;
                 },
                 child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 200), child: body),

@@ -110,6 +110,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                       DeviceDaemonBlocState daemonState) {
                     if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
                         daemonState.device.id == state.box.device) {
+                    if (_reachable == daemonState.reachable) return;
                       setState(() {
                         _reachable = daemonState.reachable;
                       });
@@ -140,9 +141,12 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                     if (state is FeedVentilationFormBlocStateNoDevice) {
                       return true;
                     }
-                    BlocProvider.of<FeedVentilationFormBloc>(context)
-                        .add(FeedVentilationFormBlocEventCancelEvent());
-                    return false;
+                    if (changed) {
+                      BlocProvider.of<FeedVentilationFormBloc>(context)
+                          .add(FeedVentilationFormBlocEventCancelEvent());
+                      return false;
+                    }
+                    return true;
                   },
                   child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 200), child: body),
