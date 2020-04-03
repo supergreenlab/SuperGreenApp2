@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device/select_device_bloc.dart';
@@ -128,12 +129,14 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
             d,
           ) =>
               ListTile(
+                leading: Text('🤖', style: TextStyle(fontSize: 30)),
                 onTap: () => _selectDevice(context, d),
                 onLongPress: () => _deleteDevice(context, d),
                 title: Text(
                   '${i++} - ${d.name}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
+                subtitle: Text('Tap to select'),
               ))
           .toList(),
     );

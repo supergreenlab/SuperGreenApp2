@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_plant/select_device_box/select_device_box_bloc.dart';
+import 'package:super_green_app/pages/add_device/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -57,14 +57,15 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             } else if (state is SelectDeviceBoxBlocStateDone) {
               body = Fullscreen(
                   title: 'Done!',
-                  child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+                  child: Icon(Icons.done, color: Color(0xff3bb30b), size: 100));
             } else {
               body = _renderBoxSelection(context, state);
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Plant creation',
-                  backgroundColor: Color(0xff0bb354),
+                  '🤖',
+                  fontSize: 40,
+                  backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
@@ -81,14 +82,15 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         AnimatedContainer(
           duration: Duration(milliseconds: 100),
           height: 20,
-          color: Color(0xff0bb354),
+          color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: 'Available boxes',
+          title: 'Controller boxes',
           icon: 'assets/box_setup/icon_controller.svg',
-          backgroundColor: Color(0xff0bb354),
+          backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
           elevation: 5,
+          large: true,
         ),
         _renderBoxes(state),
       ],
@@ -138,13 +140,13 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                 _deleteBox(state, index);
               },
               title: state.boxes[index].enabled
-                  ? Text('Already running', style: TextStyle(color: Colors.red))
-                  : Text('Available', style: TextStyle(color: Colors.green)),
+                  ? Text('Already running', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))
+                  : Text('Available', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Icon(Icons.home, color: Color(0xff3bb30b)),
-                  Text('Box #${state.boxes[index].box + 1}'),
+                  Text('Box #${state.boxes[index].box + 1}', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
               subtitle: Text(
