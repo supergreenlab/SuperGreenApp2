@@ -90,8 +90,12 @@ import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart'
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_page.dart';
+import 'package:super_green_app/pages/settings/boxes/edit_config/settings_box_bloc.dart';
+import 'package:super_green_app/pages/settings/boxes/edit_config/settings_box_page.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_bloc.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_page.dart';
+import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_page.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_page.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_bloc.dart';
@@ -391,10 +395,20 @@ class _MainPageState extends State<MainPage> {
           create: (context) => SettingsBoxesBloc(settings.arguments),
           child: SettingsBoxesPage(),
         );
+      case '/settings/box':
+        return BlocProvider(
+          create: (context) => SettingsBoxBloc(settings.arguments),
+          child: SettingsBoxPage(),
+        );
       case '/settings/devices':
         return BlocProvider(
           create: (context) => SettingsDevicesBloc(settings.arguments),
           child: SettingsDevicesPage(),
+        );
+      case '/settings/device':
+        return BlocProvider(
+          create: (context) => SettingsDeviceBloc(settings.arguments),
+          child: SettingsDevicePage(),
         );
     }
     return Text('Unknown route');

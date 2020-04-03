@@ -41,9 +41,13 @@ class SettingsBoxesPage extends StatelessWidget {
                         width: 40,
                         height: 40,
                         child:
-                            SvgPicture.asset('assets/settings/icon_box.svg')),
+                            SvgPicture.asset('assets/settings/icon_lab.svg')),
                     onLongPress: () {
                       _deleteBox(context, state.boxes[index]);
+                    },
+                    onTap: () {
+                      BlocProvider.of<MainNavigatorBloc>(context).add(
+                          MainNavigateToSettingsBox(state.boxes[index]));
                     },
                     title: Text('${index + 1}. ${state.boxes[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -55,7 +59,7 @@ class SettingsBoxesPage extends StatelessWidget {
           }
           return Scaffold(
               appBar: SGLAppBar(
-                '🧪',
+                '⚗️',
                 fontSize: 35,
                 backgroundColor: Colors.yellow,
                 titleColor: Colors.green,
@@ -84,10 +88,12 @@ class SettingsBoxesPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
                     child: Text('You have no lab yet',
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
                   Text('Create your first',
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('GREEN LAB',
                       style: TextStyle(
                           fontSize: 50,

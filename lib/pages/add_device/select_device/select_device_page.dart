@@ -64,7 +64,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       color: Color(0xff0b6ab3),
                     ),
                     SectionTitle(
-                      title: 'Select the controller below',
+                      title: 'Select a controller below',
                       icon: 'assets/box_setup/icon_controller.svg',
                       backgroundColor: Color(0xff0b6ab3),
                       titleColor: Colors.white,
@@ -134,7 +134,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                 onLongPress: () => _deleteDevice(context, d),
                 title: Text(
                   '${i++} - ${d.name}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                 ),
                 subtitle: Text('Tap to select'),
               ))
@@ -174,7 +174,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                         ),
                         Text('CONTROLLER',
                             style: TextStyle(
-                                fontSize: 50,
+                                fontSize: 45,
                                 fontWeight: FontWeight.w200,
                                 color: Color(0xff3bb30b))),
                       ],

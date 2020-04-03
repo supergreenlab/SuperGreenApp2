@@ -140,7 +140,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
               }),
         ),
         SectionTitle(
-          title: 'Is this a single or multiple plant grow diary?',
+          title: 'Is this a single or multiple plant\ngrow diary?',
           icon: 'assets/settings/icon_plants.svg',
           backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,

@@ -25,6 +25,7 @@ import 'package:super_green_app/pages/add_plant/select_box/select_box_bloc.dart'
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/section_title.dart';
 
 class SelectBoxPage extends StatelessWidget {
   @override
@@ -41,17 +42,27 @@ class SelectBoxPage extends StatelessWidget {
             if (state.boxes.length == 0) {
               body = _renderNoBox(context);
             } else {
-              body = _renderBoxList(context, state);
+              body = Column(
+                children: <Widget>[
+                  SectionTitle(
+                      title: 'Select lab below',
+                      icon: 'assets/settings/icon_lab.svg',
+                      titleColor: Colors.green,
+                      backgroundColor: Colors.yellow,
+                      elevation: 4,),
+                  Expanded(child: _renderBoxList(context, state)),
+                ],
+              );
             }
           }
           return Scaffold(
               appBar: SGLAppBar(
-                '🧪',
+                '⚗️',
                 fontSize: 35,
                 backgroundColor: Colors.yellow,
                 titleColor: Colors.green,
                 iconColor: Colors.green,
-                elevation: 10,
+                elevation: state is SelectBoxBlocStateLoaded && state.boxes.length == 0 ? 4 : 0,
               ),
               body: AnimatedSwitcher(
                 duration: Duration(milliseconds: 200),
@@ -75,10 +86,12 @@ class SelectBoxPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
                     child: Text('You have no lab yet',
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
                   Text('Create your first',
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('GREEN LAB',
                       style: TextStyle(
                           fontSize: 50,
@@ -113,7 +126,7 @@ class SelectBoxPage extends StatelessWidget {
           );
         }
         return ListTile(
-          leading: SvgPicture.asset('assets/box_setup/icon_box.svg'),
+          leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
           title: Text(state.boxes[index].name,
               style: TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text('Tap to select'),

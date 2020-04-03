@@ -94,7 +94,7 @@ class SettingsPage extends StatelessWidget {
                   leading: SizedBox(
                       width: 40,
                       height: 40,
-                      child: SvgPicture.asset('assets/settings/icon_box.svg')),
+                      child: SvgPicture.asset('assets/settings/icon_lab.svg')),
                   title: Text('Labs',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Change controller & delete labs.'),

@@ -46,6 +46,10 @@ class SettingsDevicesPage extends StatelessWidget {
                     onLongPress: () {
                       _deleteBox(context, state.devices[index]);
                     },
+                    onTap: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToSettingsDevice(state.devices[index]));
+                    },
                     title: Text('${index + 1}. ${state.devices[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Long tap to delete.'),
@@ -102,7 +106,7 @@ class SettingsDevicesPage extends StatelessWidget {
                         ),
                         Text('CONTROLLER',
                             style: TextStyle(
-                                fontSize: 50,
+                                fontSize: 45,
                                 fontWeight: FontWeight.w200,
                                 color: Color(0xff3bb30b))),
                       ],

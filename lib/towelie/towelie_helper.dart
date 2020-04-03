@@ -114,7 +114,14 @@ class _TowelieHelperState extends State<TowelieHelper> {
           child: MarkdownBody(
             data: state.text,
             styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 16)),
+                strong: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal),
+                p: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300)),
           ))
     ];
     List<Widget> buttons = [];
@@ -209,7 +216,8 @@ class _TowelieHelperState extends State<TowelieHelper> {
                   padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xffdedede), width: 2),
+                      boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black38, offset: Offset(2, 2))],
+                        border: Border.all(color: Colors.black26, width: 1),
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: Column(

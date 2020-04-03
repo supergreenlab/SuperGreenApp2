@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device_box/select_device_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -63,7 +64,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  '🤖',
+                  '🤖🔌',
                   fontSize: 40,
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
@@ -85,7 +86,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: 'Controller boxes',
+          title: 'Select controller\'s box slot',
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
@@ -126,7 +127,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                     }
                   }));
                 },
-                title: Text('Add new box to controller'),
+                title: Text('Configure new box'),
                 leading:
                     SizedBox(width: 50, height: 50, child: Icon(Icons.add)),
               );
@@ -140,13 +141,13 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                 _deleteBox(state, index);
               },
               title: state.boxes[index].enabled
-                  ? Text('Already running', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))
-                  : Text('Available', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                  ? Text('Already running', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w300))
+                  : Text('Available', style: TextStyle(color: Colors.green, fontWeight: FontWeight.w300)),
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(Icons.home, color: Color(0xff3bb30b)),
-                  Text('Box #${state.boxes[index].box + 1}', style: TextStyle(fontWeight: FontWeight.bold)),
+                  SvgPicture.asset('assets/box_setup/icon_box.svg'),
+                  Text('Box #${state.boxes[index].box + 1}', style: TextStyle(fontWeight: FontWeight.w300)),
                 ],
               ),
               subtitle: Text(
