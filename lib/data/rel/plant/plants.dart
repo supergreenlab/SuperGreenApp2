@@ -27,7 +27,8 @@ part 'plants.g.dart';
 class Plants extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
-  IntColumn get box => integer().nullable()(); // TODO remove nullable() for the next version
+  IntColumn get box =>
+      integer().nullable()(); // TODO remove nullable() for the next version
   TextColumn get name => text().withLength(min: 1, max: 32)();
   BoolColumn get single => boolean().withDefault(Constant(false))();
 
@@ -195,6 +196,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   Future updateTimelapse(TimelapsesCompanion timelapse) {
     return (update(timelapses)..where((t) => t.id.equals(timelapse.id.value)))
         .write(timelapse);
+  }
+
+  Future deleteTimelapse(Timelapse timelapse) {
+    return delete(timelapses).delete(timelapse);
   }
 
   Map<String, dynamic> plantSettings(Plant plant) {

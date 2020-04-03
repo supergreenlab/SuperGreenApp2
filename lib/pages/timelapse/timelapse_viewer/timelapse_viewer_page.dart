@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -59,6 +60,9 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
             BlocProvider.of<MainNavigatorBloc>(context).add(
                 MainNavigateToFullscreenPicture(
                     state.timelapses[index].id, state.images[index]));
+          },
+          onLongPress: () {
+            _deleteTimelapse(context, state.timelapses[index]);
           },
           child: SizedBox(
               height: 300,
@@ -148,5 +152,35 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
         ),
       ],
     );
+  }
+
+  void _deleteTimelapse(BuildContext context, Timelapse timelapse) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete timelapse ${timelapse.uploadName}?'),
+            content: Text('This can\'t be reverted. Continue?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<TimelapseViewerBloc>(context)
+          .add(TimelapseViewerBlocEventDelete(timelapse));
+    }
   }
 }
