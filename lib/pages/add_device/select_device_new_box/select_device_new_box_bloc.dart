@@ -133,6 +133,9 @@ class SelectDeviceNewBoxBloc
       final ledDuty =
           await ddb.getParam(_args.device.id, 'LED_${event.ledID}_DUTY');
       await DeviceHelper.updateIntParam(_args.device, ledDuty, 20);
+      final ledDim =
+          await ddb.getParam(_args.device.id, 'LED_${event.ledID}_DIM');
+      await DeviceHelper.updateIntParam(_args.device, ledDim, 100);
     } else if (event is SelectDeviceNewBoxBlocEventUnselectLed) {
       final ddb = RelDB.get().devicesDAO;
       final ledDuty =

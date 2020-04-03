@@ -140,9 +140,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
               onLongPress: () {
                 _deleteBox(state, index);
               },
-              title: state.boxes[index].enabled
-                  ? Text('Already running', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w300))
-                  : Text('Available', style: TextStyle(color: Colors.green, fontWeight: FontWeight.w300)),
+              title: Text('Already running', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w300)),
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -151,7 +149,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                 ],
               ),
               subtitle: Text(
-                  'Led channels: ${state.boxes[index].leds.map((l) => l + 1).join(', ')}'),
+                  state.boxes[index].leds.length > 0 ? 'Led channels: ${state.boxes[index].leds.map((l) => l + 1).join(', ')}' : 'No led channels assigned'),
             );
           },
         ),

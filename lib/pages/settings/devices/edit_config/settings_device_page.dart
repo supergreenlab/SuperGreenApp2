@@ -118,6 +118,27 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                       setState(() {});
                     }),
               ),
+              SectionTitle(
+                title: 'Edit controller box slots',
+                icon: 'assets/box_setup/icon_controller.svg',
+                backgroundColor: Color(0xff0b6ab3),
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GreenButton(
+                      title: 'View slots',
+                      onPressed: () {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigateToSelectDeviceBoxEvent(state.device));
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

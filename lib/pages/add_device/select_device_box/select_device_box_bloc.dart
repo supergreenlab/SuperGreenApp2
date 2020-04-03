@@ -135,7 +135,7 @@ class SelectDeviceBoxBloc
     for (int i = 0; i < boxModule.arrayLen; ++i) {
       final boxEnabledParam = await ddb.getParam(device.id, 'BOX_${i}_ENABLED');
       if (boxEnabledParam.ivalue == 1) {
-        boxes.add(SelectData(i, boxEnabledParam.ivalue == 1, []));
+        boxes.add(SelectData(i, []));
       }
     }
     final ledModule = await ddb.getModule(device.id, 'led');
@@ -155,10 +155,9 @@ class SelectDeviceBoxBloc
 
 class SelectData extends Equatable {
   final int box;
-  final bool enabled;
   final List<int> leds;
 
-  SelectData(this.box, this.enabled, this.leds);
+  SelectData(this.box, this.leds);
 
   @override
   List<Object> get props => [box, leds];

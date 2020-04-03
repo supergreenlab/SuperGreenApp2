@@ -61,18 +61,20 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
             } else if (state is SelectDeviceNewBoxBlocStateDone) {
               body = Fullscreen(
                   title: 'Done!',
-                  child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+                  child: Icon(Icons.done, color: Color(0xff0b6ab3), size: 100));
             } else {
               body = _renderLedSelection(context, state);
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Box creation',
-                  backgroundColor: Color(0xff0bb354),
+                  '🤖🔌',
+                  fontSize: 40,
+                  backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
@@ -89,12 +91,12 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
         AnimatedContainer(
           duration: Duration(milliseconds: 100),
           height: 20,
-          color: Color(0xff0bb354),
+          color: Color(0xff0b6ab3),
         ),
         SectionTitle(
           title: 'Available LED channels',
           icon: 'assets/box_setup/icon_controller.svg',
-          backgroundColor: Color(0xff0bb354),
+          backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
           elevation: 5,
         ),
@@ -112,7 +114,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           child: SectionTitle(
             title: 'Selected LED channels',
             icon: 'assets/box_setup/icon_controller.svg',
-            backgroundColor: Color(0xff0bb354),
+            backgroundColor: Color(0xff0b6ab3),
             titleColor: Colors.white,
             elevation: 5,
           ),
