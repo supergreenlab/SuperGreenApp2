@@ -123,8 +123,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               SectionTitle(
                 title: 'Plant lab',
                 icon: 'assets/settings/icon_lab.svg',
-                backgroundColor: Color(0xff0bb354),
-                titleColor: Colors.white,
+                backgroundColor: Colors.yellow,
+                titleColor: Colors.green,
                 elevation: 5,
               ),
               ListTile(
