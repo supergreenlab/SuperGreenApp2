@@ -266,8 +266,28 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
     );
   }
 
+  String _pad(String t) {
+    return t.length == 1 ? '0$t' : t;
+  }
+
   Widget _renderScheduleChange(
       BuildContext context, FeedScheduleFormBlocStateLoaded state) {
+    Duration duration;
+    try {
+      DateTime from = DateTime.parse(
+          '2020-01-01 ${_pad(onHourEditingController.value.text)}:${_pad(onMinEditingController.value.text)}:00Z');
+      DateTime to = DateTime.parse(
+          '2020-01-01 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
+      DateTime to2 = DateTime.parse(
+          '2020-01-02 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
+
+      duration = to.difference(from);
+      if (duration.inSeconds < 0) {
+        duration = to2.difference(from);
+      }
+    } catch (e) {
+      duration = Duration.zero;
+    }
     return Container(
       color: Colors.white54,
       child: Column(
@@ -296,6 +316,9 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                         Container(
                           width: 80,
                           child: TextFormField(
+                            onChanged: (_) {
+                              setState(() {});
+                            },
                             decoration: InputDecoration(labelText: 'ON hour'),
                             controller: onHourEditingController,
                           ),
@@ -304,6 +327,9 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                         Container(
                           width: 80,
                           child: TextFormField(
+                            onChanged: (_) {
+                              setState(() {});
+                            },
                             decoration: InputDecoration(labelText: 'ON min'),
                             controller: onMinEditingController,
                           ),
@@ -316,6 +342,9 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                         Container(
                           width: 80,
                           child: TextFormField(
+                            onChanged: (_) {
+                              setState(() {});
+                            },
                             decoration: InputDecoration(labelText: 'OFF hour'),
                             controller: offHourEditingController,
                           ),
@@ -324,11 +353,20 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                         Container(
                           width: 80,
                           child: TextFormField(
+                            onChanged: (_) {
+                              setState(() {});
+                            },
                             decoration: InputDecoration(labelText: 'OFF min'),
                             controller: offMinEditingController,
                           ),
                         ),
                       ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Text(
+                          'duration: ${duration.inHours.abs()}:${duration.inMinutes.abs() % 60}',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 12.0),
