@@ -519,7 +519,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             List<Widget> content = [
               Container(
                 decoration: BoxDecoration(
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1, offset: Offset(0, 2))],
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 1,
+                        offset: Offset(0, 2))
+                  ],
                   color: Colors.white,
                 ),
                 child: ListTile(
@@ -530,7 +535,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             ];
             content.addAll(plants.where((p) => p.box == b.id).map((p) {
               Widget item = Padding(
-                  padding: EdgeInsets.only(left: 24),
+                  padding: EdgeInsets.only(left: 16),
                   child: ListTile(
                     leading: (plantFeedState is PlantFeedBlocStateLoaded &&
                             plantFeedState.plant.id == p.id)
