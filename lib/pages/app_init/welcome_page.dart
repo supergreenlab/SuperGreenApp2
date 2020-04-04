@@ -96,8 +96,9 @@ class _WelcomePageState extends State<WelcomePage> {
       );
     }
     return Expanded(
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: body),
+      child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center, children: body)),
     );
   }
 

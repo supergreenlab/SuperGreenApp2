@@ -96,7 +96,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
 
   Widget _renderDone(SettingsPlantBlocStateDone state) {
     String subtitle =
-        'Plant ${_nameController.value.text} on box ${_box.name} updated:)';
+        'Plant ${_nameController.value.text} on lab ${_box.name} updated:)';
     return Fullscreen(
         title: 'Done!',
         subtitle: subtitle,

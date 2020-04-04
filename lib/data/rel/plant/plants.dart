@@ -103,6 +103,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return select(plants).watch();
   }
 
+  Future<List<Plant>> getUnsyncedPlants() {
+    return (select(plants)..where((p) => p.synced.equals(false))).get();
+  }
+
   Future<Plant> getPlantWithFeed(int feedID) {
     return (select(plants)..where((p) => p.feed.equals(feedID))).getSingle();
   }
@@ -130,6 +134,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
 
   Future<List<Box>> getBoxes() {
     return select(boxes).get();
+  }
+
+  Future<List<Box>> getUnsyncedBoxes() {
+    return (select(boxes)..where((b) => b.synced.equals(false))).get();
   }
 
   Stream<List<Box>> watchBoxes() {

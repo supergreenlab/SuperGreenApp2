@@ -417,9 +417,13 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('You have no plant yet.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                    child: Text('You have no plant yet.',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
-                  Text('Add your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                  Text('Add your first',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('PLANT',
                       style: TextStyle(
                           fontSize: 50,
@@ -508,23 +512,39 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         if (state is PlantDrawerBlocStateLoadingPlantList) {
           content = FullscreenLoading(title: 'Loading..');
         } else if (state is PlantDrawerBlocStatePlantListUpdated) {
-          List<Plant> plants = state.plants;
+          List<Plant> plants = state.plants.toList();
+          List<Box> boxes = state.boxes;
           content = ListView(
-            children: plants.map((b) {
-              Widget item = ListTile(
-                leading: (plantFeedState is PlantFeedBlocStateLoaded &&
-                        plantFeedState.plant.id == b.id)
-                    ? Icon(
-                        Icons.check_box,
-                        color: Colors.green,
-                      )
-                    : Icon(Icons.crop_square),
-                title: Text(b.name),
-                onTap: () => _selectPlant(context, b),
-              );
+              children: boxes.map((b) {
+            List<Widget> content = [
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1, offset: Offset(0, 2))],
+                  color: Colors.white,
+                ),
+                child: ListTile(
+                  leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
+                  title: Text(b.name),
+                ),
+              ),
+            ];
+            content.addAll(plants.where((p) => p.box == b.id).map((p) {
+              Widget item = Padding(
+                  padding: EdgeInsets.only(left: 24),
+                  child: ListTile(
+                    leading: (plantFeedState is PlantFeedBlocStateLoaded &&
+                            plantFeedState.plant.id == p.id)
+                        ? Icon(
+                            Icons.check_box,
+                            color: Colors.green,
+                          )
+                        : Icon(Icons.crop_square),
+                    title: Text(p.name),
+                    onTap: () => _selectPlant(context, p),
+                  ));
               try {
                 int nOthers = state.hasPending
-                    .where((e) => e.id == b.feed)
+                    .where((e) => e.id == p.feed)
                     .map((e) => e.nNew)
                     .reduce((a, e) => a + e);
                 if (nOthers != null && nOthers > 0) {
@@ -537,8 +557,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 }
               } catch (e) {}
               return item;
-            }).toList(),
-          );
+            }).toList());
+            return Column(
+              children: content,
+            );
+          }).toList());
         }
         return AnimatedSwitcher(
           duration: Duration(milliseconds: 200),

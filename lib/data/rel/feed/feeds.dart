@@ -91,6 +91,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
   }
 
+  Future<List<Feed>> getUnsyncedFeeds() {
+    return (select(feeds)..where((f) => f.synced.equals(false))).get();
+  }
+
   Future deleteFeed(Feed feed) {
     return delete(feeds).delete(feed);
   }
@@ -136,6 +140,14 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .getSingle();
   }
 
+  Future<int> getNMeasures() {
+    return getNFeedEntriesWithType('FE_MEASURE').getSingle();
+  }
+
+  Future<List<FeedEntry>> getUnsyncedFeedEntries() {
+    return (select(feedEntries)..where((f) => f.synced.equals(false))).get();
+  }
+
   Future updateFeedEntry(FeedEntriesCompanion feedEntry) {
     return (update(feedEntries)
           ..where((tbl) => tbl.id.equals(feedEntry.id.value)))
@@ -175,13 +187,13 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .toList();
   }
 
-  Future<int> getNMeasures() {
-    return getNFeedEntriesWithType('FE_MEASURE').getSingle();
-  }
-
   Future<List<FeedMedia>> getFeedMedias(int feedEntryID) {
     return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID)))
         .get();
+  }
+
+  Future<List<FeedMedia>> getUnsyncedFeedMedias() {
+    return (select(feedMedias)..where((f) => f.synced.equals(false))).get();
   }
 
   Future<FeedMedia> getFeedMedia(int feedMediaID) {

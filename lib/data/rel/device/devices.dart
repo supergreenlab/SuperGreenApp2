@@ -86,6 +86,10 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
     return select(devices).get();
   }
 
+  Future<List<Device>> getUnsyncedDevices() {
+    return (select(devices)..where((d) => d.synced.equals(false))).get();
+  }
+
   Stream<List<Device>> watchDevices() {
     return select(devices).watch();
   }

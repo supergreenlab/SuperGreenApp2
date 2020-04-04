@@ -56,7 +56,13 @@ class FeedsAPI {
 
   Future syncPlant(Plant plant) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
+    if (feed.serverID == null) {
+      throw 'Missing serverID for feed relation';
+    }
     Box box = await RelDB.get().plantsDAO.getBox(plant.box);
+    if (box.serverID == null) {
+      throw 'Missing serverID for box relation';
+    }
     Map<String, dynamic> obj = {
       'id': plant.serverID,
       'feedID': feed.serverID,
@@ -83,6 +89,9 @@ class FeedsAPI {
     };
     if (box.device != null) {
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+      if (device.serverID == null) {
+        throw 'Missing serverID for device relation';
+      }
       obj['deviceID'] = device.serverID;
       obj['deviceBox'] = box.deviceBox;
     }
@@ -99,6 +108,9 @@ class FeedsAPI {
 
   Future syncTimelapse(Timelapse timelapse) async {
     Plant plant = await RelDB.get().plantsDAO.getPlant(timelapse.plant);
+    if (plant.serverID == null) {
+      throw 'Missing serverID for plant relation';
+    }
     Map<String, dynamic> obj = {
       'id': timelapse.serverID,
       'plantID': plant.serverID,
@@ -157,6 +169,9 @@ class FeedsAPI {
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
+    if (feed.serverID == null) {
+      throw 'Missing serverID for feed relation';
+    }
     Map<String, dynamic> obj = {
       'id': feedEntry.serverID,
       'feedID': feed.serverID,
@@ -178,6 +193,9 @@ class FeedsAPI {
   Future syncFeedMedia(FeedMedia feedMedia) async {
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntry(feedMedia.feedEntry);
+    if (feedEntry.serverID == null) {
+      throw 'Missing serverID for feedEntry relation';
+    }
     String fileRef = ''; // TODO find file upload server
     Map<String, dynamic> obj = {
       'id': feedMedia.serverID,

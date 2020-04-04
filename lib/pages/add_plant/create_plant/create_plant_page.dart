@@ -106,7 +106,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
 
   Widget _renderDone(CreatePlantBlocStateDone state) {
     String subtitle =
-        'Plant ${_nameController.value.text} on box ${state.box.name} created:)';
+        'Plant ${_nameController.value.text} on lab ${state.box.name} created:)';
     return Fullscreen(
         title: 'Done!',
         subtitle: subtitle,
@@ -121,33 +121,41 @@ class CreatePlantPageState extends State<CreatePlantPage> {
           height: _keyboardVisible ? 0 : 100,
           color: Color(0xff0bb354),
         ),
-        SectionTitle(
-          title: 'Let\'s name your new plant:',
-          icon: 'assets/box_setup/icon_box_name.svg',
-          backgroundColor: Color(0xff0bb354),
-          titleColor: Colors.white,
-          large: true,
-          elevation: 5,
+        Expanded(
+          child: ListView(children: [
+            SectionTitle(
+              title: 'Let\'s name your new plant:',
+              icon: 'assets/box_setup/icon_box_name.svg',
+              backgroundColor: Color(0xff0bb354),
+              titleColor: Colors.white,
+              large: true,
+              elevation: 5,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+              child: SGLTextField(
+                  hintText: 'Ex: Gorilla Kush',
+                  controller: _nameController,
+                  onChanged: (_) {
+                    setState(() {});
+                  }),
+            ),
+            SectionTitle(
+              title: 'Is this a single or multiple plant\ngrow diary?',
+              icon: 'assets/settings/icon_plants.svg',
+              backgroundColor: Color(0xff0bb354),
+              titleColor: Colors.white,
+              elevation: 5,
+            ),
+            _renderOptionCheckbx(context, 'Single plant grow diary',
+                (newValue) {
+              setState(() {
+                _single = newValue;
+              });
+            }, _single),
+          ]),
         ),
-        Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
-          child: SGLTextField(
-              hintText: 'Ex: Gorilla Kush',
-              controller: _nameController,
-              onChanged: (_) {
-                setState(() {});
-              }),
-        ),
-        SectionTitle(
-          title: 'Is this a single or multiple plant\ngrow diary?',
-          icon: 'assets/settings/icon_plants.svg',
-          backgroundColor: Color(0xff0bb354),
-          titleColor: Colors.white,
-          elevation: 5,
-        ),
-        _renderOptionCheckbx(context, 'Single plant grow diary', (newValue) {setState(() {_single = newValue;});}, _single),
-        Expanded(child: Container()),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
           child: Align(

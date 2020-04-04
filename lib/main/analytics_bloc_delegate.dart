@@ -15,7 +15,6 @@ List<bool Function(Equatable)> filteredEvents = [
   (e) => e is FeedBlocEventFeedEntriesListUpdated,
   (e) => e is DeviceDaemonBlocEventLoadDevice,
   (e) => e is PlantDrawerBlocEventBoxListUpdated,
-  (e) => e is FeedMediaCardBlocEventInit,
   (e) => e is PlantFeedBlocEventLoad,
 ];
 

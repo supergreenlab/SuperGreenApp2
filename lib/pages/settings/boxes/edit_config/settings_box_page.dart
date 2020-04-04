@@ -97,8 +97,8 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
 
   Widget _renderDone(SettingsBoxBlocStateDone state) {
     String subtitle = _device != null
-        ? 'Plant ${_nameController.value.text} on box ${_device.name} updated:)'
-        : 'Plant ${_nameController.value.text}';
+        ? 'Lab ${_nameController.value.text} on controller ${_device.name} updated:)'
+        : 'Lab ${_nameController.value.text}';
     return Fullscreen(
         title: 'Done!',
         subtitle: subtitle,

@@ -26,20 +26,20 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class AppInitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocListener<AppInitBloc, AppInitBlocState>(
       bloc: BlocProvider.of<AppInitBloc>(context),
-        listener: (BuildContext context, AppInitBlocState state) {
-          if (state is AppInitBlocStateReady) {
-            if (state.firstStart == false) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToHomeEvent());
-            } else {
-              BlocProvider.of<TowelieBloc>(context)
-                  .add(TowelieBlocEventAppInit());
-            }
+      listener: (BuildContext context, AppInitBlocState state) {
+        if (state is AppInitBlocStateReady) {
+          if (state.firstStart == false) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToHomeEvent());
+          } else {
+            BlocProvider.of<TowelieBloc>(context)
+                .add(TowelieBlocEventAppInit());
           }
-        },
-        child: BlocBuilder<AppInitBloc, AppInitBlocState>(
+        }
+      },
+      child: BlocBuilder<AppInitBloc, AppInitBlocState>(
         bloc: BlocProvider.of<AppInitBloc>(context),
         builder: (BuildContext context, AppInitBlocState state) {
           if (state is AppInitBlocStateReady) {

@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class SyncerBlocEvent extends Equatable {}
 
@@ -26,8 +29,13 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     add(SyncerBlocEventInit());
     _timer = Timer.periodic(Duration(seconds: 5), (_) async {
       if (_working) return;
-      if (!await _validJWT()) return;
+      _working = true;
+      if (!await _validJWT()) {
+        _working = false;
+        return;
+      }
       await _sync();
+      _working = false;
     });
   }
 
@@ -38,11 +46,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {}
 
   Future _sync() async {
-    _working = true;
     await _syncFeeds();
+    await _syncFeedEntries();
+    await _syncFeedMedias();
     await _syncDevices();
+    await _syncBoxes();
     await _syncPlants();
-    _working = false;
   }
 
   Future<bool> _validJWT() async {
@@ -51,11 +60,55 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     return true;
   }
 
-  Future _syncFeeds() async {}
+  Future _syncFeeds() async {
+    List<Feed> feeds = await RelDB.get().feedsDAO.getUnsyncedFeeds();
+    for (int i = 0; i < feeds.length; ++i) {
+      Feed feed = feeds[i];
+      await FeedsAPI().syncFeed(feed);
+    }
+  }
 
-  Future _syncPlants() async {}
+  Future _syncFeedEntries() async {
+    List<FeedEntry> feedEntries =
+        await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
+    for (int i = 0; i < feedEntries.length; ++i) {
+      FeedEntry feedEntry = feedEntries[i];
+      await FeedsAPI().syncFeedEntry(feedEntry);
+    }
+  }
 
-  Future _syncDevices() async {}
+  Future _syncFeedMedias() async {
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getUnsyncedFeedMedias();
+    for (int i = 0; i < feedMedias.length; ++i) {
+      FeedMedia feedMedia = feedMedias[i];
+      await FeedsAPI().syncFeedMedia(feedMedia);
+    }
+  }
+
+  Future _syncDevices() async {
+    List<Device> devices = await RelDB.get().devicesDAO.getUnsyncedDevices();
+    for (int i = 0; i < devices.length; ++i) {
+      Device device = devices[i];
+      await FeedsAPI().syncDevice(device);
+    }
+  }
+
+  Future _syncBoxes() async {
+    List<Box> boxes = await RelDB.get().plantsDAO.getUnsyncedBoxes();
+    for (int i = 0; i < boxes.length; ++i) {
+      Box box = boxes[i];
+      await FeedsAPI().syncBox(box);
+    }
+  }
+
+  Future _syncPlants() async {
+    List<Plant> plants = await RelDB.get().plantsDAO.getUnsyncedPlants();
+    for (int i = 0; i < plants.length; ++i) {
+      Plant plant = plants[i];
+      await FeedsAPI().syncPlant(plant);
+    }
+  }
 
   @override
   Future<void> close() async {
