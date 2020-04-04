@@ -110,7 +110,7 @@ class FeedMeasureFormBloc
             {'previous': event.previous != null ? event.previous.id : null})),
       ));
       await db.feedsDAO
-          .addFeedMedia(event.current.copyWith(feedEntry: Value(feedEntryID)));
+          .addFeedMedia(event.current.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
       yield FeedMeasureFormBlocStateDone(_args.plant, feedEntry);
     }
