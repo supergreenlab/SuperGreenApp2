@@ -48,7 +48,12 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
     return BlocListener(
       bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
       listener: (BuildContext context, FeedScheduleFormBlocState state) {
-        if (state is FeedScheduleFormBlocStateDone) {
+        if (state is FeedScheduleFormBlocStateLoaded) {
+          if (state.box.device != null) {
+            BlocProvider.of<DeviceDaemonBloc>(context)
+                .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+          }
+        } else if (state is FeedScheduleFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(mustPop: true));
         }

@@ -45,8 +45,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
         if (state is FeedVentilationFormBlocStateLoaded) {
-          BlocProvider.of<DeviceDaemonBloc>(context)
-              .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+          if (state.box.device != null) {
+            BlocProvider.of<DeviceDaemonBloc>(context)
+                .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+          }
           setState(() {
             _blowerDay = state.blowerDay;
             _blowerNight = state.blowerNight;
