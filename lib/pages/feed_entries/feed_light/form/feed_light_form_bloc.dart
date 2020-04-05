@@ -78,7 +78,8 @@ class FeedLightFormBlocStateLightsLoaded extends FeedLightFormBlocState {
 
 class FeedLightFormBlocStateNoDevice
     extends FeedLightFormBlocStateLightsLoaded {
-  FeedLightFormBlocStateNoDevice(List<int> values, Box box) : super(values, box);
+  FeedLightFormBlocStateNoDevice(List<int> values, Box box)
+      : super(values, box);
 }
 
 class FeedLightFormBlocStateLoading extends FeedLightFormBlocState {
@@ -159,15 +160,21 @@ class FeedLightFormBloc
         return;
       }
       yield FeedLightFormBlocStateLoading();
-      int feedEntryID =
-          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-        type: 'FE_LIGHT',
-        feed: _args.plant.feed,
-        date: DateTime.now(),
-        params: Value(JsonEncoder().convert(
-            {'initialValues': _initialValues, 'values': event.values})),
-      ));
-      FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      List<Plant> plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+      FeedEntry feedEntry;
+      for (int i = 0; i < plants.length; ++i) {
+        int feedEntryID =
+            await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          type: 'FE_LIGHT',
+          feed: plants[i].feed,
+          date: DateTime.now(),
+          params: Value(JsonEncoder().convert(
+              {'initialValues': _initialValues, 'values': event.values})),
+        ));
+        if (i == 0) {
+          feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+        }
+      }
       yield FeedLightFormBlocStateDone(_args.plant, feedEntry);
     } else if (event is FeedLightFormBlocEventCancel) {
       final db = RelDB.get();

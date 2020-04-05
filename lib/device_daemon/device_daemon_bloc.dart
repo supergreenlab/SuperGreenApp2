@@ -79,7 +79,11 @@ class DeviceDaemonBloc
     if (event is DeviceDaemonBlocEventInit) {
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
     } else if (event is DeviceDaemonBlocEventLoadDevice) {
-      Device device = _devices.firstWhere((d) => d.id == event.deviceID);
+      Device device =
+          _devices.firstWhere((d) => d.id == event.deviceID, orElse: null);
+      if (device == null) {
+        return;
+      }
       yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable);
     } else if (event is DeviceDaemonBlocEventDeviceReachable) {
       yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable);

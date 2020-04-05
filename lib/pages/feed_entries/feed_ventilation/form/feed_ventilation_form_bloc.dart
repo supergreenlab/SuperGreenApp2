@@ -77,8 +77,7 @@ class FeedVentilationFormBlocState extends Equatable {
   List<Object> get props => [];
 }
 
-class FeedVentilationFormBlocStateLoaded
-    extends FeedVentilationFormBlocState {
+class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
   final int initialBlowerDay;
   final int initialBlowerNight;
   final int blowerDay;
@@ -111,7 +110,8 @@ class FeedVentilationFormBlocStateNoDevice
     extends FeedVentilationFormBlocStateLoaded {
   FeedVentilationFormBlocStateNoDevice(int initialBlowerDay,
       int initialBlowerNight, int blowerDay, int blowerNight, Box box)
-      : super(initialBlowerDay, initialBlowerNight, blowerDay, blowerNight, box);
+      : super(
+            initialBlowerDay, initialBlowerNight, blowerDay, blowerNight, box);
 }
 
 class FeedVentilationFormBloc
@@ -180,21 +180,24 @@ class FeedVentilationFormBloc
         return;
       }
       yield FeedVentilationFormBlocStateLoading('Saving..');
-      await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-        type: 'FE_VENTILATION',
-        feed: _args.plant.feed,
-        date: DateTime.now(),
-        params: Value(JsonEncoder().convert({
-          'initialValues': {
-            'blowerDay': _initialBlowerDay,
-            'blowerNight': _initialBlowerNight
-          },
-          'values': {
-            'blowerDay': event.blowerDay,
-            'blowerNight': event.blowerNight
-          }
-        })),
-      ));
+      List<Plant> plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+      for (int i = 0; i < plants.length; ++i) {
+        await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          type: 'FE_VENTILATION',
+          feed: plants[i].feed,
+          date: DateTime.now(),
+          params: Value(JsonEncoder().convert({
+            'initialValues': {
+              'blowerDay': _initialBlowerDay,
+              'blowerNight': _initialBlowerNight
+            },
+            'values': {
+              'blowerDay': event.blowerDay,
+              'blowerNight': event.blowerNight
+            }
+          })),
+        ));
+      }
       yield FeedVentilationFormBlocStateDone();
     } else if (event is FeedVentilationFormBlocEventCancelEvent) {
       final db = RelDB.get();

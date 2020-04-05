@@ -106,7 +106,7 @@ class FeedScheduleFormBloc
 
   String _initialSchedule;
   Map<String, dynamic> _initialSchedules = {};
-  
+
   Box _box;
 
   final MainNavigateToFeedScheduleFormEvent _args;
@@ -169,19 +169,21 @@ class FeedScheduleFormBloc
       await db.plantsDAO.updateBox(BoxesCompanion(
           id: Value(box.id),
           settings: Value(JsonEncoder().convert(boxSettings))));
-
       if (_schedule == 'BLOOM') {
-        await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-          type: 'FE_SCHEDULE',
-          feed: _args.plant.feed,
-          date: DateTime.now(),
-          params: Value(JsonEncoder().convert({
-            'initialSchedule': _initialSchedule,
-            'initialSchedules': _initialSchedules,
-            'schedule': _schedule,
-            'schedules': _schedules,
-          })),
-        ));
+        List<Plant> plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+        for (int i = 0; i < plants.length; ++i) {
+          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+            type: 'FE_SCHEDULE',
+            feed: plants[i].feed,
+            date: DateTime.now(),
+            params: Value(JsonEncoder().convert({
+              'initialSchedule': _initialSchedule,
+              'initialSchedules': _initialSchedules,
+              'schedule': _schedule,
+              'schedules': _schedules,
+            })),
+          ));
+        }
       }
       yield FeedScheduleFormBlocStateDone();
     }

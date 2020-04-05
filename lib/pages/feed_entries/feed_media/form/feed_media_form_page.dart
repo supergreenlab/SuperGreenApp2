@@ -78,18 +78,20 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
             bloc: BlocProvider.of<FeedMediaFormBloc>(context),
             builder: (context, state) {
-              String title = 'Observation';
+              String title = '🧐';
               Widget body;
               if (state is FeedMediaFormBlocStateLoading) {
                 body = Scaffold(
                     appBar: SGLAppBar(
                       title,
+                      fontSize: 35,
                     ),
                     body: FullscreenLoading(title: 'Saving..'));
               } else if (state is FeedMediaFormBlocStateDone) {
                 body = Scaffold(
                     appBar: SGLAppBar(
                       title,
+                      fontSize: 35,
                     ),
                     body: Fullscreen(
                       title: 'Done!',
@@ -98,6 +100,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
               } else {
                 body = FeedFormLayout(
                   title: title,
+                  fontSize: 35,
                   changed:
                       _medias.length != 0 || _textController.value.text != '',
                   valid:

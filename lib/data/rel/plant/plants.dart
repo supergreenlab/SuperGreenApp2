@@ -107,6 +107,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return (select(plants)..where((p) => p.synced.equals(false))).get();
   }
 
+  Future<List<Plant>> getPlantsInBox(int boxID) {
+    return (select(plants)..where((p) => p.box.equals(boxID))).get();
+  }
+
   Future<Plant> getPlantWithFeed(int feedID) {
     return (select(plants)..where((p) => p.feed.equals(feedID))).getSingle();
   }

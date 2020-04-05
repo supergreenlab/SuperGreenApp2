@@ -22,6 +22,6 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/fo
 class FeedBendingFormPage extends FeedCareCommonFormPage<FeedBendingFormBloc> {
   @override
   String title() {
-    return 'Bending log';
+    return '💪';
   }
 }

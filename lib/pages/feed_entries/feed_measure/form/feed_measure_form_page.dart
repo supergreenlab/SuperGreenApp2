@@ -58,7 +58,8 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
           listener: (BuildContext context, FeedMeasureFormBlocState state) {
             if (state is FeedMeasureFormBlocStateDone) {
               BlocProvider.of<TowelieBloc>(context).add(
-                  TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
+                  TowelieBlocEventFeedEntryCreated(
+                      state.plant, state.feedEntry));
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigatorActionPop(mustPop: true));
             }
@@ -66,7 +67,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
           child: BlocBuilder<FeedMeasureFormBloc, FeedMeasureFormBlocState>(
               bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
               builder: (context, state) {
-                String title = 'Take measure pic';
+                String title = '🍌';
                 Widget body;
                 if (_showSelector && state is FeedMeasureFormBlocStateLoaded) {
                   body = FeedMeasurePreviousSelector(state.measures,
@@ -80,18 +81,21 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                   body = Scaffold(
                       appBar: SGLAppBar(
                         title,
+                        fontSize: 35,
                       ),
                       body: FullscreenLoading(title: 'Loading..'));
                 } else if (state is FeedMeasureFormBlocStateLoading) {
                   body = Scaffold(
                       appBar: SGLAppBar(
                         title,
+                        fontSize: 35,
                       ),
                       body: FullscreenLoading(title: 'Saving..'));
                 } else if (state is FeedMeasureFormBlocStateDone) {
                   body = Scaffold(
                       appBar: SGLAppBar(
                         title,
+                        fontSize: 35,
                       ),
                       body: Fullscreen(
                         title: 'Done!',
@@ -100,6 +104,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                 } else {
                   body = FeedFormLayout(
                       title: title,
+                      fontSize: 35,
                       changed: _previous != null || _media != null,
                       valid: _media != null,
                       onOK: () => BlocProvider.of<FeedMeasureFormBloc>(context)
@@ -194,7 +199,8 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
         MainNavigateToImageCaptureEvent(
             futureFn: futureFn.futureFn,
             overlayPath: _previous?.filePath,
-            videoEnabled: false, pickerEnabled: false));
+            videoEnabled: false,
+            pickerEnabled: false));
     FeedMediasCompanion fm = await futureFn.future;
     return fm;
   }
@@ -250,7 +256,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
             BlocProvider.of<MainNavigatorBloc>(context).add(
                 MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
                     futureFn: ff.futureFn,
-                    overlayPath:  _previous?.filePath,
+                    overlayPath: _previous?.filePath,
                     okButton: 'OK'));
             bool keep = await ff.future;
             if (keep == true) {

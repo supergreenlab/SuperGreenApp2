@@ -65,7 +65,7 @@ class NumberFormParam extends StatelessWidget {
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                 )),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: Text('${value * displayMultiplier}$unit',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
             ),

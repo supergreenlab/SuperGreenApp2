@@ -82,8 +82,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         bloc: BlocProvider.of<FormBloc>(context),
         listener: (BuildContext context, FeedCareCommonFormBlocState state) {
           if (state is FeedCareCommonFormBlocStateDone) {
-            BlocProvider.of<TowelieBloc>(context)
-                .add(TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
+            BlocProvider.of<TowelieBloc>(context).add(
+                TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }
@@ -96,12 +96,14 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 body = Scaffold(
                     appBar: SGLAppBar(
                       title,
+                      fontSize: 35,
                     ),
                     body: FullscreenLoading(title: 'Saving..'));
               } else if (state is FeedCareCommonFormBlocStateDone) {
                 body = Scaffold(
                     appBar: SGLAppBar(
                       title,
+                      fontSize: 35,
                     ),
                     body: Fullscreen(
                       title: 'Saving..',
@@ -110,6 +112,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
               } else {
                 body = FeedFormLayout(
                   title: title,
+                  fontSize: 35,
                   changed: _afterMedias.length != 0 ||
                       _beforeMedias.length != 0 ||
                       _textController.value.text != '',

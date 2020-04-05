@@ -95,8 +95,8 @@ class FeedMeasureFormBloc
       FeedMeasureFormBlocEvent event) async* {
     if (event is FeedMeasureFormBlocEventInit) {
       final db = RelDB.get();
-      List<FeedMedia> measures =
-          await db.feedsDAO.getFeedMediasWithType(_args.plant.feed, 'FE_MEASURE');
+      List<FeedMedia> measures = await db.feedsDAO
+          .getFeedMediasWithType(_args.plant.feed, 'FE_MEASURE');
       yield FeedMeasureFormBlocStateLoaded(measures);
     } else if (event is FeedMeasureFormBlocEventCreate) {
       yield FeedMeasureFormBlocStateLoading();
@@ -109,8 +109,8 @@ class FeedMeasureFormBloc
         params: Value(JsonEncoder().convert(
             {'previous': event.previous != null ? event.previous.id : null})),
       ));
-      await db.feedsDAO
-          .addFeedMedia(event.current.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
+      await db.feedsDAO.addFeedMedia(event.current.copyWith(
+          feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
       yield FeedMeasureFormBlocStateDone(_args.plant, feedEntry);
     }

@@ -24,6 +24,6 @@ class FeedDefoliationFormPage
     extends FeedCareCommonFormPage<FeedDefoliationFormBloc> {
   @override
   String title() {
-    return 'Defoliation log';
+    return '🍃';
   }
 }

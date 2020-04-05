@@ -31,11 +31,13 @@ class FeedWaterFormBlocEventCreate extends FeedWaterFormBlocEvent {
   final bool tooDry;
   final double volume;
   final bool nutrient;
+  final bool wateringLab;
 
-  FeedWaterFormBlocEventCreate(this.tooDry, this.volume, this.nutrient);
+  FeedWaterFormBlocEventCreate(
+      this.tooDry, this.volume, this.nutrient, this.wateringLab);
 
   @override
-  List<Object> get props => [tooDry, volume, nutrient];
+  List<Object> get props => [tooDry, volume, nutrient, wateringLab];
 }
 
 class FeedWaterFormBlocState extends Equatable {
@@ -67,18 +69,27 @@ class FeedWaterFormBloc
       FeedWaterFormBlocEvent event) async* {
     if (event is FeedWaterFormBlocEventCreate) {
       final db = RelDB.get();
-      int feedEntryID =
-          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
-        type: 'FE_WATER',
-        feed: _args.plant.feed,
-        date: DateTime.now(),
-        params: Value(JsonEncoder().convert({
-          'tooDry': event.tooDry,
-          'volume': event.volume,
-          'nutrient': event.nutrient,
-        })),
-      ));
-      FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+      List<Plant> plants = [_args.plant];
+      if (event.wateringLab) {
+        plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+      }
+      FeedEntry feedEntry;
+      for (int i = 0; i < plants.length; ++i) {
+        int feedEntryID =
+            await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          type: 'FE_WATER',
+          feed: plants[i].feed,
+          date: DateTime.now(),
+          params: Value(JsonEncoder().convert({
+            'tooDry': event.tooDry,
+            'volume': event.volume,
+            'nutrient': event.nutrient,
+          })),
+        ));
+        if (i == 0) {
+          feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
+        }
+      }
       yield FeedWaterFormBlocStateDone(_args.plant, feedEntry);
     }
   }

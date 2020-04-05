@@ -278,11 +278,11 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
           '2020-01-01 ${_pad(onHourEditingController.value.text)}:${_pad(onMinEditingController.value.text)}:00Z');
       DateTime to = DateTime.parse(
           '2020-01-01 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
-      DateTime to2 = DateTime.parse(
-          '2020-01-02 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
 
       duration = to.difference(from);
       if (duration.inSeconds < 0) {
+        DateTime to2 = DateTime.parse(
+            '2020-01-02 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
         duration = to2.difference(from);
       }
     } catch (e) {
@@ -365,7 +365,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: Text(
-                          'duration: ${duration.inHours.abs()}:${duration.inMinutes.abs() % 60}',
+                          'ON for: ${duration.inHours}:${duration.inMinutes % 60}',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(

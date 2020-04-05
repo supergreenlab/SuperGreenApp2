@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
@@ -25,6 +26,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/feed_form/yesno_form_param.dart';
+import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedWaterFormPage extends StatefulWidget {
   @override
@@ -36,6 +38,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   double volume = 1;
   bool nutrient;
   bool freedomUnits;
+  bool wateringLab = false;
 
   @override
   void initState() {
@@ -59,18 +62,10 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
             bloc: BlocProvider.of<FeedWaterFormBloc>(context),
             builder: (context, state) {
               return FeedFormLayout(
-                title: 'New watering record',
+                title: '💧',
+                fontSize: 35,
                 body: ListView(
                   children: <Widget>[
-                    YesNoFormParam(
-                        icon: 'assets/feed_form/icon_dry.svg',
-                        title: 'Was it too dry?',
-                        yes: tooDry,
-                        onPressed: (yes) {
-                          setState(() {
-                            tooDry = yes;
-                          });
-                        }),
                     NumberFormParam(
                         icon: 'assets/feed_form/icon_volume.svg',
                         title: 'Approx. volume',
@@ -85,6 +80,15 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                           });
                         }),
                     YesNoFormParam(
+                        icon: 'assets/feed_form/icon_dry.svg',
+                        title: 'Was it too dry?',
+                        yes: tooDry,
+                        onPressed: (yes) {
+                          setState(() {
+                            tooDry = yes;
+                          });
+                        }),
+                    YesNoFormParam(
                         icon: 'assets/feed_form/icon_nutrient.svg',
                         title: 'Nutrient?',
                         yes: nutrient,
@@ -93,12 +97,47 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                             nutrient = yes;
                           });
                         }),
+                    SectionTitle(
+                        title: 'Watering the whole lab?',
+                        icon: 'assets/settings/icon_lab.svg'),
+                    _renderOptionCheckbx(context, 'Watering whole lab at once.',
+                        (newValue) {
+                      setState(() {
+                        wateringLab = newValue;
+                      });
+                    }, wateringLab),
                   ],
                 ),
                 onOK: () => BlocProvider.of<FeedWaterFormBloc>(context).add(
-                  FeedWaterFormBlocEventCreate(tooDry, volume, nutrient),
+                  FeedWaterFormBlocEventCreate(
+                      tooDry, volume, nutrient, wateringLab),
                 ),
               );
             }));
+  }
+
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            onChanged: onChanged,
+            value: value,
+          ),
+          InkWell(
+            onTap: () {
+              onChanged(!value);
+            },
+            child: MarkdownBody(
+              fitContent: true,
+              data: text,
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 14)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

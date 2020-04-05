@@ -22,6 +22,6 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/for
 class FeedTransplantFormPage extends FeedCareCommonFormPage<FeedTransplantFormBloc> {
   @override
   String title() {
-    return 'Transplant log';
+    return '🌱';
   }
 }

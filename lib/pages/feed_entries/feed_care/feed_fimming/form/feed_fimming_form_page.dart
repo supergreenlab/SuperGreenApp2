@@ -22,6 +22,6 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/form/f
 class FeedFimmingFormPage extends FeedCareCommonFormPage<FeedFimmingFormBloc> {
   @override
   String title() {
-    return 'Fimming log';
+    return '🤏';
   }
 }
