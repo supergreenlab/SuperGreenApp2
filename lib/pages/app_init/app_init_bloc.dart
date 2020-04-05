@@ -31,12 +31,11 @@ import 'package:super_green_app/main/analytics_bloc_delegate.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 
-class AppInitBlocEventLoaded extends AppInitBlocEvent {
-  final AppData appData;
-  AppInitBlocEventLoaded(this.appData);
+class AppInitBlocEventInit extends AppInitBlocEvent {
+  AppInitBlocEventInit();
 
   @override
-  List<Object> get props => [appData];
+  List<Object> get props => [];
 }
 
 class AppInitBlocEventAllowAnalytics extends AppInitBlocEvent {
@@ -76,44 +75,42 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
   AppInitBlocState get initialState => AppInitBlocStateLoading();
 
   AppInitBloc() {
-    _init();
+    add(AppInitBlocEventInit());
   }
 
   @override
   Stream<AppInitBlocState> mapEventToState(AppInitBlocEvent event) async* {
-    if (event is AppInitBlocEventLoaded) {
-      yield AppInitBlocStateReady(event.appData.firstStart);
+    if (event is AppInitBlocEventInit) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      Hive.init(appDocDir.path);
+      Hive.registerAdapter(AppDataAdapter());
+
+      await _db.init();
+
+      AppData appData = _db.getAppData();
+
+      if (appData.allowAnalytics == true) {
+        _allowAnalytics();
+      }
+      yield AppInitBlocStateReady(appData.firstStart);
     } else if (event is AppInitBlocEventAllowAnalytics) {
       _db.setFirstStart(false);
       _db.setAllowAnalytics(event.allowAnalytics);
       if (event.allowAnalytics == true) {
-        await FlutterMatomo.initializeTracker(
-            'https://analytics.supergreenlab.com/piwik.php', 3);
+        _allowAnalytics();
       }
       yield AppInitBlocStateDone();
     }
   }
 
-  _init() async {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    Hive.init(appDocDir.path);
-    Hive.registerAdapter(AppDataAdapter());
-
-    await _db.init();
-
-    AppData appData = _db.getAppData();
-
-    if (appData.allowAnalytics == true) {
-      await FlutterMatomo.initializeTracker(
-          'https://analytics.supergreenlab.com/piwik.php', 3);
-      BlocSupervisor.delegate = AnalyticsBlocDelegate();
-    }
-
-    add(AppInitBlocEventLoaded(appData));
+  void _allowAnalytics() async {
+    await FlutterMatomo.initializeTracker(
+        'https://analytics.supergreenlab.com/piwik.php', 3);
+    BlocSupervisor.delegate = AnalyticsBlocDelegate();
   }
 }

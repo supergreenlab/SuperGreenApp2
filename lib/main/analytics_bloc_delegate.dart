@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/plant_drawer_bloc.dart';
@@ -22,10 +21,11 @@ class AnalyticsBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    if (filteredEvents.firstWhere((fn) => fn(transition.event), orElse: null) != null) {
-      return;
+    try {
+      filteredEvents.singleWhere((fn) => fn(transition.event));
+    } catch (e) {
+      FlutterMatomo.trackEventWithName('AnalyticsBlocDelegate', 'onTransition',
+          transition.event.runtimeType.toString());
     }
-    FlutterMatomo.trackEventWithName('AnalyticsBlocDelegate', 'onTransition',
-        transition.event.runtimeType.toString());
   }
 }
