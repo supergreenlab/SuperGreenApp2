@@ -112,6 +112,7 @@ import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewe
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
+import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
 
@@ -132,7 +133,9 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<DeviceDaemonBloc>(
-        context); // force-instanciate DeviceDaemonBloc :/
+        context); // force-instanciate DeviceDaemonBloc
+    BlocProvider.of<SyncerBloc>(
+        context); // force-instanciate SyncerBloc
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);

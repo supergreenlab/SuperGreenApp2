@@ -74,7 +74,7 @@ class FeedsAPI {
 
     PlantsCompanion plantsCompanion = plant
         .createCompanion(true)
-        .copyWith(id: Value(plant.id), synced: Value(true));
+        .copyWith(synced: Value(true));
     if (id != null) {
       plantsCompanion = plantsCompanion.copyWith(serverID: Value(id));
     }
@@ -99,7 +99,7 @@ class FeedsAPI {
 
     BoxesCompanion boxesCompanion = box
         .createCompanion(true)
-        .copyWith(id: Value(box.id), synced: Value(true));
+        .copyWith(synced: Value(true));
     if (id != null) {
       boxesCompanion = boxesCompanion.copyWith(serverID: Value(id));
     }
@@ -125,7 +125,7 @@ class FeedsAPI {
 
     TimelapsesCompanion timelapsesCompanion = timelapse
         .createCompanion(true)
-        .copyWith(id: Value(timelapse.id), synced: Value(true));
+        .copyWith(synced: Value(true));
     if (id != null) {
       timelapsesCompanion = timelapsesCompanion.copyWith(serverID: Value(id));
     }
@@ -144,7 +144,7 @@ class FeedsAPI {
 
     DevicesCompanion devicesCompanion = device
         .createCompanion(true)
-        .copyWith(id: Value(device.id), synced: Value(true));
+        .copyWith(synced: Value(true));
     if (id != null) {
       devicesCompanion = devicesCompanion.copyWith(serverID: Value(id));
     }
@@ -160,7 +160,7 @@ class FeedsAPI {
 
     FeedsCompanion feedsCompanion = feed
         .createCompanion(true)
-        .copyWith(id: Value(feed.id), synced: Value(true));
+        .copyWith(synced: Value(true));
     if (id != null) {
       feedsCompanion = feedsCompanion.copyWith(serverID: Value(id));
     }
@@ -175,7 +175,7 @@ class FeedsAPI {
     Map<String, dynamic> obj = {
       'id': feedEntry.serverID,
       'feedID': feed.serverID,
-      'date': feedEntry.date,
+      'date': feedEntry.date.toIso8601String(),
       'type': feedEntry.type,
       'params': feedEntry.params,
     };
@@ -183,7 +183,7 @@ class FeedsAPI {
 
     FeedEntriesCompanion feedEntriesCompanion = feedEntry
         .createCompanion(true)
-        .copyWith(id: Value(feed.id), synced: Value(true));
+        .copyWith(synced: Value(true));
     if (id != null) {
       feedEntriesCompanion = feedEntriesCompanion.copyWith(serverID: Value(id));
     }
@@ -216,14 +216,14 @@ class FeedsAPI {
 
   Future<String> _postPut(String path, Map<String, dynamic> obj) async {
     Function postPut = obj['id'] != null ? put : post;
-    Response resp = await postPut('$_serverHost/userend',
+    Response resp = await postPut('$_serverHost$path',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
         },
         body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'createUserEnd failed';
+      throw '_postPut failed';
     }
     if (resp.headers['x-sgl-token'] != null) {
       AppDB().setJWT(resp.headers['x-sgl-token']);

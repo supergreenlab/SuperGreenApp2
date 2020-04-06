@@ -26,23 +26,30 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   SyncerBloc() {
     add(SyncerBlocEventInit());
-    _timer = Timer.periodic(Duration(seconds: 5), (_) async {
-      if (_working) return;
-      _working = true;
-      if (!await _validJWT()) {
-        _working = false;
-        return;
-      }
-      await _sync();
-      _working = false;
-    });
   }
 
   @override
   SyncerBlocState get initialState => SyncerBlocStateInit();
 
   @override
-  Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {}
+  Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {
+    if (event is SyncerBlocEventInit) {
+      _timer = Timer.periodic(Duration(seconds: 5), (_) async {
+        if (_working == true) return;
+        _working = true;
+        if (!await _validJWT()) {
+          _working = false;
+          return;
+        }
+        try {
+          await _sync();
+        } catch (e) {
+          print(e);
+        }
+        _working = false;
+      });
+    }
+  }
 
   Future _sync() async {
     await _syncFeeds();
