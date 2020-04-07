@@ -32,6 +32,18 @@ class Devices extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static DevicesCompanion fromJSON(Map<String, dynamic> map) {
+    return DevicesCompanion(
+        identifier: Value(map['identifier'] as String),
+        name: Value(map['name'] as String),
+        ip: Value(map['ip'] as String),
+        mdns: Value(map['mdns'] as String),
+        isReachable: Value(false),
+        config: Value(''),
+        synced: Value(true),
+        serverID: Value(map['id'] as String));
+  }
 }
 
 class Modules extends Table {
@@ -71,6 +83,10 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
 
   Future<Device> getDevice(int id) {
     return (select(devices)..where((d) => d.id.equals(id))).getSingle();
+  }
+
+  Future<Device> getDeviceForServerID(String serverID) {
+    return (select(devices)..where((d) => d.serverID.equals(serverID))).getSingle();
   }
 
   Stream<Device> watchDevice(int id) {

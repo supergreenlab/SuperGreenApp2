@@ -36,6 +36,15 @@ class Plants extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static PlantsCompanion fromJSON(Map<String, dynamic> map) {
+    return PlantsCompanion(
+        name: Value(map['name'] as String),
+        single: Value(map['single'] as bool),
+        settings: Value(map['settings'] as String),
+        synced: Value(true),
+        serverID: Value(map['id'] as String));
+  }
 }
 
 @DataClassName("Box")
@@ -49,6 +58,15 @@ class Boxes extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static BoxesCompanion fromJSON(Map<String, dynamic> map) {
+    return BoxesCompanion(
+        deviceBox: Value(map['deviceBox'] as int),
+        name: Value(map['name'] as String),
+        settings: Value(map['settings'] as String),
+        synced: Value(true),
+        serverID: Value(map['id'] as String));
+  }
 }
 
 class ChartCaches extends Table {
@@ -76,6 +94,18 @@ class Timelapses extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static TimelapsesCompanion fromJSON(Map<String, dynamic> map) {
+    return TimelapsesCompanion(
+        controllerID: Value(map['controllerID'] as String),
+        rotate: Value(map['rotate'] as String),
+        name: Value(map['name'] as String),
+        strain: Value(map['strain'] as String),
+        dropboxToken: Value(map['dropboxToken'] as String),
+        uploadName: Value(map['uploadName'] as String),
+        synced: Value(true),
+        serverID: Value(map['id'] as String));
+  }
 }
 
 @UseDao(tables: [
@@ -93,6 +123,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
 
   Future<Plant> getPlant(int id) {
     return (select(plants)..where((p) => p.id.equals(id))).getSingle();
+  }
+
+  Future<Plant> getPlantForServerID(String serverID) {
+    return (select(plants)..where((p) => p.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Future<List<Plant>> getPlants() {
@@ -134,6 +169,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
 
   Future<Box> getBox(int id) {
     return (select(boxes)..where((b) => b.id.equals(id))).getSingle();
+  }
+
+  Future<Box> getBoxForServerID(String serverID) {
+    return (select(boxes)..where((b) => b.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Future<List<Box>> getBoxes() {
@@ -199,6 +239,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
 
   Future<List<Timelapse>> getTimelapses(int plantID) {
     return (select(timelapses)..where((t) => t.plant.equals(plantID))).get();
+  }
+
+  Future<Timelapse> getTimelapseForServerID(String serverID) {
+    return (select(timelapses)..where((t) => t.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Future<int> addTimelapse(TimelapsesCompanion timelapse) {

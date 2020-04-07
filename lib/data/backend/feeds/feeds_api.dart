@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/device/devices.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
+import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedsAPI {
@@ -72,9 +75,8 @@ class FeedsAPI {
     };
     String id = await _postPut('/plant', obj);
 
-    PlantsCompanion plantsCompanion = plant
-        .createCompanion(true)
-        .copyWith(synced: Value(true));
+    PlantsCompanion plantsCompanion =
+        plant.createCompanion(true).copyWith(synced: Value(true));
     if (id != null) {
       plantsCompanion = plantsCompanion.copyWith(serverID: Value(id));
     }
@@ -97,9 +99,8 @@ class FeedsAPI {
     }
     String id = await _postPut('/box', obj);
 
-    BoxesCompanion boxesCompanion = box
-        .createCompanion(true)
-        .copyWith(synced: Value(true));
+    BoxesCompanion boxesCompanion =
+        box.createCompanion(true).copyWith(synced: Value(true));
     if (id != null) {
       boxesCompanion = boxesCompanion.copyWith(serverID: Value(id));
     }
@@ -123,9 +124,8 @@ class FeedsAPI {
     };
     String id = await _postPut('/timelapse', obj);
 
-    TimelapsesCompanion timelapsesCompanion = timelapse
-        .createCompanion(true)
-        .copyWith(synced: Value(true));
+    TimelapsesCompanion timelapsesCompanion =
+        timelapse.createCompanion(true).copyWith(synced: Value(true));
     if (id != null) {
       timelapsesCompanion = timelapsesCompanion.copyWith(serverID: Value(id));
     }
@@ -142,9 +142,8 @@ class FeedsAPI {
     };
     String id = await _postPut('/device', obj);
 
-    DevicesCompanion devicesCompanion = device
-        .createCompanion(true)
-        .copyWith(synced: Value(true));
+    DevicesCompanion devicesCompanion =
+        device.createCompanion(true).copyWith(synced: Value(true));
     if (id != null) {
       devicesCompanion = devicesCompanion.copyWith(serverID: Value(id));
     }
@@ -158,9 +157,8 @@ class FeedsAPI {
     };
     String id = await _postPut('/feed', obj);
 
-    FeedsCompanion feedsCompanion = feed
-        .createCompanion(true)
-        .copyWith(synced: Value(true));
+    FeedsCompanion feedsCompanion =
+        feed.createCompanion(true).copyWith(synced: Value(true));
     if (id != null) {
       feedsCompanion = feedsCompanion.copyWith(serverID: Value(id));
     }
@@ -181,9 +179,8 @@ class FeedsAPI {
     };
     String id = await _postPut('/feedEntry', obj);
 
-    FeedEntriesCompanion feedEntriesCompanion = feedEntry
-        .createCompanion(true)
-        .copyWith(synced: Value(true));
+    FeedEntriesCompanion feedEntriesCompanion =
+        feedEntry.createCompanion(true).copyWith(synced: Value(true));
     if (id != null) {
       feedEntriesCompanion = feedEntriesCompanion.copyWith(serverID: Value(id));
     }
@@ -212,6 +209,76 @@ class FeedsAPI {
       feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(id));
     }
     RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
+  }
+
+  Future<List<PlantsCompanion>> unsyncedPlants() async {
+    Map<String, dynamic> syncData = await _unsynced("plant");
+    List<dynamic> maps = syncData['items'];
+    return maps.map<PlantsCompanion>((m) => Plants.fromJSON(m)).toList();
+  }
+
+  Future<List<BoxesCompanion>> unsyncedBoxes() async {
+    Map<String, dynamic> syncData = await _unsynced("box");
+    List<dynamic> maps = syncData['items'];
+    return maps.map<BoxesCompanion>((m) => Boxes.fromJSON(m)).toList();
+  }
+
+  Future<List<TimelapsesCompanion>> unsyncedTimelapses() async {
+    Map<String, dynamic> syncData = await _unsynced("timelapse");
+    List<dynamic> maps = syncData['items'];
+    return maps
+        .map<TimelapsesCompanion>((m) => Timelapses.fromJSON(m))
+        .toList();
+  }
+
+  Future<List<DevicesCompanion>> unsyncedDevices() async {
+    Map<String, dynamic> syncData = await _unsynced("device");
+    List<dynamic> maps = syncData['items'];
+    return maps.map<DevicesCompanion>((m) => Devices.fromJSON(m)).toList();
+  }
+
+  Future<List<FeedsCompanion>> unsyncedFeeds() async {
+    Map<String, dynamic> syncData = await _unsynced("feed");
+    List<dynamic> maps = syncData['items'];
+    return maps.map<FeedsCompanion>((m) => Feeds.fromJSON(m)).toList();
+  }
+
+  Future<List<FeedEntriesCompanion>> unsyncedFeedEntries() async {
+    Map<String, dynamic> syncData = await _unsynced("feedEntry");
+    List<dynamic> maps = syncData['items'];
+    return maps
+        .map<FeedEntriesCompanion>((m) => FeedEntries.fromJSON(m))
+        .toList();
+  }
+
+  Future<List<FeedMediasCompanion>> unsyncedFeedMedias() async {
+    Map<String, dynamic> syncData = await _unsynced("feedMedia");
+    List<dynamic> maps = syncData['items'];
+    return maps
+        .map<FeedMediasCompanion>((m) => FeedMedias.fromJSON(m))
+        .toList();
+  }
+
+  Future<Map<String, dynamic>> setSynced(String type, String id) async {
+    Response resp = await post('$_serverHost/$type/sync/$id', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'fetchServerSync failed';
+    }
+    return JsonDecoder().convert(resp.body);
+  }
+
+  Future<Map<String, dynamic>> _unsynced(String type) async {
+    Response resp = await get('$_serverHost/$type/sync', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'fetchServerSync failed';
+    }
+    return JsonDecoder().convert(resp.body);
   }
 
   Future<String> _postPut(String path, Map<String, dynamic> obj) async {

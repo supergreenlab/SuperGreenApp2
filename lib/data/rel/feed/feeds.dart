@@ -27,6 +27,13 @@ class Feeds extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static FeedsCompanion fromJSON(Map<String, dynamic> map) {
+    return FeedsCompanion(
+        name: Value(map['name'] as String),
+        synced: Value(true),
+        serverID: Value(map['id'] as String));
+  }
 }
 
 @DataClassName("FeedEntry")
@@ -41,6 +48,16 @@ class FeedEntries extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static FeedEntriesCompanion fromJSON(Map<String, dynamic> map) {
+    return FeedEntriesCompanion(
+        date: Value(DateTime.parse(map['date'] as String)),
+        type: Value(map['type'] as String),
+        isNew: Value(true),
+        params: Value(map['params'] as String),
+        synced: Value(true),
+        serverID: Value(map['id'] as String));
+  }
 }
 
 class FeedMedias extends Table {
@@ -54,6 +71,13 @@ class FeedMedias extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static FeedMediasCompanion fromJSON(Map<String, dynamic> map) {
+    return FeedMediasCompanion(
+        params: Value(map['params'] as String),
+        synced: Value(true),
+        serverID: Value(map['id'] as String));
+  }
 }
 
 @UseDao(tables: [
@@ -89,6 +113,11 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   Future<Feed> getFeed(int feedID) {
     return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
+  }
+
+  Future<Feed> getFeedForServerID(String serverID) {
+    return (select(feeds)..where((f) => f.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Future<List<Feed>> getUnsyncedFeeds() {
@@ -137,6 +166,11 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   Future<FeedEntry> getFeedEntry(int feedEntryID) {
     return (select(feedEntries)..where((f) => f.id.equals(feedEntryID)))
+        .getSingle();
+  }
+
+  Future<FeedEntry> getFeedEntryForServerID(String serverID) {
+    return (select(feedEntries)..where((fe) => fe.serverID.equals(serverID)))
         .getSingle();
   }
 
@@ -198,6 +232,11 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   Future<FeedMedia> getFeedMedia(int feedMediaID) {
     return (select(feedMedias)..where((f) => f.id.equals(feedMediaID)))
+        .getSingle();
+  }
+
+  Future<FeedMedia> getFeedMediaForServerID(String serverID) {
+    return (select(feedMedias)..where((fe) => fe.serverID.equals(serverID)))
         .getSingle();
   }
 
