@@ -212,55 +212,73 @@ class FeedsAPI {
   }
 
   Future<List<PlantsCompanion>> unsyncedPlants() async {
-    Map<String, dynamic> syncData = await _unsynced("plant");
+    Map<String, dynamic> syncData = await _unsynced("Plants");
     List<dynamic> maps = syncData['items'];
-    return maps.map<PlantsCompanion>((m) => Plants.fromJSON(m)).toList();
+    List<PlantsCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      results.add(await Plants.fromJSON(maps[i]));
+    }
+    return results;
   }
 
   Future<List<BoxesCompanion>> unsyncedBoxes() async {
-    Map<String, dynamic> syncData = await _unsynced("box");
+    Map<String, dynamic> syncData = await _unsynced("Boxes");
     List<dynamic> maps = syncData['items'];
-    return maps.map<BoxesCompanion>((m) => Boxes.fromJSON(m)).toList();
+    List<BoxesCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      results.add(await Boxes.fromJSON(maps[i]));
+    }
+    return results;
   }
 
   Future<List<TimelapsesCompanion>> unsyncedTimelapses() async {
-    Map<String, dynamic> syncData = await _unsynced("timelapse");
+    Map<String, dynamic> syncData = await _unsynced("Timelapses");
     List<dynamic> maps = syncData['items'];
-    return maps
-        .map<TimelapsesCompanion>((m) => Timelapses.fromJSON(m))
-        .toList();
+    List<TimelapsesCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      results.add(await Timelapses.fromJSON(maps[i]));
+    }
+    return results;
   }
 
   Future<List<DevicesCompanion>> unsyncedDevices() async {
-    Map<String, dynamic> syncData = await _unsynced("device");
+    Map<String, dynamic> syncData = await _unsynced("Devices");
     List<dynamic> maps = syncData['items'];
     return maps.map<DevicesCompanion>((m) => Devices.fromJSON(m)).toList();
   }
 
   Future<List<FeedsCompanion>> unsyncedFeeds() async {
-    Map<String, dynamic> syncData = await _unsynced("feed");
+    Map<String, dynamic> syncData = await _unsynced("Feeds");
     List<dynamic> maps = syncData['items'];
-    return maps.map<FeedsCompanion>((m) => Feeds.fromJSON(m)).toList();
+    List<FeedsCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      results.add(await Feeds.fromJSON(maps[i]));
+    }
+    return results;
   }
 
   Future<List<FeedEntriesCompanion>> unsyncedFeedEntries() async {
-    Map<String, dynamic> syncData = await _unsynced("feedEntry");
+    Map<String, dynamic> syncData = await _unsynced("FeedEntries");
     List<dynamic> maps = syncData['items'];
-    return maps
-        .map<FeedEntriesCompanion>((m) => FeedEntries.fromJSON(m))
-        .toList();
+    List<FeedEntriesCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      results.add(await FeedEntries.fromJSON(maps[i]));
+    }
+    return results;
   }
 
   Future<List<FeedMediasCompanion>> unsyncedFeedMedias() async {
-    Map<String, dynamic> syncData = await _unsynced("feedMedia");
+    Map<String, dynamic> syncData = await _unsynced("FeedMedias");
     List<dynamic> maps = syncData['items'];
-    return maps
-        .map<FeedMediasCompanion>((m) => FeedMedias.fromJSON(m))
-        .toList();
+    List<FeedMediasCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      results.add(await FeedMedias.fromJSON(maps[i]));
+    }
+    return results;
   }
 
   Future<Map<String, dynamic>> setSynced(String type, String id) async {
-    Response resp = await post('$_serverHost/$type/sync/$id', headers: {
+    Response resp = await post('$_serverHost/$type/$id/sync', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -271,7 +289,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> _unsynced(String type) async {
-    Response resp = await get('$_serverHost/$type/sync', headers: {
+    Response resp = await get('$_serverHost/sync$type', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });

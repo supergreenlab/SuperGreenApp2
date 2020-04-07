@@ -37,8 +37,12 @@ class Plants extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static PlantsCompanion fromJSON(Map<String, dynamic> map) {
+  static Future<PlantsCompanion> fromJSON(Map<String, dynamic> map) async {
+    Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
+    Box box = await RelDB.get().plantsDAO.getBoxForServerID(map['boxID']);
     return PlantsCompanion(
+        feed: Value(feed.id),
+        box: Value(box.id),
         name: Value(map['name'] as String),
         single: Value(map['single'] as bool),
         settings: Value(map['settings'] as String),
@@ -59,8 +63,15 @@ class Boxes extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static BoxesCompanion fromJSON(Map<String, dynamic> map) {
+  static Future<BoxesCompanion> fromJSON(Map<String, dynamic> map) async {
+    int deviceID;
+    if (map['deviceID'] != null) {
+      Device device =
+          await RelDB.get().devicesDAO.getDeviceForServerID(map['deviceID']);
+      deviceID = device.id;
+    }
     return BoxesCompanion(
+        device: Value(deviceID),
         deviceBox: Value(map['deviceBox'] as int),
         name: Value(map['name'] as String),
         settings: Value(map['settings'] as String),
@@ -95,8 +106,10 @@ class Timelapses extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static TimelapsesCompanion fromJSON(Map<String, dynamic> map) {
+  static Future<TimelapsesCompanion> fromJSON(Map<String, dynamic> map) async {
+    Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
+        plant: Value(plant.id),
         controllerID: Value(map['controllerID'] as String),
         rotate: Value(map['rotate'] as String),
         name: Value(map['name'] as String),

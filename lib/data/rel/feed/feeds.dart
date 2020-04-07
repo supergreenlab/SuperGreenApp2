@@ -28,7 +28,7 @@ class Feeds extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static FeedsCompanion fromJSON(Map<String, dynamic> map) {
+  static Future<FeedsCompanion> fromJSON(Map<String, dynamic> map) async {
     return FeedsCompanion(
         name: Value(map['name'] as String),
         synced: Value(true),
@@ -49,8 +49,10 @@ class FeedEntries extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static FeedEntriesCompanion fromJSON(Map<String, dynamic> map) {
+  static Future<FeedEntriesCompanion> fromJSON(Map<String, dynamic> map) async {
+    Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     return FeedEntriesCompanion(
+        feed: Value(feed.id),
         date: Value(DateTime.parse(map['date'] as String)),
         type: Value(map['type'] as String),
         isNew: Value(true),
@@ -72,8 +74,15 @@ class FeedMedias extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static FeedMediasCompanion fromJSON(Map<String, dynamic> map) {
+  static Future<FeedMediasCompanion> fromJSON(Map<String, dynamic> map) async {
+    Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
     return FeedMediasCompanion(
+        feed: Value(feed.id),
+        feedEntry: Value(feedEntry.id),
+        filePath: Value(map['filePath'] as String),
+        thumbnailPath: Value(map['thumbnailPath'] as String),
         params: Value(map['params'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
