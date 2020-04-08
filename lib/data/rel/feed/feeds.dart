@@ -16,7 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
 import 'package:moor/moor.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'feeds.g.dart';
@@ -75,18 +80,34 @@ class FeedMedias extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<FeedMediasCompanion> fromJSON(Map<String, dynamic> map) async {
-    Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
+    Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
+    String filePath = '${await _makeFilePath()}.${map['filePath'].split('.')[1].split('?')[0]}';
+    String thumbnailPath =
+        '${await _makeFilePath()}.${map['thumbnailPath'].split('.')[1].split('?')[0]}';
+    await FeedsAPI().download(map['filePath'], filePath);
+    await FeedsAPI().download(map['thumbnailPath'], thumbnailPath);
     return FeedMediasCompanion(
         feed: Value(feed.id),
         feedEntry: Value(feedEntry.id),
-        filePath: Value(map['filePath'] as String),
-        thumbnailPath: Value(map['thumbnailPath'] as String),
+        filePath: Value(filePath),
+        thumbnailPath: Value(thumbnailPath),
         params: Value(map['params'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }
+
+  // TODO DRY with capture_page.dart
+  static Future<String> _makeFilePath() async {
+    final Directory extDir = await getApplicationDocumentsDirectory();
+    final String dirPath = '${extDir.path}/Pictures/sgl';
+    await Directory(dirPath).create(recursive: true);
+    final String filePath = '$dirPath/${_timestamp()}';
+    return filePath;
+  }
+
+  static String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 }
 
 @UseDao(tables: [

@@ -191,7 +191,7 @@ class FeedsAPI {
     Map<String, dynamic> obj = {
       'id': feedEntry.serverID,
       'feedID': feed.serverID,
-      'date': feedEntry.date.toIso8601String(),
+      'date': feedEntry.date.toUtc().toIso8601String(),
       'type': feedEntry.type,
       'params': feedEntry.params,
     };
@@ -328,15 +328,19 @@ class FeedsAPI {
     return results;
   }
 
-  Future<Map<String, dynamic>> setSynced(String type, String id) async {
+  Future download(String from, String to) async {
+    Response fileResp = await get('$_storageServerHost$from', headers: {'Host': _storageServerHostHeader});
+    await File(to).writeAsBytes(fileResp.bodyBytes);
+  }
+
+  Future setSynced(String type, String id) async {
     Response resp = await post('$_serverHost/$type/$id/sync', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchServerSync failed';
+      throw 'setSynced failed';
     }
-    return JsonDecoder().convert(resp.body);
   }
 
   Future<Map<String, dynamic>> _unsynced(String type) async {

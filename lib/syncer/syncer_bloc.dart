@@ -93,7 +93,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       } else {
         await RelDB.get().feedsDAO.addFeed(feedsCompanion);
       }
-      await FeedsAPI().setSynced("feeds", feedsCompanion.serverID.value);
+      await FeedsAPI().setSynced("feed", feedsCompanion.serverID.value);
     }
   }
 
@@ -185,7 +185,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       } else {
         await RelDB.get().plantsDAO.addPlant(plantsCompanion);
       }
-      await FeedsAPI().setSynced("box", plantsCompanion.serverID.value);
+      await FeedsAPI().setSynced("plant", plantsCompanion.serverID.value);
     }
   }
 
@@ -200,7 +200,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future<bool> _validJWT() async {
     if (AppDB().getAppData().jwt == null) return false;
-    // TODO call server check token endpoint
     return true;
   }
 

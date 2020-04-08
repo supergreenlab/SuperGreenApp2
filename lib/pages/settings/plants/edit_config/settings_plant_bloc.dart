@@ -71,8 +71,10 @@ class SettingsPlantBloc
       yield SettingsPlantBlocStateLoaded(_plant, _box);
     } else if (event is SettingsPlantBlocEventUpdate) {
       yield SettingsPlantBlocStateLoading();
-      await RelDB.get().plantsDAO.updatePlant(
-          PlantsCompanion(id: Value(_plant.id), name: Value(event.name), box: Value(event.box.id)));
+      await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
+          id: Value(_plant.id),
+          name: Value(event.name),
+          box: Value(event.box.id)));
       yield SettingsPlantBlocStateDone(_plant, _box);
     }
   }

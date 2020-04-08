@@ -136,9 +136,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<DeviceDaemonBloc>(
-        context); // force-instanciate DeviceDaemonBloc
-    BlocProvider.of<SyncerBloc>(context); // force-instanciate SyncerBloc
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);

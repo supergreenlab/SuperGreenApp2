@@ -349,6 +349,7 @@ class _CapturePageState extends State<CapturePage> {
     } catch (e) {}
   }
 
+  // TODO DRY with feeds.dart
   Future<String> _makeFilePath() async {
     final Directory extDir = await getApplicationDocumentsDirectory();
     final String dirPath = '${extDir.path}/Pictures/sgl';

@@ -34,6 +34,7 @@ import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_ba
 import 'package:super_green_app/pages/feeds/plant_feed/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -110,6 +111,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 }
               },
               child: Scaffold(
+                  appBar: state is PlantFeedBlocStateNoPlant? SGLAppBar(
+                    'Add new controller',
+                    backgroundColor: Color(0xff063047),
+                    titleColor: Colors.white,
+                    iconColor: Colors.white,
+                  ) : null,
                   drawer: Drawer(child: this._drawerContent(context, state)),
                   body: AnimatedSwitcher(
                       child: body, duration: Duration(milliseconds: 200)),
@@ -466,18 +473,19 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Container(
+          color: Color(0xff063047),
           height: 120,
           child: DrawerHeader(
               child: Row(children: <Widget>[
             SizedBox(
               width: 40,
               height: 40,
-              child: SvgPicture.asset("assets/super_green_lab_vertical.svg"),
+              child: SvgPicture.asset("assets/super_green_lab_vertical_white.svg"),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(16.0),
               child: Text('Plant list',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300)),
             ),
           ])),
         ),
