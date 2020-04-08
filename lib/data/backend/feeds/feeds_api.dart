@@ -15,14 +15,17 @@ class FeedsAPI {
   bool get loggedIn => AppDB().getAppData().jwt != null;
 
   String _serverHost;
+  String _storageServerHost;
 
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
     if (kReleaseMode) {
       _serverHost = 'https://api.supergreenlab.com';
+      _storageServerHost = 'https://storage.supergreenlab.com';
     } else {
       _serverHost = 'http://10.0.2.2:8080';
+      _storageServerHost = 'http://10.0.2.2:9000';
     }
   }
 
@@ -193,11 +196,48 @@ class FeedsAPI {
     if (feedEntry.serverID == null) {
       throw 'Missing serverID for feedEntry relation';
     }
-    String fileRef = ''; // TODO find file upload server
+    Response resp = await post('$_serverHost/feedMediaUploadURL',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        },
+        body: JsonEncoder().convert({
+          'fileName': feedMedia.filePath,
+        }));
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'fetchServerSync failed';
+    }
+    Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
+
+    {
+      Uri path = Uri.parse('$_storageServerHost${uploadUrls['filePath']}');
+      MultipartRequest request = MultipartRequest("PUT", path);
+      request.headers['Host'] = 'minio:9000';
+      request.files
+          .add(await MultipartFile.fromPath('file', feedMedia.filePath));
+      StreamedResponse uploadResp = await request.send();
+      if (uploadResp.statusCode ~/ 100 != 2) {
+        throw 'upload failed';
+      }
+    }
+
+    {
+      Uri path = Uri.parse('$_storageServerHost${uploadUrls['thumbnailPath']}');
+      MultipartRequest request = MultipartRequest("PUT", path);
+      request.headers['Host'] = 'minio:9000';
+      request.files
+          .add(await MultipartFile.fromPath('file', feedMedia.thumbnailPath));
+      StreamedResponse uploadResp = await request.send();
+      if (uploadResp.statusCode ~/ 100 != 2) {
+        throw 'upload failed';
+      }
+    }
+
     Map<String, dynamic> obj = {
       'id': feedMedia.serverID,
       'feedEntryID': feedEntry.serverID,
-      'fileRef': fileRef,
+      'filePath': Uri.parse(uploadUrls['filePath']).path.split('/')[2],
+      'thumbnailPath': Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2],
       'params': feedMedia.params,
     };
     String id = await _postPut('/feedMedia', obj);
