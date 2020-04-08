@@ -11,14 +11,9 @@ class SettingsAuthBlocEventInit extends SettingsAuthBlocEvent {
   List<Object> get props => [];
 }
 
-class SettingsAuthBlocEventCreateAccount extends SettingsAuthBlocEvent {
-  final String nickname;
-  final String password;
-
-  SettingsAuthBlocEventCreateAccount(this.nickname, this.password);
-
+class SettingsAuthBlocEventLogout extends SettingsAuthBlocEvent {
   @override
-  List<Object> get props => [nickname, password];
+  List<Object> get props => [];
 }
 
 abstract class SettingsAuthBlocState extends Equatable {}
@@ -47,14 +42,8 @@ class SettingsAuthBlocStateDone extends SettingsAuthBlocState {
   List<Object> get props => [];
 }
 
-class SettingsAuthBlocStateError extends SettingsAuthBlocState {
-  @override
-  List<Object> get props => [];
-}
-
 class SettingsAuthBloc
     extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
-
   //ignore: unused_field
   final MainNavigateToSettingsAuth _args;
   bool _isAuth;
@@ -73,19 +62,8 @@ class SettingsAuthBloc
     if (event is SettingsAuthBlocEventInit) {
       yield SettingsAuthBlocStateLoading();
       yield SettingsAuthBlocStateLoaded(_isAuth);
-    } else if (event is SettingsAuthBlocEventCreateAccount) {
-      yield SettingsAuthBlocStateLoading();
-      try {
-        await FeedsAPI().createUser(event.nickname, event.password);
-        await FeedsAPI().login(event.nickname, event.password);
-        await FeedsAPI().createUserEnd();
-      } catch (e) {
-        print(e);
-        yield SettingsAuthBlocStateError();
-        await Future.delayed(Duration(seconds: 2));
-        yield SettingsAuthBlocStateLoaded(_isAuth);
-        return;
-      }
+    } else if (event is SettingsAuthBlocEventLogout) {
+      AppDB().setJWT(null);
       yield SettingsAuthBlocStateDone();
     }
   }

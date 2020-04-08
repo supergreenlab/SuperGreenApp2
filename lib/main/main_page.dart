@@ -88,6 +88,10 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_page.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
+import 'package:super_green_app/pages/settings/auth/create_account/settings_create_account_bloc.dart';
+import 'package:super_green_app/pages/settings/auth/create_account/settings_create_account_page.dart';
+import 'package:super_green_app/pages/settings/auth/login/settings_login_bloc.dart';
+import 'package:super_green_app/pages/settings/auth/login/settings_login_page.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_page.dart';
 import 'package:super_green_app/pages/settings/boxes/edit_config/settings_box_bloc.dart';
@@ -134,8 +138,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     BlocProvider.of<DeviceDaemonBloc>(
         context); // force-instanciate DeviceDaemonBloc
-    BlocProvider.of<SyncerBloc>(
-        context); // force-instanciate SyncerBloc
+    BlocProvider.of<SyncerBloc>(context); // force-instanciate SyncerBloc
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -382,6 +385,16 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => SettingsAuthBloc(settings.arguments),
           child: SettingsAuthPage(),
+        );
+      case '/settings/login':
+        return BlocProvider(
+          create: (context) => SettingsLoginBloc(settings.arguments),
+          child: SettingsLoginPage(),
+        );
+      case '/settings/createaccount':
+        return BlocProvider(
+          create: (context) => SettingsCreateAccountBloc(settings.arguments),
+          child: SettingsCreateAccountPage(),
         );
       case '/settings/plants':
         return BlocProvider(

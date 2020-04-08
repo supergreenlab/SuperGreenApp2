@@ -383,6 +383,20 @@ class MainNavigateToSettingsAuth extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
+class MainNavigateToSettingsLogin extends MainNavigatorEvent {
+  MainNavigateToSettingsLogin({futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [];
+}
+
+class MainNavigateToSettingsCreateAccount extends MainNavigatorEvent {
+  MainNavigateToSettingsCreateAccount({futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigateToSettingsPlants extends MainNavigatorEvent {
   MainNavigateToSettingsPlants();
 
@@ -574,6 +588,12 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSettingsAuth) {
       future = _navigatorKey.currentState
           .pushNamed('/settings/auth', arguments: event);
+    } else if (event is MainNavigateToSettingsLogin) {
+      future = _navigatorKey.currentState
+          .pushNamed('/settings/login', arguments: event);
+    } else if (event is MainNavigateToSettingsCreateAccount) {
+      future = _navigatorKey.currentState
+          .pushNamed('/settings/createaccount', arguments: event);
     } else if (event is MainNavigateToSettingsPlants) {
       future = _navigatorKey.currentState
           .pushNamed('/settings/plants', arguments: event);
