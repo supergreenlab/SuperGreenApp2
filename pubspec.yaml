@@ -60,6 +60,7 @@ dependencies:
   flutter_local_notifications:
   exif:
   image_picker:
+  device_info:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
   flutter:

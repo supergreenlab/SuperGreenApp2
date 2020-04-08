@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
@@ -17,6 +18,7 @@ class FeedsAPI {
 
   String _serverHost;
   String _storageServerHost;
+  String _storageServerHostHeader;
 
   factory FeedsAPI() => _instance;
 
@@ -24,10 +26,22 @@ class FeedsAPI {
     if (kReleaseMode) {
       _serverHost = 'https://api.supergreenlab.com';
       _storageServerHost = 'https://storage.supergreenlab.com';
+      _storageServerHostHeader = 'storage.supergreenlab.com';
+    } else {
+      initUrls();
+    }
+  }
+
+  void initUrls() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if ((await deviceInfo.androidInfo).isPhysicalDevice) {
+      _serverHost = 'http://192.168.1.123:8080';
+      _storageServerHost = 'http://192.168.1.123:9000';
     } else {
       _serverHost = 'http://10.0.2.2:8080';
       _storageServerHost = 'http://10.0.2.2:9000';
     }
+    _storageServerHostHeader = 'minio:9000';
   }
 
   Future login(String nickname, String password) async {
@@ -213,16 +227,17 @@ class FeedsAPI {
     {
       Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
           body: File(feedMedia.filePath).readAsBytesSync(),
-          headers: {'Host': 'minio:9000'});
+          headers: {'Host': _storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
         throw 'upload failed';
       }
     }
 
     {
-      Response resp = await put('$_storageServerHost${uploadUrls['thumbnailPath']}',
+      Response resp = await put(
+          '$_storageServerHost${uploadUrls['thumbnailPath']}',
           body: File(feedMedia.thumbnailPath).readAsBytesSync(),
-          headers: {'Host': 'minio:9000'});
+          headers: {'Host': _storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
         throw 'upload failed';
       }
