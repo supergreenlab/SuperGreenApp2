@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
@@ -210,25 +211,19 @@ class FeedsAPI {
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
     {
-      Uri path = Uri.parse('$_storageServerHost${uploadUrls['filePath']}');
-      MultipartRequest request = MultipartRequest("PUT", path);
-      request.headers['Host'] = 'minio:9000';
-      request.files
-          .add(await MultipartFile.fromPath('file', feedMedia.filePath));
-      StreamedResponse uploadResp = await request.send();
-      if (uploadResp.statusCode ~/ 100 != 2) {
+      Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
+          body: File(feedMedia.filePath).readAsBytesSync(),
+          headers: {'Host': 'minio:9000'});
+      if (resp.statusCode ~/ 100 != 2) {
         throw 'upload failed';
       }
     }
 
     {
-      Uri path = Uri.parse('$_storageServerHost${uploadUrls['thumbnailPath']}');
-      MultipartRequest request = MultipartRequest("PUT", path);
-      request.headers['Host'] = 'minio:9000';
-      request.files
-          .add(await MultipartFile.fromPath('file', feedMedia.thumbnailPath));
-      StreamedResponse uploadResp = await request.send();
-      if (uploadResp.statusCode ~/ 100 != 2) {
+      Response resp = await put('$_storageServerHost${uploadUrls['thumbnailPath']}',
+          body: File(feedMedia.thumbnailPath).readAsBytesSync(),
+          headers: {'Host': 'minio:9000'});
+      if (resp.statusCode ~/ 100 != 2) {
         throw 'upload failed';
       }
     }
@@ -237,7 +232,8 @@ class FeedsAPI {
       'id': feedMedia.serverID,
       'feedEntryID': feedEntry.serverID,
       'filePath': Uri.parse(uploadUrls['filePath']).path.split('/')[2],
-      'thumbnailPath': Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2],
+      'thumbnailPath':
+          Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2],
       'params': feedMedia.params,
     };
     String id = await _postPut('/feedMedia', obj);
