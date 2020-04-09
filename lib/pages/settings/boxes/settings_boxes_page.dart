@@ -51,7 +51,7 @@ class SettingsBoxesPage extends StatelessWidget {
                     },
                     title: Text('${index + 1}. ${state.boxes[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Long tap to delete.'),
+                    subtitle: Text('Long press to delete.'),
                   );
                 },
               );
