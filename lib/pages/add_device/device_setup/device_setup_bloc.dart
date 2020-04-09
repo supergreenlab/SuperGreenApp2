@@ -23,6 +23,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
+import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -32,6 +33,14 @@ abstract class DeviceSetupBlocEvent extends Equatable {}
 class DeviceSetupBlocEventStartSetup extends DeviceSetupBlocEvent {
   @override
   List<Object> get props => [];
+}
+
+class DeviceSetupBlocEventProgress extends DeviceSetupBlocEvent {
+  final double percent;
+  DeviceSetupBlocEventProgress(this.percent);
+
+  @override
+  List<Object> get props => [percent];
 }
 
 class DeviceSetupBlocState extends Equatable {
@@ -83,6 +92,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       DeviceSetupBlocEvent event) async* {
     if (event is DeviceSetupBlocEventStartSetup) {
       yield* this._startSearch(event);
+    } else if (event is DeviceSetupBlocEventProgress) {
+      yield DeviceSetupBlocState(event.percent);
     }
   }
 
@@ -127,58 +138,13 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         yield DeviceSetupBlocStateLoadingError();
         return;
       }
-      final Map<String, int> modules = Map();
 
-      double total = keys['keys'].length.toDouble(), done = 0;
-      for (Map<String, dynamic> k in keys['keys']) {
-        var moduleName = k['module'];
-        if (modules.containsKey(moduleName) == false) {
-          bool isArray = k.containsKey('array');
-          ModulesCompanion module = ModulesCompanion.insert(
-              device: deviceID,
-              name: moduleName,
-              isArray: isArray,
-              arrayLen: isArray ? k['array']['len'] : 0);
-          final moduleID = await db.addModule(module);
-          modules[moduleName] = moduleID;
-        }
-        int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
-        ParamsCompanion param;
-        if (type == INTEGER_TYPE) {
-          try {
-            final value =
-                await DeviceAPI.fetchIntParam(_args.ip, k['caps_name']);
-            param = ParamsCompanion.insert(
-                device: deviceID,
-                module: modules[moduleName],
-                key: k['caps_name'],
-                type: type,
-                ivalue: Value(value));
-            await db.addParam(param);
-          } catch (e) {
-            print(e);
-            yield DeviceSetupBlocStateLoadingError();
-            return;
-          }
-        } else {
-          try {
-            final value =
-                await DeviceAPI.fetchStringParam(_args.ip, k['caps_name']);
-            param = ParamsCompanion.insert(
-                device: deviceID,
-                module: modules[moduleName],
-                key: k['caps_name'],
-                type: type,
-                svalue: Value(value));
-            await db.addParam(param);
-          } catch (e) {
-            print(e);
-            yield DeviceSetupBlocStateLoadingError();
-            return;
-          }
-        }
-        ++done;
-        yield DeviceSetupBlocState(done / total);
+      try {
+        await DeviceAPI.fetchAllParams(_args.ip, deviceID, keys, (adv) {
+          add(DeviceSetupBlocEventProgress(adv));
+        });
+      } catch (e) {
+        yield DeviceSetupBlocStateLoadingError();
       }
 
       Param state = await db.getParam(deviceID, 'STATE');

@@ -21,7 +21,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:moor/moor.dart';
 import 'package:multicast_dns/multicast_dns.dart';
+import 'package:super_green_app/data/rel/device/devices.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 class DeviceAPI {
   static Future<String> resolveLocalName(String name) async {
@@ -170,5 +173,59 @@ class DeviceAPI {
       }
     }
     return fetchIntParam(controllerIP, paramName);
+  }
+
+  static Future fetchAllParams(
+      String ip, int deviceID, Map<String, dynamic> keys, Function(double) advancement) async {
+    final db = RelDB.get().devicesDAO;
+    final Map<String, int> modules = Map();
+    double total = keys['keys'].length.toDouble(), done = 0;
+    for (Map<String, dynamic> k in keys['keys']) {
+      var moduleName = k['module'];
+      if (modules.containsKey(moduleName) == false) {
+        bool isArray = k.containsKey('array');
+        ModulesCompanion module = ModulesCompanion.insert(
+            device: deviceID,
+            name: moduleName,
+            isArray: isArray,
+            arrayLen: isArray ? k['array']['len'] : 0);
+        final moduleID = await db.addModule(module);
+        modules[moduleName] = moduleID;
+      }
+      int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
+      ParamsCompanion param;
+      if (type == INTEGER_TYPE) {
+        try {
+          final value = await DeviceAPI.fetchIntParam(ip, k['caps_name']);
+          param = ParamsCompanion.insert(
+              device: deviceID,
+              module: modules[moduleName],
+              key: k['caps_name'],
+              type: type,
+              ivalue: Value(value));
+          await db.addParam(param);
+        } catch (e) {
+          print(e);
+          throw e;
+        }
+      } else {
+        try {
+          final value =
+              await DeviceAPI.fetchStringParam(ip, k['caps_name']);
+          param = ParamsCompanion.insert(
+              device: deviceID,
+              module: modules[moduleName],
+              key: k['caps_name'],
+              type: type,
+              svalue: Value(value));
+          await db.addParam(param);
+        } catch (e) {
+          print(e);
+          throw e;
+        }
+      }
+      ++done;
+      advancement(done / total);
+    }
   }
 }

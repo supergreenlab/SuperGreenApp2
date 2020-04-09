@@ -34,13 +34,14 @@ class Devices extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static DevicesCompanion fromJSON(Map<String, dynamic> map) {
+    // TODO load all modules/params
     return DevicesCompanion(
         identifier: Value(map['identifier'] as String),
         name: Value(map['name'] as String),
         ip: Value(map['ip'] as String),
         mdns: Value(map['mdns'] as String),
         isReachable: Value(false),
-        config: Value(''),
+        config: Value(map['config']),
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }

@@ -89,6 +89,7 @@ class FeedsAPI {
       'feedID': feed.serverID,
       'boxID': box.serverID,
       'name': plant.name,
+      'single': plant.single,
       'settings': plant.settings,
     };
     String id = await _postPut('/plant', obj);
@@ -157,6 +158,7 @@ class FeedsAPI {
       'name': device.name,
       'ip': device.ip,
       'mdns': device.mdns,
+      'config': device.config,
     };
     String id = await _postPut('/device', obj);
 
