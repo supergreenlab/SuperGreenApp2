@@ -25,6 +25,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/main/analytics_bloc_delegate.dart';
@@ -93,6 +94,8 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       await _db.init();
 
       AppData appData = _db.getAppData();
+
+      FeedsAPI(); // force init
 
       if (appData.allowAnalytics == true) {
         _allowAnalytics();

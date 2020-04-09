@@ -478,8 +478,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           child: DrawerHeader(
               child: Row(children: <Widget>[
             SizedBox(
-              width: 40,
-              height: 40,
+              width: 50,
+              height: 50,
               child: SvgPicture.asset("assets/super_green_lab_vertical_white.svg"),
             ),
             Padding(

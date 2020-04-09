@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -124,11 +128,23 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       FeedMedia exists = await RelDB.get()
           .feedsDAO
           .getFeedMediaForServerID(feedMediasCompanion.serverID.value);
+      String filePath =
+          '${await _makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
+      String thumbnailPath =
+          '${await _makeFilePath()}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
+      await FeedsAPI().download(feedMediasCompanion.filePath.value, filePath);
+      await FeedsAPI()
+          .download(feedMediasCompanion.thumbnailPath.value, thumbnailPath);
       if (exists != null) {
-        await RelDB.get().feedsDAO.updateFeedMedia(
-            feedMediasCompanion.copyWith(id: Value(exists.id)));
+        await _deleteFileIfExists(exists.filePath);
+        await _deleteFileIfExists(exists.thumbnailPath);
+        await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion.copyWith(
+            id: Value(exists.id),
+            filePath: Value(filePath),
+            thumbnailPath: Value(thumbnailPath)));
       } else {
-        await RelDB.get().feedsDAO.addFeedMedia(feedMediasCompanion);
+        await RelDB.get().feedsDAO.addFeedMedia(feedMediasCompanion.copyWith(
+            filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
       }
       await FeedsAPI()
           .setSynced("feedMedia", feedMediasCompanion.serverID.value);
@@ -147,7 +163,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
             .devicesDAO
             .updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
       } else {
-        await RelDB.get().devicesDAO.addDevice(devicesCompanion);
+        int deviceID = await RelDB.get().devicesDAO.addDevice(devicesCompanion);
+        Map<String, dynamic> keys = json.decode(devicesCompanion.config.value);
+        await DeviceAPI.fetchAllParams(
+            devicesCompanion.ip.value, deviceID, keys, (adv) {});
       }
       await FeedsAPI().setSynced("device", devicesCompanion.serverID.value);
     }
@@ -252,6 +271,25 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       await FeedsAPI().syncPlant(plant);
     }
   }
+
+  Future _deleteFileIfExists(String filePath) async {
+    final File file = File(filePath);
+    try {
+      await file.delete();
+    } catch (e) {}
+  }
+
+  // TODO DRY with capture_page.dart
+  static Future<String> _makeFilePath() async {
+    final Directory extDir = await getApplicationDocumentsDirectory();
+    final String dirPath = '${extDir.path}/Pictures/sgl';
+    await Directory(dirPath).create(recursive: true);
+    final String filePath = '$dirPath/${_timestamp()}';
+    return filePath;
+  }
+
+  static String _timestamp() =>
+      DateTime.now().millisecondsSinceEpoch.toString();
 
   @override
   Future<void> close() async {

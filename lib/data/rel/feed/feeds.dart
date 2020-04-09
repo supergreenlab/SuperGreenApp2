@@ -83,31 +83,15 @@ class FeedMedias extends Table {
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
-    String filePath = '${await _makeFilePath()}.${map['filePath'].split('.')[1].split('?')[0]}';
-    String thumbnailPath =
-        '${await _makeFilePath()}.${map['thumbnailPath'].split('.')[1].split('?')[0]}';
-    await FeedsAPI().download(map['filePath'], filePath);
-    await FeedsAPI().download(map['thumbnailPath'], thumbnailPath);
     return FeedMediasCompanion(
         feed: Value(feed.id),
         feedEntry: Value(feedEntry.id),
-        filePath: Value(filePath),
-        thumbnailPath: Value(thumbnailPath),
+        filePath: Value(map['filePath']),
+        thumbnailPath: Value(map['thumbnailPath']),
         params: Value(map['params'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }
-
-  // TODO DRY with capture_page.dart
-  static Future<String> _makeFilePath() async {
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/Pictures/sgl';
-    await Directory(dirPath).create(recursive: true);
-    final String filePath = '$dirPath/${_timestamp()}';
-    return filePath;
-  }
-
-  static String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 }
 
 @UseDao(tables: [

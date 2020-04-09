@@ -175,6 +175,7 @@ class DeviceAPI {
     return fetchIntParam(controllerIP, paramName);
   }
 
+  // TODO add check if param exists for insert/update
   static Future fetchAllParams(
       String ip, int deviceID, Map<String, dynamic> keys, Function(double) advancement) async {
     final db = RelDB.get().devicesDAO;
