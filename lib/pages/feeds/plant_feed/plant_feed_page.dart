@@ -115,6 +115,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   appBar: state is PlantFeedBlocStateNoPlant
                       ? SGLAppBar(
                           'Add new controller',
+                          fontSize: 20,
                           backgroundColor: Color(0xff063047),
                           titleColor: Colors.white,
                           iconColor: Colors.white,

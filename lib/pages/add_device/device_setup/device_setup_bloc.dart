@@ -21,10 +21,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
-import 'package:super_green_app/data/api/device_api.dart';
-import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -43,8 +40,31 @@ class DeviceSetupBlocEventProgress extends DeviceSetupBlocEvent {
   List<Object> get props => [percent];
 }
 
+class DeviceSetupBlocEventLoadingError extends DeviceSetupBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class DeviceSetupBlocEventAlreadyExists extends DeviceSetupBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class DeviceSetupBlocEventDone extends DeviceSetupBlocEvent {
+  final Device device;
+  final bool requiresInititalSetup;
+  final bool requiresWifiSetup;
+
+  DeviceSetupBlocEventDone(
+      this.device, this.requiresInititalSetup, this.requiresWifiSetup);
+
+  @override
+  List<Object> get props => [device];
+}
+
 class DeviceSetupBlocState extends Equatable {
   final double percent;
+
   DeviceSetupBlocState(this.percent);
 
   @override
@@ -91,14 +111,19 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
   Stream<DeviceSetupBlocState> mapEventToState(
       DeviceSetupBlocEvent event) async* {
     if (event is DeviceSetupBlocEventStartSetup) {
-      yield* this._startSearch(event);
+      this._startSearch(event);
     } else if (event is DeviceSetupBlocEventProgress) {
       yield DeviceSetupBlocState(event.percent);
+    } else if (event is DeviceSetupBlocEventLoadingError) {
+      yield DeviceSetupBlocStateLoadingError();
+    } else if (event is DeviceSetupBlocEventAlreadyExists) {
+      yield DeviceSetupBlocStateAlreadyExists();
+    } else if (event is DeviceSetupBlocEventDone) {
+      yield DeviceSetupBlocStateDone(event.device, event.requiresInititalSetup, event.requiresWifiSetup);
     }
   }
 
-  Stream<DeviceSetupBlocState> _startSearch(
-      DeviceSetupBlocEventStartSetup event) async* {
+  void _startSearch(DeviceSetupBlocEventStartSetup event) async {
     try {
       final db = RelDB.get().devicesDAO;
       String deviceIdentifier;
@@ -107,12 +132,12 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         deviceIdentifier =
             await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
       } catch (e) {
-        yield DeviceSetupBlocStateLoadingError();
+        add(DeviceSetupBlocEventLoadingError());
         return;
       }
 
       if (await db.getDeviceByIdentifier(deviceIdentifier) != null) {
-        yield DeviceSetupBlocStateAlreadyExists();
+        add(DeviceSetupBlocEventAlreadyExists());
         return;
       }
 
@@ -135,7 +160,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
             mdns: mdnsDomain);
         deviceID = await db.addDevice(device);
       } catch (e) {
-        yield DeviceSetupBlocStateLoadingError();
+        add(DeviceSetupBlocEventLoadingError());
         return;
       }
 
@@ -144,15 +169,15 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
           add(DeviceSetupBlocEventProgress(adv));
         });
       } catch (e) {
-        yield DeviceSetupBlocStateLoadingError();
+        add(DeviceSetupBlocEventLoadingError());
       }
 
       Param state = await db.getParam(deviceID, 'STATE');
       Param wifi = await db.getParam(deviceID, 'WIFI_STATUS');
       final d = await db.getDevice(deviceID);
-      yield DeviceSetupBlocStateDone(d, state.ivalue == 0, wifi.ivalue != 3);
+      add(DeviceSetupBlocEventDone(d, state.ivalue == 0, wifi.ivalue != 3));
     } catch (e) {
-      yield DeviceSetupBlocStateLoadingError();
+      add(DeviceSetupBlocEventLoadingError());
     }
   }
 }
