@@ -24,7 +24,7 @@ class FeedsAPI {
 
   FeedsAPI._newInstance() {
     if (kReleaseMode) {
-      _serverHost = 'https://api.supergreenlab.com';
+      _serverHost = 'https://api2.supergreenlab.com';
       _storageServerHost = 'https://storage.supergreenlab.com';
       _storageServerHostHeader = 'storage.supergreenlab.com';
     } else {
