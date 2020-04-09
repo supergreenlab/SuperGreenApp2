@@ -48,13 +48,6 @@ class PlantFeedBlocEventUpdated extends PlantFeedBlocEvent {
   List<Object> get props => [rand];
 }
 
-class PlantFeedBlocEventSunglasses extends PlantFeedBlocEvent {
-  final int rand = Random().nextInt(1 << 32);
-
-  @override
-  List<Object> get props => [rand];
-}
-
 abstract class PlantFeedBlocState extends Equatable {}
 
 class PlantFeedBlocStateInit extends PlantFeedBlocState {
@@ -133,28 +126,6 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
       yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
     } else if (event is PlantFeedBlocEventUpdated) {
       yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
-    } else if (event is PlantFeedBlocEventSunglasses) {
-      final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
-      if (box.device == null) {
-        return;
-      }
-      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
-      Param dimParam = await RelDB.get()
-          .devicesDAO
-          .getParam(device.id, 'BOX_${box.deviceBox}_LED_DIM');
-      try {
-        if (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 -
-                dimParam.ivalue >
-            1200) {
-          await DeviceHelper.updateIntParam(device, dimParam,
-              DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
-        } else {
-          await DeviceHelper.updateIntParam(device, dimParam, 0);
-        }
-      } catch (e) {
-        print(e);
-      }
     }
   }
 

@@ -33,6 +33,7 @@ import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_ba
 import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/plant_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feed/sunglasses_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -111,12 +112,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 }
               },
               child: Scaffold(
-                  appBar: state is PlantFeedBlocStateNoPlant? SGLAppBar(
-                    'Add new controller',
-                    backgroundColor: Color(0xff063047),
-                    titleColor: Colors.white,
-                    iconColor: Colors.white,
-                  ) : null,
+                  appBar: state is PlantFeedBlocStateNoPlant
+                      ? SGLAppBar(
+                          'Add new controller',
+                          backgroundColor: Color(0xff063047),
+                          titleColor: Colors.white,
+                          iconColor: Colors.white,
+                        )
+                      : null,
                   drawer: Drawer(child: this._drawerContent(context, state)),
                   body: AnimatedSwitcher(
                       child: body, duration: Duration(milliseconds: 200)),
@@ -383,13 +386,28 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       if (state.box.device != null && _reachable) {
         actions.insert(
             0,
-            IconButton(
-              icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
-              tooltip: 'Sunglasses mode',
-              onPressed: () {
-                BlocProvider.of<PlantFeedBloc>(context)
-                    .add(PlantFeedBlocEventSunglasses());
-              },
+            BlocProvider<SunglassesBloc>(
+              create: (BuildContext context) =>
+                  SunglassesBloc(state.box.device, state.box.deviceBox),
+              child: BlocBuilder<SunglassesBloc, SunglassesBlocState>(
+                builder: (BuildContext context, SunglassesBlocState state) {
+                  if (state is SunglassesBlocStateLoaded) {
+                    return Opacity(
+                      opacity: state.sunglassesOn ? 0.5 : 1,
+                      child: IconButton(
+                        icon:
+                            SvgPicture.asset('assets/home/icon_sunglasses.svg'),
+                        tooltip: 'Sunglasses mode',
+                        onPressed: () {
+                          BlocProvider.of<SunglassesBloc>(context)
+                              .add(SunglassesBlocEventOnOff());
+                        },
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
             ));
       }
       return BlocProvider(
@@ -480,12 +498,16 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             SizedBox(
               width: 50,
               height: 50,
-              child: SvgPicture.asset("assets/super_green_lab_vertical_white.svg"),
+              child:
+                  SvgPicture.asset("assets/super_green_lab_vertical_white.svg"),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text('Plant list',
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300)),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300)),
             ),
           ])),
         ),
