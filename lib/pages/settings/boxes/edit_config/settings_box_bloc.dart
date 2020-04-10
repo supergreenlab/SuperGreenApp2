@@ -81,7 +81,8 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
           id: Value(_box.id),
           name: Value(event.name),
           device: Value(event.device?.id),
-          deviceBox: Value(event.deviceBox)));
+          deviceBox: Value(event.deviceBox),
+          synced: Value(false)));
       yield SettingsBoxBlocStateDone(_box, _device, _deviceBox);
     }
   }

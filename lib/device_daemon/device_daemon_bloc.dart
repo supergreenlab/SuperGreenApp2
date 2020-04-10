@@ -109,7 +109,7 @@ class DeviceDaemonBloc
         add(DeviceDaemonBlocEventDeviceReachable(device, true));
       }
     } catch (e) {
-      print('Device ${device.identifier} not found, trying mdns lookup.');
+      print('Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
       RelDB.get().devicesDAO.updateDevice(
           DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
       add(DeviceDaemonBlocEventDeviceReachable(device, false));

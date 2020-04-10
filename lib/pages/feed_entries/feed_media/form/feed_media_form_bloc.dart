@@ -35,7 +35,7 @@ class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
   FeedMediaFormBlocEventCreate(this.medias, this.message, this.helpRequest);
 
   @override
-  List<Object> get props => [message, helpRequest];
+  List<Object> get props => [medias, message, helpRequest];
 }
 
 class FeedMediaFormBlocState extends Equatable {
@@ -79,7 +79,7 @@ class FeedMediaFormBloc
         type: 'FE_MEDIA',
         feed: _args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'message': event.message})),
+        params: Value(JsonEncoder().convert({'message': event.message, 'helpRequest': event.helpRequest})),
       ));
       for (FeedMediasCompanion m in event.medias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));

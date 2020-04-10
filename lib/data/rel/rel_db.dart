@@ -68,7 +68,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -80,6 +80,8 @@ class RelDB extends _$RelDB {
           await m.createTable(boxes);
           await m.issueCustomQuery(
               "insert into boxes (name, device, device_box, settings) select name, device, device_box, id as settings from plants");
+        } else if (from == 2) {
+          await m.addColumn(feeds, feeds.isNewsFeed);
         }
       }, beforeOpen: (details) async {
         if (details.versionBefore == 1) {
@@ -95,6 +97,10 @@ class RelDB extends _$RelDB {
                 .createCompanion(true)
                 .copyWith(settings: Value('{}')));
           }
+        } else if (details.versionBefore == 2) {
+          Feed feed = await feedsDAO.getFeed(1);
+          await feedsDAO.updateFeed(
+              feed.createCompanion(true).copyWith(isNewsFeed: Value(true)));
         }
       });
 }

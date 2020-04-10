@@ -152,7 +152,7 @@ class FeedsAPI {
   }
 
   Future syncDevice(Device device) async {
-    Map<String, dynamic> obj = {
+    Map<String, dynamic> obj = { // TODO move all those to a toJSON static method in model class
       'id': device.serverID,
       'identifier': device.identifier,
       'name': device.name,
@@ -174,6 +174,7 @@ class FeedsAPI {
     Map<String, dynamic> obj = {
       'id': feed.serverID,
       'name': feed.name,
+      'isNewsFeed': feed.isNewsFeed,
     };
     String id = await _postPut('/feed', obj);
 

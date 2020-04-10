@@ -74,7 +74,8 @@ class SettingsPlantBloc
       await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
           id: Value(_plant.id),
           name: Value(event.name),
-          box: Value(event.box.id)));
+          box: Value(event.box.id),
+          synced: Value(false)));
       yield SettingsPlantBlocStateDone(_plant, _box);
     }
   }
