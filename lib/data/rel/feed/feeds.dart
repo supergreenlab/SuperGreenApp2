@@ -16,12 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
 
-import 'package:http/http.dart' as http;
 import 'package:moor/moor.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'feeds.g.dart';
@@ -29,6 +25,7 @@ part 'feeds.g.dart';
 class Feeds extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 24)();
+  BoolColumn get isNewsFeed => boolean().withDefault(Constant(false))();
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
@@ -36,6 +33,7 @@ class Feeds extends Table {
   static Future<FeedsCompanion> fromJSON(Map<String, dynamic> map) async {
     return FeedsCompanion(
         name: Value(map['name'] as String),
+        isNewsFeed: Value(map['isNewsFeed'] as bool),
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }

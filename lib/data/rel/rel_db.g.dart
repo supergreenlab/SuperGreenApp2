@@ -2590,11 +2590,13 @@ class $TimelapsesTable extends Timelapses
 class Feed extends DataClass implements Insertable<Feed> {
   final int id;
   final String name;
+  final bool isNewsFeed;
   final String serverID;
   final bool synced;
   Feed(
       {@required this.id,
       @required this.name,
+      @required this.isNewsFeed,
       this.serverID,
       @required this.synced});
   factory Feed.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -2606,6 +2608,8 @@ class Feed extends DataClass implements Insertable<Feed> {
     return Feed(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      isNewsFeed: boolType
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_news_feed']),
       serverID: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
       synced:
@@ -2618,6 +2622,7 @@ class Feed extends DataClass implements Insertable<Feed> {
     return Feed(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      isNewsFeed: serializer.fromJson<bool>(json['isNewsFeed']),
       serverID: serializer.fromJson<String>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
@@ -2628,6 +2633,7 @@ class Feed extends DataClass implements Insertable<Feed> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'isNewsFeed': serializer.toJson<bool>(isNewsFeed),
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
@@ -2638,6 +2644,9 @@ class Feed extends DataClass implements Insertable<Feed> {
     return FeedsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      isNewsFeed: isNewsFeed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isNewsFeed),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
@@ -2646,9 +2655,16 @@ class Feed extends DataClass implements Insertable<Feed> {
     );
   }
 
-  Feed copyWith({int id, String name, String serverID, bool synced}) => Feed(
+  Feed copyWith(
+          {int id,
+          String name,
+          bool isNewsFeed,
+          String serverID,
+          bool synced}) =>
+      Feed(
         id: id ?? this.id,
         name: name ?? this.name,
+        isNewsFeed: isNewsFeed ?? this.isNewsFeed,
         serverID: serverID ?? this.serverID,
         synced: synced ?? this.synced,
       );
@@ -2657,6 +2673,7 @@ class Feed extends DataClass implements Insertable<Feed> {
     return (StringBuffer('Feed(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('isNewsFeed: $isNewsFeed, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
           ..write(')'))
@@ -2664,14 +2681,19 @@ class Feed extends DataClass implements Insertable<Feed> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(name.hashCode, $mrjc(serverID.hashCode, synced.hashCode))));
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          name.hashCode,
+          $mrjc(isNewsFeed.hashCode,
+              $mrjc(serverID.hashCode, synced.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Feed &&
           other.id == this.id &&
           other.name == this.name &&
+          other.isNewsFeed == this.isNewsFeed &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
 }
@@ -2679,28 +2701,33 @@ class Feed extends DataClass implements Insertable<Feed> {
 class FeedsCompanion extends UpdateCompanion<Feed> {
   final Value<int> id;
   final Value<String> name;
+  final Value<bool> isNewsFeed;
   final Value<String> serverID;
   final Value<bool> synced;
   const FeedsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.isNewsFeed = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   });
   FeedsCompanion.insert({
     this.id = const Value.absent(),
     @required String name,
+    this.isNewsFeed = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   }) : name = Value(name);
   FeedsCompanion copyWith(
       {Value<int> id,
       Value<String> name,
+      Value<bool> isNewsFeed,
       Value<String> serverID,
       Value<bool> synced}) {
     return FeedsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      isNewsFeed: isNewsFeed ?? this.isNewsFeed,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
@@ -2729,6 +2756,15 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
         minTextLength: 1, maxTextLength: 24);
   }
 
+  final VerificationMeta _isNewsFeedMeta = const VerificationMeta('isNewsFeed');
+  GeneratedBoolColumn _isNewsFeed;
+  @override
+  GeneratedBoolColumn get isNewsFeed => _isNewsFeed ??= _constructIsNewsFeed();
+  GeneratedBoolColumn _constructIsNewsFeed() {
+    return GeneratedBoolColumn('is_news_feed', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
   GeneratedTextColumn _serverID;
   @override
@@ -2748,7 +2784,8 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, name, serverID, synced];
+  List<GeneratedColumn> get $columns =>
+      [id, name, isNewsFeed, serverID, synced];
   @override
   $FeedsTable get asDslTable => this;
   @override
@@ -2767,6 +2804,10 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
           _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (d.isNewsFeed.present) {
+      context.handle(_isNewsFeedMeta,
+          isNewsFeed.isAcceptableValue(d.isNewsFeed.value, _isNewsFeedMeta));
     }
     if (d.serverID.present) {
       context.handle(_serverIDMeta,
@@ -2795,6 +2836,9 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
     }
     if (d.name.present) {
       map['name'] = Variable<String, StringType>(d.name.value);
+    }
+    if (d.isNewsFeed.present) {
+      map['is_news_feed'] = Variable<bool, BoolType>(d.isNewsFeed.value);
     }
     if (d.serverID.present) {
       map['server_i_d'] = Variable<String, StringType>(d.serverID.value);

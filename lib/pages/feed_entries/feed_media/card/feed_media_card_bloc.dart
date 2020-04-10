@@ -81,9 +81,8 @@ class FeedMediaCardBloc
       RelDB db = RelDB.get();
       Map<String, dynamic> params = JsonDecoder().convert(_feedEntry.params);
       params['message'] = event.message;
-      db.feedsDAO.updateFeedEntry(_feedEntry
-          .createCompanion(true)
-          .copyWith(params: Value(JsonEncoder().convert(params))));
+      db.feedsDAO.updateFeedEntry(_feedEntry.createCompanion(true).copyWith(
+          params: Value(JsonEncoder().convert(params)), synced: Value(false)));
       _feedEntry = await db.feedsDAO.getFeedEntry(_feedEntry.id);
       yield FeedMediaCardBlocState(_feed, _feedEntry, _params, _medias);
     }
