@@ -27,7 +27,7 @@ class SettingsDevicesPage extends StatelessWidget {
           } else if (state is SettingsDevicesBlocStateNotEmptyBox) {
             body = Fullscreen(
               child: Icon(Icons.do_not_disturb, color: Colors.red, size: 100),
-              title: 'Cannot delete box',
+              title: 'Cannot delete lab',
               subtitle: 'Move all plants to another box first.',
             );
           } else if (state is SettingsDevicesBlocStateLoaded) {
@@ -164,7 +164,7 @@ class SettingsDevicesPage extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Delete box ${device.name}?'),
+            title: Text('Delete lab ${device.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
               FlatButton(

@@ -53,7 +53,7 @@ class FeedLightFormBlocEventCreate extends FeedLightFormBlocEvent {
 
 class FeedLightFormBlocValueChangedEvent extends FeedLightFormBlocEvent {
   final int i;
-  final double value;
+  final int value;
 
   FeedLightFormBlocValueChangedEvent(this.i, this.value);
 

@@ -178,7 +178,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           },
           onChangeEnd: (double newValue) {
             BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                FeedVentilationFormBlocBlowerDayChangedEvent(newValue.toInt()));
+                FeedVentilationFormBlocBlowerDayChangedEvent(newValue.round()));
           },
         ),
         SliderFormParam(

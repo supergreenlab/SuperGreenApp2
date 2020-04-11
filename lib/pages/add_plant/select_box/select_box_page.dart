@@ -45,11 +45,12 @@ class SelectBoxPage extends StatelessWidget {
               body = Column(
                 children: <Widget>[
                   SectionTitle(
-                      title: 'Select lab below',
-                      icon: 'assets/settings/icon_lab.svg',
-                      titleColor: Colors.green,
-                      backgroundColor: Colors.yellow,
-                      elevation: 4,),
+                    title: 'Select lab below',
+                    icon: 'assets/settings/icon_lab.svg',
+                    titleColor: Colors.green,
+                    backgroundColor: Colors.yellow,
+                    elevation: 4,
+                  ),
                   Expanded(child: _renderBoxList(context, state)),
                 ],
               );
@@ -62,7 +63,10 @@ class SelectBoxPage extends StatelessWidget {
                 backgroundColor: Colors.yellow,
                 titleColor: Colors.green,
                 iconColor: Colors.green,
-                elevation: state is SelectBoxBlocStateLoaded && state.boxes.length == 0 ? 4 : 0,
+                elevation:
+                    state is SelectBoxBlocStateLoaded && state.boxes.length == 0
+                        ? 4
+                        : 0,
               ),
               body: AnimatedSwitcher(
                 duration: Duration(milliseconds: 200),
@@ -92,11 +96,14 @@ class SelectBoxPage extends StatelessWidget {
                   Text('Create your first',
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
-                  Text('GREEN LAB',
-                      style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xff3bb30b))),
+                  Text(
+                    'GREEN LAB',
+                    style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.w200,
+                        color: Color(0xff3bb30b)),
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             ),

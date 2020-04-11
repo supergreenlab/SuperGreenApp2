@@ -28,18 +28,20 @@ class DeviceHelper {
         .updateDevice(device.createCompanion(true).copyWith(name: Value(name)));
   }
 
-  static Future updateStringParam(Device device, Param param, String value,
+  static Future<String> updateStringParam(Device device, Param param, String value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    await DeviceAPI.setStringParam(device.ip, param.key, value,
+    value = await DeviceAPI.setStringParam(device.ip, param.key, value,
         timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
+    return value;
   }
 
-  static Future updateIntParam(Device device, Param param, int value,
+  static Future<int> updateIntParam(Device device, Param param, int value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    await DeviceAPI.setIntParam(device.ip, param.key, value,
+    value = await DeviceAPI.setIntParam(device.ip, param.key, value,
         timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
+    return value;
   }
 
   static Future refreshStringParam(Device device, Param param,

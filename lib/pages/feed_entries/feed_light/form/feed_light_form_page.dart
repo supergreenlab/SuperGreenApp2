@@ -183,7 +183,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       },
       onChangeEnd: (double value) {
         BlocProvider.of<FeedLightFormBloc>(context)
-            .add(FeedLightFormBlocValueChangedEvent(i, value));
+            .add(FeedLightFormBlocValueChangedEvent(i, value.round()));
       },
     );
   }

@@ -99,7 +99,8 @@ class SettingsBoxesPage extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.w200,
-                          color: Color(0xff3bb30b))),
+                          color: Color(0xff3bb30b)),
+                      textAlign: TextAlign.center),
                 ],
               ),
             ),
@@ -122,7 +123,7 @@ class SettingsBoxesPage extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Delete box ${box.name}?'),
+            title: Text('Delete lab ${box.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
               FlatButton(
