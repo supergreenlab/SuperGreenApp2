@@ -6,6 +6,8 @@ PODS:
     - Reachability
   - connectivity_macos (0.0.1):
     - Flutter
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_ble_lib (2.2.3):
     - Flutter
@@ -66,6 +68,7 @@ DEPENDENCIES:
   - camera (from `.symlinks/plugins/camera/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectivity_macos (from `.symlinks/plugins/connectivity_macos/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - flutter_ble_lib (from `.symlinks/plugins/flutter_ble_lib/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
@@ -100,6 +103,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity/ios"
   connectivity_macos:
     :path: ".symlinks/plugins/connectivity_macos/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
   flutter_ble_lib:
@@ -143,6 +148,7 @@ SPEC CHECKSUMS:
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
   connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
   connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
+  device_info: cbf09d2ec12aa7110e0b09fabe54b5bd6c8efe74
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
