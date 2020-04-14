@@ -30,7 +30,6 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
   @override
   Stream<TowelieBlocState> feedEntryTrigger(
       TowelieBlocEventFeedEntryCreated event) async* {
-    String notificationText = 'Don\'t forget to take the next measure!';
     Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
     String notificationPayload = 'plant.${plant.id}';
     yield TowelieBlocStateHelper(
@@ -41,37 +40,37 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
               '1 day',
               event.feedEntry.id,
               'Take the next measure',
-              notificationText,
+              '${plant.name} was measured 1 day ago.',
               notificationPayload,
               60 * 24),
           TowelieButtonReminder.createButton(
               '2 days',
               event.feedEntry.id,
               'Take the next measure',
-              notificationText,
+              '${plant.name} was measured 2 days ago.',
               notificationPayload,
-              60 * 48),
+              60 * 24 * 2),
           TowelieButtonReminder.createButton(
               '3 days',
               event.feedEntry.id,
               'Take the next measure',
-              notificationText,
+              '${plant.name} was measured 3 days ago.',
               notificationPayload,
-              60 * 72),
+              60 * 24 * 3),
           TowelieButtonReminder.createButton(
               '4 days',
               event.feedEntry.id,
               'Take the next measure',
               notificationPayload,
-              notificationText,
-              60 * 96),
+              '${plant.name} was measured 4 days ago.',
+              60 * 24 * 4),
           TowelieButtonReminder.createButton(
               '6 days',
               event.feedEntry.id,
               'Take the next measure',
-              notificationText,
+              '${plant.name} was measured 6 days ago.',
               notificationPayload,
-              60 * 144)
+              60 * 24 * 6)
         ]);
   }
 }

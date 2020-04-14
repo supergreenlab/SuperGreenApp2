@@ -30,7 +30,6 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
   @override
   Stream<TowelieBlocState> feedEntryTrigger(
       TowelieBlocEventFeedEntryCreated event) async* {
-    String notificationText = 'Don\'t forget to water your plant!';
     Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
     String notificationPayload = 'plant.${plant.id}';
     yield TowelieBlocStateHelper(
@@ -41,28 +40,28 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
               '1 min',
               event.feedEntry.id,
               'Water your plant',
-              notificationText,
+              'Don\'t forget to water your plant!\n${plant.name} was last watered 1min ago.',
               notificationPayload,
               1),
           TowelieButtonReminder.createButton(
               '3 days',
               event.feedEntry.id,
               'Water your plant',
-              notificationText,
+              'Don\'t forget to water your plant!\n${plant.name} was last watered 3 days ago.',
               notificationPayload,
               60 * 72),
           TowelieButtonReminder.createButton(
               '4 days',
               event.feedEntry.id,
               'Water your plant',
-              notificationText,
+              'Don\'t forget to water your plant!\n${plant.name} was last watered 4 days ago.',
               notificationPayload,
               60 * 96),
           TowelieButtonReminder.createButton(
               '6 days',
               event.feedEntry.id,
               'Water your plant',
-              notificationText,
+              'Don\'t forget to water your plant!\n${plant.name} was last watered 6 days ago.',
               notificationPayload,
               60 * 144)
         ]);

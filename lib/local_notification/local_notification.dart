@@ -117,18 +117,24 @@ class LocalNotificationBloc
     } else if (event is LocalNotificationBlocEventNotificationReceived) {
       yield LocalNotificationBlocStateNotification(
           event.id, event.title, event.body, event.payload);
+      yield* _processPayload(event.payload);
     } else if (event is LocalNotificationBlocEventNotificationSelected) {
-      List<String> payload = (event.payload ?? '').split('.');
-      if (payload.length == 0) {
-        return;
-      }
-      if (payload[0] == 'plant') {
-        int plantID = int.parse(payload[1]);
-        Plant plant = await RelDB.get().plantsDAO.getPlant(plantID);
-        AppDB().setLastPlant(plantID);
-        yield LocalNotificationBlocStateMainNavigation(
-            MainNavigateToHomeEvent(plant: plant));
-      }
+      yield* _processPayload(event.payload);
+    }
+  }
+
+  Stream<LocalNotificationBlocState> _processPayload(String payload) async* {
+    List<String> payloadParts = (payload ?? '').split('.');
+    if (payloadParts.length == 0) {
+      return;
+    }
+    if (payloadParts[0] == 'plant') {
+      int plantID = int.parse(payloadParts[1]);
+      Plant plant = await RelDB.get().plantsDAO.getPlant(plantID);
+      if (plant == null) return;
+      AppDB().setLastPlant(plantID);
+      yield LocalNotificationBlocStateMainNavigation(
+          MainNavigateToHomeEvent(plant: plant));
     }
   }
 
@@ -151,16 +157,10 @@ class LocalNotificationBloc
       int id, String title, String body, String payload) async {
     add(LocalNotificationBlocEventNotificationReceived(
         id, title, body, payload));
-    if (payload != null) {
-      print('notification payload: $id $title $body $payload');
-    }
   }
 
   Future _onSelectNotification(String payload) async {
     add(LocalNotificationBlocEventNotificationSelected(payload));
-    if (payload != null) {
-      print('notification payload: $payload');
-    }
   }
 
   Future<bool> checkPermissions() async {
