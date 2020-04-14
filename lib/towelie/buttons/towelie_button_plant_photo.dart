@@ -24,35 +24,36 @@ import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 
+const _id = 'PLANT_PHOTO';
+
 class TowelieButtonPlantPhoto extends TowelieButton {
-  static Map<String, dynamic> createButton() {
-    return {
-      'ID': 'PLANT_PHOTO',
-      'title': 'Photo',
-    };
-  }
+  @override
+  String get id => _id;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_id, {
+        'title': 'Photo',
+      });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'PLANT_PHOTO') {
-      final db = RelDB.get();
-      Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
-      Box box = await db.plantsDAO.getBox(plant.box);
-      Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
-      plantSettings['plantType'] = 'PHOTO';
-      await db.plantsDAO.updatePlant(PlantsCompanion(
-          id: Value(plant.id),
-          settings: Value(JsonEncoder().convert(plantSettings))));
+    final db = RelDB.get();
+    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+    Box box = await db.plantsDAO.getBox(plant.box);
+    Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
+    plantSettings['plantType'] = 'PHOTO';
+    await db.plantsDAO.updatePlant(PlantsCompanion(
+        id: Value(plant.id),
+        settings: Value(JsonEncoder().convert(plantSettings))));
 
-      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-      boxSettings['schedule'] = 'VEG';
-      await db.plantsDAO.updateBox(BoxesCompanion(
-          id: Value(box.id),
-          settings: Value(JsonEncoder().convert(boxSettings))));
+    final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
+    boxSettings['schedule'] = 'VEG';
+    await db.plantsDAO.updateBox(BoxesCompanion(
+        id: Value(box.id),
+        settings: Value(JsonEncoder().convert(boxSettings))));
 
-      await TowelieCardsFactory.createPlantAlreadyStartedCard(event.feed);
-      await removeButtons(event.feedEntry);
-    }
+    await TowelieCardsFactory.createPlantAlreadyStartedCard(event.feed);
+    await removeButtons(event.feedEntry, _id);
   }
 }

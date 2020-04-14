@@ -248,7 +248,10 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   Stream<TowelieBlocState> mapEventToState(TowelieBlocEvent event) async* {
     if (event is TowelieBlocEventCardButtonPressed) {
       for (int i = 0; i < buttons.length; ++i) {
-        yield* buttons[i].buttonPressed(event);
+        if (buttons[i].id == event.params['id']) {
+          yield* buttons[i].buttonPressed(event);
+          return;
+        }
       }
     } else {
       for (int i = 0; i < actions.length; ++i) {

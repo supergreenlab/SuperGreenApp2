@@ -24,37 +24,38 @@ import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 
+const _id = 'PLANT_VEG_STAGE';
+
 class TowelieButtonPlantVegStage extends TowelieButton {
-  static Map<String, dynamic> createButton() {
-    return {
-      'ID': 'PLANT_VEG_STAGE',
-      'title': 'Veg',
-    };
-  }
+  @override
+  String get id => _id;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_id, {
+        'title': 'Veg',
+      });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'PLANT_VEG_STAGE') {
-      final db = RelDB.get();
-      Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
-      Box box = await db.plantsDAO.getBox(plant.box);
-      Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
-      plantSettings['phase'] = 'VEG';
-      await db.plantsDAO.updatePlant(PlantsCompanion(
-          id: Value(plant.id),
-          settings: Value(JsonEncoder().convert(plantSettings))));
+    final db = RelDB.get();
+    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+    Box box = await db.plantsDAO.getBox(plant.box);
+    Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
+    plantSettings['phase'] = 'VEG';
+    await db.plantsDAO.updatePlant(PlantsCompanion(
+        id: Value(plant.id),
+        settings: Value(JsonEncoder().convert(plantSettings))));
 
-      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-      if (boxSettings['plantType'] == 'PHOTO') {
-        boxSettings['schedule'] = 'VEG';
-      }
-      await db.plantsDAO.updateBox(BoxesCompanion(
-          id: Value(box.id),
-          settings: Value(JsonEncoder().convert(boxSettings))));
-
-      await TowelieCardsFactory.createPlantTutoTakePic(event.feed);
-      await removeButtons(event.feedEntry);
+    final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
+    if (boxSettings['plantType'] == 'PHOTO') {
+      boxSettings['schedule'] = 'VEG';
     }
+    await db.plantsDAO.updateBox(BoxesCompanion(
+        id: Value(box.id),
+        settings: Value(JsonEncoder().convert(boxSettings))));
+
+    await TowelieCardsFactory.createPlantTutoTakePic(event.feed);
+    await removeButtons(event.feedEntry, _id);
   }
 }

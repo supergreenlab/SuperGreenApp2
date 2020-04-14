@@ -21,23 +21,24 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
+const _id = 'TAKE_PIC';
+
 class TowelieButtonTutoTakePic extends TowelieButton {
-  static Map<String, dynamic> createButton() {
-    return {
-      'ID': 'TAKE_PIC',
-      'title': 'Take pic',
-    };
-  }
+  @override
+  String get id => _id;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_id, {
+        'title': 'Take pic',
+      });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'TAKE_PIC') {
-      final db = RelDB.get();
-      Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
-      yield TowelieBlocStateMainNavigation(
-          MainNavigateToFeedMediaFormEvent(plant));
-      await removeButtons(event.feedEntry);
-    }
+    final db = RelDB.get();
+    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+    yield TowelieBlocStateMainNavigation(
+        MainNavigateToFeedMediaFormEvent(plant));
+    await removeButtons(event.feedEntry, id);
   }
 }

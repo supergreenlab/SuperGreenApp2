@@ -21,20 +21,23 @@ import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
+const _id = 'VIEW_BOX';
+
 class TowelieButtonViewPlant extends TowelieButton {
-  static Map<String, dynamic> createButton(Plant plant) => {
-        'ID': 'VIEW_BOX',
+  @override
+  String get id => _id;
+
+  static Map<String, dynamic> createButton(Plant plant) =>
+      TowelieButton.createButton(_id, {
         'title': 'View plant',
         'plantID': plant.id,
-      };
+      });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'VIEW_BOX') {
-      final bdb = RelDB.get().plantsDAO;
-      Plant plant = await bdb.getPlant(event.params['plantID']);
-      yield TowelieBlocStateHomeNavigation(HomeNavigateToPlantFeedEvent(plant));
-    }
+    final bdb = RelDB.get().plantsDAO;
+    Plant plant = await bdb.getPlant(event.params['plantID']);
+    yield TowelieBlocStateHomeNavigation(HomeNavigateToPlantFeedEvent(plant));
   }
 }

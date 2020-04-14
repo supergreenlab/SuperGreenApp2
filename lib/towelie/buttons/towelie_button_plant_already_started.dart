@@ -20,20 +20,21 @@ import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 
+const _id = 'PLANT_ALREADY_STARTED';
+
 class TowelieButtonPlantAlreadyStarted extends TowelieButton {
-  static Map<String, dynamic> createButton() {
-    return {
-      'ID': 'PLANT_ALREADY_STARTED',
-      'title': 'Yes',
-    };
-  }
+  @override
+  String get id => _id;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_id, {
+        'title': 'Yes',
+      });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'PLANT_ALREADY_STARTED') {
-      await TowelieCardsFactory.createPlantVegOrBloom(event.feed);
-      await removeButtons(event.feedEntry);
-    }
+    await TowelieCardsFactory.createPlantVegOrBloom(event.feed);
+    await removeButtons(event.feedEntry, id);
   }
 }

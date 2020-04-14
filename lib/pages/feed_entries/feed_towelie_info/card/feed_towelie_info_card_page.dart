@@ -26,7 +26,6 @@ import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 
 class FeedTowelieInfoCardPage extends StatelessWidget {
-
   final Animation animation;
 
   const FeedTowelieInfoCardPage(this.animation, {Key key}) : super(key: key);
@@ -46,14 +45,18 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
           ];
           if (state.params['buttons'] != null &&
               state.params['buttons'].length > 0) {
-            content.add(_renderButtonBar(context, state, state.params['buttons']));
+            content
+                .add(_renderButtonBar(context, state, state.params['buttons']));
+          } else if (state.params['selectedButton'] != null) {
+            content.add(_renderSelectedButton(
+                context, state, state.params['selectedButton']));
           }
           return FeedCard(
               animation: animation,
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: content,
-          ));
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: content,
+              ));
         });
   }
 
@@ -75,22 +78,34 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  ButtonBar _renderButtonBar(BuildContext context, FeedTowelieInfoCardBlocState state, List buttons) {
+  ButtonBar _renderButtonBar(
+      BuildContext context, FeedTowelieInfoCardBlocState state, List buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-      children: buttons.map((b) => _renderButtonFromName(context, state, b)).toList(),
+      children: buttons.map((b) => _renderButton(context, state, b)).toList(),
     );
   }
 
-  Widget _renderButtonFromName(
-      BuildContext context, FeedTowelieInfoCardBlocState state, Map<String, dynamic> button) {
+  Widget _renderButton(BuildContext context, FeedTowelieInfoCardBlocState state,
+      Map<String, dynamic> button) {
     return FlatButton(
-      child: Text(button['title'].toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12)),
+      child: Text(button['title'].toUpperCase(),
+          style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
-        BlocProvider.of<TowelieBloc>(context)
-            .add(TowelieBlocEventCardButtonPressed(button, state.feed, state.feedEntry));
+        BlocProvider.of<TowelieBloc>(context).add(
+            TowelieBlocEventCardButtonPressed(
+                button, state.feed, state.feedEntry));
       },
+    );
+  }
+
+  Widget _renderSelectedButton(BuildContext context,
+      FeedTowelieInfoCardBlocState state, Map<String, dynamic> button) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24.0, bottom: 24),
+      child: Text('➡️ ${button['title'].toUpperCase()}',
+          style: TextStyle(color: Color(0xff565656), fontSize: 12, fontWeight: FontWeight.bold)),
     );
   }
 }

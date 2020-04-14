@@ -20,20 +20,21 @@ import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
+const _id = 'GOT_SGL_BUNDLE';
+
 class TowelieButtonGotSGLBundle extends TowelieButton {
-  static Map<String, dynamic> createButton() {
-    return {
-      'ID': 'GOT_SGL_BUNDLE',
-      'title': 'Yes I got one!',
-    };
-  }
+  @override
+  String get id => _id;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_id, {
+        'title': 'Yes I got one!',
+      });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'GOT_SGL_BUNDLE') {
-      await TowelieCardsFactory.createGotSGLBundleCard(event.feed);
-      await removeButtons(event.feedEntry);
-    }
+    await TowelieCardsFactory.createGotSGLBundleCard(event.feed);
+    await removeButtons(event.feedEntry, id);
   }
 }

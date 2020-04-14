@@ -20,20 +20,20 @@ import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
+const _id = 'NO_THANKS';
+
 class TowelieButtonDontWantToBuy extends TowelieButton {
-  static Map<String, dynamic> createButton() {
-    return {
-      'ID': 'NO_THANKS',
+  @override
+  String get id => _id;
+
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_id, {
       'title': 'No, thanks.',
-    };
-  }
+    });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventCardButtonPressed event) async* {
-    if (event.params['ID'] == 'NO_THANKS') {
-      await TowelieCardsFactory.createCreatePlantCard(event.feed);
-      await removeButtons(event.feedEntry);
-    }
+    await TowelieCardsFactory.createCreatePlantCard(event.feed);
+    await removeButtons(event.feedEntry, id);
   }
 }
