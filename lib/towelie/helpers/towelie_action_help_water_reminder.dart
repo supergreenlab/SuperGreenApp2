@@ -36,32 +36,32 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
         RouteSettings(name: '/feed/plant', arguments: null),
         SGLLocalizations.current.towelieHelperWaterReminder,
         buttons: [
-          TowelieButtonReminder.createButton(
-              '1 min',
-              event.feedEntry.id,
-              'Water your plant',
-              'Don\'t forget to water your plant!\n${plant.name} was last watered 1min ago.',
-              notificationPayload,
-              1),
+          // TowelieButtonReminder.createButton(
+          //     '1 min',
+          //     event.feedEntry.id,
+          //     'Water your plant',
+          //     '${plant.name} last watered 1min ago.',
+          //     notificationPayload,
+          //     1),
           TowelieButtonReminder.createButton(
               '3 days',
               event.feedEntry.id,
               'Water your plant',
-              'Don\'t forget to water your plant!\n${plant.name} was last watered 3 days ago.',
+              '${plant.name} last watered 3 days ago.',
               notificationPayload,
               60 * 72),
           TowelieButtonReminder.createButton(
               '4 days',
               event.feedEntry.id,
               'Water your plant',
-              'Don\'t forget to water your plant!\n${plant.name} was last watered 4 days ago.',
+              '${plant.name} last watered 4 days ago.',
               notificationPayload,
               60 * 96),
           TowelieButtonReminder.createButton(
               '6 days',
               event.feedEntry.id,
               'Water your plant',
-              'Don\'t forget to water your plant!\n${plant.name} was last watered 6 days ago.',
+              '${plant.name} last watered 6 days ago.',
               notificationPayload,
               60 * 144)
         ]);
