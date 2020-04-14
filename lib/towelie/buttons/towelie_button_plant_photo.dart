@@ -37,7 +37,7 @@ class TowelieButtonPlantPhoto extends TowelieButton {
 
   @override
   Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventCardButtonPressed event) async* {
+      TowelieBlocEventButtonPressed event) async* {
     final db = RelDB.get();
     Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
     Box box = await db.plantsDAO.getBox(plant.box);
@@ -54,6 +54,6 @@ class TowelieButtonPlantPhoto extends TowelieButton {
         settings: Value(JsonEncoder().convert(boxSettings))));
 
     await TowelieCardsFactory.createPlantAlreadyStartedCard(event.feed);
-    await removeButtons(event.feedEntry, _id);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

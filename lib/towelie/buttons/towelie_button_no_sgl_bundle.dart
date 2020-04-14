@@ -33,8 +33,8 @@ class TowelieButtonNoSGLBundle extends TowelieButton {
 
   @override
   Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventCardButtonPressed event) async* {
+      TowelieBlocEventButtonPressed event) async* {
     await TowelieCardsFactory.createNoSGLBundleCard(event.feed);
-    await removeButtons(event.feedEntry, id);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

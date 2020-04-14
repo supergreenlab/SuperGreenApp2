@@ -30,12 +30,15 @@ abstract class TowelieButton {
     return params;
   }
 
-  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventCardButtonPressed event);
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event);
 
-  Future removeButtons(FeedEntry feedEntry, String selectedButton) async {
+  Future removeButtons(FeedEntry feedEntry, { String selectedButtonID, bool Function(dynamic) selector }) async {
+    if (selectedButtonID != null) {
+      selector = (b) => b['id'] == selectedButtonID;
+    }
     final fdb = RelDB.get().feedsDAO;
     final Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
-    final Map<String, dynamic> button = (params['buttons'] as List).singleWhere((b) => b['id'] == selectedButton);
+    final Map<String, dynamic> button = (params['buttons'] as List).singleWhere(selector);
     params['buttons'] = [];
     params['selectedButton'] = button;
     await fdb.updateFeedEntry(feedEntry

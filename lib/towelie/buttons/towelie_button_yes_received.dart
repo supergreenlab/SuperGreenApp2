@@ -33,8 +33,8 @@ class TowelieButtonYesReceived extends TowelieButton {
 
   @override
   Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventCardButtonPressed event) async* {
+      TowelieBlocEventButtonPressed event) async* {
     await TowelieCardsFactory.createCreatePlantCard(event.feed);
-    await removeButtons(event.feedEntry, id);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

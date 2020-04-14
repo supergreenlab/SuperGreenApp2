@@ -94,8 +94,8 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
           style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
         BlocProvider.of<TowelieBloc>(context).add(
-            TowelieBlocEventCardButtonPressed(
-                button, state.feed, state.feedEntry));
+            TowelieBlocEventButtonPressed(
+                button, feed: state.feed, feedEntry: state.feedEntry));
       },
     );
   }

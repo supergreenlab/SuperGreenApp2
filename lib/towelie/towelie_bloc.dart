@@ -22,6 +22,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_create_plant.dart';
@@ -37,7 +38,8 @@ import 'package:super_green_app/towelie/buttons/towelie_button_plant_bloom_stage
 import 'package:super_green_app/towelie/buttons/towelie_button_plant_not_started.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_plant_photo.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_plant_veg_stage.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_tuto_take_pic.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_push_route_feed_media.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_push_route_measure.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 import 'package:super_green_app/towelie/feed/towelie_action_appinit.dart';
@@ -58,7 +60,6 @@ import 'package:super_green_app/towelie/helpers/towelie_action_help_water_remind
 import 'package:super_green_app/towelie/helpers/towelie_action_help_wifi.dart';
 import 'package:super_green_app/towelie/towelie_action.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
-import 'package:super_green_app/towelie/towelie_helper.dart';
 
 abstract class TowelieBlocEvent extends Equatable {}
 
@@ -74,17 +75,6 @@ class TowelieBlocEventHelperNext extends TowelieBlocEvent {
   final RouteSettings settings;
 
   TowelieBlocEventHelperNext(this.settings);
-
-  @override
-  List<Object> get props => [rand, settings];
-}
-
-class TowelieBlocEventHelperButton extends TowelieBlocEvent {
-  final int rand = Random().nextInt(1 << 32);
-  final TowelieHelperButton button;
-  final RouteSettings settings;
-
-  TowelieBlocEventHelperButton(this.settings, this.button);
 
   @override
   List<Object> get props => [rand, settings];
@@ -140,13 +130,13 @@ class TowelieBlocEventTrigger extends TowelieBlocEvent {
   List<Object> get props => [triggerID, parameters];
 }
 
-class TowelieBlocEventCardButtonPressed extends TowelieBlocEvent {
+class TowelieBlocEventButtonPressed extends TowelieBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final Map<String, dynamic> params;
   final Feed feed;
   final FeedEntry feedEntry;
 
-  TowelieBlocEventCardButtonPressed(this.params, this.feed, this.feedEntry);
+  TowelieBlocEventButtonPressed(this.params, { this.feed, this.feedEntry });
 
   @override
   List<Object> get props => [rand, params, feed, feedEntry];
@@ -177,20 +167,28 @@ class TowelieBlocStateHomeNavigation extends TowelieBlocState {
   List<Object> get props => [rand, homeNavigatorEvent];
 }
 
+class TowelieBlocStateLocalNotification extends TowelieBlocState {
+  final int rand = Random().nextInt(1 << 32);
+  final LocalNotificationBlocEventReminder localNotificationBlocEventReminder;
+
+  TowelieBlocStateLocalNotification(this.localNotificationBlocEventReminder);
+
+  @override
+  List<Object> get props => [rand, localNotificationBlocEventReminder];
+}
+
 class TowelieBlocStateHelper extends TowelieBlocState {
   final int rand = Random().nextInt(1 << 32);
   final RouteSettings settings;
   final String text;
   final bool hasNext;
-  final List<TowelieHelperButton> buttons;
-  final List<TowelieHelperReminder> reminders;
-  final TowelieHelperPushRoute pushRoute;
+  final List<Map<String, dynamic>> buttons;
 
   TowelieBlocStateHelper(this.settings, this.text,
-      {this.hasNext = false, this.buttons, this.reminders, this.pushRoute});
+      {this.hasNext=false, this.buttons});
 
   @override
-  List<Object> get props => [rand, settings, text, buttons, reminders, pushRoute];
+  List<Object> get props => [rand, settings, text, buttons];
 }
 
 class TowelieBlocStateHelperPop extends TowelieBlocState {
@@ -238,7 +236,8 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonPlantBloomStage(),
     TowelieButtonPlantAuto(),
     TowelieButtonPlantPhoto(),
-    TowelieButtonTutoTakePic(),
+    TowelieButtonPushRouteFeedMedia(),
+    TowelieButtonPushRouteMeasure(),
   ];
 
   @override
@@ -246,11 +245,10 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
 
   @override
   Stream<TowelieBlocState> mapEventToState(TowelieBlocEvent event) async* {
-    if (event is TowelieBlocEventCardButtonPressed) {
+    if (event is TowelieBlocEventButtonPressed) {
       for (int i = 0; i < buttons.length; ++i) {
         if (buttons[i].id == event.params['id']) {
           yield* buttons[i].buttonPressed(event);
-          return;
         }
       }
     } else {

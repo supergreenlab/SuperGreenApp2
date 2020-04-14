@@ -35,7 +35,7 @@ class TowelieButtonViewPlant extends TowelieButton {
 
   @override
   Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventCardButtonPressed event) async* {
+      TowelieBlocEventButtonPressed event) async* {
     final bdb = RelDB.get().plantsDAO;
     Plant plant = await bdb.getPlant(event.params['plantID']);
     yield TowelieBlocStateHomeNavigation(HomeNavigateToPlantFeedEvent(plant));

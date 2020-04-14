@@ -156,6 +156,9 @@ class _MainPageState extends State<MainPage> {
             if (state is TowelieBlocStateMainNavigation) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(state.mainNavigatorEvent);
+            } else if (state is TowelieBlocStateLocalNotification) {
+              BlocProvider.of<LocalNotificationBloc>(context)
+                  .add(state.localNotificationBlocEventReminder);
             }
           },
           child: MaterialApp(

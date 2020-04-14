@@ -34,7 +34,7 @@ import 'package:super_green_app/towelie/buttons/towelie_button_plant_bloom_stage
 import 'package:super_green_app/towelie/buttons/towelie_button_plant_not_started.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_plant_photo.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_plant_veg_stage.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_tuto_take_pic.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_push_route_feed_media.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 
@@ -190,6 +190,8 @@ class TowelieCardsFactory {
 
   static Future createPlantTutoTakePic(Feed feed) async {
     final fdb = RelDB.get().feedsDAO;
+    final db = RelDB.get();
+    Plant plant = await db.plantsDAO.getPlantWithFeed(feed.id);
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
@@ -198,7 +200,7 @@ class TowelieCardsFactory {
       params: Value(JsonEncoder().convert({
         'text': SGLLocalizations.current.toweliePlantTutoTakePic,
         'buttons': [
-          TowelieButtonTutoTakePic.createButton(),
+          TowelieButtonPushRouteFeedMedia.createButton('Take pic', plant.id),
         ]
       })),
     ));

@@ -33,7 +33,7 @@ class TowelieButtonCreatePlant extends TowelieButton {
 
   @override
   Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventCardButtonPressed event) async* {
+      TowelieBlocEventButtonPressed event) async* {
     yield TowelieBlocStateMainNavigation(MainNavigateToCreatePlantEvent());
   }
 }

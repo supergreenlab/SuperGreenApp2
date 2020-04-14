@@ -33,7 +33,7 @@ class TowelieButtonIWantOne extends TowelieButton {
 
   @override
   Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventCardButtonPressed event) async* {
+      TowelieBlocEventButtonPressed event) async* {
     launch('https://www.supergreenlab.com');
   }
 }

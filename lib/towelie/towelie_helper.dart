@@ -125,45 +125,18 @@ class _TowelieHelperState extends State<TowelieHelper> {
           ))
     ];
     List<Widget> buttons = [];
-    if (state.reminders != null) {
-      state.reminders.forEach((reminder) {
-        buttons.add(FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            onPressed: () async {
-              BlocProvider.of<LocalNotificationBloc>(context).add(
-                  LocalNotificationBlocEventReminder(
-                      reminder.notificationId,
-                      reminder.afterMinutes,
-                      reminder.notificationTitle,
-                      reminder.notificationBody));
-              _prepareHide();
-            },
-            child: Text(reminder.text.toUpperCase(),
-                style: TextStyle(color: Colors.blue, fontSize: 12))));
-      });
-    }
-    if (state.buttons != null && state.buttons.length > 0) {
+    if ((state.buttons?.length ?? 0) > 0) {
       for (int i = 0; i < state.buttons.length; ++i) {
-        TowelieHelperButton button = state.buttons[i];
+        Map<String, dynamic> button = state.buttons[i];
         buttons.add(FlatButton(
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             onPressed: () {
               BlocProvider.of<TowelieBloc>(context)
-                  .add(TowelieBlocEventHelperButton(widget.settings, button));
+                  .add(TowelieBlocEventButtonPressed(button));
             },
-            child: Text(button.title.toUpperCase(),
+            child: Text(button['title'].toUpperCase(),
                 style: TextStyle(color: Colors.blue, fontSize: 12))));
       }
-    }
-    if (state.pushRoute != null) {
-      buttons.add(FlatButton(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          onPressed: () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(state.pushRoute.route);
-          },
-          child: Text(state.pushRoute.title.toUpperCase(),
-              style: TextStyle(color: Colors.blue, fontSize: 12))));
     }
     if (state.hasNext) {
       buttons.add(FlatButton(
@@ -216,7 +189,12 @@ class _TowelieHelperState extends State<TowelieHelper> {
                   padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black38, offset: Offset(2, 2))],
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 2,
+                              color: Colors.black38,
+                              offset: Offset(2, 2))
+                        ],
                         border: Border.all(color: Colors.black26, width: 1),
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5))),

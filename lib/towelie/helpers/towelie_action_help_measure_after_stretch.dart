@@ -18,10 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_push_route_measure.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
-import 'package:super_green_app/towelie/towelie_helper.dart';
 
 class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
   @override
@@ -33,10 +32,10 @@ class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
     yield TowelieBlocStateHelper(
       RouteSettings(name: '/feed/plant', arguments: null),
       SGLLocalizations.current.towelieHelperMeasureAfterStretch,
-      pushRoute: TowelieHelperPushRoute(
-        'Take measure',
-        MainNavigateToFeedMeasureFormEvent(event.plant),
-      ),
+      buttons: [
+        TowelieButtonPushRouteMeasure.createButton(
+            'Take measure', event.plant.id),
+      ],
     );
   }
 }

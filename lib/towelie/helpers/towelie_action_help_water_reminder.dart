@@ -18,9 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
-import 'package:super_green_app/towelie/towelie_helper.dart';
 
 class TowelieActionHelpWaterReminder extends TowelieActionHelp {
   @override
@@ -33,11 +33,26 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
     yield TowelieBlocStateHelper(
         RouteSettings(name: '/feed/plant', arguments: null),
         SGLLocalizations.current.towelieHelperWaterReminder,
-        reminders: [
+        buttons: [
           //TowelieHelperReminder('1 min', event.feedEntry.id, 'Water your plant', notificationText, 1),
-          TowelieHelperReminder('3 days', event.feedEntry.id, 'Water your plant', notificationText, 60 * 72),
-          TowelieHelperReminder('4 days', event.feedEntry.id, 'Water your plant', notificationText, 60 * 96),
-          TowelieHelperReminder('6 days', event.feedEntry.id, 'Water your plant', notificationText, 60 * 144)
+          TowelieButtonReminder.createButton(
+              '3 days',
+              'reminder.3days.${event.feedEntry.id}',
+              'Water your plant',
+              notificationText,
+              60 * 72),
+          TowelieButtonReminder.createButton(
+              '4 days',
+              'reminder.4days.${event.feedEntry.id}',
+              'Water your plant',
+              notificationText,
+              60 * 96),
+          TowelieButtonReminder.createButton(
+              '6 days',
+              'reminder.6days.${event.feedEntry.id}',
+              'Water your plant',
+              notificationText,
+              60 * 144)
         ]);
   }
 }
