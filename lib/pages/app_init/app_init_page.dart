@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/welcome_page.dart';
@@ -32,6 +33,8 @@ class AppInitPage extends StatelessWidget {
       bloc: BlocProvider.of<AppInitBloc>(context),
       listener: (BuildContext context, AppInitBlocState state) {
         if (state is AppInitBlocStateReady) {
+          BlocProvider.of<LocalNotificationBloc>(context)
+              .add(LocalNotificationBlocEventInit());
           BlocProvider.of<DeviceDaemonBloc>(
               context); // force-instanciate DeviceDaemonBloc
           BlocProvider.of<SyncerBloc>(context); // force-instanciate SyncerBloc

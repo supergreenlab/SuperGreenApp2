@@ -20,7 +20,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/plant_drawer_bloc.dart';
@@ -64,6 +63,7 @@ class HomePage extends StatelessWidget {
           } else if (state is HomeBlocStateLoaded) {
             body = Navigator(
               //observers: [_analyticsObserver],
+              initialRoute: navigatorState.index == 0 ? "/" : "/feed/plant",
               key: _navigatorKey,
               onGenerateRoute: (settings) =>
                   this._onGenerateRoute(context, settings),
@@ -184,19 +184,6 @@ class HomePage extends StatelessWidget {
       BlocProvider.of<TowelieBloc>(context)
           .add(TowelieBlocEventRoute(settings));
     });
-    if (settings.arguments == null) {
-      // TODO find a better way to start on box feed..
-      if (AppDB().getAppData().lastPlantID == null) {
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => SGLFeedBloc(),
-                  child: SGLFeedPage(),
-                ));
-      } else {
-        return _plantFeedRoute(context, settings, HomeNavigateToPlantFeedEvent(null));
-      }
-    }
     switch (settings.name) {
       case '/feed/sgl':
         return MaterialPageRoute(

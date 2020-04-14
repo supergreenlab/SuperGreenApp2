@@ -40,6 +40,7 @@ import 'package:super_green_app/towelie/buttons/towelie_button_plant_photo.dart'
 import 'package:super_green_app/towelie/buttons/towelie_button_plant_veg_stage.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_push_route_feed_media.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_push_route_measure.dart';
+import 'package:super_green_app/towelie/buttons/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_yes_received.dart';
 import 'package:super_green_app/towelie/feed/towelie_action_appinit.dart';
@@ -188,7 +189,7 @@ class TowelieBlocStateHelper extends TowelieBlocState {
       {this.hasNext=false, this.buttons});
 
   @override
-  List<Object> get props => [rand, settings, text, buttons];
+  List<Object> get props => [rand, settings, text, hasNext, buttons];
 }
 
 class TowelieBlocStateHelperPop extends TowelieBlocState {
@@ -238,6 +239,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonPlantPhoto(),
     TowelieButtonPushRouteFeedMedia(),
     TowelieButtonPushRouteMeasure(),
+    TowelieButtonReminder(),
   ];
 
   @override

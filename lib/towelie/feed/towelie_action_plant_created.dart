@@ -32,7 +32,7 @@ class TowelieActionPlantCreated extends TowelieAction {
       final bdb = RelDB.get().plantsDAO;
       Feed feed = await fdb.getFeed(event.plant.feed);
       await TowelieCardsFactory.createWelcomePlantCard(feed);
-      Timer(Duration(seconds: 10), () async {
+      Timer(Duration(seconds: 5), () async {
         await TowelieCardsFactory.createPlantAutoOrPhoto(feed);
       });
       int nPlants = await bdb.nPlants().getSingle();

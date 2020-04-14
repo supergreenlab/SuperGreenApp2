@@ -21,7 +21,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -116,7 +115,6 @@ import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewe
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
-import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
 

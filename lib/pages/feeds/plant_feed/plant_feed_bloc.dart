@@ -21,7 +21,6 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -91,7 +90,7 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   Stream<PlantFeedBlocState> mapEventToState(PlantFeedBlocEvent event) async* {
     if (event is PlantFeedBlocEventLoad) {
       AppDB _db = AppDB();
-      _plant = _args.plant;
+      _plant = _args?.plant;
       if (_plant == null) {
         AppData appData = _db.getAppData();
         if (appData.lastPlantID == null) {

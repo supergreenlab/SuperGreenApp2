@@ -37,10 +37,12 @@ class MainNavigatorEvent extends Equatable {
 }
 
 class MainNavigateToHomeEvent extends MainNavigatorEvent {
-  MainNavigateToHomeEvent();
+  final Plant plant;
+
+  MainNavigateToHomeEvent({ this.plant });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [plant];
 }
 
 class MainNavigateToCreatePlantEvent extends MainNavigatorEvent {

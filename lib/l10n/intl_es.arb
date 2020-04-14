@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-03T10:59:05.361184",
+  "@@last_modified": "2020-04-14T14:41:11.821643",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -48,7 +48,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieWelcomeApp": "Hey man, welcome here, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant.\n      \nWelcome to **SuperGreenLab's** grow diary app!\nWhile it can be used without, this app has been optimized to be used with a **Ninja bundle**.\n**Do you own one?**",
+  "towelieWelcomeApp": "Welcome to SuperGreenLab's grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n      \nWhile it can be used without, this app has been optimized to be used with a **SuperGreenLab grow bundle**.\n**Do you own one?**",
   "@towelieWelcomeApp": {
     "description": "Towelie Welcome App",
     "type": "text",

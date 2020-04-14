@@ -119,7 +119,9 @@ Then we\'ll search for it **by name** or **by IP**, please **fill** the followin
 
   String get towelieWelcomeApp {
     return Intl.message(
-      '''Hey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!
+      '''Welcome to SuperGreenLab's grow diary app!
+===
+Hey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!
       
 While it can be used without, this app has been optimized to be used with a **SuperGreenLab grow bundle**.
 **Do you own one?**''',

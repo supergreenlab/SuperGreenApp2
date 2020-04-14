@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
@@ -30,40 +31,46 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
   Stream<TowelieBlocState> feedEntryTrigger(
       TowelieBlocEventFeedEntryCreated event) async* {
     String notificationText = 'Don\'t forget to take the next measure!';
+    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
+    String notificationPayload = 'plant.${plant.id}';
     yield TowelieBlocStateHelper(
         RouteSettings(name: '/feed/plant', arguments: null),
         SGLLocalizations.current.towelieHelperMeasureReminder,
         buttons: [
-          //TowelieHelperReminder('1 min', event.feedEntry.id, 'Take the next measure', notificationText, 1),
           TowelieButtonReminder.createButton(
               '1 day',
-              'reminder.1days.${event.feedEntry.id}',
+              event.feedEntry.id,
               'Take the next measure',
               notificationText,
+              notificationPayload,
               60 * 24),
           TowelieButtonReminder.createButton(
               '2 days',
-              'reminder.2days.${event.feedEntry.id}',
+              event.feedEntry.id,
               'Take the next measure',
               notificationText,
+              notificationPayload,
               60 * 48),
           TowelieButtonReminder.createButton(
               '3 days',
-              'reminder.3days.${event.feedEntry.id}',
+              event.feedEntry.id,
               'Take the next measure',
               notificationText,
+              notificationPayload,
               60 * 72),
           TowelieButtonReminder.createButton(
               '4 days',
-              'reminder.4days.${event.feedEntry.id}',
+              event.feedEntry.id,
               'Take the next measure',
+              notificationPayload,
               notificationText,
               60 * 96),
           TowelieButtonReminder.createButton(
               '6 days',
-              'reminder.6days.${event.feedEntry.id}',
+              event.feedEntry.id,
               'Take the next measure',
               notificationText,
+              notificationPayload,
               60 * 144)
         ]);
   }

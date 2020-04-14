@@ -22,34 +22,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:super_green_app/local_notification/local_notification.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
-
-class TowelieHelperButton {
-  final String title;
-  final Map<String, dynamic> params;
-
-  TowelieHelperButton(this.title, this.params);
-}
-
-class TowelieHelperReminder {
-  final String text;
-  final int notificationId;
-  final String notificationTitle;
-  final String notificationBody;
-  final int afterMinutes;
-
-  TowelieHelperReminder(this.text, this.notificationId, this.notificationTitle,
-      this.notificationBody, this.afterMinutes);
-}
-
-class TowelieHelperPushRoute {
-  final String title;
-  final MainNavigatorEvent route;
-
-  TowelieHelperPushRoute(this.title, this.route);
-}
 
 class TowelieHelper extends StatefulWidget {
   final RouteSettings settings;
@@ -133,6 +106,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
             onPressed: () {
               BlocProvider.of<TowelieBloc>(context)
                   .add(TowelieBlocEventButtonPressed(button));
+              _prepareHide();
             },
             child: Text(button['title'].toUpperCase(),
                 style: TextStyle(color: Colors.blue, fontSize: 12))));
