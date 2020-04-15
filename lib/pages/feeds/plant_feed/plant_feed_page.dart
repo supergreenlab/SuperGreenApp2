@@ -74,8 +74,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         listener: (BuildContext context, PlantFeedBlocState state) {
           if (state is PlantFeedBlocStateLoaded) {
             if (state.box.device != null) {
-              BlocProvider.of<DeviceDaemonBloc>(context)
-                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+              // TODO find something better than this
+              Timer(Duration(milliseconds: 100), () {
+                BlocProvider.of<DeviceDaemonBloc>(context)
+                    .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+              });
             }
           }
         },
