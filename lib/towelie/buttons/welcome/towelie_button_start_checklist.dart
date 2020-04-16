@@ -16,25 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/towelie/cards/plant/card_plant_veg_or_bloom.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'PLANT_ALREADY_STARTED';
+const _id = 'CREATE_PLANT';
 
-class TowelieButtonPlantAlreadyStarted extends TowelieButton {
+class TowelieButtonStartChecklist extends TowelieButton {
   @override
   String get id => _id;
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_id, {
-        'title': 'Yes',
+        'title': 'Start',
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    await CardPlantVegOrBloom.createPlantVegOrBloom(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    yield TowelieBlocStateMainNavigation(MainNavigateToCreatePlantEvent());
   }
 }

@@ -16,43 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert';
-
-import 'package:moor/moor.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/towelie/cards/plant/card_plant_already_started.dart';
+import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
+import 'package:super_green_app/towelie/cards/plant/card_plant_veg_or_bloom.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'PLANT_AUTO';
+const _startedID = 'PLANT_ALREADY_STARTED';
 
-class TowelieButtonPlantAuto extends TowelieButton {
+class TowelieButtonPlantAlreadyStarted extends TowelieButton {
   @override
-  String get id => _id;
+  String get id => _startedID;
 
   static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
-        'title': 'Auto',
+      TowelieButton.createButton(_startedID, {
+        'title': 'Yes',
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    final db = RelDB.get();
-    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
-    Map<String, dynamic> settings = db.plantsDAO.plantSettings(plant);
-    settings['plantType'] = 'AUTO';
-    await db.plantsDAO.updatePlant(PlantsCompanion(
-        id: Value(plant.id), settings: Value(JsonEncoder().convert(settings))));
+    await CardPlantVegOrBloom.createPlantVegOrBloom(event.feed);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
+  }
+}
 
-    Box box = await db.plantsDAO.getBox(plant.box);
-    final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-    boxSettings['schedule'] = 'AUTO';
-    await db.plantsDAO.updatePlant(PlantsCompanion(
-        id: Value(box.id),
-        settings: Value(JsonEncoder().convert(boxSettings))));
+const _notStartedID = 'PLANT_NOT_STARTED';
 
-    await CardPlantAlreadyStarted.createPlantAlreadyStartedCard(event.feed);
+class TowelieButtonPlantNotStarted extends TowelieButton {
+  @override
+  String get id => _notStartedID;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_notStartedID, {
+        'title': 'No',
+      });
+
+  @override
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
+    await CardPlantTutoTakePic.createPlantTutoTakePic(event.feed);
     await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

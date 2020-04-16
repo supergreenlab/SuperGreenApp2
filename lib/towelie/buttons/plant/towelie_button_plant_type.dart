@@ -24,14 +24,47 @@ import 'package:super_green_app/towelie/cards/plant/card_plant_already_started.d
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'PLANT_PHOTO';
+const _autoID = 'PLANT_AUTO';
+
+class TowelieButtonPlantAuto extends TowelieButton {
+  @override
+  String get id => _autoID;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_autoID, {
+        'title': 'Auto',
+      });
+
+  @override
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
+    final db = RelDB.get();
+    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+    Map<String, dynamic> settings = db.plantsDAO.plantSettings(plant);
+    settings['plantType'] = 'AUTO';
+    await db.plantsDAO.updatePlant(PlantsCompanion(
+        id: Value(plant.id), settings: Value(JsonEncoder().convert(settings))));
+
+    Box box = await db.plantsDAO.getBox(plant.box);
+    final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
+    boxSettings['schedule'] = 'AUTO';
+    await db.plantsDAO.updatePlant(PlantsCompanion(
+        id: Value(box.id),
+        settings: Value(JsonEncoder().convert(boxSettings))));
+
+    await CardPlantAlreadyStarted.createPlantAlreadyStartedCard(event.feed);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
+  }
+}
+
+const _photoID = 'PLANT_PHOTO';
 
 class TowelieButtonPlantPhoto extends TowelieButton {
   @override
-  String get id => _id;
+  String get id => _photoID;
 
   static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
+      TowelieButton.createButton(_photoID, {
         'title': 'Photo',
       });
 

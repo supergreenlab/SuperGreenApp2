@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_reminder.dart';
+import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 

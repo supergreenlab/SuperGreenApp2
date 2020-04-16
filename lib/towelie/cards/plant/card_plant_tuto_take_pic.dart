@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_push_route_feed_media.dart';
+import 'package:super_green_app/towelie/buttons/combo/towelie_button_push_route_feed_media.dart';
 
 class CardPlantTutoTakePic {
   static String get toweliePlantTutoTakePic {

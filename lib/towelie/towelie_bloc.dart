@@ -27,17 +27,15 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/actions/towelie_action_appinit.dart';
 import 'package:super_green_app/towelie/actions/towelie_action_plant_created.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_create_plant.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_already_started.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_auto.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_bloom_stage.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_not_started.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_photo.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_veg_stage.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_push_route_feed_media.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_push_route_measure.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_reminder.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_view_plant.dart';
+import 'package:super_green_app/towelie/buttons/combo/towelie_button_push_route_feed_media.dart';
+import 'package:super_green_app/towelie/buttons/combo/towelie_button_push_route_measure.dart';
+import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_already_started.dart';
+import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_phase.dart';
+import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_type.dart';
+import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_create_plant.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_i_need_help.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/helpers/combo/towelie_action_help_measure_after_stretch.dart';
 import 'package:super_green_app/towelie/helpers/device/towelie_action_help_add_device.dart';
 import 'package:super_green_app/towelie/helpers/device/towelie_action_help_add_existing_device.dart';
@@ -216,6 +214,8 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   ];
   static List<TowelieButton> buttons = [
     // App onboarding
+    TowelieButtonINeedHelp(),
+    TowelieButtonIDontNeedHelp(),
     TowelieButtonCreatePlant(),
 
     // Plant onboarding
@@ -231,6 +231,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonPushRouteFeedMedia(),
     TowelieButtonPushRouteMeasure(),
 
+    // Reminder
     TowelieButtonReminder(),
   ];
 

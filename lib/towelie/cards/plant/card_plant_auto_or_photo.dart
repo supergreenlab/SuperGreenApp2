@@ -4,8 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_auto.dart';
-import 'package:super_green_app/towelie/buttons/towelie_button_plant_photo.dart';
+import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_type.dart';
 
 class PlantAutoOrPhoto {
   static String get toweliePlantAutoOrPhoto {
