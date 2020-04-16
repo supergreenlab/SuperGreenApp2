@@ -81,6 +81,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncInDevices();
     await _syncInBoxes();
     await _syncInPlants();
+    await _syncInTimelapses();
   }
 
   Future _syncInFeeds() async {
@@ -208,6 +209,25 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     }
   }
 
+  Future _syncInTimelapses() async {
+    List<TimelapsesCompanion> timelapses =
+        await FeedsAPI().unsyncedTimelapses();
+    for (int i = 0; i < timelapses.length; ++i) {
+      TimelapsesCompanion timelapsesCompanion = timelapses[i];
+      Plant exists = await RelDB.get()
+          .plantsDAO
+          .getPlantForServerID(timelapsesCompanion.serverID.value);
+      if (exists != null) {
+        await RelDB.get().plantsDAO.updateTimelapse(
+            timelapsesCompanion.copyWith(id: Value(exists.id)));
+      } else {
+        await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
+      }
+      await FeedsAPI()
+          .setSynced("timelapse", timelapsesCompanion.serverID.value);
+    }
+  }
+
   Future _syncOut() async {
     await _syncOutFeeds();
     await _syncOutFeedEntries();
@@ -215,6 +235,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncOutDevices();
     await _syncOutBoxes();
     await _syncOutPlants();
+    await _syncOutTimelapses();
   }
 
   Future<bool> _validJWT() async {
@@ -269,6 +290,15 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     for (int i = 0; i < plants.length; ++i) {
       Plant plant = plants[i];
       await FeedsAPI().syncPlant(plant);
+    }
+  }
+
+  Future _syncOutTimelapses() async {
+    List<Timelapse> timelapses =
+        await RelDB.get().plantsDAO.getUnsyncedTimelapses();
+    for (int i = 0; i < timelapses.length; ++i) {
+      Timelapse timelapse = timelapses[i];
+      await FeedsAPI().syncTimelapse(timelapse);
     }
   }
 

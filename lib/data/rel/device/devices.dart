@@ -45,6 +45,17 @@ class Devices extends Table {
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }
+
+  static Future<Map<String, dynamic>> toJSON(Device device) async {
+    return {
+      'id': device.serverID,
+      'identifier': device.identifier,
+      'name': device.name,
+      'ip': device.ip,
+      'mdns': device.mdns,
+      'config': device.config,
+    };
+  }
 }
 
 class Modules extends Table {
@@ -87,7 +98,8 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Future<Device> getDeviceForServerID(String serverID) {
-    return (select(devices)..where((d) => d.serverID.equals(serverID))).getSingle();
+    return (select(devices)..where((d) => d.serverID.equals(serverID)))
+        .getSingle();
   }
 
   Stream<Device> watchDevice(int id) {

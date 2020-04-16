@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -36,6 +35,14 @@ class Feeds extends Table {
         isNewsFeed: Value(map['isNewsFeed'] as bool),
         synced: Value(true),
         serverID: Value(map['id'] as String));
+  }
+
+  static Future<Map<String, dynamic>> toJSON(Feed feed) async {
+    return {
+      'id': feed.serverID,
+      'name': feed.name,
+      'isNewsFeed': feed.isNewsFeed,
+    };
   }
 }
 
@@ -63,6 +70,20 @@ class FeedEntries extends Table {
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }
+
+  static Future<Map<String, dynamic>> toJSON(FeedEntry feedEntry) async {
+    Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
+    if (feed.serverID == null) {
+      throw 'Missing serverID for feed relation';
+    }
+    return {
+      'id': feedEntry.serverID,
+      'feedID': feed.serverID,
+      'date': feedEntry.date.toUtc().toIso8601String(),
+      'type': feedEntry.type,
+      'params': feedEntry.params,
+    };
+  }
 }
 
 class FeedMedias extends Table {
@@ -89,6 +110,22 @@ class FeedMedias extends Table {
         params: Value(map['params'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
+  }
+
+  static Future<Map<String, dynamic>> toJSON(FeedMedia feedMedia) async {
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(feedMedia.feedEntry);
+    if (feedEntry.serverID == null) {
+      throw 'Missing serverID for feedEntry relation';
+    }
+
+    return {
+      'id': feedMedia.serverID,
+      'feedEntryID': feedEntry.serverID,
+      'filePath': feedMedia.filePath,
+      'thumbnailPath': feedMedia.thumbnailPath,
+      'params': feedMedia.params,
+    };
   }
 }
 

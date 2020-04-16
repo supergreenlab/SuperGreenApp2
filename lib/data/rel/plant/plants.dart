@@ -49,6 +49,26 @@ class Plants extends Table {
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }
+
+  static Future<Map<String, dynamic>> toJSON(Plant plant) async {
+    Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
+    if (feed.serverID == null) {
+      throw 'Missing serverID for feed relation';
+    }
+    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
+    if (box.serverID == null) {
+      throw 'Missing serverID for box relation';
+    }
+
+    return {
+      'id': plant.serverID,
+      'feedID': feed.serverID,
+      'boxID': box.serverID,
+      'name': plant.name,
+      'single': plant.single,
+      'settings': plant.settings,
+    };
+  }
 }
 
 @DataClassName("Box")
@@ -77,6 +97,23 @@ class Boxes extends Table {
         settings: Value(map['settings'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
+  }
+
+  static Future<Map<String, dynamic>> toJSON(Box box) async {
+    Map<String, dynamic> obj = {
+      'id': box.serverID,
+      'name': box.name,
+      'settings': box.settings,
+    };
+    if (box.device != null) {
+      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+      if (device.serverID == null) {
+        throw 'Missing serverID for device relation';
+      }
+      obj['deviceID'] = device.serverID;
+      obj['deviceBox'] = box.deviceBox;
+    }
+    return obj;
   }
 }
 
@@ -107,7 +144,8 @@ class Timelapses extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<TimelapsesCompanion> fromJSON(Map<String, dynamic> map) async {
-    Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
+    Plant plant =
+        await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
         plant: Value(plant.id),
         controllerID: Value(map['controllerID'] as String),
@@ -118,6 +156,23 @@ class Timelapses extends Table {
         uploadName: Value(map['uploadName'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
+  }
+
+  static Future<Map<String, dynamic>> toJSON(Timelapse timelapse) async {
+    Plant plant = await RelDB.get().plantsDAO.getPlant(timelapse.plant);
+    if (plant.serverID == null) {
+      throw 'Missing serverID for plant relation';
+    }
+    return {
+      'id': timelapse.serverID,
+      'plantID': plant.serverID,
+      'controllerID': timelapse.controllerID,
+      'rotate': timelapse.rotate,
+      'name': timelapse.name,
+      'strain': timelapse.strain,
+      'dropboxToken': timelapse.dropboxToken,
+      'uploadName': timelapse.uploadName,
+    };
   }
 }
 
@@ -257,6 +312,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   Future<Timelapse> getTimelapseForServerID(String serverID) {
     return (select(timelapses)..where((t) => t.serverID.equals(serverID)))
         .getSingle();
+  }
+
+  Future<List<Timelapse>> getUnsyncedTimelapses() {
+    return (select(timelapses)..where((b) => b.synced.equals(false))).get();
   }
 
   Future<int> addTimelapse(TimelapsesCompanion timelapse) {

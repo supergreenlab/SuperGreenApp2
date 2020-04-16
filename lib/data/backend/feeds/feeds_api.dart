@@ -76,22 +76,7 @@ class FeedsAPI {
   }
 
   Future syncPlant(Plant plant) async {
-    Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
-    if (feed.serverID == null) {
-      throw 'Missing serverID for feed relation';
-    }
-    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
-    if (box.serverID == null) {
-      throw 'Missing serverID for box relation';
-    }
-    Map<String, dynamic> obj = {
-      'id': plant.serverID,
-      'feedID': feed.serverID,
-      'boxID': box.serverID,
-      'name': plant.name,
-      'single': plant.single,
-      'settings': plant.settings,
-    };
+    Map<String, dynamic> obj = await Plants.toJSON(plant);
     String id = await _postPut('/plant', obj);
 
     PlantsCompanion plantsCompanion =
@@ -103,19 +88,7 @@ class FeedsAPI {
   }
 
   Future syncBox(Box box) async {
-    Map<String, dynamic> obj = {
-      'id': box.serverID,
-      'name': box.name,
-      'settings': box.settings,
-    };
-    if (box.device != null) {
-      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
-      if (device.serverID == null) {
-        throw 'Missing serverID for device relation';
-      }
-      obj['deviceID'] = device.serverID;
-      obj['deviceBox'] = box.deviceBox;
-    }
+    Map<String, dynamic> obj = await Boxes.toJSON(box);
     String id = await _postPut('/box', obj);
 
     BoxesCompanion boxesCompanion =
@@ -127,20 +100,7 @@ class FeedsAPI {
   }
 
   Future syncTimelapse(Timelapse timelapse) async {
-    Plant plant = await RelDB.get().plantsDAO.getPlant(timelapse.plant);
-    if (plant.serverID == null) {
-      throw 'Missing serverID for plant relation';
-    }
-    Map<String, dynamic> obj = {
-      'id': timelapse.serverID,
-      'plantID': plant.serverID,
-      'controllerID': timelapse.controllerID,
-      'rotate': timelapse.rotate,
-      'name': timelapse.name,
-      'strain': timelapse.strain,
-      'dropboxToken': timelapse.dropboxToken,
-      'uploadName': timelapse.uploadName,
-    };
+    Map<String, dynamic> obj = await Timelapses.toJSON(timelapse);
     String id = await _postPut('/timelapse', obj);
 
     TimelapsesCompanion timelapsesCompanion =
@@ -152,14 +112,7 @@ class FeedsAPI {
   }
 
   Future syncDevice(Device device) async {
-    Map<String, dynamic> obj = { // TODO move all those to a toJSON static method in model class
-      'id': device.serverID,
-      'identifier': device.identifier,
-      'name': device.name,
-      'ip': device.ip,
-      'mdns': device.mdns,
-      'config': device.config,
-    };
+    Map<String, dynamic> obj = await Devices.toJSON(device);
     String id = await _postPut('/device', obj);
 
     DevicesCompanion devicesCompanion =
@@ -171,11 +124,7 @@ class FeedsAPI {
   }
 
   Future syncFeed(Feed feed) async {
-    Map<String, dynamic> obj = {
-      'id': feed.serverID,
-      'name': feed.name,
-      'isNewsFeed': feed.isNewsFeed,
-    };
+    Map<String, dynamic> obj = await Feeds.toJSON(feed);
     String id = await _postPut('/feed', obj);
 
     FeedsCompanion feedsCompanion =
@@ -187,17 +136,7 @@ class FeedsAPI {
   }
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
-    Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
-    if (feed.serverID == null) {
-      throw 'Missing serverID for feed relation';
-    }
-    Map<String, dynamic> obj = {
-      'id': feedEntry.serverID,
-      'feedID': feed.serverID,
-      'date': feedEntry.date.toUtc().toIso8601String(),
-      'type': feedEntry.type,
-      'params': feedEntry.params,
-    };
+    Map<String, dynamic> obj = await FeedEntries.toJSON(feedEntry);
     String id = await _postPut('/feedEntry', obj);
 
     FeedEntriesCompanion feedEntriesCompanion =
@@ -209,11 +148,8 @@ class FeedsAPI {
   }
 
   Future syncFeedMedia(FeedMedia feedMedia) async {
-    FeedEntry feedEntry =
-        await RelDB.get().feedsDAO.getFeedEntry(feedMedia.feedEntry);
-    if (feedEntry.serverID == null) {
-      throw 'Missing serverID for feedEntry relation';
-    }
+    Map<String, dynamic> obj = await FeedMedias.toJSON(feedMedia);
+
     Response resp = await post('$_serverHost/feedMediaUploadURL',
         headers: {
           'Content-Type': 'application/json',
@@ -246,14 +182,10 @@ class FeedsAPI {
       }
     }
 
-    Map<String, dynamic> obj = {
-      'id': feedMedia.serverID,
-      'feedEntryID': feedEntry.serverID,
-      'filePath': Uri.parse(uploadUrls['filePath']).path.split('/')[2],
-      'thumbnailPath':
-          Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2],
-      'params': feedMedia.params,
-    };
+    obj['filePath'] = Uri.parse(uploadUrls['filePath']).path.split('/')[2];
+    obj['thumbnailPath'] =
+        Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2];
+
     String id = await _postPut('/feedMedia', obj);
 
     FeedMediasCompanion feedMediasCompanion = feedMedia
@@ -332,7 +264,8 @@ class FeedsAPI {
   }
 
   Future download(String from, String to) async {
-    Response fileResp = await get('$_storageServerHost$from', headers: {'Host': _storageServerHostHeader});
+    Response fileResp = await get('$_storageServerHost$from',
+        headers: {'Host': _storageServerHostHeader});
     await File(to).writeAsBytes(fileResp.bodyBytes);
   }
 

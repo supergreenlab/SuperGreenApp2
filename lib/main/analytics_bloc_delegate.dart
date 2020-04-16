@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/plant_drawer_bloc.dart';
@@ -15,6 +16,7 @@ List<bool Function(Equatable)> filteredEvents = [
   (e) => e is DeviceDaemonBlocEventLoadDevice,
   (e) => e is PlantDrawerBlocEventBoxListUpdated,
   (e) => e is PlantFeedBlocEventLoad,
+  (e) => e is DeviceSetupBlocEventProgress,
 ];
 
 class AnalyticsBlocDelegate extends BlocDelegate {

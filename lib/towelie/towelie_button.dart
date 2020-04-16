@@ -25,24 +25,26 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 abstract class TowelieButton {
   String get id;
 
-  static Map<String, dynamic> createButton(String id, Map<String, dynamic> params) {
+  static Map<String, dynamic> createButton(
+      String id, Map<String, dynamic> params) {
     params['id'] = id;
     return params;
   }
 
   Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event);
 
-  Future removeButtons(FeedEntry feedEntry, { String selectedButtonID, bool Function(dynamic) selector }) async {
+  Future removeButtons(FeedEntry feedEntry,
+      {String selectedButtonID, bool Function(dynamic) selector}) async {
     if (selectedButtonID != null) {
       selector = (b) => b['id'] == selectedButtonID;
     }
     final fdb = RelDB.get().feedsDAO;
     final Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
-    final Map<String, dynamic> button = (params['buttons'] as List).singleWhere(selector);
+    final Map<String, dynamic> button =
+        (params['buttons'] as List).singleWhere(selector);
     params['buttons'] = [];
     params['selectedButton'] = button;
-    await fdb.updateFeedEntry(feedEntry
-        .createCompanion(true)
-        .copyWith(params: Value(JsonEncoder().convert(params))));
+    await fdb.updateFeedEntry(feedEntry.createCompanion(true).copyWith(
+        params: Value(JsonEncoder().convert(params)), synced: Value(false)));
   }
 }
