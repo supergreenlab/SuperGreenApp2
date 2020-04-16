@@ -16,24 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/towelie/cards/welcome/card_create_plant.dart';
+import 'package:super_green_app/towelie/cards/welcome/card_products_intro.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-const _id = 'I_WANT_ONE';
+const _needHelpID = 'PLANT_I_NEED_HELP';
 
-class TowelieButtonIWantOne extends TowelieButton {
+class TowelieButtonINeedHelp extends TowelieButton {
   @override
-  String get id => _id;
+  String get id => _needHelpID;
 
   static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
-        'title': 'I want one!',
+      TowelieButton.createButton(_needHelpID, {
+        'title': 'Yes!',
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    launch('https://www.supergreenlab.com');
+    await CardProductsIntro.createProductsIntro(event.feed);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
+  }
+}
+
+const _dontNeedHelpID = 'PLANT_I_DONT_NEED_HELP';
+
+class TowelieButtonIDontNeedHelp extends TowelieButton {
+  @override
+  String get id => _dontNeedHelpID;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_dontNeedHelpID, {
+        'title': 'Nope!',
+      });
+
+  @override
+  Stream<TowelieBlocState> buttonPressed(
+      TowelieBlocEventButtonPressed event) async* {
+    await CardCreatePlant.createCreatePlantCard(event.feed);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

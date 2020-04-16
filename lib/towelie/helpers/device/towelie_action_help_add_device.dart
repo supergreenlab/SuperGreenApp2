@@ -16,12 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieActionHelpAddDevice extends TowelieActionHelp {
+  static String get towelieHelperAddDevice {
+    return Intl.message(
+      '''**Good**.
+Now this is when you should **plug the controller to it\'s power supply** if not already.
+Then you will choose one of the options above to **connect to the controller**.''',
+      name: 'towelieHelperAddDevice',
+      desc: 'Towelie Helper Add device',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   String get route => '/device/add';
 
@@ -31,7 +43,7 @@ class TowelieActionHelpAddDevice extends TowelieActionHelp {
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperAddDevice);
+          event.settings, TowelieActionHelpAddDevice.towelieHelperAddDevice);
     }
   }
 }

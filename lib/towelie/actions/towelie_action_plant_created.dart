@@ -20,8 +20,10 @@ import 'dart:async';
 
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
+import 'package:super_green_app/towelie/cards/plant/card_plant_auto_or_photo.dart';
+import 'package:super_green_app/towelie/cards/plant/card_welcome_plant.dart';
+import 'package:super_green_app/towelie/cards/welcome/card_plant_created.dart';
 import 'package:super_green_app/towelie/towelie_action.dart';
-import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieActionPlantCreated extends TowelieAction {
@@ -31,14 +33,14 @@ class TowelieActionPlantCreated extends TowelieAction {
       final fdb = RelDB.get().feedsDAO;
       final bdb = RelDB.get().plantsDAO;
       Feed feed = await fdb.getFeed(event.plant.feed);
-      await TowelieCardsFactory.createWelcomePlantCard(feed);
+      await CardWelcomePlant.createWelcomePlantCard(feed);
       Timer(Duration(seconds: 5), () async {
-        await TowelieCardsFactory.createPlantAutoOrPhoto(feed);
+        await PlantAutoOrPhoto.createPlantAutoOrPhoto(feed);
       });
       int nPlants = await bdb.nPlants().getSingle();
       if (nPlants == 1) {
         Feed sglFeed = await fdb.getFeed(1);
-        await TowelieCardsFactory.createPlantCreatedCard(sglFeed, event.plant);
+        await CardPlantCreated.createPlantCreatedCard(sglFeed, event.plant);
       }
       yield TowelieBlocStateHomeNavigation(
           HomeNavigateToPlantFeedEvent(event.plant));

@@ -20,9 +20,9 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
-import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 
 const _id = 'PLANT_VEG_STAGE';
 
@@ -55,7 +55,7 @@ class TowelieButtonPlantVegStage extends TowelieButton {
         id: Value(box.id),
         settings: Value(JsonEncoder().convert(boxSettings))));
 
-    await TowelieCardsFactory.createPlantTutoTakePic(event.feed);
+    await CardPlantTutoTakePic.createPlantTutoTakePic(event.feed);
     await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

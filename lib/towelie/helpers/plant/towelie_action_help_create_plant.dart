@@ -16,14 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpSelectNewPlantDevice extends TowelieActionHelp {
+class TowelieActionHelpCreatePlant extends TowelieActionHelp {
+  
+  static String get towelieHelperCreatePlant {
+    return Intl.message(
+      '''Hey man, **welcome to the plant creation process**, I\'ll be there to guide you through it.
+First step is to **give your new plant a name**.''',
+      name: 'towelieHelperCreatePlant',
+      desc: 'Towelie Helper Create Plant',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
-  String get route => '/plant/device/new';
+  String get route => '/plant/new';
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
@@ -31,7 +43,7 @@ class TowelieActionHelpSelectNewPlantDevice extends TowelieActionHelp {
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperSelectNewPlantDeviceBox);
+          event.settings, TowelieActionHelpCreatePlant.towelieHelperCreatePlant);
     }
   }
 }

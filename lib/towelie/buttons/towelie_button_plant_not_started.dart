@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
-import 'package:super_green_app/towelie/towelie_cards_factory.dart';
 
 const _id = 'PLANT_NOT_STARTED';
 
@@ -34,7 +34,7 @@ class TowelieButtonPlantNotStarted extends TowelieButton {
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    await TowelieCardsFactory.createPlantTutoTakePic(event.feed);
+    await CardPlantTutoTakePic.createPlantTutoTakePic(event.feed);
     await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

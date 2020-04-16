@@ -1,68 +1,8 @@
 {
-  "@@last_modified": "2020-04-14T14:41:11.821643",
+  "@@last_modified": "2020-04-16T17:14:00.735091",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
-    "type": "text",
-    "placeholders": {}
-  },
-  "instructionsVegScheduleHelper": "**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day.",
-  "@instructionsVegScheduleHelper": {
-    "description": "Veg schedule helper",
-    "type": "text",
-    "placeholders": {}
-  },
-  "instructionsBloomScheduleHelper": "**Bloom stage** is the phase between germination and blooming, the plant grows and develops it’s branches. It requires **at most 12h lights per days**, usual setting is **12h** per day.",
-  "@instructionsBloomScheduleHelper": {
-    "description": "Bloom schedule helper",
-    "type": "text",
-    "placeholders": {}
-  },
-  "instructionsAutoScheduleHelper": "Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another.",
-  "@instructionsAutoScheduleHelper": {
-    "description": "Auto schedule helper",
-    "type": "text",
-    "placeholders": {}
-  },
-  "instructionsExistingDeviceTitle": "Enter controller name or IP",
-  "@instructionsExistingDeviceTitle": {
-    "description": "Instructions existing device title",
-    "type": "text",
-    "placeholders": {}
-  },
-  "instructionsExistingDevice": "Please make sure your **mobile phone** is **connected to your home wifi**.\nThen we'll search for it **by name** or **by IP**, please **fill** the following text field.",
-  "@instructionsExistingDevice": {
-    "description": "Instructions existing device",
-    "type": "text",
-    "placeholders": {}
-  },
-  "instructionsNewDeviceWifiFailed": "**Couldn't connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:",
-  "@instructionsNewDeviceWifiFailed": {
-    "description": "Instructions new device wifi failed",
-    "type": "text",
-    "placeholders": {}
-  },
-  "instructionsNewDeviceWifiFailed2": "Then press the **DONE** button below",
-  "@instructionsNewDeviceWifiFailed2": {
-    "description": "Instructions new device wifi failed2",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieWelcomeApp": "Welcome to SuperGreenLab's grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n      \nWhile it can be used without, this app has been optimized to be used with a **SuperGreenLab grow bundle**.\n**Do you own one?**",
-  "@towelieWelcomeApp": {
-    "description": "Towelie Welcome App",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieWelcomeAppHasBundle": "Have you **received it** yet?",
-  "@towelieWelcomeAppHasBundle": {
-    "description": "Towelie Welcome App - Has bundle",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieWelcomeAppNoBundle": "With **6 full spectrum LED grow lights** providing dense light and **little heat**. This complete grow box bundle lets you **build a grow box** out of **almost anything**.\n\nWith these lights we successfully grew and harvested from **space buckets, TV stands, office storages** and custom built grow boxes. Some of our users even grew in **toolboxes or suitcase** ! What will you build ?\n\nComing with a **sensor, ventilation, a controller and a companion App**. The **ninja** grow bundle is fully controllable from your smartphone and can be split into **3 different chambers** with different **light dimming, schedules and ventilation setups**.",
-  "@towelieWelcomeAppNoBundle": {
-    "description": "Towelie Welcome App - No bundle",
     "type": "text",
     "placeholders": {}
   },
@@ -72,21 +12,33 @@
     "type": "text",
     "placeholders": {}
   },
+  "towelieWelcomeApp": "Welcome to SuperGreenLab's grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n\nTo start off on a right foot, we made a checklist of all the stuffs you'll need to start growing.\n\nDo you need a hand to start growing?\n",
+  "@towelieWelcomeApp": {
+    "description": "Towelie Welcome App",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieProductsIntro": "",
+  "@towelieProductsIntro": {
+    "description": "Towelie Products Intro",
+    "type": "text",
+    "placeholders": {}
+  },
   "toweliePlantCreated": "Awesome, **you created your first plant**!\n\nYou can access your newly plant feed either by **pressing the home button below**, or the **View plant** button below.\n",
   "@toweliePlantCreated": {
     "description": "Towelie Plant Created",
     "type": "text",
     "placeholders": {}
   },
-  "towelieWelcomePlant": "**Welcome to your plant feed!**\nThis is where you will modify your plant’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the plant’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.",
-  "@towelieWelcomePlant": {
-    "description": "Towelie Welcome Plant",
-    "type": "text",
-    "placeholders": {}
-  },
   "toweliePlantAutoOrPhoto": "To better guide you to a **successful harvest**, I'll need a bit **more informations** about your plant:)\nIs this plant an **auto** or **photo** strain?",
   "@toweliePlantAutoOrPhoto": {
     "description": "Towelie Plant auto or photo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "toweliePlantTutoTakePic": "Alright **let's start**!\nOne first thing you can do to **start** this journey is to **take a picture** of your **plant**.",
+  "@toweliePlantTutoTakePic": {
+    "description": "Towelie Plant tuto take pic",
     "type": "text",
     "placeholders": {}
   },
@@ -102,15 +54,33 @@
     "type": "text",
     "placeholders": {}
   },
-  "toweliePlantTutoTakePic": "Alright **let's start**!\nOne first thing you can do to **start** this journey is to **take a picture** of your **plant**.",
-  "@toweliePlantTutoTakePic": {
-    "description": "Towelie Plant tuto take pic",
+  "towelieHelperMeasureAfterStretch": "**Hey**! it might be a good idea to **take a measure** of your plant to **monitor the stretch**.",
+  "@towelieHelperMeasureAfterStretch": {
+    "description": "Towelie Helper measure after stretch",
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperCreatePlant": "Hey man, **welcome to the plant creation process**, I'll be there to guide you through it.\nFirst step is to **give your new plant a name**.",
-  "@towelieHelperCreatePlant": {
-    "description": "Towelie Helper Create Plant",
+  "towelieHelperWaterReminder": "Do you want me to **set a reminder** so you don't forget to water again soon?",
+  "@towelieHelperWaterReminder": {
+    "description": "Towelie Helper water reminder",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperMeasureReminder": "Do you want me to **set a reminder** so you don't forget to take a measure again soon?",
+  "@towelieHelperMeasureReminder": {
+    "description": "Towelie Helper measure reminder",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperAddDevice": "**Good**.\nNow this is when you should **plug the controller to it's power supply** if not already.\nThen you will choose one of the options above to **connect to the controller**.",
+  "@towelieHelperAddDevice": {
+    "description": "Towelie Helper Add device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperSelectPlantDeviceBox": "Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.",
+  "@towelieHelperSelectPlantDeviceBox": {
+    "description": "Towelie Helper plant Device box",
     "type": "text",
     "placeholders": {}
   },
@@ -120,9 +90,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperAddDevice": "**Good**.\nNow this is when you should **plug the controller to it's power supply** if not already.\nThen you will choose one of the options above to **connect to the controller**.",
-  "@towelieHelperAddDevice": {
-    "description": "Towelie Helper Add device",
+  "towelieHelperTestDevice": "This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.",
+  "@towelieHelperTestDevice": {
+    "description": "Towelie Helper test device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperSelectNewPlantDeviceBox": "Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.\nTo **better understand** you should have your LED panels **connected to the controller**.",
+  "@towelieHelperSelectNewPlantDeviceBox": {
+    "description": "Towelie Helper new plant Device box",
     "type": "text",
     "placeholders": {}
   },
@@ -138,45 +114,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperSelectPlantDeviceBox": "Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.",
-  "@towelieHelperSelectPlantDeviceBox": {
-    "description": "Towelie Helper plant Device box",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieHelperSelectNewPlantDeviceBox": "Ok, this is where we'll choose which of the **controller's LED channel** will be used to light up the plant.\nTo **better understand** you should have your LED panels **connected to the controller**.",
-  "@towelieHelperSelectNewPlantDeviceBox": {
-    "description": "Towelie Helper new plant Device box",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieHelperTestDevice": "This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.",
-  "@towelieHelperTestDevice": {
-    "description": "Towelie Helper test device",
-    "type": "text",
-    "placeholders": {}
-  },
   "towelieHelperFormMeasure": "This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**. And as a **bonus feature**, it does **timelapses** of all the measures you've taken!",
   "@towelieHelperFormMeasure": {
     "description": "Towelie Helper measure form 2",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieHelperMeasureReminder": "Do you want me to **set a reminder** so you don't forget to take a measure again soon?",
-  "@towelieHelperMeasureReminder": {
-    "description": "Towelie Helper measure reminder",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieHelperMeasureAfterStretch": "**Hey**! it might be a good idea to **take a measure** of your plant to **monitor the stretch**.",
-  "@towelieHelperMeasureAfterStretch": {
-    "description": "Towelie Helper measure after stretch",
-    "type": "text",
-    "placeholders": {}
-  },
-  "towelieHelperWaterReminder": "Do you want me to **set a reminder** so you don't forget to water again soon?",
-  "@towelieHelperWaterReminder": {
-    "description": "Towelie Helper water reminder",
     "type": "text",
     "placeholders": {}
   },
@@ -198,9 +138,57 @@
     "type": "text",
     "placeholders": {}
   },
+  "towelieHelperCreatePlant": "Hey man, **welcome to the plant creation process**, I'll be there to guide you through it.\nFirst step is to **give your new plant a name**.",
+  "@towelieHelperCreatePlant": {
+    "description": "Towelie Helper Create Plant",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsNewDeviceWifiFailed": "**Couldn't connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:",
+  "@instructionsNewDeviceWifiFailed": {
+    "description": "Instructions new device wifi failed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsNewDeviceWifiFailed2": "Then press the **DONE** button below",
+  "@instructionsNewDeviceWifiFailed2": {
+    "description": "Instructions new device wifi failed2",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsExistingDeviceTitle": "Enter controller name or IP",
+  "@instructionsExistingDeviceTitle": {
+    "description": "Instructions existing device title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsExistingDevice": "Please make sure your **mobile phone** is **connected to your home wifi**.\nThen we'll search for it **by name** or **by IP**, please **fill** the following text field.",
+  "@instructionsExistingDevice": {
+    "description": "Instructions existing device",
+    "type": "text",
+    "placeholders": {}
+  },
   "formAllowAnalytics": "**Help us** discern what's **useful** from what's\n**useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..)\nis involved in our data analytics strategy.*",
   "@formAllowAnalytics": {
     "description": "Form allow analytics",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsVegScheduleHelper": "**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day.",
+  "@instructionsVegScheduleHelper": {
+    "description": "Veg schedule helper",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsBloomScheduleHelper": "**Bloom stage** is the phase between germination and blooming, the plant grows and develops it’s branches. It requires **at most 12h lights per days**, usual setting is **12h** per day.",
+  "@instructionsBloomScheduleHelper": {
+    "description": "Bloom schedule helper",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsAutoScheduleHelper": "Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another.",
+  "@instructionsAutoScheduleHelper": {
+    "description": "Auto schedule helper",
     "type": "text",
     "placeholders": {}
   }

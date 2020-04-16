@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -29,6 +30,24 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class NewDevicePage extends StatelessWidget {
+  static String get instructionsNewDeviceWifiFailed {
+    return Intl.message(
+      '''**Couldn\'t connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:''',
+      name: 'instructionsNewDeviceWifiFailed',
+      desc: 'Instructions new device wifi failed',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get instructionsNewDeviceWifiFailed2 {
+    return Intl.message(
+      '''Then press the **DONE** button below''',
+      name: 'instructionsNewDeviceWifiFailed2',
+      desc: 'Instructions new device wifi failed2',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -88,7 +107,7 @@ class NewDevicePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: MarkdownBody(
-              data: SGLLocalizations.current.instructionsNewDeviceWifiFailed,
+              data: NewDevicePage.instructionsNewDeviceWifiFailed,
               styleSheet: MarkdownStyleSheet(
                   p: TextStyle(color: Colors.black, fontSize: 16)),
             ),
@@ -109,8 +128,7 @@ class NewDevicePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
-                    data: SGLLocalizations
-                        .current.instructionsNewDeviceWifiFailed2,
+                    data: NewDevicePage.instructionsNewDeviceWifiFailed2,
                     styleSheet: MarkdownStyleSheet(
                         p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),

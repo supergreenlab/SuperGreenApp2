@@ -16,22 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpAddExistingDevice extends TowelieActionHelp {
+class TowelieActionHelpTestDevice extends TowelieActionHelp {
+  static String get towelieHelperTestDevice {
+    return Intl.message(
+      '''This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.''',
+      name: 'towelieHelperTestDevice',
+      desc: 'Towelie Helper test device',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
-  String get route => '/device/existing';
+  String get route => '/device/test';
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
-    if (nDevices == 0) {
+    if (nDevices == 1) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperAddExistingDevice);
+          event.settings, TowelieActionHelpTestDevice.towelieHelperTestDevice);
     }
   }
 }

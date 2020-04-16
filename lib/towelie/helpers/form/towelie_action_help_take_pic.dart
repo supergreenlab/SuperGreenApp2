@@ -16,22 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpSelectDevice extends TowelieActionHelp {
+class TowelieActionHelpFormTakePic extends TowelieActionHelp {
+  static   String get towelieHelperFormTakePic {
+    return Intl.message(
+      '''Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You'll be glad you took regular pictures on your next grow!**''',
+      name: 'towelieHelperFormTakePic',
+      desc: 'Towelie Helper form take pic',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+  
   @override
-  String get route => '/plant/device';
+  String get route => '/feed/form/media';
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
-    final ddb = RelDB.get().devicesDAO;
-    int nDevices = await ddb.nDevices().getSingle();
-    if (nDevices == 0) {
+    int nPics = await RelDB.get().feedsDAO.getNFeedEntriesWithType('FE_MEDIA').getSingle();
+    if (nPics == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperSelectDevice);
+          event.settings, TowelieActionHelpFormTakePic.towelieHelperFormTakePic);
     }
   }
 }

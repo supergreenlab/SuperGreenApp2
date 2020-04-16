@@ -16,25 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/towelie/towelie_button.dart';
-import 'package:super_green_app/towelie/towelie_cards_factory.dart';
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/towelie/cards/welcome/card_welcome_app.dart';
+import 'package:super_green_app/towelie/towelie_action.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'GOT_SGL_BUNDLE';
-
-class TowelieButtonGotSGLBundle extends TowelieButton {
+class TowelieActionAppInit extends TowelieAction {
   @override
-  String get id => _id;
-
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
-        'title': 'Yes I got one!',
-      });
-
-  @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
-    await TowelieCardsFactory.createGotSGLBundleCard(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+  Stream<TowelieBlocState> eventReceived(TowelieBlocEvent event) async* {
+    if (event is TowelieBlocEventAppInit) {
+      final fdb = RelDB.get().feedsDAO;
+      int feedID =
+          await fdb.addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
+      Feed feed = await fdb.getFeed(feedID);
+      await CardWelcomeApp.createWelcomeAppCard(feed);
+    }
   }
 }

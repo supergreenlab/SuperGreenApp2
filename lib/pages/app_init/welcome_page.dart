@@ -21,12 +21,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class WelcomePage extends StatefulWidget {
+  static String get formAllowAnalytics {
+    return Intl.message(
+      '''**Help us** discern what's **useful** from what's
+**useless** by sharing **anonymous** usage data.
+*Note: no third party (ie google, facebook..)
+is involved in our data analytics strategy.*''',
+      name: 'formAllowAnalytics',
+      desc: 'Form allow analytics',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final _loading;
 
   WelcomePage(this._loading);
@@ -86,8 +99,8 @@ class _WelcomePageState extends State<WelcomePage> {
       body.add(
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 24.0),
-          child: _renderOptionCheckbx(
-              context, SGLLocalizations.current.formAllowAnalytics, (newValue) {
+          child: _renderOptionCheckbx(context, WelcomePage.formAllowAnalytics,
+              (newValue) {
             setState(() {
               _allowAnalytics = newValue;
             });

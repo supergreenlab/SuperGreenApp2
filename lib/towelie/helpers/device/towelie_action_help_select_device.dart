@@ -16,21 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpFormTakePic extends TowelieActionHelp {
+class TowelieActionHelpSelectDevice extends TowelieActionHelp {
+  static String get towelieHelperSelectDevice {
+    return Intl.message(
+      '''Alright, now that your plant has a name we can **start its configuration**:)
+If you own a **SuperGreenLab bundle**, you need to tell the app **which controller will control the plant's lights, ventilation and sensors**.
+Because it\'s all brand new, let\'s first **setup a new controller**.
+If you don\'t own a bundle, you can skip this by pressing "NO SGL DEVICE".''',
+      name: 'towelieHelperSelectDevice',
+      desc: 'Towelie Helper Select plant device',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
-  String get route => '/feed/form/media';
+  String get route => '/plant/device';
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
-    int nPics = await RelDB.get().feedsDAO.getNFeedEntriesWithType('FE_MEDIA').getSingle();
-    if (nPics == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperFormTakePic);
+    final ddb = RelDB.get().devicesDAO;
+    int nDevices = await ddb.nDevices().getSingle();
+    if (nDevices == 0) {
+      yield TowelieBlocStateHelper(event.settings,
+          TowelieActionHelpSelectDevice.towelieHelperSelectDevice);
     }
   }
 }

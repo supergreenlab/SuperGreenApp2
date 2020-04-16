@@ -21,6 +21,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -32,6 +33,25 @@ import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
 class ExistingDevicePage extends StatefulWidget {
+  static String get instructionsExistingDeviceTitle {
+    return Intl.message(
+      '''Enter controller name or IP''',
+      name: 'instructionsExistingDeviceTitle',
+      desc: 'Instructions existing device title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get instructionsExistingDevice {
+    return Intl.message(
+      '''Please make sure your **mobile phone** is **connected to your home wifi**.
+Then we\'ll search for it **by name** or **by IP**, please **fill** the following text field.''',
+      name: 'instructionsExistingDevice',
+      desc: 'Instructions existing device',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _ExistingDevicePageState createState() => _ExistingDevicePageState();
 }
@@ -67,7 +87,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
               final form = <Widget>[
                 SectionTitle(
                   title:
-                      SGLLocalizations.current.instructionsExistingDeviceTitle,
+                      ExistingDevicePage.instructionsExistingDeviceTitle,
                   icon: 'assets/box_setup/icon_search.svg',
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
@@ -77,7 +97,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
-                    data: SGLLocalizations.current.instructionsExistingDevice,
+                    data: ExistingDevicePage.instructionsExistingDevice,
                     styleSheet: MarkdownStyleSheet(
                         p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),

@@ -23,7 +23,7 @@ import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
-import 'package:super_green_app/towelie/helpers/towelie_action_help_notification.dart';
+import 'package:super_green_app/towelie/helpers/misc/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();

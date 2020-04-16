@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -30,6 +31,33 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
 class FeedScheduleFormPage extends StatefulWidget {
+  static String get instructionsVegScheduleHelper {
+    return Intl.message(
+      '**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day.',
+      name: 'instructionsVegScheduleHelper',
+      desc: 'Veg schedule helper',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get instructionsBloomScheduleHelper {
+    return Intl.message(
+      '**Bloom stage** is the phase between germination and blooming, the plant grows and develops it’s branches. It requires **at most 12h lights per days**, usual setting is **12h** per day.',
+      name: 'instructionsBloomScheduleHelper',
+      desc: 'Bloom schedule helper',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get instructionsAutoScheduleHelper {
+    return Intl.message(
+      'Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another.',
+      name: 'instructionsAutoScheduleHelper',
+      desc: 'Auto schedule helper',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _FeedScheduleFormPageState createState() => _FeedScheduleFormPageState();
 }
@@ -137,7 +165,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 state.schedules['VEG'],
                 'Vegetative schedule',
                 'assets/feed_form/icon_veg.svg',
-                SGLLocalizations.of(context).instructionsVegScheduleHelper,
+                FeedScheduleFormPage.instructionsVegScheduleHelper,
                 state.schedule == 'VEG', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('VEG'));
@@ -152,7 +180,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 state.schedules['BLOOM'],
                 'Blooming schedule',
                 'assets/feed_form/icon_bloom.svg',
-                SGLLocalizations.of(context).instructionsBloomScheduleHelper,
+                FeedScheduleFormPage.instructionsBloomScheduleHelper,
                 state.schedule == 'BLOOM', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('BLOOM'));
@@ -167,7 +195,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 state.schedules['AUTO'],
                 'Auto flower schedule',
                 'assets/feed_form/icon_autoflower.svg',
-                SGLLocalizations.of(context).instructionsAutoScheduleHelper,
+                FeedScheduleFormPage.instructionsAutoScheduleHelper,
                 state.schedule == 'AUTO', () {
               BlocProvider.of<FeedScheduleFormBloc>(context)
                   .add(FeedScheduleFormBlocEventSetSchedule('AUTO'));

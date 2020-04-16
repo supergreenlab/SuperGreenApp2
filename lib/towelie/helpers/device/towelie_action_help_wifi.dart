@@ -16,22 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpSelectPlantDeviceBox extends TowelieActionHelp {
+class TowelieActionHelpWifi extends TowelieActionHelp {
+  static String get towelieHelperDeviceWifi {
+    return Intl.message(
+      '''**While not mandatory**, connecting your controller to your home wifi has a few benefits:
+- receive software **upgrade** and bug fixes
+- remote **monitoring**
+- remote **control** (coming soon)''',
+      name: 'towelieHelperDeviceWifi',
+      desc: 'Towelie Helper Device wifi',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
-  String get route => '/plant/device/box';
+  String get route => '/device/wifi';
 
   @override
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
-    final bdb = RelDB.get().plantsDAO;
-    int nPlants = await bdb.nPlants().getSingle();
-    if (nPlants == 0) {
+    final ddb = RelDB.get().devicesDAO;
+    int nDevices = await ddb.nDevices().getSingle();
+    if (nDevices == 1) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperSelectPlantDeviceBox);
+          event.settings, TowelieActionHelpWifi.towelieHelperDeviceWifi);
     }
   }
 }

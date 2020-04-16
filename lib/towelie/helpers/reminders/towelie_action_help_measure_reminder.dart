@@ -17,53 +17,71 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/buttons/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpWaterReminder extends TowelieActionHelp {
+class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
+  static String get towelieHelperMeasureReminder {
+    return Intl.message(
+      '''Do you want me to **set a reminder** so you don't forget to take a measure again soon?''',
+      name: 'towelieHelperMeasureReminder',
+      desc: 'Towelie Helper measure reminder',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
-  String get feedEntryType => 'FE_WATER';
+  String get feedEntryType => 'FE_MEASURE';
 
   @override
   Stream<TowelieBlocState> feedEntryTrigger(
       TowelieBlocEventFeedEntryCreated event) async* {
-    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
+    Plant plant =
+        await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
     String notificationPayload = 'plant.${plant.id}';
     yield TowelieBlocStateHelper(
         RouteSettings(name: '/feed/plant', arguments: null),
-        SGLLocalizations.current.towelieHelperWaterReminder,
+        TowelieActionHelpMeasureReminder.towelieHelperMeasureReminder,
         buttons: [
-          // TowelieButtonReminder.createButton(
-          //     '1 min',
-          //     event.feedEntry.id,
-          //     'Water your plant',
-          //     '${plant.name} last watered 1min ago.',
-          //     notificationPayload,
-          //     1),
+          TowelieButtonReminder.createButton(
+              '1 day',
+              event.feedEntry.id,
+              'Take the next measure',
+              '${plant.name} was measured 1 day ago.',
+              notificationPayload,
+              60 * 24),
+          TowelieButtonReminder.createButton(
+              '2 days',
+              event.feedEntry.id,
+              'Take the next measure',
+              '${plant.name} was measured 2 days ago.',
+              notificationPayload,
+              60 * 24 * 2),
           TowelieButtonReminder.createButton(
               '3 days',
               event.feedEntry.id,
-              'Water your plant',
-              '${plant.name} last watered 3 days ago.',
+              'Take the next measure',
+              '${plant.name} was measured 3 days ago.',
               notificationPayload,
-              60 * 72),
+              60 * 24 * 3),
           TowelieButtonReminder.createButton(
               '4 days',
               event.feedEntry.id,
-              'Water your plant',
-              '${plant.name} last watered 4 days ago.',
+              'Take the next measure',
               notificationPayload,
-              60 * 96),
+              '${plant.name} was measured 4 days ago.',
+              60 * 24 * 4),
           TowelieButtonReminder.createButton(
               '6 days',
               event.feedEntry.id,
-              'Water your plant',
-              '${plant.name} last watered 6 days ago.',
+              'Take the next measure',
+              '${plant.name} was measured 6 days ago.',
               notificationPayload,
-              60 * 144)
+              60 * 24 * 6)
         ]);
   }
 }

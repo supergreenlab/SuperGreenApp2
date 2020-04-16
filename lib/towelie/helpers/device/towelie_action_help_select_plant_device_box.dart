@@ -16,35 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-class TowelieActionHelpFormMeasure extends TowelieActionHelp {
-  @override
-  String get route => '/feed/form/measure';
-
-  @override
-  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
-    int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
-    if (nMeasures == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperFormMeasure,
-          hasNext: true);
-    } else if (nMeasures == 1) {
-      yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperFormMeasure3,
-          hasNext: false);
-    }
+class TowelieActionHelpSelectPlantDeviceBox extends TowelieActionHelp {
+  static String get towelieHelperSelectPlantDeviceBox {
+    return Intl.message(
+      '''Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.''',
+      name: 'towelieHelperSelectPlantDeviceBox',
+      desc: 'Towelie Helper plant Device box',
+      locale: SGLLocalizations.current.localeName,
+    );
   }
 
   @override
-  Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {
-    int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
-    if (nMeasures == 0) {
+  String get route => '/plant/device/box';
+
+  @override
+  Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
+    final bdb = RelDB.get().plantsDAO;
+    int nPlants = await bdb.nPlants().getSingle();
+    if (nPlants == 0) {
       yield TowelieBlocStateHelper(
-          event.settings, SGLLocalizations.current.towelieHelperFormMeasure2);
+          event.settings,
+          TowelieActionHelpSelectPlantDeviceBox
+              .towelieHelperSelectPlantDeviceBox);
     }
   }
 }
