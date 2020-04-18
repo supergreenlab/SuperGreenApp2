@@ -29,7 +29,7 @@ class TowelieButtonINeedHelp extends TowelieButton {
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_needHelpID, {
-        'title': 'Yes!',
+        'title': 'Yes I want help!',
       });
 
   @override
@@ -48,7 +48,7 @@ class TowelieButtonIDontNeedHelp extends TowelieButton {
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_dontNeedHelpID, {
-        'title': 'Nope!',
+        'title': 'Nope already got it all.',
       });
 
   @override

@@ -35,6 +35,7 @@ import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_type.
 import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_create_plant.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_i_need_help.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/helpers/combo/towelie_action_help_measure_after_stretch.dart';
 import 'package:super_green_app/towelie/helpers/device/towelie_action_help_add_device.dart';
@@ -217,6 +218,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonINeedHelp(),
     TowelieButtonIDontNeedHelp(),
     TowelieButtonCreatePlant(),
+    TowelieButtonShowProducts(),
 
     // Plant onboarding
     TowelieButtonViewPlant(),

@@ -22,18 +22,21 @@ import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products.dart';
 
 class CardProductsIntro {
-    static String get towelieProductsIntro {
+  static String get towelieProductsIntro {
     return Intl.message(
-      '''
+      '''**Thanks for checking out our quick start checklist:)**
+
+This is a selection of products we and the community like and got good results with.
 ''',
       name: 'towelieProductsIntro',
       desc: 'Towelie Products Intro',
       locale: SGLLocalizations.current.localeName,
     );
   }
-  
+
   static Future createProductsIntro(Feed feed) async {
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
@@ -41,12 +44,14 @@ class CardProductsIntro {
       feed: feed.id,
       date: DateTime.now(),
       isNew: Value(true),
-      params: Value(JsonEncoder().convert({
-        'text': CardProductsIntro.towelieProductsIntro,
-        'products': [
-
-        ],
-      })),
+      params: Value(JsonEncoder().convert(
+        {
+          'text': CardProductsIntro.towelieProductsIntro,
+          'buttons': [
+            TowelieButtonShowProducts.createButton(),
+          ]
+        },
+      )),
     ));
   }
 }

@@ -17,14 +17,17 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:yaml/yaml.dart';
 
 class CardBaseProducts {
-    static String get towelieProducts {
+  static String get towelieBaseProducts {
     return Intl.message(
       '''
 ''',
@@ -33,8 +36,10 @@ class CardBaseProducts {
       locale: SGLLocalizations.current.localeName,
     );
   }
-  
+
   static Future createBaseProducts(Feed feed) async {
+    YamlMap yml =
+        loadYaml(await rootBundle.loadString('assets/products/checklist.yml'));
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_PRODUCTS',
@@ -42,10 +47,8 @@ class CardBaseProducts {
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': CardBaseProducts.towelieProducts,
-        'products': [
-          
-        ],
+        'text': CardBaseProducts.towelieBaseProducts,
+        'products': yml['products'],
       })),
     ));
   }

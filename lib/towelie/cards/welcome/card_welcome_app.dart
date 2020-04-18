@@ -31,7 +31,7 @@ class CardWelcomeApp {
 ===
 Hey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!
 
-To start off on a right foot, we made a checklist of all the stuffs you'll need to start growing.
+To start off on a right foot, we made a **quick start checklist** of all the stuffs you'll need to **start growing**.
 
 Do you need a hand to start growing?
 ''',

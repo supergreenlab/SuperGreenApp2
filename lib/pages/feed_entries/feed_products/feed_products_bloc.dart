@@ -6,11 +6,15 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class FeedProductsBlocEvent extends Equatable {}
 
-abstract class FeedProductsBlocState extends Equatable {}
+class FeedProductsBlocState extends Equatable {
+  final Feed feed;
+  final FeedEntry feedEntry;
+  final Map<String, dynamic> params;
 
-class FeedProductsBlocStateInit extends FeedProductsBlocState {
+  FeedProductsBlocState(this.feed, this.feedEntry, this.params);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [this.feed, this.feedEntry, this.params];
 }
 
 class FeedProductsBloc
@@ -24,7 +28,8 @@ class FeedProductsBloc
   }
 
   @override
-  FeedProductsBlocState get initialState => FeedProductsBlocStateInit();
+  FeedProductsBlocState get initialState =>
+      FeedProductsBlocState(_feed, _feedEntry, {});
 
   @override
   Stream<FeedProductsBlocState> mapEventToState(

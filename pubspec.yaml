@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
+  yaml:
   camera:
   multicast_dns:
   http:
@@ -96,6 +97,7 @@ flutter:
     - assets/box_setup/
     - assets/home/
     - assets/settings/
+    - assets/products/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

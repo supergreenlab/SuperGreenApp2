@@ -6,7 +6,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 
 class CardWelcomePlant {
-  static String get toweliePlantWelcome {
+  static String get towelieWelcomePlant {
     return Intl.message(
       '''**Welcome to your plant feed!**
 This is where you will modify your plant’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the plant’s environment.
@@ -31,7 +31,7 @@ And all this feed can be reviewed, shared or replayed later, **and that’s awes
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': CardWelcomePlant.toweliePlantWelcome,
+        'text': CardWelcomePlant.towelieWelcomePlant,
         'buttons': [],
       })),
     ));

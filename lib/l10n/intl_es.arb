@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-16T17:14:00.735091",
+  "@@last_modified": "2020-04-18T15:33:55.216331",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -12,13 +12,19 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieWelcomeApp": "Welcome to SuperGreenLab's grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n\nTo start off on a right foot, we made a checklist of all the stuffs you'll need to start growing.\n\nDo you need a hand to start growing?\n",
+  "towelieWelcomeApp": "Welcome to SuperGreenLab's grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n\nTo start off on a right foot, we made a **quick start checklist** of all the stuffs you'll need to **start growing**.\n\nDo you need a hand to start growing?\n",
   "@towelieWelcomeApp": {
     "description": "Towelie Welcome App",
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsIntro": "",
+  "towelieBaseProducts": "",
+  "@towelieBaseProducts": {
+    "description": "Towelie Base Products",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieProductsIntro": "**Thanks for checking out our quick start checklist:)**\n\nThis is a selection of products we and the community like and got good results with.\n",
   "@towelieProductsIntro": {
     "description": "Towelie Products Intro",
     "type": "text",
@@ -45,6 +51,12 @@
   "toweliePlantAlreadyStarted": "Is this plant mid grow cycle?",
   "@toweliePlantAlreadyStarted": {
     "description": "Towelie Plant already started",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieWelcomePlant": "**Welcome to your plant feed!**\nThis is where you will modify your plant’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the plant’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.",
+  "@towelieWelcomePlant": {
+    "description": "Towelie Welcome Plant",
     "type": "text",
     "placeholders": {}
   },
