@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -76,12 +78,17 @@ class FeedEntries extends Table {
     if (feed.serverID == null) {
       throw 'Missing serverID for feed relation';
     }
+    Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
+    if (params['previous'] != null) {
+      FeedMedia feedMedia = await RelDB.get().feedsDAO.getFeedMedia(params['previous']);
+      params['previous'] = feedMedia.serverID;
+    }
     return {
       'id': feedEntry.serverID,
       'feedID': feed.serverID,
       'date': feedEntry.date.toUtc().toIso8601String(),
       'type': feedEntry.type,
-      'params': feedEntry.params,
+      'params': JsonEncoder().convert(params),
     };
   }
 }

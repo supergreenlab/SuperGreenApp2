@@ -37,10 +37,12 @@ class FeedMeasureCardBlocState extends Equatable {
   final FeedMedia previous;
   final FeedMedia current;
 
-  FeedMeasureCardBlocState(this.feed, this.feedEntry, this.params, this.previous, this.current);
+  FeedMeasureCardBlocState(
+      this.feed, this.feedEntry, this.params, this.previous, this.current);
 
   @override
-  List<Object> get props => [this.feed, this.feedEntry, this.params, this.previous, this.current];
+  List<Object> get props =>
+      [this.feed, this.feedEntry, this.params, this.previous, this.current];
 }
 
 class FeedMeasureCardBloc
@@ -53,7 +55,8 @@ class FeedMeasureCardBloc
   FeedMedia _current;
 
   @override
-  FeedMeasureCardBlocState get initialState => FeedMeasureCardBlocState(_feed, _feedEntry, {}, _previous, _current);
+  FeedMeasureCardBlocState get initialState =>
+      FeedMeasureCardBlocState(_feed, _feedEntry, {}, _previous, _current);
 
   FeedMeasureCardBloc(this._feed, this._feedEntry) {
     _params.addAll(JsonDecoder().convert(_feedEntry.params));
@@ -65,9 +68,14 @@ class FeedMeasureCardBloc
       FeedMeasureCardBlocEvent event) async* {
     if (event is FeedMeasureCardBlocEventInit) {
       RelDB db = RelDB.get();
-      _previous = await db.feedsDAO.getFeedMedia(_params['previous']);
+      if (_params['previous'] is int) {
+        _previous = await db.feedsDAO.getFeedMedia(_params['previous']);
+      } else if (_params['previous'] is String) {
+        _previous = await db.feedsDAO.getFeedMediaForServerID(_params['previous']);
+      }
       _current = (await db.feedsDAO.getFeedMedias(_feedEntry.id))[0];
-      yield FeedMeasureCardBlocState(_feed, _feedEntry, _params, _previous, _current);
+      yield FeedMeasureCardBlocState(
+          _feed, _feedEntry, _params, _previous, _current);
     }
   }
 }
