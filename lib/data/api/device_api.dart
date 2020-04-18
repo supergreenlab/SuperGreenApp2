@@ -180,6 +180,10 @@ class DeviceAPI {
       String ip, int deviceID, Map<String, dynamic> keys, Function(double) advancement) async {
     final db = RelDB.get().devicesDAO;
     final Map<String, int> modules = Map();
+
+    await db.deleteParams(deviceID);
+    await db.deleteModules(deviceID);
+
     double total = keys['keys'].length.toDouble(), done = 0;
     for (Map<String, dynamic> k in keys['keys']) {
       var moduleName = k['module'];

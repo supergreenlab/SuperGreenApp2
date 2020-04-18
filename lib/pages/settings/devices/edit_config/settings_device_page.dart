@@ -69,6 +69,13 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
               body = FullscreenLoading(
                 title: 'Loading..',
               );
+            } else if (state is SettingsDeviceBlocStateRefreshing) {
+              body = FullscreenLoading(
+                percent: state.percent,
+                title: 'Refreshing..',
+              );
+            } else if (state is SettingsDeviceBlocStateRefreshed) {
+              body = _renderRefreshDone(state);
             } else if (state is SettingsDeviceBlocStateDone) {
               body = _renderDone(state);
             } else if (state is SettingsDeviceBlocStateLoaded) {
@@ -88,6 +95,14 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     duration: Duration(milliseconds: 200), child: body));
           }),
     );
+  }
+
+  Widget _renderRefreshDone(SettingsDeviceBlocStateRefreshed state) {
+    String subtitle = 'Controller ${_nameController.value.text} refreshed!';
+    return Fullscreen(
+        title: 'Done!',
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderDone(SettingsDeviceBlocStateDone state) {
@@ -138,6 +153,27 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                       onPressed: () {
                         BlocProvider.of<MainNavigatorBloc>(context).add(
                             MainNavigateToSelectDeviceBoxEvent(state.device));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SectionTitle(
+                title: 'Refresh controller params',
+                icon: 'assets/box_setup/icon_controller.svg',
+                backgroundColor: Color(0xff0b6ab3),
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GreenButton(
+                      title: 'Refresh params',
+                      onPressed: () {
+                        BlocProvider.of<SettingsDeviceBloc>(context)
+                            .add(SettingsDeviceBlocEventRefresh());
                       },
                     ),
                   ),
