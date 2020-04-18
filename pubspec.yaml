@@ -23,7 +23,7 @@ dependencies:
   rxdart:
   flutter_svg:
   permission_handler: 4.4.0+hotfix.2
-  moor:
+  moor: 
   moor_ffi:
   path_provider:
   path:
@@ -71,11 +71,11 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
-  hive_generator: 0.7.0+2
+  hive_generator:
   moor_generator:
   build_runner:
-  # flutter_test:
-    # sdk: flutter
+  flutter_test:
+    sdk: flutter
 
 
 # For information on the generic Dart part of this file, see the

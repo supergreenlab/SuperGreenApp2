@@ -36,12 +36,12 @@ class FeedCardDate extends StatelessWidget {
       format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''} ago';
     } else if (hourDiff < 24) {
       format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ago';
-    } else if (dayDiff < 5) {
+    } else/* if (dayDiff < 5)*/ {
       format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ago';
-    } else {
+    } /*else {
       DateFormat f = DateFormat('yyyy-MM-dd');
       format = f.format(feedEntry.date);
-    }
+    }*/
     return Text(format,
         style: TextStyle(color: Colors.black54));
   }
