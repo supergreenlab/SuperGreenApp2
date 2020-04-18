@@ -70,6 +70,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                         icon: 'assets/feed_form/icon_volume.svg',
                         title: 'Approx. volume',
                         value: volume,
+                        step: 0.25,
                         displayMultiplier: freedomUnits ? 0.25 : 1,
                         unit: freedomUnits ? ' gal' : ' L',
                         onChange: (newValue) {
