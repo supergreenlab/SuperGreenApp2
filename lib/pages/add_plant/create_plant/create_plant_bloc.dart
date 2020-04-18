@@ -61,7 +61,10 @@ class CreatePlantBloc extends Bloc<CreatePlantBlocEvent, CreatePlantBlocState> {
       final feedID = await fdb.addFeed(feed);
       PlantsCompanion plant;
       plant = PlantsCompanion.insert(
-          feed: feedID, name: event.name, box: Value(event.box));
+          feed: feedID,
+          name: event.name,
+          box: Value(event.box),
+          single: Value(event.single));
       final plantID = await bdb.addPlant(plant);
       final p = await bdb.getPlant(plantID);
       final b = await bdb.getBox(event.box);
