@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -23,12 +25,21 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 const _id = 'CREATE_PLANT';
 
 class TowelieButtonCreatePlant extends TowelieButton {
+  static String get towelieButtonCreatePlant {
+    return Intl.message(
+      '''Create plant''',
+      name: 'towelieButtonCreatePlant',
+      desc: 'Towelie Button Create Plant',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   String get id => _id;
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_id, {
-        'title': 'Create plant',
+        'title': TowelieButtonCreatePlant.towelieButtonCreatePlant,
       });
 
   @override

@@ -29,7 +29,7 @@ class FeedCard extends StatefulWidget {
   _FeedCardState createState() => _FeedCardState();
 }
 
-class _FeedCardState extends State<FeedCard> {
+class _FeedCardState extends State<FeedCard> with AutomaticKeepAliveClientMixin {
   double _opacity = 0;
 
   @override
@@ -76,4 +76,7 @@ class _FeedCardState extends State<FeedCard> {
     widget.animation.removeStatusListener(_statusListener);
     super.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

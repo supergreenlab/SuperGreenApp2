@@ -30,6 +30,11 @@ class CardProductsIntro {
       '''**Thanks for checking out our quick start checklist:)**
 
 This is a selection of products we and the community like and got good results with.
+
+- Build a growbox
+- Get some seeds
+- Growing medium
+- Nutrients
 ''',
       name: 'towelieProductsIntro',
       desc: 'Towelie Products Intro',
