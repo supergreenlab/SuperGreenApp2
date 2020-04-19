@@ -175,62 +175,89 @@ class DeviceAPI {
     return fetchIntParam(controllerIP, paramName);
   }
 
-  // TODO add check if param exists for insert/update
-  static Future fetchAllParams(
-      String ip, int deviceID, Map<String, dynamic> keys, Function(double) advancement) async {
-    final db = RelDB.get().devicesDAO;
-    final Map<String, int> modules = Map();
+  static Map<int, bool> fetchingAllParams = {};
 
-    await db.deleteParams(deviceID);
-    await db.deleteModules(deviceID);
+  static Future fetchAllParams(String ip, int deviceID,
+      Map<String, dynamic> keys, Function(double) advancement) async {
+    if (DeviceAPI.fetchingAllParams[deviceID]) {
+      return;
+    }
+    DeviceAPI.fetchingAllParams[deviceID] = true;
+    try {
+      final db = RelDB.get().devicesDAO;
+      final Map<String, int> modules = Map();
 
-    double total = keys['keys'].length.toDouble(), done = 0;
-    for (Map<String, dynamic> k in keys['keys']) {
-      var moduleName = k['module'];
-      if (modules.containsKey(moduleName) == false) {
-        bool isArray = k.containsKey('array');
-        ModulesCompanion module = ModulesCompanion.insert(
-            device: deviceID,
-            name: moduleName,
-            isArray: isArray,
-            arrayLen: isArray ? k['array']['len'] : 0);
-        final moduleID = await db.addModule(module);
-        modules[moduleName] = moduleID;
-      }
-      int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
-      ParamsCompanion param;
-      if (type == INTEGER_TYPE) {
-        try {
-          final value = await DeviceAPI.fetchIntParam(ip, k['caps_name']);
-          param = ParamsCompanion.insert(
-              device: deviceID,
-              module: modules[moduleName],
-              key: k['caps_name'],
-              type: type,
-              ivalue: Value(value));
-          await db.addParam(param);
-        } catch (e) {
-          print(e);
-          throw e;
+      await db.deleteParams(deviceID);
+      await db.deleteModules(deviceID);
+
+      double total = keys['keys'].length.toDouble(), done = 0;
+      for (Map<String, dynamic> k in keys['keys']) {
+        var moduleName = k['module'];
+        int moduleID;
+        if (modules.containsKey(moduleName) == false) {
+          bool isArray = k.containsKey('array');
+          Module exists = await db.getModule(deviceID, moduleName);
+          if (exists != null) {
+            ModulesCompanion module = ModulesCompanion.insert(
+                device: deviceID,
+                name: moduleName,
+                isArray: isArray,
+                arrayLen: isArray ? k['array']['len'] : 0);
+            moduleID = await db.addModule(module);
+          } else {
+            moduleID = exists.id;
+          }
+          modules[moduleName] = moduleID;
         }
-      } else {
-        try {
-          final value =
-              await DeviceAPI.fetchStringParam(ip, k['caps_name']);
-          param = ParamsCompanion.insert(
-              device: deviceID,
-              module: modules[moduleName],
-              key: k['caps_name'],
-              type: type,
-              svalue: Value(value));
-          await db.addParam(param);
-        } catch (e) {
-          print(e);
-          throw e;
+        int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
+        Param exists = await db.getParam(deviceID, k['caps_name']);
+        if (type == INTEGER_TYPE) {
+          try {
+            final value = await DeviceAPI.fetchIntParam(ip, k['caps_name']);
+            if (exists == null) {
+              ParamsCompanion param = ParamsCompanion.insert(
+                  device: deviceID,
+                  module: modules[moduleName],
+                  key: k['caps_name'],
+                  type: type,
+                  ivalue: Value(value));
+              await db.addParam(param);
+            } else {
+              await db.updateParam(exists.copyWith(ivalue: value));
+            }
+          } catch (e) {
+            print(e);
+            throw e;
+          }
+        } else {
+          try {
+            final value = await DeviceAPI.fetchStringParam(ip, k['caps_name']);
+            if (exists == null) {
+              ParamsCompanion param = ParamsCompanion.insert(
+                  device: deviceID,
+                  module: modules[moduleName],
+                  key: k['caps_name'],
+                  type: type,
+                  svalue: Value(value));
+              await db.addParam(param);
+            } else {
+              await db.updateParam(exists.copyWith(svalue: value));
+            }
+          } catch (e) {
+            print(e);
+            throw e;
+          }
         }
+        ++done;
+        advancement(done / total);
       }
-      ++done;
-      advancement(done / total);
+      await db.updateDevice(DevicesCompanion(
+        id: Value(deviceID),
+        isSetup: Value(true),
+      ));
+    } catch (e) {
+      DeviceAPI.fetchingAllParams[deviceID] = false;
+      throw e;
     }
   }
 }

@@ -112,10 +112,6 @@ class SettingsDeviceBloc
     } else if (event is SettingsDeviceBlocEventUpdate) {
       yield SettingsDeviceBlocStateLoading();
       await DeviceHelper.updateDeviceName(_args.device, event.name);
-      Param mdns =
-          await RelDB.get().devicesDAO.getParam(_args.device.id, 'MDNS_DOMAIN');
-      await DeviceHelper.updateStringParam(
-          _args.device, mdns, event.name.toLowerCase());
       yield SettingsDeviceBlocStateDone(_device);
     }
   }

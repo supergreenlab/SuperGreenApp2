@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
@@ -104,22 +105,24 @@ class DeviceDaemonBloc
           nRetries: 1);
       if (identifier == device.identifier) {
         print('Device ${device.name} (${device.identifier}) found.');
+        if (device.isSetup == false) {
+          Map<String, dynamic> keys = json.decode(device.config);
+          await DeviceAPI.fetchAllParams(
+              device.ip, device.id, keys, (_) => null);
+        }
         await ddb.updateDevice(
             DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
         add(DeviceDaemonBlocEventDeviceReachable(device, true));
       }
     } catch (e) {
-      print('Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
+      print(
+          'Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
       RelDB.get().devicesDAO.updateDevice(
           DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
       add(DeviceDaemonBlocEventDeviceReachable(device, false));
       String ip;
       await new Future.delayed(const Duration(seconds: 2));
-      Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
-      if (mdns == null) {
-        return;
-      }
-      ip = await DeviceAPI.resolveLocalName(mdns.svalue);
+      ip = await DeviceAPI.resolveLocalName(device.mdns);
       if (ip != null && ip != "") {
         try {
           String identifier =
@@ -127,8 +130,13 @@ class DeviceDaemonBloc
           if (identifier == device.identifier) {
             print(
                 'Device ${device.name} (${device.identifier}) found with mdns lookup.');
+            if (device.isSetup == false) {
+              Map<String, dynamic> keys = json.decode(device.config);
+              await DeviceAPI.fetchAllParams(
+                  ip, device.id, keys, (_) => null);
+            }
             await ddb.updateDevice(DevicesCompanion(
-                id: Value(device.id), isReachable: Value(true), ip: Value(ip)));
+                id: Value(device.id), isReachable: Value(true), ip: Value(ip), synced: Value(ip == device.ip)));
             add(DeviceDaemonBlocEventDeviceReachable(device, true));
           }
         } catch (e) {

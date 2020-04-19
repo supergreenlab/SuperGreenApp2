@@ -72,7 +72,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
-  hive_generator:
+  hive_generator: 0.7.0+2
   moor_generator:
   build_runner:
   flutter_test:
