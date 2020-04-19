@@ -66,7 +66,9 @@ class DeviceDaemonBloc
       for (int i = 0; i < _devices.length; ++i) {
         try {
           _updateDeviceStatus(_devices[i]);
-        } catch (e) {}
+        } catch (e) {
+          print(e);
+        }
       }
     });
   }
@@ -132,11 +134,13 @@ class DeviceDaemonBloc
                 'Device ${device.name} (${device.identifier}) found with mdns lookup.');
             if (device.isSetup == false) {
               Map<String, dynamic> keys = json.decode(device.config);
-              await DeviceAPI.fetchAllParams(
-                  ip, device.id, keys, (_) => null);
+              await DeviceAPI.fetchAllParams(ip, device.id, keys, (_) => null);
             }
             await ddb.updateDevice(DevicesCompanion(
-                id: Value(device.id), isReachable: Value(true), ip: Value(ip), synced: Value(ip == device.ip)));
+                id: Value(device.id),
+                isReachable: Value(true),
+                ip: Value(ip),
+                synced: Value(ip == device.ip)));
             add(DeviceDaemonBlocEventDeviceReachable(device, true));
           }
         } catch (e) {
@@ -146,6 +150,12 @@ class DeviceDaemonBloc
               id: Value(device.id), isReachable: Value(false)));
           add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
+      } else {
+        print(
+            'Device ${device.name} (${device.identifier}) not found, aborting.');
+        RelDB.get().devicesDAO.updateDevice(
+            DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+        add(DeviceDaemonBlocEventDeviceReachable(device, false));
       }
     }
     _deviceWorker[device.id] = false;

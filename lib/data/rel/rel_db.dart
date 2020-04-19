@@ -68,7 +68,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -82,6 +82,8 @@ class RelDB extends _$RelDB {
               "insert into boxes (name, device, device_box, settings) select name, device, device_box, id as settings from plants");
         } else if (from == 2) {
           await m.addColumn(feeds, feeds.isNewsFeed);
+        } else if (from == 3) {
+          await m.addColumn(devices, devices.isSetup);
         }
       }, beforeOpen: (details) async {
         if (details.versionBefore == 1) {

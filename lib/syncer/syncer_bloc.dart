@@ -18,11 +18,31 @@ class SyncerBlocEventInit extends SyncerBlocEvent {
   List<Object> get props => [];
 }
 
+class SyncerBlocEventSyncing extends SyncerBlocState {
+  final bool syncing;
+  final String file;
+
+  SyncerBlocEventSyncing(this.syncing, this.file);
+
+  @override
+  List<Object> get props => [syncing, file];
+}
+
 abstract class SyncerBlocState extends Equatable {}
 
 class SyncerBlocStateInit extends SyncerBlocState {
   @override
   List<Object> get props => [];
+}
+
+class SyncerBlocStateSyncing extends SyncerBlocState {
+  final bool syncing;
+  final String file;
+
+  SyncerBlocStateSyncing(this.syncing, this.file);
+
+  @override
+  List<Object> get props => [syncing, file];
 }
 
 class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
@@ -71,6 +91,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
         _workingIn = false;
       });
+    } else if (event is SyncerBlocEventSyncing) {
+      
     }
   }
 

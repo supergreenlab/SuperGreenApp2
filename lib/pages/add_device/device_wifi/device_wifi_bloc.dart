@@ -125,8 +125,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     String ip;
     for (int i = 0; i < 4; ++i) {
       await new Future.delayed(const Duration(seconds: 2));
-      Param mdns = await ddb.getParam(_args.device.id, 'MDNS_DOMAIN');
-      ip = await DeviceAPI.resolveLocalName(mdns.svalue);
+      ip = await DeviceAPI.resolveLocalName(_args.device.mdns);
       if (ip == "" || ip == null) {
         continue;
       }

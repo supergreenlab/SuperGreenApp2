@@ -179,7 +179,7 @@ class DeviceAPI {
 
   static Future fetchAllParams(String ip, int deviceID,
       Map<String, dynamic> keys, Function(double) advancement) async {
-    if (DeviceAPI.fetchingAllParams[deviceID]) {
+    if (DeviceAPI.fetchingAllParams[deviceID] == true) {
       return;
     }
     DeviceAPI.fetchingAllParams[deviceID] = true;
@@ -197,7 +197,7 @@ class DeviceAPI {
         if (modules.containsKey(moduleName) == false) {
           bool isArray = k.containsKey('array');
           Module exists = await db.getModule(deviceID, moduleName);
-          if (exists != null) {
+          if (exists == null) {
             ModulesCompanion module = ModulesCompanion.insert(
                 device: deviceID,
                 name: moduleName,
@@ -256,6 +256,7 @@ class DeviceAPI {
         isSetup: Value(true),
       ));
     } catch (e) {
+      print(e);
       throw e;
     } finally {
       DeviceAPI.fetchingAllParams[deviceID] = false;

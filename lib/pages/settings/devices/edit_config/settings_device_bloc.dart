@@ -117,10 +117,18 @@ class SettingsDeviceBloc
   }
 
   void refreshParams() async {
+    final deviceName =
+        await DeviceAPI.fetchStringParam(_device.ip, "DEVICE_NAME");
+    final mdnsDomain =
+        await DeviceAPI.fetchStringParam(_device.ip, "MDNS_DOMAIN");
     final config = await DeviceAPI.fetchConfig(_device.ip);
     Map<String, dynamic> keys = json.decode(config);
-    await RelDB.get().devicesDAO.updateDevice(
-        DevicesCompanion(id: Value(_device.id), config: Value(config)));
+    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+        id: Value(_device.id),
+        name: Value(deviceName),
+        mdns: Value(mdnsDomain),
+        config: Value(config),
+        synced: Value(false)));
     await DeviceAPI.fetchAllParams(_device.ip, _device.id, keys, (adv) {
       add(SettingsDeviceBlocEventRefreshing(adv));
     });
