@@ -187,8 +187,8 @@ class DeviceAPI {
       final db = RelDB.get().devicesDAO;
       final Map<String, int> modules = Map();
 
-      await db.deleteParams(deviceID);
-      await db.deleteModules(deviceID);
+      // await db.deleteParams(deviceID);
+      // await db.deleteModules(deviceID);
 
       double total = keys['keys'].length.toDouble(), done = 0;
       for (Map<String, dynamic> k in keys['keys']) {
@@ -256,8 +256,9 @@ class DeviceAPI {
         isSetup: Value(true),
       ));
     } catch (e) {
-      DeviceAPI.fetchingAllParams[deviceID] = false;
       throw e;
+    } finally {
+      DeviceAPI.fetchingAllParams[deviceID] = false;
     }
   }
 }
