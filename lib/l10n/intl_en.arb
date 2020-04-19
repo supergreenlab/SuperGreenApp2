@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-18T15:33:55.216331",
+  "@@last_modified": "2020-04-19T10:35:23.867720",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -24,7 +24,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsIntro": "**Thanks for checking out our quick start checklist:)**\n\nThis is a selection of products we and the community like and got good results with.\n",
+  "towelieProductsIntro": "**Thanks for checking out our quick start checklist:)**\n\nThis is a **selection** of products **we** and the **community** like and got **good results** with.\n\nThe topics covered are:\n\n- Build a growbox\n- Get some seeds\n- Growing medium\n- Nutrients\n",
   "@towelieProductsIntro": {
     "description": "Towelie Products Intro",
     "type": "text",
@@ -63,6 +63,42 @@
   "toweliePlantVegOrBloom": "Is the plant in **veg** or **bloom**?",
   "@toweliePlantVegOrBloom": {
     "description": "Towelie Plant Veg or bloom",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonCreatePlant": "Create plant",
+  "@towelieButtonCreatePlant": {
+    "description": "Towelie Button Create Plant",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonViewPlant": "View plant",
+  "@towelieButtonViewPlant": {
+    "description": "Towelie Button view plant",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonStartChecklist": "Start",
+  "@towelieButtonStartChecklist": {
+    "description": "Towelie Button start checklist",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonINeedHelp": "Yes I want help!",
+  "@towelieButtonINeedHelp": {
+    "description": "Towelie Button I need help",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonIDontNeedHelp": "Nope already got it all.",
+  "@towelieButtonIDontNeedHelp": {
+    "description": "Towelie Button I dont need help",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonGoToChecklist": "Go to checklist",
+  "@towelieButtonGoToChecklist": {
+    "description": "Towelie Button go to checklist",
     "type": "text",
     "placeholders": {}
   },

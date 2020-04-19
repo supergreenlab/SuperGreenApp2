@@ -28,7 +28,7 @@ class TowelieButtonShowProducts extends TowelieButton {
   static String get towelieButtonGoToChecklist {
     return Intl.message(
       '''Go to checklist''',
-      name: 'towelieButtonCreatePlant',
+      name: 'towelieButtonGoToChecklist',
       desc: 'Towelie Button go to checklist',
       locale: SGLLocalizations.current.localeName,
     );

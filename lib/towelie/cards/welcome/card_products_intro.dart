@@ -29,7 +29,9 @@ class CardProductsIntro {
     return Intl.message(
       '''**Thanks for checking out our quick start checklist:)**
 
-This is a selection of products we and the community like and got good results with.
+This is a **selection** of products **we** and the **community** like and got **good results** with.
+
+The topics covered are:
 
 - Build a growbox
 - Get some seeds
