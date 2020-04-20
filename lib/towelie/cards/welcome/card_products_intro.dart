@@ -22,7 +22,7 @@ import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_growbox.dart';
 
 class CardProductsIntro {
   static String get towelieProductsIntro {
@@ -55,7 +55,7 @@ The topics covered are:
         {
           'text': CardProductsIntro.towelieProductsIntro,
           'buttons': [
-            TowelieButtonShowProducts.createButton(),
+            TowelieButtonShowProductsGrowbox.createButton(),
           ]
         },
       )),

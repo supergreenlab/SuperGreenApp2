@@ -18,33 +18,34 @@
 
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/towelie/cards/welcome/card_products_seeds.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'CREATE_PLANT';
+const _showProductsID = 'SHOW_PRODUCTS_SEED';
 
-class TowelieButtonCreatePlant extends TowelieButton {
-  static String get towelieButtonCreatePlant {
+class TowelieButtonShowProductsSeeds extends TowelieButton {
+  static String get towelieButtonShowProductsSeeds {
     return Intl.message(
-      '''Create plant''',
-      name: 'towelieButtonCreatePlant',
-      desc: 'Towelie button create plant',
+      '''Next''',
+      name: 'towelieButtonShowProductsSeeds',
+      desc: 'Towelie button go to products seeds',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
   @override
-  String get id => _id;
+  String get id => _showProductsID;
 
   static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
-        'title': TowelieButtonCreatePlant.towelieButtonCreatePlant,
+      TowelieButton.createButton(_showProductsID, {
+        'title': TowelieButtonShowProductsSeeds.towelieButtonShowProductsSeeds,
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    yield TowelieBlocStateMainNavigation(MainNavigateToCreatePlantEvent());
+    await CardProductsSeeds.createProductsSeeds(event.feed);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

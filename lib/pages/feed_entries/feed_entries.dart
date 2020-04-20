@@ -35,8 +35,8 @@ import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measur
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_bloc.dart';
@@ -115,8 +115,8 @@ class FeedEntriesHelper {
         ),
     'FE_PRODUCTS': (feed, feedEntry, animation) => BlocProvider(
           key: Key('{$feedEntry.id}'),
-          create: (context) => FeedProductsBloc(feed, feedEntry),
-          child: FeedProductsPage(animation, key: Key('{$feedEntry.id}')),
+          create: (context) => FeedProductsCardBloc(feed, feedEntry),
+          child: FeedProductsCardPage(animation, key: Key('{$feedEntry.id}')),
         ),
   };
 

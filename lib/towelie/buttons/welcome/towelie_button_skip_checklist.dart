@@ -18,18 +18,18 @@
 
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/towelie/cards/welcome/card_create_plant.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'CREATE_PLANT';
+const _id = 'SKIP_CHECKLIST';
 
-class TowelieButtonCreatePlant extends TowelieButton {
-  static String get towelieButtonCreatePlant {
+class TowelieButtonSkipChecklist extends TowelieButton {
+  static String get towelieButtonSkipChecklist {
     return Intl.message(
-      '''Create plant''',
-      name: 'towelieButtonCreatePlant',
-      desc: 'Towelie button create plant',
+      '''Skip checklist''',
+      name: 'towelieButtonSkipChecklist',
+      desc: 'Towelie button skip checklist',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -39,12 +39,13 @@ class TowelieButtonCreatePlant extends TowelieButton {
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_id, {
-        'title': TowelieButtonCreatePlant.towelieButtonCreatePlant,
+        'title': TowelieButtonSkipChecklist.towelieButtonSkipChecklist,
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    yield TowelieBlocStateMainNavigation(MainNavigateToCreatePlantEvent());
+    await CardCreatePlant.createCreatePlantCard(event.feed);
+    await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

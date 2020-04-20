@@ -18,45 +18,40 @@
 
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_create_plant.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_seed.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_skip_checklist.dart';
+import 'package:yaml/yaml.dart';
 
-class CardCreatePlant {
-  static String get towelieCreatePlant {
+class CardProductsGrowbox {
+  static String get towelieGrowboxProducts {
     return Intl.message(
-      '''Alright we're ready to start your **first plant!**
-
-The app works like this:
-- you **create a plant**
-- setup **your green lab**
-- control and monitor it with a **SuperGreenController** (optional)
-
-Once this is done, you will have access to it's **feed**, it's like a timeline of the **plant's life**.
-Whenever you **water**, change **light power**, **train the plant**, or any other action,
-it will **log** it in the plant's feed, so you can **share it**, or **replay it** for your next grow!
-
-Press the **Create plant** button below.
-''',
-      name: 'towelieCreatePlant',
-      desc: 'Towelie Create Plant',
+      '''Growbox checklist''',
+      name: 'towelieGrowboxProducts',
+      desc: 'Towelie Growbox Products',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  static Future createCreatePlantCard(Feed feed) async {
+  static Future createProductsGrowbox(Feed feed) async {
+    YamlMap yml =
+        loadYaml(await rootBundle.loadString('assets/products/initial_checklist_growbox.yml'));
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
-      type: 'FE_TOWELIE_INFO',
+      type: 'FE_PRODUCTS',
       feed: feed.id,
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': CardCreatePlant.towelieCreatePlant,
+        'text': CardProductsGrowbox.towelieGrowboxProducts,
+        'products': yml['products'],
         'buttons': [
-          TowelieButtonCreatePlant.createButton(),
+          TowelieButtonShowProductsSeeds.createButton(),
+          TowelieButtonSkipChecklist.createButton(),
         ],
       })),
     ));
