@@ -1,12 +1,12 @@
 {
-  "@@last_modified": "2020-04-21T14:43:00.209072",
+  "@@last_modified": "2020-04-21T17:42:39.236063",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsGrowingMedium": "Growing medium checklist",
+  "towelieProductsGrowingMedium": "**Your plants' new favorite diet - simple and efficient**\n\nThe **trick** to growing in soil: water **only** when the top soil is dry **1 knuckle deep**\nand the pot feels light. Simple as that.\n",
   "@towelieProductsGrowingMedium": {
     "description": "Towelie seeds products",
     "type": "text",
@@ -18,13 +18,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsNutrients": "Nutrient checklist",
+  "towelieProductsNutrients": "**Keep it simple, stupid - use soil!**\n\nOne single product from seedling to harvest, mix it in every watering\nand enjoy **lush plant** that yield **top quality** nugs every single time!\n",
   "@towelieProductsNutrients": {
     "description": "Towelie nutrients products",
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsBundle": "Bundle checklist",
+  "towelieProductsBundle": "**Lighting & ventilation - ensures environment and odor control.**\n\nWith **6 full spectrum** LED grow lights providing **dense light** and **little heat**.\nThis **complete grow box bundle** lets you build a grow box out of almost anything.\n",
   "@towelieProductsBundle": {
     "description": "Towelie products bundle",
     "type": "text",
@@ -36,19 +36,19 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsIntro": "**Thanks for checking out our quick start checklist:)**\n\nThis is a **selection** of products **we** and the **community** like and got **good results** with.\n\nThe topics covered are:\n\n- Build a growbox\n- Add light and ventilation\n- Get some seeds\n- Growing medium\n- Nutrients\n",
+  "towelieProductsIntro": "**Thanks for checking out our quick start checklist:)**\n\nThis is a **selection** of products **we** and the **community** like and got **good results** with.\n\nThe topics covered are:\n\n- Build a **growbox**\n- Add **light and ventilation**\n- Get some **seeds**\n- **Growing medium**\n- **Nutrients**\n",
   "@towelieProductsIntro": {
     "description": "Towelie Products Intro",
     "type": "text",
     "placeholders": {}
   },
-  "towelieGrowboxProducts": "**First step to unlimited weed: The Growbox**\nThe most important part of the process is to choose your grow space.\nWhen using the SuperGreenLab controller and its 6 LED panels,\nyou an use 4 or 5 LED panels for blooming, and keep 1 or 2 for vegging.\n",
+  "towelieGrowboxProducts": "**First step to unlimited weed: The Growbox!**\n\nChoosing your **growbox** to fit your **available space** is the foundation to your future harvests.\nYou **canopy surface** is one of the key factors determining **yield**.\nWe curated a list of the **community's growboxes** for you to choose from and be **successful**.\n",
   "@towelieGrowboxProducts": {
     "description": "Towelie Growbox Products",
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsSeeds": "Seeds checklist",
+  "towelieProductsSeeds": "**#1 rule of cannabis growing; genetics matter!**\n\nWith the overwhelming number of **strains available** and new ones coming out regularly;\nit's essential that you pick something that **meets your needs**!\nThe **SuperGreenLab** community seebank list is here to help you find **the strain for you**.\n",
   "@towelieProductsSeeds": {
     "description": "Towelie seeds products",
     "type": "text",

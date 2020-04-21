@@ -30,7 +30,12 @@ import 'package:yaml/yaml.dart';
 class CardProductsSeeds {
   static String get towelieProductsSeeds {
     return Intl.message(
-      '''Seeds checklist''',
+      '''**#1 rule of cannabis growing; genetics matter!**
+
+With the overwhelming number of **strains available** and new ones coming out regularly;
+it's essential that you pick something that **meets your needs**!
+The **SuperGreenLab** community seebank list is here to help you find **the strain for you**.
+''',
       name: 'towelieProductsSeeds',
       desc: 'Towelie seeds products',
       locale: SGLLocalizations.current.localeName,

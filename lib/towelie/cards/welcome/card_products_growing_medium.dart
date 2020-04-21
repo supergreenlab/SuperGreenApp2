@@ -30,7 +30,11 @@ import 'package:yaml/yaml.dart';
 class CardProductsGrowingMedium {
   static String get towelieProductsGrowingMedium {
     return Intl.message(
-      '''Growing medium checklist''',
+      '''**Your plants' new favorite diet - simple and efficient**
+
+The **trick** to growing in soil: water **only** when the top soil is dry **1 knuckle deep**
+and the pot feels light. Simple as that.
+''',
       name: 'towelieProductsGrowingMedium',
       desc: 'Towelie seeds products',
       locale: SGLLocalizations.current.localeName,

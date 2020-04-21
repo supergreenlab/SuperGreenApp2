@@ -94,8 +94,9 @@ class _FeedPageState extends State<FeedPage> {
                 }
               }
             }
+          } else {
+            _entries = state.entries;
           }
-          _entries = state.entries;
         }
       },
       child: BlocBuilder<FeedBloc, FeedBlocState>(
@@ -132,7 +133,8 @@ class _FeedPageState extends State<FeedPage> {
               background: this.widget.appBar,
               centerTitle: this.widget.appBar == null,
               title: this.widget.appBar == null
-                  ? Text(widget.title, style: TextStyle(color: Color(0xff404040)))
+                  ? Text(widget.title,
+                      style: TextStyle(color: Color(0xff404040)))
                   : null,
             ),
           ),

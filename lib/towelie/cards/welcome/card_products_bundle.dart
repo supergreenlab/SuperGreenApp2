@@ -30,7 +30,11 @@ import 'package:yaml/yaml.dart';
 class CardProductsBundle {
   static String get towelieProductsBundle {
     return Intl.message(
-      '''Bundle checklist''',
+      '''**Lighting & ventilation - ensures environment and odor control.**
+
+With **6 full spectrum** LED grow lights providing **dense light** and **little heat**.
+This **complete grow box bundle** lets you build a grow box out of almost anything.
+''',
       name: 'towelieProductsBundle',
       desc: 'Towelie products bundle',
       locale: SGLLocalizations.current.localeName,
@@ -38,8 +42,8 @@ class CardProductsBundle {
   }
 
   static Future createProductsBundle(Feed feed) async {
-    YamlMap yml =
-        loadYaml(await rootBundle.loadString('assets/products/initial_checklist_bundle.yml'));
+    YamlMap yml = loadYaml(await rootBundle
+        .loadString('assets/products/initial_checklist_bundle.yml'));
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_PRODUCTS',

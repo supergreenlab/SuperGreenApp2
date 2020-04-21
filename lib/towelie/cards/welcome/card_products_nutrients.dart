@@ -29,7 +29,11 @@ import 'package:yaml/yaml.dart';
 class CardProductsNutrients {
   static String get towelieProductsNutrients {
     return Intl.message(
-      '''Nutrient checklist''',
+      '''**Keep it simple, stupid - use soil!**
+
+One single product from seedling to harvest, mix it in every watering
+and enjoy **lush plant** that yield **top quality** nugs every single time!
+''',
       name: 'towelieProductsNutrients',
       desc: 'Towelie nutrients products',
       locale: SGLLocalizations.current.localeName,

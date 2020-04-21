@@ -21,7 +21,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_card_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -40,8 +42,12 @@ class FeedProductsCardPage extends StatelessWidget {
         bloc: BlocProvider.of<FeedProductsCardBloc>(context),
         builder: (context, state) {
           List<Widget> content = [
-            FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
-                state.feedEntry, canDelete: false,),
+            FeedCardTitle(
+              'assets/feed_card/icon_towelie.png',
+              'Towelie',
+              state.feedEntry,
+              canDelete: false,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
               child: _renderBody(context, state),
@@ -100,6 +106,7 @@ class FeedProductsCardPage extends StatelessWidget {
                   MarkdownBody(
                       data: product['description'],
                       styleSheet: MarkdownStyleSheet(
+                        strong: TextStyle(),
                           p: TextStyle(color: Colors.black, fontSize: 14))),
                 ],
               ),
@@ -115,7 +122,11 @@ class FeedProductsCardPage extends StatelessWidget {
             height: 0,
             child: FlatButton(
               child: Text('View', style: TextStyle(color: Colors.blue)),
-              onPressed: () {
+              onPressed: () async {
+                if (AppDB().getAppData().allowAnalytics == true) {
+                  await FlutterMatomo.trackScreenWithName(
+                      'FeedProductsCardPage', 'product_clicked');
+                }
                 launch(product['link']['data']);
               },
             ),
