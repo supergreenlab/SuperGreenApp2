@@ -27,7 +27,7 @@ const _id = 'CREATE_PLANT';
 class TowelieButtonCreatePlant extends TowelieButton {
   static String get towelieButtonCreatePlant {
     return Intl.message(
-      '''Create plant''',
+      '''GO!''',
       name: 'towelieButtonCreatePlant',
       desc: 'Towelie button create plant',
       locale: SGLLocalizations.current.localeName,

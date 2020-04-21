@@ -23,7 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_create_plant.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_end_checklist.dart';
 import 'package:yaml/yaml.dart';
 
 class CardProductsNutrients {
@@ -37,8 +37,8 @@ class CardProductsNutrients {
   }
 
   static Future createProductsNutrients(Feed feed) async {
-    YamlMap yml =
-        loadYaml(await rootBundle.loadString('assets/products/initial_checklist_nutrients.yml'));
+    YamlMap yml = loadYaml(await rootBundle
+        .loadString('assets/products/initial_checklist_nutrients.yml'));
     final fdb = RelDB.get().feedsDAO;
     await fdb.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_PRODUCTS',
@@ -49,7 +49,7 @@ class CardProductsNutrients {
         'text': CardProductsNutrients.towelieProductsNutrients,
         'products': yml['products'],
         'buttons': [
-          TowelieButtonCreatePlant.createButton(),
+          TowelieButtonEndChecklist.createButton(),
         ],
       })),
     ));

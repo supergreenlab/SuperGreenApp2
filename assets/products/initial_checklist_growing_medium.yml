@@ -1,8 +1,29 @@
 products: 
-  - title:
-    description:
-    picture:
-    price:
+  - title: Peat pellets
+    description: Simple germination tool and easy transplant without the risk of shock.
+    picture: assets/products/growing_medium/peat_pellets.jpg
+    price: $8.58
     link:
-      type:
-      data:
+      type: external
+      data: https://amzn.to/2RNlsKc
+  - title: Fabric pots 2gal
+    description: Great drainage and breathability for heathy and vigorous roots.
+    picture: assets/products/growing_medium/fabric_pots.jpg
+    price: $16.99
+    link:
+      type: external
+      data: https://amzn.to/2wPkA0r
+  - title: Clay pebbles
+    description: Extra drainage and protection from water left in saucer.
+    picture: assets/products/growing_medium/clay_pebbles.jpg
+    price: $13.69
+    link:
+      type: external
+      data: https://amzn.to/3eyM7UU
+  - title: Light mix soil
+    description: Keep it simple, no extra nutrients added in the soil.
+    picture: assets/products/growing_medium/light_mix.jpg
+    price: $20.13
+    link:
+      type: external
+      data: https://amzn.to/2RR6dQK

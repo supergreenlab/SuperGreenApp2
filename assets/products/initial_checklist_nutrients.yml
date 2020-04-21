@@ -1,8 +1,29 @@
 products: 
-  - title:
-    description:
-    picture:
-    price:
+  - title: Mega Crop
+    description: Simple and efficient soluble nutrient, perfect for the whole growth cycle.
+    picture: assets/products/nutrients/mega_crop.png
+    price: $23.90
     link:
-      type:
-      data:
+      type: external
+      data: https://greenleafnutrients.com/?ref=services
+  - title: Digital scale
+    description: Measure the nutrients for nutrients and also wiegh your harvest.
+    picture: assets/products/nutrients/scale.jpg
+    price: $13.99
+    link:
+      type: external
+      data: https://amzn.to/2XL44K4
+  - title: PH meter
+    description: Essential tool to make sure you are always in the correct range for optimal nutrient intake.
+    picture: assets/products/nutrients/ph_meter.jpg
+    price: $12.99
+    link:
+      type: external
+      data: https://amzn.to/2KjuWJ4
+  - title: pH up/down
+    description: For increasing and reducing pH to get to the optimal range.
+    picture: assets/products/nutrients/ph_up_down.jpg
+    price: $18.80
+    link:
+      type: external
+      data: https://amzn.to/2ROWhai

@@ -34,7 +34,9 @@ import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_phase
 import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_type.dart';
 import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_create_plant.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_end_checklist.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_i_need_help.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_bundle.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_growbox.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_growing_medium.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_nutrients.dart';
@@ -222,11 +224,13 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonINeedHelp(),
     TowelieButtonIDontNeedHelp(),
     TowelieButtonCreatePlant(),
+    TowelieButtonShowProductsBundle(),
     TowelieButtonSkipChecklist(),
     TowelieButtonShowProductsGrowbox(),
     TowelieButtonShowProductsSeeds(),
     TowelieButtonShowProductsGrowingMedium(),
     TowelieButtonShowProductsNutrients(),
+    TowelieButtonEndChecklist(),
 
     // Plant onboarding
     TowelieButtonViewPlant(),

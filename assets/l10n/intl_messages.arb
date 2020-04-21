@@ -1,8 +1,14 @@
 {
-  "@@last_modified": "2020-04-20T14:48:32.332693",
+  "@@last_modified": "2020-04-21T11:49:05.142087",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieProductsGrowingMedium": "Growing medium checklist",
+  "@towelieProductsGrowingMedium": {
+    "description": "Towelie seeds products",
     "type": "text",
     "placeholders": {}
   },
@@ -18,19 +24,25 @@
     "type": "text",
     "placeholders": {}
   },
+  "towelieProductsBundle": "Bundle checklist",
+  "@towelieProductsBundle": {
+    "description": "Towelie products bundle",
+    "type": "text",
+    "placeholders": {}
+  },
   "towelieWelcomeApp": "Welcome to SuperGreenLab's grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n\nTo start off on a right foot, we made a **quick start checklist** of all the stuffs you'll need to **start growing**.\n\nDo you need a hand to start growing?\n",
   "@towelieWelcomeApp": {
     "description": "Towelie Welcome App",
     "type": "text",
     "placeholders": {}
   },
-  "towelieProductsIntro": "**Thanks for checking out our quick start checklist:)**\n\nThis is a **selection** of products **we** and the **community** like and got **good results** with.\n\nThe topics covered are:\n\n- Build a growbox\n- Get some seeds\n- Growing medium\n- Nutrients\n",
+  "towelieProductsIntro": "**Thanks for checking out our quick start checklist:)**\n\nThis is a **selection** of products **we** and the **community** like and got **good results** with.\n\nThe topics covered are:\n\n- Build a growbox\n- Add light and ventilation\n- Get some seeds\n- Growing medium\n- Nutrients\n",
   "@towelieProductsIntro": {
     "description": "Towelie Products Intro",
     "type": "text",
     "placeholders": {}
   },
-  "towelieGrowboxProducts": "Growbox checklist",
+  "towelieGrowboxProducts": "**First step to unlimited weed: The Growbox**\nThe most important part of the process is to choose your grow space.\nWhen using the SuperGreenLab controller and its 6 LED panels,\nyou an use 4 or 5 LED panels for blooming, and keep 1 or 2 for vegging.\n",
   "@towelieGrowboxProducts": {
     "description": "Towelie Growbox Products",
     "type": "text",
@@ -81,6 +93,12 @@
   "towelieButtonCreatePlant": "Create plant",
   "@towelieButtonCreatePlant": {
     "description": "Towelie button create plant",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonShowProductsBundle": "Next",
+  "@towelieButtonShowProductsBundle": {
+    "description": "Towelie button show products bundle",
     "type": "text",
     "placeholders": {}
   },

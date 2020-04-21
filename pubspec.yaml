@@ -98,6 +98,11 @@ flutter:
     - assets/home/
     - assets/settings/
     - assets/products/
+    - assets/products/bundle/
+    - assets/products/growbox/
+    - assets/products/growing_medium/
+    - assets/products/nutrients/
+    - assets/products/seeds/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -23,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_bundle.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_seed.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_skip_checklist.dart';
 import 'package:yaml/yaml.dart';
@@ -30,7 +31,11 @@ import 'package:yaml/yaml.dart';
 class CardProductsGrowbox {
   static String get towelieGrowboxProducts {
     return Intl.message(
-      '''Growbox checklist''',
+      '''**First step to unlimited weed: The Growbox**
+The most important part of the process is to choose your grow space.
+When using the SuperGreenLab controller and its 6 LED panels,
+you an use 4 or 5 LED panels for blooming, and keep 1 or 2 for vegging.
+''',
       name: 'towelieGrowboxProducts',
       desc: 'Towelie Growbox Products',
       locale: SGLLocalizations.current.localeName,
@@ -50,7 +55,7 @@ class CardProductsGrowbox {
         'text': CardProductsGrowbox.towelieGrowboxProducts,
         'products': yml['products'],
         'buttons': [
-          TowelieButtonShowProductsSeeds.createButton(),
+          TowelieButtonShowProductsBundle.createButton(),
           TowelieButtonSkipChecklist.createButton(),
         ],
       })),

@@ -34,6 +34,7 @@ This is a **selection** of products **we** and the **community** like and got **
 The topics covered are:
 
 - Build a growbox
+- Add light and ventilation
 - Get some seeds
 - Growing medium
 - Nutrients

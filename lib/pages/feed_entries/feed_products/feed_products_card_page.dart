@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_card_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -72,6 +75,51 @@ class FeedProductsCardPage extends StatelessWidget {
             child: SvgPicture.asset(state.params['top_pic']),
           ));
     }
+    List<dynamic> products = state.params['products'];
+    body.addAll(products.map<Widget>((p) {
+      Map<String, dynamic> product = p;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          SizedBox(
+              width: 70, height: 70, child: Image.asset(product['picture'])),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      product['title'],
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  MarkdownBody(
+                      data: product['description'],
+                      styleSheet: MarkdownStyleSheet(
+                          p: TextStyle(color: Colors.black, fontSize: 14))),
+                ],
+              ),
+            ),
+          ),
+          ButtonTheme(
+            padding: EdgeInsets.symmetric(
+                vertical: 16.0,
+                horizontal: 16.0), //adds padding inside the button
+            materialTapTargetSize: MaterialTapTargetSize
+                .shrinkWrap, //limits the touch area to the button area
+            minWidth: 0, //wraps child's width
+            height: 0,
+            child: FlatButton(
+              child: Text('View', style: TextStyle(color: Colors.blue)),
+              onPressed: () {},
+            ),
+          ),
+        ]),
+      );
+    }));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: body,
@@ -93,9 +141,10 @@ class FeedProductsCardPage extends StatelessWidget {
       child: Text(button['title'].toUpperCase(),
           style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
-        BlocProvider.of<TowelieBloc>(context).add(
-            TowelieBlocEventButtonPressed(
-                button, feed: state.feed, feedEntry: state.feedEntry));
+        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(
+            button,
+            feed: state.feed,
+            feedEntry: state.feedEntry));
       },
     );
   }
@@ -105,7 +154,10 @@ class FeedProductsCardPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
       child: Text('➡️ ${button['title'].toUpperCase()}',
-          style: TextStyle(color: Color(0xff565656), fontSize: 12, fontWeight: FontWeight.bold)),
+          style: TextStyle(
+              color: Color(0xff565656),
+              fontSize: 12,
+              fontWeight: FontWeight.bold)),
     );
   }
 }
