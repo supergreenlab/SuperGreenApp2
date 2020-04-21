@@ -106,7 +106,7 @@ class FeedProductsCardPage extends StatelessWidget {
                   MarkdownBody(
                       data: product['description'],
                       styleSheet: MarkdownStyleSheet(
-                        strong: TextStyle(),
+                          strong: TextStyle(),
                           p: TextStyle(color: Colors.black, fontSize: 14))),
                 ],
               ),
@@ -121,7 +121,16 @@ class FeedProductsCardPage extends StatelessWidget {
             minWidth: 0, //wraps child's width
             height: 0,
             child: FlatButton(
-              child: Text('View', style: TextStyle(color: Colors.blue)),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    product['price'],
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text('View', style: TextStyle(color: Colors.blue)),
+                ],
+              ),
               onPressed: () async {
                 if (AppDB().getAppData().allowAnalytics == true) {
                   await FlutterMatomo.trackScreenWithName(

@@ -2,28 +2,36 @@ products:
   - title: Paradise Seeds
     description: Paradise Seeds is based out of Amsterdam and has been in operation since the early 1990s, making it one of the longest-established seedbanks on the internet.
     picture: assets/products/seeds/paradise_seeds.png
-    price: from $4/seed
+    price: |
+      from
+      $4/seed
     link:
       type: external
       data: https://www.paradise-seeds.com/en?acc=58238e9ae2dd305d79c2ebc8c1883422
   - title: Seedsman
     description: Seedsman has been in business since 2003, making them one of the older online seed banks around. With strains from over 120 breeders they have one of the largest seed catalogs in the world!
     picture: assets/products/seeds/seedsman.png
-    price: from $4/seed
+    price: |
+      from
+      $4/seed
     link:
       type: external
       data: https://www.seedsman.com/en/?a_aid=5e467237479ff
   - title: ILoveGrowingMarijuana
     description: IloveGrowing Marijuana, founded by Robert Bergman, may not have the most extensive collection, but you are sure of buying exceptionally quality seeds.
     picture: assets/products/seeds/ILGM.png
-    price: from $4/seed
+    price: |
+      from
+      $4/seed
     link:
       type: external
       data: https://shop.ilovegrowingmarijuana.com?aff=4839
   - title: Sensiseeds
     description: Sensi Seeds pioneered the cannabis seed industry in 1985. Today, the company is the world’s largest cannabis seedbank with over 500 varieties. These genetics and the brand name have become true classics in the cannabis community.
     picture: assets/products/seeds/sensi_seeds.png
-    price: from $4/seed
+    price: |
+      from
+      $4/seed
     link:
       type: external
       data: https://sensiseeds.com?a_aid=SuperGreenLab

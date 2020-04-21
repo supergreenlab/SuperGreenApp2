@@ -35,7 +35,6 @@ class Devices extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static DevicesCompanion fromJSON(Map<String, dynamic> map) {
-    // TODO load all modules/params
     return DevicesCompanion(
         identifier: Value(map['identifier'] as String),
         name: Value(map['name'] as String),
