@@ -230,6 +230,19 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'
               ])),
+      _renderSpeedDialChild(
+          'Transplant',
+          'assets/feed_card/icon_transplant.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedTransplantFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_TRANSPLANT',
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_to_repot_your_seedling/l/en',
+                't/supergreenlab/SuperGreenTips/master/s/how_to_transplant_your_seedling/l/en'
+              ])),
     ];
   }
 
@@ -276,19 +289,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipID: 'TIP_BLOOM',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
-              ])),
-      _renderSpeedDialChild(
-          'Transplant',
-          'assets/feed_card/icon_transplant.svg',
-          _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedTransplantFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement),
-              tipID: 'TIP_TRANSPLANT',
-              tipPaths: [
-                't/supergreenlab/SuperGreenTips/master/s/when_to_repot_your_seedling/l/en',
-                't/supergreenlab/SuperGreenTips/master/s/how_to_transplant_your_seedling/l/en'
               ])),
     ];
   }
