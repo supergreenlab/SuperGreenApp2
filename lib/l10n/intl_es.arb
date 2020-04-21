@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-21T11:49:05.142087",
+  "@@last_modified": "2020-04-21T14:43:00.209072",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -90,7 +90,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieButtonCreatePlant": "Create plant",
+  "towelieButtonCreatePlant": "GO!",
   "@towelieButtonCreatePlant": {
     "description": "Towelie button create plant",
     "type": "text",
@@ -111,6 +111,12 @@
   "towelieButtonShowNutrients": "Next",
   "@towelieButtonShowNutrients": {
     "description": "Towelie button show nutrients",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieButtonEndChecklist": "Create plant",
+  "@towelieButtonEndChecklist": {
+    "description": "Towelie button end checklist",
     "type": "text",
     "placeholders": {}
   },

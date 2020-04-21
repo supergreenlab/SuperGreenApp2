@@ -27,6 +27,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeedProductsCardPage extends StatelessWidget {
   final Animation animation;
@@ -40,7 +41,7 @@ class FeedProductsCardPage extends StatelessWidget {
         builder: (context, state) {
           List<Widget> content = [
             FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
-                state.feedEntry),
+                state.feedEntry, canDelete: false,),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
               child: _renderBody(context, state),
@@ -114,7 +115,9 @@ class FeedProductsCardPage extends StatelessWidget {
             height: 0,
             child: FlatButton(
               child: Text('View', style: TextStyle(color: Colors.blue)),
-              onPressed: () {},
+              onPressed: () {
+                launch(product['link']['data']);
+              },
             ),
           ),
         ]),

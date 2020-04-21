@@ -37,7 +37,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         builder: (context, state) {
           List<Widget> content = [
             FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
-                state.feedEntry),
+                state.feedEntry, canDelete: false),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
               child: _renderBody(context, state),
