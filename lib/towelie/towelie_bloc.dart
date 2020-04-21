@@ -54,6 +54,7 @@ import 'package:super_green_app/towelie/helpers/device/towelie_action_help_wifi.
 import 'package:super_green_app/towelie/helpers/form/towelie_action_help_form_measure.dart';
 import 'package:super_green_app/towelie/helpers/form/towelie_action_help_take_pic.dart';
 import 'package:super_green_app/towelie/helpers/misc/towelie_action_help_notification.dart';
+import 'package:super_green_app/towelie/helpers/plant/towelie_action_help_create_lab.dart';
 import 'package:super_green_app/towelie/helpers/plant/towelie_action_help_create_plant.dart';
 import 'package:super_green_app/towelie/helpers/reminders/towelie_action_help_measure_reminder.dart';
 import 'package:super_green_app/towelie/helpers/reminders/towelie_action_help_water_reminder.dart';
@@ -204,7 +205,10 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
     TowelieActionAppInit(),
     TowelieActionPlantCreated(),
+
     TowelieActionHelpCreatePlant(),
+    TowelieActionHelpCreateLab(),
+
     TowelieActionHelpSelectDevice(),
     TowelieActionHelpAddDevice(),
     TowelieActionHelpAddExistingDevice(),
@@ -212,12 +216,15 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpSelectPlantDeviceBox(),
     TowelieActionHelpTestDevice(),
     TowelieActionHelpWifi(),
+
     TowelieActionHelpFormMeasure(),
     TowelieActionHelpFormTakePic(),
+
     TowelieActionHelpMeasureReminder(),
     TowelieActionHelpWaterReminder(),
-    TowelieActionHelpNotification(),
     TowelieActionHelpMeasureAfterStretch(),
+
+    TowelieActionHelpNotification(),
   ];
   static List<TowelieButton> buttons = [
     // App onboarding

@@ -17,6 +17,12 @@ mixin _$PlantsDAOMixin on DatabaseAccessor<RelDB> {
         readsFrom: {plants}).map((QueryRow row) => row.readInt('COUNT(*)'));
   }
 
+  Selectable<int> nBoxes() {
+    return customSelectQuery('SELECT COUNT(*) FROM boxes',
+        variables: [],
+        readsFrom: {boxes}).map((QueryRow row) => row.readInt('COUNT(*)'));
+  }
+
   Selectable<int> nTimelapses(int var1) {
     return customSelectQuery('SELECT COUNT(*) FROM timelapses WHERE plant = ?',
         variables: [Variable.withInt(var1)],

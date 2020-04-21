@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-21T17:42:39.236063",
+  "@@last_modified": "2020-04-21T18:08:34.028677",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -243,6 +243,12 @@
   "towelieHelperFormTakePic": "Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You'll be glad you took regular pictures on your next grow!**",
   "@towelieHelperFormTakePic": {
     "description": "Towelie Helper form take pic",
+    "type": "text",
+    "placeholders": {}
+  },
+  "towelieHelperCreateLab": "Now we're creating our **first Lab**!\nA lab is where you **simulate a tiny echosystem**\nwith artificial **lights and ventilation**.",
+  "@towelieHelperCreateLab": {
+    "description": "Towelie Helper create lab",
     "type": "text",
     "placeholders": {}
   },

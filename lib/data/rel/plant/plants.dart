@@ -183,6 +183,7 @@ class Timelapses extends Table {
   Timelapses,
 ], queries: {
   'nPlants': 'SELECT COUNT(*) FROM plants',
+  'nBoxes': 'SELECT COUNT(*) FROM boxes',
   'nTimelapses': 'SELECT COUNT(*) FROM timelapses WHERE plant = ?',
   'nPlantsInBox': 'SELECT COUNT(*) FROM plants WHERE box = ?',
 })
