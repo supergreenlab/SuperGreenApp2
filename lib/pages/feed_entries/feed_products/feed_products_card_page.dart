@@ -59,13 +59,13 @@ class FeedProductsCardPage extends StatelessWidget {
               child: _renderBody(context, state),
             ),
           ];
-          if (state.params['buttons'] != null &&
+          if (state.params['selectedButton'] != null) {
+            content.add(_renderSelectedButton(
+                context, state, state.params['selectedButton']));
+          } else if (state.params['buttons'] != null &&
               state.params['buttons'].length > 0) {
             content
                 .add(_renderButtonBar(context, state, state.params['buttons']));
-          } else if (state.params['selectedButton'] != null) {
-            content.add(_renderSelectedButton(
-                context, state, state.params['selectedButton']));
           }
           return FeedCard(
               animation: animation,
