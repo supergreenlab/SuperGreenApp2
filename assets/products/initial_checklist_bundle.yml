@@ -3,13 +3,48 @@ products:
     description: The ultimate kit to transforma any furniture into a connected growbox.
     picture: assets/products/bundle/ninja_bundle.png
     price: $299
+    geo: us_us
     link:
       type: external
       data: https://www.supergreenlab.com/bundle/micro-box-bundle
+  - title: Ninja bundle
+    description: The ultimate kit to transforma any furniture into a connected growbox.
+    picture: assets/products/bundle/ninja_bundle.png
+    price: $361.79
+    geo: eu_de
+    link:
+      type: external
+      data: https://www.supergreenlab.com/bundle/micro-box-bundle
+  - title: Ninja bundle
+    description: The ultimate kit to transforma any furniture into a connected growbox.
+    picture: assets/products/bundle/ninja_bundle.png
+    price: $361.79
+    geo: eu_fr
+    link:
+      type: external
+      data: https://www.supergreenlab.com/bundle/micro-box-bundle
+
   - title: Carbon filter
     description: Get rid of smell with a cheap and efficient filter.
     picture: assets/products/bundle/carbon_filter.jpg
     price: $18.95
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/3eGYezw
+  - title: Carbon filter
+    description: Get rid of smell with a cheap and efficient filter.
+    picture: assets/products/bundle/carbon_filter.jpg
+    price: 19.07€
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/3bldpwf
+  - title: Carbon filter
+    description: Get rid of smell with a cheap and efficient filter.
+    picture: assets/products/bundle/carbon_filter.jpg
+    price: $18.95
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/2wX7CxJ

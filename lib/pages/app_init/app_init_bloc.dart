@@ -20,6 +20,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:devicelocale/devicelocale.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_matomo/flutter_matomo.dart';
@@ -94,6 +95,16 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       await _db.init();
 
       AppData appData = _db.getAppData();
+
+      if (appData.storeGeo == null) {
+        final Map<String, String> localeToStoreGeo = {
+          'en_US': 'us_us',
+          'de_DE': 'eu_de',
+          'fr_FR': 'eu_fr',
+        };
+        String locale = await Devicelocale.currentLocale;
+        AppDB().setStoreGeo(localeToStoreGeo[locale] ?? 'us_us');
+      }
 
       FeedsAPI(); // force init
 

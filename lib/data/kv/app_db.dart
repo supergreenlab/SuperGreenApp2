@@ -38,6 +38,10 @@ class AppDB {
     return _settingsDB.get('data', defaultValue: AppData());
   }
 
+  Stream<BoxEvent> watchAppData() {
+    return _settingsDB.watch(key: 'data');
+  }
+
   void setFirstStart(firstStart) {
     AppData appData = getAppData();
     appData.firstStart = firstStart;
@@ -65,6 +69,12 @@ class AppDB {
   void setJWT(String jwt) {
     AppData appData = getAppData();
     appData.jwt = jwt;
+    setAppData(appData);
+  }
+
+  void setStoreGeo(String storeGeo) {
+    AppData appData = getAppData();
+    appData.storeGeo = storeGeo;
     setAppData(appData);
   }
 

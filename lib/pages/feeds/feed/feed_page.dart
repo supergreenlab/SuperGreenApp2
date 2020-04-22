@@ -94,9 +94,8 @@ class _FeedPageState extends State<FeedPage> {
                 }
               }
             }
-          } else {
-            _entries = state.entries;
           }
+          _entries = state.entries;
         }
       },
       child: BlocBuilder<FeedBloc, FeedBlocState>(

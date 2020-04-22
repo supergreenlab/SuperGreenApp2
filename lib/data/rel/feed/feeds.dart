@@ -225,6 +225,11 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .getSingle();
   }
 
+  Stream<FeedEntry> watchFeedEntry(int feedEntryID) {
+    return (select(feedEntries)..where((f) => f.id.equals(feedEntryID)))
+        .watchSingle();
+  }
+
   Future<FeedEntry> getFeedEntryForServerID(String serverID) {
     return (select(feedEntries)..where((fe) => fe.serverID.equals(serverID)))
         .getSingle();

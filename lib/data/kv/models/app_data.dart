@@ -32,4 +32,6 @@ class AppData {
   bool freedomUnits = true;
   @HiveField(4)
   String jwt;
+  @HiveField(5)
+  String storeGeo;
 }

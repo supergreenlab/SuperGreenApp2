@@ -31,6 +31,12 @@ import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const _storeGeoNames = {
+  'us_us': 'US',
+  'eu_de': 'German',
+  'eu_fr': 'French',
+};
+
 class FeedProductsCardPage extends StatelessWidget {
   final Animation animation;
 
@@ -82,8 +88,9 @@ class FeedProductsCardPage extends StatelessWidget {
             child: SvgPicture.asset(state.params['top_pic']),
           ));
     }
+    body.add(_renderStoreGeos(context, state));
     List<dynamic> products = state.params['products'];
-    body.addAll(products.map<Widget>((p) {
+    body.addAll(products.where((p) => p['geo'] == state.storeGeo).map<Widget>((dynamic p) {
       Map<String, dynamic> product = p;
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
@@ -146,6 +153,38 @@ class FeedProductsCardPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: body,
+    );
+  }
+
+  Widget _renderStoreGeos(
+      BuildContext context, FeedProductsCardBlocState state) {
+    List<dynamic> products = state.params['products'];
+    List<String> storeGeos = products
+        .map<String>((dynamic p) {
+          Map<String, dynamic> product = p;
+          return product['geo'] as String;
+        })
+        .toSet()
+        .toList();
+    return Container(
+      height: 50,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: storeGeos.map<Widget>((sg) {
+          bool selected = sg == state.storeGeo;
+          return FlatButton(
+            child: Text(_storeGeoNames[sg],
+                style: TextStyle(
+                    color: sg == state.storeGeo ? Colors.black : Colors.blue)),
+            onPressed: selected
+                ? null
+                : () async {
+                    BlocProvider.of<FeedProductsCardBloc>(context)
+                        .add(FeedProductsCardBlocEventSetStoreGeo(sg));
+                  },
+          );
+        }).toList(),
+      ),
     );
   }
 

@@ -36,20 +36,21 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         bloc: BlocProvider.of<FeedTowelieInfoCardBloc>(context),
         builder: (context, state) {
           List<Widget> content = [
-            FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
-                state.feedEntry, canDelete: false),
+            FeedCardTitle(
+                'assets/feed_card/icon_towelie.png', 'Towelie', state.feedEntry,
+                canDelete: false),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
               child: _renderBody(context, state),
             ),
           ];
-          if (state.params['buttons'] != null &&
+          if (state.params['selectedButton'] != null) {
+            content.add(_renderSelectedButton(
+                context, state, state.params['selectedButton']));
+          } else if (state.params['buttons'] != null &&
               state.params['buttons'].length > 0) {
             content
                 .add(_renderButtonBar(context, state, state.params['buttons']));
-          } else if (state.params['selectedButton'] != null) {
-            content.add(_renderSelectedButton(
-                context, state, state.params['selectedButton']));
           }
           return FeedCard(
               animation: animation,
@@ -93,9 +94,10 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
       child: Text(button['title'].toUpperCase(),
           style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
-        BlocProvider.of<TowelieBloc>(context).add(
-            TowelieBlocEventButtonPressed(
-                button, feed: state.feed, feedEntry: state.feedEntry));
+        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(
+            button,
+            feed: state.feed,
+            feedEntry: state.feedEntry));
       },
     );
   }
@@ -105,7 +107,10 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
       child: Text('➡️ ${button['title'].toUpperCase()}',
-          style: TextStyle(color: Color(0xff565656), fontSize: 12, fontWeight: FontWeight.bold)),
+          style: TextStyle(
+              color: Color(0xff565656),
+              fontSize: 12,
+              fontWeight: FontWeight.bold)),
     );
   }
 }

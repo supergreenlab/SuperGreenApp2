@@ -42,7 +42,6 @@ abstract class TowelieButton {
     final Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
     final Map<String, dynamic> button =
         (params['buttons'] as List).singleWhere(selector);
-    params['buttons'] = [];
     params['selectedButton'] = button;
     await fdb.updateFeedEntry(feedEntry.createCompanion(true).copyWith(
         params: Value(JsonEncoder().convert(params)), synced: Value(false)));

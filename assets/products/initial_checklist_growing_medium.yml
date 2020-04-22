@@ -1,29 +1,100 @@
-products: 
+products:
   - title: Peat pellets
     description: Simple germination tool and easy transplant without the risk of shock.
     picture: assets/products/growing_medium/peat_pellets.jpg
     price: $8.58
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/2RNlsKc
+  - title: Peat pellets
+    description: Simple germination tool and easy transplant without the risk of shock.
+    picture: assets/products/growing_medium/peat_pellets.jpg
+    price: 19.95€
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/2KoGV8n
+  - title: Peat pellets
+    description: Simple germination tool and easy transplant without the risk of shock.
+    picture: assets/products/growing_medium/peat_pellets.jpg
+    price: 7.00€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/2KpvCN7
+
   - title: Fabric pots 2gal
     description: Great drainage and breathability for heathy and vigorous roots.
     picture: assets/products/growing_medium/fabric_pots.jpg
     price: $16.99
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/2wPkA0r
+  - title: Fabric pots 2gal
+    description: Great drainage and breathability for heathy and vigorous roots.
+    picture: assets/products/growing_medium/fabric_pots.jpg
+    price: 28.99€
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/3eGoxWu
+  - title: Fabric pots 2gal
+    description: Great drainage and breathability for heathy and vigorous roots.
+    picture: assets/products/growing_medium/fabric_pots.jpg
+    price: 11.99€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/3cAYBcX
+
   - title: Clay pebbles
     description: Extra drainage and protection from water left in saucer.
     picture: assets/products/growing_medium/clay_pebbles.jpg
     price: $13.69
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/3eyM7UU
+  - title: Clay pebbles
+    description: Extra drainage and protection from water left in saucer.
+    picture: assets/products/growing_medium/clay_pebbles.jpg
+    price: 7.29€
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/3eMJpeT
+  - title: Clay pebbles
+    description: Extra drainage and protection from water left in saucer.
+    picture: assets/products/growing_medium/clay_pebbles.jpg
+    price: 10€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/3cCZiSX
+
   - title: Light mix soil
     description: Keep it simple, no extra nutrients added in the soil.
     picture: assets/products/growing_medium/light_mix.jpg
     price: $20.13
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/2RR6dQK
+  - title: Light mix soil
+    description: Keep it simple, no extra nutrients added in the soil.
+    picture: assets/products/growing_medium/light_mix.jpg
+    price: 14€
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/2KlaYhg
+  - title: Light mix soil
+    description: Keep it simple, no extra nutrients added in the soil.
+    picture: assets/products/growing_medium/light_mix.jpg
+    price: 39.99€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/3eGiXmN

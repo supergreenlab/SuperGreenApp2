@@ -3,27 +3,106 @@ products:
     description: Simple and efficient soluble nutrient, perfect for the whole growth cycle.
     picture: assets/products/nutrients/mega_crop.png
     price: $23.90
+    geo: us_us
     link:
       type: external
       data: https://greenleafnutrients.com/?ref=services
+  - title: Mega Crop
+    description: Simple and efficient soluble nutrient, perfect for the whole growth cycle.
+    picture: assets/products/nutrients/mega_crop.png
+    price: 11.39€
+    geo: eu_de
+    link:
+      type: external
+      data: https://greenleafnutrients.com/?ref=services
+  - title: Mega Crop
+    description: Simple and efficient soluble nutrient, perfect for the whole growth cycle.
+    picture: assets/products/nutrients/mega_crop.png
+    price: 11.39€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://greenleafnutrients.com/?ref=services
+
   - title: Digital scale
     description: Measure the nutrients for nutrients and also wiegh your harvest.
     picture: assets/products/nutrients/scale.jpg
     price: $13.99
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/2XL44K4
+  - title: Digital scale
+    description: Measure the nutrients for nutrients and also wiegh your harvest.
+    picture: assets/products/nutrients/scale.jpg
+    price: $13.99
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/2Vtw7w7
+  - title: Digital scale
+    description: Measure the nutrients for nutrients and also wiegh your harvest.
+    picture: assets/products/nutrients/scale.jpg
+    price: 13.99€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/2XRU7dX
+
   - title: PH meter
     description: Essential tool to make sure you are always in the correct range for optimal nutrient intake.
     picture: assets/products/nutrients/ph_meter.jpg
     price: $12.99
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/2KjuWJ4
+  - title: PH meter
+    description: Essential tool to make sure you are always in the correct range for optimal nutrient intake.
+    picture: assets/products/nutrients/ph_meter.jpg
+    price: 11.76€
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/3apeMZv
+  - title: PH meter
+    description: Essential tool to make sure you are always in the correct range for optimal nutrient intake.
+    picture: assets/products/nutrients/ph_meter.jpg
+    price: 14.99€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/3eH7543
+
   - title: pH up/down
     description: For increasing and reducing pH to get to the optimal range.
     picture: assets/products/nutrients/ph_up_down.jpg
     price: $18.80
+    geo: us_us
     link:
       type: external
       data: https://amzn.to/2ROWhai
+  - title: pH up/down
+    description: For increasing and reducing pH to get to the optimal range.
+    picture: assets/products/nutrients/ph_up_down.jpg
+    price: 33.99€
+    geo: eu_de
+    link:
+      type: external
+      data: https://amzn.to/2XQM2WS
+  - title: pH up
+    description: For increasing and reducing pH to get to the optimal range.
+    picture: assets/products/nutrients/ph_up_down.jpg
+    price: 13.99€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/2Vtp1rf
+  - title: pH down
+    description: For increasing and reducing pH to get to the optimal range.
+    picture: assets/products/nutrients/ph_up_down.jpg
+    price: 18.99€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://amzn.to/2XW4CwA

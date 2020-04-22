@@ -3,20 +3,73 @@ products:
     description: 1 plant stealth cabinet - great size for a microgrow strater, buy a eket 35x35x35cm for a side veg box!
     picture: assets/products/growbox/eket.jpg
     price: $45
+    geo: us_us
     link:
       type: external
       data: https://www.ikea.com/us/en/p/eket-cabinet-with-door-and-shelf-white-90333938/
+  - title: Ikea EKET - 1 plant wonderbox
+    description: 1 plant stealth cabinet - great size for a microgrow strater, buy a eket 35x35x35cm for a side veg box!
+    picture: assets/products/growbox/eket.jpg
+    price: 40€
+    geo: eu_de
+    link:
+      type: external
+      data: https://www.ikea.com/de/de/p/eket-schrank-mit-tuer-1-boden-weiss-90333938/
+  - title: Ikea EKET - 1 plant wonderbox
+    description: 1 plant stealth cabinet - great size for a microgrow strater, buy a eket 35x35x35cm for a side veg box!
+    picture: assets/products/growbox/eket.jpg
+    price: 40€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://www.ikea.com/fr/fr/p/eket-element-1-porte-et-1-tablette-blanc-90333938/
+
   - title: Ikea BESTA - multi space
     description: Multi cycle stealth TV stand - 2 chambers for simle perpetual harvests
     picture: assets/products/growbox/besta.jpg
     price: $145
+    geo: us_us
+    link:
+      type: external
+      data: https://www.ikea.com/us/en/p/besta-storage-combination-with-doors-white-lappviken-white-s69324530/
+  - title: Ikea BESTA - multi space
+    description: Multi cycle stealth TV stand - 2 chambers for simle perpetual harvests
+    picture: assets/products/growbox/besta.jpg
+    price: 100€
+    geo: eu_de
+    link:
+      type: external
+      data: https://www.ikea.com/de/de/p/besta-aufbewahrung-mit-tueren-weiss-lappviken-weiss-s69324530/
+  - title: Ikea BESTA - multi space
+    description: Multi cycle stealth TV stand - 2 chambers for simle perpetual harvests
+    picture: assets/products/growbox/besta.jpg
+    price: 95€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://www.ikea.com/de/de/p/besta-aufbewahrung-mit-tueren-weiss-lappviken-weiss-s69324530/
+
+  - title: Ikea BRIMNES
+    description: Multi cycle stealth closet - multiple chambers for faster harvests
+    picture: assets/products/growbox/brimnes.jpg
+    price: $129
+    geo: us_us
     link:
       type: external
       data: https://www.ikea.com/us/en/p/besta-storage-combination-with-doors-white-lappviken-white-s69324530/
   - title: Ikea BRIMNES
     description: Multi cycle stealth closet - multiple chambers for faster harvests
     picture: assets/products/growbox/brimnes.jpg
-    price: $129
+    price: 89.99€
+    geo: eu_de
     link:
       type: external
-      data: https://www.ikea.com/us/en/p/besta-storage-combination-with-doors-white-lappviken-white-s69324530/
+      data: https://www.ikea.com/de/de/p/brimnes-kleiderschrank-2-tuerig-weiss-40400478/
+  - title: Ikea BRIMNES
+    description: Multi cycle stealth closet - multiple chambers for faster harvests
+    picture: assets/products/growbox/brimnes.jpg
+    price: 119€
+    geo: eu_fr
+    link:
+      type: external
+      data: https://www.ikea.com/de/de/p/brimnes-kleiderschrank-2-tuerig-weiss-40400478/
