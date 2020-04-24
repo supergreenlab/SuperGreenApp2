@@ -20,7 +20,7 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
+import 'package:super_green_app/towelie/cards/plant/card_plant_phase.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
@@ -75,7 +75,7 @@ abstract class TowelieButtonPlantType extends TowelieButton {
         id: Value(box.id),
         settings: Value(JsonEncoder().convert(boxSettings))));
 
-    await CardPlantTutoTakePic.createPlantTutoTakePic(event.feed);
+    await CardPlantPhase.createPlantPhase(event.feed);
     await removeButtons(event.feedEntry, selectedButtonID: id);
   }
 }

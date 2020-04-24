@@ -196,7 +196,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GreenButton(
-                        title: 'SHOW NOW',
+                        title: 'SHOP NOW',
                         onPressed: () {
                           launch('https://www.supergreelab.com');
                         },

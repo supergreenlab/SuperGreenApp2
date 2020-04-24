@@ -59,17 +59,10 @@ class _FeedPageState extends State<FeedPage> {
         if (state is FeedBlocStateLoaded) {
           if (_entries != null) {
             if (state.entries.length > _entries.length) {
-              int millis = min(
-                  1000,
-                  max(
-                      600,
-                      ((widget.appBarHeight - 56.0) - _scrollController.offset)
-                              .abs()
-                              .toInt() *
-                          7));
+              int millis = 500;
               _entries = state.entries;
               _listKey.currentState
-                  .insertItem(0, duration: Duration(milliseconds: millis));
+                  .insertItem(1, duration: Duration(milliseconds: millis));
               if (_scrollController.offset == 0) {
                 // this is to prevent a bug with animateTo not triggering when offset == 0
                 _scrollController.jumpTo(30);
@@ -83,12 +76,13 @@ class _FeedPageState extends State<FeedPage> {
             } else if (state.entries.length < _entries.length) {
               for (int i = 0; i < _entries.length; ++i) {
                 if (!state.entries.contains(_entries[i])) {
+                  FeedEntry feedEntry = _entries[i];
                   _entries = state.entries;
                   _listKey.currentState.removeItem(
-                      i,
+                      i+1,
                       (context, animation) =>
                           FeedEntriesHelper.cardForFeedEntry(
-                              state.feed, _entries[i], animation),
+                              state.feed, feedEntry, animation),
                       duration: Duration(milliseconds: 500));
                   break;
                 }

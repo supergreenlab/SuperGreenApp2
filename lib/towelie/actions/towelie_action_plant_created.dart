@@ -34,13 +34,14 @@ class TowelieActionPlantCreated extends TowelieAction {
       final bdb = RelDB.get().plantsDAO;
       Feed feed = await fdb.getFeed(event.plant.feed);
       await CardWelcomePlant.createWelcomePlantCard(feed);
+      Timer(Duration(seconds: 5), () async {
+        await CardPlantType.createPlantType(feed);
+      });
       int nPlants = await bdb.nPlants().getSingle();
       if (nPlants == 1) {
         Feed sglFeed = await fdb.getFeed(1);
         await CardPlantCreated.createPlantCreatedCard(sglFeed, event.plant);
       }
-      await Future.delayed(Duration(seconds: 5));
-      await CardPlantType.createPlantType(feed);
       yield TowelieBlocStateHomeNavigation(
           HomeNavigateToPlantFeedEvent(event.plant));
     }

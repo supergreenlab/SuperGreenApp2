@@ -60,7 +60,7 @@ class TowelieButtonPlantVegPhase extends TowelieButtonPlantPhase {
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_vegID, {
-        'title': 'Seed',
+        'title': 'Veg',
       });
 
   TowelieButtonPlantVegPhase() : super('VEG', 'VEG');
