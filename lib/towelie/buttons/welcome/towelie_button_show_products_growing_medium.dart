@@ -47,6 +47,6 @@ class TowelieButtonShowProductsGrowingMedium extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
     await CardProductsGrowingMedium.createProductsGrowingMedium(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    await selectButtons(event.feedEntry, selectedButtonID: id);
   }
 }

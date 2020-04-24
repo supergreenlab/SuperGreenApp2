@@ -20,6 +20,7 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/towelie/cards/plant/card_plant_start_seed.dart';
 import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -32,10 +33,14 @@ class TowelieButtonPlantSeedPhase extends TowelieButtonPlantPhase {
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_seedID, {
-        'title': 'Seed',
+        'title': 'Not started yet',
       });
 
   TowelieButtonPlantSeedPhase() : super('SEED', 'VEG');
+
+  Future createNextCard(Feed feed) async {
+    await CardPlantStartSeedling.createPlantStartSeedling(feed);
+  }
 }
 
 const _seedlingID = 'PLANT_SEEDLING_STAGE';
@@ -107,7 +112,7 @@ abstract class TowelieButtonPlantPhase extends TowelieButton {
         settings: Value(JsonEncoder().convert(boxSettings))));
 
     await createNextCard(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    await selectButtons(event.feedEntry, selectedButtonID: id);
   }
 
   Future createNextCard(Feed feed) async {

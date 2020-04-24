@@ -47,7 +47,7 @@ class TowelieButtonINeedHelp extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
     await CardProductsIntro.createProductsIntro(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    await selectButtons(event.feedEntry, selectedButtonID: id);
   }
 }
 
@@ -75,6 +75,6 @@ class TowelieButtonIDontNeedHelp extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
     await CardCreatePlant.createCreatePlantCard(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    await selectButtons(event.feedEntry, selectedButtonID: id);
   }
 }

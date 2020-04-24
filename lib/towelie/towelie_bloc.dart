@@ -29,7 +29,9 @@ import 'package:super_green_app/towelie/actions/towelie_action_appinit.dart';
 import 'package:super_green_app/towelie/actions/towelie_action_plant_created.dart';
 import 'package:super_green_app/towelie/buttons/combo/towelie_button_push_route_feed_media.dart';
 import 'package:super_green_app/towelie/buttons/combo/towelie_button_push_route_measure.dart';
+import 'package:super_green_app/towelie/buttons/misc/towelie_button_create_account.dart';
 import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_phase.dart';
+import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_start_seedling.dart';
 import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_type.dart';
 import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_create_plant.dart';
@@ -247,6 +249,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonPlantBloomPhase(),
     TowelieButtonPlantAuto(),
     TowelieButtonPlantPhoto(),
+    TowelieButtonStartSeedling(),
 
     // Push routes
     TowelieButtonPushRouteFeedMedia(),
@@ -254,6 +257,9 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
 
     // Reminder
     TowelieButtonReminder(),
+
+    // Misc
+    TowelieButtonCreateAccount(),
   ];
 
   @override

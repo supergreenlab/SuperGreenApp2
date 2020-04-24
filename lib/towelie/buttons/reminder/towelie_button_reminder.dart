@@ -34,7 +34,7 @@ class TowelieButtonReminder extends TowelieButton {
         event.params['notificationBody'],
         event.params['notificationPayload']));
     if (event.feedEntry != null) {
-      await removeButtons(event.feedEntry,
+      await selectButtons(event.feedEntry,
           selector: (params) =>
               params['afterMinutes'] == event.params['afterMinutes']);
     }

@@ -46,6 +46,6 @@ class TowelieButtonShowProductsGrowbox extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
     await CardProductsGrowbox.createProductsGrowbox(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    await selectButtons(event.feedEntry, selectedButtonID: id);
   }
 }

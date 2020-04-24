@@ -48,6 +48,6 @@ class TowelieButtonShowProductsNutrients extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
     await CardProductsNutrients.createProductsNutrients(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    await selectButtons(event.feedEntry, selectedButtonID: id);
   }
 }

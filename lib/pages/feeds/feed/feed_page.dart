@@ -17,7 +17,6 @@
  */
 
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,12 +66,11 @@ class _FeedPageState extends State<FeedPage> {
                 // this is to prevent a bug with animateTo not triggering when offset == 0
                 _scrollController.jumpTo(30);
               }
-
               Timer(
                   Duration(milliseconds: 100),
                   () => _scrollController.animateTo(widget.appBarHeight - 56.0,
                       duration: Duration(milliseconds: millis),
-                      curve: ElasticInOutCurve()));
+                      curve: Curves.linear));
             } else if (state.entries.length < _entries.length) {
               for (int i = 0; i < _entries.length; ++i) {
                 if (!state.entries.contains(_entries[i])) {

@@ -16,36 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:intl/intl.dart';
-import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/cards/welcome/card_create_plant.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'END_CHECKLIST';
+const _id = 'CREATE_ACCOUNT';
 
-class TowelieButtonEndChecklist extends TowelieButton {
-  static String get towelieButtonEndChecklist {
-    return Intl.message(
-      '''Create plant''',
-      name: 'towelieButtonEndChecklist',
-      desc: 'Towelie button end checklist',
-      locale: SGLLocalizations.current.localeName,
-    );
-  }
-
+class TowelieButtonCreateAccount extends TowelieButton {
   @override
   String get id => _id;
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_id, {
-        'title': TowelieButtonEndChecklist.towelieButtonEndChecklist,
+        'title': 'CREATE ACCOUNT',
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    await CardCreatePlant.createCreatePlantCard(event.feed);
-    await selectButtons(event.feedEntry, selectedButtonID: id);
+    yield TowelieBlocStateMainNavigation(MainNavigateToSettingsAuth());
   }
 }

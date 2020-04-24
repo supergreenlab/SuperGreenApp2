@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-21T18:08:34.028677",
+  "@@last_modified": "2020-04-24T18:19:53.387399",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -60,33 +60,33 @@
     "type": "text",
     "placeholders": {}
   },
-  "toweliePlantAutoOrPhoto": "To better guide you to a **successful harvest**, I'll need a bit **more informations** about your plant:)\nIs this plant an **auto** or **photo** strain?",
-  "@toweliePlantAutoOrPhoto": {
-    "description": "Towelie Plant auto or photo",
-    "type": "text",
-    "placeholders": {}
-  },
   "toweliePlantTutoTakePic": "Alright **let's start**!\nOne first thing you can do to **start** this journey is to **take a picture** of your **plant**.",
   "@toweliePlantTutoTakePic": {
     "description": "Towelie Plant tuto take pic",
     "type": "text",
     "placeholders": {}
   },
-  "toweliePlantAlreadyStarted": "Is this plant mid grow cycle?",
-  "@toweliePlantAlreadyStarted": {
-    "description": "Towelie Plant already started",
+  "toweliePlantPhase": "Alright tell me at **which stage** the plant is at.\nIs it already **vegging** or still **just a seed**?",
+  "@toweliePlantPhase": {
+    "description": "Towelie plant phase",
     "type": "text",
     "placeholders": {}
   },
-  "towelieWelcomePlant": "**Welcome to your plant feed!**\nThis is where you will modify your plant’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the plant’s environment.\n\nThis is also where you will log the actions **you want to remember**: last time you watered for example.\n\nThe app will also add log entries for temperature or humidity **heads up and reminders** you can set or\nreceive from the app.\n\nAnd all this feed can be reviewed, shared or replayed later, **and that’s awesome**.",
+  "towelieWelcomePlant": "**Welcome to your plant feed!**\nThis is where you can **keep a history** of your plant's life.\n\nEverytime you **water**, **train**, or even just **observe something** about your plant,\nyou can **add an item** to the feed.\n\nSo you can see the **evolution** of your plant, **repeat it** later, or **share it!**",
   "@towelieWelcomePlant": {
     "description": "Towelie Welcome Plant",
     "type": "text",
     "placeholders": {}
   },
-  "toweliePlantVegOrBloom": "Is the plant in **veg** or **bloom**?",
-  "@toweliePlantVegOrBloom": {
-    "description": "Towelie Plant Veg or bloom",
+  "toweliePlantStartSeedling": "Alright, let me know when you're **ready to start** by pressing the button below.\nIn the meantime you can also **create an account**:P that will enable backups, remote control, sharing, etc...",
+  "@toweliePlantStartSeedling": {
+    "description": "Towelie plant start seedling",
+    "type": "text",
+    "placeholders": {}
+  },
+  "toweliePlantType": "To better guide you to a **successful harvest**, I'll need a bit **more informations** about your plant.\nIs this plant an **auto** or **photo** strain?",
+  "@toweliePlantType": {
+    "description": "Towelie Plant auto or photo",
     "type": "text",
     "placeholders": {}
   },

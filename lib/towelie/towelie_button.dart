@@ -33,7 +33,7 @@ abstract class TowelieButton {
 
   Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event);
 
-  Future removeButtons(FeedEntry feedEntry,
+  Future selectButtons(FeedEntry feedEntry,
       {String selectedButtonID, bool Function(dynamic) selector}) async {
     if (selectedButtonID != null) {
       selector = (b) => b['id'] == selectedButtonID;

@@ -9,7 +9,8 @@ import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_phase
 class CardPlantPhase {
   static String get toweliePlantPhase {
     return Intl.message(
-      '''Is the plant in **veg** or **bloom**?''',
+      '''Alright tell me at **which stage** the plant is at.
+Is it already **vegging** or still **just a seed**?''',
       name: 'toweliePlantPhase',
       desc: 'Towelie plant phase',
       locale: SGLLocalizations.current.localeName,

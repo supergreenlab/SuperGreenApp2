@@ -23,7 +23,7 @@ class TowelieButtonPushRouteMeasure extends TowelieButton {
     yield TowelieBlocStateMainNavigation(
         MainNavigateToFeedMeasureFormEvent(plant));
     if (event.feedEntry != null) {
-      await removeButtons(event.feedEntry, selectedButtonID: id);
+      await selectButtons(event.feedEntry, selectedButtonID: id);
     }
   }
 }

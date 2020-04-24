@@ -76,6 +76,6 @@ abstract class TowelieButtonPlantType extends TowelieButton {
         settings: Value(JsonEncoder().convert(boxSettings))));
 
     await CardPlantPhase.createPlantPhase(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+    await selectButtons(event.feedEntry, selectedButtonID: id);
   }
 }

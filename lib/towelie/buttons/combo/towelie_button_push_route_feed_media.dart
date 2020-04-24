@@ -41,7 +41,7 @@ class TowelieButtonPushRouteFeedMedia extends TowelieButton {
     yield TowelieBlocStateMainNavigation(
         MainNavigateToFeedMediaFormEvent(plant));
     if (event.feedEntry != null) {
-      await removeButtons(event.feedEntry, selectedButtonID: id);
+      await selectButtons(event.feedEntry, selectedButtonID: id);
     }
   }
 }
