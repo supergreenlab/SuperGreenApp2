@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:moor/moor.dart';
@@ -103,6 +104,13 @@ class RelDB extends _$RelDB {
           Feed feed = await feedsDAO.getFeed(1);
           await feedsDAO.updateFeed(
               feed.createCompanion(true).copyWith(isNewsFeed: Value(true)));
+        } else if (details.versionBefore == 3) {
+          List<Plant> plants = await plantsDAO.getPlants();
+          for (int i = 0; i < plants.length; ++i) {
+            Map<String, dynamic> settings = jsonDecode(plants[i].settings);
+            settings['isSingle'] = plants[i].single;
+            plantsDAO.updatePlant(plants[i].createCompanion(true).copyWith(settings: Value(jsonEncode(settings))));
+          }
         }
       });
 }

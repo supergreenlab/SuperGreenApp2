@@ -24,9 +24,51 @@ import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dar
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
+const _seedID = 'PLANT_SEED_STAGE';
+
+class TowelieButtonPlantSeedPhase extends TowelieButtonPlantPhase {
+  @override
+  String get id => _seedID;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_seedID, {
+        'title': 'Seed',
+      });
+
+  TowelieButtonPlantSeedPhase() : super('SEED', 'VEG');
+}
+
+const _seedlingID = 'PLANT_SEEDLING_STAGE';
+
+class TowelieButtonPlantSeedlingPhase extends TowelieButtonPlantPhase {
+  @override
+  String get id => _seedlingID;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_seedlingID, {
+        'title': 'Seedling',
+      });
+
+  TowelieButtonPlantSeedlingPhase() : super('SEEDLING', 'VEG');
+}
+
+const _vegID = 'PLANT_VEG_STAGE';
+
+class TowelieButtonPlantVegPhase extends TowelieButtonPlantPhase {
+  @override
+  String get id => _vegID;
+
+  static Map<String, dynamic> createButton() =>
+      TowelieButton.createButton(_vegID, {
+        'title': 'Seed',
+      });
+
+  TowelieButtonPlantVegPhase() : super('VEG', 'VEG');
+}
+
 const _bloomID = 'PLANT_BLOOM_STAGE';
 
-class TowelieButtonPlantBloomStage extends TowelieButton {
+class TowelieButtonPlantBloomPhase extends TowelieButtonPlantPhase {
   @override
   String get id => _bloomID;
 
@@ -35,6 +77,15 @@ class TowelieButtonPlantBloomStage extends TowelieButton {
         'title': 'Bloom',
       });
 
+  TowelieButtonPlantBloomPhase() : super('BLOOM', 'BLOOM');
+}
+
+abstract class TowelieButtonPlantPhase extends TowelieButton {
+  final String phase;
+  final String schedule;
+
+  TowelieButtonPlantPhase(this.phase, this.schedule);
+
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
@@ -42,56 +93,24 @@ class TowelieButtonPlantBloomStage extends TowelieButton {
     Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
     Box box = await db.plantsDAO.getBox(plant.box);
     Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
-    plantSettings['phase'] = 'BLOOM';
+    plantSettings['phase'] = phase;
     await db.plantsDAO.updatePlant(PlantsCompanion(
         id: Value(plant.id),
         settings: Value(JsonEncoder().convert(plantSettings))));
 
     final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
     if (plantSettings['plantType'] == 'PHOTO') {
-      boxSettings['schedule'] = 'BLOOM';
+      boxSettings['schedule'] = schedule;
     }
     await db.plantsDAO.updateBox(BoxesCompanion(
         id: Value(box.id),
         settings: Value(JsonEncoder().convert(boxSettings))));
 
-    await CardPlantTutoTakePic.createPlantTutoTakePic(event.feed);
+    await createNextCard(event.feed);
     await removeButtons(event.feedEntry, selectedButtonID: id);
   }
-}
 
-const _vegID = 'PLANT_VEG_STAGE';
-
-class TowelieButtonPlantVegStage extends TowelieButton {
-  @override
-  String get id => _vegID;
-
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_vegID, {
-        'title': 'Veg',
-      });
-
-  @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
-    final db = RelDB.get();
-    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
-    Box box = await db.plantsDAO.getBox(plant.box);
-    Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
-    plantSettings['phase'] = 'VEG';
-    await db.plantsDAO.updatePlant(PlantsCompanion(
-        id: Value(plant.id),
-        settings: Value(JsonEncoder().convert(plantSettings))));
-
-    final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-    if (boxSettings['plantType'] == 'PHOTO') {
-      boxSettings['schedule'] = 'VEG';
-    }
-    await db.plantsDAO.updateBox(BoxesCompanion(
-        id: Value(box.id),
-        settings: Value(JsonEncoder().convert(boxSettings))));
-
-    await CardPlantTutoTakePic.createPlantTutoTakePic(event.feed);
-    await removeButtons(event.feedEntry, selectedButtonID: id);
+  Future createNextCard(Feed feed) async {
+    await CardPlantTutoTakePic.createPlantTutoTakePic(feed);
   }
 }

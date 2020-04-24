@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -25,9 +27,9 @@ abstract class CreatePlantBlocEvent extends Equatable {}
 
 class CreatePlantBlocEventCreate extends CreatePlantBlocEvent {
   final String name;
-  final bool single;
+  final bool isSingle;
   final int box;
-  CreatePlantBlocEventCreate(this.name, this.single, this.box);
+  CreatePlantBlocEventCreate(this.name, this.isSingle, this.box);
 
   @override
   List<Object> get props => [name, box];
@@ -64,7 +66,7 @@ class CreatePlantBloc extends Bloc<CreatePlantBlocEvent, CreatePlantBlocState> {
           feed: feedID,
           name: event.name,
           box: Value(event.box),
-          single: Value(event.single));
+          settings: Value(jsonEncode({'isSingle': event.isSingle})));
       final plantID = await bdb.addPlant(plant);
       final p = await bdb.getPlant(plantID);
       final b = await bdb.getBox(event.box);

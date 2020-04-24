@@ -9,14 +9,12 @@ class CardWelcomePlant {
   static String get towelieWelcomePlant {
     return Intl.message(
       '''**Welcome to your plant feed!**
-This is where you will modify your plant’s parameters, everytime you change your **light dimming**, change from **veg to bloom**, or change your **ventilation**, **it will log a card here**, so you’ll have a clear history of all changes you did, and how it affected the plant’s environment.
+This is where you can **keep a history** of your plant's life.
 
-This is also where you will log the actions **you want to remember**: last time you watered for example.
+Everytime you **water**, **train**, or even just **observe something** about your plant,
+you can **add an item** to the feed.
 
-The app will also add log entries for temperature or humidity **heads up and reminders** you can set or
-receive from the app.
-
-And all this feed can be reviewed, shared or replayed later, **and that’s awesome**.''',
+So you can see the **evolution** of your plant, **repeat it** later, or **share it!**''',
       name: 'towelieWelcomePlant',
       desc: 'Towelie Welcome Plant',
       locale: SGLLocalizations.current.localeName,

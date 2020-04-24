@@ -39,7 +39,7 @@ class CreatePlantPage extends StatefulWidget {
 
 class CreatePlantPageState extends State<CreatePlantPage> {
   final _nameController = TextEditingController();
-  bool _single = true;
+  bool _isSingle = true;
 
   KeyboardVisibilityNotification _keyboardVisibility =
       KeyboardVisibilityNotification();
@@ -151,9 +151,9 @@ class CreatePlantPageState extends State<CreatePlantPage> {
             _renderOptionCheckbx(context, 'Single plant grow diary',
                 (newValue) {
               setState(() {
-                _single = newValue;
+                _isSingle = newValue;
               });
-            }, _single),
+            }, _isSingle),
           ]),
         ),
         Padding(
@@ -203,7 +203,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
         BlocProvider.of<CreatePlantBloc>(context)
             .add(CreatePlantBlocEventCreate(
           _nameController.text,
-          _single,
+          _isSingle,
           res.id,
         ));
       }
