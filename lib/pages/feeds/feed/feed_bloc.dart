@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
@@ -77,6 +79,7 @@ class FeedBlocStateLoaded extends FeedBlocState {
 class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
   final int _feedID;
   Feed _feed;
+  StreamSubscription<List<FeedEntry>> _stream;
 
   FeedBloc(this._feedID) {
     add(FeedBlocEventLoadFeed());
@@ -91,7 +94,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       final fdb = RelDB.get().feedsDAO;
       _feed = await fdb.getFeed(_feedID);
       final entries = fdb.watchEntries(_feedID);
-      entries.listen(_onFeedEntriesChange);
+      _stream = entries.listen(_onFeedEntriesChange);
     } else if (event is FeedBlocEventMarkAsRead) {
       final fdb = RelDB.get().feedsDAO;
       await fdb.updateFeedEntry(
@@ -108,5 +111,13 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
 
   void _onFeedEntriesChange(List<FeedEntry> entries) {
     add(FeedBlocEventFeedEntriesListUpdated(entries));
+  }
+
+  @override
+  Future<void> close() {
+    if (_stream != null) {
+      _stream.cancel();
+    }
+    return super.close();
   }
 }

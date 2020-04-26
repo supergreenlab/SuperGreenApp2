@@ -91,9 +91,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
         _workingIn = false;
       });
-    } else if (event is SyncerBlocEventSyncing) {
-      
-    }
+    } else if (event is SyncerBlocEventSyncing) {}
   }
 
   Future _syncIn() async {
@@ -107,6 +105,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncInFeeds() async {
+    print("Syncing feeds");
     List<FeedsCompanion> feeds = await FeedsAPI().unsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
       FeedsCompanion feedsCompanion = feeds[i];
@@ -121,10 +120,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         await RelDB.get().feedsDAO.addFeed(feedsCompanion);
       }
       await FeedsAPI().setSynced("feed", feedsCompanion.serverID.value);
+      print("Synced feed");
     }
   }
 
   Future _syncInFeedEntries() async {
+    print("Syncing feedEntries");
     List<FeedEntriesCompanion> feedEntries =
         await FeedsAPI().unsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
@@ -140,10 +141,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       await FeedsAPI()
           .setSynced("feedEntry", feedEntriesCompanion.serverID.value);
+      print("Synced feedEntry");
     }
   }
 
   Future _syncInFeedMedias() async {
+    print("Syncing feedMedias");
     List<FeedMediasCompanion> feedMedias =
         await FeedsAPI().unsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
@@ -171,10 +174,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       await FeedsAPI()
           .setSynced("feedMedia", feedMediasCompanion.serverID.value);
+      print("Synced feedMedia");
     }
   }
 
   Future _syncInDevices() async {
+    print("Syncing devices");
     List<DevicesCompanion> devices = await FeedsAPI().unsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
       DevicesCompanion devicesCompanion = devices[i];
@@ -187,15 +192,16 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
             .updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
       } else {
         int deviceID = await RelDB.get().devicesDAO.addDevice(devicesCompanion);
-        Map<String, dynamic> keys = json.decode(devicesCompanion.config.value);
         await DeviceAPI.fetchAllParams(
-            devicesCompanion.ip.value, deviceID, keys, (adv) {});
+            devicesCompanion.ip.value, deviceID, (adv) {});
       }
       await FeedsAPI().setSynced("device", devicesCompanion.serverID.value);
+      print("Synced device");
     }
   }
 
   Future _syncInBoxes() async {
+    print("Syncing boxes");
     List<BoxesCompanion> boxes = await FeedsAPI().unsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
       BoxesCompanion boxesCompanion = boxes[i];
@@ -210,10 +216,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         await RelDB.get().plantsDAO.addBox(boxesCompanion);
       }
       await FeedsAPI().setSynced("box", boxesCompanion.serverID.value);
+      print("Synced box");
     }
   }
 
   Future _syncInPlants() async {
+    print("Syncing plants");
     List<PlantsCompanion> plants = await FeedsAPI().unsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
       PlantsCompanion plantsCompanion = plants[i];
@@ -228,10 +236,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         await RelDB.get().plantsDAO.addPlant(plantsCompanion);
       }
       await FeedsAPI().setSynced("plant", plantsCompanion.serverID.value);
+      print("Synced plant");
     }
   }
 
   Future _syncInTimelapses() async {
+    print("Syncing timelapses");
     List<TimelapsesCompanion> timelapses =
         await FeedsAPI().unsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
@@ -247,6 +257,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       await FeedsAPI()
           .setSynced("timelapse", timelapsesCompanion.serverID.value);
+      print("Synced timelapse");
     }
   }
 

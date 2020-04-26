@@ -108,9 +108,8 @@ class DeviceDaemonBloc
       if (identifier == device.identifier) {
         print('Device ${device.name} (${device.identifier}) found.');
         if (device.isSetup == false) {
-          Map<String, dynamic> keys = json.decode(device.config);
           await DeviceAPI.fetchAllParams(
-              device.ip, device.id, keys, (_) => null);
+              device.ip, device.id, (_) => null);
         }
         await ddb.updateDevice(
             DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
@@ -133,8 +132,7 @@ class DeviceDaemonBloc
             print(
                 'Device ${device.name} (${device.identifier}) found with mdns lookup.');
             if (device.isSetup == false) {
-              Map<String, dynamic> keys = json.decode(device.config);
-              await DeviceAPI.fetchAllParams(ip, device.id, keys, (_) => null);
+              await DeviceAPI.fetchAllParams(ip, device.id, (_) => null);
             }
             await ddb.updateDevice(DevicesCompanion(
                 id: Value(device.id),

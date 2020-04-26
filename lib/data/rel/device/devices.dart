@@ -25,7 +25,6 @@ class Devices extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get identifier => text().withLength(min: 1, max: 16)();
   TextColumn get name => text().withLength(min: 1, max: 24)();
-  TextColumn get config => text()();
   TextColumn get ip => text().withLength(min: 7, max: 15)();
   TextColumn get mdns => text().withLength(min: 1, max: 64)();
   BoolColumn get isReachable => boolean().withDefault(Constant(true))();
@@ -41,7 +40,6 @@ class Devices extends Table {
         ip: Value(map['ip'] as String),
         mdns: Value(map['mdns'] as String),
         isReachable: Value(false),
-        config: Value(map['config']),
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }
@@ -53,7 +51,6 @@ class Devices extends Table {
       'name': device.name,
       'ip': device.ip,
       'mdns': device.mdns,
-      'config': device.config,
     };
   }
 }

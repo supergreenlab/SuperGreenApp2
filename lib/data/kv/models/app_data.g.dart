@@ -21,13 +21,14 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..lastPlantID = fields[1] as int
       ..allowAnalytics = fields[2] as bool
       ..freedomUnits = fields[3] as bool
-      ..jwt = fields[4] as String;
+      ..jwt = fields[4] as String
+      ..storeGeo = fields[5] as String;
   }
 
   @override
   void write(BinaryWriter writer, AppData obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.firstStart)
       ..writeByte(1)
@@ -37,6 +38,8 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..writeByte(3)
       ..write(obj.freedomUnits)
       ..writeByte(4)
-      ..write(obj.jwt);
+      ..write(obj.jwt)
+      ..writeByte(5)
+      ..write(obj.storeGeo);
   }
 }

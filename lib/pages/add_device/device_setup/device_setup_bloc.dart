@@ -149,13 +149,10 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
             await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
         final mdnsDomain =
             await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
-        final config = await DeviceAPI.fetchConfig(_args.ip);
-        keys = json.decode(config);
 
         final device = DevicesCompanion.insert(
             identifier: deviceIdentifier,
             name: deviceName,
-            config: config,
             ip: _args.ip,
             mdns: mdnsDomain);
         deviceID = await db.addDevice(device);
@@ -165,7 +162,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       }
 
       try {
-        await DeviceAPI.fetchAllParams(_args.ip, deviceID, keys, (adv) {
+        await DeviceAPI.fetchAllParams(_args.ip, deviceID, (adv) {
           add(DeviceSetupBlocEventProgress(adv));
         });
       } catch (e) {

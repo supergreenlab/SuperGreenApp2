@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -57,6 +59,7 @@ class SettingsDevicesBlocStateLoaded extends SettingsDevicesBlocState {
 class SettingsDevicesBloc
     extends Bloc<SettingsDevicesBlocEvent, SettingsDevicesBlocState> {
   List<Device> _devices;
+  StreamSubscription<List<Device>> _devicesStream;
 
   //ignore: unused_field
   final MainNavigateToSettingsDevices _args;
@@ -72,7 +75,8 @@ class SettingsDevicesBloc
   Stream<SettingsDevicesBlocState> mapEventToState(event) async* {
     if (event is SettingsDevicesBlocEventInit) {
       yield SettingsDevicesBlocStateLoading();
-      RelDB.get().devicesDAO.watchDevices().listen(_onDeviceListChange);
+      _devicesStream =
+          RelDB.get().devicesDAO.watchDevices().listen(_onDeviceListChange);
     } else if (event is SettingsDevicesblocEventBoxListChanged) {
       yield SettingsDevicesBlocStateLoaded(event.devices);
     } else if (event is SettingsDevicesBlocEventDeleteBox) {
@@ -87,5 +91,13 @@ class SettingsDevicesBloc
   void _onDeviceListChange(List<Device> devices) {
     _devices = devices;
     add(SettingsDevicesblocEventBoxListChanged(_devices));
+  }
+
+  @override
+  Future<void> close() {
+    if (_devicesStream != null) {
+      _devicesStream.cancel();
+    }
+    return super.close();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -57,6 +59,7 @@ class SettingsBoxesBlocStateLoaded extends SettingsBoxesBlocState {
 class SettingsBoxesBloc
     extends Bloc<SettingsBoxesBlocEvent, SettingsBoxesBlocState> {
   List<Box> _boxes;
+  StreamSubscription<List<Box>> _boxesStream;
 
   //ignore: unused_field
   final MainNavigateToSettingsBoxes _args;
@@ -72,7 +75,8 @@ class SettingsBoxesBloc
   Stream<SettingsBoxesBlocState> mapEventToState(event) async* {
     if (event is SettingsBoxesBlocEventInit) {
       yield SettingsBoxesBlocStateLoading();
-      RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
+      _boxesStream =
+          RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
     } else if (event is SettingsBoxesblocEventBoxListChanged) {
       yield SettingsBoxesBlocStateLoaded(event.boxes);
     } else if (event is SettingsBoxesBlocEventDeleteBox) {
@@ -91,5 +95,13 @@ class SettingsBoxesBloc
   void _onBoxListChange(List<Box> boxes) {
     _boxes = boxes;
     add(SettingsBoxesblocEventBoxListChanged(_boxes));
+  }
+
+  @override
+  Future<void> close() {
+    if (_boxesStream != null) {
+      _boxesStream.cancel();
+    }
+    return super.close();
   }
 }

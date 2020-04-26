@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -121,15 +119,12 @@ class SettingsDeviceBloc
         await DeviceAPI.fetchStringParam(_device.ip, "DEVICE_NAME");
     final mdnsDomain =
         await DeviceAPI.fetchStringParam(_device.ip, "MDNS_DOMAIN");
-    final config = await DeviceAPI.fetchConfig(_device.ip);
-    Map<String, dynamic> keys = json.decode(config);
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
         id: Value(_device.id),
         name: Value(deviceName),
         mdns: Value(mdnsDomain),
-        config: Value(config),
         synced: Value(false)));
-    await DeviceAPI.fetchAllParams(_device.ip, _device.id, keys, (adv) {
+    await DeviceAPI.fetchAllParams(_device.ip, _device.id, (adv) {
       add(SettingsDeviceBlocEventRefreshing(adv));
     });
     add(SettingsDeviceBlocEventRefreshing(100));

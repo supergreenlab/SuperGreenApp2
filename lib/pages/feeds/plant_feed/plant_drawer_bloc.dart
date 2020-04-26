@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
@@ -51,7 +53,8 @@ class PlantDrawerBlocStatePlantListUpdated extends PlantDrawerBlocState {
   final List<Box> boxes;
   final List<GetPendingFeedsResult> hasPending;
 
-  PlantDrawerBlocStatePlantListUpdated(this.plants, this.boxes, this.hasPending);
+  PlantDrawerBlocStatePlantListUpdated(
+      this.plants, this.boxes, this.hasPending);
 
   @override
   List<Object> get props => [plants, boxes, hasPending];
@@ -61,6 +64,9 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   List<Plant> _plants = [];
   List<Box> _boxes = [];
   List<GetPendingFeedsResult> _hasPending = [];
+  StreamSubscription<List<Plant>> _plantStream;
+  StreamSubscription<List<Box>> _boxesStream;
+  StreamSubscription<List<GetPendingFeedsResult>> _pendingStream;
 
   @override
   PlantDrawerBlocState get initialState =>
@@ -75,12 +81,10 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
       PlantDrawerBlocEvent event) async* {
     if (event is PlantDrawerBlocEventLoadPlants) {
       final db = RelDB.get().plantsDAO;
-      db.watchPlants().listen(_onPlantListChange);
-      db.watchBoxes().listen(_onBoxListChange);
+      _plantStream = db.watchPlants().listen(_onPlantListChange);
+      _boxesStream = db.watchBoxes().listen(_onBoxListChange);
       final fdb = RelDB.get().feedsDAO;
-      Stream<List<GetPendingFeedsResult>> hasPending =
-          fdb.getPendingFeeds().watch();
-      hasPending.listen(_hasPendingChange);
+      _pendingStream = fdb.getPendingFeeds().watch().listen(_hasPendingChange);
     } else if (event is PlantDrawerBlocEventBoxListUpdated) {
       yield PlantDrawerBlocStatePlantListUpdated(_plants, _boxes, _hasPending);
     }
@@ -101,5 +105,19 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   void _hasPendingChange(List<GetPendingFeedsResult> hasPending) {
     _hasPending = hasPending;
     add(PlantDrawerBlocEventBoxListUpdated(_plants, _boxes, _hasPending));
+  }
+
+  @override
+  Future<void> close() {
+    if (_plantStream != null) {
+      _plantStream.cancel();
+    }
+    if (_boxesStream != null) {
+      _boxesStream.cancel();
+    }
+    if (_pendingStream != null) {
+      _pendingStream.cancel();
+    }
+    return super.close();
   }
 }

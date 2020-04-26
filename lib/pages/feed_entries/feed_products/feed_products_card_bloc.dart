@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
@@ -38,8 +39,7 @@ class FeedProductsCardBlocEventStoreGeoUpdated
   List<Object> get props => [storeGeo];
 }
 
-class FeedProductsCardBlocEventSetStoreGeo
-    extends FeedProductsCardBlocEvent {
+class FeedProductsCardBlocEventSetStoreGeo extends FeedProductsCardBlocEvent {
   final String storeGeo;
 
   FeedProductsCardBlocEventSetStoreGeo(this.storeGeo);
@@ -68,6 +68,7 @@ class FeedProductsCardBloc
   final Feed _feed;
   final FeedEntry _feedEntry;
   final Map<String, dynamic> _params = {};
+  StreamSubscription<BoxEvent> _stream;
 
   @override
   FeedProductsCardBlocState get initialState => FeedProductsCardBlocState(
@@ -75,7 +76,7 @@ class FeedProductsCardBloc
 
   FeedProductsCardBloc(this._feed, this._feedEntry) {
     _params.addAll(JsonDecoder().convert(_feedEntry.params));
-    AppDB().watchAppData().listen((BoxEvent event) {
+    _stream = AppDB().watchAppData().listen((BoxEvent event) {
       AppData appData = event.value;
       add(FeedProductsCardBlocEventStoreGeoUpdated(appData.storeGeo));
     });
@@ -90,5 +91,13 @@ class FeedProductsCardBloc
     } else if (event is FeedProductsCardBlocEventSetStoreGeo) {
       AppDB().setStoreGeo(event.storeGeo);
     }
+  }
+
+  @override
+  Future<void> close() {
+    if (_stream != null) {
+      _stream.cancel();
+    }
+    return super.close();
   }
 }

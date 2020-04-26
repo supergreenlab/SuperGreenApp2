@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
@@ -54,6 +56,8 @@ class HomeBlocStateLoaded extends HomeBlocState {
 }
 
 class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
+  StreamSubscription<List<GetPendingFeedsResult>> _pendingStream;
+
   HomeBloc() {
     add(HomeBlocEventLoad());
   }
@@ -65,9 +69,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
   Stream<HomeBlocState> mapEventToState(HomeBlocEvent event) async* {
     if (event is HomeBlocEventLoad) {
       final fdb = RelDB.get().feedsDAO;
-      Stream<List<GetPendingFeedsResult>> hasPending =
-          fdb.getPendingFeeds().watch();
-      hasPending.listen(_hasPendingChange);
+      _pendingStream = fdb.getPendingFeeds().watch().listen(_hasPendingChange);
     } else if (event is HomeBlocEventLoaded) {
       yield HomeBlocStateLoaded(event.hasPending);
     }
@@ -75,5 +77,13 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
 
   void _hasPendingChange(List<GetPendingFeedsResult> hasPending) {
     add(HomeBlocEventLoaded(hasPending));
+  }
+
+  @override
+  Future<void> close() {
+    if (_pendingStream != null) {
+      _pendingStream.cancel();
+    }
+    return super.close();
   }
 }

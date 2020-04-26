@@ -23,13 +23,13 @@ class FeedsAPI {
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
-    if (kReleaseMode || Platform.isIOS) {
+    //if (kReleaseMode || Platform.isIOS) {
       _serverHost = 'https://api2.supergreenlab.com';
       _storageServerHost = 'https://storage.supergreenlab.com';
       _storageServerHostHeader = 'storage.supergreenlab.com';
-    } else {
-      initUrls();
-    }
+    // } else {
+    //   initUrls();
+    // }
   }
 
   void initUrls() async {
@@ -285,7 +285,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchServerSync failed';
+      throw '_unsynced failed';
     }
     return JsonDecoder().convert(resp.body);
   }

@@ -177,8 +177,7 @@ class DeviceAPI {
 
   static Map<int, bool> fetchingAllParams = {};
 
-  static Future fetchAllParams(String ip, int deviceID,
-      Map<String, dynamic> keys, Function(double) advancement) async {
+  static Future fetchAllParams(String ip, int deviceID, Function(double) advancement) async {
     if (DeviceAPI.fetchingAllParams[deviceID] == true) {
       return;
     }
@@ -187,8 +186,8 @@ class DeviceAPI {
       final db = RelDB.get().devicesDAO;
       final Map<String, int> modules = Map();
 
-      // await db.deleteParams(deviceID);
-      // await db.deleteModules(deviceID);
+      final config = await DeviceAPI.fetchConfig(ip);
+      Map<String, dynamic> keys = json.decode(config);
 
       double total = keys['keys'].length.toDouble(), done = 0;
       for (Map<String, dynamic> k in keys['keys']) {

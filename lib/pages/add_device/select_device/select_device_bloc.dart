@@ -88,6 +88,7 @@ class SelectDeviceBlocStateDone extends SelectDeviceBlocState {
 class SelectDeviceBloc
     extends Bloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
   List<Device> _devices = [];
+  StreamSubscription<List<Device>> _stream;
 
   //ignore: unused_field
   final MainNavigateToSelectDeviceEvent _args;
@@ -105,7 +106,7 @@ class SelectDeviceBloc
     if (event is SelectDeviceBlocEventLoadDevices) {
       final ddb = RelDB.get().devicesDAO;
       final watcher = ddb.watchDevices();
-      watcher.listen(_onDeviceListChanged);
+      _stream = watcher.listen(_onDeviceListChanged);
     } else if (event is SelectDeviceBlocEventDeviceListUpdated) {
       _devices = event.devices;
       yield SelectDeviceBlocStateDeviceListUpdated(_devices);
@@ -118,8 +119,7 @@ class SelectDeviceBloc
     } else if (event is SelectDeviceBlocEventSelect) {
       final ddb = RelDB.get().devicesDAO;
       final Device device = event.device;
-      final stateParam =
-          await ddb.getParam(device.id, 'STATE');
+      final stateParam = await ddb.getParam(device.id, 'STATE');
       // TODO declare Param enums when possible
       if (stateParam.ivalue != 2) {
         await DeviceHelper.updateIntParam(device, stateParam, 2);
@@ -130,5 +130,13 @@ class SelectDeviceBloc
 
   void _onDeviceListChanged(List<Device> devices) {
     add(SelectDeviceBlocEventDeviceListUpdated(devices));
+  }
+
+  @override
+  Future<void> close() {
+    if (_stream != null) {
+      _stream.cancel();
+    }
+    return super.close();
   }
 }

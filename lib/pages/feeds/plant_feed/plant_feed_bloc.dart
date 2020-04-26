@@ -78,6 +78,8 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   Box _box;
   Plant _plant;
   int _nTimelapses;
+  StreamSubscription<int> _timelapsesStream;
+  StreamSubscription<Plant> _plantStream;
 
   PlantFeedBloc(this._args) {
     this.add(PlantFeedBlocEventLoad());
@@ -116,12 +118,13 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
       _box = await db.plantsDAO.getBox(_plant.box);
       _nTimelapses =
           await RelDB.get().plantsDAO.nTimelapses(_plant.id).getSingle();
-      RelDB.get()
+      _timelapsesStream = RelDB.get()
           .plantsDAO
           .nTimelapses(_plant.id)
           .watchSingle()
           .listen(_onNTimelapsesUpdated);
-      RelDB.get().plantsDAO.watchPlant(_plant.id).listen(_onPlantUpdated);
+      _plantStream =
+          RelDB.get().plantsDAO.watchPlant(_plant.id).listen(_onPlantUpdated);
       yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
     } else if (event is PlantFeedBlocEventUpdated) {
       yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
@@ -136,5 +139,16 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   void _onNTimelapsesUpdated(int nTimelapses) {
     _nTimelapses = nTimelapses;
     add(PlantFeedBlocEventUpdated());
+  }
+
+  @override
+  Future<void> close() {
+    if (_timelapsesStream != null) {
+      _timelapsesStream.cancel();
+    }
+    if (_plantStream != null) {
+      _plantStream.cancel();
+    }
+    return super.close();
   }
 }
