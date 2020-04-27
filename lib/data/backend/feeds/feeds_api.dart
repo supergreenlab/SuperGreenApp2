@@ -23,13 +23,13 @@ class FeedsAPI {
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
-    //if (kReleaseMode || Platform.isIOS) {
+    if (kReleaseMode || Platform.isIOS) {
       _serverHost = 'https://api2.supergreenlab.com';
       _storageServerHost = 'https://storage.supergreenlab.com';
       _storageServerHostHeader = 'storage.supergreenlab.com';
-    // } else {
-    //   initUrls();
-    // }
+    } else {
+      initUrls();
+    }
   }
 
   void initUrls() async {
