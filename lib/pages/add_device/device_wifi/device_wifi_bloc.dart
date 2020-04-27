@@ -117,15 +117,16 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
 
   Stream<DeviceWifiBlocState> _researchDevice() async* {
     var ddb = RelDB.get().devicesDAO;
+    Device device = await ddb.getDevice(_args.device.id);
 
     yield DeviceWifiBlocStateSearching();
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-        id: Value(_args.device.id), isReachable: Value(false)));
+        id: Value(device.id), isReachable: Value(false)));
 
     String ip;
     for (int i = 0; i < 4; ++i) {
       await new Future.delayed(const Duration(seconds: 2));
-      ip = await DeviceAPI.resolveLocalName(_args.device.mdns);
+      ip = await DeviceAPI.resolveLocalName(device.mdns);
       if (ip == "" || ip == null) {
         continue;
       }
@@ -138,13 +139,13 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     }
 
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-        id: Value(_args.device.id), ip: Value(ip), isReachable: Value(true)));
-    Device device = await RelDB.get().devicesDAO.getDevice(_args.device.id);
+        id: Value(device.id), ip: Value(ip), isReachable: Value(true)));
+    device = await RelDB.get().devicesDAO.getDevice(device.id);
 
     Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
     await ddb.updateParam(ipParam.copyWith(svalue: ip));
 
-    Param wifiStatusParam = await ddb.getParam(_args.device.id, 'WIFI_STATUS');
+    Param wifiStatusParam = await ddb.getParam(device.id, 'WIFI_STATUS');
     await DeviceHelper.refreshIntParam(device, wifiStatusParam);
 
     yield DeviceWifiBlocStateDone(device);
