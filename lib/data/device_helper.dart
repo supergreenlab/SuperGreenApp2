@@ -22,14 +22,14 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class DeviceHelper {
   static Future updateDeviceName(Device device, String name) async {
-    final mdnsDomain = name.toLowerCase().replaceAllMapped(RegExp(r'[\W_]+'), (match) => "");
+    final mdnsDomain = DeviceAPI.mdnsDomain(name);
     final ddb = RelDB.get().devicesDAO;
     await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name);
-    await ddb.updateDevice(device
-        .createCompanion(true)
-        .copyWith(name: Value(name), mdns: Value(mdnsDomain)));
     Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
     await DeviceHelper.updateStringParam(device, mdns, mdnsDomain);
+    await ddb.updateDevice(device
+        .createCompanion(true)
+        .copyWith(name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
   }
 
   static Future<String> updateStringParam(

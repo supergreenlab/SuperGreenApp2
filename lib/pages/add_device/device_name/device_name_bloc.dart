@@ -77,8 +77,10 @@ class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
       yield DeviceNameBlocStateLoading(_args.device);
       var ddb = RelDB.get().devicesDAO;
       await DeviceHelper.updateDeviceName(_args.device, event.name);
+
       Param wifiStatus = await ddb.getParam(_args.device.id, 'WIFI_STATUS');
-      yield DeviceNameBlocStateDone(_args.device, wifiStatus.ivalue != 3);
+      Device device = await ddb.getDevice(_args.device.id);
+      yield DeviceNameBlocStateDone(device, wifiStatus.ivalue != 3);
     }
   }
 }

@@ -35,8 +35,8 @@ class FeedsAPI {
   void initUrls() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
-      _serverHost = 'http://192.168.1.123:8080';
-      _storageServerHost = 'http://192.168.1.123:9000';
+      _serverHost = 'http://192.168.1.124:8080';
+      _storageServerHost = 'http://192.168.1.124:9000';
     } else {
       _serverHost = 'http://10.0.2.2:8080';
       _storageServerHost = 'http://10.0.2.2:9000';

@@ -27,11 +27,17 @@ import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class DeviceAPI {
+  static String mdnsDomain(String name) {
+    return name
+        .toLowerCase()
+        .replaceAllMapped(RegExp(r'[\W_]+'), (match) => "");
+  }
+
   static Future<String> resolveLocalName(String name) async {
     if (name.endsWith('.local')) {
       name.replaceAll('.local', '');
     }
-    name = '${name.toLowerCase()}.local';
+    name = '${DeviceAPI.mdnsDomain(name)}.local';
     // Temporary workaround, mdns discovery fails on the current version of the lib
     String ip;
     if (Platform.isAndroid) {
@@ -177,7 +183,8 @@ class DeviceAPI {
 
   static Map<int, bool> fetchingAllParams = {};
 
-  static Future fetchAllParams(String ip, int deviceID, Function(double) advancement) async {
+  static Future fetchAllParams(
+      String ip, int deviceID, Function(double) advancement) async {
     if (DeviceAPI.fetchingAllParams[deviceID] == true) {
       return;
     }
