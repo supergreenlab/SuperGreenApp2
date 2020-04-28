@@ -52,7 +52,8 @@ class FeedMeasureCardPage extends StatelessWidget {
                     if (state.previous != null) {
                       BlocProvider.of<MainNavigatorBloc>(context).add(
                           MainNavigateToFullscreenMedia(state.previous,
-                              overlayPath: state.current.filePath));
+                              overlayPath: state.current.filePath,
+                              heroPath: state.current.filePath));
                     } else {
                       BlocProvider.of<MainNavigatorBloc>(context)
                           .add(MainNavigateToFullscreenMedia(state.current));

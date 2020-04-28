@@ -76,7 +76,7 @@ import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_fo
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_page.dart';
-import 'package:super_green_app/pages/fullscreen_picture/fullscreen_media_page.dart';
+import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_page.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_bloc.dart';
 import 'package:super_green_app/pages/graphs/metrics_bloc.dart';
 import 'package:super_green_app/pages/graphs/metrics_page.dart';

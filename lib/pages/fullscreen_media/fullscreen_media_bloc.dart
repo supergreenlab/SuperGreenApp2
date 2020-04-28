@@ -34,16 +34,17 @@ class FullscreenMediaBlocState extends Equatable {
   final bool isVideo;
   final FeedMedia feedMedia;
   final String overlayPath;
+  final String heroPath;
 
-  FullscreenMediaBlocState(this.feedMedia, this.isVideo, this.overlayPath);
+  FullscreenMediaBlocState(this.feedMedia, this.isVideo, this.overlayPath, this.heroPath);
 
   @override
   List<Object> get props => [feedMedia, isVideo];
 }
 
 class FullscreenMediaBlocStateInit extends FullscreenMediaBlocState {
-  FullscreenMediaBlocStateInit(FeedMedia feedMedia, bool isVideo, String overlayPath)
-      : super(feedMedia, isVideo, overlayPath);
+  FullscreenMediaBlocStateInit(FeedMedia feedMedia, bool isVideo, String overlayPath, String heroPath)
+      : super(feedMedia, isVideo, overlayPath, heroPath);
 }
 
 class FullscreenMediaBloc
@@ -58,13 +59,13 @@ class FullscreenMediaBloc
 
   @override
   FullscreenMediaBlocState get initialState =>
-      FullscreenMediaBlocState(_args.feedMedia, _isVideo, _args.overlayPath);
+      FullscreenMediaBlocState(_args.feedMedia, _isVideo, _args.overlayPath, _args.heroPath);
 
   @override
   Stream<FullscreenMediaBlocState> mapEventToState(
       FullscreenMediaBlocEvent event) async* {
     if (event is FullscreenMediaBlocEventInit) {
-      yield FullscreenMediaBlocStateInit(_args.feedMedia, _isVideo, _args.overlayPath);
+      yield FullscreenMediaBlocStateInit(_args.feedMedia, _isVideo, _args.overlayPath, _args.heroPath);
     }
   }
 }

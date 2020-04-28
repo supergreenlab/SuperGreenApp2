@@ -70,7 +70,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
               return LayoutBuilder(
                 builder: (context, constraint) {
                   return Hero(
-                      tag: 'FeedMedia:${state.feedMedia.filePath}',
+                      tag: 'FeedMedia:${state.heroPath ?? state.feedMedia.filePath}',
                       child: GestureDetector(onTap: () {
                         BlocProvider.of<MainNavigatorBloc>(context)
                             .add(MainNavigatorActionPop());
