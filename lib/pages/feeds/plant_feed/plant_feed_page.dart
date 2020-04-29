@@ -55,10 +55,21 @@ enum SpeedDialType {
 class _PlantFeedPageState extends State<PlantFeedPage> {
   final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
+  double _onEnvironmentControlWidth = 50;
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
   String _deviceIP = '';
+
+  @override
+  void initState() {
+    Timer(Duration(seconds: 2), () {
+      setState(() {
+        _onEnvironmentControlWidth = 0;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +176,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         children: [
           _renderGeneralSpeedDials(context, state),
           _renderTrimSpeedDials(context, state),
-          _renderEnvironmentSpeedDials(context, state)
         ][_speedDialType.index]);
   }
 
@@ -246,53 +256,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     ];
   }
 
-  List<SpeedDialChild> _renderEnvironmentSpeedDials(
-      BuildContext context, PlantFeedBlocStateLoaded state) {
-    return [
-      SpeedDialChild(
-          child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
-          labelStyle: TextStyle(fontWeight: FontWeight.bold),
-          onTap: () {
-            setState(() {
-              _speedDialType = SpeedDialType.general;
-            });
-          }),
-      _renderSpeedDialChild(
-          'Stretch control',
-          'assets/feed_card/icon_dimming.svg',
-          _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(
-                  state.plant,
-                  pushAsReplacement: pushAsReplacement),
-              tipID: 'TIP_STRETCH',
-              tipPaths: [
-                't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
-                't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
-              ])),
-      _renderSpeedDialChild(
-          'Ventilation control',
-          'assets/feed_card/icon_blower.svg',
-          _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedVentilationFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement))),
-      _renderSpeedDialChild(
-          'Light schedule',
-          'assets/feed_card/icon_schedule.svg',
-          _onSpeedDialSelected(
-              context,
-              ({pushAsReplacement = false}) =>
-                  MainNavigateToFeedScheduleFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement),
-              tipID: 'TIP_BLOOM',
-              tipPaths: [
-                't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
-              ])),
-    ];
-  }
-
   List<SpeedDialChild> _renderGeneralSpeedDials(
       BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
@@ -332,15 +295,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           onTap: () {
             setState(() {
               _speedDialType = SpeedDialType.trainings;
-            });
-          }),
-      SpeedDialChild(
-          child: SvgPicture.asset('assets/feed_card/icon_schedule.svg'),
-          label: 'Environment',
-          labelStyle: TextStyle(fontWeight: FontWeight.bold),
-          onTap: () {
-            setState(() {
-              _speedDialType = SpeedDialType.environment;
             });
           }),
     ];
@@ -621,14 +575,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           borderRadius: BorderRadius.circular(15),
         ),
         constraints: BoxConstraints(
-          minWidth: 30,
-          minHeight: 30,
+          minWidth: 20,
+          minHeight: 20,
         ),
         child: Text(
           '$n',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 12,
           ),
           textAlign: TextAlign.center,
         ),
@@ -655,7 +609,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
     Widget graphBody;
     if (state.box.device != null) {
-      graphBody = Stack(children: [_renderGraphs(context, state)]);
+      graphBody = _renderGraphs(context, state);
     } else {
       graphBody = Stack(children: [
         _renderGraphs(context, state),
@@ -694,6 +648,26 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         ),
       ]);
     }
+
+    graphBody = GestureDetector(
+      onPanUpdate: (DragUpdateDetails details) {
+        setState(() {
+          _onEnvironmentControlWidth =
+              max(0, min(50, _onEnvironmentControlWidth - details.delta.dx));
+        });
+      },
+      child: Row(
+        children: <Widget>[
+          Expanded(child: graphBody),
+          AnimatedContainer(
+            width: _onEnvironmentControlWidth,
+            child:
+                Stack(children: [_renderEnvironmentControls(context, state)]),
+            duration: Duration(milliseconds: 200),
+          ),
+        ],
+      ),
+    );
 
     Widget nameText;
     if (_reachable && _showIP) {
@@ -767,5 +741,76 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       create: (context) => PlantFeedAppBarBloc(state.plant),
       child: PlantFeedAppBarPage(),
     );
+  }
+
+  Widget _renderEnvironmentControls(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
+    return Column(
+      children: <Widget>[
+        _renderEnvironmentControl(
+            context,
+            'assets/feed_card/icon_dimming.svg',
+            _onEnvironmentControlTapped(
+                context,
+                ({pushAsReplacement = false}) =>
+                    MainNavigateToFeedLightFormEvent(state.plant,
+                        pushAsReplacement: pushAsReplacement),
+                tipID: 'TIP_STRETCH',
+                tipPaths: [
+                  't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
+                  't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
+                ])),
+        _renderEnvironmentControl(
+            context,
+            'assets/feed_card/icon_blower.svg',
+            _onEnvironmentControlTapped(
+                context,
+                ({pushAsReplacement = false}) =>
+                    MainNavigateToFeedVentilationFormEvent(state.plant,
+                        pushAsReplacement: pushAsReplacement))),
+        _renderEnvironmentControl(
+            context,
+            'assets/feed_card/icon_schedule.svg',
+            _onEnvironmentControlTapped(
+                context,
+                ({pushAsReplacement = false}) =>
+                    MainNavigateToFeedScheduleFormEvent(state.plant,
+                        pushAsReplacement: pushAsReplacement),
+                tipID: 'TIP_BLOOM',
+                tipPaths: [
+                  't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
+                ])),
+      ],
+    );
+  }
+
+  Widget _renderEnvironmentControl(
+      BuildContext context, String icon, void Function() navigateTo) {
+    return InkWell(
+      onTap: navigateTo,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
+        child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+            ),
+            child: SvgPicture.asset(icon,
+                width: 40, height: 40, fit: BoxFit.contain)),
+      ),
+    );
+  }
+
+  void Function() _onEnvironmentControlTapped(BuildContext context,
+      MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
+      {String tipID, List<String> tipPaths}) {
+    return () {
+      if (tipPaths != null && !AppDB().isTipDone(tipID)) {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
+            tipID, tipPaths, navigatorEvent(pushAsReplacement: true)));
+      } else {
+        BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
+      }
+    };
   }
 }

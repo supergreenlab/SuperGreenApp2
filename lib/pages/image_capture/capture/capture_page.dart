@@ -37,6 +37,7 @@ class _CapturePageState extends State<CapturePage> {
   List<CameraDescription> _cameras;
   CameraController _cameraController;
 
+  bool _videoMode = false;
   bool _popDone = true;
 
   @override
@@ -73,82 +74,83 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   Widget _renderCamera(BuildContext context, CaptureBlocState state) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (!_popDone) {
-          await _deleteFileIfExists('$_filePath.mp4');
-          await _deleteFileIfExists('$_filePath.jpg');
-        }
-        return true;
+    return GestureDetector(
+      onPanEnd: (DragEndDetails details) {
+        setState(() {
+          _videoMode = !_videoMode;
+        });
       },
-      child: Stack(
-        children: [
-          LayoutBuilder(builder: (context, constraints) {
-            double width = constraints.maxWidth;
-            double height =
-                constraints.maxWidth / _cameraController.value.aspectRatio;
-            Widget cameraPreview = Positioned(
-                left: (constraints.maxWidth - width) / 2,
-                top: (constraints.maxHeight - height) / 2,
-                child: SizedBox(
+      child: WillPopScope(
+        onWillPop: () async {
+          if (!_popDone) {
+            await _deleteFileIfExists('$_filePath.mp4');
+            await _deleteFileIfExists('$_filePath.jpg');
+          }
+          return true;
+        },
+        child: Stack(
+          children: [
+            LayoutBuilder(builder: (context, constraints) {
+              double width = constraints.maxWidth;
+              double height =
+                  constraints.maxWidth / _cameraController.value.aspectRatio;
+              Widget cameraPreview = Positioned(
+                  left: (constraints.maxWidth - width) / 2,
+                  top: (constraints.maxHeight - height) / 2,
+                  child: SizedBox(
+                      width: width,
+                      height: height,
+                      child: CameraPreview(_cameraController)));
+              if (state.overlayPath != null) {
+                Widget overlay = SizedBox(
                     width: width,
                     height: height,
-                    child: CameraPreview(_cameraController)));
-            if (state.overlayPath != null) {
-              Widget overlay = SizedBox(
-                  width: width,
-                  height: height,
-                  child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Opacity(
-                          opacity: 0.6,
-                          child: Image.file(File(state.overlayPath)))));
-              cameraPreview = Stack(children: [
-                cameraPreview,
-                overlay,
-              ]);
-            } else {
-              cameraPreview = Stack(children: [
-                cameraPreview,
-              ]);
-            }
-            return cameraPreview;
-          }),
-          Positioned(
-            top: 25,
-            left: 0,
-            child: SizedBox(
-              width: 35,
-              height: 35,
-              child: _renderCloseButton(context),
-            ),
-          ),
-          Positioned(
-            top: 25,
-            right: 0,
-            child: SizedBox(
-              width: 35,
-              height: 35,
-              child: _renderMuteButton(context, state),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.black26,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: _renderIdleCameraMode(context, state),
-                )),
+                    child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Opacity(
+                            opacity: 0.6,
+                            child: Image.file(File(state.overlayPath)))));
+                cameraPreview = Stack(children: [
+                  cameraPreview,
+                  overlay,
+                ]);
+              } else {
+                cameraPreview = Stack(children: [
+                  cameraPreview,
+                ]);
+              }
+              return cameraPreview;
+            }),
+            Positioned(
+              top: 25,
+              left: 0,
+              child: SizedBox(
+                width: 35,
+                height: 35,
+                child: _renderCloseButton(context),
               ),
             ),
-          )
-        ],
+            Positioned(
+              top: 25,
+              right: 0,
+              child: SizedBox(
+                width: 35,
+                height: 35,
+                child: _renderMuteButton(context, state),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 100,
+              child: Container(
+                color: Colors.black26,
+                child: _renderIdleCameraMode(context, state),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -221,47 +223,88 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   Widget _renderMuteButton(BuildContext context, CaptureBlocState state) {
-    return RawMaterialButton(
-      onPressed: () {
-        _enableAudio = !_enableAudio;
-        _setupCamera();
-      },
-      shape: new CircleBorder(),
-      child: new Icon(
-        _enableAudio ? Icons.volume_up : Icons.volume_off,
-        color: Colors.white,
-        size: 35.0,
-      ),
-    );
-  }
-
-  List<Widget> _renderIdleCameraMode(
-      BuildContext context, CaptureBlocState state) {
-    List<Widget> items = [
-      Container(width: state.pickerEnabled ? 50 : null),
-      _renderPictureButton(context, state),
-    ];
-    if (state.videoEnabled) {
-      items.add(_renderCameraButton(context, state));
-    }
-    if (state.pickerEnabled) {
-      items.add(FlatButton(
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        child: Icon(Icons.library_books, color: Colors.white54),
-        onPressed: () async {
-          var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-          if (image != null) {
-            image.copy(_filePath);
-            _endCapture(state, _filePath);
-          }
+    if (_videoMode) {
+      return RawMaterialButton(
+        onPressed: () {
+          _enableAudio = !_enableAudio;
+          _setupCamera();
         },
-      ));
-    } else {
-      items.add(
-        Container(),
+        shape: new CircleBorder(),
+        child: new Icon(
+          _enableAudio ? Icons.volume_up : Icons.volume_off,
+          color: Colors.white,
+          size: 35.0,
+        ),
       );
     }
-    return items;
+    return Container();
+  }
+
+  Widget _renderIdleCameraMode(BuildContext context, CaptureBlocState state) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        List<Widget> items = [];
+        items.add(Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Icon(
+              Icons.arrow_left,
+              size: 20,
+              color: Colors.white54,
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: (state.videoEnabled && _videoMode
+                    ? _renderCameraButton(context, state)
+                    : _renderPictureButton(context, state))),
+            Icon(
+              Icons.arrow_right,
+              size: 20,
+              color: Colors.white54,
+            ),
+          ],
+        ));
+        if (state.pickerEnabled) {
+          items.add(Positioned(
+            right: 20,
+            top: 0,
+            height: constraints.maxHeight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FlatButton(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  child: Icon(Icons.library_books, color: Colors.white54),
+                  onPressed: () async {
+                    if (_videoMode) {
+                      File video = await ImagePicker.pickVideo(
+                          source: ImageSource.gallery);
+                      if (video != null) {
+                        String filePath = '$_filePath.mp4';
+                        video.copy(filePath);
+                        _endCapture(state, filePath);
+                      }
+                    } else {
+                      File image = await ImagePicker.pickImage(
+                          source: ImageSource.gallery);
+                      if (image != null) {
+                        String filePath = '$_filePath.jpg';
+                        image.copy(filePath);
+                        _endCapture(state, filePath);
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+          ));
+        }
+        return Stack(
+          children: items,
+        );
+      },
+    );
   }
 
   List<Widget> _renderRecordingMode(

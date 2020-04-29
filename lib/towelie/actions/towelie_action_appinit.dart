@@ -28,7 +28,7 @@ class TowelieActionAppInit extends TowelieAction {
     if (event is TowelieBlocEventAppInit) {
       final fdb = RelDB.get().feedsDAO;
       int feedID =
-          await fdb.addFeed(FeedsCompanion(name: Value("SuperGreenLab")));
+          await fdb.addFeed(FeedsCompanion(name: Value("SuperGreenLab"), isNewsFeed: Value(true)));
       Feed feed = await fdb.getFeed(feedID);
       await CardWelcomeApp.createWelcomeAppCard(feed);
     }

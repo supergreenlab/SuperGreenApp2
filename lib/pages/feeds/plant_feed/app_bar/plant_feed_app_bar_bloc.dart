@@ -99,6 +99,7 @@ class PlantFeedAppBarBloc
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
       if (device == null) {
         _timer.cancel();
+        _timer = null;
         return _createDummyData();
       }
       String identifier = device.identifier;

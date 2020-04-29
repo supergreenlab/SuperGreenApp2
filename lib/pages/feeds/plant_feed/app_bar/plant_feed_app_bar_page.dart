@@ -51,7 +51,7 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
                   border: Border.all(color: Color(0xffdedede), width: 1),
                 ),
                 child: Fullscreen(
-                  title: 'Not enough data to display graphs yet',
+                  title: 'Not enough data to display metrics yet',
                   subtitle: 'try again in a few minutes',
                   fontSize: 20,
                   fontWeight: FontWeight.normal,

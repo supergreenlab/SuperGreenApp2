@@ -192,8 +192,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
             .updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
       } else {
         int deviceID = await RelDB.get().devicesDAO.addDevice(devicesCompanion);
-        await DeviceAPI.fetchAllParams(
-            devicesCompanion.ip.value, deviceID, (adv) {});
+        // No await, that's intentional
+        DeviceAPI.fetchAllParams(devicesCompanion.ip.value, deviceID, (adv) {});
       }
       await FeedsAPI().setSynced("device", devicesCompanion.serverID.value);
       print("Synced device");
