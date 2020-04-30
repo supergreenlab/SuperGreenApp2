@@ -28,9 +28,10 @@ class FeedCardTitle extends StatelessWidget {
   final FeedEntry feedEntry;
   final Function onEdit;
   final bool canDelete;
+  final bool showSyncStatus;
 
   const FeedCardTitle(this.icon, this.title, this.feedEntry,
-      {this.onEdit, this.canDelete = true});
+      {this.onEdit, this.canDelete = true, this.showSyncStatus = true});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +45,21 @@ class FeedCardTitle extends StatelessWidget {
                 ? SvgPicture.asset(icon)
                 : Image.asset(icon)),
       ),
-      Text(title,
-          style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w300,
-              color: Colors.black87)),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(title,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.black87)),
+          showSyncStatus
+              ? Text(feedEntry.synced ? 'Synced' : 'Not synced',
+                  style: TextStyle(
+                      color: feedEntry.synced ? Colors.green : Colors.red))
+              : Container(),
+        ],
+      ),
       Expanded(
         child: Container(),
       ),
