@@ -27,8 +27,10 @@ class MediaList extends StatelessWidget {
   final List<FeedMedia> _medias;
   final String prefix;
   final Function(FeedMedia media) onMediaTapped;
+  final bool showSyncStatus;
 
-  const MediaList(this._medias, {this.prefix = '', this.onMediaTapped});
+  const MediaList(this._medias,
+      {this.prefix = '', this.onMediaTapped, this.showSyncStatus = true});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,23 @@ class MediaList extends StatelessWidget {
               ),
             ),
             right: 8.0,
-            bottom: 8.0)
+            bottom: 8.0),
+        showSyncStatus
+            ? Positioned(
+                left: 0,
+                bottom: 0,
+                child: Container(
+                  color: Colors.white54,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(media.synced ? 'Synced' : 'Not synced',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                            color: media.synced ? Colors.green : Colors.red)),
+                  ),
+                ),
+              )
+            : Container(),
       ]),
     );
   }

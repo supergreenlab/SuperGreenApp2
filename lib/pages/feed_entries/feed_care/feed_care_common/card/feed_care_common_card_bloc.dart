@@ -31,6 +31,11 @@ class FeedCareCommonCardBlocEventInit extends FeedCareCommonCardBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedMediaCardBlocEventMediaListUpdated extends FeedCareCommonCardBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedCareCommonCardBlocEventEdit extends FeedCareCommonCardBlocEvent {
   final String message;
 
@@ -69,6 +74,8 @@ class FeedCareCommonCardBloc
   final List<FeedMedia> _beforeMedias = [];
   final List<FeedMedia> _afterMedias = [];
 
+  StreamSubscription<List<FeedMedia>> _stream;
+
   @override
   FeedCareCommonCardBlocState get initialState =>
       FeedCareCommonCardBlocState(_feed, _feedEntry, {}, [], []);
@@ -83,15 +90,8 @@ class FeedCareCommonCardBloc
       FeedCareCommonCardBlocEvent event) async* {
     if (event is FeedCareCommonCardBlocEventInit) {
       RelDB db = RelDB.get();
-      List<FeedMedia> medias = await db.feedsDAO.getFeedMedias(_feedEntry.id);
-      _beforeMedias.addAll(medias.where((m) {
-        final Map<String, dynamic> params = JsonDecoder().convert(m.params);
-        return params['before'];
-      }));
-      _afterMedias.addAll(medias.where((m) {
-        final Map<String, dynamic> params = JsonDecoder().convert(m.params);
-        return !params['before'];
-      }));
+      _stream = db.feedsDAO.watchFeedMedias(_feedEntry.id).listen(_onMediasUpdated);
+    } else if (event is FeedMediaCardBlocEventMediaListUpdated) {
       yield FeedCareCommonCardBlocState(
           _feed, _feedEntry, _params, _beforeMedias, _afterMedias);
     } else if (event is FeedCareCommonCardBlocEventEdit) {
@@ -104,5 +104,25 @@ class FeedCareCommonCardBloc
       yield FeedCareCommonCardBlocState(
           _feed, _feedEntry, _params, _beforeMedias, _afterMedias);
     }
+  }
+
+  void _onMediasUpdated(List<FeedMedia> medias) {
+    _beforeMedias.addAll(medias.where((m) {
+      final Map<String, dynamic> params = JsonDecoder().convert(m.params);
+      return params['before'];
+    }));
+    _afterMedias.addAll(medias.where((m) {
+      final Map<String, dynamic> params = JsonDecoder().convert(m.params);
+      return !params['before'];
+    }));
+    add(FeedMediaCardBlocEventMediaListUpdated());
+  }
+
+  @override
+  Future<void> close() async {
+    if (_stream != null) {
+      await _stream.cancel();
+    }
+    return super.close();
   }
 }

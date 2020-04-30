@@ -89,9 +89,9 @@ class SettingsPlantsBloc
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     if (_plantsStream != null) {
-      _plantsStream.cancel();
+      await _plantsStream.cancel();
     }
     return super.close();
   }

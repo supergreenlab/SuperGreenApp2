@@ -133,9 +133,9 @@ class SelectDeviceBloc
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     if (_stream != null) {
-      _stream.cancel();
+      await _stream.cancel();
     }
     return super.close();
   }

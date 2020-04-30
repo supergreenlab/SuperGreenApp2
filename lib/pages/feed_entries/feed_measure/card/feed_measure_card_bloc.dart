@@ -30,6 +30,12 @@ class FeedMeasureCardBlocEventInit extends FeedMeasureCardBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedMeasureCardBlocEventMediaListUpdated
+    extends FeedMeasureCardBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedMeasureCardBlocState extends Equatable {
   final Feed feed;
   final FeedEntry feedEntry;
@@ -54,6 +60,9 @@ class FeedMeasureCardBloc
   FeedMedia _previous;
   FeedMedia _current;
 
+  StreamSubscription<FeedMedia> _previousStream;
+  StreamSubscription<List<FeedMedia>> _currentStream;
+
   @override
   FeedMeasureCardBlocState get initialState =>
       FeedMeasureCardBlocState(_feed, _feedEntry, {}, _previous, _current);
@@ -69,13 +78,41 @@ class FeedMeasureCardBloc
     if (event is FeedMeasureCardBlocEventInit) {
       RelDB db = RelDB.get();
       if (_params['previous'] is int) {
-        _previous = await db.feedsDAO.getFeedMedia(_params['previous']);
+        _previousStream = db.feedsDAO
+            .watchFeedMedia(_params['previous'])
+            .listen(_onPreviousMediaUpdated);
       } else if (_params['previous'] is String) {
-        _previous = await db.feedsDAO.getFeedMediaForServerID(_params['previous']);
+        _previousStream = db.feedsDAO
+            .watchFeedMediaForServerID(_params['previous'])
+            .listen(_onPreviousMediaUpdated);
       }
-      _current = (await db.feedsDAO.getFeedMedias(_feedEntry.id))[0];
+      _currentStream = db.feedsDAO
+          .watchFeedMedias(_feedEntry.id)
+          .listen(_onCurrentMediaUpdated);
+    } else if (event is FeedMeasureCardBlocEventMediaListUpdated) {
       yield FeedMeasureCardBlocState(
           _feed, _feedEntry, _params, _previous, _current);
     }
+  }
+
+  void _onPreviousMediaUpdated(FeedMedia previous) {
+    _previous = previous;
+    add(FeedMeasureCardBlocEventMediaListUpdated());
+  }
+
+  void _onCurrentMediaUpdated(List<FeedMedia> medias) {
+    _current = medias[0];
+    add(FeedMeasureCardBlocEventMediaListUpdated());
+  }
+
+  @override
+  Future<void> close() async {
+    if (_previousStream != null) {
+      await _previousStream.cancel();
+    }
+    if (_currentStream != null) {
+      await _currentStream.cancel();
+    }
+    return super.close();
   }
 }

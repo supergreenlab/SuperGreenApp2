@@ -142,12 +142,12 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     if (_timelapsesStream != null) {
-      _timelapsesStream.cancel();
+      await _timelapsesStream.cancel();
     }
     if (_plantStream != null) {
-      _plantStream.cancel();
+      await _plantStream.cancel();
     }
     return super.close();
   }

@@ -80,7 +80,8 @@ class FeedEntries extends Table {
     }
     Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
     if (params['previous'] != null) {
-      FeedMedia feedMedia = await RelDB.get().feedsDAO.getFeedMedia(params['previous']);
+      FeedMedia feedMedia =
+          await RelDB.get().feedsDAO.getFeedMedia(params['previous']);
       params['previous'] = feedMedia.serverID;
     }
     return {
@@ -287,6 +288,11 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .get();
   }
 
+  Stream<List<FeedMedia>> watchFeedMedias(int feedEntryID) {
+    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID)))
+        .watch();
+  }
+
   Future<List<FeedMedia>> getUnsyncedFeedMedias() {
     return (select(feedMedias)..where((f) => f.synced.equals(false))).get();
   }
@@ -296,9 +302,19 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .getSingle();
   }
 
+  Stream<FeedMedia> watchFeedMedia(int feedMediaID) {
+    return (select(feedMedias)..where((f) => f.id.equals(feedMediaID)))
+        .watchSingle();
+  }
+
   Future<FeedMedia> getFeedMediaForServerID(String serverID) {
     return (select(feedMedias)..where((fe) => fe.serverID.equals(serverID)))
         .getSingle();
+  }
+
+  Stream<FeedMedia> watchFeedMediaForServerID(String serverID) {
+    return (select(feedMedias)..where((fe) => fe.serverID.equals(serverID)))
+        .watchSingle();
   }
 
   Future deleteFeedMedia(FeedMedia feedMedia) {

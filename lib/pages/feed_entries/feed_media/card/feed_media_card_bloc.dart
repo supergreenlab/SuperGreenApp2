@@ -31,6 +31,11 @@ class FeedMediaCardBlocEventInit extends FeedMediaCardBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedMediaCardBlocEventMediaListUpdated extends FeedMediaCardBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class FeedMediaCardBlocEventEdit extends FeedMediaCardBlocEvent {
   final String message;
 
@@ -61,6 +66,8 @@ class FeedMediaCardBloc
 
   final List<FeedMedia> _medias = [];
 
+  StreamSubscription<List<FeedMedia>> _stream;
+
   @override
   FeedMediaCardBlocState get initialState =>
       FeedMediaCardBlocState(_feed, _feedEntry, {}, []);
@@ -74,8 +81,11 @@ class FeedMediaCardBloc
   Stream<FeedMediaCardBlocState> mapEventToState(
       FeedMediaCardBlocEvent event) async* {
     if (event is FeedMediaCardBlocEventInit) {
-      RelDB db = RelDB.get();
-      _medias.addAll(await db.feedsDAO.getFeedMedias(_feedEntry.id));
+      _stream = RelDB.get()
+          .feedsDAO
+          .watchFeedMedias(_feedEntry.id)
+          .listen(_onMediasUpdated);
+    } else if (event is FeedMediaCardBlocEventMediaListUpdated) {
       yield FeedMediaCardBlocState(_feed, _feedEntry, _params, _medias);
     } else if (event is FeedMediaCardBlocEventEdit) {
       RelDB db = RelDB.get();
@@ -86,5 +96,18 @@ class FeedMediaCardBloc
       _feedEntry = await db.feedsDAO.getFeedEntry(_feedEntry.id);
       yield FeedMediaCardBlocState(_feed, _feedEntry, _params, _medias);
     }
+  }
+
+  void _onMediasUpdated(List<FeedMedia> medias) {
+    _medias.replaceRange(0, _medias.length, medias);
+    add(FeedMediaCardBlocEventMediaListUpdated());
+  }
+
+  @override
+  Future<void> close() async {
+    if (_stream != null) {
+      await _stream.cancel();
+    }
+    return super.close();
   }
 }

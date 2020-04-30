@@ -94,9 +94,9 @@ class SettingsDevicesBloc
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     if (_devicesStream != null) {
-      _devicesStream.cancel();
+      await _devicesStream.cancel();
     }
     return super.close();
   }

@@ -98,9 +98,9 @@ class SettingsBoxesBloc
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     if (_boxesStream != null) {
-      _boxesStream.cancel();
+      await _boxesStream.cancel();
     }
     return super.close();
   }

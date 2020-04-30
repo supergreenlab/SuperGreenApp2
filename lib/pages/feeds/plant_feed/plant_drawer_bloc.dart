@@ -108,15 +108,15 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     if (_plantStream != null) {
-      _plantStream.cancel();
+      await _plantStream.cancel();
     }
     if (_boxesStream != null) {
-      _boxesStream.cancel();
+      await _boxesStream.cancel();
     }
     if (_pendingStream != null) {
-      _pendingStream.cancel();
+      await _pendingStream.cancel();
     }
     return super.close();
   }

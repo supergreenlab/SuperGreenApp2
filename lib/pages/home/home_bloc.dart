@@ -80,9 +80,9 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     if (_pendingStream != null) {
-      _pendingStream.cancel();
+      await _pendingStream.cancel();
     }
     return super.close();
   }
