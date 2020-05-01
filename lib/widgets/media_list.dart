@@ -67,13 +67,13 @@ class MediaList extends StatelessWidget {
             }
           : null,
       child: Stack(children: [
-        Hero(
-          tag: 'FeedMedia:${media.filePath}',
-          child: SizedBox(
-              width: constraints.maxWidth,
-              height: constraints.maxHeight,
-              child: FittedBox(
-                  fit: BoxFit.cover,
+        SizedBox(
+          width: constraints.maxWidth,
+          height: constraints.maxHeight,
+          child: FittedBox(
+              fit: BoxFit.cover,
+              child: Hero(
+                  tag: 'FeedMedia:${media.filePath}',
                   child: Image.file(File(media.thumbnailPath)))),
         ),
         Positioned(
@@ -100,7 +100,7 @@ class MediaList extends StatelessWidget {
                     padding: const EdgeInsets.all(4.0),
                     child: Text(media.synced ? 'Synced' : 'Not synced',
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.bold,
                             color: media.synced ? Colors.green : Colors.red)),
                   ),
                 ),
