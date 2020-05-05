@@ -54,7 +54,7 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
             FeedCardTitle(
               widget.iconPath(),
               widget.title(),
-              state.feedEntry,
+              state.synced,
               onEdit: () {
                 setState(() {
                   editText = true;

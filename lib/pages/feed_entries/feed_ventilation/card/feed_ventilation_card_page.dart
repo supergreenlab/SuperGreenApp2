@@ -17,49 +17,80 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedVentilationCardPage extends StatelessWidget {
   final Animation animation;
+  final FeedBlocEntryState state;
 
-  const FeedVentilationCardPage(this.animation, {Key key}) : super(key: key);
+  const FeedVentilationCardPage(this.animation, this.state, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedVentilationCardBloc, FeedVentilationCardBlocState>(
-        bloc: BlocProvider.of<FeedVentilationCardBloc>(context),
-        builder: (context, state) => FeedCard(
-              animation: animation,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  FeedCardTitle('assets/feed_card/icon_blower.svg',
-                      'Ventilation change', state.feedEntry),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FeedCardDate(state.feedEntry),
-                  ),
-                  Container(
-                    height: 120,
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: _renderValues([
-                        state.params['values']['blowerDay'],
-                        state.params['values']['blowerNight']
-                      ], [
-                        state.params['initialValues']['blowerDay'],
-                        state.params['initialValues']['blowerNight']
-                      ]),
-                    ),
-                  ),
-                ],
-              ),
-            ));
+    if (state is FeedBlocEntryStateLoaded) {
+      return _renderLoaded(context, state);
+    }
+    return _renderLoading(context);
+  }
+
+  Widget _renderLoading(BuildContext context) {
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle(
+              'assets/feed_card/icon_blower.svg', 'Ventilation change', state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
+          Container(
+            height: 90,
+            alignment: Alignment.center,
+            child: FullscreenLoading(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
+    FeedVentilationState cardState = state.state;
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle('assets/feed_card/icon_blower.svg',
+              'Ventilation change', state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
+          Container(
+            height: 120,
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _renderValues([
+                cardState.values.blowerDay,
+                cardState.values.blowerNight
+              ], [
+                cardState.initialValues.blowerDay,
+                cardState.initialValues.blowerNight
+              ]),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   List<Widget> _renderValues(
