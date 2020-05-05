@@ -17,21 +17,18 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
 
 class FeedCardTitle extends StatelessWidget {
   final String icon;
   final String title;
-  final FeedEntry feedEntry;
+  final bool synced;
   final Function onEdit;
-  final bool canDelete;
+  final Function onDelete;
   final bool showSyncStatus;
 
-  const FeedCardTitle(this.icon, this.title, this.feedEntry,
-      {this.onEdit, this.canDelete = true, this.showSyncStatus = true});
+  const FeedCardTitle(this.icon, this.title, this.synced,
+      {this.onEdit, this.onDelete, this.showSyncStatus = true});
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +51,9 @@ class FeedCardTitle extends StatelessWidget {
                   fontWeight: FontWeight.w300,
                   color: Colors.black87)),
           showSyncStatus
-              ? Text(feedEntry.synced ? 'Synced' : 'Not synced',
+              ? Text(synced ? 'Synced' : 'Not synced',
                   style: TextStyle(
-                      color: feedEntry.synced ? Colors.green : Colors.red))
+                      color: synced ? Colors.green : Colors.red))
               : Container(),
         ],
       ),
@@ -75,7 +72,7 @@ class FeedCardTitle extends StatelessWidget {
         ),
       );
     }
-    if (canDelete == true) {
+    if (onDelete != null) {
       content.add(
         IconButton(
           icon: Icon(
@@ -121,8 +118,7 @@ class FeedCardTitle extends StatelessWidget {
           );
         });
     if (confirm) {
-      BlocProvider.of<FeedBloc>(context)
-          .add(FeedBlocEventDeleteFeedEntry(feedEntry));
+      onDelete();
     }
   }
 }

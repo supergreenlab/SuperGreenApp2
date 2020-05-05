@@ -16,31 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
 
-class FeedCardDate extends StatelessWidget {
+class FeedBlocEntryState extends Equatable {
+  final String id;
+  final String type;
+  final bool synced;
   final DateTime date;
 
-  const FeedCardDate(this.date);
+  FeedBlocEntryState(this.id, this.type, this.synced, this.date);
 
   @override
-  Widget build(BuildContext context) {
-    Duration diff = DateTime.now().difference(date);
-    int minuteDiff = diff.inMinutes;
-    int hourDiff = diff.inHours;
-    int dayDiff = diff.inDays;
-    String format;
-    if (minuteDiff < 60) {
-      format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''} ago';
-    } else if (hourDiff < 24) {
-      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ago';
-    } else/* if (dayDiff < 5)*/ {
-      format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ago';
-    } /*else {
-      DateFormat f = DateFormat('yyyy-MM-dd');
-      format = f.format(feedEntry.date);
-    }*/
-    return Text(format,
-        style: TextStyle(color: Colors.black54));
-  }
+  List<Object> get props => [id, type, synced, date];
+}
+
+class FeedBlocEntryStateNotLoaded extends FeedBlocEntryState {
+  FeedBlocEntryStateNotLoaded(String id, String type, bool synced, DateTime date) : super(id, type, synced, date);
+}
+
+class FeedBlocEntryStateLoaded extends FeedBlocEntryState {
+  final dynamic state;
+
+  FeedBlocEntryStateLoaded(String id, String type, bool synced, DateTime date, this.state)
+      : super(id, type, synced, date);
+
+  @override
+  List<Object> get props => [id, type, synced, date, state];
 }
