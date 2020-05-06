@@ -32,12 +32,12 @@ class FeedBlocEventLoadEntries extends FeedBlocEvent {
 }
 
 class FeedBlocEventLoadEntry extends FeedBlocEvent {
-  final String entryID;
+  final dynamic id;
 
-  FeedBlocEventLoadEntry(this.entryID);
+  FeedBlocEventLoadEntry(this.id);
 
   @override
-  List<Object> get props => [entryID];
+  List<Object> get props => [id];
 }
 
 abstract class FeedBlocState extends Equatable {}
@@ -50,7 +50,7 @@ class FeedBlocStateInit extends FeedBlocState {
 }
 
 class FeedBlocStateLoaded extends FeedBlocState {
-  final List<FeedBlocEntryState> entries;
+  final List<FeedEntryState> entries;
 
   FeedBlocStateLoaded(this.entries);
 
@@ -59,9 +59,10 @@ class FeedBlocStateLoaded extends FeedBlocState {
 }
 
 abstract class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
-  List<FeedBlocEntryState> _entryStates = [];
+  final dynamic _feedID;
+  List<FeedEntryState> _entryStates = [];
 
-  FeedBloc() {
+  FeedBloc(this._feedID) {
     add(FeedBlocEventLoadEntries(10));
   }
 

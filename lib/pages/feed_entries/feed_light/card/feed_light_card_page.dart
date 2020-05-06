@@ -26,7 +26,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedLightCardPage extends StatelessWidget {
   final Animation animation;
-  final FeedBlocEntryState state;
+  final FeedEntryState state;
 
   const FeedLightCardPage(this.animation, this.state, {Key key})
       : super(key: key);

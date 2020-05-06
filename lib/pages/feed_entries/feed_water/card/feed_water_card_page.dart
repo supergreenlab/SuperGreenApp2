@@ -27,7 +27,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedWaterCardPage extends StatelessWidget {
   final Animation animation;
-  final FeedBlocEntryState state;
+  final FeedEntryState state;
 
   const FeedWaterCardPage(this.animation, this.state, {Key key})
       : super(key: key);
