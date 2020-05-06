@@ -19,7 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_card_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -28,45 +28,69 @@ import 'package:super_green_app/widgets/media_list.dart';
 
 class FeedMeasureCardPage extends StatelessWidget {
   final Animation animation;
+  final FeedEntryState state;
 
-  const FeedMeasureCardPage(this.animation, {Key key}) : super(key: key);
+  const FeedMeasureCardPage(this.animation, this.state, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedMeasureCardBloc, FeedMeasureCardBlocState>(
-        bloc: BlocProvider.of<FeedMeasureCardBloc>(context),
-        builder: (context, state) {
-          if (state.current == null) {
-            return FullscreenLoading(title: 'loading');
-          }
-          return FeedCard(
-            animation: animation,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                FeedCardTitle('assets/feed_card/icon_measure.svg', 'Measure',
-                    state.feedEntry),
-                MediaList(
-                  [state.current],
-                  onMediaTapped: (media) {
-                    if (state.previous != null) {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(
-                          MainNavigateToFullscreenMedia(state.previous,
-                              overlayPath: state.current.filePath,
-                              heroPath: state.current.filePath));
-                    } else {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToFullscreenMedia(state.current));
-                    }
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FeedCardDate(state.feedEntry),
-                ),
-              ],
-            ),
-          );
-        });
+    if (state is FeedBlocEntryStateLoaded) {
+      return _renderLoaded(context, state);
+    }
+    return _renderLoading(context);
+  }
+
+  Widget _renderLoading(BuildContext context) {
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle(
+              'assets/feed_card/icon_towelie.svg', 'Towelie', state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
+          Container(
+            height: 90,
+            alignment: Alignment.center,
+            child: FullscreenLoading(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle(
+              'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
+          MediaList(
+            [state.current],
+            onMediaTapped: (media) {
+              if (state.previous != null) {
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToFullscreenMedia(state.previous,
+                        overlayPath: state.current.filePath,
+                        heroPath: state.current.filePath));
+              } else {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToFullscreenMedia(state.current));
+              }
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.feedEntry),
+          ),
+        ],
+      ),
+    );
   }
 }

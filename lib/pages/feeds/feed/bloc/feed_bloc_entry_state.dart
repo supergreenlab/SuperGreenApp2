@@ -18,28 +18,29 @@
 
 import 'package:equatable/equatable.dart';
 
-class FeedBlocEntryState extends Equatable {
-  final String id;
+class FeedEntryState extends Equatable {
+  final dynamic id;
+  final dynamic feedID;
   final String type;
   final bool synced;
   final DateTime date;
 
-  FeedBlocEntryState(this.id, this.type, this.synced, this.date);
+  FeedEntryState(this.id, this.feedID, this.type, this.synced, this.date);
 
   @override
-  List<Object> get props => [id, type, synced, date];
+  List<Object> get props => [id, feedID, type, synced, date];
 }
 
-class FeedBlocEntryStateNotLoaded extends FeedBlocEntryState {
-  FeedBlocEntryStateNotLoaded(String id, String type, bool synced, DateTime date) : super(id, type, synced, date);
+class FeedBlocEntryStateNotLoaded extends FeedEntryState {
+  FeedBlocEntryStateNotLoaded(dynamic id, dynamic feedID, String type, bool synced, DateTime date) : super(id, feedID, type, synced, date);
 }
 
-class FeedBlocEntryStateLoaded extends FeedBlocEntryState {
+class FeedBlocEntryStateLoaded extends FeedEntryState {
   final dynamic state;
 
-  FeedBlocEntryStateLoaded(String id, String type, bool synced, DateTime date, this.state)
-      : super(id, type, synced, date);
+  FeedBlocEntryStateLoaded(dynamic id, dynamic feedID, String type, bool synced, DateTime date, this.state)
+      : super(id, feedID, type, synced, date);
 
   @override
-  List<Object> get props => [id, type, synced, date, state];
+  List<Object> get props => [id, feedID, type, synced, date, state];
 }

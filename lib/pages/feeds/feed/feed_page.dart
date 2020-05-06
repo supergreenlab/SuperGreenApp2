@@ -77,10 +77,9 @@ class _FeedPageState extends State<FeedPage> {
                   FeedEntry feedEntry = _entries[i];
                   _entries = state.entries;
                   _listKey.currentState.removeItem(
-                      i+1,
+                      i + 1,
                       (context, animation) =>
-                          FeedEntriesHelper.cardForFeedEntry(
-                              state.feed, feedEntry, animation),
+                          FeedEntriesHelper.cardForFeedEntry(animation, null),
                       duration: Duration(milliseconds: 500));
                   break;
                 }
@@ -151,8 +150,7 @@ class _FeedPageState extends State<FeedPage> {
                   position: animation.drive(
                       Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
                           .chain(CurveTween(curve: Curves.linear))),
-                  child: FeedEntriesHelper.cardForFeedEntry(
-                      state.feed, entries[index], animation));
+                  child: FeedEntriesHelper.cardForFeedEntry(animation, null));
             },
             initialItemCount: entries.length + 1,
           )

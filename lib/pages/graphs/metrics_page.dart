@@ -183,7 +183,7 @@ class _MetricsPageState extends State<MetricsPage> {
           return ListTile(
             leading: SvgPicture.asset(_icons[state.entries[i].type]),
             title: Text(_titles[state.entries[i].type]),
-            subtitle: FeedCardDate(state.entries[i]),
+            subtitle: FeedCardDate(state.entries[i].date),
           );
         });
   }

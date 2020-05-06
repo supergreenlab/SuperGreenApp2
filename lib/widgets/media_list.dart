@@ -23,10 +23,19 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/widgets/bordered_text.dart';
 
+class MediaState {
+  final dynamic id;
+  final String filePath;
+  final String thumbnailPath;
+  final bool synced;
+
+  MediaState(this.id, this.filePath, this.thumbnailPath, this.synced);
+}
+
 class MediaList extends StatelessWidget {
-  final List<FeedMedia> _medias;
+  final List<MediaState> _medias;
   final String prefix;
-  final Function(FeedMedia media) onMediaTapped;
+  final Function(MediaState media) onMediaTapped;
   final bool showSyncStatus;
 
   const MediaList(this._medias,
@@ -59,7 +68,7 @@ class MediaList extends StatelessWidget {
   }
 
   Widget _renderImage(BuildContext context, BoxConstraints constraints,
-      FeedMedia media, String label) {
+      MediaState media, String label) {
     return InkWell(
       onTap: onMediaTapped != null
           ? () {
