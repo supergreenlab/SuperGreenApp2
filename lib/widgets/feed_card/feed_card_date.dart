@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedCardDate extends StatelessWidget {

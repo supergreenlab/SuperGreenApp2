@@ -97,8 +97,8 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       _stream = entries.listen(_onFeedEntriesChange);
     } else if (event is FeedBlocEventMarkAsRead) {
       final fdb = RelDB.get().feedsDAO;
-      await fdb.updateFeedEntry(
-          event.feedEntry.createCompanion(true).copyWith(isNew: Value(false)));
+      await fdb.updateFeedEntry(FeedEntriesCompanion(
+          id: Value(event.feedEntry.id), isNew: Value(false)));
     } else if (event is FeedBlocEventFeedEntriesListUpdated) {
       yield FeedBlocStateLoaded(_feed, event._feedEntries);
     } else if (event is FeedBlocEventDeleteFeedEntry) {

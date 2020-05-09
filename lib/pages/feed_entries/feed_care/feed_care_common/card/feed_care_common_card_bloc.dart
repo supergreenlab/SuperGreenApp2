@@ -31,7 +31,8 @@ class FeedCareCommonCardBlocEventInit extends FeedCareCommonCardBlocEvent {
   List<Object> get props => [];
 }
 
-class FeedMediaCardBlocEventMediaListUpdated extends FeedCareCommonCardBlocEvent {
+class FeedMediaCardBlocEventMediaListUpdated
+    extends FeedCareCommonCardBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -90,7 +91,8 @@ class FeedCareCommonCardBloc
       FeedCareCommonCardBlocEvent event) async* {
     if (event is FeedCareCommonCardBlocEventInit) {
       RelDB db = RelDB.get();
-      _stream = db.feedsDAO.watchFeedMedias(_feedEntry.id).listen(_onMediasUpdated);
+      _stream =
+          db.feedsDAO.watchFeedMedias(_feedEntry.id).listen(_onMediasUpdated);
     } else if (event is FeedMediaCardBlocEventMediaListUpdated) {
       yield FeedCareCommonCardBlocState(
           _feed, _feedEntry, _params, _beforeMedias, _afterMedias);
@@ -98,8 +100,10 @@ class FeedCareCommonCardBloc
       RelDB db = RelDB.get();
       Map<String, dynamic> params = JsonDecoder().convert(_feedEntry.params);
       params['message'] = event.message;
-      db.feedsDAO.updateFeedEntry(_feedEntry.createCompanion(true).copyWith(
-          params: Value(JsonEncoder().convert(params)), synced: Value(false)));
+      db.feedsDAO.updateFeedEntry(FeedEntriesCompanion(
+          id: Value(_feedEntry.id),
+          params: Value(JsonEncoder().convert(params)),
+          synced: Value(false)));
       _feedEntry = await db.feedsDAO.getFeedEntry(_feedEntry.id);
       yield FeedCareCommonCardBlocState(
           _feed, _feedEntry, _params, _beforeMedias, _afterMedias);

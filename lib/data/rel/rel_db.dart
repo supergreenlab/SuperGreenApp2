@@ -93,23 +93,23 @@ class RelDB extends _$RelDB {
           for (int i = 0; i < tmpBoxes.length; ++i) {
             Plant plant =
                 await plantsDAO.getPlant(int.parse(tmpBoxes[i].settings));
-            await plantsDAO.updatePlant(plant
-                .createCompanion(true)
-                .copyWith(box: Value(tmpBoxes[i].id)));
-            await plantsDAO.updateBox(tmpBoxes[i]
-                .createCompanion(true)
-                .copyWith(settings: Value('{}')));
+            await plantsDAO.updatePlant(PlantsCompanion(
+                id: Value(plant.id), box: Value(tmpBoxes[i].id)));
+            await plantsDAO.updateBox(BoxesCompanion(
+                id: Value(tmpBoxes[i].id), settings: Value('{}')));
           }
         } else if (details.versionBefore == 2) {
           Feed feed = await feedsDAO.getFeed(1);
           await feedsDAO.updateFeed(
-              feed.createCompanion(true).copyWith(isNewsFeed: Value(true)));
+              FeedsCompanion(id: Value(feed.id), isNewsFeed: Value(true)));
         } else if (details.versionBefore == 3) {
           List<Plant> plants = await plantsDAO.getPlants();
           for (int i = 0; i < plants.length; ++i) {
             Map<String, dynamic> settings = jsonDecode(plants[i].settings);
             settings['isSingle'] = plants[i].single;
-            plantsDAO.updatePlant(plants[i].createCompanion(true).copyWith(settings: Value(jsonEncode(settings))));
+            plantsDAO.updatePlant(PlantsCompanion(
+                id: Value(plants[i].id),
+                settings: Value(jsonEncode(settings))));
           }
         }
       });

@@ -27,9 +27,11 @@ class DeviceHelper {
     await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name);
     Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
     await DeviceHelper.updateStringParam(device, mdns, mdnsDomain);
-    await ddb.updateDevice(device
-        .createCompanion(true)
-        .copyWith(name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
+    await ddb.updateDevice(DevicesCompanion(
+        id: Value(device.id),
+        name: Value(name),
+        mdns: Value(mdnsDomain),
+        synced: Value(false)));
   }
 
   static Future<String> updateStringParam(

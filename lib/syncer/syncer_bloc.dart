@@ -270,12 +270,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncOutTimelapses();
   }
 
-  Future<bool> _validJWT() async {
-    if (AppDB().getAppData().jwt == null) return false;
-    return true;
-  }
-
   Future _syncOutFeeds() async {
+    print("Sending feeds");
     List<Feed> feeds = await RelDB.get().feedsDAO.getUnsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
       Feed feed = feeds[i];
@@ -284,6 +280,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutFeedEntries() async {
+    print("Sending feedEntries");
     List<FeedEntry> feedEntries =
         await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
@@ -293,6 +290,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutFeedMedias() async {
+    print("Sending feedMedias");
     List<FeedMedia> feedMedias =
         await RelDB.get().feedsDAO.getUnsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
@@ -302,6 +300,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutDevices() async {
+    print("Sending devices");
     List<Device> devices = await RelDB.get().devicesDAO.getUnsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
       Device device = devices[i];
@@ -310,6 +309,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutBoxes() async {
+    print("Sending boxes");
     List<Box> boxes = await RelDB.get().plantsDAO.getUnsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
       Box box = boxes[i];
@@ -318,6 +318,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutPlants() async {
+    print("Sending plants");
     List<Plant> plants = await RelDB.get().plantsDAO.getUnsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
       Plant plant = plants[i];
@@ -326,12 +327,18 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutTimelapses() async {
+    print("Sending timelapses");
     List<Timelapse> timelapses =
         await RelDB.get().plantsDAO.getUnsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       Timelapse timelapse = timelapses[i];
       await FeedsAPI().syncTimelapse(timelapse);
     }
+  }
+
+  Future<bool> _validJWT() async {
+    if (AppDB().getAppData().jwt == null) return false;
+    return true;
   }
 
   Future _deleteFileIfExists(String filePath) async {

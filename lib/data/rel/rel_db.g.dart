@@ -50,6 +50,39 @@ class Device extends DataClass implements Insertable<Device> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || identifier != null) {
+      map['identifier'] = Variable<String>(identifier);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || ip != null) {
+      map['ip'] = Variable<String>(ip);
+    }
+    if (!nullToAbsent || mdns != null) {
+      map['mdns'] = Variable<String>(mdns);
+    }
+    if (!nullToAbsent || isReachable != null) {
+      map['is_reachable'] = Variable<bool>(isReachable);
+    }
+    if (!nullToAbsent || isSetup != null) {
+      map['is_setup'] = Variable<bool>(isSetup);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || synced != null) {
+      map['synced'] = Variable<bool>(synced);
+    }
+    return map;
+  }
+
   factory Device.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -79,30 +112,6 @@ class Device extends DataClass implements Insertable<Device> {
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
-  }
-
-  @override
-  DevicesCompanion createCompanion(bool nullToAbsent) {
-    return DevicesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      identifier: identifier == null && nullToAbsent
-          ? const Value.absent()
-          : Value(identifier),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      ip: ip == null && nullToAbsent ? const Value.absent() : Value(ip),
-      mdns: mdns == null && nullToAbsent ? const Value.absent() : Value(mdns),
-      isReachable: isReachable == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isReachable),
-      isSetup: isSetup == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isSetup),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
-    );
   }
 
   Device copyWith(
@@ -207,6 +216,30 @@ class DevicesCompanion extends UpdateCompanion<Device> {
         name = Value(name),
         ip = Value(ip),
         mdns = Value(mdns);
+  static Insertable<Device> custom({
+    Expression<int> id,
+    Expression<String> identifier,
+    Expression<String> name,
+    Expression<String> ip,
+    Expression<String> mdns,
+    Expression<bool> isReachable,
+    Expression<bool> isSetup,
+    Expression<String> serverID,
+    Expression<bool> synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (identifier != null) 'identifier': identifier,
+      if (name != null) 'name': name,
+      if (ip != null) 'ip': ip,
+      if (mdns != null) 'mdns': mdns,
+      if (isReachable != null) 'is_reachable': isReachable,
+      if (isSetup != null) 'is_setup': isSetup,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
   DevicesCompanion copyWith(
       {Value<int> id,
       Value<String> identifier,
@@ -228,6 +261,39 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (identifier.present) {
+      map['identifier'] = Variable<String>(identifier.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (ip.present) {
+      map['ip'] = Variable<String>(ip.value);
+    }
+    if (mdns.present) {
+      map['mdns'] = Variable<String>(mdns.value);
+    }
+    if (isReachable.present) {
+      map['is_reachable'] = Variable<bool>(isReachable.value);
+    }
+    if (isSetup.present) {
+      map['is_setup'] = Variable<bool>(isSetup.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
   }
 }
 
@@ -328,50 +394,55 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   @override
   final String actualTableName = 'devices';
   @override
-  VerificationContext validateIntegrity(DevicesCompanion d,
+  VerificationContext validateIntegrity(Insertable<Device> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.identifier.present) {
-      context.handle(_identifierMeta,
-          identifier.isAcceptableValue(d.identifier.value, _identifierMeta));
+    if (data.containsKey('identifier')) {
+      context.handle(
+          _identifierMeta,
+          identifier.isAcceptableOrUnknown(
+              data['identifier'], _identifierMeta));
     } else if (isInserting) {
       context.missing(_identifierMeta);
     }
-    if (d.name.present) {
+    if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (d.ip.present) {
-      context.handle(_ipMeta, ip.isAcceptableValue(d.ip.value, _ipMeta));
+    if (data.containsKey('ip')) {
+      context.handle(_ipMeta, ip.isAcceptableOrUnknown(data['ip'], _ipMeta));
     } else if (isInserting) {
       context.missing(_ipMeta);
     }
-    if (d.mdns.present) {
+    if (data.containsKey('mdns')) {
       context.handle(
-          _mdnsMeta, mdns.isAcceptableValue(d.mdns.value, _mdnsMeta));
+          _mdnsMeta, mdns.isAcceptableOrUnknown(data['mdns'], _mdnsMeta));
     } else if (isInserting) {
       context.missing(_mdnsMeta);
     }
-    if (d.isReachable.present) {
-      context.handle(_isReachableMeta,
-          isReachable.isAcceptableValue(d.isReachable.value, _isReachableMeta));
-    }
-    if (d.isSetup.present) {
-      context.handle(_isSetupMeta,
-          isSetup.isAcceptableValue(d.isSetup.value, _isSetupMeta));
-    }
-    if (d.serverID.present) {
-      context.handle(_serverIDMeta,
-          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
-    }
-    if (d.synced.present) {
+    if (data.containsKey('is_reachable')) {
       context.handle(
-          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+          _isReachableMeta,
+          isReachable.isAcceptableOrUnknown(
+              data['is_reachable'], _isReachableMeta));
+    }
+    if (data.containsKey('is_setup')) {
+      context.handle(_isSetupMeta,
+          isSetup.isAcceptableOrUnknown(data['is_setup'], _isSetupMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
     }
     return context;
   }
@@ -382,39 +453,6 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   Device map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Device.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(DevicesCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.identifier.present) {
-      map['identifier'] = Variable<String, StringType>(d.identifier.value);
-    }
-    if (d.name.present) {
-      map['name'] = Variable<String, StringType>(d.name.value);
-    }
-    if (d.ip.present) {
-      map['ip'] = Variable<String, StringType>(d.ip.value);
-    }
-    if (d.mdns.present) {
-      map['mdns'] = Variable<String, StringType>(d.mdns.value);
-    }
-    if (d.isReachable.present) {
-      map['is_reachable'] = Variable<bool, BoolType>(d.isReachable.value);
-    }
-    if (d.isSetup.present) {
-      map['is_setup'] = Variable<bool, BoolType>(d.isSetup.value);
-    }
-    if (d.serverID.present) {
-      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
-    }
-    if (d.synced.present) {
-      map['synced'] = Variable<bool, BoolType>(d.synced.value);
-    }
-    return map;
   }
 
   @override
@@ -451,6 +489,27 @@ class Module extends DataClass implements Insertable<Module> {
           intType.mapFromDatabaseResponse(data['${effectivePrefix}array_len']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || device != null) {
+      map['device'] = Variable<int>(device);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || isArray != null) {
+      map['is_array'] = Variable<bool>(isArray);
+    }
+    if (!nullToAbsent || arrayLen != null) {
+      map['array_len'] = Variable<int>(arrayLen);
+    }
+    return map;
+  }
+
   factory Module.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -472,22 +531,6 @@ class Module extends DataClass implements Insertable<Module> {
       'isArray': serializer.toJson<bool>(isArray),
       'arrayLen': serializer.toJson<int>(arrayLen),
     };
-  }
-
-  @override
-  ModulesCompanion createCompanion(bool nullToAbsent) {
-    return ModulesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      device:
-          device == null && nullToAbsent ? const Value.absent() : Value(device),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      isArray: isArray == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isArray),
-      arrayLen: arrayLen == null && nullToAbsent
-          ? const Value.absent()
-          : Value(arrayLen),
-    );
   }
 
   Module copyWith(
@@ -550,6 +593,22 @@ class ModulesCompanion extends UpdateCompanion<Module> {
         name = Value(name),
         isArray = Value(isArray),
         arrayLen = Value(arrayLen);
+  static Insertable<Module> custom({
+    Expression<int> id,
+    Expression<int> device,
+    Expression<String> name,
+    Expression<bool> isArray,
+    Expression<int> arrayLen,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (device != null) 'device': device,
+      if (name != null) 'name': name,
+      if (isArray != null) 'is_array': isArray,
+      if (arrayLen != null) 'array_len': arrayLen,
+    });
+  }
+
   ModulesCompanion copyWith(
       {Value<int> id,
       Value<int> device,
@@ -563,6 +622,27 @@ class ModulesCompanion extends UpdateCompanion<Module> {
       isArray: isArray ?? this.isArray,
       arrayLen: arrayLen ?? this.arrayLen,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (device.present) {
+      map['device'] = Variable<int>(device.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (isArray.present) {
+      map['is_array'] = Variable<bool>(isArray.value);
+    }
+    if (arrayLen.present) {
+      map['array_len'] = Variable<int>(arrayLen.value);
+    }
+    return map;
   }
 }
 
@@ -633,33 +713,34 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   @override
   final String actualTableName = 'modules';
   @override
-  VerificationContext validateIntegrity(ModulesCompanion d,
+  VerificationContext validateIntegrity(Insertable<Module> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.device.present) {
-      context.handle(
-          _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
+    if (data.containsKey('device')) {
+      context.handle(_deviceMeta,
+          device.isAcceptableOrUnknown(data['device'], _deviceMeta));
     } else if (isInserting) {
       context.missing(_deviceMeta);
     }
-    if (d.name.present) {
+    if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (d.isArray.present) {
+    if (data.containsKey('is_array')) {
       context.handle(_isArrayMeta,
-          isArray.isAcceptableValue(d.isArray.value, _isArrayMeta));
+          isArray.isAcceptableOrUnknown(data['is_array'], _isArrayMeta));
     } else if (isInserting) {
       context.missing(_isArrayMeta);
     }
-    if (d.arrayLen.present) {
+    if (data.containsKey('array_len')) {
       context.handle(_arrayLenMeta,
-          arrayLen.isAcceptableValue(d.arrayLen.value, _arrayLenMeta));
+          arrayLen.isAcceptableOrUnknown(data['array_len'], _arrayLenMeta));
     } else if (isInserting) {
       context.missing(_arrayLenMeta);
     }
@@ -672,27 +753,6 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   Module map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Module.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(ModulesCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.device.present) {
-      map['device'] = Variable<int, IntType>(d.device.value);
-    }
-    if (d.name.present) {
-      map['name'] = Variable<String, StringType>(d.name.value);
-    }
-    if (d.isArray.present) {
-      map['is_array'] = Variable<bool, BoolType>(d.isArray.value);
-    }
-    if (d.arrayLen.present) {
-      map['array_len'] = Variable<int, IntType>(d.arrayLen.value);
-    }
-    return map;
   }
 
   @override
@@ -733,6 +793,33 @@ class Param extends DataClass implements Insertable<Param> {
       ivalue: intType.mapFromDatabaseResponse(data['${effectivePrefix}ivalue']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || device != null) {
+      map['device'] = Variable<int>(device);
+    }
+    if (!nullToAbsent || module != null) {
+      map['module'] = Variable<int>(module);
+    }
+    if (!nullToAbsent || key != null) {
+      map['key'] = Variable<String>(key);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<int>(type);
+    }
+    if (!nullToAbsent || svalue != null) {
+      map['svalue'] = Variable<String>(svalue);
+    }
+    if (!nullToAbsent || ivalue != null) {
+      map['ivalue'] = Variable<int>(ivalue);
+    }
+    return map;
+  }
+
   factory Param.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -758,23 +845,6 @@ class Param extends DataClass implements Insertable<Param> {
       'svalue': serializer.toJson<String>(svalue),
       'ivalue': serializer.toJson<int>(ivalue),
     };
-  }
-
-  @override
-  ParamsCompanion createCompanion(bool nullToAbsent) {
-    return ParamsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      device:
-          device == null && nullToAbsent ? const Value.absent() : Value(device),
-      module:
-          module == null && nullToAbsent ? const Value.absent() : Value(module),
-      key: key == null && nullToAbsent ? const Value.absent() : Value(key),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
-      svalue:
-          svalue == null && nullToAbsent ? const Value.absent() : Value(svalue),
-      ivalue:
-          ivalue == null && nullToAbsent ? const Value.absent() : Value(ivalue),
-    );
   }
 
   Param copyWith(
@@ -861,6 +931,26 @@ class ParamsCompanion extends UpdateCompanion<Param> {
         module = Value(module),
         key = Value(key),
         type = Value(type);
+  static Insertable<Param> custom({
+    Expression<int> id,
+    Expression<int> device,
+    Expression<int> module,
+    Expression<String> key,
+    Expression<int> type,
+    Expression<String> svalue,
+    Expression<int> ivalue,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (device != null) 'device': device,
+      if (module != null) 'module': module,
+      if (key != null) 'key': key,
+      if (type != null) 'type': type,
+      if (svalue != null) 'svalue': svalue,
+      if (ivalue != null) 'ivalue': ivalue,
+    });
+  }
+
   ParamsCompanion copyWith(
       {Value<int> id,
       Value<int> device,
@@ -878,6 +968,33 @@ class ParamsCompanion extends UpdateCompanion<Param> {
       svalue: svalue ?? this.svalue,
       ivalue: ivalue ?? this.ivalue,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (device.present) {
+      map['device'] = Variable<int>(device.value);
+    }
+    if (module.present) {
+      map['module'] = Variable<int>(module.value);
+    }
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<int>(type.value);
+    }
+    if (svalue.present) {
+      map['svalue'] = Variable<String>(svalue.value);
+    }
+    if (ivalue.present) {
+      map['ivalue'] = Variable<int>(ivalue.value);
+    }
+    return map;
   }
 }
 
@@ -970,42 +1087,44 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   @override
   final String actualTableName = 'params';
   @override
-  VerificationContext validateIntegrity(ParamsCompanion d,
+  VerificationContext validateIntegrity(Insertable<Param> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.device.present) {
-      context.handle(
-          _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
+    if (data.containsKey('device')) {
+      context.handle(_deviceMeta,
+          device.isAcceptableOrUnknown(data['device'], _deviceMeta));
     } else if (isInserting) {
       context.missing(_deviceMeta);
     }
-    if (d.module.present) {
-      context.handle(
-          _moduleMeta, module.isAcceptableValue(d.module.value, _moduleMeta));
+    if (data.containsKey('module')) {
+      context.handle(_moduleMeta,
+          module.isAcceptableOrUnknown(data['module'], _moduleMeta));
     } else if (isInserting) {
       context.missing(_moduleMeta);
     }
-    if (d.key.present) {
-      context.handle(_keyMeta, key.isAcceptableValue(d.key.value, _keyMeta));
+    if (data.containsKey('key')) {
+      context.handle(
+          _keyMeta, key.isAcceptableOrUnknown(data['key'], _keyMeta));
     } else if (isInserting) {
       context.missing(_keyMeta);
     }
-    if (d.type.present) {
+    if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableValue(d.type.value, _typeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
-    if (d.svalue.present) {
-      context.handle(
-          _svalueMeta, svalue.isAcceptableValue(d.svalue.value, _svalueMeta));
+    if (data.containsKey('svalue')) {
+      context.handle(_svalueMeta,
+          svalue.isAcceptableOrUnknown(data['svalue'], _svalueMeta));
     }
-    if (d.ivalue.present) {
-      context.handle(
-          _ivalueMeta, ivalue.isAcceptableValue(d.ivalue.value, _ivalueMeta));
+    if (data.containsKey('ivalue')) {
+      context.handle(_ivalueMeta,
+          ivalue.isAcceptableOrUnknown(data['ivalue'], _ivalueMeta));
     }
     return context;
   }
@@ -1016,33 +1135,6 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   Param map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Param.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(ParamsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.device.present) {
-      map['device'] = Variable<int, IntType>(d.device.value);
-    }
-    if (d.module.present) {
-      map['module'] = Variable<int, IntType>(d.module.value);
-    }
-    if (d.key.present) {
-      map['key'] = Variable<String, StringType>(d.key.value);
-    }
-    if (d.type.present) {
-      map['type'] = Variable<int, IntType>(d.type.value);
-    }
-    if (d.svalue.present) {
-      map['svalue'] = Variable<String, StringType>(d.svalue.value);
-    }
-    if (d.ivalue.present) {
-      map['ivalue'] = Variable<int, IntType>(d.ivalue.value);
-    }
-    return map;
   }
 
   @override
@@ -1090,6 +1182,36 @@ class Plant extends DataClass implements Insertable<Plant> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || feed != null) {
+      map['feed'] = Variable<int>(feed);
+    }
+    if (!nullToAbsent || box != null) {
+      map['box'] = Variable<int>(box);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || single != null) {
+      map['single'] = Variable<bool>(single);
+    }
+    if (!nullToAbsent || settings != null) {
+      map['settings'] = Variable<String>(settings);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || synced != null) {
+      map['synced'] = Variable<bool>(synced);
+    }
+    return map;
+  }
+
   factory Plant.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -1117,26 +1239,6 @@ class Plant extends DataClass implements Insertable<Plant> {
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
-  }
-
-  @override
-  PlantsCompanion createCompanion(bool nullToAbsent) {
-    return PlantsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
-      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      single:
-          single == null && nullToAbsent ? const Value.absent() : Value(single),
-      settings: settings == null && nullToAbsent
-          ? const Value.absent()
-          : Value(settings),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
-    );
   }
 
   Plant copyWith(
@@ -1230,6 +1332,28 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     this.synced = const Value.absent(),
   })  : feed = Value(feed),
         name = Value(name);
+  static Insertable<Plant> custom({
+    Expression<int> id,
+    Expression<int> feed,
+    Expression<int> box,
+    Expression<String> name,
+    Expression<bool> single,
+    Expression<String> settings,
+    Expression<String> serverID,
+    Expression<bool> synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (feed != null) 'feed': feed,
+      if (box != null) 'box': box,
+      if (name != null) 'name': name,
+      if (single != null) 'single': single,
+      if (settings != null) 'settings': settings,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
   PlantsCompanion copyWith(
       {Value<int> id,
       Value<int> feed,
@@ -1249,6 +1373,36 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (feed.present) {
+      map['feed'] = Variable<int>(feed.value);
+    }
+    if (box.present) {
+      map['box'] = Variable<int>(box.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (single.present) {
+      map['single'] = Variable<bool>(single.value);
+    }
+    if (settings.present) {
+      map['settings'] = Variable<String>(settings.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
   }
 }
 
@@ -1344,42 +1498,44 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   @override
   final String actualTableName = 'plants';
   @override
-  VerificationContext validateIntegrity(PlantsCompanion d,
+  VerificationContext validateIntegrity(Insertable<Plant> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.feed.present) {
+    if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
-    if (d.box.present) {
-      context.handle(_boxMeta, box.isAcceptableValue(d.box.value, _boxMeta));
-    }
-    if (d.name.present) {
+    if (data.containsKey('box')) {
       context.handle(
-          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+          _boxMeta, box.isAcceptableOrUnknown(data['box'], _boxMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (d.single.present) {
-      context.handle(
-          _singleMeta, single.isAcceptableValue(d.single.value, _singleMeta));
+    if (data.containsKey('single')) {
+      context.handle(_singleMeta,
+          single.isAcceptableOrUnknown(data['single'], _singleMeta));
     }
-    if (d.settings.present) {
+    if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
-          settings.isAcceptableValue(d.settings.value, _settingsMeta));
+          settings.isAcceptableOrUnknown(data['settings'], _settingsMeta));
     }
-    if (d.serverID.present) {
+    if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
     }
-    if (d.synced.present) {
-      context.handle(
-          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
     }
     return context;
   }
@@ -1390,36 +1546,6 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   Plant map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Plant.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(PlantsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.feed.present) {
-      map['feed'] = Variable<int, IntType>(d.feed.value);
-    }
-    if (d.box.present) {
-      map['box'] = Variable<int, IntType>(d.box.value);
-    }
-    if (d.name.present) {
-      map['name'] = Variable<String, StringType>(d.name.value);
-    }
-    if (d.single.present) {
-      map['single'] = Variable<bool, BoolType>(d.single.value);
-    }
-    if (d.settings.present) {
-      map['settings'] = Variable<String, StringType>(d.settings.value);
-    }
-    if (d.serverID.present) {
-      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
-    }
-    if (d.synced.present) {
-      map['synced'] = Variable<bool, BoolType>(d.synced.value);
-    }
-    return map;
   }
 
   @override
@@ -1464,6 +1590,33 @@ class Box extends DataClass implements Insertable<Box> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || device != null) {
+      map['device'] = Variable<int>(device);
+    }
+    if (!nullToAbsent || deviceBox != null) {
+      map['device_box'] = Variable<int>(deviceBox);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || settings != null) {
+      map['settings'] = Variable<String>(settings);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || synced != null) {
+      map['synced'] = Variable<bool>(synced);
+    }
+    return map;
+  }
+
   factory Box.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -1489,27 +1642,6 @@ class Box extends DataClass implements Insertable<Box> {
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
-  }
-
-  @override
-  BoxesCompanion createCompanion(bool nullToAbsent) {
-    return BoxesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      device:
-          device == null && nullToAbsent ? const Value.absent() : Value(device),
-      deviceBox: deviceBox == null && nullToAbsent
-          ? const Value.absent()
-          : Value(deviceBox),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      settings: settings == null && nullToAbsent
-          ? const Value.absent()
-          : Value(settings),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
-    );
   }
 
   Box copyWith(
@@ -1593,6 +1725,26 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   }) : name = Value(name);
+  static Insertable<Box> custom({
+    Expression<int> id,
+    Expression<int> device,
+    Expression<int> deviceBox,
+    Expression<String> name,
+    Expression<String> settings,
+    Expression<String> serverID,
+    Expression<bool> synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (device != null) 'device': device,
+      if (deviceBox != null) 'device_box': deviceBox,
+      if (name != null) 'name': name,
+      if (settings != null) 'settings': settings,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
   BoxesCompanion copyWith(
       {Value<int> id,
       Value<int> device,
@@ -1610,6 +1762,33 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (device.present) {
+      map['device'] = Variable<int>(device.value);
+    }
+    if (deviceBox.present) {
+      map['device_box'] = Variable<int>(deviceBox.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (settings.present) {
+      map['settings'] = Variable<String>(settings.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
   }
 }
 
@@ -1696,37 +1875,38 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   @override
   final String actualTableName = 'boxes';
   @override
-  VerificationContext validateIntegrity(BoxesCompanion d,
+  VerificationContext validateIntegrity(Insertable<Box> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.device.present) {
-      context.handle(
-          _deviceMeta, device.isAcceptableValue(d.device.value, _deviceMeta));
+    if (data.containsKey('device')) {
+      context.handle(_deviceMeta,
+          device.isAcceptableOrUnknown(data['device'], _deviceMeta));
     }
-    if (d.deviceBox.present) {
+    if (data.containsKey('device_box')) {
       context.handle(_deviceBoxMeta,
-          deviceBox.isAcceptableValue(d.deviceBox.value, _deviceBoxMeta));
+          deviceBox.isAcceptableOrUnknown(data['device_box'], _deviceBoxMeta));
     }
-    if (d.name.present) {
+    if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (d.settings.present) {
+    if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
-          settings.isAcceptableValue(d.settings.value, _settingsMeta));
+          settings.isAcceptableOrUnknown(data['settings'], _settingsMeta));
     }
-    if (d.serverID.present) {
+    if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
     }
-    if (d.synced.present) {
-      context.handle(
-          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
     }
     return context;
   }
@@ -1737,33 +1917,6 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   Box map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Box.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(BoxesCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.device.present) {
-      map['device'] = Variable<int, IntType>(d.device.value);
-    }
-    if (d.deviceBox.present) {
-      map['device_box'] = Variable<int, IntType>(d.deviceBox.value);
-    }
-    if (d.name.present) {
-      map['name'] = Variable<String, StringType>(d.name.value);
-    }
-    if (d.settings.present) {
-      map['settings'] = Variable<String, StringType>(d.settings.value);
-    }
-    if (d.serverID.present) {
-      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
-    }
-    if (d.synced.present) {
-      map['synced'] = Variable<bool, BoolType>(d.synced.value);
-    }
-    return map;
   }
 
   @override
@@ -1800,6 +1953,27 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}values']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || plant != null) {
+      map['plant'] = Variable<int>(plant);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || date != null) {
+      map['date'] = Variable<DateTime>(date);
+    }
+    if (!nullToAbsent || values != null) {
+      map['values'] = Variable<String>(values);
+    }
+    return map;
+  }
+
   factory ChartCache.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -1821,19 +1995,6 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
       'date': serializer.toJson<DateTime>(date),
       'values': serializer.toJson<String>(values),
     };
-  }
-
-  @override
-  ChartCachesCompanion createCompanion(bool nullToAbsent) {
-    return ChartCachesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      plant:
-          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
-      values:
-          values == null && nullToAbsent ? const Value.absent() : Value(values),
-    );
   }
 
   ChartCache copyWith(
@@ -1895,6 +2056,22 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   })  : plant = Value(plant),
         name = Value(name),
         date = Value(date);
+  static Insertable<ChartCache> custom({
+    Expression<int> id,
+    Expression<int> plant,
+    Expression<String> name,
+    Expression<DateTime> date,
+    Expression<String> values,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (plant != null) 'plant': plant,
+      if (name != null) 'name': name,
+      if (date != null) 'date': date,
+      if (values != null) 'values': values,
+    });
+  }
+
   ChartCachesCompanion copyWith(
       {Value<int> id,
       Value<int> plant,
@@ -1908,6 +2085,27 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
       date: date ?? this.date,
       values: values ?? this.values,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (plant.present) {
+      map['plant'] = Variable<int>(plant.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (values.present) {
+      map['values'] = Variable<String>(values.value);
+    }
+    return map;
   }
 }
 
@@ -1976,33 +2174,34 @@ class $ChartCachesTable extends ChartCaches
   @override
   final String actualTableName = 'chart_caches';
   @override
-  VerificationContext validateIntegrity(ChartCachesCompanion d,
+  VerificationContext validateIntegrity(Insertable<ChartCache> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.plant.present) {
+    if (data.containsKey('plant')) {
       context.handle(
-          _plantMeta, plant.isAcceptableValue(d.plant.value, _plantMeta));
+          _plantMeta, plant.isAcceptableOrUnknown(data['plant'], _plantMeta));
     } else if (isInserting) {
       context.missing(_plantMeta);
     }
-    if (d.name.present) {
+    if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (d.date.present) {
+    if (data.containsKey('date')) {
       context.handle(
-          _dateMeta, date.isAcceptableValue(d.date.value, _dateMeta));
+          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
-    if (d.values.present) {
-      context.handle(
-          _valuesMeta, values.isAcceptableValue(d.values.value, _valuesMeta));
+    if (data.containsKey('values')) {
+      context.handle(_valuesMeta,
+          values.isAcceptableOrUnknown(data['values'], _valuesMeta));
     }
     return context;
   }
@@ -2013,27 +2212,6 @@ class $ChartCachesTable extends ChartCaches
   ChartCache map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return ChartCache.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(ChartCachesCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.plant.present) {
-      map['plant'] = Variable<int, IntType>(d.plant.value);
-    }
-    if (d.name.present) {
-      map['name'] = Variable<String, StringType>(d.name.value);
-    }
-    if (d.date.present) {
-      map['date'] = Variable<DateTime, DateTimeType>(d.date.value);
-    }
-    if (d.values.present) {
-      map['values'] = Variable<String, StringType>(d.values.value);
-    }
-    return map;
   }
 
   @override
@@ -2097,6 +2275,48 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || plant != null) {
+      map['plant'] = Variable<int>(plant);
+    }
+    if (!nullToAbsent || ssid != null) {
+      map['ssid'] = Variable<String>(ssid);
+    }
+    if (!nullToAbsent || password != null) {
+      map['password'] = Variable<String>(password);
+    }
+    if (!nullToAbsent || controllerID != null) {
+      map['controller_i_d'] = Variable<String>(controllerID);
+    }
+    if (!nullToAbsent || rotate != null) {
+      map['rotate'] = Variable<String>(rotate);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || strain != null) {
+      map['strain'] = Variable<String>(strain);
+    }
+    if (!nullToAbsent || dropboxToken != null) {
+      map['dropbox_token'] = Variable<String>(dropboxToken);
+    }
+    if (!nullToAbsent || uploadName != null) {
+      map['upload_name'] = Variable<String>(uploadName);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || synced != null) {
+      map['synced'] = Variable<bool>(synced);
+    }
+    return map;
+  }
+
   factory Timelapse.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -2132,38 +2352,6 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
-  }
-
-  @override
-  TimelapsesCompanion createCompanion(bool nullToAbsent) {
-    return TimelapsesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      plant:
-          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
-      ssid: ssid == null && nullToAbsent ? const Value.absent() : Value(ssid),
-      password: password == null && nullToAbsent
-          ? const Value.absent()
-          : Value(password),
-      controllerID: controllerID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(controllerID),
-      rotate:
-          rotate == null && nullToAbsent ? const Value.absent() : Value(rotate),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      strain:
-          strain == null && nullToAbsent ? const Value.absent() : Value(strain),
-      dropboxToken: dropboxToken == null && nullToAbsent
-          ? const Value.absent()
-          : Value(dropboxToken),
-      uploadName: uploadName == null && nullToAbsent
-          ? const Value.absent()
-          : Value(uploadName),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
-    );
   }
 
   Timelapse copyWith(
@@ -2294,6 +2482,36 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   }) : plant = Value(plant);
+  static Insertable<Timelapse> custom({
+    Expression<int> id,
+    Expression<int> plant,
+    Expression<String> ssid,
+    Expression<String> password,
+    Expression<String> controllerID,
+    Expression<String> rotate,
+    Expression<String> name,
+    Expression<String> strain,
+    Expression<String> dropboxToken,
+    Expression<String> uploadName,
+    Expression<String> serverID,
+    Expression<bool> synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (plant != null) 'plant': plant,
+      if (ssid != null) 'ssid': ssid,
+      if (password != null) 'password': password,
+      if (controllerID != null) 'controller_i_d': controllerID,
+      if (rotate != null) 'rotate': rotate,
+      if (name != null) 'name': name,
+      if (strain != null) 'strain': strain,
+      if (dropboxToken != null) 'dropbox_token': dropboxToken,
+      if (uploadName != null) 'upload_name': uploadName,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
   TimelapsesCompanion copyWith(
       {Value<int> id,
       Value<int> plant,
@@ -2321,6 +2539,48 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (plant.present) {
+      map['plant'] = Variable<int>(plant.value);
+    }
+    if (ssid.present) {
+      map['ssid'] = Variable<String>(ssid.value);
+    }
+    if (password.present) {
+      map['password'] = Variable<String>(password.value);
+    }
+    if (controllerID.present) {
+      map['controller_i_d'] = Variable<String>(controllerID.value);
+    }
+    if (rotate.present) {
+      map['rotate'] = Variable<String>(rotate.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (strain.present) {
+      map['strain'] = Variable<String>(strain.value);
+    }
+    if (dropboxToken.present) {
+      map['dropbox_token'] = Variable<String>(dropboxToken.value);
+    }
+    if (uploadName.present) {
+      map['upload_name'] = Variable<String>(uploadName.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
   }
 }
 
@@ -2466,61 +2726,64 @@ class $TimelapsesTable extends Timelapses
   @override
   final String actualTableName = 'timelapses';
   @override
-  VerificationContext validateIntegrity(TimelapsesCompanion d,
+  VerificationContext validateIntegrity(Insertable<Timelapse> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.plant.present) {
+    if (data.containsKey('plant')) {
       context.handle(
-          _plantMeta, plant.isAcceptableValue(d.plant.value, _plantMeta));
+          _plantMeta, plant.isAcceptableOrUnknown(data['plant'], _plantMeta));
     } else if (isInserting) {
       context.missing(_plantMeta);
     }
-    if (d.ssid.present) {
+    if (data.containsKey('ssid')) {
       context.handle(
-          _ssidMeta, ssid.isAcceptableValue(d.ssid.value, _ssidMeta));
+          _ssidMeta, ssid.isAcceptableOrUnknown(data['ssid'], _ssidMeta));
     }
-    if (d.password.present) {
+    if (data.containsKey('password')) {
       context.handle(_passwordMeta,
-          password.isAcceptableValue(d.password.value, _passwordMeta));
+          password.isAcceptableOrUnknown(data['password'], _passwordMeta));
     }
-    if (d.controllerID.present) {
+    if (data.containsKey('controller_i_d')) {
       context.handle(
           _controllerIDMeta,
-          controllerID.isAcceptableValue(
-              d.controllerID.value, _controllerIDMeta));
+          controllerID.isAcceptableOrUnknown(
+              data['controller_i_d'], _controllerIDMeta));
     }
-    if (d.rotate.present) {
+    if (data.containsKey('rotate')) {
+      context.handle(_rotateMeta,
+          rotate.isAcceptableOrUnknown(data['rotate'], _rotateMeta));
+    }
+    if (data.containsKey('name')) {
       context.handle(
-          _rotateMeta, rotate.isAcceptableValue(d.rotate.value, _rotateMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     }
-    if (d.name.present) {
-      context.handle(
-          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+    if (data.containsKey('strain')) {
+      context.handle(_strainMeta,
+          strain.isAcceptableOrUnknown(data['strain'], _strainMeta));
     }
-    if (d.strain.present) {
-      context.handle(
-          _strainMeta, strain.isAcceptableValue(d.strain.value, _strainMeta));
-    }
-    if (d.dropboxToken.present) {
+    if (data.containsKey('dropbox_token')) {
       context.handle(
           _dropboxTokenMeta,
-          dropboxToken.isAcceptableValue(
-              d.dropboxToken.value, _dropboxTokenMeta));
+          dropboxToken.isAcceptableOrUnknown(
+              data['dropbox_token'], _dropboxTokenMeta));
     }
-    if (d.uploadName.present) {
-      context.handle(_uploadNameMeta,
-          uploadName.isAcceptableValue(d.uploadName.value, _uploadNameMeta));
-    }
-    if (d.serverID.present) {
-      context.handle(_serverIDMeta,
-          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
-    }
-    if (d.synced.present) {
+    if (data.containsKey('upload_name')) {
       context.handle(
-          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+          _uploadNameMeta,
+          uploadName.isAcceptableOrUnknown(
+              data['upload_name'], _uploadNameMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
     }
     return context;
   }
@@ -2531,49 +2794,6 @@ class $TimelapsesTable extends Timelapses
   Timelapse map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Timelapse.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(TimelapsesCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.plant.present) {
-      map['plant'] = Variable<int, IntType>(d.plant.value);
-    }
-    if (d.ssid.present) {
-      map['ssid'] = Variable<String, StringType>(d.ssid.value);
-    }
-    if (d.password.present) {
-      map['password'] = Variable<String, StringType>(d.password.value);
-    }
-    if (d.controllerID.present) {
-      map['controller_i_d'] =
-          Variable<String, StringType>(d.controllerID.value);
-    }
-    if (d.rotate.present) {
-      map['rotate'] = Variable<String, StringType>(d.rotate.value);
-    }
-    if (d.name.present) {
-      map['name'] = Variable<String, StringType>(d.name.value);
-    }
-    if (d.strain.present) {
-      map['strain'] = Variable<String, StringType>(d.strain.value);
-    }
-    if (d.dropboxToken.present) {
-      map['dropbox_token'] = Variable<String, StringType>(d.dropboxToken.value);
-    }
-    if (d.uploadName.present) {
-      map['upload_name'] = Variable<String, StringType>(d.uploadName.value);
-    }
-    if (d.serverID.present) {
-      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
-    }
-    if (d.synced.present) {
-      map['synced'] = Variable<bool, BoolType>(d.synced.value);
-    }
-    return map;
   }
 
   @override
@@ -2611,6 +2831,27 @@ class Feed extends DataClass implements Insertable<Feed> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || isNewsFeed != null) {
+      map['is_news_feed'] = Variable<bool>(isNewsFeed);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || synced != null) {
+      map['synced'] = Variable<bool>(synced);
+    }
+    return map;
+  }
+
   factory Feed.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -2632,22 +2873,6 @@ class Feed extends DataClass implements Insertable<Feed> {
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
-  }
-
-  @override
-  FeedsCompanion createCompanion(bool nullToAbsent) {
-    return FeedsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      isNewsFeed: isNewsFeed == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isNewsFeed),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
-    );
   }
 
   Feed copyWith(
@@ -2713,6 +2938,22 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   }) : name = Value(name);
+  static Insertable<Feed> custom({
+    Expression<int> id,
+    Expression<String> name,
+    Expression<bool> isNewsFeed,
+    Expression<String> serverID,
+    Expression<bool> synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (isNewsFeed != null) 'is_news_feed': isNewsFeed,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
   FeedsCompanion copyWith(
       {Value<int> id,
       Value<String> name,
@@ -2726,6 +2967,27 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (isNewsFeed.present) {
+      map['is_news_feed'] = Variable<bool>(isNewsFeed.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
   }
 }
 
@@ -2788,29 +3050,32 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   @override
   final String actualTableName = 'feeds';
   @override
-  VerificationContext validateIntegrity(FeedsCompanion d,
+  VerificationContext validateIntegrity(Insertable<Feed> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.name.present) {
+    if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableValue(d.name.value, _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (d.isNewsFeed.present) {
-      context.handle(_isNewsFeedMeta,
-          isNewsFeed.isAcceptableValue(d.isNewsFeed.value, _isNewsFeedMeta));
-    }
-    if (d.serverID.present) {
-      context.handle(_serverIDMeta,
-          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
-    }
-    if (d.synced.present) {
+    if (data.containsKey('is_news_feed')) {
       context.handle(
-          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+          _isNewsFeedMeta,
+          isNewsFeed.isAcceptableOrUnknown(
+              data['is_news_feed'], _isNewsFeedMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+    }
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
     }
     return context;
   }
@@ -2821,27 +3086,6 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   Feed map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Feed.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(FeedsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.name.present) {
-      map['name'] = Variable<String, StringType>(d.name.value);
-    }
-    if (d.isNewsFeed.present) {
-      map['is_news_feed'] = Variable<bool, BoolType>(d.isNewsFeed.value);
-    }
-    if (d.serverID.present) {
-      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
-    }
-    if (d.synced.present) {
-      map['synced'] = Variable<bool, BoolType>(d.synced.value);
-    }
-    return map;
   }
 
   @override
@@ -2890,6 +3134,36 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || feed != null) {
+      map['feed'] = Variable<int>(feed);
+    }
+    if (!nullToAbsent || date != null) {
+      map['date'] = Variable<DateTime>(date);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    if (!nullToAbsent || isNew != null) {
+      map['is_new'] = Variable<bool>(isNew);
+    }
+    if (!nullToAbsent || params != null) {
+      map['params'] = Variable<String>(params);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || synced != null) {
+      map['synced'] = Variable<bool>(synced);
+    }
+    return map;
+  }
+
   factory FeedEntry.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -2917,25 +3191,6 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
-  }
-
-  @override
-  FeedEntriesCompanion createCompanion(bool nullToAbsent) {
-    return FeedEntriesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
-      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
-      isNew:
-          isNew == null && nullToAbsent ? const Value.absent() : Value(isNew),
-      params:
-          params == null && nullToAbsent ? const Value.absent() : Value(params),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
-    );
   }
 
   FeedEntry copyWith(
@@ -3030,6 +3285,28 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   })  : feed = Value(feed),
         date = Value(date),
         type = Value(type);
+  static Insertable<FeedEntry> custom({
+    Expression<int> id,
+    Expression<int> feed,
+    Expression<DateTime> date,
+    Expression<String> type,
+    Expression<bool> isNew,
+    Expression<String> params,
+    Expression<String> serverID,
+    Expression<bool> synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (feed != null) 'feed': feed,
+      if (date != null) 'date': date,
+      if (type != null) 'type': type,
+      if (isNew != null) 'is_new': isNew,
+      if (params != null) 'params': params,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
   FeedEntriesCompanion copyWith(
       {Value<int> id,
       Value<int> feed,
@@ -3049,6 +3326,36 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (feed.present) {
+      map['feed'] = Variable<int>(feed.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (isNew.present) {
+      map['is_new'] = Variable<bool>(isNew.value);
+    }
+    if (params.present) {
+      map['params'] = Variable<String>(params.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
   }
 }
 
@@ -3145,45 +3452,46 @@ class $FeedEntriesTable extends FeedEntries
   @override
   final String actualTableName = 'feed_entries';
   @override
-  VerificationContext validateIntegrity(FeedEntriesCompanion d,
+  VerificationContext validateIntegrity(Insertable<FeedEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.feed.present) {
+    if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
-    if (d.date.present) {
+    if (data.containsKey('date')) {
       context.handle(
-          _dateMeta, date.isAcceptableValue(d.date.value, _dateMeta));
+          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
-    if (d.type.present) {
+    if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableValue(d.type.value, _typeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
-    if (d.isNew.present) {
+    if (data.containsKey('is_new')) {
       context.handle(
-          _isNewMeta, isNew.isAcceptableValue(d.isNew.value, _isNewMeta));
+          _isNewMeta, isNew.isAcceptableOrUnknown(data['is_new'], _isNewMeta));
     }
-    if (d.params.present) {
-      context.handle(
-          _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
+    if (data.containsKey('params')) {
+      context.handle(_paramsMeta,
+          params.isAcceptableOrUnknown(data['params'], _paramsMeta));
     }
-    if (d.serverID.present) {
+    if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
     }
-    if (d.synced.present) {
-      context.handle(
-          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
     }
     return context;
   }
@@ -3194,36 +3502,6 @@ class $FeedEntriesTable extends FeedEntries
   FeedEntry map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return FeedEntry.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(FeedEntriesCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.feed.present) {
-      map['feed'] = Variable<int, IntType>(d.feed.value);
-    }
-    if (d.date.present) {
-      map['date'] = Variable<DateTime, DateTimeType>(d.date.value);
-    }
-    if (d.type.present) {
-      map['type'] = Variable<String, StringType>(d.type.value);
-    }
-    if (d.isNew.present) {
-      map['is_new'] = Variable<bool, BoolType>(d.isNew.value);
-    }
-    if (d.params.present) {
-      map['params'] = Variable<String, StringType>(d.params.value);
-    }
-    if (d.serverID.present) {
-      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
-    }
-    if (d.synced.present) {
-      map['synced'] = Variable<bool, BoolType>(d.synced.value);
-    }
-    return map;
   }
 
   @override
@@ -3273,6 +3551,36 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || feed != null) {
+      map['feed'] = Variable<int>(feed);
+    }
+    if (!nullToAbsent || feedEntry != null) {
+      map['feed_entry'] = Variable<int>(feedEntry);
+    }
+    if (!nullToAbsent || filePath != null) {
+      map['file_path'] = Variable<String>(filePath);
+    }
+    if (!nullToAbsent || thumbnailPath != null) {
+      map['thumbnail_path'] = Variable<String>(thumbnailPath);
+    }
+    if (!nullToAbsent || params != null) {
+      map['params'] = Variable<String>(params);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || synced != null) {
+      map['synced'] = Variable<bool>(synced);
+    }
+    return map;
+  }
+
   factory FeedMedia.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -3300,30 +3608,6 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
-  }
-
-  @override
-  FeedMediasCompanion createCompanion(bool nullToAbsent) {
-    return FeedMediasCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
-      feedEntry: feedEntry == null && nullToAbsent
-          ? const Value.absent()
-          : Value(feedEntry),
-      filePath: filePath == null && nullToAbsent
-          ? const Value.absent()
-          : Value(filePath),
-      thumbnailPath: thumbnailPath == null && nullToAbsent
-          ? const Value.absent()
-          : Value(thumbnailPath),
-      params:
-          params == null && nullToAbsent ? const Value.absent() : Value(params),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
-    );
   }
 
   FeedMedia copyWith(
@@ -3419,6 +3703,28 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
         feedEntry = Value(feedEntry),
         filePath = Value(filePath),
         thumbnailPath = Value(thumbnailPath);
+  static Insertable<FeedMedia> custom({
+    Expression<int> id,
+    Expression<int> feed,
+    Expression<int> feedEntry,
+    Expression<String> filePath,
+    Expression<String> thumbnailPath,
+    Expression<String> params,
+    Expression<String> serverID,
+    Expression<bool> synced,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (feed != null) 'feed': feed,
+      if (feedEntry != null) 'feed_entry': feedEntry,
+      if (filePath != null) 'file_path': filePath,
+      if (thumbnailPath != null) 'thumbnail_path': thumbnailPath,
+      if (params != null) 'params': params,
+      if (serverID != null) 'server_i_d': serverID,
+      if (synced != null) 'synced': synced,
+    });
+  }
+
   FeedMediasCompanion copyWith(
       {Value<int> id,
       Value<int> feed,
@@ -3438,6 +3744,36 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (feed.present) {
+      map['feed'] = Variable<int>(feed.value);
+    }
+    if (feedEntry.present) {
+      map['feed_entry'] = Variable<int>(feedEntry.value);
+    }
+    if (filePath.present) {
+      map['file_path'] = Variable<String>(filePath.value);
+    }
+    if (thumbnailPath.present) {
+      map['thumbnail_path'] = Variable<String>(thumbnailPath.value);
+    }
+    if (params.present) {
+      map['params'] = Variable<String>(params.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (synced.present) {
+      map['synced'] = Variable<bool>(synced.value);
+    }
+    return map;
   }
 }
 
@@ -3542,49 +3878,50 @@ class $FeedMediasTable extends FeedMedias
   @override
   final String actualTableName = 'feed_medias';
   @override
-  VerificationContext validateIntegrity(FeedMediasCompanion d,
+  VerificationContext validateIntegrity(Insertable<FeedMedia> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.id.present) {
-      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (d.feed.present) {
+    if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableValue(d.feed.value, _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
-    if (d.feedEntry.present) {
+    if (data.containsKey('feed_entry')) {
       context.handle(_feedEntryMeta,
-          feedEntry.isAcceptableValue(d.feedEntry.value, _feedEntryMeta));
+          feedEntry.isAcceptableOrUnknown(data['feed_entry'], _feedEntryMeta));
     } else if (isInserting) {
       context.missing(_feedEntryMeta);
     }
-    if (d.filePath.present) {
+    if (data.containsKey('file_path')) {
       context.handle(_filePathMeta,
-          filePath.isAcceptableValue(d.filePath.value, _filePathMeta));
+          filePath.isAcceptableOrUnknown(data['file_path'], _filePathMeta));
     } else if (isInserting) {
       context.missing(_filePathMeta);
     }
-    if (d.thumbnailPath.present) {
+    if (data.containsKey('thumbnail_path')) {
       context.handle(
           _thumbnailPathMeta,
-          thumbnailPath.isAcceptableValue(
-              d.thumbnailPath.value, _thumbnailPathMeta));
+          thumbnailPath.isAcceptableOrUnknown(
+              data['thumbnail_path'], _thumbnailPathMeta));
     } else if (isInserting) {
       context.missing(_thumbnailPathMeta);
     }
-    if (d.params.present) {
-      context.handle(
-          _paramsMeta, params.isAcceptableValue(d.params.value, _paramsMeta));
+    if (data.containsKey('params')) {
+      context.handle(_paramsMeta,
+          params.isAcceptableOrUnknown(data['params'], _paramsMeta));
     }
-    if (d.serverID.present) {
+    if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableValue(d.serverID.value, _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
     }
-    if (d.synced.present) {
-      context.handle(
-          _syncedMeta, synced.isAcceptableValue(d.synced.value, _syncedMeta));
+    if (data.containsKey('synced')) {
+      context.handle(_syncedMeta,
+          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
     }
     return context;
   }
@@ -3595,37 +3932,6 @@ class $FeedMediasTable extends FeedMedias
   FeedMedia map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return FeedMedia.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(FeedMediasCompanion d) {
-    final map = <String, Variable>{};
-    if (d.id.present) {
-      map['id'] = Variable<int, IntType>(d.id.value);
-    }
-    if (d.feed.present) {
-      map['feed'] = Variable<int, IntType>(d.feed.value);
-    }
-    if (d.feedEntry.present) {
-      map['feed_entry'] = Variable<int, IntType>(d.feedEntry.value);
-    }
-    if (d.filePath.present) {
-      map['file_path'] = Variable<String, StringType>(d.filePath.value);
-    }
-    if (d.thumbnailPath.present) {
-      map['thumbnail_path'] =
-          Variable<String, StringType>(d.thumbnailPath.value);
-    }
-    if (d.params.present) {
-      map['params'] = Variable<String, StringType>(d.params.value);
-    }
-    if (d.serverID.present) {
-      map['server_i_d'] = Variable<String, StringType>(d.serverID.value);
-    }
-    if (d.synced.present) {
-      map['synced'] = Variable<bool, BoolType>(d.synced.value);
-    }
-    return map;
   }
 
   @override

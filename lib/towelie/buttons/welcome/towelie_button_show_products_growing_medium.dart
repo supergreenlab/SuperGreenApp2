@@ -19,7 +19,6 @@
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/cards/welcome/card_products_growing_medium.dart';
-import 'package:super_green_app/towelie/cards/welcome/card_products_seeds.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 

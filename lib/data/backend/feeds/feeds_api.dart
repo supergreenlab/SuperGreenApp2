@@ -95,72 +95,74 @@ class FeedsAPI {
 
   Future syncPlant(Plant plant) async {
     Map<String, dynamic> obj = await Plants.toJSON(plant);
-    String id = await _postPut('/plant', obj);
+    String serverID = await _postPut('/plant', obj);
 
     PlantsCompanion plantsCompanion =
-        plant.createCompanion(true).copyWith(synced: Value(true));
-    if (id != null) {
-      plantsCompanion = plantsCompanion.copyWith(serverID: Value(id));
+        PlantsCompanion(id: Value(plant.id), synced: Value(true));
+    if (serverID != null) {
+      plantsCompanion = plantsCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().plantsDAO.updatePlant(plantsCompanion);
   }
 
   Future syncBox(Box box) async {
     Map<String, dynamic> obj = await Boxes.toJSON(box);
-    String id = await _postPut('/box', obj);
+    String serverID = await _postPut('/box', obj);
 
     BoxesCompanion boxesCompanion =
-        box.createCompanion(true).copyWith(synced: Value(true));
-    if (id != null) {
-      boxesCompanion = boxesCompanion.copyWith(serverID: Value(id));
+        BoxesCompanion(id: Value(box.id), synced: Value(true));
+    if (serverID != null) {
+      boxesCompanion = boxesCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().plantsDAO.updateBox(boxesCompanion);
   }
 
   Future syncTimelapse(Timelapse timelapse) async {
     Map<String, dynamic> obj = await Timelapses.toJSON(timelapse);
-    String id = await _postPut('/timelapse', obj);
+    String serverID = await _postPut('/timelapse', obj);
 
     TimelapsesCompanion timelapsesCompanion =
-        timelapse.createCompanion(true).copyWith(synced: Value(true));
-    if (id != null) {
-      timelapsesCompanion = timelapsesCompanion.copyWith(serverID: Value(id));
+        TimelapsesCompanion(id: Value(timelapse.id), synced: Value(true));
+    if (serverID != null) {
+      timelapsesCompanion =
+          timelapsesCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion);
   }
 
   Future syncDevice(Device device) async {
     Map<String, dynamic> obj = await Devices.toJSON(device);
-    String id = await _postPut('/device', obj);
+    String serverID = await _postPut('/device', obj);
 
     DevicesCompanion devicesCompanion =
-        device.createCompanion(true).copyWith(synced: Value(true));
-    if (id != null) {
-      devicesCompanion = devicesCompanion.copyWith(serverID: Value(id));
+        DevicesCompanion(id: Value(device.id), synced: Value(true));
+    if (serverID != null) {
+      devicesCompanion = devicesCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().devicesDAO.updateDevice(devicesCompanion);
   }
 
   Future syncFeed(Feed feed) async {
     Map<String, dynamic> obj = await Feeds.toJSON(feed);
-    String id = await _postPut('/feed', obj);
+    String serverID = await _postPut('/feed', obj);
 
     FeedsCompanion feedsCompanion =
-        feed.createCompanion(true).copyWith(synced: Value(true));
-    if (id != null) {
-      feedsCompanion = feedsCompanion.copyWith(serverID: Value(id));
+        FeedsCompanion(id: Value(feed.id), synced: Value(true));
+    if (serverID != null) {
+      feedsCompanion = feedsCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().feedsDAO.updateFeed(feedsCompanion);
   }
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
     Map<String, dynamic> obj = await FeedEntries.toJSON(feedEntry);
-    String id = await _postPut('/feedEntry', obj);
+    String serverID = await _postPut('/feedEntry', obj);
 
     FeedEntriesCompanion feedEntriesCompanion =
-        feedEntry.createCompanion(true).copyWith(synced: Value(true));
-    if (id != null) {
-      feedEntriesCompanion = feedEntriesCompanion.copyWith(serverID: Value(id));
+        FeedEntriesCompanion(id: Value(feedEntry.id), synced: Value(true));
+    if (serverID != null) {
+      feedEntriesCompanion =
+          feedEntriesCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().feedsDAO.updateFeedEntry(feedEntriesCompanion);
   }
@@ -182,8 +184,10 @@ class FeedsAPI {
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
     {
+      File file = File(feedMedia.filePath);
+      print('Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
       Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
-          body: File(feedMedia.filePath).readAsBytesSync(),
+          body: file.readAsBytesSync(),
           headers: {'Host': _storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
         throw 'upload failed';
@@ -191,9 +195,11 @@ class FeedsAPI {
     }
 
     {
+      File file = File(feedMedia.thumbnailPath);
+      print('Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
       Response resp = await put(
           '$_storageServerHost${uploadUrls['thumbnailPath']}',
-          body: File(feedMedia.thumbnailPath).readAsBytesSync(),
+          body: file.readAsBytesSync(),
           headers: {'Host': _storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
         throw 'upload failed';
@@ -204,13 +210,12 @@ class FeedsAPI {
     obj['thumbnailPath'] =
         Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2];
 
-    String id = await _postPut('/feedMedia', obj);
+    String serverID = await _postPut('/feedMedia', obj);
 
-    FeedMediasCompanion feedMediasCompanion = feedMedia
-        .createCompanion(true)
-        .copyWith(id: Value(feedMedia.id), synced: Value(true));
-    if (id != null) {
-      feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(id));
+    FeedMediasCompanion feedMediasCompanion =
+        FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
+    if (serverID != null) {
+      feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
   }

@@ -538,7 +538,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               try {
                 int nOthers = state.hasPending
                     .where((e) => e.id == p.feed)
-                    .map((e) => e.nNew)
+                    .map<int>((e) => int.parse(e.nNew))
                     .reduce((a, e) => a + e);
                 if (nOthers != null && nOthers > 0) {
                   item = Stack(

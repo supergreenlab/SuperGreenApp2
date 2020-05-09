@@ -135,6 +135,19 @@ class FeedMedias extends Table {
       'params': feedMedia.params,
     };
   }
+
+  // TODO check when createCompaion comes back
+  // Temporary replacement for createCompaion (coming back in next release:/)
+  static FeedMediasCompanion toCompanion(FeedMedia feedMedia) {
+    return FeedMediasCompanion(
+        feed: Value(feedMedia.feed),
+        feedEntry: Value(feedMedia.feedEntry),
+        filePath: Value(feedMedia.filePath),
+        thumbnailPath: Value(feedMedia.thumbnailPath),
+        params: Value(feedMedia.params),
+        synced: Value(feedMedia.synced),
+        serverID: Value(feedMedia.serverID));
+  }
 }
 
 @UseDao(tables: [

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_form_bloc.dart';
@@ -137,7 +138,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
       icon: 'assets/feed_form/icon_after_pic.svg',
       child: FeedFormMediaList(
         maxMedias: 1,
-        medias: _previous != null ? [_previous.createCompanion(true)] : [],
+        medias: _previous != null ? [FeedMedias.toCompanion(_previous)] : [],
         onLongPressed: (FeedMediasCompanion media) async {
           bool confirm = await showDialog<bool>(
               context: context,

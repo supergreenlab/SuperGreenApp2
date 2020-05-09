@@ -44,6 +44,7 @@ class _FeedCardState extends State<FeedCard> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: AnimatedOpacity(
