@@ -17,8 +17,10 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:moor/moor.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'feeds.g.dart';
@@ -134,6 +136,17 @@ class FeedMedias extends Table {
       'thumbnailPath': feedMedia.thumbnailPath,
       'params': feedMedia.params,
     };
+  }
+
+  static String makeFilePath() {
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final String filePath = 'Pictures/sgl/$timestamp';
+    return filePath;
+  }
+
+  static Future<String> makeAbsoluteFilePath(String filePath) async {
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    return '${appDocDir.path}/$filePath';
   }
 
   // TODO check when createCompaion comes back
