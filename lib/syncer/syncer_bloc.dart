@@ -294,8 +294,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<FeedMedia> feedMedias =
         await RelDB.get().feedsDAO.getUnsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
-      FeedMedia feedMedia = feedMedias[i];
-      await FeedsAPI().syncFeedMedia(feedMedia);
+      try {
+        FeedMedia feedMedia = feedMedias[i];
+        await FeedsAPI().syncFeedMedia(feedMedia);
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
