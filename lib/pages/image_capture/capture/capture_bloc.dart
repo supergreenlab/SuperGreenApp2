@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -87,8 +88,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
       if (thumbnailPath.endsWith('mp4')) {
         thumbnailPath = thumbnailPath.replaceAll('.mp4', '.jpg');
         await VideoThumbnail.thumbnailFile(
-          video: event.filePath,
-          thumbnailPath: thumbnailPath,
+          video: await FeedMedias.makeAbsoluteFilePath(event.filePath),
+          thumbnailPath: await FeedMedias.makeAbsoluteFilePath(thumbnailPath),
           imageFormat: ImageFormat.JPEG,
           quality: 50,
         );

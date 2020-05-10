@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class SyncerBlocEvent extends Equatable {}
@@ -154,15 +155,15 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           .feedsDAO
           .getFeedMediaForServerID(feedMediasCompanion.serverID.value);
       String filePath =
-          '${await _makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
+          '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
       String thumbnailPath =
-          '${await _makeFilePath()}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
-      await FeedsAPI().download(feedMediasCompanion.filePath.value, filePath);
+          '${FeedMedias.makeFilePath()}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
+      await FeedsAPI().download(feedMediasCompanion.filePath.value, await FeedMedias.makeAbsoluteFilePath(filePath));
       await FeedsAPI()
-          .download(feedMediasCompanion.thumbnailPath.value, thumbnailPath);
+          .download(feedMediasCompanion.thumbnailPath.value, await FeedMedias.makeAbsoluteFilePath(thumbnailPath));
       if (exists != null) {
-        await _deleteFileIfExists(exists.filePath);
-        await _deleteFileIfExists(exists.thumbnailPath);
+        await _deleteFileIfExists(await FeedMedias.makeAbsoluteFilePath(exists.filePath));
+        await _deleteFileIfExists(await FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
         await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion.copyWith(
             id: Value(exists.id),
             filePath: Value(filePath),
@@ -351,18 +352,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       await file.delete();
     } catch (e) {}
   }
-
-  // TODO DRY with capture_page.dart
-  static Future<String> _makeFilePath() async {
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/Pictures/sgl';
-    await Directory(dirPath).create(recursive: true);
-    final String filePath = '$dirPath/${_timestamp()}';
-    return filePath;
-  }
-
-  static String _timestamp() =>
-      DateTime.now().millisecondsSinceEpoch.toString();
 
   @override
   Future<void> close() async {

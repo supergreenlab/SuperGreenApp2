@@ -184,8 +184,10 @@ class FeedsAPI {
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
     {
-      File file = File(feedMedia.filePath);
-      print('Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
+      File file =
+          File(await FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
+      print(
+          'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
       Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
           body: file.readAsBytesSync(),
           headers: {'Host': _storageServerHostHeader});
@@ -195,8 +197,10 @@ class FeedsAPI {
     }
 
     {
-      File file = File(feedMedia.thumbnailPath);
-      print('Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
+      File file =
+          File(await FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
+      print(
+          'Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
       Response resp = await put(
           '$_storageServerHost${uploadUrls['thumbnailPath']}',
           body: file.readAsBytesSync(),
@@ -215,7 +219,8 @@ class FeedsAPI {
     FeedMediasCompanion feedMediasCompanion =
         FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
     if (serverID != null) {
-      feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(serverID));
+      feedMediasCompanion =
+          feedMediasCompanion.copyWith(serverID: Value(serverID));
     }
     RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
   }

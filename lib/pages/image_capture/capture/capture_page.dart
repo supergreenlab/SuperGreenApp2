@@ -22,7 +22,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 
@@ -47,7 +47,6 @@ class _CapturePageState extends State<CapturePage> {
       listener: (BuildContext context, CaptureBlocState state) async {
         if (state is CaptureBlocStateInit) {
           if (_cameraController == null) {
-            _filePath = await _makeFilePath();
             _cameras = await availableCameras();
             _setupCamera();
           }
@@ -83,8 +82,10 @@ class _CapturePageState extends State<CapturePage> {
       child: WillPopScope(
         onWillPop: () async {
           if (!_popDone) {
-            await _deleteFileIfExists('$_filePath.mp4');
-            await _deleteFileIfExists('$_filePath.jpg');
+            if (_filePath != null) {
+              await _deleteFileIfExists(
+                  await FeedMedias.makeAbsoluteFilePath(_filePath));
+            }
           }
           return true;
         },
@@ -208,8 +209,10 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderCloseButton(BuildContext context) {
     return RawMaterialButton(
       onPressed: () async {
-        await _deleteFileIfExists('$_filePath.mp4');
-        await _deleteFileIfExists('$_filePath.jpg');
+        if (_filePath != null) {
+          await _deleteFileIfExists(
+              await FeedMedias.makeAbsoluteFilePath(_filePath));
+        }
         BlocProvider.of<MainNavigatorBloc>(context)
             .add(MainNavigatorActionPop());
       },
@@ -281,17 +284,17 @@ class _CapturePageState extends State<CapturePage> {
                       File video = await ImagePicker.pickVideo(
                           source: ImageSource.gallery);
                       if (video != null) {
-                        String filePath = '$_filePath.mp4';
-                        video.copy(filePath);
-                        _endCapture(state, filePath);
+                        _filePath = '${FeedMedias.makeFilePath()}.mp4';
+                        video.copy(_filePath);
+                        _endCapture(state);
                       }
                     } else {
                       File image = await ImagePicker.pickImage(
                           source: ImageSource.gallery);
                       if (image != null) {
-                        String filePath = '$_filePath.jpg';
-                        image.copy(filePath);
-                        _endCapture(state, filePath);
+                        _filePath = '${FeedMedias.makeFilePath()}.jpg';
+                        image.copy(_filePath);
+                        _endCapture(state);
                       }
                     }
                   },
@@ -317,21 +320,27 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderPictureButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.photo_camera, Colors.blue,
         () async {
-      await _deleteFileIfExists('$_filePath.jpg');
-      _filePath = await _makeFilePath();
-      final String filePath = '$_filePath.jpg';
-      await _cameraController.takePicture(filePath);
-      _endCapture(state, filePath);
+      if (_filePath != null) {
+        await _deleteFileIfExists(
+            await FeedMedias.makeAbsoluteFilePath(_filePath));
+      }
+      _filePath = '${FeedMedias.makeFilePath()}.jpg';
+      String absolutePath = await FeedMedias.makeAbsoluteFilePath(_filePath);
+      await _cameraController.takePicture(absolutePath);
+      _endCapture(state);
     });
   }
 
   Widget _renderCameraButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.videocam, Colors.blue, () async {
-      await _deleteFileIfExists('$_filePath.mp4');
-      _filePath = await _makeFilePath();
-      final String filePath = '$_filePath.mp4';
-      await _deleteFileIfExists(filePath);
-      await _cameraController.startVideoRecording(filePath);
+      if (_filePath != null) {
+        await _deleteFileIfExists(
+            await FeedMedias.makeAbsoluteFilePath(_filePath));
+      }
+      _filePath = '${FeedMedias.makeFilePath()}.mp4';
+      String absolutePath = await FeedMedias.makeAbsoluteFilePath(_filePath);
+      await _deleteFileIfExists(absolutePath);
+      await _cameraController.startVideoRecording(absolutePath);
       setState(() {});
     });
   }
@@ -339,7 +348,7 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderStopButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.stop, Colors.red, () async {
       await _cameraController.stopVideoRecording();
-      _endCapture(state, '$_filePath.mp4');
+      _endCapture(state);
       setState(() {});
     });
   }
@@ -360,17 +369,18 @@ class _CapturePageState extends State<CapturePage> {
     );
   }
 
-  void _endCapture(CaptureBlocState state, String filePath) {
+  void _endCapture(CaptureBlocState state) {
     BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToImageCapturePlaybackEvent(filePath,
+        MainNavigateToImageCapturePlaybackEvent(_filePath,
             overlayPath: state.overlayPath, futureFn: (f) async {
       final ret = await f;
       if (ret == null || ret == false) {
-        await _deleteFileIfExists(filePath);
+        await _deleteFileIfExists(
+            await FeedMedias.makeAbsoluteFilePath(_filePath));
         return;
       }
       BlocProvider.of<CaptureBloc>(context)
-          .add(CaptureBlocEventCreate(filePath));
+          .add(CaptureBlocEventCreate(_filePath));
     }));
   }
 
@@ -391,17 +401,6 @@ class _CapturePageState extends State<CapturePage> {
       await file.delete();
     } catch (e) {}
   }
-
-  // TODO DRY with feeds.dart
-  Future<String> _makeFilePath() async {
-    final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/Pictures/sgl';
-    await Directory(dirPath).create(recursive: true);
-    final String filePath = '$dirPath/${_timestamp()}';
-    return filePath;
-  }
-
-  String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   @override
   void dispose() {
