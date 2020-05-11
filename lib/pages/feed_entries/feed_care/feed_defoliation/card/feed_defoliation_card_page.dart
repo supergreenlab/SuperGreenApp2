@@ -20,10 +20,11 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/card/feed_defoliation_card_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
 
 class FeedDefoliationCardPage extends FeedCareCommonCardPage<FeedDefoliationCardBloc> {
 
-  FeedDefoliationCardPage(Animation animation, {Key key}) : super(animation, key: key);
+  FeedDefoliationCardPage(Animation animation, FeedEntryState state, {Key key}) : super(animation, state, key: key);
 
   String iconPath() {
     return 'assets/feed_card/icon_defoliation.svg';
