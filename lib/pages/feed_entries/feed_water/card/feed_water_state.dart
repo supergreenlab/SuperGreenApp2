@@ -28,12 +28,4 @@ class FeedWaterState {
     return FeedWaterState(
         map['volume'], map['tooDry'], map['nutrient']);
   }
-
-  static Future<Map<String, dynamic>> toJSON(FeedWaterState state) async {
-    return {
-      'volume': state.volume,
-      'tooDry': state.tooDry,
-      'nutrient': state.nutrient,
-    };
-  }
 }

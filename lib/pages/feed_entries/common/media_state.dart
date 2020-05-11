@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
+class MediaState {
+  final dynamic id;
+  final String filePath;
+  final String thumbnailPath;
+  final bool synced;
 
-class FeedMediaState {
-  final String message;
-  final List<MediaState> medias;
-
-  FeedMediaState(this.message, this.medias);
+  MediaState(this.id, this.filePath, this.thumbnailPath, this.synced);
 }

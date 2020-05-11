@@ -18,9 +18,10 @@
 
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 
-class FeedMediaState {
+class FeedCareCommonState {
   final String message;
-  final List<MediaState> medias;
+  final List<MediaState> beforeMedias;
+  final List<MediaState> afterMedias;
 
-  FeedMediaState(this.message, this.medias);
+  FeedCareCommonState(this.message, this.beforeMedias, this.afterMedias);
 }

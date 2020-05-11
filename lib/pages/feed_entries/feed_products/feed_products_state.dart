@@ -16,88 +16,76 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:async';
-import 'dart:convert';
+class FeedProductsButton {
+  final String id;
+  final String title;
 
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
-import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/kv/models/app_data.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
-
-abstract class FeedProductsCardBlocEvent extends Equatable {}
-
-class FeedProductsCardBlocEventStoreGeoUpdated
-    extends FeedProductsCardBlocEvent {
-  final String storeGeo;
-
-  FeedProductsCardBlocEventStoreGeoUpdated(this.storeGeo);
-
-  @override
-  // TODO: implement props
-  List<Object> get props => [storeGeo];
-}
-
-class FeedProductsCardBlocEventSetStoreGeo extends FeedProductsCardBlocEvent {
-  final String storeGeo;
-
-  FeedProductsCardBlocEventSetStoreGeo(this.storeGeo);
-
-  @override
-  // TODO: implement props
-  List<Object> get props => [storeGeo];
-}
-
-class FeedProductsCardBlocState extends Equatable {
-  final Feed feed;
-  final FeedEntry feedEntry;
   final Map<String, dynamic> params;
-  final String storeGeo;
 
-  FeedProductsCardBlocState(
-      this.feed, this.feedEntry, this.params, this.storeGeo);
+  FeedProductsButton(this.id, this.title, this.params);
 
-  @override
-  List<Object> get props =>
-      [this.feed, this.feedEntry, this.params, this.storeGeo];
+  static FeedProductsButton fromJSON(Map<String, dynamic> map) {
+    return FeedProductsButton(map['id'], map['title'], map);
+  }
 }
 
-class FeedProductsCardBloc
-    extends Bloc<FeedProductsCardBlocEvent, FeedProductsCardBlocState> {
-  final Feed _feed;
-  final FeedEntry _feedEntry;
-  final Map<String, dynamic> _params = {};
-  StreamSubscription<BoxEvent> _stream;
+class FeedProductsLink {
+  final String type;
+  final String data;
 
-  @override
-  FeedProductsCardBlocState get initialState => FeedProductsCardBlocState(
-      _feed, _feedEntry, _params, AppDB().getAppData().storeGeo);
+  FeedProductsLink(this.type, this.data);
 
-  FeedProductsCardBloc(this._feed, this._feedEntry) {
-    _params.addAll(JsonDecoder().convert(_feedEntry.params));
-    _stream = AppDB().watchAppData().listen((BoxEvent event) {
-      AppData appData = event.value;
-      add(FeedProductsCardBlocEventStoreGeoUpdated(appData.storeGeo));
-    });
+  static FeedProductsLink fromJSON(Map<String, dynamic> map) {
+    return FeedProductsLink(map['type'], map['data']);
   }
+}
 
-  @override
-  Stream<FeedProductsCardBlocState> mapEventToState(
-      FeedProductsCardBlocEvent event) async* {
-    if (event is FeedProductsCardBlocEventStoreGeoUpdated) {
-      yield FeedProductsCardBlocState(
-          _feed, _feedEntry, _params, event.storeGeo);
-    } else if (event is FeedProductsCardBlocEventSetStoreGeo) {
-      AppDB().setStoreGeo(event.storeGeo);
-    }
+class FeedProductsItem {
+  final String title;
+  final String description;
+  final String picture;
+  final String price;
+  final String geo;
+  final FeedProductsLink link;
+
+  FeedProductsItem(this.title, this.description, this.picture, this.price, this.geo, this.link);
+
+  static FeedProductsItem fromJSON(Map<String, dynamic> map) {
+    return FeedProductsItem(
+      map['title'],
+      map['description'],
+      map['picture'],
+      map['price'],
+      map['geo'],
+      FeedProductsLink.fromJSON(map['link']),
+    );
   }
+}
 
-  @override
-  Future<void> close() async {
-    if (_stream != null) {
-      await _stream.cancel();
-    }
-    return super.close();
+class FeedProductsState {
+  String storeGeo;
+
+  final String topPic;
+  final String text;
+  final List<FeedProductsItem> items;
+  final List<FeedProductsButton> buttons;
+  final FeedProductsButton selectedButton;
+
+  FeedProductsState(this.topPic, this.text, this.items, this.buttons, this.selectedButton);
+
+  static FeedProductsState fromJSON(Map<String, dynamic> map) {
+    List<FeedProductsItem> items = map['products'].map((p) => FeedProductsItem.fromJSON(p));
+    List<FeedProductsButton> buttons =
+        (map['buttons'] ?? []).map((b) => FeedProductsButton.fromJSON(b));
+    FeedProductsButton selectedButton = map['selectedButton'] == null
+        ? null
+        : FeedProductsButton.fromJSON(map['selectedButton']);
+    return FeedProductsState(
+      map['top_pic'],
+      map['text'],
+      items,
+      buttons,
+      selectedButton,
+    );
   }
 }
