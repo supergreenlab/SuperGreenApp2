@@ -20,17 +20,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/widgets/bordered_text.dart';
-
-class MediaState {
-  final dynamic id;
-  final String filePath;
-  final String thumbnailPath;
-  final bool synced;
-
-  MediaState(this.id, this.filePath, this.thumbnailPath, this.synced);
-}
 
 class MediaList extends StatelessWidget {
   final List<MediaState> _medias;

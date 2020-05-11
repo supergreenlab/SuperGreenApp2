@@ -24,10 +24,4 @@ class FeedScheduleState {
   static Future<FeedScheduleState> fromJSON(Map<String, dynamic> map) async {
     return FeedScheduleState(map['schedule']);
   }
-
-  static Future<Map<String, dynamic>> toJSON(FeedScheduleState state) async {
-    return {
-      'schedule': state.schedule,
-    };
-  }
 }

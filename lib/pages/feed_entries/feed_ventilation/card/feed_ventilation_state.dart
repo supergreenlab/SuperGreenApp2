@@ -36,18 +36,4 @@ class FeedVentilationState {
         FeedVentilationStateValues(map['initialValues']['blowerDay'],
             map['initialValues']['blowerNight']));
   }
-
-  static Future<Map<String, dynamic>> toJSON(
-      FeedVentilationState state) async {
-    return {
-      'values': {
-        'blowerDay': state.values.blowerDay,
-        'blowerNight': state.values.blowerNight,
-      },
-      'initialValues': {
-        'blowerDay': state.initialValues.blowerDay,
-        'blowerNight': state.initialValues.blowerNight,
-      },
-    };
-  }
 }

@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
@@ -64,6 +65,7 @@ class FeedMeasureCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
+    FeedMeasureState cardState = state.state;
     return FeedCard(
       animation: animation,
       child: Column(
@@ -72,22 +74,22 @@ class FeedMeasureCardPage extends StatelessWidget {
           FeedCardTitle(
               'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
           MediaList(
-            [state.current],
+            [cardState.current],
             onMediaTapped: (media) {
-              if (state.previous != null) {
+              if (cardState.previous != null) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToFullscreenMedia(state.previous,
-                        overlayPath: state.current.filePath,
-                        heroPath: state.current.filePath));
+                    MainNavigateToFullscreenMedia(cardState.previous,
+                        overlayPath: cardState.current.filePath,
+                        heroPath: cardState.current.filePath));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(state.current));
+                    .add(MainNavigateToFullscreenMedia(cardState.current));
               }
             },
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state.feedEntry),
+            child: FeedCardDate(state.date),
           ),
         ],
       ),

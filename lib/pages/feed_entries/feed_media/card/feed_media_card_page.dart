@@ -19,17 +19,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 class FeedMediaCardPage extends StatefulWidget {
   final Animation animation;
+  final FeedEntryState state;
 
-  const FeedMediaCardPage(this.animation, {Key key}) : super(key: key);
+  const FeedMediaCardPage(this.animation, this.state, {Key key})
+      : super(key: key);
 
   @override
   _FeedMediaCardPageState createState() => _FeedMediaCardPageState();
@@ -40,52 +44,74 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedMediaCardBloc, FeedMediaCardBlocState>(
-        bloc: BlocProvider.of<FeedMediaCardBloc>(context),
-        builder: (context, state) {
-          return FeedCard(
-            animation: widget.animation,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                FeedCardTitle(
-                  'assets/feed_card/icon_media.svg',
-                  'Grow log',
-                  state.feedEntry,
-                  onEdit: () {
-                    setState(() {
-                      editText = true;
-                    });
+    if (widget.state is FeedBlocEntryStateLoaded) {
+      return _renderLoaded(context, widget.state);
+    }
+    return _renderLoading(context);
+  }
+
+  Widget _renderLoading(BuildContext context) {
+    return FeedCard(
+      animation: widget.animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
+              widget.state.synced),
+          Container(
+            height: 90,
+            alignment: Alignment.center,
+            child: FullscreenLoading(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
+    FeedMediaState cardState = state.state;
+    return FeedCard(
+      animation: widget.animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle(
+            'assets/feed_card/icon_media.svg',
+            'Grow log',
+            state.synced,
+            onEdit: () {
+              setState(() {
+                editText = true;
+              });
+            },
+          ),
+          cardState.medias.length > 0
+              ? MediaList(
+                  cardState.medias,
+                  onMediaTapped: (media) {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToFullscreenMedia(media));
                   },
-                ),
-                state.medias.length > 0
-                    ? MediaList(
-                        state.medias,
-                        onMediaTapped: (media) {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToFullscreenMedia(media));
-                        },
-                      )
-                    : Container(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: FeedCardDate(state.feedEntry),
-                ),
-                FeedCardText(
-                  state.params['message'] ?? '',
-                  edit: editText,
-                  onEdited: (value) {
-                    BlocProvider.of<FeedMediaCardBloc>(context)
-                        .add(FeedMediaCardBlocEventEdit(value));
-                    setState(() {
-                      editText = false;
-                    });
-                  },
-                ),
-              ],
-            ),
-          );
-        });
+                )
+              : Container(),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: FeedCardDate(state.date),
+          ),
+          FeedCardText(
+            cardState.message ?? '',
+            edit: editText,
+            onEdited: (value) {
+              BlocProvider.of<FeedMediaCardBloc>(context)
+                  .add(FeedMediaCardBlocEventEdit(value));
+              setState(() {
+                editText = false;
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

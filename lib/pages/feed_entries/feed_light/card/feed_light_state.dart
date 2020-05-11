@@ -25,11 +25,4 @@ class FeedLightState {
   static Future<FeedLightState> fromJSON(Map<String, dynamic> map) async {
     return FeedLightState(map['values'], map['initialValues']);
   }
-
-  static Future<Map<String, dynamic>> toJSON(FeedLightState state) async {
-    return {
-      'values': state.values,
-      'initialValues': state.initialValues,
-    };
-  }
 }

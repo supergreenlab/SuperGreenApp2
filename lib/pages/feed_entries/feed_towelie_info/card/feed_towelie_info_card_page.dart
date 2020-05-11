@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -65,21 +66,20 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
+    FeedTowelieInfoState cardState = state.state;
     List<Widget> content = [
       FeedCardTitle(
-          'assets/feed_card/icon_towelie.png', 'Towelie', state.synced,
-          canDelete: false),
+          'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
-        child: _renderBody(context, state),
+        child: _renderBody(context, cardState),
       ),
     ];
-    if (state.params['selectedButton'] != null) {
-      content.add(_renderSelectedButton(
-          context, state, state.params['selectedButton']));
-    } else if (state.params['buttons'] != null &&
-        state.params['buttons'].length > 0) {
-      content.add(_renderButtonBar(context, state, state.params['buttons']));
+    if (cardState.selectedButton != null) {
+      content
+          .add(_renderSelectedButton(context, cardState.selectedButton));
+    } else if (cardState.buttons != null && cardState.buttons.length > 0) {
+      content.add(_renderButtonBar(context, cardState.buttons));
     }
     return FeedCard(
         animation: animation,
@@ -89,16 +89,16 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         ));
   }
 
-  Widget _renderBody(BuildContext context, FeedTowelieInfoCardBlocState state) {
+  Widget _renderBody(BuildContext context, FeedTowelieInfoState cardState) {
     final body = <Widget>[
-      FeedCardText(state.params['text']),
+      FeedCardText(cardState.text),
     ];
-    if (state.params['top_pic'] != null) {
+    if (cardState.topPic != null) {
       body.insert(
           0,
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: SvgPicture.asset(state.params['top_pic']),
+            child: SvgPicture.asset(cardState.topPic),
           ));
     }
     return Column(
@@ -107,34 +107,32 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  ButtonBar _renderButtonBar(
-      BuildContext context, List buttons) {
+  ButtonBar _renderButtonBar(BuildContext context, List<FeedTowelieInfoButton> buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-      children: buttons.map((b) => _renderButton(context, state, b)).toList(),
+      children: buttons.map((b) => _renderButton(context, b)).toList(),
     );
   }
 
-  Widget _renderButton(BuildContext context,
-      Map<String, dynamic> button) {
+  Widget _renderButton(BuildContext context, FeedTowelieInfoButton button) {
     return FlatButton(
-      child: Text(button['title'].toUpperCase(),
+      child: Text(button.title.toUpperCase(),
           style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(
-            button,
-            feed: state.feed,
-            feedEntry: state.feedEntry));
+            button.params,
+            feed: state.feedID,
+            feedEntry: state.id));
       },
     );
   }
 
-  Widget _renderSelectedButton(BuildContext context,
-      FeedTowelieInfoCardBlocState state, Map<String, dynamic> button) {
+  Widget _renderSelectedButton(
+      BuildContext context, FeedTowelieInfoButton button) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
-      child: Text('➡️ ${button['title'].toUpperCase()}',
+      child: Text('➡️ ${button.title.toUpperCase()}',
           style: TextStyle(
               color: Color(0xff565656),
               fontSize: 12,
