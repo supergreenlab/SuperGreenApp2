@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/data/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 
 class MainNavigatorEvent extends Equatable {
   final void Function(Future<dynamic> future) futureFn;
@@ -309,7 +310,7 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
 
 class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
   final String overlayPath;
-  final FeedMedia feedMedia;
+  final MediaState feedMedia;
   final String heroPath;
 
   MainNavigateToFullscreenMedia(this.feedMedia, {this.overlayPath, this.heroPath});

@@ -58,13 +58,13 @@ class SettingsDevicesBlocStateLoaded extends SettingsDevicesBlocState {
 
 class SettingsDevicesBloc
     extends Bloc<SettingsDevicesBlocEvent, SettingsDevicesBlocState> {
-  List<Device> _devices;
+  List<Device> devices;
   StreamSubscription<List<Device>> _devicesStream;
 
   //ignore: unused_field
-  final MainNavigateToSettingsDevices _args;
+  final MainNavigateToSettingsDevices args;
 
-  SettingsDevicesBloc(this._args) {
+  SettingsDevicesBloc(this.args) {
     add(SettingsDevicesBlocEventInit());
   }
 
@@ -88,9 +88,9 @@ class SettingsDevicesBloc
     }
   }
 
-  void _onDeviceListChange(List<Device> devices) {
-    _devices = devices;
-    add(SettingsDevicesblocEventBoxListChanged(_devices));
+  void _onDeviceListChange(List<Device> d) {
+    devices = d;
+    add(SettingsDevicesblocEventBoxListChanged(devices));
   }
 
   @override

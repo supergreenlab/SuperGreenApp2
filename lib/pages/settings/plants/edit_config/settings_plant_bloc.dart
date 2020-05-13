@@ -51,11 +51,11 @@ class SettingsPlantBlocStateDone extends SettingsPlantBlocState {
 class SettingsPlantBloc
     extends Bloc<SettingsPlantBlocEvent, SettingsPlantBlocState> {
   //ignore: unused_field
-  final MainNavigateToSettingsPlant _args;
-  Plant _plant;
-  Box _box;
+  final MainNavigateToSettingsPlant args;
+  Plant plant;
+  Box box;
 
-  SettingsPlantBloc(this._args) {
+  SettingsPlantBloc(this.args) {
     add(SettingsPlantBlocEventInit());
   }
 
@@ -66,17 +66,17 @@ class SettingsPlantBloc
   Stream<SettingsPlantBlocState> mapEventToState(
       SettingsPlantBlocEvent event) async* {
     if (event is SettingsPlantBlocEventInit) {
-      _plant = await RelDB.get().plantsDAO.getPlant(_args.plant.id);
-      _box = await RelDB.get().plantsDAO.getBox(_plant.box);
-      yield SettingsPlantBlocStateLoaded(_plant, _box);
+      plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
+      box = await RelDB.get().plantsDAO.getBox(plant.box);
+      yield SettingsPlantBlocStateLoaded(plant, box);
     } else if (event is SettingsPlantBlocEventUpdate) {
       yield SettingsPlantBlocStateLoading();
       await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
-          id: Value(_plant.id),
+          id: Value(plant.id),
           name: Value(event.name),
           box: Value(event.box.id),
           synced: Value(false)));
-      yield SettingsPlantBlocStateDone(_plant, _box);
+      yield SettingsPlantBlocStateDone(plant, box);
     }
   }
 }

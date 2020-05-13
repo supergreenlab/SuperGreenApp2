@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class FeedScheduleState {
+import 'package:equatable/equatable.dart';
+
+class FeedScheduleState extends Equatable {
   final String schedule;
 
   FeedScheduleState(this.schedule);
@@ -24,4 +26,7 @@ class FeedScheduleState {
   static Future<FeedScheduleState> fromJSON(Map<String, dynamic> map) async {
     return FeedScheduleState(map['schedule']);
   }
+
+  @override
+  List<Object> get props => [schedule];
 }

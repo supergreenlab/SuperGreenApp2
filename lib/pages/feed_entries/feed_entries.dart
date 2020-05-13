@@ -30,31 +30,32 @@ import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_sched
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_card_page.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
 
 class FeedEntriesHelper {
   static Map<String,
-      Widget Function(Animation animation, FeedEntryState state)> _cards = {
-    'FE_LIGHT': (animation, state) => FeedLightCardPage(animation, state),
-    'FE_MEDIA': (animation, state) => FeedMediaCardPage(animation, state),
-    'FE_MEASURE': (animation, state) => FeedMeasureCardPage(animation, state),
-    'FE_SCHEDULE': (animation, state) => FeedScheduleCardPage(animation, state),
-    'FE_TOPPING': (animation, state) => FeedToppingCardPage(animation, state),
-    'FE_DEFOLIATION': (animation, state) =>
-        FeedDefoliationCardPage(animation, state),
-    'FE_FIMMING': (animation, state) => FeedFimmingCardPage(animation, state),
-    'FE_BENDING': (animation, state) => FeedBendingCardPage(animation, state),
-    'FE_TRANSPLANT': (animation, state) =>
-        FeedTransplantCardPage(animation, state),
-    'FE_VENTILATION': (animation, state) =>
-        FeedVentilationCardPage(animation, state),
-    'FE_WATER': (animation, state) => FeedWaterCardPage(animation, state),
-    'FE_TOWELIE_INFO': (animation, state) =>
-        FeedTowelieInfoCardPage(animation, state),
-    'FE_PRODUCTS': (animation, state) => FeedProductsCardPage(animation, state),
+      Widget Function(Animation animation, FeedState feedState, FeedEntryState state)> _cards = {
+    'FE_LIGHT': (animation, feedState, state) => FeedLightCardPage(animation, feedState, state),
+    'FE_MEDIA': (animation, feedState, state) => FeedMediaCardPage(animation, feedState, state),
+    'FE_MEASURE': (animation, feedState, state) => FeedMeasureCardPage(animation, feedState, state),
+    'FE_SCHEDULE': (animation, feedState, state) => FeedScheduleCardPage(animation, feedState, state),
+    'FE_TOPPING': (animation, feedState, state) => FeedToppingCardPage(animation, feedState, state),
+    'FE_DEFOLIATION': (animation, feedState, state) =>
+        FeedDefoliationCardPage(animation, feedState, state),
+    'FE_FIMMING': (animation, feedState, state) => FeedFimmingCardPage(animation, feedState, state),
+    'FE_BENDING': (animation, feedState, state) => FeedBendingCardPage(animation, feedState, state),
+    'FE_TRANSPLANT': (animation, feedState, state) =>
+        FeedTransplantCardPage(animation, feedState, state),
+    'FE_VENTILATION': (animation, feedState, state) =>
+        FeedVentilationCardPage(animation, feedState, state),
+    'FE_WATER': (animation, feedState, state) => FeedWaterCardPage(animation, feedState, state),
+    'FE_TOWELIE_INFO': (animation, feedState, state) =>
+        FeedTowelieInfoCardPage(animation, feedState, state),
+    'FE_PRODUCTS': (animation, feedState, state) => FeedProductsCardPage(animation, feedState, state),
   };
 
-  static Widget cardForFeedEntry(Animation animation, FeedEntryState state) {
-    return _cards[state.type](animation, state);
+  static Widget cardForFeedEntry(Animation animation, FeedState feedState, FeedEntryState state) {
+    return _cards[state.type](animation, feedState, state);
   }
 }

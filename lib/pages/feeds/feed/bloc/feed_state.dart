@@ -18,29 +18,11 @@
 
 import 'package:equatable/equatable.dart';
 
-class FeedEntryState extends Equatable {
-  final dynamic id;
-  final dynamic feedID;
-  final String type;
-  final bool synced;
-  final DateTime date;
+class FeedState extends Equatable {
+  final String storeGeo;
 
-  FeedEntryState(this.id, this.feedID, this.type, this.synced, this.date);
+  FeedState(this.storeGeo);
 
   @override
-  List<Object> get props => [id, feedID, type, synced, date];
-}
-
-class FeedBlocEntryStateNotLoaded extends FeedEntryState {
-  FeedBlocEntryStateNotLoaded(dynamic id, dynamic feedID, String type, bool synced, DateTime date) : super(id, feedID, type, synced, date);
-}
-
-class FeedBlocEntryStateLoaded extends FeedEntryState {
-  final dynamic state;
-
-  FeedBlocEntryStateLoaded(dynamic id, dynamic feedID, String type, bool synced, DateTime date, this.state)
-      : super(id, feedID, type, synced, date);
-
-  @override
-  List<Object> get props => [id, feedID, type, synced, date, state];
+  List<Object> get props => [storeGeo];
 }

@@ -16,14 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class FeedVentilationStateValues {
+import 'package:equatable/equatable.dart';
+
+class FeedVentilationStateValues extends Equatable {
   final double blowerDay;
   final double blowerNight;
 
   FeedVentilationStateValues(this.blowerDay, this.blowerNight);
+
+  @override
+  List<Object> get props => [blowerDay, blowerNight];
 }
 
-class FeedVentilationState {
+class FeedVentilationState extends Equatable {
   final FeedVentilationStateValues values;
   final FeedVentilationStateValues initialValues;
 
@@ -36,4 +41,7 @@ class FeedVentilationState {
         FeedVentilationStateValues(map['initialValues']['blowerDay'],
             map['initialValues']['blowerNight']));
   }
+
+  @override
+  List<Object> get props => [values, initialValues];
 }

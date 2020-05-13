@@ -20,9 +20,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_entries.dart';
-import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/abstract_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedPage extends StatefulWidget {
@@ -46,57 +47,48 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  List<FeedEntry> _entries;
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey<SliverAnimatedListState> _listKey =
+  FeedState feedState;
+  final List<FeedEntryState> entries = [];
+  final ScrollController scrollController = ScrollController();
+  final GlobalKey<SliverAnimatedListState> listKey =
       GlobalKey<SliverAnimatedListState>();
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<FeedBloc, FeedBlocState>(
       listener: (BuildContext context, state) {
-        if (state is FeedBlocStateLoaded) {
-          if (_entries != null) {
-            if (state.entries.length > _entries.length) {
-              int millis = 500;
-              _entries = state.entries;
-              _listKey.currentState
-                  .insertItem(1, duration: Duration(milliseconds: millis));
-              if (_scrollController.offset == 0) {
-                // this is to prevent a bug with animateTo not triggering when offset == 0
-                _scrollController.jumpTo(30);
-              }
-              Timer(
-                  Duration(milliseconds: 100),
-                  () => _scrollController.animateTo(widget.appBarHeight - 56.0,
-                      duration: Duration(milliseconds: millis),
-                      curve: Curves.linear));
-            } else if (state.entries.length < _entries.length) {
-              for (int i = 0; i < _entries.length; ++i) {
-                if (!state.entries.contains(_entries[i])) {
-                  FeedEntry feedEntry = _entries[i];
-                  _entries = state.entries;
-                  _listKey.currentState.removeItem(
-                      i + 1,
-                      (context, animation) =>
-                          FeedEntriesHelper.cardForFeedEntry(animation, null),
-                      duration: Duration(milliseconds: 500));
-                  break;
-                }
-              }
-            }
+        if (state is FeedBlocStateEntriesLoaded) {
+          entries.addAll(state.entries);
+        } else if (state is FeedBlocStateAddEntry) {
+          entries.insert(state.index, state.entry);
+          listKey.currentState
+              .insertItem(1, duration: Duration(milliseconds: 500));
+          if (scrollController.offset == 0) {
+            // this is to prevent a bug with animateTo not triggering when offset == 0
+            scrollController.jumpTo(30);
           }
-          _entries = state.entries;
+          Timer(
+              Duration(milliseconds: 100),
+              () => scrollController.animateTo(widget.appBarHeight - 56.0,
+                  duration: Duration(milliseconds: 500), curve: Curves.linear));
+        } else if (state is FeedBlocStateRemoveEntry) {
+          FeedEntryState entry = state.entry;
+          entries.removeAt(state.index);
+          listKey.currentState.removeItem(
+              state.index,
+              (context, animation) => FeedEntriesHelper.cardForFeedEntry(
+                  animation, feedState, entry),
+              duration: Duration(milliseconds: 500));
         }
       },
       child: BlocBuilder<FeedBloc, FeedBlocState>(
         bloc: BlocProvider.of<FeedBloc>(context),
         builder: (BuildContext context, FeedBlocState state) {
           Widget body;
-          if (state is FeedBlocStateLoaded) {
-            body = _renderCards(context, state);
-          } else {
+          if (entries.length == 0) {
             body = FullscreenLoading(title: 'Loading feed...');
+          } else {
+            body = _renderCards(context);
           }
           return AnimatedSwitcher(
               child: body, duration: Duration(milliseconds: 200));
@@ -105,12 +97,11 @@ class _FeedPageState extends State<FeedPage> {
     );
   }
 
-  Widget _renderCards(BuildContext context, FeedBlocStateLoaded state) {
-    List<FeedEntry> entries = _entries == null ? state.entries : _entries;
+  Widget _renderCards(BuildContext context) {
     return Container(
       color: Color(0xffeeeeee),
       child: CustomScrollView(
-        controller: _scrollController,
+        controller: scrollController,
         slivers: <Widget>[
           SliverAppBar(
             actions: widget.actions,
@@ -129,28 +120,29 @@ class _FeedPageState extends State<FeedPage> {
             ),
           ),
           SliverAnimatedList(
-            key: _listKey,
+            key: listKey,
             itemBuilder:
                 (BuildContext context, int index, Animation<double> animation) {
-              index = index - 1;
-              if (index == -1) {
-                return Container(height: 10);
-              } else if (!widget.bottomPadding && index >= entries.length) {
-                return null;
-              } else if (index == entries.length) {
-                return Container(height: 76);
-              } else if (index > entries.length) {
+              if (index > entries.length) {
                 return null;
               }
               if (entries[index].isNew && ModalRoute.of(context).isCurrent) {
                 BlocProvider.of<FeedBloc>(context)
-                    .add(FeedBlocEventMarkAsRead(entries[index]));
+                    .add(FeedBlocEventEntryVisible(index));
+              }
+              Widget card = FeedEntriesHelper.cardForFeedEntry(
+                  animation, feedState, entries[index]);
+              if (index == 0) {
+                card = Padding(padding: EdgeInsets.only(top: 10), child: card);
+              } else if (index == entries.length - 1) {
+                card =
+                    Padding(padding: EdgeInsets.only(bottom: 10), child: card);
               }
               return SlideTransition(
                   position: animation.drive(
                       Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
                           .chain(CurveTween(curve: Curves.linear))),
-                  child: FeedEntriesHelper.cardForFeedEntry(animation, null));
+                  child: card);
             },
             initialItemCount: entries.length + 1,
           )

@@ -16,35 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 
-abstract class FullscreenPictureBlocEvent extends Equatable {}
+class FeedEntryState extends Equatable {
+  final dynamic id;
+  final dynamic feedID;
+  final String type;
+  final bool isNew;
+  final bool synced;
+  final DateTime date;
 
-class FullscreenPictureBlocState extends Equatable {
-  final int id;
-  final Uint8List image;
-
-  FullscreenPictureBlocState(this.id, this.image);
+  FeedEntryState(this.id, this.feedID, this.type, this.isNew, this.synced, this.date);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [id, feedID, type, synced, date];
 }
 
-class FullscreenPictureBloc
-    extends Bloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
-  final MainNavigateToFullscreenPicture args;
+class FeedBlocEntryStateNotLoaded extends FeedEntryState {
+  FeedBlocEntryStateNotLoaded(dynamic id, dynamic feedID, String type, bool isNew, bool synced, DateTime date) : super(id, feedID, type, isNew, synced, date);
+}
 
-  FullscreenPictureBloc(this.args);
+class FeedBlocEntryStateLoaded extends FeedEntryState {
+  final dynamic state;
+
+  FeedBlocEntryStateLoaded(dynamic id, dynamic feedID, String type, bool isNew, bool synced, DateTime date, this.state)
+      : super(id, feedID, type, isNew, synced, date);
 
   @override
-  FullscreenPictureBlocState get initialState => FullscreenPictureBlocState(args.id, args.image);
-
-  @override
-  Stream<FullscreenPictureBlocState> mapEventToState(
-      FullscreenPictureBlocEvent event) async* {}
+  List<Object> get props => [id, feedID, type, synced, date, state];
 }

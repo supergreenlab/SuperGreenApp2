@@ -27,7 +27,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_bar_page.dart';
@@ -370,7 +370,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       }
       return BlocProvider(
         key: Key('feed'),
-        create: (context) => FeedBloc(state.plant.feed),
+        create: (context) => LocalFeedBloc(state.plant.feed),
         child: FeedPage(
           color: Color(0xff063047),
           actions: actions,

@@ -81,12 +81,12 @@ class FeedMeasureFormBlocStateDone extends FeedMeasureFormBlocState {
 
 class FeedMeasureFormBloc
     extends Bloc<FeedMeasureFormBlocEvent, FeedMeasureFormBlocState> {
-  final MainNavigateToFeedMeasureFormEvent _args;
+  final MainNavigateToFeedMeasureFormEvent args;
 
   @override
   FeedMeasureFormBlocState get initialState => FeedMeasureFormBlocStateInit();
 
-  FeedMeasureFormBloc(this._args) {
+  FeedMeasureFormBloc(this.args) {
     add(FeedMeasureFormBlocEventInit());
   }
 
@@ -96,7 +96,7 @@ class FeedMeasureFormBloc
     if (event is FeedMeasureFormBlocEventInit) {
       final db = RelDB.get();
       List<FeedMedia> measures = await db.feedsDAO
-          .getFeedMediasWithType(_args.plant.feed, 'FE_MEASURE');
+          .getFeedMediasWithType(args.plant.feed, 'FE_MEASURE');
       yield FeedMeasureFormBlocStateLoaded(measures);
     } else if (event is FeedMeasureFormBlocEventCreate) {
       yield FeedMeasureFormBlocStateLoading();
@@ -104,15 +104,15 @@ class FeedMeasureFormBloc
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEASURE',
-        feed: _args.plant.feed,
+        feed: args.plant.feed,
         date: DateTime.now(),
         params: Value(JsonEncoder().convert(
             {'previous': event.previous != null ? event.previous.id : null})),
       ));
       await db.feedsDAO.addFeedMedia(event.current.copyWith(
-          feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
+          feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
-      yield FeedMeasureFormBlocStateDone(_args.plant, feedEntry);
+      yield FeedMeasureFormBlocStateDone(args.plant, feedEntry);
     }
   }
 }

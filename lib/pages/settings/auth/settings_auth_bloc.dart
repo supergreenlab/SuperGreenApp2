@@ -44,10 +44,10 @@ class SettingsAuthBlocStateDone extends SettingsAuthBlocState {
 class SettingsAuthBloc
     extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
   //ignore: unused_field
-  final MainNavigateToSettingsAuth _args;
+  final MainNavigateToSettingsAuth args;
   bool _isAuth;
 
-  SettingsAuthBloc(this._args) {
+  SettingsAuthBloc(this.args) {
     _isAuth = AppDB().getAppData().jwt != null;
     add(SettingsAuthBlocEventInit());
   }

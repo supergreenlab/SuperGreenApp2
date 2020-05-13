@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class FeedProductsButton {
+import 'package:equatable/equatable.dart';
+
+class FeedProductsButton extends Equatable {
   final String id;
   final String title;
 
@@ -27,9 +29,12 @@ class FeedProductsButton {
   static FeedProductsButton fromJSON(Map<String, dynamic> map) {
     return FeedProductsButton(map['id'], map['title'], map);
   }
+
+  @override
+  List<Object> get props => [id, title];
 }
 
-class FeedProductsLink {
+class FeedProductsLink extends Equatable {
   final String type;
   final String data;
 
@@ -38,9 +43,12 @@ class FeedProductsLink {
   static FeedProductsLink fromJSON(Map<String, dynamic> map) {
     return FeedProductsLink(map['type'], map['data']);
   }
+
+  @override
+  List<Object> get props => [type, data];
 }
 
-class FeedProductsItem {
+class FeedProductsItem extends Equatable {
   final String title;
   final String description;
   final String picture;
@@ -60,11 +68,12 @@ class FeedProductsItem {
       FeedProductsLink.fromJSON(map['link']),
     );
   }
+
+  @override
+  List<Object> get props => [title, description, picture, price, geo, link];
 }
 
-class FeedProductsState {
-  String storeGeo;
-
+class FeedProductsState extends Equatable {
   final String topPic;
   final String text;
   final List<FeedProductsItem> items;
@@ -88,4 +97,7 @@ class FeedProductsState {
       selectedButton,
     );
   }
+
+  @override
+  List<Object> get props => [topPic, text, items, buttons, selectedButton];
 }

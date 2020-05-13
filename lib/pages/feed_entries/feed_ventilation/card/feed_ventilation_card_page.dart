@@ -18,7 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -26,9 +27,10 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedVentilationCardPage extends StatelessWidget {
   final Animation animation;
+  final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedVentilationCardPage(this.animation, this.state, {Key key})
+  const FeedVentilationCardPage(this.animation, this.feedState, this.state, {Key key})
       : super(key: key);
 
   @override

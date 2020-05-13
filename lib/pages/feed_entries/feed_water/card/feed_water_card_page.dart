@@ -19,7 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -27,9 +28,10 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedWaterCardPage extends StatelessWidget {
   final Animation animation;
+  final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedWaterCardPage(this.animation, this.state, {Key key})
+  const FeedWaterCardPage(this.animation, this.feedState, this.state, {Key key})
       : super(key: key);
 
   @override

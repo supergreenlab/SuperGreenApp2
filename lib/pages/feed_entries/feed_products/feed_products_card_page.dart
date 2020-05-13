@@ -25,7 +25,8 @@ import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
@@ -41,9 +42,10 @@ const _storeGeoNames = {
 
 class FeedProductsCardPage extends StatelessWidget {
   final Animation animation;
+  final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedProductsCardPage(this.animation, this.state, {Key key})
+  const FeedProductsCardPage(this.animation, this.feedState, this.state, {Key key})
       : super(key: key);
 
   @override
@@ -112,7 +114,7 @@ class FeedProductsCardPage extends StatelessWidget {
     }
     body.add(_renderStoreGeos(context, cardState));
     body.addAll(cardState.items
-        .where((p) => p.geo == cardState.storeGeo)
+        .where((p) => p.geo == feedState.storeGeo)
         .map<Widget>((dynamic p) {
       Map<String, dynamic> product = p;
       return Padding(
@@ -193,16 +195,16 @@ class FeedProductsCardPage extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: storeGeos.map<Widget>((sg) {
-          bool selected = sg == cardState.storeGeo;
+          bool selected = sg == feedState.storeGeo;
           return FlatButton(
             child: Text(_storeGeoNames[sg],
                 style: TextStyle(
-                    color: sg == cardState.storeGeo ? Colors.black : Colors.blue)),
+                    color: sg == feedState.storeGeo ? Colors.black : Colors.blue)),
             onPressed: selected
                 ? null
                 : () async {
-                    BlocProvider.of<FeedProductsCardBloc>(context)
-                        .add(FeedProductsCardBlocEventSetStoreGeo(sg));
+                    //BlocProvider.of<FeedProductsCardBloc>(context)
+                    //    .add(FeedProductsCardBlocEventSetStoreGeo(sg));
                   },
           );
         }).toList(),

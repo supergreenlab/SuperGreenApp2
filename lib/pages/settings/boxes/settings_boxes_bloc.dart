@@ -62,9 +62,9 @@ class SettingsBoxesBloc
   StreamSubscription<List<Box>> _boxesStream;
 
   //ignore: unused_field
-  final MainNavigateToSettingsBoxes _args;
+  final MainNavigateToSettingsBoxes args;
 
-  SettingsBoxesBloc(this._args) {
+  SettingsBoxesBloc(this.args) {
     add(SettingsBoxesBlocEventInit());
   }
 

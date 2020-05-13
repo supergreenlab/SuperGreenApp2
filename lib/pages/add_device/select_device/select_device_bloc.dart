@@ -91,12 +91,12 @@ class SelectDeviceBloc
   StreamSubscription<List<Device>> _stream;
 
   //ignore: unused_field
-  final MainNavigateToSelectDeviceEvent _args;
+  final MainNavigateToSelectDeviceEvent args;
 
   @override
   SelectDeviceBlocState get initialState => SelectDeviceBlocState(_devices);
 
-  SelectDeviceBloc(this._args) {
+  SelectDeviceBloc(this.args) {
     this.add(SelectDeviceBlocEventLoadDevices());
   }
 

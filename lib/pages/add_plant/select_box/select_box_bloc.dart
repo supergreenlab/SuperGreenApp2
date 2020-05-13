@@ -57,9 +57,9 @@ class SelectBoxBlocStateLoaded extends SelectBoxBlocState {
 
 class SelectBoxBloc extends Bloc<SelectBoxBlocEvent, SelectBoxBlocState> {
   //ignore: unused_field
-  MainNavigateToSelectBoxEvent _args;
+  MainNavigateToSelectBoxEvent args;
 
-  SelectBoxBloc(this._args) {
+  SelectBoxBloc(this.args) {
     add(SelectBoxBlocEventInit());
   }
 
