@@ -61,12 +61,12 @@ class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
 
 class FeedMediaFormBloc
     extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
-  final MainNavigateToFeedMediaFormEvent _args;
+  final MainNavigateToFeedMediaFormEvent args;
 
   @override
   FeedMediaFormBlocState get initialState => FeedMediaFormBlocState();
 
-  FeedMediaFormBloc(this._args);
+  FeedMediaFormBloc(this.args);
 
   @override
   Stream<FeedMediaFormBlocState> mapEventToState(
@@ -77,12 +77,12 @@ class FeedMediaFormBloc
       int feedEntryID =
           await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEDIA',
-        feed: _args.plant.feed,
+        feed: args.plant.feed,
         date: DateTime.now(),
         params: Value(JsonEncoder().convert({'message': event.message, 'helpRequest': event.helpRequest})),
       ));
       for (FeedMediasCompanion m in event.medias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
+        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
       }
       yield FeedMediaFormBlocStateDone();
     }

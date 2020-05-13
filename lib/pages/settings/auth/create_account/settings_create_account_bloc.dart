@@ -56,10 +56,10 @@ class SettingsCreateAccountBloc
     extends Bloc<SettingsCreateAccountBlocEvent, SettingsCreateAccountBlocState> {
 
   //ignore: unused_field
-  final MainNavigateToSettingsCreateAccount _args;
+  final MainNavigateToSettingsCreateAccount args;
   bool _isAuth;
 
-  SettingsCreateAccountBloc(this._args) {
+  SettingsCreateAccountBloc(this.args) {
     _isAuth = AppDB().getAppData().jwt != null;
     add(SettingsCreateAccountBlocEventInit());
   }

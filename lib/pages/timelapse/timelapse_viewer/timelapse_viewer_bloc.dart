@@ -46,9 +46,9 @@ class TimelapseViewerBlocStateLoaded extends TimelapseViewerBlocState {
 
 class TimelapseViewerBloc
     extends Bloc<TimelapseViewerBlocEvent, TimelapseViewerBlocState> {
-  final MainNavigateToTimelapseViewer _args;
+  final MainNavigateToTimelapseViewer args;
 
-  TimelapseViewerBloc(this._args) {
+  TimelapseViewerBloc(this.args) {
     add(TimelapseViewerBlocEventInit());
   }
 
@@ -70,7 +70,7 @@ class TimelapseViewerBloc
 
   Stream<TimelapseViewerBlocState> reloadTimelapses() async* {
     List<Timelapse> timelapses =
-        await RelDB.get().plantsDAO.getTimelapses(_args.plant.id);
+        await RelDB.get().plantsDAO.getTimelapses(args.plant.id);
     List<Uint8List> pictures = [];
     for (int i = 0; i < timelapses.length; ++i) {
       Response res = await post(
@@ -82,6 +82,6 @@ class TimelapseViewerBloc
           });
       pictures.add(res.bodyBytes);
     }
-    yield TimelapseViewerBlocStateLoaded(_args.plant, timelapses, pictures);
+    yield TimelapseViewerBlocStateLoaded(args.plant, timelapses, pictures);
   }
 }

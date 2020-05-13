@@ -57,21 +57,21 @@ class FeedWaterFormBlocStateDone extends FeedWaterFormBlocState {
 
 class FeedWaterFormBloc
     extends Bloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
-  final MainNavigateToFeedWaterFormEvent _args;
+  final MainNavigateToFeedWaterFormEvent args;
 
   @override
   FeedWaterFormBlocState get initialState => FeedWaterFormBlocState();
 
-  FeedWaterFormBloc(this._args);
+  FeedWaterFormBloc(this.args);
 
   @override
   Stream<FeedWaterFormBlocState> mapEventToState(
       FeedWaterFormBlocEvent event) async* {
     if (event is FeedWaterFormBlocEventCreate) {
       final db = RelDB.get();
-      List<Plant> plants = [_args.plant];
+      List<Plant> plants = [args.plant];
       if (event.wateringLab) {
-        plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+        plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
       }
       FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {
@@ -90,7 +90,7 @@ class FeedWaterFormBloc
           feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
         }
       }
-      yield FeedWaterFormBlocStateDone(_args.plant, feedEntry);
+      yield FeedWaterFormBlocStateDone(args.plant, feedEntry);
     }
   }
 }

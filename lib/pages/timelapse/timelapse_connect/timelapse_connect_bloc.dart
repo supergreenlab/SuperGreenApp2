@@ -35,9 +35,9 @@ class TimelapseConnectBlocStateDone extends TimelapseConnectBlocState {
 
 class TimelapseConnectBloc
     extends Bloc<TimelapseConnectBlocEvent, TimelapseConnectBlocState> {
-  final MainNavigateToTimelapseConnect _args;
+  final MainNavigateToTimelapseConnect args;
 
-  TimelapseConnectBloc(this._args);
+  TimelapseConnectBloc(this.args);
 
   @override
   TimelapseConnectBlocState get initialState => TimelapseConnectBlocState();
@@ -47,11 +47,11 @@ class TimelapseConnectBloc
       TimelapseConnectBlocEvent event) async* {
     if (event is TimelapseConnectBlocEventSaveConfig) {
       await RelDB.get().plantsDAO.addTimelapse(TimelapsesCompanion.insert(
-          plant: _args.plant.id,
+          plant: args.plant.id,
           dropboxToken: Value(event.dropboxToken),
           uploadName: Value(event.uploadName)));
 
-      yield TimelapseConnectBlocStateDone(_args.plant);
+      yield TimelapseConnectBlocStateDone(args.plant);
     }
   }
 }

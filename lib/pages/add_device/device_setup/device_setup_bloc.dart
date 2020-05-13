@@ -96,12 +96,12 @@ class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
 }
 
 class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
-  final MainNavigateToDeviceSetupEvent _args;
+  final MainNavigateToDeviceSetupEvent args;
 
   @override
   DeviceSetupBlocState get initialState => DeviceSetupBlocState(0);
 
-  DeviceSetupBloc(this._args) {
+  DeviceSetupBloc(this.args) {
     Future.delayed(const Duration(seconds: 1),
         () => this.add(DeviceSetupBlocEventStartSetup()));
   }
@@ -129,7 +129,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
 
       try {
         deviceIdentifier =
-            await DeviceAPI.fetchStringParam(_args.ip, "BROKER_CLIENTID");
+            await DeviceAPI.fetchStringParam(args.ip, "BROKER_CLIENTID");
       } catch (e) {
         add(DeviceSetupBlocEventLoadingError());
         return;
@@ -145,14 +145,14 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
 
       try {
         final deviceName =
-            await DeviceAPI.fetchStringParam(_args.ip, "DEVICE_NAME");
+            await DeviceAPI.fetchStringParam(args.ip, "DEVICE_NAME");
         final mdnsDomain =
-            await DeviceAPI.fetchStringParam(_args.ip, "MDNS_DOMAIN");
+            await DeviceAPI.fetchStringParam(args.ip, "MDNS_DOMAIN");
 
         final device = DevicesCompanion.insert(
             identifier: deviceIdentifier,
             name: deviceName,
-            ip: _args.ip,
+            ip: args.ip,
             mdns: mdnsDomain);
         deviceID = await db.addDevice(device);
       } catch (e) {
@@ -161,7 +161,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       }
 
       try {
-        await DeviceAPI.fetchAllParams(_args.ip, deviceID, (adv) {
+        await DeviceAPI.fetchAllParams(args.ip, deviceID, (adv) {
           add(DeviceSetupBlocEventProgress(adv));
         });
       } catch (e) {

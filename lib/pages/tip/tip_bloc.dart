@@ -60,30 +60,30 @@ class TipBlocStateLoaded extends TipBlocState {
 }
 
 class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
-  final MainNavigateToTipEvent _args;
+  final MainNavigateToTipEvent args;
 
-  TipBloc(this._args) {
+  TipBloc(this.args) {
     add(TipBlocEventInit());
   }
 
   @override
-  TipBlocState get initialState => TipBlocStateInit(_args.nextRoute);
+  TipBlocState get initialState => TipBlocStateInit(args.nextRoute);
 
   @override
   Stream<TipBlocState> mapEventToState(TipBlocEvent event) async* {
     if (event is TipBlocEventInit) {
       List<Map<String, dynamic>> tips = [];
-      for (int i = 0; i < _args.paths.length; i += 1) {
+      for (int i = 0; i < args.paths.length; i += 1) {
         Response resp =
-            await get('https://tipapi.supergreenlab.com/${_args.paths[i]}');
+            await get('https://tipapi.supergreenlab.com/${args.paths[i]}');
         Map<String, dynamic> body = JsonDecoder().convert(resp.body);
         if (body != null && body.length > 0) {
           tips.add(body);
         }
       }
-      yield TipBlocStateLoaded(_args.nextRoute, tips);
+      yield TipBlocStateLoaded(args.nextRoute, tips);
     } else if (event is TipBlocEventDone) {
-      AppDB().setTipDone(_args.tipID);
+      AppDB().setTipDone(args.tipID);
     }
   }
 }

@@ -85,9 +85,9 @@ class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
 
 class SelectDeviceBoxBloc
     extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
-  final MainNavigateToSelectDeviceBoxEvent _args;
+  final MainNavigateToSelectDeviceBoxEvent args;
 
-  SelectDeviceBoxBloc(this._args) {
+  SelectDeviceBoxBloc(this.args) {
     add(SelectDeviceBoxBlocEventInitialize());
   }
 
@@ -102,26 +102,26 @@ class SelectDeviceBoxBloc
     } else if (event is SelectDeviceBoxBlocEventDelete) {
       // lots of duplicated execution follows.. this needs a proper way to represent a group of Params (ie. ll params for a single LED channel for ex)
       final ddb = RelDB.get().devicesDAO;
-      final Device device = await ddb.getDevice(_args.device.id);
+      final Device device = await ddb.getDevice(args.device.id);
       final boxEnabledParam =
           await ddb.getParam(device.id, 'BOX_${event.box}_ENABLED');
-      await DeviceHelper.updateIntParam(_args.device, boxEnabledParam, 0);
+      await DeviceHelper.updateIntParam(args.device, boxEnabledParam, 0);
       final ledModule = await ddb.getModule(device.id, 'led');
       for (int i = 0; i < ledModule.arrayLen; ++i) {
         final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
         if (ledBox.ivalue == event.box) {
-          await DeviceHelper.updateIntParam(_args.device, ledBox, -1);
+          await DeviceHelper.updateIntParam(args.device, ledBox, -1);
         }
       }
       yield* _loadAll();
     } else if (event is SelectDeviceBoxBlocEventSelectBox) {
       final ddb = RelDB.get().devicesDAO;
-      final Device device = await ddb.getDevice(_args.device.id);
+      final Device device = await ddb.getDevice(args.device.id);
       final timerTypeParam =
           await ddb.getParam(device.id, 'BOX_${event.box}_TIMER_TYPE');
       // TODO declare Param enums when possible
       if (timerTypeParam.ivalue != 1) {
-        await DeviceHelper.updateIntParam(_args.device, timerTypeParam, 1);
+        await DeviceHelper.updateIntParam(args.device, timerTypeParam, 1);
       }
       yield SelectDeviceBoxBlocStateDone(event.box);
     }
@@ -129,7 +129,7 @@ class SelectDeviceBoxBloc
 
   Stream<SelectDeviceBoxBlocState> _loadAll() async* {
     final ddb = RelDB.get().devicesDAO;
-    final Device device = await ddb.getDevice(_args.device.id);
+    final Device device = await ddb.getDevice(args.device.id);
     final boxModule = await ddb.getModule(device.id, 'box');
     List<SelectData> boxes = [];
     for (int i = 0; i < boxModule.arrayLen; ++i) {

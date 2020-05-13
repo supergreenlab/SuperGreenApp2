@@ -73,15 +73,15 @@ class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
 }
 
 class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
-  final HomeNavigateToPlantFeedEvent _args;
+  final HomeNavigateToPlantFeedEvent args;
 
-  Box _box;
-  Plant _plant;
-  int _nTimelapses;
-  StreamSubscription<int> _timelapsesStream;
-  StreamSubscription<Plant> _plantStream;
+  Box box;
+  Plant plant;
+  int nTimelapses;
+  StreamSubscription<int> timelapsesStream;
+  StreamSubscription<Plant> plantStream;
 
-  PlantFeedBloc(this._args) {
+  PlantFeedBloc(this.args) {
     this.add(PlantFeedBlocEventLoad());
   }
 
@@ -92,62 +92,62 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   Stream<PlantFeedBlocState> mapEventToState(PlantFeedBlocEvent event) async* {
     if (event is PlantFeedBlocEventLoad) {
       AppDB _db = AppDB();
-      _plant = _args?.plant;
-      if (_plant == null) {
+      plant = args?.plant;
+      if (plant == null) {
         AppData appData = _db.getAppData();
         if (appData.lastPlantID == null) {
           yield PlantFeedBlocStateNoPlant();
           return;
         }
-        _plant = await RelDB.get().plantsDAO.getPlant(appData.lastPlantID);
-        if (_plant == null) {
+        plant = await RelDB.get().plantsDAO.getPlant(appData.lastPlantID);
+        if (plant == null) {
           List<Plant> plants = await RelDB.get().plantsDAO.getPlants();
           if (plants.length == 0) {
             _db.setLastPlant(null);
             yield PlantFeedBlocStateNoPlant();
             return;
           }
-          _plant = plants[0];
-          _db.setLastPlant(_plant.id);
+          plant = plants[0];
+          _db.setLastPlant(plant.id);
         }
       } else {
-        _db.setLastPlant(_plant.id);
+        _db.setLastPlant(plant.id);
       }
 
       final db = RelDB.get();
-      _box = await db.plantsDAO.getBox(_plant.box);
-      _nTimelapses =
-          await RelDB.get().plantsDAO.nTimelapses(_plant.id).getSingle();
-      _timelapsesStream = RelDB.get()
+      box = await db.plantsDAO.getBox(plant.box);
+      nTimelapses =
+          await RelDB.get().plantsDAO.nTimelapses(plant.id).getSingle();
+      timelapsesStream = RelDB.get()
           .plantsDAO
-          .nTimelapses(_plant.id)
+          .nTimelapses(plant.id)
           .watchSingle()
           .listen(_onNTimelapsesUpdated);
-      _plantStream =
-          RelDB.get().plantsDAO.watchPlant(_plant.id).listen(_onPlantUpdated);
-      yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
+      plantStream =
+          RelDB.get().plantsDAO.watchPlant(plant.id).listen(_onPlantUpdated);
+      yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
     } else if (event is PlantFeedBlocEventUpdated) {
-      yield PlantFeedBlocStateLoaded(_box, _plant, _nTimelapses);
+      yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
     }
   }
 
-  void _onPlantUpdated(Plant plant) {
-    _plant = plant;
+  void _onPlantUpdated(Plant p) {
+    plant = p;
     add(PlantFeedBlocEventUpdated());
   }
 
-  void _onNTimelapsesUpdated(int nTimelapses) {
-    _nTimelapses = nTimelapses;
+  void _onNTimelapsesUpdated(int n) {
+    nTimelapses = n;
     add(PlantFeedBlocEventUpdated());
   }
 
   @override
   Future<void> close() async {
-    if (_timelapsesStream != null) {
-      await _timelapsesStream.cancel();
+    if (timelapsesStream != null) {
+      await timelapsesStream.cancel();
     }
-    if (_plantStream != null) {
-      await _plantStream.cancel();
+    if (plantStream != null) {
+      await plantStream.cancel();
     }
     return super.close();
   }

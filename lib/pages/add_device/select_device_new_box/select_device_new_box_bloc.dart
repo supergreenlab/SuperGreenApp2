@@ -88,64 +88,64 @@ class SelectDeviceNewBoxBlocStateDone extends SelectDeviceNewBoxBlocState {
 
 class SelectDeviceNewBoxBloc
     extends Bloc<SelectDeviceNewBoxBlocEvent, SelectDeviceNewBoxBlocState> {
-  List<int> _boxes = [];
-  List<int> _leds = [];
-  final MainNavigateToSelectNewDeviceBoxEvent _args;
+  List<int> boxes = [];
+  List<int> leds = [];
+  final MainNavigateToSelectNewDeviceBoxEvent args;
 
-  SelectDeviceNewBoxBloc(this._args) {
+  SelectDeviceNewBoxBloc(this.args) {
     add(SelectDeviceNewBoxBlocEventInitialize());
   }
 
   @override
-  SelectDeviceNewBoxBlocState get initialState => SelectDeviceNewBoxBlocState(_leds);
+  SelectDeviceNewBoxBlocState get initialState => SelectDeviceNewBoxBlocState(leds);
 
   @override
   Stream<SelectDeviceNewBoxBlocState> mapEventToState(
       SelectDeviceNewBoxBlocEvent event) async* {
     if (event is SelectDeviceNewBoxBlocEventInitialize) {
       final ddb = RelDB.get().devicesDAO;
-      final Device device = await ddb.getDevice(_args.device.id);
+      final Device device = await ddb.getDevice(args.device.id);
       final boxModule = await ddb.getModule(device.id, 'box');
       for (int i = 0; i < boxModule.arrayLen; ++i) {
         final boxEnabled = await ddb.getParam(device.id, 'BOX_${i}_ENABLED');
         if (boxEnabled.ivalue == 0) {
-          _boxes.add(i);
+          boxes.add(i);
         }
       }
-      if (_boxes.length == 0) {
-        yield SelectDeviceNewBoxBlocStateDeviceFull(_leds);
+      if (boxes.length == 0) {
+        yield SelectDeviceNewBoxBlocStateDeviceFull(leds);
         return;
       }
       final ledModule = await ddb.getModule(device.id, 'led');
       for (int i = 0; i < ledModule.arrayLen; ++i) {
         final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
-        if (ledBox.ivalue < 0 || _boxes.contains(ledBox.ivalue)) {
-          _leds.add(i);
+        if (ledBox.ivalue < 0 || boxes.contains(ledBox.ivalue)) {
+          leds.add(i);
         }
       }
-      if (_leds.length == 0) {
-        yield SelectDeviceNewBoxBlocStateDeviceFull(_leds);
+      if (leds.length == 0) {
+        yield SelectDeviceNewBoxBlocStateDeviceFull(leds);
         return;
       }
-      yield SelectDeviceNewBoxBlocStateLoaded(_leds);
+      yield SelectDeviceNewBoxBlocStateLoaded(leds);
     } else if (event is SelectDeviceNewBoxBlocEventSelectLed) {
       final ddb = RelDB.get().devicesDAO;
       final ledDuty =
-          await ddb.getParam(_args.device.id, 'LED_${event.ledID}_DUTY');
-      await DeviceHelper.updateIntParam(_args.device, ledDuty, 20);
+          await ddb.getParam(args.device.id, 'LED_${event.ledID}_DUTY');
+      await DeviceHelper.updateIntParam(args.device, ledDuty, 20);
       final ledDim =
-          await ddb.getParam(_args.device.id, 'LED_${event.ledID}_DIM');
-      await DeviceHelper.updateIntParam(_args.device, ledDim, 100);
+          await ddb.getParam(args.device.id, 'LED_${event.ledID}_DIM');
+      await DeviceHelper.updateIntParam(args.device, ledDim, 100);
     } else if (event is SelectDeviceNewBoxBlocEventUnselectLed) {
       final ddb = RelDB.get().devicesDAO;
       final ledDuty =
-          await ddb.getParam(_args.device.id, 'LED_${event.ledID}_DUTY');
-      await DeviceHelper.updateIntParam(_args.device, ledDuty, 0);
+          await ddb.getParam(args.device.id, 'LED_${event.ledID}_DUTY');
+      await DeviceHelper.updateIntParam(args.device, ledDuty, 0);
     } else if (event is SelectDeviceNewBoxBlocEventSelectLeds) {
-      yield SelectDeviceNewBoxBlocStateLoading(_leds);
-      int box = _boxes[0];
+      yield SelectDeviceNewBoxBlocStateLoading(leds);
+      int box = boxes[0];
       final ddb = RelDB.get().devicesDAO;
-      final Device device = await ddb.getDevice(_args.device.id);
+      final Device device = await ddb.getDevice(args.device.id);
       for (int i = 0; i < event.leds.length; ++i) {
         final ledBox =
             await ddb.getParam(device.id, 'LED_${event.leds[i]}_BOX');
@@ -156,7 +156,7 @@ class SelectDeviceNewBoxBloc
       }
       final boxEnabled = await ddb.getParam(device.id, 'BOX_${box}_ENABLED');
       await DeviceHelper.updateIntParam(device, boxEnabled, 1);
-      yield SelectDeviceNewBoxBlocStateDone(box, _leds);
+      yield SelectDeviceNewBoxBlocStateDone(box, leds);
     }
   }
 }

@@ -18,7 +18,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
 
 abstract class FeedBlocEvent extends Equatable {}
 
@@ -31,13 +31,31 @@ class FeedBlocEventLoadEntries extends FeedBlocEvent {
   List<Object> get props => [n];
 }
 
-class FeedBlocEventLoadEntry extends FeedBlocEvent {
-  final dynamic id;
+class FeedBlocEventDeleteFeedEntry extends FeedBlocEvent {
+  final int index;
 
-  FeedBlocEventLoadEntry(this.id);
+  FeedBlocEventDeleteFeedEntry(this.index);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [index];
+}
+
+class FeedBlocEventEntryVisible extends FeedBlocEvent {
+  final int index;
+
+  FeedBlocEventEntryVisible(this.index);
+
+  @override
+  List<Object> get props => [index];
+}
+
+class FeedBlocEventEntryHidden extends FeedBlocEvent {
+  final int index;
+
+  FeedBlocEventEntryHidden(this.index);
+
+  @override
+  List<Object> get props => [index];
 }
 
 abstract class FeedBlocState extends Equatable {}
@@ -49,20 +67,39 @@ class FeedBlocStateInit extends FeedBlocState {
   List<Object> get props => [];
 }
 
-class FeedBlocStateLoaded extends FeedBlocState {
+class FeedBlocStateEntriesLoaded extends FeedBlocState {
   final List<FeedEntryState> entries;
 
-  FeedBlocStateLoaded(this.entries);
+  FeedBlocStateEntriesLoaded(this.entries);
 
   @override
   List<Object> get props => [entries];
 }
 
-abstract class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
-  final dynamic _feedID;
-  List<FeedEntryState> _entryStates = [];
+class FeedBlocStateAddEntry extends FeedBlocState {
+  final int index;
+  final FeedEntryState entry;
 
-  FeedBloc(this._feedID) {
+  FeedBlocStateAddEntry(this.index, this.entry);
+
+  @override
+  List<Object> get props => [index, entry];
+}
+
+class FeedBlocStateRemoveEntry extends FeedBlocState {
+  final int index;
+  final FeedEntryState entry;
+
+  FeedBlocStateRemoveEntry(this.index, this.entry);
+
+  @override
+  List<Object> get props => [index, entry];
+}
+
+abstract class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
+  List<FeedEntryState> entries = [];
+
+  FeedBloc() {
     add(FeedBlocEventLoadEntries(10));
   }
 

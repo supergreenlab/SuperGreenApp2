@@ -54,11 +54,11 @@ class DeviceTestBlocStateDone extends DeviceTestBlocState {
 }
 
 class DeviceTestBloc extends Bloc<DeviceTestBlocEvent, DeviceTestBlocState> {
-  final MainNavigateToDeviceTestEvent _args;
+  final MainNavigateToDeviceTestEvent args;
 
   int _nLedChannels = 0;
 
-  DeviceTestBloc(this._args) {
+  DeviceTestBloc(this.args) {
     add(DeviceTestBlocEventInit());
   }
 
@@ -71,24 +71,24 @@ class DeviceTestBloc extends Bloc<DeviceTestBlocEvent, DeviceTestBlocState> {
     if (event is DeviceTestBlocEventInit) {
       yield DeviceTestBlocStateLoading();
       var ddb = RelDB.get().devicesDAO;
-      Module lightModule = await ddb.getModule(_args.device.id, "led");
+      Module lightModule = await ddb.getModule(args.device.id, "led");
       _nLedChannels = lightModule.arrayLen;
       yield DeviceTestBlocState(_nLedChannels);
     } else if (event is DeviceTestBlocEventTestLed) {
       var ddb = RelDB.get().devicesDAO;
       yield DeviceTestBlocStateTestingLed(_nLedChannels, event.ledID);
       Param ledParam =
-          await ddb.getParam(_args.device.id, "LED_${event.ledID}_DUTY");
-      await DeviceHelper.updateIntParam(_args.device, ledParam, 100);
+          await ddb.getParam(args.device.id, "LED_${event.ledID}_DUTY");
+      await DeviceHelper.updateIntParam(args.device, ledParam, 100);
       await Future.delayed(Duration(seconds: 2));
-      await DeviceHelper.updateIntParam(_args.device, ledParam, 0);
+      await DeviceHelper.updateIntParam(args.device, ledParam, 0);
       yield DeviceTestBlocState(_nLedChannels);
     } else if (event is DeviceTestBlocEventDone) {
       yield DeviceTestBlocStateLoading();
       var ddb = RelDB.get().devicesDAO;
-      Device device = await ddb.getDevice(_args.device.id);
-      Param stateParam = await ddb.getParam(_args.device.id, "STATE");
-      await DeviceHelper.updateIntParam(_args.device, stateParam, 2);
+      Device device = await ddb.getDevice(args.device.id);
+      Param stateParam = await ddb.getParam(args.device.id, "STATE");
+      await DeviceHelper.updateIntParam(args.device, stateParam, 2);
       yield DeviceTestBlocStateDone(device, 6);
     }
   }

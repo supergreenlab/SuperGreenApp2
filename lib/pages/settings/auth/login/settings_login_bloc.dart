@@ -56,10 +56,10 @@ class SettingsLoginBloc
     extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocState> {
 
   //ignore: unused_field
-  final MainNavigateToSettingsLogin _args;
+  final MainNavigateToSettingsLogin args;
   bool _isAuth;
 
-  SettingsLoginBloc(this._args) {
+  SettingsLoginBloc(this.args) {
     _isAuth = AppDB().getAppData().jwt != null;
     add(SettingsLoginBlocEventInit());
   }

@@ -104,16 +104,16 @@ class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
 
 class FeedLightFormBloc
     extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
-  final MainNavigateToFeedLightFormEvent _args;
+  final MainNavigateToFeedLightFormEvent args;
 
-  Device _device;
-  List<Param> _lightParams;
-  List<int> _initialValues;
+  Device device;
+  List<Param> lightParams;
+  List<int> initialValues;
 
   @override
   FeedLightFormBlocState get initialState => FeedLightFormBlocState();
 
-  FeedLightFormBloc(this._args) {
+  FeedLightFormBloc(this.args) {
     add(FeedLightFormBlocEventLoadLights());
   }
 
@@ -122,45 +122,45 @@ class FeedLightFormBloc
       FeedLightFormBlocEvent event) async* {
     if (event is FeedLightFormBlocEventLoadLights) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65], box);
         return;
       }
-      _device = await db.devicesDAO.getDevice(box.device);
-      Module lightModule = await db.devicesDAO.getModule(_device.id, "led");
-      _lightParams = [];
+      device = await db.devicesDAO.getDevice(box.device);
+      Module lightModule = await db.devicesDAO.getModule(device.id, "led");
+      lightParams = [];
       for (int i = 0; i < lightModule.arrayLen; ++i) {
         Param boxParam =
-            await db.devicesDAO.getParam(_device.id, "LED_${i}_BOX");
+            await db.devicesDAO.getParam(device.id, "LED_${i}_BOX");
         if (boxParam.ivalue == box.deviceBox) {
-          _lightParams
-              .add(await db.devicesDAO.getParam(_device.id, "LED_${i}_DIM"));
+          lightParams
+              .add(await db.devicesDAO.getParam(device.id, "LED_${i}_DIM"));
         }
       }
-      List<int> values = _lightParams.map((l) => l.ivalue).toList();
-      _initialValues = values;
+      List<int> values = lightParams.map((l) => l.ivalue).toList();
+      initialValues = values;
       yield FeedLightFormBlocStateLightsLoaded(values, box);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         return;
       }
       try {
         await DeviceHelper.updateIntParam(
-            _device, _lightParams[event.i], (event.value).toInt());
+            device, lightParams[event.i], (event.value).toInt());
       } catch (e) {
         print(e);
       }
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         return;
       }
       yield FeedLightFormBlocStateLoading();
-      List<Plant> plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+      List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
       FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {
         int feedEntryID =
@@ -169,31 +169,31 @@ class FeedLightFormBloc
           feed: plants[i].feed,
           date: DateTime.now(),
           params: Value(JsonEncoder().convert(
-              {'initialValues': _initialValues, 'values': event.values})),
+              {'initialValues': initialValues, 'values': event.values})),
         ));
         if (i == 0) {
           feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
         }
       }
-      yield FeedLightFormBlocStateDone(_args.plant, feedEntry);
+      yield FeedLightFormBlocStateDone(args.plant, feedEntry);
     } else if (event is FeedLightFormBlocEventCancel) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
-        yield FeedLightFormBlocStateDone(_args.plant, null);
+        yield FeedLightFormBlocStateDone(args.plant, null);
         return;
       }
       yield FeedLightFormBlocStateCancelling();
-      for (int i = 0; i < _lightParams.length; ++i) {
+      for (int i = 0; i < lightParams.length; ++i) {
         try {
           await DeviceHelper.updateIntParam(
-              _device, _lightParams[i], _initialValues[i]);
+              device, lightParams[i], initialValues[i]);
         } catch (e) {
           print(e);
           return;
         }
       }
-      yield FeedLightFormBlocStateDone(_args.plant, null);
+      yield FeedLightFormBlocStateDone(args.plant, null);
     }
   }
 }

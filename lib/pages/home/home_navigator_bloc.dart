@@ -79,21 +79,21 @@ class HomeNavigatorState extends Equatable {
 
 class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   //ignore: unused_field
-  final MainNavigateToHomeEvent _args;
+  final MainNavigateToHomeEvent args;
   final GlobalKey<NavigatorState> _navigatorKey;
 
-  HomeNavigatorBloc(this._args, this._navigatorKey) {
-    if (_args.plant != null) {
+  HomeNavigatorBloc(this.args, this._navigatorKey) {
+    if (args.plant != null) {
       // TODO find something better
       Timer(Duration(seconds: 1), () {
-        add(HomeNavigateToPlantFeedEvent(_args.plant));
+        add(HomeNavigateToPlantFeedEvent(args.plant));
       });
     }
   }
 
   @override
   HomeNavigatorState get initialState => HomeNavigatorState(
-      (AppDB().getAppData().lastPlantID != null || _args.plant != null)
+      (AppDB().getAppData().lastPlantID != null || args.plant != null)
           ? 1
           : 0);
 

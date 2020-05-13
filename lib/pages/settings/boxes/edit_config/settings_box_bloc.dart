@@ -53,12 +53,12 @@ class SettingsBoxBlocStateDone extends SettingsBoxBlocState {
 
 class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
   //ignore: unused_field
-  final MainNavigateToSettingsBox _args;
-  Box _box;
-  Device _device;
-  int _deviceBox;
+  final MainNavigateToSettingsBox args;
+  Box box;
+  Device device;
+  int deviceBox;
 
-  SettingsBoxBloc(this._args) {
+  SettingsBoxBloc(this.args) {
     add(SettingsBoxBlocEventInit());
   }
 
@@ -69,21 +69,21 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
   Stream<SettingsBoxBlocState> mapEventToState(
       SettingsBoxBlocEvent event) async* {
     if (event is SettingsBoxBlocEventInit) {
-      _box = await RelDB.get().plantsDAO.getBox(_args.box.id);
-      if (_box.device != null) {
-        _device = await RelDB.get().devicesDAO.getDevice(_box.device);
-        _deviceBox = _box.deviceBox;
+      box = await RelDB.get().plantsDAO.getBox(args.box.id);
+      if (box.device != null) {
+        device = await RelDB.get().devicesDAO.getDevice(box.device);
+        deviceBox = box.deviceBox;
       }
-      yield SettingsBoxBlocStateLoaded(_box, _device, _deviceBox);
+      yield SettingsBoxBlocStateLoaded(box, device, deviceBox);
     } else if (event is SettingsBoxBlocEventUpdate) {
       yield SettingsBoxBlocStateLoading();
       await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
-          id: Value(_box.id),
+          id: Value(box.id),
           name: Value(event.name),
           device: Value(event.device?.id),
           deviceBox: Value(event.deviceBox),
           synced: Value(false)));
-      yield SettingsBoxBlocStateDone(_box, _device, _deviceBox);
+      yield SettingsBoxBlocStateDone(box, device, deviceBox);
     }
   }
 }

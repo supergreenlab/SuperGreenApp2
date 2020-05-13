@@ -80,10 +80,10 @@ class SettingsDeviceBlocStateDone extends SettingsDeviceBlocState {
 class SettingsDeviceBloc
     extends Bloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
   //ignore: unused_field
-  final MainNavigateToSettingsDevice _args;
-  Device _device;
+  final MainNavigateToSettingsDevice args;
+  Device device;
 
-  SettingsDeviceBloc(this._args) {
+  SettingsDeviceBloc(this.args) {
     add(SettingsDeviceBlocEventInit());
   }
 
@@ -94,8 +94,8 @@ class SettingsDeviceBloc
   Stream<SettingsDeviceBlocState> mapEventToState(
       SettingsDeviceBlocEvent event) async* {
     if (event is SettingsDeviceBlocEventInit) {
-      _device = await RelDB.get().devicesDAO.getDevice(_args.device.id);
-      yield SettingsDeviceBlocStateLoaded(_device);
+      device = await RelDB.get().devicesDAO.getDevice(args.device.id);
+      yield SettingsDeviceBlocStateLoaded(device);
     } else if (event is SettingsDeviceBlocEventRefresh) {
       yield SettingsDeviceBlocStateRefreshing(0);
       refreshParams();
@@ -103,28 +103,28 @@ class SettingsDeviceBloc
       if (event.percent != 100) {
         yield SettingsDeviceBlocStateRefreshing(event.percent);
       } else {
-        yield SettingsDeviceBlocStateRefreshed(_device);
+        yield SettingsDeviceBlocStateRefreshed(device);
         await Future.delayed(Duration(seconds: 2));
-        yield SettingsDeviceBlocStateLoaded(_device);
+        yield SettingsDeviceBlocStateLoaded(device);
       }
     } else if (event is SettingsDeviceBlocEventUpdate) {
       yield SettingsDeviceBlocStateLoading();
-      await DeviceHelper.updateDeviceName(_args.device, event.name);
-      yield SettingsDeviceBlocStateDone(_device);
+      await DeviceHelper.updateDeviceName(args.device, event.name);
+      yield SettingsDeviceBlocStateDone(device);
     }
   }
 
   void refreshParams() async {
     final deviceName =
-        await DeviceAPI.fetchStringParam(_device.ip, "DEVICE_NAME");
+        await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME");
     final mdnsDomain =
-        await DeviceAPI.fetchStringParam(_device.ip, "MDNS_DOMAIN");
+        await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN");
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-        id: Value(_device.id),
+        id: Value(device.id),
         name: Value(deviceName),
         mdns: Value(mdnsDomain),
         synced: Value(false)));
-    await DeviceAPI.fetchAllParams(_device.ip, _device.id, (adv) {
+    await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
       add(SettingsDeviceBlocEventRefreshing(adv));
     });
     add(SettingsDeviceBlocEventRefreshing(100));

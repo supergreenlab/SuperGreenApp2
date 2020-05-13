@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class FeedTowelieInfoButton {
+import 'package:equatable/equatable.dart';
+
+class FeedTowelieInfoButton extends Equatable {
   final String id;
   final String title;
 
@@ -27,9 +29,12 @@ class FeedTowelieInfoButton {
   static FeedTowelieInfoButton fromJSON(Map<String, dynamic> map) {
     return FeedTowelieInfoButton(map['id'], map['title'], map);
   }
+
+  @override
+  List<Object> get props => [id, title];
 }
 
-class FeedTowelieInfoState {
+class FeedTowelieInfoState extends Equatable {
   final String topPic;
   final String text;
   final List<FeedTowelieInfoButton> buttons;
@@ -51,4 +56,7 @@ class FeedTowelieInfoState {
       selectedButton,
     );
   }
+
+  @override
+  List<Object> get props => [topPic, text, buttons, selectedButton];
 }
