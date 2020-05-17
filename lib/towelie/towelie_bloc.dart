@@ -134,8 +134,8 @@ class TowelieBlocEventTrigger extends TowelieBlocEvent {
 class TowelieBlocEventButtonPressed extends TowelieBlocEvent {
   final int rand = Random().nextInt(1 << 32);
   final Map<String, dynamic> params;
-  final Feed feed;
-  final FeedEntry feedEntry;
+  final dynamic feed;
+  final dynamic feedEntry;
 
   TowelieBlocEventButtonPressed(this.params, { this.feed, this.feedEntry });
 

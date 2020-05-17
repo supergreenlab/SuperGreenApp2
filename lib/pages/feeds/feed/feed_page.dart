@@ -25,6 +25,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class FeedPage extends StatefulWidget {
   final Color color;
@@ -50,6 +51,7 @@ class _FeedPageState extends State<FeedPage> {
   FeedState feedState;
   bool eof = false;
   final List<FeedEntryState> entries = [];
+  final Map<dynamic, bool> visibleEntries = {};
 
   final ScrollController scrollController = ScrollController();
   final GlobalKey<SliverAnimatedListState> listKey =
@@ -137,30 +139,47 @@ class _FeedPageState extends State<FeedPage> {
               if (index >= entries.length) {
                 return null;
               }
-              if (entries[index].isNew && ModalRoute.of(context).isCurrent) {
-                BlocProvider.of<FeedBloc>(context)
-                    .add(FeedBlocEventEntryVisible(index));
-              }
+              FeedEntryState feedEntry = entries[index];
               Widget card = FeedEntriesCardHelpers.cardForFeedEntry(
-                  animation, feedState, entries[index]);
+                  animation, feedState, feedEntry);
               if (index == 0) {
                 card = Padding(padding: EdgeInsets.only(top: 10), child: card);
               } else if (index == entries.length - 1 && eof) {
                 card =
                     Padding(padding: EdgeInsets.only(bottom: 10), child: card);
               } else if (index == entries.length && !eof) {
-                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLoadEntries(
-                    10, entries[entries.length - 1].id));
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventLoadEntries(10));
                 return Container(
                   height: 50,
                   child: FullscreenLoading(),
                 );
               }
-              return SlideTransition(
-                  position: animation.drive(
-                      Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
+              return VisibilityDetector(
+                  key: Key('feed_entry_${feedEntry.feedEntryID}'),
+                  onVisibilityChanged: (VisibilityInfo info) {
+                    if (!(visibleEntries[feedEntry.feedEntryID] ?? false) &&
+                        info.visibleFraction > 0) {
+                      visibleEntries[feedEntry.feedEntryID] = true;
+                      BlocProvider.of<FeedBloc>(context)
+                          .add(FeedBlocEventEntryVisible(index));
+                      if (feedEntry.isNew && ModalRoute.of(context).isCurrent) {
+                        BlocProvider.of<FeedBloc>(context)
+                            .add(FeedBlocEventMarkAsRead(index));
+                      }
+                    }
+                    if (visibleEntries[feedEntry.feedEntryID] == true &&
+                        info.visibleFraction == 0) {
+                      visibleEntries[feedEntry.feedEntryID] = false;
+                      BlocProvider.of<FeedBloc>(context)
+                          .add(FeedBlocEventEntryHidden(index));
+                    }
+                  },
+                  child: SlideTransition(
+                      position: animation.drive(Tween<Offset>(
+                              begin: Offset(0.0, 1.0), end: Offset.zero)
                           .chain(CurveTween(curve: Curves.linear))),
-                  child: card);
+                      child: card));
             },
             initialItemCount: entries.length + 1,
           )

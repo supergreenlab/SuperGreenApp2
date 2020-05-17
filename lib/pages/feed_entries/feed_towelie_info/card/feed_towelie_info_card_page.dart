@@ -127,7 +127,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(
             button.params,
             feed: state.feedID,
-            feedEntry: state.id));
+            feedEntry: state.feedEntryID));
       },
     );
   }

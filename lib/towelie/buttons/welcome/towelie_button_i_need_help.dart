@@ -17,6 +17,7 @@
  */
 
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/cards/welcome/card_create_plant.dart';
 import 'package:super_green_app/towelie/cards/welcome/card_products_intro.dart';
@@ -46,8 +47,10 @@ class TowelieButtonINeedHelp extends TowelieButton {
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    await CardProductsIntro.createProductsIntro(event.feed);
-    await selectButtons(event.feedEntry, selectedButtonID: id);
+    Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    await CardProductsIntro.createProductsIntro(feed);
+    await selectButtons(feedEntry, selectedButtonID: id);
   }
 }
 

@@ -95,7 +95,7 @@ abstract class TowelieButtonPlantPhase extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
     final db = RelDB.get();
-    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.id);
+    Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed.feedEntryID);
     Box box = await db.plantsDAO.getBox(plant.box);
     Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
     plantSettings['phase'] = phase;

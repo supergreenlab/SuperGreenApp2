@@ -19,7 +19,7 @@
 import 'package:equatable/equatable.dart';
 
 class FeedEntryState extends Equatable {
-  final dynamic id;
+  final dynamic feedEntryID;
   final dynamic feedID;
   final String type;
   final bool isNew;
@@ -28,10 +28,10 @@ class FeedEntryState extends Equatable {
   final dynamic params;
 
   FeedEntryState(
-      this.id, this.feedID, this.type, this.isNew, this.synced, this.date, this.params);
+      this.feedEntryID, this.feedID, this.type, this.isNew, this.synced, this.date, this.params);
 
   @override
-  List<Object> get props => [id, feedID, type, isNew, synced, date, params];
+  List<Object> get props => [feedEntryID, feedID, type, isNew, synced, date, params];
 }
 
 class FeedEntryStateNotLoaded extends FeedEntryState {
@@ -41,8 +41,8 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
 }
 
 class FeedEntryStateLoaded extends FeedEntryState {
-  FeedEntryStateLoaded.copy(FeedEntryState from) : super(from.id, from.feedID, from.type, from.isNew, from.synced, from.date, from.params);
+  FeedEntryStateLoaded.copy(FeedEntryState from) : super(from.feedEntryID, from.feedID, from.type, from.isNew, from.synced, from.date, from.params);
 
   @override
-  List<Object> get props => [id, feedID, type, isNew, synced, date, params];
+  List<Object> get props => [feedEntryID, feedID, type, isNew, synced, date, params];
 }
