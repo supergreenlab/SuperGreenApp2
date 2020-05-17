@@ -16,11 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class MediaState {
+import 'package:equatable/equatable.dart';
+
+class MediaState extends Equatable {
   final dynamic id;
   final String filePath;
   final String thumbnailPath;
   final bool synced;
 
   MediaState(this.id, this.filePath, this.thumbnailPath, this.synced);
+
+  @override
+  List<Object> get props => [id, filePath, thumbnailPath, synced];
 }

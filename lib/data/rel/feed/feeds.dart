@@ -211,19 +211,20 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return delete(feeds).delete(feed);
   }
 
-  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(int feedID) {
+  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(int feedID, int limit, int offset) {
     return (select(feedEntries)
       ..where((fe) => fe.feed.equals(feedID))
       ..orderBy(
-          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]));
+          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)])
+      ..limit(limit, offset: offset));
   }
 
-  Future<List<FeedEntry>> getEntries(int feedID) {
-    return _selectEntries(feedID).get();
+  Future<List<FeedEntry>> getEntries(int feedID, int limit, int offset) {
+    return _selectEntries(feedID, limit, offset).get();
   }
 
-  Stream<List<FeedEntry>> watchEntries(int feedID) {
-    return _selectEntries(feedID).watch();
+  Stream<List<FeedEntry>> watchEntries(int feedID, int limit, int offset) {
+    return _selectEntries(feedID, limit, offset).watch();
   }
 
   Future<List<FeedEntry>> getEnvironmentEntries(int feedID) {

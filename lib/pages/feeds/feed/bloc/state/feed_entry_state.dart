@@ -25,23 +25,24 @@ class FeedEntryState extends Equatable {
   final bool isNew;
   final bool synced;
   final DateTime date;
+  final dynamic params;
 
-  FeedEntryState(this.id, this.feedID, this.type, this.isNew, this.synced, this.date);
-
-  @override
-  List<Object> get props => [id, feedID, type, synced, date];
-}
-
-class FeedBlocEntryStateNotLoaded extends FeedEntryState {
-  FeedBlocEntryStateNotLoaded(dynamic id, dynamic feedID, String type, bool isNew, bool synced, DateTime date) : super(id, feedID, type, isNew, synced, date);
-}
-
-class FeedBlocEntryStateLoaded extends FeedEntryState {
-  final dynamic state;
-
-  FeedBlocEntryStateLoaded(dynamic id, dynamic feedID, String type, bool isNew, bool synced, DateTime date, this.state)
-      : super(id, feedID, type, isNew, synced, date);
+  FeedEntryState(
+      this.id, this.feedID, this.type, this.isNew, this.synced, this.date, this.params);
 
   @override
-  List<Object> get props => [id, feedID, type, synced, date, state];
+  List<Object> get props => [id, feedID, type, isNew, synced, date, params];
+}
+
+class FeedEntryStateNotLoaded extends FeedEntryState {
+  FeedEntryStateNotLoaded(dynamic id, dynamic feedID, String type, bool isNew,
+      bool synced, DateTime date, dynamic params)
+      : super(id, feedID, type, isNew, synced, date, params);
+}
+
+class FeedEntryStateLoaded extends FeedEntryState {
+  FeedEntryStateLoaded.copy(FeedEntryState from) : super(from.id, from.feedID, from.type, from.isNew, from.synced, from.date, from.params);
+
+  @override
+  List<Object> get props => [id, feedID, type, isNew, synced, date, params];
 }

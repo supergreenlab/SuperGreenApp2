@@ -24,9 +24,10 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
@@ -45,12 +46,13 @@ class FeedProductsCardPage extends StatelessWidget {
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedProductsCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedProductsCardPage(this.animation, this.feedState, this.state,
+      {Key key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedBlocEntryStateLoaded) {
+    if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
     return _renderLoading(context);
@@ -65,7 +67,7 @@ class FeedProductsCardPage extends StatelessWidget {
           FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
               state.synced),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -74,8 +76,8 @@ class FeedProductsCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    FeedProductsState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedProductsState state) {
+    FeedProductsParams params = state.params;
     List<Widget> content = [
       FeedCardTitle(
         'assets/feed_card/icon_towelie.png',
@@ -84,13 +86,13 @@ class FeedProductsCardPage extends StatelessWidget {
       ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
-        child: _renderBody(context, cardState),
+        child: _renderBody(context, state),
       ),
     ];
-    if (cardState.selectedButton != null) {
-      content.add(_renderSelectedButton(context, cardState.selectedButton));
-    } else if (cardState.buttons != null && cardState.buttons.length > 0) {
-      content.add(_renderButtonBar(context, cardState.buttons));
+    if (params.selectedButton != null) {
+      content.add(_renderSelectedButton(context, params.selectedButton));
+    } else if (params.buttons != null && params.buttons.length > 0) {
+      content.add(_renderButtonBar(context, params.buttons));
     }
     return FeedCard(
         animation: animation,
@@ -101,19 +103,20 @@ class FeedProductsCardPage extends StatelessWidget {
   }
 
   Widget _renderBody(BuildContext context, FeedProductsState cardState) {
+    FeedProductsParams params = state.params;
     final body = <Widget>[
-      FeedCardText(cardState.text),
+      FeedCardText(params.text),
     ];
-    if (cardState.topPic != null) {
+    if (params.topPic != null) {
       body.insert(
           0,
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: SvgPicture.asset(cardState.topPic),
+            child: SvgPicture.asset(params.topPic),
           ));
     }
     body.add(_renderStoreGeos(context, cardState));
-    body.addAll(cardState.items
+    body.addAll(params.products
         .where((p) => p.geo == feedState.storeGeo)
         .map<Widget>((dynamic p) {
       Map<String, dynamic> product = p;
@@ -181,9 +184,9 @@ class FeedProductsCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderStoreGeos(
-      BuildContext context, FeedProductsState cardState) {
-    List<String> storeGeos = cardState.items
+  Widget _renderStoreGeos(BuildContext context, FeedProductsState state) {
+    FeedProductsParams params = state.params;
+    List<String> storeGeos = params.products
         .map<String>((dynamic p) {
           Map<String, dynamic> product = p;
           return product['geo'] as String;
@@ -199,7 +202,8 @@ class FeedProductsCardPage extends StatelessWidget {
           return FlatButton(
             child: Text(_storeGeoNames[sg],
                 style: TextStyle(
-                    color: sg == feedState.storeGeo ? Colors.black : Colors.blue)),
+                    color:
+                        sg == feedState.storeGeo ? Colors.black : Colors.blue)),
             onPressed: selected
                 ? null
                 : () async {
@@ -221,7 +225,7 @@ class FeedProductsCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderButton(BuildContext context, FeedProductsButton button) {
+  Widget _renderButton(BuildContext context, FeedProductsButtonParams button) {
     return FlatButton(
       child: Text(button.title.toUpperCase(),
           style: TextStyle(color: Colors.blue, fontSize: 12)),
@@ -235,7 +239,7 @@ class FeedProductsCardPage extends StatelessWidget {
   }
 
   Widget _renderSelectedButton(
-      BuildContext context, FeedProductsButton button) {
+      BuildContext context, FeedProductsButtonParams button) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
       child: Text('➡️ ${button.title.toUpperCase()}',

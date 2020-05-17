@@ -18,9 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -36,7 +37,7 @@ class FeedWaterCardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedBlocEntryStateLoaded) {
+    if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
     return _renderLoading(context);
@@ -55,7 +56,7 @@ class FeedWaterCardPage extends StatelessWidget {
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -64,15 +65,15 @@ class FeedWaterCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    final FeedWaterState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
+    FeedWaterParams params = state.params;
     List<Widget> body = [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Text(
           AppDB().getAppData().freedomUnits == true
-              ? '${cardState.volume / 4} gal'
-              : '${cardState.volume} L',
+              ? '${params.volume / 4} gal'
+              : '${params.volume} L',
           style: TextStyle(
               fontSize: 45,
               fontWeight: FontWeight.w300,
@@ -80,23 +81,23 @@ class FeedWaterCardPage extends StatelessWidget {
         ),
       ),
     ];
-    if (cardState.tooDry != null || cardState.nutrient != null) {
+    if (params.tooDry != null || params.nutrient != null) {
       List<Widget> details = [];
-      if (cardState.tooDry != null) {
+      if (params.tooDry != null) {
         details.add(Padding(
           padding: const EdgeInsets.all(4.0),
           child: Text(
-            'Was Dry: ${cardState.tooDry == true ? 'YES' : 'NO'}',
+            'Was Dry: ${params.tooDry == true ? 'YES' : 'NO'}',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
           ),
         ));
       }
-      if (cardState.nutrient != null) {
+      if (params.nutrient != null) {
         details.add(
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Text(
-              'With nutes: ${cardState.nutrient == true ? 'YES' : 'NO'}',
+              'With nutes: ${params.nutrient == true ? 'YES' : 'NO'}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
             ),
           ),

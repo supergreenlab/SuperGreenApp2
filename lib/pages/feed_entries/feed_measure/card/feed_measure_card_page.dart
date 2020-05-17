@@ -20,8 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -38,7 +39,7 @@ class FeedMeasureCardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedBlocEntryStateLoaded) {
+    if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
     return _renderLoading(context);
@@ -51,13 +52,13 @@ class FeedMeasureCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_towelie.svg', 'Towelie', state.synced),
+              'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -66,8 +67,7 @@ class FeedMeasureCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    FeedMeasureState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedMeasureState state) {
     return FeedCard(
       animation: animation,
       child: Column(
@@ -76,16 +76,16 @@ class FeedMeasureCardPage extends StatelessWidget {
           FeedCardTitle(
               'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
           MediaList(
-            [cardState.current],
+            [state.current],
             onMediaTapped: (media) {
-              if (cardState.previous != null) {
+              if (state.previous != null) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToFullscreenMedia(cardState.previous,
-                        overlayPath: cardState.current.filePath,
-                        heroPath: cardState.current.filePath));
+                    MainNavigateToFullscreenMedia(state.previous,
+                        overlayPath: state.current.filePath,
+                        heroPath: state.current.filePath));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(cardState.current));
+                    .add(MainNavigateToFullscreenMedia(state.current));
               }
             },
           ),

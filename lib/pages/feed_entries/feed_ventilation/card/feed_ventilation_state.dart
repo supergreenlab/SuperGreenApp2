@@ -16,32 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedVentilationStateValues extends Equatable {
-  final double blowerDay;
-  final double blowerNight;
-
-  FeedVentilationStateValues(this.blowerDay, this.blowerNight);
-
-  @override
-  List<Object> get props => [blowerDay, blowerNight];
-}
-
-class FeedVentilationState extends Equatable {
-  final FeedVentilationStateValues values;
-  final FeedVentilationStateValues initialValues;
-
-  FeedVentilationState(this.values, this.initialValues);
-
-  static Future<FeedVentilationState> fromJSON(Map<String, dynamic> map) async {
-    return FeedVentilationState(
-        FeedVentilationStateValues(
-            map['values']['blowerDay'], map['values']['blowerNight']),
-        FeedVentilationStateValues(map['initialValues']['blowerDay'],
-            map['initialValues']['blowerNight']));
-  }
-
-  @override
-  List<Object> get props => [values, initialValues];
+class FeedVentilationState extends FeedEntryStateLoaded {
+  FeedVentilationState(FeedEntryState from) : super.copy(from);
 }

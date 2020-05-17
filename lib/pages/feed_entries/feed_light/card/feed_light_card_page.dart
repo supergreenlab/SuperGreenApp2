@@ -17,9 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_light.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -35,7 +36,7 @@ class FeedLightCardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedBlocEntryStateLoaded) {
+    if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
     return _renderLoading(context);
@@ -54,7 +55,7 @@ class FeedLightCardPage extends StatelessWidget {
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -63,8 +64,8 @@ class FeedLightCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    FeedLightState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
+    FeedLightParams params = state.params;
     return FeedCard(
       animation: animation,
       child: Column(
@@ -85,7 +86,7 @@ class FeedLightCardPage extends StatelessWidget {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children:
-                    _renderValues(cardState.values, cardState.initialValues),
+                    _renderValues(params.values, params.initialValues),
               ),
             ),
           ),

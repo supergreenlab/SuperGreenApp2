@@ -16,17 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedScheduleState extends Equatable {
-  final String schedule;
-
-  FeedScheduleState(this.schedule);
-
-  static Future<FeedScheduleState> fromJSON(Map<String, dynamic> map) async {
-    return FeedScheduleState(map['schedule']);
-  }
-
-  @override
-  List<Object> get props => [schedule];
+class FeedScheduleState extends FeedEntryStateLoaded {
+  FeedScheduleState(FeedEntryState from) : super.copy(from);
 }

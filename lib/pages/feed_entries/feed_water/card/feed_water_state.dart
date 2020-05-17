@@ -16,21 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedWaterState extends Equatable {
-  final double volume;
-  final bool tooDry;
-  final bool nutrient;
-
-  FeedWaterState(this.volume, this.tooDry, this.nutrient);
-
-  static Future<FeedWaterState> fromJSON(
-      Map<String, dynamic> map) async {
-    return FeedWaterState(
-        map['volume'], map['tooDry'], map['nutrient']);
-  }
-
-  @override
-  List<Object> get props => [volume, tooDry, nutrient];
+class FeedWaterState extends FeedEntryStateLoaded {
+  FeedWaterState(FeedEntryState from) : super.copy(from);
 }

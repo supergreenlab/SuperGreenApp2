@@ -17,8 +17,14 @@
  */
 
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedMeasureState {
-  MediaState current;
-  MediaState previous;
+class FeedMeasureState extends FeedEntryStateLoaded {
+  final MediaState current;
+  final MediaState previous;
+
+  FeedMeasureState(FeedEntryState from, this.current, this.previous) : super.copy(from);
+
+  @override
+  List<Object> get props => [...super.props, current, previous];
 }

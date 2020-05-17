@@ -20,8 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
@@ -46,7 +46,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.state is FeedBlocEntryStateLoaded) {
+    if (widget.state is FeedEntryStateLoaded) {
       return _renderLoaded(context, widget.state);
     }
     return _renderLoading(context);
@@ -61,7 +61,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
           FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
               widget.state.synced),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -70,8 +70,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    FeedMediaState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedMediaState state) {
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -87,9 +86,9 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               });
             },
           ),
-          cardState.medias.length > 0
+          state.medias.length > 0
               ? MediaList(
-                  cardState.medias,
+                  state.medias,
                   onMediaTapped: (media) {
                     BlocProvider.of<MainNavigatorBloc>(context)
                         .add(MainNavigateToFullscreenMedia(media));
@@ -102,7 +101,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
             child: FeedCardDate(state.date),
           ),
           FeedCardText(
-            cardState.message ?? '',
+            state.params.message ?? '',
             edit: editText,
             onEdited: (value) {
               //BlocProvider.of<FeedMediaCardBloc>(context)

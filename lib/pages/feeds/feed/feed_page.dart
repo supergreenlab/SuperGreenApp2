@@ -20,10 +20,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_entries.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/abstract_feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feed_entries/feed_entries_card_helpers.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedPage extends StatefulWidget {
@@ -48,7 +48,9 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   FeedState feedState;
+  bool eof = false;
   final List<FeedEntryState> entries = [];
+
   final ScrollController scrollController = ScrollController();
   final GlobalKey<SliverAnimatedListState> listKey =
       GlobalKey<SliverAnimatedListState>();
@@ -57,8 +59,13 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     return BlocListener<FeedBloc, FeedBlocState>(
       listener: (BuildContext context, state) {
-        if (state is FeedBlocStateEntriesLoaded) {
-          entries.addAll(state.entries);
+        if (state is FeedBlocStateFeedLoaded) {
+          feedState = state.feed;
+        } else if (state is FeedBlocStateEntriesLoaded) {
+          setState(() {
+            eof = state.eof;
+            entries.addAll(state.entries);
+          });
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
           listKey.currentState
@@ -71,12 +78,16 @@ class _FeedPageState extends State<FeedPage> {
               Duration(milliseconds: 100),
               () => scrollController.animateTo(widget.appBarHeight - 56.0,
                   duration: Duration(milliseconds: 500), curve: Curves.linear));
+        } else if (state is FeedBlocStateUpdateEntry) {
+          setState(() {
+            entries[state.index] = state.entry;
+          });
         } else if (state is FeedBlocStateRemoveEntry) {
           FeedEntryState entry = state.entry;
           entries.removeAt(state.index);
           listKey.currentState.removeItem(
               state.index,
-              (context, animation) => FeedEntriesHelper.cardForFeedEntry(
+              (context, animation) => FeedEntriesCardHelpers.cardForFeedEntry(
                   animation, feedState, entry),
               duration: Duration(milliseconds: 500));
         }
@@ -123,20 +134,27 @@ class _FeedPageState extends State<FeedPage> {
             key: listKey,
             itemBuilder:
                 (BuildContext context, int index, Animation<double> animation) {
-              if (index > entries.length) {
+              if (index >= entries.length) {
                 return null;
               }
               if (entries[index].isNew && ModalRoute.of(context).isCurrent) {
                 BlocProvider.of<FeedBloc>(context)
                     .add(FeedBlocEventEntryVisible(index));
               }
-              Widget card = FeedEntriesHelper.cardForFeedEntry(
+              Widget card = FeedEntriesCardHelpers.cardForFeedEntry(
                   animation, feedState, entries[index]);
               if (index == 0) {
                 card = Padding(padding: EdgeInsets.only(top: 10), child: card);
-              } else if (index == entries.length - 1) {
+              } else if (index == entries.length - 1 && eof) {
                 card =
                     Padding(padding: EdgeInsets.only(bottom: 10), child: card);
+              } else if (index == entries.length && !eof) {
+                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLoadEntries(
+                    10, entries[entries.length - 1].id));
+                return Container(
+                  height: 50,
+                  child: FullscreenLoading(),
+                );
               }
               return SlideTransition(
                   position: animation.drive(
