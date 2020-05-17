@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -70,8 +71,17 @@ class LocalFeedBloc extends FeedBlocProvider {
   }
 
   @override
-  void startListenEntryChanges(FeedEntryStateLoaded entry) {}
+  void startListenEntryChanges(FeedEntryStateLoaded entry) {
+    print('startListenEntryChanges');
+  }
 
   @override
-  void cancelListenEntryChanges(FeedEntryState entry) {}
+  void cancelListenEntryChanges(FeedEntryState entry) {
+    print('cancelListenEntryChanges');
+  }
+
+  @override
+  Future markAsRead(dynamic feedEntryID) async {
+    await RelDB.get().feedsDAO.updateFeedEntry(FeedEntriesCompanion(id: Value(feedEntryID), isNew: Value(false)));
+  }
 }

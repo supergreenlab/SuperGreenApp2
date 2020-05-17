@@ -26,7 +26,7 @@ class FeedMediaLoader extends FeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
     List<FeedMedia> feedMedias =
-        await RelDB.get().feedsDAO.getFeedMedias(state.id);
+        await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
     List<MediaState> medias = feedMedias
         .map((m) => MediaState(m.id, m.filePath, m.thumbnailPath, m.synced));
     return FeedMediaState(state, medias);

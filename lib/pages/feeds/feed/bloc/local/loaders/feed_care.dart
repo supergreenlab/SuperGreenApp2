@@ -27,7 +27,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 class FeedCareLoader extends FeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
-    List<FeedMedia> medias = await RelDB.get().feedsDAO.getFeedMedias(state.id);
+    List<FeedMedia> medias = await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
     List<MediaState> beforeMedias = medias.where((m) {
       final Map<String, dynamic> params = JsonDecoder().convert(m.params);
       return params['before'];

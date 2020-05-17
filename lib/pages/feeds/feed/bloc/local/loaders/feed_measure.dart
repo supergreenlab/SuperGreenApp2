@@ -41,7 +41,7 @@ class FeedMeasureLoader extends FeedEntryLoader {
           previousMedia.thumbnailPath, previousMedia.synced);
     }
 
-    List<FeedMedia> currentMedia = await db.feedsDAO.getFeedMedias(state.id);
+    List<FeedMedia> currentMedia = await db.feedsDAO.getFeedMedias(state.feedEntryID);
     MediaState current = MediaState(
         currentMedia[0].id,
         currentMedia[0].filePath,

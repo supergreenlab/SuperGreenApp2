@@ -32,12 +32,11 @@ class FeedBlocEventInit extends FeedBlocEvent {
 
 class FeedBlocEventLoadEntries extends FeedBlocEvent {
   final int n;
-  final dynamic lastId;
 
-  FeedBlocEventLoadEntries(this.n, this.lastId);
+  FeedBlocEventLoadEntries(this.n);
 
   @override
-  List<Object> get props => [n, lastId];
+  List<Object> get props => [n];
 }
 
 class FeedBlocEventUpdateEntry extends FeedBlocEvent {
@@ -72,6 +71,15 @@ class FeedBlocEventEntryHidden extends FeedBlocEvent {
   final int index;
 
   FeedBlocEventEntryHidden(this.index);
+
+  @override
+  List<Object> get props => [index];
+}
+
+class FeedBlocEventMarkAsRead extends FeedBlocEvent {
+  final int index;
+
+  FeedBlocEventMarkAsRead(this.index);
 
   @override
   List<Object> get props => [index];
@@ -141,7 +149,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
 
   FeedBloc(this.provider) {
     add(FeedBlocEventInit());
-    add(FeedBlocEventLoadEntries(10, null));
+    add(FeedBlocEventLoadEntries(10));
   }
 
   @override
@@ -162,13 +170,15 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
         FeedEntryLoader loader = provider.loaders[e.type];
         e = await loader.load(e);
         entries[event.index] = e;
+        yield FeedBlocStateUpdateEntry(event.index, e);
       }
       provider.startListenEntryChanges(e);
-      yield FeedBlocStateUpdateEntry(event.index, e);
     } else if (event is FeedBlocEventEntryHidden) {
       provider.cancelListenEntryChanges(entries[event.index]);
     } else if (event is FeedBlocEventUpdateEntry) {
       yield FeedBlocStateUpdateEntry(event.index, event.entry);
+    } else if (event is FeedBlocEventMarkAsRead) {
+      await provider.markAsRead(entries[event.index].feedEntryID);
     }
   }
 }
@@ -181,6 +191,7 @@ abstract class FeedBlocProvider {
   Map<String, FeedEntryLoader> get loaders;
   Future init();
   Future<List<FeedEntryStateNotLoaded>> loadEntries(int n, int offset);
+  Future markAsRead(dynamic feedEntryID);
   void startListenEntryChanges(FeedEntryStateLoaded entry);
   void cancelListenEntryChanges(FeedEntryStateLoaded entry);
 }
