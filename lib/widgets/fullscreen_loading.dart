@@ -24,7 +24,7 @@ class FullscreenLoading extends StatelessWidget {
   final double percent;
   final Color textColor;
 
-  const FullscreenLoading({this.title, this.percent, this.textColor});
+  const FullscreenLoading({this.title='Loading..', this.percent, this.textColor});
 
   @override
   Widget build(BuildContext context) {

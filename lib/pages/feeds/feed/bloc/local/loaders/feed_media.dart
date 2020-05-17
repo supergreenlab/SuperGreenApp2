@@ -16,14 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/pages/feeds/feed/bloc/abstract_feed_bloc.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
+import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class LocalFeedBloc extends FeedBloc {
-  final int feedID;
-
-  LocalFeedBloc(this.feedID);
-
+class FeedMediaLoader extends FeedEntryLoader {
   @override
-  Stream<FeedBlocState> loadEntries(int n) {
+  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getFeedMedias(state.id);
+    List<MediaState> medias = feedMedias
+        .map((m) => MediaState(m.id, m.filePath, m.thumbnailPath, m.synced));
+    return FeedMediaState(state, medias);
   }
 }

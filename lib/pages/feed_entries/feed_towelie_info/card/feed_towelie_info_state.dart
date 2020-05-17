@@ -16,47 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedTowelieInfoButton extends Equatable {
-  final String id;
-  final String title;
-
-  final Map<String, dynamic> params;
-
-  FeedTowelieInfoButton(this.id, this.title, this.params);
-
-  static FeedTowelieInfoButton fromJSON(Map<String, dynamic> map) {
-    return FeedTowelieInfoButton(map['id'], map['title'], map);
-  }
-
-  @override
-  List<Object> get props => [id, title];
-}
-
-class FeedTowelieInfoState extends Equatable {
-  final String topPic;
-  final String text;
-  final List<FeedTowelieInfoButton> buttons;
-  final FeedTowelieInfoButton selectedButton;
-
-  FeedTowelieInfoState(
-      this.topPic, this.text, this.buttons, this.selectedButton);
-
-  static FeedTowelieInfoState fromJSON(Map<String, dynamic> map) {
-    List<FeedTowelieInfoButton> buttons =
-        (map['buttons'] ?? []).map((b) => FeedTowelieInfoButton.fromJSON(b));
-    FeedTowelieInfoButton selectedButton = map['selectedButton'] == null
-        ? null
-        : FeedTowelieInfoButton.fromJSON(map['selectedButton']);
-    return FeedTowelieInfoState(
-      map['top_pic'],
-      map['text'],
-      buttons,
-      selectedButton,
-    );
-  }
-
-  @override
-  List<Object> get props => [topPic, text, buttons, selectedButton];
+class FeedTowelieInfoState extends FeedEntryStateLoaded {
+  FeedTowelieInfoState(FeedEntryState from) : super.copy(from);
 }

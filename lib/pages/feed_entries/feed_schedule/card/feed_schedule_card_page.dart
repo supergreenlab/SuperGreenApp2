@@ -17,9 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -30,12 +31,13 @@ class FeedScheduleCardPage extends StatelessWidget {
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedScheduleCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedScheduleCardPage(this.animation, this.feedState, this.state,
+      {Key key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedBlocEntryStateLoaded) {
+    if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
     return _renderLoading(context);
@@ -47,14 +49,14 @@ class FeedScheduleCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg',
-              'Schedule change', state.synced),
+          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
+              state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -63,8 +65,8 @@ class FeedScheduleCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    FeedScheduleState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
+    FeedScheduleParams params = state.params;
     return FeedCard(
       animation: animation,
       child: Column(
@@ -83,7 +85,7 @@ class FeedScheduleCardPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Flipped to\n${cardState.schedule}!',
+                  'Flipped to\n${params.schedule}!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 30,

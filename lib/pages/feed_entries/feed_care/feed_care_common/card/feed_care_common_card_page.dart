@@ -19,10 +19,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
@@ -54,7 +55,7 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.state is FeedBlocEntryStateLoaded) {
+    if (widget.state is FeedEntryStateLoaded) {
       return _renderLoaded(context, widget.state);
     }
     return _renderLoading(context);
@@ -66,14 +67,14 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_towelie.svg', 'Towelie',
+          FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
               widget.state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(widget.state.date),
           ),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -82,8 +83,8 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    FeedCareCommonState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedCareCommonState state) {
+    FeedCareParams params = state.params;
     List<Widget> body = [
       FeedCardTitle(
         widget.iconPath(),
@@ -100,7 +101,7 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
         child: FeedCardDate(widget.state.date),
       ),
       FeedCardText(
-        cardState.message ?? '',
+        params.message ?? '',
         edit: editText,
         onEdited: (value) {
           BlocProvider.of<CardBloc>(context)
@@ -111,13 +112,13 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
         },
       )
     ];
-    if (cardState.beforeMedias.length > 0) {
+    if (state.beforeMedias.length > 0) {
       body.insert(
         1,
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: MediaList(
-            cardState.beforeMedias,
+            state.beforeMedias,
             prefix: 'Before ',
             onMediaTapped: (media) {
               BlocProvider.of<MainNavigatorBloc>(context)
@@ -127,13 +128,13 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
         ),
       );
     }
-    if (cardState.afterMedias.length > 0) {
+    if (state.afterMedias.length > 0) {
       body.insert(
           1,
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: MediaList(
-              cardState.afterMedias,
+              state.afterMedias,
               prefix: 'After ',
               onMediaTapped: (media) {
                 BlocProvider.of<MainNavigatorBloc>(context)

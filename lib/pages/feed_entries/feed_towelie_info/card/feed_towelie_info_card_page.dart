@@ -19,9 +19,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_towelie_info.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/feed_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
@@ -39,7 +40,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedBlocEntryStateLoaded) {
+    if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
     return _renderLoading(context);
@@ -52,13 +53,13 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_towelie.svg', 'Towelie', state.synced),
+              'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -67,21 +68,21 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedBlocEntryStateLoaded state) {
-    FeedTowelieInfoState cardState = state.state;
+  Widget _renderLoaded(BuildContext context, FeedTowelieInfoState state) {
+    FeedTowelieInfoParams params = state.params;
     List<Widget> content = [
       FeedCardTitle(
           'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
-        child: _renderBody(context, cardState),
+        child: _renderBody(context, state),
       ),
     ];
-    if (cardState.selectedButton != null) {
+    if (params.selectedButton != null) {
       content
-          .add(_renderSelectedButton(context, cardState.selectedButton));
-    } else if (cardState.buttons != null && cardState.buttons.length > 0) {
-      content.add(_renderButtonBar(context, cardState.buttons));
+          .add(_renderSelectedButton(context, params.selectedButton));
+    } else if (params.buttons != null && params.buttons.length > 0) {
+      content.add(_renderButtonBar(context, params.buttons));
     }
     return FeedCard(
         animation: animation,
@@ -91,16 +92,17 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         ));
   }
 
-  Widget _renderBody(BuildContext context, FeedTowelieInfoState cardState) {
+  Widget _renderBody(BuildContext context, FeedTowelieInfoState state) {
+    FeedTowelieInfoParams params = state.params;
     final body = <Widget>[
-      FeedCardText(cardState.text),
+      FeedCardText(params.text),
     ];
-    if (cardState.topPic != null) {
+    if (params.topPic != null) {
       body.insert(
           0,
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: SvgPicture.asset(cardState.topPic),
+            child: SvgPicture.asset(params.topPic),
           ));
     }
     return Column(
@@ -109,7 +111,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  ButtonBar _renderButtonBar(BuildContext context, List<FeedTowelieInfoButton> buttons) {
+  ButtonBar _renderButtonBar(BuildContext context, List<FeedTowelieParamsButton> buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
@@ -117,7 +119,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderButton(BuildContext context, FeedTowelieInfoButton button) {
+  Widget _renderButton(BuildContext context, FeedTowelieParamsButton button) {
     return FlatButton(
       child: Text(button.title.toUpperCase(),
           style: TextStyle(color: Colors.blue, fontSize: 12)),
@@ -131,7 +133,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   }
 
   Widget _renderSelectedButton(
-      BuildContext context, FeedTowelieInfoButton button) {
+      BuildContext context, FeedTowelieParamsButton button) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
       child: Text('➡️ ${button.title.toUpperCase()}',

@@ -16,13 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class FeedLightState {
-  final List<int> values;
-  final List<int> initialValues;
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-  FeedLightState(this.values, this.initialValues);
-
-  static Future<FeedLightState> fromJSON(Map<String, dynamic> map) async {
-    return FeedLightState(map['values'], map['initialValues']);
-  }
+class FeedLightState extends FeedEntryStateLoaded {
+  FeedLightState(FeedEntryState from) : super.copy(from);
 }
