@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
@@ -102,7 +103,7 @@ class FeedsAPI {
     if (serverID != null) {
       plantsCompanion = plantsCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().plantsDAO.updatePlant(plantsCompanion);
+    await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
   }
 
   Future syncBox(Box box) async {
@@ -114,7 +115,7 @@ class FeedsAPI {
     if (serverID != null) {
       boxesCompanion = boxesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().plantsDAO.updateBox(boxesCompanion);
+    await RelDB.get().plantsDAO.updateBox(boxesCompanion);
   }
 
   Future syncTimelapse(Timelapse timelapse) async {
@@ -127,7 +128,7 @@ class FeedsAPI {
       timelapsesCompanion =
           timelapsesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion);
+    await RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion);
   }
 
   Future syncDevice(Device device) async {
@@ -139,7 +140,7 @@ class FeedsAPI {
     if (serverID != null) {
       devicesCompanion = devicesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().devicesDAO.updateDevice(devicesCompanion);
+    await RelDB.get().devicesDAO.updateDevice(devicesCompanion);
   }
 
   Future syncFeed(Feed feed) async {
@@ -151,7 +152,7 @@ class FeedsAPI {
     if (serverID != null) {
       feedsCompanion = feedsCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().feedsDAO.updateFeed(feedsCompanion);
+    await RelDB.get().feedsDAO.updateFeed(feedsCompanion);
   }
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
@@ -164,7 +165,7 @@ class FeedsAPI {
       feedEntriesCompanion =
           feedEntriesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().feedsDAO.updateFeedEntry(feedEntriesCompanion);
+    await FeedEntryHelper.updateFeedEntry(feedEntriesCompanion);
   }
 
   Future syncFeedMedia(FeedMedia feedMedia) async {
@@ -222,7 +223,7 @@ class FeedsAPI {
       feedMediasCompanion =
           feedMediasCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
+    await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
   }
 
   Future<List<PlantsCompanion>> unsyncedPlants() async {

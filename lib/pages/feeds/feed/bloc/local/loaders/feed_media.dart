@@ -20,9 +20,12 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedMediaLoader extends FeedEntryLoader {
+class FeedMediaLoader extends LocalFeedEntryLoader {
+  FeedMediaLoader(Function(FeedBlocEvent) add) : super(add);
+
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
     List<FeedMedia> feedMedias =
@@ -31,4 +34,7 @@ class FeedMediaLoader extends FeedEntryLoader {
         .map((m) => MediaState(m.id, m.filePath, m.thumbnailPath, m.synced));
     return FeedMediaState(state, medias);
   }
+
+  @override
+  Future<void> close() async {}
 }

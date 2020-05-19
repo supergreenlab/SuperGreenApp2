@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
 
@@ -39,7 +39,7 @@ class SGLFeedPage extends StatelessWidget {
 
   Widget _renderFeed(BuildContext context, SGLFeedBlocState state) {
     return BlocProvider(
-      create: (context) => FeedBloc(LocalFeedBloc(1)),
+      create: (context) => FeedBloc(LocalFeedBlocProvider(1)),
       child: FeedPage(
         title: '',
         color: Colors.indigo,

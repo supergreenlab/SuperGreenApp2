@@ -22,6 +22,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class FeedCareCommonCardBlocEvent extends Equatable {}
@@ -100,7 +101,7 @@ class FeedCareCommonCardBloc
       RelDB db = RelDB.get();
       Map<String, dynamic> params = JsonDecoder().convert(_feedEntry.params);
       params['message'] = event.message;
-      db.feedsDAO.updateFeedEntry(FeedEntriesCompanion(
+      await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
           id: Value(_feedEntry.id),
           params: Value(JsonEncoder().convert(params)),
           synced: Value(false)));

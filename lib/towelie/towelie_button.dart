@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
@@ -38,12 +39,11 @@ abstract class TowelieButton {
     if (selectedButtonID != null) {
       selector = (b) => b['id'] == selectedButtonID;
     }
-    final fdb = RelDB.get().feedsDAO;
     final Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
     final Map<String, dynamic> button =
         (params['buttons'] as List).singleWhere(selector);
     params['selectedButton'] = button;
-    await fdb.updateFeedEntry(FeedEntriesCompanion(
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
         id: Value(feedEntry.id),
         params: Value(JsonEncoder().convert(params)),
         synced: Value(false)));

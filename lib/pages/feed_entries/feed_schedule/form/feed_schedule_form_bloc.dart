@@ -23,6 +23,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -172,7 +173,7 @@ class FeedScheduleFormBloc
       if (schedule == 'BLOOM') {
         List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
         for (int i = 0; i < plants.length; ++i) {
-          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
             type: 'FE_SCHEDULE',
             feed: plants[i].feed,
             date: DateTime.now(),

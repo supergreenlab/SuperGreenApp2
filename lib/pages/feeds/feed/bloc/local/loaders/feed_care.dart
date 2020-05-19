@@ -22,12 +22,17 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedCareLoader extends FeedEntryLoader {
+class FeedCareLoader extends LocalFeedEntryLoader {
+
+  FeedCareLoader(Function(FeedBlocEvent) add) : super(add);
+
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
-    List<FeedMedia> medias = await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
+    List<FeedMedia> medias =
+        await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
     List<MediaState> beforeMedias = medias.where((m) {
       final Map<String, dynamic> params = JsonDecoder().convert(m.params);
       return params['before'];
@@ -40,4 +45,7 @@ class FeedCareLoader extends FeedEntryLoader {
         (m) => MediaState(m.id, m.filePath, m.thumbnailPath, m.synced));
     return FeedCareCommonState(state, beforeMedias, afterMedias);
   }
+
+  @override
+  Future<void> close() async {}
 }
