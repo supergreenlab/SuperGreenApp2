@@ -48,7 +48,8 @@ class TowelieButtonINeedHelp extends TowelieButton {
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
-    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await CardProductsIntro.createProductsIntro(feed);
     await selectButtons(feedEntry, selectedButtonID: id);
   }
@@ -77,7 +78,9 @@ class TowelieButtonIDontNeedHelp extends TowelieButton {
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    await CardCreatePlant.createCreatePlantCard(event.feed);
-    await selectButtons(event.feedEntry, selectedButtonID: id);
+    Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    await CardCreatePlant.createCreatePlantCard(feed);
+    await selectButtons(feedEntry, selectedButtonID: id);
   }
 }

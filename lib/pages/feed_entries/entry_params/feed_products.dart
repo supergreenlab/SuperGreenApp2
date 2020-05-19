@@ -114,9 +114,9 @@ class FeedProductsParams extends Equatable {
   static FeedProductsParams fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     List<FeedProductsItemParams> items =
-        map['products'].map((p) => FeedProductsItemParams.fromMap(p));
+        map['products'].map<FeedProductsItemParams>((p) => FeedProductsItemParams.fromMap(p)).toList();
     List<FeedProductsButtonParams> buttons =
-        (map['buttons'] ?? []).map((b) => FeedProductsButtonParams.fromMap(b));
+        (map['buttons'] ?? []).map<FeedProductsButtonParams>((b) => FeedProductsButtonParams.fromMap(b)).toList();
     FeedProductsButtonParams selectedButton = map['selectedButton'] == null
         ? null
         : FeedProductsButtonParams.fromMap(map['selectedButton']);
@@ -133,8 +133,8 @@ class FeedProductsParams extends Equatable {
     return JsonEncoder().convert({
       'top_pic': topPic,
       'text': text,
-      'products': products.map<Map<String, dynamic>>((p) => p.toMap()),
-      'buttons': buttons.map<Map<String, dynamic>>((b) => b.toMap()),
+      'products': products.map<Map<String, dynamic>>((p) => p.toMap()).toList(),
+      'buttons': buttons.map<Map<String, dynamic>>((b) => b.toMap()).toList(),
       'selectedButton': selectedButton.toMap(),
     });
   }

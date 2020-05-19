@@ -18,9 +18,16 @@
 
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedTowelieInfoLoader extends FeedEntryLoader {
+class FeedTowelieInfoLoader extends LocalFeedEntryLoader {
+  FeedTowelieInfoLoader(Function(FeedBlocEvent) add) : super(add);
+
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async => FeedTowelieInfoState(state);
+  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async =>
+      FeedTowelieInfoState(state);
+
+  @override
+  Future<void> close() async {}
 }

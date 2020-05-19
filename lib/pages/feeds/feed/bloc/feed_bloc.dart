@@ -39,23 +39,31 @@ class FeedBlocEventLoadEntries extends FeedBlocEvent {
   List<Object> get props => [n];
 }
 
-class FeedBlocEventUpdateEntry extends FeedBlocEvent {
-  final int index;
+class FeedBlocEventAddedEntry extends FeedBlocEvent {
   final FeedEntryState entry;
 
-  FeedBlocEventUpdateEntry(this.index, this.entry);
+  FeedBlocEventAddedEntry(this.entry);
 
   @override
-  List<Object> get props => [index, entry];
+  List<Object> get props => [entry];
 }
 
-class FeedBlocEventDeleteFeedEntry extends FeedBlocEvent {
-  final int index;
+class FeedBlocEventUpdatedEntry extends FeedBlocEvent {
+  final FeedEntryState entry;
 
-  FeedBlocEventDeleteFeedEntry(this.index);
+  FeedBlocEventUpdatedEntry(this.entry);
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [entry];
+}
+
+class FeedBlocEventDeletedFeedEntry extends FeedBlocEvent {
+  final dynamic feedEntryID;
+
+  FeedBlocEventDeletedFeedEntry(this.feedEntryID);
+
+  @override
+  List<Object> get props => [feedEntryID];
 }
 
 class FeedBlocEventEntryVisible extends FeedBlocEvent {
@@ -158,7 +166,9 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
   @override
   Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {
     if (event is FeedBlocEventInit) {
-      await provider.init();
+      await provider.init(this.add);
+      FeedState feedState = await provider.loadFeed();
+      yield FeedBlocStateFeedLoaded(feedState);
     } else if (event is FeedBlocEventLoadEntries) {
       List<FeedEntryState> fes =
           await provider.loadEntries(event.n, entries.length);
@@ -166,32 +176,59 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       yield FeedBlocStateEntriesLoaded(entries, entries.length < event.n);
     } else if (event is FeedBlocEventEntryVisible) {
       FeedEntryState e = entries[event.index];
+      FeedEntryLoader loader = provider.loaders[e.type];
       if (e is FeedEntryStateNotLoaded) {
-        FeedEntryLoader loader = provider.loaders[e.type];
         e = await loader.load(e);
         entries[event.index] = e;
         yield FeedBlocStateUpdateEntry(event.index, e);
       }
-      provider.startListenEntryChanges(e);
+      loader.startListenEntryChanges(e);
     } else if (event is FeedBlocEventEntryHidden) {
-      provider.cancelListenEntryChanges(entries[event.index]);
-    } else if (event is FeedBlocEventUpdateEntry) {
-      yield FeedBlocStateUpdateEntry(event.index, event.entry);
+      FeedEntryState e = entries[event.index];
+      FeedEntryLoader loader = provider.loaders[e.type];
+      loader.cancelListenEntryChanges(entries[event.index]);
+    } else if (event is FeedBlocEventAddedEntry) {
+      int index = entries
+          .indexWhere((fe) => !(fe.date.compareTo(event.entry.date) > 0));
+      yield FeedBlocStateAddEntry(index == -1 ? 0 : index, event.entry);
+    } else if (event is FeedBlocEventDeletedFeedEntry) {
+      int index =
+          entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
+      FeedEntryState entry = entries[index];
+      yield FeedBlocStateRemoveEntry(index, entry);
+    } else if (event is FeedBlocEventUpdatedEntry) {
+      int index =
+          entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
+      yield FeedBlocStateUpdateEntry(index, event.entry);
     } else if (event is FeedBlocEventMarkAsRead) {
       await provider.markAsRead(entries[event.index].feedEntryID);
     }
   }
+
+  @override
+  Future<void> close() async {
+    await provider.close();
+    return super.close();
+  }
 }
 
 abstract class FeedEntryLoader {
+  final Function(FeedBlocEvent) add;
+
+  FeedEntryLoader(this.add);
+
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state);
+  void startListenEntryChanges(FeedEntryStateLoaded entry);
+  void cancelListenEntryChanges(FeedEntryStateLoaded entry);
+  Future<void> close();
 }
 
 abstract class FeedBlocProvider {
   Map<String, FeedEntryLoader> get loaders;
-  Future init();
+  Future init(Function(FeedBlocEvent) add);
+  Future<FeedState> loadFeed();
   Future<List<FeedEntryStateNotLoaded>> loadEntries(int n, int offset);
+  Future deleteFeedEntry(dynamic feedEntryID);
   Future markAsRead(dynamic feedEntryID);
-  void startListenEntryChanges(FeedEntryStateLoaded entry);
-  void cancelListenEntryChanges(FeedEntryStateLoaded entry);
+  Future<void> close();
 }

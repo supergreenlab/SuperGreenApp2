@@ -71,7 +71,7 @@ class _FeedPageState extends State<FeedPage> {
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
           listKey.currentState
-              .insertItem(1, duration: Duration(milliseconds: 500));
+              .insertItem(state.index, duration: Duration(milliseconds: 500));
           if (scrollController.offset == 0) {
             // this is to prevent a bug with animateTo not triggering when offset == 0
             scrollController.jumpTo(30);
@@ -170,7 +170,7 @@ class _FeedPageState extends State<FeedPage> {
                     }
                     if (visibleEntries[feedEntry.feedEntryID] == true &&
                         info.visibleFraction == 0) {
-                      visibleEntries[feedEntry.feedEntryID] = false;
+                      visibleEntries.remove(feedEntry.feedEntryID);
                       BlocProvider.of<FeedBloc>(context)
                           .add(FeedBlocEventEntryHidden(index));
                     }

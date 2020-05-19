@@ -64,7 +64,7 @@ class FeedProductsCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
+          FeedCardTitle('assets/feed_card/icon_towelie.png', 'Schedule change',
               state.synced),
           Container(
             height: 100,
@@ -118,13 +118,12 @@ class FeedProductsCardPage extends StatelessWidget {
     body.add(_renderStoreGeos(context, cardState));
     body.addAll(params.products
         .where((p) => p.geo == feedState.storeGeo)
-        .map<Widget>((dynamic p) {
-      Map<String, dynamic> product = p;
+        .map<Widget>((FeedProductsItemParams product) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           SizedBox(
-              width: 70, height: 70, child: Image.asset(product['picture'])),
+              width: 70, height: 70, child: Image.asset(product.picture)),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
@@ -134,12 +133,12 @@ class FeedProductsCardPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      product['title'],
+                      product.title,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   MarkdownBody(
-                      data: product['description'],
+                      data: product.description,
                       styleSheet: MarkdownStyleSheet(
                           strong: TextStyle(),
                           p: TextStyle(color: Colors.black, fontSize: 14))),
@@ -159,7 +158,7 @@ class FeedProductsCardPage extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Text(
-                    product['price'],
+                    product.price,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     textAlign: TextAlign.center,
                   ),
@@ -171,7 +170,7 @@ class FeedProductsCardPage extends StatelessWidget {
                   await FlutterMatomo.trackScreenWithName(
                       'FeedProductsCardPage', 'product_clicked');
                 }
-                launch(product['link']['data']);
+                launch(product.link.data);
               },
             ),
           ),
@@ -187,9 +186,8 @@ class FeedProductsCardPage extends StatelessWidget {
   Widget _renderStoreGeos(BuildContext context, FeedProductsState state) {
     FeedProductsParams params = state.params;
     List<String> storeGeos = params.products
-        .map<String>((dynamic p) {
-          Map<String, dynamic> product = p;
-          return product['geo'] as String;
+        .map<String>((FeedProductsItemParams p) {
+          return p.geo;
         })
         .toSet()
         .toList();

@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -134,10 +135,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           .feedsDAO
           .getFeedEntryForServerID(feedEntriesCompanion.serverID.value);
       if (exists != null) {
-        await RelDB.get().feedsDAO.updateFeedEntry(
+        await FeedEntryHelper.updateFeedEntry(
             feedEntriesCompanion.copyWith(id: Value(exists.id)));
       } else {
-        await RelDB.get().feedsDAO.addFeedEntry(feedEntriesCompanion);
+        await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
       }
       await FeedsAPI()
           .setSynced("feedEntry", feedEntriesCompanion.serverID.value);

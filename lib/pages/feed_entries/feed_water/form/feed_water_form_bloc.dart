@@ -22,6 +22,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -76,7 +77,7 @@ class FeedWaterFormBloc
       FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {
         int feedEntryID =
-            await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+            await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_WATER',
           feed: plants[i].feed,
           date: DateTime.now(),

@@ -18,10 +18,16 @@
 
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedWaterLoader extends FeedEntryLoader {
+class FeedWaterLoader extends LocalFeedEntryLoader {
+  FeedWaterLoader(Function(FeedBlocEvent) add) : super(add);
+
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async =>
       FeedWaterState(state);
+
+  @override
+  Future<void> close() async {}
 }

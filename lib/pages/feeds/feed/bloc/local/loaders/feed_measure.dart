@@ -21,9 +21,13 @@ import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedMeasureLoader extends FeedEntryLoader {
+class FeedMeasureLoader extends LocalFeedEntryLoader {
+  
+  FeedMeasureLoader(Function(FeedBlocEvent) add) : super(add);
+
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
     FeedMeasureParams params = state.params;
@@ -41,7 +45,8 @@ class FeedMeasureLoader extends FeedEntryLoader {
           previousMedia.thumbnailPath, previousMedia.synced);
     }
 
-    List<FeedMedia> currentMedia = await db.feedsDAO.getFeedMedias(state.feedEntryID);
+    List<FeedMedia> currentMedia =
+        await db.feedsDAO.getFeedMedias(state.feedEntryID);
     MediaState current = MediaState(
         currentMedia[0].id,
         currentMedia[0].filePath,
@@ -49,4 +54,7 @@ class FeedMeasureLoader extends FeedEntryLoader {
         currentMedia[0].synced);
     return FeedMeasureState(state, previous, current);
   }
+
+  @override
+  Future<void> close() async {}
 }
