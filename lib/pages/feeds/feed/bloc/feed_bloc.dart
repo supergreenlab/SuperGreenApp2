@@ -18,6 +18,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
@@ -91,6 +92,15 @@ class FeedBlocEventMarkAsRead extends FeedBlocEvent {
 
   @override
   List<Object> get props => [index];
+}
+
+class FeedBlocEventSetStoreGeo extends FeedBlocEvent {
+  final String storeGeo;
+
+  FeedBlocEventSetStoreGeo(this.storeGeo);
+
+  @override
+  List<Object> get props => [storeGeo];
 }
 
 abstract class FeedBlocState extends Equatable {}
@@ -190,7 +200,9 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventAddedEntry) {
       int index = entries
           .indexWhere((fe) => !(fe.date.compareTo(event.entry.date) > 0));
-      yield FeedBlocStateAddEntry(index == -1 ? 0 : index, event.entry);
+      index = index == -1 ? 0 : index;
+      entries.insert(index, event.entry);
+      yield FeedBlocStateAddEntry(index, event.entry);
     } else if (event is FeedBlocEventDeletedFeedEntry) {
       int index =
           entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
@@ -202,6 +214,10 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       yield FeedBlocStateUpdateEntry(index, event.entry);
     } else if (event is FeedBlocEventMarkAsRead) {
       await provider.markAsRead(entries[event.index].feedEntryID);
+    } else if (event is FeedBlocEventSetStoreGeo) {
+      AppDB().setStoreGeo(event.storeGeo);
+      FeedState feedState = await provider.loadFeed();
+      yield FeedBlocStateFeedLoaded(feedState);
     }
   }
 

@@ -26,6 +26,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -64,8 +65,8 @@ class FeedProductsCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_towelie.png', 'Schedule change',
-              state.synced),
+          FeedCardTitle('assets/feed_card/icon_towelie.png',
+              'Towelie\'s selection', state.synced),
           Container(
             height: 100,
             alignment: Alignment.center,
@@ -81,7 +82,7 @@ class FeedProductsCardPage extends StatelessWidget {
     List<Widget> content = [
       FeedCardTitle(
         'assets/feed_card/icon_towelie.png',
-        'Towelie',
+        'Towelie\'s selection',
         state.synced,
       ),
       Padding(
@@ -122,8 +123,7 @@ class FeedProductsCardPage extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          SizedBox(
-              width: 70, height: 70, child: Image.asset(product.picture)),
+          SizedBox(width: 70, height: 70, child: Image.asset(product.picture)),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
@@ -205,8 +205,8 @@ class FeedProductsCardPage extends StatelessWidget {
             onPressed: selected
                 ? null
                 : () async {
-                    //BlocProvider.of<FeedProductsCardBloc>(context)
-                    //    .add(FeedProductsCardBlocEventSetStoreGeo(sg));
+                    BlocProvider.of<FeedBloc>(context)
+                        .add(FeedBlocEventSetStoreGeo(sg));
                   },
           );
         }).toList(),

@@ -41,7 +41,9 @@ class TowelieButtonPushRouteFeedMedia extends TowelieButton {
     yield TowelieBlocStateMainNavigation(
         MainNavigateToFeedMediaFormEvent(plant));
     if (event.feedEntry != null) {
-      await selectButtons(event.feedEntry, selectedButtonID: id);
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+      await selectButtons(feedEntry, selectedButtonID: id);
     }
   }
 }
