@@ -54,6 +54,9 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
   }
 
   void cancelListenEntryChanges(FeedEntryStateLoaded entry) {
+    if (subscriptions[entry.feedEntryID] == null) {
+      return;
+    }
     subscriptions[entry.feedEntryID].cancel();
     subscriptions.remove(entry.feedEntryID);
   }
