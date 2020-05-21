@@ -19,6 +19,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
@@ -101,6 +102,16 @@ class FeedBlocEventSetStoreGeo extends FeedBlocEvent {
 
   @override
   List<Object> get props => [storeGeo];
+}
+
+class FeedBlocEventEditParams extends FeedBlocEvent {
+  final FeedEntryState entry;
+  final dynamic params;
+
+  FeedBlocEventEditParams(this.entry, this.params);
+
+  @override
+  List<Object> get props => [entry, params];
 }
 
 abstract class FeedBlocState extends Equatable {}
@@ -218,6 +229,9 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       AppDB().setStoreGeo(event.storeGeo);
       FeedState feedState = await provider.loadFeed();
       yield FeedBlocStateFeedLoaded(feedState);
+    } else if (event is FeedBlocEventEditParams) {
+      FeedEntryLoader loader = provider.loaders[event.entry.type];
+      await loader.update(event.entry, event.params);
     }
   }
 
@@ -234,6 +248,7 @@ abstract class FeedEntryLoader {
   FeedEntryLoader(this.add);
 
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state);
+  Future update(FeedEntryState entry, FeedEntryParams params);
   void startListenEntryChanges(FeedEntryStateLoaded entry);
   void cancelListenEntryChanges(FeedEntryStateLoaded entry);
   Future<void> close();

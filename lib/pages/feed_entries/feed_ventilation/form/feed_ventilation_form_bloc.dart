@@ -26,6 +26,7 @@ import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
 
 abstract class FeedVentilationFormBlocEvent extends Equatable {}
 
@@ -187,16 +188,10 @@ class FeedVentilationFormBloc
           type: 'FE_VENTILATION',
           feed: plants[i].feed,
           date: DateTime.now(),
-          params: Value(JsonEncoder().convert({
-            'initialValues': {
-              'blowerDay': initialBlowerDay,
-              'blowerNight': initialBlowerNight
-            },
-            'values': {
-              'blowerDay': event.blowerDay,
-              'blowerNight': event.blowerNight
-            }
-          })),
+          params: Value(JsonEncoder().convert(FeedVentilationParams(
+              FeedVentilationParamsValues(event.blowerDay, event.blowerNight),
+              FeedVentilationParamsValues(
+                  initialBlowerDay, initialBlowerNight)))),
         ));
       }
       yield FeedVentilationFormBlocStateDone();
@@ -208,8 +203,7 @@ class FeedVentilationFormBloc
       }
       yield FeedVentilationFormBlocStateLoading('Cancelling..');
       try {
-        await DeviceHelper.updateIntParam(
-            device, blowerDay, initialBlowerDay);
+        await DeviceHelper.updateIntParam(device, blowerDay, initialBlowerDay);
         await DeviceHelper.updateIntParam(
             device, blowerNight, initialBlowerNight);
       } catch (e) {}

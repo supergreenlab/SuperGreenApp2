@@ -27,7 +27,7 @@ class FeedTowelieInfoLoader extends LocalFeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async =>
       FeedTowelieInfoState(state);
-
+      
   @override
   Future<void> close() async {}
 }

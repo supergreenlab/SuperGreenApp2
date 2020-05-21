@@ -25,6 +25,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
 
 abstract class FeedMediaFormBlocEvent extends Equatable {}
 
@@ -80,10 +81,12 @@ class FeedMediaFormBloc
         type: 'FE_MEDIA',
         feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'message': event.message, 'helpRequest': event.helpRequest})),
+        params: Value(JsonEncoder().convert(
+            FeedMediaParams(event.message, event.helpRequest).toJSON())),
       ));
       for (FeedMediasCompanion m in event.medias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
+        await db.feedsDAO.addFeedMedia(m.copyWith(
+            feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
       }
       yield FeedMediaFormBlocStateDone();
     }

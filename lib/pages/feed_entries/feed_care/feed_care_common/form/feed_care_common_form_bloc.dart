@@ -25,6 +25,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
 
 abstract class FeedCareCommonFormBlocEvent extends Equatable {}
 
@@ -34,7 +35,8 @@ class FeedCareCommonFormBlocEventCreate extends FeedCareCommonFormBlocEvent {
   final String message;
   final bool helpRequest;
 
-  FeedCareCommonFormBlocEventCreate(this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
+  FeedCareCommonFormBlocEventCreate(
+      this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
 
   @override
   List<Object> get props => [message, helpRequest];
@@ -78,13 +80,20 @@ abstract class FeedCareCommonFormBloc
         type: cardType(),
         feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'message': event.message})),
+        params: Value(
+            JsonEncoder().convert(FeedCareParams(event.message).toJSON())),
       ));
       for (FeedMediasCompanion m in event.beforeMedias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(args.plant.feed), feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': true}))));
+        await db.feedsDAO.addFeedMedia(m.copyWith(
+            feed: Value(args.plant.feed),
+            feedEntry: Value(feedEntryID),
+            params: Value(JsonEncoder().convert({'before': true}))));
       }
       for (FeedMediasCompanion m in event.afterMedias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(args.plant.feed), feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
+        await db.feedsDAO.addFeedMedia(m.copyWith(
+            feed: Value(args.plant.feed),
+            feedEntry: Value(feedEntryID),
+            params: Value(JsonEncoder().convert({'before': false}))));
       }
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
       yield FeedCareCommonFormBlocStateDone(args.plant, feedEntry);

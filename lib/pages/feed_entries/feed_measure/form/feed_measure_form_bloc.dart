@@ -25,6 +25,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 
 abstract class FeedMeasureFormBlocEvent extends Equatable {}
 
@@ -107,8 +108,8 @@ class FeedMeasureFormBloc
         type: 'FE_MEASURE',
         feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert(
-            {'previous': event.previous != null ? event.previous.id : null})),
+        params: Value(JsonEncoder().convert(FeedMeasureParams(
+            event.previous != null ? event.previous.id : null))),
       ));
       await db.feedsDAO.addFeedMedia(event.current.copyWith(
           feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));

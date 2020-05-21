@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
@@ -28,6 +29,9 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
   Map<dynamic, StreamSubscription<FeedEntryUpdateEvent>> subscriptions = {};
 
   LocalFeedEntryLoader(Function(FeedBlocEvent) add) : super(add);
+
+  @override
+  Future update(FeedEntryState entry, FeedEntryParams params) async {}
 
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
     if (subscriptions[entry.feedEntryID] != null) {

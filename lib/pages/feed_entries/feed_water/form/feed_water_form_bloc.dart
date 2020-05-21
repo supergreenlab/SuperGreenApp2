@@ -25,6 +25,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
 
 abstract class FeedWaterFormBlocEvent extends Equatable {}
 
@@ -81,11 +82,9 @@ class FeedWaterFormBloc
           type: 'FE_WATER',
           feed: plants[i].feed,
           date: DateTime.now(),
-          params: Value(JsonEncoder().convert({
-            'tooDry': event.tooDry,
-            'volume': event.volume,
-            'nutrient': event.nutrient,
-          })),
+          params: Value(
+              FeedWaterParams(event.volume, event.tooDry, event.nutrient)
+                  .toJSON()),
         ));
         if (i == 0) {
           feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);

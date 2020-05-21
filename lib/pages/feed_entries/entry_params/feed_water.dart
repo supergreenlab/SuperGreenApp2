@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
-class FeedWaterParams extends Equatable {
+class FeedWaterParams extends FeedEntryParams {
   final double volume;
   final bool tooDry;
   final bool nutrient;
@@ -32,8 +32,10 @@ class FeedWaterParams extends Equatable {
     return FeedWaterParams(map['volume'], map['tooDry'], map['nutrient']);
   }
 
-  static Map<String, dynamic> toJSON(FeedWaterParams p) {
-    return {'volume': p.volume, 'tooDry': p.tooDry, 'nutrient': p.nutrient};
+  @override
+  String toJSON() {
+    return JsonEncoder()
+        .convert({'volume': volume, 'tooDry': tooDry, 'nutrient': nutrient});
   }
 
   @override

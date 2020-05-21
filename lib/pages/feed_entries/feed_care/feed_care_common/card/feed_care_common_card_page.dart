@@ -20,8 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -31,26 +31,24 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
-abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
-    extends StatefulWidget {
+abstract class FeedCareCommonCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedCareCommonCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedCareCommonCardPage(this.animation, this.feedState, this.state,
+      {Key key})
       : super(key: key);
 
   @override
-  _FeedCareCommonCardPageState<CardBloc> createState() =>
-      _FeedCareCommonCardPageState<CardBloc>();
+  _FeedCareCommonCardPageState createState() => _FeedCareCommonCardPageState();
 
   String title();
 
   String iconPath();
 }
 
-class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
-    extends State<FeedCareCommonCardPage<CardBloc>> {
+class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
   bool editText;
 
   @override
@@ -67,8 +65,7 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie',
-              widget.state.synced),
+          FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(widget.state.date),
@@ -104,8 +101,8 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
         params.message ?? '',
         edit: editText,
         onEdited: (value) {
-          BlocProvider.of<CardBloc>(context)
-              .add(FeedCareCommonCardBlocEventEdit(value));
+          BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(
+              state.feedEntryID, params.copyWith(value)));
           setState(() {
             editText = false;
           });
@@ -121,8 +118,9 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
             state.beforeMedias,
             prefix: 'Before ',
             onMediaTapped: (media) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToFullscreenMedia(
+                      media.thumbnailPath, media.filePath));
             },
           ),
         ),
@@ -137,8 +135,9 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
               state.afterMedias,
               prefix: 'After ',
               onMediaTapped: (media) {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToFullscreenMedia(
+                        media.thumbnailPath, media.filePath));
               },
             ),
           ));
