@@ -121,6 +121,8 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
 
   Widget _renderButton(BuildContext context, FeedTowelieParamsButton button) {
     return FlatButton(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      padding: EdgeInsets.all(0),
       child: Text(button.title.toUpperCase(),
           style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {

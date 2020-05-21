@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
@@ -30,8 +31,11 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
     List<FeedMedia> feedMedias =
         await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
-    List<MediaState> medias = feedMedias
-        .map((m) => MediaState(m.id, m.filePath, m.thumbnailPath, m.synced));
+    List<MediaState> medias = feedMedias.map((m) => MediaState(
+        m.id,
+        FeedMedias.makeAbsoluteFilePath(m.filePath),
+        FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+        m.synced)).toList();
     return FeedMediaState(state, medias);
   }
 

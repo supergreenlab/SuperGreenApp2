@@ -186,7 +186,7 @@ class FeedsAPI {
 
     {
       File file =
-          File(await FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
+          File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
       print(
           'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
       Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
@@ -199,7 +199,7 @@ class FeedsAPI {
 
     {
       File file =
-          File(await FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
+          File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
       print(
           'Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
       Response resp = await put(

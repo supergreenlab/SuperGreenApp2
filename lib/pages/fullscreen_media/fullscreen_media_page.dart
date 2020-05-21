@@ -56,7 +56,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
           if (state is FullscreenMediaBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
               _videoPlayerController =
-                  VideoPlayerController.file(File(state.feedMedia.filePath));
+                  VideoPlayerController.file(File(state.filePath));
               await _videoPlayerController.initialize();
               _videoPlayerController.play();
               _videoPlayerController.setLooping(true);
@@ -70,7 +70,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
               return LayoutBuilder(
                 builder: (context, constraint) {
                   return Hero(
-                      tag: 'FeedMedia:${state.heroPath ?? state.feedMedia.filePath}',
+                      tag: 'FeedMedia:${state.heroPath ?? state.filePath}',
                       child: GestureDetector(onTap: () {
                         BlocProvider.of<MainNavigatorBloc>(context)
                             .add(MainNavigatorActionPop());
@@ -142,8 +142,8 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         height: constraints.maxHeight,
         child: Image.file(
           File(state.isVideo
-              ? state.feedMedia.thumbnailPath
-              : state.feedMedia.filePath),
+              ? state.thumbnailPath
+              : state.filePath),
           fit: BoxFit.contain,
         ));
     if (state.overlayPath != null) {

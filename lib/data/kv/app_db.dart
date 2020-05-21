@@ -25,6 +25,8 @@ class AppDB {
   Box _settingsDB;
   Box _miscDB;
 
+  String documentPath;
+
   factory AppDB() => _instance;
 
   AppDB._newInstance();
