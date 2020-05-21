@@ -26,6 +26,7 @@ import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_light.dart';
 
 abstract class FeedLightFormBlocEvent extends Equatable {}
 
@@ -169,8 +170,8 @@ class FeedLightFormBloc
           type: 'FE_LIGHT',
           feed: plants[i].feed,
           date: DateTime.now(),
-          params: Value(JsonEncoder().convert(
-              {'initialValues': initialValues, 'values': event.values})),
+          params: Value(JsonEncoder()
+              .convert(FeedLightParams(event.values, initialValues).toJSON())),
         ));
         if (i == 0) {
           feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);

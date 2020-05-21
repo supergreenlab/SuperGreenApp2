@@ -18,24 +18,29 @@
 
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
-class FeedMediaParams extends Equatable {
+class FeedMediaParams extends FeedEntryParams {
   final String message;
+  final bool helpRequest;
 
-  FeedMediaParams(this.message);
+  FeedMediaParams(this.message, this.helpRequest);
+
+  FeedMediaParams copyWith(String message) => FeedMediaParams(message, this.helpRequest);
 
   static FeedMediaParams fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedMediaParams(map['message']);
+    return FeedMediaParams(map['message'], map['helpRequest']);
   }
 
+  @override
   String toJSON() {
     return JsonEncoder().convert({
       'message': message,
+      'helpRequest': helpRequest
     });
   }
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, helpRequest];
 }

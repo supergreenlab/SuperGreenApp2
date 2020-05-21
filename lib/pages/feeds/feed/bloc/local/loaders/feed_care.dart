@@ -18,9 +18,12 @@
 
 import 'dart:convert';
 
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
@@ -33,23 +36,37 @@ class FeedCareLoader extends LocalFeedEntryLoader {
   Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
     List<FeedMedia> medias =
         await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
-    List<MediaState> beforeMedias = medias.where((m) {
-      final Map<String, dynamic> params = JsonDecoder().convert(m.params);
-      return params['before'];
-    }).map<MediaState>((m) => MediaState(
-        m.id,
-        FeedMedias.makeAbsoluteFilePath(m.filePath),
-        FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
-        m.synced)).toList();
-    List<MediaState> afterMedias = medias.where((m) {
-      final Map<String, dynamic> params = JsonDecoder().convert(m.params);
-      return !params['before'];
-    }).map<MediaState>((m) => MediaState(
-        m.id,
-        FeedMedias.makeAbsoluteFilePath(m.filePath),
-        FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
-        m.synced)).toList();
+    List<MediaState> beforeMedias = medias
+        .where((m) {
+          final Map<String, dynamic> params = JsonDecoder().convert(m.params);
+          return params['before'];
+        })
+        .map<MediaState>((m) => MediaState(
+            m.id,
+            FeedMedias.makeAbsoluteFilePath(m.filePath),
+            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+            m.synced))
+        .toList();
+    List<MediaState> afterMedias = medias
+        .where((m) {
+          final Map<String, dynamic> params = JsonDecoder().convert(m.params);
+          return !params['before'];
+        })
+        .map<MediaState>((m) => MediaState(
+            m.id,
+            FeedMedias.makeAbsoluteFilePath(m.filePath),
+            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+            m.synced))
+        .toList();
     return FeedCareCommonState(state, beforeMedias, afterMedias);
+  }
+
+  @override
+  Future update(FeedEntryState entry, FeedEntryParams params) async {
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+        id: Value(entry.feedEntryID),
+        params: Value(params.toJSON()),
+        synced: Value(false)));
   }
 
   @override

@@ -18,24 +18,34 @@
 
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
-class FeedScheduleParams extends Equatable {
+class FeedScheduleParams extends FeedEntryParams {
   final String schedule;
+  final Map<String, dynamic> schedules;
+  final String initialSchedule;
+  final Map<String, dynamic> initialSchedules;
 
-  FeedScheduleParams(this.schedule);
+  FeedScheduleParams(this.schedule, this.schedules, this.initialSchedule,
+      this.initialSchedules);
 
   static FeedScheduleParams fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedScheduleParams(map['schedule']);
+    return FeedScheduleParams(map['schedule'], map['schedules'],
+        map['initialSchedule'], map['initialSchedules']);
   }
 
+  @override
   String toJSON() {
     return JsonEncoder().convert({
       'schedule': schedule,
+      'schedules': schedules,
+      'initialSchedule': initialSchedule,
+      'initialSchedules': initialSchedules,
     });
   }
 
   @override
-  List<Object> get props => [schedule];
+  List<Object> get props =>
+      [schedule, schedules, initialSchedule, initialSchedules];
 }

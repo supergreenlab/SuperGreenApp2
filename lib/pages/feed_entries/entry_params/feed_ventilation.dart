@@ -19,10 +19,11 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedVentilationParamsValues extends Equatable {
-  final double blowerDay;
-  final double blowerNight;
+  final int blowerDay;
+  final int blowerNight;
 
   FeedVentilationParamsValues(this.blowerDay, this.blowerNight);
 
@@ -30,15 +31,15 @@ class FeedVentilationParamsValues extends Equatable {
     return FeedVentilationParamsValues(map['blowerDay'], map['blowerNight']);
   }
 
-  static Map<String, dynamic> toJSON(FeedVentilationParamsValues p) {
-    return {'blowerDay': p.blowerDay, 'blowerNight': p.blowerNight};
+  Map<String, dynamic> toMap() {
+    return {'blowerDay': blowerDay, 'blowerNight': blowerNight};
   }
 
   @override
   List<Object> get props => [blowerDay, blowerNight];
 }
 
-class FeedVentilationParams extends Equatable {
+class FeedVentilationParams extends FeedEntryParams {
   final FeedVentilationParamsValues values;
   final FeedVentilationParamsValues initialValues;
 
@@ -51,11 +52,12 @@ class FeedVentilationParams extends Equatable {
         FeedVentilationParamsValues.fromJSON(map['initialValues']));
   }
 
-  static Map<String, dynamic> toJSON(FeedVentilationParams p) {
-    return {
-      'values': FeedVentilationParamsValues.toJSON(p.values),
-      'initialValues': FeedVentilationParamsValues.toJSON(p.initialValues)
-    };
+  @override
+  String toJSON() {
+    return JsonEncoder().convert({
+      'values': values.toMap(),
+      'initialValues': initialValues.toMap()
+    });
   }
 
   @override

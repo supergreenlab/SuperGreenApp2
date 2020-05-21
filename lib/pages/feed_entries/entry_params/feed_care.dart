@@ -18,18 +18,21 @@
 
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
-class FeedCareParams extends Equatable {
+class FeedCareParams extends FeedEntryParams {
   final String message;
 
   FeedCareParams(this.message);
+
+  FeedCareParams copyWith(String message) => FeedCareParams(message);
 
   static FeedCareParams fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedCareParams(map['message']);
   }
 
+  @override
   String toJSON() {
     return JsonEncoder().convert({
       'message': message,

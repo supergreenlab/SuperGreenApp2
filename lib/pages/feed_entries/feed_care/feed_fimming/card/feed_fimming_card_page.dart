@@ -18,11 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/card/feed_fimming_card_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
-class FeedFimmingCardPage extends FeedCareCommonCardPage<FeedFimmingCardBloc> {
+class FeedFimmingCardPage extends FeedCareCommonCardPage {
 
   FeedFimmingCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key}) : super(animation, feedState, state, key: key);
 

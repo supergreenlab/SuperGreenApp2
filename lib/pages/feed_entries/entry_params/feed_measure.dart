@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
-class FeedMeasureParams extends Equatable {
+class FeedMeasureParams extends FeedEntryParams {
   final dynamic previous;
 
   FeedMeasureParams(this.previous);
@@ -30,6 +30,7 @@ class FeedMeasureParams extends Equatable {
     return FeedMeasureParams(map['previous']);
   }
 
+  @override
   String toJSON() {
     return JsonEncoder().convert({'previous': previous});
   }

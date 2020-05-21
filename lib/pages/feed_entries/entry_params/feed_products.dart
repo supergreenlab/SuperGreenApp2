@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedProductsButtonParams extends Equatable {
   final String id;
@@ -101,7 +102,7 @@ class FeedProductsItemParams extends Equatable {
   List<Object> get props => [title, description, picture, price, geo, link];
 }
 
-class FeedProductsParams extends Equatable {
+class FeedProductsParams extends FeedEntryParams {
   final String topPic;
   final String text;
   final List<FeedProductsItemParams> products;
@@ -129,6 +130,7 @@ class FeedProductsParams extends Equatable {
     );
   }
 
+  @override
   String toJSON() {
     return JsonEncoder().convert({
       'top_pic': topPic,

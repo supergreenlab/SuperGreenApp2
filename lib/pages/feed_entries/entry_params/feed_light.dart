@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
-class FeedLightParams extends Equatable {
+class FeedLightParams extends FeedEntryParams {
   final List<int> values;
   final List<int> initialValues;
 
@@ -31,6 +31,7 @@ class FeedLightParams extends Equatable {
     return FeedLightParams(map['values'], map['initialValues']);
   }
 
+  @override
   String toJSON() {
     return JsonEncoder().convert({
       'values': values,

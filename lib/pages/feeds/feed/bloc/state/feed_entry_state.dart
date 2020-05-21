@@ -17,6 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedEntryState extends Equatable {
   final dynamic feedEntryID;
@@ -25,7 +26,7 @@ class FeedEntryState extends Equatable {
   final bool isNew;
   final bool synced;
   final DateTime date;
-  final dynamic params;
+  final FeedEntryParams params;
 
   FeedEntryState(
       this.feedEntryID, this.feedID, this.type, this.isNew, this.synced, this.date, this.params);

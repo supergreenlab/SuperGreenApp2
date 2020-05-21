@@ -26,6 +26,7 @@ import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
 
 abstract class FeedScheduleFormBlocEvent extends Equatable {}
 
@@ -177,12 +178,9 @@ class FeedScheduleFormBloc
             type: 'FE_SCHEDULE',
             feed: plants[i].feed,
             date: DateTime.now(),
-            params: Value(JsonEncoder().convert({
-              'initialSchedule': initialSchedule,
-              'initialSchedules': initialSchedules,
-              'schedule': schedule,
-              'schedules': schedules,
-            })),
+            params: Value(FeedScheduleParams(
+                    schedule, schedules, initialSchedule, initialSchedules)
+                .toJSON()),
           ));
         }
       }

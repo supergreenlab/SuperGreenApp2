@@ -19,7 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -71,6 +73,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedMediaState state) {
+    FeedMediaParams params = state.params;
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -90,8 +93,9 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               ? MediaList(
                   state.medias,
                   onMediaTapped: (media) {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
+                    BlocProvider.of<MainNavigatorBloc>(context).add(
+                        MainNavigateToFullscreenMedia(
+                            media.thumbnailPath, media.filePath));
                   },
                 )
               : Container(),
@@ -101,11 +105,11 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
             child: FeedCardDate(state.date),
           ),
           FeedCardText(
-            state.params.message ?? '',
+            params.message ?? '',
             edit: editText,
             onEdited: (value) {
-              //BlocProvider.of<FeedMediaCardBloc>(context)
-              //    .add(FeedMediaCardBlocEventEdit(value));
+              BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(
+                  state.feedEntryID, params.copyWith(value)));
               setState(() {
                 editText = false;
               });
