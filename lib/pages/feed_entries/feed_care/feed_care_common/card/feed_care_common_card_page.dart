@@ -122,7 +122,7 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
             prefix: 'Before ',
             onMediaTapped: (media) {
               BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToFullscreenMedia(media));
+                  .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
             },
           ),
         ),
@@ -138,7 +138,7 @@ class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
               prefix: 'After ',
               onMediaTapped: (media) {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(media));
+                    .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
               },
             ),
           ));

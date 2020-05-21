@@ -91,6 +91,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       final Directory appDocDir = await getApplicationDocumentsDirectory();
       Hive.init(appDocDir.path);
       Hive.registerAdapter(AppDataAdapter(), 35);
+      AppDB().documentPath = appDocDir.path;
 
       final String dirPath = '${appDocDir.path}/Pictures/sgl';
       await Directory(dirPath).create(recursive: true);

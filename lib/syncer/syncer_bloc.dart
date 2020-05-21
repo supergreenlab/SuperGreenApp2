@@ -159,12 +159,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
       String thumbnailPath =
           '${FeedMedias.makeFilePath()}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
-      await FeedsAPI().download(feedMediasCompanion.filePath.value, await FeedMedias.makeAbsoluteFilePath(filePath));
+      await FeedsAPI().download(feedMediasCompanion.filePath.value, FeedMedias.makeAbsoluteFilePath(filePath));
       await FeedsAPI()
-          .download(feedMediasCompanion.thumbnailPath.value, await FeedMedias.makeAbsoluteFilePath(thumbnailPath));
+          .download(feedMediasCompanion.thumbnailPath.value, FeedMedias.makeAbsoluteFilePath(thumbnailPath));
       if (exists != null) {
-        await _deleteFileIfExists(await FeedMedias.makeAbsoluteFilePath(exists.filePath));
-        await _deleteFileIfExists(await FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(exists.filePath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
         await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion.copyWith(
             id: Value(exists.id),
             filePath: Value(filePath),

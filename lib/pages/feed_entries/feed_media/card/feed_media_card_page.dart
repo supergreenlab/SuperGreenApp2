@@ -91,7 +91,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   state.medias,
                   onMediaTapped: (media) {
                     BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToFullscreenMedia(media));
+                        .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
                   },
                 )
               : Container(),

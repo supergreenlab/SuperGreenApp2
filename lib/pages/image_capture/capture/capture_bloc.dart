@@ -88,8 +88,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
       if (thumbnailPath.endsWith('mp4')) {
         thumbnailPath = thumbnailPath.replaceAll('.mp4', '.jpg');
         await VideoThumbnail.thumbnailFile(
-          video: await FeedMedias.makeAbsoluteFilePath(event.filePath),
-          thumbnailPath: await FeedMedias.makeAbsoluteFilePath(thumbnailPath),
+          video: FeedMedias.makeAbsoluteFilePath(event.filePath),
+          thumbnailPath: FeedMedias.makeAbsoluteFilePath(thumbnailPath),
           imageFormat: ImageFormat.JPEG,
           quality: 50,
         );

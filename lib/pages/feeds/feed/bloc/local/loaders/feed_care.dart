@@ -18,6 +18,7 @@
 
 import 'dart:convert';
 
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
@@ -26,7 +27,6 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_e
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedCareLoader extends LocalFeedEntryLoader {
-
   FeedCareLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
@@ -36,13 +36,19 @@ class FeedCareLoader extends LocalFeedEntryLoader {
     List<MediaState> beforeMedias = medias.where((m) {
       final Map<String, dynamic> params = JsonDecoder().convert(m.params);
       return params['before'];
-    }).map<MediaState>(
-        (m) => MediaState(m.id, m.filePath, m.thumbnailPath, m.synced));
+    }).map<MediaState>((m) => MediaState(
+        m.id,
+        FeedMedias.makeAbsoluteFilePath(m.filePath),
+        FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+        m.synced)).toList();
     List<MediaState> afterMedias = medias.where((m) {
       final Map<String, dynamic> params = JsonDecoder().convert(m.params);
       return !params['before'];
-    }).map<MediaState>(
-        (m) => MediaState(m.id, m.filePath, m.thumbnailPath, m.synced));
+    }).map<MediaState>((m) => MediaState(
+        m.id,
+        FeedMedias.makeAbsoluteFilePath(m.filePath),
+        FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+        m.synced)).toList();
     return FeedCareCommonState(state, beforeMedias, afterMedias);
   }
 

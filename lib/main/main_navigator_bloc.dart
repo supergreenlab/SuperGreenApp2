@@ -40,7 +40,7 @@ class MainNavigatorEvent extends Equatable {
 class MainNavigateToHomeEvent extends MainNavigatorEvent {
   final Plant plant;
 
-  MainNavigateToHomeEvent({ this.plant });
+  MainNavigateToHomeEvent({this.plant});
 
   @override
   List<Object> get props => [plant];
@@ -310,13 +310,15 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
 
 class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
   final String overlayPath;
-  final MediaState feedMedia;
+  final String thumbnailPath;
+  final String filePath;
   final String heroPath;
 
-  MainNavigateToFullscreenMedia(this.feedMedia, {this.overlayPath, this.heroPath});
+  MainNavigateToFullscreenMedia(this.thumbnailPath, this.filePath,
+      {this.overlayPath, this.heroPath});
 
   @override
-  List<Object> get props => [feedMedia, overlayPath, heroPath];
+  List<Object> get props => [thumbnailPath, filePath, overlayPath, heroPath];
 }
 
 class MainNavigateToFullscreenPicture extends MainNavigatorEvent {

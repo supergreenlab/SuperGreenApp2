@@ -84,7 +84,7 @@ class _CapturePageState extends State<CapturePage> {
           if (!_popDone) {
             if (_filePath != null) {
               await _deleteFileIfExists(
-                  await FeedMedias.makeAbsoluteFilePath(_filePath));
+                  FeedMedias.makeAbsoluteFilePath(_filePath));
             }
           }
           return true;
@@ -211,7 +211,7 @@ class _CapturePageState extends State<CapturePage> {
       onPressed: () async {
         if (_filePath != null) {
           await _deleteFileIfExists(
-              await FeedMedias.makeAbsoluteFilePath(_filePath));
+              FeedMedias.makeAbsoluteFilePath(_filePath));
         }
         BlocProvider.of<MainNavigatorBloc>(context)
             .add(MainNavigatorActionPop());
@@ -285,7 +285,7 @@ class _CapturePageState extends State<CapturePage> {
                           source: ImageSource.gallery);
                       if (video != null) {
                         _filePath = '${FeedMedias.makeFilePath()}.mp4';
-                        video.copy(_filePath);
+                        video.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
                         _endCapture(state);
                       }
                     } else {
@@ -293,7 +293,7 @@ class _CapturePageState extends State<CapturePage> {
                           source: ImageSource.gallery);
                       if (image != null) {
                         _filePath = '${FeedMedias.makeFilePath()}.jpg';
-                        image.copy(_filePath);
+                        image.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
                         _endCapture(state);
                       }
                     }
@@ -322,10 +322,10 @@ class _CapturePageState extends State<CapturePage> {
         () async {
       if (_filePath != null) {
         await _deleteFileIfExists(
-            await FeedMedias.makeAbsoluteFilePath(_filePath));
+            FeedMedias.makeAbsoluteFilePath(_filePath));
       }
       _filePath = '${FeedMedias.makeFilePath()}.jpg';
-      String absolutePath = await FeedMedias.makeAbsoluteFilePath(_filePath);
+      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
       await _cameraController.takePicture(absolutePath);
       _endCapture(state);
     });
@@ -335,10 +335,10 @@ class _CapturePageState extends State<CapturePage> {
     return _renderBottomButton(context, Icons.videocam, Colors.blue, () async {
       if (_filePath != null) {
         await _deleteFileIfExists(
-            await FeedMedias.makeAbsoluteFilePath(_filePath));
+            FeedMedias.makeAbsoluteFilePath(_filePath));
       }
       _filePath = '${FeedMedias.makeFilePath()}.mp4';
-      String absolutePath = await FeedMedias.makeAbsoluteFilePath(_filePath);
+      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
       await _deleteFileIfExists(absolutePath);
       await _cameraController.startVideoRecording(absolutePath);
       setState(() {});
@@ -369,14 +369,14 @@ class _CapturePageState extends State<CapturePage> {
     );
   }
 
-  void _endCapture(CaptureBlocState state) {
+  void _endCapture(CaptureBlocState state) async {
     BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToImageCapturePlaybackEvent(_filePath,
+        MainNavigateToImageCapturePlaybackEvent(FeedMedias.makeAbsoluteFilePath(_filePath),
             overlayPath: state.overlayPath, futureFn: (f) async {
       final ret = await f;
       if (ret == null || ret == false) {
         await _deleteFileIfExists(
-            await FeedMedias.makeAbsoluteFilePath(_filePath));
+            FeedMedias.makeAbsoluteFilePath(_filePath));
         return;
       }
       BlocProvider.of<CaptureBloc>(context)

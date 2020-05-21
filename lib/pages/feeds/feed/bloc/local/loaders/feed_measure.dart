@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
@@ -25,7 +26,6 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_e
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedMeasureLoader extends LocalFeedEntryLoader {
-  
   FeedMeasureLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
@@ -41,16 +41,19 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
         previousMedia =
             await db.feedsDAO.getFeedMediaForServerID(params.previous);
       }
-      previous = MediaState(previousMedia.id, previousMedia.filePath,
-          previousMedia.thumbnailPath, previousMedia.synced);
+      previous = MediaState(
+          previousMedia.id,
+          FeedMedias.makeAbsoluteFilePath(previousMedia.filePath),
+          FeedMedias.makeAbsoluteFilePath(previousMedia.thumbnailPath),
+          previousMedia.synced);
     }
 
     List<FeedMedia> currentMedia =
         await db.feedsDAO.getFeedMedias(state.feedEntryID);
     MediaState current = MediaState(
         currentMedia[0].id,
-        currentMedia[0].filePath,
-        currentMedia[0].thumbnailPath,
+        FeedMedias.makeAbsoluteFilePath(currentMedia[0].filePath),
+        FeedMedias.makeAbsoluteFilePath(currentMedia[0].thumbnailPath),
         currentMedia[0].synced);
     return FeedMeasureState(state, previous, current);
   }

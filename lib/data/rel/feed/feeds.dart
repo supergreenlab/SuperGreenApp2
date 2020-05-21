@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:moor/moor.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'feeds.g.dart';
@@ -144,9 +145,8 @@ class FeedMedias extends Table {
     return filePath;
   }
 
-  static Future<String> makeAbsoluteFilePath(String filePath) async {
-    final Directory appDocDir = await getApplicationDocumentsDirectory();
-    return '${appDocDir.path}/$filePath';
+  static String makeAbsoluteFilePath(String filePath) {
+    return '${AppDB().documentPath}/$filePath';
   }
 
   // TODO check when createCompaion comes back
