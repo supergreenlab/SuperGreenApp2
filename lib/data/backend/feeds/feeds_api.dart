@@ -95,7 +95,7 @@ class FeedsAPI {
   }
 
   Future syncPlant(Plant plant) async {
-    Map<String, dynamic> obj = await Plants.toJSON(plant);
+    Map<String, dynamic> obj = await Plants.toMap(plant);
     String serverID = await _postPut('/plant', obj);
 
     PlantsCompanion plantsCompanion =
@@ -107,7 +107,7 @@ class FeedsAPI {
   }
 
   Future syncBox(Box box) async {
-    Map<String, dynamic> obj = await Boxes.toJSON(box);
+    Map<String, dynamic> obj = await Boxes.toMap(box);
     String serverID = await _postPut('/box', obj);
 
     BoxesCompanion boxesCompanion =
@@ -119,7 +119,7 @@ class FeedsAPI {
   }
 
   Future syncTimelapse(Timelapse timelapse) async {
-    Map<String, dynamic> obj = await Timelapses.toJSON(timelapse);
+    Map<String, dynamic> obj = await Timelapses.toMap(timelapse);
     String serverID = await _postPut('/timelapse', obj);
 
     TimelapsesCompanion timelapsesCompanion =
@@ -132,7 +132,7 @@ class FeedsAPI {
   }
 
   Future syncDevice(Device device) async {
-    Map<String, dynamic> obj = await Devices.toJSON(device);
+    Map<String, dynamic> obj = await Devices.toMap(device);
     String serverID = await _postPut('/device', obj);
 
     DevicesCompanion devicesCompanion =
@@ -144,7 +144,7 @@ class FeedsAPI {
   }
 
   Future syncFeed(Feed feed) async {
-    Map<String, dynamic> obj = await Feeds.toJSON(feed);
+    Map<String, dynamic> obj = await Feeds.toMap(feed);
     String serverID = await _postPut('/feed', obj);
 
     FeedsCompanion feedsCompanion =
@@ -156,7 +156,7 @@ class FeedsAPI {
   }
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
-    Map<String, dynamic> obj = await FeedEntries.toJSON(feedEntry);
+    Map<String, dynamic> obj = await FeedEntries.toMap(feedEntry);
     String serverID = await _postPut('/feedEntry', obj);
 
     FeedEntriesCompanion feedEntriesCompanion =
@@ -169,7 +169,7 @@ class FeedsAPI {
   }
 
   Future syncFeedMedia(FeedMedia feedMedia) async {
-    Map<String, dynamic> obj = await FeedMedias.toJSON(feedMedia);
+    Map<String, dynamic> obj = await FeedMedias.toMap(feedMedia);
 
     Response resp = await post('$_serverHost/feedMediaUploadURL',
         headers: {
@@ -231,7 +231,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<PlantsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Plants.fromJSON(maps[i]));
+      results.add(await Plants.fromMap(maps[i]));
     }
     return results;
   }
@@ -241,7 +241,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<BoxesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Boxes.fromJSON(maps[i]));
+      results.add(await Boxes.fromMap(maps[i]));
     }
     return results;
   }
@@ -251,7 +251,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<TimelapsesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Timelapses.fromJSON(maps[i]));
+      results.add(await Timelapses.fromMap(maps[i]));
     }
     return results;
   }
@@ -259,7 +259,7 @@ class FeedsAPI {
   Future<List<DevicesCompanion>> unsyncedDevices() async {
     Map<String, dynamic> syncData = await _unsynced("Devices");
     List<dynamic> maps = syncData['items'];
-    return maps.map<DevicesCompanion>((m) => Devices.fromJSON(m)).toList();
+    return maps.map<DevicesCompanion>((m) => Devices.fromMap(m)).toList();
   }
 
   Future<List<FeedsCompanion>> unsyncedFeeds() async {
@@ -267,7 +267,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Feeds.fromJSON(maps[i]));
+      results.add(await Feeds.fromMap(maps[i]));
     }
     return results;
   }
@@ -277,7 +277,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedEntriesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await FeedEntries.fromJSON(maps[i]));
+      results.add(await FeedEntries.fromMap(maps[i]));
     }
     return results;
   }
@@ -287,7 +287,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedMediasCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await FeedMedias.fromJSON(maps[i]));
+      results.add(await FeedMedias.fromMap(maps[i]));
     }
     return results;
   }
