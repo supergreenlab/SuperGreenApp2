@@ -116,10 +116,14 @@ class RelDB extends _$RelDB {
           List<FeedMedia> feedMedias = await feedsDAO.getAllFeedMedias();
           for (int i = 0; i < feedMedias.length; ++i) {
             FeedMedia feedMedia = feedMedias[i];
+            String filePath =
+                FeedMedias.makeRelativeFilePath(basename(feedMedia.filePath));
+            String thumbnailPath = FeedMedias.makeRelativeFilePath(
+                basename(feedMedia.thumbnailPath));
             await feedsDAO.updateFeedMedia(FeedMediasCompanion(
               id: Value(feedMedia.id),
-              filePath: Value(FeedMedias.makeRelativeFilePath(basename(feedMedia.filePath))),
-              thumbnailPath: Value(FeedMedias.makeRelativeFilePath(basename(feedMedia.thumbnailPath)))
+              filePath: Value(filePath),
+              thumbnailPath: Value(thumbnailPath),
             ));
           }
         }
