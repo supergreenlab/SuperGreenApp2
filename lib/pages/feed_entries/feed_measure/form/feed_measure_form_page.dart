@@ -255,9 +255,9 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
             FutureFn ff =
                 BlocProvider.of<MainNavigatorBloc>(context).futureFn();
             BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                MainNavigateToImageCapturePlaybackEvent(FeedMedias.makeAbsoluteFilePath(media.filePath.value),
                     futureFn: ff.futureFn,
-                    overlayPath: _previous?.filePath,
+                    overlayPath: FeedMedias.makeAbsoluteFilePath(_previous?.filePath),
                     okButton: 'OK'));
             bool keep = await ff.future;
             if (keep == true) {
