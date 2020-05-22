@@ -18,6 +18,16 @@
 
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
+<<<<<<< HEAD
+<<<<<<< HEAD:lib/pages/feed_entries/feed_products/feed_products_state.dart
 class FeedProductsState extends FeedEntryStateLoaded {
   FeedProductsState(FeedEntryState from) : super.copy(from);
+=======
+class FeedWaterState extends FeedEntryStateLoaded {
+  FeedWaterState(FeedEntryState from) : super.copy(from);
+>>>>>>> aa259ba6f3e197318fbdf72966fb22168168177b:lib/pages/feed_entries/feed_water/card/feed_water_state.dart
+=======
+class FeedProductsState extends FeedEntryStateLoaded {
+  FeedProductsState(FeedEntryState from) : super.copy(from);
+>>>>>>> aa259ba6f3e197318fbdf72966fb22168168177b
 }
