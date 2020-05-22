@@ -46,17 +46,21 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
       if (feedEntry.id != entry.feedEntryID) {
         return;
       }
-      FeedEntryStateNotLoaded newState = FeedEntryStateNotLoaded(
-          feedEntry.id,
-          feedEntry.feed,
-          feedEntry.type,
-          feedEntry.isNew,
-          feedEntry.synced,
-          feedEntry.date,
-          FeedEntriesParamHelpers.paramForFeedEntryType(
-              feedEntry.type, feedEntry.params));
-      add(FeedBlocEventUpdatedEntry(await load(newState)));
+      await updateFeedEntryState(feedEntry);
     });
+  }
+
+  Future<void> updateFeedEntryState(FeedEntry feedEntry) async {
+    FeedEntryStateNotLoaded newState = FeedEntryStateNotLoaded(
+        feedEntry.id,
+        feedEntry.feed,
+        feedEntry.type,
+        feedEntry.isNew,
+        feedEntry.synced,
+        feedEntry.date,
+        FeedEntriesParamHelpers.paramForFeedEntryType(
+            feedEntry.type, feedEntry.params));
+    add(FeedBlocEventUpdatedEntry(await load(newState)));
   }
 
   @mustCallSuper

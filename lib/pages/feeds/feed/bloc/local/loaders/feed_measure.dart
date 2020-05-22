@@ -28,8 +28,8 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_e
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedMeasureLoader extends LocalFeedEntryLoader {
-  Map<dynamic, StreamSubscription<FeedMedia>> _previousStreams;
-  Map<dynamic, StreamSubscription<List<FeedMedia>>> _currentStreams;
+  Map<dynamic, StreamSubscription<FeedMedia>> _previousStreams = {};
+  Map<dynamic, StreamSubscription<List<FeedMedia>>> _currentStreams = {};
 
   FeedMeasureLoader(Function(FeedBlocEvent) add) : super(add);
 
@@ -70,18 +70,24 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
     if (params.previous is int) {
       _previousStreams[entry.feedEntryID] =
           db.feedsDAO.watchFeedMedia(params.previous).listen((_) async {
-        add(FeedBlocEventUpdatedEntry(await load(entry)));
+        FeedEntry feedEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+        await updateFeedEntryState(feedEntry);
       });
     } else if (params.previous is String) {
       _previousStreams[entry.feedEntryID] = db.feedsDAO
           .watchFeedMediaForServerID(params.previous)
           .listen((_) async {
-        add(FeedBlocEventUpdatedEntry(await load(entry)));
+        FeedEntry feedEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+        await updateFeedEntryState(feedEntry);
       });
     }
     _currentStreams[entry.feedEntryID] =
         db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
-      add(FeedBlocEventUpdatedEntry(await load(entry)));
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+      await updateFeedEntryState(feedEntry);
     });
   }
 
@@ -89,9 +95,11 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
     super.cancelListenEntryChanges(entry);
     if (_previousStreams[entry.feedEntryID] != null) {
       await _previousStreams[entry.feedEntryID].cancel();
+      _previousStreams.remove(entry.feedEntryID);
     }
     if (_currentStreams[entry.feedEntryID] != null) {
       await _currentStreams[entry.feedEntryID].cancel();
+      _currentStreams.remove(entry.feedEntryID);
     }
   }
 

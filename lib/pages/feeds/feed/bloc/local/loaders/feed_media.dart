@@ -30,8 +30,8 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_e
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedMediaLoader extends LocalFeedEntryLoader {
-  Map<dynamic, StreamSubscription<List<FeedMedia>>> _streams;
-  
+  Map<dynamic, StreamSubscription<List<FeedMedia>>> _streams = {};
+
   FeedMediaLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
@@ -61,7 +61,9 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
     RelDB db = RelDB.get();
     _streams[entry.feedEntryID] =
         db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
-      add(FeedBlocEventUpdatedEntry(await load(entry)));
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+      await updateFeedEntryState(feedEntry);
     });
   }
 
@@ -69,6 +71,7 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
     super.cancelListenEntryChanges(entry);
     if (_streams[entry.feedEntryID] != null) {
       await _streams[entry.feedEntryID].cancel();
+      _streams.remove(entry.feedEntryID);
     }
   }
 
