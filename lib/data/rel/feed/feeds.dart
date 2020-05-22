@@ -32,7 +32,7 @@ class Feeds extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<FeedsCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<FeedsCompanion> fromMap(Map<String, dynamic> map) async {
     return FeedsCompanion(
         name: Value(map['name'] as String),
         isNewsFeed: Value(map['isNewsFeed'] as bool),
@@ -40,7 +40,7 @@ class Feeds extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(Feed feed) async {
+  static Future<Map<String, dynamic>> toMap(Feed feed) async {
     return {
       'id': feed.serverID,
       'name': feed.name,
@@ -62,7 +62,7 @@ class FeedEntries extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<FeedEntriesCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<FeedEntriesCompanion> fromMap(Map<String, dynamic> map) async {
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     return FeedEntriesCompanion(
         feed: Value(feed.id),
@@ -74,7 +74,7 @@ class FeedEntries extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(FeedEntry feedEntry) async {
+  static Future<Map<String, dynamic>> toMap(FeedEntry feedEntry) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
     if (feed.serverID == null) {
       throw 'Missing serverID for feed relation';
@@ -107,7 +107,7 @@ class FeedMedias extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<FeedMediasCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<FeedMediasCompanion> fromMap(Map<String, dynamic> map) async {
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
@@ -121,7 +121,7 @@ class FeedMedias extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(FeedMedia feedMedia) async {
+  static Future<Map<String, dynamic>> toMap(FeedMedia feedMedia) async {
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntry(feedMedia.feedEntry);
     if (feedEntry.serverID == null) {
