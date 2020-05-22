@@ -139,7 +139,11 @@ class FeedMedias extends Table {
 
   static String makeFilePath() {
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    final String filePath = 'Pictures/sgl/$timestamp';
+    return FeedMedias.makeRelativeFilePath(timestamp);
+  }
+
+  static String makeRelativeFilePath(String fileName) {
+    final String filePath = 'Pictures/sgl/$fileName';
     return filePath;
   }
 
@@ -209,7 +213,8 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return delete(feeds).delete(feed);
   }
 
-  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(int feedID, int limit, int offset) {
+  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(
+      int feedID, int limit, int offset) {
     return (select(feedEntries)
       ..where((fe) => fe.feed.equals(feedID))
       ..orderBy(
@@ -306,6 +311,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (await query.get())
         .map<FeedMedia>((e) => e.readTable(feedMedias))
         .toList();
+  }
+
+  Future<List<FeedMedia>> getAllFeedMedias() {
+    return (select(feedMedias)).get();
   }
 
   Future<List<FeedMedia>> getFeedMedias(int feedEntryID) {
