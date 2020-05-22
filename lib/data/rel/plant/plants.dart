@@ -37,7 +37,7 @@ class Plants extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<PlantsCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<PlantsCompanion> fromMap(Map<String, dynamic> map) async {
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     Box box = await RelDB.get().plantsDAO.getBoxForServerID(map['boxID']);
     return PlantsCompanion(
@@ -50,7 +50,7 @@ class Plants extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(Plant plant) async {
+  static Future<Map<String, dynamic>> toMap(Plant plant) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
     if (feed.serverID == null) {
       throw 'Missing serverID for feed relation';
@@ -83,7 +83,7 @@ class Boxes extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<BoxesCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<BoxesCompanion> fromMap(Map<String, dynamic> map) async {
     int deviceID;
     if (map['deviceID'] != null) {
       Device device =
@@ -99,7 +99,7 @@ class Boxes extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(Box box) async {
+  static Future<Map<String, dynamic>> toMap(Box box) async {
     Map<String, dynamic> obj = {
       'id': box.serverID,
       'name': box.name,
@@ -143,7 +143,7 @@ class Timelapses extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<TimelapsesCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<TimelapsesCompanion> fromMap(Map<String, dynamic> map) async {
     Plant plant =
         await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
@@ -158,7 +158,7 @@ class Timelapses extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(Timelapse timelapse) async {
+  static Future<Map<String, dynamic>> toMap(Timelapse timelapse) async {
     Plant plant = await RelDB.get().plantsDAO.getPlant(timelapse.plant);
     if (plant.serverID == null) {
       throw 'Missing serverID for plant relation';

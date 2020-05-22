@@ -80,8 +80,7 @@ abstract class FeedCareCommonFormBloc
         type: cardType(),
         feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(
-            JsonEncoder().convert(FeedCareParams(event.message).toJSON())),
+        params: Value(FeedCareParams(event.message).toJSON()),
       ));
       for (FeedMediasCompanion m in event.beforeMedias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(

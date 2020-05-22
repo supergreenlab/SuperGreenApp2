@@ -170,8 +170,7 @@ class FeedLightFormBloc
           type: 'FE_LIGHT',
           feed: plants[i].feed,
           date: DateTime.now(),
-          params: Value(JsonEncoder()
-              .convert(FeedLightParams(event.values, initialValues).toJSON())),
+          params: Value(FeedLightParams(event.values, initialValues).toJSON()),
         ));
         if (i == 0) {
           feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
