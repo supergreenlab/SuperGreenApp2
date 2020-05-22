@@ -68,6 +68,12 @@ class _FeedPageState extends State<FeedPage> {
             eof = state.eof;
             entries.addAll(state.entries);
           });
+          if (state.initialLoad == false) {
+            for (int i = 0; i < state.entries.length; ++i) {
+              listKey.currentState
+                  .insertItem(i, duration: Duration(milliseconds: 500));
+            }
+          }
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
           listKey.currentState
@@ -136,7 +142,17 @@ class _FeedPageState extends State<FeedPage> {
             key: listKey,
             itemBuilder:
                 (BuildContext context, int index, Animation<double> animation) {
-              if (index >= entries.length) {
+              if (index == entries.length) {
+                if (eof) {
+                  return null;
+                }
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventLoadEntries(10, entries.length));
+                return Container(
+                  height: 50,
+                  child: FullscreenLoading(),
+                );
+              } else if (index > entries.length) {
                 return null;
               }
               FeedEntryState feedEntry = entries[index];
@@ -147,13 +163,6 @@ class _FeedPageState extends State<FeedPage> {
               } else if (index == entries.length - 1 && eof) {
                 card =
                     Padding(padding: EdgeInsets.only(bottom: 10), child: card);
-              } else if (index == entries.length && !eof) {
-                BlocProvider.of<FeedBloc>(context)
-                    .add(FeedBlocEventLoadEntries(10));
-                return Container(
-                  height: 50,
-                  child: FullscreenLoading(),
-                );
               }
               return VisibilityDetector(
                   key: Key('feed_entry_${feedEntry.feedEntryID}'),
