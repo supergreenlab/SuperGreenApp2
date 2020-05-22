@@ -108,8 +108,8 @@ class FeedMeasureFormBloc
         type: 'FE_MEASURE',
         feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert(FeedMeasureParams(
-            event.previous != null ? event.previous.id : null))),
+        params: Value(FeedMeasureParams(
+            event.previous != null ? event.previous.id : null).toJSON()),
       ));
       await db.feedsDAO.addFeedMedia(event.current.copyWith(
           feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));

@@ -247,10 +247,10 @@ abstract class FeedEntryLoader {
 
   FeedEntryLoader(this.add);
 
-  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state);
+  Future<FeedEntryStateLoaded> load(FeedEntryState state);
   Future update(FeedEntryState entry, FeedEntryParams params);
   void startListenEntryChanges(FeedEntryStateLoaded entry);
-  void cancelListenEntryChanges(FeedEntryStateLoaded entry);
+  Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry);
   Future<void> close();
 }
 

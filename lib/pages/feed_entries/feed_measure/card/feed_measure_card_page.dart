@@ -51,7 +51,7 @@ class FeedMeasureCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
+              'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),

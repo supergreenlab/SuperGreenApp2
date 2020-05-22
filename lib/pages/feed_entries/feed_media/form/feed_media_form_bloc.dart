@@ -81,8 +81,8 @@ class FeedMediaFormBloc
         type: 'FE_MEDIA',
         feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert(
-            FeedMediaParams(event.message, event.helpRequest).toJSON())),
+        params:
+            Value(FeedMediaParams(event.message, event.helpRequest).toJSON()),
       ));
       for (FeedMediasCompanion m in event.medias) {
         await db.feedsDAO.addFeedMedia(m.copyWith(

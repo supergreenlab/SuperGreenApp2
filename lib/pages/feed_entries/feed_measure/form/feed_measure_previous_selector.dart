@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedMeasurePreviousSelector extends StatefulWidget {
@@ -46,7 +47,7 @@ class _FeedMeasurePreviousSelectorState extends State<FeedMeasurePreviousSelecto
                   return SizedBox(
                     width: constraints.maxWidth,
                     height: constraints.maxHeight,
-                    child: FittedBox(fit: BoxFit.contain, child: Image.file(File(widget._measures[index].thumbnailPath))),
+                    child: FittedBox(fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(widget._measures[index].thumbnailPath)))),
                   );
                 },
                 pagination: widget._measures.length > 1

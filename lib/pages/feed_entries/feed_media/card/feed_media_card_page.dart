@@ -60,7 +60,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
+          FeedCardTitle('assets/feed_card/icon_media.svg', 'Grow log',
               widget.state.synced),
           Container(
             height: 100,
@@ -109,7 +109,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
             edit: editText,
             onEdited: (value) {
               BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(
-                  state.feedEntryID, params.copyWith(value)));
+                  state, params.copyWith(value)));
               setState(() {
                 editText = false;
               });
