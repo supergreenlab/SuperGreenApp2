@@ -11,9 +11,9 @@ PODS:
   - devicelocale (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_ble_lib (2.2.3):
+  - flutter_ble_lib (2.2.4):
     - Flutter
-    - MultiplatformBleAdapter (= 0.1.5)
+    - MultiplatformBleAdapter (~> 0.1.5)
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_matomo (0.0.1):
@@ -151,12 +151,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
-  connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   devicelocale: feebbe5e7a30adb8c4f83185de1b50ff19b44f00
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_ble_lib: 20e79f0b1d78d921d9ed68ab4451e190029bc3d9
+  flutter_ble_lib: ff02e3a782af6431ed0a2b5bef325ec041604b2e
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_matomo: a4fc9d95faaf6f95124fc1956e892f91791b5fac
   flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
