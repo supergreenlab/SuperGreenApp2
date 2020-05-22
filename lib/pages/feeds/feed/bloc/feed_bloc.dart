@@ -34,11 +34,12 @@ class FeedBlocEventInit extends FeedBlocEvent {
 
 class FeedBlocEventLoadEntries extends FeedBlocEvent {
   final int n;
+  final int currentLength;
 
-  FeedBlocEventLoadEntries(this.n);
+  FeedBlocEventLoadEntries(this.n, this.currentLength);
 
   @override
-  List<Object> get props => [n];
+  List<Object> get props => [n, currentLength];
 }
 
 class FeedBlocEventAddedEntry extends FeedBlocEvent {
@@ -135,11 +136,12 @@ class FeedBlocStateFeedLoaded extends FeedBlocState {
 class FeedBlocStateEntriesLoaded extends FeedBlocState {
   final List<FeedEntryState> entries;
   final bool eof;
+  final bool initialLoad;
 
-  FeedBlocStateEntriesLoaded(this.entries, this.eof);
+  FeedBlocStateEntriesLoaded(this.entries, this.eof, this.initialLoad);
 
   @override
-  List<Object> get props => [entries, eof];
+  List<Object> get props => [entries, eof, initialLoad];
 }
 
 class FeedBlocStateAddEntry extends FeedBlocState {
@@ -174,11 +176,12 @@ class FeedBlocStateRemoveEntry extends FeedBlocState {
 
 class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
   FeedBlocProvider provider;
+  bool initialLoad = true;
   List<FeedEntryState> entries = [];
 
   FeedBloc(this.provider) {
     add(FeedBlocEventInit());
-    add(FeedBlocEventLoadEntries(10));
+    add(FeedBlocEventLoadEntries(10, entries.length));
   }
 
   @override
@@ -194,7 +197,8 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       List<FeedEntryState> fes =
           await provider.loadEntries(event.n, entries.length);
       entries.addAll(fes);
-      yield FeedBlocStateEntriesLoaded(entries, entries.length < event.n);
+      yield FeedBlocStateEntriesLoaded(fes, fes.length < event.n, initialLoad);
+      initialLoad = false;
     } else if (event is FeedBlocEventEntryVisible) {
       FeedEntryState e = entries[event.index];
       FeedEntryLoader loader = provider.loaders[e.type];
