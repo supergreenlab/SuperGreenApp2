@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:super_green_app/data/rel/plant/plants.dart';
@@ -69,7 +70,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -110,6 +111,16 @@ class RelDB extends _$RelDB {
             plantsDAO.updatePlant(PlantsCompanion(
                 id: Value(plants[i].id),
                 settings: Value(jsonEncode(settings))));
+          }
+        } else if (details.versionBefore == 4) {
+          List<FeedMedia> feedMedias = await feedsDAO.getAllFeedMedias();
+          for (int i = 0; i < feedMedias.length; ++i) {
+            FeedMedia feedMedia = feedMedias[i];
+            await feedsDAO.updateFeedMedia(FeedMediasCompanion(
+              id: Value(feedMedia.id),
+              filePath: Value(FeedMedias.makeRelativeFilePath(basename(feedMedia.filePath))),
+              thumbnailPath: Value(FeedMedias.makeRelativeFilePath(basename(feedMedia.thumbnailPath)))
+            ));
           }
         }
       });
