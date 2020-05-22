@@ -218,10 +218,12 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       int index =
           entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
       FeedEntryState entry = entries[index];
+      entries.removeAt(index);
       yield FeedBlocStateRemoveEntry(index, entry);
     } else if (event is FeedBlocEventUpdatedEntry) {
       int index =
           entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
+      entries[index] = event.entry;
       yield FeedBlocStateUpdateEntry(index, event.entry);
     } else if (event is FeedBlocEventMarkAsRead) {
       await provider.markAsRead(entries[event.index].feedEntryID);

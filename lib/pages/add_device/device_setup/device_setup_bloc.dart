@@ -140,7 +140,6 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         return;
       }
 
-      Map<String, dynamic> keys;
       int deviceID;
 
       try {
