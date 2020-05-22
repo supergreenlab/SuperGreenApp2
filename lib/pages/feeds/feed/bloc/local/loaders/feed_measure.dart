@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
@@ -26,10 +28,13 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_e
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedMeasureLoader extends LocalFeedEntryLoader {
+  Map<dynamic, StreamSubscription<FeedMedia>> _previousStreams;
+  Map<dynamic, StreamSubscription<List<FeedMedia>>> _currentStreams;
+
   FeedMeasureLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     FeedMeasureParams params = state.params;
     MediaState previous;
     RelDB db = RelDB.get();
@@ -55,9 +60,50 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
         FeedMedias.makeAbsoluteFilePath(currentMedia[0].filePath),
         FeedMedias.makeAbsoluteFilePath(currentMedia[0].thumbnailPath),
         currentMedia[0].synced);
-    return FeedMeasureState(state, previous, current);
+    return FeedMeasureState(state, current, previous);
   }
 
-  @override
-  Future<void> close() async {}
+  void startListenEntryChanges(FeedEntryStateLoaded entry) {
+    super.startListenEntryChanges(entry);
+    FeedMeasureParams params = entry.params;
+    RelDB db = RelDB.get();
+    if (params.previous is int) {
+      _previousStreams[entry.feedEntryID] =
+          db.feedsDAO.watchFeedMedia(params.previous).listen((_) async {
+        add(FeedBlocEventUpdatedEntry(await load(entry)));
+      });
+    } else if (params.previous is String) {
+      _previousStreams[entry.feedEntryID] = db.feedsDAO
+          .watchFeedMediaForServerID(params.previous)
+          .listen((_) async {
+        add(FeedBlocEventUpdatedEntry(await load(entry)));
+      });
+    }
+    _currentStreams[entry.feedEntryID] =
+        db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
+      add(FeedBlocEventUpdatedEntry(await load(entry)));
+    });
+  }
+
+  Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry) async {
+    super.cancelListenEntryChanges(entry);
+    if (_previousStreams[entry.feedEntryID] != null) {
+      await _previousStreams[entry.feedEntryID].cancel();
+    }
+    if (_currentStreams[entry.feedEntryID] != null) {
+      await _currentStreams[entry.feedEntryID].cancel();
+    }
+  }
+
+  Future<void> close() async {
+    super.close();
+    List<Future> promises = [];
+    for (StreamSubscription<FeedMedia> sub in _previousStreams.values) {
+      promises.add(sub.cancel());
+    }
+    for (StreamSubscription<List<FeedMedia>> sub in _currentStreams.values) {
+      promises.add(sub.cancel());
+    }
+    Future.wait(promises);
+  }
 }

@@ -25,9 +25,6 @@ class FeedProductsLoader extends LocalFeedEntryLoader {
   FeedProductsLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async =>
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
       FeedProductsState(state);
-
-  @override
-  Future<void> close() async {}
 }

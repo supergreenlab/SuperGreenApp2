@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
-import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';

@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
@@ -28,10 +30,12 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_e
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedMediaLoader extends LocalFeedEntryLoader {
+  Map<dynamic, StreamSubscription<List<FeedMedia>>> _streams;
+  
   FeedMediaLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async {
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     List<FeedMedia> feedMedias =
         await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
     List<MediaState> medias = feedMedias
@@ -52,6 +56,28 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
         synced: Value(false)));
   }
 
-  @override
-  Future<void> close() async {}
+  void startListenEntryChanges(FeedEntryStateLoaded entry) {
+    super.startListenEntryChanges(entry);
+    RelDB db = RelDB.get();
+    _streams[entry.feedEntryID] =
+        db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
+      add(FeedBlocEventUpdatedEntry(await load(entry)));
+    });
+  }
+
+  Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry) async {
+    super.cancelListenEntryChanges(entry);
+    if (_streams[entry.feedEntryID] != null) {
+      await _streams[entry.feedEntryID].cancel();
+    }
+  }
+
+  Future<void> close() async {
+    super.close();
+    List<Future> promises = [];
+    for (StreamSubscription<List<FeedMedia>> sub in _streams.values) {
+      promises.add(sub.cancel());
+    }
+    Future.wait(promises);
+  }
 }

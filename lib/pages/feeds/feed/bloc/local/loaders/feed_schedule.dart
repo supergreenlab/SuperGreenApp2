@@ -25,9 +25,6 @@ class FeedScheduleLoader extends LocalFeedEntryLoader {
   FeedScheduleLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async =>
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
       FeedScheduleState(state);
-
-  @override
-  Future<void> close() async {}
 }

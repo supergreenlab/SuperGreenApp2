@@ -25,9 +25,6 @@ class FeedWaterLoader extends LocalFeedEntryLoader {
   FeedWaterLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryStateNotLoaded state) async =>
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
       FeedWaterState(state);
-
-  @override
-  Future<void> close() async {}
 }

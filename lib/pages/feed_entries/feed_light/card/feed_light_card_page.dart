@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_light.dart';
-import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -48,7 +47,7 @@ class FeedLightCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
+          FeedCardTitle('assets/feed_card/icon_light.svg', 'Stretch control',
               state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
