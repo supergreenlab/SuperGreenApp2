@@ -18,16 +18,6 @@
 
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-<<<<<<< HEAD
-<<<<<<< HEAD:lib/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_state.dart
 class FeedTowelieInfoState extends FeedEntryStateLoaded {
   FeedTowelieInfoState(FeedEntryState from) : super.copy(from);
-=======
-class FeedScheduleState extends FeedEntryStateLoaded {
-  FeedScheduleState(FeedEntryState from) : super.copy(from);
->>>>>>> aa259ba6f3e197318fbdf72966fb22168168177b:lib/pages/feed_entries/feed_schedule/card/feed_schedule_state.dart
-=======
-class FeedTowelieInfoState extends FeedEntryStateLoaded {
-  FeedTowelieInfoState(FeedEntryState from) : super.copy(from);
->>>>>>> aa259ba6f3e197318fbdf72966fb22168168177b
 }

@@ -18,16 +18,6 @@
 
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-<<<<<<< HEAD
 class FeedLightState extends FeedEntryStateLoaded {
   FeedLightState(FeedEntryState from) : super.copy(from);
-=======
-<<<<<<< HEAD:lib/pages/feed_entries/feed_ventilation/card/feed_ventilation_state.dart
-class FeedVentilationState extends FeedEntryStateLoaded {
-  FeedVentilationState(FeedEntryState from) : super.copy(from);
-=======
-class FeedLightState extends FeedEntryStateLoaded {
-  FeedLightState(FeedEntryState from) : super.copy(from);
->>>>>>> aa259ba6f3e197318fbdf72966fb22168168177b:lib/pages/feed_entries/feed_light/card/feed_light_state.dart
->>>>>>> aa259ba6f3e197318fbdf72966fb22168168177b
 }
