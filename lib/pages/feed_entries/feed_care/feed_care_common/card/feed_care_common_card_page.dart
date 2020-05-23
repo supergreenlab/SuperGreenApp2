@@ -71,7 +71,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             child: FeedCardDate(widget.state.date),
           ),
           Container(
-            height: 100,
+            height: 750,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),

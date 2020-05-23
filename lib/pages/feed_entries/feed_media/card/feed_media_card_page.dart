@@ -63,7 +63,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
           FeedCardTitle('assets/feed_card/icon_media.svg', 'Grow log',
               widget.state.synced),
           Container(
-            height: 100,
+            height: 350,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),

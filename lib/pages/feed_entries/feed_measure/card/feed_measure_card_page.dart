@@ -57,7 +57,7 @@ class FeedMeasureCardPage extends StatelessWidget {
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 100,
+            height: 350,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -84,7 +84,7 @@ class FeedMeasureCardPage extends StatelessWidget {
                         heroPath: state.current.filePath));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(state.current.thumbnailPath, state.previous.filePath));
+                    .add(MainNavigateToFullscreenMedia(state.current.thumbnailPath, state.current.filePath));
               }
             },
           ),

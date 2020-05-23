@@ -51,7 +51,15 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
   }
 
   Future<void> updateFeedEntryState(FeedEntry feedEntry) async {
-    FeedEntryStateNotLoaded newState = FeedEntryStateNotLoaded(
+    FeedEntryState newState = stateForFeedEntry(feedEntry);
+    if (newState is FeedEntryStateNotLoaded) {
+      newState = await load(newState);
+    }
+    add(FeedBlocEventUpdatedEntry(newState));
+  }
+
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) {
+    return FeedEntryStateNotLoaded(
         feedEntry.id,
         feedEntry.feed,
         feedEntry.type,
@@ -60,7 +68,6 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         feedEntry.date,
         FeedEntriesParamHelpers.paramForFeedEntryType(
             feedEntry.type, feedEntry.params));
-    add(FeedBlocEventUpdatedEntry(await load(newState)));
   }
 
   @mustCallSuper

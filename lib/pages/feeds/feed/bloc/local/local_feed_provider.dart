@@ -33,12 +33,13 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_schedul
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_towelie_info.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_ventilation.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_water.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class LocalFeedBlocProvider extends FeedBlocProvider {
   final int feedID;
-  Map<String, FeedEntryLoader> loaders = {};
+  Map<String, LocalFeedEntryLoader> loaders = {};
   StreamSubscription<FeedEntryInsertEvent> insertSubscription;
   StreamSubscription<FeedEntryDeleteEvent> deleteSubscription;
 
@@ -68,15 +69,7 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
       if (feedEntry.feed != feedID) {
         return;
       }
-      FeedEntryState newFirstEntry = FeedEntryStateNotLoaded(
-          feedEntry.id,
-          feedID,
-          feedEntry.type,
-          feedEntry.isNew,
-          feedEntry.synced,
-          feedEntry.date,
-          FeedEntriesParamHelpers.paramForFeedEntryType(
-              feedEntry.type, feedEntry.params));
+      FeedEntryState newFirstEntry = loaders[feedEntry.type].stateForFeedEntry(feedEntry);
       add(FeedBlocEventAddedEntry(newFirstEntry));
     });
     deleteSubscription = FeedEntryHelper.eventBus
@@ -92,18 +85,11 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
   }
 
   @override
-  Future<List<FeedEntryStateNotLoaded>> loadEntries(int n, int offset) async {
+  Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
     List<FeedEntry> fe =
         await RelDB.get().feedsDAO.getEntries(feedID, n, offset);
     return fe
-        .map<FeedEntryStateNotLoaded>((fe) => FeedEntryStateNotLoaded(
-            fe.id,
-            feedID,
-            fe.type,
-            fe.isNew,
-            fe.synced,
-            fe.date,
-            FeedEntriesParamHelpers.paramForFeedEntryType(fe.type, fe.params)))
+        .map<FeedEntryState>((fe) => loaders[fe.type].stateForFeedEntry(fe))
         .toList();
   }
 

@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
+import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -39,10 +40,10 @@ class FeedWaterCardPage extends StatelessWidget {
     if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
-    return _renderLoading(context);
+    return _renderLoading(context, state);
   }
 
-  Widget _renderLoading(BuildContext context) {
+  Widget _renderLoading(BuildContext context, FeedEntryState state) {
     return FeedCard(
       animation: animation,
       child: Column(
@@ -55,7 +56,7 @@ class FeedWaterCardPage extends StatelessWidget {
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 100,
+            height: 90,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -64,7 +65,7 @@ class FeedWaterCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
+  Widget _renderLoaded(BuildContext context, FeedWaterState state) {
     FeedWaterParams params = state.params;
     List<Widget> body = [
       Padding(
@@ -74,7 +75,7 @@ class FeedWaterCardPage extends StatelessWidget {
               ? '${params.volume / 4} gal'
               : '${params.volume} L',
           style: TextStyle(
-              fontSize: 45,
+              fontSize: 40,
               fontWeight: FontWeight.w300,
               color: Color(0xff3bb30b)),
         ),

@@ -68,7 +68,7 @@ class FeedProductsCardPage extends StatelessWidget {
           FeedCardTitle('assets/feed_card/icon_towelie.png',
               'Towelie\'s selection', state.synced),
           Container(
-            height: 100,
+            height: 150,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),

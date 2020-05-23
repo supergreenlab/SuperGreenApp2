@@ -54,7 +54,7 @@ class FeedVentilationCardPage extends StatelessWidget {
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 100,
+            height: 120,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),

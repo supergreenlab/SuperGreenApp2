@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
@@ -27,4 +28,8 @@ class FeedWaterLoader extends LocalFeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
       FeedWaterState(state);
+
+  @override
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>
+      FeedWaterState(super.stateForFeedEntry(feedEntry));
 }

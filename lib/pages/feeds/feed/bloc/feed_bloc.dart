@@ -264,7 +264,7 @@ abstract class FeedBlocProvider {
   Map<String, FeedEntryLoader> get loaders;
   Future init(Function(FeedBlocEvent) add);
   Future<FeedState> loadFeed();
-  Future<List<FeedEntryStateNotLoaded>> loadEntries(int n, int offset);
+  Future<List<FeedEntryState>> loadEntries(int n, int offset);
   Future deleteFeedEntry(dynamic feedEntryID);
   Future markAsRead(dynamic feedEntryID);
   Future<void> close();
