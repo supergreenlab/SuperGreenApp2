@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device_api.dart';
+import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -167,9 +168,26 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         add(DeviceSetupBlocEventLoadingError());
       }
 
-      Param state = await db.getParam(deviceID, 'STATE');
-      Param wifi = await db.getParam(deviceID, 'WIFI_STATUS');
       final d = await db.getDevice(deviceID);
+
+      final Param time = await db.getParam(deviceID, 'TIME');
+      await DeviceHelper.updateIntParam(d, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+
+      final Param state = await db.getParam(deviceID, 'STATE');
+
+      // Just got his device, set schedule to local timezone
+      if (state.ivalue == 0) {
+        final Module boxes = await db.getModule(deviceID, 'box');
+        for (int i = 0; i < boxes.arrayLen; ++i) {
+          final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
+          final Param offHour = await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
+
+          await DeviceHelper.updateHourParam(d, onHour, onHour.ivalue);
+          await DeviceHelper.updateHourParam(d, offHour, offHour.ivalue);
+        }
+      }
+
+      final Param wifi = await db.getParam(deviceID, 'WIFI_STATUS');
       add(DeviceSetupBlocEventDone(d, state.ivalue == 0, wifi.ivalue != 3));
     } catch (e) {
       add(DeviceSetupBlocEventLoadingError());

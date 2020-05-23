@@ -150,12 +150,12 @@ class FeedScheduleFormBloc
         device = await db.devicesDAO.getDevice(box.device);
         Param onHour = await db.devicesDAO
             .getParam(device.id, 'BOX_${box.deviceBox}_ON_HOUR');
-        await DeviceHelper.updateIntParam(
-            device, onHour, timezone(schedules[schedule]['ON_HOUR']));
+        await DeviceHelper.updateHourParam(
+            device, onHour, schedules[schedule]['ON_HOUR']);
         Param offHour = await db.devicesDAO
             .getParam(device.id, 'BOX_${box.deviceBox}_OFF_HOUR');
-        await DeviceHelper.updateIntParam(
-            device, offHour, timezone(schedules[schedule]['OFF_HOUR']));
+        await DeviceHelper.updateHourParam(
+            device, offHour, schedules[schedule]['OFF_HOUR']);
       }
 
       final Map<String, dynamic> plantSettings =
@@ -186,13 +186,5 @@ class FeedScheduleFormBloc
       }
       yield FeedScheduleFormBlocStateDone();
     }
-  }
-
-  int timezone(int hour) {
-    hour = hour - DateTime.now().timeZoneOffset.inHours;
-    if (hour < 0) {
-      hour += 24;
-    }
-    return hour % 24;
   }
 }

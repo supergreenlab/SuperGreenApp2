@@ -104,9 +104,13 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
       var ddb = RelDB.get().devicesDAO;
       Param ssid = await ddb.getParam(args.device.id, 'WIFI_SSID');
       await DeviceHelper.updateStringParam(args.device, ssid, event.ssid);
-      Param pass = await ddb.getParam(args.device.id, 'WIFI_PASSWORD');
-      await DeviceHelper.updateStringParam(args.device, pass, event.pass,
-          timeout: 5, nRetries: 1);
+      try {
+        Param pass = await ddb.getParam(args.device.id, 'WIFI_PASSWORD');
+        await DeviceHelper.updateStringParam(args.device, pass, event.pass,
+            timeout: 5, nRetries: 1);
+      } catch (e) {
+        print(e);
+      }
       yield* _researchDevice();
     } else if (event is DeviceWifiBlocEventRetrySearch) {
       yield* _researchDevice();
@@ -120,8 +124,8 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     Device device = await ddb.getDevice(args.device.id);
 
     yield DeviceWifiBlocStateSearching();
-    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-        id: Value(device.id), isReachable: Value(false)));
+    await RelDB.get().devicesDAO.updateDevice(
+        DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
 
     String ip;
     for (int i = 0; i < 4; ++i) {

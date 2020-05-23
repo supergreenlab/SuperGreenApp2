@@ -123,7 +123,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               child: Scaffold(
                   appBar: state is PlantFeedBlocStateNoPlant
                       ? SGLAppBar(
-                          'Add new controller',
+                          'Plant feed',
                           fontSize: 20,
                           backgroundColor: Color(0xff063047),
                           titleColor: Colors.white,
