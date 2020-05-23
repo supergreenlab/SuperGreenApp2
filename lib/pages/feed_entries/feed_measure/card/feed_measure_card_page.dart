@@ -33,7 +33,8 @@ class FeedMeasureCardPage extends StatelessWidget {
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedMeasureCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedMeasureCardPage(this.animation, this.feedState, this.state,
+      {Key key})
       : super(key: key);
 
   @override
@@ -52,6 +53,10 @@ class FeedMeasureCardPage extends StatelessWidget {
         children: [
           FeedCardTitle(
               'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -79,12 +84,14 @@ class FeedMeasureCardPage extends StatelessWidget {
             onMediaTapped: (media) {
               if (state.previous != null) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToFullscreenMedia(state.previous.thumbnailPath, state.previous.filePath,
+                    MainNavigateToFullscreenMedia(
+                        state.previous.thumbnailPath, state.previous.filePath,
                         overlayPath: state.current.filePath,
                         heroPath: state.current.filePath));
               } else {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToFullscreenMedia(state.current.thumbnailPath, state.current.filePath));
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToFullscreenMedia(
+                        state.current.thumbnailPath, state.current.filePath));
               }
             },
           ),

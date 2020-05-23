@@ -62,6 +62,10 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         children: [
           FeedCardTitle('assets/feed_card/icon_media.svg', 'Grow log',
               widget.state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(widget.state.date),
+          ),
           Container(
             height: 350,
             alignment: Alignment.center,
@@ -108,8 +112,8 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
             params.message ?? '',
             edit: editText,
             onEdited: (value) {
-              BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(
-                  state, params.copyWith(value)));
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventEditParams(state, params.copyWith(value)));
               setState(() {
                 editText = false;
               });

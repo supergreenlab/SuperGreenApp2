@@ -56,7 +56,6 @@ enum SpeedDialType {
 class _PlantFeedPageState extends State<PlantFeedPage> {
   final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
-  double _onEnvironmentControlWidth = 50;
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
@@ -64,11 +63,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   @override
   void initState() {
-    Timer(Duration(seconds: 2), () {
-      setState(() {
-        _onEnvironmentControlWidth = 0;
-      });
-    });
     super.initState();
   }
 
@@ -377,7 +371,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           actions: actions,
           bottomPadding: true,
           title: '',
-          appBarHeight: 300,
+          appBarHeight: 350,
           appBar: _renderAppBar(context, state),
         ),
       );
@@ -650,7 +644,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       ]);
     }
 
-    graphBody = GestureDetector(
+    /*graphBody = GestureDetector(
       onPanUpdate: (DragUpdateDetails details) {
         setState(() {
           _onEnvironmentControlWidth =
@@ -668,7 +662,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           ),
         ],
       ),
-    );
+    );*/
 
     Widget nameText;
     if (_reachable && _showIP) {
@@ -732,6 +726,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   duration: Duration(milliseconds: 200), child: graphBody),
             ),
           ),
+          Container(
+              height: 95, child: _renderEnvironmentControls(context, state)),
         ],
       ),
     );
@@ -747,57 +743,75 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   Widget _renderEnvironmentControls(
       BuildContext context, PlantFeedBlocStateLoaded state) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _renderEnvironmentControl(
-            context,
-            'assets/feed_card/icon_dimming.svg',
-            _onEnvironmentControlTapped(
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, top: 4, bottom: 8),
+          child: Text('Environment control',
+              style: TextStyle(color: Colors.white)),
+        ),
+        Row(
+          children: <Widget>[
+            _renderEnvironmentControl(
                 context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedLightFormEvent(state.plant,
-                        pushAsReplacement: pushAsReplacement),
-                tipID: 'TIP_STRETCH',
-                tipPaths: [
-                  't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
-                  't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
-                ])),
-        _renderEnvironmentControl(
-            context,
-            'assets/feed_card/icon_blower.svg',
-            _onEnvironmentControlTapped(
+                'Light',
+                'assets/feed_card/icon_dimming.svg',
+                _onEnvironmentControlTapped(
+                    context,
+                    ({pushAsReplacement = false}) =>
+                        MainNavigateToFeedLightFormEvent(state.plant,
+                            pushAsReplacement: pushAsReplacement),
+                    tipID: 'TIP_STRETCH',
+                    tipPaths: [
+                      't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
+                      't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
+                    ])),
+            _renderEnvironmentControl(
                 context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedVentilationFormEvent(state.plant,
-                        pushAsReplacement: pushAsReplacement))),
-        _renderEnvironmentControl(
-            context,
-            'assets/feed_card/icon_schedule.svg',
-            _onEnvironmentControlTapped(
+                'Ventil',
+                'assets/feed_card/icon_blower.svg',
+                _onEnvironmentControlTapped(
+                    context,
+                    ({pushAsReplacement = false}) =>
+                        MainNavigateToFeedVentilationFormEvent(state.plant,
+                            pushAsReplacement: pushAsReplacement))),
+            _renderEnvironmentControl(
                 context,
-                ({pushAsReplacement = false}) =>
-                    MainNavigateToFeedScheduleFormEvent(state.plant,
-                        pushAsReplacement: pushAsReplacement),
-                tipID: 'TIP_BLOOM',
-                tipPaths: [
-                  't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
-                ])),
+                'Schedule',
+                'assets/feed_card/icon_schedule.svg',
+                _onEnvironmentControlTapped(
+                    context,
+                    ({pushAsReplacement = false}) =>
+                        MainNavigateToFeedScheduleFormEvent(state.plant,
+                            pushAsReplacement: pushAsReplacement),
+                    tipID: 'TIP_BLOOM',
+                    tipPaths: [
+                      't/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'
+                    ])),
+          ],
+        ),
       ],
     );
   }
 
-  Widget _renderEnvironmentControl(
-      BuildContext context, String icon, void Function() navigateTo) {
+  Widget _renderEnvironmentControl(BuildContext context, String name,
+      String icon, void Function() navigateTo) {
     return InkWell(
       onTap: navigateTo,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
-        child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-            ),
-            child: SvgPicture.asset(icon,
-                width: 40, height: 40, fit: BoxFit.contain)),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 3.0),
+            child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                child: SvgPicture.asset(icon,
+                    width: 40, height: 40, fit: BoxFit.contain)),
+          ),
+          Text(name, style: TextStyle(color: Colors.white, fontSize: 12), textAlign: TextAlign.center,),
+        ],
       ),
     );
   }
