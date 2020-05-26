@@ -42,13 +42,13 @@ class FeedsAPI {
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
-    if (kReleaseMode || Platform.isIOS) {
+    // if (kReleaseMode || Platform.isIOS) {
       _serverHost = 'https://api2.supergreenlab.com';
       _storageServerHost = 'https://storage.supergreenlab.com';
       _storageServerHostHeader = 'storage.supergreenlab.com';
-    } else {
-      initUrls();
-    }
+    // } else {
+    //   initUrls();
+    // }
   }
 
   void initUrls() async {
@@ -291,6 +291,18 @@ class FeedsAPI {
     return results;
   }
 
+  Future<List<dynamic>> publicPlants(int n, int offset) async {
+    Response resp = await get('$_serverHost/public/plants?limit=$n&offset=$offset', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicPlants failed';
+    }
+    Map<String, dynamic> results =  JsonDecoder().convert(resp.body);
+    return results['plants'];
+  }
+
   Future<Map<String, dynamic>> publicPlant(String id) async {
     Response resp = await get('$_serverHost/public/plant/$id', headers: {
       'Content-Type': 'application/json',
@@ -330,8 +342,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> publicFeedMedia(String id) async {
-    Response resp =
-        await get('$_serverHost/public/feedMedia/$id', headers: {
+    Response resp = await get('$_serverHost/public/feedMedia/$id', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -345,6 +356,10 @@ class FeedsAPI {
     Response fileResp = await get('$_storageServerHost$from',
         headers: {'Host': _storageServerHostHeader});
     await File(to).writeAsBytes(fileResp.bodyBytes);
+  }
+
+  String absoluteFileURL(String path) {
+    return '$_storageServerHost$path';
   }
 
   Future setSynced(String type, String id) async {

@@ -18,56 +18,72 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ExplorerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExplorerBloc, ExplorerBlocState>(
         bloc: BlocProvider.of<ExplorerBloc>(context),
-        builder: (context, state) => Scaffold(
-            appBar: SGLAppBar(
-              'Explorer',
-              backgroundColor: Colors.deepPurple,
-              titleColor: Colors.yellow,
-              iconColor: Colors.white,
-              elevation: 10,
-            ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: SvgPicture.asset(
-                                'assets/feed_card/logo_sgl.svg')),
-                      ),
-                      Text(
-                        'COMING SOON',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            color: Colors.grey),
-                      ),
-                      FlatButton(
-                        onPressed: () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToPublicPlant('1655f201-c722-49ac-acd9-e1e3ff4c70c4'));
-                        },
-                        child: Text('public plant'),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            )));
+        builder: (context, state) {
+          Widget body;
+          if (state is ExplorerBlocStateInit) {
+            body = FullscreenLoading();
+          } else if (state is ExplorerBlocStateLoaded) {
+            body = _renderList(context, state);
+          }
+          return Scaffold(
+              appBar: SGLAppBar(
+                'Explorer',
+                backgroundColor: Colors.deepPurple,
+                titleColor: Colors.yellow,
+                iconColor: Colors.white,
+                elevation: 10,
+              ),
+              body: body);
+        });
+  }
+
+  Widget _renderList(BuildContext context, ExplorerBlocStateLoaded state) {
+    return GridView.count(
+      crossAxisCount: 2,
+      children:
+          state.plants.map<Widget>((p) => _renderPlant(context, p)).toList(),
+    );
+  }
+
+  Widget _renderPlant(BuildContext context, PlantState plant) {
+    return LayoutBuilder(
+      builder: (_, BoxConstraints constraints) {
+        return InkWell(
+          onTap: () {
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(plant.id));
+          },
+          child: Stack(
+            children: <Widget>[
+              Container(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                child: Image.network(
+                    FeedsAPI().absoluteFileURL(plant.thumbnailPath),
+                    fit: BoxFit.cover),
+              ),
+              Center(
+                  child: Text(
+                '${plant.name}',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              )),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
