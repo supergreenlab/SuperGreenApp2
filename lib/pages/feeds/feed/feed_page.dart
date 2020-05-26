@@ -146,8 +146,8 @@ class _FeedPageState extends State<FeedPage> {
             BlocProvider.of<FeedBloc>(context)
                 .add(FeedBlocEventLoadEntries(10, entries.length));
             return Container(
-              height: 50,
-              child: FullscreenLoading(),
+              height: 100,
+              child: FullscreenLoading(title: 'loading more cards..'),
             );
           } else if (index > entries.length) {
             return null;
