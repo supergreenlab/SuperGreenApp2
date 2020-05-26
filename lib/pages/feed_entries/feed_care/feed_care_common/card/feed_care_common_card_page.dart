@@ -102,7 +102,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
         edit: editText,
         onEdited: (value) {
           BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(
-              state.feedEntryID, params.copyWith(value)));
+              state, params.copyWith(value)));
           setState(() {
             editText = false;
           });
