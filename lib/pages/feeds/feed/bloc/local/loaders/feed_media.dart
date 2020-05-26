@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
@@ -43,6 +44,7 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
             m.id,
             FeedMedias.makeAbsoluteFilePath(m.filePath),
             FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+            JsonDecoder().convert(m.params),
             m.synced))
         .toList();
     return FeedMediaState(state, medias);

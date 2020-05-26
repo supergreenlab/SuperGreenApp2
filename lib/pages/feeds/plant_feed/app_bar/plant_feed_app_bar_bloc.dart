@@ -64,6 +64,9 @@ class PlantFeedAppBarBloc
 
   PlantFeedAppBarBloc(this.plant) {
     add(PlantFeedAppBarBlocEventLoadChart());
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      this.add(PlantFeedAppBarBlocEventReloadChart());
+    });
   }
 
   @override
@@ -77,9 +80,6 @@ class PlantFeedAppBarBloc
         List<charts.Series<Metric, DateTime>> graphData =
             await updateChart(plant);
         yield PlantFeedAppBarBlocStateLoaded(graphData, plant);
-        _timer = Timer.periodic(Duration(seconds: 30), (timer) {
-          this.add(PlantFeedAppBarBlocEventReloadChart());
-        });
       } catch (e) {}
     } else if (event is PlantFeedAppBarBlocEventReloadChart) {
       try {

@@ -58,18 +58,6 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     add(FeedBlocEventUpdatedEntry(newState));
   }
 
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) {
-    return FeedEntryStateNotLoaded(
-        feedEntry.id,
-        feedEntry.feed,
-        feedEntry.type,
-        feedEntry.isNew,
-        feedEntry.synced,
-        feedEntry.date,
-        FeedEntriesParamHelpers.paramForFeedEntryType(
-            feedEntry.type, feedEntry.params));
-  }
-
   @mustCallSuper
   Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry) async {
     if (subscriptions[entry.feedEntryID] == null) {
@@ -87,5 +75,17 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
       promises.add(sub.cancel());
     }
     Future.wait(promises);
+  }
+
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) {
+    return FeedEntryStateNotLoaded(
+        feedEntry.id,
+        feedEntry.feed,
+        feedEntry.type,
+        feedEntry.isNew,
+        feedEntry.synced,
+        feedEntry.date,
+        FeedEntriesParamHelpers.paramForFeedEntryType(
+            feedEntry.type, feedEntry.params));
   }
 }

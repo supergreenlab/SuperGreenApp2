@@ -810,7 +810,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 child: SvgPicture.asset(icon,
                     width: 40, height: 40, fit: BoxFit.contain)),
           ),
-          Text(name, style: TextStyle(color: Colors.white, fontSize: 12), textAlign: TextAlign.center,),
+          Text(
+            name,
+            style: TextStyle(color: Colors.white, fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

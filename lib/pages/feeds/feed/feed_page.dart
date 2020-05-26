@@ -50,6 +50,7 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
   FeedState feedState;
   bool eof = false;
+  bool loaded = false;
   final List<FeedEntryState> entries = [];
   final Map<dynamic, bool> visibleEntries = {};
 
@@ -65,6 +66,7 @@ class _FeedPageState extends State<FeedPage> {
           feedState = state.feed;
         } else if (state is FeedBlocStateEntriesLoaded) {
           setState(() {
+            loaded = true;
             eof = state.eof;
             entries.addAll(state.entries);
           });
@@ -103,96 +105,95 @@ class _FeedPageState extends State<FeedPage> {
       child: BlocBuilder<FeedBloc, FeedBlocState>(
         bloc: BlocProvider.of<FeedBloc>(context),
         builder: (BuildContext context, FeedBlocState state) {
-          Widget body;
-          if (entries.length == 0) {
-            body = FullscreenLoading(title: 'Loading feed...');
-          } else {
-            body = _renderCards(context);
-          }
-          return AnimatedSwitcher(
-              child: body, duration: Duration(milliseconds: 200));
+          return _renderCards(context);
         },
       ),
     );
   }
 
   Widget _renderCards(BuildContext context) {
+    List<Widget> content = [
+      SliverAppBar(
+        actions: widget.actions,
+        backgroundColor: widget.color,
+        expandedHeight: widget.appBarHeight ?? 56.0,
+        iconTheme: IconThemeData(color: Colors.white),
+        elevation: 4,
+        forceElevated: true,
+        flexibleSpace: FlexibleSpaceBar(
+          background: this.widget.appBar,
+          centerTitle: this.widget.appBar == null,
+          title: this.widget.appBar == null
+              ? Text(widget.title, style: TextStyle(color: Color(0xff404040)))
+              : null,
+        ),
+      ),
+    ];
+    if (!loaded) {
+      content.add(SliverFillRemaining(
+          hasScrollBody: false,
+          fillOverscroll: false,
+          child: FullscreenLoading(title: 'Loading feed...')));
+    } else {
+      content.add(SliverAnimatedList(
+        key: listKey,
+        itemBuilder:
+            (BuildContext context, int index, Animation<double> animation) {
+          if (index == entries.length) {
+            if (eof) {
+              return null;
+            }
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventLoadEntries(10, entries.length));
+            return Container(
+              height: 50,
+              child: FullscreenLoading(),
+            );
+          } else if (index > entries.length) {
+            return null;
+          }
+          FeedEntryState feedEntry = entries[index];
+          Widget card = FeedEntriesCardHelpers.cardForFeedEntry(
+              animation, feedState, feedEntry);
+          if (index == 0) {
+            card = Padding(padding: EdgeInsets.only(top: 10), child: card);
+          } else if (index == entries.length - 1 && eof) {
+            card = Padding(padding: EdgeInsets.only(bottom: 10), child: card);
+          }
+          return VisibilityDetector(
+              key: Key('feed_entry_${feedEntry.feedEntryID}'),
+              onVisibilityChanged: (VisibilityInfo info) {
+                if (!(visibleEntries[feedEntry.feedEntryID] ?? false) &&
+                    info.visibleFraction > 0) {
+                  visibleEntries[feedEntry.feedEntryID] = true;
+                  BlocProvider.of<FeedBloc>(context)
+                      .add(FeedBlocEventEntryVisible(index));
+                  if (feedEntry.isNew && ModalRoute.of(context).isCurrent) {
+                    BlocProvider.of<FeedBloc>(context)
+                        .add(FeedBlocEventMarkAsRead(index));
+                  }
+                }
+                if (visibleEntries[feedEntry.feedEntryID] == true &&
+                    info.visibleFraction == 0) {
+                  visibleEntries.remove(feedEntry.feedEntryID);
+                  BlocProvider.of<FeedBloc>(context)
+                      .add(FeedBlocEventEntryHidden(index));
+                }
+              },
+              child: SlideTransition(
+                  position: animation.drive(
+                      Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
+                          .chain(CurveTween(curve: Curves.linear))),
+                  child: card));
+        },
+        initialItemCount: entries.length + (eof ? 0 : 1),
+      ));
+    }
     return Container(
       color: Color(0xffeeeeee),
       child: CustomScrollView(
         controller: scrollController,
-        slivers: <Widget>[
-          SliverAppBar(
-            actions: widget.actions,
-            backgroundColor: widget.color,
-            expandedHeight: widget.appBarHeight ?? 56.0,
-            iconTheme: IconThemeData(color: Colors.white),
-            elevation: 4,
-            forceElevated: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: this.widget.appBar,
-              centerTitle: this.widget.appBar == null,
-              title: this.widget.appBar == null
-                  ? Text(widget.title,
-                      style: TextStyle(color: Color(0xff404040)))
-                  : null,
-            ),
-          ),
-          SliverAnimatedList(
-            key: listKey,
-            itemBuilder:
-                (BuildContext context, int index, Animation<double> animation) {
-              if (index == entries.length) {
-                if (eof) {
-                  return null;
-                }
-                BlocProvider.of<FeedBloc>(context)
-                    .add(FeedBlocEventLoadEntries(10, entries.length));
-                return Container(
-                  height: 50,
-                  child: FullscreenLoading(),
-                );
-              } else if (index > entries.length) {
-                return null;
-              }
-              FeedEntryState feedEntry = entries[index];
-              Widget card = FeedEntriesCardHelpers.cardForFeedEntry(
-                  animation, feedState, feedEntry);
-              if (index == 0) {
-                card = Padding(padding: EdgeInsets.only(top: 10), child: card);
-              } else if (index == entries.length - 1 && eof) {
-                card =
-                    Padding(padding: EdgeInsets.only(bottom: 10), child: card);
-              }
-              return VisibilityDetector(
-                  key: Key('feed_entry_${feedEntry.feedEntryID}'),
-                  onVisibilityChanged: (VisibilityInfo info) {
-                    if (!(visibleEntries[feedEntry.feedEntryID] ?? false) &&
-                        info.visibleFraction > 0) {
-                      visibleEntries[feedEntry.feedEntryID] = true;
-                      BlocProvider.of<FeedBloc>(context)
-                          .add(FeedBlocEventEntryVisible(index));
-                      if (feedEntry.isNew && ModalRoute.of(context).isCurrent) {
-                        BlocProvider.of<FeedBloc>(context)
-                            .add(FeedBlocEventMarkAsRead(index));
-                      }
-                    }
-                    if (visibleEntries[feedEntry.feedEntryID] == true &&
-                        info.visibleFraction == 0) {
-                      visibleEntries.remove(feedEntry.feedEntryID);
-                      BlocProvider.of<FeedBloc>(context)
-                          .add(FeedBlocEventEntryHidden(index));
-                    }
-                  },
-                  child: SlideTransition(
-                      position: animation.drive(Tween<Offset>(
-                              begin: Offset(0.0, 1.0), end: Offset.zero)
-                          .chain(CurveTween(curve: Curves.linear))),
-                      child: card));
-            },
-            initialItemCount: entries.length + 1,
-          )
-        ],
+        slivers: content,
       ),
     );
   }

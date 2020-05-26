@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 
@@ -43,9 +44,26 @@ class ExplorerPage extends StatelessWidget {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: SizedBox(height: 100, width: 100, child: SvgPicture.asset('assets/feed_card/logo_sgl.svg')),
+                        child: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: SvgPicture.asset(
+                                'assets/feed_card/logo_sgl.svg')),
                       ),
-                      Text('COMING SOON', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.grey),),
+                      Text(
+                        'COMING SOON',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            color: Colors.grey),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToPublicPlant('1655f201-c722-49ac-acd9-e1e3ff4c70c4'));
+                        },
+                        child: Text('public plant'),
+                      ),
                     ],
                   ),
                 )

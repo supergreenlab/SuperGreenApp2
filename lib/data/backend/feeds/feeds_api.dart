@@ -185,8 +185,7 @@ class FeedsAPI {
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
     {
-      File file =
-          File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
+      File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
       print(
           'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
       Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
@@ -290,6 +289,56 @@ class FeedsAPI {
       results.add(await FeedMedias.fromMap(maps[i]));
     }
     return results;
+  }
+
+  Future<Map<String, dynamic>> publicPlant(String id) async {
+    Response resp = await get('$_serverHost/public/plant/$id', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicPlant failed';
+    }
+    return JsonDecoder().convert(resp.body);
+  }
+
+  Future<List<dynamic>> publicFeedEntries(String id, int n, int offset) async {
+    Response resp = await get(
+        '$_serverHost/public/plant/$id/feedEntries?limit=$n&offset=$offset',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicFeedEntries failed';
+    }
+    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
+    return results['entries'];
+  }
+
+  Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
+    Response resp =
+        await get('$_serverHost/public/feedEntry/$id/feedMedias', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicFeedEntries failed';
+    }
+    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
+    return results['medias'];
+  }
+
+  Future<Map<String, dynamic>> publicFeedMedia(String id) async {
+    Response resp =
+        await get('$_serverHost/public/feedMedia/$id', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicFeedEntries failed';
+    }
+    return JsonDecoder().convert(resp.body);
   }
 
   Future download(String from, String to) async {

@@ -48,6 +48,7 @@ class FeedCareLoader extends LocalFeedEntryLoader {
             m.id,
             FeedMedias.makeAbsoluteFilePath(m.filePath),
             FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+            JsonDecoder().convert(m.params),
             m.synced))
         .toList();
     List<MediaState> afterMedias = medias
@@ -59,6 +60,7 @@ class FeedCareLoader extends LocalFeedEntryLoader {
             m.id,
             FeedMedias.makeAbsoluteFilePath(m.filePath),
             FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
+            JsonDecoder().convert(m.params),
             m.synced))
         .toList();
     return FeedCareCommonState(state, beforeMedias, afterMedias);

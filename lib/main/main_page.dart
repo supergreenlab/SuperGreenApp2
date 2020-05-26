@@ -74,6 +74,8 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
+import 'package:super_green_app/pages/feeds/public_plant/public_plant_bloc.dart';
+import 'package:super_green_app/pages/feeds/public_plant/public_plant_page.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_page.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_page.dart';
@@ -424,6 +426,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => SettingsDeviceBloc(settings.arguments),
           child: SettingsDevicePage(),
+        );
+      case '/public/plant':
+        return BlocProvider(
+          create: (context) => PublicPlantBloc(settings.arguments),
+          child: PublicPlantPage(),
         );
     }
     return Text('Unknown route');

@@ -16,17 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 
-class MediaState extends Equatable {
-  final dynamic id;
-  final String filePath;
-  final String thumbnailPath;
-  final Map<String, dynamic> params;
-  final bool synced;
+abstract class PublicPlantBlocEvent extends Equatable {}
 
-  MediaState(this.id, this.filePath, this.thumbnailPath, this.params, this.synced);
+class PublicPlantBlocState extends Equatable {
+  final String id;
+
+  PublicPlantBlocState(this.id) : super();
 
   @override
-  List<Object> get props => [id, filePath, thumbnailPath, params, synced];
+  List<Object> get props => [id];
+}
+
+class PublicPlantBlocStateInit extends PublicPlantBlocState {
+  PublicPlantBlocStateInit(String id) : super(id);
+}
+
+class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
+  final MainNavigateToPublicPlant args;
+
+  PublicPlantBloc(this.args);
+
+  @override
+  PublicPlantBlocState get initialState => PublicPlantBlocStateInit(args.id);
+
+  @override
+  Stream<PublicPlantBlocState> mapEventToState(
+      PublicPlantBlocEvent event) async* {}
 }

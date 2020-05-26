@@ -450,6 +450,15 @@ class MainNavigateToSettingsDevice extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
+class MainNavigateToPublicPlant extends MainNavigatorEvent {
+  final String id;
+
+  MainNavigateToPublicPlant(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -617,6 +626,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSettingsDevice) {
       future = _navigatorKey.currentState
           .pushNamed('/settings/device', arguments: event);
+    } else if (event is MainNavigateToPublicPlant) {
+      future = _navigatorKey.currentState
+          .pushNamed('/public/plant', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

@@ -16,17 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class MediaState extends Equatable {
-  final dynamic id;
-  final String filePath;
-  final String thumbnailPath;
-  final Map<String, dynamic> params;
-  final bool synced;
-
-  MediaState(this.id, this.filePath, this.thumbnailPath, this.params, this.synced);
+class FeedScheduleLoader extends RemoteFeedEntryLoader {
+  FeedScheduleLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  List<Object> get props => [id, filePath, thumbnailPath, params, synced];
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
+      FeedScheduleState(state);
+
+  FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
+      FeedScheduleState(super.stateForFeedEntryMap(feedEntry));
 }

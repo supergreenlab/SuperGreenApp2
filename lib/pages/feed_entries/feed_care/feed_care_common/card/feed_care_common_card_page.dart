@@ -70,10 +70,6 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(widget.state.date),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(widget.state.date),
-          ),
           Container(
             height: 750,
             alignment: Alignment.center,

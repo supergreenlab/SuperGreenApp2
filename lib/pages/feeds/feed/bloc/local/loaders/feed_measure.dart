@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -50,6 +51,7 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
           previousMedia.id,
           FeedMedias.makeAbsoluteFilePath(previousMedia.filePath),
           FeedMedias.makeAbsoluteFilePath(previousMedia.thumbnailPath),
+          JsonDecoder().convert(previousMedia.params),
           previousMedia.synced);
     }
 
@@ -59,6 +61,7 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
         currentMedia[0].id,
         FeedMedias.makeAbsoluteFilePath(currentMedia[0].filePath),
         FeedMedias.makeAbsoluteFilePath(currentMedia[0].thumbnailPath),
+        JsonDecoder().convert(currentMedia[0].params),
         currentMedia[0].synced);
     return FeedMeasureState(state, current, previous);
   }
