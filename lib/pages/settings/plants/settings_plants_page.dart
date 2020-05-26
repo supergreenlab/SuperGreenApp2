@@ -44,7 +44,7 @@ class SettingsPlantsPage extends StatelessWidget {
                     },
                     title: Text('${index + 1}. ${state.plants[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Long press to delete.'),
+                    subtitle: Text('Tap to open, Long press to delete.'),
                   );
                 },
               );
