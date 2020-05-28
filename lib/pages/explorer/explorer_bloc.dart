@@ -66,7 +66,7 @@ class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
   @override
   Stream<ExplorerBlocState> mapEventToState(ExplorerBlocEvent event) async* {
     if (event is ExplorerBlocEventInit) {
-      List<dynamic> plantsMap = await FeedsAPI().publicPlants(10, 0);
+      List<dynamic> plantsMap = await FeedsAPI().publicPlants(15, 0);
       List<PlantState> plants = plantsMap
           .map<PlantState>((p) => PlantState(
                 p['id'],
