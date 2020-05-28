@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/widgets/bordered_text.dart';
@@ -82,7 +83,9 @@ class MediaList extends StatelessWidget {
                         if (loadingProgress == null) {
                           return child;
                         }
-                        return FullscreenLoading(percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                        return FullscreenLoading(
+                            percent: loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes);
                       },
                     )
                   : Image.file(File(media.thumbnailPath), fit: BoxFit.cover)),
@@ -101,6 +104,12 @@ class MediaList extends StatelessWidget {
             ),
             right: 8.0,
             bottom: 8.0),
+        isVideo(media.filePath)
+            ? Positioned(
+                left: constraints.maxWidth / 2 - 38,
+                top: constraints.maxHeight / 2 - 48,
+                child: SvgPicture.asset('assets/feed_card/play_button.svg'))
+            : Container(),
         showSyncStatus
             ? Positioned(
                 left: 0,
@@ -119,5 +128,14 @@ class MediaList extends StatelessWidget {
             : Container(),
       ]),
     );
+  }
+
+  bool isVideo(String filePath) {
+    if (filePath.startsWith('http')) {
+      String path = Uri.parse(filePath).path;
+      return path.endsWith('mp4');
+    } else {
+      return filePath.endsWith('mp4');
+    }
   }
 }
