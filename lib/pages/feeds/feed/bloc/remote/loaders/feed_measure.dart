@@ -34,14 +34,15 @@ class FeedMeasureLoader extends RemoteFeedEntryLoader {
     List<dynamic> feedMediasMap =
         await FeedsAPI().publicFeedMediasForFeedEntry(state.feedEntryID);
     MediaState currentMedia = stateForFeedMediaMap(feedMediasMap[0]);
-    String previous = (state.params as FeedMeasureParams).previous;
     MediaState previousMedia;
-    if (previous != null) {
-      Map<String, dynamic> previousMediaMap =
-          await FeedsAPI().publicFeedMedia(previous);
-      previousMedia = stateForFeedMediaMap(previousMediaMap);
+    if ((state.params as FeedMeasureParams).previous is String) {
+      String previous = (state.params as FeedMeasureParams).previous;
+      if (previous != null) {
+        Map<String, dynamic> previousMediaMap =
+            await FeedsAPI().publicFeedMedia(previous);
+        previousMedia = stateForFeedMediaMap(previousMediaMap);
+      }
     }
-    return FeedMeasureState(
-        state, currentMedia, previousMedia);
+    return FeedMeasureState(state, currentMedia, previousMedia);
   }
 }
