@@ -200,7 +200,7 @@ class _MainPageState extends State<MainPage> {
     return BlocBuilder<SyncerBloc, SyncerBlocState>(
       builder: (BuildContext context, SyncerBlocState state) {
         List<Widget> content = [body];
-        if (state is SyncerBlocStateSyncing) {
+        if (state is SyncerBlocStateSyncing && state.syncing) {
           content.add(Positioned(
               left: 0,
               top: 0,
