@@ -74,7 +74,9 @@ class MediaList extends StatelessWidget {
               height: constraints.maxHeight,
               child: FittedBox(
                   fit: BoxFit.cover,
-                  child: Image.file(File(media.thumbnailPath)))),
+                  child: media.thumbnailPath.startsWith("http")
+                      ? Image.network(media.thumbnailPath)
+                      : Image.file(File(media.thumbnailPath)))),
         ),
         Positioned(
             child: BorderedText(

@@ -45,19 +45,14 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   @override
   Future<void> close() async {}
 
-  Future<MediaState> stateForFeedMediaMap(
-      Map<String, dynamic> feedMediaMap) async {
-    String filePath =
-        '${AppDB().tmpPath}/file_${feedMediaMap['id']}.${feedMediaMap['filePath'].split('.')[1].split('?')[0]}';
-    if (!File(filePath).existsSync()) {
-      await FeedsAPI().download(feedMediaMap['filePath'], filePath);
-    }
-    String thumbnailPath =
-        '${AppDB().tmpPath}/thumbnail_${feedMediaMap['id']}.${feedMediaMap['thumbnailPath'].split('.')[1].split('?')[0]}';
-    if (!File(thumbnailPath).existsSync()) {
-      await FeedsAPI().download(feedMediaMap['thumbnailPath'], thumbnailPath);
-    }
-    return MediaState(feedMediaMap['id'], filePath, thumbnailPath, JsonDecoder().convert(feedMediaMap['params']), true);
+  MediaState stateForFeedMediaMap(
+      Map<String, dynamic> feedMediaMap) {
+    return MediaState(
+        feedMediaMap['id'],
+        FeedsAPI().absoluteFileURL(feedMediaMap['filePath']),
+        FeedsAPI().absoluteFileURL(feedMediaMap['thumbnailPath']),
+        JsonDecoder().convert(feedMediaMap['params']),
+        true);
   }
 
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntryMap) {

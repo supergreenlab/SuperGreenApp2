@@ -55,8 +55,13 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         listener: (context, state) async {
           if (state is FullscreenMediaBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
-              _videoPlayerController =
-                  VideoPlayerController.file(File(state.filePath));
+              if (state.filePath.startsWith('http')) {
+                _videoPlayerController =
+                    VideoPlayerController.network(state.filePath);
+              } else {
+                _videoPlayerController =
+                    VideoPlayerController.file(File(state.filePath));
+              }
               await _videoPlayerController.initialize();
               _videoPlayerController.play();
               _videoPlayerController.setLooping(true);
@@ -137,15 +142,16 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
 
   Widget _renderPicturePlayer(BuildContext context,
       FullscreenMediaBlocState state, BoxConstraints constraints) {
+    String filePath = state.isVideo ? state.thumbnailPath : state.filePath;
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child: Image.file(
-          File(state.isVideo
-              ? state.thumbnailPath
-              : state.filePath),
-          fit: BoxFit.contain,
-        ));
+        child: filePath.startsWith('http')
+            ? Image.network(filePath, fit: BoxFit.contain)
+            : Image.file(
+                File(filePath),
+                fit: BoxFit.contain,
+              ));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
@@ -154,7 +160,10 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             child: SizedBox(
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
-                child: Image.file(File(state.overlayPath), fit: BoxFit.contain))),
+                child: state.overlayPath.startsWith('http')
+                    ? Image.network(state.overlayPath, fit: BoxFit.contain)
+                    : Image.file(File(state.overlayPath),
+                        fit: BoxFit.contain))),
         Positioned(
           left: 30,
           right: 30,
