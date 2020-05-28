@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/widgets/bordered_text.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class MediaList extends StatelessWidget {
   final List<MediaState> _medias;
@@ -72,11 +73,19 @@ class MediaList extends StatelessWidget {
           child: SizedBox(
               width: constraints.maxWidth,
               height: constraints.maxHeight,
-              child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: media.thumbnailPath.startsWith("http")
-                      ? Image.network(media.thumbnailPath)
-                      : Image.file(File(media.thumbnailPath)))),
+              child: media.thumbnailPath.startsWith("http")
+                  ? Image.network(
+                      media.thumbnailPath,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return FullscreenLoading(percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                      },
+                    )
+                  : Image.file(File(media.thumbnailPath), fit: BoxFit.cover)),
         ),
         Positioned(
             child: BorderedText(

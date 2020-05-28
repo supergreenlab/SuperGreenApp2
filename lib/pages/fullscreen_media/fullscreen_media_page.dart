@@ -24,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:video_player/video_player.dart';
 
 class FullscreenMediaPage extends StatefulWidget {
@@ -147,7 +148,16 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: filePath.startsWith('http')
-            ? Image.network(filePath, fit: BoxFit.contain)
+            ? Image.network(filePath, fit: BoxFit.contain, loadingBuilder:
+                (BuildContext context, Widget child,
+                    ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return FullscreenLoading(
+                    percent: loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes);
+              })
             : Image.file(
                 File(filePath),
                 fit: BoxFit.contain,
@@ -161,7 +171,16 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: state.overlayPath.startsWith('http')
-                    ? Image.network(state.overlayPath, fit: BoxFit.contain)
+                    ? Image.network(state.overlayPath, fit: BoxFit.contain,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return FullscreenLoading(
+                            percent: loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes);
+                      })
                     : Image.file(File(state.overlayPath),
                         fit: BoxFit.contain))),
         Positioned(

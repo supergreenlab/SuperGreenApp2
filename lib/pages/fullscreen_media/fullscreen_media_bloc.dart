@@ -56,7 +56,6 @@ class FullscreenMediaBloc
   get _isVideo {
     if (args.filePath.startsWith('http')) {
       String path = Uri.parse(args.filePath).path;
-      print(path);
       return path.endsWith('mp4');
     } else {
       return args.filePath.endsWith('mp4');
