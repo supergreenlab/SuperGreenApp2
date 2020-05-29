@@ -246,7 +246,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperCreateLab": "Now we're creating our **first Lab**!\nA lab is where you **simulate a tiny echosystem**\nwith artificial **lights and ventilation**.",
+  "towelieHelperCreateLab": "Now we're creating our **first Lab**!\nA lab is where you **simulate a tiny ecosystem**\nwith artificial **lights and ventilation**.",
   "@towelieHelperCreateLab": {
     "description": "Towelie Helper create lab",
     "type": "text",
