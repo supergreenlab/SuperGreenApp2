@@ -31,9 +31,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>To record and take pictures of your grow's advancement</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Only required for wifi automatic setup. (optionnal)</string>
+	<string>Only required for wifi automatic setup. (optional)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Only required for wifi automatic setup. (optionnal)</string>
+	<string>Only required for wifi automatic setup. (optional)</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>If you have anything to record with sound.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
