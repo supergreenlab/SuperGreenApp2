@@ -19,11 +19,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/feed_topping_card_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
-class FeedToppingCardPage extends FeedCareCommonCardPage<FeedToppingCardBloc> {
+class FeedToppingCardPage extends FeedCareCommonCardPage {
 
-  FeedToppingCardPage(Animation animation, {Key key}) : super(animation, key: key);
+  FeedToppingCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key}) : super(animation, feedState, state, key: key);
 
   String iconPath() {
     return 'assets/feed_card/icon_topping.svg';

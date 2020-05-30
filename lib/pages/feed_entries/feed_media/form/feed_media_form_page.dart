@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
@@ -169,7 +170,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
               FutureFn ff =
                   BlocProvider.of<MainNavigatorBloc>(context).futureFn();
               BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                  MainNavigateToImageCapturePlaybackEvent(FeedMedias.makeAbsoluteFilePath(media.filePath.value),
                       futureFn: ff.futureFn, okButton: 'OK'));
               bool keep = await ff.future;
               if (keep == true) {

@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'feeds.g.dart';
@@ -31,7 +32,7 @@ class Feeds extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<FeedsCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<FeedsCompanion> fromMap(Map<String, dynamic> map) async {
     return FeedsCompanion(
         name: Value(map['name'] as String),
         isNewsFeed: Value(map['isNewsFeed'] as bool),
@@ -39,7 +40,7 @@ class Feeds extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(Feed feed) async {
+  static Future<Map<String, dynamic>> toMap(Feed feed) async {
     return {
       'id': feed.serverID,
       'name': feed.name,
@@ -61,7 +62,7 @@ class FeedEntries extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<FeedEntriesCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<FeedEntriesCompanion> fromMap(Map<String, dynamic> map) async {
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     return FeedEntriesCompanion(
         feed: Value(feed.id),
@@ -73,7 +74,7 @@ class FeedEntries extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(FeedEntry feedEntry) async {
+  static Future<Map<String, dynamic>> toMap(FeedEntry feedEntry) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
     if (feed.serverID == null) {
       throw 'Missing serverID for feed relation';
@@ -106,7 +107,7 @@ class FeedMedias extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static Future<FeedMediasCompanion> fromJSON(Map<String, dynamic> map) async {
+  static Future<FeedMediasCompanion> fromMap(Map<String, dynamic> map) async {
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
@@ -120,7 +121,7 @@ class FeedMedias extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(FeedMedia feedMedia) async {
+  static Future<Map<String, dynamic>> toMap(FeedMedia feedMedia) async {
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntry(feedMedia.feedEntry);
     if (feedEntry.serverID == null) {
@@ -134,6 +135,20 @@ class FeedMedias extends Table {
       'thumbnailPath': feedMedia.thumbnailPath,
       'params': feedMedia.params,
     };
+  }
+
+  static String makeFilePath() {
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    return FeedMedias.makeRelativeFilePath(timestamp);
+  }
+
+  static String makeRelativeFilePath(String fileName) {
+    final String filePath = 'Pictures/sgl/$fileName';
+    return filePath;
+  }
+
+  static String makeAbsoluteFilePath(String filePath) {
+    return '${AppDB().documentPath}/$filePath';
   }
 
   // TODO check when createCompaion comes back
@@ -198,19 +213,21 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return delete(feeds).delete(feed);
   }
 
-  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(int feedID) {
+  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(
+      int feedID, int limit, int offset) {
     return (select(feedEntries)
       ..where((fe) => fe.feed.equals(feedID))
       ..orderBy(
-          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]));
+          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)])
+      ..limit(limit, offset: offset));
   }
 
-  Future<List<FeedEntry>> getEntries(int feedID) {
-    return _selectEntries(feedID).get();
+  Future<List<FeedEntry>> getEntries(int feedID, int limit, int offset) {
+    return _selectEntries(feedID, limit, offset).get();
   }
 
-  Stream<List<FeedEntry>> watchEntries(int feedID) {
-    return _selectEntries(feedID).watch();
+  Stream<List<FeedEntry>> watchEntries(int feedID, int limit, int offset) {
+    return _selectEntries(feedID, limit, offset).watch();
   }
 
   Future<List<FeedEntry>> getEnvironmentEntries(int feedID) {
@@ -294,6 +311,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (await query.get())
         .map<FeedMedia>((e) => e.readTable(feedMedias))
         .toList();
+  }
+
+  Future<List<FeedMedia>> getAllFeedMedias() {
+    return (select(feedMedias)).get();
   }
 
   Future<List<FeedMedia>> getFeedMedias(int feedEntryID) {

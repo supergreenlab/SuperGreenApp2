@@ -17,6 +17,7 @@
  */
 
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/cards/welcome/card_products_growing_medium.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
@@ -39,13 +40,16 @@ class TowelieButtonShowProductsGrowingMedium extends TowelieButton {
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_showProductsID, {
-        'title': TowelieButtonShowProductsGrowingMedium.towelieButtonShowGrowingMedium,
+        'title': TowelieButtonShowProductsGrowingMedium
+            .towelieButtonShowGrowingMedium,
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    await CardProductsGrowingMedium.createProductsGrowingMedium(event.feed);
-    await selectButtons(event.feedEntry, selectedButtonID: id);
+    Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    await CardProductsGrowingMedium.createProductsGrowingMedium(feed);
+    await selectButtons(feedEntry, selectedButtonID: id);
   }
 }

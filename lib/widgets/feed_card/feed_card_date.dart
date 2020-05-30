@@ -17,16 +17,15 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedCardDate extends StatelessWidget {
-  final FeedEntry feedEntry;
+  final DateTime date;
 
-  const FeedCardDate(this.feedEntry);
+  const FeedCardDate(this.date);
 
   @override
   Widget build(BuildContext context) {
-    Duration diff = DateTime.now().difference(feedEntry.date);
+    Duration diff = DateTime.now().difference(date);
     int minuteDiff = diff.inMinutes;
     int hourDiff = diff.inHours;
     int dayDiff = diff.inDays;

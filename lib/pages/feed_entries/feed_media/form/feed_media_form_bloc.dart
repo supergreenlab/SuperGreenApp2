@@ -17,13 +17,14 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
 
 abstract class FeedMediaFormBlocEvent extends Equatable {}
 
@@ -61,12 +62,12 @@ class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
 
 class FeedMediaFormBloc
     extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
-  final MainNavigateToFeedMediaFormEvent _args;
+  final MainNavigateToFeedMediaFormEvent args;
 
   @override
   FeedMediaFormBlocState get initialState => FeedMediaFormBlocState();
 
-  FeedMediaFormBloc(this._args);
+  FeedMediaFormBloc(this.args);
 
   @override
   Stream<FeedMediaFormBlocState> mapEventToState(
@@ -75,14 +76,16 @@ class FeedMediaFormBloc
       yield FeedMediaFormBlocStateLoading();
       final db = RelDB.get();
       int feedEntryID =
-          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEDIA',
-        feed: _args.plant.feed,
+        feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'message': event.message, 'helpRequest': event.helpRequest})),
+        params:
+            Value(FeedMediaParams(event.message, event.helpRequest).toJSON()),
       ));
       for (FeedMediasCompanion m in event.medias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
+        await db.feedsDAO.addFeedMedia(m.copyWith(
+            feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
       }
       yield FeedMediaFormBlocStateDone();
     }

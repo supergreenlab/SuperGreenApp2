@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedFormMediaList extends StatelessWidget {
@@ -56,7 +57,7 @@ class FeedFormMediaList extends StatelessWidget {
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image:
-                              Image.file(File(m.thumbnailPath.value)).image))),
+                              Image.file(File(FeedMedias.makeAbsoluteFilePath(m.thumbnailPath.value))).image))),
             ))
         .toList();
     if (maxMedias == -1 || maxMedias > this.medias.length) {

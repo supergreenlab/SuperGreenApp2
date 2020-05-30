@@ -37,12 +37,12 @@ class FullscreenPictureBlocState extends Equatable {
 
 class FullscreenPictureBloc
     extends Bloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
-  final MainNavigateToFullscreenPicture _args;
+  final MainNavigateToFullscreenPicture args;
 
-  FullscreenPictureBloc(this._args);
+  FullscreenPictureBloc(this.args);
 
   @override
-  FullscreenPictureBlocState get initialState => FullscreenPictureBlocState(_args.id, _args.image);
+  FullscreenPictureBlocState get initialState => FullscreenPictureBlocState(args.id, args.image);
 
   @override
   Stream<FullscreenPictureBlocState> mapEventToState(

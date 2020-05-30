@@ -23,8 +23,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
 
 abstract class FeedVentilationFormBlocEvent extends Equatable {}
 
@@ -116,19 +118,19 @@ class FeedVentilationFormBlocStateNoDevice
 
 class FeedVentilationFormBloc
     extends Bloc<FeedVentilationFormBlocEvent, FeedVentilationFormBlocState> {
-  final MainNavigateToFeedVentilationFormEvent _args;
+  final MainNavigateToFeedVentilationFormEvent args;
 
-  Device _device;
-  Param _blowerDay;
-  Param _blowerNight;
-  int _initialBlowerDay;
-  int _initialBlowerNight;
+  Device device;
+  Param blowerDay;
+  Param blowerNight;
+  int initialBlowerDay;
+  int initialBlowerNight;
 
   @override
   FeedVentilationFormBlocState get initialState =>
       FeedVentilationFormBlocState();
 
-  FeedVentilationFormBloc(this._args) {
+  FeedVentilationFormBloc(this.args) {
     add(FeedVentilationFormBlocEventLoadVentilations());
   }
 
@@ -137,80 +139,73 @@ class FeedVentilationFormBloc
       FeedVentilationFormBlocEvent event) async* {
     if (event is FeedVentilationFormBlocEventLoadVentilations) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         yield FeedVentilationFormBlocStateNoDevice(15, 5, 15, 5, box);
         return;
       }
-      _device = await db.devicesDAO.getDevice(box.device);
-      _blowerDay = await db.devicesDAO
-          .getParam(_device.id, "BOX_${box.deviceBox}_BLOWER_DAY");
-      _initialBlowerDay = _blowerDay.ivalue;
-      _blowerNight = await db.devicesDAO
-          .getParam(_device.id, "BOX_${box.deviceBox}_BLOWER_NIGHT");
-      _initialBlowerNight = _blowerNight.ivalue;
-      yield FeedVentilationFormBlocStateLoaded(_initialBlowerDay,
-          _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue, box);
+      device = await db.devicesDAO.getDevice(box.device);
+      blowerDay = await db.devicesDAO
+          .getParam(device.id, "BOX_${box.deviceBox}_BLOWER_DAY");
+      initialBlowerDay = blowerDay.ivalue;
+      blowerNight = await db.devicesDAO
+          .getParam(device.id, "BOX_${box.deviceBox}_BLOWER_NIGHT");
+      initialBlowerNight = blowerNight.ivalue;
+      yield FeedVentilationFormBlocStateLoaded(initialBlowerDay,
+          initialBlowerNight, blowerDay.ivalue, blowerNight.ivalue, box);
     } else if (event is FeedVentilationFormBlocBlowerDayChangedEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         return;
       }
-      _blowerDay = _blowerDay.copyWith(ivalue: event.blowerDay);
+      blowerDay = blowerDay.copyWith(ivalue: event.blowerDay);
       await DeviceHelper.updateIntParam(
-          _device, _blowerDay, (event.blowerDay).toInt());
-      yield FeedVentilationFormBlocStateLoaded(_initialBlowerDay,
-          _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue, box);
+          device, blowerDay, (event.blowerDay).toInt());
+      yield FeedVentilationFormBlocStateLoaded(initialBlowerDay,
+          initialBlowerNight, blowerDay.ivalue, blowerNight.ivalue, box);
     } else if (event is FeedVentilationFormBlocBlowerNightChangedEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         return;
       }
-      _blowerNight = _blowerNight.copyWith(ivalue: event.blowerNight);
+      blowerNight = blowerNight.copyWith(ivalue: event.blowerNight);
       await DeviceHelper.updateIntParam(
-          _device, _blowerNight, (event.blowerNight).toInt());
-      yield FeedVentilationFormBlocStateLoaded(_initialBlowerDay,
-          _initialBlowerNight, _blowerDay.ivalue, _blowerNight.ivalue, box);
+          device, blowerNight, (event.blowerNight).toInt());
+      yield FeedVentilationFormBlocStateLoaded(initialBlowerDay,
+          initialBlowerNight, blowerDay.ivalue, blowerNight.ivalue, box);
     } else if (event is FeedVentilationFormBlocEventCreate) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         return;
       }
       yield FeedVentilationFormBlocStateLoading('Saving..');
-      List<Plant> plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+      List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
       for (int i = 0; i < plants.length; ++i) {
-        await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+        await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_VENTILATION',
           feed: plants[i].feed,
           date: DateTime.now(),
-          params: Value(JsonEncoder().convert({
-            'initialValues': {
-              'blowerDay': _initialBlowerDay,
-              'blowerNight': _initialBlowerNight
-            },
-            'values': {
-              'blowerDay': event.blowerDay,
-              'blowerNight': event.blowerNight
-            }
-          })),
+          params: Value(JsonEncoder().convert(FeedVentilationParams(
+              FeedVentilationParamsValues(event.blowerDay, event.blowerNight),
+              FeedVentilationParamsValues(
+                  initialBlowerDay, initialBlowerNight)))),
         ));
       }
       yield FeedVentilationFormBlocStateDone();
     } else if (event is FeedVentilationFormBlocEventCancelEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       if (box.device == null) {
         return;
       }
       yield FeedVentilationFormBlocStateLoading('Cancelling..');
       try {
+        await DeviceHelper.updateIntParam(device, blowerDay, initialBlowerDay);
         await DeviceHelper.updateIntParam(
-            _device, _blowerDay, _initialBlowerDay);
-        await DeviceHelper.updateIntParam(
-            _device, _blowerNight, _initialBlowerNight);
+            device, blowerNight, initialBlowerNight);
       } catch (e) {}
       yield FeedVentilationFormBlocStateDone();
     }

@@ -16,10 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_bloc.dart';
+import 'dart:convert';
 
-class FeedTransplantCardBloc
-    extends FeedCareCommonCardBloc {
-  FeedTransplantCardBloc(Feed feed, FeedEntry feedEntry) : super(feed, feedEntry);
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
+
+class FeedMeasureParams extends FeedEntryParams {
+  final dynamic previous;
+
+  FeedMeasureParams(this.previous);
+
+  static FeedMeasureParams fromJSON(String json) {
+    Map<String, dynamic> map = JsonDecoder().convert(json);
+    return FeedMeasureParams(map['previous']);
+  }
+
+  @override
+  String toJSON() {
+    return JsonEncoder().convert({'previous': previous});
+  }
+
+  @override
+  List<Object> get props => [previous];
 }

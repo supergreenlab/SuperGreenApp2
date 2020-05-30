@@ -53,13 +53,13 @@ class SettingsPlantsBlocStateLoaded extends SettingsPlantsBlocState {
 
 class SettingsPlantsBloc
     extends Bloc<SettingsPlantsBlocEvent, SettingsPlantsBlocState> {
-  List<Plant> _plants;
+  List<Plant> plants;
   StreamSubscription<List<Plant>> _plantsStream;
 
   //ignore: unused_field
-  final MainNavigateToSettingsPlants _args;
+  final MainNavigateToSettingsPlants args;
 
-  SettingsPlantsBloc(this._args) {
+  SettingsPlantsBloc(this.args) {
     add(SettingsPlantsBlocEventInit());
   }
 
@@ -83,9 +83,9 @@ class SettingsPlantsBloc
     }
   }
 
-  void _onPlantListChange(List<Plant> plants) {
-    _plants = plants;
-    add(SettingsPlantsblocEventPlantListChanged(_plants));
+  void _onPlantListChange(List<Plant> p) {
+    plants = p;
+    add(SettingsPlantsblocEventPlantListChanged(plants));
   }
 
   @override

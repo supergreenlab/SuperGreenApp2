@@ -20,7 +20,6 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class FullscreenMediaBlocEvent extends Equatable {}
@@ -32,40 +31,55 @@ class FullscreenMediaBlocEventInit extends FullscreenMediaBlocEvent {
 
 class FullscreenMediaBlocState extends Equatable {
   final bool isVideo;
-  final FeedMedia feedMedia;
+  final String thumbnailPath;
+  final String filePath;
   final String overlayPath;
   final String heroPath;
 
-  FullscreenMediaBlocState(this.feedMedia, this.isVideo, this.overlayPath, this.heroPath);
+  FullscreenMediaBlocState(this.thumbnailPath, this.filePath, this.isVideo,
+      this.overlayPath, this.heroPath);
 
   @override
-  List<Object> get props => [feedMedia, isVideo];
+  List<Object> get props => [thumbnailPath, filePath, isVideo];
 }
 
 class FullscreenMediaBlocStateInit extends FullscreenMediaBlocState {
-  FullscreenMediaBlocStateInit(FeedMedia feedMedia, bool isVideo, String overlayPath, String heroPath)
-      : super(feedMedia, isVideo, overlayPath, heroPath);
+  FullscreenMediaBlocStateInit(String thumbnailPath, String filePath,
+      bool isVideo, String overlayPath, String heroPath)
+      : super(thumbnailPath, filePath, isVideo, overlayPath, heroPath);
 }
 
 class FullscreenMediaBloc
     extends Bloc<FullscreenMediaBlocEvent, FullscreenMediaBlocState> {
-  final MainNavigateToFullscreenMedia _args;
+  final MainNavigateToFullscreenMedia args;
 
-  get _isVideo => _args.feedMedia.filePath.endsWith('mp4');
+  get _isVideo {
+    if (args.filePath.startsWith('http')) {
+      String path = Uri.parse(args.filePath).path;
+      return path.endsWith('mp4');
+    } else {
+      return args.filePath.endsWith('mp4');
+    }
+  }
 
-  FullscreenMediaBloc(this._args) {
+  FullscreenMediaBloc(this.args) {
     add(FullscreenMediaBlocEventInit());
   }
 
   @override
-  FullscreenMediaBlocState get initialState =>
-      FullscreenMediaBlocState(_args.feedMedia, _isVideo, _args.overlayPath, _args.heroPath);
+  FullscreenMediaBlocState get initialState => FullscreenMediaBlocState(
+      args.thumbnailPath,
+      args.filePath,
+      _isVideo,
+      args.overlayPath,
+      args.heroPath);
 
   @override
   Stream<FullscreenMediaBlocState> mapEventToState(
       FullscreenMediaBlocEvent event) async* {
     if (event is FullscreenMediaBlocEventInit) {
-      yield FullscreenMediaBlocStateInit(_args.feedMedia, _isVideo, _args.overlayPath, _args.heroPath);
+      yield FullscreenMediaBlocStateInit(args.thumbnailPath, args.filePath,
+          _isVideo, args.overlayPath, args.heroPath);
     }
   }
 }

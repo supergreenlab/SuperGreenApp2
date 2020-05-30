@@ -19,102 +19,135 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
-abstract class FeedCareCommonCardPage<CardBloc extends FeedCareCommonCardBloc>
-    extends StatefulWidget {
+abstract class FeedCareCommonCardPage extends StatefulWidget {
   final Animation animation;
+  final FeedState feedState;
+  final FeedEntryState state;
 
-  const FeedCareCommonCardPage(this.animation, {Key key}) : super(key: key);
+  const FeedCareCommonCardPage(this.animation, this.feedState, this.state,
+      {Key key})
+      : super(key: key);
 
   @override
-  _FeedCareCommonCardPageState<CardBloc> createState() =>
-      _FeedCareCommonCardPageState<CardBloc>();
+  _FeedCareCommonCardPageState createState() => _FeedCareCommonCardPageState();
 
   String title();
 
   String iconPath();
 }
 
-class _FeedCareCommonCardPageState<CardBloc extends FeedCareCommonCardBloc>
-    extends State<FeedCareCommonCardPage<CardBloc>> {
+class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
   bool editText;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CardBloc, FeedCareCommonCardBlocState>(
-        bloc: BlocProvider.of<CardBloc>(context),
-        builder: (context, state) {
-          List<Widget> body = [
-            FeedCardTitle(
-              widget.iconPath(),
-              widget.title(),
-              state.feedEntry,
-              onEdit: () {
-                setState(() {
-                  editText = true;
-                });
+    if (widget.state is FeedEntryStateLoaded) {
+      return _renderLoaded(context, widget.state);
+    }
+    return _renderLoading(context);
+  }
+
+  Widget _renderLoading(BuildContext context) {
+    return FeedCard(
+      animation: widget.animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(widget.state.date),
+          ),
+          Container(
+            height: 700,
+            alignment: Alignment.center,
+            child: FullscreenLoading(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, FeedCareCommonState state) {
+    FeedCareParams params = state.params;
+    List<Widget> body = [
+      FeedCardTitle(
+        widget.iconPath(),
+        widget.title(),
+        widget.state.synced,
+        onEdit: () {
+          setState(() {
+            editText = true;
+          });
+        },
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FeedCardDate(widget.state.date),
+      ),
+      FeedCardText(
+        params.message ?? '',
+        edit: editText,
+        onEdited: (value) {
+          BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(
+              state, params.copyWith(value)));
+          setState(() {
+            editText = false;
+          });
+        },
+      )
+    ];
+    if (state.beforeMedias.length > 0) {
+      body.insert(
+        1,
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: MediaList(
+            state.beforeMedias,
+            prefix: 'Before ',
+            onMediaTapped: (media) {
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToFullscreenMedia(
+                      media.thumbnailPath, media.filePath));
+            },
+          ),
+        ),
+      );
+    }
+    if (state.afterMedias.length > 0) {
+      body.insert(
+          1,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: MediaList(
+              state.afterMedias,
+              prefix: 'After ',
+              onMediaTapped: (media) {
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToFullscreenMedia(
+                        media.thumbnailPath, media.filePath));
               },
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FeedCardDate(state.feedEntry),
-            ),
-            FeedCardText(
-              state.params['message'] ?? '',
-              edit: editText,
-              onEdited: (value) {
-                BlocProvider.of<CardBloc>(context)
-                    .add(FeedCareCommonCardBlocEventEdit(value));
-                setState(() {
-                  editText = false;
-                });
-              },
-            )
-          ];
-          if (state.beforeMedias.length > 0) {
-            body.insert(
-              1,
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: MediaList(
-                  state.beforeMedias,
-                  prefix: 'Before ',
-                  onMediaTapped: (media) {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToFullscreenMedia(media));
-                  },
-                ),
-              ),
-            );
-          }
-          if (state.afterMedias.length > 0) {
-            body.insert(
-                1,
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: MediaList(
-                    state.afterMedias,
-                    prefix: 'After ',
-                    onMediaTapped: (media) {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToFullscreenMedia(media));
-                    },
-                  ),
-                ));
-          }
-          return FeedCard(
-            animation: widget.animation,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: body,
-            ),
-          );
-        });
+          ));
+    }
+    return FeedCard(
+      animation: widget.animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: body,
+      ),
+    );
   }
 }

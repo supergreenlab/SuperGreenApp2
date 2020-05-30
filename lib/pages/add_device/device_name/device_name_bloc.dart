@@ -61,25 +61,25 @@ class DeviceNameBlocStateDone extends DeviceNameBlocState {
 }
 
 class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
-  final MainNavigateToDeviceNameEvent _args;
+  final MainNavigateToDeviceNameEvent args;
 
   @override
-  DeviceNameBlocState get initialState => DeviceNameBlocState(_args.device);
+  DeviceNameBlocState get initialState => DeviceNameBlocState(args.device);
 
-  DeviceNameBloc(this._args);
+  DeviceNameBloc(this.args);
 
   @override
   Stream<DeviceNameBlocState> mapEventToState(
       DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventReset) {
-      yield DeviceNameBlocState(_args.device);
+      yield DeviceNameBlocState(args.device);
     } else if (event is DeviceNameBlocEventSetName) {
-      yield DeviceNameBlocStateLoading(_args.device);
+      yield DeviceNameBlocStateLoading(args.device);
       var ddb = RelDB.get().devicesDAO;
-      await DeviceHelper.updateDeviceName(_args.device, event.name);
+      await DeviceHelper.updateDeviceName(args.device, event.name);
 
-      Param wifiStatus = await ddb.getParam(_args.device.id, 'WIFI_STATUS');
-      Device device = await ddb.getDevice(_args.device.id);
+      Param wifiStatus = await ddb.getParam(args.device.id, 'WIFI_STATUS');
+      Device device = await ddb.getDevice(args.device.id);
       yield DeviceNameBlocStateDone(device, wifiStatus.ivalue != 3);
     }
   }

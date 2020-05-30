@@ -18,11 +18,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/card/feed_transplant_card_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
-class FeedTransplantCardPage extends FeedCareCommonCardPage<FeedTransplantCardBloc> {
+class FeedTransplantCardPage extends FeedCareCommonCardPage {
 
-  FeedTransplantCardPage(Animation animation, {Key key}) : super(animation, key: key);
+  FeedTransplantCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key}) : super(animation, feedState, state, key: key);
 
   String iconPath() {
     return 'assets/feed_card/icon_transplant.svg';

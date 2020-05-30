@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
@@ -41,20 +42,20 @@ class FeedsAPI {
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
-    if (kReleaseMode || Platform.isIOS) {
+    // if (kReleaseMode || Platform.isIOS) {
       _serverHost = 'https://api2.supergreenlab.com';
       _storageServerHost = 'https://storage.supergreenlab.com';
       _storageServerHostHeader = 'storage.supergreenlab.com';
-    } else {
-      initUrls();
-    }
+    // } else {
+    //   initUrls();
+    // }
   }
 
   void initUrls() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
-      _serverHost = 'http://192.168.1.124:8080';
-      _storageServerHost = 'http://192.168.1.124:9000';
+      _serverHost = 'http://192.168.1.122:8080';
+      _storageServerHost = 'http://192.168.1.122:9000';
     } else {
       _serverHost = 'http://10.0.2.2:8080';
       _storageServerHost = 'http://10.0.2.2:9000';
@@ -94,7 +95,7 @@ class FeedsAPI {
   }
 
   Future syncPlant(Plant plant) async {
-    Map<String, dynamic> obj = await Plants.toJSON(plant);
+    Map<String, dynamic> obj = await Plants.toMap(plant);
     String serverID = await _postPut('/plant', obj);
 
     PlantsCompanion plantsCompanion =
@@ -102,11 +103,11 @@ class FeedsAPI {
     if (serverID != null) {
       plantsCompanion = plantsCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().plantsDAO.updatePlant(plantsCompanion);
+    await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
   }
 
   Future syncBox(Box box) async {
-    Map<String, dynamic> obj = await Boxes.toJSON(box);
+    Map<String, dynamic> obj = await Boxes.toMap(box);
     String serverID = await _postPut('/box', obj);
 
     BoxesCompanion boxesCompanion =
@@ -114,11 +115,11 @@ class FeedsAPI {
     if (serverID != null) {
       boxesCompanion = boxesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().plantsDAO.updateBox(boxesCompanion);
+    await RelDB.get().plantsDAO.updateBox(boxesCompanion);
   }
 
   Future syncTimelapse(Timelapse timelapse) async {
-    Map<String, dynamic> obj = await Timelapses.toJSON(timelapse);
+    Map<String, dynamic> obj = await Timelapses.toMap(timelapse);
     String serverID = await _postPut('/timelapse', obj);
 
     TimelapsesCompanion timelapsesCompanion =
@@ -127,11 +128,11 @@ class FeedsAPI {
       timelapsesCompanion =
           timelapsesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion);
+    await RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion);
   }
 
   Future syncDevice(Device device) async {
-    Map<String, dynamic> obj = await Devices.toJSON(device);
+    Map<String, dynamic> obj = await Devices.toMap(device);
     String serverID = await _postPut('/device', obj);
 
     DevicesCompanion devicesCompanion =
@@ -139,11 +140,11 @@ class FeedsAPI {
     if (serverID != null) {
       devicesCompanion = devicesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().devicesDAO.updateDevice(devicesCompanion);
+    await RelDB.get().devicesDAO.updateDevice(devicesCompanion);
   }
 
   Future syncFeed(Feed feed) async {
-    Map<String, dynamic> obj = await Feeds.toJSON(feed);
+    Map<String, dynamic> obj = await Feeds.toMap(feed);
     String serverID = await _postPut('/feed', obj);
 
     FeedsCompanion feedsCompanion =
@@ -151,11 +152,11 @@ class FeedsAPI {
     if (serverID != null) {
       feedsCompanion = feedsCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().feedsDAO.updateFeed(feedsCompanion);
+    await RelDB.get().feedsDAO.updateFeed(feedsCompanion);
   }
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
-    Map<String, dynamic> obj = await FeedEntries.toJSON(feedEntry);
+    Map<String, dynamic> obj = await FeedEntries.toMap(feedEntry);
     String serverID = await _postPut('/feedEntry', obj);
 
     FeedEntriesCompanion feedEntriesCompanion =
@@ -164,11 +165,11 @@ class FeedsAPI {
       feedEntriesCompanion =
           feedEntriesCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().feedsDAO.updateFeedEntry(feedEntriesCompanion);
+    await FeedEntryHelper.updateFeedEntry(feedEntriesCompanion);
   }
 
   Future syncFeedMedia(FeedMedia feedMedia) async {
-    Map<String, dynamic> obj = await FeedMedias.toJSON(feedMedia);
+    Map<String, dynamic> obj = await FeedMedias.toMap(feedMedia);
 
     Response resp = await post('$_serverHost/feedMediaUploadURL',
         headers: {
@@ -184,8 +185,9 @@ class FeedsAPI {
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
     {
-      File file = File(feedMedia.filePath);
-      print('Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
+      File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
+      print(
+          'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
       Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
           body: file.readAsBytesSync(),
           headers: {'Host': _storageServerHostHeader});
@@ -195,8 +197,10 @@ class FeedsAPI {
     }
 
     {
-      File file = File(feedMedia.thumbnailPath);
-      print('Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
+      File file =
+          File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
+      print(
+          'Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
       Response resp = await put(
           '$_storageServerHost${uploadUrls['thumbnailPath']}',
           body: file.readAsBytesSync(),
@@ -215,9 +219,10 @@ class FeedsAPI {
     FeedMediasCompanion feedMediasCompanion =
         FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
     if (serverID != null) {
-      feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(serverID));
+      feedMediasCompanion =
+          feedMediasCompanion.copyWith(serverID: Value(serverID));
     }
-    RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
+    await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
   }
 
   Future<List<PlantsCompanion>> unsyncedPlants() async {
@@ -225,7 +230,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<PlantsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Plants.fromJSON(maps[i]));
+      results.add(await Plants.fromMap(maps[i]));
     }
     return results;
   }
@@ -235,7 +240,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<BoxesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Boxes.fromJSON(maps[i]));
+      results.add(await Boxes.fromMap(maps[i]));
     }
     return results;
   }
@@ -245,7 +250,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<TimelapsesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Timelapses.fromJSON(maps[i]));
+      results.add(await Timelapses.fromMap(maps[i]));
     }
     return results;
   }
@@ -253,7 +258,7 @@ class FeedsAPI {
   Future<List<DevicesCompanion>> unsyncedDevices() async {
     Map<String, dynamic> syncData = await _unsynced("Devices");
     List<dynamic> maps = syncData['items'];
-    return maps.map<DevicesCompanion>((m) => Devices.fromJSON(m)).toList();
+    return maps.map<DevicesCompanion>((m) => Devices.fromMap(m)).toList();
   }
 
   Future<List<FeedsCompanion>> unsyncedFeeds() async {
@@ -261,7 +266,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Feeds.fromJSON(maps[i]));
+      results.add(await Feeds.fromMap(maps[i]));
     }
     return results;
   }
@@ -271,7 +276,7 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedEntriesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await FeedEntries.fromJSON(maps[i]));
+      results.add(await FeedEntries.fromMap(maps[i]));
     }
     return results;
   }
@@ -281,15 +286,80 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedMediasCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await FeedMedias.fromJSON(maps[i]));
+      results.add(await FeedMedias.fromMap(maps[i]));
     }
     return results;
+  }
+
+  Future<List<dynamic>> publicPlants(int n, int offset) async {
+    Response resp = await get('$_serverHost/public/plants?limit=$n&offset=$offset', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicPlants failed';
+    }
+    Map<String, dynamic> results =  JsonDecoder().convert(resp.body);
+    return results['plants'];
+  }
+
+  Future<Map<String, dynamic>> publicPlant(String id) async {
+    Response resp = await get('$_serverHost/public/plant/$id', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicPlant failed';
+    }
+    return JsonDecoder().convert(resp.body);
+  }
+
+  Future<List<dynamic>> publicFeedEntries(String id, int n, int offset) async {
+    Response resp = await get(
+        '$_serverHost/public/plant/$id/feedEntries?limit=$n&offset=$offset',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicFeedEntries failed';
+    }
+    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
+    return results['entries'];
+  }
+
+  Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
+    Response resp =
+        await get('$_serverHost/public/feedEntry/$id/feedMedias', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicFeedEntries failed';
+    }
+    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
+    return results['medias'];
+  }
+
+  Future<Map<String, dynamic>> publicFeedMedia(String id) async {
+    Response resp = await get('$_serverHost/public/feedMedia/$id', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'publicFeedEntries failed';
+    }
+    return JsonDecoder().convert(resp.body);
   }
 
   Future download(String from, String to) async {
     Response fileResp = await get('$_storageServerHost$from',
         headers: {'Host': _storageServerHostHeader});
     await File(to).writeAsBytes(fileResp.bodyBytes);
+  }
+
+  String absoluteFileURL(String path) {
+    return '$_storageServerHost$path';
   }
 
   Future setSynced(String type, String id) async {

@@ -17,9 +17,18 @@
  */
 
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
-class FeedToppingCardBloc
-    extends FeedCareCommonCardBloc {
-  FeedToppingCardBloc(Feed feed, FeedEntry feedEntry) : super(feed, feedEntry);
+class FeedLightLoader extends LocalFeedEntryLoader {
+  FeedLightLoader(Function(FeedBlocEvent) add) : super(add);
+
+  @override
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
+      FeedLightState(state);
+
+  @override
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) => FeedLightState(super.stateForFeedEntry(feedEntry));
 }

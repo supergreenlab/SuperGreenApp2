@@ -17,48 +17,81 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_light.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedLightCardPage extends StatelessWidget {
   final Animation animation;
+  final FeedState feedState;
+  final FeedEntryState state;
 
-  const FeedLightCardPage(this.animation, {Key key}) : super(key: key);
+  const FeedLightCardPage(this.animation, this.feedState, this.state, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedLightCardBloc, FeedLightCardBlocState>(
-        bloc: BlocProvider.of<FeedLightCardBloc>(context),
-        builder: (context, state) => FeedCard(
-              animation: animation,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  FeedCardTitle('assets/feed_card/icon_light.svg',
-                      'Stretch control', state.feedEntry),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FeedCardDate(state.feedEntry),
-                  ),
-                  Container(
-                    height: 130,
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: _renderValues(state.params['values'],
-                            state.params['initialValues']),
-                      ),
-                    ),
-                  ),
-                ],
+    if (state is FeedEntryStateLoaded) {
+      return _renderLoaded(context, state);
+    }
+    return _renderLoading(context);
+  }
+
+  Widget _renderLoading(BuildContext context) {
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle('assets/feed_card/icon_light.svg', 'Stretch control',
+              state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
+          Container(
+            height: 100,
+            alignment: Alignment.center,
+            child: FullscreenLoading(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
+    FeedLightParams params = state.params;
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle('assets/feed_card/icon_light.svg', 'Stretch control',
+              state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
+          Container(
+            height: 130,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children:
+                    _renderValues(params.values, params.initialValues),
               ),
-            ));
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   List<Widget> _renderValues(
@@ -94,12 +127,14 @@ class FeedLightCardPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text('${v['from']}%',
-                        style:
-                            TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w300)),
                     Icon(Icons.arrow_forward, size: 18),
                     Text('${v['to']}%',
-                        style:
-                            TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.green)),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                            color: Colors.green)),
                   ],
                 ),
               ],

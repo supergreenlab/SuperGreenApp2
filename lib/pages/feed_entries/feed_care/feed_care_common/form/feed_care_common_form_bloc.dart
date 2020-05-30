@@ -22,8 +22,10 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
 
 abstract class FeedCareCommonFormBlocEvent extends Equatable {}
 
@@ -33,7 +35,8 @@ class FeedCareCommonFormBlocEventCreate extends FeedCareCommonFormBlocEvent {
   final String message;
   final bool helpRequest;
 
-  FeedCareCommonFormBlocEventCreate(this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
+  FeedCareCommonFormBlocEventCreate(
+      this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
 
   @override
   List<Object> get props => [message, helpRequest];
@@ -59,12 +62,12 @@ class FeedCareCommonFormBlocStateDone extends FeedCareCommonFormBlocState {
 
 abstract class FeedCareCommonFormBloc
     extends Bloc<FeedCareCommonFormBlocEvent, FeedCareCommonFormBlocState> {
-  final MainNavigateToFeedCareCommonFormEvent _args;
+  final MainNavigateToFeedCareCommonFormEvent args;
 
   @override
   FeedCareCommonFormBlocState get initialState => FeedCareCommonFormBlocState();
 
-  FeedCareCommonFormBloc(this._args);
+  FeedCareCommonFormBloc(this.args);
 
   @override
   Stream<FeedCareCommonFormBlocState> mapEventToState(
@@ -73,20 +76,26 @@ abstract class FeedCareCommonFormBloc
       yield FeedCareCommonFormBlocStateLoading();
       final db = RelDB.get();
       int feedEntryID =
-          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: cardType(),
-        feed: _args.plant.feed,
+        feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert({'message': event.message})),
+        params: Value(FeedCareParams(event.message).toJSON()),
       ));
       for (FeedMediasCompanion m in event.beforeMedias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': true}))));
+        await db.feedsDAO.addFeedMedia(m.copyWith(
+            feed: Value(args.plant.feed),
+            feedEntry: Value(feedEntryID),
+            params: Value(JsonEncoder().convert({'before': true}))));
       }
       for (FeedMediasCompanion m in event.afterMedias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID), params: Value(JsonEncoder().convert({'before': false}))));
+        await db.feedsDAO.addFeedMedia(m.copyWith(
+            feed: Value(args.plant.feed),
+            feedEntry: Value(feedEntryID),
+            params: Value(JsonEncoder().convert({'before': false}))));
       }
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
-      yield FeedCareCommonFormBlocStateDone(_args.plant, feedEntry);
+      yield FeedCareCommonFormBlocStateDone(args.plant, feedEntry);
     }
   }
 

@@ -24,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:video_player/video_player.dart';
 
 class FullscreenMediaPage extends StatefulWidget {
@@ -55,8 +56,13 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         listener: (context, state) async {
           if (state is FullscreenMediaBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
-              _videoPlayerController =
-                  VideoPlayerController.file(File(state.feedMedia.filePath));
+              if (state.filePath.startsWith('http')) {
+                _videoPlayerController =
+                    VideoPlayerController.network(state.filePath);
+              } else {
+                _videoPlayerController =
+                    VideoPlayerController.file(File(state.filePath));
+              }
               await _videoPlayerController.initialize();
               _videoPlayerController.play();
               _videoPlayerController.setLooping(true);
@@ -70,7 +76,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
               return LayoutBuilder(
                 builder: (context, constraint) {
                   return Hero(
-                      tag: 'FeedMedia:${state.heroPath ?? state.feedMedia.filePath}',
+                      tag: 'FeedMedia:${state.heroPath ?? state.filePath}',
                       child: GestureDetector(onTap: () {
                         BlocProvider.of<MainNavigatorBloc>(context)
                             .add(MainNavigatorActionPop());
@@ -137,15 +143,25 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
 
   Widget _renderPicturePlayer(BuildContext context,
       FullscreenMediaBlocState state, BoxConstraints constraints) {
+    String filePath = state.isVideo ? state.thumbnailPath : state.filePath;
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child: Image.file(
-          File(state.isVideo
-              ? state.feedMedia.thumbnailPath
-              : state.feedMedia.filePath),
-          fit: BoxFit.contain,
-        ));
+        child: filePath.startsWith('http')
+            ? Image.network(filePath, fit: BoxFit.contain, loadingBuilder:
+                (BuildContext context, Widget child,
+                    ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return FullscreenLoading(
+                    percent: loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes);
+              })
+            : Image.file(
+                File(filePath),
+                fit: BoxFit.contain,
+              ));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
@@ -154,7 +170,19 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             child: SizedBox(
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
-                child: Image.file(File(state.overlayPath), fit: BoxFit.contain))),
+                child: state.overlayPath.startsWith('http')
+                    ? Image.network(state.overlayPath, fit: BoxFit.contain,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return FullscreenLoading(
+                            percent: loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes);
+                      })
+                    : Image.file(File(state.overlayPath),
+                        fit: BoxFit.contain))),
         Positioned(
           left: 30,
           right: 30,

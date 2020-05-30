@@ -51,6 +51,19 @@ class DeviceHelper {
     return value;
   }
 
+  static Future<int> updateHourParam(Device device, Param param, int hour,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    hour = hour - DateTime.now().timeZoneOffset.inHours;
+    if (hour < 0) {
+      hour += 24;
+    }
+    hour = hour % 24;
+    hour = await DeviceAPI.setIntParam(device.ip, param.key, hour,
+        timeout: timeout, nRetries: nRetries, wait: wait);
+    await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: hour));
+    return hour;
+  }
+
   static Future refreshStringParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     String value = await DeviceAPI.fetchStringParam(device.ip, param.key,

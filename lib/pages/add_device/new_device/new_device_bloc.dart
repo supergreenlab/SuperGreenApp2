@@ -62,13 +62,13 @@ class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
 
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   //ignore: unused_field
-  MainNavigateToNewDeviceEvent _args;
-  final PermissionHandler _permissionHandler = PermissionHandler();
+  MainNavigateToNewDeviceEvent args;
+  final PermissionHandler permissionHandler = PermissionHandler();
 
   @override
   NewDeviceBlocState get initialState => NewDeviceBlocState();
 
-  NewDeviceBloc(this._args) {
+  NewDeviceBloc(this.args) {
     Future.delayed(const Duration(seconds: 1), () => this.add(NewDeviceBlocEventStartSearch()));
   }
 
@@ -82,10 +82,10 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   Stream<NewDeviceBlocState> _startSearch(
       NewDeviceBlocEventStartSearch event) async* {
     if (Platform.isIOS &&
-        await _permissionHandler
+        await permissionHandler
                 .checkPermissionStatus(PermissionGroup.locationWhenInUse) !=
             PermissionStatus.granted) {
-      final result = await _permissionHandler
+      final result = await permissionHandler
           .requestPermissions([PermissionGroup.locationWhenInUse]);
       if (result[PermissionGroup.locationWhenInUse] !=
           PermissionStatus.granted) {

@@ -33,7 +33,7 @@ class Devices extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  static DevicesCompanion fromJSON(Map<String, dynamic> map) {
+  static DevicesCompanion fromMap(Map<String, dynamic> map) {
     return DevicesCompanion(
         identifier: Value(map['identifier'] as String),
         name: Value(map['name'] as String),
@@ -44,7 +44,7 @@ class Devices extends Table {
         serverID: Value(map['id'] as String));
   }
 
-  static Future<Map<String, dynamic>> toJSON(Device device) async {
+  static Future<Map<String, dynamic>> toMap(Device device) async {
     return {
       'id': device.serverID,
       'identifier': device.identifier,

@@ -74,6 +74,8 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
+import 'package:super_green_app/pages/feeds/public_plant/public_plant_bloc.dart';
+import 'package:super_green_app/pages/feeds/public_plant/public_plant_page.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_page.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_page.dart';
@@ -115,6 +117,7 @@ import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewe
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
+import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
 
@@ -177,8 +180,9 @@ class _MainPageState extends State<MainPage> {
                 SGLLocalizations.of(context).title,
             onGenerateRoute: (settings) => MaterialPageRoute(
                 settings: settings,
-                builder: (context) => TowelieHelper.wrapWidget(
-                    settings, context, _onGenerateRoute(context, settings))),
+                builder: (context) => wrapSyncIndicator(
+                    TowelieHelper.wrapWidget(settings, context,
+                        _onGenerateRoute(context, settings)))),
             theme: ThemeData(
               fontFamily: 'Roboto',
             ),
@@ -189,6 +193,34 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget wrapSyncIndicator(Widget body) {
+    return BlocBuilder<SyncerBloc, SyncerBlocState>(
+      builder: (BuildContext context, SyncerBlocState state) {
+        List<Widget> content = [body];
+        if (state is SyncerBlocStateSyncing && state.syncing) {
+          content.add(Positioned(
+              left: 0,
+              top: 0,
+              right: 0,
+              height: 40,
+              child: Scaffold(
+                body: Container(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 21.0),
+                      child: Center(
+                          child: Text('Syncing - ${state.text}',
+                              style: TextStyle(color: Colors.white))),
+                    )),
+              )));
+        }
+        return Stack(
+          children: content,
+        );
+      },
     );
   }
 
@@ -424,6 +456,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => SettingsDeviceBloc(settings.arguments),
           child: SettingsDevicePage(),
+        );
+      case '/public/plant':
+        return BlocProvider(
+          create: (context) => PublicPlantBloc(settings.arguments),
+          child: PublicPlantPage(),
         );
     }
     return Text('Unknown route');

@@ -17,13 +17,14 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 
 abstract class FeedMeasureFormBlocEvent extends Equatable {}
 
@@ -81,12 +82,12 @@ class FeedMeasureFormBlocStateDone extends FeedMeasureFormBlocState {
 
 class FeedMeasureFormBloc
     extends Bloc<FeedMeasureFormBlocEvent, FeedMeasureFormBlocState> {
-  final MainNavigateToFeedMeasureFormEvent _args;
+  final MainNavigateToFeedMeasureFormEvent args;
 
   @override
   FeedMeasureFormBlocState get initialState => FeedMeasureFormBlocStateInit();
 
-  FeedMeasureFormBloc(this._args) {
+  FeedMeasureFormBloc(this.args) {
     add(FeedMeasureFormBlocEventInit());
   }
 
@@ -96,23 +97,23 @@ class FeedMeasureFormBloc
     if (event is FeedMeasureFormBlocEventInit) {
       final db = RelDB.get();
       List<FeedMedia> measures = await db.feedsDAO
-          .getFeedMediasWithType(_args.plant.feed, 'FE_MEASURE');
+          .getFeedMediasWithType(args.plant.feed, 'FE_MEASURE');
       yield FeedMeasureFormBlocStateLoaded(measures);
     } else if (event is FeedMeasureFormBlocEventCreate) {
       yield FeedMeasureFormBlocStateLoading();
       final db = RelDB.get();
       int feedEntryID =
-          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEASURE',
-        feed: _args.plant.feed,
+        feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(JsonEncoder().convert(
-            {'previous': event.previous != null ? event.previous.id : null})),
+        params: Value(FeedMeasureParams(
+            event.previous != null ? event.previous.id : null).toJSON()),
       ));
       await db.feedsDAO.addFeedMedia(event.current.copyWith(
-          feed: Value(_args.plant.feed), feedEntry: Value(feedEntryID)));
+          feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
       FeedEntry feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
-      yield FeedMeasureFormBlocStateDone(_args.plant, feedEntry);
+      yield FeedMeasureFormBlocStateDone(args.plant, feedEntry);
     }
   }
 }

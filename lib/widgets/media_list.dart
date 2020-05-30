@@ -19,14 +19,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/widgets/bordered_text.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class MediaList extends StatelessWidget {
-  final List<FeedMedia> _medias;
+  final List<MediaState> _medias;
   final String prefix;
-  final Function(FeedMedia media) onMediaTapped;
+  final Function(MediaState media) onMediaTapped;
   final bool showSyncStatus;
 
   const MediaList(this._medias,
@@ -59,7 +61,7 @@ class MediaList extends StatelessWidget {
   }
 
   Widget _renderImage(BuildContext context, BoxConstraints constraints,
-      FeedMedia media, String label) {
+      MediaState media, String label) {
     return InkWell(
       onTap: onMediaTapped != null
           ? () {
@@ -67,14 +69,26 @@ class MediaList extends StatelessWidget {
             }
           : null,
       child: Stack(children: [
-        SizedBox(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight,
-          child: FittedBox(
-              fit: BoxFit.cover,
-              child: Hero(
-                  tag: 'FeedMedia:${media.filePath}',
-                  child: Image.file(File(media.thumbnailPath)))),
+        Hero(
+          tag: 'FeedMedia:${media.filePath}',
+          child: SizedBox(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              child: media.thumbnailPath.startsWith("http")
+                  ? Image.network(
+                      media.thumbnailPath,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return FullscreenLoading(
+                            percent: loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes);
+                      },
+                    )
+                  : Image.file(File(media.thumbnailPath), fit: BoxFit.cover)),
         ),
         Positioned(
             child: BorderedText(
@@ -90,6 +104,12 @@ class MediaList extends StatelessWidget {
             ),
             right: 8.0,
             bottom: 8.0),
+        isVideo(media.filePath)
+            ? Positioned(
+                left: constraints.maxWidth / 2 - 38,
+                top: constraints.maxHeight / 2 - 48,
+                child: SvgPicture.asset('assets/feed_card/play_button.svg'))
+            : Container(),
         showSyncStatus
             ? Positioned(
                 left: 0,
@@ -108,5 +128,14 @@ class MediaList extends StatelessWidget {
             : Container(),
       ]),
     );
+  }
+
+  bool isVideo(String filePath) {
+    if (filePath.startsWith('http')) {
+      String path = Uri.parse(filePath).path;
+      return path.endsWith('mp4');
+    } else {
+      return filePath.endsWith('mp4');
+    }
   }
 }

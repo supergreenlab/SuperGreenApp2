@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
+import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class DeviceDaemonBlocEvent extends Equatable {}
@@ -107,12 +108,12 @@ class DeviceDaemonBloc
       if (identifier == device.identifier) {
         print('Device ${device.name} (${device.identifier}) found.');
         if (device.isSetup == false) {
-          await DeviceAPI.fetchAllParams(
-              device.ip, device.id, (_) => null);
+          await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null);
         }
         await ddb.updateDevice(
             DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
         add(DeviceDaemonBlocEventDeviceReachable(device, true));
+        await _updateDeviceTime(device);
       }
     } catch (e) {
       print(
@@ -160,6 +161,12 @@ class DeviceDaemonBloc
 
   void _deviceListChanged(List<Device> devices) {
     _devices = devices;
+  }
+
+  Future<void> _updateDeviceTime(Device device) async {
+    final Param time = await RelDB.get().devicesDAO.getParam(device.id, 'TIME');
+    await DeviceHelper.updateIntParam(
+        device, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
   }
 
   @override

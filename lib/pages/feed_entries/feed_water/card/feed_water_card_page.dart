@@ -17,87 +17,117 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
+import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedWaterCardPage extends StatelessWidget {
   final Animation animation;
+  final FeedState feedState;
+  final FeedEntryState state;
 
-  const FeedWaterCardPage(this.animation, {Key key}) : super(key: key);
+  const FeedWaterCardPage(this.animation, this.feedState, this.state, {Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedWaterCardBloc, FeedWaterCardBlocState>(
-        bloc: BlocProvider.of<FeedWaterCardBloc>(context),
-        builder: (context, state) {
-          List<Widget> body = [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Text(
-                AppDB().getAppData().freedomUnits == true
-                    ? '${state.params['volume'] / 4} gal'
-                    : '${state.params['volume']} L',
-                style: TextStyle(
-                    fontSize: 45,
-                    fontWeight: FontWeight.w300,
-                    color: Color(0xff3bb30b)),
-              ),
+    if (state is FeedEntryStateLoaded) {
+      return _renderLoaded(context, state);
+    }
+    return _renderLoading(context, state);
+  }
+
+  Widget _renderLoading(BuildContext context, FeedEntryState state) {
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle(
+              'assets/feed_card/icon_watering.svg', 'Watering', state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
+          Container(
+            height: 90,
+            alignment: Alignment.center,
+            child: FullscreenLoading(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, FeedWaterState state) {
+    FeedWaterParams params = state.params;
+    List<Widget> body = [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Text(
+          AppDB().getAppData().freedomUnits == true
+              ? '${params.volume / 4} gal'
+              : '${params.volume} L',
+          style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.w300,
+              color: Color(0xff3bb30b)),
+        ),
+      ),
+    ];
+    if (params.tooDry != null || params.nutrient != null) {
+      List<Widget> details = [];
+      if (params.tooDry != null) {
+        details.add(Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Text(
+            'Was Dry: ${params.tooDry == true ? 'YES' : 'NO'}',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+          ),
+        ));
+      }
+      if (params.nutrient != null) {
+        details.add(
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text(
+              'With nutes: ${params.nutrient == true ? 'YES' : 'NO'}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
             ),
-          ];
-          if (state.params['tooDry'] != null ||
-              state.params['nutrient'] != null) {
-            List<Widget> details = [];
-            if (state.params['tooDry'] != null) {
-              details.add(Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  'Was Dry: ${state.params['tooDry'] == true ? 'YES' : 'NO'}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                ),
-              ));
-            }
-            if (state.params['nutrient'] != null) {
-              details.add(
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    'With nutes: ${state.params['nutrient'] == true ? 'YES' : 'NO'}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                  ),
-                ),
-              );
-            }
-            body.add(Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: details,
-            ));
-          }
-          return FeedCard(
-            animation: animation,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                FeedCardTitle('assets/feed_card/icon_watering.svg', 'Watering',
-                    state.feedEntry),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FeedCardDate(state.feedEntry),
-                ),
-                Container(
-                  height: 90,
-                  alignment: Alignment.center,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: body),
-                ),
-              ],
-            ),
-          );
-        });
+          ),
+        );
+      }
+      body.add(Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: details,
+      ));
+    }
+    return FeedCard(
+      animation: animation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FeedCardTitle(
+              'assets/feed_card/icon_watering.svg', 'Watering', state.synced),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state.date),
+          ),
+          Container(
+            height: 90,
+            alignment: Alignment.center,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center, children: body),
+          ),
+        ],
+      ),
+    );
   }
 }

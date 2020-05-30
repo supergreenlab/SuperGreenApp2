@@ -61,9 +61,9 @@ class ExistingDeviceBlocStateNotFound extends ExistingDeviceBlocState {
 class ExistingDeviceBloc
     extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
   //ignore: unused_field
-  final MainNavigateToExistingDeviceEvent _args;
+  final MainNavigateToExistingDeviceEvent args;
 
-  ExistingDeviceBloc(this._args);
+  ExistingDeviceBloc(this.args);
 
   @override
   ExistingDeviceBlocState get initialState => ExistingDeviceBlocState();

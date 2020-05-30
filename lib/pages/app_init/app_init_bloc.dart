@@ -88,13 +88,19 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
         DeviceOrientation.portraitDown,
       ]);
 
-      Directory appDocDir = await getApplicationDocumentsDirectory();
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
+      final Directory tmpDocDir = await getTemporaryDirectory();
       Hive.init(appDocDir.path);
       Hive.registerAdapter(AppDataAdapter(), 35);
+      AppDB().documentPath = appDocDir.path;
+      AppDB().tmpPath = tmpDocDir.path;
+
+      final String dirPath = '${appDocDir.path}/Pictures/sgl';
+      await Directory(dirPath).create(recursive: true);
 
       await _db.init();
 
-      AppData appData = _db.getAppData();
+      final AppData appData = _db.getAppData();
 
       if (appData.storeGeo == null) {
         final Map<String, String> localeToStoreGeo = {
@@ -102,7 +108,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
           'de_DE': 'eu_de',
           'fr_FR': 'eu_fr',
         };
-        String locale = await Devicelocale.currentLocale;
+        final String locale = await Devicelocale.currentLocale;
         AppDB().setStoreGeo(localeToStoreGeo[locale] ?? 'us_us');
       }
 

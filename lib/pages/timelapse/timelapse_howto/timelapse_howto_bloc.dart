@@ -17,12 +17,12 @@ class TimelapseHowtoBlocState extends Equatable {
 class TimelapseHowtoBloc
     extends Bloc<TimelapseHowtoBlocEvent, TimelapseHowtoBlocState> {
 
-  final MainNavigateToTimelapseHowto _args;
+  final MainNavigateToTimelapseHowto args;
 
-  TimelapseHowtoBloc(this._args);
+  TimelapseHowtoBloc(this.args);
 
   @override
-  TimelapseHowtoBlocState get initialState => TimelapseHowtoBlocState(_args.plant);
+  TimelapseHowtoBlocState get initialState => TimelapseHowtoBlocState(args.plant);
 
   @override
   Stream<TimelapseHowtoBlocState> mapEventToState(

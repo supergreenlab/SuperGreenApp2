@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -68,27 +69,27 @@ class CaptureBlocStateDone extends CaptureBlocState {
 }
 
 class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
-  final MainNavigateToImageCaptureEvent _args;
+  final MainNavigateToImageCaptureEvent args;
 
   @override
   CaptureBlocState get initialState =>
-      CaptureBlocState(_args.videoEnabled, _args.pickerEnabled, _args.overlayPath);
+      CaptureBlocState(args.videoEnabled, args.pickerEnabled, args.overlayPath);
 
-  CaptureBloc(this._args) {
+  CaptureBloc(this.args) {
     add(CaptureBlocEventInit());
   }
 
   @override
   Stream<CaptureBlocState> mapEventToState(CaptureBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield CaptureBlocStateInit(_args.videoEnabled, _args.pickerEnabled, _args.overlayPath);
+      yield CaptureBlocStateInit(args.videoEnabled, args.pickerEnabled, args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
       String thumbnailPath = event.filePath;
       if (thumbnailPath.endsWith('mp4')) {
         thumbnailPath = thumbnailPath.replaceAll('.mp4', '.jpg');
         await VideoThumbnail.thumbnailFile(
-          video: event.filePath,
-          thumbnailPath: thumbnailPath,
+          video: FeedMedias.makeAbsoluteFilePath(event.filePath),
+          thumbnailPath: FeedMedias.makeAbsoluteFilePath(thumbnailPath),
           imageFormat: ImageFormat.JPEG,
           quality: 50,
         );
@@ -98,7 +99,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
         thumbnailPath: Value(thumbnailPath),
       );
       yield CaptureBlocStateDone(
-          feedMedia, _args.videoEnabled, _args.pickerEnabled, _args.overlayPath);
+          feedMedia, args.videoEnabled, args.pickerEnabled, args.overlayPath);
     }
   }
 }

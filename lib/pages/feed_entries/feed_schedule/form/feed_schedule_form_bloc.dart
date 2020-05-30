@@ -23,8 +23,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
 
 abstract class FeedScheduleFormBlocEvent extends Equatable {}
 
@@ -99,23 +101,23 @@ class FeedScheduleFormBlocStateDone extends FeedScheduleFormBlocState {
 
 class FeedScheduleFormBloc
     extends Bloc<FeedScheduleFormBlocEvent, FeedScheduleFormBlocState> {
-  Device _device;
+  Device device;
 
-  String _schedule = '';
-  Map<String, dynamic> _schedules = {};
+  String schedule = '';
+  Map<String, dynamic> schedules = {};
 
-  String _initialSchedule;
-  Map<String, dynamic> _initialSchedules = {};
+  String initialSchedule;
+  Map<String, dynamic> initialSchedules = {};
 
-  Box _box;
+  Box box;
 
-  final MainNavigateToFeedScheduleFormEvent _args;
+  final MainNavigateToFeedScheduleFormEvent args;
 
   @override
   FeedScheduleFormBlocState get initialState =>
       FeedScheduleFormBlocStateUnInitialized();
 
-  FeedScheduleFormBloc(this._args) {
+  FeedScheduleFormBloc(this.args) {
     add(FeedScheduleFormBlocEventInit());
   }
 
@@ -124,76 +126,65 @@ class FeedScheduleFormBloc
       FeedScheduleFormBlocEvent event) async* {
     if (event is FeedScheduleFormBlocEventInit) {
       final db = RelDB.get();
-      _box = await db.plantsDAO.getBox(_args.plant.box);
-      _device = await db.devicesDAO.getDevice(_box.device);
-      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(_box);
-      _initialSchedule = _schedule = boxSettings['schedule'];
-      _initialSchedules = _schedules = boxSettings['schedules'];
+      box = await db.plantsDAO.getBox(args.plant.box);
+      device = await db.devicesDAO.getDevice(box.device);
+      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
+      initialSchedule = schedule = boxSettings['schedule'];
+      initialSchedules = schedules = boxSettings['schedules'];
       yield FeedScheduleFormBlocStateLoaded(
-          _schedule, _schedules, _initialSchedule, _initialSchedules, _box);
+          schedule, schedules, initialSchedule, initialSchedules, box);
     } else if (event is FeedScheduleFormBlocEventSetSchedule) {
-      _schedule = event.schedule;
+      schedule = event.schedule;
       yield FeedScheduleFormBlocStateLoaded(
-          _schedule, _schedules, _initialSchedule, _initialSchedules, _box);
+          schedule, schedules, initialSchedule, initialSchedules, box);
     } else if (event is FeedScheduleFormBlocEventUpdatePreset) {
-      _schedules[event.schedule] = event.values;
+      schedules[event.schedule] = event.values;
       yield FeedScheduleFormBlocStateLoaded(
-          _schedule, _schedules, _initialSchedule, _initialSchedules, _box);
+          schedule, schedules, initialSchedule, initialSchedules, box);
     } else if (event is FeedScheduleFormBlocEventCreate) {
       yield FeedScheduleFormBlocStateLoading();
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
 
-      if (_device != null) {
-        _device = await db.devicesDAO.getDevice(box.device);
+      if (device != null) {
+        device = await db.devicesDAO.getDevice(box.device);
         Param onHour = await db.devicesDAO
-            .getParam(_device.id, 'BOX_${box.deviceBox}_ON_HOUR');
-        await DeviceHelper.updateIntParam(
-            _device, onHour, timezone(_schedules[_schedule]['ON_HOUR']));
+            .getParam(device.id, 'BOX_${box.deviceBox}_ON_HOUR');
+        await DeviceHelper.updateHourParam(
+            device, onHour, schedules[schedule]['ON_HOUR']);
         Param offHour = await db.devicesDAO
-            .getParam(_device.id, 'BOX_${box.deviceBox}_OFF_HOUR');
-        await DeviceHelper.updateIntParam(
-            _device, offHour, timezone(_schedules[_schedule]['OFF_HOUR']));
+            .getParam(device.id, 'BOX_${box.deviceBox}_OFF_HOUR');
+        await DeviceHelper.updateHourParam(
+            device, offHour, schedules[schedule]['OFF_HOUR']);
       }
 
       final Map<String, dynamic> plantSettings =
-          db.plantsDAO.plantSettings(_args.plant);
-      plantSettings['phase'] = _schedule;
+          db.plantsDAO.plantSettings(args.plant);
+      plantSettings['phase'] = schedule;
       await db.plantsDAO.updatePlant(PlantsCompanion(
-          id: Value(_args.plant.id),
+          id: Value(args.plant.id),
           settings: Value(JsonEncoder().convert(plantSettings))));
 
       final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-      boxSettings['schedule'] = _schedule;
-      boxSettings['schedules'] = _schedules;
+      boxSettings['schedule'] = schedule;
+      boxSettings['schedules'] = schedules;
       await db.plantsDAO.updateBox(BoxesCompanion(
           id: Value(box.id),
           settings: Value(JsonEncoder().convert(boxSettings))));
-      if (_schedule == 'BLOOM') {
-        List<Plant> plants = await db.plantsDAO.getPlantsInBox(_args.plant.box);
+      if (schedule == 'BLOOM') {
+        List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
         for (int i = 0; i < plants.length; ++i) {
-          await db.feedsDAO.addFeedEntry(FeedEntriesCompanion.insert(
+          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
             type: 'FE_SCHEDULE',
             feed: plants[i].feed,
             date: DateTime.now(),
-            params: Value(JsonEncoder().convert({
-              'initialSchedule': _initialSchedule,
-              'initialSchedules': _initialSchedules,
-              'schedule': _schedule,
-              'schedules': _schedules,
-            })),
+            params: Value(FeedScheduleParams(
+                    schedule, schedules, initialSchedule, initialSchedules)
+                .toJSON()),
           ));
         }
       }
       yield FeedScheduleFormBlocStateDone();
     }
-  }
-
-  int timezone(int hour) {
-    hour = hour - DateTime.now().timeZoneOffset.inHours;
-    if (hour < 0) {
-      hour += 24;
-    }
-    return hour % 24;
   }
 }

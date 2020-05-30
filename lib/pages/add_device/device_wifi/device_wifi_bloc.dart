@@ -89,9 +89,9 @@ class DeviceWifiBlocStateDone extends DeviceWifiBlocState {
 }
 
 class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
-  final MainNavigateToDeviceWifiEvent _args;
+  final MainNavigateToDeviceWifiEvent args;
 
-  DeviceWifiBloc(this._args);
+  DeviceWifiBloc(this.args);
 
   @override
   DeviceWifiBlocState get initialState => DeviceWifiBlocState();
@@ -102,11 +102,15 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     if (event is DeviceWifiBlocEventSetup) {
       yield DeviceWifiBlocStateLoading();
       var ddb = RelDB.get().devicesDAO;
-      Param ssid = await ddb.getParam(_args.device.id, 'WIFI_SSID');
-      await DeviceHelper.updateStringParam(_args.device, ssid, event.ssid);
-      Param pass = await ddb.getParam(_args.device.id, 'WIFI_PASSWORD');
-      await DeviceHelper.updateStringParam(_args.device, pass, event.pass,
-          timeout: 5, nRetries: 1);
+      Param ssid = await ddb.getParam(args.device.id, 'WIFI_SSID');
+      await DeviceHelper.updateStringParam(args.device, ssid, event.ssid);
+      try {
+        Param pass = await ddb.getParam(args.device.id, 'WIFI_PASSWORD');
+        await DeviceHelper.updateStringParam(args.device, pass, event.pass,
+            timeout: 5, nRetries: 1);
+      } catch (e) {
+        print(e);
+      }
       yield* _researchDevice();
     } else if (event is DeviceWifiBlocEventRetrySearch) {
       yield* _researchDevice();
@@ -117,11 +121,11 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
 
   Stream<DeviceWifiBlocState> _researchDevice() async* {
     var ddb = RelDB.get().devicesDAO;
-    Device device = await ddb.getDevice(_args.device.id);
+    Device device = await ddb.getDevice(args.device.id);
 
     yield DeviceWifiBlocStateSearching();
-    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-        id: Value(device.id), isReachable: Value(false)));
+    await RelDB.get().devicesDAO.updateDevice(
+        DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
 
     String ip;
     for (int i = 0; i < 4; ++i) {

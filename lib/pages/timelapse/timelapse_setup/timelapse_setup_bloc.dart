@@ -113,12 +113,12 @@ const CharacteristicUUID = "ec0e";
 
 class TimelapseSetupBloc
     extends Bloc<TimelapseSetupBlocEvent, TimelapseSetupBlocState> {
-  final BleManager _bleManager = BleManager();
-  ScanResult _scanResult;
+  final BleManager bleManager = BleManager();
+  ScanResult scanResult;
 
-  final MainNavigateToTimelapseSetup _args;
+  final MainNavigateToTimelapseSetup args;
 
-  TimelapseSetupBloc(this._args) {
+  TimelapseSetupBloc(this.args) {
     add(TimelapseSetupBlocEventInit());
   }
 
@@ -129,15 +129,15 @@ class TimelapseSetupBloc
   Stream<TimelapseSetupBlocState> mapEventToState(
       TimelapseSetupBlocEvent event) async* {
     if (event is TimelapseSetupBlocEventInit) {
-      await _bleManager.createClient();
-      BluetoothState currentState = await _bleManager.bluetoothState();
+      await bleManager.createClient();
+      BluetoothState currentState = await bleManager.bluetoothState();
       add(TimelapseSetupBlocEventBleStateChanged(currentState));
-      _bleManager.observeBluetoothState().listen((btState) {
+      bleManager.observeBluetoothState().listen((btState) {
         add(TimelapseSetupBlocEventBleStateChanged(btState));
       });
     } else if (event is TimelapseSetupBlocEventDeviceFound) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(_args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.plant.box);
       String controllerid;
       if (box.device != null) {
         Device device =
@@ -163,7 +163,7 @@ class TimelapseSetupBloc
       yield TimelapseSetupBlocStateSettingParams();
       String value =
           '${event.ssid};|;${event.password};|;${event.controllerID};|;${event.dropboxToken};|;${event.name};|;${event.strain};|;${event.uploadName};|;${event.rotate}';
-      Peripheral peripheral = _scanResult.peripheral;
+      Peripheral peripheral = scanResult.peripheral;
       if (!await peripheral.isConnected()) {
         await peripheral.connect();
       }
@@ -173,7 +173,7 @@ class TimelapseSetupBloc
       await peripheral.disconnectOrCancelConnection();
 
       await RelDB.get().plantsDAO.addTimelapse(TimelapsesCompanion.insert(
-          plant: _args.plant.id,
+          plant: args.plant.id,
           ssid: Value(event.ssid),
           password: Value(event.password),
           controllerID: Value(event.controllerID),
@@ -183,25 +183,25 @@ class TimelapseSetupBloc
           dropboxToken: Value(event.dropboxToken),
           uploadName: Value(event.uploadName)));
 
-      yield TimelapseSetupBlocStateDone(_args.plant);
+      yield TimelapseSetupBlocStateDone(args.plant);
     }
   }
 
   void startScan() {
-    _scanResult = null;
-    _bleManager.startPeripheralScan(
+    scanResult = null;
+    bleManager.startPeripheralScan(
       uuids: [ServiceUUID],
-    ).listen((scanResult) {
-      if (_scanResult != null) {
+    ).listen((ScanResult sr) {
+      if (scanResult != null) {
         return;
       }
       print(
-          '${scanResult.peripheral.name} ${scanResult.peripheral.identifier}');
-      if (scanResult.peripheral.name == 'sgl-cam' ||
-          scanResult.peripheral.name == 'supergreenlivepi') {
-        _scanResult = scanResult;
+          '${sr.peripheral.name} ${sr.peripheral.identifier}');
+      if (sr.peripheral.name == 'sgl-cam' ||
+          sr.peripheral.name == 'supergreenlivepi') {
+        scanResult = sr;
         add(TimelapseSetupBlocEventDeviceFound());
-        _bleManager.stopPeripheralScan();
+        bleManager.stopPeripheralScan();
       }
     });
   }
@@ -222,7 +222,7 @@ class TimelapseSetupBloc
 
   @override
   Future<void> close() async {
-    await _bleManager.destroyClient();
+    await bleManager.destroyClient();
     return super.close();
   }
 }

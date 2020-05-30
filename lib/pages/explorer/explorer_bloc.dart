@@ -18,23 +18,64 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 
-class ExplorerBlocEvent extends Equatable {
+class PlantState extends Equatable {
+  final String id;
+  final String name;
+  final String filePath;
+  final String thumbnailPath;
+
+  PlantState(this.id, this.name, this.filePath, this.thumbnailPath);
+
+  @override
+  List<Object> get props => [id, name, filePath, thumbnailPath];
+}
+
+abstract class ExplorerBlocEvent extends Equatable {}
+
+class ExplorerBlocEventInit extends ExplorerBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class ExplorerBlocState extends Equatable {
+abstract class ExplorerBlocState extends Equatable {}
+
+class ExplorerBlocStateInit extends ExplorerBlocState {
   @override
   List<Object> get props => [];
+}
+
+class ExplorerBlocStateLoaded extends ExplorerBlocState {
+  final List<PlantState> plants;
+
+  ExplorerBlocStateLoaded(this.plants);
+
+  @override
+  List<Object> get props => [plants];
 }
 
 class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
+  ExplorerBloc() {
+    add(ExplorerBlocEventInit());
+  }
+
   @override
-  ExplorerBlocState get initialState => ExplorerBlocState();
+  ExplorerBlocState get initialState => ExplorerBlocStateInit();
 
   @override
   Stream<ExplorerBlocState> mapEventToState(ExplorerBlocEvent event) async* {
+    if (event is ExplorerBlocEventInit) {
+      List<dynamic> plantsMap = await FeedsAPI().publicPlants(15, 0);
+      List<PlantState> plants = plantsMap
+          .map<PlantState>((p) => PlantState(
+                p['id'],
+                p['name'],
+                p['filePath'],
+                p['thumbnailPath'],
+              ))
+          .toList();
+      yield ExplorerBlocStateLoaded(plants);
+    }
   }
-
 }

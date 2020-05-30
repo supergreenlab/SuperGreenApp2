@@ -49,7 +49,11 @@ class DeviceAPI {
   }
 
   static Future<String> resolveLocalNameMDNS(String name) async {
-    final MDnsClient client = MDnsClient();
+    final MDnsClient client = MDnsClient(rawDatagramSocketFactory:
+        (dynamic host, int port, {bool reuseAddress, bool reusePort, int ttl}) {
+      return RawDatagramSocket.bind(host, port,
+          reuseAddress: true, reusePort: false, ttl: ttl);
+    });
     await client.start();
 
     String foundIP;

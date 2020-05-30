@@ -39,7 +39,7 @@ class MainNavigatorEvent extends Equatable {
 class MainNavigateToHomeEvent extends MainNavigatorEvent {
   final Plant plant;
 
-  MainNavigateToHomeEvent({ this.plant });
+  MainNavigateToHomeEvent({this.plant});
 
   @override
   List<Object> get props => [plant];
@@ -309,13 +309,15 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
 
 class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
   final String overlayPath;
-  final FeedMedia feedMedia;
+  final String thumbnailPath;
+  final String filePath;
   final String heroPath;
 
-  MainNavigateToFullscreenMedia(this.feedMedia, {this.overlayPath, this.heroPath});
+  MainNavigateToFullscreenMedia(this.thumbnailPath, this.filePath,
+      {this.overlayPath, this.heroPath});
 
   @override
-  List<Object> get props => [feedMedia, overlayPath, heroPath];
+  List<Object> get props => [thumbnailPath, filePath, overlayPath, heroPath];
 }
 
 class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
@@ -446,6 +448,15 @@ class MainNavigateToSettingsDevice extends MainNavigatorEvent {
 
   @override
   List<Object> get props => [device];
+}
+
+class MainNavigateToPublicPlant extends MainNavigatorEvent {
+  final String id;
+
+  MainNavigateToPublicPlant(this.id);
+
+  @override
+  List<Object> get props => [id];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
@@ -615,6 +626,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSettingsDevice) {
       future = _navigatorKey.currentState
           .pushNamed('/settings/device', arguments: event);
+    } else if (event is MainNavigateToPublicPlant) {
+      future = _navigatorKey.currentState
+          .pushNamed('/public/plant', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);
