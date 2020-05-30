@@ -21,6 +21,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:video_player/video_player.dart';
@@ -54,7 +55,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
           if (state is PlaybackBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
               _videoPlayerController =
-                  VideoPlayerController.file(File(state.filePath));
+                  VideoPlayerController.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)));
               await _videoPlayerController.initialize();
               _videoPlayerController.play();
               _videoPlayerController.setLooping(true);
@@ -136,7 +137,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: FittedBox(
-            fit: BoxFit.contain, child: Image.file(File(state.filePath))));
+            fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)))));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
@@ -147,7 +148,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
                 height: constraints.maxHeight,
                 child: FittedBox(
                     fit: BoxFit.contain,
-                    child: Image.file(File(state.overlayPath))))),
+                    child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath)))))),
         Positioned(
           left: 30,
           right: 30,

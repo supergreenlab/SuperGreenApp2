@@ -110,7 +110,7 @@ class _CapturePageState extends State<CapturePage> {
                         fit: BoxFit.contain,
                         child: Opacity(
                             opacity: 0.6,
-                            child: Image.file(File(state.overlayPath)))));
+                            child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath))))));
                 cameraPreview = Stack(children: [
                   cameraPreview,
                   overlay,
@@ -371,7 +371,7 @@ class _CapturePageState extends State<CapturePage> {
 
   void _endCapture(CaptureBlocState state) async {
     BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToImageCapturePlaybackEvent(FeedMedias.makeAbsoluteFilePath(_filePath),
+        MainNavigateToImageCapturePlaybackEvent(_filePath,
             overlayPath: state.overlayPath, futureFn: (f) async {
       final ret = await f;
       if (ret == null || ret == false) {
