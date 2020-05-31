@@ -188,10 +188,10 @@ class FeedVentilationFormBloc
           type: 'FE_VENTILATION',
           feed: plants[i].feed,
           date: DateTime.now(),
-          params: Value(JsonEncoder().convert(FeedVentilationParams(
+          params: Value(FeedVentilationParams(
               FeedVentilationParamsValues(event.blowerDay, event.blowerNight),
               FeedVentilationParamsValues(
-                  initialBlowerDay, initialBlowerNight)))),
+                  initialBlowerDay, initialBlowerNight)).toJSON()),
         ));
       }
       yield FeedVentilationFormBlocStateDone();
