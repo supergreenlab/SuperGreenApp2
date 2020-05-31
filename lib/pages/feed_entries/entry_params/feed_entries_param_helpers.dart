@@ -23,6 +23,7 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart'
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_towelie_info.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_unknown.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
 
@@ -44,6 +45,10 @@ abstract class FeedEntriesParamHelpers {
   };
 
   static dynamic paramForFeedEntryType(String type, String json) {
-    return _params[type](json);
+    Function builder = _params[type];
+    if (builder == null) {
+      return FeedUnknownParams();
+    }
+    return builder(json);
   }
 }

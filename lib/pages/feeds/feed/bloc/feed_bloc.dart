@@ -201,7 +201,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       initialLoad = false;
     } else if (event is FeedBlocEventEntryVisible) {
       FeedEntryState e = entries[event.index];
-      FeedEntryLoader loader = provider.loaders[e.type];
+      FeedEntryLoader loader = provider.loaderForType(e.type);
       if (e is FeedEntryStateNotLoaded) {
         e = await loader.load(e);
         entries[event.index] = e;
@@ -210,7 +210,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       loader.startListenEntryChanges(e);
     } else if (event is FeedBlocEventEntryHidden) {
       FeedEntryState e = entries[event.index];
-      FeedEntryLoader loader = provider.loaders[e.type];
+      FeedEntryLoader loader = provider.loaderForType(e.type);
       loader.cancelListenEntryChanges(entries[event.index]);
     } else if (event is FeedBlocEventAddedEntry) {
       int index = entries
@@ -236,7 +236,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       FeedState feedState = await provider.loadFeed();
       yield FeedBlocStateFeedLoaded(feedState);
     } else if (event is FeedBlocEventEditParams) {
-      FeedEntryLoader loader = provider.loaders[event.entry.type];
+      FeedEntryLoader loader = provider.loaderForType(event.entry.type);
       await loader.update(event.entry, event.params);
     }
   }
@@ -262,6 +262,8 @@ abstract class FeedEntryLoader {
 
 abstract class FeedBlocProvider {
   Map<String, FeedEntryLoader> get loaders;
+  FeedEntryLoader loaderForType(String type);
+
   Future init(Function(FeedBlocEvent) add);
   Future<FeedState> loadFeed();
   Future<List<FeedEntryState>> loadEntries(int n, int offset);

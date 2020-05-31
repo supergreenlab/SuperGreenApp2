@@ -28,6 +28,7 @@ import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_ca
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_unknown/feed_unknown_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -69,6 +70,10 @@ class FeedEntriesCardHelpers {
 
   static Widget cardForFeedEntry(
       Animation animation, FeedState feedState, FeedEntryState state) {
-    return _cards[state.type](animation, feedState, state);
+        Function builder = _cards[state.type];
+    if (builder == null) {
+      return FeedUnknownCardPage(animation, feedState, state);
+    }
+    return builder(animation, feedState, state);
   }
 }
