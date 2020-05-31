@@ -285,7 +285,7 @@ class _CapturePageState extends State<CapturePage> {
                           source: ImageSource.gallery);
                       if (video != null) {
                         _filePath = '${FeedMedias.makeFilePath()}.mp4';
-                        video.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
+                        await video.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
                         _endCapture(state);
                       }
                     } else {
@@ -293,7 +293,7 @@ class _CapturePageState extends State<CapturePage> {
                           source: ImageSource.gallery);
                       if (image != null) {
                         _filePath = '${FeedMedias.makeFilePath()}.jpg';
-                        image.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
+                        await image.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
                         _endCapture(state);
                       }
                     }
