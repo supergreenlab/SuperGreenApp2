@@ -47,12 +47,12 @@ class FeedUnknownCardPage extends StatelessWidget {
             child: FeedCardDate(state.date),
           ),
           Container(
-            height: 110,
+            height: 150,
             alignment: Alignment.center,
             child: Fullscreen(
               title: 'Unknown card',
               subtitle: 'Upgrade your app',
-              child: SvgPicture.asset('assets/feed_card/icon_unknown.svg'),
+              child: SvgPicture.asset('assets/feed_card/icon_unknown.svg', height: 70),
             ),
           ),
         ],
