@@ -30,6 +30,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_media.d
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_products.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_schedule.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_towelie_info.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_unknown.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_ventilation.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_water.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
@@ -39,6 +40,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 class LocalFeedBlocProvider extends FeedBlocProvider {
   final int feedID;
   Map<String, LocalFeedEntryLoader> loaders = {};
+  FeedUnknownLoader unknownLoader;
   StreamSubscription<FeedEntryInsertEvent> insertSubscription;
   StreamSubscription<FeedEntryDeleteEvent> deleteSubscription;
 
@@ -46,6 +48,7 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
 
   @override
   Future init(Function(FeedBlocEvent) add) async {
+    unknownLoader = FeedUnknownLoader(add);
     loaders = {
       'FE_LIGHT': FeedLightLoader(add),
       'FE_MEDIA': FeedMediaLoader(add),
@@ -68,7 +71,8 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
       if (feedEntry.feed != feedID) {
         return;
       }
-      FeedEntryState newFirstEntry = loaders[feedEntry.type].stateForFeedEntry(feedEntry);
+      FeedEntryState newFirstEntry =
+          loaderForType(feedEntry.type).stateForFeedEntry(feedEntry);
       add(FeedBlocEventAddedEntry(newFirstEntry));
     });
     deleteSubscription = FeedEntryHelper.eventBus
@@ -76,6 +80,15 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
         .listen((FeedEntryDeleteEvent event) {
       add(FeedBlocEventDeletedFeedEntry(event.feedEntry.id));
     });
+  }
+
+  @override
+  LocalFeedEntryLoader loaderForType(String type) {
+    FeedEntryLoader loader = loaders[type];
+    if (loader == null) {
+      return unknownLoader;
+    }
+    return loader;
   }
 
   @override
@@ -88,7 +101,7 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
     List<FeedEntry> fe =
         await RelDB.get().feedsDAO.getEntries(feedID, n, offset);
     return fe
-        .map<FeedEntryState>((fe) => loaders[fe.type].stateForFeedEntry(fe))
+        .map<FeedEntryState>((fe) => loaderForType(fe.type).stateForFeedEntry(fe))
         .toList();
   }
 

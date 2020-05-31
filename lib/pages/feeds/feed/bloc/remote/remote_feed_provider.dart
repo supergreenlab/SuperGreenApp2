@@ -26,6 +26,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_light.
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_measure.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_media.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_schedule.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_unknown.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_ventilation.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_water.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
@@ -35,11 +36,13 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 class RemoteFeedBlocProvider extends FeedBlocProvider {
   final String feedID;
   Map<String, RemoteFeedEntryLoader> loaders = {};
+  FeedUnknownLoader unknownLoader;
 
   RemoteFeedBlocProvider(this.feedID);
 
   @override
   Future init(Function(FeedBlocEvent) add) async {
+    unknownLoader = FeedUnknownLoader(add);
     loaders = {
       'FE_LIGHT': FeedLightLoader(add),
       'FE_MEDIA': FeedMediaLoader(add),
@@ -56,16 +59,26 @@ class RemoteFeedBlocProvider extends FeedBlocProvider {
   }
 
   @override
+  RemoteFeedEntryLoader loaderForType(String type) {
+    FeedEntryLoader loader = loaders[type];
+    if (loader == null) {
+      return unknownLoader;
+    }
+    return loader;
+  }
+
+  @override
   Future<FeedState> loadFeed() async {
     return FeedState(AppDB().getAppData().storeGeo);
   }
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
-    List<dynamic> entriesMap = await FeedsAPI().publicFeedEntries(feedID, n, offset);
+    List<dynamic> entriesMap =
+        await FeedsAPI().publicFeedEntries(feedID, n, offset);
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
-      return loaders[entryMap['type']].stateForFeedEntryMap(entryMap);
+      return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap);
     }).toList();
   }
 
