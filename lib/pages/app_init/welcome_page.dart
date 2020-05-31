@@ -137,15 +137,17 @@ class _WelcomePageState extends State<WelcomePage> {
             onChanged: onChanged,
             value: value,
           ),
-          InkWell(
-            onTap: () {
-              onChanged(!value);
-            },
-            child: MarkdownBody(
-              fitContent: true,
-              data: text,
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 14)),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                onChanged(!value);
+              },
+              child: MarkdownBody(
+                fitContent: true,
+                data: text,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 14)),
+              ),
             ),
           ),
         ],
