@@ -188,7 +188,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
               FutureFn ff =
                   BlocProvider.of<MainNavigatorBloc>(context).futureFn();
               BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToImageCapturePlaybackEvent(FeedMedias.makeAbsoluteFilePath(media.filePath.value),
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
                       futureFn: ff.futureFn, okButton: 'OK'));
               bool keep = await ff.future;
               if (keep == true) {
@@ -225,7 +225,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
               FutureFn ff =
                   BlocProvider.of<MainNavigatorBloc>(context).futureFn();
               BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToImageCapturePlaybackEvent(FeedMedias.makeAbsoluteFilePath(media.filePath.value),
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
                       futureFn: ff.futureFn, okButton: 'OK'));
               bool keep = await ff.future;
               if (keep == true) {
