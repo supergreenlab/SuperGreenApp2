@@ -39,6 +39,8 @@ class FeedsAPI {
   String _storageServerHost;
   String _storageServerHostHeader;
 
+  String get serverHost => _serverHost;
+
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
