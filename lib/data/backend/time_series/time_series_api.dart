@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class TimeSeriesAPI {
@@ -56,7 +57,7 @@ class TimeSeriesAPI {
         await RelDB.get().plantsDAO.deleteChartCacheForPlant(cache.plant);
       }
       Response resp = await get(
-          'https://api2.supergreenlab.com/metrics?cid=$controllerID&q=$name&t=72&n=50');
+          '${FeedsAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50');
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
       await RelDB.get().plantsDAO.addChartCache(ChartCachesCompanion.insert(
