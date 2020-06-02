@@ -24,6 +24,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
@@ -37,6 +38,7 @@ class FeedMediaFormPage extends StatefulWidget {
 }
 
 class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
+  DateTime date = DateTime.now();
   final List<FeedMediasCompanion> _medias = [];
   final TextEditingController _textController = TextEditingController();
 
@@ -108,7 +110,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                       _medias.length != 0 || _textController.value.text != '',
                   onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
                       FeedMediaFormBlocEventCreate(
-                          _medias, _textController.text, _helpRequest)),
+                          date, _medias, _textController.text, _helpRequest)),
                   body: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: _keyboardVisible
@@ -123,6 +125,14 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
 
   List<Widget> _renderBody(BuildContext context, FeedMediaFormBlocState state) {
     return [
+      FeedFormDatePicker(
+        date,
+        onChange: (DateTime newDate) {
+          setState(() {
+            date = newDate;
+          });
+        },
+      ),
       FeedFormParamLayout(
         title: 'Attached medias',
         icon: 'assets/feed_form/icon_after_pic.svg',

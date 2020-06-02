@@ -25,6 +25,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
@@ -43,6 +44,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc>
 
 class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
     extends State<FeedCareCommonFormPage> {
+  DateTime date = DateTime.now();
   final String title;
   final List<FeedMediasCompanion> _beforeMedias = [];
   final List<FeedMediasCompanion> _afterMedias = [];
@@ -121,7 +123,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                       _beforeMedias.length != 0 ||
                       _textController.value.text != '',
                   onOK: () => BlocProvider.of<FormBloc>(context).add(
-                      FeedCareCommonFormBlocEventCreate(_beforeMedias,
+                      FeedCareCommonFormBlocEventCreate(date, _beforeMedias,
                           _afterMedias, _textController.text, _helpRequest)),
                   body: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -138,6 +140,14 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
   List<Widget> _renderBody(
       BuildContext context, FeedCareCommonFormBlocState state) {
     return [
+      FeedFormDatePicker(
+        date,
+        onChange: (DateTime newDate) {
+          setState(() {
+            date = newDate;
+          });
+        },
+      ),
       FeedFormParamLayout(
         title: 'Before pics',
         icon: 'assets/feed_form/icon_before_pic.svg',

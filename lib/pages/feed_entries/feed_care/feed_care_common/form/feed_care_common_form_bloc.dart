@@ -30,16 +30,17 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
 abstract class FeedCareCommonFormBlocEvent extends Equatable {}
 
 class FeedCareCommonFormBlocEventCreate extends FeedCareCommonFormBlocEvent {
+  final DateTime date;
   final List<FeedMediasCompanion> beforeMedias;
   final List<FeedMediasCompanion> afterMedias;
   final String message;
   final bool helpRequest;
 
   FeedCareCommonFormBlocEventCreate(
-      this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
+      this.date, this.beforeMedias, this.afterMedias, this.message, this.helpRequest);
 
   @override
-  List<Object> get props => [message, helpRequest];
+  List<Object> get props => [date, beforeMedias, afterMedias, message, helpRequest];
 }
 
 class FeedCareCommonFormBlocState extends Equatable {
@@ -79,7 +80,7 @@ abstract class FeedCareCommonFormBloc
           await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: cardType(),
         feed: args.plant.feed,
-        date: DateTime.now(),
+        date: event.date,
         params: Value(FeedCareParams(event.message).toJSON()),
       ));
       for (FeedMediasCompanion m in event.beforeMedias) {

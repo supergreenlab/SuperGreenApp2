@@ -29,14 +29,15 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart'
 abstract class FeedMediaFormBlocEvent extends Equatable {}
 
 class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
+  final DateTime date;
   final List<FeedMediasCompanion> medias;
   final String message;
   final bool helpRequest;
 
-  FeedMediaFormBlocEventCreate(this.medias, this.message, this.helpRequest);
+  FeedMediaFormBlocEventCreate(this.date, this.medias, this.message, this.helpRequest);
 
   @override
-  List<Object> get props => [medias, message, helpRequest];
+  List<Object> get props => [date, medias, message, helpRequest];
 }
 
 class FeedMediaFormBlocState extends Equatable {
@@ -79,7 +80,7 @@ class FeedMediaFormBloc
           await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEDIA',
         feed: args.plant.feed,
-        date: DateTime.now(),
+        date: event.date,
         params:
             Value(FeedMediaParams(event.message, event.helpRequest).toJSON()),
       ));
