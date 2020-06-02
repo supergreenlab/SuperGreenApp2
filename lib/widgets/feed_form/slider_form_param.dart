@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 
 class SliderFormParam extends StatelessWidget {
@@ -54,7 +55,7 @@ class SliderFormParam extends StatelessWidget {
             children: <Widget>[
               FlatButton(
                 onPressed: () {
-                  double newValue = value - 1;
+                  double newValue = math.max(min, value - 1);
                   onChanged(newValue);
                   onChangeEnd(newValue);
                 },
@@ -68,7 +69,7 @@ class SliderFormParam extends StatelessWidget {
                       color: Color(0xff3bb30b))),
               FlatButton(
                 onPressed: () {
-                  double newValue = value + 1;
+                  double newValue = math.min(max, value + 1);
                   onChanged(newValue);
                   onChangeEnd(newValue);
                 },

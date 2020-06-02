@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 
 class FeedFormDatePicker extends StatelessWidget {
   final DateTime date;
@@ -27,12 +28,13 @@ class FeedFormDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       child: Container(
         child: Row(
           children: <Widget>[
-            Expanded(child: Text('Event date: ${DateFormat('dd/MM/yyyy').format(date)}')),
+            Expanded(child: Text('Event date: ${DateFormat(format).format(date)}')),
             FlatButton(
                 onPressed: () async {
                   DateTime newDate = await showDatePicker(
