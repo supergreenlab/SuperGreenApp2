@@ -75,34 +75,64 @@ class FeedWaterCardPage extends StatelessWidget {
               ? '${params.volume / 4} gal'
               : '${params.volume} L',
           style: TextStyle(
-              fontSize: 40,
+              fontSize: 30,
               fontWeight: FontWeight.w300,
               color: Color(0xff3bb30b)),
         ),
       ),
     ];
-    if (params.tooDry != null || params.nutrient != null) {
-      List<Widget> details = [];
-      if (params.tooDry != null) {
-        details.add(Padding(
+    List<Widget> details = [];
+    if (params.tooDry != null) {
+      details.add(Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Text(
+          'Was dry: ${params.tooDry == true ? 'YES' : 'NO'}',
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+        ),
+      ));
+    }
+    if (params.nutrient != null) {
+      details.add(
+        Padding(
           padding: const EdgeInsets.all(4.0),
           child: Text(
-            'Was Dry: ${params.tooDry == true ? 'YES' : 'NO'}',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+            'With nutes: ${params.nutrient == true ? 'YES' : 'NO'}',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
           ),
-        ));
-      }
-      if (params.nutrient != null) {
-        details.add(
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Text(
-              'With nutes: ${params.nutrient == true ? 'YES' : 'NO'}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-            ),
+        ),
+      );
+    }
+    List<Widget> metrics = [];
+    if (params.ph != null) {
+      metrics.add(
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Text(
+            'PH: ${params.ph}',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
           ),
-        );
-      }
+        ),
+      );
+    }
+    if (params.ec != null) {
+      metrics.add(
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Text(
+            'EC: ${params.ec}',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+          ),
+        ),
+      );
+    }
+
+    if (metrics.length != 0) {
+      details.add(Row(
+        children: metrics,
+      ));
+    }
+
+    if (details.length != 0) {
       body.add(Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,

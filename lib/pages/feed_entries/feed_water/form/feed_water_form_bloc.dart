@@ -33,12 +33,14 @@ class FeedWaterFormBlocEventCreate extends FeedWaterFormBlocEvent {
   final double volume;
   final bool nutrient;
   final bool wateringLab;
+  final double ph;
+  final double ec;
 
   FeedWaterFormBlocEventCreate(
-      this.tooDry, this.volume, this.nutrient, this.wateringLab);
+      this.tooDry, this.volume, this.nutrient, this.wateringLab, this.ph, this.ec);
 
   @override
-  List<Object> get props => [tooDry, volume, nutrient, wateringLab];
+  List<Object> get props => [tooDry, volume, nutrient, wateringLab, ph, ec];
 }
 
 class FeedWaterFormBlocState extends Equatable {
@@ -82,7 +84,7 @@ class FeedWaterFormBloc
           feed: plants[i].feed,
           date: DateTime.now(),
           params: Value(
-              FeedWaterParams(event.volume, event.tooDry, event.nutrient)
+              FeedWaterParams(event.volume, event.tooDry, event.nutrient, event.ph, event.ec)
                   .toJSON()),
         ));
         if (i == 0) {
