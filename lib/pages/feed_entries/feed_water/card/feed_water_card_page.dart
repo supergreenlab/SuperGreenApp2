@@ -108,7 +108,7 @@ class FeedWaterCardPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(4.0),
           child: Text(
-            'PH: ${params.ph}',
+            'PH: ${params.ph.toStringAsFixed(1)}',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
           ),
         ),
@@ -119,7 +119,7 @@ class FeedWaterCardPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(4.0),
           child: Text(
-            'EC: ${params.ec}',
+            'EC: ${params.ec.toInt()}',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
           ),
         ),
