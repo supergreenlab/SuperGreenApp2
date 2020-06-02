@@ -75,6 +75,38 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
 
   Widget _renderGraphs(
       BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
+    String tempUnit = AppDB().getAppData().freedomUnits ? '°F' : '°C';
+    DateTime metricDate = state.graphData[0]
+        .data[selectedGraphIndex ?? state.graphData[0].data.length - 1].time;
+    String format = AppDB().getAppData().freedomUnits
+        ? 'MM/dd/yyyy HH:mm'
+        : 'dd/MM/yyyy HH:mm';
+    Widget dateText = Text('${DateFormat(format).format(metricDate)}',
+        style: TextStyle(
+            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold));
+    List<charts.LineAnnotationSegment> annotations;
+    if (selectedGraphIndex != null) {
+      annotations = [
+        charts.LineAnnotationSegment(
+            metricDate, charts.RangeAnnotationAxisType.domain,
+            labelStyleSpec:
+                charts.TextStyleSpec(color: charts.MaterialPalette.white),
+            color: charts.MaterialPalette.gray.shade500)
+      ];
+      dateText = Row(
+        children: <Widget>[
+          dateText,
+          Expanded(
+            child: Text(
+              'tap to reset',
+              style: TextStyle(
+                  color: Colors.white, decoration: TextDecoration.underline),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      );
+    }
     Widget graphs = Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -90,6 +122,11 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
               child: charts.TimeSeriesChart(
                 state.graphData,
                 animate: false,
+                behaviors: annotations != null && annotations.length > 0
+                    ? [
+                        charts.RangeAnnotation(annotations),
+                      ]
+                    : null,
                 customSeriesRenderers: [
                   charts.PointRendererConfig(customRendererId: 'customPoint')
                 ],
@@ -142,28 +179,19 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
         ),
       ]);
     }
-    String tempUnit = AppDB().getAppData().freedomUnits ? '°F' : '°C';
-    DateTime metricDate = state.graphData[0]
-        .data[selectedGraphIndex ?? state.graphData[0].data.length - 1].time;
-    String format = AppDB().getAppData().freedomUnits
-        ? 'MM/dd/yyyy HH:mm'
-        : 'dd/MM/yyyy HH:mm';
+
     return Padding(
       padding: const EdgeInsets.only(top: 8, left: 0, right: 0, bottom: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 4.0, bottom: 8.0),
-            child: InkWell(
-                onTap: () {
-                  setState(() {
-                    selectedGraphIndex = null;
-                  });
-                },
-                child: Text(
-                    'Metrics at: ${DateFormat(format).format(metricDate)}',
-                    style: TextStyle(color: Colors.white))),
+          InkWell(
+            onTap: () {
+              setState(() {
+                selectedGraphIndex = null;
+              });
+            },
+            child: Padding(padding: const EdgeInsets.all(8.0), child: dateText),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
