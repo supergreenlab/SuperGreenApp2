@@ -42,17 +42,19 @@ class FeedMeasureCardPage extends StatelessWidget {
     if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
-    return _renderLoading(context);
+    return _renderLoading(context, state);
   }
 
-  Widget _renderLoading(BuildContext context) {
+  Widget _renderLoading(BuildContext context, FeedEntryState state) {
     return FeedCard(
       animation: animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
+              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -74,9 +76,12 @@ class FeedMeasureCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
+              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           MediaList(
             [state.current],
+            showSyncStatus: !state.remoteState,
             onMediaTapped: (media) {
               if (state.previous != null) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(

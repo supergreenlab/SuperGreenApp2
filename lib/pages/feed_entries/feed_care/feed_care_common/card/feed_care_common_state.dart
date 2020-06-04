@@ -23,7 +23,7 @@ class FeedCareCommonState extends FeedEntryStateLoaded {
   final List<MediaState> beforeMedias;
   final List<MediaState> afterMedias;
 
-  FeedCareCommonState(FeedEntryState from, this.beforeMedias, this.afterMedias) : super.copy(from);
+  FeedCareCommonState(FeedEntryState from, this.beforeMedias, this.afterMedias, { bool remoteState=false }) : super.copy(from, remoteState: remoteState);
 
   @override
   List<Object> get props => [...super.props, beforeMedias, afterMedias];

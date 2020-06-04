@@ -56,16 +56,18 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
     if (widget.state is FeedEntryStateLoaded) {
       return _renderLoaded(context, widget.state);
     }
-    return _renderLoading(context);
+    return _renderLoading(context, widget.state);
   }
 
-  Widget _renderLoading(BuildContext context) {
+  Widget _renderLoading(BuildContext context, FeedEntryState state) {
     return FeedCard(
       animation: widget.animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced),
+          FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(widget.state.date),
@@ -83,16 +85,12 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
   Widget _renderLoaded(BuildContext context, FeedCareCommonState state) {
     FeedCareParams params = state.params;
     List<Widget> body = [
-      FeedCardTitle(
-        widget.iconPath(),
-        widget.title(),
-        widget.state.synced,
-        onEdit: () {
-          setState(() {
-            editText = true;
-          });
-        },
-      ),
+      FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced,
+          onEdit: () {
+        setState(() {
+          editText = true;
+        });
+      }, showSyncStatus: !state.remoteState, showControls: !state.remoteState),
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: FeedCardDate(widget.state.date),
@@ -101,8 +99,8 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
         params.message ?? '',
         edit: editText,
         onEdited: (value) {
-          BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(
-              state, params.copyWith(value)));
+          BlocProvider.of<FeedBloc>(context)
+              .add(FeedBlocEventEditParams(state, params.copyWith(value)));
           setState(() {
             editText = false;
           });

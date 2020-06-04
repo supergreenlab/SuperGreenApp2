@@ -22,7 +22,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 class FeedMediaState extends FeedEntryStateLoaded {
   final List<MediaState> medias;
 
-  FeedMediaState(FeedEntryState from, this.medias) : super.copy(from);
+  FeedMediaState(FeedEntryState from, this.medias, { bool remoteState=false }) : super.copy(from, remoteState: remoteState);
 
   @override
   List<Object> get props => [...super.props, medias];

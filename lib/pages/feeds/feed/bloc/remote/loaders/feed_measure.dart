@@ -43,6 +43,6 @@ class FeedMeasureLoader extends RemoteFeedEntryLoader {
         previousMedia = stateForFeedMediaMap(previousMediaMap);
       }
     }
-    return FeedMeasureState(state, currentMedia, previousMedia);
+    return FeedMeasureState(state, currentMedia, previousMedia, remoteState: true);
   }
 }

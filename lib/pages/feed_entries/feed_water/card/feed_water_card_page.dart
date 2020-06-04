@@ -50,7 +50,9 @@ class FeedWaterCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_watering.svg', 'Watering', state.synced),
+              'assets/feed_card/icon_watering.svg', 'Watering', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -145,7 +147,9 @@ class FeedWaterCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_watering.svg', 'Watering', state.synced),
+              'assets/feed_card/icon_watering.svg', 'Watering', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),

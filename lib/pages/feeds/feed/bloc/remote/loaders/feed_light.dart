@@ -26,8 +26,8 @@ class FeedLightLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedLightState(state);
+      FeedLightState(state, remoteState: true);
 
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedLightState(super.stateForFeedEntryMap(feedEntry));
+      FeedLightState(super.stateForFeedEntryMap(feedEntry), remoteState: true);
 }

@@ -28,22 +28,30 @@ class FeedEntryState extends Equatable {
   final DateTime date;
   final FeedEntryParams params;
 
-  FeedEntryState(
-      this.feedEntryID, this.feedID, this.type, this.isNew, this.synced, this.date, this.params);
+  final bool remoteState;
+
+  FeedEntryState(this.feedEntryID, this.feedID, this.type, this.isNew,
+      this.synced, this.date, this.params,
+      {this.remoteState = false});
 
   @override
-  List<Object> get props => [feedEntryID, feedID, type, isNew, synced, date, params];
+  List<Object> get props =>
+      [feedEntryID, feedID, type, isNew, synced, date, params, remoteState];
 }
 
 class FeedEntryStateNotLoaded extends FeedEntryState {
   FeedEntryStateNotLoaded(dynamic id, dynamic feedID, String type, bool isNew,
-      bool synced, DateTime date, dynamic params)
-      : super(id, feedID, type, isNew, synced, date, params);
+      bool synced, DateTime date, dynamic params, {bool remoteState})
+      : super(id, feedID, type, isNew, synced, date, params,
+            remoteState: remoteState);
 }
 
 class FeedEntryStateLoaded extends FeedEntryState {
-  FeedEntryStateLoaded.copy(FeedEntryState from) : super(from.feedEntryID, from.feedID, from.type, from.isNew, from.synced, from.date, from.params);
+  FeedEntryStateLoaded.copy(FeedEntryState from, {bool remoteState})
+      : super(from.feedEntryID, from.feedID, from.type, from.isNew, from.synced,
+            from.date, from.params,
+            remoteState: remoteState ?? from.remoteState);
 
   @override
-  List<Object> get props => [feedEntryID, feedID, type, isNew, synced, date, params];
+  List<Object> get props => [...super.props];
 }

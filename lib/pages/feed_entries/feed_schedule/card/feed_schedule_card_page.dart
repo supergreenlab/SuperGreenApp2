@@ -49,7 +49,9 @@ class FeedScheduleCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
-              state.synced),
+              state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -72,7 +74,9 @@ class FeedScheduleCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
-              state.synced),
+              state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),

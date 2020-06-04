@@ -26,9 +26,10 @@ class FeedCardTitle extends StatelessWidget {
   final Function onEdit;
   final Function onDelete;
   final bool showSyncStatus;
+  final bool showControls;
 
   const FeedCardTitle(this.icon, this.title, this.synced,
-      {this.onEdit, this.onDelete, this.showSyncStatus = true});
+      {this.onEdit, this.onDelete, this.showSyncStatus = true, this.showControls = true});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class FeedCardTitle extends StatelessWidget {
         child: Container(),
       ),
     ];
-    if (onEdit != null) {
+    if (onEdit != null && showControls) {
       content.add(
         IconButton(
           icon: Icon(
@@ -72,7 +73,7 @@ class FeedCardTitle extends StatelessWidget {
         ),
       );
     }
-    if (onDelete != null) {
+    if (onDelete != null && showControls) {
       content.add(
         IconButton(
           icon: Icon(
