@@ -306,13 +306,22 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future<List<FeedMedia>> getFeedMediasWithType(
-      int feedID, String feedType) async {
+      String feedType, {int feedID, bool synced, bool feedEntrySynced}) async {
     JoinedSelectStatement<FeedMedias, FeedMedia> query = select(feedMedias)
         .join([
       leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
     ]);
-    query.where(
-        feedEntries.feed.equals(feedID) & feedEntries.type.equals(feedType));
+    Expression<bool> where = feedEntries.type.equals(feedType);
+    if (feedID != null) {
+      where &= feedEntries.feed.equals(feedID);
+    }
+    if (feedEntrySynced != null) {
+      where &= feedEntries.synced.equals(feedEntrySynced);
+    }
+    if (synced != null) {
+      where &= feedMedias.synced.equals(synced);
+    }
+    query.where(where);
     query.orderBy(
         [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
     return (await query.get())
@@ -334,8 +343,8 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .watch();
   }
 
-  Future<List<FeedMedia>> getUnsyncedFeedMedias(int feedEntryId) {
-    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryId) & f.synced.equals(false))).get();
+  Future<List<FeedMedia>> getUnsyncedFeedMedias(int feedEntryID) {
+    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID) & f.synced.equals(false))).get();
   }
 
   Future<FeedMedia> getFeedMedia(int feedMediaID) {

@@ -111,7 +111,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing feeds");
     List<FeedsCompanion> feeds = await FeedsAPI().unsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'feed: ${i+1}/${feeds.length}'));
+      add(SyncerBlocEventSyncing(true, 'feed: ${i + 1}/${feeds.length}'));
       FeedsCompanion feedsCompanion = feeds[i];
       Feed exists = await RelDB.get()
           .feedsDAO
@@ -133,7 +133,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<FeedEntriesCompanion> feedEntries =
         await FeedsAPI().unsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'entry: ${i+1}/${feedEntries.length}'));
+      add(SyncerBlocEventSyncing(
+          true, 'entry: ${i + 1}/${feedEntries.length}'));
       FeedEntriesCompanion feedEntriesCompanion = feedEntries[i];
       FeedEntry exists = await RelDB.get()
           .feedsDAO
@@ -155,7 +156,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<FeedMediasCompanion> feedMedias =
         await FeedsAPI().unsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'media: ${i+1}/${feedMedias.length}'));
+      add(SyncerBlocEventSyncing(true, 'media: ${i + 1}/${feedMedias.length}'));
       FeedMediasCompanion feedMediasCompanion = feedMedias[i];
       FeedMedia exists = await RelDB.get()
           .feedsDAO
@@ -191,7 +192,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing devices");
     List<DevicesCompanion> devices = await FeedsAPI().unsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'device: ${i+1}/${devices.length}'));
+      add(SyncerBlocEventSyncing(true, 'device: ${i + 1}/${devices.length}'));
       DevicesCompanion devicesCompanion = devices[i];
       Device exists = await RelDB.get()
           .devicesDAO
@@ -214,7 +215,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing boxes");
     List<BoxesCompanion> boxes = await FeedsAPI().unsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'box: ${i+1}/${boxes.length}'));
+      add(SyncerBlocEventSyncing(true, 'box: ${i + 1}/${boxes.length}'));
       BoxesCompanion boxesCompanion = boxes[i];
       Box exists = await RelDB.get()
           .plantsDAO
@@ -235,7 +236,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing plants");
     List<PlantsCompanion> plants = await FeedsAPI().unsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'plant: ${i+1}/${plants.length}'));
+      add(SyncerBlocEventSyncing(true, 'plant: ${i + 1}/${plants.length}'));
       PlantsCompanion plantsCompanion = plants[i];
       Plant exists = await RelDB.get()
           .plantsDAO
@@ -257,7 +258,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<TimelapsesCompanion> timelapses =
         await FeedsAPI().unsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'timelapse: ${i+1}/${timelapses.length}'));
+      add(SyncerBlocEventSyncing(
+          true, 'timelapse: ${i + 1}/${timelapses.length}'));
       TimelapsesCompanion timelapsesCompanion = timelapses[i];
       Plant exists = await RelDB.get()
           .plantsDAO
@@ -276,6 +278,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future _syncOut() async {
     await _syncOutFeeds();
+    await _syncOutOrphanedFeedMedias();
     await _syncOutFeedEntries();
     await _syncOutDevices();
     await _syncOutBoxes();
@@ -303,14 +306,29 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     }
   }
 
+  // TODO remove this function, migration purpose
+  Future _syncOutOrphanedFeedMedias() async {
+    print("Sending orphaned feedMedias");
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getFeedMediasWithType('FE_MEASURE', feedEntrySynced: true, synced: false);
+    for (int i = 0; i < feedMedias.length; ++i) {
+      // try {
+      FeedMedia feedMedia = feedMedias[i];
+      await FeedsAPI().syncFeedMedia(feedMedia);
+      // } catch (e) {
+      //   print(e);
+      // }
+    }
+  }
+
   Future _syncOutFeedMedias(int feedEntryID) async {
     print("Sending feedMedias");
     List<FeedMedia> feedMedias =
         await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
     for (int i = 0; i < feedMedias.length; ++i) {
       // try {
-        FeedMedia feedMedia = feedMedias[i];
-        await FeedsAPI().syncFeedMedia(feedMedia);
+      FeedMedia feedMedia = feedMedias[i];
+      await FeedsAPI().syncFeedMedia(feedMedia);
       // } catch (e) {
       //   print(e);
       // }

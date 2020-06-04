@@ -97,7 +97,7 @@ class FeedMeasureFormBloc
     if (event is FeedMeasureFormBlocEventInit) {
       final db = RelDB.get();
       List<FeedMedia> measures = await db.feedsDAO
-          .getFeedMediasWithType(args.plant.feed, 'FE_MEASURE');
+          .getFeedMediasWithType('FE_MEASURE', feedID: args.plant.feed);
       yield FeedMeasureFormBlocStateLoaded(measures);
     } else if (event is FeedMeasureFormBlocEventCreate) {
       yield FeedMeasureFormBlocStateLoading();
