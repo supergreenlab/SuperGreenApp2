@@ -17,10 +17,13 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:image/image.dart';
 import 'package:moor/moor.dart';
+import 'package:path/path.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -54,14 +57,16 @@ class CaptureBlocState extends Equatable {
 }
 
 class CaptureBlocStateInit extends CaptureBlocState {
-  CaptureBlocStateInit(bool videoEnabled, bool pickerEnabled, String overlayPath)
+  CaptureBlocStateInit(
+      bool videoEnabled, bool pickerEnabled, String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 }
 
 class CaptureBlocStateDone extends CaptureBlocState {
   final FeedMediasCompanion feedMedia;
 
-  CaptureBlocStateDone(this.feedMedia, bool videoEnabled, bool pickerEnabled, String overlayPath)
+  CaptureBlocStateDone(
+      this.feedMedia, bool videoEnabled, bool pickerEnabled, String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
@@ -82,17 +87,23 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   @override
   Stream<CaptureBlocState> mapEventToState(CaptureBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield CaptureBlocStateInit(args.videoEnabled, args.pickerEnabled, args.overlayPath);
+      yield CaptureBlocStateInit(
+          args.videoEnabled, args.pickerEnabled, args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
-      String thumbnailPath = event.filePath;
+      String fileName = basename(event.filePath);
+      String thumbnailPath =
+          event.filePath.replaceFirst(fileName, 'thumbnail_$fileName');
       if (thumbnailPath.endsWith('mp4')) {
-        thumbnailPath = thumbnailPath.replaceAll('.mp4', '.jpg');
+        thumbnailPath = thumbnailPath.replaceFirst('.mp4', '.jpg');
         await VideoThumbnail.thumbnailFile(
           video: FeedMedias.makeAbsoluteFilePath(event.filePath),
           thumbnailPath: FeedMedias.makeAbsoluteFilePath(thumbnailPath),
           imageFormat: ImageFormat.JPEG,
           quality: 50,
         );
+        await optimizePicture(thumbnailPath, thumbnailPath);
+      } else {
+        await optimizePicture(event.filePath, thumbnailPath);
       }
       final feedMedia = FeedMediasCompanion(
         filePath: Value(event.filePath),
@@ -101,5 +112,16 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
       yield CaptureBlocStateDone(
           feedMedia, args.videoEnabled, args.pickerEnabled, args.overlayPath);
     }
+  }
+
+  Future optimizePicture(String from, String to) async {
+    Image image = decodeImage(
+        await File(FeedMedias.makeAbsoluteFilePath(from))
+            .readAsBytes());
+    Image thumbnail = copyResize(image,
+        height: image.height > image.width ? 800 : null,
+        width: image.width >= image.height ? 800 : null);
+    await File(FeedMedias.makeAbsoluteFilePath(to))
+        .writeAsBytes(encodeJpg(thumbnail, quality: 50));
   }
 }

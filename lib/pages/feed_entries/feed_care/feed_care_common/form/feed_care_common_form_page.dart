@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -125,6 +127,16 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                   onOK: () => BlocProvider.of<FormBloc>(context).add(
                       FeedCareCommonFormBlocEventCreate(date, _beforeMedias,
                           _afterMedias, _textController.text, _helpRequest)),
+                  onCancel: () async {
+                    for (FeedMediasCompanion media in _beforeMedias) {
+                      await _deleteFileIfExists(media.filePath.value);
+                      await _deleteFileIfExists(media.thumbnailPath.value);
+                    }
+                    for (FeedMediasCompanion media in _afterMedias) {
+                      await _deleteFileIfExists(media.filePath.value);
+                      await _deleteFileIfExists(media.thumbnailPath.value);
+                    }
+                  },
                   body: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: _keyboardVisible
@@ -179,6 +191,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 });
             if (confirm) {
               setState(() {
+                _deleteFileIfExists(media.filePath.value);
+                _deleteFileIfExists(media.thumbnailPath.value);
                 _beforeMedias.remove(media);
               });
             }
@@ -286,6 +300,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
     return Row(
       children: <Widget>[],
     );
+  }
+
+  Future _deleteFileIfExists(String filePath) async {
+    final File file = File(FeedMedias.makeAbsoluteFilePath(filePath));
+    try {
+      await file.delete();
+    } catch (e) {}
   }
 
   @override

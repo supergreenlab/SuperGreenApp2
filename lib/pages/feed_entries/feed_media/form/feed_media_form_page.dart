@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -111,6 +113,12 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                   onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
                       FeedMediaFormBlocEventCreate(
                           date, _medias, _textController.text, _helpRequest)),
+                  onCancel: () async {
+                    for (FeedMediasCompanion media in _medias) {
+                      await _deleteFileIfExists(media.filePath.value);
+                      await _deleteFileIfExists(media.thumbnailPath.value);
+                    }
+                  },
                   body: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: _keyboardVisible
@@ -252,6 +260,13 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         Text(text),
       ],
     );
+  }
+
+  Future _deleteFileIfExists(String filePath) async {
+    final File file = File(FeedMedias.makeAbsoluteFilePath(filePath));
+    try {
+      await file.delete();
+    } catch (e) {}
   }
 
   @override

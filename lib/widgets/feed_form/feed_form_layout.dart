@@ -24,6 +24,7 @@ class FeedFormLayout extends StatelessWidget {
   final bool valid;
   final bool changed;
   final void Function() onOK;
+  final void Function() onCancel;
   final String title;
   final bool hideBackButton;
   final double fontSize;
@@ -32,6 +33,7 @@ class FeedFormLayout extends StatelessWidget {
       {@required this.body,
       @required this.onOK,
       @required this.title,
+      this.onCancel,
       this.valid = true,
       this.changed = false,
       this.hideBackButton = false,
@@ -56,7 +58,7 @@ class FeedFormLayout extends StatelessWidget {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text('Unsaved changed'),
-                  content: Text('Changed will not be saved. Continue?'),
+                  content: Text('Changes will not be saved. Continue?'),
                   actions: <Widget>[
                     FlatButton(
                       onPressed: () {
@@ -67,6 +69,9 @@ class FeedFormLayout extends StatelessWidget {
                     FlatButton(
                       onPressed: () {
                         Navigator.pop(context, true);
+                        if (onCancel != null) {
+                          onCancel();
+                        }
                       },
                       child: Text('YES'),
                     ),

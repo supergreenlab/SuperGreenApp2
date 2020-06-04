@@ -122,7 +122,7 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
               child: charts.TimeSeriesChart(
                 state.graphData,
                 animate: false,
-                behaviors: annotations != null && annotations.length > 0
+                behaviors: selectedGraphIndex != null
                     ? [
                         charts.RangeAnnotation(annotations),
                       ]

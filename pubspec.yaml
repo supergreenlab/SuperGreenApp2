@@ -26,7 +26,7 @@ dependencies:
   rxdart:
   flutter_svg:
   permission_handler: 4.4.0+hotfix.2
-  moor: 
+  moor:
   moor_ffi: 0.5.0
   path_provider:
   path:
@@ -62,6 +62,7 @@ dependencies:
   flutter_local_notifications:
   exif:
   image_picker:
+  image:
   device_info:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git
@@ -82,13 +83,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -107,18 +106,14 @@ flutter:
     - assets/products/growing_medium/
     - assets/products/nutrients/
     - assets/products/seeds/
-
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
