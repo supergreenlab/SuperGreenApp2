@@ -83,6 +83,29 @@ class Device extends DataClass implements Insertable<Device> {
     return map;
   }
 
+  DevicesCompanion toCompanion(bool nullToAbsent) {
+    return DevicesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      identifier: identifier == null && nullToAbsent
+          ? const Value.absent()
+          : Value(identifier),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      ip: ip == null && nullToAbsent ? const Value.absent() : Value(ip),
+      mdns: mdns == null && nullToAbsent ? const Value.absent() : Value(mdns),
+      isReachable: isReachable == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isReachable),
+      isSetup: isSetup == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isSetup),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
+  }
+
   factory Device.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -510,6 +533,21 @@ class Module extends DataClass implements Insertable<Module> {
     return map;
   }
 
+  ModulesCompanion toCompanion(bool nullToAbsent) {
+    return ModulesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      device:
+          device == null && nullToAbsent ? const Value.absent() : Value(device),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      isArray: isArray == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isArray),
+      arrayLen: arrayLen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(arrayLen),
+    );
+  }
+
   factory Module.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -818,6 +856,22 @@ class Param extends DataClass implements Insertable<Param> {
       map['ivalue'] = Variable<int>(ivalue);
     }
     return map;
+  }
+
+  ParamsCompanion toCompanion(bool nullToAbsent) {
+    return ParamsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      device:
+          device == null && nullToAbsent ? const Value.absent() : Value(device),
+      module:
+          module == null && nullToAbsent ? const Value.absent() : Value(module),
+      key: key == null && nullToAbsent ? const Value.absent() : Value(key),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      svalue:
+          svalue == null && nullToAbsent ? const Value.absent() : Value(svalue),
+      ivalue:
+          ivalue == null && nullToAbsent ? const Value.absent() : Value(ivalue),
+    );
   }
 
   factory Param.fromJson(Map<String, dynamic> json,
@@ -1210,6 +1264,25 @@ class Plant extends DataClass implements Insertable<Plant> {
       map['synced'] = Variable<bool>(synced);
     }
     return map;
+  }
+
+  PlantsCompanion toCompanion(bool nullToAbsent) {
+    return PlantsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
+      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      single:
+          single == null && nullToAbsent ? const Value.absent() : Value(single),
+      settings: settings == null && nullToAbsent
+          ? const Value.absent()
+          : Value(settings),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
   }
 
   factory Plant.fromJson(Map<String, dynamic> json,
@@ -1617,6 +1690,26 @@ class Box extends DataClass implements Insertable<Box> {
     return map;
   }
 
+  BoxesCompanion toCompanion(bool nullToAbsent) {
+    return BoxesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      device:
+          device == null && nullToAbsent ? const Value.absent() : Value(device),
+      deviceBox: deviceBox == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deviceBox),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      settings: settings == null && nullToAbsent
+          ? const Value.absent()
+          : Value(settings),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
+  }
+
   factory Box.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -1974,6 +2067,18 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     return map;
   }
 
+  ChartCachesCompanion toCompanion(bool nullToAbsent) {
+    return ChartCachesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      plant:
+          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      values:
+          values == null && nullToAbsent ? const Value.absent() : Value(values),
+    );
+  }
+
   factory ChartCache.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -2315,6 +2420,37 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       map['synced'] = Variable<bool>(synced);
     }
     return map;
+  }
+
+  TimelapsesCompanion toCompanion(bool nullToAbsent) {
+    return TimelapsesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      plant:
+          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
+      ssid: ssid == null && nullToAbsent ? const Value.absent() : Value(ssid),
+      password: password == null && nullToAbsent
+          ? const Value.absent()
+          : Value(password),
+      controllerID: controllerID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(controllerID),
+      rotate:
+          rotate == null && nullToAbsent ? const Value.absent() : Value(rotate),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      strain:
+          strain == null && nullToAbsent ? const Value.absent() : Value(strain),
+      dropboxToken: dropboxToken == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dropboxToken),
+      uploadName: uploadName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(uploadName),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
   }
 
   factory Timelapse.fromJson(Map<String, dynamic> json,
@@ -2852,6 +2988,21 @@ class Feed extends DataClass implements Insertable<Feed> {
     return map;
   }
 
+  FeedsCompanion toCompanion(bool nullToAbsent) {
+    return FeedsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      isNewsFeed: isNewsFeed == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isNewsFeed),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
+  }
+
   factory Feed.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -3162,6 +3313,24 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       map['synced'] = Variable<bool>(synced);
     }
     return map;
+  }
+
+  FeedEntriesCompanion toCompanion(bool nullToAbsent) {
+    return FeedEntriesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
+      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      isNew:
+          isNew == null && nullToAbsent ? const Value.absent() : Value(isNew),
+      params:
+          params == null && nullToAbsent ? const Value.absent() : Value(params),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
   }
 
   factory FeedEntry.fromJson(Map<String, dynamic> json,
@@ -3579,6 +3748,29 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       map['synced'] = Variable<bool>(synced);
     }
     return map;
+  }
+
+  FeedMediasCompanion toCompanion(bool nullToAbsent) {
+    return FeedMediasCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
+      feedEntry: feedEntry == null && nullToAbsent
+          ? const Value.absent()
+          : Value(feedEntry),
+      filePath: filePath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(filePath),
+      thumbnailPath: thumbnailPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(thumbnailPath),
+      params:
+          params == null && nullToAbsent ? const Value.absent() : Value(params),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      synced:
+          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+    );
   }
 
   factory FeedMedia.fromJson(Map<String, dynamic> json,

@@ -34,4 +34,6 @@ class AppData {
   String jwt;
   @HiveField(5)
   String storeGeo;
+  @HiveField(6)
+  bool syncOverGSM = false;
 }

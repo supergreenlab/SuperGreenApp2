@@ -10,6 +10,15 @@ class SettingsAuthBlocEventInit extends SettingsAuthBlocEvent {
   List<Object> get props => [];
 }
 
+class SettingsAuthBlocEventSetSyncedOverGSM extends SettingsAuthBlocEvent {
+  final bool syncOverGSM;
+
+  SettingsAuthBlocEventSetSyncedOverGSM(this.syncOverGSM);
+
+  @override
+  List<Object> get props => [syncOverGSM];
+}
+
 class SettingsAuthBlocEventLogout extends SettingsAuthBlocEvent {
   @override
   List<Object> get props => [];
@@ -29,8 +38,9 @@ class SettingsAuthBlocStateLoading extends SettingsAuthBlocState {
 
 class SettingsAuthBlocStateLoaded extends SettingsAuthBlocState {
   final bool isAuth;
+  final bool syncOverGSM;
 
-  SettingsAuthBlocStateLoaded(this.isAuth);
+  SettingsAuthBlocStateLoaded(this.isAuth, this.syncOverGSM);
 
   @override
   List<Object> get props => [isAuth];
@@ -60,7 +70,9 @@ class SettingsAuthBloc
       SettingsAuthBlocEvent event) async* {
     if (event is SettingsAuthBlocEventInit) {
       yield SettingsAuthBlocStateLoading();
-      yield SettingsAuthBlocStateLoaded(_isAuth);
+      yield SettingsAuthBlocStateLoaded(_isAuth, AppDB().getAppData().syncOverGSM);
+    } else if (event is SettingsAuthBlocEventSetSyncedOverGSM) {
+      AppDB().setSynceOverGSM(event.syncOverGSM);
     } else if (event is SettingsAuthBlocEventLogout) {
       AppDB().setJWT(null);
       yield SettingsAuthBlocStateDone();
