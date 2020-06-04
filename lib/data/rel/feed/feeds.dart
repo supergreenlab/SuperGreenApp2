@@ -83,6 +83,9 @@ class FeedEntries extends Table {
     if (params['previous'] != null && params['previous'] is int) {
       FeedMedia feedMedia =
           await RelDB.get().feedsDAO.getFeedMedia(params['previous']);
+      if (feedMedia.serverID == null) {
+        throw 'Missing serverID for feedMedia relation';
+      }
       params['previous'] = feedMedia.serverID;
     }
     return {
@@ -275,7 +278,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future<List<FeedEntry>> getUnsyncedFeedEntries() {
-    return (select(feedEntries)..where((f) => f.synced.equals(false))).get();
+    return (select(feedEntries)..where((f) => f.synced.equals(false))..orderBy([(fe) => OrderingTerm(expression: fe.id, mode: OrderingMode.asc)])).get();
   }
 
   Future updateFeedEntry(FeedEntriesCompanion feedEntry) {
@@ -331,8 +334,8 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .watch();
   }
 
-  Future<List<FeedMedia>> getUnsyncedFeedMedias() {
-    return (select(feedMedias)..where((f) => f.synced.equals(false))).get();
+  Future<List<FeedMedia>> getUnsyncedFeedMedias(int feedEntryId) {
+    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryId) & f.synced.equals(false))).get();
   }
 
   Future<FeedMedia> getFeedMedia(int feedMediaID) {

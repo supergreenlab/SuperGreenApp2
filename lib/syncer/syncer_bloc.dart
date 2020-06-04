@@ -277,7 +277,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   Future _syncOut() async {
     await _syncOutFeeds();
     await _syncOutFeedEntries();
-    await _syncOutFeedMedias();
     await _syncOutDevices();
     await _syncOutBoxes();
     await _syncOutPlants();
@@ -300,20 +299,21 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     for (int i = 0; i < feedEntries.length; ++i) {
       FeedEntry feedEntry = feedEntries[i];
       await FeedsAPI().syncFeedEntry(feedEntry);
+      await _syncOutFeedMedias(feedEntry.id);
     }
   }
 
-  Future _syncOutFeedMedias() async {
+  Future _syncOutFeedMedias(int feedEntryID) async {
     print("Sending feedMedias");
     List<FeedMedia> feedMedias =
-        await RelDB.get().feedsDAO.getUnsyncedFeedMedias();
+        await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
     for (int i = 0; i < feedMedias.length; ++i) {
-      try {
+      // try {
         FeedMedia feedMedia = feedMedias[i];
         await FeedsAPI().syncFeedMedia(feedMedia);
-      } catch (e) {
-        print(e);
-      }
+      // } catch (e) {
+      //   print(e);
+      // }
     }
   }
 
