@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
@@ -70,6 +71,7 @@ class FeedMeasureCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedMeasureState state) {
+    FeedMeasureParams params = state.params;
     return FeedCard(
       animation: animation,
       child: Column(
@@ -88,7 +90,10 @@ class FeedMeasureCardPage extends StatelessWidget {
                     MainNavigateToFullscreenMedia(
                         state.previous.thumbnailPath, state.previous.filePath,
                         overlayPath: state.current.filePath,
-                        heroPath: state.current.filePath));
+                        heroPath: state.current.filePath,
+                        sliderTitle: params.time != null
+                            ? '${Duration(seconds: params.time).inHours} hours\ndifference'
+                            : ''));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
                     MainNavigateToFullscreenMedia(

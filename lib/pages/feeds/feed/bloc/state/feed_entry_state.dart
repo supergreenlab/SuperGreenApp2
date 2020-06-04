@@ -41,13 +41,13 @@ class FeedEntryState extends Equatable {
 
 class FeedEntryStateNotLoaded extends FeedEntryState {
   FeedEntryStateNotLoaded(dynamic id, dynamic feedID, String type, bool isNew,
-      bool synced, DateTime date, dynamic params, {bool remoteState})
+      bool synced, DateTime date, dynamic params, {bool remoteState=false})
       : super(id, feedID, type, isNew, synced, date, params,
             remoteState: remoteState);
 }
 
 class FeedEntryStateLoaded extends FeedEntryState {
-  FeedEntryStateLoaded.copy(FeedEntryState from, {bool remoteState})
+  FeedEntryStateLoaded.copy(FeedEntryState from, {bool remoteState=false})
       : super(from.feedEntryID, from.feedID, from.type, from.isNew, from.synced,
             from.date, from.params,
             remoteState: remoteState ?? from.remoteState);

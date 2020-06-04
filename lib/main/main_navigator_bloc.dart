@@ -312,9 +312,10 @@ class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
   final String thumbnailPath;
   final String filePath;
   final String heroPath;
+  final String sliderTitle;
 
   MainNavigateToFullscreenMedia(this.thumbnailPath, this.filePath,
-      {this.overlayPath, this.heroPath});
+      {this.overlayPath, this.heroPath, this.sliderTitle});
 
   @override
   List<Object> get props => [thumbnailPath, filePath, overlayPath, heroPath];

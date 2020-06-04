@@ -80,7 +80,7 @@ class FeedEntries extends Table {
       throw 'Missing serverID for feed relation';
     }
     Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
-    if (params['previous'] != null) {
+    if (params['previous'] != null && params['previous'] is int) {
       FeedMedia feedMedia =
           await RelDB.get().feedsDAO.getFeedMedia(params['previous']);
       params['previous'] = feedMedia.serverID;
@@ -224,6 +224,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
 
   Future<List<FeedEntry>> getEntries(int feedID, int limit, int offset) {
     return _selectEntries(feedID, limit, offset).get();
+  }
+
+  Future<List<FeedEntry>> getEntriesWithType(String type) {
+    return (select(feedEntries)..where((fe) => fe.type.equals(type))).get();
   }
 
   Stream<List<FeedEntry>> watchEntries(int feedID, int limit, int offset) {

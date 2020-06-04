@@ -186,14 +186,23 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         Positioned(
           left: 30,
           right: 30,
-          top: constraints.maxHeight - 70,
-          child: Slider(
-            onChanged: (double value) {
-              setState(() {
-                _opacity = value;
-              });
-            },
-            value: _opacity,
+          bottom: 30,
+          child: Column(
+            children: <Widget>[
+              Text(state.sliderTitle ?? '',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+              Slider(
+                onChanged: (double value) {
+                  setState(() {
+                    _opacity = value;
+                  });
+                },
+                value: _opacity,
+              ),
+            ],
           ),
         )
       ]);
