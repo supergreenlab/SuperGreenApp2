@@ -241,6 +241,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         onChange: (DateTime newDate) {
           setState(() {
             date = newDate;
+            _saveDraft();
           });
         },
       ),

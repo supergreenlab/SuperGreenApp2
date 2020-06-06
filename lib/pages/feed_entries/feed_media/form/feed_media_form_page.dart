@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -24,6 +26,8 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_draft.dart';
+import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
@@ -33,6 +37,44 @@ import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+
+class FeedMediaDraft extends FeedEntryDraftState {
+  final int time;
+  final List<MediaDraftState> medias;
+  final String message;
+
+  FeedMediaDraft(int draftID, this.time, this.medias, this.message)
+      : super(draftID);
+
+  factory FeedMediaDraft.fromJSON(int draftID, String json) {
+    Map<String, dynamic> map = JsonDecoder().convert(json);
+    return FeedMediaDraft(
+      draftID,
+      map['time'],
+      map['medias']
+          .map<MediaDraftState>((m) => MediaDraftState.fromMap(m))
+          .toList(),
+      map['message'],
+    );
+  }
+
+  @override
+  String toJSON() {
+    return JsonEncoder().convert({
+      'time': time,
+      'medias': medias.map<Map<String, dynamic>>((m) => m.toMap()).toList(),
+      'message': message,
+    });
+  }
+
+  @override
+  List<Object> get props => [medias, message];
+
+  @override
+  FeedMediaDraft copyWithDraftID(int draftID) {
+    return FeedMediaDraft(draftID, time, medias, message);
+  }
+}
 
 class FeedMediaFormPage extends StatefulWidget {
   @override
@@ -45,6 +87,10 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   final TextEditingController _textController = TextEditingController();
 
   bool _helpRequest = false;
+
+  Timer _saveDraftTimer;
+
+  FeedMediaDraft draft;
 
   KeyboardVisibilityNotification _keyboardVisibility =
       KeyboardVisibilityNotification();
@@ -68,6 +114,16 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         }
       },
     );
+
+    _textController.addListener(() {
+      if (_saveDraftTimer != null) {
+        _saveDraftTimer.cancel();
+      }
+      _saveDraftTimer = Timer(Duration(seconds: 1), () {
+        _saveDraft();
+        _saveDraftTimer = null;
+      });
+    });
   }
 
   @override
@@ -75,13 +131,23 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
     return BlocListener(
         bloc: BlocProvider.of<FeedMediaFormBloc>(context),
         listener: (BuildContext context, FeedMediaFormBlocState state) {
-          if (state is FeedMediaFormBlocStateDone) {
+          if (state is FeedMediaFormBlocStateDraft) {
+            _resumeDraft(context, state.draft);
+          } else if (state is FeedMediaFormBlocStateCurrentDraft) {
+            draft = state.draft;
+          } else if (state is FeedMediaFormBlocStateDone) {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop(mustPop: true));
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
             bloc: BlocProvider.of<FeedMediaFormBloc>(context),
+            condition: (FeedMediaFormBlocState beforeState,
+                FeedMediaFormBlocState afterState) {
+              return afterState is FeedMediaFormBlocStateLoading ||
+                  afterState is FeedMediaFormBlocStateDone ||
+                  afterState is FeedMediaFormBlocState;
+            },
             builder: (context, state) {
               String title = '🧐';
               Widget body;
@@ -111,12 +177,16 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                   valid:
                       _medias.length != 0 || _textController.value.text != '',
                   onOK: () => BlocProvider.of<FeedMediaFormBloc>(context).add(
-                      FeedMediaFormBlocEventCreate(
-                          date, _medias, _textController.text, _helpRequest)),
+                      FeedMediaFormBlocEventCreate(date, _medias,
+                          _textController.text, _helpRequest, draft)),
                   onCancel: () async {
                     for (FeedMediasCompanion media in _medias) {
                       await _deleteFileIfExists(media.filePath.value);
                       await _deleteFileIfExists(media.thumbnailPath.value);
+                    }
+                    if (draft != null) {
+                      BlocProvider.of<FeedMediaFormBloc>(context)
+                          .add(FeedMediaFormBlocEventDeleteDraft(draft));
                     }
                   },
                   body: Column(
@@ -138,6 +208,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         onChange: (DateTime newDate) {
           setState(() {
             date = newDate;
+            _saveDraft();
           });
         },
       ),
@@ -173,6 +244,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
             if (confirm) {
               setState(() {
                 _medias.remove(media);
+                _saveDraft();
               });
             }
           },
@@ -182,6 +254,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
               if (fm != null) {
                 setState(() {
                   _medias.add(fm);
+                  _saveDraft();
                 });
               }
             } else {
@@ -198,6 +271,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                   setState(() {
                     int i = _medias.indexOf(media);
                     _medias.replaceRange(i, i + 1, [fm]);
+                    _saveDraft();
                   });
                 }
               }
@@ -260,6 +334,61 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         Text(text),
       ],
     );
+  }
+
+  void _resumeDraft(BuildContext context, FeedMediaDraft newDraft) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Draft recovery'),
+            content: Text('Resume previous grow log?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm == false) {
+      for (MediaDraftState media in newDraft.medias) {
+        await _deleteFileIfExists(media.filePath);
+        await _deleteFileIfExists(media.thumbnailPath);
+      }
+      BlocProvider.of<FeedMediaFormBloc>(context)
+          .add(FeedMediaFormBlocEventDeleteDraft(newDraft));
+    } else {
+      draft = newDraft;
+      setState(() {
+        date = DateTime.fromMillisecondsSinceEpoch(draft.time * 1000);
+        _medias
+            .addAll(draft.medias.map((e) => e.toFeedMediaCompanion()).toList());
+        _textController.text = draft.message;
+      });
+    }
+  }
+
+  void _saveDraft() {
+    draft = FeedMediaDraft(
+        draft?.draftID,
+        date.millisecondsSinceEpoch ~/ 1000,
+        _medias
+            .map<MediaDraftState>(
+                (e) => MediaDraftState.fromFeedMediaCompanion(e))
+            .toList(),
+        _textController.text);
+    BlocProvider.of<FeedMediaFormBloc>(context)
+        .add(FeedMediaFormBlocEventSaveDraft(draft));
   }
 
   Future _deleteFileIfExists(String filePath) async {
