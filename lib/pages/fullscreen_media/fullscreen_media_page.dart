@@ -190,6 +190,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
           child: Column(
             children: <Widget>[
               Text(state.sliderTitle ?? '',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

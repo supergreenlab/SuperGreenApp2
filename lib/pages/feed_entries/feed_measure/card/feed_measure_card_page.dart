@@ -72,6 +72,21 @@ class FeedMeasureCardPage extends StatelessWidget {
 
   Widget _renderLoaded(BuildContext context, FeedMeasureState state) {
     FeedMeasureParams params = state.params;
+    String sliderTitle;
+    if (params.time != null) {
+      Duration time = Duration(seconds: params.time);
+      sliderTitle = '${Duration(seconds: params.time).inDays} days';
+      if (time.inMinutes == 0) {
+        sliderTitle = '${Duration(seconds: params.time).inSeconds} s';
+      } else if (time.inHours == 0) {
+        sliderTitle = '${Duration(seconds: params.time).inMinutes} min';
+      } else if (time.inDays == 0) {
+        sliderTitle = '${Duration(seconds: params.time).inHours} hours';
+      } else if (time.inDays < 4) {
+        sliderTitle =
+            '${Duration(seconds: params.time).inDays} days and ${Duration(seconds: params.time).inHours % 24} hours';
+      }
+    }
     return FeedCard(
       animation: animation,
       child: Column(
@@ -91,9 +106,7 @@ class FeedMeasureCardPage extends StatelessWidget {
                         state.previous.thumbnailPath, state.previous.filePath,
                         overlayPath: state.current.filePath,
                         heroPath: state.current.filePath,
-                        sliderTitle: params.time != null
-                            ? '${Duration(seconds: params.time).inHours} hours\ndifference'
-                            : ''));
+                        sliderTitle: sliderTitle));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
                     MainNavigateToFullscreenMedia(
