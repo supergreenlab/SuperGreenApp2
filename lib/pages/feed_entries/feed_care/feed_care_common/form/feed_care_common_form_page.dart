@@ -80,7 +80,8 @@ class FeedCareCommonDraft extends FeedEntryDraftState {
 
   @override
   FeedCareCommonDraft copyWithDraftID(int draftID) {
-    return FeedCareCommonDraft(draftID, time, beforeMedias, afterMedias, message);
+    return FeedCareCommonDraft(
+        draftID, time, beforeMedias, afterMedias, message);
   }
 }
 
@@ -199,8 +200,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                       _beforeMedias.length != 0 ||
                       _textController.value.text != '',
                   onOK: () => BlocProvider.of<FormBloc>(context).add(
-                      FeedCareCommonFormBlocEventCreate(date, _beforeMedias,
-                          _afterMedias, _textController.text, _helpRequest, draft)),
+                      FeedCareCommonFormBlocEventCreate(
+                          date,
+                          _beforeMedias,
+                          _afterMedias,
+                          _textController.text,
+                          _helpRequest,
+                          draft)),
                   onCancel: () async {
                     for (FeedMediasCompanion media in _beforeMedias) {
                       await _deleteFileIfExists(media.filePath.value);
@@ -272,6 +278,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 _deleteFileIfExists(media.filePath.value);
                 _deleteFileIfExists(media.thumbnailPath.value);
                 _beforeMedias.remove(media);
+                _saveDraft();
               });
             }
           },
@@ -314,6 +321,39 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
           medias: _afterMedias,
+          onLongPressed: (FeedMediasCompanion media) async {
+            bool confirm = await showDialog<bool>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Delete this pic?'),
+                    content: Text('This can\'t be reverted. Continue?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: Text('NO'),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: Text('YES'),
+                      ),
+                    ],
+                  );
+                });
+            if (confirm) {
+              setState(() {
+                _deleteFileIfExists(media.filePath.value);
+                _deleteFileIfExists(media.thumbnailPath.value);
+                _afterMedias.remove(media);
+                _saveDraft();
+              });
+            }
+          },
           onPressed: (FeedMediasCompanion media) async {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
