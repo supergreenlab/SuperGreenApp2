@@ -26,7 +26,7 @@ class FeedMeasureParams extends FeedEntryParams {
 
   FeedMeasureParams(this.time, this.previous);
 
-  static FeedMeasureParams fromJSON(String json) {
+  factory FeedMeasureParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedMeasureParams(map['time'], map['previous']);
   }

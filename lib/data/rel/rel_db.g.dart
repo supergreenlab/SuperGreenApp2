@@ -3679,6 +3679,267 @@ class $FeedEntriesTable extends FeedEntries
   }
 }
 
+class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
+  final int id;
+  final int feed;
+  final String type;
+  final String params;
+  FeedEntryDraft(
+      {@required this.id,
+      @required this.feed,
+      @required this.type,
+      @required this.params});
+  factory FeedEntryDraft.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return FeedEntryDraft(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      params:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || feed != null) {
+      map['feed'] = Variable<int>(feed);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    if (!nullToAbsent || params != null) {
+      map['params'] = Variable<String>(params);
+    }
+    return map;
+  }
+
+  FeedEntryDraftsCompanion toCompanion(bool nullToAbsent) {
+    return FeedEntryDraftsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      params:
+          params == null && nullToAbsent ? const Value.absent() : Value(params),
+    );
+  }
+
+  factory FeedEntryDraft.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return FeedEntryDraft(
+      id: serializer.fromJson<int>(json['id']),
+      feed: serializer.fromJson<int>(json['feed']),
+      type: serializer.fromJson<String>(json['type']),
+      params: serializer.fromJson<String>(json['params']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'feed': serializer.toJson<int>(feed),
+      'type': serializer.toJson<String>(type),
+      'params': serializer.toJson<String>(params),
+    };
+  }
+
+  FeedEntryDraft copyWith({int id, int feed, String type, String params}) =>
+      FeedEntryDraft(
+        id: id ?? this.id,
+        feed: feed ?? this.feed,
+        type: type ?? this.type,
+        params: params ?? this.params,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FeedEntryDraft(')
+          ..write('id: $id, ')
+          ..write('feed: $feed, ')
+          ..write('type: $type, ')
+          ..write('params: $params')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(feed.hashCode, $mrjc(type.hashCode, params.hashCode))));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is FeedEntryDraft &&
+          other.id == this.id &&
+          other.feed == this.feed &&
+          other.type == this.type &&
+          other.params == this.params);
+}
+
+class FeedEntryDraftsCompanion extends UpdateCompanion<FeedEntryDraft> {
+  final Value<int> id;
+  final Value<int> feed;
+  final Value<String> type;
+  final Value<String> params;
+  const FeedEntryDraftsCompanion({
+    this.id = const Value.absent(),
+    this.feed = const Value.absent(),
+    this.type = const Value.absent(),
+    this.params = const Value.absent(),
+  });
+  FeedEntryDraftsCompanion.insert({
+    this.id = const Value.absent(),
+    @required int feed,
+    @required String type,
+    this.params = const Value.absent(),
+  })  : feed = Value(feed),
+        type = Value(type);
+  static Insertable<FeedEntryDraft> custom({
+    Expression<int> id,
+    Expression<int> feed,
+    Expression<String> type,
+    Expression<String> params,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (feed != null) 'feed': feed,
+      if (type != null) 'type': type,
+      if (params != null) 'params': params,
+    });
+  }
+
+  FeedEntryDraftsCompanion copyWith(
+      {Value<int> id,
+      Value<int> feed,
+      Value<String> type,
+      Value<String> params}) {
+    return FeedEntryDraftsCompanion(
+      id: id ?? this.id,
+      feed: feed ?? this.feed,
+      type: type ?? this.type,
+      params: params ?? this.params,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (feed.present) {
+      map['feed'] = Variable<int>(feed.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (params.present) {
+      map['params'] = Variable<String>(params.value);
+    }
+    return map;
+  }
+}
+
+class $FeedEntryDraftsTable extends FeedEntryDrafts
+    with TableInfo<$FeedEntryDraftsTable, FeedEntryDraft> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $FeedEntryDraftsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _feedMeta = const VerificationMeta('feed');
+  GeneratedIntColumn _feed;
+  @override
+  GeneratedIntColumn get feed => _feed ??= _constructFeed();
+  GeneratedIntColumn _constructFeed() {
+    return GeneratedIntColumn(
+      'feed',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
+  @override
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn('type', $tableName, false,
+        minTextLength: 1, maxTextLength: 24);
+  }
+
+  final VerificationMeta _paramsMeta = const VerificationMeta('params');
+  GeneratedTextColumn _params;
+  @override
+  GeneratedTextColumn get params => _params ??= _constructParams();
+  GeneratedTextColumn _constructParams() {
+    return GeneratedTextColumn('params', $tableName, false,
+        defaultValue: Constant('{}'));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, feed, type, params];
+  @override
+  $FeedEntryDraftsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'feed_entry_drafts';
+  @override
+  final String actualTableName = 'feed_entry_drafts';
+  @override
+  VerificationContext validateIntegrity(Insertable<FeedEntryDraft> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('feed')) {
+      context.handle(
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
+    } else if (isInserting) {
+      context.missing(_feedMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('params')) {
+      context.handle(_paramsMeta,
+          params.isAcceptableOrUnknown(data['params'], _paramsMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FeedEntryDraft map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return FeedEntryDraft.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $FeedEntryDraftsTable createAlias(String alias) {
+    return $FeedEntryDraftsTable(_db, alias);
+  }
+}
+
 class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   final int id;
   final int feed;
@@ -4152,6 +4413,9 @@ abstract class _$RelDB extends GeneratedDatabase {
   $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
   $FeedEntriesTable _feedEntries;
   $FeedEntriesTable get feedEntries => _feedEntries ??= $FeedEntriesTable(this);
+  $FeedEntryDraftsTable _feedEntryDrafts;
+  $FeedEntryDraftsTable get feedEntryDrafts =>
+      _feedEntryDrafts ??= $FeedEntryDraftsTable(this);
   $FeedMediasTable _feedMedias;
   $FeedMediasTable get feedMedias => _feedMedias ??= $FeedMediasTable(this);
   DevicesDAO _devicesDAO;
@@ -4173,6 +4437,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         timelapses,
         feeds,
         feedEntries,
+        feedEntryDrafts,
         feedMedias
       ];
 }

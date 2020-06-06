@@ -27,7 +27,7 @@ class FeedVentilationParamsValues extends Equatable {
 
   FeedVentilationParamsValues(this.blowerDay, this.blowerNight);
 
-  static FeedVentilationParamsValues fromJSON(Map<String, dynamic> map) {
+  factory FeedVentilationParamsValues.fromJSON(Map<String, dynamic> map) {
     return FeedVentilationParamsValues(map['blowerDay'], map['blowerNight']);
   }
 
@@ -45,7 +45,7 @@ class FeedVentilationParams extends FeedEntryParams {
 
   FeedVentilationParams(this.values, this.initialValues);
 
-  static FeedVentilationParams fromJSON(String json) {
+  factory FeedVentilationParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedVentilationParams(
         FeedVentilationParamsValues.fromJSON(map['values']),

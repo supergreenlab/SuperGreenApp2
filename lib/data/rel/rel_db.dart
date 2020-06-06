@@ -52,6 +52,7 @@ LazyDatabase _openConnection() {
   Timelapses,
   Feeds,
   FeedEntries,
+  FeedEntryDrafts,
   FeedMedias,
 ], daos: [
   DevicesDAO,
@@ -87,6 +88,8 @@ class RelDB extends _$RelDB {
           await m.addColumn(feeds, feeds.isNewsFeed);
         } else if (from == 3) {
           await m.addColumn(devices, devices.isSetup);
+        } else if (from == 5) {
+          await m.createTable(feedEntryDrafts);
         }
       }, beforeOpen: (OpeningDetails details) async {
         if (!details.hadUpgrade) {

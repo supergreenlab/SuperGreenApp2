@@ -27,7 +27,7 @@ class FeedCareParams extends FeedEntryParams {
 
   FeedCareParams copyWith(String message) => FeedCareParams(message);
 
-  static FeedCareParams fromJSON(String json) {
+  factory FeedCareParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedCareParams(map['message']);
   }

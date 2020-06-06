@@ -29,7 +29,7 @@ class FeedWaterParams extends FeedEntryParams {
 
   FeedWaterParams(this.volume, this.tooDry, this.nutrient, this.ph, this.ec);
 
-  static FeedWaterParams fromJSON(String json) {
+  factory FeedWaterParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedWaterParams(map['volume'], map['tooDry'], map['nutrient'], map['ph'], map['ec']);
   }
