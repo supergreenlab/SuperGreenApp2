@@ -26,9 +26,9 @@ class FeedWaterLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedWaterState(state);
+      FeedWaterState(state, remoteState: true);
 
   @override
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedWaterState(super.stateForFeedEntryMap(feedEntry));
+      FeedWaterState(super.stateForFeedEntryMap(feedEntry), remoteState: true);
 }

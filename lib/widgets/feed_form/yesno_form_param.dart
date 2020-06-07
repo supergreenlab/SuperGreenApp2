@@ -46,7 +46,7 @@ class YesNoFormParam extends StatelessWidget {
                 },
                 textStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20)),
+                    fontSize: 15)),
             FeedFormButton(
                 title: 'NO',
                 border: yes == false,
@@ -55,7 +55,7 @@ class YesNoFormParam extends StatelessWidget {
                 },
                 textStyle: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20)),
+                    fontSize: 15)),
           ],
         ),
       ),

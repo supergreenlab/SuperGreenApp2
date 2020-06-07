@@ -38,17 +38,19 @@ class FeedLightCardPage extends StatelessWidget {
     if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
-    return _renderLoading(context);
+    return _renderLoading(context, state);
   }
 
-  Widget _renderLoading(BuildContext context) {
+  Widget _renderLoading(BuildContext context, FeedEntryState state) {
     return FeedCard(
       animation: animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle('assets/feed_card/icon_light.svg', 'Stretch control',
-              state.synced),
+              state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -71,7 +73,9 @@ class FeedLightCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle('assets/feed_card/icon_light.svg', 'Stretch control',
-              state.synced),
+              state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -84,8 +88,7 @@ class FeedLightCardPage extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                children:
-                    _renderValues(params.values, params.initialValues),
+                children: _renderValues(params.values, params.initialValues),
               ),
             ),
           ),

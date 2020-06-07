@@ -26,9 +26,9 @@ class FeedUnknownLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedUnknownState(state);
+      FeedUnknownState(state, remoteState: true);
 
   @override
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedUnknownState(super.stateForFeedEntryMap(feedEntry));
+      FeedUnknownState(super.stateForFeedEntryMap(feedEntry), remoteState: true);
 }

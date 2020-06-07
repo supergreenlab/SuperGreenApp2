@@ -36,6 +36,6 @@ class FeedMediaLoader extends RemoteFeedEntryLoader {
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
-    return FeedMediaState(state, medias);
+    return FeedMediaState(state, medias, remoteState: true);
   }
 }

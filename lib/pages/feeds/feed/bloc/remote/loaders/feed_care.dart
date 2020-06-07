@@ -39,6 +39,7 @@ class FeedCareLoader extends RemoteFeedEntryLoader {
     return FeedCareCommonState(
         state,
         medias.where((m) => m.params['before'] == true).toList() ?? [],
-        medias.where((m) => m.params['before'] != true).toList() ?? []);
+        medias.where((m) => m.params['before'] != true).toList() ?? [],
+        remoteState: true);
   }
 }

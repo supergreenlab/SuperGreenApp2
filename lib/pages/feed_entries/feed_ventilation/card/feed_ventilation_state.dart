@@ -19,5 +19,5 @@
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedVentilationState extends FeedEntryStateLoaded {
-  FeedVentilationState(FeedEntryState from) : super.copy(from);
+  FeedVentilationState(FeedEntryState from, { bool remoteState=false }) : super.copy(from, remoteState: remoteState);
 }

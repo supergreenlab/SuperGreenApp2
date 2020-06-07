@@ -28,7 +28,7 @@ class FeedMediaParams extends FeedEntryParams {
 
   FeedMediaParams copyWith(String message) => FeedMediaParams(message, this.helpRequest);
 
-  static FeedMediaParams fromJSON(String json) {
+  factory FeedMediaParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedMediaParams(map['message'], map['helpRequest']);
   }

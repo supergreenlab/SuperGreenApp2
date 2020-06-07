@@ -152,6 +152,11 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     Param wifiStatusParam = await ddb.getParam(device.id, 'WIFI_STATUS');
     await DeviceHelper.refreshIntParam(device, wifiStatusParam);
 
+    if (wifiStatusParam.ivalue != 3) {
+      yield DeviceWifiBlocStateNotFound();
+      return;
+    }
+
     yield DeviceWifiBlocStateDone(device);
   }
 }

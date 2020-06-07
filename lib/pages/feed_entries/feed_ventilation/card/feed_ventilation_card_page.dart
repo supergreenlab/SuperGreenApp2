@@ -30,7 +30,8 @@ class FeedVentilationCardPage extends StatelessWidget {
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedVentilationCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedVentilationCardPage(this.animation, this.feedState, this.state,
+      {Key key})
       : super(key: key);
 
   @override
@@ -48,7 +49,12 @@ class FeedVentilationCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_blower.svg', 'Ventilation change', state.synced),
+            'assets/feed_card/icon_blower.svg',
+            'Ventilation change',
+            state.synced,
+            showSyncStatus: !state.remoteState,
+            showControls: !state.remoteState,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -71,7 +77,9 @@ class FeedVentilationCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle('assets/feed_card/icon_blower.svg',
-              'Ventilation change', state.synced),
+              'Ventilation change', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),

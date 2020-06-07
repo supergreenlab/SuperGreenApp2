@@ -136,7 +136,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             Padding(
               padding: const EdgeInsets.only(top: 24.0, left: 8.0, right: 8.0),
               child: Text(
-                'Is the emoji wifi back?\nConnect to it, then tap this button:',
+                'Is the emoji wifi back?\nThen the entered credentials were wrong.\nConnect to it, then tap this button:',
                 style: TextStyle(fontSize: 14, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),

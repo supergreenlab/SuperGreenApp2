@@ -23,10 +23,11 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/feed_form/yesno_form_param.dart';
-import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedWaterFormPage extends StatefulWidget {
   @override
@@ -39,6 +40,9 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   bool nutrient;
   bool freedomUnits;
   bool wateringLab = false;
+  DateTime date = DateTime.now();
+  TextEditingController phController = TextEditingController();
+  TextEditingController ecController = TextEditingController();
 
   @override
   void initState() {
@@ -66,6 +70,14 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                 fontSize: 35,
                 body: ListView(
                   children: <Widget>[
+                    FeedFormDatePicker(
+                      date,
+                      onChange: (DateTime newDate) {
+                        setState(() {
+                          date = newDate;
+                        });
+                      },
+                    ),
                     NumberFormParam(
                         icon: 'assets/feed_form/icon_volume.svg',
                         title: 'Approx. volume',
@@ -80,6 +92,16 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                             }
                           });
                         }),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: _renderOptionCheckbx(context,
+                          'Watering all plants in the lab with the **same quantity**.',
+                          (newValue) {
+                        setState(() {
+                          wateringLab = newValue;
+                        });
+                      }, wateringLab),
+                    ),
                     YesNoFormParam(
                         icon: 'assets/feed_form/icon_dry.svg',
                         title: 'Was it too dry?',
@@ -98,20 +120,77 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                             nutrient = yes;
                           });
                         }),
-                    SectionTitle(
-                        title: 'Watering the whole lab?',
-                        icon: 'assets/settings/icon_lab.svg'),
-                    _renderOptionCheckbx(context, 'Watering whole lab at once.',
-                        (newValue) {
-                      setState(() {
-                        wateringLab = newValue;
-                      });
-                    }, wateringLab),
+                    FeedFormParamLayout(
+                        icon: 'assets/feed_form/icon_metrics.svg',
+                        title: 'Water metrics',
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text('PH:',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24.0),
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                            hintText: 'ex: 6.5'),
+                                        keyboardType: TextInputType.number,
+                                        controller: phController,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text('EC:',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24.0),
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                            hintText: 'ex: 1200'),
+                                        keyboardType: TextInputType.number,
+                                        controller: ecController,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
                   ],
                 ),
                 onOK: () => BlocProvider.of<FeedWaterFormBloc>(context).add(
                   FeedWaterFormBlocEventCreate(
-                      tooDry, volume, nutrient, wateringLab),
+                      date,
+                      tooDry,
+                      volume,
+                      nutrient,
+                      wateringLab,
+                      phController.value.text == ''
+                          ? null
+                          : double.parse(phController.value.text),
+                      ecController.value.text == ''
+                          ? null
+                          : double.parse(ecController.value.text)),
                 ),
               );
             }));
@@ -126,15 +205,17 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
             onChanged: onChanged,
             value: value,
           ),
-          InkWell(
-            onTap: () {
-              onChanged(!value);
-            },
-            child: MarkdownBody(
-              fitContent: true,
-              data: text,
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 14)),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                onChanged(!value);
+              },
+              child: MarkdownBody(
+                fitContent: true,
+                data: text,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 14)),
+              ),
             ),
           ),
         ],

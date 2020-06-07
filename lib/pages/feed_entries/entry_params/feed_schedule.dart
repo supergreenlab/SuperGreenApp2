@@ -29,7 +29,7 @@ class FeedScheduleParams extends FeedEntryParams {
   FeedScheduleParams(this.schedule, this.schedules, this.initialSchedule,
       this.initialSchedules);
 
-  static FeedScheduleParams fromJSON(String json) {
+  factory FeedScheduleParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedScheduleParams(map['schedule'], map['schedules'],
         map['initialSchedule'], map['initialSchedules']);

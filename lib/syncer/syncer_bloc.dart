@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -46,11 +47,15 @@ class SyncerBlocStateSyncing extends SyncerBlocState {
 }
 
 class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
+  StreamSubscription<ConnectivityResult> _connectivity;
+
   Timer _timerOut;
   bool _workingOut;
 
   Timer _timerIn;
   bool _workingIn;
+
+  bool _usingWifi = false;
 
   SyncerBloc() {
     add(SyncerBlocEventInit());
@@ -62,6 +67,11 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   @override
   Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {
     if (event is SyncerBlocEventInit) {
+      _connectivity = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) {
+        _usingWifi = (result == ConnectivityResult.wifi);
+      });
       _timerOut = Timer.periodic(Duration(seconds: 5), (_) async {
         if (_workingOut == true) return;
         _workingOut = true;
@@ -97,6 +107,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncIn() async {
+    if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+      throw 'Can\'t sync over GSM';
+    }
     await _syncInFeeds();
     await _syncInFeedEntries();
     await _syncInFeedMedias();
@@ -111,7 +124,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing feeds");
     List<FeedsCompanion> feeds = await FeedsAPI().unsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'feed: ${i+1}/${feeds.length}'));
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(true, 'feed: ${i + 1}/${feeds.length}'));
       FeedsCompanion feedsCompanion = feeds[i];
       Feed exists = await RelDB.get()
           .feedsDAO
@@ -133,7 +149,11 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<FeedEntriesCompanion> feedEntries =
         await FeedsAPI().unsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'entry: ${i+1}/${feedEntries.length}'));
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(
+          true, 'entry: ${i + 1}/${feedEntries.length}'));
       FeedEntriesCompanion feedEntriesCompanion = feedEntries[i];
       FeedEntry exists = await RelDB.get()
           .feedsDAO
@@ -155,7 +175,11 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<FeedMediasCompanion> feedMedias =
         await FeedsAPI().unsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'media: ${i+1}/${feedMedias.length}'));
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+
+      add(SyncerBlocEventSyncing(true, 'media: ${i + 1}/${feedMedias.length}'));
       FeedMediasCompanion feedMediasCompanion = feedMedias[i];
       FeedMedia exists = await RelDB.get()
           .feedsDAO
@@ -191,7 +215,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing devices");
     List<DevicesCompanion> devices = await FeedsAPI().unsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'device: ${i+1}/${devices.length}'));
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(true, 'device: ${i + 1}/${devices.length}'));
       DevicesCompanion devicesCompanion = devices[i];
       Device exists = await RelDB.get()
           .devicesDAO
@@ -214,7 +241,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing boxes");
     List<BoxesCompanion> boxes = await FeedsAPI().unsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'box: ${i+1}/${boxes.length}'));
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(true, 'box: ${i + 1}/${boxes.length}'));
       BoxesCompanion boxesCompanion = boxes[i];
       Box exists = await RelDB.get()
           .plantsDAO
@@ -235,7 +265,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Syncing plants");
     List<PlantsCompanion> plants = await FeedsAPI().unsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'plant: ${i+1}/${plants.length}'));
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(true, 'plant: ${i + 1}/${plants.length}'));
       PlantsCompanion plantsCompanion = plants[i];
       Plant exists = await RelDB.get()
           .plantsDAO
@@ -257,7 +290,11 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<TimelapsesCompanion> timelapses =
         await FeedsAPI().unsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
-      add(SyncerBlocEventSyncing(true, 'timelapse: ${i+1}/${timelapses.length}'));
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(
+          true, 'timelapse: ${i + 1}/${timelapses.length}'));
       TimelapsesCompanion timelapsesCompanion = timelapses[i];
       Plant exists = await RelDB.get()
           .plantsDAO
@@ -275,9 +312,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOut() async {
+    if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+      throw 'Can\'t sync over GSM';
+    }
     await _syncOutFeeds();
+    await _syncOutOrphanedFeedMedias();
     await _syncOutFeedEntries();
-    await _syncOutFeedMedias();
     await _syncOutDevices();
     await _syncOutBoxes();
     await _syncOutPlants();
@@ -288,6 +328,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Sending feeds");
     List<Feed> feeds = await RelDB.get().feedsDAO.getUnsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
       Feed feed = feeds[i];
       await FeedsAPI().syncFeed(feed);
     }
@@ -298,22 +341,49 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<FeedEntry> feedEntries =
         await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
       FeedEntry feedEntry = feedEntries[i];
       await FeedsAPI().syncFeedEntry(feedEntry);
+      await _syncOutFeedMedias(feedEntry.id);
     }
   }
 
-  Future _syncOutFeedMedias() async {
+  // TODO remove this function, migration purpose
+  Future _syncOutOrphanedFeedMedias() async {
+    print("Sending orphaned feedMedias");
+    List<FeedMedia> feedMedias = await RelDB.get()
+        .feedsDAO
+        .getFeedMediasWithType('FE_MEASURE',
+            feedEntrySynced: true, synced: false);
+    for (int i = 0; i < feedMedias.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      // try {
+      FeedMedia feedMedia = feedMedias[i];
+      await FeedsAPI().syncFeedMedia(feedMedia);
+      // } catch (e) {
+      //   print(e);
+      // }
+    }
+  }
+
+  Future _syncOutFeedMedias(int feedEntryID) async {
     print("Sending feedMedias");
     List<FeedMedia> feedMedias =
-        await RelDB.get().feedsDAO.getUnsyncedFeedMedias();
+        await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
     for (int i = 0; i < feedMedias.length; ++i) {
-      try {
-        FeedMedia feedMedia = feedMedias[i];
-        await FeedsAPI().syncFeedMedia(feedMedia);
-      } catch (e) {
-        print(e);
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
       }
+      // try {
+      FeedMedia feedMedia = feedMedias[i];
+      await FeedsAPI().syncFeedMedia(feedMedia);
+      // } catch (e) {
+      //   print(e);
+      // }
     }
   }
 
@@ -321,6 +391,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Sending devices");
     List<Device> devices = await RelDB.get().devicesDAO.getUnsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
       Device device = devices[i];
       await FeedsAPI().syncDevice(device);
     }
@@ -330,6 +403,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Sending boxes");
     List<Box> boxes = await RelDB.get().plantsDAO.getUnsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
       Box box = boxes[i];
       await FeedsAPI().syncBox(box);
     }
@@ -339,6 +415,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     print("Sending plants");
     List<Plant> plants = await RelDB.get().plantsDAO.getUnsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
       Plant plant = plants[i];
       await FeedsAPI().syncPlant(plant);
     }
@@ -349,6 +428,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     List<Timelapse> timelapses =
         await RelDB.get().plantsDAO.getUnsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
       Timelapse timelapse = timelapses[i];
       await FeedsAPI().syncTimelapse(timelapse);
     }
@@ -368,6 +450,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   @override
   Future<void> close() async {
+    if (_connectivity != null) {
+      _connectivity.cancel();
+    }
     if (_timerOut != null) {
       _timerOut.cancel();
     }

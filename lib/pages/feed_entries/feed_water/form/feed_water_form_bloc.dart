@@ -29,16 +29,19 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart'
 abstract class FeedWaterFormBlocEvent extends Equatable {}
 
 class FeedWaterFormBlocEventCreate extends FeedWaterFormBlocEvent {
+  final DateTime date;
   final bool tooDry;
   final double volume;
   final bool nutrient;
   final bool wateringLab;
+  final double ph;
+  final double ec;
 
   FeedWaterFormBlocEventCreate(
-      this.tooDry, this.volume, this.nutrient, this.wateringLab);
+      this.date, this.tooDry, this.volume, this.nutrient, this.wateringLab, this.ph, this.ec);
 
   @override
-  List<Object> get props => [tooDry, volume, nutrient, wateringLab];
+  List<Object> get props => [date, tooDry, volume, nutrient, wateringLab, ph, ec];
 }
 
 class FeedWaterFormBlocState extends Equatable {
@@ -80,9 +83,9 @@ class FeedWaterFormBloc
             await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_WATER',
           feed: plants[i].feed,
-          date: DateTime.now(),
+          date: event.date,
           params: Value(
-              FeedWaterParams(event.volume, event.tooDry, event.nutrient)
+              FeedWaterParams(event.volume, event.tooDry, event.nutrient, event.ph, event.ec)
                   .toJSON()),
         ));
         if (i == 0) {

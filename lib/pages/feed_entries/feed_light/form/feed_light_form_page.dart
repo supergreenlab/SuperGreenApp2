@@ -138,7 +138,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               fontSize: 35,
               changed: changed,
               valid: changed && _reachable,
-              hideBackButton: (_reachable == false ||
+              hideBackButton: ((_reachable == false && changed) ||
                   state is FeedLightFormBlocStateLoading ||
                   state is FeedLightFormBlocStateCancelling),
               onOK: () {
@@ -147,7 +147,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               },
               body: WillPopScope(
                 onWillPop: () async {
-                  if (_reachable == false) {
+                  if (_reachable == false && changed) {
                     return false;
                   }
                   if (state is FeedLightFormBlocStateNoDevice) {

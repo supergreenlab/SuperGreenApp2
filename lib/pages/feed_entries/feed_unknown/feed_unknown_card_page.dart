@@ -30,7 +30,8 @@ class FeedUnknownCardPage extends StatelessWidget {
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedUnknownCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedUnknownCardPage(this.animation, this.feedState, this.state,
+      {Key key})
       : super(key: key);
 
   @override
@@ -41,7 +42,9 @@ class FeedUnknownCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_unknown.svg', 'Unknown card', state.synced),
+              'assets/feed_card/icon_unknown.svg', 'Unknown card', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -52,7 +55,8 @@ class FeedUnknownCardPage extends StatelessWidget {
             child: Fullscreen(
               title: 'Unknown card',
               subtitle: 'Upgrade your app',
-              child: SvgPicture.asset('assets/feed_card/icon_unknown.svg', height: 70),
+              child: SvgPicture.asset('assets/feed_card/icon_unknown.svg',
+                  height: 70),
             ),
           ),
         ],

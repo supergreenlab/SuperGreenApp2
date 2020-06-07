@@ -371,7 +371,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           actions: actions,
           bottomPadding: true,
           title: '',
-          appBarHeight: 350,
+          appBarHeight: 380,
           appBar: _renderAppBar(context, state),
         ),
       );

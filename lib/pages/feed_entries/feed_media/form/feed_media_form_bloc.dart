@@ -25,18 +25,46 @@ import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
+import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_page.dart';
 
 abstract class FeedMediaFormBlocEvent extends Equatable {}
 
+class FeedMediaFormBlocEventLoadDraft extends FeedMediaFormBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FeedMediaFormBlocEventSaveDraft extends FeedMediaFormBlocEvent {
+  final FeedMediaDraft draft;
+
+  FeedMediaFormBlocEventSaveDraft(this.draft);
+
+  @override
+  List<Object> get props => [draft];
+}
+
+class FeedMediaFormBlocEventDeleteDraft extends FeedMediaFormBlocEvent {
+  final FeedMediaDraft draft;
+
+  FeedMediaFormBlocEventDeleteDraft(this.draft);
+
+  @override
+  List<Object> get props => [draft];
+}
+
 class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
+  final DateTime date;
   final List<FeedMediasCompanion> medias;
   final String message;
   final bool helpRequest;
 
-  FeedMediaFormBlocEventCreate(this.medias, this.message, this.helpRequest);
+  final FeedMediaDraft draft;
+
+  FeedMediaFormBlocEventCreate(
+      this.date, this.medias, this.message, this.helpRequest, this.draft);
 
   @override
-  List<Object> get props => [medias, message, helpRequest];
+  List<Object> get props => [date, medias, message, helpRequest, draft];
 }
 
 class FeedMediaFormBlocState extends Equatable {
@@ -44,6 +72,24 @@ class FeedMediaFormBlocState extends Equatable {
 
   @override
   List<Object> get props => [];
+}
+
+class FeedMediaFormBlocStateDraft extends FeedMediaFormBlocState {
+  final FeedMediaDraft draft;
+
+  FeedMediaFormBlocStateDraft(this.draft);
+
+  @override
+  List<Object> get props => [draft];
+}
+
+class FeedMediaFormBlocStateCurrentDraft extends FeedMediaFormBlocState {
+  final FeedMediaDraft draft;
+
+  FeedMediaFormBlocStateCurrentDraft(this.draft);
+
+  @override
+  List<Object> get props => [draft];
 }
 
 class FeedMediaFormBlocStateLoading extends FeedMediaFormBlocState {
@@ -67,19 +113,48 @@ class FeedMediaFormBloc
   @override
   FeedMediaFormBlocState get initialState => FeedMediaFormBlocState();
 
-  FeedMediaFormBloc(this.args);
+  FeedMediaFormBloc(this.args) {
+    add(FeedMediaFormBlocEventLoadDraft());
+  }
 
   @override
   Stream<FeedMediaFormBlocState> mapEventToState(
       FeedMediaFormBlocEvent event) async* {
-    if (event is FeedMediaFormBlocEventCreate) {
+    if (event is FeedMediaFormBlocEventLoadDraft) {
+      try {
+        FeedEntryDraft draft = await RelDB.get()
+            .feedsDAO
+            .getEntryDraft(args.plant.feed, 'FE_MEDIA');
+        yield FeedMediaFormBlocStateDraft(
+            FeedMediaDraft.fromJSON(draft.id, draft.params));
+      } catch (e) {
+        print(e);
+      }
+    } else if (event is FeedMediaFormBlocEventDeleteDraft) {
+      await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);
+    } else if (event is FeedMediaFormBlocEventSaveDraft) {
+      if (event.draft.draftID != null) {
+        await RelDB.get().feedsDAO.updateFeedEntryDraft(
+            FeedEntryDraftsCompanion(
+                id: Value(event.draft.draftID),
+                params: Value(event.draft.toJSON())));
+      } else {
+        int draftID = await RelDB.get().feedsDAO.addFeedEntryDraft(
+            FeedEntryDraftsCompanion(
+                feed: Value(args.plant.feed),
+                type: Value('FE_MEDIA'),
+                params: Value(event.draft.toJSON())));
+        yield FeedMediaFormBlocStateCurrentDraft(
+            event.draft.copyWithDraftID(draftID));
+      }
+    } else if (event is FeedMediaFormBlocEventCreate) {
       yield FeedMediaFormBlocStateLoading();
       final db = RelDB.get();
       int feedEntryID =
           await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEDIA',
         feed: args.plant.feed,
-        date: DateTime.now(),
+        date: event.date,
         params:
             Value(FeedMediaParams(event.message, event.helpRequest).toJSON()),
       ));
@@ -87,6 +162,11 @@ class FeedMediaFormBloc
         await db.feedsDAO.addFeedMedia(m.copyWith(
             feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
       }
+
+      if (event.draft != null) {
+        await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);
+      }
+
       yield FeedMediaFormBlocStateDone();
     }
   }

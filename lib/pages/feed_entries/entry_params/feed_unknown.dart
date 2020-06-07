@@ -23,7 +23,7 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_param
 class FeedUnknownParams extends FeedEntryParams {
   FeedUnknownParams();
 
-  static FeedUnknownParams fromJSON(String json) {
+  factory FeedUnknownParams.fromJSON(String json) {
     return FeedUnknownParams();
   }
 

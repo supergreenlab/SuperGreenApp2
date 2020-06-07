@@ -27,6 +27,7 @@ import 'package:path/path.dart' as p;
 import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 
 part 'rel_db.g.dart';
 
@@ -51,6 +52,7 @@ LazyDatabase _openConnection() {
   Timelapses,
   Feeds,
   FeedEntries,
+  FeedEntryDrafts,
   FeedMedias,
 ], daos: [
   DevicesDAO,
@@ -70,7 +72,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -86,8 +88,13 @@ class RelDB extends _$RelDB {
           await m.addColumn(feeds, feeds.isNewsFeed);
         } else if (from == 3) {
           await m.addColumn(devices, devices.isSetup);
+        } else if (from == 5) {
+          await m.createTable(feedEntryDrafts);
         }
-      }, beforeOpen: (details) async {
+      }, beforeOpen: (OpeningDetails details) async {
+        if (!details.hadUpgrade) {
+          return;
+        }
         if (details.versionBefore == 1) {
           List<Box> tmpBoxes = await plantsDAO.getBoxes();
 
@@ -125,6 +132,37 @@ class RelDB extends _$RelDB {
               filePath: Value(filePath),
               thumbnailPath: Value(thumbnailPath),
             ));
+          }
+        } else if (details.versionBefore == 5) {
+          List<FeedEntry> measures =
+              await feedsDAO.getEntriesWithType('FE_MEASURE');
+          for (FeedEntry measure in measures) {
+            try {
+              FeedMeasureParams params =
+                  FeedMeasureParams.fromJSON(measure.params);
+              if (params.previous == null) {
+                continue;
+              }
+              FeedMedia previous;
+              if (params.previous is String) {
+                previous =
+                    await feedsDAO.getFeedMediaForServerID(params.previous);
+              } else {
+                previous = await feedsDAO.getFeedMedia(params.previous);
+              }
+              FeedEntry previousEntry =
+                  await feedsDAO.getFeedEntry(previous.feedEntry);
+              await feedsDAO.updateFeedEntry(FeedEntriesCompanion(
+                id: Value(measure.id),
+                synced: Value(false),
+                params: Value(FeedMeasureParams(
+                        measure.date.difference(previousEntry.date).inSeconds,
+                        params.previous)
+                    .toJSON()),
+              ));
+            } catch (e) {
+              print(e);
+            }
           }
         }
       });

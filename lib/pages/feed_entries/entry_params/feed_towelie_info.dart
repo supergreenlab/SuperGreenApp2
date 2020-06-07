@@ -29,7 +29,7 @@ class FeedTowelieParamsButton extends Equatable {
 
   FeedTowelieParamsButton(this.id, this.title, this.params);
 
-  static FeedTowelieParamsButton fromMap(Map<String, dynamic> map) {
+  factory FeedTowelieParamsButton.fromMap(Map<String, dynamic> map) {
     return FeedTowelieParamsButton(map['id'], map['title'], map);
   }
 
@@ -53,7 +53,7 @@ class FeedTowelieInfoParams extends FeedEntryParams {
 
   FeedTowelieInfoParams(this.topPic, this.text, this.buttons, this.selectedButton);
 
-  static FeedTowelieInfoParams fromJSON(String json) {
+  factory FeedTowelieInfoParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     List<FeedTowelieParamsButton> buttons = (map['buttons'] ?? [])
         .map<FeedTowelieParamsButton>(

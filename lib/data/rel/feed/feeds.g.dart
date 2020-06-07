@@ -9,6 +9,7 @@ part of 'feeds.dart';
 mixin _$FeedsDAOMixin on DatabaseAccessor<RelDB> {
   $FeedsTable get feeds => attachedDatabase.feeds;
   $FeedEntriesTable get feedEntries => attachedDatabase.feedEntries;
+  $FeedEntryDraftsTable get feedEntryDrafts => attachedDatabase.feedEntryDrafts;
   $FeedMediasTable get feedMedias => attachedDatabase.feedMedias;
   GetPendingFeedsResult _rowToGetPendingFeedsResult(QueryRow row) {
     return GetPendingFeedsResult(

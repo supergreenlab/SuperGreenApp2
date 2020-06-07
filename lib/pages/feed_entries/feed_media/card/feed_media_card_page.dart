@@ -51,17 +51,19 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
     if (widget.state is FeedEntryStateLoaded) {
       return _renderLoaded(context, widget.state);
     }
-    return _renderLoading(context);
+    return _renderLoading(context, widget.state);
   }
 
-  Widget _renderLoading(BuildContext context) {
+  Widget _renderLoading(BuildContext context, FeedEntryState state) {
     return FeedCard(
       animation: widget.animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle('assets/feed_card/icon_media.svg', 'Grow log',
-              widget.state.synced),
+              widget.state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(widget.state.date),
@@ -84,18 +86,18 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_media.svg',
-            'Grow log',
-            state.synced,
-            onEdit: () {
-              setState(() {
-                editText = true;
-              });
-            },
-          ),
+              'assets/feed_card/icon_media.svg', 'Grow log', state.synced,
+              onEdit: () {
+            setState(() {
+              editText = true;
+            });
+          },
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           state.medias.length > 0
               ? MediaList(
                   state.medias,
+                  showSyncStatus: !state.remoteState,
                   onMediaTapped: (media) {
                     BlocProvider.of<MainNavigatorBloc>(context).add(
                         MainNavigateToFullscreenMedia(

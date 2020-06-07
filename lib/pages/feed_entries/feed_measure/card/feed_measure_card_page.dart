@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
@@ -42,17 +43,19 @@ class FeedMeasureCardPage extends StatelessWidget {
     if (state is FeedEntryStateLoaded) {
       return _renderLoaded(context, state);
     }
-    return _renderLoading(context);
+    return _renderLoading(context, state);
   }
 
-  Widget _renderLoading(BuildContext context) {
+  Widget _renderLoading(BuildContext context, FeedEntryState state) {
     return FeedCard(
       animation: animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
+              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
@@ -68,22 +71,42 @@ class FeedMeasureCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedMeasureState state) {
+    FeedMeasureParams params = state.params;
+    String sliderTitle;
+    if (params.time != null) {
+      Duration time = Duration(seconds: params.time);
+      sliderTitle = '${Duration(seconds: params.time).inDays} days';
+      if (time.inMinutes == 0) {
+        sliderTitle = '${Duration(seconds: params.time).inSeconds} s';
+      } else if (time.inHours == 0) {
+        sliderTitle = '${Duration(seconds: params.time).inMinutes} min';
+      } else if (time.inDays == 0) {
+        sliderTitle = '${Duration(seconds: params.time).inHours} hours';
+      } else if (time.inDays < 4) {
+        sliderTitle =
+            '${Duration(seconds: params.time).inDays} days and ${Duration(seconds: params.time).inHours % 24} hours';
+      }
+    }
     return FeedCard(
       animation: animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_measure.svg', 'Measure', state.synced),
+              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState),
           MediaList(
             [state.current],
+            showSyncStatus: !state.remoteState,
             onMediaTapped: (media) {
               if (state.previous != null) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
                     MainNavigateToFullscreenMedia(
                         state.previous.thumbnailPath, state.previous.filePath,
                         overlayPath: state.current.filePath,
-                        heroPath: state.current.filePath));
+                        heroPath: state.current.filePath,
+                        sliderTitle: sliderTitle));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
                     MainNavigateToFullscreenMedia(

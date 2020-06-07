@@ -94,69 +94,72 @@ class DeviceDaemonBloc
   }
 
   void _updateDeviceStatus(Device device) async {
-    if (_deviceWorker[device.id] == true) {
-      return;
-    }
-    _deviceWorker[device.id] = true;
-
-    var ddb = RelDB.get().devicesDAO;
-
     try {
-      String identifier = await DeviceAPI.fetchStringParam(
-          device.ip, 'BROKER_CLIENTID',
-          nRetries: 1);
-      if (identifier == device.identifier) {
-        print('Device ${device.name} (${device.identifier}) found.');
-        if (device.isSetup == false) {
-          await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null);
-        }
-        await ddb.updateDevice(
-            DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
-        add(DeviceDaemonBlocEventDeviceReachable(device, true));
-        await _updateDeviceTime(device);
+      if (_deviceWorker[device.id] == true) {
+        return;
       }
-    } catch (e) {
-      print(
-          'Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
-      RelDB.get().devicesDAO.updateDevice(
-          DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
-      add(DeviceDaemonBlocEventDeviceReachable(device, false));
-      String ip;
-      await new Future.delayed(const Duration(seconds: 2));
-      ip = await DeviceAPI.resolveLocalName(device.mdns);
-      if (ip != null && ip != "") {
-        try {
-          String identifier =
-              await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
-          if (identifier == device.identifier) {
-            print(
-                'Device ${device.name} (${device.identifier}) found with mdns lookup.');
-            if (device.isSetup == false) {
-              await DeviceAPI.fetchAllParams(ip, device.id, (_) => null);
-            }
-            await ddb.updateDevice(DevicesCompanion(
-                id: Value(device.id),
-                isReachable: Value(true),
-                ip: Value(ip),
-                synced: Value(ip == device.ip)));
-            add(DeviceDaemonBlocEventDeviceReachable(device, true));
+      _deviceWorker[device.id] = true;
+
+      var ddb = RelDB.get().devicesDAO;
+
+      try {
+        String identifier = await DeviceAPI.fetchStringParam(
+            device.ip, 'BROKER_CLIENTID',
+            nRetries: 1);
+        if (identifier == device.identifier) {
+          print('Device ${device.name} (${device.identifier}) found.');
+          if (device.isSetup == false) {
+            await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null);
           }
-        } catch (e) {
+          await ddb.updateDevice(
+              DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
+          add(DeviceDaemonBlocEventDeviceReachable(device, true));
+          await _updateDeviceTime(device);
+        }
+      } catch (e) {
+        print(
+            'Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
+        await RelDB.get().devicesDAO.updateDevice(
+            DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+        add(DeviceDaemonBlocEventDeviceReachable(device, false));
+        String ip;
+        await new Future.delayed(const Duration(seconds: 2));
+        ip = await DeviceAPI.resolveLocalName(device.mdns);
+        if (ip != null && ip != "") {
+          try {
+            String identifier =
+                await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
+            if (identifier == device.identifier) {
+              print(
+                  'Device ${device.name} (${device.identifier}) found with mdns lookup.');
+              if (device.isSetup == false) {
+                await DeviceAPI.fetchAllParams(ip, device.id, (_) => null);
+              }
+              await ddb.updateDevice(DevicesCompanion(
+                  id: Value(device.id),
+                  isReachable: Value(true),
+                  ip: Value(ip),
+                  synced: Value(ip == device.ip)));
+              add(DeviceDaemonBlocEventDeviceReachable(device, true));
+            }
+          } catch (e) {
+            print(
+                'Device ${device.name} (${device.identifier}) not found, aborting.');
+            await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+                id: Value(device.id), isReachable: Value(false)));
+            add(DeviceDaemonBlocEventDeviceReachable(device, false));
+          }
+        } else {
           print(
               'Device ${device.name} (${device.identifier}) not found, aborting.');
-          RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
+          await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
               id: Value(device.id), isReachable: Value(false)));
           add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
-      } else {
-        print(
-            'Device ${device.name} (${device.identifier}) not found, aborting.');
-        RelDB.get().devicesDAO.updateDevice(
-            DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
-        add(DeviceDaemonBlocEventDeviceReachable(device, false));
       }
+    } finally {
+      _deviceWorker[device.id] = false;
     }
-    _deviceWorker[device.id] = false;
   }
 
   void _deviceListChanged(List<Device> devices) {

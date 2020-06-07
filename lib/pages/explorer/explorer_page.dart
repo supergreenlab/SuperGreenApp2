@@ -61,7 +61,8 @@ class ExplorerPage extends StatelessWidget {
       builder: (_, BoxConstraints constraints) {
         return InkWell(
           onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(plant.id));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToPublicPlant(plant.id));
           },
           child: Stack(
             children: <Widget>[
@@ -73,13 +74,17 @@ class ExplorerPage extends StatelessWidget {
                     fit: BoxFit.cover),
               ),
               Center(
-                  child: Text(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
                 '${plant.name}',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              )),
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+                  )),
             ],
           ),
         );

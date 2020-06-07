@@ -81,6 +81,12 @@ class AppDB {
     setAppData(appData);
   }
 
+  void setSynceOverGSM(bool syncOverGSM) {
+    AppData appData = getAppData();
+    appData.syncOverGSM = syncOverGSM;
+    setAppData(appData);
+  }
+
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
   }

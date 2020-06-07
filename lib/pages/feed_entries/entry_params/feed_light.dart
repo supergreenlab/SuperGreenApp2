@@ -26,7 +26,7 @@ class FeedLightParams extends FeedEntryParams {
 
   FeedLightParams(this.values, this.initialValues);
 
-  static FeedLightParams fromJSON(String json) {
+  factory FeedLightParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedLightParams(map['values'].map<int>((v) => v as int).toList(),
         map['initialValues'].map<int>((v) => v as int).toList());

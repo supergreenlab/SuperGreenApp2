@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -15,11 +16,17 @@ class SettingsAuthPage extends StatefulWidget {
 }
 
 class _SettingsAuthPageState extends State<SettingsAuthPage> {
+  bool _syncOverGSM = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<SettingsAuthBloc, SettingsAuthBlocState>(
       listener: (BuildContext context, SettingsAuthBlocState state) {
-        if (state is SettingsAuthBlocStateDone) {
+        if (state is SettingsAuthBlocStateLoaded) {
+          setState(() {
+            _syncOverGSM = state.syncOverGSM;
+          });
+        } else if (state is SettingsAuthBlocStateDone) {
           Timer(Duration(seconds: 2), () {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigatorActionPop());
@@ -94,6 +101,14 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                     .add(SettingsAuthBlocEventLogout());
               },
             ),
+            _renderOptionCheckbx(context, 'Sync over mobile data too',
+                (bool newValue) {
+              setState(() {
+                _syncOverGSM = newValue;
+                BlocProvider.of<SettingsAuthBloc>(context)
+                    .add(SettingsAuthBlocEventSetSyncedOverGSM(_syncOverGSM));
+              });
+            }, _syncOverGSM == true),
           ])),
         ]);
   }
@@ -153,6 +168,30 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
             )
           ],
         )),
+      ],
+    );
+  }
+
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Checkbox(
+          onChanged: onChanged,
+          value: value,
+        ),
+        InkWell(
+          onTap: () {
+            onChanged(!value);
+          },
+          child: MarkdownBody(
+            fitContent: true,
+            data: text,
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 14)),
+          ),
+        ),
       ],
     );
   }

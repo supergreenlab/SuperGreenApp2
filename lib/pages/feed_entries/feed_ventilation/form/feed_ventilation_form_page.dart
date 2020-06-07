@@ -130,7 +130,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 fontSize: 35,
                 changed: changed,
                 valid: changed && _reachable,
-                hideBackButton: (_reachable == false ||
+                hideBackButton: ((_reachable == false && changed) ||
                     state is FeedVentilationFormBlocStateLoading),
                 onOK: () {
                   BlocProvider.of<FeedVentilationFormBloc>(context).add(
@@ -139,7 +139,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 },
                 body: WillPopScope(
                   onWillPop: () async {
-                    if (_reachable == false) {
+                    if (_reachable == false && changed) {
                       return false;
                     }
                     if (state is FeedVentilationFormBlocStateNoDevice) {
