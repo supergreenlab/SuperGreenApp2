@@ -141,7 +141,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                             hintText: 'ex: 6.5'),
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                                         controller: phController,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 20),
@@ -164,7 +164,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                             hintText: 'ex: 1200'),
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                                         controller: ecController,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 20),
