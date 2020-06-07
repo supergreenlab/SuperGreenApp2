@@ -27,7 +27,6 @@ import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/feed_entry_draft.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
@@ -42,8 +41,9 @@ class FeedMediaDraft extends FeedEntryDraftState {
   final int time;
   final List<MediaDraftState> medias;
   final String message;
+  final bool helpRequest;
 
-  FeedMediaDraft(int draftID, this.time, this.medias, this.message)
+  FeedMediaDraft(int draftID, this.time, this.medias, this.message, this.helpRequest)
       : super(draftID);
 
   factory FeedMediaDraft.fromJSON(int draftID, String json) {
@@ -55,6 +55,7 @@ class FeedMediaDraft extends FeedEntryDraftState {
           .map<MediaDraftState>((m) => MediaDraftState.fromMap(m))
           .toList(),
       map['message'],
+      map['helpRequest'],
     );
   }
 
@@ -64,6 +65,7 @@ class FeedMediaDraft extends FeedEntryDraftState {
       'time': time,
       'medias': medias.map<Map<String, dynamic>>((m) => m.toMap()).toList(),
       'message': message,
+      'helpRequest': helpRequest,
     });
   }
 
@@ -72,7 +74,7 @@ class FeedMediaDraft extends FeedEntryDraftState {
 
   @override
   FeedMediaDraft copyWithDraftID(int draftID) {
-    return FeedMediaDraft(draftID, time, medias, message);
+    return FeedMediaDraft(draftID, time, medias, message, helpRequest);
   }
 }
 
@@ -374,6 +376,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         _medias
             .addAll(draft.medias.map((e) => e.toFeedMediaCompanion()).toList());
         _textController.text = draft.message;
+        _helpRequest = draft.helpRequest;
       });
     }
   }
@@ -386,7 +389,8 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
             .map<MediaDraftState>(
                 (e) => MediaDraftState.fromFeedMediaCompanion(e))
             .toList(),
-        _textController.text);
+        _textController.text,
+        _helpRequest);
     BlocProvider.of<FeedMediaFormBloc>(context)
         .add(FeedMediaFormBlocEventSaveDraft(draft));
   }

@@ -137,28 +137,32 @@ class RelDB extends _$RelDB {
           List<FeedEntry> measures =
               await feedsDAO.getEntriesWithType('FE_MEASURE');
           for (FeedEntry measure in measures) {
-            FeedMeasureParams params =
-                FeedMeasureParams.fromJSON(measure.params);
-            if (params.previous == null) {
-              continue;
+            try {
+              FeedMeasureParams params =
+                  FeedMeasureParams.fromJSON(measure.params);
+              if (params.previous == null) {
+                continue;
+              }
+              FeedMedia previous;
+              if (params.previous is String) {
+                previous =
+                    await feedsDAO.getFeedMediaForServerID(params.previous);
+              } else {
+                previous = await feedsDAO.getFeedMedia(params.previous);
+              }
+              FeedEntry previousEntry =
+                  await feedsDAO.getFeedEntry(previous.feedEntry);
+              await feedsDAO.updateFeedEntry(FeedEntriesCompanion(
+                id: Value(measure.id),
+                synced: Value(false),
+                params: Value(FeedMeasureParams(
+                        measure.date.difference(previousEntry.date).inSeconds,
+                        params.previous)
+                    .toJSON()),
+              ));
+            } catch (e) {
+              print(e);
             }
-            FeedMedia previous;
-            if (params.previous is String) {
-              previous =
-                  await feedsDAO.getFeedMediaForServerID(params.previous);
-            } else {
-              previous = await feedsDAO.getFeedMedia(params.previous);
-            }
-            FeedEntry previousEntry =
-                await feedsDAO.getFeedEntry(previous.feedEntry);
-            await feedsDAO.updateFeedEntry(FeedEntriesCompanion(
-              id: Value(measure.id),
-              synced: Value(false),
-              params: Value(FeedMeasureParams(
-                      measure.date.difference(previousEntry.date).inSeconds,
-                      params.previous)
-                  .toJSON()),
-            ));
           }
         }
       });
