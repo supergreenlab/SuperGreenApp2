@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -141,7 +143,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                             hintText: 'ex: 6.5'),
-                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                                         controller: phController,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 20),
@@ -164,7 +165,6 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                             hintText: 'ex: 1200'),
-                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
                                         controller: ecController,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 20),
