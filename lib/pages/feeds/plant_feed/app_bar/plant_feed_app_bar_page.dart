@@ -30,6 +30,9 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
       listener: (BuildContext context, PlantFeedAppBarBlocState state) {
         if (state is PlantFeedAppBarBlocStateLoaded) {
           Timer(Duration(milliseconds: 500), () {
+            if (_scrollController.hasClients == false) {
+              return;
+            }
             _scrollController.animateTo(200,
                 duration: Duration(seconds: 15), curve: Curves.linear);
           });

@@ -350,23 +350,16 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     }
   }
 
-  // TODO remove this function, migration purpose
   Future _syncOutOrphanedFeedMedias() async {
     print("Sending orphaned feedMedias");
-    List<FeedMedia> feedMedias = await RelDB.get()
-        .feedsDAO
-        .getFeedMediasWithType('FE_MEASURE',
-            feedEntrySynced: true, synced: false);
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getOrphanedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      // try {
       FeedMedia feedMedia = feedMedias[i];
       await FeedsAPI().syncFeedMedia(feedMedia);
-      // } catch (e) {
-      //   print(e);
-      // }
     }
   }
 
@@ -378,12 +371,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      // try {
       FeedMedia feedMedia = feedMedias[i];
       await FeedsAPI().syncFeedMedia(feedMedia);
-      // } catch (e) {
-      //   print(e);
-      // }
     }
   }
 

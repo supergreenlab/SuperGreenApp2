@@ -326,7 +326,9 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future deleteFeedEntryDraft(int feedEntryDraftID) {
-    return (delete(feedEntryDrafts)..where((fed) => fed.id.equals(feedEntryDraftID))).go();
+    return (delete(feedEntryDrafts)
+          ..where((fed) => fed.id.equals(feedEntryDraftID)))
+        .go();
   }
 
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {
@@ -356,6 +358,19 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
       where &= feedMedias.synced.equals(synced);
     }
     query.where(where);
+    query.orderBy(
+        [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
+    return (await query.get())
+        .map<FeedMedia>((e) => e.readTable(feedMedias))
+        .toList();
+  }
+
+  Future<List<FeedMedia>> getOrphanedFeedMedias() async {
+    JoinedSelectStatement<FeedMedias, FeedMedia> query = select(feedMedias)
+        .join([
+      leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
+    ]);
+    query.where(feedEntries.synced.equals(true) & feedMedias.synced.equals(false));
     query.orderBy(
         [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
     return (await query.get())
