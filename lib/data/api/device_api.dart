@@ -27,6 +27,8 @@ import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class DeviceAPI {
+  static Client client;
+
   static String mdnsDomain(String name) {
     return name
         .toLowerCase()

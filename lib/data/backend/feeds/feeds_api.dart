@@ -41,6 +41,9 @@ class FeedsAPI {
 
   String get serverHost => _serverHost;
 
+  final Client apiClient = Client();
+  final Client storageClient = Client();
+
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
@@ -66,7 +69,7 @@ class FeedsAPI {
   }
 
   Future login(String nickname, String password) async {
-    Response resp = await post('$_serverHost/login',
+    Response resp = await apiClient.post('$_serverHost/login',
         headers: {'Content-Type': 'application/json'},
         body: JsonEncoder().convert({
           'handle': nickname,
@@ -79,7 +82,7 @@ class FeedsAPI {
   }
 
   Future createUser(String nickname, String password) async {
-    Response resp = await post('$_serverHost/user',
+    Response resp = await apiClient.post('$_serverHost/user',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -173,7 +176,7 @@ class FeedsAPI {
   Future syncFeedMedia(FeedMedia feedMedia) async {
     Map<String, dynamic> obj = await FeedMedias.toMap(feedMedia);
 
-    Response resp = await post('$_serverHost/feedMediaUploadURL',
+    Response resp = await apiClient.post('$_serverHost/feedMediaUploadURL',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -190,7 +193,7 @@ class FeedsAPI {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
       print(
           'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
-      Response resp = await put('$_storageServerHost${uploadUrls['filePath']}',
+      Response resp = await storageClient.put('$_storageServerHost${uploadUrls['filePath']}',
           body: file.readAsBytesSync(),
           headers: {'Host': _storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
@@ -203,7 +206,7 @@ class FeedsAPI {
           File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
       print(
           'Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
-      Response resp = await put(
+      Response resp = await storageClient.put(
           '$_storageServerHost${uploadUrls['thumbnailPath']}',
           body: file.readAsBytesSync(),
           headers: {'Host': _storageServerHostHeader});
@@ -294,7 +297,7 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicPlants(int n, int offset) async {
-    Response resp = await get('$_serverHost/public/plants?limit=$n&offset=$offset', headers: {
+    Response resp = await apiClient.get('$_serverHost/public/plants?limit=$n&offset=$offset', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -306,7 +309,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> publicPlant(String id) async {
-    Response resp = await get('$_serverHost/public/plant/$id', headers: {
+    Response resp = await apiClient.get('$_serverHost/public/plant/$id', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -317,7 +320,7 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicFeedEntries(String id, int n, int offset) async {
-    Response resp = await get(
+    Response resp = await apiClient.get(
         '$_serverHost/public/plant/$id/feedEntries?limit=$n&offset=$offset',
         headers: {
           'Content-Type': 'application/json',
@@ -332,7 +335,7 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
     Response resp =
-        await get('$_serverHost/public/feedEntry/$id/feedMedias', headers: {
+        await apiClient.get('$_serverHost/public/feedEntry/$id/feedMedias', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -344,7 +347,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> publicFeedMedia(String id) async {
-    Response resp = await get('$_serverHost/public/feedMedia/$id', headers: {
+    Response resp = await apiClient.get('$_serverHost/public/feedMedia/$id', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -355,7 +358,7 @@ class FeedsAPI {
   }
 
   Future download(String from, String to) async {
-    Response fileResp = await get('$_storageServerHost$from',
+    Response fileResp = await storageClient.get('$_storageServerHost$from',
         headers: {'Host': _storageServerHostHeader});
     await File(to).writeAsBytes(fileResp.bodyBytes);
   }
@@ -365,7 +368,7 @@ class FeedsAPI {
   }
 
   Future setSynced(String type, String id) async {
-    Response resp = await post('$_serverHost/$type/$id/sync', headers: {
+    Response resp = await apiClient.post('$_serverHost/$type/$id/sync', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -375,7 +378,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> _unsynced(String type) async {
-    Response resp = await get('$_serverHost/sync$type', headers: {
+    Response resp = await apiClient.get('$_serverHost/sync$type', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -386,7 +389,7 @@ class FeedsAPI {
   }
 
   Future<String> _postPut(String path, Map<String, dynamic> obj) async {
-    Function postPut = obj['id'] != null ? put : post;
+    Function postPut = obj['id'] != null ? apiClient.put : apiClient.post;
     Response resp = await postPut('$_serverHost$path',
         headers: {
           'Content-Type': 'application/json',

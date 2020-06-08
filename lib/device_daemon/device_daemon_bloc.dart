@@ -94,14 +94,12 @@ class DeviceDaemonBloc
   }
 
   void _updateDeviceStatus(Device device) async {
+    if (_deviceWorker[device.id] == true) {
+      return;
+    }
+    _deviceWorker[device.id] = true;
     try {
-      if (_deviceWorker[device.id] == true) {
-        return;
-      }
-      _deviceWorker[device.id] = true;
-
       var ddb = RelDB.get().devicesDAO;
-
       try {
         String identifier = await DeviceAPI.fetchStringParam(
             device.ip, 'BROKER_CLIENTID',
