@@ -27,7 +27,6 @@ import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class DeviceAPI {
-  
   static String mdnsDomain(String name) {
     return name
         .toLowerCase()
@@ -79,28 +78,34 @@ class DeviceAPI {
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
     }
-    for (int i = 0; i < nRetries; ++i) {
-      if (i != 0 && wait > 0) {
-        await Future.delayed(Duration(seconds: wait));
-      }
-      try {
-        final req = await client.getUrl(
-            Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}'));
-        final HttpClientResponse resp = await req.close();
-        if (resp.contentLength == 0) {
-          return '';
+    try {
+      for (int i = 0; i < nRetries; ++i) {
+        if (i != 0 && wait > 0) {
+          await Future.delayed(Duration(seconds: wait));
         }
-        final completer = Completer<String>();
-        resp.transform(utf8.decoder).listen((contents) {
-          completer.complete(contents);
-        }, onError: completer.completeError);
-        return completer.future;
-      } catch (e) {
-        print(e);
-        if (i == nRetries - 1) {
-          throw e;
+        try {
+          final req = await client.getUrl(
+              Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}'));
+          final HttpClientResponse resp = await req.close();
+          if (resp.contentLength == 0) {
+            client.close();
+            return '';
+          }
+          final completer = Completer<String>();
+          resp.transform(utf8.decoder).listen((contents) {
+            completer.complete(contents);
+          }, onError: completer.completeError);
+          client.close();
+          return completer.future;
+        } catch (e) {
+          print(e);
+          if (i == nRetries - 1) {
+            throw e;
+          }
         }
       }
+    } finally {
+      client.close();
     }
     return null;
   }
@@ -111,25 +116,30 @@ class DeviceAPI {
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
     }
-    for (int i = 0; i < nRetries; ++i) {
-      if (i != 0 && wait > 0) {
-        await Future.delayed(Duration(seconds: wait));
-      }
-      try {
-        final req = await client.getUrl(
-            Uri.parse('http://$controllerIP/i?k=${paramName.toUpperCase()}'));
-        final resp = await req.close();
-        final completer = Completer<int>();
-        resp.transform(utf8.decoder).listen((contents) {
-          completer.complete(int.parse(contents));
-        }, onError: completer.completeError);
-        return completer.future;
-      } catch (e) {
-        print(e);
-        if (i == nRetries - 1) {
-          throw e;
+    try {
+      for (int i = 0; i < nRetries; ++i) {
+        if (i != 0 && wait > 0) {
+          await Future.delayed(Duration(seconds: wait));
+        }
+        try {
+          final req = await client.getUrl(
+              Uri.parse('http://$controllerIP/i?k=${paramName.toUpperCase()}'));
+          final resp = await req.close();
+          final completer = Completer<int>();
+          resp.transform(utf8.decoder).listen((contents) {
+            completer.complete(int.parse(contents));
+          }, onError: completer.completeError);
+          client.close();
+          return completer.future;
+        } catch (e) {
+          print(e);
+          if (i == nRetries - 1) {
+            throw e;
+          }
         }
       }
+    } finally {
+      client.close();
     }
     return null;
   }
@@ -141,21 +151,25 @@ class DeviceAPI {
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
     }
-    for (int i = 0; i < nRetries; ++i) {
-      if (i != 0 && wait > 0) {
-        await Future.delayed(Duration(seconds: wait));
-      }
-      try {
-        final req = await client.postUrl(Uri.parse(
-            'http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value'));
-        await req.close();
-        break;
-      } catch (e) {
-        print(e);
-        if (i == nRetries - 1) {
-          throw e;
+    try {
+      for (int i = 0; i < nRetries; ++i) {
+        if (i != 0 && wait > 0) {
+          await Future.delayed(Duration(seconds: wait));
+        }
+        try {
+          final req = await client.postUrl(Uri.parse(
+              'http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value'));
+          await req.close();
+          break;
+        } catch (e) {
+          print(e);
+          if (i == nRetries - 1) {
+            throw e;
+          }
         }
       }
+    } finally {
+      client.close();
     }
     return await fetchStringParam(controllerIP, paramName);
   }
@@ -167,21 +181,25 @@ class DeviceAPI {
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
     }
-    for (int i = 0; i < nRetries; ++i) {
-      if (i != 0 && wait > 0) {
-        await Future.delayed(Duration(seconds: wait));
-      }
-      try {
-        final req = await client.postUrl(Uri.parse(
-            'http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value'));
-        await req.close();
-        break;
-      } catch (e) {
-        print(e);
-        if (i == nRetries - 1) {
-          throw e;
+    try {
+      for (int i = 0; i < nRetries; ++i) {
+        if (i != 0 && wait > 0) {
+          await Future.delayed(Duration(seconds: wait));
+        }
+        try {
+          final req = await client.postUrl(Uri.parse(
+              'http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value'));
+          await req.close();
+          break;
+        } catch (e) {
+          print(e);
+          if (i == nRetries - 1) {
+            throw e;
+          }
         }
       }
+    } finally {
+      client.close();
     }
     return fetchIntParam(controllerIP, paramName);
   }
