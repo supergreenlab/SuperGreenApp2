@@ -80,9 +80,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                 state is DeviceWifiBlocStateNotFound);
             Widget body;
             if (state is DeviceWifiBlocStateLoading) {
-              body = FullscreenLoading(
-                title: 'Setting parameters..'
-              );
+              body = FullscreenLoading(title: 'Setting parameters..');
             } else if (state is DeviceWifiBlocStateNotFound) {
               body = _renderNotfound();
             } else if (state is DeviceWifiBlocStateSearching) {
@@ -144,8 +142,13 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             GreenButton(
               title: 'RETYPE CREDENTIALS',
               onPressed: () {
-                BlocProvider.of<DeviceWifiBloc>(context)
-                    .add(DeviceWifiBlocEventRetypeCredentials());
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToNewDeviceEvent(true,
+                        futureFn: (future) async {
+                  await future;
+                  BlocProvider.of<DeviceWifiBloc>(context)
+                      .add(DeviceWifiBlocEventRetypeCredentials());
+                }));
               },
             )
           ],

@@ -51,13 +51,21 @@ class NewDeviceBlocStateConnectingToSSID extends NewDeviceBlocState {
 }
 
 class NewDeviceBlocStateConnectionToSSIDFailed extends NewDeviceBlocState {
+  final bool popOnComplete;
+
+  NewDeviceBlocStateConnectionToSSIDFailed(this.popOnComplete);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [popOnComplete];
 }
 
 class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
+  final bool popOnComplete;
+
+  NewDeviceBlocStateConnectionToSSIDSuccess(this.popOnComplete);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [popOnComplete];
 }
 
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
@@ -99,10 +107,10 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
       if (await WiFiForIoTPlugin.connect(DefaultSSID,
               password: DefaultPass, security: NetworkSecurity.WPA, joinOnce: false) ==
           false) {
-        yield NewDeviceBlocStateConnectionToSSIDFailed();
+        yield NewDeviceBlocStateConnectionToSSIDFailed(args.popOnComplete);
         return;
       }
     }
-    yield NewDeviceBlocStateConnectionToSSIDSuccess();
+    yield NewDeviceBlocStateConnectionToSSIDSuccess(args.popOnComplete);
   }
 }

@@ -102,8 +102,13 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     if (event is DeviceWifiBlocEventSetup) {
       yield DeviceWifiBlocStateLoading();
       var ddb = RelDB.get().devicesDAO;
-      Param ssid = await ddb.getParam(args.device.id, 'WIFI_SSID');
-      await DeviceHelper.updateStringParam(args.device, ssid, event.ssid);
+      try {
+        Param ssid = await ddb.getParam(args.device.id, 'WIFI_SSID');
+        await DeviceHelper.updateStringParam(args.device, ssid, event.ssid);
+      } catch (e) {
+        yield DeviceWifiBlocState();
+        return;
+      }
       try {
         Param pass = await ddb.getParam(args.device.id, 'WIFI_PASSWORD');
         await DeviceHelper.updateStringParam(args.device, pass, event.pass,

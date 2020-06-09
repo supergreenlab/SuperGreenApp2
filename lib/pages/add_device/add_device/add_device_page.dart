@@ -46,7 +46,7 @@ class AddDevicePage extends StatelessWidget {
                     'Choose this option if the controller is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
                     'CONNECT CONTROLLER', () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToNewDeviceEvent(futureFn: (future) async {
+                      MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
                     Device device = await future;
                     if (device != null) {
                       BlocProvider.of<MainNavigatorBloc>(context)

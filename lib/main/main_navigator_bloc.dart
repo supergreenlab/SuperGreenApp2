@@ -96,10 +96,12 @@ class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
-  MainNavigateToNewDeviceEvent({futureFn}) : super(futureFn: futureFn);
+  final bool popOnComplete;
+
+  MainNavigateToNewDeviceEvent(this.popOnComplete, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [popOnComplete];
 }
 
 class MainNavigateToExistingDeviceEvent extends MainNavigatorEvent {

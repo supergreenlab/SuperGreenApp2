@@ -54,7 +54,12 @@ class NewDevicePage extends StatelessWidget {
       bloc: BlocProvider.of<NewDeviceBloc>(context),
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
-          _startSetup(context);
+          if (state.popOnComplete) {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop());
+          } else {
+            _startSetup(context);
+          }
         }
       },
       child: BlocBuilder<NewDeviceBloc, NewDeviceBlocState>(
@@ -64,7 +69,7 @@ class NewDevicePage extends StatelessWidget {
             if (state is NewDeviceBlocStateConnectingToSSID) {
               body = _renderLoading();
             } else if (state is NewDeviceBlocStateConnectionToSSIDFailed) {
-              body = _renderFailed(context);
+              body = _renderFailed(context, state);
             } else {
               body = _renderLoading();
             }
@@ -99,7 +104,7 @@ class NewDevicePage extends StatelessWidget {
     );
   }
 
-  Widget _renderFailed(BuildContext context) {
+  Widget _renderFailed(BuildContext context, NewDeviceBlocStateConnectionToSSIDFailed state) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -143,7 +148,12 @@ class NewDevicePage extends StatelessWidget {
               child: GreenButton(
                 title: 'DONE',
                 onPressed: () {
-                  _startSetup(context);
+                  if (state.popOnComplete) {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigatorActionPop());
+                  } else {
+                    _startSetup(context);
+                  }
                 },
               ),
             ),
