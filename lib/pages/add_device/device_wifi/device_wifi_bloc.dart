@@ -60,8 +60,12 @@ class DeviceWifiBlocEventRetypeCredentials extends DeviceWifiBlocEvent {
 }
 
 class DeviceWifiBlocState extends Equatable {
+  final bool error;
+
+  DeviceWifiBlocState({this.error=false});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [error];
 }
 
 class DeviceWifiBlocStateLoading extends DeviceWifiBlocState {
@@ -106,7 +110,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
         Param ssid = await ddb.getParam(args.device.id, 'WIFI_SSID');
         await DeviceHelper.updateStringParam(args.device, ssid, event.ssid);
       } catch (e) {
-        yield DeviceWifiBlocState();
+        yield DeviceWifiBlocState(error: true);
         return;
       }
       try {

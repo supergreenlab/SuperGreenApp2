@@ -27,6 +27,7 @@ class SGLTextField extends StatelessWidget {
   final Function(String) onFieldSubmitted;
   final FocusNode focusNode;
   final bool obscureText;
+  final String error;
 
   SGLTextField(
       {this.hintText,
@@ -36,11 +37,12 @@ class SGLTextField extends StatelessWidget {
       this.textInputAction = TextInputAction.next,
       this.onFieldSubmitted,
       this.focusNode,
-      this.obscureText=false});
+      this.obscureText = false,
+      this.error});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    Widget field = Container(
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: Colors.black26),
           borderRadius: BorderRadius.circular(3)),
@@ -63,5 +65,18 @@ class SGLTextField extends StatelessWidget {
         ),
       ),
     );
+    if (error != null) {
+      field = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          field,
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(error, style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      );
+    }
+    return field;
   }
 }

@@ -86,7 +86,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             } else if (state is DeviceWifiBlocStateSearching) {
               body = _renderSearching();
             } else {
-              body = _renderForm(context);
+              body = _renderForm(context, state);
             }
             return Scaffold(
                 appBar: SGLAppBar(
@@ -157,7 +157,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
     );
   }
 
-  Widget _renderForm(BuildContext context) {
+  Widget _renderForm(BuildContext context, DeviceWifiBlocState state) {
     return Column(
       children: <Widget>[
         Expanded(
@@ -173,7 +173,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                   onFieldSubmitted: (term) {
                 _ssidFocusNode.unfocus();
                 FocusScope.of(context).requestFocus(_passFocusNode);
-              }, focusNode: _ssidFocusNode),
+              }, focusNode: _ssidFocusNode,
+              error: state.error == true ? 'Make sure you are connected to the emoji wifi!' : ''),
               _renderInput(context, 'Enter your home wifi password', '...',
                   _passController, onFieldSubmitted: (term) {
                 _handleInput(context);
@@ -205,7 +206,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
 
   Widget _renderInput(BuildContext context, String title, String hint,
       TextEditingController controller,
-      {Function(String) onFieldSubmitted, FocusNode focusNode}) {
+      {Function(String) onFieldSubmitted, FocusNode focusNode, String error}) {
     return Column(children: [
       SectionTitle(
         title: title,
@@ -224,6 +225,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
               controller: controller,
               textInputAction: TextInputAction.next,
               onFieldSubmitted: onFieldSubmitted,
+              error: error,
               onChanged: (_) {
                 setState(() {});
               },
