@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
@@ -602,6 +603,87 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state) {
     String name = state.plant.name;
 
+    Widget nameText;
+    if (_reachable && _showIP) {
+      nameText = Column(
+        children: <Widget>[
+          Text(
+            name,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.normal),
+          ),
+          Text(_deviceIP,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey,
+              ))
+        ],
+      );
+    } else {
+      nameText = Text(
+        name,
+        style: TextStyle(
+            color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.w200),
+      );
+    }
+    if (state.box.device != null) {
+      nameText = Row(
+        children: <Widget>[
+          nameText,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Icon(Icons.offline_bolt,
+                color: _reachable ? Colors.green : Colors.grey, size: 20),
+          ),
+        ],
+      );
+    }
+
+    List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
+      (BuildContext context, PlantFeedBlocStateLoaded state) => Container(),
+      _renderEnvironmentTab,
+    ];
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 64.0, top: 12.0),
+            child: InkWell(
+              onTap: () {
+                if (state.box.device == null) {
+                  return;
+                }
+                setState(() {
+                  _showIP = !_showIP;
+                });
+              },
+              child: nameText,
+            ),
+          ),
+          Expanded(
+                      child: Swiper(
+              itemCount: tabs.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                return tabs[index](context, state);
+              },
+              pagination: SwiperPagination(
+                      builder: new DotSwiperPaginationBuilder(
+                          color: Colors.white, activeColor: Color(0xff3bb30b)),
+                    ),
+              loop: false,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderEnvironmentTab(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
     Widget graphBody;
     if (state.box.device != null) {
       graphBody = _renderGraphs(context, state);
@@ -644,92 +726,19 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       ]);
     }
 
-    /*graphBody = GestureDetector(
-      onPanUpdate: (DragUpdateDetails details) {
-        setState(() {
-          _onEnvironmentControlWidth =
-              max(0, min(50, _onEnvironmentControlWidth - details.delta.dx));
-        });
-      },
-      child: Row(
-        children: <Widget>[
-          Expanded(child: graphBody),
-          AnimatedContainer(
-            width: _onEnvironmentControlWidth,
-            child:
-                Stack(children: [_renderEnvironmentControls(context, state)]),
-            duration: Duration(milliseconds: 200),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 200), child: graphBody),
           ),
-        ],
-      ),
-    );*/
-
-    Widget nameText;
-    if (_reachable && _showIP) {
-      nameText = Column(
-        children: <Widget>[
-          Text(
-            name,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 15.0,
-                fontWeight: FontWeight.normal),
-          ),
-          Text(_deviceIP,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey,
-              ))
-        ],
-      );
-    } else {
-      nameText = Text(
-        name,
-        style: TextStyle(
-            color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.w200),
-      );
-    }
-    if (state.box.device != null) {
-      nameText = Row(
-        children: <Widget>[
-          nameText,
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Icon(Icons.offline_bolt,
-                color: _reachable ? Colors.green : Colors.grey, size: 20),
-          ),
-        ],
-      );
-    }
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 64.0, top: 12.0),
-            child: InkWell(
-              onTap: () {
-                if (state.box.device == null) {
-                  return;
-                }
-                setState(() {
-                  _showIP = !_showIP;
-                });
-              },
-              child: nameText,
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: graphBody),
-            ),
-          ),
-          Container(
-              height: 95, child: _renderEnvironmentControls(context, state)),
-        ],
-      ),
+        ),
+        Container(
+            height: 115, child: _renderEnvironmentControls(context, state)),
+      ],
     );
   }
 
