@@ -170,6 +170,7 @@ class FeedScheduleFormBloc
       boxSettings['schedules'] = schedules;
       await db.plantsDAO.updateBox(BoxesCompanion(
           id: Value(box.id),
+          synced: Value(false),
           settings: Value(JsonEncoder().convert(boxSettings))));
       if (schedule == 'BLOOM') {
         List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
