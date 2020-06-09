@@ -642,7 +642,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     }
 
     List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
-      (BuildContext context, PlantFeedBlocStateLoaded state) => Container(),
+      _renderPlantInfos,
       _renderEnvironmentTab,
     ];
     return SafeArea(
@@ -664,22 +664,27 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             ),
           ),
           Expanded(
-                      child: Swiper(
+            child: Swiper(
               itemCount: tabs.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 return tabs[index](context, state);
               },
               pagination: SwiperPagination(
-                      builder: new DotSwiperPaginationBuilder(
-                          color: Colors.white, activeColor: Color(0xff3bb30b)),
-                    ),
+                builder: new DotSwiperPaginationBuilder(
+                    color: Colors.white, activeColor: Color(0xff3bb30b)),
+              ),
               loop: false,
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _renderPlantInfos(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
+    return Container();
   }
 
   Widget _renderEnvironmentTab(
