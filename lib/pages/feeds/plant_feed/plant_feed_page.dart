@@ -642,8 +642,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     }
 
     List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
-      _renderPlantInfos,
       _renderEnvironmentTab,
+      _renderPlantInfos,
     ];
     return SafeArea(
       child: Column(
@@ -684,7 +684,17 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   Widget _renderPlantInfos(
       BuildContext context, PlantFeedBlocStateLoaded state) {
-    return Container();
+    return Container(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Center(
+            child: Text(
+          'Plant infos\nComing soon!',
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ))
+      ]),
+    );
   }
 
   Widget _renderEnvironmentTab(
