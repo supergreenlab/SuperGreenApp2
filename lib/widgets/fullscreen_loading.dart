@@ -23,8 +23,13 @@ class FullscreenLoading extends StatelessWidget {
   final String title;
   final double percent;
   final Color textColor;
+  final String circleText;
 
-  const FullscreenLoading({this.title='Loading..', this.percent, this.textColor});
+  const FullscreenLoading(
+      {this.title = 'Loading..',
+      this.percent,
+      this.textColor,
+      this.circleText});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,14 @@ class FullscreenLoading extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('${(percent * 100).toInt()}%', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: textColor ?? Color(0xffababab))),
+                  Text(
+                    circleText ?? '${(percent * 100).toInt()}%',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 18,
+                        color: textColor ?? Color(0xffababab)),
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               )),
         ],

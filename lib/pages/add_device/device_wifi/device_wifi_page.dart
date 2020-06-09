@@ -84,7 +84,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             } else if (state is DeviceWifiBlocStateNotFound) {
               body = _renderNotfound();
             } else if (state is DeviceWifiBlocStateSearching) {
-              body = _renderSearching();
+              body = _renderSearching(state);
             } else {
               body = _renderForm(context, state);
             }
@@ -199,9 +199,9 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
     );
   }
 
-  Widget _renderSearching() {
+  Widget _renderSearching(DeviceWifiBlocStateSearching state) {
     return FullscreenLoading(
-        title: 'Searching controller on network\nplease wait..');
+        title: 'Searching controller on network\nplease wait..', percent: state.tries / state.totalTries, circleText: 'Try\n${state.tries}/${state.totalTries}',);
   }
 
   Widget _renderInput(BuildContext context, String title, String hint,

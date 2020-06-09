@@ -62,7 +62,7 @@ class DeviceWifiBlocEventRetypeCredentials extends DeviceWifiBlocEvent {
 class DeviceWifiBlocState extends Equatable {
   final bool error;
 
-  DeviceWifiBlocState({this.error=false});
+  DeviceWifiBlocState({this.error = false});
 
   @override
   List<Object> get props => [error];
@@ -74,8 +74,13 @@ class DeviceWifiBlocStateLoading extends DeviceWifiBlocState {
 }
 
 class DeviceWifiBlocStateSearching extends DeviceWifiBlocState {
+  final int tries;
+  final int totalTries;
+
+  DeviceWifiBlocStateSearching(this.tries, this.totalTries);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [tries, totalTries];
 }
 
 class DeviceWifiBlocStateNotFound extends DeviceWifiBlocState {
@@ -120,6 +125,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
       } catch (e) {
         print(e);
       }
+      await Future.delayed(Duration(seconds: 4));
       yield* _researchDevice();
     } else if (event is DeviceWifiBlocEventRetrySearch) {
       yield* _researchDevice();
@@ -132,13 +138,14 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     var ddb = RelDB.get().devicesDAO;
     Device device = await ddb.getDevice(args.device.id);
 
-    yield DeviceWifiBlocStateSearching();
+    yield DeviceWifiBlocStateSearching(1, 5);
     await RelDB.get().devicesDAO.updateDevice(
         DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
 
     String ip;
-    for (int i = 0; i < 4; ++i) {
-      await new Future.delayed(const Duration(seconds: 2));
+    for (int i = 0; i < 5; ++i) {
+      yield DeviceWifiBlocStateSearching(i + 1, 5);
+      await new Future.delayed(const Duration(seconds: 3));
       ip = await DeviceAPI.resolveLocalName(device.mdns);
       if (ip == "" || ip == null) {
         continue;
@@ -160,6 +167,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
 
     Param wifiStatusParam = await ddb.getParam(device.id, 'WIFI_STATUS');
     await DeviceHelper.refreshIntParam(device, wifiStatusParam);
+    wifiStatusParam = await ddb.getParam(device.id, 'WIFI_STATUS');
 
     if (wifiStatusParam.ivalue != 3) {
       yield DeviceWifiBlocStateNotFound();
