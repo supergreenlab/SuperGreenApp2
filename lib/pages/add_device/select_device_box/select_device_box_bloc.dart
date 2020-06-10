@@ -101,6 +101,7 @@ class SelectDeviceBoxBloc
       yield* _loadAll();
     } else if (event is SelectDeviceBoxBlocEventDelete) {
       // lots of duplicated execution follows.. this needs a proper way to represent a group of Params (ie. ll params for a single LED channel for ex)
+      yield SelectDeviceBoxBlocStateInit();
       final ddb = RelDB.get().devicesDAO;
       final Device device = await ddb.getDevice(args.device.id);
       final boxEnabledParam =
@@ -134,9 +135,9 @@ class SelectDeviceBoxBloc
     List<SelectData> boxes = [];
     for (int i = 0; i < boxModule.arrayLen; ++i) {
       final boxEnabledParam = await ddb.getParam(device.id, 'BOX_${i}_ENABLED');
-      if (boxEnabledParam.ivalue == 1) {
-        boxes.add(SelectData(i, []));
-      }
+      //if (boxEnabledParam.ivalue == 1) {
+        boxes.add(SelectData(i, boxEnabledParam.ivalue == 1, []));
+      //}
     }
     final ledModule = await ddb.getModule(device.id, 'led');
     for (int i = 0; i < ledModule.arrayLen; ++i) {
@@ -155,10 +156,11 @@ class SelectDeviceBoxBloc
 
 class SelectData extends Equatable {
   final int box;
+  final bool enabled;
   final List<int> leds;
 
-  SelectData(this.box, this.leds);
+  SelectData(this.box, this.enabled, this.leds);
 
   @override
-  List<Object> get props => [box, leds];
+  List<Object> get props => [box, enabled, leds];
 }

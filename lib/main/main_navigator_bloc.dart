@@ -80,12 +80,13 @@ class MainNavigateToSelectDeviceBoxEvent extends MainNavigatorEvent {
 
 class MainNavigateToSelectNewDeviceBoxEvent extends MainNavigatorEvent {
   final Device device;
+  final int boxID;
 
-  MainNavigateToSelectNewDeviceBoxEvent(this.device, {futureFn})
+  MainNavigateToSelectNewDeviceBoxEvent(this.device, this.boxID, {futureFn})
       : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [device, boxID];
 }
 
 class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {

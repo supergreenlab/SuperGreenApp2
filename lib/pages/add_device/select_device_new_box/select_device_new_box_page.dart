@@ -47,7 +47,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
       listener: (context, state) {
         if (state is SelectDeviceNewBoxBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: state.box));
+              .add(MainNavigatorActionPop(param: true));
         }
       },
       child: BlocBuilder<SelectDeviceNewBoxBloc, SelectDeviceNewBoxBlocState>(

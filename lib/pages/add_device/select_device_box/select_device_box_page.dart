@@ -99,57 +99,61 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   }
 
   Widget _renderBoxes(SelectDeviceBoxBlocStateLoaded state) {
+    int selectedLeds =
+        state.boxes.map<int>((b) => b.leds.length).reduce((acc, b) => acc + b);
+    bool hasAvailableLeds = selectedLeds < state.nLeds;
     return Expanded(
       child: Container(
         color: Colors.white,
         child: ListView.builder(
           itemBuilder: (BuildContext context, int index) {
-            if (index >= state.boxes.length + 1) {
+            if (index == state.boxes.length) {
               return null;
-            } else if (index == state.boxes.length) {
-              if (state.boxes.length > 0) {
-                int selectedLeds = state.boxes
-                    .map<int>((b) => b.leds.length)
-                    .reduce((acc, b) => acc + b);
-                if (selectedLeds >= state.nLeds) {
-                  return null;
-                }
-              }
-              return ListTile(
-                onTap: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToSelectNewDeviceBoxEvent(state.device,
-                          futureFn: (future) async {
-                    dynamic deviceBox = await future;
-                    if (deviceBox is int) {
-                      BlocProvider.of<SelectDeviceBoxBloc>(context)
-                          .add(SelectDeviceBoxBlocEventSelectBox(deviceBox));
-                    }
-                  }));
-                },
-                title: Text('Configure new box'),
-                leading:
-                    SizedBox(width: 50, height: 50, child: Icon(Icons.add)),
-              );
+            }
+            Widget title;
+            if (state.boxes[index].enabled) {
+              title = Text('Already running',
+                  style: TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.w300));
+            } else {
+              title = Text(
+                  hasAvailableLeds ? 'Available' : 'No more free led channels',
+                  style: TextStyle(
+                      color: Colors.green, fontWeight: FontWeight.w300));
             }
             return ListTile(
               onTap: () {
-                BlocProvider.of<SelectDeviceBoxBloc>(context).add(
-                    SelectDeviceBoxBlocEventSelectBox(state.boxes[index].box));
+                if (state.boxes[index].enabled == false) {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToSelectNewDeviceBoxEvent(state.device, index,
+                          futureFn: (future) async {
+                    dynamic done = await future;
+                    if (done == true) {
+                      BlocProvider.of<SelectDeviceBoxBloc>(context)
+                          .add(SelectDeviceBoxBlocEventSelectBox(index));
+                    }
+                  }));
+                } else {
+                  BlocProvider.of<SelectDeviceBoxBloc>(context).add(
+                      SelectDeviceBoxBlocEventSelectBox(
+                          state.boxes[index].box));
+                }
               },
               onLongPress: () {
                 _deleteBox(state, index);
               },
-              title: Text('Already running', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w300)),
+              title: title,
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SvgPicture.asset('assets/box_setup/icon_box.svg'),
-                  Text('Box #${state.boxes[index].box + 1}', style: TextStyle(fontWeight: FontWeight.w300)),
+                  Text('Box #${state.boxes[index].box + 1}',
+                      style: TextStyle(fontWeight: FontWeight.w300)),
                 ],
               ),
-              subtitle: Text(
-                  state.boxes[index].leds.length > 0 ? 'Led channels: ${state.boxes[index].leds.map((l) => l + 1).join(', ')}' : 'No led channels assigned'),
+              subtitle: Text(state.boxes[index].leds.length > 0
+                  ? 'Led channels: ${state.boxes[index].leds.map((l) => l + 1).join(', ')}'
+                  : 'No led channels assigned'),
             );
           },
         ),
@@ -163,7 +167,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Reset box #$index on controller ${state.device.name}?'),
+            title:
+                Text('Reset box #$index on controller ${state.device.name}?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
