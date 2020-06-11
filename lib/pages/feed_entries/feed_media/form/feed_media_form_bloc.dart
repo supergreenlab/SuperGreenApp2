@@ -22,6 +22,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
@@ -128,7 +129,7 @@ class FeedMediaFormBloc
         yield FeedMediaFormBlocStateDraft(
             FeedMediaDraft.fromJSON(draft.id, draft.params));
       } catch (e) {
-        print(e);
+        console.e(e);
       }
     } else if (event is FeedMediaFormBlocEventDeleteDraft) {
       await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);

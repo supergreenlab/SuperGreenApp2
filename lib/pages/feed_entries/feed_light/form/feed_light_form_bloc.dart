@@ -23,6 +23,7 @@ import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/device_helper.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_light.dart';
@@ -152,7 +153,7 @@ class FeedLightFormBloc
         await DeviceHelper.updateIntParam(
             device, lightParams[event.i], (event.value).toInt());
       } catch (e) {
-        print(e);
+        console.e(e);
       }
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
@@ -189,7 +190,7 @@ class FeedLightFormBloc
           await DeviceHelper.updateIntParam(
               device, lightParams[i], initialValues[i]);
         } catch (e) {
-          print(e);
+          console.e(e);
           return;
         }
       }

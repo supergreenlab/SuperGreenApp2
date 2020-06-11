@@ -23,6 +23,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:multicast_dns/multicast_dns.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -98,7 +99,7 @@ class DeviceAPI {
           client.close();
           return completer.future;
         } catch (e) {
-          print(e);
+          console.e(e);
           if (i == nRetries - 1) {
             throw e;
           }
@@ -132,7 +133,7 @@ class DeviceAPI {
           client.close();
           return completer.future;
         } catch (e) {
-          print(e);
+          console.e(e);
           if (i == nRetries - 1) {
             throw e;
           }
@@ -162,7 +163,7 @@ class DeviceAPI {
           await req.close();
           break;
         } catch (e) {
-          print(e);
+          console.e(e);
           if (i == nRetries - 1) {
             throw e;
           }
@@ -192,7 +193,7 @@ class DeviceAPI {
           await req.close();
           break;
         } catch (e) {
-          print(e);
+          console.e(e);
           if (i == nRetries - 1) {
             throw e;
           }
@@ -255,7 +256,7 @@ class DeviceAPI {
               await db.updateParam(exists.copyWith(ivalue: value));
             }
           } catch (e) {
-            print(e);
+            console.e(e);
             throw e;
           }
         } else {
@@ -273,7 +274,7 @@ class DeviceAPI {
               await db.updateParam(exists.copyWith(svalue: value));
             }
           } catch (e) {
-            print(e);
+            console.e(e);
             throw e;
           }
         }
@@ -285,7 +286,7 @@ class DeviceAPI {
         isSetup: Value(true),
       ));
     } catch (e) {
-      print(e);
+      console.e(e);
       throw e;
     } finally {
       DeviceAPI.fetchingAllParams[deviceID] = false;

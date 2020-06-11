@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class SunglassesBlocEvent extends Equatable {}
@@ -64,7 +65,7 @@ class SunglassesBloc extends Bloc<SunglassesBlocEvent, SunglassesBlocState> {
               DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
         }
       } catch (e) {
-        print(e);
+        console.e(e);
       }
       yield SunglassesBlocStateLoaded(await _isON());
     }

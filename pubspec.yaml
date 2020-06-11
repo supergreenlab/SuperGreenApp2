@@ -17,6 +17,9 @@ environment:
   sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
+  logger:
+  logger_flutter:
+    path: ./vendor/logger_flutter
   visibility_detector:
   devicelocale:
   yaml:

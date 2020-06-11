@@ -120,6 +120,7 @@ import 'package:super_green_app/pages/tip/tip_page.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
+import 'package:logger_flutter/logger_flutter.dart';
 
 final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 
@@ -180,9 +181,9 @@ class _MainPageState extends State<MainPage> {
                 SGLLocalizations.of(context).title,
             onGenerateRoute: (settings) => MaterialPageRoute(
                 settings: settings,
-                builder: (context) => wrapSyncIndicator(
+                builder: (context) => wrapLogger(wrapSyncIndicator(
                     TowelieHelper.wrapWidget(settings, context,
-                        _onGenerateRoute(context, settings)))),
+                        _onGenerateRoute(context, settings))))),
             theme: ThemeData(
               fontFamily: 'Roboto',
             ),
@@ -222,6 +223,10 @@ class _MainPageState extends State<MainPage> {
         );
       },
     );
+  }
+
+  Widget wrapLogger(Widget body) {
+    return LogConsoleOnShake(child: body);
   }
 
   Widget _onGenerateRoute(BuildContext context, RouteSettings settings) {
