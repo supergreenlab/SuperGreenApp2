@@ -119,7 +119,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     } else if (event is DeviceSetupBlocEventAlreadyExists) {
       yield DeviceSetupBlocStateAlreadyExists();
     } else if (event is DeviceSetupBlocEventDone) {
-      yield DeviceSetupBlocStateDone(event.device, event.requiresInititalSetup, event.requiresWifiSetup);
+      yield DeviceSetupBlocStateDone(
+          event.device, event.requiresInititalSetup, event.requiresWifiSetup);
     }
   }
 
@@ -136,7 +137,12 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         return;
       }
 
-      if (await db.getDeviceByIdentifier(deviceIdentifier) != null) {
+      try {
+        if (await db.getDeviceByIdentifier(deviceIdentifier) != null) {
+          add(DeviceSetupBlocEventAlreadyExists());
+          return;
+        }
+      } catch (e) {
         add(DeviceSetupBlocEventAlreadyExists());
         return;
       }
@@ -171,7 +177,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       final d = await db.getDevice(deviceID);
 
       final Param time = await db.getParam(deviceID, 'TIME');
-      await DeviceHelper.updateIntParam(d, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+      await DeviceHelper.updateIntParam(
+          d, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
 
       final Param state = await db.getParam(deviceID, 'STATE');
 
@@ -180,7 +187,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         final Module boxes = await db.getModule(deviceID, 'box');
         for (int i = 0; i < boxes.arrayLen; ++i) {
           final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
-          final Param offHour = await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
+          final Param offHour =
+              await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
 
           await DeviceHelper.updateHourParam(d, onHour, onHour.ivalue);
           await DeviceHelper.updateHourParam(d, offHour, offHour.ivalue);

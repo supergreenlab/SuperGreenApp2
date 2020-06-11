@@ -69,6 +69,18 @@ class SettingsBoxesPage extends StatelessWidget {
                 titleColor: Colors.green,
                 iconColor: Colors.green,
                 hideBackButton: !(state is SettingsBoxesBlocStateLoaded),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToCreateBoxEvent());
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
                 elevation: 10,
               ),
               body: AnimatedSwitcher(

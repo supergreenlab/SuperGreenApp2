@@ -63,6 +63,14 @@ class SettingsPlantsPage extends StatelessWidget {
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsPlantsBlocStateLoaded),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+                    },
+                    child: Icon(Icons.add, color: Colors.white,),
+                  ),
+                ],
                 elevation: 10,
               ),
               body: AnimatedSwitcher(

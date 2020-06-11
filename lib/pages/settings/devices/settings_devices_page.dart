@@ -71,6 +71,18 @@ class SettingsDevicesPage extends StatelessWidget {
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsDevicesBlocStateLoaded),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToAddDeviceEvent());
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
                 elevation: 10,
               ),
               body: AnimatedSwitcher(
