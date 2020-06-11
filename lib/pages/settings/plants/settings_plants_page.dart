@@ -45,6 +45,11 @@ class SettingsPlantsPage extends StatelessWidget {
                     title: Text('${index + 1}. ${state.plants[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('Tap to open, Long press to delete.'),
+                    trailing: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: SvgPicture.asset(
+                            'assets/settings/icon_${state.plants[index].synced ? '' : 'un'}synced.svg')),
                   );
                 },
               );

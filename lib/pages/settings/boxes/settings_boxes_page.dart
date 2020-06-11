@@ -37,22 +37,26 @@ class SettingsBoxesPage extends StatelessWidget {
                 itemCount: state.boxes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    leading: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child:
-                            SvgPicture.asset('assets/settings/icon_lab.svg')),
-                    onLongPress: () {
-                      _deleteBox(context, state.boxes[index]);
-                    },
-                    onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToSettingsBox(state.boxes[index]));
-                    },
-                    title: Text('${index + 1}. ${state.boxes[index].name}',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Tap to open, Long press to delete.'),
-                  );
+                      leading: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child:
+                              SvgPicture.asset('assets/settings/icon_lab.svg')),
+                      onLongPress: () {
+                        _deleteBox(context, state.boxes[index]);
+                      },
+                      onTap: () {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigateToSettingsBox(state.boxes[index]));
+                      },
+                      title: Text('${index + 1}. ${state.boxes[index].name}',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text('Tap to open, Long press to delete.'),
+                      trailing: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: SvgPicture.asset(
+                              'assets/settings/icon_${state.boxes[index].synced ? '' : 'un'}synced.svg')));
                 },
               );
             }
