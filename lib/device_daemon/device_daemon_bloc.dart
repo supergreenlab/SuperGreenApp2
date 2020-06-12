@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/device_helper.dart';
-import 'package:super_green_app/data/logger/Logger.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class DeviceDaemonBlocEvent extends Equatable {}
@@ -68,7 +68,7 @@ class DeviceDaemonBloc
         try {
           _updateDeviceStatus(_devices[i]);
         } catch (e) {
-          Logger.log(e);
+          Logger.log(e.toString());
         }
       }
     });

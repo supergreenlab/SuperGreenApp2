@@ -23,7 +23,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
-import 'package:super_green_app/data/logger/Logger.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
@@ -131,7 +131,7 @@ abstract class FeedCareCommonFormBloc
         yield FeedCareCommonFormBlocStateDraft(
             FeedCareCommonDraft.fromJSON(draft.id, draft.params));
       } catch (e) {
-        Logger.log(e);
+        Logger.log(e.toString());
       }
     } else if (event is FeedCareCommonFormBlocEventDeleteDraft) {
       await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);

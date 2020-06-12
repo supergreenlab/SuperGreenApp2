@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 import 'package:moor/moor.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:super_green_app/data/logger/Logger.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -157,7 +157,7 @@ class TimelapseSetupBloc
           yield TimelapseSetupBlocStateScanning();
           startScan();
         } catch (e) {
-          Logger.log(e);
+          Logger.log(e.toString());
         }
       }
     } else if (event is TimelapseSetupBlocEventSetConfig) {

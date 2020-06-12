@@ -25,7 +25,7 @@ import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
-import 'package:super_green_app/data/logger/Logger.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
@@ -303,7 +303,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicPlants failed';
+      throw 'publicPlants failed: ${resp.body}';
     }
     Map<String, dynamic> results =  JsonDecoder().convert(resp.body);
     return results['plants'];
@@ -315,7 +315,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicPlant failed';
+      throw 'publicPlant failed: ${resp.body}';
     }
     return JsonDecoder().convert(resp.body);
   }
@@ -328,7 +328,7 @@ class FeedsAPI {
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
         });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedEntries failed';
+      throw 'publicFeedEntries failed: ${resp.body}';
     }
     Map<String, dynamic> results = JsonDecoder().convert(resp.body);
     return results['entries'];
@@ -341,7 +341,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedEntries failed';
+      throw 'publicFeedEntries failed: ${resp.body}';
     }
     Map<String, dynamic> results = JsonDecoder().convert(resp.body);
     return results['medias'];
@@ -353,7 +353,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedEntries failed';
+      throw 'publicFeedEntries failed: ${resp.body}';
     }
     return JsonDecoder().convert(resp.body);
   }
@@ -374,7 +374,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'setSynced failed';
+      throw 'setSynced failed: ${resp.body}';
     }
   }
 
@@ -384,7 +384,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw '_unsynced failed';
+      throw '_unsynced failed: ${resp.body}';
     }
     return JsonDecoder().convert(resp.body);
   }
@@ -398,7 +398,7 @@ class FeedsAPI {
         },
         body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {
-      throw '_postPut failed';
+      throw '_postPut failed: ${resp.body}';
     }
     if (resp.headers['x-sgl-token'] != null) {
       AppDB().setJWT(resp.headers['x-sgl-token']);

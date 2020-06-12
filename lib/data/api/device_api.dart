@@ -23,7 +23,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:multicast_dns/multicast_dns.dart';
-import 'package:super_green_app/data/logger/Logger.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -89,14 +89,14 @@ class DeviceAPI {
               Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}'));
           final HttpClientResponse resp = await req.close();
           if (resp.contentLength == 0) {
-            client.close();
+            client.close(force: true);
             return '';
           }
           final completer = Completer<String>();
           resp.transform(utf8.decoder).listen((contents) {
             completer.complete(contents);
           }, onError: completer.completeError);
-          client.close();
+          client.close(force: true);
           return completer.future;
         } catch (e) {
           Logger.log(e);
@@ -106,7 +106,7 @@ class DeviceAPI {
         }
       }
     } finally {
-      client.close();
+      client.close(force: true);
     }
     return null;
   }
@@ -130,7 +130,7 @@ class DeviceAPI {
           resp.transform(utf8.decoder).listen((contents) {
             completer.complete(int.parse(contents));
           }, onError: completer.completeError);
-          client.close();
+          client.close(force: true);
           return completer.future;
         } catch (e) {
           Logger.log(e);
@@ -140,7 +140,7 @@ class DeviceAPI {
         }
       }
     } finally {
-      client.close();
+      client.close(force: true);
     }
     return null;
   }
@@ -170,7 +170,7 @@ class DeviceAPI {
         }
       }
     } finally {
-      client.close();
+      client.close(force: true);
     }
     return await fetchStringParam(controllerIP, paramName);
   }
@@ -200,7 +200,7 @@ class DeviceAPI {
         }
       }
     } finally {
-      client.close();
+      client.close(force: true);
     }
     return fetchIntParam(controllerIP, paramName);
   }

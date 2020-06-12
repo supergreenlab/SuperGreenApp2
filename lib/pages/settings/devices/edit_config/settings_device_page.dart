@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
@@ -136,6 +137,34 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     onChanged: (_) {
                       setState(() {});
                     }),
+              ),
+              SectionTitle(
+                title: 'Edit wifi config',
+                icon: 'assets/box_setup/icon_controller.svg',
+                backgroundColor: Color(0xff0b6ab3),
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GreenButton(
+                      title: 'Wifi config',
+                      onPressed: () {
+                        BlocProvider.of<MainNavigatorBloc>(context).add(
+                            MainNavigateToDeviceWifiEvent(state.device, futureFn: (Future future) async {
+                              dynamic error = await future;
+                              if (error != true) {
+                                await Fluttertoast.showToast(msg: 'Wifi config changed successfully');
+                              } else {
+                                await Fluttertoast.showToast(msg: 'Wifi config change failed');
+                              }
+                            }));
+                      },
+                    ),
+                  ),
+                ],
               ),
               SectionTitle(
                 title: 'Edit controller box slots',

@@ -32,10 +32,12 @@ class Logger {
   }
 
   static void log(String message) {
+    print(message);
     try {
-      logFile
-          .writeAsStringSync('${DateTime.now().toIso8601String()} - $message\n', mode: FileMode.append, flush: true);
-      print(message);
+      logFile.writeAsStringSync(
+          '${DateTime.now().toIso8601String()} - $message\n',
+          mode: FileMode.append,
+          flush: true);
     } catch (e) {
       print(e);
     }

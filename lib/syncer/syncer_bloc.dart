@@ -9,7 +9,7 @@ import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
-import 'package:super_green_app/data/logger/Logger.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -83,7 +83,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         try {
           await _syncOut();
         } catch (e) {
-          Logger.log(e);
+          Logger.log(e.toString());
         }
         _workingOut = false;
       });
@@ -98,7 +98,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         try {
           await _syncIn();
         } catch (e) {
-          Logger.log(e);
+          Logger.log(e.toString());
         }
         _workingIn = false;
       });
