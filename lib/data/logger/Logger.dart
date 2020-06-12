@@ -31,10 +31,10 @@ class Logger {
     }
   }
 
-  static void log(String message) async {
+  static void log(String message) {
     try {
-      await logFile
-          .writeAsString('${DateTime.now().toIso8601String()} - $message\n', mode: FileMode.append, flush: true);
+      logFile
+          .writeAsStringSync('${DateTime.now().toIso8601String()} - $message\n', mode: FileMode.append, flush: true);
       print(message);
     } catch (e) {
       print(e);
