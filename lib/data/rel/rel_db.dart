@@ -73,7 +73,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -162,7 +162,16 @@ class RelDB extends _$RelDB {
                     .toJSON()),
               ));
             } catch (e) {
-              Logger.log(e.toString());
+              Logger.log(e);
+            }
+          }
+        } else if (details.versionBefore == 6) {
+          List<Device> devices = await devicesDAO.getDevices();
+          for (Device device in devices) {
+            if (device.synced == true && device.serverID == null) {
+              await devicesDAO.updateDevice(DevicesCompanion(
+                  id: Value(device.id),
+                  synced: Value(false)));
             }
           }
         }

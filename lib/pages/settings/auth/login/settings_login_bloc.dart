@@ -80,7 +80,7 @@ class SettingsLoginBloc
         await FeedsAPI().login(event.nickname, event.password);
         await FeedsAPI().createUserEnd();
       } catch (e) {
-        Logger.log(e.toString());
+        Logger.log(e);
         yield SettingsLoginBlocStateError();
         await Future.delayed(Duration(seconds: 2));
         yield SettingsLoginBlocStateLoaded(_isAuth);

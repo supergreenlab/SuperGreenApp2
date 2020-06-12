@@ -83,7 +83,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         try {
           await _syncOut();
         } catch (e) {
-          Logger.log(e.toString());
+          Logger.log(e);
         }
         _workingOut = false;
       });
@@ -98,7 +98,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         try {
           await _syncIn();
         } catch (e) {
-          Logger.log(e.toString());
+          Logger.log(e);
         }
         _workingIn = false;
       });

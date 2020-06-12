@@ -131,7 +131,7 @@ abstract class FeedCareCommonFormBloc
         yield FeedCareCommonFormBlocStateDraft(
             FeedCareCommonDraft.fromJSON(draft.id, draft.params));
       } catch (e) {
-        Logger.log(e.toString());
+        Logger.log(e);
       }
     } else if (event is FeedCareCommonFormBlocEventDeleteDraft) {
       await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);

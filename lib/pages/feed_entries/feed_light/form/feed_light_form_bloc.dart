@@ -153,7 +153,7 @@ class FeedLightFormBloc
         await DeviceHelper.updateIntParam(
             device, lightParams[event.i], (event.value).toInt());
       } catch (e) {
-        Logger.log(e.toString());
+        Logger.log(e);
       }
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
@@ -190,7 +190,7 @@ class FeedLightFormBloc
           await DeviceHelper.updateIntParam(
               device, lightParams[i], initialValues[i]);
         } catch (e) {
-          Logger.log(e.toString());
+          Logger.log(e);
           return;
         }
       }

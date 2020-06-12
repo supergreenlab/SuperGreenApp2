@@ -31,7 +31,7 @@ class Logger {
     }
   }
 
-  static void log(String message) {
+  static void log(Object message) {
     print(message);
     try {
       logFile.writeAsStringSync(

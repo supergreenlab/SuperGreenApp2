@@ -157,7 +157,7 @@ class TimelapseSetupBloc
           yield TimelapseSetupBlocStateScanning();
           startScan();
         } catch (e) {
-          Logger.log(e.toString());
+          Logger.log(e);
         }
       }
     } else if (event is TimelapseSetupBlocEventSetConfig) {

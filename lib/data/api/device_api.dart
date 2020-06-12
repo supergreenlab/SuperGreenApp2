@@ -89,14 +89,12 @@ class DeviceAPI {
               Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}'));
           final HttpClientResponse resp = await req.close();
           if (resp.contentLength == 0) {
-            client.close(force: true);
             return '';
           }
           final completer = Completer<String>();
           resp.transform(utf8.decoder).listen((contents) {
             completer.complete(contents);
           }, onError: completer.completeError);
-          client.close(force: true);
           return completer.future;
         } catch (e) {
           Logger.log(e);
@@ -130,7 +128,6 @@ class DeviceAPI {
           resp.transform(utf8.decoder).listen((contents) {
             completer.complete(int.parse(contents));
           }, onError: completer.completeError);
-          client.close(force: true);
           return completer.future;
         } catch (e) {
           Logger.log(e);

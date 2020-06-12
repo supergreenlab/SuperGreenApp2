@@ -22,6 +22,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -171,6 +172,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
           add(DeviceSetupBlocEventProgress(adv));
         });
       } catch (e) {
+        Logger.log(e);
         add(DeviceSetupBlocEventLoadingError());
       }
 

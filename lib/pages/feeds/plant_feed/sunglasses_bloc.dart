@@ -65,7 +65,7 @@ class SunglassesBloc extends Bloc<SunglassesBlocEvent, SunglassesBlocState> {
               DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
         }
       } catch (e) {
-        Logger.log(e.toString());
+        Logger.log(e);
       }
       yield SunglassesBlocStateLoaded(await _isON());
     }

@@ -68,7 +68,7 @@ class DeviceDaemonBloc
         try {
           _updateDeviceStatus(_devices[i]);
         } catch (e) {
-          Logger.log(e.toString());
+          Logger.log(e);
         }
       }
     });
@@ -138,7 +138,7 @@ class DeviceDaemonBloc
                   id: Value(device.id),
                   isReachable: Value(true),
                   ip: Value(ip),
-                  synced: Value(ip == device.ip)));
+                  synced: Value(device.synced ? ip == device.ip : false)));
               add(DeviceDaemonBlocEventDeviceReachable(device, true));
             }
           } catch (e) {

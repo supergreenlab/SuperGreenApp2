@@ -124,7 +124,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
         await DeviceHelper.updateStringParam(args.device, pass, event.pass,
             timeout: 5, nRetries: 1);
       } catch (e) {
-        Logger.log(e.toString());
+        Logger.log(e);
       }
       await Future.delayed(Duration(seconds: 4));
       yield* _researchDevice();

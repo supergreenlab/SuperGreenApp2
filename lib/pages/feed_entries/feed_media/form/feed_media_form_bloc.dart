@@ -129,7 +129,7 @@ class FeedMediaFormBloc
         yield FeedMediaFormBlocStateDraft(
             FeedMediaDraft.fromJSON(draft.id, draft.params));
       } catch (e) {
-        Logger.log(e.toString());
+        Logger.log(e);
       }
     } else if (event is FeedMediaFormBlocEventDeleteDraft) {
       await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);
