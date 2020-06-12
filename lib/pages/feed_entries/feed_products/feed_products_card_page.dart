@@ -21,7 +21,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
@@ -166,10 +165,10 @@ class FeedProductsCardPage extends StatelessWidget {
                 ],
               ),
               onPressed: () async {
-                if (AppDB().getAppData().allowAnalytics == true) {
-                  await FlutterMatomo.trackScreenWithName(
-                      'FeedProductsCardPage', 'product_clicked');
-                }
+                // if (AppDB().getAppData().allowAnalytics == true) {
+                //   await FlutterMatomo.trackScreenWithName(
+                //       'FeedProductsCardPage', 'product_clicked');
+                // }
                 launch(product.link.data);
               },
             ),

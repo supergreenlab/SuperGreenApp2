@@ -24,7 +24,7 @@ import 'package:devicelocale/devicelocale.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_matomo/flutter_matomo.dart';
+// import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
@@ -121,23 +121,23 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
 
       FeedsAPI(); // force init
 
-      if (appData.allowAnalytics == true) {
-        _allowAnalytics();
-      }
+      // if (appData.allowAnalytics == true) {
+      //   _allowAnalytics();
+      // }
       yield AppInitBlocStateReady(appData.firstStart);
     } else if (event is AppInitBlocEventAllowAnalytics) {
       _db.setFirstStart(false);
       _db.setAllowAnalytics(event.allowAnalytics);
-      if (event.allowAnalytics == true) {
-        _allowAnalytics();
-      }
+      // if (event.allowAnalytics == true) {
+      //   _allowAnalytics();
+      // }
       yield AppInitBlocStateDone();
     }
   }
 
-  void _allowAnalytics() async {
-    await FlutterMatomo.initializeTracker(
-        'https://analytics.supergreenlab.com/piwik.php', 3);
-    BlocSupervisor.delegate = AnalyticsBlocDelegate();
-  }
+  // void _allowAnalytics() async {
+  //   await FlutterMatomo.initializeTracker(
+  //       'https://analytics.supergreenlab.com/piwik.php', 3);
+  //   BlocSupervisor.delegate = AnalyticsBlocDelegate();
+  // }
 }

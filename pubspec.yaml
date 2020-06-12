@@ -58,8 +58,6 @@ dependencies:
   youtube_player_flutter:
   matrix_gesture_detector:
     path: ./vendor/matrix_gesture_detector
-  flutter_matomo:
-    path: ./vendor/flutter_matomo
   connectivity:
   flutter_local_notifications:
   exif:

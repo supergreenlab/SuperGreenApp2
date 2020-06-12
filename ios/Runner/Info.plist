@@ -24,6 +24,10 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+	<key>NSAllowsLocalNetworking</key>
+	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>BLE is only used to setup the raspberry pi remote live camera and timelapse feature.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
