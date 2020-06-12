@@ -25,6 +25,7 @@ import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/local/feed_entry_helper.dart';
+import 'package:super_green_app/data/logger/Logger.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
@@ -191,7 +192,7 @@ class FeedsAPI {
 
     {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
-      print(
+      Logger.log(
           'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
       Response resp = await storageClient.put('$_storageServerHost${uploadUrls['filePath']}',
           body: file.readAsBytesSync(),
@@ -204,7 +205,7 @@ class FeedsAPI {
     {
       File file =
           File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
-      print(
+      Logger.log(
           'Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
       Response resp = await storageClient.put(
           '$_storageServerHost${uploadUrls['thumbnailPath']}',

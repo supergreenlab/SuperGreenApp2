@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/logger/Logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class DeviceDaemonBlocEvent extends Equatable {}
@@ -67,7 +68,7 @@ class DeviceDaemonBloc
         try {
           _updateDeviceStatus(_devices[i]);
         } catch (e) {
-          print(e);
+          Logger.log(e);
         }
       }
     });
@@ -105,7 +106,7 @@ class DeviceDaemonBloc
             device.ip, 'BROKER_CLIENTID',
             nRetries: 1);
         if (identifier == device.identifier) {
-          print('Device ${device.name} (${device.identifier}) found.');
+          Logger.log('Device ${device.name} (${device.identifier}) found.');
           if (device.isSetup == false) {
             await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null);
           }
@@ -115,7 +116,7 @@ class DeviceDaemonBloc
           await _updateDeviceTime(device);
         }
       } catch (e) {
-        print(
+        Logger.log(
             'Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
         await RelDB.get().devicesDAO.updateDevice(
             DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
@@ -128,7 +129,7 @@ class DeviceDaemonBloc
             String identifier =
                 await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
             if (identifier == device.identifier) {
-              print(
+              Logger.log(
                   'Device ${device.name} (${device.identifier}) found with mdns lookup.');
               if (device.isSetup == false) {
                 await DeviceAPI.fetchAllParams(ip, device.id, (_) => null);
@@ -141,14 +142,14 @@ class DeviceDaemonBloc
               add(DeviceDaemonBlocEventDeviceReachable(device, true));
             }
           } catch (e) {
-            print(
+            Logger.log(
                 'Device ${device.name} (${device.identifier}) not found, aborting.');
             await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
                 id: Value(device.id), isReachable: Value(false)));
             add(DeviceDaemonBlocEventDeviceReachable(device, false));
           }
         } else {
-          print(
+          Logger.log(
               'Device ${device.name} (${device.identifier}) not found, aborting.');
           await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
               id: Value(device.id), isReachable: Value(false)));

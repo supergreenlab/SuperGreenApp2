@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/logger/Logger.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SettingsLoginBlocEvent extends Equatable {}
@@ -79,7 +80,7 @@ class SettingsLoginBloc
         await FeedsAPI().login(event.nickname, event.password);
         await FeedsAPI().createUserEnd();
       } catch (e) {
-        print(e);
+        Logger.log(e);
         yield SettingsLoginBlocStateError();
         await Future.delayed(Duration(seconds: 2));
         yield SettingsLoginBlocStateLoaded(_isAuth);

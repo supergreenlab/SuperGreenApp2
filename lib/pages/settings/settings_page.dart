@@ -16,9 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:super_green_app/data/logger/Logger.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -107,10 +112,35 @@ class SettingsPage extends StatelessWidget {
                   leading: SizedBox(
                       width: 40,
                       height: 40,
-                      child: SvgPicture.asset('assets/settings/icon_controller.svg')),
+                      child: SvgPicture.asset(
+                          'assets/settings/icon_controller.svg')),
                   title: Text('Controllers',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('Delete controllers.'),
+                  subtitle: Text('Edit & delete controllers.'),
+                ),
+                ListTile(
+                  onTap: () async {
+                    File logFile = File(await Logger.logFilePath());
+                    final Directory tmpDir =
+                        await getTemporaryDirectory();
+                    String tmpLogFile = '${tmpDir.path}/log.txt';
+                    await logFile.copy(tmpLogFile);
+                    final Email email = Email(
+                      body: 'Log file',
+                      subject: 'Hey stant,\nhere\'s my log file\ncheers.',
+                      recipients: ['stant@supergreenlab.com'],
+                      attachmentPaths: [tmpLogFile],
+                      isHTML: false,
+                    );
+                    await FlutterEmailSender.send(email);
+                  },
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.asset('assets/settings/avatar.jpg')),
+                  title: Text('Send my logs to stant',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Tap to send over email'),
                 )
               ],
             )));

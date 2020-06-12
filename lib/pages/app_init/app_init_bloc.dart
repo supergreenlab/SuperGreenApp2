@@ -22,6 +22,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_matomo/flutter_matomo.dart';
 import 'package:hive/hive.dart';
@@ -29,6 +30,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
+import 'package:super_green_app/data/logger/Logger.dart';
 import 'package:super_green_app/main/analytics_bloc_delegate.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
@@ -87,6 +89,11 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
       ]);
+
+      await Logger.init();
+      FlutterError.onError = (FlutterErrorDetails details) {
+        Logger.log(details.toString());
+      };
 
       final Directory appDocDir = await getApplicationDocumentsDirectory();
       final Directory tmpDocDir = await getTemporaryDirectory();

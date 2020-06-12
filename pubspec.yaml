@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
+  flutter_email_sender:
   visibility_detector:
   devicelocale:
   yaml:

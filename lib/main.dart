@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/logger/Logger.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -29,24 +32,35 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
 void main() async {
-  runApp(MultiBlocProvider(
-      providers: <BlocProvider>[
-        BlocProvider<MainNavigatorBloc>(
-            create: (context) => MainNavigatorBloc(navigatorKey)),
-        BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
-        BlocProvider<DeviceDaemonBloc>(create: (context) => DeviceDaemonBloc()),
-        BlocProvider<SyncerBloc>(create: (context) => SyncerBloc()),
-        BlocProvider<LocalNotificationBloc>(
-            create: (context) => LocalNotificationBloc()),
-      ],
-      child: BlocListener<LocalNotificationBloc, LocalNotificationBlocState>(
-          listener: (BuildContext context, LocalNotificationBlocState state) {
-            if (state is LocalNotificationBlocStateNotification) {
-              BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventTrigger(
-                  TowelieActionHelpNotification.id,
-                  state,
-                  ModalRoute.of(context).settings.name));
-            }
-          },
-          child: MainPage(navigatorKey))));
+  runZonedGuarded<Future<void>>(
+    () async {
+      runApp(MultiBlocProvider(
+          providers: <BlocProvider>[
+            BlocProvider<MainNavigatorBloc>(
+                create: (context) => MainNavigatorBloc(navigatorKey)),
+            BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
+            BlocProvider<DeviceDaemonBloc>(
+                create: (context) => DeviceDaemonBloc()),
+            BlocProvider<SyncerBloc>(create: (context) => SyncerBloc()),
+            BlocProvider<LocalNotificationBloc>(
+                create: (context) => LocalNotificationBloc()),
+          ],
+          child:
+              BlocListener<LocalNotificationBloc, LocalNotificationBlocState>(
+                  listener:
+                      (BuildContext context, LocalNotificationBlocState state) {
+                    if (state is LocalNotificationBlocStateNotification) {
+                      BlocProvider.of<TowelieBloc>(context).add(
+                          TowelieBlocEventTrigger(
+                              TowelieActionHelpNotification.id,
+                              state,
+                              ModalRoute.of(context).settings.name));
+                    }
+                  },
+                  child: MainPage(navigatorKey))));
+    },
+    (dynamic error, StackTrace stackTrace) {
+      Logger.log('$error\n$stackTrace');
+    },
+  );
 }

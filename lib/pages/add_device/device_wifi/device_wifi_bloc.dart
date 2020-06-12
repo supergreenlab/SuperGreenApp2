@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/logger/Logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -123,7 +124,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
         await DeviceHelper.updateStringParam(args.device, pass, event.pass,
             timeout: 5, nRetries: 1);
       } catch (e) {
-        print(e);
+        Logger.log(e);
       }
       await Future.delayed(Duration(seconds: 4));
       yield* _researchDevice();
