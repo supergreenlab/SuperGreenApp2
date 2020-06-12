@@ -127,7 +127,7 @@ class SettingsPage extends StatelessWidget {
                     await logFile.copy(tmpLogFile);
                     final Email email = Email(
                       subject: 'Log file',
-                      body: 'Hey stant,\nhere\'s my log file\ncheers.',
+                      body: 'Hey stant,\n\nhere\'s my log file\n\ncheers.',
                       recipients: ['stant@supergreenlab.com'],
                       attachmentPaths: [tmpLogFile],
                       isHTML: false,
