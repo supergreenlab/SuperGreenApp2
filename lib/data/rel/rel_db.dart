@@ -141,7 +141,7 @@ class RelDB extends _$RelDB {
           }
         } else if (details.versionBefore == 5) {
           List<FeedEntry> measures =
-              await feedsDAO.getEntriesWithType('FE_MEASURE');
+              await feedsDAO.getFeedEntriesWithType('FE_MEASURE');
           for (FeedEntry measure in measures) {
             try {
               FeedMeasureParams params =

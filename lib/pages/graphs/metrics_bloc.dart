@@ -85,7 +85,7 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
       List<charts.Series<Metric, DateTime>> graphData =
           await updateChart(args.plant);
       _events =
-          await RelDB.get().feedsDAO.getEnvironmentEntries(args.plant.feed);
+          await RelDB.get().feedsDAO.getEnvironmentFeedEntries(args.plant.feed);
       yield MetricsBlocStateLoaded(graphData, _events);
       _timer = Timer.periodic(Duration(seconds: 60), (timer) {
         this.add(MetricsBlocEventReloadChart());

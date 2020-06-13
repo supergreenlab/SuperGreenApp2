@@ -99,7 +99,7 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
     List<FeedEntry> fe =
-        await RelDB.get().feedsDAO.getEntries(feedID, n, offset);
+        await RelDB.get().feedsDAO.getFeedEntries(feedID, n, offset);
     return fe
         .map<FeedEntryState>(
             (fe) => loaderForType(fe.type).stateForFeedEntry(fe))
