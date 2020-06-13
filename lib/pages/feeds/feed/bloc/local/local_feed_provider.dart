@@ -19,8 +19,8 @@
 import 'dart:async';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/helpers/feed_entry_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/local/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_care.dart';
@@ -101,7 +101,8 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
     List<FeedEntry> fe =
         await RelDB.get().feedsDAO.getEntries(feedID, n, offset);
     return fe
-        .map<FeedEntryState>((fe) => loaderForType(fe.type).stateForFeedEntry(fe))
+        .map<FeedEntryState>(
+            (fe) => loaderForType(fe.type).stateForFeedEntry(fe))
         .toList();
   }
 

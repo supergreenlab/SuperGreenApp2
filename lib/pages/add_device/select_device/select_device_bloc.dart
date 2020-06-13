@@ -20,7 +20,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/device_helper.dart';
+import 'package:super_green_app/data/helpers/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -113,9 +113,7 @@ class SelectDeviceBloc
     } else if (event is SelectDeviceBlocEventDelete) {
       final ddb = RelDB.get().devicesDAO;
       await RelDB.get().plantsDAO.cleanDeviceIDs(event.device.id);
-      await ddb.deleteDevice(event.device);
-      await ddb.deleteParams(event.device.id);
-      await ddb.deleteModules(event.device.id);
+      await DeviceHelper.deleteDevice(event.device);
     } else if (event is SelectDeviceBlocEventSelect) {
       final ddb = RelDB.get().devicesDAO;
       final Device device = event.device;

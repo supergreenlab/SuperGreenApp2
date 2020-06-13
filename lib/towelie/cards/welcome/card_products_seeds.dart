@@ -21,7 +21,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/local/feed_entry_helper.dart';
+import 'package:super_green_app/data/helpers/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_growing_medium.dart';

@@ -115,6 +115,15 @@ class FeedBlocEventEditParams extends FeedBlocEvent {
   List<Object> get props => [entry, params];
 }
 
+class FeedBlocEventDeleteEntry extends FeedBlocEvent {
+  final FeedEntryState entry;
+
+  FeedBlocEventDeleteEntry(this.entry);
+
+  @override
+  List<Object> get props => [entry];
+}
+
 abstract class FeedBlocState extends Equatable {}
 
 class FeedBlocStateInit extends FeedBlocState {
@@ -238,6 +247,8 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventEditParams) {
       FeedEntryLoader loader = provider.loaderForType(event.entry.type);
       await loader.update(event.entry, event.params);
+    } else if (event is FeedBlocEventDeleteEntry) {
+      await provider.deleteFeedEntry(event.entry.feedEntryID);
     }
   }
 

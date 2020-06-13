@@ -21,7 +21,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/local/feed_entry_helper.dart';
+import 'package:super_green_app/data/helpers/feed_entry_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_bundle.dart';
@@ -34,7 +34,7 @@ class CardProductsGrowbox {
       '''**First step to unlimited weed: The Growbox!**
 
 Choosing your **growbox** to fit your **available space** is the foundation to your future harvests.
-You **canopy surface** is one of the key factors determining **yield**.
+Your **canopy surface** is one of the key factors determining **yield**.
 We curated a list of the **community's growboxes** for you to choose from and be **successful**.
 ''',
       name: 'towelieGrowboxProducts',

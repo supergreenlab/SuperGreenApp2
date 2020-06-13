@@ -65,9 +65,13 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+          FeedCardTitle(
+            widget.iconPath(),
+            widget.title(),
+            widget.state.synced,
+            showSyncStatus: !state.remoteState,
+            showControls: false,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(widget.state.date),
@@ -85,12 +89,22 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
   Widget _renderLoaded(BuildContext context, FeedCareCommonState state) {
     FeedCareParams params = state.params;
     List<Widget> body = [
-      FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced,
-          onEdit: () {
-        setState(() {
-          editText = true;
-        });
-      }, showSyncStatus: !state.remoteState, showControls: !state.remoteState),
+      FeedCardTitle(
+        widget.iconPath(),
+        widget.title(),
+        widget.state.synced,
+        onEdit: () {
+          setState(() {
+            editText = true;
+          });
+        },
+        showSyncStatus: !state.remoteState,
+        showControls: !state.remoteState,
+        onDelete: () {
+          BlocProvider.of<FeedBloc>(context)
+              .add(FeedBlocEventDeleteEntry(state));
+        },
+      ),
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: FeedCardDate(widget.state.date),
