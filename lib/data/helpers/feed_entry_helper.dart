@@ -16,7 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:event_bus/event_bus.dart';
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedEntryInsertEvent {
@@ -56,7 +61,49 @@ class FeedEntryHelper {
 
   static Future<void> deleteFeedEntry(FeedEntry feedEntry) async {
     await RelDB.get().feedsDAO.deleteFeedEntry(feedEntry);
-    await RelDB.get().feedsDAO.deleteFeedMediasForFeedEntry(feedEntry.id);
+    if (feedEntry.serverID != null) {
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(feedEntry.serverID), type: Value('feedEntry')));
+    }
+
+    List<FeedMedia> feedMedias =
+        await RelDB.get().feedsDAO.getFeedMedias(feedEntry.id);
+    for (FeedMedia feedMedia in feedMedias) {
+      FeedEntryHelper.deleteFeedMedia(feedMedia);
+    }
     eventBus.fire(FeedEntryDeleteEvent(feedEntry));
+  }
+
+  static Future<void> deleteFeedMedia(FeedMedia feedMedia) async {
+    try {
+      await File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath)).delete();
+    } catch (e) {
+      Logger.log(e);
+    }
+    try {
+      await File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath))
+          .delete();
+    } catch (e) {
+      Logger.log(e);
+    }
+    await RelDB.get().feedsDAO.deleteFeedMedia(feedMedia);
+    if (feedMedia.serverID != null) {
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(feedMedia.serverID), type: Value('feedMedia')));
+    }
+  }
+
+  static Future<void> deleteFeed(Feed feed) async {
+    feed = await RelDB.get().feedsDAO.getFeed(feed.id);
+    List<FeedEntry> feedEntries =
+        await RelDB.get().feedsDAO.getAllFeedEntries(feed.id);
+    for (FeedEntry feedEntry in feedEntries) {
+      await FeedEntryHelper.deleteFeedEntry(feedEntry);
+    }
+    await RelDB.get().feedsDAO.deleteFeed(feed);
+    if (feed.serverID != null) {
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(feed.serverID), type: Value('feed')));
+    }
   }
 }

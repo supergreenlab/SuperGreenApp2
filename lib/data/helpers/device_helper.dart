@@ -77,4 +77,16 @@ class DeviceHelper {
         timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
   }
+
+  static Future deleteDevice(Device device) async {
+    device = await RelDB.get().devicesDAO.getDevice(device.id);
+    await RelDB.get().devicesDAO.deleteDevice(device);
+    if (device.serverID != null) {
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
+          serverID: Value(device.serverID), type: Value('device')));
+    }
+
+    await RelDB.get().devicesDAO.deleteParams(device.id);
+    await RelDB.get().devicesDAO.deleteModules(device.id);
+  }
 }

@@ -311,6 +311,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return (select(timelapses)..where((t) => t.plant.equals(plantID))).get();
   }
 
+  Future<Timelapse> getTimelapse(int timelapseID) {
+    return (select(timelapses)..where((t) => t.id.equals(timelapseID))).getSingle();
+  }
+
   Future<Timelapse> getTimelapseForServerID(String serverID) {
     return (select(timelapses)..where((t) => t.serverID.equals(serverID)))
         .getSingle();

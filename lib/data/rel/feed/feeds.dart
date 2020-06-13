@@ -225,7 +225,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return delete(feeds).delete(feed);
   }
 
-  SimpleSelectStatement<FeedEntries, FeedEntry> _selectEntries(
+  SimpleSelectStatement<FeedEntries, FeedEntry> _selectFeedEntries(
       int feedID, int limit, int offset) {
     return (select(feedEntries)
       ..where((fe) => fe.feed.equals(feedID))
@@ -234,19 +234,24 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
       ..limit(limit, offset: offset));
   }
 
-  Future<List<FeedEntry>> getEntries(int feedID, int limit, int offset) {
-    return _selectEntries(feedID, limit, offset).get();
+  Future<List<FeedEntry>> getFeedEntries(int feedID, int limit, int offset) {
+    return _selectFeedEntries(feedID, limit, offset).get();
   }
 
-  Future<List<FeedEntry>> getEntriesWithType(String type) {
+  Future<List<FeedEntry>> getAllFeedEntries(int feedID) {
+    return (select(feedEntries)
+      ..where((fe) => fe.feed.equals(feedID))).get();
+  }
+
+  Future<List<FeedEntry>> getFeedEntriesWithType(String type) {
     return (select(feedEntries)..where((fe) => fe.type.equals(type))).get();
   }
 
-  Stream<List<FeedEntry>> watchEntries(int feedID, int limit, int offset) {
-    return _selectEntries(feedID, limit, offset).watch();
+  Stream<List<FeedEntry>> watchFeedEntries(int feedID, int limit, int offset) {
+    return _selectFeedEntries(feedID, limit, offset).watch();
   }
 
-  Future<List<FeedEntry>> getEnvironmentEntries(int feedID) {
+  Future<List<FeedEntry>> getEnvironmentFeedEntries(int feedID) {
     return (select(feedEntries)
           ..where((fe) =>
               fe.feed.equals(feedID) &
@@ -370,7 +375,8 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .join([
       leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
     ]);
-    query.where(feedEntries.synced.equals(true) & feedMedias.synced.equals(false));
+    query.where(
+        feedEntries.synced.equals(true) & feedMedias.synced.equals(false));
     query.orderBy(
         [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
     return (await query.get())

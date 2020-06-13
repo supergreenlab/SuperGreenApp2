@@ -4393,6 +4393,222 @@ class $FeedMediasTable extends FeedMedias
   }
 }
 
+class Delete extends DataClass implements Insertable<Delete> {
+  final int id;
+  final String serverID;
+  final String type;
+  Delete({@required this.id, @required this.serverID, @required this.type});
+  factory Delete.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Delete(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      serverID: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || serverID != null) {
+      map['server_i_d'] = Variable<String>(serverID);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    return map;
+  }
+
+  DeletesCompanion toCompanion(bool nullToAbsent) {
+    return DeletesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      serverID: serverID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(serverID),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+    );
+  }
+
+  factory Delete.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Delete(
+      id: serializer.fromJson<int>(json['id']),
+      serverID: serializer.fromJson<String>(json['serverID']),
+      type: serializer.fromJson<String>(json['type']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'serverID': serializer.toJson<String>(serverID),
+      'type': serializer.toJson<String>(type),
+    };
+  }
+
+  Delete copyWith({int id, String serverID, String type}) => Delete(
+        id: id ?? this.id,
+        serverID: serverID ?? this.serverID,
+        type: type ?? this.type,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Delete(')
+          ..write('id: $id, ')
+          ..write('serverID: $serverID, ')
+          ..write('type: $type')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      $mrjf($mrjc(id.hashCode, $mrjc(serverID.hashCode, type.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Delete &&
+          other.id == this.id &&
+          other.serverID == this.serverID &&
+          other.type == this.type);
+}
+
+class DeletesCompanion extends UpdateCompanion<Delete> {
+  final Value<int> id;
+  final Value<String> serverID;
+  final Value<String> type;
+  const DeletesCompanion({
+    this.id = const Value.absent(),
+    this.serverID = const Value.absent(),
+    this.type = const Value.absent(),
+  });
+  DeletesCompanion.insert({
+    this.id = const Value.absent(),
+    @required String serverID,
+    @required String type,
+  })  : serverID = Value(serverID),
+        type = Value(type);
+  static Insertable<Delete> custom({
+    Expression<int> id,
+    Expression<String> serverID,
+    Expression<String> type,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (serverID != null) 'server_i_d': serverID,
+      if (type != null) 'type': type,
+    });
+  }
+
+  DeletesCompanion copyWith(
+      {Value<int> id, Value<String> serverID, Value<String> type}) {
+    return DeletesCompanion(
+      id: id ?? this.id,
+      serverID: serverID ?? this.serverID,
+      type: type ?? this.type,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (serverID.present) {
+      map['server_i_d'] = Variable<String>(serverID.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    return map;
+  }
+}
+
+class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $DeletesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
+  GeneratedTextColumn _serverID;
+  @override
+  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
+  GeneratedTextColumn _constructServerID() {
+    return GeneratedTextColumn('server_i_d', $tableName, false,
+        minTextLength: 36, maxTextLength: 36);
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
+  @override
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn('type', $tableName, false,
+        minTextLength: 1, maxTextLength: 16);
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, serverID, type];
+  @override
+  $DeletesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'deletes';
+  @override
+  final String actualTableName = 'deletes';
+  @override
+  VerificationContext validateIntegrity(Insertable<Delete> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    if (data.containsKey('server_i_d')) {
+      context.handle(_serverIDMeta,
+          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+    } else if (isInserting) {
+      context.missing(_serverIDMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Delete map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Delete.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $DeletesTable createAlias(String alias) {
+    return $DeletesTable(_db, alias);
+  }
+}
+
 abstract class _$RelDB extends GeneratedDatabase {
   _$RelDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $DevicesTable _devices;
@@ -4418,12 +4634,16 @@ abstract class _$RelDB extends GeneratedDatabase {
       _feedEntryDrafts ??= $FeedEntryDraftsTable(this);
   $FeedMediasTable _feedMedias;
   $FeedMediasTable get feedMedias => _feedMedias ??= $FeedMediasTable(this);
+  $DeletesTable _deletes;
+  $DeletesTable get deletes => _deletes ??= $DeletesTable(this);
   DevicesDAO _devicesDAO;
   DevicesDAO get devicesDAO => _devicesDAO ??= DevicesDAO(this as RelDB);
   PlantsDAO _plantsDAO;
   PlantsDAO get plantsDAO => _plantsDAO ??= PlantsDAO(this as RelDB);
   FeedsDAO _feedsDAO;
   FeedsDAO get feedsDAO => _feedsDAO ??= FeedsDAO(this as RelDB);
+  DeletesDAO _deletesDAO;
+  DeletesDAO get deletesDAO => _deletesDAO ??= DeletesDAO(this as RelDB);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -4438,6 +4658,7 @@ abstract class _$RelDB extends GeneratedDatabase {
         feeds,
         feedEntries,
         feedEntryDrafts,
-        feedMedias
+        feedMedias,
+        deletes
       ];
 }

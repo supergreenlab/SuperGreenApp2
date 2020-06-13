@@ -22,7 +22,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/local/feed_entry_helper.dart';
+import 'package:super_green_app/data/helpers/feed_entry_helper.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';

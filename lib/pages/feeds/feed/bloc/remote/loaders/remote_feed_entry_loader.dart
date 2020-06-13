@@ -18,11 +18,9 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
-import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';

@@ -25,6 +25,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/rel/common/deletes.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
@@ -55,10 +56,12 @@ LazyDatabase _openConnection() {
   FeedEntries,
   FeedEntryDrafts,
   FeedMedias,
+  Deletes,
 ], daos: [
   DevicesDAO,
   PlantsDAO,
-  FeedsDAO
+  FeedsDAO,
+  DeletesDAO,
 ])
 class RelDB extends _$RelDB {
   static RelDB _instance;
@@ -91,6 +94,8 @@ class RelDB extends _$RelDB {
           await m.addColumn(devices, devices.isSetup);
         } else if (from == 5) {
           await m.createTable(feedEntryDrafts);
+        } else if (from == 6) {
+          await m.createTable(deletes);
         }
       }, beforeOpen: (OpeningDetails details) async {
         if (!details.hadUpgrade) {
