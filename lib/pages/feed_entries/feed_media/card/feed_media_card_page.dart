@@ -86,14 +86,21 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_media.svg', 'Grow log', state.synced,
-              onEdit: () {
-            setState(() {
-              editText = true;
-            });
-          },
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+            'assets/feed_card/icon_media.svg',
+            'Grow log',
+            state.synced,
+            onEdit: () {
+              setState(() {
+                editText = true;
+              });
+            },
+            showSyncStatus: !state.remoteState,
+            showControls: !state.remoteState,
+            onDelete: () {
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventDeleteEntry(state));
+            },
+          ),
           state.medias.length > 0
               ? MediaList(
                   state.medias,

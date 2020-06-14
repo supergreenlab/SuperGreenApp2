@@ -22,10 +22,10 @@ class SettingsDevicesblocEventBoxListChanged extends SettingsDevicesBlocEvent {
   List<Object> get props => [devices];
 }
 
-class SettingsDevicesBlocEventDeleteBox extends SettingsDevicesBlocEvent {
+class SettingsDevicesBlocEventDeleteDevice extends SettingsDevicesBlocEvent {
   final Device device;
 
-  SettingsDevicesBlocEventDeleteBox(this.device);
+  SettingsDevicesBlocEventDeleteDevice(this.device);
 
   @override
   List<Object> get props => [device];
@@ -80,8 +80,7 @@ class SettingsDevicesBloc
           RelDB.get().devicesDAO.watchDevices().listen(_onDeviceListChange);
     } else if (event is SettingsDevicesblocEventBoxListChanged) {
       yield SettingsDevicesBlocStateLoaded(event.devices);
-    } else if (event is SettingsDevicesBlocEventDeleteBox) {
-      final ddb = RelDB.get().devicesDAO;
+    } else if (event is SettingsDevicesBlocEventDeleteDevice) {
       await RelDB.get().plantsDAO.cleanDeviceIDs(event.device.id);
       await DeviceHelper.deleteDevice(event.device);
     }

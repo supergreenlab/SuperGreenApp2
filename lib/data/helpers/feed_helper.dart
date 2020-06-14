@@ -69,7 +69,7 @@ class FeedEntryHelper {
     List<FeedMedia> feedMedias =
         await RelDB.get().feedsDAO.getFeedMedias(feedEntry.id);
     for (FeedMedia feedMedia in feedMedias) {
-      FeedEntryHelper.deleteFeedMedia(feedMedia);
+      await FeedEntryHelper.deleteFeedMedia(feedMedia);
     }
     eventBus.fire(FeedEntryDeleteEvent(feedEntry));
   }

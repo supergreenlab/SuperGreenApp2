@@ -76,11 +76,7 @@ class SettingsPlantsBloc
     } else if (event is SettingsPlantsblocEventPlantListChanged) {
       yield SettingsPlantsBlocStateLoaded(event.plants);
     } else if (event is SettingsPlantsBlocEventDeletePlant) {
-      await RelDB.get().feedsDAO.deleteFeedMediasForFeed(event.plant.feed);
-      await RelDB.get().feedsDAO.deleteFeedEntriesForFeed(event.plant.feed);
-      Feed feed = await RelDB.get().feedsDAO.getFeed(event.plant.feed);
-      await RelDB.get().feedsDAO.deleteFeed(feed);
-      PlantHelper.deletePlant(event.plant);
+      await PlantHelper.deletePlant(event.plant);
     }
   }
 

@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -93,9 +94,16 @@ class FeedMeasureCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+            'assets/feed_card/icon_measure.svg',
+            'Measure',
+            state.synced,
+            showSyncStatus: !state.remoteState,
+            showControls: !state.remoteState,
+            onDelete: () {
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventDeleteEntry(state));
+            },
+          ),
           MediaList(
             [state.current],
             showSyncStatus: !state.remoteState,

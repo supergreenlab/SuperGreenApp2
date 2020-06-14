@@ -17,7 +17,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -48,10 +50,17 @@ class FeedScheduleCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
-              state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+          FeedCardTitle(
+            'assets/feed_card/icon_schedule.svg',
+            'Schedule change',
+            state.synced,
+            showSyncStatus: !state.remoteState,
+            showControls: !state.remoteState,
+            onDelete: () {
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventDeleteEntry(state));
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),

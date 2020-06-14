@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
-import 'package:super_green_app/data/helpers/feed_entry_helper.dart';
+import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';

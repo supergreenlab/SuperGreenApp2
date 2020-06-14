@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/helpers/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -88,7 +89,7 @@ class SettingsBoxesBloc
         yield SettingsBoxesBlocStateLoaded(_boxes);
         return;
       }
-      await RelDB.get().plantsDAO.deleteBox(event.box);
+      await PlantHelper.deleteBox(event.box);
     }
   }
 
