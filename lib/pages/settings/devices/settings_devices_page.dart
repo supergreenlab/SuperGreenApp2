@@ -201,7 +201,7 @@ class SettingsDevicesPage extends StatelessWidget {
         });
     if (confirm) {
       BlocProvider.of<SettingsDevicesBloc>(context)
-          .add(SettingsDevicesBlocEventDeleteBox(device));
+          .add(SettingsDevicesBlocEventDeleteDevice(device));
     }
   }
 }

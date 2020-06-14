@@ -143,7 +143,11 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                             hintText: 'ex: 6.5'),
-                                        keyboardType: Platform.isAndroid ? TextInputType.number : TextInputType.numberWithOptions(decimal: true),
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
                                         controller: phController,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 20),
@@ -166,7 +170,9 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                                       child: TextField(
                                         decoration: InputDecoration(
                                             hintText: 'ex: 1200'),
-                                        keyboardType: Platform.isAndroid ? TextInputType.number : TextInputType.numberWithOptions(decimal: true),
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
                                         controller: ecController,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 20),
@@ -189,10 +195,12 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                       wateringLab,
                       phController.value.text == ''
                           ? null
-                          : double.parse(phController.value.text.replaceAll(',', '.')),
+                          : double.parse(
+                              phController.value.text.replaceAll(',', '.')),
                       ecController.value.text == ''
                           ? null
-                          : double.parse(ecController.value.text.replaceAll(',', '.'))),
+                          : double.parse(
+                              ecController.value.text.replaceAll(',', '.'))),
                 ),
               );
             }));

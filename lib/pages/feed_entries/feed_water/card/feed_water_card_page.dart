@@ -17,9 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -147,9 +149,16 @@ class FeedWaterCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_watering.svg', 'Watering', state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+            'assets/feed_card/icon_watering.svg',
+            'Watering',
+            state.synced,
+            showSyncStatus: !state.remoteState,
+            showControls: !state.remoteState,
+            onDelete: () {
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventDeleteEntry(state));
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),
