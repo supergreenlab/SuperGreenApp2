@@ -23,7 +23,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/helpers/feed_entry_helper.dart';
+import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';

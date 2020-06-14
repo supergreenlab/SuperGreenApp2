@@ -17,13 +17,12 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/helpers/device_helper.dart';
-import 'package:super_green_app/data/helpers/feed_entry_helper.dart';
+import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
