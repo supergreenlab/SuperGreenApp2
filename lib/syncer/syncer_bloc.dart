@@ -7,10 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device_api.dart';
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/helpers/device_helper.dart';
 import 'package:super_green_app/data/helpers/feed_helper.dart';
+import 'package:super_green_app/data/helpers/plant_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
+import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class SyncerBlocEvent extends Equatable {}
@@ -133,12 +137,18 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       Feed exists = await RelDB.get()
           .feedsDAO
           .getFeedForServerID(feedsCompanion.serverID.value);
-      if (exists != null) {
-        await RelDB.get()
-            .feedsDAO
-            .updateFeed(feedsCompanion.copyWith(id: Value(exists.id)));
+      if (feedsCompanion is DeletedFeedsCompanion) {
+        if (exists != null) {
+          await FeedEntryHelper.deleteFeed(exists, addDeleted: false);
+        }
       } else {
-        await RelDB.get().feedsDAO.addFeed(feedsCompanion);
+        if (exists != null) {
+          await RelDB.get()
+              .feedsDAO
+              .updateFeed(feedsCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await RelDB.get().feedsDAO.addFeed(feedsCompanion);
+        }
       }
       await FeedsAPI().setSynced("feed", feedsCompanion.serverID.value);
       Logger.log("Synced feed");
@@ -159,11 +169,17 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       FeedEntry exists = await RelDB.get()
           .feedsDAO
           .getFeedEntryForServerID(feedEntriesCompanion.serverID.value);
-      if (exists != null) {
-        await FeedEntryHelper.updateFeedEntry(
-            feedEntriesCompanion.copyWith(id: Value(exists.id)));
+      if (feedEntriesCompanion is DeletedFeedEntriesCompanion) {
+        if (exists != null) {
+          await FeedEntryHelper.deleteFeedEntry(exists, addDeleted: false);
+        }
       } else {
-        await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
+        if (exists != null) {
+          await FeedEntryHelper.updateFeedEntry(
+              feedEntriesCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
+        }
       }
       await FeedsAPI()
           .setSynced("feedEntry", feedEntriesCompanion.serverID.value);
@@ -185,26 +201,33 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       FeedMedia exists = await RelDB.get()
           .feedsDAO
           .getFeedMediaForServerID(feedMediasCompanion.serverID.value);
-      String filePath =
-          '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
-      String thumbnailPath =
-          '${FeedMedias.makeFilePath()}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
-      await FeedsAPI().download(feedMediasCompanion.filePath.value,
-          FeedMedias.makeAbsoluteFilePath(filePath));
-      await FeedsAPI().download(feedMediasCompanion.thumbnailPath.value,
-          FeedMedias.makeAbsoluteFilePath(thumbnailPath));
-      if (exists != null) {
-        await _deleteFileIfExists(
-            FeedMedias.makeAbsoluteFilePath(exists.filePath));
-        await _deleteFileIfExists(
-            FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
-        await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion.copyWith(
-            id: Value(exists.id),
-            filePath: Value(filePath),
-            thumbnailPath: Value(thumbnailPath)));
+      if (feedMediasCompanion is DeletedFeedMediasCompanion) {
+        if (exists != null) {
+          await FeedEntryHelper.deleteFeedMedia(exists, addDeleted: false);
+        }
       } else {
-        await RelDB.get().feedsDAO.addFeedMedia(feedMediasCompanion.copyWith(
-            filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
+        String filePath =
+            '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
+        String thumbnailPath =
+            '${FeedMedias.makeFilePath()}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
+        await FeedsAPI().download(feedMediasCompanion.filePath.value,
+            FeedMedias.makeAbsoluteFilePath(filePath));
+        await FeedsAPI().download(feedMediasCompanion.thumbnailPath.value,
+            FeedMedias.makeAbsoluteFilePath(thumbnailPath));
+        if (exists != null) {
+          await _deleteFileIfExists(
+              FeedMedias.makeAbsoluteFilePath(exists.filePath));
+          await _deleteFileIfExists(
+              FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
+          await RelDB.get().feedsDAO.updateFeedMedia(
+              feedMediasCompanion.copyWith(
+                  id: Value(exists.id),
+                  filePath: Value(filePath),
+                  thumbnailPath: Value(thumbnailPath)));
+        } else {
+          await RelDB.get().feedsDAO.addFeedMedia(feedMediasCompanion.copyWith(
+              filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
+        }
       }
       await FeedsAPI()
           .setSynced("feedMedia", feedMediasCompanion.serverID.value);
@@ -224,14 +247,22 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       Device exists = await RelDB.get()
           .devicesDAO
           .getDeviceForServerID(devicesCompanion.serverID.value);
-      if (exists != null) {
-        await RelDB.get()
-            .devicesDAO
-            .updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
+      if (devicesCompanion is DeletedDevicesCompanion) {
+        if (exists != null) {
+          await DeviceHelper.deleteDevice(exists, addDeleted: false);
+        }
       } else {
-        int deviceID = await RelDB.get().devicesDAO.addDevice(devicesCompanion);
-        // No await, that's intentional
-        DeviceAPI.fetchAllParams(devicesCompanion.ip.value, deviceID, (adv) {});
+        if (exists != null) {
+          await RelDB.get()
+              .devicesDAO
+              .updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          int deviceID =
+              await RelDB.get().devicesDAO.addDevice(devicesCompanion);
+          // No await, that's intentional
+          DeviceAPI.fetchAllParams(
+              devicesCompanion.ip.value, deviceID, (adv) {});
+        }
       }
       await FeedsAPI().setSynced("device", devicesCompanion.serverID.value);
       Logger.log("Synced device");
@@ -250,12 +281,18 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       Box exists = await RelDB.get()
           .plantsDAO
           .getBoxForServerID(boxesCompanion.serverID.value);
-      if (exists != null) {
-        await RelDB.get()
-            .plantsDAO
-            .updateBox(boxesCompanion.copyWith(id: Value(exists.id)));
+      if (boxesCompanion is DeletedBoxesCompanion) {
+        if (exists != null) {
+          await PlantHelper.deleteBox(exists, addDeleted: false);
+        }
       } else {
-        await RelDB.get().plantsDAO.addBox(boxesCompanion);
+        if (exists != null) {
+          await RelDB.get()
+              .plantsDAO
+              .updateBox(boxesCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await RelDB.get().plantsDAO.addBox(boxesCompanion);
+        }
       }
       await FeedsAPI().setSynced("box", boxesCompanion.serverID.value);
       Logger.log("Synced box");
@@ -274,12 +311,18 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       Plant exists = await RelDB.get()
           .plantsDAO
           .getPlantForServerID(plantsCompanion.serverID.value);
-      if (exists != null) {
-        await RelDB.get()
-            .plantsDAO
-            .updatePlant(plantsCompanion.copyWith(id: Value(exists.id)));
+      if (plantsCompanion is DeletedPlantsCompanion) {
+        if (exists != null) {
+          await PlantHelper.deletePlant(exists, addDeleted: false);
+        }
       } else {
-        await RelDB.get().plantsDAO.addPlant(plantsCompanion);
+        if (exists != null) {
+          await RelDB.get()
+              .plantsDAO
+              .updatePlant(plantsCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await RelDB.get().plantsDAO.addPlant(plantsCompanion);
+        }
       }
       await FeedsAPI().setSynced("plant", plantsCompanion.serverID.value);
       Logger.log("Synced plant");
@@ -297,14 +340,20 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       add(SyncerBlocEventSyncing(
           true, 'timelapse: ${i + 1}/${timelapses.length}'));
       TimelapsesCompanion timelapsesCompanion = timelapses[i];
-      Plant exists = await RelDB.get()
+      Timelapse exists = await RelDB.get()
           .plantsDAO
-          .getPlantForServerID(timelapsesCompanion.serverID.value);
-      if (exists != null) {
-        await RelDB.get().plantsDAO.updateTimelapse(
-            timelapsesCompanion.copyWith(id: Value(exists.id)));
+          .getTimelapseForServerID(timelapsesCompanion.serverID.value);
+      if (timelapsesCompanion is DeletedPlantsCompanion) {
+        if (exists != null) {
+          await PlantHelper.deleteTimelapse(exists, addDeleted: false);
+        }
       } else {
-        await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
+        if (exists != null) {
+          await RelDB.get().plantsDAO.updateTimelapse(
+              timelapsesCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
+        }
       }
       await FeedsAPI()
           .setSynced("timelapse", timelapsesCompanion.serverID.value);

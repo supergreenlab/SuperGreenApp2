@@ -78,12 +78,12 @@ class DeviceHelper {
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
   }
 
-  static Future deleteDevice(Device device) async {
+  static Future deleteDevice(Device device, {addDeleted: true}) async {
     device = await RelDB.get().devicesDAO.getDevice(device.id);
     await RelDB.get().devicesDAO.deleteDevice(device);
-    if (device.serverID != null) {
+    if (addDeleted && device.serverID != null) {
       await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
-          serverID: Value(device.serverID), type: Value('device')));
+          serverID: Value(device.serverID), type: Value('devices')));
     }
 
     await RelDB.get().devicesDAO.deleteParams(device.id);

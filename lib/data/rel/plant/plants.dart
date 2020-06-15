@@ -24,6 +24,10 @@ import 'package:super_green_app/misc/map_utils.dart';
 
 part 'plants.g.dart';
 
+class DeletedPlantsCompanion extends PlantsCompanion {
+  DeletedPlantsCompanion(serverID) : super(serverID: serverID);
+}
+
 class Plants extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
@@ -39,6 +43,9 @@ class Plants extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<PlantsCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedPlantsCompanion(Value(map['id'] as String));
+    }
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     Box box = await RelDB.get().plantsDAO.getBoxForServerID(map['boxID']);
     return PlantsCompanion(
@@ -72,6 +79,10 @@ class Plants extends Table {
   }
 }
 
+class DeletedBoxesCompanion extends BoxesCompanion {
+  DeletedBoxesCompanion(serverID) : super(serverID: serverID);
+}
+
 @DataClassName("Box")
 class Boxes extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -85,6 +96,9 @@ class Boxes extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<BoxesCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedBoxesCompanion(Value(map['id'] as String));
+    }
     int deviceID;
     if (map['deviceID'] != null) {
       Device device =
@@ -127,6 +141,10 @@ class ChartCaches extends Table {
   TextColumn get values => text().withDefault(Constant('[]'))();
 }
 
+class DeletedTimelapsesCompanion extends TimelapsesCompanion {
+  DeletedTimelapsesCompanion(serverID) : super(serverID: serverID);
+}
+
 class Timelapses extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get plant => integer()();
@@ -145,6 +163,9 @@ class Timelapses extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<TimelapsesCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedTimelapsesCompanion(Value(map['id'] as String));
+    }
     Plant plant =
         await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
@@ -312,7 +333,8 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<Timelapse> getTimelapse(int timelapseID) {
-    return (select(timelapses)..where((t) => t.id.equals(timelapseID))).getSingle();
+    return (select(timelapses)..where((t) => t.id.equals(timelapseID)))
+        .getSingle();
   }
 
   Future<Timelapse> getTimelapseForServerID(String serverID) {

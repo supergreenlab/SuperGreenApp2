@@ -24,6 +24,10 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'feeds.g.dart';
 
+class DeletedFeedsCompanion extends FeedsCompanion {
+  DeletedFeedsCompanion(serverID) : super(serverID: serverID);
+}
+
 class Feeds extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().withLength(min: 1, max: 24)();
@@ -33,6 +37,9 @@ class Feeds extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<FeedsCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedFeedsCompanion(Value(map['id'] as String));
+    }
     return FeedsCompanion(
         name: Value(map['name'] as String),
         isNewsFeed: Value(map['isNewsFeed'] as bool),
@@ -49,6 +56,10 @@ class Feeds extends Table {
   }
 }
 
+class DeletedFeedEntriesCompanion extends FeedEntriesCompanion {
+  DeletedFeedEntriesCompanion(serverID) : super(serverID: serverID);
+}
+
 @DataClassName("FeedEntry")
 class FeedEntries extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -63,6 +74,9 @@ class FeedEntries extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<FeedEntriesCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedFeedEntriesCompanion(Value(map['id'] as String));
+    }
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     return FeedEntriesCompanion(
         feed: Value(feed.id),
@@ -106,6 +120,10 @@ class FeedEntryDrafts extends Table {
   TextColumn get params => text().withDefault(Constant('{}'))();
 }
 
+class DeletedFeedMediasCompanion extends FeedMediasCompanion {
+  DeletedFeedMediasCompanion(serverID) : super(serverID: serverID);
+}
+
 class FeedMedias extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
@@ -119,6 +137,9 @@ class FeedMedias extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<FeedMediasCompanion> fromMap(Map<String, dynamic> map) async {
+    if (map['deleted'] == true) {
+      return DeletedFeedMediasCompanion(Value(map['id'] as String));
+    }
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
@@ -239,8 +260,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future<List<FeedEntry>> getAllFeedEntries(int feedID) {
-    return (select(feedEntries)
-      ..where((fe) => fe.feed.equals(feedID))).get();
+    return (select(feedEntries)..where((fe) => fe.feed.equals(feedID))).get();
   }
 
   Future<List<FeedEntry>> getFeedEntriesWithType(String type) {

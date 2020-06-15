@@ -21,32 +21,32 @@ import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class PlantHelper {
-  static Future deletePlant(Plant plant) async {
+  static Future deletePlant(Plant plant, {addDeleted: true}) async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
     await RelDB.get().plantsDAO.deletePlant(plant);
-    if (plant.serverID != null) {
+    if (addDeleted && plant.serverID != null) {
       await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
-          serverID: Value(plant.serverID), type: Value('plant')));
+          serverID: Value(plant.serverID), type: Value('plants')));
     }
     Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
     await FeedEntryHelper.deleteFeed(feed);
   }
 
-  static Future deleteBox(Box box) async {
+  static Future deleteBox(Box box, {addDeleted: true}) async {
     box = await RelDB.get().plantsDAO.getBox(box.id);
     await RelDB.get().plantsDAO.deleteBox(box);
-    if (box.serverID != null) {
+    if (addDeleted && box.serverID != null) {
       await RelDB.get().deletesDAO.addDelete(
-          DeletesCompanion(serverID: Value(box.serverID), type: Value('box')));
+          DeletesCompanion(serverID: Value(box.serverID), type: Value('boxes')));
     }
   }
 
-  static Future deleteTimelapse(Timelapse timelapse) async {
+  static Future deleteTimelapse(Timelapse timelapse, {addDeleted: true}) async {
     timelapse = await RelDB.get().plantsDAO.getTimelapse(timelapse.id);
     await RelDB.get().plantsDAO.deleteTimelapse(timelapse);
-    if (timelapse.serverID != null) {
+    if (addDeleted && timelapse.serverID != null) {
       await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
-          serverID: Value(timelapse.serverID), type: Value('timelapse')));
+          serverID: Value(timelapse.serverID), type: Value('timelapses')));
     }
   }
 }

@@ -21,6 +21,10 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'devices.g.dart';
 
+class DeletedDevicesCompanion extends DevicesCompanion {
+  DeletedDevicesCompanion(serverID) : super(serverID: serverID);
+}
+
 class Devices extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get identifier => text().withLength(min: 1, max: 16)();
@@ -34,6 +38,9 @@ class Devices extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static DevicesCompanion fromMap(Map<String, dynamic> map) {
+    if (map['deleted'] == true) {
+      return DeletedDevicesCompanion(Value(map['id'] as String));
+    }
     return DevicesCompanion(
         identifier: Value(map['identifier'] as String),
         name: Value(map['name'] as String),
