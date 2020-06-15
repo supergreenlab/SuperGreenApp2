@@ -59,11 +59,11 @@ class FeedEntryHelper {
     eventBus.fire(FeedEntryUpdateEvent(feedEntry));
   }
 
-  static Future<void> deleteFeedEntry(FeedEntry feedEntry) async {
+  static Future<void> deleteFeedEntry(FeedEntry feedEntry, {addDeleted: true}) async {
     await RelDB.get().feedsDAO.deleteFeedEntry(feedEntry);
-    if (feedEntry.serverID != null) {
+    if (addDeleted && feedEntry.serverID != null) {
       await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
-          serverID: Value(feedEntry.serverID), type: Value('feedEntry')));
+          serverID: Value(feedEntry.serverID), type: Value('feedentries')));
     }
 
     List<FeedMedia> feedMedias =
@@ -74,7 +74,7 @@ class FeedEntryHelper {
     eventBus.fire(FeedEntryDeleteEvent(feedEntry));
   }
 
-  static Future<void> deleteFeedMedia(FeedMedia feedMedia) async {
+  static Future<void> deleteFeedMedia(FeedMedia feedMedia, {addDeleted: true}) async {
     try {
       await File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath)).delete();
     } catch (e) {
@@ -87,13 +87,13 @@ class FeedEntryHelper {
       Logger.log(e);
     }
     await RelDB.get().feedsDAO.deleteFeedMedia(feedMedia);
-    if (feedMedia.serverID != null) {
+    if (addDeleted && feedMedia.serverID != null) {
       await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
-          serverID: Value(feedMedia.serverID), type: Value('feedMedia')));
+          serverID: Value(feedMedia.serverID), type: Value('feedmedias')));
     }
   }
 
-  static Future<void> deleteFeed(Feed feed) async {
+  static Future<void> deleteFeed(Feed feed, {addDeleted: true}) async {
     feed = await RelDB.get().feedsDAO.getFeed(feed.id);
     List<FeedEntry> feedEntries =
         await RelDB.get().feedsDAO.getAllFeedEntries(feed.id);
@@ -101,9 +101,9 @@ class FeedEntryHelper {
       await FeedEntryHelper.deleteFeedEntry(feedEntry);
     }
     await RelDB.get().feedsDAO.deleteFeed(feed);
-    if (feed.serverID != null) {
+    if (addDeleted && feed.serverID != null) {
       await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
-          serverID: Value(feed.serverID), type: Value('feed')));
+          serverID: Value(feed.serverID), type: Value('feeds')));
     }
   }
 }
