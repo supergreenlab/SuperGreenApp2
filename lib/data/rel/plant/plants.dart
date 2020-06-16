@@ -103,7 +103,9 @@ class Boxes extends Table {
     if (map['deviceID'] != null) {
       Device device =
           await RelDB.get().devicesDAO.getDeviceForServerID(map['deviceID']);
-      deviceID = device.id;
+      if (device != null) {
+        deviceID = device.id;
+      }
     }
     return BoxesCompanion(
         device: Value(deviceID),
@@ -119,6 +121,7 @@ class Boxes extends Table {
       'id': box.serverID,
       'name': box.name,
       'settings': box.settings,
+      'deviceID': null,
     };
     if (box.device != null) {
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
