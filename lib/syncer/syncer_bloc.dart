@@ -209,7 +209,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         String filePath =
             '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
         String thumbnailPath =
-            '${FeedMedias.makeFilePath()}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
+            '${FeedMedias.makeFilePath(prefix: 'thumbnail_')}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
         await FeedsAPI().download(feedMediasCompanion.filePath.value,
             FeedMedias.makeAbsoluteFilePath(filePath));
         await FeedsAPI().download(feedMediasCompanion.thumbnailPath.value,
@@ -365,6 +365,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
       throw 'Can\'t sync over GSM';
     }
+    await _syncOutDeletes();
     await _syncOutFeeds();
     await _syncOutOrphanedFeedMedias();
     await _syncOutFeedEntries();
@@ -372,6 +373,16 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncOutBoxes();
     await _syncOutPlants();
     await _syncOutTimelapses();
+  }
+
+  Future _syncOutDeletes() async {
+    Logger.log("Sending deletes");
+    List<Delete> deletes = await RelDB.get().deletesDAO.getDeletes();
+    if (deletes.length == 0) {
+      return;
+    }
+    await FeedsAPI().sendDeletes(deletes);
+    await RelDB.get().deletesDAO.removeDeletes(deletes);
   }
 
   Future _syncOutFeeds() async {
