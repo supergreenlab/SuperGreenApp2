@@ -187,7 +187,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           icon: 'assets/feed_form/icon_blower.svg',
           value: _blowerNight.toDouble(),
           min: 0,
-          max: 60,
+          max: 100,
           color: Colors.blue,
           onChanged: (double newValue) {
             setState(() {
