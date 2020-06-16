@@ -25,6 +25,13 @@ class Deletes extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get serverID => text().withLength(min: 36, max: 36)();
   TextColumn get type => text().withLength(min: 1, max: 16)();
+
+  static Map<String, dynamic> toMap(Delete delete) {
+    return {
+      'id': delete.serverID,
+      'type': delete.type,
+    };
+  }
 }
 
 @UseDao(tables: [
@@ -39,5 +46,11 @@ class DeletesDAO extends DatabaseAccessor<RelDB> with _$DeletesDAOMixin {
 
   Future<List<Delete>> getDeletes() {
     return select(deletes).get();
+  }
+
+  Future removeDeletes(List<Delete> dels) {
+    return (delete(deletes)
+          ..where((d) => d.id.isIn(dels.map<int>((d) => d.id))))
+        .go();
   }
 }

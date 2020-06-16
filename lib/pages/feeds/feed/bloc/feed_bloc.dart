@@ -230,9 +230,11 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventDeletedFeedEntry) {
       int index =
           entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
-      FeedEntryState entry = entries[index];
-      entries.removeAt(index);
-      yield FeedBlocStateRemoveEntry(index, entry);
+      if (index >= 0) {
+        entries.removeAt(index);
+        FeedEntryState entry = entries[index];
+        yield FeedBlocStateRemoveEntry(index, entry);
+      }
     } else if (event is FeedBlocEventUpdatedEntry) {
       int index =
           entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);

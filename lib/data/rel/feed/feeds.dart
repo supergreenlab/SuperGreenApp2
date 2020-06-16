@@ -169,9 +169,9 @@ class FeedMedias extends Table {
     };
   }
 
-  static String makeFilePath() {
+  static String makeFilePath({String prefix=''}) {
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    return FeedMedias.makeRelativeFilePath(timestamp);
+    return FeedMedias.makeRelativeFilePath('$prefix$timestamp');
   }
 
   static String makeRelativeFilePath(String fileName) {

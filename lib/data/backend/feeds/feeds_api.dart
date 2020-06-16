@@ -26,6 +26,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/rel/common/deletes.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
@@ -77,6 +78,7 @@ class FeedsAPI {
           'password': password,
         }));
     if (resp.statusCode ~/ 100 != 2) {
+      Logger.log(resp.body);
       throw 'Access denied';
     }
     AppDB().setJWT(resp.headers['x-sgl-token']);
@@ -92,12 +94,30 @@ class FeedsAPI {
           'password': password,
         }));
     if (resp.statusCode ~/ 100 != 2) {
+      Logger.log(resp.body);
       throw 'createUser failed';
     }
   }
 
   Future createUserEnd() async {
     return _postPut('/userend', {});
+  }
+
+  Future sendDeletes(List<Delete> deletes) async {
+    Response resp = await apiClient.post('$_serverHost/deletes',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        },
+        body: JsonEncoder().convert({
+          "deletes": deletes
+              .map<Map<String, dynamic>>((d) => Deletes.toMap(d))
+              .toList(),
+        }));
+    if (resp.statusCode ~/ 100 != 2) {
+      Logger.log(resp.body);
+      throw 'sendDeletes failed';
+    }
   }
 
   Future syncPlant(Plant plant) async {
@@ -194,7 +214,8 @@ class FeedsAPI {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
       Logger.log(
           'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
-      Response resp = await storageClient.put('$_storageServerHost${uploadUrls['filePath']}',
+      Response resp = await storageClient.put(
+          '$_storageServerHost${uploadUrls['filePath']}',
           body: file.readAsBytesSync(),
           headers: {'Host': _storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
@@ -298,19 +319,21 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicPlants(int n, int offset) async {
-    Response resp = await apiClient.get('$_serverHost/public/plants?limit=$n&offset=$offset', headers: {
+    Response resp = await apiClient
+        .get('$_serverHost/public/plants?limit=$n&offset=$offset', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       throw 'publicPlants failed: ${resp.body}';
     }
-    Map<String, dynamic> results =  JsonDecoder().convert(resp.body);
+    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
     return results['plants'];
   }
 
   Future<Map<String, dynamic>> publicPlant(String id) async {
-    Response resp = await apiClient.get('$_serverHost/public/plant/$id', headers: {
+    Response resp =
+        await apiClient.get('$_serverHost/public/plant/$id', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -335,8 +358,8 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
-    Response resp =
-        await apiClient.get('$_serverHost/public/feedEntry/$id/feedMedias', headers: {
+    Response resp = await apiClient
+        .get('$_serverHost/public/feedEntry/$id/feedMedias', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -348,7 +371,8 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> publicFeedMedia(String id) async {
-    Response resp = await apiClient.get('$_serverHost/public/feedMedia/$id', headers: {
+    Response resp =
+        await apiClient.get('$_serverHost/public/feedMedia/$id', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -369,7 +393,8 @@ class FeedsAPI {
   }
 
   Future setSynced(String type, String id) async {
-    Response resp = await apiClient.post('$_serverHost/$type/$id/sync', headers: {
+    Response resp =
+        await apiClient.post('$_serverHost/$type/$id/sync', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
