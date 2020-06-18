@@ -43,6 +43,9 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         .on<FeedEntryUpdateEvent>()
         .listen((FeedEntryUpdateEvent event) async {
       FeedEntry feedEntry = event.feedEntry;
+      if (feedEntry == null) {
+        return;
+      }
       if (feedEntry.id != entry.feedEntryID) {
         return;
       }

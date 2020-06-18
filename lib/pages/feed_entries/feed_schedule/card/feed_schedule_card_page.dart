@@ -56,10 +56,6 @@ class FeedScheduleCardPage extends StatelessWidget {
             state.synced,
             showSyncStatus: !state.remoteState,
             showControls: !state.remoteState,
-            onDelete: () {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventDeleteEntry(state));
-            },
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -82,10 +78,17 @@ class FeedScheduleCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
-              state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+          FeedCardTitle(
+            'assets/feed_card/icon_schedule.svg',
+            'Schedule change',
+            state.synced,
+            showSyncStatus: !state.remoteState,
+            showControls: !state.remoteState,
+            onDelete: () {
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventDeleteEntry(state));
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state.date),

@@ -79,8 +79,11 @@ class FeedCareLoader extends LocalFeedEntryLoader {
     RelDB db = RelDB.get();
     _streams[entry.feedEntryID] =
         db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
-      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-      await updateFeedEntryState(feedEntry);
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+      if (feedEntry != null) {
+        await updateFeedEntryState(feedEntry);
+      }
     });
   }
 
