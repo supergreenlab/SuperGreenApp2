@@ -75,7 +75,9 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
           db.feedsDAO.watchFeedMedia(params.previous).listen((_) async {
         FeedEntry feedEntry =
             await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-        await updateFeedEntryState(feedEntry);
+        if (feedEntry != null) {
+          await updateFeedEntryState(feedEntry);
+        }
       });
     } else if (params.previous is String) {
       _previousStreams[entry.feedEntryID] = db.feedsDAO
@@ -83,14 +85,18 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
           .listen((_) async {
         FeedEntry feedEntry =
             await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-        await updateFeedEntryState(feedEntry);
+        if (feedEntry != null) {
+          await updateFeedEntryState(feedEntry);
+        }
       });
     }
     _currentStreams[entry.feedEntryID] =
         db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
       FeedEntry feedEntry =
           await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-      await updateFeedEntryState(feedEntry);
+      if (feedEntry != null) {
+        await updateFeedEntryState(feedEntry);
+      }
     });
   }
 
