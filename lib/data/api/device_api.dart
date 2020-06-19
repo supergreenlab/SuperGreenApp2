@@ -95,6 +95,7 @@ class DeviceAPI {
           resp.transform(utf8.decoder).listen((contents) {
             completer.complete(contents);
           }, onError: completer.completeError);
+          completer.future.whenComplete(() => client.close(force: true));
           return completer.future;
         } catch (e) {
           Logger.log(e);
@@ -104,7 +105,6 @@ class DeviceAPI {
         }
       }
     } finally {
-      client.close(force: true);
     }
     return null;
   }
@@ -128,6 +128,7 @@ class DeviceAPI {
           resp.transform(utf8.decoder).listen((contents) {
             completer.complete(int.parse(contents));
           }, onError: completer.completeError);
+          completer.future.whenComplete(() => client.close(force: true));
           return completer.future;
         } catch (e) {
           Logger.log(e);
@@ -136,9 +137,7 @@ class DeviceAPI {
           }
         }
       }
-    } finally {
-      client.close(force: true);
-    }
+    } finally {}
     return null;
   }
 
@@ -156,7 +155,7 @@ class DeviceAPI {
         }
         try {
           final req = await client.postUrl(Uri.parse(
-              'http://$controllerIP/s?k=${paramName.toUpperCase()}&v=$value'));
+              'http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}'));
           await req.close();
           break;
         } catch (e) {
