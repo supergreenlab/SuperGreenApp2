@@ -155,6 +155,9 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                         BlocProvider.of<MainNavigatorBloc>(context).add(
                             MainNavigateToDeviceWifiEvent(state.device, futureFn: (Future future) async {
                               dynamic error = await future;
+                              if (error == null) {
+                                return;
+                              }
                               if (error != true) {
                                 await Fluttertoast.showToast(msg: 'Wifi config changed successfully');
                               } else {
