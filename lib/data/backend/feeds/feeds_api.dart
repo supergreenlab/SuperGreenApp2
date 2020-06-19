@@ -212,28 +212,32 @@ class FeedsAPI {
 
     {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
-      Logger.log(
-          'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
-      Response resp = await storageClient.put(
-          '$_storageServerHost${uploadUrls['filePath']}',
-          body: file.readAsBytesSync(),
-          headers: {'Host': _storageServerHostHeader});
-      if (resp.statusCode ~/ 100 != 2) {
-        throw 'upload failed';
+      if (await file.exists()) {
+        Logger.log(
+            'Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
+        Response resp = await storageClient.put(
+            '$_storageServerHost${uploadUrls['filePath']}',
+            body: file.readAsBytesSync(),
+            headers: {'Host': _storageServerHostHeader});
+        if (resp.statusCode ~/ 100 != 2) {
+          throw 'upload failed';
+        }
       }
     }
 
     {
       File file =
           File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
-      Logger.log(
-          'Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
-      Response resp = await storageClient.put(
-          '$_storageServerHost${uploadUrls['thumbnailPath']}',
-          body: file.readAsBytesSync(),
-          headers: {'Host': _storageServerHostHeader});
-      if (resp.statusCode ~/ 100 != 2) {
-        throw 'upload failed';
+      if (await file.exists()) {
+        Logger.log(
+            'Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
+        Response resp = await storageClient.put(
+            '$_storageServerHost${uploadUrls['thumbnailPath']}',
+            body: file.readAsBytesSync(),
+            headers: {'Host': _storageServerHostHeader});
+        if (resp.statusCode ~/ 100 != 2) {
+          throw 'upload failed';
+        }
       }
     }
 
