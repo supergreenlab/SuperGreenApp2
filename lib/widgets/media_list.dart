@@ -30,9 +30,13 @@ class MediaList extends StatelessWidget {
   final String prefix;
   final Function(MediaState media) onMediaTapped;
   final bool showSyncStatus;
+  final bool showTapIcon;
 
   const MediaList(this._medias,
-      {this.prefix = '', this.onMediaTapped, this.showSyncStatus = true});
+      {this.prefix = '',
+      this.onMediaTapped,
+      this.showSyncStatus = true,
+      this.showTapIcon = false});
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +126,18 @@ class MediaList extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: media.synced ? Colors.green : Colors.red)),
+                  ),
+                ),
+              )
+            : Container(),
+        showTapIcon
+            ? Positioned(
+                right: 0,
+                top: 10,
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: SvgPicture.asset('assets/feed_card/icon_tap_measure.svg'),
                   ),
                 ),
               )

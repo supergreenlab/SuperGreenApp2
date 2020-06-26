@@ -104,7 +104,8 @@ class DeviceAPI {
           }
         }
       }
-    } finally {
+    } catch (e) {
+      Logger.log(e);
     }
     return null;
   }
@@ -137,7 +138,9 @@ class DeviceAPI {
           }
         }
       }
-    } finally {}
+    } catch (e) {
+      Logger.log(e);
+    }
     return null;
   }
 
@@ -165,6 +168,8 @@ class DeviceAPI {
           }
         }
       }
+    } catch(e) {
+      Logger.log(e);
     } finally {
       client.close(force: true);
     }
@@ -195,6 +200,8 @@ class DeviceAPI {
           }
         }
       }
+    } catch(e) {
+      Logger.log(e);
     } finally {
       client.close(force: true);
     }

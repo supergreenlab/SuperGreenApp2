@@ -343,7 +343,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       Timelapse exists = await RelDB.get()
           .plantsDAO
           .getTimelapseForServerID(timelapsesCompanion.serverID.value);
-      if (timelapsesCompanion is DeletedPlantsCompanion) {
+      if (timelapsesCompanion is DeletedTimelapsesCompanion) {
         if (exists != null) {
           await PlantHelper.deleteTimelapse(exists, addDeleted: false);
         }
