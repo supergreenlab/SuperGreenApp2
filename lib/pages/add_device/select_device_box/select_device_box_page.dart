@@ -168,7 +168,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title:
-                Text('Reset box #$index on controller ${state.device.name}?'),
+                Text('Reset box #${index+1} on controller ${state.device.name}?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {

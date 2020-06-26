@@ -107,6 +107,7 @@ class FeedMeasureCardPage extends StatelessWidget {
           MediaList(
             [state.current],
             showSyncStatus: !state.remoteState,
+            showTapIcon: state.previous != null,
             onMediaTapped: (media) {
               if (state.previous != null) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(

@@ -181,7 +181,7 @@ class SettingsDevicesPage extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Delete lab ${device.name}?'),
+            title: Text('Delete device ${device.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
               FlatButton(

@@ -95,7 +95,9 @@ class DeviceDaemonBloc
   }
 
   void _updateDeviceStatus(Device device) async {
+    print('_updateDeviceStatus start ${device.name}');
     if (_deviceWorker[device.id] == true) {
+      Logger.log('blocking ${device.name}');
       return;
     }
     _deviceWorker[device.id] = true;
@@ -156,8 +158,11 @@ class DeviceDaemonBloc
           add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
       }
+    } catch(e) {
+      Logger.log(e);
     } finally {
       _deviceWorker[device.id] = false;
+      print('_updateDeviceStatus stop ${device.name}');
     }
   }
 
