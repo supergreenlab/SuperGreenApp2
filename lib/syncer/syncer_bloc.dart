@@ -72,6 +72,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   @override
   Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {
     if (event is SyncerBlocEventInit) {
+      _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
       _connectivity = Connectivity()
           .onConnectivityChanged
           .listen((ConnectivityResult result) {
