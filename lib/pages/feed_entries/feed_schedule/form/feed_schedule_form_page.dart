@@ -306,6 +306,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
   Widget _renderScheduleChange(
       BuildContext context, FeedScheduleFormBlocStateLoaded state) {
     Duration duration;
+    String durationStr = '';
     try {
       DateTime from = DateTime.parse(
           '2020-01-01 ${_pad(onHourEditingController.value.text)}:${_pad(onMinEditingController.value.text)}:00Z');
@@ -317,6 +318,10 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
         DateTime to2 = DateTime.parse(
             '2020-01-02 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
         duration = to2.difference(from);
+      }
+      durationStr = 'ON for: ${duration.inHours}:${duration.inMinutes % 60}';
+      if (duration.inHours == 0 && duration.inMinutes == 0) {
+        durationStr = 'ON for: 24:00';
       }
     } catch (e) {
       duration = Duration.zero;
@@ -397,8 +402,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
-                      child: Text(
-                          'ON for: ${duration.inHours}:${duration.inMinutes % 60}',
+                      child: Text(durationStr,
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
