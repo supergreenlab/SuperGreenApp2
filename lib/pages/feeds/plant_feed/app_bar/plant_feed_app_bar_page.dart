@@ -33,7 +33,7 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
             if (_scrollController.hasClients == false) {
               return;
             }
-            _scrollController.animateTo(200,
+            _scrollController.animateTo(50,
                 duration: Duration(seconds: 15), curve: Curves.linear);
           });
         }
