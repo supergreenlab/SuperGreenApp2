@@ -169,7 +169,7 @@ class FeedMedias extends Table {
     };
   }
 
-  static String makeFilePath({String prefix=''}) {
+  static String makeFilePath({String prefix = ''}) {
     String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     return FeedMedias.makeRelativeFilePath('$prefix$timestamp');
   }
@@ -259,8 +259,12 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return _selectFeedEntries(feedID, limit, offset).get();
   }
 
-  Future<List<FeedEntry>> getAllFeedEntries(int feedID) {
+  Future<List<FeedEntry>> getAllFeedEntriesForFeed(int feedID) {
     return (select(feedEntries)..where((fe) => fe.feed.equals(feedID))).get();
+  }
+
+  Future<List<FeedEntry>> getAllFeedEntries() {
+    return select(feedEntries).get();
   }
 
   Future<List<FeedEntry>> getFeedEntriesWithType(String type) {

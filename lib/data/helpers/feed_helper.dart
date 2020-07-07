@@ -96,7 +96,7 @@ class FeedEntryHelper {
   static Future<void> deleteFeed(Feed feed, {addDeleted: true}) async {
     feed = await RelDB.get().feedsDAO.getFeed(feed.id);
     List<FeedEntry> feedEntries =
-        await RelDB.get().feedsDAO.getAllFeedEntries(feed.id);
+        await RelDB.get().feedsDAO.getAllFeedEntriesForFeed(feed.id);
     for (FeedEntry feedEntry in feedEntries) {
       await FeedEntryHelper.deleteFeedEntry(feedEntry);
     }

@@ -22,7 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
-import 'package:super_green_app/pages/feeds/public_plant/public_plant_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_bloc.dart';
 
 class PublicPlantPage extends StatelessWidget {
   @override

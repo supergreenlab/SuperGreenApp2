@@ -174,9 +174,8 @@ class RelDB extends _$RelDB {
           List<Device> devices = await devicesDAO.getDevices();
           for (Device device in devices) {
             if (device.synced == true && device.serverID == null) {
-              await devicesDAO.updateDevice(DevicesCompanion(
-                  id: Value(device.id),
-                  synced: Value(false)));
+              await devicesDAO.updateDevice(
+                  DevicesCompanion(id: Value(device.id), synced: Value(false)));
             }
           }
         }

@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feed/app_bar/plant_feed_app_bar_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
