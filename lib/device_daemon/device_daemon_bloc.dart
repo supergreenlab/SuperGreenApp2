@@ -116,6 +116,8 @@ class DeviceDaemonBloc
               DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
           add(DeviceDaemonBlocEventDeviceReachable(device, true));
           await _updateDeviceTime(device);
+        } else {
+          throw "Wrong identifier for device ${device.name}";
         }
       } catch (e) {
         Logger.log(
@@ -142,6 +144,8 @@ class DeviceDaemonBloc
                   ip: Value(ip),
                   synced: Value(device.synced ? ip == device.ip : false)));
               add(DeviceDaemonBlocEventDeviceReachable(device, true));
+            } else {
+              throw "Wrong identifier for device ${device.name}";
             }
           } catch (e) {
             Logger.log(
@@ -158,7 +162,7 @@ class DeviceDaemonBloc
           add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
       }
-    } catch(e) {
+    } catch (e) {
       Logger.log(e);
     } finally {
       _deviceWorker[device.id] = false;

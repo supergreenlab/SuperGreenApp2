@@ -16,34 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/params/plant_infos_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 
-abstract class PublicPlantBlocEvent extends Equatable {}
-
-class PublicPlantBlocState extends Equatable {
+class RemotePlantInfosBloc extends PlantInfosBloc {
   final String plantID;
 
-  PublicPlantBlocState(this.plantID) : super();
+  RemotePlantInfosBloc(this.plantID);
 
   @override
-  List<Object> get props => [plantID];
-}
-
-class PublicPlantBlocStateInit extends PublicPlantBlocState {
-  PublicPlantBlocStateInit(String id) : super(id);
-}
-
-class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
-  final MainNavigateToPublicPlant args;
-
-  PublicPlantBloc(this.args);
+  Stream<PlantInfosState> loadPlant() async* {}
 
   @override
-  PublicPlantBlocState get initialState => PublicPlantBlocStateInit(args.id);
-
-  @override
-  Stream<PublicPlantBlocState> mapEventToState(
-      PublicPlantBlocEvent event) async* {}
+  Stream<PlantInfosState> updatePlant(PlantInfosSettings settings) async* {}
 }

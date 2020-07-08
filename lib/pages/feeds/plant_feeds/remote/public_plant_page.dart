@@ -19,9 +19,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/remote/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_bloc.dart';
 
 class PublicPlantPage extends StatelessWidget {
@@ -38,21 +41,37 @@ class PublicPlantPage extends StatelessWidget {
   }
 
   Widget _renderFeed(BuildContext context, PublicPlantBlocState state) {
+    List<Widget Function(BuildContext, PublicPlantBlocState)> tabs = [
+      _renderPlantInfos,
+    ];
     return BlocProvider(
-      create: (context) => FeedBloc(
-          RemoteFeedBlocProvider(state.id)),
+      create: (context) => FeedBloc(RemoteFeedBlocProvider(state.plantID)),
       child: FeedPage(
         title: 'Plop',
         color: Colors.indigo,
-        appBarHeight: 200,
+        appBarHeight: 380,
         appBar: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child:
-                SvgPicture.asset('assets/feed_card/logo_sgl_white.svg'),
+          child: Expanded(
+            child: Swiper(
+              itemCount: tabs.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                return tabs[index](context, state);
+              },
+              pagination: SwiperPagination(
+                builder: new DotSwiperPaginationBuilder(
+                    color: Colors.white, activeColor: Color(0xff3bb30b)),
+              ),
+              loop: false,
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _renderPlantInfos(BuildContext context, PublicPlantBlocState state) {
+    return BlocProvider(
+        create: (context) => RemotePlantInfosBloc(state.plantID), child: PlantInfosPage<RemotePlantInfosBloc>());
   }
 }

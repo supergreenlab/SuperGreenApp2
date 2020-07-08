@@ -96,6 +96,7 @@ flutter:
   assets:
     - assets/
     - assets/feed_form/
+    - assets/plant_infos/
     - assets/feed_card/
     - assets/box_setup/
     - assets/home/

@@ -31,10 +31,12 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/sunglasses_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -604,7 +606,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     String name = state.plant.name;
 
     Widget nameText;
-    if (_reachable && _showIP) {
+    if (_showIP) {
       nameText = Column(
         children: <Widget>[
           Text(
@@ -684,17 +686,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   Widget _renderPlantInfos(
       BuildContext context, PlantFeedBlocStateLoaded state) {
-    return Container(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Center(
-            child: Text(
-          'Plant infos\nComing soon!',
-          style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ))
-      ]),
-    );
+    return BlocProvider(
+        create: (context) => LocalPlantInfosBloc(state.plant), child: PlantInfosPage<LocalPlantInfosBloc>());
   }
 
   Widget _renderEnvironmentTab(
