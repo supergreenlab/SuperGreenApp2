@@ -20,12 +20,22 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_strain.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_widget.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
-    extends StatelessWidget {
+    extends StatefulWidget {
+  @override
+  _PlantInfosPageState<PIBloc> createState() => _PlantInfosPageState<PIBloc>();
+}
+
+class _PlantInfosPageState<
+        PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
+    extends State<PlantInfosPage<PIBloc>> {
+  String form;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PIBloc, PlantInfosState>(
@@ -34,7 +44,16 @@ class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
           if (state is PlantInfosStateLoading) {
             return _renderLoading(context, state);
           }
-          return _renderLoaded(context, state);
+          if (form == null) {
+            return _renderLoaded(context, state);
+          } else {
+            return Stack(
+              children: <Widget>[
+                _renderLoaded(context, state),
+                _renderForm(context, state),
+              ],
+            );
+          }
         });
   }
 
@@ -45,6 +64,15 @@ class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
   }
 
   Widget _renderLoaded(BuildContext context, PlantInfosStateLoaded state) {
+    String strain;
+
+    if (state.plantInfos.settings.strain != null &&
+        state.plantInfos.settings.seedbank != null) {
+      strain =
+          '# ${state.plantInfos.settings.strain}\nfrom **${state.plantInfos.settings.seedbank}**';
+    } else if (state.plantInfos.settings.strain != null) {
+      strain = '# ${state.plantInfos.settings.strain}';
+    }
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -55,23 +83,30 @@ class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, bottom: 16),
-                    child: Text(
-                      state.plantInfos.name,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
                   PlantInfosWidget(
-                      'icon_plant_type.svg', 'Plant type', null, () {}),
+                      title: 'Strain name',
+                      value: strain,
+                      onEdit: () => _openForm('STRAIN')),
                   PlantInfosWidget(
-                      'icon_vegging_since.svg', 'Vegging since', null, () {}),
-                  PlantInfosWidget('icon_medium.svg', 'Medium', null, () {}),
+                      icon: 'icon_plant_type.svg',
+                      title: 'Plant type',
+                      value: 'Photo',
+                      onEdit: () => _openForm('STRAIN')),
                   PlantInfosWidget(
-                      'icon_dimension.svg', 'Dimensions', null, () {}),
+                      icon: 'icon_vegging_since.svg',
+                      title: 'Vegging since',
+                      value: null,
+                      onEdit: () => _openForm('STRAIN')),
+                  PlantInfosWidget(
+                      icon: 'icon_medium.svg',
+                      title: 'Medium',
+                      value: null,
+                      onEdit: () => _openForm('STRAIN')),
+                  PlantInfosWidget(
+                      icon: 'icon_dimension.svg',
+                      title: 'Dimensions',
+                      value: null,
+                      onEdit: () => _openForm('STRAIN')),
                 ]),
           ),
           Expanded(
@@ -103,5 +138,42 @@ class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
         ],
       ),
     );
+  }
+
+  Widget _renderForm(BuildContext context, PlantInfosStateLoaded state) {
+    final forms = {
+      'STRAIN': () => PlantInfosStrain(
+            strain: state.plantInfos.settings.strain,
+            seedbank: state.plantInfos.settings.seedbank,
+            onCancel: () => _openForm(null),
+            onSubmit: () => _openForm(null),
+          ),
+    };
+    return Container(
+      color: Color(0xff063047).withAlpha(127),
+      child: Column(
+        children: <Widget>[
+          Center(
+              child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Color(0xff063047),
+                    borderRadius: BorderRadius.circular(2),
+                    border: Border.all(color: Colors.white)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: forms[form](),
+                )),
+          )),
+        ],
+      ),
+    );
+  }
+
+  void _openForm(String form) {
+    setState(() {
+      this.form = form;
+    });
   }
 }

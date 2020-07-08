@@ -26,7 +26,7 @@ class PlantInfosSettings extends Equatable {
   final bool isSingle;
 
   final String strain;
-  final String seedBank;
+  final String seedbank;
 
   final DateTime veggingStart;
   final DateTime bloomingStart;
@@ -35,7 +35,7 @@ class PlantInfosSettings extends Equatable {
   final int height;
   final int depth;
 
-  PlantInfosSettings(this.phase, this.plantType, this.isSingle, this.strain, this.seedBank, this.veggingStart, this.bloomingStart,
+  PlantInfosSettings(this.phase, this.plantType, this.isSingle, this.strain, this.seedbank, this.veggingStart, this.bloomingStart,
       this.medium, this.width, this.height, this.depth);
 
   factory PlantInfosSettings.fromJSON(String json) {
@@ -61,7 +61,7 @@ class PlantInfosSettings extends Equatable {
       'plantType': plantType,
       'isSingle': isSingle,
       'strain': strain,
-      'seedBank': seedBank,
+      'seedBank': seedbank,
       'veggingStart': veggingStart,
       'bloomingStart': bloomingStart,
       'medium': medium,
