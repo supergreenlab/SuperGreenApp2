@@ -24,7 +24,7 @@ class PlantInfosPhaseSince extends StatefulWidget {
   final DateTime date;
 
   final Function onCancel;
-  final Function onSubmit;
+  final Function(String phase, DateTime date) onSubmit;
 
   PlantInfosPhaseSince(
       {@required this.phase,
@@ -37,7 +37,8 @@ class PlantInfosPhaseSince extends StatefulWidget {
 }
 
 class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
-  final TextEditingController plantTypeController = TextEditingController();
+  DateTime date;
+  final TextEditingController phaseController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,9 @@ class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
       title: 'Vegging since',
       icon: 'icon_vegging_since.svg',
       onCancel: widget.onCancel,
-      onSubmit: widget.onSubmit,
+      onSubmit: () {
+        widget.onSubmit(phaseController.text, date);
+      },
       child: Column(
         children: <Widget>[],
       ),

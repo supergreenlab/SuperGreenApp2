@@ -24,7 +24,7 @@ class PlantInfosPlantType extends StatefulWidget {
   final String plantType;
 
   final Function onCancel;
-  final Function onSubmit;
+  final Function(String plantType) onSubmit;
 
   PlantInfosPlantType(
       {@required this.plantType,
@@ -44,7 +44,9 @@ class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
       title: 'Plant type',
       icon: 'icon_plant_type.svg',
       onCancel: widget.onCancel,
-      onSubmit: widget.onSubmit,
+      onSubmit: () {
+        widget.onSubmit(plantTypeController.text);
+      },
       child: Column(
         children: <Widget>[
           PlantInfosInput(

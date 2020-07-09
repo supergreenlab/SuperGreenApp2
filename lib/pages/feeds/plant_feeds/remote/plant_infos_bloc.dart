@@ -17,7 +17,6 @@
  */
 
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 class RemotePlantInfosBloc extends PlantInfosBloc {
   final String plantID;
@@ -28,5 +27,5 @@ class RemotePlantInfosBloc extends PlantInfosBloc {
   Stream<PlantInfosState> loadPlant() async* {}
 
   @override
-  Stream<PlantInfosState> updatePlant(PlantSettings settings) async* {}
+  Stream<PlantInfosState> updateSettings(PlantInfos plantInfos) async* {}
 }

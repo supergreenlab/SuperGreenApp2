@@ -25,7 +25,7 @@ class PlantInfosDimensions extends StatefulWidget {
   final int depth;
 
   final Function onCancel;
-  final Function onSubmit;
+  final Function(int width, int height, int depth) onSubmit;
 
   PlantInfosDimensions(
       {@required this.onCancel,
@@ -39,7 +39,7 @@ class PlantInfosDimensions extends StatefulWidget {
 }
 
 class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
-  final TextEditingController plantTypeController = TextEditingController();
+  final TextEditingController dimensionsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,9 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
       title: 'Dimensions',
       icon: 'icon_dimension.svg',
       onCancel: widget.onCancel,
-      onSubmit: widget.onSubmit,
+      onSubmit: () {
+        widget.onSubmit(0, 0, 0);
+      },
       child: Column(
         children: <Widget>[],
       ),

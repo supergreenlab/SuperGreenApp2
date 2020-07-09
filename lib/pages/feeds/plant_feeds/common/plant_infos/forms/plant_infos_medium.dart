@@ -23,7 +23,7 @@ class PlantInfosMedium extends StatefulWidget {
   final String medium;
 
   final Function onCancel;
-  final Function onSubmit;
+  final Function(String medium) onSubmit;
 
   PlantInfosMedium(
       {@required this.medium,
@@ -43,10 +43,11 @@ class _PlantInfosMediumState extends State<PlantInfosMedium> {
       title: 'Medium',
       icon: 'icon_medium.svg',
       onCancel: widget.onCancel,
-      onSubmit: widget.onSubmit,
+      onSubmit: () {
+        widget.onSubmit(plantTypeController.text);
+      },
       child: Column(
-        children: <Widget>[
-        ],
+        children: <Widget>[],
       ),
     );
   }

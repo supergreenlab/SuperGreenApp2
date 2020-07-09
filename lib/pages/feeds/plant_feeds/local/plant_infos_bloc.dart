@@ -26,6 +26,7 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_sett
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 class LocalPlantInfosBloc extends PlantInfosBloc {
+  Box box;
   final Plant plant;
 
   StreamSubscription<Box> boxStream;
@@ -36,7 +37,8 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
 
   @override
   Stream<PlantInfosState> loadPlant() async* {
-    this.plantInfos = PlantInfos(plant.name, null, null, null, null);
+    box = await RelDB.get().plantsDAO.getBox(plant.box);
+    this.plantInfos = PlantInfos(plant.name, null, null, null, null, true);
     plantStream =
         RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
     boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
@@ -47,11 +49,18 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
   }
 
   @override
-  Stream<PlantInfosState> updatePlant(PlantSettings settings) async* {
+  Stream<PlantInfosState> updateSettings(PlantInfos plantInfos) async* {
     PlantsCompanion plant = PlantsCompanion(
-        id: Value(this.plant.id), settings: Value(settings.toJSON()));
+        id: Value(this.plant.id),
+        settings: Value(plantInfos.plantSettings.toJSON()),
+        synced: Value(false));
     await RelDB.get().plantsDAO.updatePlant(plant);
-    plantInfosLoaded(plantInfos.copyWith(plantSettings: settings));
+    BoxesCompanion box = BoxesCompanion(
+        id: Value(this.box.id),
+        settings: Value(plantInfos.boxSettings.toJSON()),
+        synced: Value(false));
+    await RelDB.get().plantsDAO.updateBox(box);
+    plantInfosLoaded(plantInfos);
   }
 
   void plantUpdated(Plant plant) {
@@ -62,8 +71,7 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
 
   void boxUpdated(Box box) {
     BoxSettings settings = BoxSettings.fromJSON(box.settings);
-    plantInfosLoaded(
-        plantInfos.copyWith(boxSettings: settings));
+    plantInfosLoaded(plantInfos.copyWith(boxSettings: settings));
   }
 
   void feedMediaUpdated(FeedMedia feedMedia) {

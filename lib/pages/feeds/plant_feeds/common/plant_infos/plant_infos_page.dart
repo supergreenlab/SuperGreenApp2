@@ -27,6 +27,8 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_strain.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_widget.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
@@ -80,7 +82,9 @@ class _PlantInfosPageState<
 
     String phaseTitle = 'Current phase';
     if (state.plantInfos.plantSettings.phase == 'VEG') {
-
+      phaseTitle = 'Vegging since';
+    } else if (state.plantInfos.plantSettings.phase == 'BLOOM') {
+      phaseTitle = 'Blooming since';
     }
     return Container(
       child: Row(
@@ -103,7 +107,7 @@ class _PlantInfosPageState<
                       onEdit: () => _openForm('PLANT_TYPE')),
                   PlantInfosWidget(
                       icon: 'icon_vegging_since.svg',
-                      title: 'Vegging since',
+                      title: phaseTitle,
                       value: null,
                       onEdit: () => _openForm('PHASE_SINCE')),
                   PlantInfosWidget(
@@ -156,30 +160,46 @@ class _PlantInfosPageState<
             strain: state.plantInfos.plantSettings.strain,
             seedbank: state.plantInfos.plantSettings.seedbank,
             onCancel: () => _openForm(null),
-            onSubmit: () => _openForm(null),
+            onSubmit: (String strain, String seedbank) => updatePlantSettings(
+                context,
+                state,
+                state.plantInfos.plantSettings
+                    .copyWith(strain: strain, seedbank: seedbank)),
           ),
       'PLANT_TYPE': () => PlantInfosPlantType(
             plantType: state.plantInfos.plantSettings.plantType,
             onCancel: () => _openForm(null),
-            onSubmit: () => _openForm(null),
+            onSubmit: (String plantType) => updatePlantSettings(context, state,
+                state.plantInfos.plantSettings.copyWith(plantType: plantType)),
           ),
       'PHASE_SINCE': () => PlantInfosPhaseSince(
-            phase: state.plantInfos.plantSettings.phase,
-            date: state.plantInfos.plantSettings.veggingStart,
-            onCancel: () => _openForm(null),
-            onSubmit: () => _openForm(null),
-          ),
+          phase: state.plantInfos.plantSettings.phase,
+          date: state.plantInfos.plantSettings.veggingStart,
+          onCancel: () => _openForm(null),
+          onSubmit: (String phase, DateTime date) => updatePlantSettings(
+              context,
+              state,
+              phase == 'VEG'
+                  ? state.plantInfos.plantSettings
+                      .copyWith(phase: phase, veggingStart: date)
+                  : state.plantInfos.plantSettings
+                      .copyWith(phase: phase, bloomingStart: date))),
       'MEDIUM': () => PlantInfosMedium(
             medium: state.plantInfos.plantSettings.medium,
             onCancel: () => _openForm(null),
-            onSubmit: () => _openForm(null),
+            onSubmit: (String medium) => updatePlantSettings(context, state,
+                state.plantInfos.plantSettings.copyWith(medium: medium)),
           ),
       'DIMENSIONS': () => PlantInfosDimensions(
             width: state.plantInfos.boxSettings.width,
             height: state.plantInfos.boxSettings.height,
             depth: state.plantInfos.boxSettings.depth,
             onCancel: () => _openForm(null),
-            onSubmit: () => _openForm(null),
+            onSubmit: (int width, int height, int depth) => updateBoxSettings(
+                context,
+                state,
+                state.plantInfos.boxSettings
+                    .copyWith(width: width, height: height, depth: depth)),
           ),
     };
     return Container(
@@ -208,5 +228,28 @@ class _PlantInfosPageState<
     setState(() {
       this.form = form;
     });
+  }
+
+  void updatePlantSettings(BuildContext context, PlantInfosStateLoaded state,
+      PlantSettings settings) {
+    updatePlantInfos(
+        context,
+        state.plantInfos.copyWith(
+          plantSettings: settings,
+        ));
+  }
+
+  void updateBoxSettings(
+      BuildContext context, PlantInfosStateLoaded state, BoxSettings settings) {
+    updatePlantInfos(
+        context,
+        state.plantInfos.copyWith(
+          boxSettings: settings,
+        ));
+  }
+
+  void updatePlantInfos(BuildContext context, PlantInfos plantInfos) {
+    BlocProvider.of<PIBloc>(context).add(PlantInfosEventUpdate(plantInfos));
+    _openForm(null);
   }
 }

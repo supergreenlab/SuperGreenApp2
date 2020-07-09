@@ -27,26 +27,30 @@ class PlantInfos extends Equatable {
   final String thumbnailPath;
   final BoxSettings boxSettings;
   final PlantSettings plantSettings;
+  final bool editable;
 
   PlantInfos(this.name, this.filePath, this.thumbnailPath, this.boxSettings,
-      this.plantSettings);
+      this.plantSettings, this.editable);
 
   @override
   List<Object> get props =>
-      [name, filePath, thumbnailPath, boxSettings, plantSettings];
+      [name, filePath, thumbnailPath, boxSettings, plantSettings, editable];
 
-  PlantInfos copyWith(
-          {String name,
-          String filePath,
-          String thumbnailPath,
-          BoxSettings boxSettings,
-          PlantSettings plantSettings}) =>
+  PlantInfos copyWith({
+    String name,
+    String filePath,
+    String thumbnailPath,
+    BoxSettings boxSettings,
+    PlantSettings plantSettings,
+    bool editable,
+  }) =>
       PlantInfos(
         name ?? this.name,
         filePath ?? this.filePath,
         thumbnailPath ?? this.thumbnailPath,
         boxSettings ?? this.boxSettings,
         plantSettings ?? this.plantSettings,
+        editable ?? this.editable,
       );
 }
 
@@ -67,12 +71,12 @@ class PlantInfosEventLoaded extends PlantInfosEvent {
 }
 
 class PlantInfosEventUpdate extends PlantInfosEvent {
-  final PlantSettings settings;
+  final PlantInfos plantInfos;
 
-  PlantInfosEventUpdate(this.settings);
+  PlantInfosEventUpdate(this.plantInfos);
 
   @override
-  List<Object> get props => [settings];
+  List<Object> get props => [plantInfos];
 }
 
 abstract class PlantInfosState extends Equatable {}
@@ -108,12 +112,12 @@ abstract class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
     } else if (event is PlantInfosEventLoaded) {
       yield PlantInfosStateLoaded(event.plantInfos);
     } else if (event is PlantInfosEventUpdate) {
-      yield* updatePlant(event.settings);
+      yield* updateSettings(event.plantInfos);
     }
   }
 
   Stream<PlantInfosState> loadPlant();
-  Stream<PlantInfosState> updatePlant(PlantSettings settings);
+  Stream<PlantInfosState> updateSettings(PlantInfos plantInfos);
 
   void plantInfosLoaded(PlantInfos plantInfos) {
     this.plantInfos = plantInfos;

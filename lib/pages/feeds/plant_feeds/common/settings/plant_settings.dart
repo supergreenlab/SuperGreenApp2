@@ -88,8 +88,8 @@ class PlantSettings extends Equatable {
     bool isSingle,
     String strain,
     String seedbank,
-    String veggingStart,
-    String bloomingStart,
+    DateTime veggingStart,
+    DateTime bloomingStart,
     String medium
   }) => PlantSettings(
     phase ?? this.phase,

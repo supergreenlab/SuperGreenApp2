@@ -25,7 +25,7 @@ class PlantInfosStrain extends StatefulWidget {
   final String seedbank;
 
   final Function onCancel;
-  final Function onSubmit;
+  final Function(String strain, String seedbank) onSubmit;
 
   PlantInfosStrain(
       {@required this.strain,
@@ -47,7 +47,9 @@ class _PlantInfosStrainState extends State<PlantInfosStrain> {
       title: 'Strain name',
       icon: null,
       onCancel: widget.onCancel,
-      onSubmit: widget.onSubmit,
+      onSubmit: () {
+        widget.onSubmit(strainController.text, seedbankController.text);
+      },
       child: Column(
         children: <Widget>[
           PlantInfosInput(
