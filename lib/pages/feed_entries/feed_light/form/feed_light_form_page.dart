@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
@@ -46,8 +48,10 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       bloc: BlocProvider.of<FeedLightFormBloc>(context),
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
-          BlocProvider.of<DeviceDaemonBloc>(context)
-              .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+          Timer(Duration(milliseconds: 100), () {
+            BlocProvider.of<DeviceDaemonBloc>(context)
+                .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+          });
           setState(() => values = List.from(state.values));
         } else if (state is FeedLightFormBlocStateDone) {
           if (state.feedEntry != null) {
@@ -123,7 +127,6 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                     if (state is FeedLightFormBlocStateLightsLoaded) {
                       if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
                           daemonState.device.id == state.box.device) {
-                        if (_reachable == daemonState.reachable) return;
                         if (_reachable == daemonState.reachable) return;
                         setState(() {
                           _reachable = daemonState.reachable;

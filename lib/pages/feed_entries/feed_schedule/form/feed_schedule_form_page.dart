@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -78,8 +80,10 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
       listener: (BuildContext context, FeedScheduleFormBlocState state) {
         if (state is FeedScheduleFormBlocStateLoaded) {
           if (state.box.device != null) {
-            BlocProvider.of<DeviceDaemonBloc>(context)
-                .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+            Timer(Duration(milliseconds: 100), () {
+              BlocProvider.of<DeviceDaemonBloc>(context)
+                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+            });
           }
         } else if (state is FeedScheduleFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)

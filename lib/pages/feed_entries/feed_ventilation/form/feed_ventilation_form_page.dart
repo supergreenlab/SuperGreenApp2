@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
@@ -46,8 +48,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
         if (state is FeedVentilationFormBlocStateLoaded) {
           if (state.box.device != null) {
-            BlocProvider.of<DeviceDaemonBloc>(context)
-                .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+            Timer(Duration(milliseconds: 100), () {
+              BlocProvider.of<DeviceDaemonBloc>(context)
+                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+            });
           }
           setState(() {
             _blowerDay = state.blowerDay;

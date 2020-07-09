@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_plant_type.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_strain.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_widget.dart';
@@ -90,8 +91,8 @@ class _PlantInfosPageState<
                   PlantInfosWidget(
                       icon: 'icon_plant_type.svg',
                       title: 'Plant type',
-                      value: 'Photo',
-                      onEdit: () => _openForm('STRAIN')),
+                      value: state.plantInfos.settings.plantType,
+                      onEdit: () => _openForm('PLANT_TYPE')),
                   PlantInfosWidget(
                       icon: 'icon_vegging_since.svg',
                       title: 'Vegging since',
@@ -100,12 +101,13 @@ class _PlantInfosPageState<
                   PlantInfosWidget(
                       icon: 'icon_medium.svg',
                       title: 'Medium',
-                      value: null,
+                      value: state.plantInfos.settings.medium,
                       onEdit: () => _openForm('STRAIN')),
                   PlantInfosWidget(
                       icon: 'icon_dimension.svg',
                       title: 'Dimensions',
-                      value: null,
+                      value:
+                          '${state.plantInfos.settings.width}x${state.plantInfos.settings.height}x${state.plantInfos.settings.depth}',
                       onEdit: () => _openForm('STRAIN')),
                 ]),
           ),
@@ -145,6 +147,11 @@ class _PlantInfosPageState<
       'STRAIN': () => PlantInfosStrain(
             strain: state.plantInfos.settings.strain,
             seedbank: state.plantInfos.settings.seedbank,
+            onCancel: () => _openForm(null),
+            onSubmit: () => _openForm(null),
+          ),
+      'PLANT_TYPE': () => PlantInfosPlantType(
+            plantType: state.plantInfos.settings.plantType,
             onCancel: () => _openForm(null),
             onSubmit: () => _openForm(null),
           ),
