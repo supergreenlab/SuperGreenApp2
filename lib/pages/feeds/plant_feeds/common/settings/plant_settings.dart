@@ -20,7 +20,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class PlantInfosSettings extends Equatable {
+class PlantSettings extends Equatable {
   final String phase;
   final String plantType;
   final bool isSingle;
@@ -31,16 +31,21 @@ class PlantInfosSettings extends Equatable {
   final DateTime veggingStart;
   final DateTime bloomingStart;
   final String medium;
-  final int width;
-  final int height;
-  final int depth;
 
-  PlantInfosSettings(this.phase, this.plantType, this.isSingle, this.strain, this.seedbank, this.veggingStart, this.bloomingStart,
-      this.medium, this.width, this.height, this.depth);
+  PlantSettings(
+    this.phase,
+    this.plantType,
+    this.isSingle,
+    this.strain,
+    this.seedbank,
+    this.veggingStart,
+    this.bloomingStart,
+    this.medium,
+  );
 
-  factory PlantInfosSettings.fromJSON(String json) {
+  factory PlantSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return PlantInfosSettings(
+    return PlantSettings(
       map['phase'],
       map['plantType'],
       map['isSingle'],
@@ -49,9 +54,6 @@ class PlantInfosSettings extends Equatable {
       map['veggingStart'],
       map['bloomingStart'],
       map['medium'],
-      map['width'],
-      map['height'],
-      map['depth'],
     );
   }
 
@@ -65,13 +67,38 @@ class PlantInfosSettings extends Equatable {
       'veggingStart': veggingStart,
       'bloomingStart': bloomingStart,
       'medium': medium,
-      'width': width,
-      'height': height,
-      'depth': depth,
     });
   }
 
   @override
-  List<Object> get props =>
-      [phase, plantType, isSingle, veggingStart, bloomingStart, medium, width, height, depth];
+  List<Object> get props => [
+        phase,
+        plantType,
+        isSingle,
+        strain,
+        seedbank,
+        veggingStart,
+        bloomingStart,
+        medium,
+      ];
+  
+  PlantSettings copyWith({
+    String phase,
+    String plantType,
+    bool isSingle,
+    String strain,
+    String seedbank,
+    String veggingStart,
+    String bloomingStart,
+    String medium
+  }) => PlantSettings(
+    phase ?? this.phase,
+    plantType ?? this.plantType,
+    isSingle ?? this.isSingle,
+    strain ?? this.strain,
+    seedbank ?? this.seedbank,
+    veggingStart ?? this.veggingStart,
+    bloomingStart ?? this.bloomingStart,
+    medium ?? this.medium,
+  );
 }

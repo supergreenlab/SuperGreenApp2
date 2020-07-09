@@ -20,6 +20,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_dimensions.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_medium.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_phase_since.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_plant_type.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_strain.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
@@ -67,12 +70,17 @@ class _PlantInfosPageState<
   Widget _renderLoaded(BuildContext context, PlantInfosStateLoaded state) {
     String strain;
 
-    if (state.plantInfos.settings.strain != null &&
-        state.plantInfos.settings.seedbank != null) {
+    if (state.plantInfos.plantSettings.strain != null &&
+        state.plantInfos.plantSettings.seedbank != null) {
       strain =
-          '# ${state.plantInfos.settings.strain}\nfrom **${state.plantInfos.settings.seedbank}**';
-    } else if (state.plantInfos.settings.strain != null) {
-      strain = '# ${state.plantInfos.settings.strain}';
+          '# ${state.plantInfos.plantSettings.strain}\nfrom **${state.plantInfos.plantSettings.seedbank}**';
+    } else if (state.plantInfos.plantSettings.strain != null) {
+      strain = '# ${state.plantInfos.plantSettings.strain}';
+    }
+
+    String phaseTitle = 'Current phase';
+    if (state.plantInfos.plantSettings.phase == 'VEG') {
+
     }
     return Container(
       child: Row(
@@ -91,24 +99,24 @@ class _PlantInfosPageState<
                   PlantInfosWidget(
                       icon: 'icon_plant_type.svg',
                       title: 'Plant type',
-                      value: state.plantInfos.settings.plantType,
+                      value: state.plantInfos.plantSettings.plantType,
                       onEdit: () => _openForm('PLANT_TYPE')),
                   PlantInfosWidget(
                       icon: 'icon_vegging_since.svg',
                       title: 'Vegging since',
                       value: null,
-                      onEdit: () => _openForm('STRAIN')),
+                      onEdit: () => _openForm('PHASE_SINCE')),
                   PlantInfosWidget(
                       icon: 'icon_medium.svg',
                       title: 'Medium',
-                      value: state.plantInfos.settings.medium,
-                      onEdit: () => _openForm('STRAIN')),
+                      value: state.plantInfos.plantSettings.medium,
+                      onEdit: () => _openForm('MEDIUM')),
                   PlantInfosWidget(
                       icon: 'icon_dimension.svg',
                       title: 'Dimensions',
                       value:
-                          '${state.plantInfos.settings.width}x${state.plantInfos.settings.height}x${state.plantInfos.settings.depth}',
-                      onEdit: () => _openForm('STRAIN')),
+                          '${state.plantInfos.boxSettings.width}x${state.plantInfos.boxSettings.height}x${state.plantInfos.boxSettings.depth}',
+                      onEdit: () => _openForm('DIMENSIONS')),
                 ]),
           ),
           Expanded(
@@ -145,13 +153,31 @@ class _PlantInfosPageState<
   Widget _renderForm(BuildContext context, PlantInfosStateLoaded state) {
     final forms = {
       'STRAIN': () => PlantInfosStrain(
-            strain: state.plantInfos.settings.strain,
-            seedbank: state.plantInfos.settings.seedbank,
+            strain: state.plantInfos.plantSettings.strain,
+            seedbank: state.plantInfos.plantSettings.seedbank,
             onCancel: () => _openForm(null),
             onSubmit: () => _openForm(null),
           ),
       'PLANT_TYPE': () => PlantInfosPlantType(
-            plantType: state.plantInfos.settings.plantType,
+            plantType: state.plantInfos.plantSettings.plantType,
+            onCancel: () => _openForm(null),
+            onSubmit: () => _openForm(null),
+          ),
+      'PHASE_SINCE': () => PlantInfosPhaseSince(
+            phase: state.plantInfos.plantSettings.phase,
+            date: state.plantInfos.plantSettings.veggingStart,
+            onCancel: () => _openForm(null),
+            onSubmit: () => _openForm(null),
+          ),
+      'MEDIUM': () => PlantInfosMedium(
+            medium: state.plantInfos.plantSettings.medium,
+            onCancel: () => _openForm(null),
+            onSubmit: () => _openForm(null),
+          ),
+      'DIMENSIONS': () => PlantInfosDimensions(
+            width: state.plantInfos.boxSettings.width,
+            height: state.plantInfos.boxSettings.height,
+            depth: state.plantInfos.boxSettings.depth,
             onCancel: () => _openForm(null),
             onSubmit: () => _openForm(null),
           ),

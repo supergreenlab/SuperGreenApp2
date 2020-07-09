@@ -18,48 +18,34 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_input.dart';
 
-class PlantInfosStrain extends StatefulWidget {
-  final String strain;
-  final String seedbank;
+class PlantInfosMedium extends StatefulWidget {
+  final String medium;
 
   final Function onCancel;
   final Function onSubmit;
 
-  PlantInfosStrain(
-      {@required this.strain,
-      @required this.seedbank,
+  PlantInfosMedium(
+      {@required this.medium,
       @required this.onCancel,
       @required this.onSubmit});
 
   @override
-  _PlantInfosStrainState createState() => _PlantInfosStrainState();
+  _PlantInfosMediumState createState() => _PlantInfosMediumState();
 }
 
-class _PlantInfosStrainState extends State<PlantInfosStrain> {
-  final TextEditingController strainController = TextEditingController();
-  final TextEditingController seedbankController = TextEditingController();
+class _PlantInfosMediumState extends State<PlantInfosMedium> {
+  final TextEditingController plantTypeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return PlantInfosForm(
-      title: 'Strain name',
-      icon: null,
+      title: 'Medium',
+      icon: 'icon_medium.svg',
       onCancel: widget.onCancel,
       onSubmit: widget.onSubmit,
       child: Column(
         children: <Widget>[
-          PlantInfosInput(
-              controller: strainController,
-              initialValue: widget.strain,
-              labelText: 'Strain',
-              hintText: 'Ex: White widow'),
-          PlantInfosInput(
-              controller: seedbankController,
-              initialValue: widget.seedbank,
-              labelText: 'Seedbank',
-              hintText: 'Ex: Paradise Seeds'),
         ],
       ),
     );

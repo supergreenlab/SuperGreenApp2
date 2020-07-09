@@ -21,12 +21,14 @@ import 'dart:async';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/params/plant_infos_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 class LocalPlantInfosBloc extends PlantInfosBloc {
   final Plant plant;
 
+  StreamSubscription<Box> boxStream;
   StreamSubscription<Plant> plantStream;
   StreamSubscription<FeedMedia> feedMediaStream;
 
@@ -34,9 +36,10 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
 
   @override
   Stream<PlantInfosState> loadPlant() async* {
-    this.plantInfos = PlantInfos(plant.name, null, null, null);
+    this.plantInfos = PlantInfos(plant.name, null, null, null, null);
     plantStream =
         RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
+    boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
     feedMediaStream = RelDB.get()
         .feedsDAO
         .watchLastFeedMedia(plant.feed)
@@ -44,16 +47,23 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
   }
 
   @override
-  Stream<PlantInfosState> updatePlant(PlantInfosSettings settings) async* {
+  Stream<PlantInfosState> updatePlant(PlantSettings settings) async* {
     PlantsCompanion plant = PlantsCompanion(
         id: Value(this.plant.id), settings: Value(settings.toJSON()));
     await RelDB.get().plantsDAO.updatePlant(plant);
-    plantInfosLoaded(plantInfos.copyWith(settings: settings));
+    plantInfosLoaded(plantInfos.copyWith(plantSettings: settings));
   }
 
   void plantUpdated(Plant plant) {
-    PlantInfosSettings settings = PlantInfosSettings.fromJSON(plant.settings);
-    plantInfosLoaded(plantInfos.copyWith(name: plant.name, settings: settings));
+    PlantSettings settings = PlantSettings.fromJSON(plant.settings);
+    plantInfosLoaded(
+        plantInfos.copyWith(name: plant.name, plantSettings: settings));
+  }
+
+  void boxUpdated(Box box) {
+    BoxSettings settings = BoxSettings.fromJSON(box.settings);
+    plantInfosLoaded(
+        plantInfos.copyWith(boxSettings: settings));
   }
 
   void feedMediaUpdated(FeedMedia feedMedia) {
@@ -65,6 +75,7 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
 
   @override
   Future<void> close() {
+    boxStream.cancel();
     plantStream.cancel();
     feedMediaStream.cancel();
     return super.close();

@@ -18,49 +18,36 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_input.dart';
 
-class PlantInfosStrain extends StatefulWidget {
-  final String strain;
-  final String seedbank;
+class PlantInfosPhaseSince extends StatefulWidget {
+  final String phase;
+  final DateTime date;
 
   final Function onCancel;
   final Function onSubmit;
 
-  PlantInfosStrain(
-      {@required this.strain,
-      @required this.seedbank,
+  PlantInfosPhaseSince(
+      {@required this.phase,
+      @required this.date,
       @required this.onCancel,
       @required this.onSubmit});
 
   @override
-  _PlantInfosStrainState createState() => _PlantInfosStrainState();
+  _PlantInfosPhaseSinceState createState() => _PlantInfosPhaseSinceState();
 }
 
-class _PlantInfosStrainState extends State<PlantInfosStrain> {
-  final TextEditingController strainController = TextEditingController();
-  final TextEditingController seedbankController = TextEditingController();
+class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
+  final TextEditingController plantTypeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return PlantInfosForm(
-      title: 'Strain name',
-      icon: null,
+      title: 'Vegging since',
+      icon: 'icon_vegging_since.svg',
       onCancel: widget.onCancel,
       onSubmit: widget.onSubmit,
       child: Column(
-        children: <Widget>[
-          PlantInfosInput(
-              controller: strainController,
-              initialValue: widget.strain,
-              labelText: 'Strain',
-              hintText: 'Ex: White widow'),
-          PlantInfosInput(
-              controller: seedbankController,
-              initialValue: widget.seedbank,
-              labelText: 'Seedbank',
-              hintText: 'Ex: Paradise Seeds'),
-        ],
+        children: <Widget>[],
       ),
     );
   }

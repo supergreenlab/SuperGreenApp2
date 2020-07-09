@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_input.dart';
 
 class PlantInfosPlantType extends StatefulWidget {
   final String plantType;
@@ -46,35 +47,12 @@ class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
       onSubmit: widget.onSubmit,
       child: Column(
         children: <Widget>[
-          _renderInputField(
-              plantTypeController, widget.plantType, 'Plant type', 'Ex: Photo/Auto'),
+          PlantInfosInput(
+              controller: plantTypeController,
+              initialValue: widget.plantType,
+              labelText: 'Plant type',
+              hintText: 'Ex: Photo/Auto'),
         ],
-      ),
-    );
-  }
-
-  Widget _renderInputField(TextEditingController controller,
-      String initialValue, String labelText, String hintText) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: TextFormField(
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          filled: true,
-          fillColor: Colors.white10,
-          hintText: hintText,
-          hintStyle: TextStyle(color: Colors.white30),
-          labelText: labelText,
-          labelStyle: TextStyle(
-            color: Colors.white,
-          ),
-          enabledBorder:
-              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        ),
-        style: TextStyle(color: Colors.white, decoration: TextDecoration.none),
-        initialValue: widget.plantType,
-        controller: plantTypeController,
       ),
     );
   }

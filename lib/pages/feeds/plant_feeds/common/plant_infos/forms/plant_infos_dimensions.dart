@@ -18,49 +18,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_input.dart';
 
-class PlantInfosStrain extends StatefulWidget {
-  final String strain;
-  final String seedbank;
+class PlantInfosDimensions extends StatefulWidget {
+  final int width;
+  final int height;
+  final int depth;
 
   final Function onCancel;
   final Function onSubmit;
 
-  PlantInfosStrain(
-      {@required this.strain,
-      @required this.seedbank,
-      @required this.onCancel,
-      @required this.onSubmit});
+  PlantInfosDimensions(
+      {@required this.onCancel,
+      @required this.onSubmit,
+      @required this.width,
+      @required this.height,
+      @required this.depth});
 
   @override
-  _PlantInfosStrainState createState() => _PlantInfosStrainState();
+  _PlantInfosDimensionsState createState() => _PlantInfosDimensionsState();
 }
 
-class _PlantInfosStrainState extends State<PlantInfosStrain> {
-  final TextEditingController strainController = TextEditingController();
-  final TextEditingController seedbankController = TextEditingController();
+class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
+  final TextEditingController plantTypeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return PlantInfosForm(
-      title: 'Strain name',
-      icon: null,
+      title: 'Dimensions',
+      icon: 'icon_dimension.svg',
       onCancel: widget.onCancel,
       onSubmit: widget.onSubmit,
       child: Column(
-        children: <Widget>[
-          PlantInfosInput(
-              controller: strainController,
-              initialValue: widget.strain,
-              labelText: 'Strain',
-              hintText: 'Ex: White widow'),
-          PlantInfosInput(
-              controller: seedbankController,
-              initialValue: widget.seedbank,
-              labelText: 'Seedbank',
-              hintText: 'Ex: Paradise Seeds'),
-        ],
+        children: <Widget>[],
       ),
     );
   }

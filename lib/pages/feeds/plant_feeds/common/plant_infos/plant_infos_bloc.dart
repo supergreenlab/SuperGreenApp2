@@ -18,29 +18,35 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/params/plant_infos_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 class PlantInfos extends Equatable {
   final String name;
   final String filePath;
   final String thumbnailPath;
-  final PlantInfosSettings settings;
+  final BoxSettings boxSettings;
+  final PlantSettings plantSettings;
 
-  PlantInfos(this.name, this.filePath, this.thumbnailPath, this.settings);
+  PlantInfos(this.name, this.filePath, this.thumbnailPath, this.boxSettings,
+      this.plantSettings);
 
   @override
-  List<Object> get props => [name, filePath, thumbnailPath, settings];
+  List<Object> get props =>
+      [name, filePath, thumbnailPath, boxSettings, plantSettings];
 
   PlantInfos copyWith(
           {String name,
           String filePath,
           String thumbnailPath,
-          PlantInfosSettings settings}) =>
+          BoxSettings boxSettings,
+          PlantSettings plantSettings}) =>
       PlantInfos(
         name ?? this.name,
         filePath ?? this.filePath,
         thumbnailPath ?? this.thumbnailPath,
-        settings ?? this.settings,
+        boxSettings ?? this.boxSettings,
+        plantSettings ?? this.plantSettings,
       );
 }
 
@@ -61,7 +67,7 @@ class PlantInfosEventLoaded extends PlantInfosEvent {
 }
 
 class PlantInfosEventUpdate extends PlantInfosEvent {
-  final PlantInfosSettings settings;
+  final PlantSettings settings;
 
   PlantInfosEventUpdate(this.settings);
 
@@ -107,7 +113,7 @@ abstract class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
   }
 
   Stream<PlantInfosState> loadPlant();
-  Stream<PlantInfosState> updatePlant(PlantInfosSettings settings);
+  Stream<PlantInfosState> updatePlant(PlantSettings settings);
 
   void plantInfosLoaded(PlantInfos plantInfos) {
     this.plantInfos = plantInfos;
