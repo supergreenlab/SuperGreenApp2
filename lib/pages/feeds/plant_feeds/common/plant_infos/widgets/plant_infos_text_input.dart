@@ -22,12 +22,14 @@ class PlantInfosTextInput extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final String labelText;
+  final bool number;
 
   const PlantInfosTextInput(
       {Key key,
       @required this.controller,
       @required this.hintText,
-      @required this.labelText})
+      @required this.labelText,
+      this.number=false})
       : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class PlantInfosTextInput extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: TextFormField(
+        keyboardType: number ? TextInputType.numberWithOptions(decimal: true) : null,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),

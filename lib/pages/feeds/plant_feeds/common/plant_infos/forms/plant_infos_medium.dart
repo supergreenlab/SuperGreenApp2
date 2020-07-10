@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_dropdown_input.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
 
 class PlantInfosMedium extends StatefulWidget {
@@ -35,11 +36,11 @@ class PlantInfosMedium extends StatefulWidget {
 }
 
 class _PlantInfosMediumState extends State<PlantInfosMedium> {
-  TextEditingController plantTypeController;
+  String medium;
 
   @override
   void initState() {
-    plantTypeController = TextEditingController(text: widget.medium);
+    medium = widget.medium;
     super.initState();
   }
 
@@ -50,10 +51,26 @@ class _PlantInfosMediumState extends State<PlantInfosMedium> {
       icon: 'icon_medium.svg',
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(plantTypeController.text);
+        widget.onSubmit(medium);
       },
       child: Column(
-        children: <Widget>[],
+        children: <Widget>[
+          PlantInfosDropdownInput(
+            labelText: 'Medium',
+            hintText: 'Choose a medium',
+            items: [
+              ['SOIL', 'Soil'],
+              ['DWC', 'DWC'],
+              ['HYDRO', 'Hydro'],
+            ],
+            value: medium,
+            onChanged: (String newValue) {
+              setState(() {
+                medium = newValue;
+              });
+            },
+          ),
+        ],
       ),
     );
   }

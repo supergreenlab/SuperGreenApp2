@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
 
 class PlantInfosDimensions extends StatefulWidget {
   final int width;
@@ -45,9 +46,12 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
 
   @override
   void initState() {
-    widthController = TextEditingController(text: widget.width ?? '');
-    heightController = TextEditingController(text: widget.height ?? '');
-    depthController = TextEditingController(text: widget.depth ?? '');
+    widthController = TextEditingController(
+        text: widget.width == null ? '' : widget.width.toString());
+    heightController = TextEditingController(
+        text: widget.height == null ? '' : widget.height.toString() ?? '');
+    depthController = TextEditingController(
+        text: widget.depth == null ? '' : widget.depth.toString() ?? '');
     super.initState();
   }
 
@@ -58,10 +62,30 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
       icon: 'icon_dimension.svg',
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(0, 0, 0);
+        widget.onSubmit(int.parse(widthController.text),
+            int.parse(heightController.text), int.parse(depthController.text));
       },
       child: Column(
-        children: <Widget>[],
+        children: <Widget>[
+          PlantInfosTextInput(
+            controller: widthController,
+            labelText: 'Width (cm)',
+            hintText: 'Ex: 25',
+            number: true,
+          ),
+          PlantInfosTextInput(
+            controller: heightController,
+            labelText: 'Height (cm)',
+            hintText: 'Ex: 25',
+            number: true,
+          ),
+          PlantInfosTextInput(
+            controller: depthController,
+            labelText: 'Depth (cm)',
+            hintText: 'Ex: 25',
+            number: true,
+          ),
+        ],
       ),
     );
   }

@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_dropdown_input.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
 
@@ -36,11 +37,11 @@ class PlantInfosPlantType extends StatefulWidget {
 }
 
 class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
-  TextEditingController plantTypeController;
+  String plantType;
 
   @override
   void initState() {
-    plantTypeController = TextEditingController(text: widget.plantType);
+    plantType = widget.plantType;
     super.initState();
   }
 
@@ -51,14 +52,24 @@ class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
       icon: 'icon_plant_type.svg',
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(plantTypeController.text);
+        widget.onSubmit(plantType);
       },
       child: Column(
         children: <Widget>[
-          PlantInfosTextInput(
-              controller: plantTypeController,
-              labelText: 'Plant type',
-              hintText: 'Ex: Photo/Auto'),
+          PlantInfosDropdownInput(
+            labelText: 'Plant type',
+            hintText: 'Choose a type',
+            items: [
+              ['PHOTO', 'Photoperiod'],
+              ['AUTO', 'Auto'],
+            ],
+            value: plantType,
+            onChanged: (String newValue) {
+              setState(() {
+                plantType = newValue;
+              });
+            },
+          ),
         ],
       ),
     );
