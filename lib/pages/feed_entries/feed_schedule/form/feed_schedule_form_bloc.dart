@@ -158,13 +158,6 @@ class FeedScheduleFormBloc
             device, offHour, schedules[schedule]['OFF_HOUR']);
       }
 
-      final Map<String, dynamic> plantSettings =
-          db.plantsDAO.plantSettings(args.plant);
-      plantSettings['phase'] = schedule;
-      await db.plantsDAO.updatePlant(PlantsCompanion(
-          id: Value(args.plant.id),
-          settings: Value(JsonEncoder().convert(plantSettings))));
-
       final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
       boxSettings['schedule'] = schedule;
       boxSettings['schedules'] = schedules;

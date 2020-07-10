@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_input.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
 
 class PlantInfosStrain extends StatefulWidget {
   final String strain;
@@ -38,8 +38,15 @@ class PlantInfosStrain extends StatefulWidget {
 }
 
 class _PlantInfosStrainState extends State<PlantInfosStrain> {
-  final TextEditingController strainController = TextEditingController();
-  final TextEditingController seedbankController = TextEditingController();
+  TextEditingController strainController;
+  TextEditingController seedbankController;
+
+  @override
+  void initState() {
+    strainController = TextEditingController(text: widget.strain);
+    seedbankController = TextEditingController(text: widget.seedbank);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +59,12 @@ class _PlantInfosStrainState extends State<PlantInfosStrain> {
       },
       child: Column(
         children: <Widget>[
-          PlantInfosInput(
+          PlantInfosTextInput(
               controller: strainController,
-              initialValue: widget.strain,
               labelText: 'Strain',
               hintText: 'Ex: White widow'),
-          PlantInfosInput(
+          PlantInfosTextInput(
               controller: seedbankController,
-              initialValue: widget.seedbank,
               labelText: 'Seedbank',
               hintText: 'Ex: Paradise Seeds'),
         ],

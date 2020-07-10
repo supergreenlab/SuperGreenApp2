@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_input.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
 
 class PlantInfosPlantType extends StatefulWidget {
   final String plantType;
@@ -36,7 +36,13 @@ class PlantInfosPlantType extends StatefulWidget {
 }
 
 class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
-  final TextEditingController plantTypeController = TextEditingController();
+  TextEditingController plantTypeController;
+
+  @override
+  void initState() {
+    plantTypeController = TextEditingController(text: widget.plantType);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +55,8 @@ class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
       },
       child: Column(
         children: <Widget>[
-          PlantInfosInput(
+          PlantInfosTextInput(
               controller: plantTypeController,
-              initialValue: widget.plantType,
               labelText: 'Plant type',
               hintText: 'Ex: Photo/Auto'),
         ],

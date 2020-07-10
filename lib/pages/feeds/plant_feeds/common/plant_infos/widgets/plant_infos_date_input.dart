@@ -20,23 +20,34 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 
-class FeedFormDatePicker extends StatelessWidget {
+class PlantInfosDateInput extends StatelessWidget {
+  final String hintText;
+  final String labelText;
   final DateTime date;
   final Function(DateTime) onChange;
 
-  const FeedFormDatePicker(this.date, {this.onChange});
+  const PlantInfosDateInput(
+      {Key key,
+      @required this.hintText,
+      @required this.labelText,
+      @required this.date,
+      @required this.onChange})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String format =
         AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         child: Row(
           children: <Widget>[
             Expanded(
-                child: Text('Event date: ${DateFormat(format).format(date)}')),
+                child: Text(
+              'Event date: ${DateFormat(format).format(date)}',
+              style: TextStyle(color: Colors.white),
+            )),
             FlatButton(
                 onPressed: () async {
                   DateTime newDate = await showDatePicker(
@@ -46,7 +57,7 @@ class FeedFormDatePicker extends StatelessWidget {
                       lastDate: DateTime.now());
                   onChange(newDate);
                 },
-                child: Text('change'))
+                child: Text('change', style: TextStyle(color: Colors.white)))
           ],
         ),
       ),

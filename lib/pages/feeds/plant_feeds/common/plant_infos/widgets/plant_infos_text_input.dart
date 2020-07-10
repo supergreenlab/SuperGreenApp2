@@ -18,13 +18,17 @@
 
 import 'package:flutter/material.dart';
 
-class PlantInfosInput extends StatelessWidget {
+class PlantInfosTextInput extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final String labelText;
-  final String initialValue;
 
-  const PlantInfosInput({Key key, this.controller, this.hintText, this.labelText, this.initialValue}) : super(key: key);
+  const PlantInfosTextInput(
+      {Key key,
+      @required this.controller,
+      @required this.hintText,
+      @required this.labelText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,6 @@ class PlantInfosInput extends StatelessWidget {
               UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
         ),
         style: TextStyle(color: Colors.white, decoration: TextDecoration.none),
-        initialValue: initialValue,
         controller: controller,
       ),
     );

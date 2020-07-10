@@ -39,7 +39,17 @@ class PlantInfosDimensions extends StatefulWidget {
 }
 
 class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
-  final TextEditingController dimensionsController = TextEditingController();
+  TextEditingController widthController;
+  TextEditingController heightController;
+  TextEditingController depthController;
+
+  @override
+  void initState() {
+    widthController = TextEditingController(text: widget.width ?? '');
+    heightController = TextEditingController(text: widget.height ?? '');
+    depthController = TextEditingController(text: widget.depth ?? '');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

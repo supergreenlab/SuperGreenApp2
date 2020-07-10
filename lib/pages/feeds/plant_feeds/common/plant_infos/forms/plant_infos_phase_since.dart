@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_date_input.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_dropdown_input.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
 
 class PlantInfosPhaseSince extends StatefulWidget {
@@ -37,20 +39,56 @@ class PlantInfosPhaseSince extends StatefulWidget {
 }
 
 class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
+  String phase;
   DateTime date;
-  final TextEditingController phaseController = TextEditingController();
+
+  @override
+  void initState() {
+    phase = widget.phase;
+    date = widget.date ?? DateTime.now();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    String phaseTitle = 'Current phase';
+    if (phase == 'VEG') {
+      phaseTitle = 'Vegging since';
+    } else if (phase == 'BLOOM') {
+      phaseTitle = 'Blooming since';
+    }
     return PlantInfosForm(
-      title: 'Vegging since',
+      title: phaseTitle,
       icon: 'icon_vegging_since.svg',
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(phaseController.text, date);
+        widget.onSubmit(phase, date);
       },
       child: Column(
-        children: <Widget>[],
+        children: <Widget>[
+          PlantInfosDropdownInput(
+            labelText: 'Plant phase',
+            hintText: 'Choose a phase',
+            items: [
+              ['VEG', 'Vegetative'],
+              ['BLOOM', 'Blooming'],
+            ],
+            value: widget.phase,
+            onChanged: (String newValue) {
+              setState(() {
+                phase = newValue;
+              });
+            },
+          ),
+          PlantInfosDateInput(
+            hintText: 'Since: ',
+            labelText: 'Pick a date',
+            date: date,
+            onChange: (DateTime date) {
+              this.date = date;
+            },
+          ),
+        ],
       ),
     );
   }

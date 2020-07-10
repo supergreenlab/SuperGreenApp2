@@ -35,7 +35,13 @@ class PlantInfosMedium extends StatefulWidget {
 }
 
 class _PlantInfosMediumState extends State<PlantInfosMedium> {
-  final TextEditingController plantTypeController = TextEditingController();
+  TextEditingController plantTypeController;
+
+  @override
+  void initState() {
+    plantTypeController = TextEditingController(text: widget.medium);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

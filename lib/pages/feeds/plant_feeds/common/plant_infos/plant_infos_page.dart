@@ -20,6 +20,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_dimensions.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_medium.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_phase_since.dart';
@@ -80,12 +82,24 @@ class _PlantInfosPageState<
       strain = '# ${state.plantInfos.plantSettings.strain}';
     }
 
+    String format =
+        AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     String phaseTitle = 'Current phase';
+    String phaseSince;
     if (state.plantInfos.plantSettings.phase == 'VEG') {
+      if (state.plantInfos.plantSettings.veggingStart != null) {
+        phaseSince = DateFormat(format)
+            .format(state.plantInfos.plantSettings.veggingStart);
+      }
       phaseTitle = 'Vegging since';
     } else if (state.plantInfos.plantSettings.phase == 'BLOOM') {
+      if (state.plantInfos.plantSettings.bloomingStart != null) {
+        phaseSince = DateFormat(format)
+            .format(state.plantInfos.plantSettings.bloomingStart);
+      }
       phaseTitle = 'Blooming since';
     }
+
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -108,7 +122,7 @@ class _PlantInfosPageState<
                   PlantInfosWidget(
                       icon: 'icon_vegging_since.svg',
                       title: phaseTitle,
-                      value: null,
+                      value: phaseSince,
                       onEdit: () => _openForm('PHASE_SINCE')),
                   PlantInfosWidget(
                       icon: 'icon_medium.svg',

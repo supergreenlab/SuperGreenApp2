@@ -51,8 +51,12 @@ class PlantSettings extends Equatable {
       map['isSingle'],
       map['strain'],
       map['seedBank'],
-      map['veggingStart'],
-      map['bloomingStart'],
+      map['veggingStart'] == null
+          ? null
+          : DateTime.parse(map['veggingStart'] as String),
+      map['bloomingStart'] == null
+          ? null
+          : DateTime.parse(map['bloomingStart'] as String),
       map['medium'],
     );
   }
@@ -64,8 +68,11 @@ class PlantSettings extends Equatable {
       'isSingle': isSingle,
       'strain': strain,
       'seedBank': seedbank,
-      'veggingStart': veggingStart,
-      'bloomingStart': bloomingStart,
+      'veggingStart':
+          veggingStart == null ? null : veggingStart.toUtc().toIso8601String(),
+      'bloomingStart': bloomingStart == null
+          ? null
+          : bloomingStart.toUtc().toIso8601String(),
       'medium': medium,
     });
   }
@@ -81,24 +88,24 @@ class PlantSettings extends Equatable {
         bloomingStart,
         medium,
       ];
-  
-  PlantSettings copyWith({
-    String phase,
-    String plantType,
-    bool isSingle,
-    String strain,
-    String seedbank,
-    DateTime veggingStart,
-    DateTime bloomingStart,
-    String medium
-  }) => PlantSettings(
-    phase ?? this.phase,
-    plantType ?? this.plantType,
-    isSingle ?? this.isSingle,
-    strain ?? this.strain,
-    seedbank ?? this.seedbank,
-    veggingStart ?? this.veggingStart,
-    bloomingStart ?? this.bloomingStart,
-    medium ?? this.medium,
-  );
+
+  PlantSettings copyWith(
+          {String phase,
+          String plantType,
+          bool isSingle,
+          String strain,
+          String seedbank,
+          DateTime veggingStart,
+          DateTime bloomingStart,
+          String medium}) =>
+      PlantSettings(
+        phase ?? this.phase,
+        plantType ?? this.plantType,
+        isSingle ?? this.isSingle,
+        strain ?? this.strain,
+        seedbank ?? this.seedbank,
+        veggingStart ?? this.veggingStart,
+        bloomingStart ?? this.bloomingStart,
+        medium ?? this.medium,
+      );
 }
