@@ -36,6 +36,7 @@ class Plants extends Table {
   TextColumn get name => text().withLength(min: 1, max: 32)();
   // TODO remove the single param, it's moved to the settings json string
   BoolColumn get single => boolean().withDefault(Constant(false))();
+  BoolColumn get public => boolean().withDefault(Constant(false))();
 
   TextColumn get settings => text().withDefault(Constant('{}'))();
 

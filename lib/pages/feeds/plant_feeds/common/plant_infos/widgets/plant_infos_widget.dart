@@ -35,7 +35,7 @@ class PlantInfosWidget extends StatelessWidget {
         onTap: onEdit,
         child: value == null ? _renderNoValue() : _renderValue());
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, right: 8.0),
       child: Container(
         child: Row(
           children: <Widget>[
@@ -49,10 +49,7 @@ class PlantInfosWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(title, style: TextStyle(color: Colors.white)),
-                  ),
+                  Text(title, style: TextStyle(color: Colors.white)),
                   valueWidget,
                 ],
               ),

@@ -59,6 +59,7 @@ enum SpeedDialType {
 class _PlantFeedPageState extends State<PlantFeedPage> {
   final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
+  ScrollController drawerScrollController;
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
@@ -66,6 +67,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   @override
   void initState() {
+    drawerScrollController = ScrollController();
     super.initState();
   }
 
@@ -501,58 +503,60 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           List<Plant> plants = state.plants.toList();
           List<Box> boxes = state.boxes;
           content = ListView(
+            controller: drawerScrollController,
+              key: const PageStorageKey<String>('plants'),
               children: boxes.map((b) {
-            List<Widget> content = [
-              Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 1,
-                        offset: Offset(0, 2))
-                  ],
-                  color: Colors.white,
-                ),
-                child: ListTile(
-                  leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
-                  title: Text(b.name),
-                ),
-              ),
-            ];
-            content.addAll(plants.where((p) => p.box == b.id).map((p) {
-              Widget item = Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: ListTile(
-                    leading: (plantFeedState is PlantFeedBlocStateLoaded &&
-                            plantFeedState.plant.id == p.id)
-                        ? Icon(
-                            Icons.check_box,
-                            color: Colors.green,
-                          )
-                        : Icon(Icons.crop_square),
-                    title: Text(p.name),
-                    onTap: () => _selectPlant(context, p),
-                  ));
-              try {
-                int nOthers = state.hasPending
-                    .where((e) => e.id == p.feed)
-                    .map<int>((e) => int.parse(e.nNew))
-                    .reduce((a, e) => a + e);
-                if (nOthers != null && nOthers > 0) {
-                  item = Stack(
-                    children: [
-                      item,
-                      _renderBadge(nOthers),
-                    ],
-                  );
-                }
-              } catch (e) {}
-              return item;
-            }).toList());
-            return Column(
-              children: content,
-            );
-          }).toList());
+                List<Widget> content = [
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 1,
+                            offset: Offset(0, 2))
+                      ],
+                      color: Colors.white,
+                    ),
+                    child: ListTile(
+                      leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
+                      title: Text(b.name),
+                    ),
+                  ),
+                ];
+                content.addAll(plants.where((p) => p.box == b.id).map((p) {
+                  Widget item = Padding(
+                      padding: EdgeInsets.only(left: 16),
+                      child: ListTile(
+                        leading: (plantFeedState is PlantFeedBlocStateLoaded &&
+                                plantFeedState.plant.id == p.id)
+                            ? Icon(
+                                Icons.check_box,
+                                color: Colors.green,
+                              )
+                            : Icon(Icons.crop_square),
+                        title: Text(p.name),
+                        onTap: () => _selectPlant(context, p),
+                      ));
+                  try {
+                    int nOthers = state.hasPending
+                        .where((e) => e.id == p.feed)
+                        .map<int>((e) => int.parse(e.nNew))
+                        .reduce((a, e) => a + e);
+                    if (nOthers != null && nOthers > 0) {
+                      item = Stack(
+                        children: [
+                          item,
+                          _renderBadge(nOthers),
+                        ],
+                      );
+                    }
+                  } catch (e) {}
+                  return item;
+                }).toList());
+                return Column(
+                  children: content,
+                );
+              }).toList());
         }
         return AnimatedSwitcher(
           duration: Duration(milliseconds: 200),
@@ -687,7 +691,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   Widget _renderPlantInfos(
       BuildContext context, PlantFeedBlocStateLoaded state) {
     return BlocProvider(
-        create: (context) => LocalPlantInfosBloc(state.plant), child: PlantInfosPage<LocalPlantInfosBloc>());
+        create: (context) => LocalPlantInfosBloc(state.plant),
+        child: PlantInfosPage<LocalPlantInfosBloc>());
   }
 
   Widget _renderEnvironmentTab(

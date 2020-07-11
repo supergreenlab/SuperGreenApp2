@@ -35,6 +35,8 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
     extends StatefulWidget {
+  PlantInfosPage({Key key}) : super(key: key);
+
   @override
   _PlantInfosPageState<PIBloc> createState() => _PlantInfosPageState<PIBloc>();
 }
@@ -43,6 +45,13 @@ class _PlantInfosPageState<
         PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
     extends State<PlantInfosPage<PIBloc>> {
   String form;
+  ScrollController infosScrollController;
+
+  @override
+  void initState() {
+    infosScrollController = ScrollController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,72 +109,99 @@ class _PlantInfosPageState<
       phaseTitle = 'Blooming since';
     }
 
+    String dimensions;
+    if (state.plantInfos.boxSettings.width != null &&
+        state.plantInfos.boxSettings.height != null &&
+        state.plantInfos.boxSettings.depth != null) {
+      dimensions =
+          '${state.plantInfos.boxSettings.width}x${state.plantInfos.boxSettings.height}x${state.plantInfos.boxSettings.depth}';
+    }
+
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Expanded(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  PlantInfosWidget(
-                      title: 'Strain name',
-                      value: strain,
-                      onEdit: () => _openForm('STRAIN')),
-                  PlantInfosWidget(
-                      icon: 'icon_plant_type.svg',
-                      title: 'Plant type',
-                      value: state.plantInfos.plantSettings.plantType,
-                      onEdit: () => _openForm('PLANT_TYPE')),
-                  PlantInfosWidget(
-                      icon: 'icon_vegging_since.svg',
-                      title: phaseTitle,
-                      value: phaseSince,
-                      onEdit: () => _openForm('PHASE_SINCE')),
-                  PlantInfosWidget(
-                      icon: 'icon_medium.svg',
-                      title: 'Medium',
-                      value: state.plantInfos.plantSettings.medium,
-                      onEdit: () => _openForm('MEDIUM')),
-                  PlantInfosWidget(
-                      icon: 'icon_dimension.svg',
-                      title: 'Dimensions',
-                      value:
-                          '${state.plantInfos.boxSettings.width}x${state.plantInfos.boxSettings.height}x${state.plantInfos.boxSettings.depth}',
-                      onEdit: () => _openForm('DIMENSIONS')),
-                ]),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 30.0),
+              child: ListView(
+                  controller: infosScrollController,
+                  key: const PageStorageKey<String>('infos'),
+                  children: [
+                    PlantInfosWidget(
+                        title: 'Strain name',
+                        value: strain,
+                        onEdit: () => _openForm('STRAIN')),
+                    PlantInfosWidget(
+                        icon: 'icon_plant_type.svg',
+                        title: 'Plant type',
+                        value: state.plantInfos.plantSettings.plantType,
+                        onEdit: () => _openForm('PLANT_TYPE')),
+                    PlantInfosWidget(
+                        icon: 'icon_vegging_since.svg',
+                        title: phaseTitle,
+                        value: phaseSince,
+                        onEdit: () => _openForm('PHASE_SINCE')),
+                    PlantInfosWidget(
+                        icon: 'icon_medium.svg',
+                        title: 'Medium',
+                        value: state.plantInfos.plantSettings.medium,
+                        onEdit: () => _openForm('MEDIUM')),
+                    PlantInfosWidget(
+                        icon: 'icon_dimension.svg',
+                        title: 'Dimensions',
+                        value: dimensions,
+                        onEdit: () => _openForm('DIMENSIONS')),
+                  ]),
+            ),
           ),
           Expanded(
               child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return SizedBox(
-                  width: constraints.maxWidth,
-                  height: constraints.maxHeight - 100,
-                  child: state.plantInfos.thumbnailPath.startsWith("http")
-                      ? Image.network(
-                          state.plantInfos.thumbnailPath,
-                          fit: BoxFit.contain,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return FullscreenLoading(
-                                percent: loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes);
-                          },
-                        )
-                      : Image.file(File(state.plantInfos.thumbnailPath),
-                          fit: BoxFit.contain));
-            }),
+            padding: const EdgeInsets.only(top: 16.0, bottom: 30.0),
+            child: state.plantInfos.thumbnailPath == null
+                ? _renderNoPicture(context, state)
+                : _renderPicture(context, state),
           )),
         ],
       ),
     );
+  }
+
+  Widget _renderNoPicture(BuildContext context, PlantInfosStateLoaded state) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Center(
+          child: Text('No picture yet', style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    );
+  }
+
+  Widget _renderPicture(BuildContext context, PlantInfosStateLoaded state) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return SizedBox(
+          width: constraints.maxWidth,
+          height: constraints.maxHeight - 100,
+          child: state.plantInfos.thumbnailPath.startsWith("http")
+              ? Image.network(
+                  state.plantInfos.thumbnailPath,
+                  fit: BoxFit.contain,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return FullscreenLoading(
+                        percent: loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes);
+                  },
+                )
+              : Image.file(File(state.plantInfos.thumbnailPath),
+                  fit: BoxFit.contain));
+    });
   }
 
   Widget _renderForm(BuildContext context, PlantInfosStateLoaded state) {

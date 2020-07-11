@@ -155,47 +155,53 @@ class _TowelieHelperState extends State<TowelieHelper> {
                 visible = false;
               });
             },
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 2,
-                              color: Colors.black38,
-                              offset: Offset(2, 2))
-                        ],
-                        border: Border.all(color: Colors.black26, width: 1),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: Column(
-                      children: content,
+            child: InkWell(
+              onTap: () {
+                _prepareHide();
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 2,
+                                color: Colors.black38,
+                                offset: Offset(2, 2))
+                          ],
+                          border: Border.all(color: Colors.black26, width: 1),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: Column(
+                        children: content,
+                      ),
+                    ),
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        right: 4.0, bottom: 8.0, left: 2.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Color(0xffdedede), width: 2),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
+                      child: Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationY(pi),
+                          child: SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: Image.asset(
+                                  'assets/feed_card/icon_towelie.png'))),
                     ),
                   ),
-                )),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(right: 4.0, bottom: 8.0, left: 2.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xffdedede), width: 2),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(50))),
-                    child: Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.rotationY(pi),
-                        child: SizedBox(
-                            width: 60,
-                            height: 60,
-                            child: Image.asset(
-                                'assets/feed_card/icon_towelie.png'))),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

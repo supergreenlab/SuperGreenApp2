@@ -1203,6 +1203,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   final int box;
   final String name;
   final bool single;
+  final bool public;
   final String settings;
   final String serverID;
   final bool synced;
@@ -1212,6 +1213,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       this.box,
       @required this.name,
       @required this.single,
+      @required this.public,
       @required this.settings,
       this.serverID,
       @required this.synced});
@@ -1228,6 +1230,8 @@ class Plant extends DataClass implements Insertable<Plant> {
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       single:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}single']),
+      public:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}public']),
       settings: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
       serverID: stringType
@@ -1254,6 +1258,9 @@ class Plant extends DataClass implements Insertable<Plant> {
     if (!nullToAbsent || single != null) {
       map['single'] = Variable<bool>(single);
     }
+    if (!nullToAbsent || public != null) {
+      map['public'] = Variable<bool>(public);
+    }
     if (!nullToAbsent || settings != null) {
       map['settings'] = Variable<String>(settings);
     }
@@ -1274,6 +1281,8 @@ class Plant extends DataClass implements Insertable<Plant> {
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       single:
           single == null && nullToAbsent ? const Value.absent() : Value(single),
+      public:
+          public == null && nullToAbsent ? const Value.absent() : Value(public),
       settings: settings == null && nullToAbsent
           ? const Value.absent()
           : Value(settings),
@@ -1294,6 +1303,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       box: serializer.fromJson<int>(json['box']),
       name: serializer.fromJson<String>(json['name']),
       single: serializer.fromJson<bool>(json['single']),
+      public: serializer.fromJson<bool>(json['public']),
       settings: serializer.fromJson<String>(json['settings']),
       serverID: serializer.fromJson<String>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
@@ -1308,6 +1318,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       'box': serializer.toJson<int>(box),
       'name': serializer.toJson<String>(name),
       'single': serializer.toJson<bool>(single),
+      'public': serializer.toJson<bool>(public),
       'settings': serializer.toJson<String>(settings),
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
@@ -1320,6 +1331,7 @@ class Plant extends DataClass implements Insertable<Plant> {
           int box,
           String name,
           bool single,
+          bool public,
           String settings,
           String serverID,
           bool synced}) =>
@@ -1329,6 +1341,7 @@ class Plant extends DataClass implements Insertable<Plant> {
         box: box ?? this.box,
         name: name ?? this.name,
         single: single ?? this.single,
+        public: public ?? this.public,
         settings: settings ?? this.settings,
         serverID: serverID ?? this.serverID,
         synced: synced ?? this.synced,
@@ -1341,6 +1354,7 @@ class Plant extends DataClass implements Insertable<Plant> {
           ..write('box: $box, ')
           ..write('name: $name, ')
           ..write('single: $single, ')
+          ..write('public: $public, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -1359,8 +1373,10 @@ class Plant extends DataClass implements Insertable<Plant> {
                   name.hashCode,
                   $mrjc(
                       single.hashCode,
-                      $mrjc(settings.hashCode,
-                          $mrjc(serverID.hashCode, synced.hashCode))))))));
+                      $mrjc(
+                          public.hashCode,
+                          $mrjc(settings.hashCode,
+                              $mrjc(serverID.hashCode, synced.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1370,6 +1386,7 @@ class Plant extends DataClass implements Insertable<Plant> {
           other.box == this.box &&
           other.name == this.name &&
           other.single == this.single &&
+          other.public == this.public &&
           other.settings == this.settings &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
@@ -1381,6 +1398,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   final Value<int> box;
   final Value<String> name;
   final Value<bool> single;
+  final Value<bool> public;
   final Value<String> settings;
   final Value<String> serverID;
   final Value<bool> synced;
@@ -1390,6 +1408,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     this.box = const Value.absent(),
     this.name = const Value.absent(),
     this.single = const Value.absent(),
+    this.public = const Value.absent(),
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -1400,6 +1419,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     this.box = const Value.absent(),
     @required String name,
     this.single = const Value.absent(),
+    this.public = const Value.absent(),
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -1411,6 +1431,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     Expression<int> box,
     Expression<String> name,
     Expression<bool> single,
+    Expression<bool> public,
     Expression<String> settings,
     Expression<String> serverID,
     Expression<bool> synced,
@@ -1421,6 +1442,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       if (box != null) 'box': box,
       if (name != null) 'name': name,
       if (single != null) 'single': single,
+      if (public != null) 'public': public,
       if (settings != null) 'settings': settings,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
@@ -1433,6 +1455,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       Value<int> box,
       Value<String> name,
       Value<bool> single,
+      Value<bool> public,
       Value<String> settings,
       Value<String> serverID,
       Value<bool> synced}) {
@@ -1442,6 +1465,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       box: box ?? this.box,
       name: name ?? this.name,
       single: single ?? this.single,
+      public: public ?? this.public,
       settings: settings ?? this.settings,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
@@ -1465,6 +1489,9 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     }
     if (single.present) {
       map['single'] = Variable<bool>(single.value);
+    }
+    if (public.present) {
+      map['public'] = Variable<bool>(public.value);
     }
     if (settings.present) {
       map['settings'] = Variable<String>(settings.value);
@@ -1534,6 +1561,15 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
         defaultValue: Constant(false));
   }
 
+  final VerificationMeta _publicMeta = const VerificationMeta('public');
+  GeneratedBoolColumn _public;
+  @override
+  GeneratedBoolColumn get public => _public ??= _constructPublic();
+  GeneratedBoolColumn _constructPublic() {
+    return GeneratedBoolColumn('public', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
   GeneratedTextColumn _settings;
   @override
@@ -1563,7 +1599,7 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feed, box, name, single, settings, serverID, synced];
+      [id, feed, box, name, single, public, settings, serverID, synced];
   @override
   $PlantsTable get asDslTable => this;
   @override
@@ -1597,6 +1633,10 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
     if (data.containsKey('single')) {
       context.handle(_singleMeta,
           single.isAcceptableOrUnknown(data['single'], _singleMeta));
+    }
+    if (data.containsKey('public')) {
+      context.handle(_publicMeta,
+          public.isAcceptableOrUnknown(data['public'], _publicMeta));
     }
     if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
