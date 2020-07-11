@@ -20,6 +20,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/helpers/feed_helper.dart';
@@ -48,13 +49,13 @@ class FeedsAPI {
   factory FeedsAPI() => _instance;
 
   FeedsAPI._newInstance() {
-    // if (kReleaseMode || Platform.isIOS) {
+    if (kReleaseMode || Platform.isIOS) {
       _serverHost = 'https://api2.supergreenlab.com';
       _storageServerHost = 'https://storage.supergreenlab.com';
       _storageServerHostHeader = 'storage.supergreenlab.com';
-    // } else {
-    //   initUrls();
-    // }
+    } else {
+      initUrls();
+    }
   }
 
   void initUrls() async {

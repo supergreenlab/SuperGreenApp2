@@ -54,6 +54,7 @@ class Plants extends Table {
         box: Value(box.id),
         name: Value(map['name'] as String),
         single: Value(map['single'] as bool),
+        public: Value(map['public'] as bool),
         settings: Value(map['settings'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
@@ -75,6 +76,7 @@ class Plants extends Table {
       'boxID': box.serverID,
       'name': plant.name,
       'single': plant.single,
+      'public': plant.public,
       'settings': plant.settings,
     };
   }
