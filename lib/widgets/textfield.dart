@@ -28,6 +28,7 @@ class SGLTextField extends StatelessWidget {
   final FocusNode focusNode;
   final bool obscureText;
   final String error;
+  final TextCapitalization textCapitalization;
 
   SGLTextField(
       {this.hintText,
@@ -38,7 +39,8 @@ class SGLTextField extends StatelessWidget {
       this.onFieldSubmitted,
       this.focusNode,
       this.obscureText = false,
-      this.error});
+      this.error,
+      this.textCapitalization = TextCapitalization.sentences});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class SGLTextField extends StatelessWidget {
           textInputAction: textInputAction,
           onSubmitted: onFieldSubmitted,
           enabled: enabled,
-          textCapitalization: TextCapitalization.sentences,
+          textCapitalization: textCapitalization,
           decoration: InputDecoration(
             hintText: hintText,
             border: InputBorder.none,
