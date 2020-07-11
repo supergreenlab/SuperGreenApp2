@@ -33,6 +33,10 @@ class BoxSettings extends Equatable {
 
   factory BoxSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
+    return BoxSettings.fromMap(map);
+  }
+
+  factory BoxSettings.fromMap(Map<String, dynamic> map) {
     return BoxSettings(
       map['schedule'],
       map['schedules'],

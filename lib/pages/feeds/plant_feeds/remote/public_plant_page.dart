@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_provider.dart';
@@ -51,18 +50,21 @@ class PublicPlantPage extends StatelessWidget {
         color: Colors.indigo,
         appBarHeight: 380,
         appBar: SafeArea(
-          child: Expanded(
-            child: Swiper(
-              itemCount: tabs.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return tabs[index](context, state);
-              },
-              pagination: SwiperPagination(
-                builder: new DotSwiperPaginationBuilder(
-                    color: Colors.white, activeColor: Color(0xff3bb30b)),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 45.0),
+            child: Expanded(
+              child: Swiper(
+                itemCount: tabs.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return tabs[index](context, state);
+                },
+                pagination: SwiperPagination(
+                  builder: new DotSwiperPaginationBuilder(
+                      color: Colors.white, activeColor: Color(0xff3bb30b)),
+                ),
+                loop: false,
               ),
-              loop: false,
             ),
           ),
         ),

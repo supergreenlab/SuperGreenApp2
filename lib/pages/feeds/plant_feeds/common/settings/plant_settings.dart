@@ -45,6 +45,10 @@ class PlantSettings extends Equatable {
 
   factory PlantSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
+    return PlantSettings.fromMap(map);
+  }
+
+  factory PlantSettings.fromMap(Map<String, dynamic> map) {
     return PlantSettings(
       map['phase'],
       map['plantType'],

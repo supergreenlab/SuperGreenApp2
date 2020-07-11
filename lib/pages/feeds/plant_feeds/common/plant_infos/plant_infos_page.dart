@@ -132,27 +132,37 @@ class _PlantInfosPageState<
                     PlantInfosWidget(
                         title: 'Strain name',
                         value: strain,
-                        onEdit: () => _openForm('STRAIN')),
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('STRAIN')),
                     PlantInfosWidget(
                         icon: 'icon_plant_type.svg',
                         title: 'Plant type',
                         value: state.plantInfos.plantSettings.plantType,
-                        onEdit: () => _openForm('PLANT_TYPE')),
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('PLANT_TYPE')),
                     PlantInfosWidget(
                         icon: 'icon_vegging_since.svg',
                         title: phaseTitle,
                         value: phaseSince,
-                        onEdit: () => _openForm('PHASE_SINCE')),
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('PHASE_SINCE')),
                     PlantInfosWidget(
                         icon: 'icon_medium.svg',
                         title: 'Medium',
                         value: state.plantInfos.plantSettings.medium,
-                        onEdit: () => _openForm('MEDIUM')),
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('MEDIUM')),
                     PlantInfosWidget(
                         icon: 'icon_dimension.svg',
                         title: 'Dimensions',
                         value: dimensions,
-                        onEdit: () => _openForm('DIMENSIONS')),
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('DIMENSIONS')),
                   ]),
             ),
           ),

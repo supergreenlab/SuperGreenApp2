@@ -368,7 +368,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedEntries failed: ${resp.body}';
+      throw 'publicFeedMediasForFeedEntry failed: ${resp.body}';
     }
     Map<String, dynamic> results = JsonDecoder().convert(resp.body);
     return results['medias'];
@@ -381,7 +381,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedEntries failed: ${resp.body}';
+      throw 'publicFeedMedia failed: ${resp.body}';
     }
     return JsonDecoder().convert(resp.body);
   }

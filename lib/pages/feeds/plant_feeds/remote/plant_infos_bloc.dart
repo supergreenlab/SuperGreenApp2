@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 class RemotePlantInfosBloc extends PlantInfosBloc {
   final String plantID;
@@ -24,7 +27,16 @@ class RemotePlantInfosBloc extends PlantInfosBloc {
   RemotePlantInfosBloc(this.plantID);
 
   @override
-  Stream<PlantInfosState> loadPlant() async* {}
+  Stream<PlantInfosState> loadPlant() async* {
+    Map<String, dynamic> plant = await FeedsAPI().publicPlant(plantID);
+    plantInfosLoaded(PlantInfos(
+        plant['name'],
+        plant['filePath'],
+        plant['thumbnailPath'],
+        BoxSettings.fromJSON(plant['boxSettings']),
+        PlantSettings.fromJSON(plant['settings']),
+        false));
+  }
 
   @override
   Stream<PlantInfosState> updateSettings(PlantInfos plantInfos) async* {}

@@ -26,14 +26,24 @@ class PlantInfosWidget extends StatelessWidget {
   final String value;
   final Function onEdit;
 
-  const PlantInfosWidget({Key key, this.icon, @required this.title, @required this.value, @required this.onEdit})
+  const PlantInfosWidget(
+      {Key key,
+      this.icon,
+      @required this.title,
+      @required this.value,
+      this.onEdit})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget valueWidget = InkWell(
-        onTap: onEdit,
-        child: value == null ? _renderNoValue() : _renderValue());
+    Widget valueWidget;
+    if (onEdit != null) {
+      valueWidget = InkWell(
+          onTap: onEdit,
+          child: value == null ? _renderNoValue() : _renderValue());
+    } else {
+      valueWidget = value == null ? _renderNoValue() : _renderValue();
+    }
     return Padding(
       padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, right: 8.0),
       child: Container(
@@ -61,6 +71,10 @@ class PlantInfosWidget extends StatelessWidget {
   }
 
   Widget _renderNoValue() {
+    if (onEdit == null) {
+      return Text("Not set",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300));
+    }
     return Container(
         decoration: BoxDecoration(
             color: Colors.white24, borderRadius: BorderRadius.circular(2)),
@@ -95,10 +109,18 @@ class PlantInfosWidget extends StatelessWidget {
                 data: value,
                 styleSheet: MarkdownStyleSheet(
                     p: TextStyle(color: Colors.white, fontSize: 16),
-                    h1: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                    strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16, fontWeight: FontWeight.bold)),
+                    h1: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    strong: TextStyle(
+                        color: Color(0xff3bb30b),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
               )),
-              SvgPicture.asset("assets/plant_infos/edit.svg"),
+              onEdit == null
+                  ? Container()
+                  : SvgPicture.asset("assets/plant_infos/edit.svg"),
             ],
           ),
         ));
