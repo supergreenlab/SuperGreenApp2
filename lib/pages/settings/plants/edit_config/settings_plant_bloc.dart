@@ -13,12 +13,13 @@ class SettingsPlantBlocEventInit extends SettingsPlantBlocEvent {
 
 class SettingsPlantBlocEventUpdate extends SettingsPlantBlocEvent {
   final String name;
+  final bool public;
   final Box box;
 
-  SettingsPlantBlocEventUpdate(this.name, this.box);
+  SettingsPlantBlocEventUpdate(this.name, this.public, this.box);
 
   @override
-  List<Object> get props => [name, box];
+  List<Object> get props => [name, public, box];
 }
 
 abstract class SettingsPlantBlocState extends Equatable {}
@@ -74,6 +75,7 @@ class SettingsPlantBloc
       await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
           id: Value(plant.id),
           name: Value(event.name),
+          public: Value(event.public),
           box: Value(event.box.id),
           synced: Value(false)));
       yield SettingsPlantBlocStateDone(plant, box);

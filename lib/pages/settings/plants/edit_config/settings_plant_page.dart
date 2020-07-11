@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -22,6 +23,7 @@ class SettingsPlantPage extends StatefulWidget {
 
 class _SettingsPlantPageState extends State<SettingsPlantPage> {
   TextEditingController _nameController;
+  bool _public;
   Box _box;
 
   KeyboardVisibilityNotification _keyboardVisibility =
@@ -57,6 +59,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
       listener: (BuildContext context, SettingsPlantBlocState state) async {
         if (state is SettingsPlantBlocStateLoaded) {
           _nameController = TextEditingController(text: state.plant.name);
+          _public = state.plant.public;
           _box = state.box;
         } else if (state is SettingsPlantBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
@@ -118,13 +121,22 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                    const EdgeInsets.only(left: 8.0, right: 8.0, top: 24.0),
                 child: SGLTextField(
                     hintText: 'Ex: Gorilla Kush',
                     controller: _nameController,
                     onChanged: (_) {
                       setState(() {});
                     }),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.all(8.0),
+                child: _renderOptionCheckbx(context, 'Make this plant public', (bool newValue) {
+                  setState(() {
+                    _public = newValue;
+                  });
+                }, _public)
               ),
               SectionTitle(
                 title: 'Plant lab',
@@ -177,8 +189,37 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
     BlocProvider.of<SettingsPlantBloc>(context)
         .add(SettingsPlantBlocEventUpdate(
       _nameController.text,
+      _public,
       _box,
     ));
+  }
+
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Checkbox(
+            onChanged: onChanged,
+            value: value,
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                onChanged(!value);
+              },
+              child: MarkdownBody(
+                fitContent: true,
+                data: text,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 14)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
