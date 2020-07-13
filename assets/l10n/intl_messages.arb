@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-04-24T18:19:53.387399",
+  "@@last_modified": "2020-07-13T08:16:22.047966",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -42,7 +42,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieGrowboxProducts": "**First step to unlimited weed: The Growbox!**\n\nChoosing your **growbox** to fit your **available space** is the foundation to your future harvests.\nYou **canopy surface** is one of the key factors determining **yield**.\nWe curated a list of the **community's growboxes** for you to choose from and be **successful**.\n",
+  "towelieGrowboxProducts": "**First step to unlimited weed: The Growbox!**\n\nChoosing your **growbox** to fit your **available space** is the foundation to your future harvests.\nYour **canopy surface** is one of the key factors determining **yield**.\nWe curated a list of the **community's growboxes** for you to choose from and be **successful**.\n",
   "@towelieGrowboxProducts": {
     "description": "Towelie Growbox Products",
     "type": "text",
@@ -285,6 +285,12 @@
   "formAllowAnalytics": "**Help us** discern what's **useful** from what's\n**useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..)\nis involved in our data analytics strategy.*",
   "@formAllowAnalytics": {
     "description": "Form allow analytics",
+    "type": "text",
+    "placeholders": {}
+  },
+  "formCGU": "*By proceeding, **you explicitly agree** that you are acting in coordinance with\nlocal, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. ",
+  "@formCGU": {
+    "description": "Form CGU",
     "type": "text",
     "placeholders": {}
   },

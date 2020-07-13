@@ -2,7 +2,7 @@ products:
   - title: Ninja bundle
     description: The ultimate kit to transforma any furniture into a connected growbox.
     picture: assets/products/bundle/ninja_bundle.jpg
-    price: $299
+    price: $329
     geo: us_us
     link:
       type: external
@@ -18,7 +18,7 @@ products:
   - title: Ninja bundle
     description: The ultimate kit to transforma any furniture into a connected growbox.
     picture: assets/products/bundle/ninja_bundle.jpg
-    price: $361.79
+    price: $398.09
     geo: eu_fr
     link:
       type: external

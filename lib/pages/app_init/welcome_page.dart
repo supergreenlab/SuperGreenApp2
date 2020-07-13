@@ -40,6 +40,17 @@ is involved in our data analytics strategy.*''',
     );
   }
 
+  static String get formCGU {
+    return Intl.message(
+      '''\*By proceeding, **you explicitly agree** that you are acting in coordinance with
+local, state, and federal or national laws. **SuperGreenLab will not be liable** for
+consequences surrounding the legality of how the app, lights or grow bundle are used. ''',
+      name: 'formCGU',
+      desc: 'Form CGU',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final _loading;
 
   WelcomePage(this._loading);
@@ -49,6 +60,7 @@ is involved in our data analytics strategy.*''',
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  bool _acceptCGU = false;
   bool _allowAnalytics = false;
 
   @override
@@ -98,13 +110,24 @@ class _WelcomePageState extends State<WelcomePage> {
     if (!widget._loading) {
       body.add(
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 24.0),
+          padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
           child: _renderOptionCheckbx(context, WelcomePage.formAllowAnalytics,
               (newValue) {
             setState(() {
               _allowAnalytics = newValue;
             });
           }, _allowAnalytics),
+        ),
+      );
+      body.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 12.0),
+          child: _renderOptionCheckbx(context, WelcomePage.formCGU,
+              (newValue) {
+            setState(() {
+              _acceptCGU = newValue;
+            });
+          }, _acceptCGU),
         ),
       );
     }
@@ -117,7 +140,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Widget _nextButton(BuildContext context) {
     return GreenButton(
-      onPressed: () => _next(context),
+      onPressed: _acceptCGU ? () => _next(context) : null,
       title: 'Next',
     );
   }

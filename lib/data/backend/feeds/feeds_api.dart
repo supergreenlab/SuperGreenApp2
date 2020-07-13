@@ -61,13 +61,20 @@ class FeedsAPI {
   void initUrls() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
-      _serverHost = 'http://192.168.1.122:8080';
-      _storageServerHost = 'http://192.168.1.122:9000';
+      bool local = true;
+      _serverHost = local
+          ? 'http://192.168.1.122:8080'
+          : 'https://devapi2.supergreenlab.com';
+      _storageServerHost = local
+          ? 'http://192.168.1.122:9000'
+          : 'https://devstorage.supergreenlab.com';
+      _storageServerHostHeader =
+          local ? 'minio:9000' : 'devstorage.supergreenlab.com';
     } else {
       _serverHost = 'http://10.0.2.2:8080';
       _storageServerHost = 'http://10.0.2.2:9000';
+      _storageServerHostHeader = 'minio:9000';
     }
-    _storageServerHostHeader = 'minio:9000';
   }
 
   Future login(String nickname, String password) async {

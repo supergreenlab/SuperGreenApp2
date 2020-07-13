@@ -60,6 +60,7 @@ class _PlantInfosMediumState extends State<PlantInfosMedium> {
             hintText: 'Choose a medium',
             items: [
               ['SOIL', 'Soil'],
+              ['COCO', 'Coco'],
               ['DWC', 'DWC'],
               ['HYDRO', 'Hydro'],
             ],
