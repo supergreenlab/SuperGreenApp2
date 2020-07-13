@@ -198,7 +198,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       GreenButton(
                         title: 'SHOP NOW',
                         onPressed: () {
-                          launch('https://www.supergreelab.com');
+                          launch('https://www.supergreenlab.com');
                         },
                       ),
                       Padding(
