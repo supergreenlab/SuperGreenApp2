@@ -18,7 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_extend/share_extend.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -45,6 +48,7 @@ class FeedMediaCardPage extends StatefulWidget {
 
 class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
   bool editText = false;
+  int mediaShown = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +98,14 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                 editText = true;
               });
             },
+            onShare: () {
+              MediaState media = state.medias[mediaShown];
+              if (media.filePath.endsWith('.mp4')) {
+                ShareExtend.share(media.filePath, "video");
+              } else if (media.filePath.endsWith('.jpg')) {
+                ShareExtend.share(media.filePath, "image");
+              }
+            },
             showSyncStatus: !state.remoteState,
             showControls: !state.remoteState,
             onDelete: () {
@@ -105,6 +117,9 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               ? MediaList(
                   state.medias,
                   showSyncStatus: !state.remoteState,
+                  onMediaShown: (int i) {
+                    mediaShown = i;
+                  },
                   onMediaTapped: (media) {
                     BlocProvider.of<MainNavigatorBloc>(context).add(
                         MainNavigateToFullscreenMedia(

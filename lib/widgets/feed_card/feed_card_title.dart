@@ -25,11 +25,16 @@ class FeedCardTitle extends StatelessWidget {
   final bool synced;
   final Function onEdit;
   final Function onDelete;
+  final Function onShare;
   final bool showSyncStatus;
   final bool showControls;
 
   const FeedCardTitle(this.icon, this.title, this.synced,
-      {this.onEdit, this.onDelete, this.showSyncStatus = true, this.showControls = true});
+      {this.onEdit,
+      this.onDelete,
+      this.onShare,
+      this.showSyncStatus = true,
+      this.showControls = true});
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +58,7 @@ class FeedCardTitle extends StatelessWidget {
                   color: Colors.black87)),
           showSyncStatus
               ? Text(synced ? 'Synced' : 'Not synced',
-                  style: TextStyle(
-                      color: synced ? Colors.green : Colors.red))
+                  style: TextStyle(color: synced ? Colors.green : Colors.red))
               : Container(),
         ],
       ),
@@ -62,6 +66,17 @@ class FeedCardTitle extends StatelessWidget {
         child: Container(),
       ),
     ];
+    if (onShare != null && showControls) {
+      content.add(
+        IconButton(
+          icon: Icon(
+            Icons.share,
+            color: Colors.grey,
+          ),
+          onPressed: onShare,
+        ),
+      );
+    }
     if (onEdit != null && showControls) {
       content.add(
         IconButton(

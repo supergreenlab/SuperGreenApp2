@@ -29,6 +29,7 @@ class MediaList extends StatelessWidget {
   final List<MediaState> _medias;
   final String prefix;
   final Function(MediaState media) onMediaTapped;
+  final Function(int i) onMediaShown;
   final bool showSyncStatus;
   final bool showTapIcon;
 
@@ -36,7 +37,8 @@ class MediaList extends StatelessWidget {
       {this.prefix = '',
       this.onMediaTapped,
       this.showSyncStatus = true,
-      this.showTapIcon = false});
+      this.showTapIcon = false,
+      this.onMediaShown});
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class MediaList extends StatelessWidget {
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Swiper(
+            onIndexChanged: onMediaShown,
             itemCount: _medias.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
@@ -137,7 +140,8 @@ class MediaList extends StatelessWidget {
                 child: Container(
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: SvgPicture.asset('assets/feed_card/icon_tap_measure.svg'),
+                    child: SvgPicture.asset(
+                        'assets/feed_card/icon_tap_measure.svg'),
                   ),
                 ),
               )
