@@ -52,7 +52,7 @@ class FeedProductsCardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedEntryStateLoaded) {
+    if (state is FeedEntryStateLoaded && feedState != null) {
       return _renderLoaded(context, state);
     }
     return _renderLoading(context);

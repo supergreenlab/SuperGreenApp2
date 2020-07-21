@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
+  tuple:
   share_extend:
   fluttertoast:
   flutter_email_sender:

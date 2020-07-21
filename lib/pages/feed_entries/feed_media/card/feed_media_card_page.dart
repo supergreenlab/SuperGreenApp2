@@ -69,7 +69,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(widget.state.date),
+            child: FeedCardDate(widget.state, widget.feedState),
           ),
           Container(
             height: 350,
@@ -129,7 +129,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: FeedCardDate(state.date),
+            child: FeedCardDate(state, widget.feedState),
           ),
           FeedCardText(
             params.message ?? '',

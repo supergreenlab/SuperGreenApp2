@@ -17,15 +17,67 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_feed_state.dart';
 
-class FeedCardDate extends StatelessWidget {
-  final DateTime date;
+enum FeedCardDateDisplay {
+  ABSOLUTE,
+  SINCE_NOW,
+  SINCE_PHASE,
+}
 
-  const FeedCardDate(this.date);
+class FeedCardDate extends StatefulWidget {
+  final FeedEntryState feedEntryState;
+  final FeedState feedState;
+
+  const FeedCardDate(this.feedEntryState, this.feedState);
+
+  @override
+  _FeedCardDateState createState() => _FeedCardDateState();
+}
+
+class _FeedCardDateState extends State<FeedCardDate> {
+  FeedCardDateDisplay display = FeedCardDateDisplay.SINCE_NOW;
 
   @override
   Widget build(BuildContext context) {
-    Duration diff = DateTime.now().difference(date);
+    String format;
+    if (display == FeedCardDateDisplay.ABSOLUTE) {
+      format = renderAbsoluteDate();
+    } else if (display == FeedCardDateDisplay.SINCE_NOW) {
+      format = renderSinceNow();
+    } else if (display == FeedCardDateDisplay.SINCE_PHASE) {
+      format = renderSincePhase();
+    }
+    return InkWell(
+        onTap: () {
+          int index = FeedCardDateDisplay.values.indexOf(display);
+          index = (index + 1) % FeedCardDateDisplay.values.length;
+          setState(() {
+            display = FeedCardDateDisplay.values[index];
+          });
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(format, style: TextStyle(color: Colors.black54)),
+            Text('Tap to change', style: TextStyle(color: Colors.black12)),
+          ],
+        ));
+  }
+
+  String renderAbsoluteDate() {
+    String format =
+        AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    DateFormat f = DateFormat(format);
+    return f.format(widget.feedEntryState.date);
+  }
+
+  String renderSinceNow() {
+    Duration diff = DateTime.now().difference(widget.feedEntryState.date);
     int minuteDiff = diff.inMinutes;
     int hourDiff = diff.inHours;
     int dayDiff = diff.inDays;
@@ -34,13 +86,41 @@ class FeedCardDate extends StatelessWidget {
       format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''} ago';
     } else if (hourDiff < 24) {
       format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ago';
-    } else/* if (dayDiff < 5)*/ {
+    } else {
       format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ago';
-    } /*else {
-      DateFormat f = DateFormat('yyyy-MM-dd');
-      format = f.format(feedEntry.date);
-    }*/
-    return Text(format,
-        style: TextStyle(color: Colors.black54));
+    }
+    return format;
+  }
+
+  String renderSincePhase() {
+    PlantFeedState plantFeedState = widget.feedState;
+    String phase;
+    Duration germinationDiff =
+        plantFeedState.plantSettings.germinationDate != null
+            ? widget.feedEntryState.date
+                .difference(plantFeedState.plantSettings.germinationDate)
+            : null;
+    Duration veggingDiff = plantFeedState.plantSettings.veggingStart != null
+        ? widget.feedEntryState.date
+            .difference(plantFeedState.plantSettings.veggingStart)
+        : null;
+    Duration bloomingDiff = plantFeedState.plantSettings.bloomingStart != null
+        ? widget.feedEntryState.date
+            .difference(plantFeedState.plantSettings.bloomingStart)
+        : null;
+    Duration diff;
+    if (bloomingDiff != null && bloomingDiff.inSeconds > 0) {
+      diff = bloomingDiff;
+      phase = 'Blooming';
+    } else if (veggingDiff != null && veggingDiff.inSeconds > 0) {
+      diff = veggingDiff;
+      phase = 'Vegging';
+    } else if (germinationDiff != null && germinationDiff.inSeconds > 0) {
+      diff = germinationDiff;
+      phase = 'Germinating';
+    } else {
+      return 'Phase dates not set';
+    }
+    return '$phase for ${diff.inDays} days';
   }
 }

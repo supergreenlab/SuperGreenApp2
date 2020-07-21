@@ -33,17 +33,14 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_sett
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class PlantInfosPage<PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
-    extends StatefulWidget {
+class PlantInfosPage<PlantInfosBloc> extends StatefulWidget {
   PlantInfosPage({Key key}) : super(key: key);
 
   @override
-  _PlantInfosPageState<PIBloc> createState() => _PlantInfosPageState<PIBloc>();
+  _PlantInfosPageState createState() => _PlantInfosPageState();
 }
 
-class _PlantInfosPageState<
-        PIBloc extends Bloc<PlantInfosEvent, PlantInfosState>>
-    extends State<PlantInfosPage<PIBloc>> {
+class _PlantInfosPageState extends State<PlantInfosPage> {
   String form;
   ScrollController infosScrollController;
 
@@ -55,8 +52,8 @@ class _PlantInfosPageState<
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PIBloc, PlantInfosState>(
-        bloc: BlocProvider.of<PIBloc>(context),
+    return BlocBuilder<PlantInfosBloc, PlantInfosState>(
+        bloc: BlocProvider.of<PlantInfosBloc>(context),
         builder: (BuildContext context, PlantInfosState state) {
           if (state is PlantInfosStateLoading) {
             return _renderLoading(context, state);
@@ -93,21 +90,6 @@ class _PlantInfosPageState<
 
     String format =
         AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
-    String phaseTitle = 'Current phase';
-    String phaseSince;
-    if (state.plantInfos.plantSettings.phase == 'VEG') {
-      if (state.plantInfos.plantSettings.veggingStart != null) {
-        phaseSince = DateFormat(format)
-            .format(state.plantInfos.plantSettings.veggingStart);
-      }
-      phaseTitle = 'Vegging since';
-    } else if (state.plantInfos.plantSettings.phase == 'BLOOM') {
-      if (state.plantInfos.plantSettings.bloomingStart != null) {
-        phaseSince = DateFormat(format)
-            .format(state.plantInfos.plantSettings.bloomingStart);
-      }
-      phaseTitle = 'Blooming since';
-    }
 
     String dimensions;
     if (state.plantInfos.boxSettings.width != null &&
@@ -144,11 +126,59 @@ class _PlantInfosPageState<
                             : () => _openForm('PLANT_TYPE')),
                     PlantInfosWidget(
                         icon: 'icon_vegging_since.svg',
-                        title: phaseTitle,
-                        value: phaseSince,
+                        title: 'Germination date',
+                        value: state.plantInfos.plantSettings.germinationDate !=
+                                null
+                            ? DateFormat(format).format(
+                                state.plantInfos.plantSettings.germinationDate)
+                            : null,
                         onEdit: state.plantInfos.editable == false
                             ? null
-                            : () => _openForm('PHASE_SINCE')),
+                            : () => _openForm('GERMINATION_DATE')),
+                    PlantInfosWidget(
+                        icon: 'icon_vegging_since.svg',
+                        title: 'Vegging since',
+                        value:
+                            state.plantInfos.plantSettings.veggingStart != null
+                                ? DateFormat(format).format(
+                                    state.plantInfos.plantSettings.veggingStart)
+                                : null,
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('VEGGING_START')),
+                    PlantInfosWidget(
+                        icon: 'icon_vegging_since.svg',
+                        title: 'Blooming since',
+                        value: state.plantInfos.plantSettings.bloomingStart !=
+                                null
+                            ? DateFormat(format).format(
+                                state.plantInfos.plantSettings.bloomingStart)
+                            : null,
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('BLOOMING_START')),
+                    PlantInfosWidget(
+                        icon: 'icon_vegging_since.svg',
+                        title: 'Drying start',
+                        value:
+                            state.plantInfos.plantSettings.dryingStart != null
+                                ? DateFormat(format).format(
+                                    state.plantInfos.plantSettings.dryingStart)
+                                : null,
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('DRYING_START')),
+                    PlantInfosWidget(
+                        icon: 'icon_vegging_since.svg',
+                        title: 'Curing start',
+                        value:
+                            state.plantInfos.plantSettings.curingStart != null
+                                ? DateFormat(format).format(
+                                    state.plantInfos.plantSettings.curingStart)
+                                : null,
+                        onEdit: state.plantInfos.editable == false
+                            ? null
+                            : () => _openForm('CURING_START')),
                     PlantInfosWidget(
                         icon: 'icon_medium.svg',
                         title: 'Medium',
@@ -232,18 +262,51 @@ class _PlantInfosPageState<
             onSubmit: (String plantType) => updatePlantSettings(context, state,
                 state.plantInfos.plantSettings.copyWith(plantType: plantType)),
           ),
-      'PHASE_SINCE': () => PlantInfosPhaseSince(
-          phase: state.plantInfos.plantSettings.phase,
+      'GERMINATION_DATE': () => PlantInfosPhaseSince(
+          title: 'Germination date',
+          icon: 'icon_vegging_since.svg',
+          date: state.plantInfos.plantSettings.germinationDate,
+          onCancel: () => _openForm(null),
+          onSubmit: (DateTime date) {
+            updatePlantSettings(context, state,
+                state.plantInfos.plantSettings.copyWith(germinationDate: date));
+          }),
+      'VEGGING_START': () => PlantInfosPhaseSince(
+          title: 'Vegging started at',
+          icon: 'icon_vegging_since.svg',
           date: state.plantInfos.plantSettings.veggingStart,
           onCancel: () => _openForm(null),
-          onSubmit: (String phase, DateTime date) => updatePlantSettings(
-              context,
-              state,
-              phase == 'VEG'
-                  ? state.plantInfos.plantSettings
-                      .copyWith(phase: phase, veggingStart: date)
-                  : state.plantInfos.plantSettings
-                      .copyWith(phase: phase, bloomingStart: date))),
+          onSubmit: (DateTime date) {
+            updatePlantSettings(context, state,
+                state.plantInfos.plantSettings.copyWith(veggingStart: date));
+          }),
+      'BLOOMING_START': () => PlantInfosPhaseSince(
+          title: 'Blooming started at',
+          icon: 'icon_vegging_since.svg',
+          date: state.plantInfos.plantSettings.bloomingStart,
+          onCancel: () => _openForm(null),
+          onSubmit: (DateTime date) {
+            updatePlantSettings(context, state,
+                state.plantInfos.plantSettings.copyWith(bloomingStart: date));
+          }),
+      'DRYING_START': () => PlantInfosPhaseSince(
+          title: 'Drying started at',
+          icon: 'icon_vegging_since.svg',
+          date: state.plantInfos.plantSettings.dryingStart,
+          onCancel: () => _openForm(null),
+          onSubmit: (DateTime date) {
+            updatePlantSettings(context, state,
+                state.plantInfos.plantSettings.copyWith(dryingStart: date));
+          }),
+      'CURING_START': () => PlantInfosPhaseSince(
+          title: 'Drying started at',
+          icon: 'icon_vegging_since.svg',
+          date: state.plantInfos.plantSettings.curingStart,
+          onCancel: () => _openForm(null),
+          onSubmit: (DateTime date) {
+            updatePlantSettings(context, state,
+                state.plantInfos.plantSettings.copyWith(curingStart: date));
+          }),
       'MEDIUM': () => PlantInfosMedium(
             medium: state.plantInfos.plantSettings.medium,
             onCancel: () => _openForm(null),
@@ -309,7 +372,8 @@ class _PlantInfosPageState<
   }
 
   void updatePlantInfos(BuildContext context, PlantInfos plantInfos) {
-    BlocProvider.of<PIBloc>(context).add(PlantInfosEventUpdate(plantInfos));
+    BlocProvider.of<PlantInfosBloc>(context)
+        .add(PlantInfosEventUpdate(plantInfos));
     _openForm(null);
   }
 }

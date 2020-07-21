@@ -56,7 +56,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
               'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state.date),
+            child: FeedCardDate(state, feedState),
           ),
           Container(
             height: 100,

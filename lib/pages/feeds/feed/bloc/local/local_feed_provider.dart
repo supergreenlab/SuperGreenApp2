@@ -38,6 +38,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class LocalFeedBlocProvider extends FeedBlocProvider {
+  Function(FeedBlocEvent) add;
   final int feedID;
   Map<String, LocalFeedEntryLoader> loaders = {};
   FeedUnknownLoader unknownLoader;
@@ -48,6 +49,7 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
 
   @override
   Future init(Function(FeedBlocEvent) add) async {
+    this.add = add;
     unknownLoader = FeedUnknownLoader(add);
     loaders = {
       'FE_LIGHT': FeedLightLoader(add),
@@ -92,8 +94,8 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
   }
 
   @override
-  Future<FeedState> loadFeed() async {
-    return FeedState(AppDB().getAppData().storeGeo);
+  void loadFeed() {
+    add(FeedBlocEventFeedLoaded(FeedState(AppDB().getAppData().storeGeo)));
   }
 
   @override

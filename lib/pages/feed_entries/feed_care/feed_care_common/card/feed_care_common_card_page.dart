@@ -74,7 +74,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(widget.state.date),
+            child: FeedCardDate(widget.state, widget.feedState),
           ),
           Container(
             height: 700,
@@ -107,7 +107,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
       ),
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FeedCardDate(widget.state.date),
+        child: FeedCardDate(widget.state, widget.feedState),
       ),
       FeedCardText(
         params.message ?? '',

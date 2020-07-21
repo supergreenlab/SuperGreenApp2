@@ -19,29 +19,56 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:tuple/tuple.dart';
+
+enum PlantPhases { GERMINATING, VEGGING, BLOOMING, DRYING, CURING }
 
 class PlantSettings extends Equatable {
-  final String phase;
   final String plantType;
   final bool isSingle;
 
   final String strain;
   final String seedbank;
 
+  final DateTime germinationDate;
   final DateTime veggingStart;
   final DateTime bloomingStart;
+  final DateTime dryingStart;
+  final DateTime curingStart;
   final String medium;
 
   PlantSettings(
-    this.phase,
     this.plantType,
     this.isSingle,
     this.strain,
     this.seedbank,
+    this.germinationDate,
     this.veggingStart,
     this.bloomingStart,
+    this.dryingStart,
+    this.curingStart,
     this.medium,
   );
+
+  Tuple3<PlantPhases, DateTime, Duration> phaseAt(DateTime date) {
+    if (bloomingStart != null && bloomingStart.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.BLOOMING, bloomingStart, date.difference(bloomingStart));
+    } else if (veggingStart != null && veggingStart.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.VEGGING, veggingStart, date.difference(veggingStart));
+    } else if (germinationDate != null && germinationDate.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.GERMINATING,
+          germinationDate, date.difference(germinationDate));
+    } else if (dryingStart != null && dryingStart.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.DRYING, dryingStart, date.difference(dryingStart));
+    } else if (curingStart != null && curingStart.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.CURING, curingStart, date.difference(curingStart));
+    }
+    return null;
+  }
 
   factory PlantSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -50,66 +77,88 @@ class PlantSettings extends Equatable {
 
   factory PlantSettings.fromMap(Map<String, dynamic> map) {
     return PlantSettings(
-      map['phase'],
       map['plantType'],
       map['isSingle'],
       map['strain'],
       map['seedBank'],
+      map['germinationDate'] == null
+          ? null
+          : DateTime.parse(map['germinationDate'] as String).toLocal(),
       map['veggingStart'] == null
           ? null
-          : DateTime.parse(map['veggingStart'] as String),
+          : DateTime.parse(map['veggingStart'] as String).toLocal(),
       map['bloomingStart'] == null
           ? null
-          : DateTime.parse(map['bloomingStart'] as String),
+          : DateTime.parse(map['bloomingStart'] as String).toLocal(),
+      map['dryingStart'] == null
+          ? null
+          : DateTime.parse(map['dryingStart'] as String).toLocal(),
+      map['curingStart'] == null
+          ? null
+          : DateTime.parse(map['curingStart'] as String).toLocal(),
       map['medium'],
     );
   }
 
   String toJSON() {
     return JsonEncoder().convert({
-      'phase': phase,
       'plantType': plantType,
       'isSingle': isSingle,
       'strain': strain,
       'seedBank': seedbank,
+      'germinationDate': germinationDate == null
+          ? null
+          : germinationDate.toUtc().toIso8601String(),
       'veggingStart':
           veggingStart == null ? null : veggingStart.toUtc().toIso8601String(),
       'bloomingStart': bloomingStart == null
           ? null
           : bloomingStart.toUtc().toIso8601String(),
+      'dryingStart': dryingStart == null
+          ? null
+          : dryingStart.toUtc().toIso8601String(),
+      'curingStart': curingStart == null
+          ? null
+          : curingStart.toUtc().toIso8601String(),
       'medium': medium,
     });
   }
 
   @override
   List<Object> get props => [
-        phase,
         plantType,
         isSingle,
         strain,
         seedbank,
+        germinationDate,
         veggingStart,
         bloomingStart,
+        dryingStart,
+        curingStart,
         medium,
       ];
 
   PlantSettings copyWith(
-          {String phase,
-          String plantType,
+          {String plantType,
           bool isSingle,
           String strain,
           String seedbank,
+          DateTime germinationDate,
           DateTime veggingStart,
           DateTime bloomingStart,
+          DateTime dryingStart,
+          DateTime curingStart,
           String medium}) =>
       PlantSettings(
-        phase ?? this.phase,
         plantType ?? this.plantType,
         isSingle ?? this.isSingle,
         strain ?? this.strain,
         seedbank ?? this.seedbank,
+        germinationDate ?? this.germinationDate,
         veggingStart ?? this.veggingStart,
         bloomingStart ?? this.bloomingStart,
+        dryingStart ?? this.dryingStart,
+        curingStart ?? this.curingStart,
         medium ?? this.medium,
       );
 }

@@ -80,7 +80,7 @@ class FeedEntries extends Table {
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     return FeedEntriesCompanion(
         feed: Value(feed.id),
-        date: Value(DateTime.parse(map['date'] as String)),
+        date: Value(DateTime.parse(map['date'] as String).toLocal()),
         type: Value(map['type'] as String),
         isNew: Value(true),
         params: Value(map['params'] as String),

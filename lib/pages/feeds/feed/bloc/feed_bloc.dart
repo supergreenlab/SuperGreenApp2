@@ -69,6 +69,15 @@ class FeedBlocEventDeletedFeedEntry extends FeedBlocEvent {
   List<Object> get props => [feedEntryID];
 }
 
+class FeedBlocEventFeedLoaded extends FeedBlocEvent {
+  final FeedState feed;
+
+  FeedBlocEventFeedLoaded(this.feed);
+
+  @override
+  List<Object> get props => [feed];
+}
+
 class FeedBlocEventEntryVisible extends FeedBlocEvent {
   final int index;
 
@@ -200,8 +209,9 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
   Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {
     if (event is FeedBlocEventInit) {
       await provider.init(this.add);
-      FeedState feedState = await provider.loadFeed();
-      yield FeedBlocStateFeedLoaded(feedState);
+      provider.loadFeed();
+    } else if (event is FeedBlocEventFeedLoaded) {
+      yield FeedBlocStateFeedLoaded(event.feed);
     } else if (event is FeedBlocEventLoadEntries) {
       List<FeedEntryState> fes =
           await provider.loadEntries(event.n, entries.length);
@@ -244,8 +254,6 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       await provider.markAsRead(entries[event.index].feedEntryID);
     } else if (event is FeedBlocEventSetStoreGeo) {
       AppDB().setStoreGeo(event.storeGeo);
-      FeedState feedState = await provider.loadFeed();
-      yield FeedBlocStateFeedLoaded(feedState);
     } else if (event is FeedBlocEventEditParams) {
       FeedEntryLoader loader = provider.loaderForType(event.entry.type);
       await loader.update(event.entry, event.params);
@@ -278,7 +286,7 @@ abstract class FeedBlocProvider {
   FeedEntryLoader loaderForType(String type);
 
   Future init(Function(FeedBlocEvent) add);
-  Future<FeedState> loadFeed();
+  void loadFeed();
   Future<List<FeedEntryState>> loadEntries(int n, int offset);
   Future deleteFeedEntry(dynamic feedEntryID);
   Future markAsRead(dynamic feedEntryID);

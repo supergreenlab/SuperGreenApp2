@@ -22,9 +22,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc_provider.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/home_bloc.dart';
@@ -221,7 +223,8 @@ class HomePage extends StatelessWidget {
     }
   }
 
-  MaterialPageRoute _plantFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event) {
+  MaterialPageRoute _plantFeedRoute(BuildContext context,
+      RouteSettings settings, HomeNavigateToPlantFeedEvent event) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
@@ -229,10 +232,10 @@ class HomePage extends StatelessWidget {
                 BlocProvider<PlantDrawerBloc>(
                     create: (context) => PlantDrawerBloc()),
                 BlocProvider<PlantFeedBloc>(
-                  create: (context) => PlantFeedBloc(event),
-                )
+                    create: (context) => PlantFeedBloc(event)),
               ],
-              child: TowelieHelper.wrapWidget(settings, context, PlantFeedPage()),
+              child:
+                  TowelieHelper.wrapWidget(settings, context, PlantFeedPage()),
             ));
   }
 }

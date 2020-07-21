@@ -45,7 +45,7 @@ class PlantInfosDateInput extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 child: Text(
-              'Event date: ${DateFormat(format).format(date)}',
+              'Since: ${DateFormat(format).format(date)}',
               style: TextStyle(color: Colors.white),
             )),
             FlatButton(
@@ -53,7 +53,7 @@ class PlantInfosDateInput extends StatelessWidget {
                   DateTime newDate = await showDatePicker(
                       context: context,
                       initialDate: date,
-                      firstDate: DateTime.now().subtract(Duration(days: 10)),
+                      firstDate: DateTime.now().subtract(Duration(days: 100)),
                       lastDate: DateTime.now());
                   onChange(newDate);
                 },

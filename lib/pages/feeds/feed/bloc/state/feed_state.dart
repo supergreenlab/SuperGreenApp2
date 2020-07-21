@@ -25,4 +25,12 @@ class FeedState extends Equatable {
 
   @override
   List<Object> get props => [storeGeo];
+
+  FeedState copyWith({
+    String storeGeo,
+  }) {
+    return FeedState(
+      storeGeo ?? this.storeGeo,
+    );
+  }
 }

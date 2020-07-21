@@ -59,7 +59,7 @@ class FeedMeasureCardPage extends StatelessWidget {
               showControls: !state.remoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state.date),
+            child: FeedCardDate(state, feedState),
           ),
           Container(
             height: 350,
@@ -125,7 +125,7 @@ class FeedMeasureCardPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state.date),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),

@@ -18,18 +18,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_date_input.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_dropdown_input.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
 
 class PlantInfosPhaseSince extends StatefulWidget {
-  final String phase;
+  final String title;
+  final String icon;
   final DateTime date;
 
   final Function onCancel;
-  final Function(String phase, DateTime date) onSubmit;
+  final Function(DateTime date) onSubmit;
 
   PlantInfosPhaseSince(
-      {@required this.phase,
+      {@required this.title,
+      @required this.icon,
       @required this.date,
       @required this.onCancel,
       @required this.onSubmit});
@@ -39,53 +40,35 @@ class PlantInfosPhaseSince extends StatefulWidget {
 }
 
 class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
-  String phase;
+  String title;
   DateTime date;
 
   @override
   void initState() {
-    phase = widget.phase;
+    title = widget.title;
     date = widget.date ?? DateTime.now();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    String phaseTitle = 'Current phase';
-    if (phase == 'VEG') {
-      phaseTitle = 'Vegging since';
-    } else if (phase == 'BLOOM') {
-      phaseTitle = 'Blooming since';
-    }
     return PlantInfosForm(
-      title: phaseTitle,
-      icon: 'icon_vegging_since.svg',
+      title: widget.title,
+      icon: widget.icon,
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(phase, date);
+        widget.onSubmit(date);
       },
       child: Column(
         children: <Widget>[
-          PlantInfosDropdownInput(
-            labelText: 'Plant phase',
-            hintText: 'Choose a phase',
-            items: [
-              ['VEG', 'Vegetative'],
-              ['BLOOM', 'Blooming'],
-            ],
-            value: widget.phase,
-            onChanged: (String newValue) {
-              setState(() {
-                phase = newValue;
-              });
-            },
-          ),
           PlantInfosDateInput(
             hintText: 'Since: ',
             labelText: 'Pick a date',
             date: date,
             onChange: (DateTime date) {
-              this.date = date;
+              setState(() {
+                this.date = date;
+              });
             },
           ),
         ],

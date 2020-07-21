@@ -31,12 +31,14 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/local_plant_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc_provider.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/sunglasses_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -370,7 +372,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       }
       return BlocProvider(
         key: Key('feed'),
-        create: (context) => FeedBloc(LocalFeedBlocProvider(state.plant.feed)),
+        create: (context) =>
+            FeedBloc(LocalPlantFeedBlocProvider(state.plant.feed)),
         child: FeedPage(
           color: Color(0xff063047),
           actions: actions,
@@ -503,7 +506,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           List<Plant> plants = state.plants.toList();
           List<Box> boxes = state.boxes;
           content = ListView(
-            controller: drawerScrollController,
+              controller: drawerScrollController,
               key: const PageStorageKey<String>('plants'),
               children: boxes.map((b) {
                 List<Widget> content = [
@@ -690,9 +693,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   Widget _renderPlantInfos(
       BuildContext context, PlantFeedBlocStateLoaded state) {
-    return BlocProvider(
-        create: (context) => LocalPlantInfosBloc(state.plant),
-        child: PlantInfosPage<LocalPlantInfosBloc>());
+    return BlocProvider<PlantInfosBloc>(
+      create: (context) =>
+          PlantInfosBloc(LocalPlantInfosBlocProvider(state.plant)),
+      child: PlantInfosPage(),
+    );
   }
 
   Widget _renderEnvironmentTab(

@@ -95,10 +95,11 @@ class PlantInfosStateLoaded extends PlantInfosState {
   List<Object> get props => [plantInfos];
 }
 
-abstract class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
-  PlantInfos plantInfos;
+class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
+  final PlantInfosBlocProvider provider;
 
-  PlantInfosBloc() {
+  PlantInfosBloc(this.provider) {
+    this.provider.init(add);
     add(PlantInfosEventLoad());
   }
 
@@ -108,16 +109,32 @@ abstract class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
   @override
   Stream<PlantInfosState> mapEventToState(PlantInfosEvent event) async* {
     if (event is PlantInfosEventLoad) {
-      yield* loadPlant();
+      provider.loadPlant();
     } else if (event is PlantInfosEventLoaded) {
       yield PlantInfosStateLoaded(event.plantInfos);
     } else if (event is PlantInfosEventUpdate) {
-      yield* updateSettings(event.plantInfos);
+      yield* provider.updateSettings(event.plantInfos);
     }
   }
 
-  Stream<PlantInfosState> loadPlant();
+  @override
+  Future<void> close() async {
+    await provider.close();
+    return super.close();
+  }
+}
+
+abstract class PlantInfosBlocProvider {
+  PlantInfos plantInfos;
+  Function(PlantInfosEvent) add;
+
+  void init(Function(PlantInfosEvent) add) {
+    this.add = add;
+  }
+
+  void loadPlant();
   Stream<PlantInfosState> updateSettings(PlantInfos plantInfos);
+  Future<void> close();
 
   void plantInfosLoaded(PlantInfos plantInfos) {
     this.plantInfos = plantInfos;

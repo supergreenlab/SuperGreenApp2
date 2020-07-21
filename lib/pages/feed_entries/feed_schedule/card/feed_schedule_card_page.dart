@@ -59,7 +59,7 @@ class FeedScheduleCardPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state.date),
+            child: FeedCardDate(state, feedState),
           ),
           Container(
             height: 100,
@@ -91,7 +91,7 @@ class FeedScheduleCardPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state.date),
+            child: FeedCardDate(state, feedState),
           ),
           Container(
             height: 100,

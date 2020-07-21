@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/graphs/metrics_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -183,9 +185,16 @@ class _MetricsPageState extends State<MetricsPage> {
           return ListTile(
             leading: SvgPicture.asset(_icons[state.entries[i].type]),
             title: Text(_titles[state.entries[i].type]),
-            subtitle: FeedCardDate(state.entries[i].date),
+            subtitle: _renderDate(context, state.entries[i].date),
           );
         });
+  }
+
+  Widget _renderDate(BuildContext context, DateTime date) {
+    String format =
+        AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    DateFormat f = DateFormat(format);
+    return Text(f.format(date), style: TextStyle(color: Colors.black54));
   }
 
   Widget _renderOptionCheckbx(

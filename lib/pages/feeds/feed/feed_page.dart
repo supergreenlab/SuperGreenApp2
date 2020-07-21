@@ -63,7 +63,9 @@ class _FeedPageState extends State<FeedPage> {
     return BlocListener<FeedBloc, FeedBlocState>(
       listener: (BuildContext context, state) {
         if (state is FeedBlocStateFeedLoaded) {
-          feedState = state.feed;
+          setState(() {
+            feedState = state.feed;
+          });
         } else if (state is FeedBlocStateEntriesLoaded) {
           setState(() {
             loaded = true;

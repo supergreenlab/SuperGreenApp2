@@ -25,18 +25,19 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
-class LocalPlantInfosBloc extends PlantInfosBloc {
+class LocalPlantInfosBlocProvider extends PlantInfosBlocProvider {
   Box box;
-  final Plant plant;
+  Plant plant;
 
   StreamSubscription<Box> boxStream;
   StreamSubscription<Plant> plantStream;
   StreamSubscription<FeedMedia> feedMediaStream;
 
-  LocalPlantInfosBloc(this.plant) : super();
+  LocalPlantInfosBlocProvider(this.plant) : super();
 
   @override
-  Stream<PlantInfosState> loadPlant() async* {
+  void loadPlant() async {
+    plant = await RelDB.get().plantsDAO.getPlant(plant.id);
     box = await RelDB.get().plantsDAO.getBox(plant.box);
     this.plantInfos = PlantInfos(plant.name, null, null, null, null, true);
     plantStream =
@@ -50,26 +51,33 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
 
   @override
   Stream<PlantInfosState> updateSettings(PlantInfos plantInfos) async* {
-    PlantsCompanion plant = PlantsCompanion(
-        id: Value(this.plant.id),
-        settings: Value(plantInfos.plantSettings.toJSON()),
-        synced: Value(false));
-    await RelDB.get().plantsDAO.updatePlant(plant);
-    BoxesCompanion box = BoxesCompanion(
-        id: Value(this.box.id),
-        settings: Value(plantInfos.boxSettings.toJSON()),
-        synced: Value(false));
-    await RelDB.get().plantsDAO.updateBox(box);
-    plantInfosLoaded(plantInfos);
+    String plantSettingsJSON = plantInfos.plantSettings.toJSON();
+    if (plant.settings != plantSettingsJSON) {
+      PlantsCompanion plant = PlantsCompanion(
+          id: Value(this.plant.id),
+          settings: Value(plantSettingsJSON),
+          synced: Value(false));
+      await RelDB.get().plantsDAO.updatePlant(plant);
+    }
+    String boxSettingsJSON = plantInfos.boxSettings.toJSON();
+    if (box.settings != boxSettingsJSON) {
+      BoxesCompanion box = BoxesCompanion(
+          id: Value(this.box.id),
+          settings: Value(boxSettingsJSON),
+          synced: Value(false));
+      await RelDB.get().plantsDAO.updateBox(box);
+    }
   }
 
   void plantUpdated(Plant plant) {
+    this.plant = plant;
     PlantSettings settings = PlantSettings.fromJSON(plant.settings);
     plantInfosLoaded(
         plantInfos.copyWith(name: plant.name, plantSettings: settings));
   }
 
   void boxUpdated(Box box) {
+    this.box = box;
     BoxSettings settings = BoxSettings.fromJSON(box.settings);
     plantInfosLoaded(plantInfos.copyWith(boxSettings: settings));
   }
@@ -82,10 +90,9 @@ class LocalPlantInfosBloc extends PlantInfosBloc {
   }
 
   @override
-  Future<void> close() {
-    boxStream.cancel();
-    plantStream.cancel();
-    feedMediaStream.cancel();
-    return super.close();
+  Future<void> close() async {
+    await boxStream.cancel();
+    await plantStream.cancel();
+    await feedMediaStream.cancel();
   }
 }
