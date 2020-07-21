@@ -125,8 +125,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                             ? null
                             : () => _openForm('PLANT_TYPE')),
                     PlantInfosWidget(
-                        icon: 'icon_vegging_since.svg',
-                        title: 'Germination date',
+                        icon: 'icon_germination_date.svg',
+                        title: 'Germination',
                         value: state.plantInfos.plantSettings.germinationDate !=
                                 null
                             ? DateFormat(format).format(
@@ -137,7 +137,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                             : () => _openForm('GERMINATION_DATE')),
                     PlantInfosWidget(
                         icon: 'icon_vegging_since.svg',
-                        title: 'Vegging since',
+                        title: 'Vegging',
                         value:
                             state.plantInfos.plantSettings.veggingStart != null
                                 ? DateFormat(format).format(
@@ -147,8 +147,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                             ? null
                             : () => _openForm('VEGGING_START')),
                     PlantInfosWidget(
-                        icon: 'icon_vegging_since.svg',
-                        title: 'Blooming since',
+                        icon: 'icon_blooming_since.svg',
+                        title: 'Blooming',
                         value: state.plantInfos.plantSettings.bloomingStart !=
                                 null
                             ? DateFormat(format).format(
@@ -158,8 +158,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                             ? null
                             : () => _openForm('BLOOMING_START')),
                     PlantInfosWidget(
-                        icon: 'icon_vegging_since.svg',
-                        title: 'Drying start',
+                        icon: 'icon_drying_since.svg',
+                        title: 'Drying',
                         value:
                             state.plantInfos.plantSettings.dryingStart != null
                                 ? DateFormat(format).format(
@@ -169,8 +169,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                             ? null
                             : () => _openForm('DRYING_START')),
                     PlantInfosWidget(
-                        icon: 'icon_vegging_since.svg',
-                        title: 'Curing start',
+                        icon: 'icon_curing_since.svg',
+                        title: 'Curing',
                         value:
                             state.plantInfos.plantSettings.curingStart != null
                                 ? DateFormat(format).format(
