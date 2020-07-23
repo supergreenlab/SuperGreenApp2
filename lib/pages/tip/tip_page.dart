@@ -199,9 +199,11 @@ class _TipPageState extends State<TipPage> {
         loadingBuilder: (BuildContext context, Widget child,
             ImageChunkEvent loadingProgress) {
           if (loadingProgress == null) return child;
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return FullscreenLoading(
+              percent: loadingProgress.expectedTotalBytes == null
+                  ? null
+                  : loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes);
         },
       );
     }

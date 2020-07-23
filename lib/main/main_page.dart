@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -62,6 +63,8 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/form/f
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/form/feed_topping_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/form/feed_transplant_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/form/feed_transplant_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_life_event/form/feed_life_event_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_life_event/form/feed_life_event_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_form_bloc.dart';
@@ -74,8 +77,6 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/remote/plant_infos_bloc_provider.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_page.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
@@ -180,7 +181,7 @@ class _MainPageState extends State<MainPage> {
             navigatorKey: widget._navigatorKey,
             onGenerateTitle: (BuildContext context) =>
                 SGLLocalizations.of(context).title,
-            onGenerateRoute: (settings) => MaterialPageRoute(
+            onGenerateRoute: (settings) => CupertinoPageRoute(
                 settings: settings,
                 builder: (context) => wrapSyncIndicator(
                     TowelieHelper.wrapWidget(settings, context,
@@ -363,6 +364,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => FeedWaterFormBloc(settings.arguments),
           child: FeedWaterFormPage(),
+        );
+      case '/feed/form/lifeevents':
+        return BlocProvider(
+          create: (context) => FeedLifeEventFormBloc(settings.arguments),
+          child: FeedLifeEventFormPage(),
         );
       case '/tip':
         return BlocProvider(

@@ -28,6 +28,7 @@ class FeedFormLayout extends StatelessWidget {
   final String title;
   final bool hideBackButton;
   final double fontSize;
+  final double topBarPadding;
 
   const FeedFormLayout(
       {@required this.body,
@@ -37,7 +38,7 @@ class FeedFormLayout extends StatelessWidget {
       this.valid = true,
       this.changed = false,
       this.hideBackButton = false,
-      this.fontSize});
+      this.fontSize, this.topBarPadding = 8.0});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class FeedFormLayout extends StatelessWidget {
             iconColor: Colors.white,
           ),
           body: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.only(top: topBarPadding),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

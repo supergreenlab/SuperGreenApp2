@@ -26,6 +26,8 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/data/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 class MainNavigatorEvent extends Equatable {
   final void Function(Future<dynamic> future) futureFn;
@@ -99,7 +101,8 @@ class MainNavigateToAddDeviceEvent extends MainNavigatorEvent {
 class MainNavigateToNewDeviceEvent extends MainNavigatorEvent {
   final bool popOnComplete;
 
-  MainNavigateToNewDeviceEvent(this.popOnComplete, {futureFn}) : super(futureFn: futureFn);
+  MainNavigateToNewDeviceEvent(this.popOnComplete, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [popOnComplete];
@@ -248,6 +251,17 @@ class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
   final Plant plant;
 
   MainNavigateToFeedScheduleFormEvent(this.plant, {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [plant];
+}
+
+class MainNavigateToFeedLifeEventFormEvent extends MainNavigateToFeedFormEvent {
+  final Plant plant;
+  final PlantPhases phase;
+
+  MainNavigateToFeedLifeEventFormEvent(this.plant, this.phase, {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -580,6 +594,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/feed/form/ventilation', event);
     } else if (event is MainNavigateToFeedWaterFormEvent) {
       future = _pushOrReplace('/feed/form/water', event);
+    } else if (event is MainNavigateToFeedLifeEventFormEvent) {
+      future = _pushOrReplace('/feed/form/lifeevents', event);
     } else if (event is MainNavigateToTipEvent) {
       future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {

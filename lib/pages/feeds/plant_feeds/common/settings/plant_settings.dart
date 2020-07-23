@@ -70,6 +70,36 @@ class PlantSettings extends Equatable {
     return null;
   }
 
+  DateTime dateForPhase(PlantPhases phase) {
+    if (phase == PlantPhases.GERMINATING) {
+      return germinationDate;
+    } else if (phase == PlantPhases.VEGGING) {
+      return veggingStart;
+    } else if (phase == PlantPhases.BLOOMING) {
+      return bloomingStart;
+    } else if (phase == PlantPhases.DRYING) {
+      return dryingStart;
+    } else if (phase == PlantPhases.CURING) {
+      return curingStart;
+    }
+    return null;
+  }
+
+  PlantSettings setDateForPhase(PlantPhases phase, DateTime date) {
+    if (phase == PlantPhases.GERMINATING) {
+      return this.copyWith(germinationDate: date);
+    } else if (phase == PlantPhases.VEGGING) {
+      return this.copyWith(veggingStart: date);
+    } else if (phase == PlantPhases.BLOOMING) {
+      return this.copyWith(bloomingStart: date);
+    } else if (phase == PlantPhases.DRYING) {
+      return this.copyWith(dryingStart: date);
+    } else if (phase == PlantPhases.CURING) {
+      return this.copyWith(curingStart: date);
+    }
+    return this;
+  }
+
   factory PlantSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return PlantSettings.fromMap(map);
@@ -114,12 +144,10 @@ class PlantSettings extends Equatable {
       'bloomingStart': bloomingStart == null
           ? null
           : bloomingStart.toUtc().toIso8601String(),
-      'dryingStart': dryingStart == null
-          ? null
-          : dryingStart.toUtc().toIso8601String(),
-      'curingStart': curingStart == null
-          ? null
-          : curingStart.toUtc().toIso8601String(),
+      'dryingStart':
+          dryingStart == null ? null : dryingStart.toUtc().toIso8601String(),
+      'curingStart':
+          curingStart == null ? null : curingStart.toUtc().toIso8601String(),
       'medium': medium,
     });
   }

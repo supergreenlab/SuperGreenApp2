@@ -22,6 +22,7 @@ import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/ca
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_fimming/card/feed_fimming_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_topping/card/feed_topping_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_transplant/card/feed_transplant_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_life_event/card/feed_life_event_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_page.dart';
@@ -66,11 +67,13 @@ class FeedEntriesCardHelpers {
         FeedTowelieInfoCardPage(animation, feedState, state),
     'FE_PRODUCTS': (animation, feedState, state) =>
         FeedProductsCardPage(animation, feedState, state),
+    'FE_LIFE_EVENT': (animation, feedState, state) =>
+        FeedLifeEventCardPage(animation, feedState, state),
   };
 
   static Widget cardForFeedEntry(
       Animation animation, FeedState feedState, FeedEntryState state) {
-        Function builder = _cards[state.type];
+    Function builder = _cards[state.type];
     if (builder == null) {
       return FeedUnknownCardPage(animation, feedState, state);
     }
