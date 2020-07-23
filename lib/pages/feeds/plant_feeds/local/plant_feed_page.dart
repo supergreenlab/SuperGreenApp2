@@ -29,7 +29,6 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_page.dart';
@@ -55,7 +54,7 @@ class PlantFeedPage extends StatefulWidget {
 enum SpeedDialType {
   general,
   trainings,
-  environment,
+  lifeevents,
 }
 
 class _PlantFeedPageState extends State<PlantFeedPage> {
@@ -178,6 +177,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         children: [
           _renderGeneralSpeedDials(context, state),
           _renderTrimSpeedDials(context, state),
+          _renderLifeEvents(context, state),
         ][_speedDialType.index]);
   }
 
@@ -258,6 +258,80 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     ];
   }
 
+  List<SpeedDialChild> _renderLifeEvents(
+      BuildContext context, PlantFeedBlocStateLoaded state) {
+    return [
+      SpeedDialChild(
+          child: SvgPicture.asset('assets/feed_card/icon_none.svg'),
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          onTap: () {
+            setState(() {
+              _speedDialType = SpeedDialType.general;
+            });
+          }),
+      _renderSpeedDialChild(
+          'Germinating',
+          'assets/plant_infos/icon_germination_date.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.plant,
+                  pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_GERMINATING',
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'
+              ])),
+      _renderSpeedDialChild(
+          'Vegging',
+          'assets/plant_infos/icon_vegging_since.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.plant,
+                  pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_VEGGING',
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_does_vegetative_state_start/l/en'
+              ])),
+      _renderSpeedDialChild(
+          'Blooming',
+          'assets/plant_infos/icon_blooming_since.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.plant,
+                  pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_BLOOMING',
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_does_flowering_start/l/en'
+              ])),
+      _renderSpeedDialChild(
+          'Drying',
+          'assets/plant_infos/icon_drying_since.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.plant,
+                  pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_DRYING',
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/how_to_dry/l/en'
+              ])),
+      _renderSpeedDialChild(
+          'Curing',
+          'assets/plant_infos/icon_curing_since.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  state.plant,
+                  pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_CURING',
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/why_cure/l/en'
+              ])),
+    ];
+  }
+
   List<SpeedDialChild> _renderGeneralSpeedDials(
       BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
@@ -297,6 +371,15 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           onTap: () {
             setState(() {
               _speedDialType = SpeedDialType.trainings;
+            });
+          }),
+      SpeedDialChild(
+          child: SvgPicture.asset('assets/feed_card/icon_life_events.svg'),
+          label: 'Life events',
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          onTap: () {
+            setState(() {
+              _speedDialType = SpeedDialType.lifeevents;
             });
           }),
     ];

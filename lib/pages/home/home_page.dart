@@ -22,11 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_page.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc_provider.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/home_bloc.dart';
@@ -36,8 +34,6 @@ import 'package:super_green_app/pages/settings/settings_page.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
-
-//final RouteObserver<PageRoute> _analyticsObserver = AnalyticsObserver();
 
 class HomePage extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;

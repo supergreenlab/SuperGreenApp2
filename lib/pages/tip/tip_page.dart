@@ -22,6 +22,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
+import 'package:super_green_app/pages/tip/tip_video.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -144,7 +145,7 @@ class _TipPageState extends State<TipPage> {
     List<Widget> sections = [
       _renderSection(tip, article, article['intro']),
     ];
-    List<Map<String, dynamic>> ss = article['sections'];
+    List<dynamic> ss = article['sections'];
     if (ss != null) {
       sections.addAll(ss.map((e) => _renderSection(tip, article, e)));
     }
@@ -162,7 +163,7 @@ class _TipPageState extends State<TipPage> {
   Widget _renderSection(Map<String, dynamic> tip, Map<String, dynamic> article,
       Map<String, dynamic> section) {
     String slug = _slug(article);
-    String imagePath =
+    String mediaPath =
         'https://tipapi.supergreenlab.com/a/${tip['user']}/${tip['repo']}/${tip['branch']}/s/$slug/${section['image']['url']}';
     return Column(
       children: <Widget>[
@@ -175,17 +176,7 @@ class _TipPageState extends State<TipPage> {
               SizedBox(
                   width: constraints.maxWidth,
                   height: 300,
-                  child: Image.network(
-                    imagePath,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                  )),
+                  child: _renderMedia(mediaPath)),
         ),
         Padding(
           padding: const EdgeInsets.all(24.0),
@@ -197,6 +188,24 @@ class _TipPageState extends State<TipPage> {
         ),
       ],
     );
+  }
+
+  Widget _renderMedia(String path) {
+    bool isVideo = path.endsWith('.mp4');
+    if (!isVideo) {
+      return Image.network(
+        path,
+        fit: BoxFit.cover,
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+    }
+    return TipVideo(path: path);
   }
 
   String _slug(Map<String, dynamic> article) {
