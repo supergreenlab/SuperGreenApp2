@@ -19,9 +19,11 @@
 import 'dart:async';
 
 import 'package:hive/hive.dart' as hive;
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_provider.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_feed_state.dart';
@@ -51,6 +53,25 @@ class LocalPlantFeedBlocProvider extends LocalFeedBlocProvider {
         RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
     boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
     appDataStream = AppDB().watchAppData().listen(appDataUpdated);
+  }
+
+  @override
+  Future deleteFeedEntry(feedEntryID) async {
+    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
+    // TODO find something to do for feedEntry destructors.
+    if (feedEntry.type == 'FE_LIFE_EVENT') {
+      FeedLifeEventParams params =
+          FeedLifeEventParams.fromJSON(feedEntry.params);
+      PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
+      plantSettings = plantSettings.removeDateForPhase(params.phase);
+      PlantsCompanion plantsCompanion = PlantsCompanion(
+        id: Value(plant.id),
+        settings: Value(plantSettings.toJSON()),
+      );
+      await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
+    }
+    await super.deleteFeedEntry(feedEntryID);
   }
 
   void plantUpdated(Plant plant) {

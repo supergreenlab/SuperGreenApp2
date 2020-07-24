@@ -100,6 +100,21 @@ class PlantSettings extends Equatable {
     return this;
   }
 
+  PlantSettings removeDateForPhase(PlantPhases phase) {
+    return PlantSettings(
+      this.plantType,
+      this.isSingle,
+      this.strain,
+      this.seedbank,
+      phase == PlantPhases.GERMINATING ? null : this.germinationDate,
+      phase == PlantPhases.VEGGING ? null : this.veggingStart,
+      phase == PlantPhases.BLOOMING ? null : this.bloomingStart,
+      phase == PlantPhases.DRYING ? null : this.dryingStart,
+      phase == PlantPhases.CURING ? null : this.curingStart,
+      medium ?? this.medium,
+    );
+  }
+
   factory PlantSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return PlantSettings.fromMap(map);
