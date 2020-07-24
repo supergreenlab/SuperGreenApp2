@@ -42,5 +42,8 @@ class RemotePlantInfosBlocProvider extends PlantInfosBlocProvider {
   Stream<PlantInfosState> updateSettings(PlantInfos plantInfos) async* {}
 
   @override
+  Stream<PlantInfosState> updatePhase(PlantPhases phase, DateTime date) async*{}
+
+  @override
   Future<void> close() async {}
 }

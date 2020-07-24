@@ -79,6 +79,16 @@ class PlantInfosEventUpdate extends PlantInfosEvent {
   List<Object> get props => [plantInfos];
 }
 
+class PlantInfosEventUpdatePhase extends PlantInfosEvent {
+  final PlantPhases phase;
+  final DateTime date;
+
+  PlantInfosEventUpdatePhase(this.phase, this.date);
+
+  @override
+  List<Object> get props => [phase, date];
+}
+
 abstract class PlantInfosState extends Equatable {}
 
 class PlantInfosStateLoading extends PlantInfosState {
@@ -114,6 +124,8 @@ class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
       yield PlantInfosStateLoaded(event.plantInfos);
     } else if (event is PlantInfosEventUpdate) {
       yield* provider.updateSettings(event.plantInfos);
+    } else if (event is PlantInfosEventUpdatePhase) {
+      yield* provider.updatePhase(event.phase, event.date);
     }
   }
 
@@ -134,6 +146,7 @@ abstract class PlantInfosBlocProvider {
 
   void loadPlant();
   Stream<PlantInfosState> updateSettings(PlantInfos plantInfos);
+  Stream<PlantInfosState> updatePhase(PlantPhases phase, DateTime date);
   Future<void> close();
 
   void plantInfosLoaded(PlantInfos plantInfos) {

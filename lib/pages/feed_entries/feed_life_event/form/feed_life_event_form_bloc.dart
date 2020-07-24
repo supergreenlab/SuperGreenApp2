@@ -21,6 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/helpers/feed_helper.dart';
+import 'package:super_green_app/data/helpers/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
@@ -89,39 +90,7 @@ class FeedLifeEventFormBloc
       yield FeedLifeEventFormBlocStateLoaded(
           _args.phase, plantSettings.dateForPhase(_args.phase));
     } else if (event is FeedLifeEventFormBlocEventSetDate) {
-      Plant plant = await RelDB.get().plantsDAO.getPlant(_args.plant.id);
-
-      List<FeedEntry> lifeEvents = await RelDB.get()
-          .feedsDAO
-          .getFeedEntriesForFeedWithType(plant.feed, 'FE_LIFE_EVENT');
-      FeedEntry lifeEvent = lifeEvents.firstWhere((fe) {
-        FeedLifeEventParams params = FeedLifeEventParams.fromJSON(fe.params);
-        return params.phase == _args.phase;
-      }, orElse: () => null);
-      if (lifeEvent == null) {
-        FeedLifeEventParams params = FeedLifeEventParams(_args.phase);
-        FeedEntriesCompanion lifeEventCompanion = FeedEntriesCompanion.insert(
-          feed: plant.feed,
-          date: event.date,
-          type: 'FE_LIFE_EVENT',
-          params: Value(params.toJSON()),
-        );
-        await FeedEntryHelper.addFeedEntry(lifeEventCompanion);
-      } else {
-        FeedEntriesCompanion lifeEventCompanion = FeedEntriesCompanion(
-          id: Value(lifeEvent.id),
-          date: Value(event.date),
-        );
-        await FeedEntryHelper.updateFeedEntry(lifeEventCompanion);
-      }
-
-      PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
-      plantSettings = plantSettings.setDateForPhase(_args.phase, event.date);
-      PlantsCompanion plantsCompanion = PlantsCompanion(
-        id: Value(plant.id),
-        settings: Value(plantSettings.toJSON()),
-      );
-      await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
+      await PlantHelper.updatePlantPhase(_args.plant, _args.phase, event.date);
       yield FeedLifeEventFormBlocStateDone(_args.phase);
     }
   }

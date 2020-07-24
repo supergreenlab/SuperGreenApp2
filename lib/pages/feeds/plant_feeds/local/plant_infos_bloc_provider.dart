@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/helpers/plant_helper.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
@@ -67,6 +68,11 @@ class LocalPlantInfosBlocProvider extends PlantInfosBlocProvider {
           synced: Value(false));
       await RelDB.get().plantsDAO.updateBox(box);
     }
+  }
+
+  @override
+  Stream<PlantInfosState> updatePhase(PlantPhases phase, DateTime date) async* {
+    await PlantHelper.updatePlantPhase(plant, phase, date);
   }
 
   void plantUpdated(Plant plant) {
