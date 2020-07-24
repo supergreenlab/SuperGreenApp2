@@ -70,8 +70,8 @@ class _FeedCardDateState extends State<FeedCardDate> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(format, style: TextStyle(color: Colors.black54)),
-            Text('Tap to change', style: TextStyle(color: Colors.black12)),
+            Text(format, style: TextStyle(color: Colors.black54, fontSize: 15)),
+            Text('Change', style: TextStyle(color: Colors.black12)),
           ],
         ));
   }

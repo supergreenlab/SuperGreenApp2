@@ -95,10 +95,6 @@ class FeedLifeEventCardPage extends StatelessWidget {
                   .add(FeedBlocEventDeleteEntry(state));
             },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 130,
             alignment: Alignment.center,
@@ -110,6 +106,10 @@ class FeedLifeEventCardPage extends StatelessWidget {
                       fontSize: 40,
                       fontWeight: FontWeight.bold)),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),
