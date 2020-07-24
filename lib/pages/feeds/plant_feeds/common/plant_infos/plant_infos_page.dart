@@ -138,6 +138,11 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                         onEdit: state.plantInfos.editable == false
                             ? null
                             : () => _openForm('DIMENSIONS')),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                      child: Text('Life event dates',
+                          style: TextStyle(color: Colors.white)),
+                    ),
                     PlantInfosWidget(
                         icon: 'icon_germination_date.svg',
                         title: 'Germination',
