@@ -18,8 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_life_event/form/feed_life_event_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
@@ -48,6 +50,9 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
       listener: (BuildContext context, state) {
         if (state is FeedLifeEventFormBlocStateLoaded) {
           date = state.date ?? DateTime.now();
+        } else if (state is FeedLifeEventFormBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<FeedLifeEventFormBloc, FeedLifeEventFormBlocState>(
@@ -56,7 +61,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             Widget body;
             Tuple2<String, String> phaseTitle =
                 Tuple2('Phase', 'assets/plant_infos/icon_germination_date.svg');
-            if (state is FeedLifeEventFormBlocStateInit) {
+            if (state is FeedLifeEventFormBlocStateInit || state is FeedLifeEventFormBlocStateDone) {
               body = Expanded(child: FullscreenLoading());
             } else if (state is FeedLifeEventFormBlocStateLoaded) {
               body = renderForm(context, state);
@@ -66,7 +71,10 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
               title: '🎉',
               fontSize: 35,
               topBarPadding: 0,
-              onOK: () {},
+              onOK: () {
+                BlocProvider.of<FeedLifeEventFormBloc>(context)
+                    .add(FeedLifeEventFormBlocEventSetDate(date));
+              },
               body: FeedFormParamLayout(
                   title: phaseTitle.item1,
                   icon: phaseTitle.item2,
@@ -98,6 +106,8 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          SvgPicture.asset('assets/feed_form/icon_calendar.svg',
+              width: 50, height: 50),
           Text(
             text,
             style: TextStyle(fontSize: 20, color: Colors.grey.shade700),

@@ -84,7 +84,7 @@ class DeviceDaemonBloc
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
     } else if (event is DeviceDaemonBlocEventLoadDevice) {
       Device device =
-          _devices.firstWhere((d) => d.id == event.deviceID, orElse: null);
+          _devices.firstWhere((d) => d.id == event.deviceID, orElse: () => null);
       if (device == null) {
         return;
       }

@@ -17,9 +17,13 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 abstract class FeedLifeEventFormBlocEvent extends Equatable {}
@@ -27,6 +31,15 @@ abstract class FeedLifeEventFormBlocEvent extends Equatable {}
 class FeedLifeEventFormBlocEventInit extends FeedLifeEventFormBlocEvent {
   @override
   List<Object> get props => [];
+}
+
+class FeedLifeEventFormBlocEventSetDate extends FeedLifeEventFormBlocEvent {
+  final DateTime date;
+
+  FeedLifeEventFormBlocEventSetDate(this.date);
+
+  @override
+  List<Object> get props => [date];
 }
 
 class FeedLifeEventFormBlocState extends Equatable {
@@ -45,11 +58,14 @@ class FeedLifeEventFormBlocStateInit extends FeedLifeEventFormBlocState {
 class FeedLifeEventFormBlocStateLoaded extends FeedLifeEventFormBlocState {
   final DateTime date;
 
-  FeedLifeEventFormBlocStateLoaded(PlantPhases phase, this.date)
-      : super(phase);
+  FeedLifeEventFormBlocStateLoaded(PlantPhases phase, this.date) : super(phase);
 
   @override
   List<Object> get props => [...super.props, date];
+}
+
+class FeedLifeEventFormBlocStateDone extends FeedLifeEventFormBlocState {
+  FeedLifeEventFormBlocStateDone(PlantPhases phase) : super(phase);
 }
 
 class FeedLifeEventFormBloc
@@ -72,6 +88,41 @@ class FeedLifeEventFormBloc
       PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
       yield FeedLifeEventFormBlocStateLoaded(
           _args.phase, plantSettings.dateForPhase(_args.phase));
+    } else if (event is FeedLifeEventFormBlocEventSetDate) {
+      Plant plant = await RelDB.get().plantsDAO.getPlant(_args.plant.id);
+
+      List<FeedEntry> lifeEvents = await RelDB.get()
+          .feedsDAO
+          .getFeedEntriesForFeedWithType(plant.feed, 'FE_LIFE_EVENT');
+      FeedEntry lifeEvent = lifeEvents.firstWhere((fe) {
+        FeedLifeEventParams params = FeedLifeEventParams.fromJSON(fe.params);
+        return params.phase == _args.phase;
+      }, orElse: () => null);
+      if (lifeEvent == null) {
+        FeedLifeEventParams params = FeedLifeEventParams(_args.phase);
+        FeedEntriesCompanion lifeEventCompanion = FeedEntriesCompanion.insert(
+          feed: plant.feed,
+          date: event.date,
+          type: 'FE_LIFE_EVENT',
+          params: Value(params.toJSON()),
+        );
+        await FeedEntryHelper.addFeedEntry(lifeEventCompanion);
+      } else {
+        FeedEntriesCompanion lifeEventCompanion = FeedEntriesCompanion(
+          id: Value(lifeEvent.id),
+          date: Value(event.date),
+        );
+        await FeedEntryHelper.updateFeedEntry(lifeEventCompanion);
+      }
+
+      PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
+      plantSettings.setDateForPhase(_args.phase, event.date);
+      PlantsCompanion plantsCompanion = PlantsCompanion(
+        id: Value(plant.id),
+        settings: Value(plantSettings.toJSON()),
+      );
+      await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
+      yield FeedLifeEventFormBlocStateDone(_args.phase);
     }
   }
 }
