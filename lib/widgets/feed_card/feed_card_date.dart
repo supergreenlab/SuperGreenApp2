@@ -22,6 +22,8 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_feed_state.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
+import 'package:tuple/tuple.dart';
 
 enum FeedCardDateDisplay {
   ABSOLUTE,
@@ -56,6 +58,11 @@ class _FeedCardDateState extends State<FeedCardDate> {
         onTap: () {
           int index = FeedCardDateDisplay.values.indexOf(display);
           index = (index + 1) % FeedCardDateDisplay.values.length;
+          if (FeedCardDateDisplay.values[index] ==
+                  FeedCardDateDisplay.SINCE_PHASE &&
+              !(widget.feedState is PlantFeedState)) {
+            index = (index + 1) % FeedCardDateDisplay.values.length;
+          }
           setState(() {
             display = FeedCardDateDisplay.values[index];
           });
@@ -94,33 +101,18 @@ class _FeedCardDateState extends State<FeedCardDate> {
 
   String renderSincePhase() {
     PlantFeedState plantFeedState = widget.feedState;
-    String phase;
-    Duration germinationDiff =
-        plantFeedState.plantSettings.germinationDate != null
-            ? widget.feedEntryState.date
-                .difference(plantFeedState.plantSettings.germinationDate)
-            : null;
-    Duration veggingDiff = plantFeedState.plantSettings.veggingStart != null
-        ? widget.feedEntryState.date
-            .difference(plantFeedState.plantSettings.veggingStart)
-        : null;
-    Duration bloomingDiff = plantFeedState.plantSettings.bloomingStart != null
-        ? widget.feedEntryState.date
-            .difference(plantFeedState.plantSettings.bloomingStart)
-        : null;
-    Duration diff;
-    if (bloomingDiff != null && bloomingDiff.inSeconds > 0) {
-      diff = bloomingDiff;
-      phase = 'Blooming';
-    } else if (veggingDiff != null && veggingDiff.inSeconds > 0) {
-      diff = veggingDiff;
-      phase = 'Vegging';
-    } else if (germinationDiff != null && germinationDiff.inSeconds > 0) {
-      diff = germinationDiff;
-      phase = 'Germinating';
-    } else {
-      return 'Phase dates not set';
+    Tuple3<PlantPhases, DateTime, Duration> phaseData =
+        plantFeedState.plantSettings.phaseAt(widget.feedEntryState.date);
+    if (phaseData == null) {
+      return 'Life events not set.';
     }
-    return '$phase for ${diff.inDays} days';
+    List<String Function(Duration)> phases = [
+      (Duration diff) => 'Germinated ${phaseData.item3.inDays} days ago',
+      (Duration diff) => 'Vegging for ${phaseData.item3.inDays} days',
+      (Duration diff) => 'Blooming for ${phaseData.item3.inDays} days',
+      (Duration diff) => 'Drying for ${phaseData.item3.inDays} days',
+      (Duration diff) => 'Curing for ${phaseData.item3.inDays} days'
+    ];
+    return phases[phaseData.item1.index](phaseData.item3);
   }
 }

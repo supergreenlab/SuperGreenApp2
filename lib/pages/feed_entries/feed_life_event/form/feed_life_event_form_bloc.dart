@@ -116,7 +116,7 @@ class FeedLifeEventFormBloc
       }
 
       PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
-      plantSettings.setDateForPhase(_args.phase, event.date);
+      plantSettings = plantSettings.setDateForPhase(_args.phase, event.date);
       PlantsCompanion plantsCompanion = PlantsCompanion(
         id: Value(plant.id),
         settings: Value(plantSettings.toJSON()),

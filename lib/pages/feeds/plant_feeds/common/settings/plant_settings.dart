@@ -51,7 +51,13 @@ class PlantSettings extends Equatable {
   );
 
   Tuple3<PlantPhases, DateTime, Duration> phaseAt(DateTime date) {
-    if (bloomingStart != null && bloomingStart.isBefore(date)) {
+    if (curingStart != null && curingStart.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.CURING, curingStart, date.difference(curingStart));
+    } else if (dryingStart != null && dryingStart.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(
+          PlantPhases.DRYING, dryingStart, date.difference(dryingStart));
+    } else if (bloomingStart != null && bloomingStart.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(
           PlantPhases.BLOOMING, bloomingStart, date.difference(bloomingStart));
     } else if (veggingStart != null && veggingStart.isBefore(date)) {
@@ -60,12 +66,6 @@ class PlantSettings extends Equatable {
     } else if (germinationDate != null && germinationDate.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.GERMINATING,
           germinationDate, date.difference(germinationDate));
-    } else if (dryingStart != null && dryingStart.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.DRYING, dryingStart, date.difference(dryingStart));
-    } else if (curingStart != null && curingStart.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.CURING, curingStart, date.difference(curingStart));
     }
     return null;
   }

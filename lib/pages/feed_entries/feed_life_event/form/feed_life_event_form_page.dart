@@ -49,7 +49,9 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
     return BlocListener<FeedLifeEventFormBloc, FeedLifeEventFormBlocState>(
       listener: (BuildContext context, state) {
         if (state is FeedLifeEventFormBlocStateLoaded) {
-          date = state.date ?? DateTime.now();
+          setState(() {
+            date = state.date ?? DateTime.now();
+          });
         } else if (state is FeedLifeEventFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(mustPop: true));
@@ -61,7 +63,8 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             Widget body;
             Tuple2<String, String> phaseTitle =
                 Tuple2('Phase', 'assets/plant_infos/icon_germination_date.svg');
-            if (state is FeedLifeEventFormBlocStateInit || state is FeedLifeEventFormBlocStateDone) {
+            if (state is FeedLifeEventFormBlocStateInit ||
+                state is FeedLifeEventFormBlocStateDone) {
               body = Expanded(child: FullscreenLoading());
             } else if (state is FeedLifeEventFormBlocStateLoaded) {
               body = renderForm(context, state);
@@ -119,6 +122,9 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
                   initialDate: date,
                   firstDate: DateTime.now().subtract(Duration(days: 100)),
                   lastDate: DateTime.now());
+              if (newDate == null) {
+                return;
+              }
               setState(() {
                 date = newDate;
               });
