@@ -27,12 +27,12 @@ class RemotePlantInfosBlocProvider extends PlantInfosBlocProvider {
   RemotePlantInfosBlocProvider(this.plantID);
 
   @override
-  Stream<PlantInfosState> loadPlant() async* {
+  void loadPlant() async {
     Map<String, dynamic> plant = await FeedsAPI().publicPlant(plantID);
     plantInfosLoaded(PlantInfos(
         plant['name'],
-        plant['filePath'],
-        plant['thumbnailPath'],
+        FeedsAPI().absoluteFileURL(plant['filePath']),
+        FeedsAPI().absoluteFileURL(plant['thumbnailPath']),
         BoxSettings.fromJSON(plant['boxSettings']),
         PlantSettings.fromJSON(plant['settings']),
         false));
