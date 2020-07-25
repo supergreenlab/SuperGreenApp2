@@ -76,6 +76,7 @@ class PlantHelper {
       FeedEntriesCompanion lifeEventCompanion = FeedEntriesCompanion(
         id: Value(lifeEvent.id),
         date: Value(date),
+        synced: Value(false),
       );
       await FeedEntryHelper.updateFeedEntry(lifeEventCompanion);
     }
@@ -85,6 +86,7 @@ class PlantHelper {
     PlantsCompanion plantsCompanion = PlantsCompanion(
       id: Value(plant.id),
       settings: Value(plantSettings.toJSON()),
+      synced: Value(false),
     );
     await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
   }

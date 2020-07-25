@@ -20,6 +20,9 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 import 'package:super_green_app/towelie/cards/plant/card_plant_start_seed.dart';
 import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
@@ -36,7 +39,7 @@ class TowelieButtonPlantSeedPhase extends TowelieButtonPlantPhase {
         'title': 'Not started yet',
       });
 
-  TowelieButtonPlantSeedPhase() : super('SEED', 'VEG');
+  TowelieButtonPlantSeedPhase() : super(null, 'VEG');
 
   Future createNextCard(Feed feed) async {
     await CardPlantStartSeedling.createPlantStartSeedling(feed);
@@ -54,7 +57,7 @@ class TowelieButtonPlantSeedlingPhase extends TowelieButtonPlantPhase {
         'title': 'Seedling',
       });
 
-  TowelieButtonPlantSeedlingPhase() : super('SEEDLING', 'VEG');
+  TowelieButtonPlantSeedlingPhase() : super(PlantPhases.GERMINATING, 'VEG');
 }
 
 const _vegID = 'PLANT_VEG_STAGE';
@@ -68,7 +71,7 @@ class TowelieButtonPlantVegPhase extends TowelieButtonPlantPhase {
         'title': 'Veg',
       });
 
-  TowelieButtonPlantVegPhase() : super('VEG', 'VEG');
+  TowelieButtonPlantVegPhase() : super(PlantPhases.BLOOMING, 'VEG');
 }
 
 const _bloomID = 'PLANT_BLOOM_STAGE';
@@ -82,11 +85,11 @@ class TowelieButtonPlantBloomPhase extends TowelieButtonPlantPhase {
         'title': 'Bloom',
       });
 
-  TowelieButtonPlantBloomPhase() : super('BLOOM', 'BLOOM');
+  TowelieButtonPlantBloomPhase() : super(PlantPhases.BLOOMING, 'BLOOM');
 }
 
 abstract class TowelieButtonPlantPhase extends TowelieButton {
-  final String phase;
+  final PlantPhases phase;
   final String schedule;
 
   TowelieButtonPlantPhase(this.phase, this.schedule);
@@ -97,19 +100,22 @@ abstract class TowelieButtonPlantPhase extends TowelieButton {
     final db = RelDB.get();
     Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed);
     Box box = await db.plantsDAO.getBox(plant.box);
-    Map<String, dynamic> plantSettings = db.plantsDAO.plantSettings(plant);
-    plantSettings['phase'] = phase;
-    await db.plantsDAO.updatePlant(PlantsCompanion(
-        id: Value(plant.id),
-        settings: Value(JsonEncoder().convert(plantSettings))));
+    PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
 
-    final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-    if (plantSettings['plantType'] == 'PHOTO') {
-      boxSettings['schedule'] = schedule;
+    if (phase != null) {
+      yield TowelieBlocStateMainNavigation(
+          MainNavigateToFeedLifeEventFormEvent(plant, phase));
+    }
+
+    BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
+    if (plantSettings.plantType == 'PHOTO') {
+      boxSettings = boxSettings.copyWith(schedule: schedule);
     }
     await db.plantsDAO.updateBox(BoxesCompanion(
-        id: Value(box.id),
-        settings: Value(JsonEncoder().convert(boxSettings))));
+      id: Value(box.id),
+      settings: Value(boxSettings.toJSON()),
+      synced: Value(false),
+    ));
 
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     FeedEntry feedEntry =

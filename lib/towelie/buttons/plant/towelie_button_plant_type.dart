@@ -20,6 +20,8 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 import 'package:super_green_app/towelie/cards/plant/card_plant_phase.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -63,17 +65,18 @@ abstract class TowelieButtonPlantType extends TowelieButton {
       TowelieBlocEventButtonPressed event) async* {
     final db = RelDB.get();
     Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed);
-    Map<String, dynamic> settings = db.plantsDAO.plantSettings(plant);
-    settings['plantType'] = plantType;
+    PlantSettings plantSettings =
+        PlantSettings.fromJSON(plant.settings).copyWith(plantType: plantType);
     await db.plantsDAO.updatePlant(PlantsCompanion(
-        id: Value(plant.id), settings: Value(JsonEncoder().convert(settings))));
+        id: Value(plant.id), settings: Value(plantSettings.toJSON())));
 
     Box box = await db.plantsDAO.getBox(plant.box);
-    final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-    boxSettings['schedule'] = schedule;
-    await db.plantsDAO.updatePlant(PlantsCompanion(
+    BoxSettings boxSettings =
+        BoxSettings.fromJSON(box.settings).copyWith(schedule: schedule);
+    await db.plantsDAO.updateBox(BoxesCompanion(
         id: Value(box.id),
-        settings: Value(JsonEncoder().convert(boxSettings))));
+        settings: Value(boxSettings.toJSON()),
+        synced: Value(false)));
 
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     FeedEntry feedEntry =

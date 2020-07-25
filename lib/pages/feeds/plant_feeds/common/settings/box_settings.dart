@@ -20,6 +20,27 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+const DEFAULT_SCHEDULES = {
+  'VEG': {
+    'ON_HOUR': 3,
+    'ON_MIN': 0,
+    'OFF_HOUR': 21,
+    'OFF_MIN': 0,
+  },
+  'BLOOM': {
+    'ON_HOUR': 6,
+    'ON_MIN': 0,
+    'OFF_HOUR': 18,
+    'OFF_MIN': 0,
+  },
+  'AUTO': {
+    'ON_HOUR': 0,
+    'ON_MIN': 0,
+    'OFF_HOUR': 0,
+    'OFF_MIN': 0,
+  },
+};
+
 class BoxSettings extends Equatable {
   final String schedule;
   final Map<String, dynamic> schedules;
@@ -28,8 +49,8 @@ class BoxSettings extends Equatable {
   final int height;
   final int depth;
 
-  BoxSettings(
-      this.schedule, this.schedules, this.width, this.height, this.depth);
+  BoxSettings(this.width, this.height, this.depth,
+      {this.schedule = 'VEG', this.schedules = DEFAULT_SCHEDULES});
 
   factory BoxSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -38,11 +59,11 @@ class BoxSettings extends Equatable {
 
   factory BoxSettings.fromMap(Map<String, dynamic> map) {
     return BoxSettings(
-      map['schedule'],
-      map['schedules'],
       map['width'],
       map['height'],
       map['depth'],
+      schedule: map['schedule'],
+      schedules: map['schedules'],
     );
   }
 
@@ -66,10 +87,10 @@ class BoxSettings extends Equatable {
           int height,
           int depth}) =>
       BoxSettings(
-        schedule ?? this.schedule,
-        schedules ?? this.schedules,
         width ?? this.width,
         height ?? this.height,
         depth ?? this.depth,
+        schedule: schedule ?? this.schedule,
+        schedules: schedules ?? this.schedules,
       );
 }

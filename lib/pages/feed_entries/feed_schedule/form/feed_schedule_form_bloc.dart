@@ -27,6 +27,7 @@ import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 
 abstract class FeedScheduleFormBlocEvent extends Equatable {}
 
@@ -128,9 +129,9 @@ class FeedScheduleFormBloc
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(args.plant.box);
       device = await db.devicesDAO.getDevice(box.device);
-      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-      initialSchedule = schedule = boxSettings['schedule'];
-      initialSchedules = schedules = boxSettings['schedules'];
+      BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
+      initialSchedule = schedule = boxSettings.schedule;
+      initialSchedules = schedules = boxSettings.schedules;
       yield FeedScheduleFormBlocStateLoaded(
           schedule, schedules, initialSchedule, initialSchedules, box);
     } else if (event is FeedScheduleFormBlocEventSetSchedule) {
@@ -158,13 +159,12 @@ class FeedScheduleFormBloc
             device, offHour, schedules[schedule]['OFF_HOUR']);
       }
 
-      final Map<String, dynamic> boxSettings = db.plantsDAO.boxSettings(box);
-      boxSettings['schedule'] = schedule;
-      boxSettings['schedules'] = schedules;
+      BoxSettings boxSettings = BoxSettings.fromJSON(box.settings)
+          .copyWith(schedule: schedule, schedules: schedules);
       await db.plantsDAO.updateBox(BoxesCompanion(
           id: Value(box.id),
           synced: Value(false),
-          settings: Value(JsonEncoder().convert(boxSettings))));
+          settings: Value(boxSettings.toJSON())));
       if (schedule == 'BLOOM') {
         List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
         for (int i = 0; i < plants.length; ++i) {

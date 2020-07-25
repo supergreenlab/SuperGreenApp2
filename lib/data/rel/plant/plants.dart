@@ -366,49 +366,4 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   Future deleteTimelapse(Timelapse timelapse) {
     return delete(timelapses).delete(timelapse);
   }
-
-  Map<String, dynamic> plantSettings(Plant plant) {
-    final Map<String, dynamic> settings = JsonDecoder().convert(plant.settings);
-    // TODO make actual enums or constants
-    return {
-      'phase': settings['phase'] ?? 'VEG', // VEG or BLOOM
-      'plantType': settings['plantType'] ?? 'PHOTO', // PHOTO or AUTO
-    };
-  }
-
-  Map<String, dynamic> boxSettings(Box box) {
-    final Map<String, dynamic> settings = JsonDecoder().convert(box.settings);
-    // TODO make actual enums or constants
-    return {
-      'schedule':
-          settings['schedule'] ?? 'VEG', // Any of the schedule keys below
-      'schedules': {
-        'VEG': {
-          'ON_HOUR': MapUtils.valuePath(settings, 'schedules.VEG.ON_HOUR') ?? 3,
-          'ON_MIN': MapUtils.valuePath(settings, 'schedules.VEG.ON_MIN') ?? 0,
-          'OFF_HOUR':
-              MapUtils.valuePath(settings, 'schedules.VEG.OFF_HOUR') ?? 21,
-          'OFF_MIN': MapUtils.valuePath(settings, 'schedules.VEG.OFF_MIN') ?? 0,
-        },
-        'BLOOM': {
-          'ON_HOUR':
-              MapUtils.valuePath(settings, 'schedules.BLOOM.ON_HOUR') ?? 6,
-          'ON_MIN': MapUtils.valuePath(settings, 'schedules.BLOOM.ON_MIN') ?? 0,
-          'OFF_HOUR':
-              MapUtils.valuePath(settings, 'schedules.BLOOM.OFF_HOUR') ?? 18,
-          'OFF_MIN':
-              MapUtils.valuePath(settings, 'schedules.BLOOM.OFF_MIN') ?? 0,
-        },
-        'AUTO': {
-          'ON_HOUR':
-              MapUtils.valuePath(settings, 'schedules.AUTO.ON_HOUR') ?? 0,
-          'ON_MIN': MapUtils.valuePath(settings, 'schedules.AUTO.ON_MIN') ?? 0,
-          'OFF_HOUR':
-              MapUtils.valuePath(settings, 'schedules.AUTO.OFF_HOUR') ?? 0,
-          'OFF_MIN':
-              MapUtils.valuePath(settings, 'schedules.AUTO.OFF_MIN') ?? 0,
-        },
-      }
-    };
-  }
 }

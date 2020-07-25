@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
@@ -33,6 +34,7 @@ class TowelieButtonStartSeedling extends TowelieButton {
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    await selectButtons(event.feedEntry, selectedButtonID: id);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    await selectButtons(feedEntry, selectedButtonID: id);
   }
 }
