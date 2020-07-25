@@ -56,7 +56,7 @@ class _PlantInfosMediumState extends State<PlantInfosMedium> {
       child: Column(
         children: <Widget>[
           PlantInfosDropdownInput(
-            labelText: 'Medium',
+            labelText: 'Select medium',
             hintText: 'Choose a medium',
             items: [
               ['SOIL', 'Soil'],
