@@ -54,19 +54,17 @@ class PublicPlantPage extends StatelessWidget {
         appBar: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(top: 45.0),
-            child: Expanded(
-              child: Swiper(
-                itemCount: tabs.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return tabs[index](context, state);
-                },
-                pagination: SwiperPagination(
-                  builder: new DotSwiperPaginationBuilder(
-                      color: Colors.white, activeColor: Color(0xff3bb30b)),
-                ),
-                loop: false,
+            child: Swiper(
+              itemCount: tabs.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                return tabs[index](context, state);
+              },
+              pagination: SwiperPagination(
+                builder: new DotSwiperPaginationBuilder(
+                    color: Colors.white, activeColor: Color(0xff3bb30b)),
               ),
+              loop: false,
             ),
           ),
         ),
