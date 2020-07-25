@@ -232,8 +232,8 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       FeedEntryLoader loader = provider.loaderForType(e.type);
       loader.cancelListenEntryChanges(entries[event.index]);
     } else if (event is FeedBlocEventAddedEntry) {
-      int index = entries
-          .indexWhere((fe) => !(fe.date.compareTo(event.entry.date) > 0));
+      int index = 0;
+      for (; index < entries.length && entries[index].date.isAfter(event.entry.date); ++index) {}
       index = index == -1 ? 0 : index;
       entries.insert(index, event.entry);
       yield FeedBlocStateAddEntry(index, event.entry);
