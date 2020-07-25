@@ -55,6 +55,13 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
           //     notificationPayload,
           //     1),
           TowelieButtonReminder.createButton(
+              '2 days',
+              event.feedEntry.id,
+              'Water your plant',
+              '${plant.name} last watered 2 days ago.',
+              notificationPayload,
+              60 * 48),
+          TowelieButtonReminder.createButton(
               '3 days',
               event.feedEntry.id,
               'Water your plant',

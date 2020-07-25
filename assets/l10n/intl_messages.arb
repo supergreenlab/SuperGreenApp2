@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-07-13T08:16:22.047966",
+  "@@last_modified": "2020-07-25T12:20:18.810493",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -78,9 +78,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "toweliePlantStartSeedling": "Alright, let me know when you're **ready to start** by pressing the button below.\nIn the meantime you can also **create an account**:P that will enable backups, remote control, sharing, etc...",
+  "toweliePlantStartSeedling": "Alright, let me know when you're **ready to put the seed to germinate** by pressing the **start** button below.\nIn the meantime you can also **create an account**:P that will enable backups, remote control, sharing, etc...",
   "@toweliePlantStartSeedling": {
     "description": "Towelie plant start seedling",
+    "type": "text",
+    "placeholders": {}
+  },
+  "toweliePlantGermination": "Ok, place your seed in water, follow the guide, and press the \"germinated\" button below\nwhen you're ready to place the seed in its growing medium.",
+  "@toweliePlantGermination": {
+    "description": "Towelie plant germination",
     "type": "text",
     "placeholders": {}
   },

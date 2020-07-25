@@ -72,35 +72,6 @@ class _TipPageState extends State<TipPage> {
                     loop: false,
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      dontShow = !dontShow;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Theme(
-                          data: ThemeData(unselectedWidgetColor: Colors.black),
-                          child: Checkbox(
-                              activeColor: Colors.black,
-                              checkColor: Colors.black,
-                              value: dontShow,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  dontShow = value;
-                                });
-                              }),
-                        ),
-                        Text('Don’t show me this again',
-                            style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ),
               ],
             );
           }
@@ -117,23 +88,7 @@ class _TipPageState extends State<TipPage> {
                   child: AnimatedSwitcher(
                       duration: Duration(microseconds: 200), child: body),
                 ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
-                    child: GreenButton(
-                      title: state is TipBlocStateLoaded ? 'OK' : 'SKIP',
-                      onPressed: () {
-                        if (dontShow) {
-                          BlocProvider.of<TipBloc>(context)
-                              .add(TipBlocEventDone());
-                        }
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(state.nextRoute);
-                      },
-                    ),
-                  ),
-                ),
+                _renderBottomBar(context, state),
               ],
             ),
           );
@@ -208,6 +163,62 @@ class _TipPageState extends State<TipPage> {
       );
     }
     return TipVideo(path: path);
+  }
+
+  Widget _renderBottomBar(BuildContext context, TipBlocState state) {
+    if (state.nextRoute == null) {
+      return Container();
+    }
+    return Container(
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            InkWell(
+              onTap: () {
+                setState(() {
+                  dontShow = !dontShow;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Theme(
+                      data: ThemeData(unselectedWidgetColor: Colors.black),
+                      child: Checkbox(
+                          activeColor: Colors.black,
+                          checkColor: Colors.black,
+                          value: dontShow,
+                          onChanged: (bool value) {
+                            setState(() {
+                              dontShow = value;
+                            });
+                          }),
+                    ),
+                    Text('Don’t show me this again',
+                        style: TextStyle(color: Colors.black)),
+                  ],
+                ),
+              ),
+            ),
+            GreenButton(
+              title: state is TipBlocStateLoaded ? 'OK' : 'SKIP',
+              onPressed: () {
+                if (dontShow) {
+                  BlocProvider.of<TipBloc>(context).add(TipBlocEventDone());
+                }
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(state.nextRoute);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   String _slug(Map<String, dynamic> article) {

@@ -36,7 +36,7 @@ class TowelieButtonPlantSeedPhase extends TowelieButtonPlantPhase {
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_seedID, {
-        'title': 'Not started yet',
+        'title': 'Seed',
       });
 
   TowelieButtonPlantSeedPhase() : super(null, 'VEG');

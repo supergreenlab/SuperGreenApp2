@@ -16,29 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/towelie/cards/plant/card_plant_germination.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'PLANT_START_SEEDLING';
+const _id = 'SHOW_TIP';
 
-class TowelieButtonStartSeedling extends TowelieButton {
+class TowelieButtonShowTip extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton() =>
+  static Map<String, dynamic> createButton(String title, String url) =>
       TowelieButton.createButton(_id, {
-        'title': 'Start',
+        'title': title,
+        'url': url,
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
-    Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
-    await CardPlantGermination.createPlantGermination(feed);
-    FeedEntry feedEntry =
-        await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
-    await selectButtons(feedEntry, selectedButtonID: id);
+    yield TowelieBlocStateMainNavigation(MainNavigateToTipEvent(null, [event.params['url']], null));
   }
 }

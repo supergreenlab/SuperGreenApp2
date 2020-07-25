@@ -23,31 +23,30 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/towelie/buttons/misc/towelie_button_create_account.dart';
-import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_start_seedling.dart';
+import 'package:super_green_app/towelie/buttons/misc/towelie_button_show_tip.dart';
+import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_germinate.dart';
 
-class CardPlantStartSeedling {
-  static String get toweliePlantStartSeedling {
+class CardPlantGermination {
+  static String get toweliePlantGermination {
     return Intl.message(
-      '''Alright, let me know when you're **ready to put the seed to germinate** by pressing the **start** button below.
-In the meantime you can also **create an account**:P that will enable backups, remote control, sharing, etc...''',
-      name: 'toweliePlantStartSeedling',
-      desc: 'Towelie plant start seedling',
+      '''Ok, place your seed in water, follow the guide, and press the "germinated" button below\nwhen you're ready to place the seed in its growing medium.''',
+      name: 'toweliePlantGermination',
+      desc: 'Towelie plant germination',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  static Future createPlantStartSeedling(Feed feed) async {
+  static Future createPlantGermination(Feed feed) async {
     await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_TOWELIE_INFO',
       feed: feed.id,
       date: DateTime.now(),
       isNew: Value(true),
       params: Value(JsonEncoder().convert({
-        'text': CardPlantStartSeedling.toweliePlantStartSeedling,
+        'text': CardPlantGermination.toweliePlantGermination,
         'buttons': [
-          TowelieButtonStartSeedling.createButton(),
-          TowelieButtonCreateAccount.createButton(),
+          TowelieButtonPlantGerminate.createButton(),
+          TowelieButtonShowTip.createButton('Germination guide', 't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'),
         ]
       })),
     ));

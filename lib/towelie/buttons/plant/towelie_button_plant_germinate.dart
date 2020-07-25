@@ -16,27 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/data/helpers/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/towelie/cards/plant/card_plant_germination.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
-const _id = 'PLANT_START_SEEDLING';
+const _id = 'PLANT_GERMINATE';
 
-class TowelieButtonStartSeedling extends TowelieButton {
+class TowelieButtonPlantGerminate extends TowelieButton {
   @override
   String get id => _id;
 
   static Map<String, dynamic> createButton() =>
       TowelieButton.createButton(_id, {
-        'title': 'Start',
+        'title': 'Germinated',
       });
 
   @override
   Stream<TowelieBlocState> buttonPressed(
       TowelieBlocEventButtonPressed event) async* {
+    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feed);
+    await PlantHelper.updatePlantPhase(
+        plant, PlantPhases.GERMINATING, DateTime.now());
+    
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
-    await CardPlantGermination.createPlantGermination(feed);
+    await CardPlantTutoTakePic.createPlantTutoTakePic(feed);
     FeedEntry feedEntry =
         await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await selectButtons(feedEntry, selectedButtonID: id);
