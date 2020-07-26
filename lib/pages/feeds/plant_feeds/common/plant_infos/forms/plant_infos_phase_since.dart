@@ -66,6 +66,7 @@ class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
             labelText: 'Pick a date',
             date: date,
             onChange: (DateTime date) {
+              if (date == null) return;
               setState(() {
                 this.date = date;
               });
