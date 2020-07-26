@@ -19,6 +19,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
@@ -232,24 +233,28 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       FeedEntryLoader loader = provider.loaderForType(e.type);
       loader.cancelListenEntryChanges(entries[event.index]);
     } else if (event is FeedBlocEventAddedEntry) {
-      int index = 0;
-      for (; index < entries.length && entries[index].date.isAfter(event.entry.date); ++index) {}
-      index = index == -1 ? 0 : index;
-      entries.insert(index, event.entry);
-      yield FeedBlocStateAddEntry(index, event.entry);
+      int index = _insertIndex(event.entry);
+      yield* _insertEntryAt(index, event.entry);
     } else if (event is FeedBlocEventDeletedFeedEntry) {
       int index =
           entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
       if (index >= 0) {
-        entries.removeAt(index);
-        FeedEntryState entry = entries[index];
-        yield FeedBlocStateRemoveEntry(index, entry);
+        yield* _removeEntryAt(index);
       }
     } else if (event is FeedBlocEventUpdatedEntry) {
       int index =
           entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
-      entries[index] = event.entry;
-      yield FeedBlocStateUpdateEntry(index, event.entry);
+      int newIndex = _insertIndex(event.entry);
+      if (index == newIndex) {
+        entries[index] = event.entry;
+        yield FeedBlocStateUpdateEntry(index, event.entry);
+      } else {
+        yield* _removeEntryAt(index);
+        if (index < newIndex) {
+          --newIndex;
+        }
+        yield* _insertEntryAt(newIndex, event.entry);
+      }
     } else if (event is FeedBlocEventMarkAsRead) {
       await provider.markAsRead(entries[event.index].feedEntryID);
     } else if (event is FeedBlocEventSetStoreGeo) {
@@ -260,6 +265,25 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventDeleteEntry) {
       await provider.deleteFeedEntry(event.entry.feedEntryID);
     }
+  }
+
+  int _insertIndex(FeedEntryState feedEntry) {
+    int index = 0;
+    for (;
+        index < entries.length && entries[index].date.isAfter(feedEntry.date);
+        ++index) {}
+    return index;
+  }
+
+  Stream<FeedBlocState> _removeEntryAt(int index) async* {
+    FeedEntryState entry = entries[index];
+    entries.removeAt(index);
+    yield FeedBlocStateRemoveEntry(index, entry);
+  }
+
+  Stream<FeedBlocState> _insertEntryAt(int index, FeedEntryState entry) async* {
+    entries.insert(index, entry);
+    yield FeedBlocStateAddEntry(index, entry);
   }
 
   @override
