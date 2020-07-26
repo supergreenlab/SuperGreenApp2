@@ -83,7 +83,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
   Widget _renderBody(TowelieBlocStateHelper state) {
     List<Widget> content = <Widget>[
       Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
           child: MarkdownBody(
             data: state.text,
             styleSheet: MarkdownStyleSheet(
@@ -95,7 +95,11 @@ class _TowelieHelperState extends State<TowelieHelper> {
                     color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w300)),
-          ))
+          )),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('(Tap to close)', style: TextStyle(color: Colors.grey.shade300), textAlign: TextAlign.end,),
+          ),
     ];
     List<Widget> buttons = [];
     if ((state.buttons?.length ?? 0) > 0) {
@@ -177,6 +181,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: content,
                       ),
                     ),
