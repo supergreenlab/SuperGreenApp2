@@ -106,7 +106,7 @@ class PlantInfosStateLoaded extends PlantInfosState {
 }
 
 class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
-  final PlantInfosBlocProvider provider;
+  final PlantInfosBlocDelegate provider;
 
   PlantInfosBloc(this.provider) {
     this.provider.init(add);
@@ -136,7 +136,7 @@ class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
   }
 }
 
-abstract class PlantInfosBlocProvider {
+abstract class PlantInfosBlocDelegate {
   PlantInfos plantInfos;
   Function(PlantInfosEvent) add;
 

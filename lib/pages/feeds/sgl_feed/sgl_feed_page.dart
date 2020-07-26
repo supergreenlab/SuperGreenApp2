@@ -22,7 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_provider.dart';
+import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_delegate.dart';
 
 class SGLFeedPage extends StatelessWidget {
   @override
@@ -39,7 +39,7 @@ class SGLFeedPage extends StatelessWidget {
 
   Widget _renderFeed(BuildContext context, SGLFeedBlocState state) {
     return BlocProvider(
-      create: (context) => FeedBloc(SGLFeedBlocProvider(1)),
+      create: (context) => FeedBloc(SGLFeedBlocDelegate(1)),
       child: FeedPage(
         title: '',
         color: Colors.indigo,

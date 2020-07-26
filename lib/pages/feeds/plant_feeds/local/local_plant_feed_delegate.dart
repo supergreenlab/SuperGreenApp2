@@ -25,18 +25,18 @@ import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_provider.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_feed_state.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
-class LocalPlantFeedBlocProvider extends LocalFeedBlocProvider {
+class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   PlantFeedState feedState;
   StreamSubscription<Box> boxStream;
   StreamSubscription<Plant> plantStream;
   StreamSubscription<hive.BoxEvent> appDataStream;
 
-  LocalPlantFeedBlocProvider(int feedID) : super(feedID);
+  LocalPlantFeedBlocDelegate(int feedID) : super(feedID);
 
   @override
   void loadFeed() async {

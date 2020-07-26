@@ -22,14 +22,14 @@ import 'package:hive/hive.dart' as hive;
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_provider.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
-class SGLFeedBlocProvider extends LocalFeedBlocProvider {
+class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
   FeedState feedState;
   StreamSubscription<hive.BoxEvent> appDataStream;
 
-  SGLFeedBlocProvider(int feedID) : super(feedID);
+  SGLFeedBlocDelegate(int feedID) : super(feedID);
 
   @override
   void loadFeed() async {

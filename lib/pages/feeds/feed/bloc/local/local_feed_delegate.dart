@@ -22,7 +22,6 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_care.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_life_event.dart';
@@ -38,9 +37,8 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_water.d
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
-class LocalFeedBlocProvider extends FeedBlocProvider {
+class LocalFeedBlocDelegate extends FeedBlocDelegate {
   Function(FeedBlocEvent) add;
   final int feedID;
   Map<String, LocalFeedEntryLoader> loaders = {};
@@ -48,7 +46,7 @@ class LocalFeedBlocProvider extends FeedBlocProvider {
   StreamSubscription<FeedEntryInsertEvent> insertSubscription;
   StreamSubscription<FeedEntryDeleteEvent> deleteSubscription;
 
-  LocalFeedBlocProvider(this.feedID);
+  LocalFeedBlocDelegate(this.feedID);
 
   @override
   Future init(Function(FeedBlocEvent) add) async {

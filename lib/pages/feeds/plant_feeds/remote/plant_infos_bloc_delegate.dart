@@ -21,10 +21,10 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
-class RemotePlantInfosBlocProvider extends PlantInfosBlocProvider {
+class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   final String plantID;
 
-  RemotePlantInfosBlocProvider(this.plantID);
+  RemotePlantInfosBlocDelegate(this.plantID);
 
   @override
   void loadPlant() async {

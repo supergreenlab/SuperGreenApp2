@@ -26,7 +26,7 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
-class LocalPlantInfosBlocProvider extends PlantInfosBlocProvider {
+class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   Box box;
   Plant plant;
 
@@ -34,7 +34,7 @@ class LocalPlantInfosBlocProvider extends PlantInfosBlocProvider {
   StreamSubscription<Plant> plantStream;
   StreamSubscription<FeedMedia> feedMediaStream;
 
-  LocalPlantInfosBlocProvider(this.plant) : super();
+  LocalPlantInfosBlocDelegate(this.plant) : super();
 
   @override
   void loadPlant() async {

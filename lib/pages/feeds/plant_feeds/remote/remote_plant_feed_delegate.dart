@@ -25,9 +25,9 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_feed_state.
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
-class RemotePlantFeedBlocProvider extends RemoteFeedBlocProvider {
+class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   final String plantID;
-  RemotePlantFeedBlocProvider(this.plantID);
+  RemotePlantFeedBlocDelegate(this.plantID);
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {

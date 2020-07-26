@@ -28,7 +28,6 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
@@ -36,10 +35,10 @@ import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_page.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/local/local_plant_feed_provider.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/local_plant_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc_provider.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/sunglasses_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -463,7 +462,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       return BlocProvider(
         key: Key('feed'),
         create: (context) =>
-            FeedBloc(LocalPlantFeedBlocProvider(state.plant.feed)),
+            FeedBloc(LocalPlantFeedBlocDelegate(state.plant.feed)),
         child: FeedPage(
           color: Color(0xff063047),
           actions: actions,
@@ -785,7 +784,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       BuildContext context, PlantFeedBlocStateLoaded state) {
     return BlocProvider<PlantInfosBloc>(
       create: (context) =>
-          PlantInfosBloc(LocalPlantInfosBlocProvider(state.plant)),
+          PlantInfosBloc(LocalPlantInfosBlocDelegate(state.plant)),
       child: PlantInfosPage(),
     );
   }

@@ -194,7 +194,7 @@ class FeedBlocStateRemoveEntry extends FeedBlocState {
 }
 
 class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
-  FeedBlocProvider provider;
+  FeedBlocDelegate provider;
   bool initialLoad = true;
   List<FeedEntryState> entries = [];
 
@@ -305,7 +305,7 @@ abstract class FeedEntryLoader {
   Future<void> close();
 }
 
-abstract class FeedBlocProvider {
+abstract class FeedBlocDelegate {
   Map<String, FeedEntryLoader> get loaders;
   FeedEntryLoader loaderForType(String type);
 
