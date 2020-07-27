@@ -71,7 +71,7 @@ class TowelieButtonPlantVegPhase extends TowelieButtonPlantPhase {
         'title': 'Veg',
       });
 
-  TowelieButtonPlantVegPhase() : super(PlantPhases.BLOOMING, 'VEG');
+  TowelieButtonPlantVegPhase() : super(PlantPhases.VEGGING, 'VEG');
 }
 
 const _bloomID = 'PLANT_BLOOM_STAGE';
