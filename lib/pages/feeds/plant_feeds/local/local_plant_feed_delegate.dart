@@ -68,6 +68,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
       PlantsCompanion plantsCompanion = PlantsCompanion(
         id: Value(plant.id),
         settings: Value(plantSettings.toJSON()),
+        synced: Value(false),
       );
       await RelDB.get().plantsDAO.updatePlant(plantsCompanion);
     }

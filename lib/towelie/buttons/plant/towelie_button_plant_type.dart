@@ -68,7 +68,9 @@ abstract class TowelieButtonPlantType extends TowelieButton {
     PlantSettings plantSettings =
         PlantSettings.fromJSON(plant.settings).copyWith(plantType: plantType);
     await db.plantsDAO.updatePlant(PlantsCompanion(
-        id: Value(plant.id), settings: Value(plantSettings.toJSON())));
+        id: Value(plant.id),
+        settings: Value(plantSettings.toJSON()),
+        synced: Value(false)));
 
     Box box = await db.plantsDAO.getBox(plant.box);
     BoxSettings boxSettings =
