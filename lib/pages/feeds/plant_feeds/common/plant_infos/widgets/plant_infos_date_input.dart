@@ -53,7 +53,7 @@ class PlantInfosDateInput extends StatelessWidget {
                   DateTime newDate = await showDatePicker(
                       context: context,
                       initialDate: date,
-                      firstDate: DateTime.now().subtract(Duration(days: 100)),
+                      firstDate: DateTime.fromMillisecondsSinceEpoch(0),
                       lastDate: DateTime.now());
                   onChange(newDate);
                 },

@@ -42,7 +42,7 @@ class FeedFormDatePicker extends StatelessWidget {
                   DateTime newDate = await showDatePicker(
                       context: context,
                       initialDate: date,
-                      firstDate: DateTime.now().subtract(Duration(days: 10)),
+                      firstDate: DateTime.fromMillisecondsSinceEpoch(0),
                       lastDate: DateTime.now());
                   onChange(newDate);
                 },
