@@ -48,8 +48,9 @@ class BoxSettings extends Equatable {
   final int width;
   final int height;
   final int depth;
+  final String unit;
 
-  BoxSettings(this.width, this.height, this.depth,
+  BoxSettings(this.width, this.height, this.depth, this.unit,
       {this.schedule = 'VEG', this.schedules = DEFAULT_SCHEDULES});
 
   factory BoxSettings.fromJSON(String json) {
@@ -62,6 +63,7 @@ class BoxSettings extends Equatable {
       map['width'],
       map['height'],
       map['depth'],
+      map['unit'],
       schedule: map['schedule'],
       schedules: map['schedules'],
     );
@@ -74,22 +76,25 @@ class BoxSettings extends Equatable {
       'width': width,
       'height': height,
       'depth': depth,
+      'unit': unit,
     });
   }
 
   @override
-  List<Object> get props => [schedule, schedules, width, height, depth];
+  List<Object> get props => [schedule, schedules, width, height, depth, unit];
 
   BoxSettings copyWith(
           {String schedule,
           Map<String, dynamic> schedules,
           int width,
           int height,
-          int depth}) =>
+          int depth,
+          String unit,}) =>
       BoxSettings(
         width ?? this.width,
         height ?? this.height,
         depth ?? this.depth,
+        unit ?? this.unit,
         schedule: schedule ?? this.schedule,
         schedules: schedules ?? this.schedules,
       );

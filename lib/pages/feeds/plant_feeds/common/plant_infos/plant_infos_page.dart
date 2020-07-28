@@ -96,7 +96,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
         state.plantInfos.boxSettings.height != null &&
         state.plantInfos.boxSettings.depth != null) {
       dimensions =
-          '${state.plantInfos.boxSettings.width}x${state.plantInfos.boxSettings.height}x${state.plantInfos.boxSettings.depth}';
+          '${state.plantInfos.boxSettings.width}x${state.plantInfos.boxSettings.height}x${state.plantInfos.boxSettings.depth} ${state.plantInfos.boxSettings.unit}';
     }
 
     return Container(
@@ -320,11 +320,11 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
             height: state.plantInfos.boxSettings.height,
             depth: state.plantInfos.boxSettings.depth,
             onCancel: () => _openForm(null),
-            onSubmit: (int width, int height, int depth) => updateBoxSettings(
+            onSubmit: (int width, int height, int depth, String unit) => updateBoxSettings(
                 context,
                 state,
                 state.plantInfos.boxSettings
-                    .copyWith(width: width, height: height, depth: depth)),
+                    .copyWith(width: width, height: height, depth: depth, unit: unit)),
           ),
     };
     return Container(

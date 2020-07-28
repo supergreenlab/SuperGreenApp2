@@ -17,6 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_dropdown_input.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
 
@@ -26,7 +28,7 @@ class PlantInfosDimensions extends StatefulWidget {
   final int depth;
 
   final Function onCancel;
-  final Function(int width, int height, int depth) onSubmit;
+  final Function(int width, int height, int depth, String unit) onSubmit;
 
   PlantInfosDimensions(
       {@required this.onCancel,
@@ -40,6 +42,8 @@ class PlantInfosDimensions extends StatefulWidget {
 }
 
 class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
+  String imperialUnit = 'Inch';
+
   TextEditingController widthController;
   TextEditingController heightController;
   TextEditingController depthController;
@@ -52,40 +56,71 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
         text: widget.height == null ? '' : widget.height.toString() ?? '');
     depthController = TextEditingController(
         text: widget.depth == null ? '' : widget.depth.toString() ?? '');
+    widthController.addListener(() {setState((){});});
+    heightController.addListener(() {setState((){});});
+    depthController.addListener(() {setState((){});});
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    bool freedomUnits = AppDB().getAppData().freedomUnits;
+    String unit = freedomUnits ? imperialUnit : 'cm';
     return PlantInfosForm(
       title: 'Dimensions',
       icon: 'icon_dimension.svg',
       onCancel: widget.onCancel,
-      onSubmit: () {
-        widget.onSubmit(int.parse(widthController.text),
-            int.parse(heightController.text), int.parse(depthController.text));
-      },
-      child: Column(
-        children: <Widget>[
-          PlantInfosTextInput(
-            controller: widthController,
-            labelText: 'Width (cm)',
-            hintText: 'Ex: 25',
-            number: true,
-          ),
-          PlantInfosTextInput(
-            controller: heightController,
-            labelText: 'Height (cm)',
-            hintText: 'Ex: 25',
-            number: true,
-          ),
-          PlantInfosTextInput(
-            controller: depthController,
-            labelText: 'Depth (cm)',
-            hintText: 'Ex: 25',
-            number: true,
-          ),
-        ],
+      onSubmit: widthController.value.text != '' &&
+              heightController.value.text != '' &&
+              depthController.value.text != ''
+          ? () {
+              widget.onSubmit(
+                  int.parse(widthController.text),
+                  int.parse(heightController.text),
+                  int.parse(depthController.text),
+                  imperialUnit);
+            }
+          : null,
+      child: Container(
+        height: 150,
+        child: ListView(
+          children: <Widget>[
+            freedomUnits
+                ? PlantInfosDropdownInput(
+                    labelText: 'Select unit',
+                    hintText: 'Select unit',
+                    value: imperialUnit,
+                    items: [
+                      ['Inch', "Inch"],
+                      ['Feet', "Feet"]
+                    ],
+                    onChanged: (String newUnit) {
+                      setState(() {
+                        imperialUnit = newUnit;
+                      });
+                    },
+                  )
+                : Container(),
+            PlantInfosTextInput(
+              controller: widthController,
+              labelText: 'Width ($unit)',
+              hintText: 'Ex: 25',
+              number: true,
+            ),
+            PlantInfosTextInput(
+              controller: heightController,
+              labelText: 'Height ($unit)',
+              hintText: 'Ex: 25',
+              number: true,
+            ),
+            PlantInfosTextInput(
+              controller: depthController,
+              labelText: 'Depth ($unit)',
+              hintText: 'Ex: 25',
+              number: true,
+            ),
+          ],
+        ),
       ),
     );
   }
