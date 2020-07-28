@@ -78,7 +78,7 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
                   int.parse(widthController.text),
                   int.parse(heightController.text),
                   int.parse(depthController.text),
-                  imperialUnit);
+                  unit);
             }
           : null,
       child: Container(
