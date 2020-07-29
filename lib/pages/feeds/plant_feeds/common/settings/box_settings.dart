@@ -50,8 +50,8 @@ class BoxSettings extends Equatable {
   final int depth;
   final String unit;
 
-  BoxSettings(this.width, this.height, this.depth, this.unit,
-      {this.schedule = 'VEG', this.schedules = DEFAULT_SCHEDULES});
+  BoxSettings({this.width, this.height, this.depth, this.unit,
+      this.schedule = 'VEG', this.schedules = DEFAULT_SCHEDULES});
 
   factory BoxSettings.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -60,12 +60,12 @@ class BoxSettings extends Equatable {
 
   factory BoxSettings.fromMap(Map<String, dynamic> map) {
     return BoxSettings(
-      map['width'],
-      map['height'],
-      map['depth'],
-      map['unit'],
-      schedule: map['schedule'],
-      schedules: map['schedules'],
+      width: map['width'],
+      height: map['height'],
+      depth: map['depth'],
+      unit: map['unit'],
+      schedule: map['schedule'] ?? 'VEG',
+      schedules: map['schedules'] ?? DEFAULT_SCHEDULES,
     );
   }
 
@@ -91,10 +91,10 @@ class BoxSettings extends Equatable {
           int depth,
           String unit,}) =>
       BoxSettings(
-        width ?? this.width,
-        height ?? this.height,
-        depth ?? this.depth,
-        unit ?? this.unit,
+        width: width ?? this.width,
+        height: height ?? this.height,
+        depth: depth ?? this.depth,
+        unit: unit ?? this.unit,
         schedule: schedule ?? this.schedule,
         schedules: schedules ?? this.schedules,
       );

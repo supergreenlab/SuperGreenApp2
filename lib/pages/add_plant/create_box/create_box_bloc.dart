@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 
 abstract class CreateBoxBlocEvent extends Equatable {}
 
@@ -48,12 +49,14 @@ class CreateBoxBloc extends Bloc<CreateBoxBlocEvent, CreateBoxBlocState> {
       final bdb = RelDB.get().plantsDAO;
       BoxesCompanion box;
       if (event.device == null && event.deviceBox == null) {
-        box = BoxesCompanion.insert(name: event.name);
+        box = BoxesCompanion.insert(
+            name: event.name, settings: Value(BoxSettings().toJSON()));
       } else {
         box = BoxesCompanion.insert(
             name: event.name,
             device: Value(event.device.id),
-            deviceBox: Value(event.deviceBox));
+            deviceBox: Value(event.deviceBox),
+            settings: Value(BoxSettings().toJSON()));
       }
       final boxID = await bdb.addBox(box);
       final b = await bdb.getBox(boxID);
