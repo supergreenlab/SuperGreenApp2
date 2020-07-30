@@ -30,6 +30,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 class FeedPage extends StatefulWidget {
   final Color color;
   final String title;
+  final bool pinned;
   final Widget appBar;
   final double appBarHeight;
   final bool bottomPadding;
@@ -37,6 +38,7 @@ class FeedPage extends StatefulWidget {
 
   const FeedPage(
       {@required this.title,
+      this.pinned = false,
       @required this.color,
       this.appBar,
       @required this.appBarHeight,
@@ -71,8 +73,8 @@ class _FeedPageState extends State<FeedPage> {
           entries.addAll(state.entries);
           if (state.initialLoad == false) {
             for (int i = 0; i < state.entries.length; ++i) {
-              listKey.currentState
-                  .insertItem(nEntries + i, duration: Duration(milliseconds: 500));
+              listKey.currentState.insertItem(nEntries + i,
+                  duration: Duration(milliseconds: 500));
             }
           }
           setState(() {
@@ -117,6 +119,8 @@ class _FeedPageState extends State<FeedPage> {
   Widget _renderCards(BuildContext context) {
     List<Widget> content = [
       SliverAppBar(
+        title: Text(widget.title),
+        pinned: widget.pinned,
         actions: widget.actions,
         backgroundColor: widget.color,
         expandedHeight: widget.appBarHeight ?? 56.0,

@@ -24,15 +24,16 @@ abstract class PublicPlantBlocEvent extends Equatable {}
 
 class PublicPlantBlocState extends Equatable {
   final String plantID;
+  final String plantName;
 
-  PublicPlantBlocState(this.plantID) : super();
+  PublicPlantBlocState(this.plantID, this.plantName) : super();
 
   @override
   List<Object> get props => [plantID];
 }
 
 class PublicPlantBlocStateInit extends PublicPlantBlocState {
-  PublicPlantBlocStateInit(String id) : super(id);
+  PublicPlantBlocStateInit(String id, String name) : super(id, name);
 }
 
 class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
@@ -41,7 +42,7 @@ class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
   PublicPlantBloc(this.args);
 
   @override
-  PublicPlantBlocState get initialState => PublicPlantBlocStateInit(args.id);
+  PublicPlantBlocState get initialState => PublicPlantBlocStateInit(args.id, args.name);
 
   @override
   Stream<PublicPlantBlocState> mapEventToState(

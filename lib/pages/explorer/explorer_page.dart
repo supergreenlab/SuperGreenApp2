@@ -96,7 +96,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
         return InkWell(
           onTap: () {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToPublicPlant(plant.id));
+                .add(MainNavigateToPublicPlant(plant.id, plant.name));
           },
           child: Stack(
             children: <Widget>[

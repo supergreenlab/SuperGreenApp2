@@ -470,11 +470,12 @@ class MainNavigateToSettingsDevice extends MainNavigatorEvent {
 
 class MainNavigateToPublicPlant extends MainNavigatorEvent {
   final String id;
+  final String name;
 
-  MainNavigateToPublicPlant(this.id);
+  MainNavigateToPublicPlant(this.id, this.name);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [id, name];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
