@@ -67,17 +67,18 @@ class _FeedPageState extends State<FeedPage> {
             feedState = state.feed;
           });
         } else if (state is FeedBlocStateEntriesLoaded) {
-          setState(() {
-            loaded = true;
-            eof = state.eof;
-            entries.addAll(state.entries);
-          });
+          int nEntries = entries.length;
+          entries.addAll(state.entries);
           if (state.initialLoad == false) {
             for (int i = 0; i < state.entries.length; ++i) {
               listKey.currentState
-                  .insertItem(i, duration: Duration(milliseconds: 500));
+                  .insertItem(nEntries + i, duration: Duration(milliseconds: 500));
             }
           }
+          setState(() {
+            loaded = true;
+            eof = state.eof;
+          });
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
           listKey.currentState
