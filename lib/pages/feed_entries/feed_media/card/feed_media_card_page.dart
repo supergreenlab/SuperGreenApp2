@@ -67,14 +67,14 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               widget.state.synced,
               showSyncStatus: !state.remoteState,
               showControls: !state.remoteState),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(widget.state, widget.feedState),
-          ),
           Container(
             height: 350,
             alignment: Alignment.center,
             child: FullscreenLoading(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(widget.state, widget.feedState),
           ),
         ],
       ),

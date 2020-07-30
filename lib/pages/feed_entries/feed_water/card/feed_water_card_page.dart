@@ -55,14 +55,14 @@ class FeedWaterCardPage extends StatelessWidget {
               'assets/feed_card/icon_watering.svg', 'Watering', state.synced,
               showSyncStatus: !state.remoteState,
               showControls: !state.remoteState),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 90,
             alignment: Alignment.center,
             child: FullscreenLoading(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),
@@ -159,15 +159,15 @@ class FeedWaterCardPage extends StatelessWidget {
                   .add(FeedBlocEventDeleteEntry(state));
             },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 90,
             alignment: Alignment.center,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.center, children: body),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),

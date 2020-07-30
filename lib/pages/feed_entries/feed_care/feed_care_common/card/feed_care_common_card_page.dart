@@ -72,14 +72,14 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             showSyncStatus: !state.remoteState,
             showControls: false,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(widget.state, widget.feedState),
-          ),
           Container(
             height: 700,
             alignment: Alignment.center,
             child: FullscreenLoading(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(widget.state, widget.feedState),
           ),
         ],
       ),

@@ -57,14 +57,14 @@ class FeedScheduleCardPage extends StatelessWidget {
             showSyncStatus: !state.remoteState,
             showControls: !state.remoteState,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),
@@ -89,10 +89,6 @@ class FeedScheduleCardPage extends StatelessWidget {
                   .add(FeedBlocEventDeleteEntry(state));
             },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 100,
             alignment: Alignment.center,
@@ -109,6 +105,10 @@ class FeedScheduleCardPage extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),

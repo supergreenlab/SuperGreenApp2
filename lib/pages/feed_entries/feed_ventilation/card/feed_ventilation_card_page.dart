@@ -57,14 +57,14 @@ class FeedVentilationCardPage extends StatelessWidget {
             showSyncStatus: !state.remoteState,
             showControls: !state.remoteState,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 120,
             alignment: Alignment.center,
             child: FullscreenLoading(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),
@@ -89,10 +89,6 @@ class FeedVentilationCardPage extends StatelessWidget {
                   .add(FeedBlocEventDeleteEntry(state));
             },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 120,
             alignment: Alignment.center,
@@ -106,6 +102,10 @@ class FeedVentilationCardPage extends StatelessWidget {
                 params.initialValues.blowerNight
               ]),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),

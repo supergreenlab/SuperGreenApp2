@@ -55,14 +55,14 @@ class FeedLifeEventCardPage extends StatelessWidget {
               state.synced,
               showSyncStatus: !state.remoteState,
               showControls: !state.remoteState),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),

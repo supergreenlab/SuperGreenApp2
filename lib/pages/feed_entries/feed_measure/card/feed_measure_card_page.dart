@@ -57,14 +57,14 @@ class FeedMeasureCardPage extends StatelessWidget {
               'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
               showSyncStatus: !state.remoteState,
               showControls: !state.remoteState),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
-          ),
           Container(
             height: 350,
             alignment: Alignment.center,
             child: FullscreenLoading(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, feedState),
           ),
         ],
       ),
