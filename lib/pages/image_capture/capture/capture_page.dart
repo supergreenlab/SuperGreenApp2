@@ -25,6 +25,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class CapturePage extends StatefulWidget {
   @override
@@ -203,7 +204,7 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   Widget _renderLoading(BuildContext context, CaptureBlocState state) {
-    return Container();
+    return FullscreenLoading();
   }
 
   Widget _renderCloseButton(BuildContext context) {
