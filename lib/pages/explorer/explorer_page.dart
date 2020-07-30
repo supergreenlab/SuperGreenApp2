@@ -24,35 +24,69 @@ import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class ExplorerPage extends StatelessWidget {
+class ExplorerPage extends StatefulWidget {
+  @override
+  _ExplorerPageState createState() => _ExplorerPageState();
+}
+
+class _ExplorerPageState extends State<ExplorerPage> {
+  List<PlantState> plants = [];
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExplorerBloc, ExplorerBlocState>(
-        bloc: BlocProvider.of<ExplorerBloc>(context),
-        builder: (context, state) {
-          Widget body;
-          if (state is ExplorerBlocStateInit) {
-            body = FullscreenLoading();
-          } else if (state is ExplorerBlocStateLoaded) {
-            body = _renderList(context, state);
-          }
-          return Scaffold(
-              appBar: SGLAppBar(
-                'Explorer',
-                backgroundColor: Colors.deepPurple,
-                titleColor: Colors.yellow,
-                iconColor: Colors.white,
-                elevation: 10,
-              ),
-              body: body);
-        });
+    return BlocListener<ExplorerBloc, ExplorerBlocState>(
+      listener: (BuildContext context, ExplorerBlocState state) {
+        if (state is ExplorerBlocStateLoaded) {
+          setState(() {
+            plants.addAll(state.plants);
+          });
+        }
+      },
+      child: BlocBuilder<ExplorerBloc, ExplorerBlocState>(
+          bloc: BlocProvider.of<ExplorerBloc>(context),
+          builder: (context, state) {
+            Widget body;
+            if (state is ExplorerBlocStateInit) {
+              body = FullscreenLoading();
+            } else if (state is ExplorerBlocStateLoaded) {
+              body = _renderList(context, state);
+            }
+            return Scaffold(
+                appBar: SGLAppBar(
+                  'Explorer',
+                  backgroundColor: Colors.deepPurple,
+                  titleColor: Colors.yellow,
+                  iconColor: Colors.white,
+                  elevation: 10,
+                ),
+                body: body);
+          }),
+    );
   }
 
   Widget _renderList(BuildContext context, ExplorerBlocStateLoaded state) {
-    return GridView.count(
-      crossAxisCount: 2,
-      children:
-          state.plants.map<Widget>((p) => _renderPlant(context, p)).toList(),
+    if (plants.length == 0) {
+      return FullscreenLoading();
+    }
+    return GridView.builder(
+      itemCount: state.eof ? plants.length : plants.length+1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index > plants.length) {
+          return null;
+        }
+        if (index == plants.length) {
+          if (state.eof) {
+            return null;
+          }
+          BlocProvider.of<ExplorerBloc>(context)
+              .add(ExplorerBlocEventLoadNextPage(plants.length));
+          return FullscreenLoading();
+        }
+        return _renderPlant(context, plants[index]);
+      },
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
     );
   }
 
@@ -75,16 +109,16 @@ class ExplorerPage extends StatelessWidget {
               ),
               Center(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                '${plant.name}',
-                style: TextStyle(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  '${plant.name}',
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-                  )),
+                  textAlign: TextAlign.center,
+                ),
+              )),
             ],
           ),
         );

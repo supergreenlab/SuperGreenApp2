@@ -39,6 +39,15 @@ class ExplorerBlocEventInit extends ExplorerBlocEvent {
   List<Object> get props => [];
 }
 
+class ExplorerBlocEventLoadNextPage extends ExplorerBlocEvent {
+  final int offset;
+
+  ExplorerBlocEventLoadNextPage(this.offset);
+
+  @override
+  List<Object> get props => [offset];
+}
+
 abstract class ExplorerBlocState extends Equatable {}
 
 class ExplorerBlocStateInit extends ExplorerBlocState {
@@ -48,12 +57,15 @@ class ExplorerBlocStateInit extends ExplorerBlocState {
 
 class ExplorerBlocStateLoaded extends ExplorerBlocState {
   final List<PlantState> plants;
+  final bool eof;
 
-  ExplorerBlocStateLoaded(this.plants);
+  ExplorerBlocStateLoaded(this.plants, this.eof);
 
   @override
-  List<Object> get props => [plants];
+  List<Object> get props => [plants, eof];
 }
+
+const int N_PER_PAGE = 15;
 
 class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
   ExplorerBloc() {
@@ -66,16 +78,22 @@ class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
   @override
   Stream<ExplorerBlocState> mapEventToState(ExplorerBlocEvent event) async* {
     if (event is ExplorerBlocEventInit) {
-      List<dynamic> plantsMap = await FeedsAPI().publicPlants(15, 0);
-      List<PlantState> plants = plantsMap
-          .map<PlantState>((p) => PlantState(
-                p['id'],
-                p['name'],
-                p['filePath'],
-                p['thumbnailPath'],
-              ))
-          .toList();
-      yield ExplorerBlocStateLoaded(plants);
+      yield* loadPage(0);
+    } else if (event is ExplorerBlocEventLoadNextPage) {
+      yield* loadPage(event.offset);
     }
+  }
+
+  Stream<ExplorerBlocState> loadPage(int offset) async* {
+    List<dynamic> plantsMap = await FeedsAPI().publicPlants(N_PER_PAGE, offset);
+    List<PlantState> plants = plantsMap
+        .map<PlantState>((p) => PlantState(
+              p['id'],
+              p['name'],
+              p['filePath'],
+              p['thumbnailPath'],
+            ))
+        .toList();
+    yield ExplorerBlocStateLoaded(plants, plants.length < N_PER_PAGE);
   }
 }
