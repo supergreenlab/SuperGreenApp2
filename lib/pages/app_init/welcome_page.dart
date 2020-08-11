@@ -30,10 +30,8 @@ import 'package:super_green_app/widgets/green_button.dart';
 class WelcomePage extends StatefulWidget {
   static String get formAllowAnalytics {
     return Intl.message(
-      '''**Help us** discern what's **useful** from what's
-**useless** by sharing **anonymous** usage data.
-*Note: no third party (ie google, facebook..)
-is involved in our data analytics strategy.*''',
+      '''**Help us** discern what's **useful** from what's **useless** by sharing **anonymous** usage data.
+*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*''',
       name: 'formAllowAnalytics',
       desc: 'Form allow analytics',
       locale: SGLLocalizations.current.localeName,
@@ -42,8 +40,7 @@ is involved in our data analytics strategy.*''',
 
   static String get formCGU {
     return Intl.message(
-      '''\*By proceeding, **you explicitly agree** that you are acting in coordinance with
-local, state, and federal or national laws. **SuperGreenLab will not be liable** for
+      '''\*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for
 consequences surrounding the legality of how the app, lights or grow bundle are used. ''',
       name: 'formCGU',
       desc: 'Form CGU',
@@ -93,41 +90,39 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Widget _logo() {
     List<Widget> body = <Widget>[
-      SizedBox(
-          width: 200,
-          height: 300,
-          child: SvgPicture.asset('assets/super_green_lab_vertical.svg')),
-      Text(
-        widget._loading ? 'Loading..' : 'Welcome to SuperGreenLab!',
-        style: TextStyle(
-          fontWeight: FontWeight.w800,
-          fontFamily: 'Roboto',
-          letterSpacing: 1,
-          fontSize: 20,
-        ),
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SizedBox(
+            width: 200,
+            height: 200,
+            child: SvgPicture.asset('assets/super_green_lab_vertical.svg')),
       ),
     ];
     if (!widget._loading) {
       body.add(
-        Padding(
-          padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
-          child: _renderOptionCheckbx(context, WelcomePage.formAllowAnalytics,
-              (newValue) {
-            setState(() {
-              _allowAnalytics = newValue;
-            });
-          }, _allowAnalytics),
-        ),
-      );
-      body.add(
-        Padding(
-          padding: const EdgeInsets.only(top: 12.0),
-          child: _renderOptionCheckbx(context, WelcomePage.formCGU,
-              (newValue) {
-            setState(() {
-              _acceptCGU = newValue;
-            });
-          }, _acceptCGU),
+        Expanded(
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
+                child: _renderOptionCheckbx(
+                    context, WelcomePage.formAllowAnalytics, (newValue) {
+                  setState(() {
+                    _allowAnalytics = newValue;
+                  });
+                }, _allowAnalytics),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: _renderOptionCheckbx(context, WelcomePage.formCGU,
+                    (newValue) {
+                  setState(() {
+                    _acceptCGU = newValue;
+                  });
+                }, _acceptCGU),
+              ),
+            ],
+          ),
         ),
       );
     }

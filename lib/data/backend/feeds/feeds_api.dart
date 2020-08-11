@@ -213,7 +213,7 @@ class FeedsAPI {
           'fileName': feedMedia.filePath,
         }));
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchServerSync failed';
+      throw 'feedMediaUploadURL failed';
     }
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
