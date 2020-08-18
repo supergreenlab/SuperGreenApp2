@@ -19,6 +19,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path/path.dart';
@@ -76,7 +77,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -94,28 +95,28 @@ class RelDB extends _$RelDB {
         }
       });
 
-  Future<void> runMigrator(Migrator m, int version) async {
-    if (version == 1) {
+  Future<void> runMigrator(Migrator m, int fromVersion) async {
+    if (fromVersion == 1) {
       await m.addColumn(plants, plants.box);
       await m.addColumn(plants, plants.single);
       await m.createTable(boxes);
       await m.issueCustomQuery(
           "insert into boxes (name, device, device_box, settings) select name, device, device_box, id as settings from plants");
-    } else if (version == 2) {
+    } else if (fromVersion == 2) {
       await m.addColumn(feeds, feeds.isNewsFeed);
-    } else if (version == 3) {
+    } else if (fromVersion == 3) {
       await m.addColumn(devices, devices.isSetup);
-    } else if (version == 5) {
+    } else if (fromVersion == 5) {
       await m.createTable(feedEntryDrafts);
-    } else if (version == 6) {
+    } else if (fromVersion == 6) {
       await m.createTable(deletes);
-    } else if (version == 7) {
+    } else if (fromVersion == 7) {
       await m.addColumn(plants, plants.public);
     }
   }
 
-  Future<void> runDataChange(int version) async {
-    if (version == 1) {
+  Future<void> runDataChange(int fromVersion) async {
+    if (fromVersion == 1) {
       List<Box> tmpBoxes = await plantsDAO.getBoxes();
 
       for (int i = 0; i < tmpBoxes.length; ++i) {
@@ -125,11 +126,11 @@ class RelDB extends _$RelDB {
         await plantsDAO.updateBox(
             BoxesCompanion(id: Value(tmpBoxes[i].id), settings: Value('{}')));
       }
-    } else if (version == 2) {
+    } else if (fromVersion == 2) {
       Feed feed = await feedsDAO.getFeed(1);
       await feedsDAO.updateFeed(
           FeedsCompanion(id: Value(feed.id), isNewsFeed: Value(true)));
-    } else if (version == 3) {
+    } else if (fromVersion == 3) {
       List<Plant> plants = await plantsDAO.getPlants();
       for (int i = 0; i < plants.length; ++i) {
         Map<String, dynamic> settings = jsonDecode(plants[i].settings);
@@ -137,7 +138,7 @@ class RelDB extends _$RelDB {
         plantsDAO.updatePlant(PlantsCompanion(
             id: Value(plants[i].id), settings: Value(jsonEncode(settings))));
       }
-    } else if (version == 4) {
+    } else if (fromVersion == 4) {
       List<FeedMedia> feedMedias = await feedsDAO.getAllFeedMedias();
       for (int i = 0; i < feedMedias.length; ++i) {
         FeedMedia feedMedia = feedMedias[i];
@@ -151,7 +152,7 @@ class RelDB extends _$RelDB {
           thumbnailPath: Value(thumbnailPath),
         ));
       }
-    } else if (version == 5) {
+    } else if (fromVersion == 5) {
       List<FeedEntry> measures =
           await feedsDAO.getFeedEntriesWithType('FE_MEASURE');
       for (FeedEntry measure in measures) {
@@ -180,12 +181,60 @@ class RelDB extends _$RelDB {
           Logger.log(e);
         }
       }
-    } else if (version == 6) {
+    } else if (fromVersion == 6) {
       List<Device> devices = await devicesDAO.getDevices();
       for (Device device in devices) {
         if (device.synced == true && device.serverID == null) {
           await devicesDAO.updateDevice(
               DevicesCompanion(id: Value(device.id), synced: Value(false)));
+        }
+      }
+    } else if (fromVersion == 8) {
+      List<FeedMedia> feedMedias = await feedsDAO.getAllFeedMedias();
+      List<int> mp4Header = [
+        0x00,
+        0x00,
+        0x00,
+        0x18,
+        0x66,
+        0x74,
+        0x79,
+        0x70,
+        0x6D,
+        0x70,
+        0x34,
+        0x32
+      ];
+      for (int i = 0; i < feedMedias.length; ++i) {
+        FeedMedia feedMedia = feedMedias[i];
+        if (feedMedia.filePath.indexOf('.') != -1) {
+          continue;
+        }
+        try {
+        String filePath = FeedMedias.makeAbsoluteFilePath(feedMedia.filePath);
+        String thumbnailPath =
+            FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath);
+        List<int> header = (await File(filePath).openRead(0, 12).toList())
+            .reduce((value, element) => value..addAll(element));
+        if (listEquals(header, mp4Header)) {
+          File(filePath).renameSync('$filePath.mp4');
+          File(thumbnailPath).renameSync('$thumbnailPath.jpg');
+          await feedsDAO.updateFeedMedia(FeedMediasCompanion(
+            id: Value(feedMedia.id),
+            filePath: Value('${feedMedia.filePath}.mp4'),
+            thumbnailPath: Value('${feedMedia.thumbnailPath}.jpg'),
+          ));
+        } else {
+          File(filePath).renameSync('$filePath.jpg');
+          File(thumbnailPath).renameSync('$thumbnailPath.jpg');
+          await feedsDAO.updateFeedMedia(FeedMediasCompanion(
+            id: Value(feedMedia.id),
+            filePath: Value('${feedMedia.filePath}.jpg'),
+            thumbnailPath: Value('${feedMedia.thumbnailPath}.jpg'),
+          ));
+        }
+        } catch(e) {
+          print(e);
         }
       }
     }
