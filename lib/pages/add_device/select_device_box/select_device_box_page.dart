@@ -40,7 +40,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-      bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
+      cubit: BlocProvider.of<SelectDeviceBoxBloc>(context),
       listener: (context, state) {
         if (state is SelectDeviceBoxBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -48,7 +48,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         }
       },
       child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-          bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
+          cubit: BlocProvider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is SelectDeviceBoxBlocStateInit) {

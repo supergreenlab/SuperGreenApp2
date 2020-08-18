@@ -108,13 +108,10 @@ class PlantInfosStateLoaded extends PlantInfosState {
 class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
   final PlantInfosBlocDelegate provider;
 
-  PlantInfosBloc(this.provider) {
+  PlantInfosBloc(this.provider) : super(PlantInfosStateLoading()) {
     this.provider.init(add);
     add(PlantInfosEventLoad());
   }
-
-  @override
-  PlantInfosState get initialState => PlantInfosStateLoading();
 
   @override
   Stream<PlantInfosState> mapEventToState(PlantInfosEvent event) async* {

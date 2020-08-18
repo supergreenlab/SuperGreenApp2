@@ -38,10 +38,7 @@ class CreateBoxBloc extends Bloc<CreateBoxBlocEvent, CreateBoxBlocState> {
   //ignore: unused_field
   final MainNavigateToCreateBoxEvent args;
 
-  CreateBoxBloc(this.args);
-
-  @override
-  CreateBoxBlocState get initialState => CreateBoxBlocState();
+  CreateBoxBloc(this.args) : super(CreateBoxBlocState());
 
   @override
   Stream<CreateBoxBlocState> mapEventToState(CreateBoxBlocEvent event) async* {

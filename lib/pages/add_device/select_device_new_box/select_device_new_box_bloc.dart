@@ -90,12 +90,9 @@ class SelectDeviceNewBoxBloc
   List<int> leds = [];
   final MainNavigateToSelectNewDeviceBoxEvent args;
 
-  SelectDeviceNewBoxBloc(this.args) {
+  SelectDeviceNewBoxBloc(this.args) : super(SelectDeviceNewBoxBlocState([])) {
     add(SelectDeviceNewBoxBlocEventInitialize());
   }
-
-  @override
-  SelectDeviceNewBoxBlocState get initialState => SelectDeviceNewBoxBlocState(leds);
 
   @override
   Stream<SelectDeviceNewBoxBlocState> mapEventToState(

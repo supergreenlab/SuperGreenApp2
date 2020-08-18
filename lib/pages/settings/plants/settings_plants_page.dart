@@ -14,7 +14,7 @@ class SettingsPlantsPage extends StatelessWidget {
     return BlocListener<SettingsPlantsBloc, SettingsPlantsBlocState>(
       listener: (BuildContext context, SettingsPlantsBlocState state) {},
       child: BlocBuilder<SettingsPlantsBloc, SettingsPlantsBlocState>(
-        bloc: BlocProvider.of<SettingsPlantsBloc>(context),
+        cubit: BlocProvider.of<SettingsPlantsBloc>(context),
         builder: (BuildContext context, SettingsPlantsBlocState state) {
           Widget body;
 

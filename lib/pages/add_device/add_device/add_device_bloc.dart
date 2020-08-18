@@ -31,10 +31,7 @@ class AddDeviceBloc extends Bloc<AddDeviceBlocEvent, AddDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToAddDeviceEvent args;
 
-  AddDeviceBloc(this.args);
-
-  @override
-  AddDeviceBlocState get initialState => AddDeviceBlocState();
+  AddDeviceBloc(this.args) : super( AddDeviceBlocState());
 
   @override
   Stream<AddDeviceBlocState> mapEventToState(AddDeviceBlocEvent event) async* {}

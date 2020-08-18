@@ -61,7 +61,7 @@ class DeviceDaemonBloc
   List<Device> _devices = [];
   Map<int, bool> _deviceWorker = {};
 
-  DeviceDaemonBloc() {
+  DeviceDaemonBloc() : super(DeviceDaemonBlocStateInit()) {
     add(DeviceDaemonBlocEventInit());
     _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
       for (int i = 0; i < _devices.length; ++i) {
@@ -73,9 +73,6 @@ class DeviceDaemonBloc
       }
     });
   }
-
-  @override
-  DeviceDaemonBlocState get initialState => DeviceDaemonBlocStateInit();
 
   @override
   Stream<DeviceDaemonBlocState> mapEventToState(

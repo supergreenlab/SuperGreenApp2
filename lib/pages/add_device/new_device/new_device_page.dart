@@ -51,7 +51,7 @@ class NewDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<NewDeviceBloc>(context),
+      cubit: BlocProvider.of<NewDeviceBloc>(context),
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
           if (state.popOnComplete) {
@@ -63,7 +63,7 @@ class NewDevicePage extends StatelessWidget {
         }
       },
       child: BlocBuilder<NewDeviceBloc, NewDeviceBlocState>(
-          bloc: BlocProvider.of<NewDeviceBloc>(context),
+          cubit: BlocProvider.of<NewDeviceBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is NewDeviceBlocStateConnectingToSSID) {

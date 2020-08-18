@@ -63,10 +63,7 @@ class DeviceNameBlocStateDone extends DeviceNameBlocState {
 class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   final MainNavigateToDeviceNameEvent args;
 
-  @override
-  DeviceNameBlocState get initialState => DeviceNameBlocState(args.device);
-
-  DeviceNameBloc(this.args);
+  DeviceNameBloc(this.args) : super(DeviceNameBlocState(args.device));
 
   @override
   Stream<DeviceNameBlocState> mapEventToState(

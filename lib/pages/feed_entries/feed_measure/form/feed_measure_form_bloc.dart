@@ -84,10 +84,7 @@ class FeedMeasureFormBloc
     extends Bloc<FeedMeasureFormBlocEvent, FeedMeasureFormBlocState> {
   final MainNavigateToFeedMeasureFormEvent args;
 
-  @override
-  FeedMeasureFormBlocState get initialState => FeedMeasureFormBlocStateInit();
-
-  FeedMeasureFormBloc(this.args) {
+  FeedMeasureFormBloc(this.args) : super(FeedMeasureFormBlocStateInit()) {
     add(FeedMeasureFormBlocEventInit());
   }
 

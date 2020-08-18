@@ -34,7 +34,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
         }
       },
       child: BlocBuilder<SettingsAuthBloc, SettingsAuthBlocState>(
-        bloc: BlocProvider.of<SettingsAuthBloc>(context),
+        cubit: BlocProvider.of<SettingsAuthBloc>(context),
         builder: (BuildContext context, SettingsAuthBlocState state) {
           Widget body;
 

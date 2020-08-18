@@ -60,13 +60,10 @@ class SettingsCreateAccountBloc
   final MainNavigateToSettingsCreateAccount args;
   bool _isAuth;
 
-  SettingsCreateAccountBloc(this.args) {
+  SettingsCreateAccountBloc(this.args) : super(SettingsCreateAccountBlocStateInit()) {
     _isAuth = AppDB().getAppData().jwt != null;
     add(SettingsCreateAccountBlocEventInit());
   }
-
-  @override
-  SettingsCreateAccountBlocState get initialState => SettingsCreateAccountBlocStateInit();
 
   @override
   Stream<SettingsCreateAccountBlocState> mapEventToState(

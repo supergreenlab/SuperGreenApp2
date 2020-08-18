@@ -17,14 +17,10 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moor/moor.dart';
-import 'package:super_green_app/data/helpers/feed_helper.dart';
 import 'package:super_green_app/data/helpers/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 abstract class FeedLifeEventFormBlocEvent extends Equatable {}
@@ -73,13 +69,9 @@ class FeedLifeEventFormBloc
     extends Bloc<FeedLifeEventFormBlocEvent, FeedLifeEventFormBlocState> {
   final MainNavigateToFeedLifeEventFormEvent _args;
 
-  FeedLifeEventFormBloc(this._args) {
+  FeedLifeEventFormBloc(this._args) : super(FeedLifeEventFormBlocStateInit(_args.phase)) {
     add(FeedLifeEventFormBlocEventInit());
   }
-
-  @override
-  FeedLifeEventFormBlocState get initialState =>
-      FeedLifeEventFormBlocStateInit(_args.phase);
 
   @override
   Stream<FeedLifeEventFormBlocState> mapEventToState(

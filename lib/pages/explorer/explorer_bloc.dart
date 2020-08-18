@@ -68,12 +68,10 @@ class ExplorerBlocStateLoaded extends ExplorerBlocState {
 const int N_PER_PAGE = 15;
 
 class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
-  ExplorerBloc() {
+  
+  ExplorerBloc() : super(ExplorerBlocStateInit()) {
     add(ExplorerBlocEventInit());
   }
-
-  @override
-  ExplorerBlocState get initialState => ExplorerBlocStateInit();
 
   @override
   Stream<ExplorerBlocState> mapEventToState(ExplorerBlocEvent event) async* {

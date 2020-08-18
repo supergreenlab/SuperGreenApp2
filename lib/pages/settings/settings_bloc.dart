@@ -41,8 +41,8 @@ class SettingsBlocState extends Equatable {
 }
 
 class SettingsBloc extends Bloc<SettingsBlocEvent, SettingsBlocState> {
-  @override
-  SettingsBlocState get initialState => SettingsBlocState(AppDB().getAppData().freedomUnits);
+  
+  SettingsBloc() : super(SettingsBlocState(AppDB().getAppData().freedomUnits));
 
   @override
   Stream<SettingsBlocState> mapEventToState(SettingsBlocEvent event) async* {

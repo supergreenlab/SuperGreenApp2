@@ -59,12 +59,9 @@ class SelectBoxBloc extends Bloc<SelectBoxBlocEvent, SelectBoxBlocState> {
   //ignore: unused_field
   MainNavigateToSelectBoxEvent args;
 
-  SelectBoxBloc(this.args) {
+  SelectBoxBloc(this.args) : super(SelectBoxBlocStateLoading()) {
     add(SelectBoxBlocEventInit());
   }
-
-  @override
-  SelectBoxBlocState get initialState => SelectBoxBlocStateLoading();
 
   @override
   Stream<SelectBoxBlocState> mapEventToState(SelectBoxBlocEvent event) async* {

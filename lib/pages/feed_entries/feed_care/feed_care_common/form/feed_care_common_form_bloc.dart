@@ -113,10 +113,7 @@ abstract class FeedCareCommonFormBloc
     extends Bloc<FeedCareCommonFormBlocEvent, FeedCareCommonFormBlocState> {
   final MainNavigateToFeedCareCommonFormEvent args;
 
-  @override
-  FeedCareCommonFormBlocState get initialState => FeedCareCommonFormBlocState();
-
-  FeedCareCommonFormBloc(this.args) {
+  FeedCareCommonFormBloc(this.args) : super(FeedCareCommonFormBlocState()) {
     add(FeedCareCommonFormBlocEventLoadDraft());
   }
 

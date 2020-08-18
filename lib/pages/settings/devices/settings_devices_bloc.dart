@@ -65,12 +65,9 @@ class SettingsDevicesBloc
   //ignore: unused_field
   final MainNavigateToSettingsDevices args;
 
-  SettingsDevicesBloc(this.args) {
+  SettingsDevicesBloc(this.args) : super(SettingsDevicesBlocStateInit()) {
     add(SettingsDevicesBlocEventInit());
   }
-
-  @override
-  get initialState => SettingsDevicesBlocStateInit();
 
   @override
   Stream<SettingsDevicesBlocState> mapEventToState(event) async* {

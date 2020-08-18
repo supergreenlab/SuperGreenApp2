@@ -31,7 +31,7 @@ class SelectBoxPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectBoxBloc, SelectBoxBlocState>(
-        bloc: BlocProvider.of<SelectBoxBloc>(context),
+        cubit: BlocProvider.of<SelectBoxBloc>(context),
         builder: (BuildContext context, SelectBoxBlocState state) {
           Widget body;
           if (state is SelectBoxBlocStateLoading) {

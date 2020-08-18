@@ -82,7 +82,11 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   final MainNavigateToHomeEvent args;
   final GlobalKey<NavigatorState> _navigatorKey;
 
-  HomeNavigatorBloc(this.args, this._navigatorKey) {
+  HomeNavigatorBloc(this.args, this._navigatorKey)
+      : super(HomeNavigatorState(
+            (AppDB().getAppData().lastPlantID != null || args.plant != null)
+                ? 1
+                : 0)) {
     if (args.plant != null) {
       // TODO find something better
       Timer(Duration(seconds: 1), () {
@@ -90,12 +94,6 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
       });
     }
   }
-
-  @override
-  HomeNavigatorState get initialState => HomeNavigatorState(
-      (AppDB().getAppData().lastPlantID != null || args.plant != null)
-          ? 1
-          : 0);
 
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {

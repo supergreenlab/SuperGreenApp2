@@ -31,7 +31,7 @@ class DeviceSetupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<DeviceSetupBloc>(context),
+      cubit: BlocProvider.of<DeviceSetupBloc>(context),
       listener: (BuildContext context, DeviceSetupBlocState state) async {
         if (state is DeviceSetupBlocStateDone) {
           Device device = state.device;
@@ -54,7 +54,7 @@ class DeviceSetupPage extends StatelessWidget {
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
-          bloc: Provider.of<DeviceSetupBloc>(context),
+          cubit: Provider.of<DeviceSetupBloc>(context),
           builder: (context, state) {
             bool canGoBack = state is DeviceSetupBlocStateAlreadyExists ||
                 state is DeviceSetupBlocStateLoadingError;

@@ -40,12 +40,9 @@ class SunglassesBloc extends Bloc<SunglassesBlocEvent, SunglassesBlocState> {
   final int _deviceID;
   final int _deviceBox;
 
-  SunglassesBloc(this._deviceID, this._deviceBox) {
+  SunglassesBloc(this._deviceID, this._deviceBox) : super(SunglassesBlocStateInit()) {
     add(SunglassesBlocEventInit());
   }
-
-  @override
-  SunglassesBlocState get initialState => SunglassesBlocStateInit();
 
   @override
   Stream<SunglassesBlocState> mapEventToState(

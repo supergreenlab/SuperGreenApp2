@@ -76,11 +76,7 @@ class CaptureBlocStateDone extends CaptureBlocState {
 class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   final MainNavigateToImageCaptureEvent args;
 
-  @override
-  CaptureBlocState get initialState =>
-      CaptureBlocState(args.videoEnabled, args.pickerEnabled, args.overlayPath);
-
-  CaptureBloc(this.args) {
+  CaptureBloc(this.args) : super(CaptureBlocState(args.videoEnabled, args.pickerEnabled, args.overlayPath)) {
     add(CaptureBlocEventInit());
   }
 

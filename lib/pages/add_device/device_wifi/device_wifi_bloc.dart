@@ -101,10 +101,7 @@ class DeviceWifiBlocStateDone extends DeviceWifiBlocState {
 class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
   final MainNavigateToDeviceWifiEvent args;
 
-  DeviceWifiBloc(this.args);
-
-  @override
-  DeviceWifiBlocState get initialState => DeviceWifiBlocState();
+  DeviceWifiBloc(this.args) : super(DeviceWifiBlocState());
 
   @override
   Stream<DeviceWifiBlocState> mapEventToState(

@@ -125,11 +125,7 @@ class FeedVentilationFormBloc
   int initialBlowerDay;
   int initialBlowerNight;
 
-  @override
-  FeedVentilationFormBlocState get initialState =>
-      FeedVentilationFormBlocState();
-
-  FeedVentilationFormBloc(this.args) {
+  FeedVentilationFormBloc(this.args) : super(FeedVentilationFormBlocState()) {
     add(FeedVentilationFormBlocEventLoadVentilations());
   }
 

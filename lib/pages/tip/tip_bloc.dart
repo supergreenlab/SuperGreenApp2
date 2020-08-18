@@ -62,12 +62,9 @@ class TipBlocStateLoaded extends TipBlocState {
 class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
   final MainNavigateToTipEvent args;
 
-  TipBloc(this.args) {
+  TipBloc(this.args) : super(TipBlocStateInit(args.nextRoute)) {
     add(TipBlocEventInit());
   }
-
-  @override
-  TipBlocState get initialState => TipBlocStateInit(args.nextRoute);
 
   @override
   Stream<TipBlocState> mapEventToState(TipBlocEvent event) async* {

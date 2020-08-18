@@ -31,7 +31,7 @@ class _TimelapseConnectPageState extends State<TimelapseConnectPage> {
         }
       },
       child: BlocBuilder<TimelapseConnectBloc, TimelapseConnectBlocState>(
-          bloc: BlocProvider.of<TimelapseConnectBloc>(context),
+          cubit: BlocProvider.of<TimelapseConnectBloc>(context),
           builder: (BuildContext context, TimelapseConnectBlocState state) {
             Widget body;
 

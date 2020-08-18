@@ -87,12 +87,9 @@ class SelectDeviceBoxBloc
     extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
   final MainNavigateToSelectDeviceBoxEvent args;
 
-  SelectDeviceBoxBloc(this.args) {
+  SelectDeviceBoxBloc(this.args) : super(SelectDeviceBoxBlocStateInit()) {
     add(SelectDeviceBoxBlocEventInitialize());
   }
-
-  @override
-  SelectDeviceBoxBlocState get initialState => SelectDeviceBoxBlocStateInit();
 
   @override
   Stream<SelectDeviceBoxBlocState> mapEventToState(

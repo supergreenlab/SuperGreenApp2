@@ -53,7 +53,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlantInfosBloc, PlantInfosState>(
-        bloc: BlocProvider.of<PlantInfosBloc>(context),
+        cubit: BlocProvider.of<PlantInfosBloc>(context),
         builder: (BuildContext context, PlantInfosState state) {
           if (state is PlantInfosStateLoading) {
             return _renderLoading(context, state);

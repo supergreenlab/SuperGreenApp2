@@ -112,10 +112,7 @@ class FeedLightFormBloc
   List<Param> lightParams;
   List<int> initialValues;
 
-  @override
-  FeedLightFormBlocState get initialState => FeedLightFormBlocState();
-
-  FeedLightFormBloc(this.args) {
+  FeedLightFormBloc(this.args) : super(FeedLightFormBlocState()) {
     add(FeedLightFormBlocEventLoadLights());
   }
 

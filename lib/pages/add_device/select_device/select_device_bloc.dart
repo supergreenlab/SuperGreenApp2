@@ -93,10 +93,7 @@ class SelectDeviceBloc
   //ignore: unused_field
   final MainNavigateToSelectDeviceEvent args;
 
-  @override
-  SelectDeviceBlocState get initialState => SelectDeviceBlocState(_devices);
-
-  SelectDeviceBloc(this.args) {
+  SelectDeviceBloc(this.args) : super(SelectDeviceBlocState([])) {
     this.add(SelectDeviceBlocEventLoadDevices());
   }
 

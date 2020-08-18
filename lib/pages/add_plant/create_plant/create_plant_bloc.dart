@@ -50,8 +50,7 @@ class CreatePlantBlocStateDone extends CreatePlantBlocState {
 }
 
 class CreatePlantBloc extends Bloc<CreatePlantBlocEvent, CreatePlantBlocState> {
-  @override
-  CreatePlantBlocState get initialState => CreatePlantBlocState();
+  CreatePlantBloc() : super(CreatePlantBlocState());
 
   @override
   Stream<CreatePlantBlocState> mapEventToState(

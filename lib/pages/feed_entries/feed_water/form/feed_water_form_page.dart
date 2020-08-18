@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -55,7 +53,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: BlocProvider.of<FeedWaterFormBloc>(context),
+        cubit: BlocProvider.of<FeedWaterFormBloc>(context),
         listener: (BuildContext context, FeedWaterFormBlocState state) {
           if (state is FeedWaterFormBlocStateDone) {
             BlocProvider.of<TowelieBloc>(context).add(
@@ -65,7 +63,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           }
         },
         child: BlocBuilder<FeedWaterFormBloc, FeedWaterFormBlocState>(
-            bloc: BlocProvider.of<FeedWaterFormBloc>(context),
+            cubit: BlocProvider.of<FeedWaterFormBloc>(context),
             builder: (context, state) {
               return FeedFormLayout(
                 title: '💧',

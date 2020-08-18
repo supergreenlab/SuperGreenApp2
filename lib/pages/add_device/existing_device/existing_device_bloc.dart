@@ -63,10 +63,7 @@ class ExistingDeviceBloc
   //ignore: unused_field
   final MainNavigateToExistingDeviceEvent args;
 
-  ExistingDeviceBloc(this.args);
-
-  @override
-  ExistingDeviceBlocState get initialState => ExistingDeviceBlocState();
+  ExistingDeviceBloc(this.args) : super(ExistingDeviceBlocState());
 
   @override
   Stream<ExistingDeviceBlocState> mapEventToState(

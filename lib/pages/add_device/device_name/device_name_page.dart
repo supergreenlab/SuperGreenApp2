@@ -63,7 +63,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<DeviceNameBloc>(context),
+      cubit: BlocProvider.of<DeviceNameBloc>(context),
       listener: (BuildContext context, DeviceNameBlocState state) async {
         if (state is DeviceNameBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
@@ -82,7 +82,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         }
       },
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
-          bloc: BlocProvider.of<DeviceNameBloc>(context),
+          cubit: BlocProvider.of<DeviceNameBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is DeviceNameBlocStateLoading) {

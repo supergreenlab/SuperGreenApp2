@@ -100,11 +100,7 @@ class LocalNotificationBloc
     extends Bloc<LocalNotificationBlocEvent, LocalNotificationBlocState> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  LocalNotificationBloc();
-
-  @override
-  LocalNotificationBlocState get initialState =>
-      LocalNotificationBlocStateInit();
+  LocalNotificationBloc() : super(LocalNotificationBlocStateInit());
 
   @override
   Stream<LocalNotificationBlocState> mapEventToState(

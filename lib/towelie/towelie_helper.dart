@@ -67,7 +67,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
         }
       },
       child: BlocBuilder<TowelieBloc, TowelieBlocState>(
-        condition: (context, state) =>
+        buildWhen: (context, state) =>
             state is TowelieBlocStateHelper &&
             state.settings.name == widget.settings.name,
         builder: (BuildContext context, TowelieBlocState state) {

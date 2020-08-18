@@ -44,7 +44,7 @@ class _CapturePageState extends State<CapturePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<CaptureBloc>(context),
+      cubit: BlocProvider.of<CaptureBloc>(context),
       listener: (BuildContext context, CaptureBlocState state) async {
         if (state is CaptureBlocStateInit) {
           if (_cameraController == null) {
@@ -58,7 +58,7 @@ class _CapturePageState extends State<CapturePage> {
         }
       },
       child: BlocBuilder<CaptureBloc, CaptureBlocState>(
-          bloc: BlocProvider.of<CaptureBloc>(context),
+          cubit: BlocProvider.of<CaptureBloc>(context),
           builder: (context, state) {
             if (_cameraController != null &&
                 _cameraController.value.isInitialized == true) {

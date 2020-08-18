@@ -17,7 +17,6 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -114,11 +113,7 @@ class FeedScheduleFormBloc
 
   final MainNavigateToFeedScheduleFormEvent args;
 
-  @override
-  FeedScheduleFormBlocState get initialState =>
-      FeedScheduleFormBlocStateUnInitialized();
-
-  FeedScheduleFormBloc(this.args) {
+  FeedScheduleFormBloc(this.args) : super(FeedScheduleFormBlocStateUnInitialized()) {
     add(FeedScheduleFormBlocEventInit());
   }
 

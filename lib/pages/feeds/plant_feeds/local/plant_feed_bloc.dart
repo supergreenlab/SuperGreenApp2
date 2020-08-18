@@ -81,12 +81,9 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   StreamSubscription<int> timelapsesStream;
   StreamSubscription<Plant> plantStream;
 
-  PlantFeedBloc(this.args) {
+  PlantFeedBloc(this.args) : super(PlantFeedBlocStateInit()) {
     this.add(PlantFeedBlocEventLoad());
   }
-
-  @override
-  PlantFeedBlocState get initialState => PlantFeedBlocStateInit();
 
   @override
   Stream<PlantFeedBlocState> mapEventToState(PlantFeedBlocEvent event) async* {

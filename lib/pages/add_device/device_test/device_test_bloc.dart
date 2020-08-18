@@ -58,12 +58,9 @@ class DeviceTestBloc extends Bloc<DeviceTestBlocEvent, DeviceTestBlocState> {
 
   int _nLedChannels = 0;
 
-  DeviceTestBloc(this.args) {
+  DeviceTestBloc(this.args) : super(DeviceTestBlocStateLoading()) {
     add(DeviceTestBlocEventInit());
   }
-
-  @override
-  DeviceTestBlocState get initialState => DeviceTestBlocStateLoading();
 
   @override
   Stream<DeviceTestBlocState> mapEventToState(

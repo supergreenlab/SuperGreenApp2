@@ -65,7 +65,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<DeviceWifiBloc>(context),
+      cubit: BlocProvider.of<DeviceWifiBloc>(context),
       listener: (BuildContext context, DeviceWifiBlocState state) {
         if (state is DeviceWifiBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -73,7 +73,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
         }
       },
       child: BlocBuilder<DeviceWifiBloc, DeviceWifiBlocState>(
-          bloc: BlocProvider.of<DeviceWifiBloc>(context),
+          cubit: BlocProvider.of<DeviceWifiBloc>(context),
           builder: (context, state) {
             bool canGoBack = !(state is DeviceWifiBlocStateSearching ||
                 state is DeviceWifiBlocStateLoading ||

@@ -68,11 +68,7 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   StreamSubscription<List<Box>> _boxesStream;
   StreamSubscription<List<GetPendingFeedsResult>> _pendingStream;
 
-  @override
-  PlantDrawerBlocState get initialState =>
-      PlantDrawerBlocStateLoadingPlantList();
-
-  PlantDrawerBloc() {
+  PlantDrawerBloc() : super(PlantDrawerBlocStateLoadingPlantList()) {
     add(PlantDrawerBlocEventLoadPlants());
   }
 

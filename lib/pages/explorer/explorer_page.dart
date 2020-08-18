@@ -43,7 +43,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
         }
       },
       child: BlocBuilder<ExplorerBloc, ExplorerBlocState>(
-          bloc: BlocProvider.of<ExplorerBloc>(context),
+          cubit: BlocProvider.of<ExplorerBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is ExplorerBlocStateInit) {

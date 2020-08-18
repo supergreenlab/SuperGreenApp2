@@ -72,12 +72,9 @@ class MetricsBloc extends Bloc<MetricsBlocEvent, MetricsBlocState> {
 
   Timer _timer;
 
-  MetricsBloc(this.args) {
+  MetricsBloc(this.args) : super(MetricsBlocStateInit(args.graphData)) {
     add(MetricsBlocEventLoadChart());
   }
-
-  @override
-  get initialState => MetricsBlocStateInit(args.graphData);
 
   @override
   Stream<MetricsBlocState> mapEventToState(MetricsBlocEvent event) async* {

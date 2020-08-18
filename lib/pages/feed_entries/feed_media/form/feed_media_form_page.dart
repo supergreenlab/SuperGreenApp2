@@ -131,7 +131,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: BlocProvider.of<FeedMediaFormBloc>(context),
+        cubit: BlocProvider.of<FeedMediaFormBloc>(context),
         listener: (BuildContext context, FeedMediaFormBlocState state) {
           if (state is FeedMediaFormBlocStateDraft) {
             _resumeDraft(context, state.draft);
@@ -143,8 +143,8 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           }
         },
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
-            bloc: BlocProvider.of<FeedMediaFormBloc>(context),
-            condition: (FeedMediaFormBlocState beforeState,
+            cubit: BlocProvider.of<FeedMediaFormBloc>(context),
+            buildWhen: (FeedMediaFormBlocState beforeState,
                 FeedMediaFormBlocState afterState) {
               return afterState is FeedMediaFormBlocStateLoading ||
                   afterState is FeedMediaFormBlocStateDone ||

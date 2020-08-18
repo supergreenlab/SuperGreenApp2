@@ -51,7 +51,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<SettingsDeviceBloc>(context),
+      cubit: BlocProvider.of<SettingsDeviceBloc>(context),
       listener: (BuildContext context, SettingsDeviceBlocState state) async {
         if (state is SettingsDeviceBlocStateLoaded) {
           _nameController = TextEditingController(text: state.device.name);
@@ -63,7 +63,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
         }
       },
       child: BlocBuilder<SettingsDeviceBloc, SettingsDeviceBlocState>(
-          bloc: BlocProvider.of<SettingsDeviceBloc>(context),
+          cubit: BlocProvider.of<SettingsDeviceBloc>(context),
           builder: (BuildContext context, SettingsDeviceBlocState state) {
             Widget body;
             if (state is SettingsDeviceBlocStateLoading) {

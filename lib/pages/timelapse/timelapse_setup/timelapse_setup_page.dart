@@ -42,7 +42,7 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
         }
       },
       child: BlocBuilder<TimelapseSetupBloc, TimelapseSetupBlocState>(
-          bloc: BlocProvider.of<TimelapseSetupBloc>(context),
+          cubit: BlocProvider.of<TimelapseSetupBloc>(context),
           builder: (BuildContext context, TimelapseSetupBlocState state) {
             Widget body;
 

@@ -62,15 +62,12 @@ class PlantFeedAppBarBloc
   Timer _timer;
   final Plant plant;
 
-  PlantFeedAppBarBloc(this.plant) {
+  PlantFeedAppBarBloc(this.plant) : super(PlantFeedAppBarBlocStateInit()) {
     add(PlantFeedAppBarBlocEventLoadChart());
     _timer = Timer.periodic(Duration(seconds: 30), (timer) {
       this.add(PlantFeedAppBarBlocEventReloadChart());
     });
   }
-
-  @override
-  PlantFeedAppBarBlocState get initialState => PlantFeedAppBarBlocStateInit();
 
   @override
   Stream<PlantFeedAppBarBlocState> mapEventToState(

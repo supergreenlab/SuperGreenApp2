@@ -45,7 +45,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<FeedLightFormBloc>(context),
+      cubit: BlocProvider.of<FeedLightFormBloc>(context),
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
           Timer(Duration(milliseconds: 100), () {
@@ -63,7 +63,7 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         }
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
-          bloc: BlocProvider.of<FeedLightFormBloc>(context),
+          cubit: BlocProvider.of<FeedLightFormBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is FeedLightFormBlocStateLoading) {

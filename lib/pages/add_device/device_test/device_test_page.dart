@@ -24,7 +24,7 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<DeviceTestBloc>(context),
+      cubit: BlocProvider.of<DeviceTestBloc>(context),
       listener: (BuildContext context, DeviceTestBlocState state) async {
         if (state is DeviceTestBlocStateDone) {
           Timer(const Duration(milliseconds: 1500), () {
@@ -44,7 +44,7 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
         }
       },
       child: BlocBuilder<DeviceTestBloc, DeviceTestBlocState>(
-          bloc: BlocProvider.of<DeviceTestBloc>(context),
+          cubit: BlocProvider.of<DeviceTestBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is DeviceTestBlocStateLoading) {

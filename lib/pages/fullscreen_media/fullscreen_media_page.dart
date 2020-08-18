@@ -52,7 +52,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
   Widget build(BuildContext context) {
     return Material(
       child: BlocListener(
-        bloc: BlocProvider.of<FullscreenMediaBloc>(context),
+        cubit: BlocProvider.of<FullscreenMediaBloc>(context),
         listener: (context, state) async {
           if (state is FullscreenMediaBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
@@ -71,7 +71,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
           }
         },
         child: BlocBuilder<FullscreenMediaBloc, FullscreenMediaBlocState>(
-            bloc: BlocProvider.of<FullscreenMediaBloc>(context),
+            cubit: BlocProvider.of<FullscreenMediaBloc>(context),
             builder: (context, state) {
               return LayoutBuilder(
                 builder: (context, constraint) {

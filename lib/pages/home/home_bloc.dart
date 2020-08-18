@@ -58,12 +58,9 @@ class HomeBlocStateLoaded extends HomeBlocState {
 class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
   StreamSubscription<List<GetPendingFeedsResult>> _pendingStream;
 
-  HomeBloc() {
+  HomeBloc() : super(HomeBlocStateInit()) {
     add(HomeBlocEventLoad());
   }
-
-  @override
-  HomeBlocState get initialState => HomeBlocStateInit();
 
   @override
   Stream<HomeBlocState> mapEventToState(HomeBlocEvent event) async* {

@@ -32,7 +32,7 @@ class PublicPlantPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<PublicPlantBloc, PublicPlantBlocState>(
-        bloc: BlocProvider.of<PublicPlantBloc>(context),
+        cubit: BlocProvider.of<PublicPlantBloc>(context),
         builder: (BuildContext context, PublicPlantBlocState state) {
           return _renderFeed(context, state);
         },

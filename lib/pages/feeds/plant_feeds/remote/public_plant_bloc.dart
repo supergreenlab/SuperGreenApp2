@@ -39,10 +39,7 @@ class PublicPlantBlocStateInit extends PublicPlantBlocState {
 class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
   final MainNavigateToPublicPlant args;
 
-  PublicPlantBloc(this.args);
-
-  @override
-  PublicPlantBlocState get initialState => PublicPlantBlocStateInit(args.id, args.name);
+  PublicPlantBloc(this.args) : super(PublicPlantBlocStateInit(args.id, args.name));
 
   @override
   Stream<PublicPlantBlocState> mapEventToState(

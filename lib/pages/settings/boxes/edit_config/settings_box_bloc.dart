@@ -58,12 +58,9 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
   Device device;
   int deviceBox;
 
-  SettingsBoxBloc(this.args) {
+  SettingsBoxBloc(this.args) : super(SettingsBoxBlocStateLoading()) {
     add(SettingsBoxBlocEventInit());
   }
-
-  @override
-  SettingsBoxBlocState get initialState => SettingsBoxBlocStateLoading();
 
   @override
   Stream<SettingsBoxBlocState> mapEventToState(

@@ -64,10 +64,7 @@ class FeedWaterFormBloc
     extends Bloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
   final MainNavigateToFeedWaterFormEvent args;
 
-  @override
-  FeedWaterFormBlocState get initialState => FeedWaterFormBlocState();
-
-  FeedWaterFormBloc(this.args);
+  FeedWaterFormBloc(this.args) : super(FeedWaterFormBlocState());
 
   @override
   Stream<FeedWaterFormBlocState> mapEventToState(

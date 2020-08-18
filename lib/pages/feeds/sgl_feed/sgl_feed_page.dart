@@ -29,7 +29,7 @@ class SGLFeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<SGLFeedBloc, SGLFeedBlocState>(
-        bloc: BlocProvider.of<SGLFeedBloc>(context),
+        cubit: BlocProvider.of<SGLFeedBloc>(context),
         builder: (BuildContext context, SGLFeedBlocState state) {
           return _renderFeed(context, state);
         },

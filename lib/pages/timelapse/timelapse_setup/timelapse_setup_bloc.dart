@@ -119,12 +119,9 @@ class TimelapseSetupBloc
 
   final MainNavigateToTimelapseSetup args;
 
-  TimelapseSetupBloc(this.args) {
+  TimelapseSetupBloc(this.args) : super(TimelapseSetupBlocStateInit()) {
     add(TimelapseSetupBlocEventInit());
   }
-
-  @override
-  TimelapseSetupBlocState get initialState => TimelapseSetupBlocStateInit();
 
   @override
   Stream<TimelapseSetupBlocState> mapEventToState(

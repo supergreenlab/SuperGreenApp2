@@ -68,7 +68,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<CreatePlantBloc>(context),
+      cubit: BlocProvider.of<CreatePlantBloc>(context),
       listener: (BuildContext context, CreatePlantBlocState state) async {
         if (state is CreatePlantBlocStateDone) {
           BlocProvider.of<TowelieBloc>(context)
@@ -80,7 +80,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
         }
       },
       child: BlocBuilder<CreatePlantBloc, CreatePlantBlocState>(
-          bloc: BlocProvider.of<CreatePlantBloc>(context),
+          cubit: BlocProvider.of<CreatePlantBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is CreatePlantBlocStateDone) {

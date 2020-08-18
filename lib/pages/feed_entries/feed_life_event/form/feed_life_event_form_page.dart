@@ -58,7 +58,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
         }
       },
       child: BlocBuilder<FeedLifeEventFormBloc, FeedLifeEventFormBlocState>(
-          bloc: BlocProvider.of<FeedLifeEventFormBloc>(context),
+          cubit: BlocProvider.of<FeedLifeEventFormBloc>(context),
           builder: (context, state) {
             Widget body;
             Tuple2<String, String> phaseTitle =

@@ -18,7 +18,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TimelapseViewerBloc, TimelapseViewerBlocState>(
-        bloc: BlocProvider.of<TimelapseViewerBloc>(context),
+        cubit: BlocProvider.of<TimelapseViewerBloc>(context),
         builder: (BuildContext context, TimelapseViewerBlocState state) {
           Widget body;
           List<Widget> actions;

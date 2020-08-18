@@ -37,10 +37,7 @@ class TimelapseConnectBloc
     extends Bloc<TimelapseConnectBlocEvent, TimelapseConnectBlocState> {
   final MainNavigateToTimelapseConnect args;
 
-  TimelapseConnectBloc(this.args);
-
-  @override
-  TimelapseConnectBlocState get initialState => TimelapseConnectBlocState();
+  TimelapseConnectBloc(this.args) : super(TimelapseConnectBlocState());
 
   @override
   Stream<TimelapseConnectBlocState> mapEventToState(

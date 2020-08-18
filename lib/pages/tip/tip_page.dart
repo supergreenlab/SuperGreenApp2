@@ -39,7 +39,7 @@ class _TipPageState extends State<TipPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TipBloc, TipBlocState>(
-        bloc: BlocProvider.of<TipBloc>(context),
+        cubit: BlocProvider.of<TipBloc>(context),
         builder: (BuildContext context, TipBlocState state) {
           String title = 'Tips';
           Widget body;

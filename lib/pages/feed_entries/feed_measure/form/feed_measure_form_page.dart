@@ -55,7 +55,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
         return true;
       },
       child: BlocListener(
-          bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
+          cubit: BlocProvider.of<FeedMeasureFormBloc>(context),
           listener: (BuildContext context, FeedMeasureFormBlocState state) {
             if (state is FeedMeasureFormBlocStateDone) {
               BlocProvider.of<TowelieBloc>(context).add(
@@ -66,7 +66,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
             }
           },
           child: BlocBuilder<FeedMeasureFormBloc, FeedMeasureFormBlocState>(
-              bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
+              cubit: BlocProvider.of<FeedMeasureFormBloc>(context),
               builder: (context, state) {
                 String title = '🍌';
                 Widget body;

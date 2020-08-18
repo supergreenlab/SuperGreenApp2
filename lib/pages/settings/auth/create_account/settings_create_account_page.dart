@@ -38,7 +38,7 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
       },
       child: BlocBuilder<SettingsCreateAccountBloc,
           SettingsCreateAccountBlocState>(
-        bloc: BlocProvider.of<SettingsCreateAccountBloc>(context),
+        cubit: BlocProvider.of<SettingsCreateAccountBloc>(context),
         builder: (BuildContext context, SettingsCreateAccountBlocState state) {
           Widget body;
 

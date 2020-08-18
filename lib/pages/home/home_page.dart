@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
             try {
               int nSgl = state.hasPending
                   .where((e) => e.id == 1)
-                  .map<int>((e) => int.parse(e.nNew))
+                  .map<int>((e) => e.nNew)
                   .reduce((a, e) => a + e);
               if (nSgl != null && nSgl > 0) {
                 sglIcon = Stack(
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
             try {
               int nOthers = state.hasPending
                   .where((e) => e.id != 1)
-                  .map<int>((e) => int.parse(e.nNew))
+                  .map<int>((e) => e.nNew)
                   .reduce((a, e) => a + e);
               if (nOthers != null && nOthers > 0) {
                 homeIcon = Stack(

@@ -76,7 +76,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
+      cubit: BlocProvider.of<FeedScheduleFormBloc>(context),
       listener: (BuildContext context, FeedScheduleFormBlocState state) {
         if (state is FeedScheduleFormBlocStateLoaded) {
           if (state.box.device != null) {
@@ -91,7 +91,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
         }
       },
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
-          bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
+          cubit: BlocProvider.of<FeedScheduleFormBloc>(context),
           builder: (BuildContext context, FeedScheduleFormBlocState state) {
             Widget body;
             bool changed = false;

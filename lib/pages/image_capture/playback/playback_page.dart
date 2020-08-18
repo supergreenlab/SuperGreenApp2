@@ -50,7 +50,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
   Widget build(BuildContext context) {
     return Material(
       child: BlocListener(
-        bloc: BlocProvider.of<PlaybackBloc>(context),
+        cubit: BlocProvider.of<PlaybackBloc>(context),
         listener: (context, state) async {
           if (state is PlaybackBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
@@ -64,7 +64,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
           }
         },
         child: BlocBuilder<PlaybackBloc, PlaybackBlocState>(
-            bloc: BlocProvider.of<PlaybackBloc>(context),
+            cubit: BlocProvider.of<PlaybackBloc>(context),
             builder: (context, state) {
               return _renderPlayer(context, state);
             }),

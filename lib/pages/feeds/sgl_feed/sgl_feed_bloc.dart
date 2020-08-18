@@ -33,10 +33,7 @@ class SGLFeedBlocStateInit extends SGLFeedBlocState {
 class SGLFeedBloc
     extends Bloc<SGLFeedBlocEvent, SGLFeedBlocState> {
 
-  SGLFeedBloc();
-
-  @override
-  SGLFeedBlocState get initialState => SGLFeedBlocStateInit();
+  SGLFeedBloc() : super(SGLFeedBlocStateInit());
 
   @override
   Stream<SGLFeedBlocState> mapEventToState(

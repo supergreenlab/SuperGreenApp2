@@ -48,12 +48,9 @@ class TimelapseViewerBloc
     extends Bloc<TimelapseViewerBlocEvent, TimelapseViewerBlocState> {
   final MainNavigateToTimelapseViewer args;
 
-  TimelapseViewerBloc(this.args) {
+  TimelapseViewerBloc(this.args) : super(TimelapseViewerBlocStateInit()) {
     add(TimelapseViewerBlocEventInit());
   }
-
-  @override
-  TimelapseViewerBlocState get initialState => TimelapseViewerBlocStateInit();
 
   @override
   Stream<TimelapseViewerBlocState> mapEventToState(

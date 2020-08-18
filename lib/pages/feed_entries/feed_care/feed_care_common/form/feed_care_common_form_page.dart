@@ -149,7 +149,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        bloc: BlocProvider.of<FormBloc>(context),
+        cubit: BlocProvider.of<FormBloc>(context),
         listener: (BuildContext context, FeedCareCommonFormBlocState state) {
           if (state is FeedCareCommonFormBlocStateDraft) {
             _resumeDraft(context, state.draft);
@@ -163,8 +163,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
           }
         },
         child: BlocBuilder<FeedCareCommonFormBloc, FeedCareCommonFormBlocState>(
-            bloc: BlocProvider.of<FormBloc>(context),
-            condition: (FeedCareCommonFormBlocState beforeState,
+            cubit: BlocProvider.of<FormBloc>(context),
+            buildWhen: (FeedCareCommonFormBlocState beforeState,
                 FeedCareCommonFormBlocState afterState) {
               return afterState is FeedCareCommonFormBlocStateLoading ||
                   afterState is FeedCareCommonFormBlocStateDone ||

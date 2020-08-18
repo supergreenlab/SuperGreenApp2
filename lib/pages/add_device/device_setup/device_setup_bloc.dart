@@ -100,10 +100,7 @@ class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
 class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
   final MainNavigateToDeviceSetupEvent args;
 
-  @override
-  DeviceSetupBlocState get initialState => DeviceSetupBlocState(0);
-
-  DeviceSetupBloc(this.args) {
+  DeviceSetupBloc(this.args) : super(DeviceSetupBlocState(0)) {
     Future.delayed(const Duration(seconds: 1),
         () => this.add(DeviceSetupBlocEventStartSetup()));
   }

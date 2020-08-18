@@ -60,12 +60,9 @@ class SettingsPlantsBloc
   //ignore: unused_field
   final MainNavigateToSettingsPlants args;
 
-  SettingsPlantsBloc(this.args) {
+  SettingsPlantsBloc(this.args) : super(SettingsPlantsBlocStateInit()) {
     add(SettingsPlantsBlocEventInit());
   }
-
-  @override
-  get initialState => SettingsPlantsBlocStateInit();
 
   @override
   Stream<SettingsPlantsBlocState> mapEventToState(event) async* {

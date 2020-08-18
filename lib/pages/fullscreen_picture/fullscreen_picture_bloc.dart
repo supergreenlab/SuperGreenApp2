@@ -39,10 +39,7 @@ class FullscreenPictureBloc
     extends Bloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
   final MainNavigateToFullscreenPicture args;
 
-  FullscreenPictureBloc(this.args);
-
-  @override
-  FullscreenPictureBlocState get initialState => FullscreenPictureBlocState(args.id, args.image);
+  FullscreenPictureBloc(this.args) : super(FullscreenPictureBlocState(args.id, args.image));
 
   @override
   Stream<FullscreenPictureBlocState> mapEventToState(

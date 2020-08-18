@@ -50,7 +50,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         }
       },
       child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
-          bloc: BlocProvider.of<SelectDeviceBloc>(context),
+          cubit: BlocProvider.of<SelectDeviceBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is SelectDeviceBlocStateDeviceListUpdated) {

@@ -46,7 +46,7 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
   Widget build(BuildContext context) {
     return Material(
       child: BlocBuilder<FullscreenPictureBloc, FullscreenPictureBlocState>(
-          bloc: BlocProvider.of<FullscreenPictureBloc>(context),
+          cubit: BlocProvider.of<FullscreenPictureBloc>(context),
           builder: (context, state) {
             return LayoutBuilder(
               builder: (context, constraint) {

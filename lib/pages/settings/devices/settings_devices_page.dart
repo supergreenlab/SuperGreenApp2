@@ -16,7 +16,7 @@ class SettingsDevicesPage extends StatelessWidget {
     return BlocListener<SettingsDevicesBloc, SettingsDevicesBlocState>(
       listener: (BuildContext context, SettingsDevicesBlocState state) {},
       child: BlocBuilder<SettingsDevicesBloc, SettingsDevicesBlocState>(
-        bloc: BlocProvider.of<SettingsDevicesBloc>(context),
+        cubit: BlocProvider.of<SettingsDevicesBloc>(context),
         builder: (BuildContext context, SettingsDevicesBlocState state) {
           Widget body;
 

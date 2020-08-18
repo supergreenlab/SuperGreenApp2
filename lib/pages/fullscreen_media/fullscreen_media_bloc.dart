@@ -47,41 +47,45 @@ class FullscreenMediaBlocState extends Equatable {
 class FullscreenMediaBlocStateInit extends FullscreenMediaBlocState {
   FullscreenMediaBlocStateInit(String thumbnailPath, String filePath,
       bool isVideo, String overlayPath, String heroPath, String sliderTitle)
-      : super(thumbnailPath, filePath, isVideo, overlayPath, heroPath, sliderTitle);
+      : super(thumbnailPath, filePath, isVideo, overlayPath, heroPath,
+            sliderTitle);
 }
 
 class FullscreenMediaBloc
     extends Bloc<FullscreenMediaBlocEvent, FullscreenMediaBlocState> {
   final MainNavigateToFullscreenMedia args;
 
-  get _isVideo {
-    if (args.filePath.startsWith('http')) {
-      String path = Uri.parse(args.filePath).path;
+  static bool _isVideo(String filePath) {
+    if (filePath.startsWith('http')) {
+      String path = Uri.parse(filePath).path;
       return path.endsWith('mp4');
     } else {
-      return args.filePath.endsWith('mp4');
+      return filePath.endsWith('mp4');
     }
   }
 
-  FullscreenMediaBloc(this.args) {
+  FullscreenMediaBloc(this.args)
+      : super(FullscreenMediaBlocState(
+            args.thumbnailPath,
+            args.filePath,
+            FullscreenMediaBloc._isVideo(args.filePath),
+            args.overlayPath,
+            args.heroPath,
+            args.sliderTitle)) {
     add(FullscreenMediaBlocEventInit());
   }
-
-  @override
-  FullscreenMediaBlocState get initialState => FullscreenMediaBlocState(
-      args.thumbnailPath,
-      args.filePath,
-      _isVideo,
-      args.overlayPath,
-      args.heroPath,
-      args.sliderTitle);
 
   @override
   Stream<FullscreenMediaBlocState> mapEventToState(
       FullscreenMediaBlocEvent event) async* {
     if (event is FullscreenMediaBlocEventInit) {
-      yield FullscreenMediaBlocStateInit(args.thumbnailPath, args.filePath,
-          _isVideo, args.overlayPath, args.heroPath, args.sliderTitle);
+      yield FullscreenMediaBlocStateInit(
+          args.thumbnailPath,
+          args.filePath,
+          FullscreenMediaBloc._isVideo(args.filePath),
+          args.overlayPath,
+          args.heroPath,
+          args.sliderTitle);
     }
   }
 }

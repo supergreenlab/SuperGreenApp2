@@ -29,7 +29,7 @@ class AddDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddDeviceBloc, AddDeviceBlocState>(
-        bloc: BlocProvider.of<AddDeviceBloc>(context),
+        cubit: BlocProvider.of<AddDeviceBloc>(context),
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
               'Add new controller',

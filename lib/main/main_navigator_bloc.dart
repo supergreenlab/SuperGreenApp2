@@ -26,7 +26,6 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/data/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 
 class MainNavigatorEvent extends Equatable {
@@ -508,10 +507,7 @@ class MainNavigatorActionPopToRoot extends MainNavigatorEvent {
 
 class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
   final GlobalKey<NavigatorState> _navigatorKey;
-  MainNavigatorBloc(this._navigatorKey);
-
-  @override
-  dynamic get initialState => 0;
+  MainNavigatorBloc(this._navigatorKey) : super(0);
 
   @override
   Stream<dynamic> mapEventToState(MainNavigatorEvent event) async* {

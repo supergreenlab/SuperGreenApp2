@@ -35,7 +35,7 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
         }
       },
       child: BlocBuilder<SettingsLoginBloc, SettingsLoginBlocState>(
-        bloc: BlocProvider.of<SettingsLoginBloc>(context),
+        cubit: BlocProvider.of<SettingsLoginBloc>(context),
         builder: (BuildContext context, SettingsLoginBlocState state) {
           Widget body;
 

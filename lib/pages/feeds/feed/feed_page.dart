@@ -108,7 +108,7 @@ class _FeedPageState extends State<FeedPage> {
         }
       },
       child: BlocBuilder<FeedBloc, FeedBlocState>(
-        bloc: BlocProvider.of<FeedBloc>(context),
+        cubit: BlocProvider.of<FeedBloc>(context),
         builder: (BuildContext context, FeedBlocState state) {
           return _renderCards(context);
         },

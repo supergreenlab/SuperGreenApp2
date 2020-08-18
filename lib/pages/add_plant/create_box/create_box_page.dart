@@ -46,8 +46,8 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      bloc: BlocProvider.of<CreateBoxBloc>(context),
+    return BlocListener<CreateBoxBloc, CreateBoxBlocState>(
+      cubit: BlocProvider.of<CreateBoxBloc>(context),
       listener: (BuildContext context, CreateBoxBlocState state) async {
         if (state is CreateBoxBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -55,7 +55,7 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
         }
       },
       child: BlocBuilder<CreateBoxBloc, CreateBoxBlocState>(
-          bloc: BlocProvider.of<CreateBoxBloc>(context),
+          cubit: BlocProvider.of<CreateBoxBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is CreateBoxBlocStateDone) {

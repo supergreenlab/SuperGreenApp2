@@ -57,13 +57,10 @@ class SettingsAuthBloc
   final MainNavigateToSettingsAuth args;
   bool _isAuth;
 
-  SettingsAuthBloc(this.args) {
+  SettingsAuthBloc(this.args) : super(SettingsAuthBlocStateInit()) {
     _isAuth = AppDB().getAppData().jwt != null;
     add(SettingsAuthBlocEventInit());
   }
-
-  @override
-  SettingsAuthBlocState get initialState => SettingsAuthBlocStateInit();
 
   @override
   Stream<SettingsAuthBlocState> mapEventToState(

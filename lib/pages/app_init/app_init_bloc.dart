@@ -31,7 +31,6 @@ import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
-import 'package:super_green_app/main/analytics_bloc_delegate.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 
@@ -75,10 +74,7 @@ class AppInitBlocStateDone extends AppInitBlocState {
 class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
   AppDB _db = AppDB();
 
-  @override
-  AppInitBlocState get initialState => AppInitBlocStateLoading();
-
-  AppInitBloc() {
+  AppInitBloc() : super(AppInitBlocStateLoading()) {
     add(AppInitBlocEventInit());
   }
 
@@ -98,7 +94,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       final Directory appDocDir = await getApplicationDocumentsDirectory();
       final Directory tmpDocDir = await getTemporaryDirectory();
       Hive.init(appDocDir.path);
-      Hive.registerAdapter(AppDataAdapter(), 35);
+      Hive.registerAdapter(AppDataAdapter());
       AppDB().documentPath = appDocDir.path;
       AppDB().tmpPath = tmpDocDir.path;
 

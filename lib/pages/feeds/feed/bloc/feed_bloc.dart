@@ -19,7 +19,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
@@ -198,13 +197,10 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
   bool initialLoad = true;
   List<FeedEntryState> entries = [];
 
-  FeedBloc(this.provider) {
+  FeedBloc(this.provider) : super(FeedBlocStateInit()) {
     add(FeedBlocEventInit());
     add(FeedBlocEventLoadEntries(10, entries.length));
   }
-
-  @override
-  FeedBlocState get initialState => FeedBlocStateInit();
 
   @override
   Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {

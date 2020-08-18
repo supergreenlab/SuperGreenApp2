@@ -318,6 +318,22 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('DevicesCompanion(')
+          ..write('id: $id, ')
+          ..write('identifier: $identifier, ')
+          ..write('name: $name, ')
+          ..write('ip: $ip, ')
+          ..write('mdns: $mdns, ')
+          ..write('isReachable: $isReachable, ')
+          ..write('isSetup: $isSetup, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
@@ -681,6 +697,18 @@ class ModulesCompanion extends UpdateCompanion<Module> {
       map['array_len'] = Variable<int>(arrayLen.value);
     }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ModulesCompanion(')
+          ..write('id: $id, ')
+          ..write('device: $device, ')
+          ..write('name: $name, ')
+          ..write('isArray: $isArray, ')
+          ..write('arrayLen: $arrayLen')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -1049,6 +1077,20 @@ class ParamsCompanion extends UpdateCompanion<Param> {
       map['ivalue'] = Variable<int>(ivalue.value);
     }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ParamsCompanion(')
+          ..write('id: $id, ')
+          ..write('device: $device, ')
+          ..write('module: $module, ')
+          ..write('key: $key, ')
+          ..write('type: $type, ')
+          ..write('svalue: $svalue, ')
+          ..write('ivalue: $ivalue')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -1504,6 +1546,22 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('PlantsCompanion(')
+          ..write('id: $id, ')
+          ..write('feed: $feed, ')
+          ..write('box: $box, ')
+          ..write('name: $name, ')
+          ..write('single: $single, ')
+          ..write('public: $public, ')
+          ..write('settings: $settings, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
@@ -1923,6 +1981,20 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('BoxesCompanion(')
+          ..write('id: $id, ')
+          ..write('device: $device, ')
+          ..write('deviceBox: $deviceBox, ')
+          ..write('name: $name, ')
+          ..write('settings: $settings, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
@@ -2251,6 +2323,18 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
       map['values'] = Variable<String>(values.value);
     }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ChartCachesCompanion(')
+          ..write('id: $id, ')
+          ..write('plant: $plant, ')
+          ..write('name: $name, ')
+          ..write('date: $date, ')
+          ..write('values: $values')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -2758,6 +2842,25 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('TimelapsesCompanion(')
+          ..write('id: $id, ')
+          ..write('plant: $plant, ')
+          ..write('ssid: $ssid, ')
+          ..write('password: $password, ')
+          ..write('controllerID: $controllerID, ')
+          ..write('rotate: $rotate, ')
+          ..write('name: $name, ')
+          ..write('strain: $strain, ')
+          ..write('dropboxToken: $dropboxToken, ')
+          ..write('uploadName: $uploadName, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $TimelapsesTable extends Timelapses
@@ -3180,6 +3283,18 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('FeedsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('isNewsFeed: $isNewsFeed, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
@@ -3566,6 +3681,21 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('FeedEntriesCompanion(')
+          ..write('id: $id, ')
+          ..write('feed: $feed, ')
+          ..write('date: $date, ')
+          ..write('type: $type, ')
+          ..write('isNew: $isNew, ')
+          ..write('params: $params, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $FeedEntriesTable extends FeedEntries
@@ -3884,6 +4014,17 @@ class FeedEntryDraftsCompanion extends UpdateCompanion<FeedEntryDraft> {
       map['params'] = Variable<String>(params.value);
     }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FeedEntryDraftsCompanion(')
+          ..write('id: $id, ')
+          ..write('feed: $feed, ')
+          ..write('type: $type, ')
+          ..write('params: $params')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -4268,6 +4409,21 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return (StringBuffer('FeedMediasCompanion(')
+          ..write('id: $id, ')
+          ..write('feed: $feed, ')
+          ..write('feedEntry: $feedEntry, ')
+          ..write('filePath: $filePath, ')
+          ..write('thumbnailPath: $thumbnailPath, ')
+          ..write('params: $params, ')
+          ..write('serverID: $serverID, ')
+          ..write('synced: $synced')
+          ..write(')'))
+        .toString();
+  }
 }
 
 class $FeedMediasTable extends FeedMedias
@@ -4570,6 +4726,16 @@ class DeletesCompanion extends UpdateCompanion<Delete> {
       map['type'] = Variable<String>(type.value);
     }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeletesCompanion(')
+          ..write('id: $id, ')
+          ..write('serverID: $serverID, ')
+          ..write('type: $type')
+          ..write(')'))
+        .toString();
   }
 }
 

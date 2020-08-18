@@ -65,12 +65,9 @@ class SettingsBoxesBloc
   //ignore: unused_field
   final MainNavigateToSettingsBoxes args;
 
-  SettingsBoxesBloc(this.args) {
+  SettingsBoxesBloc(this.args) : super(SettingsBoxesBlocStateInit()) {
     add(SettingsBoxesBlocEventInit());
   }
-
-  @override
-  get initialState => SettingsBoxesBlocStateInit();
 
   @override
   Stream<SettingsBoxesBlocState> mapEventToState(event) async* {

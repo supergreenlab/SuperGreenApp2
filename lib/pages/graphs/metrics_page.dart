@@ -7,7 +7,6 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/graphs/metrics_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class MetricsPage extends StatefulWidget {
@@ -42,7 +41,7 @@ class _MetricsPageState extends State<MetricsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MetricsBloc, MetricsBlocState>(
-        bloc: BlocProvider.of<MetricsBloc>(context),
+        cubit: BlocProvider.of<MetricsBloc>(context),
         builder: (BuildContext context, MetricsBlocState state) {
           Widget body;
           List annotations;

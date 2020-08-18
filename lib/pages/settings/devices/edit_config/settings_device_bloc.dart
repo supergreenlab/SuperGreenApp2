@@ -83,12 +83,9 @@ class SettingsDeviceBloc
   final MainNavigateToSettingsDevice args;
   Device device;
 
-  SettingsDeviceBloc(this.args) {
+  SettingsDeviceBloc(this.args) : super(SettingsDeviceBlocStateLoading()) {
     add(SettingsDeviceBlocEventInit());
   }
-
-  @override
-  SettingsDeviceBlocState get initialState => SettingsDeviceBlocStateLoading();
 
   @override
   Stream<SettingsDeviceBlocState> mapEventToState(

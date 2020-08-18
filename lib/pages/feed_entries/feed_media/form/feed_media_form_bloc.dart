@@ -111,10 +111,7 @@ class FeedMediaFormBloc
     extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent args;
 
-  @override
-  FeedMediaFormBlocState get initialState => FeedMediaFormBlocState();
-
-  FeedMediaFormBloc(this.args) {
+  FeedMediaFormBloc(this.args) : super(FeedMediaFormBlocState()) {
     add(FeedMediaFormBlocEventLoadDraft());
   }
 

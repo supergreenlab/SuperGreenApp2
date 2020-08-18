@@ -266,8 +266,7 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieButtonCreateAccount(),
   ];
 
-  @override
-  TowelieBlocState get initialState => TowelieBlocState();
+  TowelieBloc() : super(TowelieBlocState());
 
   @override
   Stream<TowelieBlocState> mapEventToState(TowelieBlocEvent event) async* {

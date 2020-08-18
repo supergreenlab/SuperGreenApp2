@@ -73,10 +73,7 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   MainNavigateToNewDeviceEvent args;
   final PermissionHandler permissionHandler = PermissionHandler();
 
-  @override
-  NewDeviceBlocState get initialState => NewDeviceBlocState();
-
-  NewDeviceBloc(this.args) {
+  NewDeviceBloc(this.args) : super(NewDeviceBlocState()) {
     Future.delayed(const Duration(seconds: 1), () => this.add(NewDeviceBlocEventStartSearch()));
   }
 

@@ -8,10 +8,13 @@ part of 'app_data.dart';
 
 class AppDataAdapter extends TypeAdapter<AppData> {
   @override
+  final int typeId = 35;
+
+  @override
   AppData read(BinaryReader reader) {
-    var numOfFields = reader.readByte();
-    var fields = <int, dynamic>{
-      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AppData()
       ..firstStart = fields[0] as bool
@@ -42,4 +45,14 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..writeByte(6)
       ..write(obj.syncOverGSM);
   }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppDataAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

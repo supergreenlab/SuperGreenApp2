@@ -55,7 +55,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<SettingsPlantBloc>(context),
+      cubit: BlocProvider.of<SettingsPlantBloc>(context),
       listener: (BuildContext context, SettingsPlantBlocState state) async {
         if (state is SettingsPlantBlocStateLoaded) {
           _nameController = TextEditingController(text: state.plant.name);
@@ -69,7 +69,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
         }
       },
       child: BlocBuilder<SettingsPlantBloc, SettingsPlantBlocState>(
-          bloc: BlocProvider.of<SettingsPlantBloc>(context),
+          cubit: BlocProvider.of<SettingsPlantBloc>(context),
           builder: (BuildContext context, SettingsPlantBlocState state) {
             Widget body;
             if (state is SettingsDeviceBlocStateLoading) {

@@ -44,7 +44,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
+      cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
         if (state is FeedVentilationFormBlocStateLoaded) {
           if (state.box.device != null) {
@@ -63,7 +63,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         }
       },
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
-          bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
+          cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is FeedVentilationFormBlocStateLoading) {

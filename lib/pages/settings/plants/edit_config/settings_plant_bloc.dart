@@ -56,12 +56,9 @@ class SettingsPlantBloc
   Plant plant;
   Box box;
 
-  SettingsPlantBloc(this.args) {
+  SettingsPlantBloc(this.args) : super(SettingsPlantBlocStateLoading()) {
     add(SettingsPlantBlocEventInit());
   }
-
-  @override
-  SettingsPlantBlocState get initialState => SettingsPlantBlocStateLoading();
 
   @override
   Stream<SettingsPlantBlocState> mapEventToState(

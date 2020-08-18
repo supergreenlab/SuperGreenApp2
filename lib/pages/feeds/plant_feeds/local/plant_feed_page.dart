@@ -96,7 +96,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           }
         },
         child: BlocBuilder<PlantFeedBloc, PlantFeedBlocState>(
-          bloc: BlocProvider.of<PlantFeedBloc>(context),
+          cubit: BlocProvider.of<PlantFeedBloc>(context),
           builder: (BuildContext context, PlantFeedBlocState state) {
             Widget body;
             if (_speedDialOpen) {
@@ -583,8 +583,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   Widget _plantList(BuildContext context, PlantFeedBlocState plantFeedState) {
     return BlocBuilder<PlantDrawerBloc, PlantDrawerBlocState>(
-      bloc: BlocProvider.of<PlantDrawerBloc>(context),
-      condition: (previousState, state) =>
+      cubit: BlocProvider.of<PlantDrawerBloc>(context),
+      buildWhen: (previousState, state) =>
           state is PlantDrawerBlocStateLoadingPlantList ||
           state is PlantDrawerBlocStatePlantListUpdated,
       builder: (BuildContext context, PlantDrawerBlocState state) {
@@ -632,7 +632,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   try {
                     int nOthers = state.hasPending
                         .where((e) => e.id == p.feed)
-                        .map<int>((e) => int.parse(e.nNew))
+                        .map<int>((e) => e.nNew)
                         .reduce((a, e) => a + e);
                     if (nOthers != null && nOthers > 0) {
                       item = Stack(
