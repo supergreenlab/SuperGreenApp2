@@ -84,6 +84,13 @@ class FeedMediaFormBlocStateDraft extends FeedMediaFormBlocState {
   List<Object> get props => [draft];
 }
 
+class FeedMediaFormBlocStateNoDraft extends FeedMediaFormBlocState {
+  FeedMediaFormBlocStateNoDraft();
+
+  @override
+  List<Object> get props => [];
+}
+
 class FeedMediaFormBlocStateCurrentDraft extends FeedMediaFormBlocState {
   final FeedMediaDraft draft;
 
@@ -126,6 +133,7 @@ class FeedMediaFormBloc
         yield FeedMediaFormBlocStateDraft(
             FeedMediaDraft.fromJSON(draft.id, draft.params));
       } catch (e) {
+        yield FeedMediaFormBlocStateNoDraft();
         Logger.log(e);
       }
     } else if (event is FeedMediaFormBlocEventDeleteDraft) {

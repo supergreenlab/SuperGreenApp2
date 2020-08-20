@@ -133,9 +133,17 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
   Widget build(BuildContext context) {
     return BlocListener(
         cubit: BlocProvider.of<FeedMediaFormBloc>(context),
-        listener: (BuildContext context, FeedMediaFormBlocState state) {
+        listener: (BuildContext context, FeedMediaFormBlocState state) async {
           if (state is FeedMediaFormBlocStateDraft) {
             _resumeDraft(context, state.draft);
+          } else if (state is FeedMediaFormBlocStateNoDraft) {
+            List<FeedMediasCompanion> feedMedias = await _takePic(context);
+            if (feedMedias != null) {
+              setState(() {
+                _medias.addAll(feedMedias);
+                _saveDraft();
+              });
+            }
           } else if (state is FeedMediaFormBlocStateCurrentDraft) {
             draft = state.draft;
           } else if (state is FeedMediaFormBlocStateDone) {
