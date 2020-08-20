@@ -162,7 +162,9 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
             builder: (context, state) {
               String title = '🧐';
               Widget body;
-              if (state is FeedMediaFormBlocStateLoading) {
+              if (state is FeedMediaFormBlocStateLoadingDraft) {
+                body = Scaffold(body: FullscreenLoading(title: 'Loading..'));
+              } else if (state is FeedMediaFormBlocStateLoading) {
                 body = Scaffold(
                     appBar: SGLAppBar(
                       title,

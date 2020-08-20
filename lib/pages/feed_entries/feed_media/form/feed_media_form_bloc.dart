@@ -75,6 +75,13 @@ class FeedMediaFormBlocState extends Equatable {
   List<Object> get props => [];
 }
 
+class FeedMediaFormBlocStateLoadingDraft extends FeedMediaFormBlocState {
+  FeedMediaFormBlocStateLoadingDraft();
+
+  @override
+  List<Object> get props => [];
+}
+
 class FeedMediaFormBlocStateDraft extends FeedMediaFormBlocState {
   final FeedMediaDraft draft;
 
@@ -118,7 +125,7 @@ class FeedMediaFormBloc
     extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent args;
 
-  FeedMediaFormBloc(this.args) : super(FeedMediaFormBlocState()) {
+  FeedMediaFormBloc(this.args) : super(FeedMediaFormBlocStateLoadingDraft()) {
     add(FeedMediaFormBlocEventLoadDraft());
   }
 
