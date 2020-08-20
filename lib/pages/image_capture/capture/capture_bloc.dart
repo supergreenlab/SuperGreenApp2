@@ -37,12 +37,12 @@ class CaptureBlocEventInit extends CaptureBlocEvent {
 }
 
 class CaptureBlocEventCreate extends CaptureBlocEvent {
-  final String filePath;
+  final List<File> files;
 
-  CaptureBlocEventCreate(this.filePath);
+  CaptureBlocEventCreate(this.files);
 
   @override
-  List<Object> get props => [filePath];
+  List<Object> get props => [files];
 }
 
 class CaptureBlocState extends Equatable {
@@ -63,20 +63,22 @@ class CaptureBlocStateInit extends CaptureBlocState {
 }
 
 class CaptureBlocStateDone extends CaptureBlocState {
-  final FeedMediasCompanion feedMedia;
+  final List<FeedMediasCompanion> feedMedias;
 
-  CaptureBlocStateDone(
-      this.feedMedia, bool videoEnabled, bool pickerEnabled, String overlayPath)
+  CaptureBlocStateDone(this.feedMedias, bool videoEnabled, bool pickerEnabled,
+      String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
-  List<Object> get props => [feedMedia];
+  List<Object> get props => [feedMedias];
 }
 
 class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   final MainNavigateToImageCaptureEvent args;
 
-  CaptureBloc(this.args) : super(CaptureBlocState(args.videoEnabled, args.pickerEnabled, args.overlayPath)) {
+  CaptureBloc(this.args)
+      : super(CaptureBlocState(
+            args.videoEnabled, args.pickerEnabled, args.overlayPath)) {
     add(CaptureBlocEventInit());
   }
 
@@ -86,34 +88,40 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
       yield CaptureBlocStateInit(
           args.videoEnabled, args.pickerEnabled, args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
-      String fileName = basename(event.filePath);
-      String thumbnailPath =
-          event.filePath.replaceFirst(fileName, 'thumbnail_$fileName');
-      if (thumbnailPath.endsWith('mp4')) {
-        thumbnailPath = thumbnailPath.replaceFirst('.mp4', '.jpg');
-        await VideoThumbnail.thumbnailFile(
-          video: FeedMedias.makeAbsoluteFilePath(event.filePath),
-          thumbnailPath: FeedMedias.makeAbsoluteFilePath(thumbnailPath),
-          imageFormat: ImageFormat.JPEG,
-          quality: 50,
-        );
-        await optimizePicture(thumbnailPath, thumbnailPath);
-      } else {
-        await optimizePicture(event.filePath, thumbnailPath);
+      List<FeedMediasCompanion> feedMedias = [];
+      int i = 1;
+      for (File file in event.files) {
+        String filePath =
+            '${FeedMedias.makeFilePath()}-${i++}.${file.path.split('.').last}';
+        await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
+        String fileName = basename(filePath);
+        String thumbnailPath =
+            filePath.replaceFirst(fileName, 'thumbnail_$fileName');
+        if (thumbnailPath.endsWith('mp4')) {
+          thumbnailPath = thumbnailPath.replaceFirst('.mp4', '.jpg');
+          await VideoThumbnail.thumbnailFile(
+            video: FeedMedias.makeAbsoluteFilePath(filePath),
+            thumbnailPath: FeedMedias.makeAbsoluteFilePath(thumbnailPath),
+            imageFormat: ImageFormat.JPEG,
+            quality: 50,
+          );
+          await optimizePicture(thumbnailPath, thumbnailPath);
+        } else {
+          await optimizePicture(filePath, thumbnailPath);
+        }
+        feedMedias.add(FeedMediasCompanion(
+          filePath: Value(filePath),
+          thumbnailPath: Value(thumbnailPath),
+        ));
       }
-      final feedMedia = FeedMediasCompanion(
-        filePath: Value(event.filePath),
-        thumbnailPath: Value(thumbnailPath),
-      );
       yield CaptureBlocStateDone(
-          feedMedia, args.videoEnabled, args.pickerEnabled, args.overlayPath);
+          feedMedias, args.videoEnabled, args.pickerEnabled, args.overlayPath);
     }
   }
 
   Future optimizePicture(String from, String to) async {
     Image image = decodeImage(
-        await File(FeedMedias.makeAbsoluteFilePath(from))
-            .readAsBytes());
+        await File(FeedMedias.makeAbsoluteFilePath(from)).readAsBytes());
     Image thumbnail = copyResize(image,
         height: image.height > image.width ? 800 : null,
         width: image.width >= image.height ? 800 : null);

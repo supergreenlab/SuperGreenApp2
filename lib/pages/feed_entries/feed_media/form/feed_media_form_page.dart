@@ -43,7 +43,8 @@ class FeedMediaDraft extends FeedEntryDraftState {
   final String message;
   final bool helpRequest;
 
-  FeedMediaDraft(int draftID, this.time, this.medias, this.message, this.helpRequest)
+  FeedMediaDraft(
+      int draftID, this.time, this.medias, this.message, this.helpRequest)
       : super(draftID);
 
   factory FeedMediaDraft.fromJSON(int draftID, String json) {
@@ -252,10 +253,10 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
           },
           onPressed: (FeedMediasCompanion media) async {
             if (media == null) {
-              FeedMediasCompanion fm = await _takePic(context);
-              if (fm != null) {
+              List<FeedMediasCompanion> feedMedias = await _takePic(context);
+              if (feedMedias != null) {
                 setState(() {
-                  _medias.add(fm);
+                  _medias.addAll(feedMedias);
                   _saveDraft();
                 });
               }
@@ -268,11 +269,11 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
-                FeedMediasCompanion fm = await _takePic(context);
-                if (fm != null) {
+                List<FeedMediasCompanion> feedMedias = await _takePic(context);
+                if (feedMedias != null) {
                   setState(() {
                     int i = _medias.indexOf(media);
-                    _medias.replaceRange(i, i + 1, [fm]);
+                    _medias.replaceRange(i, i + 1, feedMedias);
                     _saveDraft();
                   });
                 }
@@ -286,12 +287,12 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
     ];
   }
 
-  Future<FeedMediasCompanion> _takePic(BuildContext context) async {
+  Future<List<FeedMediasCompanion>> _takePic(BuildContext context) async {
     FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
     BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
-    FeedMediasCompanion fm = await futureFn.future;
-    return fm;
+    List<FeedMediasCompanion> feedMedias = await futureFn.future;
+    return feedMedias;
   }
 
   Widget _renderTextrea(BuildContext context, FeedMediaFormBlocState state) {

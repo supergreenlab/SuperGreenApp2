@@ -19,9 +19,9 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
@@ -41,6 +41,8 @@ class _CapturePageState extends State<CapturePage> {
   bool _videoMode = false;
   bool _popDone = true;
 
+  bool _loading = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -54,7 +56,7 @@ class _CapturePageState extends State<CapturePage> {
         } else if (state is CaptureBlocStateDone) {
           _popDone = true;
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: state.feedMedia));
+              .add(MainNavigatorActionPop(param: state.feedMedias));
         }
       },
       child: BlocBuilder<CaptureBloc, CaptureBlocState>(
@@ -62,6 +64,10 @@ class _CapturePageState extends State<CapturePage> {
           builder: (context, state) {
             if (_cameraController != null &&
                 _cameraController.value.isInitialized == true) {
+              if (_loading) {
+                return Scaffold(
+                    body: FullscreenLoading(title: 'Copying medias..'));
+              }
               if (_cameraController.value.isRecordingVideo == true) {
                 return _renderCameraRecording(context, state);
               } else {
@@ -82,11 +88,9 @@ class _CapturePageState extends State<CapturePage> {
       },
       child: WillPopScope(
         onWillPop: () async {
-          if (!_popDone) {
-            if (_filePath != null) {
-              await _deleteFileIfExists(
-                  FeedMedias.makeAbsoluteFilePath(_filePath));
-            }
+          if (_filePath != null) {
+            await _deleteFileIfExists(
+                FeedMedias.makeAbsoluteFilePath(_filePath));
           }
           return true;
         },
@@ -111,7 +115,9 @@ class _CapturePageState extends State<CapturePage> {
                         fit: BoxFit.contain,
                         child: Opacity(
                             opacity: 0.6,
-                            child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath))))));
+                            child: Image.file(File(
+                                FeedMedias.makeAbsoluteFilePath(
+                                    state.overlayPath))))));
                 cameraPreview = Stack(children: [
                   cameraPreview,
                   overlay,
@@ -204,15 +210,14 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   Widget _renderLoading(BuildContext context, CaptureBlocState state) {
-    return FullscreenLoading();
+    return Scaffold(body: FullscreenLoading());
   }
 
   Widget _renderCloseButton(BuildContext context) {
     return RawMaterialButton(
       onPressed: () async {
         if (_filePath != null) {
-          await _deleteFileIfExists(
-              FeedMedias.makeAbsoluteFilePath(_filePath));
+          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
         }
         BlocProvider.of<MainNavigatorBloc>(context)
             .add(MainNavigatorActionPop());
@@ -281,23 +286,35 @@ class _CapturePageState extends State<CapturePage> {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: Icon(Icons.library_books, color: Colors.white54),
                   onPressed: () async {
-                    if (_videoMode) {
-                      File video = await ImagePicker.pickVideo(
-                          source: ImageSource.gallery);
-                      if (video != null) {
-                        _filePath = '${FeedMedias.makeFilePath()}.mp4';
-                        await video.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
-                        _endCapture(state);
-                      }
-                    } else {
-                      File image = await ImagePicker.pickImage(
-                          source: ImageSource.gallery);
-                      if (image != null) {
-                        _filePath = '${FeedMedias.makeFilePath()}.jpg';
-                        await image.copy(FeedMedias.makeAbsoluteFilePath(_filePath));
-                        _endCapture(state);
-                      }
-                    }
+                    List<File> files = await FilePicker.getMultiFile(
+                      type: FileType.custom,
+                      allowedExtensions: ['jpg', 'mp4'],
+                    );
+                    setState(() {
+                      _loading = true;
+                    });
+                    BlocProvider.of<CaptureBloc>(context)
+                        .add(CaptureBlocEventCreate(files));
+
+                    // if (_videoMode) {
+                    //   File video = await ImagePicker.pickVideo(
+                    //       source: ImageSource.gallery);
+                    //   if (video != null) {
+                    //     _filePath = '${FeedMedias.makeFilePath()}.mp4';
+                    //     await video
+                    //         .copy(FeedMedias.makeAbsoluteFilePath(_filePath));
+                    //     _endCapture(state);
+                    //   }
+                    // } else {
+                    //   File image = await ImagePicker.pickImage(
+                    //       source: ImageSource.gallery);
+                    //   if (image != null) {
+                    //     _filePath = '${FeedMedias.makeFilePath()}.jpg';
+                    //     await image
+                    //         .copy(FeedMedias.makeAbsoluteFilePath(_filePath));
+                    //     _endCapture(state);
+                    //   }
+                    // }
                   },
                 ),
               ],
@@ -322,8 +339,7 @@ class _CapturePageState extends State<CapturePage> {
     return _renderBottomButton(context, Icons.photo_camera, Colors.blue,
         () async {
       if (_filePath != null) {
-        await _deleteFileIfExists(
-            FeedMedias.makeAbsoluteFilePath(_filePath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
       }
       _filePath = '${FeedMedias.makeFilePath()}.jpg';
       String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
@@ -335,8 +351,7 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderCameraButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.videocam, Colors.blue, () async {
       if (_filePath != null) {
-        await _deleteFileIfExists(
-            FeedMedias.makeAbsoluteFilePath(_filePath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
       }
       _filePath = '${FeedMedias.makeFilePath()}.mp4';
       String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
@@ -376,12 +391,14 @@ class _CapturePageState extends State<CapturePage> {
             overlayPath: state.overlayPath, futureFn: (f) async {
       final ret = await f;
       if (ret == null || ret == false) {
-        await _deleteFileIfExists(
-            FeedMedias.makeAbsoluteFilePath(_filePath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
         return;
       }
-      BlocProvider.of<CaptureBloc>(context)
-          .add(CaptureBlocEventCreate(_filePath));
+      setState(() {
+        _loading = true;
+      });
+      BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreate(
+          [File(FeedMedias.makeAbsoluteFilePath(_filePath))]));
     }));
   }
 

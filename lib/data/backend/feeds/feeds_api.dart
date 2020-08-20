@@ -63,10 +63,10 @@ class FeedsAPI {
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
       _serverHost = local
-          ? 'http://192.168.1.122:8080'
+          ? 'http://192.168.1.124:8080'
           : 'https://devapi2.supergreenlab.com';
       _storageServerHost = local
-          ? 'http://192.168.1.122:9000'
+          ? 'http://192.168.1.124:9000'
           : 'https://devstorage.supergreenlab.com';
       _storageServerHostHeader =
           local ? 'minio:9000' : 'devstorage.supergreenlab.com';

@@ -211,29 +211,29 @@ class RelDB extends _$RelDB {
           continue;
         }
         try {
-        String filePath = FeedMedias.makeAbsoluteFilePath(feedMedia.filePath);
-        String thumbnailPath =
-            FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath);
-        List<int> header = (await File(filePath).openRead(0, 12).toList())
-            .reduce((value, element) => value..addAll(element));
-        if (listEquals(header, mp4Header)) {
-          File(filePath).renameSync('$filePath.mp4');
-          File(thumbnailPath).renameSync('$thumbnailPath.jpg');
-          await feedsDAO.updateFeedMedia(FeedMediasCompanion(
-            id: Value(feedMedia.id),
-            filePath: Value('${feedMedia.filePath}.mp4'),
-            thumbnailPath: Value('${feedMedia.thumbnailPath}.jpg'),
-          ));
-        } else {
-          File(filePath).renameSync('$filePath.jpg');
-          File(thumbnailPath).renameSync('$thumbnailPath.jpg');
-          await feedsDAO.updateFeedMedia(FeedMediasCompanion(
-            id: Value(feedMedia.id),
-            filePath: Value('${feedMedia.filePath}.jpg'),
-            thumbnailPath: Value('${feedMedia.thumbnailPath}.jpg'),
-          ));
-        }
-        } catch(e) {
+          String filePath = FeedMedias.makeAbsoluteFilePath(feedMedia.filePath);
+          String thumbnailPath =
+              FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath);
+          List<int> header = (await File(filePath).openRead(0, 12).toList())
+              .reduce((value, element) => value..addAll(element));
+          if (listEquals(header, mp4Header)) {
+            File(filePath).renameSync('$filePath.mp4');
+            File(thumbnailPath).renameSync('$thumbnailPath.jpg');
+            await feedsDAO.updateFeedMedia(FeedMediasCompanion(
+              id: Value(feedMedia.id),
+              filePath: Value('${feedMedia.filePath}.mp4'),
+              thumbnailPath: Value('${feedMedia.thumbnailPath}.jpg'),
+            ));
+          } else {
+            File(filePath).renameSync('$filePath.jpg');
+            File(thumbnailPath).renameSync('$thumbnailPath.jpg');
+            await feedsDAO.updateFeedMedia(FeedMediasCompanion(
+              id: Value(feedMedia.id),
+              filePath: Value('${feedMedia.filePath}.jpg'),
+              thumbnailPath: Value('${feedMedia.thumbnailPath}.jpg'),
+            ));
+          }
+        } catch (e) {
           print(e);
         }
       }

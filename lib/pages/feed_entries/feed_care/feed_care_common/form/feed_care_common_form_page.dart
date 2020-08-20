@@ -287,10 +287,10 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-                FeedMediasCompanion fm = await f;
-                if (fm != null) {
+                List<FeedMediasCompanion> feedMedias = await f;
+                if (feedMedias != null) {
                   setState(() {
-                    _beforeMedias.add(fm);
+                    _beforeMedias.addAll(feedMedias);
                     _saveDraft();
                   });
                 }
@@ -304,11 +304,11 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
-                FeedMediasCompanion fm = await _takePic(context);
-                if (fm != null) {
+                List<FeedMediasCompanion> feedMedias = await _takePic(context);
+                if (feedMedias != null) {
                   setState(() {
                     int i = _beforeMedias.indexOf(media);
-                    _beforeMedias.replaceRange(i, i + 1, [fm]);
+                    _beforeMedias.replaceRange(i, i + 1, feedMedias);
                     _saveDraft();
                   });
                 }
@@ -359,10 +359,10 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-                FeedMediasCompanion fm = await f;
-                if (fm != null) {
+                List<FeedMediasCompanion> feedMedias = await f;
+                if (feedMedias != null) {
                   setState(() {
-                    _afterMedias.add(fm);
+                    _afterMedias.addAll(feedMedias);
                     _saveDraft();
                   });
                 }
@@ -376,11 +376,11 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
-                FeedMediasCompanion fm = await _takePic(context);
-                if (fm != null) {
+                List<FeedMediasCompanion> feedMedias = await _takePic(context);
+                if (feedMedias != null) {
                   setState(() {
                     int i = _afterMedias.indexOf(media);
-                    _afterMedias.replaceRange(i, i + 1, [fm]);
+                    _afterMedias.replaceRange(i, i + 1, feedMedias);
                     _saveDraft();
                   });
                 }
@@ -394,12 +394,12 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
     ];
   }
 
-  Future<FeedMediasCompanion> _takePic(BuildContext context) async {
+  Future<List<FeedMediasCompanion>> _takePic(BuildContext context) async {
     FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
     BlocProvider.of<MainNavigatorBloc>(context)
         .add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
-    FeedMediasCompanion fm = await futureFn.future;
-    return fm;
+    List<FeedMediasCompanion> feedMedias = await futureFn.future;
+    return feedMedias;
   }
 
   Widget _renderTextrea(
