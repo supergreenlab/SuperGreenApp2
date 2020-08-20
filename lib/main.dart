@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -44,6 +45,7 @@ void main() async {
             BlocProvider<SyncerBloc>(create: (context) => SyncerBloc()),
             BlocProvider<LocalNotificationBloc>(
                 create: (context) => LocalNotificationBloc()),
+            BlocProvider<DeepLinkBloc>(create: (context) => DeepLinkBloc()),
           ],
           child:
               BlocListener<LocalNotificationBloc, LocalNotificationBlocState>(

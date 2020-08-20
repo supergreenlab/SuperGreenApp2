@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -38,6 +39,8 @@ class AppInitPage extends StatelessWidget {
           BlocProvider.of<DeviceDaemonBloc>(
               context); // force-instanciate DeviceDaemonBloc
           BlocProvider.of<SyncerBloc>(context); // force-instanciate SyncerBloc
+          BlocProvider.of<DeepLinkBloc>(
+              context); // force-instanciate DeepLinkBloc
           if (state.firstStart == false) {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigateToHomeEvent());

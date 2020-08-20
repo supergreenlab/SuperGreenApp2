@@ -69,7 +69,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
       return FullscreenLoading();
     }
     return GridView.builder(
-      itemCount: state.eof ? plants.length : plants.length+1,
+      itemCount: state.eof ? plants.length : plants.length + 1,
       itemBuilder: (BuildContext context, int index) {
         if (index > plants.length) {
           return null;
@@ -96,7 +96,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
         return InkWell(
           onTap: () {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToPublicPlant(plant.id, plant.name));
+                .add(MainNavigateToPublicPlant(plant.id, name: plant.name));
           },
           child: Stack(
             children: <Widget>[

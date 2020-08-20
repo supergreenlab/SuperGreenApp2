@@ -22,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/local_notification/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -166,32 +167,40 @@ class _MainPageState extends State<MainPage> {
                   .add(state.localNotificationBlocEventReminder);
             }
           },
-          child: MaterialApp(
-            //navigatorObservers: [_analyticsObserver,],
-            localizationsDelegates: [
-              const SGLLocalizationsDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale('en'),
-              const Locale('es'),
-              const Locale('fr'),
-            ],
-            navigatorKey: widget._navigatorKey,
-            onGenerateTitle: (BuildContext context) =>
-                SGLLocalizations.of(context).title,
-            onGenerateRoute: (settings) => CupertinoPageRoute(
-                settings: settings,
-                builder: (context) => wrapSyncIndicator(
-                    TowelieHelper.wrapWidget(settings, context,
-                        _onGenerateRoute(context, settings)))),
-            theme: ThemeData(
-              fontFamily: 'Roboto',
-            ),
-            home: BlocProvider<AppInitBloc>(
-              create: (context) => AppInitBloc(),
-              child: AppInitPage(),
+          child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
+            listener: (BuildContext context, state) {
+              if (state is DeepLinkBlocStateMainNavigation) {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(state.mainNavigatorEvent);
+              }
+            },
+            child: MaterialApp(
+              //navigatorObservers: [_analyticsObserver,],
+              localizationsDelegates: [
+                const SGLLocalizationsDelegate(),
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: [
+                const Locale('en'),
+                const Locale('es'),
+                const Locale('fr'),
+              ],
+              navigatorKey: widget._navigatorKey,
+              onGenerateTitle: (BuildContext context) =>
+                  SGLLocalizations.of(context).title,
+              onGenerateRoute: (settings) => CupertinoPageRoute(
+                  settings: settings,
+                  builder: (context) => wrapSyncIndicator(
+                      TowelieHelper.wrapWidget(settings, context,
+                          _onGenerateRoute(context, settings)))),
+              theme: ThemeData(
+                fontFamily: 'Roboto',
+              ),
+              home: BlocProvider<AppInitBloc>(
+                create: (context) => AppInitBloc(),
+                child: AppInitPage(),
+              ),
             ),
           ),
         ),

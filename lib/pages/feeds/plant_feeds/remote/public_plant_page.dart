@@ -47,7 +47,7 @@ class PublicPlantPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => FeedBloc(RemotePlantFeedBlocDelegate(state.plantID)),
       child: FeedPage(
-        title: state.plantName,
+        title: state.plantName ?? '',
         pinned: true,
         color: Colors.indigo,
         appBarHeight: 380,

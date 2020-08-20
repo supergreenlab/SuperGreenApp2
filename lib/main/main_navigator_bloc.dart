@@ -260,7 +260,8 @@ class MainNavigateToFeedLifeEventFormEvent extends MainNavigateToFeedFormEvent {
   final Plant plant;
   final PlantPhases phase;
 
-  MainNavigateToFeedLifeEventFormEvent(this.plant, this.phase, {pushAsReplacement = false})
+  MainNavigateToFeedLifeEventFormEvent(this.plant, this.phase,
+      {pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
@@ -471,7 +472,7 @@ class MainNavigateToPublicPlant extends MainNavigatorEvent {
   final String id;
   final String name;
 
-  MainNavigateToPublicPlant(this.id, this.name);
+  MainNavigateToPublicPlant(this.id, {this.name});
 
   @override
   List<Object> get props => [id, name];
