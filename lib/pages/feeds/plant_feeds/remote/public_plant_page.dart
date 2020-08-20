@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
@@ -51,6 +53,19 @@ class PublicPlantPage extends StatelessWidget {
         pinned: true,
         color: Colors.indigo,
         appBarHeight: 380,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.share,
+              color: Colors.white,
+            ),
+            onPressed: () async {
+              await ShareExtend.share(
+                  "sglapp://supergreenlab.com/public/plant?id=${state.plantID}",
+                  'text');
+            },
+          ),
+        ],
         appBar: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(top: 45.0),
