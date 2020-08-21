@@ -51,7 +51,10 @@ class DeepLinkBloc extends Bloc<DeepLinkBlocEvent, DeepLinkBlocState> {
     if (event is DeepLinkBlocEventInit) {
       Uri initialUri = await getInitialUri();
       if (initialUri != null) {
-        add(DeepLinkBlocEventUri(initialUri));
+        // TODO find something better
+        Timer(Duration(seconds: 2), () {
+          add(DeepLinkBlocEventUri(initialUri));
+        });
       }
       _sub = getUriLinksStream().listen((Uri uri) {
         add(DeepLinkBlocEventUri(uri));
@@ -61,7 +64,6 @@ class DeepLinkBloc extends Bloc<DeepLinkBlocEvent, DeepLinkBlocState> {
         yield DeepLinkBlocStateMainNavigation(
             MainNavigateToPublicPlant(event.uri.queryParameters['id']));
       }
-      print(event.uri.queryParametersAll);
     }
   }
 
