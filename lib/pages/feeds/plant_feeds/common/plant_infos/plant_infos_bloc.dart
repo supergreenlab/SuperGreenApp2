@@ -54,14 +54,14 @@ class PlantInfos extends Equatable {
       );
 }
 
-abstract class PlantInfosEvent extends Equatable {}
+abstract class PlantInfosBlocEvent extends Equatable {}
 
-class PlantInfosEventLoad extends PlantInfosEvent {
+class PlantInfosEventLoad extends PlantInfosBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class PlantInfosEventLoaded extends PlantInfosEvent {
+class PlantInfosEventLoaded extends PlantInfosBlocEvent {
   final PlantInfos plantInfos;
 
   PlantInfosEventLoaded(this.plantInfos);
@@ -70,7 +70,7 @@ class PlantInfosEventLoaded extends PlantInfosEvent {
   List<Object> get props => [plantInfos];
 }
 
-class PlantInfosEventUpdate extends PlantInfosEvent {
+class PlantInfosEventUpdate extends PlantInfosBlocEvent {
   final PlantInfos plantInfos;
 
   PlantInfosEventUpdate(this.plantInfos);
@@ -79,7 +79,7 @@ class PlantInfosEventUpdate extends PlantInfosEvent {
   List<Object> get props => [plantInfos];
 }
 
-class PlantInfosEventUpdatePhase extends PlantInfosEvent {
+class PlantInfosEventUpdatePhase extends PlantInfosBlocEvent {
   final PlantPhases phase;
   final DateTime date;
 
@@ -89,61 +89,62 @@ class PlantInfosEventUpdatePhase extends PlantInfosEvent {
   List<Object> get props => [phase, date];
 }
 
-abstract class PlantInfosState extends Equatable {}
+abstract class PlantInfosBlocState extends Equatable {}
 
-class PlantInfosStateLoading extends PlantInfosState {
+class PlantInfosBlocStateLoading extends PlantInfosBlocState {
   @override
   List<Object> get props => [];
 }
 
-class PlantInfosStateLoaded extends PlantInfosState {
+class PlantInfosBlocStateLoaded extends PlantInfosBlocState {
   final PlantInfos plantInfos;
 
-  PlantInfosStateLoaded(this.plantInfos);
+  PlantInfosBlocStateLoaded(this.plantInfos);
 
   @override
   List<Object> get props => [plantInfos];
 }
 
-class PlantInfosBloc extends Bloc<PlantInfosEvent, PlantInfosState> {
-  final PlantInfosBlocDelegate provider;
+class PlantInfosBloc extends Bloc<PlantInfosBlocEvent, PlantInfosBlocState> {
+  final PlantInfosBlocDelegate delegate;
 
-  PlantInfosBloc(this.provider) : super(PlantInfosStateLoading()) {
-    this.provider.init(add);
+  PlantInfosBloc(this.delegate) : super(PlantInfosBlocStateLoading()) {
+    delegate.init(add);
     add(PlantInfosEventLoad());
   }
 
   @override
-  Stream<PlantInfosState> mapEventToState(PlantInfosEvent event) async* {
+  Stream<PlantInfosBlocState> mapEventToState(
+      PlantInfosBlocEvent event) async* {
     if (event is PlantInfosEventLoad) {
-      provider.loadPlant();
+      delegate.loadPlant();
     } else if (event is PlantInfosEventLoaded) {
-      yield PlantInfosStateLoaded(event.plantInfos);
+      yield PlantInfosBlocStateLoaded(event.plantInfos);
     } else if (event is PlantInfosEventUpdate) {
-      yield* provider.updateSettings(event.plantInfos);
+      yield* delegate.updateSettings(event.plantInfos);
     } else if (event is PlantInfosEventUpdatePhase) {
-      yield* provider.updatePhase(event.phase, event.date);
+      yield* delegate.updatePhase(event.phase, event.date);
     }
   }
 
   @override
   Future<void> close() async {
-    await provider.close();
+    await delegate.close();
     return super.close();
   }
 }
 
 abstract class PlantInfosBlocDelegate {
   PlantInfos plantInfos;
-  Function(PlantInfosEvent) add;
+  Function(PlantInfosBlocEvent) add;
 
-  void init(Function(PlantInfosEvent) add) {
+  void init(Function(PlantInfosBlocEvent) add) {
     this.add = add;
   }
 
   void loadPlant();
-  Stream<PlantInfosState> updateSettings(PlantInfos plantInfos);
-  Stream<PlantInfosState> updatePhase(PlantPhases phase, DateTime date);
+  Stream<PlantInfosBlocState> updateSettings(PlantInfos plantInfos);
+  Stream<PlantInfosBlocState> updatePhase(PlantPhases phase, DateTime date);
   Future<void> close();
 
   void plantInfosLoaded(PlantInfos plantInfos) {

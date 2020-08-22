@@ -32,10 +32,13 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/app_bar/plant_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/local_plant_feed_delegate.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/local_products_delegate.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_infos_bloc_delegate.dart';
@@ -275,10 +278,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           'assets/plant_infos/icon_germination_date.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
-                  state.plant,
-                  PlantPhases.GERMINATING,
-                  pushAsReplacement: pushAsReplacement),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.GERMINATING,
+                      pushAsReplacement: pushAsReplacement),
               tipID: 'TIP_GERMINATING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'
@@ -288,10 +291,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           'assets/plant_infos/icon_vegging_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
-                  state.plant,
-                  PlantPhases.VEGGING,
-                  pushAsReplacement: pushAsReplacement),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.VEGGING,
+                      pushAsReplacement: pushAsReplacement),
               tipID: 'TIP_VEGGING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_does_vegetative_state_start/l/en'
@@ -301,10 +304,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           'assets/plant_infos/icon_blooming_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
-                  state.plant,
-                  PlantPhases.BLOOMING,
-                  pushAsReplacement: pushAsReplacement),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.BLOOMING,
+                      pushAsReplacement: pushAsReplacement),
               tipID: 'TIP_BLOOMING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_does_flowering_start/l/en'
@@ -314,10 +317,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           'assets/plant_infos/icon_drying_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
-                  state.plant,
-                  PlantPhases.DRYING,
-                  pushAsReplacement: pushAsReplacement),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.DRYING,
+                      pushAsReplacement: pushAsReplacement),
               tipID: 'TIP_DRYING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_dry/l/en'
@@ -327,10 +330,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           'assets/plant_infos/icon_curing_since.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
-                  state.plant,
-                  PlantPhases.CURING,
-                  pushAsReplacement: pushAsReplacement),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedLifeEventFormEvent(
+                      state.plant, PlantPhases.CURING,
+                      pushAsReplacement: pushAsReplacement),
               tipID: 'TIP_CURING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/why_cure/l/en'
@@ -742,6 +745,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
       _renderEnvironmentTab,
       _renderPlantInfos,
+      _renderProducts,
     ];
     return SafeArea(
       child: Column(
@@ -846,6 +850,13 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         Container(
             height: 115, child: _renderEnvironmentControls(context, state)),
       ],
+    );
+  }
+
+  Widget _renderProducts(BuildContext context, PlantFeedBlocStateLoaded state) {
+    return BlocProvider(
+      create: (context) => ProductsBloc(LocalProductsBlocDelegate()),
+      child: ProductsPage(),
     );
   }
 

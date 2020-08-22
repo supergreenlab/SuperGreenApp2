@@ -52,10 +52,10 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlantInfosBloc, PlantInfosState>(
+    return BlocBuilder<PlantInfosBloc, PlantInfosBlocState>(
         cubit: BlocProvider.of<PlantInfosBloc>(context),
-        builder: (BuildContext context, PlantInfosState state) {
-          if (state is PlantInfosStateLoading) {
+        builder: (BuildContext context, PlantInfosBlocState state) {
+          if (state is PlantInfosBlocStateLoading) {
             return _renderLoading(context, state);
           }
           if (form == null) {
@@ -71,13 +71,14 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
         });
   }
 
-  Widget _renderLoading(BuildContext context, PlantInfosStateLoading state) {
+  Widget _renderLoading(
+      BuildContext context, PlantInfosBlocStateLoading state) {
     return FullscreenLoading(
       title: "Loading plant data",
     );
   }
 
-  Widget _renderLoaded(BuildContext context, PlantInfosStateLoaded state) {
+  Widget _renderLoaded(BuildContext context, PlantInfosBlocStateLoaded state) {
     String strain;
 
     if (state.plantInfos.plantSettings.strain != null &&
@@ -139,7 +140,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                             ? null
                             : () => _openForm('DIMENSIONS')),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0, vertical: 8.0),
                       child: Text('Life event dates',
                           style: TextStyle(color: Colors.white)),
                     ),
@@ -213,7 +215,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
     );
   }
 
-  Widget _renderNoPicture(BuildContext context, PlantInfosStateLoaded state) {
+  Widget _renderNoPicture(
+      BuildContext context, PlantInfosBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -224,7 +227,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
     );
   }
 
-  Widget _renderPicture(BuildContext context, PlantInfosStateLoaded state) {
+  Widget _renderPicture(BuildContext context, PlantInfosBlocStateLoaded state) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return SizedBox(
@@ -249,7 +252,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
     });
   }
 
-  Widget _renderForm(BuildContext context, PlantInfosStateLoaded state) {
+  Widget _renderForm(BuildContext context, PlantInfosBlocStateLoaded state) {
     final forms = {
       'STRAIN': () => PlantInfosStrain(
             strain: state.plantInfos.plantSettings.strain,
@@ -320,11 +323,15 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
             height: state.plantInfos.boxSettings.height,
             depth: state.plantInfos.boxSettings.depth,
             onCancel: () => _openForm(null),
-            onSubmit: (int width, int height, int depth, String unit) => updateBoxSettings(
-                context,
-                state,
-                state.plantInfos.boxSettings
-                    .copyWith(width: width, height: height, depth: depth, unit: unit)),
+            onSubmit: (int width, int height, int depth, String unit) =>
+                updateBoxSettings(
+                    context,
+                    state,
+                    state.plantInfos.boxSettings.copyWith(
+                        width: width,
+                        height: height,
+                        depth: depth,
+                        unit: unit)),
           ),
     };
     return Container(
@@ -355,8 +362,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
     });
   }
 
-  void updatePlantSettings(BuildContext context, PlantInfosStateLoaded state,
-      PlantSettings settings) {
+  void updatePlantSettings(BuildContext context,
+      PlantInfosBlocStateLoaded state, PlantSettings settings) {
     updatePlantInfos(
         context,
         state.plantInfos.copyWith(
@@ -364,8 +371,8 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
         ));
   }
 
-  void updateBoxSettings(
-      BuildContext context, PlantInfosStateLoaded state, BoxSettings settings) {
+  void updateBoxSettings(BuildContext context, PlantInfosBlocStateLoaded state,
+      BoxSettings settings) {
     updatePlantInfos(
         context,
         state.plantInfos.copyWith(

@@ -51,7 +51,7 @@ class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   }
 
   @override
-  Stream<PlantInfosState> updateSettings(PlantInfos plantInfos) async* {
+  Stream<PlantInfosBlocState> updateSettings(PlantInfos plantInfos) async* {
     String plantSettingsJSON = plantInfos.plantSettings.toJSON();
     if (plant.settings != plantSettingsJSON) {
       PlantsCompanion plant = PlantsCompanion(
@@ -71,7 +71,8 @@ class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   }
 
   @override
-  Stream<PlantInfosState> updatePhase(PlantPhases phase, DateTime date) async* {
+  Stream<PlantInfosBlocState> updatePhase(
+      PlantPhases phase, DateTime date) async* {
     await PlantHelper.updatePlantPhase(plant, phase, date);
   }
 

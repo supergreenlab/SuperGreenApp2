@@ -39,10 +39,11 @@ class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   }
 
   @override
-  Stream<PlantInfosState> updateSettings(PlantInfos plantInfos) async* {}
+  Stream<PlantInfosBlocState> updateSettings(PlantInfos plantInfos) async* {}
 
   @override
-  Stream<PlantInfosState> updatePhase(PlantPhases phase, DateTime date) async*{}
+  Stream<PlantInfosBlocState> updatePhase(
+      PlantPhases phase, DateTime date) async* {}
 
   @override
   Future<void> close() async {}
