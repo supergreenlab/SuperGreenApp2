@@ -26,6 +26,7 @@ class SectionTitle extends StatelessWidget {
   final Color titleColor;
   final bool large;
   final double elevation;
+  final double iconPadding;
 
   const SectionTitle(
       {@required this.title,
@@ -33,13 +34,21 @@ class SectionTitle extends StatelessWidget {
       this.large = false,
       this.backgroundColor,
       this.titleColor = Colors.black,
-      this.elevation});
+      this.elevation,
+      this.iconPadding = 8});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: elevation != null ? [BoxShadow(offset: Offset(0, elevation), color: Colors.black12, blurRadius: elevation)] : null,
+        boxShadow: elevation != null
+            ? [
+                BoxShadow(
+                    offset: Offset(0, elevation),
+                    color: Colors.black12,
+                    blurRadius: elevation)
+              ]
+            : null,
         color: backgroundColor ?? Color(0xFFECECEC),
       ),
       child: Padding(
@@ -69,7 +78,8 @@ class SectionTitle extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(25))),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          padding: EdgeInsets.symmetric(
+              vertical: iconPadding, horizontal: iconPadding),
           child: SvgPicture.asset(this.icon),
         ),
       ),

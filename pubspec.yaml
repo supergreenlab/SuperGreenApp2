@@ -78,6 +78,11 @@ dependencies:
 
 dependency_overrides:
   analyzer: 0.39.14
+  moor_ffi:
+    git:
+      url: https://github.com/simolus3/moor.git
+      ref: develop
+      path: moor_ffi
 #  path: 1.7.0
 
 dev_dependencies:

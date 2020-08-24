@@ -19,7 +19,7 @@
 import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_provider.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_feed_state.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';

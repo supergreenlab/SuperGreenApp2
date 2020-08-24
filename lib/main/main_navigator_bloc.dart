@@ -485,6 +485,20 @@ class MainNavigateToSelectNewProductEvent extends MainNavigatorEvent {
   List<Object> get props => super.props;
 }
 
+class MainNavigateToProductInfosEvent extends MainNavigatorEvent {
+  MainNavigateToProductInfosEvent({futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => super.props;
+}
+
+class MainNavigateToProductTypeEvent extends MainNavigatorEvent {
+  MainNavigateToProductTypeEvent({futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => super.props;
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -657,6 +671,12 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSelectNewProductEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/product/select', arguments: event);
+    } else if (event is MainNavigateToProductInfosEvent) {
+      future = _navigatorKey.currentState
+          .pushNamed('/product/new/infos', arguments: event);
+    } else if (event is MainNavigateToProductTypeEvent) {
+      future = _navigatorKey.currentState
+          .pushNamed('/product/new/type', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

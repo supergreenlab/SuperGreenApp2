@@ -1,8 +1,27 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -99,7 +118,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset('assets/products/toolbox/toolbox.svg',
-                    width: 100, height: 100),
+                    width: 90, height: 90),
               ),
               Text('Search or create\ntoolbox item',
                   textAlign: TextAlign.center,
@@ -121,8 +140,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
       );
     }).toList();
     if (products.length == 0) {
-      children
-          .add(ListTile(title: Text('No search results for "${controller.text}"')));
+      children.add(
+          ListTile(title: Text('No search results for "${controller.text}"')));
     }
     children.add(ListTile(
       leading: Icon(Icons.add, size: 50),
@@ -130,7 +149,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
       subtitle: Text('Create new toolbox item',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
       onTap: () {
-        print("tap");
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToProductTypeEvent(futureFn: (future) async {}));
       },
     ));
     return Expanded(
