@@ -167,8 +167,10 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
         BlocProvider.of<MainNavigatorBloc>(context)
             .add(MainNavigateToProductTypeEvent(futureFn: (future) async {
           Product product = await future;
-          BlocProvider.of<SelectNewProductBloc>(context)
-              .add(SelectNewProductBlocEventCreateProduct(product));
+          if (product != null) {
+            BlocProvider.of<SelectNewProductBloc>(context)
+                .add(SelectNewProductBlocEventCreateProduct(product));
+          }
         }));
       },
     ));
