@@ -18,20 +18,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
+  @override
+  _ProductsPageState createState() => _ProductsPageState();
+}
+
+class _ProductsPageState extends State<ProductsPage> {
+  List<Product> products;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductsBloc, ProductsBlocState>(
-        cubit: BlocProvider.of<ProductsBloc>(context),
-        builder: (BuildContext context, ProductsBlocState state) {
-          if (state is ProductsBlocStateLoading) {
-            return _renderLoading(context, state);
-          }
-          return _renderLoaded(context, state);
-        });
+    return BlocListener<ProductsBloc, ProductsBlocState>(
+      listener: (BuildContext context, ProductsBlocState state) {
+        if (state is ProductsBlocStateLoaded) {
+          setState(() {
+            products = state.products;
+          });
+        }
+      },
+      child: BlocBuilder<ProductsBloc, ProductsBlocState>(
+          cubit: BlocProvider.of<ProductsBloc>(context),
+          builder: (BuildContext context, ProductsBlocState state) {
+            if (state is ProductsBlocStateLoading) {
+              return _renderLoading(context, state);
+            }
+            return _renderLoaded(context, state);
+          }),
+    );
   }
 
   Widget _renderLoading(BuildContext context, ProductsBlocStateLoading state) {
@@ -41,34 +59,86 @@ class ProductsPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, ProductsBlocStateLoaded state) {
-    return Container(
-      child: ListView(
-        children: [
-          _renderList(context, [], 'Box Build'),
-          _renderList(context, [], 'Seed'),
-          _renderList(context, [], 'Medium'),
-          _renderList(context, [], 'Watering'),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Toolbox',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            Expanded(
+              child: Container(),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 40,
+              ),
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToSelectNewProductEvent());
+              },
+            ),
+          ],
+        ),
+        Container(
+          height: 1,
+          color: Colors.white54,
+        ),
+        state.products.length == 0
+            ? _renderEmptyList(context)
+            : _renderList(context, state),
+      ]),
     );
   }
 
-  Widget _renderList(
-      BuildContext context, List<Product> products, String title) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            title,
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [Text('pouet', style: TextStyle(color: Colors.white))],
-          ),
-        ],
+  Widget _renderEmptyList(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+            child: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+              child: Text(
+                'Toolbox is empty\nuse the “+” above to add your first item.',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Row(children: [
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: SvgPicture.asset('assets/products/toolbox/toolbox.svg'),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                      '''List the items you used for this grow for future reference and/or kowledge sharing:)
+
+Add your nutrients to keep track of their usage when watering/making nutrient mix.''',
+                      style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ]),
+          ],
+        )),
+      ],
+    );
+  }
+
+  Widget _renderList(BuildContext context, ProductsBlocStateLoaded state) {
+    return Expanded(
+      child: ListView(
+        children: [],
       ),
     );
   }

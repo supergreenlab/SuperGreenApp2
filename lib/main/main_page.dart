@@ -93,6 +93,8 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_page.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
+import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
+import 'package:super_green_app/pages/products/search_new_product/select_new_product_page.dart';
 import 'package:super_green_app/pages/settings/auth/create_account/settings_create_account_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/create_account/settings_create_account_page.dart';
 import 'package:super_green_app/pages/settings/auth/login/settings_login_bloc.dart';
@@ -481,6 +483,14 @@ class _MainPageState extends State<MainPage> {
                 create: (context) => PublicPlantBloc(settings.arguments)),
           ],
           child: PublicPlantPage(),
+        );
+      case '/product/select':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) => SelectNewProductBloc(settings.arguments)),
+          ],
+          child: SelectNewProductPage(),
         );
     }
     return Text('Unknown route');

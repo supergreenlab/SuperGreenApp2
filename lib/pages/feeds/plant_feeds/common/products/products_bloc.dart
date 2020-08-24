@@ -21,11 +21,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Product extends Equatable {
   final String name;
+  final String url;
 
-  Product(this.name);
+  Product(this.name, this.url);
 
   @override
-  List<Object> get props => [name];
+  List<Object> get props => [name, url];
 }
 
 abstract class ProductsBlocEvent extends Equatable {}
