@@ -18,8 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/product_infos/product_infos_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class ProductInfosPage extends StatefulWidget {
@@ -37,26 +40,49 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
       listener: (BuildContext context, ProductInfosBlocState state) {},
       child: BlocBuilder<ProductInfosBloc, ProductInfosBlocState>(
         builder: (BuildContext context, ProductInfosBlocState state) {
-          Widget body = ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: SectionTitle(
-                  title: 'Product informations',
-                  icon: 'assets/products/toolbox/icon_item_type.svg',
-                  iconPadding: 0,
+          Widget body = Column(children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: SectionTitle(
+                      title: 'Product informations',
+                      icon: 'assets/products/toolbox/icon_item_type.svg',
+                      iconPadding: 0,
+                    ),
+                  ),
+                  renderTextField(
+                      context, 'Name', 'Ex: Megacrop', nameController),
+                  SectionTitle(
+                    title: 'Where did you buy it?',
+                    icon: 'assets/products/toolbox/icon_item_type.svg',
+                    iconPadding: 0,
+                  ),
+                  renderTextField(context, 'Link (optional)',
+                      'Ex: https://amazon.com/...', urlController),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: GreenButton(
+                  title: 'CREATE PRODUCT',
+                  onPressed: nameController.text == ''
+                      ? null
+                      : () {
+                          Product product = Product(
+                              name: nameController.text,
+                              url: urlController.text);
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigatorActionPop(param: product));
+                        },
                 ),
               ),
-              renderTextField(context, 'Name', 'Ex: Megacrop', nameController),
-              SectionTitle(
-                title: 'Where did you buy it?',
-                icon: 'assets/products/toolbox/icon_item_type.svg',
-                iconPadding: 0,
-              ),
-              renderTextField(context, 'Link (optional)',
-                  'Ex: https://amazon.com/...', urlController),
-            ],
-          );
+            ),
+          ]);
           return Scaffold(
               appBar: SGLAppBar(
                 '🛠',

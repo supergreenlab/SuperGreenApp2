@@ -25,6 +25,8 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class SelectNewProductPage extends StatefulWidget {
   @override
@@ -40,22 +42,33 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectNewProductBloc, SelectNewProductBlocState>(
-      listener: (BuildContext context, SelectNewProductBlocState state) {
+      listener: (BuildContext context, SelectNewProductBlocState state) async {
         if (state is SelectNewProductBlocStateLoaded) {
           products = state.products;
+        } else if (state is SelectNewProductBlocStateDone) {
+          await Future.delayed(Duration(seconds: 1));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop());
         }
       },
       child: BlocBuilder<SelectNewProductBloc, SelectNewProductBlocState>(
         builder: (BuildContext context, SelectNewProductBlocState state) {
-          List<Widget> content = [renderSearchField(context)];
-          if (products.length == 0 && controller.text == '') {
-            content.add(renderNoProducts(context));
+          Widget body;
+          if (state is SelectNewProductBlocStateCreatingProduct) {
+            body = renderCreatingProduct(context);
+          } else if (state is SelectNewProductBlocStateDone) {
+            body = renderDone(context);
           } else {
-            content.add(renderProductsList(context));
+            List<Widget> content = [renderSearchField(context)];
+            if (products.length == 0 && controller.text == '') {
+              content.add(renderNoProducts(context));
+            } else {
+              content.add(renderProductsList(context));
+            }
+            body = Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: content);
           }
-          Widget body = Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: content);
           return Scaffold(
               appBar: SGLAppBar(
                 '🛠',
@@ -63,6 +76,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                 backgroundColor: Color(0xff0EA9DA),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
+                hideBackButton:
+                    state is SelectNewProductBlocStateCreatingProduct,
               ),
               backgroundColor: Colors.white,
               body: AnimatedSwitcher(
@@ -150,12 +165,33 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
       onTap: () {
         BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigateToProductTypeEvent(futureFn: (future) async {}));
+            .add(MainNavigateToProductTypeEvent(futureFn: (future) async {
+          Product product = await future;
+          BlocProvider.of<SelectNewProductBloc>(context)
+              .add(SelectNewProductBlocEventCreateProduct(product));
+        }));
       },
     ));
     return Expanded(
       child: ListView(
         children: children,
+      ),
+    );
+  }
+
+  Widget renderCreatingProduct(BuildContext context) {
+    return FullscreenLoading(
+      title: 'Creating toolbox item',
+    );
+  }
+
+  Widget renderDone(BuildContext context) {
+    return Fullscreen(
+      title: 'Done',
+      child: Icon(
+        Icons.check,
+        color: Color(0xff3bb30b),
+        size: 100,
       ),
     );
   }

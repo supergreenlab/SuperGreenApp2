@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/product_type/product_type_bloc.dart';
 import 'package:super_green_app/pages/products/product_type/product_types.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -32,7 +33,7 @@ class ProductTypePage extends StatefulWidget {
 }
 
 class _ProductTypePageState extends State<ProductTypePage> {
-  final List<ProductTypeName> selectedTypes = [];
+  ProductTypeID selectedType;
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +54,12 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 4,
-                  children:
-                      productTypes.keys.map<Widget>((ProductTypeName name) {
+                  children: productTypes.keys.map<Widget>((ProductTypeID name) {
                     final ProductType type = productTypes[name];
                     return InkWell(
                       onTap: () {
                         setState(() {
-                          if (selectedTypes.contains(name)) {
-                            selectedTypes.remove(name);
-                          } else {
-                            selectedTypes.add(name);
-                          }
+                          selectedType = name;
                         });
                       },
                       child: Column(
@@ -75,17 +71,17 @@ class _ProductTypePageState extends State<ProductTypePage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    border: selectedTypes.contains(name)
+                                    border: selectedType == name
                                         ? Border.all(color: Colors.green)
                                         : null,
-                                    borderRadius: selectedTypes.contains(name)
+                                    borderRadius: selectedType == name
                                         ? BorderRadius.all(Radius.circular(25))
                                         : null),
                                 child: SvgPicture.asset(type.icon)),
                           ),
                           Text(type.name,
                               style: TextStyle(
-                                  fontWeight: selectedTypes.contains(name)
+                                  fontWeight: selectedType == name
                                       ? FontWeight.bold
                                       : null))
                         ],
@@ -100,12 +96,20 @@ class _ProductTypePageState extends State<ProductTypePage> {
                   alignment: Alignment.centerRight,
                   child: GreenButton(
                     title: 'NEXT',
-                    onPressed: selectedTypes.length == 0
+                    onPressed: selectedType == null
                         ? null
                         : () {
                             BlocProvider.of<MainNavigatorBloc>(context).add(
                                 MainNavigateToProductInfosEvent(
-                                    futureFn: (future) async {}));
+                                    futureFn: (future) async {
+                              Product product = await future;
+                              BlocProvider.of<MainNavigatorBloc>(context).add(
+                                  MainNavigatorActionPop(
+                                      param: Product(
+                                          name: product.name,
+                                          type: selectedType,
+                                          url: product.url)));
+                            }));
                           },
                   ),
                 ),

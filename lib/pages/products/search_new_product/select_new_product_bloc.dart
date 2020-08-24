@@ -32,6 +32,15 @@ class SelectNewProductBlocEventSearchTerms extends SelectNewProductBlocEvent {
   List<Object> get props => [searchTerms];
 }
 
+class SelectNewProductBlocEventCreateProduct extends SelectNewProductBlocEvent {
+  final Product product;
+
+  SelectNewProductBlocEventCreateProduct(this.product);
+
+  @override
+  List<Object> get props => [product];
+}
+
 abstract class SelectNewProductBlocState extends Equatable {}
 
 class SelectNewProductBlocStateInit extends SelectNewProductBlocState {
@@ -48,6 +57,21 @@ class SelectNewProductBlocStateLoaded extends SelectNewProductBlocState {
   List<Object> get props => [products];
 }
 
+class SelectNewProductBlocStateCreatingProduct
+    extends SelectNewProductBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class SelectNewProductBlocStateDone extends SelectNewProductBlocState {
+  final Product product;
+
+  SelectNewProductBlocStateDone(this.product);
+
+  @override
+  List<Object> get props => [product];
+}
+
 class SelectNewProductBloc
     extends Bloc<SelectNewProductBlocEvent, SelectNewProductBlocState> {
   final MainNavigateToSelectNewProductEvent args;
@@ -57,6 +81,11 @@ class SelectNewProductBloc
   @override
   Stream<SelectNewProductBlocState> mapEventToState(
       SelectNewProductBlocEvent event) async* {
-    if (event is SelectNewProductBlocEventSearchTerms) {}
+    if (event is SelectNewProductBlocEventSearchTerms) {
+    } else if (event is SelectNewProductBlocEventCreateProduct) {
+      yield SelectNewProductBlocStateCreatingProduct();
+      await Future.delayed(Duration(seconds: 1));
+      yield SelectNewProductBlocStateDone(event.product);
+    }
   }
 }

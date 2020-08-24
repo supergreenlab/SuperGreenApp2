@@ -18,15 +18,17 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/products/product_type/product_types.dart';
 
 class Product extends Equatable {
   final String name;
   final String url;
+  final ProductTypeID type;
 
-  Product(this.name, this.url);
+  Product({this.name, this.url, this.type});
 
   @override
-  List<Object> get props => [name, url];
+  List<Object> get props => [name, url, type];
 }
 
 abstract class ProductsBlocEvent extends Equatable {}

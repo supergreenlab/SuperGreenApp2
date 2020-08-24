@@ -18,7 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 
-enum ProductTypeName {
+enum ProductTypeID {
   VENTILATION,
   LIGHTING,
   COMPLETE_KIT,
@@ -44,31 +44,31 @@ class ProductType extends Equatable {
   List<Object> get props => [];
 }
 
-Map<ProductTypeName, ProductType> productTypes = {
-  ProductTypeName.COMPLETE_KIT: ProductType(
+Map<ProductTypeID, ProductType> productTypes = {
+  ProductTypeID.COMPLETE_KIT: ProductType(
       'Complete kit', 'assets/products/toolbox/icon_complete_kit.svg'),
-  ProductTypeName.VENTILATION: ProductType(
+  ProductTypeID.VENTILATION: ProductType(
       'Ventilation', 'assets/products/toolbox/icon_ventilation.svg'),
-  ProductTypeName.LIGHTING:
+  ProductTypeID.LIGHTING:
       ProductType('Lighting', 'assets/products/toolbox/icon_lighting.svg'),
-  ProductTypeName.SENSORS:
+  ProductTypeID.SENSORS:
       ProductType('Sensors', 'assets/products/toolbox/icon_sensors.svg'),
-  ProductTypeName.PH_EC:
+  ProductTypeID.PH_EC:
       ProductType('PH/EC', 'assets/products/toolbox/icon_ph_ec.svg'),
-  ProductTypeName.SUBSTRAT:
+  ProductTypeID.SUBSTRAT:
       ProductType('Substrat', 'assets/products/toolbox/icon_substrat.svg'),
-  ProductTypeName.FERTILIZER:
+  ProductTypeID.FERTILIZER:
       ProductType('Fertilizer', 'assets/products/toolbox/icon_fertilizer.svg'),
-  ProductTypeName.IRRIGATION:
+  ProductTypeID.IRRIGATION:
       ProductType('Irrigation', 'assets/products/toolbox/icon_irrigation.svg'),
-  ProductTypeName.FURNITURE:
+  ProductTypeID.FURNITURE:
       ProductType('Furniture', 'assets/products/toolbox/icon_furniture.svg'),
-  ProductTypeName.SEEDLING:
+  ProductTypeID.SEEDLING:
       ProductType('Seedling', 'assets/products/toolbox/icon_seedling.svg'),
-  ProductTypeName.ACCESSORIES: ProductType(
+  ProductTypeID.ACCESSORIES: ProductType(
       'Accessories', 'assets/products/toolbox/icon_accessories.svg'),
-  ProductTypeName.ELECTRICITY: ProductType(
+  ProductTypeID.ELECTRICITY: ProductType(
       'Electricity', 'assets/products/toolbox/icon_electricity.svg'),
-  ProductTypeName.OTHER:
+  ProductTypeID.OTHER:
       ProductType('Other', 'assets/products/toolbox/icon_other.svg'),
 };
