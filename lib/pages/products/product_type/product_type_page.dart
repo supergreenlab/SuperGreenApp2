@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/products/product_type/product_type_bloc.dart';
 import 'package:super_green_app/pages/products/product_type/product_types.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -99,7 +100,13 @@ class _ProductTypePageState extends State<ProductTypePage> {
                   alignment: Alignment.centerRight,
                   child: GreenButton(
                     title: 'NEXT',
-                    onPressed: selectedTypes.length == 0 ? null : () {},
+                    onPressed: selectedTypes.length == 0
+                        ? null
+                        : () {
+                            BlocProvider.of<MainNavigatorBloc>(context).add(
+                                MainNavigateToProductInfosEvent(
+                                    futureFn: (future) async {}));
+                          },
                   ),
                 ),
               ),

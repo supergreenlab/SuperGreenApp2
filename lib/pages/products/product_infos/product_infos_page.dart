@@ -22,7 +22,15 @@ import 'package:super_green_app/pages/products/product_infos/product_infos_bloc.
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class ProductInfosPage extends StatelessWidget {
+class ProductInfosPage extends StatefulWidget {
+  @override
+  _ProductInfosPageState createState() => _ProductInfosPageState();
+}
+
+class _ProductInfosPageState extends State<ProductInfosPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductInfosBloc, ProductInfosBlocState>(
@@ -39,6 +47,14 @@ class ProductInfosPage extends StatelessWidget {
                   iconPadding: 0,
                 ),
               ),
+              renderTextField(context, 'Name', 'Ex: Megacrop', nameController),
+              SectionTitle(
+                title: 'Where did you buy it?',
+                icon: 'assets/products/toolbox/icon_item_type.svg',
+                iconPadding: 0,
+              ),
+              renderTextField(context, 'Link (optional)',
+                  'Ex: https://amazon.com/...', urlController),
             ],
           );
           return Scaffold(
@@ -52,6 +68,32 @@ class ProductInfosPage extends StatelessWidget {
               backgroundColor: Colors.white,
               body: AnimatedSwitcher(
                   duration: Duration(milliseconds: 200), child: body));
+        },
+      ),
+    );
+  }
+
+  Widget renderTextField(BuildContext context, String labelText,
+      String hintText, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 8),
+      child: TextFormField(
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.black38),
+          labelText: labelText,
+          labelStyle: TextStyle(
+            color: Colors.black,
+          ),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        ),
+        style: TextStyle(color: Colors.black, decoration: TextDecoration.none),
+        controller: controller,
+        onChanged: (value) {
+          setState(() {});
         },
       ),
     );
