@@ -1,3 +1,4 @@
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 
 class LocalProductsBlocDelegate extends ProductsBlocDelegate {

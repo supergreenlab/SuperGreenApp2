@@ -17,22 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-
-enum ProductTypeID {
-  VENTILATION,
-  LIGHTING,
-  COMPLETE_KIT,
-  SENSORS,
-  PH_EC,
-  SUBSTRAT,
-  FERTILIZER,
-  IRRIGATION,
-  FURNITURE,
-  SEEDLING,
-  ACCESSORIES,
-  ELECTRICITY,
-  OTHER,
-}
+import 'package:super_green_app/data/api/backend/products/models.dart';
 
 class ProductType extends Equatable {
   final String name;

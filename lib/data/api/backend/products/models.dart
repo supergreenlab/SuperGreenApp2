@@ -16,6 +16,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class TimeSeriesHelper {
-  
+import 'package:equatable/equatable.dart';
+
+enum ProductTypeID {
+  VENTILATION,
+  LIGHTING,
+  COMPLETE_KIT,
+  SENSORS,
+  PH_EC,
+  SUBSTRAT,
+  FERTILIZER,
+  IRRIGATION,
+  FURNITURE,
+  SEEDLING,
+  ACCESSORIES,
+  ELECTRICITY,
+  OTHER,
+}
+
+class Product extends Equatable {
+  final String id;
+  final String name;
+  final ProductTypeID type;
+  final ProductSupplier supplier;
+
+  Product({this.id, this.name, this.type, this.supplier});
+
+  @override
+  List<Object> get props => [id, name, type, supplier];
+}
+
+class ProductSupplier extends Equatable {
+  final String id;
+  final String url;
+
+  ProductSupplier({this.id, this.url});
+
+  @override
+  List<Object> get props => [id, url];
 }

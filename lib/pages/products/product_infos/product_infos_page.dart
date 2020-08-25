@@ -18,8 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/product_infos/product_infos_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -75,7 +75,9 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
                       : () {
                           Product product = Product(
                               name: nameController.text,
-                              url: urlController.text);
+                              supplier: urlController.text != ''
+                                  ? ProductSupplier(url: urlController.text)
+                                  : null);
                           BlocProvider.of<MainNavigatorBloc>(context)
                               .add(MainNavigatorActionPop(param: product));
                         },

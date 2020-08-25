@@ -33,7 +33,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedsAPI {
   Future createUserEnd() async {
-    return _postPut('/userend', {});
+    return BackendAPI().postPut('/userend', {});
   }
 
   Future sendDeletes(List<Delete> deletes) async {
@@ -56,7 +56,7 @@ class FeedsAPI {
 
   Future syncPlant(Plant plant) async {
     Map<String, dynamic> obj = await Plants.toMap(plant);
-    String serverID = await _postPut('/plant', obj);
+    String serverID = await BackendAPI().postPut('/plant', obj);
 
     PlantsCompanion plantsCompanion =
         PlantsCompanion(id: Value(plant.id), synced: Value(true));
@@ -68,7 +68,7 @@ class FeedsAPI {
 
   Future syncBox(Box box) async {
     Map<String, dynamic> obj = await Boxes.toMap(box);
-    String serverID = await _postPut('/box', obj);
+    String serverID = await BackendAPI().postPut('/box', obj);
 
     BoxesCompanion boxesCompanion =
         BoxesCompanion(id: Value(box.id), synced: Value(true));
@@ -80,7 +80,7 @@ class FeedsAPI {
 
   Future syncTimelapse(Timelapse timelapse) async {
     Map<String, dynamic> obj = await Timelapses.toMap(timelapse);
-    String serverID = await _postPut('/timelapse', obj);
+    String serverID = await BackendAPI().postPut('/timelapse', obj);
 
     TimelapsesCompanion timelapsesCompanion =
         TimelapsesCompanion(id: Value(timelapse.id), synced: Value(true));
@@ -93,7 +93,7 @@ class FeedsAPI {
 
   Future syncDevice(Device device) async {
     Map<String, dynamic> obj = await Devices.toMap(device);
-    String serverID = await _postPut('/device', obj);
+    String serverID = await BackendAPI().postPut('/device', obj);
 
     DevicesCompanion devicesCompanion =
         DevicesCompanion(id: Value(device.id), synced: Value(true));
@@ -105,7 +105,7 @@ class FeedsAPI {
 
   Future syncFeed(Feed feed) async {
     Map<String, dynamic> obj = await Feeds.toMap(feed);
-    String serverID = await _postPut('/feed', obj);
+    String serverID = await BackendAPI().postPut('/feed', obj);
 
     FeedsCompanion feedsCompanion =
         FeedsCompanion(id: Value(feed.id), synced: Value(true));
@@ -117,7 +117,7 @@ class FeedsAPI {
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
     Map<String, dynamic> obj = await FeedEntries.toMap(feedEntry);
-    String serverID = await _postPut('/feedEntry', obj);
+    String serverID = await BackendAPI().postPut('/feedEntry', obj);
 
     FeedEntriesCompanion feedEntriesCompanion =
         FeedEntriesCompanion(id: Value(feedEntry.id), synced: Value(true));
@@ -181,7 +181,7 @@ class FeedsAPI {
     obj['thumbnailPath'] =
         Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2];
 
-    String serverID = await _postPut('/feedMedia', obj);
+    String serverID = await BackendAPI().postPut('/feedMedia', obj);
 
     FeedMediasCompanion feedMediasCompanion =
         FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
@@ -360,28 +360,5 @@ class FeedsAPI {
       throw '_unsynced failed: ${resp.body}';
     }
     return JsonDecoder().convert(resp.body);
-  }
-
-  Future<String> _postPut(String path, Map<String, dynamic> obj) async {
-    Function postPut = obj['id'] != null
-        ? BackendAPI().apiClient.put
-        : BackendAPI().apiClient.post;
-    Response resp = await postPut('$BackendAPI().serverHost$path',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-        },
-        body: JsonEncoder().convert(obj));
-    if (resp.statusCode ~/ 100 != 2) {
-      throw '_postPut failed: ${resp.body}';
-    }
-    if (resp.headers['x-sgl-token'] != null) {
-      AppDB().setJWT(resp.headers['x-sgl-token']);
-    }
-    if (obj['id'] == null) {
-      Map<String, dynamic> data = JsonDecoder().convert(resp.body);
-      return data['id'];
-    }
-    return null;
   }
 }

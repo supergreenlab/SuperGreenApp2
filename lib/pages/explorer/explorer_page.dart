@@ -105,7 +105,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: Image.network(
-                    BackendAPI().absoluteFileURL(plant.thumbnailPath),
+                    BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
                     fit: BoxFit.cover),
               ),
               Center(
