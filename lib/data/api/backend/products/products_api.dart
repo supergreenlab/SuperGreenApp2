@@ -16,8 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class ProductsAPI {
-  Future createProduct(String name, String url) async {}
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 
-  Future createProductSupplier(String name, String url) async {}
+class ProductsAPI {
+  Future<String> createProduct(Product product) async {
+    Map<String, dynamic> obj = product.toMap(json: true);
+    obj.remove('supplier');
+    String serverID = await BackendAPI().postPut('/product', obj);
+    return serverID;
+  }
+
+  Future<String> createProductSupplier(ProductSupplier productSupplier) async {
+    Map<String, dynamic> obj = productSupplier.toMap();
+    String serverID = await BackendAPI().postPut('/productsupplier', obj);
+    return serverID;
+  }
 }

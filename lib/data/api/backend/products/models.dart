@@ -16,9 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
+import 'dart:convert';
 
-enum ProductTypeID {
+import 'package:enum_to_string/enum_to_string.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+
+enum ProductCategoryID {
   VENTILATION,
   LIGHTING,
   COMPLETE_KIT,
@@ -34,24 +38,96 @@ enum ProductTypeID {
   OTHER,
 }
 
+List<ProductCategoryID> plantProductCategories = [
+  ProductCategoryID.SUBSTRAT,
+  ProductCategoryID.FERTILIZER,
+  ProductCategoryID.SEEDLING,
+];
+
 class Product extends Equatable {
   final String id;
   final String name;
-  final ProductTypeID type;
+  final ProductCategoryID category;
   final ProductSupplier supplier;
 
-  Product({this.id, this.name, this.type, this.supplier});
+  Product({this.id, this.name, this.category, this.supplier});
 
   @override
-  List<Object> get props => [id, name, type, supplier];
+  List<Object> get props => [id, name, category, supplier];
+
+  static Product fromMap(Map<String, dynamic> map) {
+    List<dynamic> categories = map['categories'] ?? [];
+    ProductCategoryID categoryID;
+    if (categories.length > 0) {
+      categoryID =
+          EnumToString.fromString(ProductCategoryID.values, categories[0]);
+    }
+    return Product(
+      id: map['id'],
+      name: map['name'],
+      category: categoryID,
+      supplier: ProductSupplier.fromMap(map['supplier']),
+    );
+  }
+
+  Map<String, dynamic> toMap({bool json = false}) {
+    List<String> categories = [];
+    if (category != null) {
+      categories = [describeEnum(category)];
+    }
+    return {
+      'id': id,
+      'name': name,
+      'categories': json ? JsonEncoder().convert(categories) : categories,
+      'supplier': supplier.toMap(),
+    };
+  }
+
+  Product copyWith(
+      {String id,
+      String name,
+      ProductCategoryID category,
+      ProductSupplier supplier}) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      category: category ?? this.category,
+      supplier: supplier ?? this.supplier,
+    );
+  }
 }
 
 class ProductSupplier extends Equatable {
   final String id;
+  final String productID;
   final String url;
 
-  ProductSupplier({this.id, this.url});
+  ProductSupplier({this.id, this.productID, this.url});
 
   @override
-  List<Object> get props => [id, url];
+  List<Object> get props => [id, productID, url];
+
+  static ProductSupplier fromMap(Map<String, dynamic> map) {
+    return ProductSupplier(
+      id: map['id'],
+      productID: map['productID'],
+      url: map['url'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'productID': productID,
+      'url': url,
+    };
+  }
+
+  ProductSupplier copyWith({String id, String productID, String url}) {
+    return ProductSupplier(
+      id: id ?? this.id,
+      productID: productID ?? this.productID,
+      url: url ?? this.url,
+    );
+  }
 }

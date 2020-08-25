@@ -260,7 +260,7 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicPlants(int n, int offset) async {
     Response resp = await BackendAPI().apiClient.get(
-        '$BackendAPI().serverHost/public/plants?limit=$n&offset=$offset',
+        '${BackendAPI().serverHost}/public/plants?limit=$n&offset=$offset',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -275,7 +275,7 @@ class FeedsAPI {
   Future<Map<String, dynamic>> publicPlant(String id) async {
     Response resp = await BackendAPI()
         .apiClient
-        .get('$BackendAPI().serverHost/public/plant/$id', headers: {
+        .get('${BackendAPI().serverHost}/public/plant/$id', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -287,7 +287,7 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicFeedEntries(String id, int n, int offset) async {
     Response resp = await BackendAPI().apiClient.get(
-        '$BackendAPI().serverHost/public/plant/$id/feedEntries?limit=$n&offset=$offset',
+        '${BackendAPI().serverHost}/public/plant/$id/feedEntries?limit=$n&offset=$offset',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -301,7 +301,7 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
     Response resp = await BackendAPI().apiClient.get(
-        '$BackendAPI().serverHost/public/feedEntry/$id/feedMedias',
+        '${BackendAPI().serverHost}/public/feedEntry/$id/feedMedias',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -316,7 +316,7 @@ class FeedsAPI {
   Future<Map<String, dynamic>> publicFeedMedia(String id) async {
     Response resp = await BackendAPI()
         .apiClient
-        .get('$BackendAPI().serverHost/public/feedMedia/$id', headers: {
+        .get('${BackendAPI().serverHost}/public/feedMedia/$id', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -340,7 +340,7 @@ class FeedsAPI {
   Future setSynced(String type, String id) async {
     Response resp = await BackendAPI()
         .apiClient
-        .post('$BackendAPI().serverHost/$type/$id/sync', headers: {
+        .post('${BackendAPI().serverHost}/$type/$id/sync', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -352,7 +352,7 @@ class FeedsAPI {
   Future<Map<String, dynamic>> _unsynced(String type) async {
     Response resp = await BackendAPI()
         .apiClient
-        .get('$BackendAPI().serverHost/sync$type', headers: {
+        .get('${BackendAPI().serverHost}/sync$type', headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });

@@ -46,6 +46,10 @@ class BackendAPI {
   factory BackendAPI() => _instance;
 
   BackendAPI._newInstance() {
+    usersAPI = UsersAPI();
+    feedsAPI = FeedsAPI();
+    productsAPI = ProductsAPI();
+    timeSeriesAPI = TimeSeriesAPI();
     if (kReleaseMode || Platform.isIOS) {
       serverHost = 'https://api2.supergreenlab.com';
       storageServerHost = 'https://storage.supergreenlab.com';
@@ -75,10 +79,8 @@ class BackendAPI {
   }
 
   Future<String> postPut(String path, Map<String, dynamic> obj) async {
-    Function postPut = obj['id'] != null
-        ? BackendAPI().apiClient.put
-        : BackendAPI().apiClient.post;
-    Response resp = await postPut('$BackendAPI().serverHost$path',
+    Function postPut = obj['id'] != null ? apiClient.put : apiClient.post;
+    Response resp = await postPut('${BackendAPI().serverHost}$path',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',

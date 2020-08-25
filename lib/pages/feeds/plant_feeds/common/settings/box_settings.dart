@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 
 const DEFAULT_SCHEDULES = {
   'VEG': {
@@ -50,15 +51,19 @@ class BoxSettings extends Equatable {
   final int depth;
   final String unit;
 
-  BoxSettings({this.width, this.height, this.depth, this.unit,
-      this.schedule = 'VEG', this.schedules = DEFAULT_SCHEDULES});
+  final List<Product> products;
 
-  factory BoxSettings.fromJSON(String json) {
-    Map<String, dynamic> map = JsonDecoder().convert(json);
-    return BoxSettings.fromMap(map);
-  }
+  BoxSettings(
+      {this.width,
+      this.height,
+      this.depth,
+      this.unit,
+      this.schedule = 'VEG',
+      this.schedules = DEFAULT_SCHEDULES,
+      this.products});
 
   factory BoxSettings.fromMap(Map<String, dynamic> map) {
+    List<dynamic> products = map['products'] ?? [];
     return BoxSettings(
       width: map['width'],
       height: map['height'],
@@ -66,30 +71,44 @@ class BoxSettings extends Equatable {
       unit: map['unit'],
       schedule: map['schedule'] ?? 'VEG',
       schedules: map['schedules'] ?? DEFAULT_SCHEDULES,
+      products: products.map<Product>((p) => Product.fromMap(p)).toList() ?? [],
     );
   }
 
-  String toJSON() {
-    return JsonEncoder().convert({
+  Map<String, dynamic> toMap() {
+    return {
       'schedule': schedule,
       'schedules': schedules,
       'width': width,
       'height': height,
       'depth': depth,
       'unit': unit,
-    });
+      'products': products,
+    };
+  }
+
+  factory BoxSettings.fromJSON(String json) {
+    Map<String, dynamic> map = JsonDecoder().convert(json);
+    return BoxSettings.fromMap(map);
+  }
+
+  String toJSON() {
+    return JsonEncoder().convert(toMap());
   }
 
   @override
-  List<Object> get props => [schedule, schedules, width, height, depth, unit];
+  List<Object> get props =>
+      [schedule, schedules, width, height, depth, unit, products];
 
-  BoxSettings copyWith(
-          {String schedule,
-          Map<String, dynamic> schedules,
-          int width,
-          int height,
-          int depth,
-          String unit,}) =>
+  BoxSettings copyWith({
+    String schedule,
+    Map<String, dynamic> schedules,
+    int width,
+    int height,
+    int depth,
+    String unit,
+    List<Product> products,
+  }) =>
       BoxSettings(
         width: width ?? this.width,
         height: height ?? this.height,
@@ -97,5 +116,6 @@ class BoxSettings extends Equatable {
         unit: unit ?? this.unit,
         schedule: schedule ?? this.schedule,
         schedules: schedules ?? this.schedules,
+        products: products ?? this.products,
       );
 }

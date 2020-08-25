@@ -29,31 +29,31 @@ class ProductType extends Equatable {
   List<Object> get props => [];
 }
 
-Map<ProductTypeID, ProductType> productTypes = {
-  ProductTypeID.COMPLETE_KIT: ProductType(
+Map<ProductCategoryID, ProductType> productTypes = {
+  ProductCategoryID.COMPLETE_KIT: ProductType(
       'Complete kit', 'assets/products/toolbox/icon_complete_kit.svg'),
-  ProductTypeID.VENTILATION: ProductType(
+  ProductCategoryID.VENTILATION: ProductType(
       'Ventilation', 'assets/products/toolbox/icon_ventilation.svg'),
-  ProductTypeID.LIGHTING:
+  ProductCategoryID.LIGHTING:
       ProductType('Lighting', 'assets/products/toolbox/icon_lighting.svg'),
-  ProductTypeID.SENSORS:
+  ProductCategoryID.SENSORS:
       ProductType('Sensors', 'assets/products/toolbox/icon_sensors.svg'),
-  ProductTypeID.PH_EC:
+  ProductCategoryID.PH_EC:
       ProductType('PH/EC', 'assets/products/toolbox/icon_ph_ec.svg'),
-  ProductTypeID.SUBSTRAT:
+  ProductCategoryID.SUBSTRAT:
       ProductType('Substrat', 'assets/products/toolbox/icon_substrat.svg'),
-  ProductTypeID.FERTILIZER:
+  ProductCategoryID.FERTILIZER:
       ProductType('Fertilizer', 'assets/products/toolbox/icon_fertilizer.svg'),
-  ProductTypeID.IRRIGATION:
+  ProductCategoryID.IRRIGATION:
       ProductType('Irrigation', 'assets/products/toolbox/icon_irrigation.svg'),
-  ProductTypeID.FURNITURE:
+  ProductCategoryID.FURNITURE:
       ProductType('Furniture', 'assets/products/toolbox/icon_furniture.svg'),
-  ProductTypeID.SEEDLING:
+  ProductCategoryID.SEEDLING:
       ProductType('Seedling', 'assets/products/toolbox/icon_seedling.svg'),
-  ProductTypeID.ACCESSORIES: ProductType(
+  ProductCategoryID.ACCESSORIES: ProductType(
       'Accessories', 'assets/products/toolbox/icon_accessories.svg'),
-  ProductTypeID.ELECTRICITY: ProductType(
+  ProductCategoryID.ELECTRICITY: ProductType(
       'Electricity', 'assets/products/toolbox/icon_electricity.svg'),
-  ProductTypeID.OTHER:
+  ProductCategoryID.OTHER:
       ProductType('Other', 'assets/products/toolbox/icon_other.svg'),
 };

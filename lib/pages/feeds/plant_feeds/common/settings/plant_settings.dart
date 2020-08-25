@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:tuple/tuple.dart';
 
 enum PlantPhases { GERMINATING, VEGGING, BLOOMING, DRYING, CURING }
@@ -37,18 +38,20 @@ class PlantSettings extends Equatable {
   final DateTime curingStart;
   final String medium;
 
+  final List<Product> products;
+
   PlantSettings(
-    this.plantType,
-    this.isSingle,
-    this.strain,
-    this.seedbank,
-    this.germinationDate,
-    this.veggingStart,
-    this.bloomingStart,
-    this.dryingStart,
-    this.curingStart,
-    this.medium,
-  );
+      this.plantType,
+      this.isSingle,
+      this.strain,
+      this.seedbank,
+      this.germinationDate,
+      this.veggingStart,
+      this.bloomingStart,
+      this.dryingStart,
+      this.curingStart,
+      this.medium,
+      this.products);
 
   Tuple3<PlantPhases, DateTime, Duration> phaseAt(DateTime date) {
     if (curingStart != null && curingStart.isBefore(date)) {
@@ -111,16 +114,14 @@ class PlantSettings extends Equatable {
       phase == PlantPhases.BLOOMING ? null : this.bloomingStart,
       phase == PlantPhases.DRYING ? null : this.dryingStart,
       phase == PlantPhases.CURING ? null : this.curingStart,
-      medium ?? this.medium,
+      this.medium,
+      this.products,
     );
   }
 
-  factory PlantSettings.fromJSON(String json) {
-    Map<String, dynamic> map = JsonDecoder().convert(json);
-    return PlantSettings.fromMap(map);
-  }
-
   factory PlantSettings.fromMap(Map<String, dynamic> map) {
+    List<dynamic> products = (map['products'] ?? []);
+    print(products);
     return PlantSettings(
       map['plantType'],
       map['isSingle'],
@@ -142,11 +143,12 @@ class PlantSettings extends Equatable {
           ? null
           : DateTime.parse(map['curingStart'] as String).toLocal(),
       map['medium'],
+      (products).map<Product>((p) => Product.fromMap(p)).toList(),
     );
   }
 
-  String toJSON() {
-    return JsonEncoder().convert({
+  Map<String, dynamic> toMap() {
+    return {
       'plantType': plantType,
       'isSingle': isSingle,
       'strain': strain,
@@ -164,7 +166,17 @@ class PlantSettings extends Equatable {
       'curingStart':
           curingStart == null ? null : curingStart.toUtc().toIso8601String(),
       'medium': medium,
-    });
+      'products': products,
+    };
+  }
+
+  factory PlantSettings.fromJSON(String json) {
+    Map<String, dynamic> map = JsonDecoder().convert(json);
+    return PlantSettings.fromMap(map);
+  }
+
+  String toJSON() {
+    return JsonEncoder().convert(toMap());
   }
 
   @override
@@ -179,6 +191,7 @@ class PlantSettings extends Equatable {
         dryingStart,
         curingStart,
         medium,
+        products,
       ];
 
   PlantSettings copyWith(
@@ -191,7 +204,8 @@ class PlantSettings extends Equatable {
           DateTime bloomingStart,
           DateTime dryingStart,
           DateTime curingStart,
-          String medium}) =>
+          String medium,
+          List<Product> products}) =>
       PlantSettings(
         plantType ?? this.plantType,
         isSingle ?? this.isSingle,
@@ -203,5 +217,6 @@ class PlantSettings extends Equatable {
         dryingStart ?? this.dryingStart,
         curingStart ?? this.curingStart,
         medium ?? this.medium,
+        products ?? this.products,
       );
 }

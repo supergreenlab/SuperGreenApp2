@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
@@ -85,8 +86,19 @@ class SelectNewProductBloc
     if (event is SelectNewProductBlocEventSearchTerms) {
     } else if (event is SelectNewProductBlocEventCreateProduct) {
       yield SelectNewProductBlocStateCreatingProduct();
-      await Future.delayed(Duration(seconds: 1));
-      yield SelectNewProductBlocStateDone(event.product);
+      String productID =
+          await BackendAPI().productsAPI.createProduct(event.product);
+      Product product = event.product.copyWith(id: productID);
+      if (event.product.supplier != null) {
+        ProductSupplier productSupplier =
+            product.supplier.copyWith(productID: productID);
+        String productSupplierID = await BackendAPI()
+            .productsAPI
+            .createProductSupplier(productSupplier);
+        product = product.copyWith(
+            supplier: productSupplier.copyWith(id: productSupplierID));
+      }
+      yield SelectNewProductBlocStateDone(product);
     }
   }
 }

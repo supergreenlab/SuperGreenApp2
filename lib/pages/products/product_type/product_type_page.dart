@@ -33,7 +33,7 @@ class ProductTypePage extends StatefulWidget {
 }
 
 class _ProductTypePageState extends State<ProductTypePage> {
-  ProductTypeID selectedType;
+  ProductCategoryID selectedType;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,8 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 4,
-                  children: productTypes.keys.map<Widget>((ProductTypeID name) {
+                  children:
+                      productTypes.keys.map<Widget>((ProductCategoryID name) {
                     final ProductType type = productTypes[name];
                     return InkWell(
                       onTap: () {
@@ -108,7 +109,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                                     MainNavigatorActionPop(
                                         param: Product(
                                             name: product.name,
-                                            type: selectedType,
+                                            category: selectedType,
                                             supplier: product.supplier)));
                               }
                             }));
