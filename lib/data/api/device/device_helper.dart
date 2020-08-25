@@ -17,7 +17,7 @@
  */
 
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/api/device_api.dart';
+import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class DeviceHelper {

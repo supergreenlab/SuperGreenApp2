@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -55,7 +55,6 @@ class SettingsLoginBlocStateError extends SettingsLoginBlocState {
 
 class SettingsLoginBloc
     extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocState> {
-
   //ignore: unused_field
   final MainNavigateToSettingsLogin args;
   bool _isAuth;
@@ -74,8 +73,8 @@ class SettingsLoginBloc
     } else if (event is SettingsLoginBlocEventCreateAccount) {
       yield SettingsLoginBlocStateLoading();
       try {
-        await FeedsAPI().login(event.nickname, event.password);
-        await FeedsAPI().createUserEnd();
+        await BackendAPI().usersAPI.login(event.nickname, event.password);
+        await BackendAPI().feedsAPI.createUserEnd();
       } catch (e) {
         Logger.log(e);
         yield SettingsLoginBlocStateError();

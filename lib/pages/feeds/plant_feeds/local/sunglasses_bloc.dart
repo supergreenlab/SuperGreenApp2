@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/helpers/device_helper.dart';
+import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -40,7 +40,8 @@ class SunglassesBloc extends Bloc<SunglassesBlocEvent, SunglassesBlocState> {
   final int _deviceID;
   final int _deviceBox;
 
-  SunglassesBloc(this._deviceID, this._deviceBox) : super(SunglassesBlocStateInit()) {
+  SunglassesBloc(this._deviceID, this._deviceBox)
+      : super(SunglassesBlocStateInit()) {
     add(SunglassesBlocEventInit());
   }
 

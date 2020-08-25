@@ -5,11 +5,11 @@ import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/api/device_api.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
-import 'package:super_green_app/data/helpers/device_helper.dart';
-import 'package:super_green_app/data/helpers/feed_helper.dart';
-import 'package:super_green_app/data/helpers/plant_helper.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
+import 'package:super_green_app/data/api/device/device_api.dart';
+import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/device/devices.dart';
@@ -69,7 +69,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   @override
   Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {
     if (event is SyncerBlocEventInit) {
-      _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
+      _usingWifi =
+          await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
       _connectivity = Connectivity()
           .onConnectivityChanged
           .listen((ConnectivityResult result) {
@@ -125,7 +126,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future _syncInFeeds() async {
     Logger.log("Syncing feeds");
-    List<FeedsCompanion> feeds = await FeedsAPI().unsyncedFeeds();
+    List<FeedsCompanion> feeds = await BackendAPI().feedsAPI.unsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -148,7 +149,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().feedsDAO.addFeed(feedsCompanion);
         }
       }
-      await FeedsAPI().setSynced("feed", feedsCompanion.serverID.value);
+      await BackendAPI()
+          .feedsAPI
+          .setSynced("feed", feedsCompanion.serverID.value);
       Logger.log("Synced feed");
     }
   }
@@ -156,7 +159,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   Future _syncInFeedEntries() async {
     Logger.log("Syncing feedEntries");
     List<FeedEntriesCompanion> feedEntries =
-        await FeedsAPI().unsyncedFeedEntries();
+        await BackendAPI().feedsAPI.unsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -179,7 +182,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
         }
       }
-      await FeedsAPI()
+      await BackendAPI()
+          .feedsAPI
           .setSynced("feedEntry", feedEntriesCompanion.serverID.value);
       Logger.log("Synced feedEntry");
     }
@@ -188,7 +192,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   Future _syncInFeedMedias() async {
     Logger.log("Syncing feedMedias");
     List<FeedMediasCompanion> feedMedias =
-        await FeedsAPI().unsyncedFeedMedias();
+        await BackendAPI().feedsAPI.unsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -208,9 +212,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
             '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
         String thumbnailPath =
             '${FeedMedias.makeFilePath(prefix: 'thumbnail_')}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
-        await FeedsAPI().download(feedMediasCompanion.filePath.value,
+        await BackendAPI().feedsAPI.download(feedMediasCompanion.filePath.value,
             FeedMedias.makeAbsoluteFilePath(filePath));
-        await FeedsAPI().download(feedMediasCompanion.thumbnailPath.value,
+        await BackendAPI().feedsAPI.download(
+            feedMediasCompanion.thumbnailPath.value,
             FeedMedias.makeAbsoluteFilePath(thumbnailPath));
         if (exists != null) {
           await _deleteFileIfExists(
@@ -227,7 +232,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
               filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
         }
       }
-      await FeedsAPI()
+      await BackendAPI()
+          .feedsAPI
           .setSynced("feedMedia", feedMediasCompanion.serverID.value);
       Logger.log("Synced feedMedia");
     }
@@ -235,7 +241,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future _syncInDevices() async {
     Logger.log("Syncing devices");
-    List<DevicesCompanion> devices = await FeedsAPI().unsyncedDevices();
+    List<DevicesCompanion> devices =
+        await BackendAPI().feedsAPI.unsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -262,14 +269,16 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
               devicesCompanion.ip.value, deviceID, (adv) {});
         }
       }
-      await FeedsAPI().setSynced("device", devicesCompanion.serverID.value);
+      await BackendAPI()
+          .feedsAPI
+          .setSynced("device", devicesCompanion.serverID.value);
       Logger.log("Synced device");
     }
   }
 
   Future _syncInBoxes() async {
     Logger.log("Syncing boxes");
-    List<BoxesCompanion> boxes = await FeedsAPI().unsyncedBoxes();
+    List<BoxesCompanion> boxes = await BackendAPI().feedsAPI.unsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -292,14 +301,16 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addBox(boxesCompanion);
         }
       }
-      await FeedsAPI().setSynced("box", boxesCompanion.serverID.value);
+      await BackendAPI()
+          .feedsAPI
+          .setSynced("box", boxesCompanion.serverID.value);
       Logger.log("Synced box");
     }
   }
 
   Future _syncInPlants() async {
     Logger.log("Syncing plants");
-    List<PlantsCompanion> plants = await FeedsAPI().unsyncedPlants();
+    List<PlantsCompanion> plants = await BackendAPI().feedsAPI.unsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -322,7 +333,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addPlant(plantsCompanion);
         }
       }
-      await FeedsAPI().setSynced("plant", plantsCompanion.serverID.value);
+      await BackendAPI()
+          .feedsAPI
+          .setSynced("plant", plantsCompanion.serverID.value);
       Logger.log("Synced plant");
     }
   }
@@ -330,7 +343,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   Future _syncInTimelapses() async {
     Logger.log("Syncing timelapses");
     List<TimelapsesCompanion> timelapses =
-        await FeedsAPI().unsyncedTimelapses();
+        await BackendAPI().feedsAPI.unsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -353,7 +366,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
         }
       }
-      await FeedsAPI()
+      await BackendAPI()
+          .feedsAPI
           .setSynced("timelapse", timelapsesCompanion.serverID.value);
       Logger.log("Synced timelapse");
     }
@@ -379,7 +393,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     if (deletes.length == 0) {
       return;
     }
-    await FeedsAPI().sendDeletes(deletes);
+    await BackendAPI().feedsAPI.sendDeletes(deletes);
     await RelDB.get().deletesDAO.removeDeletes(deletes);
   }
 
@@ -391,7 +405,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       Feed feed = feeds[i];
-      await FeedsAPI().syncFeed(feed);
+      await BackendAPI().feedsAPI.syncFeed(feed);
     }
   }
 
@@ -404,7 +418,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       FeedEntry feedEntry = feedEntries[i];
-      await FeedsAPI().syncFeedEntry(feedEntry);
+      await BackendAPI().feedsAPI.syncFeedEntry(feedEntry);
       await _syncOutFeedMedias(feedEntry.id);
     }
   }
@@ -418,7 +432,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       FeedMedia feedMedia = feedMedias[i];
-      await FeedsAPI().syncFeedMedia(feedMedia);
+      await BackendAPI().feedsAPI.syncFeedMedia(feedMedia);
     }
   }
 
@@ -431,7 +445,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       FeedMedia feedMedia = feedMedias[i];
-      await FeedsAPI().syncFeedMedia(feedMedia);
+      await BackendAPI().feedsAPI.syncFeedMedia(feedMedia);
     }
   }
 
@@ -443,7 +457,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       Device device = devices[i];
-      await FeedsAPI().syncDevice(device);
+      await BackendAPI().feedsAPI.syncDevice(device);
     }
   }
 
@@ -455,7 +469,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       Box box = boxes[i];
-      await FeedsAPI().syncBox(box);
+      await BackendAPI().feedsAPI.syncBox(box);
     }
   }
 
@@ -467,7 +481,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       Plant plant = plants[i];
-      await FeedsAPI().syncPlant(plant);
+      await BackendAPI().feedsAPI.syncPlant(plant);
     }
   }
 
@@ -480,7 +494,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       Timelapse timelapse = timelapses[i];
-      await FeedsAPI().syncTimelapse(timelapse);
+      await BackendAPI().feedsAPI.syncTimelapse(timelapse);
     }
   }
 

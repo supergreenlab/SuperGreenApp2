@@ -18,7 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -104,7 +105,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: Image.network(
-                    FeedsAPI().absoluteFileURL(plant.thumbnailPath),
+                    BackendAPI().absoluteFileURL(plant.thumbnailPath),
                     fit: BoxFit.cover),
               ),
               Center(

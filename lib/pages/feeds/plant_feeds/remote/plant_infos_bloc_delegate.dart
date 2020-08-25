@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
@@ -28,11 +28,12 @@ class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
 
   @override
   void loadPlant() async {
-    Map<String, dynamic> plant = await FeedsAPI().publicPlant(plantID);
+    Map<String, dynamic> plant =
+        await BackendAPI().feedsAPI.publicPlant(plantID);
     plantInfosLoaded(PlantInfos(
         plant['name'],
-        FeedsAPI().absoluteFileURL(plant['filePath']),
-        FeedsAPI().absoluteFileURL(plant['thumbnailPath']),
+        BackendAPI().feedsAPI.absoluteFileURL(plant['filePath']),
+        BackendAPI().feedsAPI.absoluteFileURL(plant['thumbnailPath']),
         BoxSettings.fromJSON(plant['boxSettings']),
         PlantSettings.fromJSON(plant['settings']),
         false));

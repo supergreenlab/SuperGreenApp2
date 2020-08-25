@@ -18,7 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
 
 class PlantState extends Equatable {
   final String id;
@@ -68,7 +68,6 @@ class ExplorerBlocStateLoaded extends ExplorerBlocState {
 const int N_PER_PAGE = 15;
 
 class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
-  
   ExplorerBloc() : super(ExplorerBlocStateInit()) {
     add(ExplorerBlocEventInit());
   }

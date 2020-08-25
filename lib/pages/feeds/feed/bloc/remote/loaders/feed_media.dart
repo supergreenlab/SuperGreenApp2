@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -30,8 +30,9 @@ class FeedMediaLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<dynamic> feedMediasMap =
-        await FeedsAPI().publicFeedMediasForFeedEntry(state.feedEntryID);
+    List<dynamic> feedMediasMap = await BackendAPI()
+        .feedsAPI
+        .publicFeedMediasForFeedEntry(state.feedEntryID);
     List<MediaState> medias = [];
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));

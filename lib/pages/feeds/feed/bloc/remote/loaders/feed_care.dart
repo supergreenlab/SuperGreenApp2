@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';

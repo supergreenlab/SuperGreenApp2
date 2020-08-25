@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
@@ -31,18 +31,20 @@ class FeedMeasureLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<dynamic> feedMediasMap =
-        await FeedsAPI().publicFeedMediasForFeedEntry(state.feedEntryID);
+    List<dynamic> feedMediasMap = await BackendAPI()
+        .feedsAPI
+        .publicFeedMediasForFeedEntry(state.feedEntryID);
     MediaState currentMedia = stateForFeedMediaMap(feedMediasMap[0]);
     MediaState previousMedia;
     if ((state.params as FeedMeasureParams).previous is String) {
       String previous = (state.params as FeedMeasureParams).previous;
       if (previous != null) {
         Map<String, dynamic> previousMediaMap =
-            await FeedsAPI().publicFeedMedia(previous);
+            await BackendAPI().feedsAPI.publicFeedMedia(previous);
         previousMedia = stateForFeedMediaMap(previousMediaMap);
       }
     }
-    return FeedMeasureState(state, currentMedia, previousMedia, remoteState: true);
+    return FeedMeasureState(state, currentMedia, previousMedia,
+        remoteState: true);
   }
 }

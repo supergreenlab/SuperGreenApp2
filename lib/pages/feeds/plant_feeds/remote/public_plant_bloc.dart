@@ -18,7 +18,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class PublicPlantBlocEvent extends Equatable {}
@@ -56,7 +56,8 @@ class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
   Stream<PublicPlantBlocState> mapEventToState(
       PublicPlantBlocEvent event) async* {
     if (event is PublicPlantBlocEventLoadPlant) {
-      Map<String, dynamic> plant = await FeedsAPI().publicPlant(args.id);
+      Map<String, dynamic> plant =
+          await BackendAPI().feedsAPI.publicPlant(args.id);
       yield PublicPlantBlocStateInit(args.id, plant['name']);
     }
   }

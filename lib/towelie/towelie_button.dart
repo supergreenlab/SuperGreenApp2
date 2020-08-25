@@ -19,7 +19,7 @@
 import 'dart:convert';
 
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/helpers/feed_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 

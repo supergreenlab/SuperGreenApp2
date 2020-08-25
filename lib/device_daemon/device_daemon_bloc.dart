@@ -4,8 +4,8 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/api/device_api.dart';
-import 'package:super_green_app/data/helpers/device_helper.dart';
+import 'package:super_green_app/data/api/device/device_api.dart';
+import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -80,8 +80,8 @@ class DeviceDaemonBloc
     if (event is DeviceDaemonBlocEventInit) {
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
     } else if (event is DeviceDaemonBlocEventLoadDevice) {
-      Device device =
-          _devices.firstWhere((d) => d.id == event.deviceID, orElse: () => null);
+      Device device = _devices.firstWhere((d) => d.id == event.deviceID,
+          orElse: () => null);
       if (device == null) {
         return;
       }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/helpers/plant_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
 import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
@@ -40,7 +40,7 @@ class TowelieButtonPlantGerminate extends TowelieButton {
     Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feed);
     await PlantHelper.updatePlantPhase(
         plant, PlantPhases.GERMINATING, DateTime.now());
-    
+
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     await CardPlantTutoTakePic.createPlantTutoTakePic(feed);
     FeedEntry feedEntry =

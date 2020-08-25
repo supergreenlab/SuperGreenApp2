@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/helpers/plant_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';

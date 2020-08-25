@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class TimeSeriesAPI {
@@ -50,14 +50,15 @@ class TimeSeriesAPI {
   static Future<List<dynamic>> fetchMetric(
       Plant plant, String controllerID, String name) async {
     List<dynamic> data;
-    ChartCache cache = await RelDB.get().plantsDAO.getChartCache(plant.id, name);
+    ChartCache cache =
+        await RelDB.get().plantsDAO.getChartCache(plant.id, name);
     Duration diff = cache?.date?.difference(DateTime.now());
     if (cache == null || -diff.inSeconds >= 30) {
       if (cache != null) {
         await RelDB.get().plantsDAO.deleteChartCacheForPlant(cache.plant);
       }
       Response resp = await get(
-          '${FeedsAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50');
+          '${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50');
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
       await RelDB.get().plantsDAO.addChartCache(ChartCachesCompanion.insert(

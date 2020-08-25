@@ -21,7 +21,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/helpers/feed_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';

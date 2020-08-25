@@ -1,18 +1,20 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SettingsCreateAccountBlocEvent extends Equatable {}
 
-class SettingsCreateAccountBlocEventInit extends SettingsCreateAccountBlocEvent {
+class SettingsCreateAccountBlocEventInit
+    extends SettingsCreateAccountBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocEventCreateAccount extends SettingsCreateAccountBlocEvent {
+class SettingsCreateAccountBlocEventCreateAccount
+    extends SettingsCreateAccountBlocEvent {
   final String nickname;
   final String password;
 
@@ -24,17 +26,20 @@ class SettingsCreateAccountBlocEventCreateAccount extends SettingsCreateAccountB
 
 abstract class SettingsCreateAccountBlocState extends Equatable {}
 
-class SettingsCreateAccountBlocStateInit extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateInit
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocStateLoading extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateLoading
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocStateLoaded extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateLoaded
+    extends SettingsCreateAccountBlocState {
   final bool isAuth;
 
   SettingsCreateAccountBlocStateLoaded(this.isAuth);
@@ -43,24 +48,26 @@ class SettingsCreateAccountBlocStateLoaded extends SettingsCreateAccountBlocStat
   List<Object> get props => [isAuth];
 }
 
-class SettingsCreateAccountBlocStateDone extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateDone
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBlocStateError extends SettingsCreateAccountBlocState {
+class SettingsCreateAccountBlocStateError
+    extends SettingsCreateAccountBlocState {
   @override
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBloc
-    extends Bloc<SettingsCreateAccountBlocEvent, SettingsCreateAccountBlocState> {
-
+class SettingsCreateAccountBloc extends Bloc<SettingsCreateAccountBlocEvent,
+    SettingsCreateAccountBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsCreateAccount args;
   bool _isAuth;
 
-  SettingsCreateAccountBloc(this.args) : super(SettingsCreateAccountBlocStateInit()) {
+  SettingsCreateAccountBloc(this.args)
+      : super(SettingsCreateAccountBlocStateInit()) {
     _isAuth = AppDB().getAppData().jwt != null;
     add(SettingsCreateAccountBlocEventInit());
   }
@@ -74,9 +81,9 @@ class SettingsCreateAccountBloc
     } else if (event is SettingsCreateAccountBlocEventCreateAccount) {
       yield SettingsCreateAccountBlocStateLoading();
       try {
-        await FeedsAPI().createUser(event.nickname, event.password);
-        await FeedsAPI().login(event.nickname, event.password);
-        await FeedsAPI().createUserEnd();
+        await BackendAPI().usersAPI.createUser(event.nickname, event.password);
+        await BackendAPI().usersAPI.login(event.nickname, event.password);
+        await BackendAPI().feedsAPI.createUserEnd();
       } catch (e) {
         Logger.log(e);
         yield SettingsCreateAccountBlocStateError();

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_delegate.dart';
@@ -32,7 +32,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
     List<dynamic> entriesMap =
-        await FeedsAPI().publicFeedEntries(plantID, n, offset);
+        await BackendAPI().feedsAPI.publicFeedEntries(plantID, n, offset);
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
       return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap);
@@ -41,7 +41,8 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   void loadFeed() async {
-    Map<String, dynamic> plant = await FeedsAPI().publicPlant(plantID);
+    Map<String, dynamic> plant =
+        await BackendAPI().feedsAPI.publicPlant(plantID);
     add(FeedBlocEventFeedLoaded(PlantFeedState(
       AppDB().getAppData().storeGeo,
       PlantSettings.fromJSON(plant['settings']),

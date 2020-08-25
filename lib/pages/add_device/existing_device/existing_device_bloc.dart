@@ -22,13 +22,13 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
-import 'package:super_green_app/data/api/device_api.dart';
+import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class ExistingDeviceBlocEvent extends Equatable {}
 
 class ExistingDeviceBlocEventStartSearch extends ExistingDeviceBlocEvent {
-  final int rand = Random().nextInt(1<<32);
+  final int rand = Random().nextInt(1 << 32);
   final String query;
   ExistingDeviceBlocEventStartSearch(this.query);
 
@@ -39,7 +39,6 @@ class ExistingDeviceBlocEventStartSearch extends ExistingDeviceBlocEvent {
 class ExistingDeviceBlocState extends Equatable {
   @override
   List<Object> get props => [];
-
 }
 
 class ExistingDeviceBlocStateResolving extends ExistingDeviceBlocState {
@@ -70,14 +69,15 @@ class ExistingDeviceBloc
       ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
       yield ExistingDeviceBlocStateResolving();
-      bool isIP = RegExp(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b').hasMatch(event.query);
+      bool isIP = RegExp(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b')
+          .hasMatch(event.query);
       String ip;
       if (isIP) {
         ip = event.query;
       } else {
         try {
           ip = await DeviceAPI.resolveLocalName(event.query);
-        } catch(e) {
+        } catch (e) {
           yield ExistingDeviceBlocStateNotFound();
           return;
         }
@@ -88,12 +88,11 @@ class ExistingDeviceBloc
       }
       try {
         await get('http://$ip/s?k=BROKER_CLIENTID');
-      } catch(e) {
-          yield ExistingDeviceBlocStateNotFound();
-          return;
-        }
+      } catch (e) {
+        yield ExistingDeviceBlocStateNotFound();
+        return;
+      }
       yield ExistingDeviceBlocStateFound(ip);
     }
   }
-
 }

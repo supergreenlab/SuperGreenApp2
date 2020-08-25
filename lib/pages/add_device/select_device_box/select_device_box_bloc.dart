@@ -18,7 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/helpers/device_helper.dart';
+import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -133,14 +133,15 @@ class SelectDeviceBoxBloc
     for (int i = 0; i < boxModule.arrayLen; ++i) {
       final boxEnabledParam = await ddb.getParam(device.id, 'BOX_${i}_ENABLED');
       //if (boxEnabledParam.ivalue == 1) {
-        boxes.add(SelectData(i, boxEnabledParam.ivalue == 1, []));
+      boxes.add(SelectData(i, boxEnabledParam.ivalue == 1, []));
       //}
     }
     final ledModule = await ddb.getModule(device.id, 'led');
     for (int i = 0; i < ledModule.arrayLen; ++i) {
       final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
       if (ledBox.ivalue >= 0) {
-        SelectData selectData = boxes.firstWhere((b) => b.box == ledBox.ivalue, orElse: () => null);
+        SelectData selectData =
+            boxes.firstWhere((b) => b.box == ledBox.ivalue, orElse: () => null);
         if (selectData != null) {
           selectData.leds.add(i);
         }

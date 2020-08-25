@@ -20,7 +20,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:super_green_app/data/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
@@ -43,12 +43,11 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   @override
   Future<void> close() async {}
 
-  MediaState stateForFeedMediaMap(
-      Map<String, dynamic> feedMediaMap) {
+  MediaState stateForFeedMediaMap(Map<String, dynamic> feedMediaMap) {
     return MediaState(
         feedMediaMap['id'],
-        FeedsAPI().absoluteFileURL(feedMediaMap['filePath']),
-        FeedsAPI().absoluteFileURL(feedMediaMap['thumbnailPath']),
+        BackendAPI().feedsAPI.absoluteFileURL(feedMediaMap['filePath']),
+        BackendAPI().feedsAPI.absoluteFileURL(feedMediaMap['thumbnailPath']),
         JsonDecoder().convert(feedMediaMap['params']),
         true);
   }
@@ -62,6 +61,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
         true,
         DateTime.parse(feedEntryMap['date']),
         FeedEntriesParamHelpers.paramForFeedEntryType(
-            feedEntryMap['type'], feedEntryMap['params']), remoteState: true);
+            feedEntryMap['type'], feedEntryMap['params']),
+        remoteState: true);
   }
 }

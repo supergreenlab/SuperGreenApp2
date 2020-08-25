@@ -20,7 +20,7 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/helpers/feed_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/towelie/buttons/misc/towelie_button_show_tip.dart';
@@ -46,7 +46,8 @@ class CardPlantGermination {
         'text': CardPlantGermination.toweliePlantGermination,
         'buttons': [
           TowelieButtonPlantGerminate.createButton(),
-          TowelieButtonShowTip.createButton('Germination guide', 't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'),
+          TowelieButtonShowTip.createButton('Germination guide',
+              't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'),
         ]
       })),
     ));
