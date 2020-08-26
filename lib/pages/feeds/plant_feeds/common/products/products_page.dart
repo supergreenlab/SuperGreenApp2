@@ -88,6 +88,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   if (products == null || products.length == 0) {
                     return;
                   }
+                  products.addAll(this.products);
                   BlocProvider.of<ProductsBloc>(context)
                       .add(ProductsBlocEventUpdate(products));
                 }));

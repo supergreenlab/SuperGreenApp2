@@ -83,7 +83,7 @@ class BoxSettings extends Equatable {
       'height': height,
       'depth': depth,
       'unit': unit,
-      'products': products,
+      'products': products.map((p) => p.toMap()).toList(),
     };
   }
 
