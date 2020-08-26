@@ -23,12 +23,26 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class ProductSupplierBlocEvent extends Equatable {}
 
+class ProductSupplierBlocEventInit extends ProductSupplierBlocEvent {
+  ProductSupplierBlocEventInit();
+
+  @override
+  List<Object> get props => [];
+}
+
 abstract class ProductSupplierBlocState extends Equatable {}
 
 class ProductSupplierBlocStateInit extends ProductSupplierBlocState {
+  ProductSupplierBlocStateInit();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ProductSupplierBlocStateLoaded extends ProductSupplierBlocState {
   final List<Product> products;
 
-  ProductSupplierBlocStateInit(this.products);
+  ProductSupplierBlocStateLoaded(this.products);
 
   @override
   List<Object> get props => [products];
@@ -38,10 +52,15 @@ class ProductSupplierBloc
     extends Bloc<ProductSupplierBlocEvent, ProductSupplierBlocState> {
   final MainNavigateToProductSupplierEvent args;
 
-  ProductSupplierBloc(this.args)
-      : super(ProductSupplierBlocStateInit(args.products));
+  ProductSupplierBloc(this.args) : super(ProductSupplierBlocStateInit()) {
+    add(ProductSupplierBlocEventInit());
+  }
 
   @override
   Stream<ProductSupplierBlocState> mapEventToState(
-      ProductSupplierBlocEvent event) async* {}
+      ProductSupplierBlocEvent event) async* {
+    if (event is ProductSupplierBlocEventInit) {
+      yield ProductSupplierBlocStateLoaded(args.products);
+    }
+  }
 }

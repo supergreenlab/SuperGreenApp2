@@ -23,6 +23,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/products/product_supplier/product_supplier_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class ProductSupplierPage extends StatefulWidget {
@@ -31,50 +32,89 @@ class ProductSupplierPage extends StatefulWidget {
 }
 
 class _ProductSupplierPageState extends State<ProductSupplierPage> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController urlController = TextEditingController();
+  List<Product> products = [];
+  List<TextEditingController> urlControllers = [];
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductSupplierBloc, ProductSupplierBlocState>(
-      listener: (BuildContext context, ProductSupplierBlocState state) {},
+      listener: (BuildContext context, ProductSupplierBlocState state) {
+        if (state is ProductSupplierBlocStateLoaded) {
+          setState(() {
+            products = state.products;
+            urlControllers = products
+                .map<TextEditingController>((e) => TextEditingController())
+                .toList();
+          });
+        }
+      },
       child: BlocBuilder<ProductSupplierBloc, ProductSupplierBlocState>(
         builder: (BuildContext context, ProductSupplierBlocState state) {
           Widget body = Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SectionTitle(
+                title: 'Where did you buy these items?\n(optional)',
+                icon: 'assets/products/toolbox/icon_item_type.svg',
+                iconPadding: 0,
+              ),
+            ),
             Expanded(
               child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: SectionTitle(
-                      title: 'Where did you buy it?',
-                      icon: 'assets/products/toolbox/icon_item_type.svg',
-                      iconPadding: 0,
-                    ),
-                  ),
-                  renderTextField(context, 'Link', 'Ex: https://amazon.com/...',
-                      urlController),
-                ],
+                children: this.products.map<Widget>((product) {
+                  int i = this.products.indexOf(product);
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 16.0, left: 8, right: 8),
+                          child: Text(product.name,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                        ),
+                        renderTextField(context, 'Link',
+                            'Ex: https://amazon.com/...', urlControllers[i]),
+                      ]);
+                }).toList(),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: GreenButton(
-                  title: 'CREATE PRODUCT',
-                  onPressed: nameController.text == ''
-                      ? null
-                      : () {
-                          Product product = Product(
-                              name: nameController.text,
-                              supplier: urlController.text != ''
-                                  ? ProductSupplier(url: urlController.text)
-                                  : null);
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigatorActionPop(param: product));
-                        },
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  RedButton(
+                    title: 'SKIP',
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorActionPop(param: products));
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: GreenButton(
+                      title: 'Ok',
+                      onPressed: urlControllers.firstWhere((c) => c.text != '',
+                                  orElse: () => null) !=
+                              null
+                          ? () {
+                              List<Product> products = [];
+                              for (int i = 0; i < this.products.length; ++i) {
+                                products.add(this.products[i].copyWith(
+                                    supplier: urlControllers[i].text != ''
+                                        ? ProductSupplier(
+                                            productID: this.products[i].id,
+                                            url: urlControllers[i].text)
+                                        : null));
+                              }
+                              BlocProvider.of<MainNavigatorBloc>(context)
+                                  .add(MainNavigatorActionPop(param: products));
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
               ),
             ),
           ]);
@@ -97,7 +137,7 @@ class _ProductSupplierPageState extends State<ProductSupplierPage> {
   Widget renderTextField(BuildContext context, String labelText,
       String hintText, TextEditingController controller) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
       child: TextFormField(
         decoration: InputDecoration(
           contentPadding:

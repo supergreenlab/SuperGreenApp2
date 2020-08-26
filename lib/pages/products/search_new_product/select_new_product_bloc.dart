@@ -131,17 +131,15 @@ class SelectNewProductBloc
     } else if (event is SelectNewProductBlocEventCreateProductSuppliers) {
       yield SelectNewProductBlocStateCreatingProductSuppliers();
       List<Product> products = [];
-      for (Product product
-          in (event as SelectNewProductBlocEventCreateProductSuppliers)
-              .products) {
+      for (Product product in event.products) {
         if (product.supplier != null) {
-          ProductSupplier productSupplier =
-              product.supplier.copyWith(productID: product.id);
           String productSupplierID = await BackendAPI()
               .productsAPI
-              .createProductSupplier(productSupplier);
-          product = product.copyWith(
-              supplier: productSupplier.copyWith(id: productSupplierID));
+              .createProductSupplier(product.supplier);
+          products.add(product.copyWith(
+              supplier: product.supplier.copyWith(id: productSupplierID)));
+        } else {
+          products.add(product);
         }
       }
       yield SelectNewProductBlocStateDone(products);

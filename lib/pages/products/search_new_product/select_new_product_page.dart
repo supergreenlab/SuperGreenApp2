@@ -87,8 +87,17 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: selectedProducts.length > 0
-                              ? Text(
-                                  '${selectedProducts.length} item${selectedProducts.length > 1 ? 's' : ''} selected')
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                        '${selectedProducts.length} item${selectedProducts.length > 1 ? 's' : ''}'),
+                                    Text(' selected',
+                                        style: TextStyle(
+                                            color: Color(0xff3bb30b),
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                )
                               : Container(),
                         ),
                       ),
@@ -102,6 +111,10 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                                         selectedProducts,
                                         futureFn: (future) async {
                                   List<Product> products = await future;
+                                  if (products == null) {
+                                    return;
+                                  }
+
                                   BlocProvider.of<SelectNewProductBloc>(context)
                                       .add(
                                           SelectNewProductBlocEventCreateProductSuppliers(
