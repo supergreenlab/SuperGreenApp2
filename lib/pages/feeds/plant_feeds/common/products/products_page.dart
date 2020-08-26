@@ -22,6 +22,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
+import 'package:super_green_app/pages/products/product/product_type/product_categories.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -87,6 +88,8 @@ class _ProductsPageState extends State<ProductsPage> {
                   if (products == null || products.length == 0) {
                     return;
                   }
+                  BlocProvider.of<ProductsBloc>(context)
+                      .add(ProductsBlocEventUpdate(products));
                 }));
               },
             ),
@@ -145,7 +148,20 @@ Add your nutrients to keep track of their usage when watering/making nutrient mi
   Widget _renderList(BuildContext context, ProductsBlocStateLoaded state) {
     return Expanded(
       child: ListView(
-        children: [],
+        children: state.products.map<Widget>((p) {
+          final ProductCategoryUI categoryUI = productCategories[p.category];
+          return ListTile(
+            leading: SvgPicture.asset(categoryUI.icon),
+            title: Text(categoryUI.name, style: TextStyle(color: Colors.white)),
+            subtitle: Text(p.name,
+                style: TextStyle(color: Colors.white, fontSize: 20)),
+            trailing: Icon(
+              Icons.open_in_browser,
+              color: Colors.white,
+              size: 30,
+            ),
+          );
+        }).toList(),
       ),
     );
   }

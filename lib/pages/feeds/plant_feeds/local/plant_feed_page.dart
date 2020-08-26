@@ -855,7 +855,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   Widget _renderProducts(BuildContext context, PlantFeedBlocStateLoaded state) {
     return BlocProvider(
-      create: (context) => ProductsBloc(LocalProductsBlocDelegate()),
+      create: (context) => ProductsBloc(LocalProductsBlocDelegate(state.plant)),
       child: ProductsPage(),
     );
   }

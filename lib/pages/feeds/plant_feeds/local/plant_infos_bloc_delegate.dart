@@ -34,7 +34,7 @@ class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   StreamSubscription<Plant> plantStream;
   StreamSubscription<FeedMedia> feedMediaStream;
 
-  LocalPlantInfosBlocDelegate(this.plant) : super();
+  LocalPlantInfosBlocDelegate(this.plant);
 
   @override
   void loadPlant() async {
