@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/product_type/product_categories.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -36,7 +35,9 @@ class SelectNewProductPage extends StatefulWidget {
 }
 
 class _SelectNewProductPageState extends State<SelectNewProductPage> {
+  List<Product> selectedProducts = [];
   List<Product> products = [];
+  bool preLoading = false;
 
   final TextEditingController controller = TextEditingController();
   Timer autocompleteTimer;
@@ -46,7 +47,9 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     return BlocListener<SelectNewProductBloc, SelectNewProductBlocState>(
       listener: (BuildContext context, SelectNewProductBlocState state) async {
         if (state is SelectNewProductBlocStateLoaded) {
-          products = state.products;
+          setState(() {
+            products = state.products;
+          });
         } else if (state is SelectNewProductBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -61,11 +64,11 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
           } else if (state is SelectNewProductBlocStateDone) {
             body = renderDone(context);
           } else {
-            List<Widget> content = [renderSearchField(context)];
+            List<Widget> content = [renderSearchField(context, state)];
             if (products.length == 0 && controller.text == '') {
               content.add(renderNoProducts(context));
             } else {
-              content.add(renderProductsList(context));
+              content.add(renderProductsList(context, state));
             }
             body = Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,36 +92,60 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     );
   }
 
-  Widget renderSearchField(BuildContext context) {
+  Widget renderSearchField(
+      BuildContext context, SelectNewProductBlocState state) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: TextFormField(
-        autofocus: true,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          hintText: 'Ex: BioBizz',
-          hintStyle: TextStyle(color: Colors.black38),
-          labelText: 'Item search',
-          labelStyle: TextStyle(
-            color: Colors.black,
+      padding:
+          const EdgeInsets.only(left: 24.0, right: 24.0, top: 8, bottom: 16),
+      child: Stack(
+        children: [
+          TextFormField(
+            autofocus: true,
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              hintText: 'Ex: BioBizz',
+              hintStyle: TextStyle(color: Colors.black38),
+              labelText: 'Item search',
+              labelStyle: TextStyle(
+                color: Colors.black,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black)),
+            ),
+            style:
+                TextStyle(color: Colors.black, decoration: TextDecoration.none),
+            controller: controller,
+            onChanged: (value) {
+              setState(() {
+                preLoading = true;
+              });
+              if (autocompleteTimer != null) {
+                autocompleteTimer.cancel();
+              }
+              autocompleteTimer = Timer(Duration(milliseconds: 500), () {
+                BlocProvider.of<SelectNewProductBloc>(context)
+                    .add(SelectNewProductBlocEventSearchTerms(value));
+                autocompleteTimer = null;
+                setState(() {
+                  preLoading = false;
+                });
+              });
+            },
           ),
-          enabledBorder:
-              UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        ),
-        style: TextStyle(color: Colors.black, decoration: TextDecoration.none),
-        controller: controller,
-        onChanged: (value) {
-          setState(() {});
-          if (autocompleteTimer != null) {
-            autocompleteTimer.cancel();
-          }
-          autocompleteTimer = Timer(Duration(milliseconds: 500), () {
-            BlocProvider.of<SelectNewProductBloc>(context)
-                .add(SelectNewProductBlocEventSearchTerms(value));
-            autocompleteTimer = null;
-          });
-        },
+          state is SelectNewProductBlocStateLoading || preLoading
+              ? Positioned(
+                  right: 5,
+                  bottom: 8,
+                  child: SizedBox(
+                      width: 15,
+                      height: 15,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                      )),
+                )
+              : Container(),
+        ],
       ),
     );
   }
@@ -150,19 +177,35 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     );
   }
 
-  Widget renderProductsList(BuildContext context) {
+  Widget renderProductsList(
+      BuildContext context, SelectNewProductBlocState state) {
     List<Widget> children = products.map<Widget>((p) {
-      final ProductCategoryUI type = productCategories[p.category];
+      final ProductCategoryUI categoryUI = productCategories[p.category];
       return ListTile(
-        leading: SvgPicture.asset(type.icon),
-        title: Text(type.name),
+        onTap: () {
+          setState(() {
+            if (selectedProducts.contains(p)) {
+              selectedProducts.remove(p);
+            } else {
+              selectedProducts.add(p);
+            }
+          });
+        },
+        leading: SvgPicture.asset(categoryUI.icon),
+        title: Text(categoryUI.name),
         subtitle: Text(p.name, style: TextStyle(fontSize: 20)),
-        trailing: Icon(Icons.add_box, size: 30, color: Color(0xff3bb30b)),
+        trailing: Icon(Icons.add_box,
+            size: 30,
+            color: selectedProducts.contains(p)
+                ? Color(0xff3bb30b)
+                : Color(0xffececec)),
       );
     }).toList();
     if (products.length == 0) {
-      children.add(
-          ListTile(title: Text('No search results for "${controller.text}"')));
+      children.add(ListTile(
+          title: Text(state is SelectNewProductBlocStateLoading || preLoading
+              ? 'Searching..'
+              : 'No search results for "${controller.text}"')));
     }
     children.add(Container(
       color: Color(0xffececec),

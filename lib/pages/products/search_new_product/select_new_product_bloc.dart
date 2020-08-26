@@ -50,6 +50,11 @@ class SelectNewProductBlocStateInit extends SelectNewProductBlocState {
   List<Object> get props => [];
 }
 
+class SelectNewProductBlocStateLoading extends SelectNewProductBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class SelectNewProductBlocStateLoaded extends SelectNewProductBlocState {
   final List<Product> products;
 
@@ -84,6 +89,7 @@ class SelectNewProductBloc
   Stream<SelectNewProductBlocState> mapEventToState(
       SelectNewProductBlocEvent event) async* {
     if (event is SelectNewProductBlocEventSearchTerms) {
+      yield SelectNewProductBlocStateLoading();
       try {
         List<Product> products =
             await BackendAPI().productsAPI.searchProducts(event.searchTerms);

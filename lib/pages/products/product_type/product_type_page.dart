@@ -56,7 +56,8 @@ class _ProductTypePageState extends State<ProductTypePage> {
                   crossAxisCount: 4,
                   children: productCategories.keys
                       .map<Widget>((ProductCategoryID name) {
-                    final ProductCategoryUI type = productCategories[name];
+                    final ProductCategoryUI categoryUI =
+                        productCategories[name];
                     return InkWell(
                       onTap: () {
                         setState(() {
@@ -78,9 +79,9 @@ class _ProductTypePageState extends State<ProductTypePage> {
                                     borderRadius: selectedType == name
                                         ? BorderRadius.all(Radius.circular(25))
                                         : null),
-                                child: SvgPicture.asset(type.icon)),
+                                child: SvgPicture.asset(categoryUI.icon)),
                           ),
-                          Text(type.name,
+                          Text(categoryUI.name,
                               style: TextStyle(
                                   fontWeight: selectedType == name
                                       ? FontWeight.bold
