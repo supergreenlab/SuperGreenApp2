@@ -88,7 +88,7 @@ class Product extends Equatable {
       'id': id,
       'name': name,
       'categories': json ? JsonEncoder().convert(categories) : categories,
-      'supplier': supplier.toMap(),
+      'supplier': supplier != null ? supplier.toMap() : null,
     };
   }
 

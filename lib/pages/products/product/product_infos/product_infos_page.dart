@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/products/product_infos/product_infos_bloc.dart';
+import 'package:super_green_app/pages/products/product/product_infos/product_infos_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
@@ -32,7 +32,6 @@ class ProductInfosPage extends StatefulWidget {
 
 class _ProductInfosPageState extends State<ProductInfosPage> {
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController urlController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +53,6 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
                   ),
                   renderTextField(
                       context, 'Name', 'Ex: Megacrop', nameController),
-                  SectionTitle(
-                    title: 'Where did you buy it?',
-                    icon: 'assets/products/toolbox/icon_item_type.svg',
-                    iconPadding: 0,
-                  ),
-                  renderTextField(context, 'Link (optional)',
-                      'Ex: https://amazon.com/...', urlController),
                 ],
               ),
             ),
@@ -73,11 +65,7 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
                   onPressed: nameController.text == ''
                       ? null
                       : () {
-                          Product product = Product(
-                              name: nameController.text,
-                              supplier: urlController.text != ''
-                                  ? ProductSupplier(url: urlController.text)
-                                  : null);
+                          Product product = Product(name: nameController.text);
                           BlocProvider.of<MainNavigatorBloc>(context)
                               .add(MainNavigatorActionPop(param: product));
                         },
@@ -106,6 +94,7 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 8),
       child: TextFormField(
+        autofocus: true,
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),

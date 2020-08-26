@@ -21,7 +21,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 
 abstract class SelectNewProductBlocEvent extends Equatable {}
 
@@ -41,6 +40,16 @@ class SelectNewProductBlocEventCreateProduct extends SelectNewProductBlocEvent {
 
   @override
   List<Object> get props => [product];
+}
+
+class SelectNewProductBlocEventCreateProductSuppliers
+    extends SelectNewProductBlocEvent {
+  final List<Product> products;
+
+  SelectNewProductBlocEventCreateProductSuppliers(this.products);
+
+  @override
+  List<Object> get props => [products];
 }
 
 abstract class SelectNewProductBlocState extends Equatable {}
@@ -70,13 +79,29 @@ class SelectNewProductBlocStateCreatingProduct
   List<Object> get props => [];
 }
 
-class SelectNewProductBlocStateDone extends SelectNewProductBlocState {
+class SelectNewProductBlocStateCreatingProductSuppliers
+    extends SelectNewProductBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class SelectNewProductBlocStateCreateProductDone
+    extends SelectNewProductBlocState {
   final Product product;
 
-  SelectNewProductBlocStateDone(this.product);
+  SelectNewProductBlocStateCreateProductDone(this.product);
 
   @override
   List<Object> get props => [product];
+}
+
+class SelectNewProductBlocStateDone extends SelectNewProductBlocState {
+  final List<Product> products;
+
+  SelectNewProductBlocStateDone(this.products);
+
+  @override
+  List<Object> get props => [products];
 }
 
 class SelectNewProductBloc
@@ -102,16 +127,24 @@ class SelectNewProductBloc
       String productID =
           await BackendAPI().productsAPI.createProduct(event.product);
       Product product = event.product.copyWith(id: productID);
-      if (event.product.supplier != null) {
-        ProductSupplier productSupplier =
-            product.supplier.copyWith(productID: productID);
-        String productSupplierID = await BackendAPI()
-            .productsAPI
-            .createProductSupplier(productSupplier);
-        product = product.copyWith(
-            supplier: productSupplier.copyWith(id: productSupplierID));
+      yield SelectNewProductBlocStateCreateProductDone(product);
+    } else if (event is SelectNewProductBlocEventCreateProductSuppliers) {
+      yield SelectNewProductBlocStateCreatingProductSuppliers();
+      List<Product> products = [];
+      for (Product product
+          in (event as SelectNewProductBlocEventCreateProductSuppliers)
+              .products) {
+        if (product.supplier != null) {
+          ProductSupplier productSupplier =
+              product.supplier.copyWith(productID: product.id);
+          String productSupplierID = await BackendAPI()
+              .productsAPI
+              .createProductSupplier(productSupplier);
+          product = product.copyWith(
+              supplier: productSupplier.copyWith(id: productSupplierID));
+        }
       }
-      yield SelectNewProductBlocStateDone(product);
+      yield SelectNewProductBlocStateDone(products);
     }
   }
 }

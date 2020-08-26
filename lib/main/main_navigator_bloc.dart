@@ -23,6 +23,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -492,6 +493,16 @@ class MainNavigateToProductInfosEvent extends MainNavigatorEvent {
   List<Object> get props => super.props;
 }
 
+class MainNavigateToProductSupplierEvent extends MainNavigatorEvent {
+  final List<Product> products;
+
+  MainNavigateToProductSupplierEvent(this.products, {futureFn})
+      : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [...super.props, products];
+}
+
 class MainNavigateToProductTypeEvent extends MainNavigatorEvent {
   MainNavigateToProductTypeEvent({futureFn}) : super(futureFn: futureFn);
 
@@ -677,6 +688,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToProductTypeEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/product/new/type', arguments: event);
+    } else if (event is MainNavigateToProductSupplierEvent) {
+      future = _navigatorKey.currentState
+          .pushNamed('/product/new/supplier', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

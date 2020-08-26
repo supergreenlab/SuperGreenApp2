@@ -80,8 +80,14 @@ class _ProductsPageState extends State<ProductsPage> {
                 size: 40,
               ),
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToSelectNewProductEvent());
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToSelectNewProductEvent(
+                        futureFn: (future) async {
+                  List<Product> products = await future;
+                  if (products == null || products.length == 0) {
+                    return;
+                  }
+                }));
               },
             ),
           ],

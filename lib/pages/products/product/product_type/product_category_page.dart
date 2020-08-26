@@ -21,8 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/products/product_type/product_type_bloc.dart';
-import 'package:super_green_app/pages/products/product_type/product_categories.dart';
+import 'package:super_green_app/pages/products/product/product_type/product_categories.dart';
+import 'package:super_green_app/pages/products/product/product_type/product_category_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
@@ -33,7 +33,7 @@ class ProductTypePage extends StatefulWidget {
 }
 
 class _ProductTypePageState extends State<ProductTypePage> {
-  ProductCategoryID selectedType;
+  ProductCategoryID selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                     return InkWell(
                       onTap: () {
                         setState(() {
-                          selectedType = name;
+                          selectedCategory = name;
                         });
                       },
                       child: Column(
@@ -73,17 +73,17 @@ class _ProductTypePageState extends State<ProductTypePage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    border: selectedType == name
+                                    border: selectedCategory == name
                                         ? Border.all(color: Colors.green)
                                         : null,
-                                    borderRadius: selectedType == name
+                                    borderRadius: selectedCategory == name
                                         ? BorderRadius.all(Radius.circular(25))
                                         : null),
                                 child: SvgPicture.asset(categoryUI.icon)),
                           ),
                           Text(categoryUI.name,
                               style: TextStyle(
-                                  fontWeight: selectedType == name
+                                  fontWeight: selectedCategory == name
                                       ? FontWeight.bold
                                       : null))
                         ],
@@ -98,7 +98,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                   alignment: Alignment.centerRight,
                   child: GreenButton(
                     title: 'NEXT',
-                    onPressed: selectedType == null
+                    onPressed: selectedCategory == null
                         ? null
                         : () {
                             BlocProvider.of<MainNavigatorBloc>(context).add(
@@ -110,8 +110,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                                     MainNavigatorActionPop(
                                         param: Product(
                                             name: product.name,
-                                            category: selectedType,
-                                            supplier: product.supplier)));
+                                            category: selectedCategory)));
                               }
                             }));
                           },

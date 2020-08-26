@@ -23,11 +23,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/products/product_type/product_categories.dart';
+import 'package:super_green_app/pages/products/product/product_type/product_categories.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class SelectNewProductPage extends StatefulWidget {
   @override
@@ -50,10 +51,15 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
           setState(() {
             products = state.products;
           });
+        } else if (state is SelectNewProductBlocStateCreateProductDone) {
+          setState(() {
+            selectedProducts.add(state.product);
+            products = [state.product];
+          });
         } else if (state is SelectNewProductBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop());
+              .add(MainNavigatorActionPop(param: state.products));
         }
       },
       child: BlocBuilder<SelectNewProductBloc, SelectNewProductBlocState>(
@@ -61,6 +67,9 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
           Widget body;
           if (state is SelectNewProductBlocStateCreatingProduct) {
             body = renderCreatingProduct(context);
+          } else if (state
+              is SelectNewProductBlocStateCreatingProductSuppliers) {
+            body = renderCreatingProductSuppliers(context);
           } else if (state is SelectNewProductBlocStateDone) {
             body = renderDone(context);
           } else {
@@ -69,7 +78,43 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
               content.add(renderNoProducts(context));
             } else {
               content.add(renderProductsList(context, state));
+              content.add(
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: selectedProducts.length > 0
+                              ? Text(
+                                  '${selectedProducts.length} item${selectedProducts.length > 1 ? 's' : ''} selected')
+                              : Container(),
+                        ),
+                      ),
+                      GreenButton(
+                        title: 'NEXT',
+                        onPressed: selectedProducts.length == 0
+                            ? null
+                            : () {
+                                BlocProvider.of<MainNavigatorBloc>(context).add(
+                                    MainNavigateToProductSupplierEvent(
+                                        selectedProducts,
+                                        futureFn: (future) async {
+                                  List<Product> products = await future;
+                                  BlocProvider.of<SelectNewProductBloc>(context)
+                                      .add(
+                                          SelectNewProductBlocEventCreateProductSuppliers(
+                                              products));
+                                }));
+                              },
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
+
             body = Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: content);
@@ -184,6 +229,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
       return ListTile(
         onTap: () {
           setState(() {
+            FocusScope.of(context).requestFocus(FocusNode());
             if (selectedProducts.contains(p)) {
               selectedProducts.remove(p);
             } else {
@@ -237,6 +283,12 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
   Widget renderCreatingProduct(BuildContext context) {
     return FullscreenLoading(
       title: 'Creating toolbox item',
+    );
+  }
+
+  Widget renderCreatingProductSuppliers(BuildContext context) {
+    return FullscreenLoading(
+      title: 'Adding links',
     );
   }
 
