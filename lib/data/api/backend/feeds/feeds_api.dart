@@ -259,12 +259,8 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicPlants(int n, int offset) async {
-    Response resp = await BackendAPI().apiClient.get(
-        '${BackendAPI().serverHost}/public/plants?limit=$n&offset=$offset',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-        });
+    Response resp =
+        await BackendAPI().get('/public/plants?limit=$n&offset=$offset');
     if (resp.statusCode ~/ 100 != 2) {
       throw 'publicPlants failed: ${resp.body}';
     }
@@ -273,12 +269,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> publicPlant(String id) async {
-    Response resp = await BackendAPI()
-        .apiClient
-        .get('${BackendAPI().serverHost}/public/plant/$id', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().get('/public/plant/$id');
     if (resp.statusCode ~/ 100 != 2) {
       throw 'publicPlant failed: ${resp.body}';
     }
@@ -286,12 +277,8 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicFeedEntries(String id, int n, int offset) async {
-    Response resp = await BackendAPI().apiClient.get(
-        '${BackendAPI().serverHost}/public/plant/$id/feedEntries?limit=$n&offset=$offset',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-        });
+    Response resp = await BackendAPI()
+        .get('/public/plant/$id/feedEntries?limit=$n&offset=$offset');
     if (resp.statusCode ~/ 100 != 2) {
       throw 'publicFeedEntries failed: ${resp.body}';
     }
@@ -300,12 +287,7 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
-    Response resp = await BackendAPI().apiClient.get(
-        '${BackendAPI().serverHost}/public/feedEntry/$id/feedMedias',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-        });
+    Response resp = await BackendAPI().get('/public/feedEntry/$id/feedMedias');
     if (resp.statusCode ~/ 100 != 2) {
       throw 'publicFeedMediasForFeedEntry failed: ${resp.body}';
     }
@@ -314,12 +296,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> publicFeedMedia(String id) async {
-    Response resp = await BackendAPI()
-        .apiClient
-        .get('${BackendAPI().serverHost}/public/feedMedia/$id', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().get('/public/feedMedia/$id');
     if (resp.statusCode ~/ 100 != 2) {
       throw 'publicFeedMedia failed: ${resp.body}';
     }

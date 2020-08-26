@@ -84,6 +84,13 @@ class SelectNewProductBloc
   Stream<SelectNewProductBlocState> mapEventToState(
       SelectNewProductBlocEvent event) async* {
     if (event is SelectNewProductBlocEventSearchTerms) {
+      try {
+        List<Product> products =
+            await BackendAPI().productsAPI.searchProducts(event.searchTerms);
+        yield SelectNewProductBlocStateLoaded(products);
+      } catch (e) {
+        yield SelectNewProductBlocStateLoaded([]);
+      }
     } else if (event is SelectNewProductBlocEventCreateProduct) {
       yield SelectNewProductBlocStateCreatingProduct();
       String productID =

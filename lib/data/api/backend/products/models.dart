@@ -55,18 +55,27 @@ class Product extends Equatable {
   @override
   List<Object> get props => [id, name, category, supplier];
 
-  static Product fromMap(Map<String, dynamic> map) {
-    List<dynamic> categories = map['categories'] ?? [];
+  static Product fromMap(Map<String, dynamic> map, {bool json = false}) {
+    List<dynamic> categories;
+    if (json) {
+      categories = JsonDecoder().convert(map['categories']);
+    } else {
+      categories = map['categories'] ?? [];
+    }
     ProductCategoryID categoryID;
     if (categories.length > 0) {
       categoryID =
           EnumToString.fromString(ProductCategoryID.values, categories[0]);
     }
+    ProductSupplier productSupplier;
+    if (map['supplier'] != null) {
+      productSupplier = ProductSupplier.fromMap(map['supplier']);
+    }
     return Product(
       id: map['id'],
       name: map['name'],
       category: categoryID,
-      supplier: ProductSupplier.fromMap(map['supplier']),
+      supplier: productSupplier,
     );
   }
 

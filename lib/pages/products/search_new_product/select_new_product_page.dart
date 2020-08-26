@@ -24,6 +24,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
+import 'package:super_green_app/pages/products/product_type/product_categories.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -150,17 +151,25 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
   }
 
   Widget renderProductsList(BuildContext context) {
-    List<Widget> children = products.map((p) {
+    List<Widget> children = products.map<Widget>((p) {
+      final ProductCategoryUI type = productCategories[p.category];
       return ListTile(
-        title: Text('pouet'),
+        leading: SvgPicture.asset(type.icon),
+        title: Text(type.name),
+        subtitle: Text(p.name, style: TextStyle(fontSize: 20)),
+        trailing: Icon(Icons.add_box, size: 30, color: Color(0xff3bb30b)),
       );
     }).toList();
     if (products.length == 0) {
       children.add(
           ListTile(title: Text('No search results for "${controller.text}"')));
     }
+    children.add(Container(
+      color: Color(0xffececec),
+      height: 1,
+    ));
     children.add(ListTile(
-      leading: Icon(Icons.add, size: 50),
+      trailing: Icon(Icons.note_add, size: 30),
       title: Text('Not found?'),
       subtitle: Text('Create new toolbox item',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),

@@ -22,7 +22,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/products/product_type/product_type_bloc.dart';
-import 'package:super_green_app/pages/products/product_type/product_types.dart';
+import 'package:super_green_app/pages/products/product_type/product_categories.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
@@ -54,9 +54,9 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 4,
-                  children:
-                      productTypes.keys.map<Widget>((ProductCategoryID name) {
-                    final ProductType type = productTypes[name];
+                  children: productCategories.keys
+                      .map<Widget>((ProductCategoryID name) {
+                    final ProductCategoryUI type = productCategories[name];
                     return InkWell(
                       onTap: () {
                         setState(() {

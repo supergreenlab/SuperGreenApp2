@@ -19,41 +19,41 @@
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 
-class ProductType extends Equatable {
+class ProductCategoryUI extends Equatable {
   final String name;
   final String icon;
 
-  ProductType(this.name, this.icon);
+  ProductCategoryUI(this.name, this.icon);
 
   @override
   List<Object> get props => [];
 }
 
-Map<ProductCategoryID, ProductType> productTypes = {
-  ProductCategoryID.COMPLETE_KIT: ProductType(
+Map<ProductCategoryID, ProductCategoryUI> productCategories = {
+  ProductCategoryID.COMPLETE_KIT: ProductCategoryUI(
       'Complete kit', 'assets/products/toolbox/icon_complete_kit.svg'),
-  ProductCategoryID.VENTILATION: ProductType(
+  ProductCategoryID.VENTILATION: ProductCategoryUI(
       'Ventilation', 'assets/products/toolbox/icon_ventilation.svg'),
-  ProductCategoryID.LIGHTING:
-      ProductType('Lighting', 'assets/products/toolbox/icon_lighting.svg'),
+  ProductCategoryID.LIGHTING: ProductCategoryUI(
+      'Lighting', 'assets/products/toolbox/icon_lighting.svg'),
   ProductCategoryID.SENSORS:
-      ProductType('Sensors', 'assets/products/toolbox/icon_sensors.svg'),
+      ProductCategoryUI('Sensors', 'assets/products/toolbox/icon_sensors.svg'),
   ProductCategoryID.PH_EC:
-      ProductType('PH/EC', 'assets/products/toolbox/icon_ph_ec.svg'),
-  ProductCategoryID.SUBSTRAT:
-      ProductType('Substrat', 'assets/products/toolbox/icon_substrat.svg'),
-  ProductCategoryID.FERTILIZER:
-      ProductType('Fertilizer', 'assets/products/toolbox/icon_fertilizer.svg'),
-  ProductCategoryID.IRRIGATION:
-      ProductType('Irrigation', 'assets/products/toolbox/icon_irrigation.svg'),
-  ProductCategoryID.FURNITURE:
-      ProductType('Furniture', 'assets/products/toolbox/icon_furniture.svg'),
-  ProductCategoryID.SEEDLING:
-      ProductType('Seedling', 'assets/products/toolbox/icon_seedling.svg'),
-  ProductCategoryID.ACCESSORIES: ProductType(
+      ProductCategoryUI('PH/EC', 'assets/products/toolbox/icon_ph_ec.svg'),
+  ProductCategoryID.SUBSTRAT: ProductCategoryUI(
+      'Substrat', 'assets/products/toolbox/icon_substrat.svg'),
+  ProductCategoryID.FERTILIZER: ProductCategoryUI(
+      'Fertilizer', 'assets/products/toolbox/icon_fertilizer.svg'),
+  ProductCategoryID.IRRIGATION: ProductCategoryUI(
+      'Irrigation', 'assets/products/toolbox/icon_irrigation.svg'),
+  ProductCategoryID.FURNITURE: ProductCategoryUI(
+      'Furniture', 'assets/products/toolbox/icon_furniture.svg'),
+  ProductCategoryID.SEEDLING: ProductCategoryUI(
+      'Seedling', 'assets/products/toolbox/icon_seedling.svg'),
+  ProductCategoryID.ACCESSORIES: ProductCategoryUI(
       'Accessories', 'assets/products/toolbox/icon_accessories.svg'),
-  ProductCategoryID.ELECTRICITY: ProductType(
+  ProductCategoryID.ELECTRICITY: ProductCategoryUI(
       'Electricity', 'assets/products/toolbox/icon_electricity.svg'),
   ProductCategoryID.OTHER:
-      ProductType('Other', 'assets/products/toolbox/icon_other.svg'),
+      ProductCategoryUI('Other', 'assets/products/toolbox/icon_other.svg'),
 };

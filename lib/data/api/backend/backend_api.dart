@@ -98,4 +98,16 @@ class BackendAPI {
     }
     return null;
   }
+
+  Future<dynamic> get(String path) async {
+    Response resp =
+        await apiClient.get('${BackendAPI().serverHost}$path', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'get failed: ${resp.body}';
+    }
+    return JsonDecoder().convert(resp.body);
+  }
 }

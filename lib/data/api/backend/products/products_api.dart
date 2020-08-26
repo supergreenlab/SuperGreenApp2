@@ -32,4 +32,13 @@ class ProductsAPI {
     String serverID = await BackendAPI().postPut('/productsupplier', obj);
     return serverID;
   }
+
+  Future<List<Product>> searchProducts(String terms) async {
+    Map<String, dynamic> productResults = await BackendAPI()
+        .get('/products/search?terms=${Uri.encodeQueryComponent(terms)}');
+    List<dynamic> products = productResults['products'];
+    return products
+        .map<Product>((p) => Product.fromMap(p, json: true))
+        .toList();
+  }
 }
