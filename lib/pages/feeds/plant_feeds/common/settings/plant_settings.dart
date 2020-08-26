@@ -166,7 +166,7 @@ class PlantSettings extends Equatable {
       'curingStart':
           curingStart == null ? null : curingStart.toUtc().toIso8601String(),
       'medium': medium,
-      'products': products.map((p) => p.toMap()).toList(),
+      'products': (products ?? []).map((p) => p.toMap()).toList(),
     };
   }
 
