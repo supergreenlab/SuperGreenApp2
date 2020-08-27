@@ -259,48 +259,53 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> publicPlants(int n, int offset) async {
-    Response resp =
-        await BackendAPI().get('/public/plants?limit=$n&offset=$offset');
-    if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicPlants failed: ${resp.body}';
+    try {
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/plants?limit=$n&offset=$offset');
+      return results['plants'];
+    } catch (e) {
+      throw 'publicPlants failed: $e';
     }
-    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
-    return results['plants'];
   }
 
   Future<Map<String, dynamic>> publicPlant(String id) async {
-    Response resp = await BackendAPI().get('/public/plant/$id');
-    if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicPlant failed: ${resp.body}';
+    try {
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/plant/$id');
+      return results;
+    } catch (e) {
+      throw 'publicPlant failed: $e';
     }
-    return JsonDecoder().convert(resp.body);
   }
 
   Future<List<dynamic>> publicFeedEntries(String id, int n, int offset) async {
-    Response resp = await BackendAPI()
-        .get('/public/plant/$id/feedEntries?limit=$n&offset=$offset');
-    if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedEntries failed: ${resp.body}';
+    try {
+      Map<String, dynamic> results = await BackendAPI()
+          .get('/public/plant/$id/feedEntries?limit=$n&offset=$offset');
+      return results['entries'];
+    } catch (e) {
+      throw 'publicFeedEntries failed: $e';
     }
-    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
-    return results['entries'];
   }
 
   Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
-    Response resp = await BackendAPI().get('/public/feedEntry/$id/feedMedias');
-    if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedMediasForFeedEntry failed: ${resp.body}';
+    try {
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/feedEntry/$id/feedMedias');
+      return results['medias'];
+    } catch (e) {
+      throw 'publicFeedMediasForFeedEntry failed: $e';
     }
-    Map<String, dynamic> results = JsonDecoder().convert(resp.body);
-    return results['medias'];
   }
 
   Future<Map<String, dynamic>> publicFeedMedia(String id) async {
-    Response resp = await BackendAPI().get('/public/feedMedia/$id');
-    if (resp.statusCode ~/ 100 != 2) {
-      throw 'publicFeedMedia failed: ${resp.body}';
+    try {
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/feedMedia/$id');
+      return results;
+    } catch (e) {
+      throw 'publicFeedMedia failed: $e';
     }
-    return JsonDecoder().convert(resp.body);
   }
 
   Future download(String from, String to) async {

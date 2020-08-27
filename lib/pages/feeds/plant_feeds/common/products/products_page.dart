@@ -82,13 +82,12 @@ class _ProductsPageState extends State<ProductsPage> {
               ),
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToSelectNewProductEvent(
+                    MainNavigateToSelectNewProductEvent(products,
                         futureFn: (future) async {
                   List<Product> products = await future;
-                  if (products == null || products.length == 0) {
+                  if (products == null) {
                     return;
                   }
-                  products.addAll(this.products);
                   BlocProvider.of<ProductsBloc>(context)
                       .add(ProductsBlocEventUpdate(products));
                 }));

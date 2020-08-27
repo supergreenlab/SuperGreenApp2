@@ -76,7 +76,9 @@ class ProductsBloc extends Bloc<ProductsBlocEvent, ProductsBlocState> {
     if (event is ProductsBlocEventInit) {
       delegate.loadProducts();
     } else if (event is ProductsBlocEventLoaded) {
-      yield ProductsBlocStateLoaded(event.products);
+      List<Product> products = event.products;
+      products.sort((p1, p2) => p1.category.index - p2.category.index);
+      yield ProductsBlocStateLoaded(products);
     } else if (event is ProductsBlocEventUpdate) {
       yield* delegate.updateProducts(event.products);
     }

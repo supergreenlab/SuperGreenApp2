@@ -36,6 +36,7 @@ class SelectNewProductPage extends StatefulWidget {
 }
 
 class _SelectNewProductPageState extends State<SelectNewProductPage> {
+  List<Product> initialProducts = [];
   List<Product> selectedProducts = [];
   List<Product> products = [];
   bool preLoading = false;
@@ -47,7 +48,12 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
   Widget build(BuildContext context) {
     return BlocListener<SelectNewProductBloc, SelectNewProductBlocState>(
       listener: (BuildContext context, SelectNewProductBlocState state) async {
-        if (state is SelectNewProductBlocStateLoaded) {
+        if (state is SelectNewProductBlocStateSelectedProducts) {
+          setState(() {
+            initialProducts.addAll(state.selectedProducts);
+            selectedProducts.addAll(state.selectedProducts);
+          });
+        } else if (state is SelectNewProductBlocStateLoaded) {
           setState(() {
             products = state.products;
           });
@@ -58,8 +64,16 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
           });
         } else if (state is SelectNewProductBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
+          for (Product product in state.products) {
+            for (int i = 0; i < selectedProducts.length; ++i) {
+              if (selectedProducts[i].id == product.id) {
+                selectedProducts[i] = product;
+                break;
+              }
+            }
+          }
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: state.products));
+              .add(MainNavigatorActionPop(param: selectedProducts));
         }
       },
       child: BlocBuilder<SelectNewProductBloc, SelectNewProductBlocState>(
@@ -77,6 +91,10 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
             if (products.length == 0 && controller.text == '') {
               content.add(renderNoProducts(context));
             } else {
+              List<Product> added =
+                  difference(selectedProducts, initialProducts);
+              List<Product> removed =
+                  difference(initialProducts, selectedProducts);
               content.add(renderProductsList(context, state));
               content.add(
                 Padding(
@@ -86,29 +104,60 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: selectedProducts.length > 0
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                        '${selectedProducts.length} item${selectedProducts.length > 1 ? 's' : ''}'),
-                                    Text(' selected',
-                                        style: TextStyle(
-                                            color: Color(0xff3bb30b),
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                )
-                              : Container(),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                      '${selectedProducts.length} item${selectedProducts.length > 1 ? 's' : ''}'),
+                                  Text(' selected',
+                                      style: TextStyle(
+                                          color: Color(0xff3bb30b),
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text('${added.length}'),
+                                  Text(' added',
+                                      style: TextStyle(
+                                          color: Color(0xff3bb30b),
+                                          fontWeight: FontWeight.bold))
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text('${removed.length}'),
+                                  Text(' removed',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold))
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       GreenButton(
                         title: 'NEXT',
-                        onPressed: selectedProducts.length == 0
+                        onPressed: selectedProducts.length == 0 &&
+                                initialProducts.length == 0
                             ? null
                             : () {
+                                List<Product> added = difference(
+                                    selectedProducts, initialProducts);
+                                if (added.length == 0) {
+                                  BlocProvider.of<MainNavigatorBloc>(context)
+                                      .add(MainNavigatorActionPop(
+                                          param: selectedProducts));
+                                  return;
+                                }
                                 BlocProvider.of<MainNavigatorBloc>(context).add(
                                     MainNavigateToProductSupplierEvent(
-                                        selectedProducts,
+                                        added.toList(),
                                         futureFn: (future) async {
                                   List<Product> products = await future;
                                   if (products == null) {
@@ -237,14 +286,24 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
 
   Widget renderProductsList(
       BuildContext context, SelectNewProductBlocState state) {
+    List<Product> added = difference(selectedProducts, initialProducts);
+    List<Product> removed = difference(initialProducts, selectedProducts);
     List<Widget> children = products.map<Widget>((p) {
       final ProductCategoryUI categoryUI = productCategories[p.category];
+      Color iconColor = Color(0xffececec);
+      if (contains(added, p)) {
+        iconColor = Color(0xff3bb30b);
+      } else if (contains(removed, p)) {
+        iconColor = Colors.red;
+      } else if (contains(initialProducts, p)) {
+        iconColor = Colors.green.shade100;
+      }
       return ListTile(
         onTap: () {
           setState(() {
             FocusScope.of(context).requestFocus(FocusNode());
-            if (selectedProducts.contains(p)) {
-              selectedProducts.remove(p);
+            if (contains(selectedProducts, p)) {
+              selectedProducts.removeWhere((sp) => sp.id == p.id);
             } else {
               selectedProducts.add(p);
             }
@@ -253,13 +312,10 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
         leading: SvgPicture.asset(categoryUI.icon),
         title: Text(categoryUI.name),
         subtitle: Text(p.name, style: TextStyle(fontSize: 20)),
-        trailing: Icon(Icons.add_box,
-            size: 30,
-            color: selectedProducts.contains(p)
-                ? Color(0xff3bb30b)
-                : Color(0xffececec)),
+        trailing: Icon(Icons.add_box, size: 30, color: iconColor),
       );
     }).toList();
+
     if (products.length == 0) {
       children.add(ListTile(
           title: Text(state is SelectNewProductBlocStateLoading || preLoading
@@ -314,5 +370,18 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
         size: 100,
       ),
     );
+  }
+
+  bool contains(List<Product> l, Product p) =>
+      l.firstWhere((a) => a.id == p.id, orElse: () => null) != null;
+
+  List<Product> difference(List<Product> l1, List<Product> l2) {
+    List<Product> diff = [];
+    for (Product p in l1) {
+      if (!contains(l2, p)) {
+        diff.add(p);
+      }
+    }
+    return diff;
   }
 }

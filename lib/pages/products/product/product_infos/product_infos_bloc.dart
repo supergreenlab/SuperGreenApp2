@@ -18,22 +18,26 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class ProductInfosBlocEvent extends Equatable {}
 
-abstract class ProductInfosBlocState extends Equatable {}
+class ProductInfosBlocState extends Equatable {
+  final ProductCategoryID productCategoryID;
 
-class ProductInfosBlocStateInit extends ProductInfosBlocState {
+  ProductInfosBlocState(this.productCategoryID);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [productCategoryID];
 }
 
 class ProductInfosBloc
     extends Bloc<ProductInfosBlocEvent, ProductInfosBlocState> {
   final MainNavigateToProductInfosEvent args;
 
-  ProductInfosBloc(this.args) : super(ProductInfosBlocStateInit());
+  ProductInfosBloc(this.args)
+      : super(ProductInfosBlocState(args.productCategoryID));
 
   @override
   Stream<ProductInfosBlocState> mapEventToState(

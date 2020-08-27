@@ -18,12 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/api/backend/products/models.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_infos/product_infos_bloc.dart';
+import 'package:super_green_app/pages/products/product/product_infos/specs/seeds_specs_form.dart';
+import 'package:super_green_app/pages/products/product/product_infos/specs_form.dart';
 import 'package:super_green_app/widgets/appbar.dart';
-import 'package:super_green_app/widgets/green_button.dart';
-import 'package:super_green_app/widgets/section_title.dart';
 
 class ProductInfosPage extends StatefulWidget {
   @override
@@ -31,48 +29,13 @@ class ProductInfosPage extends StatefulWidget {
 }
 
 class _ProductInfosPageState extends State<ProductInfosPage> {
-  final TextEditingController nameController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductInfosBloc, ProductInfosBlocState>(
       listener: (BuildContext context, ProductInfosBlocState state) {},
       child: BlocBuilder<ProductInfosBloc, ProductInfosBlocState>(
         builder: (BuildContext context, ProductInfosBlocState state) {
-          Widget body = Column(children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: SectionTitle(
-                      title: 'Product informations',
-                      icon: 'assets/products/toolbox/icon_item_type.svg',
-                      iconPadding: 0,
-                    ),
-                  ),
-                  renderTextField(
-                      context, 'Name', 'Ex: Megacrop', nameController),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: GreenButton(
-                  title: 'CREATE PRODUCT',
-                  onPressed: nameController.text == ''
-                      ? null
-                      : () {
-                          Product product = Product(name: nameController.text);
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigatorActionPop(param: product));
-                        },
-                ),
-              ),
-            ),
-          ]);
+          Widget body = productSpecsForms[state.productCategoryID]();
           return Scaffold(
               appBar: SGLAppBar(
                 '🛠',

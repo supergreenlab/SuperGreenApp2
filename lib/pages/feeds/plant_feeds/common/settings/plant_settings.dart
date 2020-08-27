@@ -121,7 +121,6 @@ class PlantSettings extends Equatable {
 
   factory PlantSettings.fromMap(Map<String, dynamic> map) {
     List<dynamic> products = (map['products'] ?? []);
-    print(products);
     return PlantSettings(
       map['plantType'],
       map['isSingle'],

@@ -30,6 +30,8 @@ class ProductCategoryUI extends Equatable {
 }
 
 Map<ProductCategoryID, ProductCategoryUI> productCategories = {
+  ProductCategoryID.SEED:
+      ProductCategoryUI('Seeds', 'assets/products/toolbox/icon_seed.svg'),
   ProductCategoryID.COMPLETE_KIT: ProductCategoryUI(
       'Complete kit', 'assets/products/toolbox/icon_complete_kit.svg'),
   ProductCategoryID.VENTILATION: ProductCategoryUI(

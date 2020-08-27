@@ -480,17 +480,23 @@ class MainNavigateToPublicPlant extends MainNavigatorEvent {
 }
 
 class MainNavigateToSelectNewProductEvent extends MainNavigatorEvent {
-  MainNavigateToSelectNewProductEvent({futureFn}) : super(futureFn: futureFn);
+  final List<Product> selectedProducts;
+
+  MainNavigateToSelectNewProductEvent(this.selectedProducts, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => super.props;
+  List<Object> get props => [...super.props, selectedProducts];
 }
 
 class MainNavigateToProductInfosEvent extends MainNavigatorEvent {
-  MainNavigateToProductInfosEvent({futureFn}) : super(futureFn: futureFn);
+  final ProductCategoryID productCategoryID;
+
+  MainNavigateToProductInfosEvent(this.productCategoryID, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => super.props;
+  List<Object> get props => [...super.props, productCategoryID];
 }
 
 class MainNavigateToProductSupplierEvent extends MainNavigatorEvent {

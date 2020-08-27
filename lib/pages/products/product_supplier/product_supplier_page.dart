@@ -18,8 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/products/product/product_type/product_categories.dart';
 import 'package:super_green_app/pages/products/product_supplier/product_supplier_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -63,19 +65,41 @@ class _ProductSupplierPageState extends State<ProductSupplierPage> {
               child: ListView(
                 children: this.products.map<Widget>((product) {
                   int i = this.products.indexOf(product);
-                  return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 16.0, left: 8, right: 8),
-                          child: Text(product.name,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                  final ProductCategoryUI categoryUI =
+                      productCategories[product.category];
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(categoryUI.icon),
+                            Text(categoryUI.name),
+                          ],
                         ),
-                        renderTextField(context, 'Link',
-                            'Ex: https://amazon.com/...', urlControllers[i]),
-                      ]);
+                      ),
+                      Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 16.0, left: 8, right: 8),
+                                child: Text(product.name,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
+                              ),
+                              renderTextField(
+                                  context,
+                                  'Link',
+                                  'Ex: https://amazon.com/...',
+                                  urlControllers[i]),
+                            ]),
+                      ),
+                    ],
+                  );
                 }).toList(),
               ),
             ),

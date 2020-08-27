@@ -23,6 +23,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 enum ProductCategoryID {
+  SEED,
   VENTILATION,
   LIGHTING,
   COMPLETE_KIT,
@@ -39,6 +40,7 @@ enum ProductCategoryID {
 }
 
 List<ProductCategoryID> plantProductCategories = [
+  ProductCategoryID.SEED,
   ProductCategoryID.SUBSTRAT,
   ProductCategoryID.FERTILIZER,
   ProductCategoryID.SEEDLING,
@@ -47,13 +49,14 @@ List<ProductCategoryID> plantProductCategories = [
 class Product extends Equatable {
   final String id;
   final String name;
+  final String specs;
   final ProductCategoryID category;
   final ProductSupplier supplier;
 
-  Product({this.id, this.name, this.category, this.supplier});
+  Product({this.id, this.name, this.specs, this.category, this.supplier});
 
   @override
-  List<Object> get props => [id, name, category, supplier];
+  List<Object> get props => [id, name, specs, category, supplier];
 
   static Product fromMap(Map<String, dynamic> map, {bool json = false}) {
     List<dynamic> categories;
@@ -74,6 +77,7 @@ class Product extends Equatable {
     return Product(
       id: map['id'],
       name: map['name'],
+      specs: map['specs'],
       category: categoryID,
       supplier: productSupplier,
     );

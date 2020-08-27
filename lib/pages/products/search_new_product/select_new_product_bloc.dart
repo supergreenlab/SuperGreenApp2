@@ -24,6 +24,13 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SelectNewProductBlocEvent extends Equatable {}
 
+class SelectNewProductBlocEventInit extends SelectNewProductBlocEvent {
+  SelectNewProductBlocEventInit();
+
+  @override
+  List<Object> get props => [];
+}
+
 class SelectNewProductBlocEventSearchTerms extends SelectNewProductBlocEvent {
   final String searchTerms;
 
@@ -57,6 +64,16 @@ abstract class SelectNewProductBlocState extends Equatable {}
 class SelectNewProductBlocStateInit extends SelectNewProductBlocState {
   @override
   List<Object> get props => [];
+}
+
+class SelectNewProductBlocStateSelectedProducts
+    extends SelectNewProductBlocState {
+  final List<Product> selectedProducts;
+
+  SelectNewProductBlocStateSelectedProducts(this.selectedProducts);
+
+  @override
+  List<Object> get props => [selectedProducts];
 }
 
 class SelectNewProductBlocStateLoading extends SelectNewProductBlocState {
@@ -108,12 +125,16 @@ class SelectNewProductBloc
     extends Bloc<SelectNewProductBlocEvent, SelectNewProductBlocState> {
   final MainNavigateToSelectNewProductEvent args;
 
-  SelectNewProductBloc(this.args) : super(SelectNewProductBlocStateInit());
+  SelectNewProductBloc(this.args) : super(SelectNewProductBlocStateInit()) {
+    add(SelectNewProductBlocEventInit());
+  }
 
   @override
   Stream<SelectNewProductBlocState> mapEventToState(
       SelectNewProductBlocEvent event) async* {
-    if (event is SelectNewProductBlocEventSearchTerms) {
+    if (event is SelectNewProductBlocEventInit) {
+      yield SelectNewProductBlocStateSelectedProducts(args.selectedProducts);
+    } else if (event is SelectNewProductBlocEventSearchTerms) {
       yield SelectNewProductBlocStateLoading();
       try {
         List<Product> products =
