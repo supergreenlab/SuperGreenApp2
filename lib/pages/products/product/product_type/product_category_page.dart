@@ -108,8 +108,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                               if (product != null) {
                                 BlocProvider.of<MainNavigatorBloc>(context).add(
                                     MainNavigatorActionPop(
-                                        param: Product(
-                                            name: product.name,
+                                        param: product.copyWith(
                                             category: selectedCategory)));
                               }
                             }));

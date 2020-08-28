@@ -51,31 +51,4 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
       ),
     );
   }
-
-  Widget renderTextField(BuildContext context, String labelText,
-      String hintText, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 8),
-      child: TextFormField(
-        autofocus: true,
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-          hintText: hintText,
-          hintStyle: TextStyle(color: Colors.black38),
-          labelText: labelText,
-          labelStyle: TextStyle(
-            color: Colors.black,
-          ),
-          enabledBorder:
-              UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        ),
-        style: TextStyle(color: Colors.black, decoration: TextDecoration.none),
-        controller: controller,
-        onChanged: (value) {
-          setState(() {});
-        },
-      ),
-    );
-  }
 }

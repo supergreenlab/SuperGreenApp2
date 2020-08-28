@@ -72,7 +72,7 @@ abstract class SpecsFormState<T extends StatefulWidget> extends State<T> {
             onPressed: nameController.text == ''
                 ? null
                 : () {
-                    Product product = Product(name: nameController.text);
+                    Product product = createProduct();
                     BlocProvider.of<MainNavigatorBloc>(context)
                         .add(MainNavigatorActionPop(param: product));
                   },
@@ -84,6 +84,8 @@ abstract class SpecsFormState<T extends StatefulWidget> extends State<T> {
   }
 
   List<Widget> formFields(BuildContext context);
+
+  Product createProduct();
 }
 
 Map<ProductCategoryID, Widget Function()> productSpecsForms = {

@@ -21,6 +21,7 @@ import 'dart:convert';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:super_green_app/data/api/backend/products/product_specs.dart';
 
 enum ProductCategoryID {
   SEED,
@@ -49,7 +50,7 @@ List<ProductCategoryID> plantProductCategories = [
 class Product extends Equatable {
   final String id;
   final String name;
-  final String specs;
+  final ProductSpecs specs;
   final ProductCategoryID category;
   final ProductSupplier supplier;
 
@@ -74,10 +75,19 @@ class Product extends Equatable {
     if (map['supplier'] != null) {
       productSupplier = ProductSupplier.fromMap(map['supplier']);
     }
+
+    ProductSpecs specs;
+    if (categoryID != null && map['specs'] != null) {
+      if (json) {
+        specs = productSpecsBuilders[categoryID].fromJSON(map[specs]);
+      } else {
+        specs = productSpecsBuilders[categoryID].fromMap(map[specs]);
+      }
+    }
     return Product(
       id: map['id'],
       name: map['name'],
-      specs: map['specs'],
+      specs: specs,
       category: categoryID,
       supplier: productSupplier,
     );
@@ -91,6 +101,7 @@ class Product extends Equatable {
     return {
       'id': id,
       'name': name,
+      'specs': json ? specs.toJSON() : specs.toMap(),
       'categories': json ? JsonEncoder().convert(categories) : categories,
       'supplier': supplier != null ? supplier.toMap() : null,
     };
@@ -99,11 +110,13 @@ class Product extends Equatable {
   Product copyWith(
       {String id,
       String name,
+      ProductSpecs specs,
       ProductCategoryID category,
       ProductSupplier supplier}) {
     return Product(
       id: id ?? this.id,
       name: name ?? this.name,
+      specs: specs ?? this.specs,
       category: category ?? this.category,
       supplier: supplier ?? this.supplier,
     );

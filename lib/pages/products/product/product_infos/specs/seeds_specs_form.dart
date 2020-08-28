@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/products/product/product_infos/specs/specs_form.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
+import 'package:super_green_app/data/api/backend/products/specs/seed_specs.dart';
+import 'package:super_green_app/pages/products/product/product_infos/specs_form.dart';
 import 'package:super_green_app/pages/products/product/product_infos/specs/widgets.dart';
 
 class SeedsSpecsForm extends StatefulWidget {
@@ -18,5 +20,11 @@ class _SeedsSpecsFormState extends SpecsFormState<SeedsSpecsForm> {
         hintText: 'Ex: Paradise Seeds',
       ),
     ];
+  }
+
+  @override
+  Product createProduct() {
+    return Product(
+        name: nameController.text, specs: SeedSpecs(bank: bankController.text));
   }
 }
