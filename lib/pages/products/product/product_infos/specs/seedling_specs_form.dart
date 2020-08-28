@@ -17,7 +17,11 @@ class _SeedlingSpecsFormState extends SpecsFormState<SeedlingSpecsForm> {
     return [
       SpecTextField(
         labelText: 'Brand',
-        hintText: 'Ex: Royal Queen Seeds',
+        hintText: 'Ex: ...',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _SeedlingSpecsFormState extends SpecsFormState<SeedlingSpecsForm> {
         name: nameController.text,
         specs: SeedlingSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: ...';
 }

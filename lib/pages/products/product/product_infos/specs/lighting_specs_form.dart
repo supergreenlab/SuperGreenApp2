@@ -18,6 +18,10 @@ class _LightingSpecsFormState extends SpecsFormState<LightingSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: Vivosun',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _LightingSpecsFormState extends SpecsFormState<LightingSpecsForm> {
         name: nameController.text,
         specs: LightingSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: vivosun 600w';
 }

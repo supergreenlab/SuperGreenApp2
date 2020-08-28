@@ -18,6 +18,10 @@ class _AccessoriesSpecsFormState extends SpecsFormState<AccessoriesSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: Royal Queen Seeds',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _AccessoriesSpecsFormState extends SpecsFormState<AccessoriesSpecsForm> {
         name: nameController.text,
         specs: AccessoriesSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: Timelapse camera';
 }

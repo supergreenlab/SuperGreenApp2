@@ -18,6 +18,10 @@ class _CompleteKitSpecsFormState extends SpecsFormState<CompleteKitSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: SuperGreenLab',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _CompleteKitSpecsFormState extends SpecsFormState<CompleteKitSpecsForm> {
         name: nameController.text,
         specs: CompleteKitSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: Ninja Bundle';
 }

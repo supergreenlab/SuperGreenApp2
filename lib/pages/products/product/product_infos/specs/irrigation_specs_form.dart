@@ -18,6 +18,10 @@ class _IrrigationSpecsFormState extends SpecsFormState<IrrigationSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: Floraflex',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _IrrigationSpecsFormState extends SpecsFormState<IrrigationSpecsForm> {
         name: nameController.text,
         specs: IrrigationSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: Blumat';
 }

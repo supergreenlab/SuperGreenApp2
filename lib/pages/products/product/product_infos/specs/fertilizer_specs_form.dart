@@ -18,6 +18,10 @@ class _FertilizerSpecsFormState extends SpecsFormState<FertilizerSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: Monkey Soil',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _FertilizerSpecsFormState extends SpecsFormState<FertilizerSpecsForm> {
         name: nameController.text,
         specs: FertilizerSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: Megacrop';
 }

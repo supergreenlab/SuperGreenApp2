@@ -18,6 +18,10 @@ class _SensorsSpecsFormState extends SpecsFormState<SensorsSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: Blue labs',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _SensorsSpecsFormState extends SpecsFormState<SensorsSpecsForm> {
         name: nameController.text,
         specs: SensorsSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: PH sensor';
 }

@@ -17,7 +17,11 @@ class _VentilationSpecsFormState extends SpecsFormState<VentilationSpecsForm> {
     return [
       SpecTextField(
         labelText: 'Brand',
-        hintText: 'Ex: AD Infinity',
+        hintText: 'Ex: AC Infinity',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _VentilationSpecsFormState extends SpecsFormState<VentilationSpecsForm> {
         name: nameController.text,
         specs: VentilationSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: Cloudline T4';
 }

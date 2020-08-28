@@ -56,9 +56,13 @@ abstract class SpecsFormState<T extends StatefulWidget> extends State<T> {
               ),
             ),
             SpecTextField(
-                labelText: 'Name',
-                hintText: 'Ex: Megacrop',
-                controller: nameController),
+              labelText: 'Name',
+              hintText: this.hintText,
+              controller: nameController,
+              onChanged: (_) {
+                setState(() {});
+              },
+            ),
             ...formFields(context),
           ],
         ),
@@ -69,13 +73,13 @@ abstract class SpecsFormState<T extends StatefulWidget> extends State<T> {
           alignment: Alignment.centerRight,
           child: GreenButton(
             title: 'CREATE PRODUCT',
-            onPressed: nameController.text == ''
-                ? null
-                : () {
+            onPressed: isValid()
+                ? () {
                     Product product = createProduct();
                     BlocProvider.of<MainNavigatorBloc>(context)
                         .add(MainNavigatorActionPop(param: product));
-                  },
+                  }
+                : null,
           ),
         ),
       ),
@@ -84,8 +88,9 @@ abstract class SpecsFormState<T extends StatefulWidget> extends State<T> {
   }
 
   List<Widget> formFields(BuildContext context);
-
   Product createProduct();
+  bool isValid();
+  String get hintText;
 }
 
 Map<ProductCategoryID, Widget Function()> productSpecsForms = {

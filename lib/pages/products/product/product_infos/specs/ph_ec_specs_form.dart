@@ -18,6 +18,10 @@ class _PHECSpecsFormState extends SpecsFormState<PHECSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: GHB',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _PHECSpecsFormState extends SpecsFormState<PHECSpecsForm> {
         name: nameController.text,
         specs: PHECSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: ...';
 }

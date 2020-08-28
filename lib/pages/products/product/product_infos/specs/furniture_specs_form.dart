@@ -18,6 +18,10 @@ class _FurnitureSpecsFormState extends SpecsFormState<FurnitureSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: Ikea',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _FurnitureSpecsFormState extends SpecsFormState<FurnitureSpecsForm> {
         name: nameController.text,
         specs: FurnitureSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: Eket';
 }

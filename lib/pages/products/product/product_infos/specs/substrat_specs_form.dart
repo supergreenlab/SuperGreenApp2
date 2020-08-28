@@ -18,6 +18,10 @@ class _SubstratSpecsFormState extends SpecsFormState<SubstratSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: Monkey Soil',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _SubstratSpecsFormState extends SpecsFormState<SubstratSpecsForm> {
         name: nameController.text,
         specs: SubstratSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: Light Mix Soil';
 }

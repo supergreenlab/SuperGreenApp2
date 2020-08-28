@@ -18,6 +18,10 @@ class _OtherSpecsFormState extends SpecsFormState<OtherSpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: ...',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _OtherSpecsFormState extends SpecsFormState<OtherSpecsForm> {
         name: nameController.text,
         specs: OtherSpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: ...';
 }

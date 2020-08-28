@@ -18,6 +18,10 @@ class _SeedsSpecsFormState extends SpecsFormState<SeedsSpecsForm> {
       SpecTextField(
         labelText: 'Seedbank',
         hintText: 'Ex: Paradise Seeds',
+        controller: bankController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -27,4 +31,11 @@ class _SeedsSpecsFormState extends SpecsFormState<SeedsSpecsForm> {
     return Product(
         name: nameController.text, specs: SeedSpecs(bank: bankController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && bankController.text != '';
+  }
+
+  String get hintText => 'Ex: El Dorado OG';
 }

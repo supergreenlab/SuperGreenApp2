@@ -79,9 +79,9 @@ class Product extends Equatable {
     ProductSpecs specs;
     if (categoryID != null && map['specs'] != null) {
       if (json) {
-        specs = productSpecsBuilders[categoryID].fromJSON(map[specs]);
+        specs = productSpecsBuilders[categoryID].fromJSON(map['specs']);
       } else {
-        specs = productSpecsBuilders[categoryID].fromMap(map[specs]);
+        specs = productSpecsBuilders[categoryID].fromMap(map['specs']);
       }
     }
     return Product(

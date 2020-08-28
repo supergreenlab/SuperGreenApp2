@@ -18,6 +18,10 @@ class _ElectricitySpecsFormState extends SpecsFormState<ElectricitySpecsForm> {
       SpecTextField(
         labelText: 'Brand',
         hintText: 'Ex: ...',
+        controller: brandController,
+        onChanged: (_) {
+          setState(() {});
+        },
       ),
     ];
   }
@@ -28,4 +32,11 @@ class _ElectricitySpecsFormState extends SpecsFormState<ElectricitySpecsForm> {
         name: nameController.text,
         specs: ElectricitySpecs(brand: brandController.text));
   }
+
+  @override
+  bool isValid() {
+    return nameController.text != '' && brandController.text != '';
+  }
+
+  String get hintText => 'Ex: timer';
 }
