@@ -27,6 +27,10 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductsPage extends StatefulWidget {
+  final bool editable;
+
+  const ProductsPage({Key key, this.editable = true}) : super(key: key);
+
   @override
   _ProductsPageState createState() => _ProductsPageState();
 }
@@ -62,39 +66,44 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   Widget _renderLoaded(BuildContext context, ProductsBlocStateLoaded state) {
+    List<Widget> topBar = [
+      Text(
+        'Toolbox',
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      ),
+    ];
+    if (widget.editable) {
+      topBar.addAll([
+        Expanded(
+          child: Container(),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 40,
+          ),
+          onPressed: () {
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToSelectNewProductEvent(products,
+                    futureFn: (future) async {
+              List<Product> products = await future;
+              if (products == null) {
+                return;
+              }
+              BlocProvider.of<ProductsBloc>(context)
+                  .add(ProductsBlocEventUpdate(products));
+            }));
+          },
+        ),
+      ]);
+    }
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Toolbox',
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            Expanded(
-              child: Container(),
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 40,
-              ),
-              onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToSelectNewProductEvent(products,
-                        futureFn: (future) async {
-                  List<Product> products = await future;
-                  if (products == null) {
-                    return;
-                  }
-                  BlocProvider.of<ProductsBloc>(context)
-                      .add(ProductsBlocEventUpdate(products));
-                }));
-              },
-            ),
-          ],
+          children: topBar,
         ),
         Container(
           height: 1,
@@ -118,7 +127,9 @@ class _ProductsPageState extends State<ProductsPage> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
               child: Text(
-                'Toolbox is empty\nuse the “+” above to add your first item.',
+                widget.editable
+                    ? 'Toolbox is empty\nuse the “+” above to add your first item.'
+                    : 'Toolbox is empty',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,

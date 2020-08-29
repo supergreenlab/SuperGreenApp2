@@ -103,7 +103,9 @@ class PublicPlantPage extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
-      child: ProductsPage(),
+      child: ProductsPage(
+        editable: false,
+      ),
     );
   }
 }
