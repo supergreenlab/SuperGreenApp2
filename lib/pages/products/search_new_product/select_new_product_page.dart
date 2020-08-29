@@ -21,9 +21,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/products/product/product_type/product_categories.dart';
+import 'package:super_green_app/pages/products/product/product_category/product_categories.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -40,6 +41,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
   List<Product> selectedProducts = [];
   List<Product> products = [];
   bool preLoading = false;
+  bool userLoggedIn = false;
 
   final TextEditingController controller = TextEditingController();
   Timer autocompleteTimer;
@@ -181,6 +183,54 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: content);
           }
+          if (userLoggedIn) {
+            body = Stack(
+              children: [
+                body,
+                Container(
+                    color: Colors.white54,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                            child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('User loggedin\nsuccessfully.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20)),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.0,
+                                  ),
+                                ),
+                                Text(
+                                  'Loading item creation page.',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    spreadRadius: 2),
+                              ],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
+                        ))
+                      ],
+                    )),
+              ],
+            );
+          }
           return Scaffold(
               appBar: SGLAppBar(
                 '🛠',
@@ -207,7 +257,6 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
       child: Stack(
         children: [
           TextFormField(
-            autofocus: true,
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
@@ -331,7 +380,32 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
       title: Text('Not found?'),
       subtitle: Text('Create new toolbox item',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
-      onTap: () {
+      onTap: () async {
+        if (!BackendAPI().usersAPI.loggedIn) {
+          int choice = await showAccountCreationPopup();
+          if (choice == 0) {
+            return;
+          }
+          Completer accountFuture = Completer();
+          Function futureFn = (future) async {
+            await future;
+            accountFuture.complete();
+          };
+          BlocProvider.of<MainNavigatorBloc>(context).add(choice == 1
+              ? MainNavigateToSettingsLogin(futureFn: futureFn)
+              : MainNavigateToSettingsCreateAccount(futureFn: futureFn));
+          await accountFuture.future;
+          if (!BackendAPI().usersAPI.loggedIn) {
+            return;
+          }
+          setState(() {
+            userLoggedIn = true;
+          });
+          await Future.delayed(Duration(seconds: 3));
+          setState(() {
+            userLoggedIn = false;
+          });
+        }
         BlocProvider.of<MainNavigatorBloc>(context)
             .add(MainNavigateToProductTypeEvent(futureFn: (future) async {
           Product product = await future;
@@ -370,6 +444,40 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
         size: 100,
       ),
     );
+  }
+
+  Future<int> showAccountCreationPopup() async {
+    int choice = await showDialog<int>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Create an account'),
+            content: Text(
+                'Hey thanks for taking the time to add a missing product, it requires a sgl account tho, please create one or login first.\n\nThanks:)'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, 0);
+                },
+                child: Text('CANCEL'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, 1);
+                },
+                child: Text('LOGIN'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, 2);
+                },
+                child: Text('CREATE ACCOUNT'),
+              ),
+            ],
+          );
+        });
+    return choice;
   }
 
   bool contains(List<Product> l, Product p) =>

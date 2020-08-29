@@ -21,8 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/products/product/product_type/product_categories.dart';
-import 'package:super_green_app/pages/products/product/product_type/product_category_bloc.dart';
+import 'package:super_green_app/pages/products/product/product_category/product_categories.dart';
+import 'package:super_green_app/pages/products/product/product_category/product_category_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
@@ -46,7 +46,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: SectionTitle(
-                  title: 'Item type',
+                  title: 'Please choose the new product\'s\ncategory.',
                   icon: 'assets/products/toolbox/icon_item_type.svg',
                   iconPadding: 0,
                 ),

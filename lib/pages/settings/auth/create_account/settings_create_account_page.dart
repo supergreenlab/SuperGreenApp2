@@ -89,6 +89,7 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 24.0),
                         child: SGLTextField(
+                            textCapitalization: TextCapitalization.none,
                             focusNode: _nicknameFocusNode,
                             onFieldSubmitted: (_) {
                               _nicknameFocusNode.unfocus();
@@ -112,6 +113,7 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 24.0),
                         child: SGLTextField(
+                            textCapitalization: TextCapitalization.none,
                             focusNode: _passwordFocusNode,
                             onFieldSubmitted: (_) {
                               _handleInput(context);
