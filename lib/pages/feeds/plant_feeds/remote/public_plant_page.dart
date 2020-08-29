@@ -24,9 +24,14 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/plant_infos_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_page.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/local_products_delegate.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/remote_plant_feed_delegate.dart';
+import 'package:super_green_app/pages/feeds/plant_feeds/remote/remote_products_delegate.dart';
 
 class PublicPlantPage extends StatelessWidget {
   @override
@@ -44,6 +49,7 @@ class PublicPlantPage extends StatelessWidget {
   Widget _renderFeed(BuildContext context, PublicPlantBlocState state) {
     List<Widget Function(BuildContext, PublicPlantBlocState)> tabs = [
       _renderPlantInfos,
+      _renderProducts,
     ];
     return BlocProvider(
       create: (context) => FeedBloc(RemotePlantFeedBlocDelegate(state.plantID)),
@@ -91,5 +97,13 @@ class PublicPlantPage extends StatelessWidget {
         create: (context) =>
             PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)),
         child: PlantInfosPage());
+  }
+
+  Widget _renderProducts(BuildContext context, PublicPlantBlocState state) {
+    return BlocProvider(
+      create: (context) =>
+          ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
+      child: ProductsPage(),
+    );
   }
 }
