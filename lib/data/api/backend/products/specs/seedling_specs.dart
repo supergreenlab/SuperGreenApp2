@@ -37,6 +37,9 @@ class SeedlingSpecs extends ProductSpecs {
     return SeedlingSpecs(brand: map['brand']);
   }
 
+  @override
+  String get by => brand;
+
   factory SeedlingSpecs.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return SeedlingSpecs.fromMap(map);

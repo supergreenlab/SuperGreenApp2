@@ -41,4 +41,7 @@ class PHECSpecs extends ProductSpecs {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return PHECSpecs.fromMap(map);
   }
+
+  @override
+  String get by => brand;
 }

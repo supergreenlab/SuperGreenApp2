@@ -339,6 +339,15 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     List<Product> removed = difference(initialProducts, selectedProducts);
     List<Widget> children = products.map<Widget>((p) {
       final ProductCategoryUI categoryUI = productCategories[p.category];
+      List<Widget> subtitle = [Text(p.name, style: TextStyle(fontSize: 20))];
+      if (p.specs != null && p.specs.by != null) {
+        subtitle.addAll([
+          Row(children: [
+            Text('by '),
+            Text(p.specs.by, style: TextStyle(color: Color(0xff3bb30b))),
+          ]),
+        ]);
+      }
       Color iconColor = Color(0xffececec);
       if (contains(added, p)) {
         iconColor = Color(0xff3bb30b);
@@ -360,7 +369,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
         },
         leading: SvgPicture.asset(categoryUI.icon),
         title: Text(categoryUI.name),
-        subtitle: Text(p.name, style: TextStyle(fontSize: 20)),
+        subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch, children: subtitle),
         trailing: Icon(Icons.add_box, size: 30, color: iconColor),
       );
     }).toList();

@@ -41,4 +41,7 @@ class FertilizerSpecs extends ProductSpecs {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FertilizerSpecs.fromMap(map);
   }
+
+  @override
+  String get by => brand;
 }

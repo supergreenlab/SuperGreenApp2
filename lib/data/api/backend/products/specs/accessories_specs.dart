@@ -41,4 +41,7 @@ class AccessoriesSpecs extends ProductSpecs {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return AccessoriesSpecs.fromMap(map);
   }
+
+  @override
+  String get by => brand;
 }

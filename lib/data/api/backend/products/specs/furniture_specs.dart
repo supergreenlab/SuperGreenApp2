@@ -41,4 +41,7 @@ class FurnitureSpecs extends ProductSpecs {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FurnitureSpecs.fromMap(map);
   }
+
+  @override
+  String get by => brand;
 }

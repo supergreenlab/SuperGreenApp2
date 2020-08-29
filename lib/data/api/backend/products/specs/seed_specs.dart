@@ -41,4 +41,7 @@ class SeedSpecs extends ProductSpecs {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return SeedSpecs.fromMap(map);
   }
+
+  @override
+  String get by => bank;
 }

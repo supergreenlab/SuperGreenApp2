@@ -41,4 +41,7 @@ class VentilationSpecs extends ProductSpecs {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return VentilationSpecs.fromMap(map);
   }
+
+  @override
+  String get by => brand;
 }

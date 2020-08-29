@@ -49,8 +49,8 @@ abstract class ProductSpecs extends Equatable {
   }
 
   Map<String, dynamic> toMap();
-
   String toJSON() => JsonEncoder().convert(toMap());
+  String get by;
 }
 
 class ProductSpecsBuilder {

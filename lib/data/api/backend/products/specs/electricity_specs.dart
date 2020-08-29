@@ -41,4 +41,7 @@ class ElectricitySpecs extends ProductSpecs {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return ElectricitySpecs.fromMap(map);
   }
+
+  @override
+  String get by => brand;
 }

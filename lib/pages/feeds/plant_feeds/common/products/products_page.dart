@@ -162,11 +162,23 @@ Add your nutrients to keep track of their usage when watering/making nutrient mi
       child: ListView(
         children: state.products.map<Widget>((p) {
           final ProductCategoryUI categoryUI = productCategories[p.category];
+          List<Widget> subtitle = [
+            Text(p.name, style: TextStyle(fontSize: 20, color: Colors.white))
+          ];
+          if (p.specs != null && p.specs.by != null) {
+            subtitle.addAll([
+              Row(children: [
+                Text('by ', style: TextStyle(color: Colors.white)),
+                Text(p.specs.by, style: TextStyle(color: Color(0xff3bb30b))),
+              ])
+            ]);
+          }
           return ListTile(
             leading: SvgPicture.asset(categoryUI.icon),
             title: Text(categoryUI.name, style: TextStyle(color: Colors.white)),
-            subtitle: Text(p.name,
-                style: TextStyle(color: Colors.white, fontSize: 20)),
+            subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: subtitle),
             trailing: p.supplier != null && p.supplier.url != null
                 ? InkWell(
                     child: Icon(
