@@ -24,6 +24,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_categories.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductsPage extends StatefulWidget {
   @override
@@ -155,11 +156,18 @@ Add your nutrients to keep track of their usage when watering/making nutrient mi
             title: Text(categoryUI.name, style: TextStyle(color: Colors.white)),
             subtitle: Text(p.name,
                 style: TextStyle(color: Colors.white, fontSize: 20)),
-            trailing: Icon(
-              Icons.open_in_browser,
-              color: Colors.white,
-              size: 30,
-            ),
+            trailing: p.supplier != null && p.supplier.url != null
+                ? InkWell(
+                    child: Icon(
+                      Icons.open_in_browser,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onTap: () {
+                      launch(p.supplier.url);
+                    },
+                  )
+                : null,
           );
         }).toList(),
       ),

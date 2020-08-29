@@ -86,8 +86,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
             } else {
               final form = <Widget>[
                 SectionTitle(
-                  title:
-                      ExistingDevicePage.instructionsExistingDeviceTitle,
+                  title: ExistingDevicePage.instructionsExistingDeviceTitle,
                   icon: 'assets/box_setup/icon_search.svg',
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
@@ -116,7 +115,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                 form.add(Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      'Controller "${_nameController.value.text}" not found!${Platform.isIOS ? '\nThis is a known bug on iOS, should be fixed by April 2020.' : ''}',
+                      'Controller "${_nameController.value.text}" not found!',
                       style: TextStyle(
                           color: Colors.red, fontWeight: FontWeight.w500)),
                 ));
