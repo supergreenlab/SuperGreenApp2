@@ -33,22 +33,32 @@ class FeedFormParamLayout extends StatelessWidget {
       @required this.title,
       this.titleBackgroundColor,
       this.titleColor,
-      this.largeTitle=false});
+      this.largeTitle = false});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SectionTitle(
-          title: title,
-          icon: icon,
-          backgroundColor: titleBackgroundColor,
-          titleColor: titleColor,
-          large: largeTitle,
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+            border: Border.all(color: Color(0xffdedede), width: 1),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SectionTitle(
+              title: title,
+              icon: icon,
+              backgroundColor: titleBackgroundColor,
+              titleColor: titleColor,
+              large: largeTitle,
+            ),
+            this.child,
+          ],
         ),
-        this.child,
-      ],
+      ),
     );
   }
 }

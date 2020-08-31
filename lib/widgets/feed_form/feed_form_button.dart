@@ -20,12 +20,17 @@ import 'package:flutter/material.dart';
 
 class FeedFormButton extends StatelessWidget {
   final String title;
+  final Icon icon;
   final bool border;
   final TextStyle textStyle;
   final void Function() onPressed;
 
   const FeedFormButton(
-      {this.title, this.border = false, this.onPressed, this.textStyle});
+      {this.title,
+      this.border = false,
+      this.onPressed,
+      this.textStyle,
+      this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +45,17 @@ class FeedFormButton extends StatelessWidget {
         highlightColor: Colors.white54,
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         onPressed: onPressed,
-        child: Text(
-          title,
-          style: this.textStyle ?? TextStyle(color: Colors.white),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: this.icon ?? Container(),
+            ),
+            Text(
+              title,
+              style: this.textStyle ?? TextStyle(color: Colors.white),
+            ),
+          ],
         ),
       ),
     );

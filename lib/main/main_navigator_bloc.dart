@@ -269,6 +269,18 @@ class MainNavigateToFeedLifeEventFormEvent extends MainNavigateToFeedFormEvent {
   List<Object> get props => [plant];
 }
 
+class MainNavigateToFeedNutrientMixFormEvent
+    extends MainNavigateToFeedFormEvent {
+  final Plant plant;
+
+  MainNavigateToFeedNutrientMixFormEvent(this.plant,
+      {pushAsReplacement = false})
+      : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigateToTipEvent extends MainNavigatorEvent {
   final List<String> paths;
   final String tipID;
@@ -632,6 +644,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/feed/form/water', event);
     } else if (event is MainNavigateToFeedLifeEventFormEvent) {
       future = _pushOrReplace('/feed/form/lifeevents', event);
+    } else if (event is MainNavigateToFeedNutrientMixFormEvent) {
+      future = _pushOrReplace('/feed/form/nutrient', event);
     } else if (event is MainNavigateToTipEvent) {
       future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {

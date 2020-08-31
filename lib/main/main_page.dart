@@ -72,6 +72,8 @@ import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measur
 import 'package:super_green_app/pages/feed_entries/feed_measure/form/feed_measure_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/form/feed_media_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
@@ -386,6 +388,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => FeedLifeEventFormBloc(settings.arguments),
           child: FeedLifeEventFormPage(),
+        );
+      case '/feed/form/nutrient':
+        return BlocProvider(
+          create: (context) => FeedNutrientMixFormBloc(settings.arguments),
+          child: FeedNutrientMixFormPage(),
         );
       case '/tip':
         return BlocProvider(

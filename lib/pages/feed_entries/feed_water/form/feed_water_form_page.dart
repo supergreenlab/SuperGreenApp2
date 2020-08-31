@@ -91,17 +91,17 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                               volume = newValue;
                             }
                           });
-                        }),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: _renderOptionCheckbx(context,
-                          'Watering all plants in the lab with the **same quantity**.',
-                          (newValue) {
-                        setState(() {
-                          wateringLab = newValue;
-                        });
-                      }, wateringLab),
-                    ),
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: renderOptionCheckbx(context,
+                              'Watering all plants in the lab with the **same quantity**.',
+                              (newValue) {
+                            setState(() {
+                              wateringLab = newValue;
+                            });
+                          }, wateringLab),
+                        )),
                     YesNoFormParam(
                         icon: 'assets/feed_form/icon_dry.svg',
                         title: 'Was it too dry?',
@@ -119,7 +119,10 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                           setState(() {
                             nutrient = yes;
                           });
-                        }),
+                        },
+                        child: nutrient == true
+                            ? renderNutrientList(context)
+                            : Container()),
                     FeedFormParamLayout(
                         icon: 'assets/feed_form/icon_metrics.svg',
                         title: 'Water metrics',
@@ -204,7 +207,11 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
             }));
   }
 
-  Widget _renderOptionCheckbx(
+  Widget renderNutrientList(BuildContext context) {
+    return Text('pouet');
+  }
+
+  Widget renderOptionCheckbx(
       BuildContext context, String text, Function(bool) onChanged, bool value) {
     return Container(
       child: Row(

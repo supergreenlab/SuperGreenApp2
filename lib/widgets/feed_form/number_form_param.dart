@@ -28,6 +28,7 @@ class NumberFormParam extends StatelessWidget {
   final double step;
   final void Function(double) onChange;
   final double displayMultiplier;
+  final Widget child;
 
   const NumberFormParam(
       {this.title,
@@ -36,7 +37,8 @@ class NumberFormParam extends StatelessWidget {
       this.step = 0.5,
       this.onChange,
       this.unit = '',
-      this.displayMultiplier = 1});
+      this.displayMultiplier = 1,
+      this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -45,46 +47,53 @@ class NumberFormParam extends StatelessWidget {
       title: title,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            ButtonTheme(
-                padding: EdgeInsets.symmetric(
-                    vertical: 4.0,
-                    horizontal: 8.0), //adds padding inside the button
-                materialTapTargetSize: MaterialTapTargetSize
-                    .shrinkWrap, //limits the touch area to the button area
-                height: 36,
-                minWidth: 60, //wraps child's width
-                child: FeedFormButton(
-                  title: '-',
-                  onPressed: () {
-                    onChange(value - step);
-                  },
-                  textStyle:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                )),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Text('${value * displayMultiplier}$unit',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                ButtonTheme(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 4.0,
+                        horizontal: 8.0), //adds padding inside the button
+                    materialTapTargetSize: MaterialTapTargetSize
+                        .shrinkWrap, //limits the touch area to the button area
+                    height: 36,
+                    minWidth: 60, //wraps child's width
+                    child: FeedFormButton(
+                      title: '-',
+                      onPressed: () {
+                        onChange(value - step);
+                      },
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Text('${value * displayMultiplier}$unit',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                ),
+                ButtonTheme(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 4.0,
+                        horizontal: 8.0), //adds padding inside the button
+                    materialTapTargetSize: MaterialTapTargetSize
+                        .shrinkWrap, //limits the touch area to the button area
+                    height: 36,
+                    minWidth: 60, //wraps child's width
+                    child: FeedFormButton(
+                      title: '+',
+                      onPressed: () {
+                        onChange(value + step);
+                      },
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    )),
+              ],
             ),
-            ButtonTheme(
-                padding: EdgeInsets.symmetric(
-                    vertical: 4.0,
-                    horizontal: 8.0), //adds padding inside the button
-                materialTapTargetSize: MaterialTapTargetSize
-                    .shrinkWrap, //limits the touch area to the button area
-                height: 36,
-                minWidth: 60, //wraps child's width
-                child: FeedFormButton(
-                  title: '+',
-                  onPressed: () {
-                    onChange(value + step);
-                  },
-                  textStyle:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                )),
+            this.child ?? Container(),
           ],
         ),
       ),

@@ -361,6 +361,19 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   MainNavigateToFeedMeasureFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
+          'Nutrient mix',
+          'assets/feed_card/icon_nutrient_mix.svg',
+          _onSpeedDialSelected(
+              context,
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedNutrientMixFormEvent(state.plant,
+                      pushAsReplacement: pushAsReplacement),
+              tipID: 'TIP_WATERING',
+              tipPaths: [
+                't/supergreenlab/SuperGreenTips/master/s/when_to_start_adding_nutrients/l/en',
+                't/supergreenlab/SuperGreenTips/master/s/how_to_prepare_nutrients/l/en'
+              ])),
+      _renderSpeedDialChild(
           'Watering',
           'assets/feed_card/icon_watering.svg',
           _onSpeedDialSelected(

@@ -112,8 +112,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                      '${selectedProducts.length} item${selectedProducts.length > 1 ? 's' : ''}'),
-                                  Text(' selected',
+                                      '${initialProducts.length} item${initialProducts.length > 1 ? 's' : ''}'),
+                                  Text(' in your toolbox',
                                       style: TextStyle(
                                           color: Color(0xff3bb30b),
                                           fontWeight: FontWeight.bold)),

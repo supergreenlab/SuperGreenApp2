@@ -24,38 +24,55 @@ class YesNoFormParam extends StatelessWidget {
   final String title;
   final String icon;
   final bool yes;
+  final Color titleBackgroundColor;
   final void Function(bool) onPressed;
+  final Widget child;
 
-  const YesNoFormParam({this.icon, this.title, this.yes, this.onPressed});
+  const YesNoFormParam(
+      {this.icon,
+      this.title,
+      this.yes,
+      this.onPressed,
+      this.titleBackgroundColor,
+      this.child});
 
   @override
   Widget build(BuildContext context) {
     return FeedFormParamLayout(
       icon: icon,
       title: title,
+      titleBackgroundColor: titleBackgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            FeedFormButton(
-                title: 'YES',
-                border: yes == true,
-                onPressed: () {
-                  this.onPressed(yes == true ? null : true);
-                },
-                textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15)),
-            FeedFormButton(
-                title: 'NO',
-                border: yes == false,
-                onPressed: () {
-                  this.onPressed(yes == false ? null : false);
-                },
-                textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                FeedFormButton(
+                    title: 'YES',
+                    icon: Icon(Icons.check,
+                        color: yes == true ? Color(0xff3bb30b) : Colors.white),
+                    border: yes == true,
+                    onPressed: () {
+                      this.onPressed(yes == true ? null : true);
+                    },
+                    textStyle:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                FeedFormButton(
+                    title: 'NO',
+                    icon: Icon(Icons.close,
+                        color: yes == false ? Colors.red : Colors.white),
+                    border: yes == false,
+                    onPressed: () {
+                      this.onPressed(yes == false ? null : false);
+                    },
+                    textStyle:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              ],
+            ),
+            this.child ?? Container(),
           ],
         ),
       ),
