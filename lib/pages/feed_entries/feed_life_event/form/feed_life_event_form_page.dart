@@ -78,13 +78,15 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
                 BlocProvider.of<FeedLifeEventFormBloc>(context)
                     .add(FeedLifeEventFormBlocEventSetDate(date));
               },
-              body: FeedFormParamLayout(
-                  title: phaseTitle.item1,
-                  icon: phaseTitle.item2,
-                  titleBackgroundColor: Colors.blueGrey,
-                  titleColor: Colors.white,
-                  largeTitle: true,
-                  child: body),
+              body: Column(
+                children: [
+                  FeedFormParamLayout(
+                      title: phaseTitle.item1,
+                      icon: phaseTitle.item2,
+                      largeTitle: true,
+                      child: body),
+                ],
+              ),
             );
           }),
     );

@@ -29,6 +29,7 @@ enum FeedCardDateDisplay {
   ABSOLUTE,
   SINCE_NOW,
   SINCE_PHASE,
+  SINCE_GERMINATION,
 }
 
 class FeedCardDate extends StatefulWidget {
@@ -46,14 +47,12 @@ class _FeedCardDateState extends State<FeedCardDate> {
 
   @override
   Widget build(BuildContext context) {
-    String format;
-    if (display == FeedCardDateDisplay.ABSOLUTE) {
-      format = renderAbsoluteDate();
-    } else if (display == FeedCardDateDisplay.SINCE_NOW) {
-      format = renderSinceNow();
-    } else if (display == FeedCardDateDisplay.SINCE_PHASE) {
-      format = renderSincePhase();
-    }
+    String format = [
+      renderAbsoluteDate,
+      renderSinceNow,
+      renderSincePhase,
+      renderSinceGermination
+    ][display.index]();
     return InkWell(
         onTap: () {
           int index = FeedCardDateDisplay.values.indexOf(display);
@@ -85,6 +84,37 @@ class _FeedCardDateState extends State<FeedCardDate> {
 
   String renderSinceNow() {
     Duration diff = DateTime.now().difference(widget.feedEntryState.date);
+    return renderDuration(diff);
+  }
+
+  String renderSincePhase() {
+    PlantFeedState plantFeedState = widget.feedState;
+    Tuple3<PlantPhases, DateTime, Duration> phaseData =
+        plantFeedState.plantSettings.phaseAt(widget.feedEntryState.date);
+    if (phaseData == null) {
+      return 'Life events not set.';
+    }
+    List<String Function(Duration)> phases = [
+      (Duration diff) => 'Germinated ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Vegging for ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Blooming for ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Drying for ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Curing for ${renderDuration(phaseData.item3)}'
+    ];
+    return phases[phaseData.item1.index](phaseData.item3);
+  }
+
+  String renderSinceGermination() {
+    PlantFeedState plantFeedState = widget.feedState;
+    if (plantFeedState.plantSettings.germinationDate == null) {
+      return 'Germination date not set.';
+    }
+    Duration diff = plantFeedState.plantSettings.germinationDate
+        .difference(widget.feedEntryState.date);
+    return renderDuration(diff);
+  }
+
+  String renderDuration(Duration diff) {
     int minuteDiff = diff.inMinutes;
     int hourDiff = diff.inHours;
     int dayDiff = diff.inDays;
@@ -97,22 +127,5 @@ class _FeedCardDateState extends State<FeedCardDate> {
       format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ago';
     }
     return format;
-  }
-
-  String renderSincePhase() {
-    PlantFeedState plantFeedState = widget.feedState;
-    Tuple3<PlantPhases, DateTime, Duration> phaseData =
-        plantFeedState.plantSettings.phaseAt(widget.feedEntryState.date);
-    if (phaseData == null) {
-      return 'Life events not set.';
-    }
-    List<String Function(Duration)> phases = [
-      (Duration diff) => 'Germinated ${phaseData.item3.inDays} days ago',
-      (Duration diff) => 'Vegging for ${phaseData.item3.inDays} days',
-      (Duration diff) => 'Blooming for ${phaseData.item3.inDays} days',
-      (Duration diff) => 'Drying for ${phaseData.item3.inDays} days',
-      (Duration diff) => 'Curing for ${phaseData.item3.inDays} days'
-    ];
-    return phases[phaseData.item1.index](phaseData.item3);
   }
 }

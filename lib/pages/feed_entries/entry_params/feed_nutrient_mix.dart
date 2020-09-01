@@ -18,14 +18,51 @@
 
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
+class NutrientProduct extends Equatable {
+  final double quantity;
+  final String unit;
+  final Product product;
+
+  NutrientProduct({this.product, this.quantity, this.unit});
+
+  factory NutrientProduct.fromMap(Map<String, dynamic> map) {
+    return NutrientProduct(
+      quantity: map['quantity'],
+      unit: map['unit'],
+      product: Product.fromMap(map['product']),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'quantity': quantity, 'unit': unit, 'product': product.toMap()};
+  }
+
+  @override
+  List<Object> get props => [product, quantity, unit];
+
+  NutrientProduct copyWith({Product product, double quantity, String unit}) {
+    return NutrientProduct(
+        product: product ?? this.product,
+        quantity: quantity ?? this.quantity,
+        unit: unit ?? this.unit);
+  }
+}
+
 class FeedNutrientMixParams extends FeedEntryParams {
-  FeedNutrientMixParams();
+  final List<NutrientProduct> nutrientProducts;
+
+  FeedNutrientMixParams(this.nutrientProducts);
 
   factory FeedNutrientMixParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedNutrientMixParams();
+    List<dynamic> nutrientProducts = map['nutrientProducts'];
+    return FeedNutrientMixParams(
+      nutrientProducts.map((np) => NutrientProduct.fromMap(np)),
+    );
   }
 
   @override
@@ -34,5 +71,5 @@ class FeedNutrientMixParams extends FeedEntryParams {
   }
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [nutrientProducts];
 }

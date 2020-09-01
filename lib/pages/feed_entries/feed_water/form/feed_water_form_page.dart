@@ -160,7 +160,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                               Expanded(
                                 child: Column(
                                   children: <Widget>[
-                                    Text('EC:',
+                                    Text('EC (ppm):',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,

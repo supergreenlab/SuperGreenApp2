@@ -27,7 +27,7 @@ class FeedVentilationParamsValues extends Equatable {
 
   FeedVentilationParamsValues(this.blowerDay, this.blowerNight);
 
-  factory FeedVentilationParamsValues.fromJSON(Map<String, dynamic> map) {
+  factory FeedVentilationParamsValues.fromMap(Map<String, dynamic> map) {
     return FeedVentilationParamsValues(map['blowerDay'], map['blowerNight']);
   }
 
@@ -48,16 +48,14 @@ class FeedVentilationParams extends FeedEntryParams {
   factory FeedVentilationParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedVentilationParams(
-        FeedVentilationParamsValues.fromJSON(map['values']),
-        FeedVentilationParamsValues.fromJSON(map['initialValues']));
+        FeedVentilationParamsValues.fromMap(map['values']),
+        FeedVentilationParamsValues.fromMap(map['initialValues']));
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({
-      'values': values.toMap(),
-      'initialValues': initialValues.toMap()
-    });
+    return JsonEncoder().convert(
+        {'values': values.toMap(), 'initialValues': initialValues.toMap()});
   }
 
   @override
