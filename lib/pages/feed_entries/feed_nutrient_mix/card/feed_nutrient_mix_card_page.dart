@@ -18,7 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
@@ -26,6 +27,7 @@ import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedNutrientMixCardPage extends StatelessWidget {
   final Animation animation;
@@ -51,14 +53,14 @@ class FeedNutrientMixCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_schedule.svg',
+            'assets/feed_card/icon_nutrient_mix.svg',
             'Nutrient mix',
             state.synced,
             showSyncStatus: !state.remoteState,
             showControls: !state.remoteState,
           ),
           Container(
-            height: 100,
+            height: 140,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -72,14 +74,14 @@ class FeedNutrientMixCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
-    FeedScheduleParams params = state.params;
+    FeedNutrientMixParams params = state.params;
     return FeedCard(
       animation: animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_schedule.svg',
+            'assets/feed_card/icon_nutrient_mix.svg',
             'Nutrient mix',
             state.synced,
             showSyncStatus: !state.remoteState,
@@ -90,15 +92,43 @@ class FeedNutrientMixCardPage extends StatelessWidget {
             },
           ),
           Container(
-            height: 100,
+            height: 140,
             alignment: Alignment.center,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Nutrient mix',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'For ',
+                        style: TextStyle(),
+                      ),
+                      Text(
+                        AppDB().getAppData().freedomUnits == true
+                            ? '${params.volume / 4} gal'
+                            : '${params.volume} L',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff3bb30b),
+                            fontSize: 16),
+                      ),
+                      Text(
+                        ' of water',
+                        style: TextStyle(),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: params.nutrientProducts
+                        .map((np) => renderNutrientProduct(np))
+                        .toList(),
+                  ),
                 ),
               ],
             ),
@@ -109,6 +139,35 @@ class FeedNutrientMixCardPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget renderNutrientProduct(NutrientProduct nutrientProduct) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Container(
+          width: 250,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+              border: Border.all(color: Color(0xffdedede), width: 1),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            children: [
+              SectionTitle(
+                  icon: 'assets/products/toolbox/icon_fertilizer.svg',
+                  title: nutrientProduct.product.name),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                      '${nutrientProduct.quantity} ${nutrientProduct.unit}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w300, fontSize: 25)),
+                ),
+              )
+            ],
+          )),
     );
   }
 }

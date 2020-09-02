@@ -26,6 +26,7 @@ import 'package:super_green_app/pages/feed_entries/feed_life_event/card/feed_lif
 import 'package:super_green_app/pages/feed_entries/feed_light/card/feed_light_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/card/feed_nutrient_mix_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_page.dart';
@@ -69,6 +70,8 @@ class FeedEntriesCardHelpers {
         FeedProductsCardPage(animation, feedState, state),
     'FE_LIFE_EVENT': (animation, feedState, state) =>
         FeedLifeEventCardPage(animation, feedState, state),
+    'FE_NUTRIENT_MIX': (animation, feedState, state) =>
+        FeedNutrientMixCardPage(animation, feedState, state),
   };
 
   static Widget cardForFeedEntry(

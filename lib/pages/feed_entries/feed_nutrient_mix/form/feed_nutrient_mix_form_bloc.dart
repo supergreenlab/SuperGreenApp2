@@ -45,12 +45,13 @@ class FeedNutrientMixFormBlocEventLoaded extends FeedNutrientMixFormBlocEvent {
 }
 
 class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
+  final double volume;
   final List<NutrientProduct> nutrientProducts;
 
-  FeedNutrientMixFormBlocEventCreate(this.nutrientProducts);
+  FeedNutrientMixFormBlocEventCreate(this.volume, this.nutrientProducts);
 
   @override
-  List<Object> get props => [nutrientProducts];
+  List<Object> get props => [volume, nutrientProducts];
 }
 
 abstract class FeedNutrientMixFormBlocState extends Equatable {}
@@ -112,11 +113,17 @@ class FeedNutrientMixFormBloc
     } else if (event is FeedNutrientMixFormBlocEventCreate) {
       yield FeedNutrientMixFormBlocStateLoading();
       await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
-        type: 'FE_SCHEDULE',
+        type: 'FE_NUTRIENT_MIX',
         feed: args.plant.feed,
         date: DateTime.now(),
-        params: Value(FeedNutrientMixParams(event.nutrientProducts).toJSON()),
+        params: Value(FeedNutrientMixParams(
+                volume: event.volume,
+                nutrientProducts: event.nutrientProducts
+                    .where((np) => np.quantity != null && np.quantity > 0)
+                    .toList())
+            .toJSON()),
       ));
+      yield FeedNutrientMixFormBlocStateDone();
     }
   }
 

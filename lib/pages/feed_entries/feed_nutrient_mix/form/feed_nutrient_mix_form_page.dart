@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -35,9 +36,10 @@ class FeedNutrientMixFormPage extends StatefulWidget {
 }
 
 class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
-  List<NutrientProduct> nutrientProducts = [];
-
   double volume = 10;
+
+  List<NutrientProduct> nutrientProducts = [];
+  List<TextEditingController> quantityControllers = [];
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +48,20 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       listener: (BuildContext context, FeedNutrientMixFormBlocState state) {
         if (state is FeedNutrientMixFormBlocStateLoaded) {
           setState(() {
+            nutrientProducts = [];
+            quantityControllers = [];
             for (Product product in state.products) {
-              if (nutrientProducts.singleWhere(
-                      (pi) => pi.product.id == product.id,
-                      orElse: () => null) ==
-                  null) {
+              NutrientProduct nutrientProduct = nutrientProducts.singleWhere(
+                  (pi) => pi.product.id == product.id,
+                  orElse: () => null);
+              if (nutrientProduct == null) {
                 nutrientProducts.add(
                     NutrientProduct(product: product, quantity: 0, unit: 'g'));
+                quantityControllers.add(TextEditingController(text: null));
+              } else {
+                nutrientProducts.add(nutrientProduct);
+                quantityControllers.add(
+                    TextEditingController(text: '${nutrientProduct.quantity}'));
               }
             }
           });
@@ -65,8 +74,6 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           cubit: BlocProvider.of<FeedNutrientMixFormBloc>(context),
           builder: (BuildContext context, FeedNutrientMixFormBlocState state) {
             Widget body;
-            bool changed = false;
-            bool valid = true;
             if (state is FeedNutrientMixFormBlocStateLoading) {
               body = FullscreenLoading(
                 title: 'Saving..',
@@ -80,10 +87,11 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             }
             return FeedFormLayout(
                 title: '🧪',
-                changed: changed,
-                valid: valid,
+                changed: true,
+                valid: true,
                 onOK: () => BlocProvider.of<FeedNutrientMixFormBloc>(context)
-                    .add(FeedNutrientMixFormBlocEventCreate(nutrientProducts)),
+                    .add(FeedNutrientMixFormBlocEventCreate(
+                        volume, nutrientProducts)),
                 body: AnimatedSwitcher(
                   child: body,
                   duration: Duration(milliseconds: 200),
@@ -111,35 +119,111 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           });
         },
       ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Text(
+              'Nutrients in your toolbox',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
     ];
-    int i = 0;
-    for (NutrientProduct productIntake in nutrientProducts) {
-      children.add(FeedFormParamLayout(
-          child: renderFertilizer(context, productIntake,
-              (NutrientProduct newProductIntake) {
-            setState(() {
-              nutrientProducts[i] = newProductIntake;
-            });
-          }),
-          icon: 'assets/products/toolbox/icon_fertilizer.svg',
-          title: productIntake.product.name));
-      ++i;
+    if (nutrientProducts.length > 0) {
+      int i = 0;
+      for (NutrientProduct productIntake in nutrientProducts) {
+        int index = i;
+        children.add(FeedFormParamLayout(
+            child:
+                renderFertilizer(context, productIntake, quantityControllers[i],
+                    (NutrientProduct newProductIntake) {
+              setState(() {
+                nutrientProducts[index] = newProductIntake;
+              });
+            }),
+            icon: 'assets/products/toolbox/icon_fertilizer.svg',
+            title: productIntake.product.name));
+        ++i;
+      }
+    } else {
+      children.add(Container(
+          height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                  child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SvgPicture.asset(
+                        'assets/products/toolbox/toolbox.svg',
+                        width: 110,
+                        height: 110),
+                  ),
+                  Text(
+                      'No nutrients in your toolbox yet.\nGo back to the previous screen to add toolbox items.',
+                      textAlign: TextAlign.center),
+                ],
+              ))
+            ],
+          )));
     }
     return ListView(
       children: children,
     );
   }
 
-  Widget renderFertilizer(BuildContext context, NutrientProduct productIntake,
+  Widget renderFertilizer(
+      BuildContext context,
+      NutrientProduct productIntake,
+      TextEditingController textEditingController,
       Function(NutrientProduct) onChange) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          Switch(
-            onChanged: (bool value) {},
-            value: true,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Solid'),
+              Switch(
+                onChanged: (bool value) {
+                  onChange(
+                      productIntake.copyWith(unit: value == true ? 'mL' : 'g'));
+                },
+                value: productIntake.unit == 'mL',
+              ),
+              Text('Liquid'),
+            ],
           ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
+                width: 70,
+                child: TextField(
+                  decoration: InputDecoration(hintText: 'ex: 10'),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  controller: textEditingController,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                  onChanged: (String value) {
+                    onChange(
+                        productIntake.copyWith(quantity: double.parse(value)));
+                  },
+                ),
+              ),
+            ),
+            Text(productIntake.unit,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          ]),
         ],
       ),
     );

@@ -53,23 +53,29 @@ class NutrientProduct extends Equatable {
 }
 
 class FeedNutrientMixParams extends FeedEntryParams {
+  final double volume;
   final List<NutrientProduct> nutrientProducts;
 
-  FeedNutrientMixParams(this.nutrientProducts);
+  FeedNutrientMixParams({this.volume, this.nutrientProducts});
 
   factory FeedNutrientMixParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    List<dynamic> nutrientProducts = map['nutrientProducts'];
+    List<dynamic> nps = map['nutrientProducts'];
     return FeedNutrientMixParams(
-      nutrientProducts.map((np) => NutrientProduct.fromMap(np)),
+      volume: map['volume'],
+      nutrientProducts:
+          (nps ?? []).map((np) => NutrientProduct.fromMap(np)).toList(),
     );
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({});
+    return JsonEncoder().convert({
+      'volume': volume,
+      'nutrientProducts': (nutrientProducts).map((np) => np.toMap()).toList()
+    });
   }
 
   @override
-  List<Object> get props => [nutrientProducts];
+  List<Object> get props => [volume, nutrientProducts];
 }

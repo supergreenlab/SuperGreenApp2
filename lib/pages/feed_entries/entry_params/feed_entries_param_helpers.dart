@@ -21,6 +21,7 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_light.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_towelie_info.dart';
@@ -44,6 +45,7 @@ abstract class FeedEntriesParamHelpers {
     'FE_TOWELIE_INFO': (json) => FeedTowelieInfoParams.fromJSON(json),
     'FE_PRODUCTS': (json) => FeedProductsParams.fromJSON(json),
     'FE_LIFE_EVENT': (json) => FeedLifeEventParams.fromJSON(json),
+    'FE_NUTRIENT_MIX': (json) => FeedNutrientMixParams.fromJSON(json),
   };
 
   static dynamic paramForFeedEntryType(String type, String json) {

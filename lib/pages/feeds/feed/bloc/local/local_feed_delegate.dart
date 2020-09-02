@@ -28,6 +28,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_life_ev
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_light.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_measure.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_media.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_products.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_schedule.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/feed_towelie_info.dart';
@@ -67,6 +68,7 @@ class LocalFeedBlocDelegate extends FeedBlocDelegate {
       'FE_TOWELIE_INFO': FeedTowelieInfoLoader(add),
       'FE_PRODUCTS': FeedProductsLoader(add),
       'FE_LIFE_EVENT': FeedLifeEventLoader(add),
+      'FE_NUTRIENT_MIX': FeedNutrientMixLoader(add),
     };
     insertSubscription = FeedEntryHelper.eventBus
         .on<FeedEntryInsertEvent>()

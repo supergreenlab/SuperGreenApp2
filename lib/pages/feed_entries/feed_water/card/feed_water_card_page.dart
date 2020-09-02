@@ -123,7 +123,7 @@ class FeedWaterCardPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(4.0),
           child: Text(
-            'EC: ${params.ec.toInt()}',
+            'TDS: ${params.ec.toInt()} ppm',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
           ),
         ),

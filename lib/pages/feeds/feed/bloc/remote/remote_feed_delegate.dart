@@ -23,6 +23,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_care.d
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_light.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_measure.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_media.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_schedule.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_unknown.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_ventilation.dart';
@@ -52,6 +53,7 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
       'FE_TRANSPLANT': FeedCareLoader(add),
       'FE_VENTILATION': FeedVentilationLoader(add),
       'FE_WATER': FeedWaterLoader(add),
+      'FE_NUTRIENT_MIX': FeedNutrientMixLoader(add),
     };
   }
 
