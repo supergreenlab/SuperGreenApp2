@@ -75,6 +75,30 @@ class FeedNutrientMixCardPage extends StatelessWidget {
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
     FeedNutrientMixParams params = state.params;
+    List<Widget> cards = [
+      renderCard(
+          'assets/feed_form/icon_volume.svg',
+          'Water quantity',
+          Text('${params.volume} L',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
+    ];
+    if (params.ph != null) {
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          'PH',
+          Text('${params.ph}',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
+    }
+    if (params.tds != null) {
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          'TDS',
+          Text('${params.tds} ppm',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
+    }
+    cards.addAll(params.nutrientProducts
+        .map((np) => renderNutrientProduct(np))
+        .toList());
     return FeedCard(
       animation: animation,
       child: Column(
@@ -92,45 +116,11 @@ class FeedNutrientMixCardPage extends StatelessWidget {
             },
           ),
           Container(
-            height: 140,
+            height: 115,
             alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'For ',
-                        style: TextStyle(),
-                      ),
-                      Text(
-                        AppDB().getAppData().freedomUnits == true
-                            ? '${params.volume / 4} gal'
-                            : '${params.volume} L',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff3bb30b),
-                            fontSize: 16),
-                      ),
-                      Text(
-                        ' of water',
-                        style: TextStyle(),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: params.nutrientProducts
-                        .map((np) => renderNutrientProduct(np))
-                        .toList(),
-                  ),
-                ),
-              ],
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: cards,
             ),
           ),
           Padding(
@@ -143,10 +133,18 @@ class FeedNutrientMixCardPage extends StatelessWidget {
   }
 
   Widget renderNutrientProduct(NutrientProduct nutrientProduct) {
+    return renderCard(
+        'assets/products/toolbox/icon_fertilizer.svg',
+        nutrientProduct.product.name,
+        Text('${nutrientProduct.quantity} ${nutrientProduct.unit}',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25)));
+  }
+
+  Widget renderCard(String icon, String title, Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
-          width: 250,
+          width: 200,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
               border: Border.all(color: Color(0xffdedede), width: 1),
@@ -154,16 +152,11 @@ class FeedNutrientMixCardPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(8)),
           child: Column(
             children: [
-              SectionTitle(
-                  icon: 'assets/products/toolbox/icon_fertilizer.svg',
-                  title: nutrientProduct.product.name),
+              SectionTitle(icon: icon, title: title),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      '${nutrientProduct.quantity} ${nutrientProduct.unit}',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w300, fontSize: 25)),
+                  child: child,
                 ),
               )
             ],

@@ -36,6 +36,9 @@ class FeedNutrientMixFormPage extends StatefulWidget {
 }
 
 class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
+  TextEditingController phController = TextEditingController();
+  TextEditingController ecController = TextEditingController();
+
   double volume = 10;
 
   List<NutrientProduct> nutrientProducts = [];
@@ -89,9 +92,18 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                 title: '🧪',
                 changed: true,
                 valid: true,
-                onOK: () => BlocProvider.of<FeedNutrientMixFormBloc>(context)
-                    .add(FeedNutrientMixFormBlocEventCreate(
-                        volume, nutrientProducts)),
+                onOK: () {
+                  double ph, ec;
+                  if (phController.text != '') {
+                    ph = double.parse(phController.text.replaceAll(',', '.'));
+                  }
+                  if (ecController.text != '') {
+                    ec = double.parse(ecController.text.replaceAll(',', '.'));
+                  }
+                  BlocProvider.of<FeedNutrientMixFormBloc>(context).add(
+                      FeedNutrientMixFormBlocEventCreate(
+                          volume, ph, ec, nutrientProducts));
+                },
                 body: AnimatedSwitcher(
                   child: body,
                   duration: Duration(milliseconds: 200),
@@ -119,6 +131,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           });
         },
       ),
+      renderWaterMetrics(context),
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -152,32 +165,92 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         ++i;
       }
     } else {
-      children.add(Container(
-          height: 200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                  child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SvgPicture.asset(
-                        'assets/products/toolbox/toolbox.svg',
-                        width: 110,
-                        height: 110),
-                  ),
-                  Text(
-                      'No nutrients in your toolbox yet.\nGo back to the previous screen to add toolbox items.',
-                      textAlign: TextAlign.center),
-                ],
-              ))
-            ],
-          )));
+      children.add(renderEmptyToolbox(context));
     }
     return ListView(
       children: children,
     );
+  }
+
+  Widget renderEmptyToolbox(BuildContext context) {
+    return Container(
+        height: 200,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+                child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SvgPicture.asset('assets/products/toolbox/toolbox.svg',
+                      width: 110, height: 110),
+                ),
+                Text(
+                    'No nutrients in your toolbox yet.\nGo back to the previous screen to add toolbox items.',
+                    textAlign: TextAlign.center),
+              ],
+            ))
+          ],
+        ));
+  }
+
+  Widget renderWaterMetrics(BuildContext context) {
+    return FeedFormParamLayout(
+        icon: 'assets/feed_form/icon_metrics.svg',
+        title: 'End water metrics',
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Text('PH:',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: TextField(
+                        decoration: InputDecoration(hintText: 'ex: 6.5'),
+                        textCapitalization: TextCapitalization.words,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        controller: phController,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Text('TDS (ppm):',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: TextField(
+                        decoration: InputDecoration(hintText: 'ex: 1200'),
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        controller: ecController,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget renderFertilizer(
