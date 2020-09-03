@@ -78,6 +78,7 @@ class FeedNutrientMixCardPage extends StatelessWidget {
     List<Widget> cards = [
       renderCard(
           'assets/feed_form/icon_volume.svg',
+          8,
           'Water quantity',
           Text('${params.volume} L',
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
@@ -85,6 +86,7 @@ class FeedNutrientMixCardPage extends StatelessWidget {
     if (params.ph != null) {
       cards.add(renderCard(
           'assets/products/toolbox/icon_ph_ec.svg',
+          0,
           'PH',
           Text('${params.ph}',
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
@@ -92,6 +94,7 @@ class FeedNutrientMixCardPage extends StatelessWidget {
     if (params.tds != null) {
       cards.add(renderCard(
           'assets/products/toolbox/icon_ph_ec.svg',
+          0,
           'TDS',
           Text('${params.tds} ppm',
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
@@ -116,11 +119,14 @@ class FeedNutrientMixCardPage extends StatelessWidget {
             },
           ),
           Container(
-            height: 115,
+            height: 130,
             alignment: Alignment.center,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: cards,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: cards,
+              ),
             ),
           ),
           Padding(
@@ -135,12 +141,14 @@ class FeedNutrientMixCardPage extends StatelessWidget {
   Widget renderNutrientProduct(NutrientProduct nutrientProduct) {
     return renderCard(
         'assets/products/toolbox/icon_fertilizer.svg',
+        0,
         nutrientProduct.product.name,
         Text('${nutrientProduct.quantity} ${nutrientProduct.unit}',
             style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25)));
   }
 
-  Widget renderCard(String icon, String title, Widget child) {
+  Widget renderCard(
+      String icon, double iconPadding, String title, Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
@@ -154,6 +162,7 @@ class FeedNutrientMixCardPage extends StatelessWidget {
             children: [
               SectionTitle(
                 icon: icon,
+                iconPadding: iconPadding,
                 title: title,
                 backgroundColor: Colors.transparent,
               ),
