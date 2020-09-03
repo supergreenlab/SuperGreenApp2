@@ -140,16 +140,26 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       ),
       renderWaterMetrics(context),
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
         child: Row(
           children: [
-            Text(
-              'Nutrients in your toolbox',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.grey),
-              textAlign: TextAlign.center,
+            Row(
+              children: [
+                Text(
+                  'Nutrients in your ',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black87),
+                ),
+                Text(
+                  'toolbox',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color(0xff3bb30b)),
+                ),
+              ],
             ),
           ],
         ),
