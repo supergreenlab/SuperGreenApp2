@@ -68,11 +68,12 @@ class FeedNutrientMixFormBlocStateInit extends FeedNutrientMixFormBlocState {
 
 class FeedNutrientMixFormBlocStateLoaded extends FeedNutrientMixFormBlocState {
   final List<Product> products;
+  final FeedNutrientMixParams lastNutrientMixParams;
 
-  FeedNutrientMixFormBlocStateLoaded(this.products);
+  FeedNutrientMixFormBlocStateLoaded(this.products, this.lastNutrientMixParams);
 
   @override
-  List<Object> get props => [products];
+  List<Object> get props => [products, lastNutrientMixParams];
 }
 
 class FeedNutrientMixFormBlocStateLoading extends FeedNutrientMixFormBlocState {
@@ -93,6 +94,7 @@ class FeedNutrientMixFormBloc
     extends Bloc<FeedNutrientMixFormBlocEvent, FeedNutrientMixFormBlocState> {
   final MainNavigateToFeedNutrientMixFormEvent args;
 
+  FeedNutrientMixParams lastNutrientMixParams;
   StreamSubscription<Plant> plantStream;
 
   FeedNutrientMixFormBloc(this.args)
@@ -104,15 +106,25 @@ class FeedNutrientMixFormBloc
   Stream<FeedNutrientMixFormBlocState> mapEventToState(
       FeedNutrientMixFormBlocEvent event) async* {
     if (event is FeedNutrientMixFormBlocEventInit) {
+      List<FeedEntry> nutrientMixes = await RelDB.get()
+          .feedsDAO
+          .getFeedEntriesForFeedWithType(args.plant.feed, 'FE_NUTRIENT_MIX');
+      if (nutrientMixes.length != 0) {
+        lastNutrientMixParams =
+            FeedNutrientMixParams.fromJSON(nutrientMixes.first.params);
+      }
       plantStream =
           RelDB.get().plantsDAO.watchPlant(args.plant.id).listen(plantUpdated);
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
-      yield FeedNutrientMixFormBlocStateLoaded(plantSettings.products
-          .where((p) => p.category == ProductCategoryID.FERTILIZER)
-          .toList());
+      yield FeedNutrientMixFormBlocStateLoaded(
+          plantSettings.products
+              .where((p) => p.category == ProductCategoryID.FERTILIZER)
+              .toList(),
+          lastNutrientMixParams);
     } else if (event is FeedNutrientMixFormBlocEventLoaded) {
-      yield FeedNutrientMixFormBlocStateLoaded(event.products);
+      yield FeedNutrientMixFormBlocStateLoaded(
+          event.products, lastNutrientMixParams);
     } else if (event is FeedNutrientMixFormBlocEventCreate) {
       yield FeedNutrientMixFormBlocStateLoading();
       await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(

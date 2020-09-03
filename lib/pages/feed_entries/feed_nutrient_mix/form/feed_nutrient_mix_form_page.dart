@@ -27,6 +27,7 @@ import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_n
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
+import 'package:super_green_app/widgets/feed_form/yesno_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedNutrientMixFormPage extends StatefulWidget {
@@ -36,8 +37,10 @@ class FeedNutrientMixFormPage extends StatefulWidget {
 }
 
 class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
+  bool hideRestore = false;
+
   TextEditingController phController = TextEditingController();
-  TextEditingController ecController = TextEditingController();
+  TextEditingController tdsController = TextEditingController();
 
   double volume = 10;
 
@@ -97,8 +100,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                   if (phController.text != '') {
                     ph = double.parse(phController.text.replaceAll(',', '.'));
                   }
-                  if (ecController.text != '') {
-                    ec = double.parse(ecController.text.replaceAll(',', '.'));
+                  if (tdsController.text != '') {
+                    ec = double.parse(tdsController.text.replaceAll(',', '.'));
                   }
                   BlocProvider.of<FeedNutrientMixFormBloc>(context).add(
                       FeedNutrientMixFormBlocEventCreate(
@@ -115,7 +118,11 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   Widget renderBody(
       BuildContext context, FeedNutrientMixFormBlocStateLoaded state) {
     bool freedomUnits = AppDB().getAppData().freedomUnits == true;
-    List<Widget> children = [
+    List<Widget> children = [];
+    if (state.lastNutrientMixParams != null && hideRestore == false) {
+      children.add(renderRestoreLastNutrientMix(state.lastNutrientMixParams));
+    }
+    children.addAll([
       NumberFormParam(
         icon: 'assets/feed_form/icon_volume.svg',
         title: 'Water quantity',
@@ -147,7 +154,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           ],
         ),
       ),
-    ];
+    ]);
     if (nutrientProducts.length > 0) {
       int i = 0;
       for (NutrientProduct productIntake in nutrientProducts) {
@@ -198,7 +205,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   Widget renderWaterMetrics(BuildContext context) {
     return FeedFormParamLayout(
         icon: 'assets/feed_form/icon_metrics.svg',
-        title: 'End water metrics',
+        title: 'End mix metrics',
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -240,7 +247,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                         decoration: InputDecoration(hintText: 'ex: 1200'),
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
-                        controller: ecController,
+                        controller: tdsController,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20),
                       ),
@@ -299,6 +306,49 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           ]),
         ],
       ),
+    );
+  }
+
+  Widget renderRestoreLastNutrientMix(
+      FeedNutrientMixParams lastNutrientMixParams) {
+    return YesNoFormParam(
+      icon: 'assets/feed_form/icon_restore_nutrient_mix.svg',
+      title: 'Reuse previous mix values?',
+      onPressed: (bool value) {
+        if (value) {
+          setState(() {
+            volume = lastNutrientMixParams.volume;
+            if (lastNutrientMixParams.ph != null) {
+              phController =
+                  TextEditingController(text: '${lastNutrientMixParams.ph}');
+            }
+            if (lastNutrientMixParams.tds != null) {
+              tdsController =
+                  TextEditingController(text: '${lastNutrientMixParams.tds}');
+            }
+            for (int i = 0;
+                i < lastNutrientMixParams.nutrientProducts.length;
+                ++i) {
+              int index = nutrientProducts.indexWhere((np) =>
+                  np.product.id ==
+                  lastNutrientMixParams.nutrientProducts[i].product.id);
+              if (index == -1) {
+                continue;
+              }
+              nutrientProducts[index] =
+                  lastNutrientMixParams.nutrientProducts[i];
+              quantityControllers[index] = TextEditingController(
+                  text:
+                      '${lastNutrientMixParams.nutrientProducts[i].quantity}');
+            }
+            hideRestore = true;
+          });
+        } else {
+          setState(() {
+            hideRestore = true;
+          });
+        }
+      },
     );
   }
 }

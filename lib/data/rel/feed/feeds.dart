@@ -274,7 +274,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   Future<List<FeedEntry>> getFeedEntriesForFeedWithType(
       int feedID, String type) {
     return (select(feedEntries)
-          ..where((fe) => fe.type.equals(type) & fe.feed.equals(feedID)))
+          ..where((fe) => fe.type.equals(type) & fe.feed.equals(feedID))
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
+          ]))
         .get();
   }
 

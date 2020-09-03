@@ -42,7 +42,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   bool wateringLab = false;
   DateTime date = DateTime.now();
   TextEditingController phController = TextEditingController();
-  TextEditingController ecController = TextEditingController();
+  TextEditingController tdsController = TextEditingController();
 
   @override
   void initState() {
@@ -174,7 +174,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                                         keyboardType:
                                             TextInputType.numberWithOptions(
                                                 decimal: true),
-                                        controller: ecController,
+                                        controller: tdsController,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 20),
                                       ),
@@ -198,10 +198,10 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                           ? null
                           : double.parse(
                               phController.value.text.replaceAll(',', '.')),
-                      ecController.value.text == ''
+                      tdsController.value.text == ''
                           ? null
                           : double.parse(
-                              ecController.value.text.replaceAll(',', '.'))),
+                              tdsController.value.text.replaceAll(',', '.'))),
                 ),
               );
             }));
