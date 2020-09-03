@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 
@@ -35,6 +36,11 @@ class FeedFormDatePicker extends StatelessWidget {
       child: Container(
         child: Row(
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset('assets/feed_form/icon_calendar.svg',
+                  width: 30, height: 30),
+            ),
             Expanded(
                 child: Text('Event date: ${DateFormat(format).format(date)}')),
             FlatButton(
