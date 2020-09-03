@@ -152,7 +152,11 @@ class FeedNutrientMixCardPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(8)),
           child: Column(
             children: [
-              SectionTitle(icon: icon, title: title),
+              SectionTitle(
+                icon: icon,
+                title: title,
+                backgroundColor: Colors.transparent,
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
