@@ -40,6 +40,7 @@ class SettingsPage extends StatelessWidget {
               titleColor: Colors.white,
               iconColor: Colors.white,
               elevation: 10,
+              hideBackButton: true,
             ),
             body: ListView(
               children: <Widget>[
@@ -121,8 +122,7 @@ class SettingsPage extends StatelessWidget {
                 ListTile(
                   onTap: () async {
                     File logFile = File(await Logger.logFilePath());
-                    final Directory tmpDir =
-                        await getTemporaryDirectory();
+                    final Directory tmpDir = await getTemporaryDirectory();
                     String tmpLogFile = '${tmpDir.path}/log.txt';
                     await logFile.copy(tmpLogFile);
                     final Email email = Email(
