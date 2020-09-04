@@ -38,7 +38,8 @@ class FeedFormLayout extends StatelessWidget {
       this.valid = true,
       this.changed = false,
       this.hideBackButton = false,
-      this.fontSize, this.topBarPadding = 8.0});
+      this.fontSize,
+      this.topBarPadding = 8.0});
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +95,7 @@ class FeedFormLayout extends StatelessWidget {
           ),
           body: Padding(
             padding: EdgeInsets.only(top: topBarPadding),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(child: this.body),
-                ]),
+            child: this.body,
           )),
     );
   }

@@ -112,17 +112,18 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                           });
                         }),
                     YesNoFormParam(
-                        icon: 'assets/feed_form/icon_nutrient.svg',
-                        title: 'Nutrient?',
-                        yes: nutrient,
-                        onPressed: (yes) {
-                          setState(() {
-                            nutrient = yes;
-                          });
-                        },
-                        child: nutrient == true
+                      icon: 'assets/feed_form/icon_nutrient.svg',
+                      title: 'Nutrient?',
+                      yes: nutrient,
+                      onPressed: (yes) {
+                        setState(() {
+                          nutrient = yes;
+                        });
+                      },
+                      /*child: nutrient == true
                             ? renderNutrientList(context)
-                            : Container()),
+                            : Container()*/
+                    ),
                     FeedFormParamLayout(
                         icon: 'assets/feed_form/icon_metrics.svg',
                         title: 'Water metrics',
@@ -208,7 +209,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   }
 
   Widget renderNutrientList(BuildContext context) {
-    return Text('pouet');
+    return Text('');
   }
 
   Widget renderOptionCheckbx(

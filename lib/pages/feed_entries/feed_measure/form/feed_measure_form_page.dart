@@ -202,8 +202,11 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
             overlayPath: _previous?.filePath,
             videoEnabled: false,
             pickerEnabled: false));
-    FeedMediasCompanion fm = await futureFn.future;
-    return fm;
+    List<FeedMediasCompanion> fm = await futureFn.future;
+    if (fm == null || fm.length == 0) {
+      return null;
+    }
+    return fm[0];
   }
 
   Widget _renderCurrent(BuildContext context) {

@@ -83,7 +83,6 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
                   FeedFormParamLayout(
                       title: phaseTitle.item1,
                       icon: phaseTitle.item2,
-                      largeTitle: true,
                       child: body),
                 ],
               ),

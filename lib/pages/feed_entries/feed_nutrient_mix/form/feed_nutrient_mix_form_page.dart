@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,7 +39,11 @@ class FeedNutrientMixFormPage extends StatefulWidget {
 }
 
 class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+
   bool hideRestore = false;
+  bool restore;
+  bool loadingRestore;
 
   TextEditingController phController = TextEditingController();
   TextEditingController tdsController = TextEditingController();
@@ -184,8 +190,12 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     } else {
       children.add(renderEmptyToolbox(context));
     }
-    return ListView(
-      children: children,
+    return AnimatedList(
+      key: listKey,
+      itemBuilder:
+          (BuildContext context, int index, Animation<double> animation) =>
+              children[index],
+      initialItemCount: children.length,
     );
   }
 
@@ -320,11 +330,17 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   }
 
   Widget renderRestoreLastNutrientMix(
-      FeedNutrientMixParams lastNutrientMixParams) {
-    return YesNoFormParam(
+      FeedNutrientMixParams lastNutrientMixParams,
+      {Animation<double> animation}) {
+    Widget body = YesNoFormParam(
       icon: 'assets/feed_form/icon_restore_nutrient_mix.svg',
       title: 'Reuse previous mix values?',
+      yes: restore,
       onPressed: (bool value) {
+        setState(() {
+          restore = value;
+          loadingRestore = true;
+        });
         if (value) {
           setState(() {
             volume = lastNutrientMixParams.volume;
@@ -351,14 +367,28 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                   text:
                       '${lastNutrientMixParams.nutrientProducts[i].quantity}');
             }
-            hideRestore = true;
           });
-        } else {
+        }
+        Timer(Duration(milliseconds: 500), () {
+          listKey.currentState.removeItem(
+              0,
+              (context, animation) => renderRestoreLastNutrientMix(
+                  lastNutrientMixParams,
+                  animation: animation),
+              duration: Duration(milliseconds: 700));
           setState(() {
             hideRestore = true;
           });
-        }
+        });
       },
     );
+    if (animation != null) {
+      body = SizeTransition(
+        axis: Axis.vertical,
+        sizeFactor: animation,
+        child: body,
+      );
+    }
+    return body;
   }
 }
