@@ -341,34 +341,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           restore = value;
           loadingRestore = true;
         });
-        if (value) {
-          setState(() {
-            volume = lastNutrientMixParams.volume;
-            if (lastNutrientMixParams.ph != null) {
-              phController =
-                  TextEditingController(text: '${lastNutrientMixParams.ph}');
-            }
-            if (lastNutrientMixParams.tds != null) {
-              tdsController =
-                  TextEditingController(text: '${lastNutrientMixParams.tds}');
-            }
-            for (int i = 0;
-                i < lastNutrientMixParams.nutrientProducts.length;
-                ++i) {
-              int index = nutrientProducts.indexWhere((np) =>
-                  np.product.id ==
-                  lastNutrientMixParams.nutrientProducts[i].product.id);
-              if (index == -1) {
-                continue;
-              }
-              nutrientProducts[index] =
-                  lastNutrientMixParams.nutrientProducts[i];
-              quantityControllers[index] = TextEditingController(
-                  text:
-                      '${lastNutrientMixParams.nutrientProducts[i].quantity}');
-            }
-          });
-        }
+
         Timer(Duration(milliseconds: 500), () {
           listKey.currentState.removeItem(
               0,
@@ -378,6 +351,11 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
               duration: Duration(milliseconds: 700));
           setState(() {
             hideRestore = true;
+            Timer(Duration(milliseconds: 600), () {
+              if (value) {
+                setLastNutrientValues(lastNutrientMixParams);
+              }
+            });
           });
         });
       },
@@ -390,5 +368,30 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       );
     }
     return body;
+  }
+
+  void setLastNutrientValues(FeedNutrientMixParams lastNutrientMixParams) {
+    setState(() {
+      volume = lastNutrientMixParams.volume;
+      if (lastNutrientMixParams.ph != null) {
+        phController =
+            TextEditingController(text: '${lastNutrientMixParams.ph}');
+      }
+      if (lastNutrientMixParams.tds != null) {
+        tdsController =
+            TextEditingController(text: '${lastNutrientMixParams.tds}');
+      }
+      for (int i = 0; i < lastNutrientMixParams.nutrientProducts.length; ++i) {
+        int index = nutrientProducts.indexWhere((np) =>
+            np.product.id ==
+            lastNutrientMixParams.nutrientProducts[i].product.id);
+        if (index == -1) {
+          continue;
+        }
+        nutrientProducts[index] = lastNutrientMixParams.nutrientProducts[i];
+        quantityControllers[index] = TextEditingController(
+            text: '${lastNutrientMixParams.nutrientProducts[i].quantity}');
+      }
+    });
   }
 }
