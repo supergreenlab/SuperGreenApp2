@@ -28,6 +28,7 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mi
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/feed_form/yesno_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -47,6 +48,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
 
   TextEditingController phController = TextEditingController();
   TextEditingController tdsController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
 
   double volume = 10;
 
@@ -110,8 +112,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                     ec = double.parse(tdsController.text.replaceAll(',', '.'));
                   }
                   BlocProvider.of<FeedNutrientMixFormBloc>(context).add(
-                      FeedNutrientMixFormBlocEventCreate(
-                          volume, ph, ec, nutrientProducts));
+                      FeedNutrientMixFormBlocEventCreate(volume, ph, ec,
+                          nutrientProducts, messageController.text));
                 },
                 body: AnimatedSwitcher(
                   child: body,
@@ -145,6 +147,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         },
       ),
       renderWaterMetrics(context),
+      _renderTextrea(context, state),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
         child: Row(
@@ -393,5 +396,22 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             text: '${lastNutrientMixParams.nutrientProducts[i].quantity}');
       }
     });
+  }
+
+  Widget _renderTextrea(
+      BuildContext context, FeedNutrientMixFormBlocState state) {
+    return Container(
+      height: 200,
+      key: Key('TEXTAREA'),
+      child: FeedFormParamLayout(
+        title: 'Observations',
+        icon: 'assets/feed_form/icon_note.svg',
+        child: Expanded(
+          child: FeedFormTextarea(
+            textEditingController: messageController,
+          ),
+        ),
+      ),
+    );
   }
 }

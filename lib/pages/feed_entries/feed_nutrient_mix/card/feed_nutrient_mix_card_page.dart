@@ -18,18 +18,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class FeedNutrientMixCardPage extends StatelessWidget {
+class FeedNutrientMixCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -39,25 +39,33 @@ class FeedNutrientMixCardPage extends StatelessWidget {
       : super(key: key);
 
   @override
+  _FeedNutrientMixCardPageState createState() =>
+      _FeedNutrientMixCardPageState();
+}
+
+class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
+  bool editText = false;
+
+  @override
   Widget build(BuildContext context) {
-    if (state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, state);
+    if (widget.state is FeedEntryStateLoaded) {
+      return _renderLoaded(context, widget.state);
     }
     return _renderLoading(context);
   }
 
   Widget _renderLoading(BuildContext context) {
     return FeedCard(
-      animation: animation,
+      animation: widget.animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
             'assets/feed_card/icon_nutrient_mix.svg',
             'Nutrient mix',
-            state.synced,
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
+            widget.state.synced,
+            showSyncStatus: !widget.state.remoteState,
+            showControls: !widget.state.remoteState,
           ),
           Container(
             height: 140,
@@ -66,7 +74,7 @@ class FeedNutrientMixCardPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
+            child: FeedCardDate(widget.state, widget.feedState),
           ),
         ],
       ),
@@ -103,7 +111,7 @@ class FeedNutrientMixCardPage extends StatelessWidget {
         .map((np) => renderNutrientProduct(np))
         .toList());
     return FeedCard(
-      animation: animation,
+      animation: widget.animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -113,6 +121,11 @@ class FeedNutrientMixCardPage extends StatelessWidget {
             state.synced,
             showSyncStatus: !state.remoteState,
             showControls: !state.remoteState,
+            onEdit: () {
+              setState(() {
+                editText = true;
+              });
+            },
             onDelete: () {
               BlocProvider.of<FeedBloc>(context)
                   .add(FeedBlocEventDeleteEntry(state));
@@ -131,7 +144,24 @@ class FeedNutrientMixCardPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
+            child: FeedCardDate(state, widget.feedState),
+          ),
+          (params.message ?? '') != ''
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Observations', style: TextStyle()),
+                )
+              : Container(),
+          FeedCardText(
+            params.message ?? '',
+            edit: editText,
+            onEdited: (value) {
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventEditParams(state, params.copyWith(value)));
+              setState(() {
+                editText = false;
+              });
+            },
           ),
         ],
       ),

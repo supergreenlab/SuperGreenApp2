@@ -57,9 +57,17 @@ class FeedNutrientMixParams extends FeedEntryParams {
   final double ph;
   final double tds;
   final List<NutrientProduct> nutrientProducts;
+  final String message;
 
   FeedNutrientMixParams(
-      {this.volume, this.ph, this.tds, this.nutrientProducts});
+      {this.volume, this.ph, this.tds, this.nutrientProducts, this.message});
+
+  FeedNutrientMixParams copyWith(String message) => FeedNutrientMixParams(
+      volume: this.volume,
+      ph: this.ph,
+      tds: this.tds,
+      nutrientProducts: this.nutrientProducts,
+      message: message);
 
   factory FeedNutrientMixParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -70,6 +78,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       tds: map['tds'],
       nutrientProducts:
           (nps ?? []).map((np) => NutrientProduct.fromMap(np)).toList(),
+      message: map['message'],
     );
   }
 
@@ -79,10 +88,11 @@ class FeedNutrientMixParams extends FeedEntryParams {
       'volume': volume,
       'ph': ph,
       'tds': tds,
-      'nutrientProducts': (nutrientProducts).map((np) => np.toMap()).toList()
+      'nutrientProducts': (nutrientProducts).map((np) => np.toMap()).toList(),
+      'message': message,
     });
   }
 
   @override
-  List<Object> get props => [volume, ph, tds, nutrientProducts];
+  List<Object> get props => [volume, ph, tds, nutrientProducts, message];
 }
