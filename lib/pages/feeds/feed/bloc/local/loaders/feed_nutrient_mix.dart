@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/card/feed_nutrient_mix_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_entry_loader.dart';
@@ -28,6 +31,14 @@ class FeedNutrientMixLoader extends LocalFeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
       FeedNutrientMixState(state);
+
+  @override
+  Future update(FeedEntryState entry, FeedEntryParams params) async {
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+        id: Value(entry.feedEntryID),
+        params: Value(params.toJSON()),
+        synced: Value(false)));
+  }
 
   @override
   FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>
