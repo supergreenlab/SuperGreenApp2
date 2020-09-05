@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -28,6 +29,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_media_list.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
@@ -39,8 +41,33 @@ class FeedMeasureFormPage extends StatefulWidget {
 class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
   FeedMedia _previous;
   FeedMediasCompanion _media;
+  final TextEditingController _textController = TextEditingController();
 
   bool _showSelector = false;
+
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
+  int _listener;
+  bool _keyboardVisible = false;
+
+  @protected
+  void initState() {
+    super.initState();
+    _listener = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardVisible = visible;
+        });
+        if (!_keyboardVisible) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +137,12 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                       valid: _media != null,
                       onOK: () => BlocProvider.of<FeedMeasureFormBloc>(context)
                           .add(FeedMeasureFormBlocEventCreate(
-                              _previous, _media)),
-                      body: _renderBody(context, state));
+                              _textController.text, _previous, _media)),
+                      body: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: _keyboardVisible
+                              ? [_renderTextrea(context, state)]
+                              : _renderBody(context, state)));
                 }
                 return AnimatedSwitcher(
                     duration: Duration(milliseconds: 200), child: body);
@@ -119,7 +150,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
     );
   }
 
-  Widget _renderBody(
+  List<Widget> _renderBody(
       BuildContext context, FeedMeasureFormBlocStateLoaded state) {
     List<Widget> content = [_renderCurrent(context)];
     if (state.measures.length > 0) {
@@ -128,8 +159,8 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
         _renderPrevious(context),
       );
     }
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch, children: content);
+    content.add(_renderTextrea(context, state));
+    return content;
   }
 
   Widget _renderPrevious(BuildContext context) {
@@ -276,5 +307,26 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
         },
       ),
     );
+  }
+
+  Widget _renderTextrea(BuildContext context, FeedMeasureFormBlocState state) {
+    return Expanded(
+      key: Key('TEXTAREA'),
+      child: FeedFormParamLayout(
+        title: 'Observations',
+        icon: 'assets/feed_form/icon_note.svg',
+        child: Expanded(
+          child: FeedFormTextarea(
+            textEditingController: _textController,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _keyboardVisibility.removeListener(_listener);
+    super.dispose();
   }
 }

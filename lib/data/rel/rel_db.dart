@@ -173,6 +173,7 @@ class RelDB extends _$RelDB {
             id: Value(measure.id),
             synced: Value(false),
             params: Value(FeedMeasureParams(
+                    params.message,
                     measure.date.difference(previousEntry.date).inSeconds,
                     params.previous)
                 .toJSON()),

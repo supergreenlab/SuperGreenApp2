@@ -26,20 +26,32 @@ class FeedWaterParams extends FeedEntryParams {
   final bool nutrient;
   final double ph;
   final double ec;
+  final String message;
 
-  FeedWaterParams(this.volume, this.tooDry, this.nutrient, this.ph, this.ec);
+  FeedWaterParams(
+      this.volume, this.tooDry, this.nutrient, this.ph, this.ec, this.message);
+
+  FeedWaterParams copyWith(String message) => FeedWaterParams(
+      this.volume, this.tooDry, this.nutrient, this.ph, this.ec, message);
 
   factory FeedWaterParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedWaterParams(map['volume'], map['tooDry'], map['nutrient'], map['ph'], map['ec']);
+    return FeedWaterParams(map['volume'], map['tooDry'], map['nutrient'],
+        map['ph'], map['ec'], map['message']);
   }
 
   @override
   String toJSON() {
-    return JsonEncoder()
-        .convert({'volume': volume, 'tooDry': tooDry, 'nutrient': nutrient, 'ph': ph, 'ec': ec});
+    return JsonEncoder().convert({
+      'volume': volume,
+      'tooDry': tooDry,
+      'nutrient': nutrient,
+      'ph': ph,
+      'ec': ec,
+      'message': message,
+    });
   }
 
   @override
-  List<Object> get props => [volume, tooDry, nutrient, ph, ec];
+  List<Object> get props => [volume, tooDry, nutrient, ph, ec, message];
 }

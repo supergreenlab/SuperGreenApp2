@@ -26,10 +26,11 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
+import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class FeedWaterCardPage extends StatelessWidget {
+class FeedWaterCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -38,16 +39,23 @@ class FeedWaterCardPage extends StatelessWidget {
       : super(key: key);
 
   @override
+  _FeedWaterCardPageState createState() => _FeedWaterCardPageState();
+}
+
+class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
+  bool editText = false;
+
+  @override
   Widget build(BuildContext context) {
-    if (state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, state);
+    if (widget.state is FeedEntryStateLoaded) {
+      return _renderLoaded(context, widget.state);
     }
-    return _renderLoading(context, state);
+    return _renderLoading(context, widget.state);
   }
 
   Widget _renderLoading(BuildContext context, FeedEntryState state) {
     return FeedCard(
-      animation: animation,
+      animation: widget.animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -62,7 +70,7 @@ class FeedWaterCardPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
+            child: FeedCardDate(state, widget.feedState),
           ),
         ],
       ),
@@ -144,7 +152,7 @@ class FeedWaterCardPage extends StatelessWidget {
       ));
     }
     return FeedCard(
-      animation: animation,
+      animation: widget.animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -154,6 +162,11 @@ class FeedWaterCardPage extends StatelessWidget {
             state.synced,
             showSyncStatus: !state.remoteState,
             showControls: !state.remoteState,
+            onEdit: () {
+              setState(() {
+                editText = true;
+              });
+            },
             onDelete: () {
               BlocProvider.of<FeedBloc>(context)
                   .add(FeedBlocEventDeleteEntry(state));
@@ -167,7 +180,18 @@ class FeedWaterCardPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, feedState),
+            child: FeedCardDate(state, widget.feedState),
+          ),
+          FeedCardText(
+            params.message ?? '',
+            edit: editText,
+            onEdited: (value) {
+              BlocProvider.of<FeedBloc>(context)
+                  .add(FeedBlocEventEditParams(state, params.copyWith(value)));
+              setState(() {
+                editText = false;
+              });
+            },
           ),
         ],
       ),

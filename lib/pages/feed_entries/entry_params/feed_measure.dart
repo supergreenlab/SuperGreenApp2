@@ -21,21 +21,26 @@ import 'dart:convert';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedMeasureParams extends FeedEntryParams {
+  final String message;
   final int time;
   final dynamic previous;
 
-  FeedMeasureParams(this.time, this.previous);
+  FeedMeasureParams(this.message, this.time, this.previous);
+
+  FeedMeasureParams copyWith(String message) =>
+      FeedMeasureParams(message, this.time, this.previous);
 
   factory FeedMeasureParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedMeasureParams(map['time'], map['previous']);
+    return FeedMeasureParams(map['message'], map['time'], map['previous']);
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({'time': time, 'previous': previous});
+    return JsonEncoder()
+        .convert({'message': message, 'time': time, 'previous': previous});
   }
 
   @override
-  List<Object> get props => [time, previous];
+  List<Object> get props => [message, time, previous];
 }

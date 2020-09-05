@@ -36,13 +36,14 @@ class FeedMeasureFormBlocEventInit extends FeedMeasureFormBlocEvent {
 }
 
 class FeedMeasureFormBlocEventCreate extends FeedMeasureFormBlocEvent {
+  final String message;
   final FeedMedia previous;
   final FeedMediasCompanion current;
 
-  FeedMeasureFormBlocEventCreate(this.previous, this.current);
+  FeedMeasureFormBlocEventCreate(this.message, this.previous, this.current);
 
   @override
-  List<Object> get props => [previous, current];
+  List<Object> get props => [message, previous, current];
 }
 
 abstract class FeedMeasureFormBlocState extends Equatable {}
@@ -110,6 +111,7 @@ class FeedMeasureFormBloc
         feed: args.plant.feed,
         date: DateTime.now(),
         params: Value(FeedMeasureParams(
+                event.message,
                 event.previous != null
                     ? DateTime.now().difference(previousEntry.date).inSeconds
                     : null,

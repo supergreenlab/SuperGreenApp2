@@ -290,6 +290,9 @@ class _CapturePageState extends State<CapturePage> {
                       type: FileType.custom,
                       allowedExtensions: ['jpg', 'mp4'],
                     );
+                    if (files == null) {
+                      return;
+                    }
                     setState(() {
                       _loading = true;
                     });

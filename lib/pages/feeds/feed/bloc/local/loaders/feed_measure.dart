@@ -19,9 +19,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -64,6 +67,14 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
         JsonDecoder().convert(currentMedia[0].params),
         currentMedia[0].synced);
     return FeedMeasureState(state, current, previous);
+  }
+
+  @override
+  Future update(FeedEntryState entry, FeedEntryParams params) async {
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+        id: Value(entry.feedEntryID),
+        params: Value(params.toJSON()),
+        synced: Value(false)));
   }
 
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
