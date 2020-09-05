@@ -45,17 +45,18 @@ class FeedNutrientMixFormBlocEventLoaded extends FeedNutrientMixFormBlocEvent {
 }
 
 class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
+  final String name;
   final double volume;
   final double ph;
   final double tds;
   final List<NutrientProduct> nutrientProducts;
   final String message;
 
-  FeedNutrientMixFormBlocEventCreate(
-      this.volume, this.ph, this.tds, this.nutrientProducts, this.message);
+  FeedNutrientMixFormBlocEventCreate(this.name, this.volume, this.ph, this.tds,
+      this.nutrientProducts, this.message);
 
   @override
-  List<Object> get props => [volume, ph, tds, nutrientProducts, message];
+  List<Object> get props => [name, volume, ph, tds, nutrientProducts, message];
 }
 
 abstract class FeedNutrientMixFormBlocState extends Equatable {}
@@ -69,7 +70,7 @@ class FeedNutrientMixFormBlocStateInit extends FeedNutrientMixFormBlocState {
 
 class FeedNutrientMixFormBlocStateLoaded extends FeedNutrientMixFormBlocState {
   final List<Product> products;
-  final FeedNutrientMixParams lastNutrientMixParams;
+  final List<FeedNutrientMixParams> lastNutrientMixParams;
 
   FeedNutrientMixFormBlocStateLoaded(this.products, this.lastNutrientMixParams);
 
@@ -95,7 +96,7 @@ class FeedNutrientMixFormBloc
     extends Bloc<FeedNutrientMixFormBlocEvent, FeedNutrientMixFormBlocState> {
   final MainNavigateToFeedNutrientMixFormEvent args;
 
-  FeedNutrientMixParams lastNutrientMixParams;
+  List<FeedNutrientMixParams> lastNutrientMixParams = [];
   StreamSubscription<Plant> plantStream;
 
   FeedNutrientMixFormBloc(this.args)
@@ -107,12 +108,14 @@ class FeedNutrientMixFormBloc
   Stream<FeedNutrientMixFormBlocState> mapEventToState(
       FeedNutrientMixFormBlocEvent event) async* {
     if (event is FeedNutrientMixFormBlocEventInit) {
-      List<FeedEntry> nutrientMixes = await RelDB.get()
-          .feedsDAO
-          .getFeedEntriesForFeedWithType(args.plant.feed, 'FE_NUTRIENT_MIX');
-      if (nutrientMixes.length != 0) {
-        lastNutrientMixParams =
-            FeedNutrientMixParams.fromJSON(nutrientMixes.first.params);
+      List<FeedEntry> nutrientMixes =
+          await RelDB.get().feedsDAO.getFeedEntriesWithType('FE_NUTRIENT_MIX');
+      for (FeedEntry nutrientMix in nutrientMixes) {
+        FeedNutrientMixParams params =
+            FeedNutrientMixParams.fromJSON(nutrientMix.params);
+        if (params.name != null && params.name != '') {
+          lastNutrientMixParams.add(params);
+        }
       }
       plantStream =
           RelDB.get().plantsDAO.watchPlant(args.plant.id).listen(plantUpdated);
@@ -133,6 +136,7 @@ class FeedNutrientMixFormBloc
         feed: args.plant.feed,
         date: DateTime.now(),
         params: Value(FeedNutrientMixParams(
+                name: event.name,
                 volume: event.volume,
                 ph: event.ph,
                 tds: event.tds,

@@ -53,6 +53,7 @@ class NutrientProduct extends Equatable {
 }
 
 class FeedNutrientMixParams extends FeedEntryParams {
+  final String name;
   final double volume;
   final double ph;
   final double tds;
@@ -60,9 +61,15 @@ class FeedNutrientMixParams extends FeedEntryParams {
   final String message;
 
   FeedNutrientMixParams(
-      {this.volume, this.ph, this.tds, this.nutrientProducts, this.message});
+      {this.name,
+      this.volume,
+      this.ph,
+      this.tds,
+      this.nutrientProducts,
+      this.message});
 
   FeedNutrientMixParams copyWith(String message) => FeedNutrientMixParams(
+      name: this.name,
       volume: this.volume,
       ph: this.ph,
       tds: this.tds,
@@ -73,6 +80,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     List<dynamic> nps = map['nutrientProducts'];
     return FeedNutrientMixParams(
+      name: map['name'],
       volume: map['volume'],
       ph: map['ph'],
       tds: map['tds'],
@@ -85,6 +93,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
   @override
   String toJSON() {
     return JsonEncoder().convert({
+      'name': name,
       'volume': volume,
       'ph': ph,
       'tds': tds,
@@ -94,5 +103,5 @@ class FeedNutrientMixParams extends FeedEntryParams {
   }
 
   @override
-  List<Object> get props => [volume, ph, tds, nutrientProducts, message];
+  List<Object> get props => [name, volume, ph, tds, nutrientProducts, message];
 }
