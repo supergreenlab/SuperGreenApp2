@@ -64,7 +64,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
               showSyncStatus: !state.remoteState,
               showControls: !state.remoteState),
           Container(
-            height: 90,
+            height: 100,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
@@ -178,10 +178,6 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.center, children: body),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, widget.feedState),
-          ),
           FeedCardText(
             params.message ?? '',
             edit: editText,
@@ -192,6 +188,10 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
                 editText = false;
               });
             },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, widget.feedState),
           ),
         ],
       ),
