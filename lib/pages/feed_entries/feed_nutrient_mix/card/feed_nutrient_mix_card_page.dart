@@ -152,17 +152,19 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
                   child: Text('Observations', style: TextStyle()),
                 )
               : Container(),
-          FeedCardText(
-            params.message ?? '',
-            edit: editText,
-            onEdited: (value) {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventEditParams(state, params.copyWith(value)));
-              setState(() {
-                editText = false;
-              });
-            },
-          ),
+          (params.message ?? '') != ''
+              ? FeedCardText(
+                  params.message ?? '',
+                  edit: editText,
+                  onEdited: (value) {
+                    BlocProvider.of<FeedBloc>(context).add(
+                        FeedBlocEventEditParams(state, params.copyWith(value)));
+                    setState(() {
+                      editText = false;
+                    });
+                  },
+                )
+              : Container(),
         ],
       ),
     );

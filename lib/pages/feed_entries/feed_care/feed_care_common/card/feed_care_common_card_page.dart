@@ -109,7 +109,9 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
         padding: const EdgeInsets.all(8.0),
         child: FeedCardDate(widget.state, widget.feedState),
       ),
-      FeedCardText(
+    ];
+    if ((params.message ?? '') != '') {
+      body.add(FeedCardText(
         params.message ?? '',
         edit: editText,
         onEdited: (value) {
@@ -119,8 +121,8 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             editText = false;
           });
         },
-      )
-    ];
+      ));
+    }
     if (state.beforeMedias.length > 0) {
       body.insert(
         1,

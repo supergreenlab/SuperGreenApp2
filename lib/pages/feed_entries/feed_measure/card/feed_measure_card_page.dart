@@ -140,17 +140,19 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state, widget.feedState),
           ),
-          FeedCardText(
-            params.message ?? '',
-            edit: editText,
-            onEdited: (value) {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventEditParams(state, params.copyWith(value)));
-              setState(() {
-                editText = false;
-              });
-            },
-          ),
+          (params.message ?? '') != ''
+              ? FeedCardText(
+                  params.message ?? '',
+                  edit: editText,
+                  onEdited: (value) {
+                    BlocProvider.of<FeedBloc>(context).add(
+                        FeedBlocEventEditParams(state, params.copyWith(value)));
+                    setState(() {
+                      editText = false;
+                    });
+                  },
+                )
+              : Container(),
         ],
       ),
     );
