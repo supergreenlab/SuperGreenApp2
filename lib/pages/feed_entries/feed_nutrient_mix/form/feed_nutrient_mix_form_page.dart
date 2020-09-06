@@ -475,17 +475,21 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       icon: 'assets/feed_form/icon_restore_nutrient_mix.svg',
       title: 'Reuse previous mix values?',
       child: Container(
-        height: 50,
+        height: 90,
         child: ListView(
             scrollDirection: Axis.horizontal,
             children: lastNutrientMixParams.map<Widget>((p) {
               int i = lastNutrientMixParams.indexOf(p);
+              String title = p.name;
+              if (p.phase != null) {
+                title = '${p.name}\n${nutrientMixPhasesUI[p.phase]}';
+              }
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   width: 120,
                   child: FeedFormButton(
-                      title: p.name,
+                      title: title,
                       textStyle: TextStyle(color: Colors.black),
                       onPressed: () {
                         setState(() {

@@ -55,6 +55,7 @@ class FeedFormButton extends StatelessWidget {
             Text(
               title,
               style: this.textStyle ?? TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
