@@ -550,24 +550,36 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       title: 'Mix phase',
       icon: 'assets/feed_form/icon_life_event.svg',
       child: Container(
-          height: 90,
-          child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: NutrientMixPhase.values
-                  .map((p) => Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Container(
-                          width: 120,
-                          child: FeedFormButton(
-                              border: phase == p,
-                              title: nutrientMixPhasesUI[p],
-                              textStyle: TextStyle(color: Colors.black),
-                              onPressed: () {
-                                setState(() {
-                                  phase = phase == p ? null : p;
-                                });
-                              }))))
-                  .toList())),
+          height: 120,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                    'Set the right phase for this nutrient mix for better categorization.'),
+              ),
+              Expanded(
+                child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: NutrientMixPhase.values
+                        .map((p) => Padding(
+                            padding: const EdgeInsets.only(
+                                right: 16.0, top: 8, bottom: 8, left: 8),
+                            child: Container(
+                                width: 120,
+                                child: FeedFormButton(
+                                    border: phase == p,
+                                    title: nutrientMixPhasesUI[p],
+                                    textStyle: TextStyle(color: Colors.black),
+                                    onPressed: () {
+                                      setState(() {
+                                        phase = phase == p ? null : p;
+                                      });
+                                    }))))
+                        .toList()),
+              ),
+            ],
+          )),
     );
   }
 
