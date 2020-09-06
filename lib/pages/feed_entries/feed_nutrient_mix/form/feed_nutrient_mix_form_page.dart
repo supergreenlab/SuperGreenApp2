@@ -28,6 +28,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_button.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
@@ -42,6 +43,8 @@ class FeedNutrientMixFormPage extends StatefulWidget {
 
 class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+
+  DateTime date = DateTime.now();
 
   bool hideRestore = false;
   bool restore;
@@ -138,6 +141,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                   }
                   BlocProvider.of<FeedNutrientMixFormBloc>(context).add(
                       FeedNutrientMixFormBlocEventCreate(
+                          date,
                           nameController.text,
                           volume,
                           ph,
@@ -161,6 +165,14 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       children.add(renderRestoreLastNutrientMix(lastNutrientMixParams));
     }
     children.addAll([
+      FeedFormDatePicker(
+        date,
+        onChange: (DateTime newDate) {
+          setState(() {
+            date = newDate;
+          });
+        },
+      ),
       renderVolume(context),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),

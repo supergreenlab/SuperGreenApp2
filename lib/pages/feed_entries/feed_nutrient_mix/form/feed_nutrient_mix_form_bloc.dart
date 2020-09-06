@@ -45,6 +45,7 @@ class FeedNutrientMixFormBlocEventLoaded extends FeedNutrientMixFormBlocEvent {
 }
 
 class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
+  final DateTime date;
   final String name;
   final double volume;
   final double ph;
@@ -53,12 +54,12 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
   final String message;
   final List<Plant> plants;
 
-  FeedNutrientMixFormBlocEventCreate(this.name, this.volume, this.ph, this.tds,
-      this.nutrientProducts, this.message, this.plants);
+  FeedNutrientMixFormBlocEventCreate(this.date, this.name, this.volume, this.ph,
+      this.tds, this.nutrientProducts, this.message, this.plants);
 
   @override
   List<Object> get props =>
-      [name, volume, ph, tds, nutrientProducts, message, plants];
+      [date, name, volume, ph, tds, nutrientProducts, message, plants];
 }
 
 abstract class FeedNutrientMixFormBlocState extends Equatable {}
@@ -175,9 +176,9 @@ class FeedNutrientMixFormBloc
         await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_NUTRIENT_MIX',
           feed: plant.feed,
-          date: DateTime.now(),
+          date: event.date,
           params: Value(FeedNutrientMixParams(
-                  name: event.name,
+                  name: event.plants.indexOf(plant) == 0 ? event.name : null,
                   volume: event.volume,
                   ph: event.ph,
                   tds: event.tds,
