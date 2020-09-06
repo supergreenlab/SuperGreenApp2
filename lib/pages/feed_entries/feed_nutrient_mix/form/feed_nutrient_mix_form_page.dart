@@ -56,6 +56,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   List<NutrientProduct> nutrientProducts = [];
   List<TextEditingController> quantityControllers = [];
 
+  List<FeedNutrientMixParams> lastNutrientMixParams;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -65,6 +67,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           setState(() {
             nutrientProducts = [];
             quantityControllers = [];
+            lastNutrientMixParams = state.lastNutrientMixParams;
             for (Product product in state.products) {
               NutrientProduct nutrientProduct = nutrientProducts.singleWhere(
                   (pi) => pi.product.id == product.id,
@@ -104,13 +107,20 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                 title: '🧪',
                 changed: true,
                 valid: true,
-                onOK: () {
+                onOK: () async {
                   double ph, ec;
                   if (phController.text != '') {
                     ph = double.parse(phController.text.replaceAll(',', '.'));
                   }
                   if (tdsController.text != '') {
                     ec = double.parse(tdsController.text.replaceAll(',', '.'));
+                  }
+                  FeedNutrientMixParams nutrientProduct = lastNutrientMixParams
+                      .firstWhere((np) => np.name == nameController.text,
+                          orElse: () => null);
+                  if (nutrientProduct != null &&
+                      await confirmUpdate(context, nutrientProduct) == false) {
+                    return;
                   }
                   BlocProvider.of<FeedNutrientMixFormBloc>(context).add(
                       FeedNutrientMixFormBlocEventCreate(
@@ -132,8 +142,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   Widget renderBody(
       BuildContext context, FeedNutrientMixFormBlocStateLoaded state) {
     List<Widget> children = [];
-    if (state.lastNutrientMixParams.length > 0 && hideRestore == false) {
-      children.add(renderRestoreLastNutrientMix(state.lastNutrientMixParams));
+    if (lastNutrientMixParams.length > 0 && hideRestore == false) {
+      children.add(renderRestoreLastNutrientMix(lastNutrientMixParams));
     }
     children.addAll([
       renderName(context),
@@ -204,7 +214,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    'You can give a nutrient mix a name, for future reuse.'),
+                    'You can give this nutrient mix a name, for future reuse. (optional)'),
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -434,6 +444,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   void setLastNutrientValues(FeedNutrientMixParams lastNutrientMixParams) {
     setState(() {
       volume = lastNutrientMixParams.volume;
+      nameController = TextEditingController(text: lastNutrientMixParams.name);
       if (lastNutrientMixParams.ph != null) {
         phController =
             TextEditingController(text: '${lastNutrientMixParams.ph}');
@@ -472,4 +483,31 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       ),
     );
   }
+
+  Future<bool> confirmUpdate(
+          BuildContext context, FeedNutrientMixParams lastNutrientMixParams) =>
+      showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Update ${lastNutrientMixParams.name}?'),
+              content: Text(
+                  'A nutrient mix with that name already exists, overwrite?'),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('NO, CHANGE NAME'),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text('YES'),
+                ),
+              ],
+            );
+          });
 }

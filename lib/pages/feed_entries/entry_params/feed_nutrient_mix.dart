@@ -68,13 +68,14 @@ class FeedNutrientMixParams extends FeedEntryParams {
       this.nutrientProducts,
       this.message});
 
-  FeedNutrientMixParams copyWith(String message) => FeedNutrientMixParams(
-      name: this.name,
-      volume: this.volume,
-      ph: this.ph,
-      tds: this.tds,
-      nutrientProducts: this.nutrientProducts,
-      message: message);
+  FeedNutrientMixParams copyWith({String name, String message}) =>
+      FeedNutrientMixParams(
+          name: name ?? this.name,
+          volume: this.volume,
+          ph: this.ph,
+          tds: this.tds,
+          nutrientProducts: this.nutrientProducts,
+          message: message ?? this.message);
 
   factory FeedNutrientMixParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);

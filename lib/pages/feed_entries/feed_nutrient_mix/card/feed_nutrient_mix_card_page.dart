@@ -158,7 +158,8 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
                   edit: editText,
                   onEdited: (value) {
                     BlocProvider.of<FeedBloc>(context).add(
-                        FeedBlocEventEditParams(state, params.copyWith(value)));
+                        FeedBlocEventEditParams(
+                            state, params.copyWith(message: value)));
                     setState(() {
                       editText = false;
                     });

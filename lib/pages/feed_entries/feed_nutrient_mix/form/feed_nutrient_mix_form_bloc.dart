@@ -131,6 +131,23 @@ class FeedNutrientMixFormBloc
           event.products, lastNutrientMixParams);
     } else if (event is FeedNutrientMixFormBlocEventCreate) {
       yield FeedNutrientMixFormBlocStateLoading();
+      if ((event.name ?? '') != '') {
+        List<FeedEntry> nutrientMixes = await RelDB.get()
+            .feedsDAO
+            .getFeedEntriesWithType('FE_NUTRIENT_MIX');
+        for (FeedEntry nutrientMix in nutrientMixes) {
+          FeedNutrientMixParams params =
+              FeedNutrientMixParams.fromJSON(nutrientMix.params);
+          if (params.name == event.name) {
+            params = params.copyWith(name: '');
+            await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
+              id: Value(nutrientMix.id),
+              synced: Value(false),
+              params: Value(params.toJSON()),
+            ));
+          }
+        }
+      }
       await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_NUTRIENT_MIX',
         feed: args.plant.feed,
