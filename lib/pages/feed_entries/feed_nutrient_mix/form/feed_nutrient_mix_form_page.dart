@@ -35,6 +35,15 @@ import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
+Map<NutrientMixPhase, String> nutrientMixPhasesUI = {
+  NutrientMixPhase.EARLY_VEG: 'Early veg',
+  NutrientMixPhase.MID_VEG: 'Mid veg',
+  NutrientMixPhase.LATE_VEG: 'Late veg',
+  NutrientMixPhase.EARLY_BLOOM: 'Early bloom',
+  NutrientMixPhase.MID_BLOOM: 'Mid bloom',
+  NutrientMixPhase.LATE_BLOOM: 'Late bloom',
+};
+
 class FeedNutrientMixFormPage extends StatefulWidget {
   @override
   _FeedNutrientMixFormPageState createState() =>
@@ -43,6 +52,7 @@ class FeedNutrientMixFormPage extends StatefulWidget {
 
 class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  final ScrollController scrollController = ScrollController();
 
   DateTime date = DateTime.now();
 
@@ -62,6 +72,10 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
 
   Plant plant;
   List<FeedNutrientMixParams> lastNutrientMixParams;
+
+  NutrientMixPhase phase;
+
+  FocusNode nameFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +140,10 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           orElse: () => null);
                   if (nutrientProduct != null &&
                       await confirmUpdate(context, nutrientProduct) == false) {
+                    scrollController.animateTo(1000,
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.linear);
+                    nameFocusNode.requestFocus();
                     return;
                   }
                   Completer<List<Plant>> plantsFuture = Completer();
@@ -148,7 +166,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           ec,
                           nutrientProducts,
                           messageController.text,
-                          plants));
+                          plants,
+                          phase));
                 },
                 body: AnimatedSwitcher(
                   child: body,
@@ -239,9 +258,11 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         ),
       ),
       renderName(context),
+      renderPhases(context, state),
     ]);
     return AnimatedList(
       key: listKey,
+      controller: scrollController,
       itemBuilder:
           (BuildContext context, int index, Animation<double> animation) =>
               children[index],
@@ -261,24 +282,41 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                 child: Text(
                     'You can give this nutrient mix a name, for future reuse. (optional)'),
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 8.0),
-                  filled: true,
-                  fillColor: Colors.white10,
-                  hintText: 'Ex: Veg-1',
-                  labelText: 'Mix name',
-                ),
-                style: TextStyle(
-                    color: Colors.black, decoration: TextDecoration.none),
-                controller: nameController,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      focusNode: nameFocusNode,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        filled: true,
+                        fillColor: Colors.white10,
+                        hintText: 'Ex: Veg-1',
+                        labelText: 'Mix name',
+                      ),
+                      style: TextStyle(
+                          color: Colors.black, decoration: TextDecoration.none),
+                      controller: nameController,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        nameController = TextEditingController(text: '');
+                      });
+                      nameFocusNode.unfocus();
+                    },
+                    child: Icon(Icons.clear, size: 30),
+                  ),
+                ],
               ),
             ],
           ),
         ),
         icon: 'assets/feed_form/icon_save.svg',
-        title: 'Save for future re-use?\n(Optional)');
+        title: 'Save for future re-use?');
   }
 
   Widget renderVolume(BuildContext context) {
@@ -485,6 +523,50 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     return body;
   }
 
+  Widget renderObservations(
+      BuildContext context, FeedNutrientMixFormBlocState state) {
+    return Container(
+      height: 200,
+      key: Key('TEXTAREA'),
+      child: FeedFormParamLayout(
+        title: 'Observations',
+        icon: 'assets/feed_form/icon_note.svg',
+        child: Expanded(
+          child: FeedFormTextarea(
+            textEditingController: messageController,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget renderPhases(
+      BuildContext context, FeedNutrientMixFormBlocState state) {
+    return FeedFormParamLayout(
+      title: 'Mix phase',
+      icon: 'assets/feed_form/icon_life_event.svg',
+      child: Container(
+          height: 90,
+          child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: NutrientMixPhase.values
+                  .map((p) => Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                          width: 120,
+                          child: FeedFormButton(
+                              border: phase == p,
+                              title: nutrientMixPhasesUI[p],
+                              textStyle: TextStyle(color: Colors.black),
+                              onPressed: () {
+                                setState(() {
+                                  phase = phase == p ? null : p;
+                                });
+                              }))))
+                  .toList())),
+    );
+  }
+
   void setLastNutrientValues(FeedNutrientMixParams lastNutrientMixParams) {
     setState(() {
       volume = lastNutrientMixParams.volume;
@@ -508,24 +590,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         quantityControllers[index] = TextEditingController(
             text: '${lastNutrientMixParams.nutrientProducts[i].quantity}');
       }
+      phase = lastNutrientMixParams.phase;
     });
-  }
-
-  Widget renderObservations(
-      BuildContext context, FeedNutrientMixFormBlocState state) {
-    return Container(
-      height: 200,
-      key: Key('TEXTAREA'),
-      child: FeedFormParamLayout(
-        title: 'Observations',
-        icon: 'assets/feed_form/icon_note.svg',
-        child: Expanded(
-          child: FeedFormTextarea(
-            textEditingController: messageController,
-          ),
-        ),
-      ),
-    );
   }
 
   Future<bool> confirmUpdate(

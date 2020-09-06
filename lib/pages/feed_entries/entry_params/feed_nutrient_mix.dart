@@ -19,8 +19,18 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
+
+enum NutrientMixPhase {
+  EARLY_VEG,
+  MID_VEG,
+  LATE_VEG,
+  EARLY_BLOOM,
+  MID_BLOOM,
+  LATE_BLOOM,
+}
 
 class NutrientProduct extends Equatable {
   final double quantity;
@@ -59,6 +69,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
   final double tds;
   final List<NutrientProduct> nutrientProducts;
   final String message;
+  final NutrientMixPhase phase;
 
   FeedNutrientMixParams(
       {this.name,
@@ -66,7 +77,8 @@ class FeedNutrientMixParams extends FeedEntryParams {
       this.ph,
       this.tds,
       this.nutrientProducts,
-      this.message});
+      this.message,
+      this.phase});
 
   FeedNutrientMixParams copyWith({String name, String message}) =>
       FeedNutrientMixParams(
@@ -75,7 +87,8 @@ class FeedNutrientMixParams extends FeedEntryParams {
           ph: this.ph,
           tds: this.tds,
           nutrientProducts: this.nutrientProducts,
-          message: message ?? this.message);
+          message: message ?? this.message,
+          phase: phase ?? this.phase);
 
   factory FeedNutrientMixParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -88,6 +101,9 @@ class FeedNutrientMixParams extends FeedEntryParams {
       nutrientProducts:
           (nps ?? []).map((np) => NutrientProduct.fromMap(np)).toList(),
       message: map['message'],
+      phase: NutrientMixPhase.values.firstWhere(
+          (p) => describeEnum(p) == map['phase'],
+          orElse: () => null),
     );
   }
 
@@ -100,6 +116,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       'tds': tds,
       'nutrientProducts': (nutrientProducts).map((np) => np.toMap()).toList(),
       'message': message,
+      'phase': phase == null ? null : describeEnum(phase),
     });
   }
 

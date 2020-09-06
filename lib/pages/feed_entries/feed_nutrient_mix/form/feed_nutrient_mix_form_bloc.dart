@@ -53,13 +53,14 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
   final List<NutrientProduct> nutrientProducts;
   final String message;
   final List<Plant> plants;
+  final NutrientMixPhase phase;
 
   FeedNutrientMixFormBlocEventCreate(this.date, this.name, this.volume, this.ph,
-      this.tds, this.nutrientProducts, this.message, this.plants);
+      this.tds, this.nutrientProducts, this.message, this.plants, this.phase);
 
   @override
   List<Object> get props =>
-      [date, name, volume, ph, tds, nutrientProducts, message, plants];
+      [date, name, volume, ph, tds, nutrientProducts, message, plants, phase];
 }
 
 abstract class FeedNutrientMixFormBlocState extends Equatable {}
@@ -122,6 +123,16 @@ class FeedNutrientMixFormBloc
           lastNutrientMixParams.add(params);
         }
       }
+      lastNutrientMixParams.sort((np1, np2) {
+        if (np1.phase == null && np2.phase == null) {
+          return 0;
+        } else if (np1.phase == null) {
+          return 1;
+        } else if (np2.phase == null) {
+          return -1;
+        }
+        return np1.phase.index - np2.phase.index;
+      });
       plantStream =
           RelDB.get().plantsDAO.watchPlant(args.plant.id).listen(plantUpdated);
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
@@ -185,7 +196,8 @@ class FeedNutrientMixFormBloc
                   nutrientProducts: event.nutrientProducts
                       .where((np) => np.quantity != null && np.quantity > 0)
                       .toList(),
-                  message: event.message)
+                  message: event.message,
+                  phase: event.phase)
               .toJSON()),
         ));
       }
