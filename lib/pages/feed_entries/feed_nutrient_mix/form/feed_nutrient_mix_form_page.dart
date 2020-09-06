@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_bloc.dart';
@@ -56,6 +57,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   List<NutrientProduct> nutrientProducts = [];
   List<TextEditingController> quantityControllers = [];
 
+  Plant plant;
   List<FeedNutrientMixParams> lastNutrientMixParams;
 
   @override
@@ -65,6 +67,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       listener: (BuildContext context, FeedNutrientMixFormBlocState state) {
         if (state is FeedNutrientMixFormBlocStateLoaded) {
           setState(() {
+            plant = state.plant;
             nutrientProducts = [];
             quantityControllers = [];
             lastNutrientMixParams = state.lastNutrientMixParams;
@@ -122,6 +125,17 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                       await confirmUpdate(context, nutrientProduct) == false) {
                     return;
                   }
+                  Completer<List<Plant>> plantsFuture = Completer();
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToPlantPickerEvent(
+                          [plant], 'Which plant(s) will receive this mix?',
+                          futureFn: (future) async {
+                    plantsFuture.complete(await future);
+                  }));
+                  List<Plant> plants = await plantsFuture.future;
+                  if (plants == null || plants.length == 0) {
+                    return;
+                  }
                   BlocProvider.of<FeedNutrientMixFormBloc>(context).add(
                       FeedNutrientMixFormBlocEventCreate(
                           nameController.text,
@@ -129,7 +143,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           ph,
                           ec,
                           nutrientProducts,
-                          messageController.text));
+                          messageController.text,
+                          plants));
                 },
                 body: AnimatedSwitcher(
                   child: body,

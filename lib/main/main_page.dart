@@ -95,6 +95,8 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_page.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
+import 'package:super_green_app/pages/plant_picker/plant_picker_bloc.dart';
+import 'package:super_green_app/pages/plant_picker/plant_picker_page.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_category_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_category_page.dart';
 import 'package:super_green_app/pages/products/product/product_infos/product_infos_bloc.dart';
@@ -520,6 +522,14 @@ class _MainPageState extends State<MainPage> {
                 create: (context) => ProductTypeBloc(settings.arguments)),
           ],
           child: ProductTypePage(),
+        );
+      case '/plantpicker':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) => PlantPickerBloc(settings.arguments)),
+          ],
+          child: PlantPickerPage(),
         );
       case '/product/new/supplier':
         return MultiBlocProvider(
