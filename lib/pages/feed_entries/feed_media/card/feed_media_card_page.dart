@@ -131,7 +131,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: FeedCardDate(state, widget.feedState),
           ),
-          (params.message ?? '') != ''
+          (params.message ?? '') != '' || editText == true
               ? FeedCardText(
                   params.message ?? '',
                   edit: editText,

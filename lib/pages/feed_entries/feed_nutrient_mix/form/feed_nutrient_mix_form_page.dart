@@ -146,10 +146,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       children.add(renderRestoreLastNutrientMix(lastNutrientMixParams));
     }
     children.addAll([
-      renderName(context),
       renderVolume(context),
-      renderWaterMetrics(context),
-      _renderTextrea(context, state),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
         child: Row(
@@ -164,7 +161,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                       color: Colors.black87),
                 ),
                 Text(
-                  'toolbox',
+                  'mix',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -195,6 +192,27 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     } else {
       children.add(renderEmptyToolbox(context));
     }
+    children.addAll([
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+        child: Text(
+          'Metrics & Observations',
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+        ),
+      ),
+      renderWaterMetrics(context),
+      renderObservations(context, state),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+        child: Text(
+          'Save this nutrient mix',
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+        ),
+      ),
+      renderName(context),
+    ]);
     return AnimatedList(
       key: listKey,
       itemBuilder:
@@ -232,8 +250,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             ],
           ),
         ),
-        icon: 'assets/feed_form/icon_volume.svg',
-        title: 'Save for future re-use?\n(Optionnal)');
+        icon: 'assets/feed_form/icon_save.svg',
+        title: 'Save for future re-use?\n(Optional)');
   }
 
   Widget renderVolume(BuildContext context) {
@@ -400,10 +418,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  width: 150,
+                  width: 120,
                   child: FeedFormButton(
                       title: p.name,
-                      icon: Icon(Icons.restore),
                       textStyle: TextStyle(color: Colors.black),
                       onPressed: () {
                         setState(() {
@@ -467,7 +484,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     });
   }
 
-  Widget _renderTextrea(
+  Widget renderObservations(
       BuildContext context, FeedNutrientMixFormBlocState state) {
     return Container(
       height: 200,

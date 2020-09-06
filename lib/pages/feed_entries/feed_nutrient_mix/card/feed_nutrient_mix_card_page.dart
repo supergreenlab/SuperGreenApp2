@@ -146,13 +146,13 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state, widget.feedState),
           ),
-          (params.message ?? '') != ''
+          (params.message ?? '') != '' || editText == true
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text('Observations', style: TextStyle()),
                 )
               : Container(),
-          (params.message ?? '') != ''
+          (params.message ?? '') != '' || editText == true
               ? FeedCardText(
                   params.message ?? '',
                   edit: editText,

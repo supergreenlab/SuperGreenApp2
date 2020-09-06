@@ -110,7 +110,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
         child: FeedCardDate(widget.state, widget.feedState),
       ),
     ];
-    if ((params.message ?? '') != '') {
+    if ((params.message ?? '') != '' || editText == true) {
       body.add(FeedCardText(
         params.message ?? '',
         edit: editText,

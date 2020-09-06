@@ -140,7 +140,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state, widget.feedState),
           ),
-          (params.message ?? '') != ''
+          (params.message ?? '') != '' || editText == true
               ? FeedCardText(
                   params.message ?? '',
                   edit: editText,
