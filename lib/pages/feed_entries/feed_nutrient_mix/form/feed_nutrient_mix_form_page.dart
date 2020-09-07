@@ -72,6 +72,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
 
   Plant plant;
   List<FeedNutrientMixParams> lastNutrientMixParams;
+  FeedNutrientMixParams baseNutrientMixParams;
 
   NutrientMixPhase phase;
 
@@ -167,7 +168,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           nutrientProducts,
                           messageController.text,
                           plants,
-                          phase));
+                          phase,
+                          baseNutrientMixParams));
                 },
                 body: AnimatedSwitcher(
                   child: body,
@@ -504,6 +506,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                                       lastNutrientMixParams,
                                       animation: animation),
                               duration: Duration(milliseconds: 700));
+                          baseNutrientMixParams = lastNutrientMixParams[i];
                           setState(() {
                             hideRestore = true;
                             Timer(Duration(milliseconds: 600), () {

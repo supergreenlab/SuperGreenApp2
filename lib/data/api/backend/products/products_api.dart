@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 
@@ -33,9 +34,13 @@ class ProductsAPI {
     return serverID;
   }
 
-  Future<List<Product>> searchProducts(String terms) async {
-    Map<String, dynamic> productResults = await BackendAPI()
-        .get('/products/search?terms=${Uri.encodeQueryComponent(terms)}');
+  Future<List<Product>> searchProducts(String terms,
+      {ProductCategoryID categoryID}) async {
+    String url = '/products/search?terms=${Uri.encodeQueryComponent(terms)}';
+    if (categoryID != null) {
+      url += '&category=${describeEnum(categoryID)}';
+    }
+    Map<String, dynamic> productResults = await BackendAPI().get(url);
     List<dynamic> products = productResults['products'];
     return products
         .map<Product>((p) => Product.fromMap(p, json: true))

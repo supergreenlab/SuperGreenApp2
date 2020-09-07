@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
+import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
@@ -130,6 +131,22 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               BlocProvider.of<FeedBloc>(context)
                   .add(FeedBlocEventDeleteEntry(state));
             },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                (params.basedOn ?? '') != ''
+                    ? Text('From: ${params.basedOn}',
+                        style: TextStyle(color: Color(0xffababab)))
+                    : Container(),
+                (params.phase ?? '') != ''
+                    ? Text('Phase: ${nutrientMixPhasesUI[params.phase]}',
+                        style: TextStyle(color: Color(0xffababab)))
+                    : Container(),
+              ],
+            ),
           ),
           Container(
             height: 130,

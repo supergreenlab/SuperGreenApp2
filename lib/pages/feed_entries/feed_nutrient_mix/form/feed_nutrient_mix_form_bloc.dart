@@ -54,13 +54,33 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
   final String message;
   final List<Plant> plants;
   final NutrientMixPhase phase;
+  final FeedNutrientMixParams baseNutrientMixParams;
 
-  FeedNutrientMixFormBlocEventCreate(this.date, this.name, this.volume, this.ph,
-      this.tds, this.nutrientProducts, this.message, this.plants, this.phase);
+  FeedNutrientMixFormBlocEventCreate(
+      this.date,
+      this.name,
+      this.volume,
+      this.ph,
+      this.tds,
+      this.nutrientProducts,
+      this.message,
+      this.plants,
+      this.phase,
+      this.baseNutrientMixParams);
 
   @override
-  List<Object> get props =>
-      [date, name, volume, ph, tds, nutrientProducts, message, plants, phase];
+  List<Object> get props => [
+        date,
+        name,
+        volume,
+        ph,
+        tds,
+        nutrientProducts,
+        message,
+        plants,
+        phase,
+        baseNutrientMixParams
+      ];
 }
 
 abstract class FeedNutrientMixFormBlocState extends Equatable {}
@@ -190,7 +210,8 @@ class FeedNutrientMixFormBloc
                       .where((np) => np.quantity != null && np.quantity > 0)
                       .toList(),
                   message: event.message,
-                  phase: event.phase)
+                  phase: event.phase,
+                  basedOn: event.baseNutrientMixParams?.name)
               .toJSON()),
         ));
       }

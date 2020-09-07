@@ -208,8 +208,8 @@ class PlantSettings extends Equatable {
       PlantSettings(
         plantType ?? this.plantType,
         isSingle ?? this.isSingle,
-        strain ?? this.strain,
-        seedbank ?? this.seedbank,
+        (strain ?? this.strain) == '' ? null : strain ?? this.strain,
+        (seedbank ?? this.seedbank) == '' ? null : seedbank ?? this.seedbank,
         germinationDate ?? this.germinationDate,
         veggingStart ?? this.veggingStart,
         bloomingStart ?? this.bloomingStart,

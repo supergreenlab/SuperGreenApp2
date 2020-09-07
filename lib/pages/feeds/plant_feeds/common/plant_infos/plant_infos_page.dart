@@ -21,7 +21,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
+import 'package:super_green_app/data/api/backend/products/specs/seed_specs.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_dimensions.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_medium.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_infos/forms/plant_infos_phase_since.dart';
@@ -84,7 +87,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
     if (state.plantInfos.plantSettings.strain != null &&
         state.plantInfos.plantSettings.seedbank != null) {
       strain =
-          '# ${state.plantInfos.plantSettings.strain}\nfrom **${state.plantInfos.plantSettings.seedbank}**';
+          '# ${state.plantInfos.plantSettings.strain}\nfrom **${state.plantInfos.plantSettings.seedbank.trim()}**';
     } else if (state.plantInfos.plantSettings.strain != null) {
       strain = '# ${state.plantInfos.plantSettings.strain}';
     }
@@ -117,7 +120,28 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                         value: strain,
                         onEdit: state.plantInfos.editable == false
                             ? null
-                            : () => _openForm('STRAIN')),
+                            : () {
+                                BlocProvider.of<MainNavigatorBloc>(context).add(
+                                    MainNavigateToSelectNewProductEvent([],
+                                        categoryID: ProductCategoryID.SEED,
+                                        futureFn: (future) async {
+                                  List<Product> products = await future;
+                                  if (products == null ||
+                                      products.length == 0) {
+                                    return;
+                                  }
+                                  SeedSpecs specs = products[0].specs;
+                                  updatePlantSettings(
+                                      context,
+                                      state,
+                                      state.plantInfos.plantSettings.copyWith(
+                                          products: state
+                                              .plantInfos.plantSettings.products
+                                            ..add(products[0]),
+                                          strain: products[0].name,
+                                          seedbank: specs.bank));
+                                }));
+                              }),
                     PlantInfosWidget(
                         icon: 'icon_plant_type.svg',
                         title: 'Plant type',

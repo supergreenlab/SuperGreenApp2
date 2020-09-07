@@ -493,8 +493,10 @@ class MainNavigateToPublicPlant extends MainNavigatorEvent {
 
 class MainNavigateToSelectNewProductEvent extends MainNavigatorEvent {
   final List<Product> selectedProducts;
+  final ProductCategoryID categoryID;
 
-  MainNavigateToSelectNewProductEvent(this.selectedProducts, {futureFn})
+  MainNavigateToSelectNewProductEvent(this.selectedProducts,
+      {this.categoryID, futureFn})
       : super(futureFn: futureFn);
 
   @override

@@ -137,8 +137,9 @@ class SelectNewProductBloc
     } else if (event is SelectNewProductBlocEventSearchTerms) {
       yield SelectNewProductBlocStateLoading();
       try {
-        List<Product> products =
-            await BackendAPI().productsAPI.searchProducts(event.searchTerms);
+        List<Product> products = await BackendAPI()
+            .productsAPI
+            .searchProducts(event.searchTerms, categoryID: args.categoryID);
         yield SelectNewProductBlocStateLoaded(products);
       } catch (e) {
         yield SelectNewProductBlocStateLoaded([]);

@@ -70,6 +70,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
   final List<NutrientProduct> nutrientProducts;
   final String message;
   final NutrientMixPhase phase;
+  final String basedOn;
 
   FeedNutrientMixParams(
       {this.name,
@@ -78,7 +79,8 @@ class FeedNutrientMixParams extends FeedEntryParams {
       this.tds,
       this.nutrientProducts,
       this.message,
-      this.phase});
+      this.phase,
+      this.basedOn});
 
   FeedNutrientMixParams copyWith({String name, String message}) =>
       FeedNutrientMixParams(
@@ -88,7 +90,8 @@ class FeedNutrientMixParams extends FeedEntryParams {
           tds: this.tds,
           nutrientProducts: this.nutrientProducts,
           message: message ?? this.message,
-          phase: phase ?? this.phase);
+          phase: phase ?? this.phase,
+          basedOn: basedOn ?? this.basedOn);
 
   factory FeedNutrientMixParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -104,6 +107,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       phase: NutrientMixPhase.values.firstWhere(
           (p) => describeEnum(p) == map['phase'],
           orElse: () => null),
+      basedOn: map['basedOn'],
     );
   }
 
@@ -117,6 +121,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       'nutrientProducts': (nutrientProducts).map((np) => np.toMap()).toList(),
       'message': message,
       'phase': phase == null ? null : describeEnum(phase),
+      'basedOn': basedOn,
     });
   }
 

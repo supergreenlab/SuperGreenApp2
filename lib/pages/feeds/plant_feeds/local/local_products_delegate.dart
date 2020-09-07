@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
+import 'package:super_green_app/data/api/backend/products/specs/seed_specs.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
@@ -31,6 +32,7 @@ class LocalProductsBlocDelegate extends ProductsBlocDelegate {
   Stream<ProductsBlocState> updateProducts(List<Product> products) async* {
     List<Product> boxProducts = [];
     List<Product> plantProducts = [];
+    Product seed;
 
     for (Product product in products) {
       if (plantProductCategories.contains(product.category)) {
@@ -38,10 +40,16 @@ class LocalProductsBlocDelegate extends ProductsBlocDelegate {
       } else {
         boxProducts.add(product);
       }
+      if (product.category == ProductCategoryID.SEED) {
+        seed = product;
+      }
     }
 
     String plantSettingsJSON = PlantSettings.fromJSON(plant.settings)
-        .copyWith(products: plantProducts)
+        .copyWith(
+            products: plantProducts,
+            strain: seed?.name ?? '',
+            seedbank: (seed?.specs as SeedSpecs)?.bank ?? '')
         .toJSON();
     String boxSettingsJSON = BoxSettings.fromJSON(box.settings)
         .copyWith(products: boxProducts)
