@@ -475,7 +475,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       icon: 'assets/feed_form/icon_restore_nutrient_mix.svg',
       title: 'Reuse previous mix values?',
       child: Container(
-        height: 90,
+        height: 70,
         child: ListView(
             scrollDirection: Axis.horizontal,
             children: lastNutrientMixParams.map<Widget>((p) {
@@ -548,9 +548,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       BuildContext context, FeedNutrientMixFormBlocState state) {
     return FeedFormParamLayout(
       title: 'Mix phase',
-      icon: 'assets/feed_form/icon_life_event.svg',
+      icon: 'assets/plant_infos/icon_vegging_since.svg',
       child: Container(
-          height: 120,
+          height: 110,
           child: Column(
             children: [
               Padding(

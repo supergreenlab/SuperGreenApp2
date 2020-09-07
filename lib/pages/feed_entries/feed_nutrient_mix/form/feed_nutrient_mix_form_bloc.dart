@@ -116,13 +116,23 @@ class FeedNutrientMixFormBloc
     if (event is FeedNutrientMixFormBlocEventInit) {
       List<FeedEntry> nutrientMixes =
           await RelDB.get().feedsDAO.getFeedEntriesWithType('FE_NUTRIENT_MIX');
+      Map<String, FeedEntry> lastNutrientMixParamsMap = {};
       for (FeedEntry nutrientMix in nutrientMixes) {
         FeedNutrientMixParams params =
             FeedNutrientMixParams.fromJSON(nutrientMix.params);
         if (params.name != null && params.name != '') {
-          lastNutrientMixParams.add(params);
+          if (lastNutrientMixParamsMap[params.name] == null) {
+            lastNutrientMixParamsMap[params.name] = nutrientMix;
+          } else if (lastNutrientMixParamsMap[params.name]
+              .date
+              .isBefore(nutrientMix.date)) {
+            lastNutrientMixParamsMap[params.name] = nutrientMix;
+          }
         }
       }
+      lastNutrientMixParams = lastNutrientMixParamsMap.values
+          .map((nm) => FeedNutrientMixParams.fromJSON(nm.params))
+          .toList();
       lastNutrientMixParams.sort((np1, np2) {
         if (np1.phase == null && np2.phase == null) {
           return 0;
@@ -149,23 +159,6 @@ class FeedNutrientMixFormBloc
           plant, event.products, lastNutrientMixParams);
     } else if (event is FeedNutrientMixFormBlocEventCreate) {
       yield FeedNutrientMixFormBlocStateLoading();
-      if ((event.name ?? '') != '') {
-        List<FeedEntry> nutrientMixes = await RelDB.get()
-            .feedsDAO
-            .getFeedEntriesWithType('FE_NUTRIENT_MIX');
-        for (FeedEntry nutrientMix in nutrientMixes) {
-          FeedNutrientMixParams params =
-              FeedNutrientMixParams.fromJSON(nutrientMix.params);
-          if (params.name == event.name) {
-            params = params.copyWith(name: '');
-            await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
-              id: Value(nutrientMix.id),
-              synced: Value(false),
-              params: Value(params.toJSON()),
-            ));
-          }
-        }
-      }
       for (Plant plant in event.plants) {
         bool updatePlant = false;
         PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
@@ -189,7 +182,7 @@ class FeedNutrientMixFormBloc
           feed: plant.feed,
           date: event.date,
           params: Value(FeedNutrientMixParams(
-                  name: event.plants.indexOf(plant) == 0 ? event.name : null,
+                  name: event.name,
                   volume: event.volume,
                   ph: event.ph,
                   tds: event.tds,
