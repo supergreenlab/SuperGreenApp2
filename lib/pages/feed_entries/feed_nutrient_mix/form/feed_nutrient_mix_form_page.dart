@@ -199,24 +199,40 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
         child: Row(
           children: [
-            Row(
-              children: [
-                Text(
-                  'Nutrients in your ',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.black87),
-                ),
-                Text(
-                  'mix',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Color(0xff3bb30b)),
-                ),
-              ],
+            Text(
+              'Nutrients in your ',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.black87),
             ),
+            Text(
+              'mix',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color(0xff3bb30b)),
+            ),
+            Expanded(child: Container()),
+            InkWell(
+                onTap: () {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToSelectNewProductEvent([],
+                          categoryID: ProductCategoryID.FERTILIZER,
+                          futureFn: (future) async {
+                    List<Product> products = await future;
+                    if (products == null || products.length == 0) {
+                      return;
+                    }
+                    setState(() {
+                      nutrientProducts.addAll(products
+                          .map((p) => NutrientProduct(product: p, unit: 'g')));
+                      quantityControllers.addAll(
+                          products.map((p) => TextEditingController(text: '')));
+                    });
+                  }));
+                },
+                child: Icon(Icons.add, size: 30)),
           ],
         ),
       ),
@@ -603,13 +619,13 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         tdsController =
             TextEditingController(text: '${lastNutrientMixParams.tds}');
       }
-      List<NutrientProduct> missingProducts = [];
+      //List<NutrientProduct> missingProducts = [];
       for (int i = 0; i < lastNutrientMixParams.nutrientProducts.length; ++i) {
         int index = nutrientProducts.indexWhere((np) =>
             np.product.id ==
             lastNutrientMixParams.nutrientProducts[i].product.id);
         if (index == -1) {
-          missingProducts.add(lastNutrientMixParams.nutrientProducts[i]);
+          //missingProducts.add(lastNutrientMixParams.nutrientProducts[i]);
           nutrientProducts.add(lastNutrientMixParams.nutrientProducts[i]);
           quantityControllers.add(TextEditingController(
               text: '${lastNutrientMixParams.nutrientProducts[i].quantity}'));
