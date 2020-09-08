@@ -69,11 +69,12 @@ class PlantPickerBloc extends Bloc<PlantPickerBlocEvent, PlantPickerBlocState> {
       List<Box> boxes = await RelDB.get().plantsDAO.getBoxes();
       yield PlantPickerBlocStateLoaded(
           args.title,
-          boxes,
+          boxes..sort((b1, b2) => b1.name.compareTo(b2.name)),
           plants.where((p) {
             PlantSettings plantSettings = PlantSettings.fromJSON(p.settings);
             return plantSettings.dryingStart == null;
-          }).toList(),
+          }).toList()
+            ..sort((p1, p2) => p1.name.compareTo(p2.name)),
           args.preselectedPlants);
     }
   }

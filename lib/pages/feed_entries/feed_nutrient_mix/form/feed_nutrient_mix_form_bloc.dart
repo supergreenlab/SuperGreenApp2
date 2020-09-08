@@ -35,6 +35,16 @@ class FeedNutrientMixFormBlocEventInit extends FeedNutrientMixFormBlocEvent {
   List<Object> get props => [];
 }
 
+// class FeedNutrientMixFormBlocEventAddNutrients
+//     extends FeedNutrientMixFormBlocEvent {
+//   final List<NutrientProduct> missingProducts;
+
+//   FeedNutrientMixFormBlocEventAddNutrients(this.missingProducts);
+
+//   @override
+//   List<Object> get props => [missingProducts];
+// }
+
 class FeedNutrientMixFormBlocEventLoaded extends FeedNutrientMixFormBlocEvent {
   final List<Product> products;
 
@@ -173,6 +183,9 @@ class FeedNutrientMixFormBloc
               .where((p) => p.category == ProductCategoryID.FERTILIZER)
               .toList(),
           lastNutrientMixParams);
+      // } else if (event is FeedNutrientMixFormBlocEventAddNutrients) {
+      //   Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
+      //   addProductsToPlant(plant, event.missingProducts);
     } else if (event is FeedNutrientMixFormBlocEventLoaded) {
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       yield FeedNutrientMixFormBlocStateLoaded(
@@ -180,23 +193,7 @@ class FeedNutrientMixFormBloc
     } else if (event is FeedNutrientMixFormBlocEventCreate) {
       yield FeedNutrientMixFormBlocStateLoading();
       for (Plant plant in event.plants) {
-        bool updatePlant = false;
-        PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
-        for (NutrientProduct nutrientProduct in event.nutrientProducts) {
-          if (plantSettings.products.firstWhere(
-                  (p) => p.id == nutrientProduct.product.id,
-                  orElse: () => null) ==
-              null) {
-            plantSettings.products.add(nutrientProduct.product);
-            updatePlant = true;
-          }
-        }
-        if (updatePlant) {
-          await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
-              id: Value(plant.id),
-              settings: Value(plantSettings.toJSON()),
-              synced: Value(false)));
-        }
+        await addProductsToPlant(plant, event.nutrientProducts);
         await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_NUTRIENT_MIX',
           feed: plant.feed,
@@ -216,6 +213,30 @@ class FeedNutrientMixFormBloc
         ));
       }
       yield FeedNutrientMixFormBlocStateDone();
+    }
+  }
+
+  Future addProductsToPlant(
+      Plant plant, List<NutrientProduct> nutrientProducts) async {
+    bool updatePlant = false;
+    PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
+    for (NutrientProduct nutrientProduct in nutrientProducts) {
+      if (nutrientProduct.quantity != null && nutrientProduct.quantity == 0) {
+        continue;
+      }
+      if (plantSettings.products.firstWhere(
+              (p) => p.id == nutrientProduct.product.id,
+              orElse: () => null) ==
+          null) {
+        plantSettings.products.add(nutrientProduct.product);
+        updatePlant = true;
+      }
+    }
+    if (updatePlant) {
+      await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
+          id: Value(plant.id),
+          settings: Value(plantSettings.toJSON()),
+          synced: Value(false)));
     }
   }
 

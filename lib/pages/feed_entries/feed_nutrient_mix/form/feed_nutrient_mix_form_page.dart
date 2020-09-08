@@ -223,9 +223,10 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     ]);
     if (nutrientProducts.length > 0) {
       int i = 0;
+      List<Widget> fertilizers = [];
       for (NutrientProduct productIntake in nutrientProducts) {
         int index = i;
-        children.add(FeedFormParamLayout(
+        fertilizers.add(FeedFormParamLayout(
             child:
                 renderFertilizer(context, productIntake, quantityControllers[i],
                     (NutrientProduct newProductIntake) {
@@ -237,6 +238,10 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             title: productIntake.product.name));
         ++i;
       }
+      children.add(Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: fertilizers,
+      ));
     } else {
       children.add(renderEmptyToolbox(context));
     }
@@ -598,18 +603,27 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         tdsController =
             TextEditingController(text: '${lastNutrientMixParams.tds}');
       }
+      List<NutrientProduct> missingProducts = [];
       for (int i = 0; i < lastNutrientMixParams.nutrientProducts.length; ++i) {
         int index = nutrientProducts.indexWhere((np) =>
             np.product.id ==
             lastNutrientMixParams.nutrientProducts[i].product.id);
         if (index == -1) {
-          continue;
+          missingProducts.add(lastNutrientMixParams.nutrientProducts[i]);
+          nutrientProducts.add(lastNutrientMixParams.nutrientProducts[i]);
+          quantityControllers.add(TextEditingController(
+              text: '${lastNutrientMixParams.nutrientProducts[i].quantity}'));
+        } else {
+          nutrientProducts[index] = lastNutrientMixParams.nutrientProducts[i];
+          quantityControllers[index] = TextEditingController(
+              text: '${lastNutrientMixParams.nutrientProducts[i].quantity}');
         }
-        nutrientProducts[index] = lastNutrientMixParams.nutrientProducts[i];
-        quantityControllers[index] = TextEditingController(
-            text: '${lastNutrientMixParams.nutrientProducts[i].quantity}');
       }
       phase = lastNutrientMixParams.phase;
+      /*if (missingProducts.length > 0) {
+        BlocProvider.of<FeedNutrientMixFormBloc>(context)
+            .add(FeedNutrientMixFormBlocEventAddNutrients(missingProducts));
+      }*/
     });
   }
 
