@@ -376,7 +376,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                       width: 110, height: 110),
                 ),
                 Text(
-                    'No nutrients in your toolbox yet.\nGo back to the previous screen to add toolbox items.',
+                    'No nutrients in your toolbox yet.\nPress the + button up here.',
                     textAlign: TextAlign.center),
               ],
             ))
