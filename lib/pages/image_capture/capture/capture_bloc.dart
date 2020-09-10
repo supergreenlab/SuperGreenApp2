@@ -23,6 +23,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image/image.dart';
 import 'package:moor/moor.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path/path.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -36,13 +37,22 @@ class CaptureBlocEventInit extends CaptureBlocEvent {
   List<Object> get props => [];
 }
 
-class CaptureBlocEventCreate extends CaptureBlocEvent {
+class CaptureBlocEventCreateWithFiles extends CaptureBlocEvent {
   final List<File> files;
 
-  CaptureBlocEventCreate(this.files);
+  CaptureBlocEventCreateWithFiles(this.files);
 
   @override
   List<Object> get props => [files];
+}
+
+class CaptureBlocEventCreateWithAssets extends CaptureBlocEvent {
+  final List<Asset> assets;
+
+  CaptureBlocEventCreateWithAssets(this.assets);
+
+  @override
+  List<Object> get props => [assets];
 }
 
 class CaptureBlocState extends Equatable {
@@ -58,6 +68,12 @@ class CaptureBlocState extends Equatable {
 
 class CaptureBlocStateInit extends CaptureBlocState {
   CaptureBlocStateInit(
+      bool videoEnabled, bool pickerEnabled, String overlayPath)
+      : super(videoEnabled, pickerEnabled, overlayPath);
+}
+
+class CaptureBlocStateLoading extends CaptureBlocState {
+  CaptureBlocStateLoading(
       bool videoEnabled, bool pickerEnabled, String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 }
@@ -87,7 +103,9 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
     if (event is CaptureBlocEventInit) {
       yield CaptureBlocStateInit(
           args.videoEnabled, args.pickerEnabled, args.overlayPath);
-    } else if (event is CaptureBlocEventCreate) {
+    } else if (event is CaptureBlocEventCreateWithFiles) {
+      yield CaptureBlocStateLoading(
+          args.videoEnabled, args.pickerEnabled, args.overlayPath);
       List<FeedMediasCompanion> feedMedias = [];
       int i = 1;
       for (File file in event.files) {

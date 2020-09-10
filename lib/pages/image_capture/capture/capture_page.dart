@@ -19,9 +19,9 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
@@ -40,8 +40,6 @@ class _CapturePageState extends State<CapturePage> {
 
   bool _videoMode = false;
   bool _popDone = true;
-
-  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +62,7 @@ class _CapturePageState extends State<CapturePage> {
           builder: (context, state) {
             if (_cameraController != null &&
                 _cameraController.value.isInitialized == true) {
-              if (_loading) {
+              if (state is CaptureBlocStateLoading) {
                 return Scaffold(
                     body: FullscreenLoading(title: 'Copying medias..'));
               }
@@ -286,18 +284,17 @@ class _CapturePageState extends State<CapturePage> {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: Icon(Icons.library_books, color: Colors.white54),
                   onPressed: () async {
-                    List<File> files = await FilePicker.getMultiFile(
-                      type: FileType.custom,
-                      allowedExtensions: ['jpg', 'mp4'],
+                    List<Asset> resultList = await MultiImagePicker.pickImages(
+                      maxImages: 30,
                     );
-                    if (files == null) {
-                      return;
-                    }
-                    setState(() {
-                      _loading = true;
-                    });
-                    BlocProvider.of<CaptureBloc>(context)
-                        .add(CaptureBlocEventCreate(files));
+                    // List<File> files = await FilePicker.getMultiFile(
+                    //   type: FileType.custom,
+                    // );
+                    // if (files == null) {
+                    //   return;
+                    // }
+                    // BlocProvider.of<CaptureBloc>(context)
+                    //     .add(CaptureBlocEventCreate(files));
 
                     // if (_videoMode) {
                     //   File video = await ImagePicker.pickVideo(
@@ -397,10 +394,7 @@ class _CapturePageState extends State<CapturePage> {
         await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
         return;
       }
-      setState(() {
-        _loading = true;
-      });
-      BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreate(
+      BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreateWithFiles(
           [File(FeedMedias.makeAbsoluteFilePath(_filePath))]));
     }));
   }
