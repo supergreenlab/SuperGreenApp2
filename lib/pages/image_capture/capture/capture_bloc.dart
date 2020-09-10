@@ -23,7 +23,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image/image.dart';
 import 'package:moor/moor.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path/path.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -37,22 +36,13 @@ class CaptureBlocEventInit extends CaptureBlocEvent {
   List<Object> get props => [];
 }
 
-class CaptureBlocEventCreateWithFiles extends CaptureBlocEvent {
+class CaptureBlocEventCreate extends CaptureBlocEvent {
   final List<File> files;
 
-  CaptureBlocEventCreateWithFiles(this.files);
+  CaptureBlocEventCreate({this.files});
 
   @override
   List<Object> get props => [files];
-}
-
-class CaptureBlocEventCreateWithAssets extends CaptureBlocEvent {
-  final List<Asset> assets;
-
-  CaptureBlocEventCreateWithAssets(this.assets);
-
-  @override
-  List<Object> get props => [assets];
 }
 
 class CaptureBlocState extends Equatable {
@@ -103,12 +93,21 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
     if (event is CaptureBlocEventInit) {
       yield CaptureBlocStateInit(
           args.videoEnabled, args.pickerEnabled, args.overlayPath);
-    } else if (event is CaptureBlocEventCreateWithFiles) {
+    } else if (event is CaptureBlocEventCreate) {
       yield CaptureBlocStateLoading(
           args.videoEnabled, args.pickerEnabled, args.overlayPath);
+      List<File> files = event.files;
+      // if (files == null) {
+      //   // TODO find something better than this..
+      //   for (Asset a in event.assets) {
+      //     File file = File('${AppDB().tmpPath}/${a.name}');
+      //     await file.writeAsBytes((await a.getByteData()).buffer.asInt32List());
+      //     files.add(file);
+      //   }
+      // }
       List<FeedMediasCompanion> feedMedias = [];
       int i = 1;
-      for (File file in event.files) {
+      for (File file in files) {
         String filePath =
             '${FeedMedias.makeFilePath()}-${i++}.${file.path.split('.').last}';
         await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));

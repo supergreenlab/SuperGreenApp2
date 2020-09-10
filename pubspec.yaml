@@ -65,7 +65,7 @@ dependencies:
   connectivity:
   flutter_local_notifications:
   exif:
-  multi_image_picker:
+  media_picker_builder:
   image:
   device_info:
   wifi_iot:

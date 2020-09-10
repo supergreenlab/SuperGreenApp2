@@ -21,10 +21,12 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:media_picker_builder/data/media_file.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
+import 'package:super_green_app/pages/image_picker/picker_widget.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class CapturePage extends StatefulWidget {
@@ -284,9 +286,30 @@ class _CapturePageState extends State<CapturePage> {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: Icon(Icons.library_books, color: Colors.white54),
                   onPressed: () async {
-                    List<Asset> resultList = await MultiImagePicker.pickImages(
-                      maxImages: 30,
-                    );
+                    _checkPermission().then((granted) {
+                      if (!granted) return;
+
+                      // To build your own custom picker use this api
+//                MediaPickerBuilder.getAlbums(
+//                  withImages: true,
+//                  withVideos: true,
+//                ).then((albums) {
+//                  print(albums);
+//                });
+
+                      // If you are happy with the example picker then you use this!
+                      _buildPicker(context);
+                    });
+
+                    // List<Asset> resultList = await MultiImagePicker.pickImages(
+                    //   maxImages: 10,
+                    // );
+                    // if (resultList == null || resultList.length == 0) {
+                    //   return;
+                    // }
+                    // BlocProvider.of<CaptureBloc>(context)
+                    //     .add(CaptureBlocEventCreate(assets: resultList));
+
                     // List<File> files = await FilePicker.getMultiFile(
                     //   type: FileType.custom,
                     // );
@@ -394,8 +417,8 @@ class _CapturePageState extends State<CapturePage> {
         await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
         return;
       }
-      BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreateWithFiles(
-          [File(FeedMedias.makeAbsoluteFilePath(_filePath))]));
+      BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreate(
+          files: [File(FeedMedias.makeAbsoluteFilePath(_filePath))]));
     }));
   }
 
@@ -415,6 +438,39 @@ class _CapturePageState extends State<CapturePage> {
     try {
       await file.delete();
     } catch (e) {}
+  }
+
+  _buildPicker(BuildContext context) {
+    showModalBottomSheet<Set<MediaFile>>(
+      context: context,
+      builder: (BuildContext c) {
+        return PickerWidget(
+          withImages: true,
+          withVideos: true,
+          onDone: (Set<MediaFile> selectedFiles) {
+            print(selectedFiles);
+            List<File> files = selectedFiles.map((f) => File(f.path)).toList();
+            BlocProvider.of<CaptureBloc>(context)
+                .add(CaptureBlocEventCreate(files: files));
+            Navigator.pop(c);
+          },
+          onCancel: () {
+            print("Cancelled");
+            Navigator.pop(c);
+          },
+        );
+      },
+    );
+  }
+
+  Future<bool> _checkPermission() async {
+    final permissionStorageGroup =
+        Platform.isIOS ? PermissionGroup.photos : PermissionGroup.storage;
+    Map<PermissionGroup, PermissionStatus> res =
+        await PermissionHandler().requestPermissions([
+      permissionStorageGroup,
+    ]);
+    return res[permissionStorageGroup] == PermissionStatus.granted;
   }
 
   @override

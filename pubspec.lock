@@ -588,6 +588,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  media_picker_builder:
+    dependency: "direct main"
+    description:
+      name: media_picker_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.1"
   meta:
     dependency: transitive
     description:
@@ -625,13 +632,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.1"
-  multi_image_picker:
-    dependency: "direct main"
-    description:
-      name: multi_image_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.7.13"
   multicast_dns:
     dependency: "direct main"
     description:
