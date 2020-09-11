@@ -66,6 +66,8 @@ dependencies:
   flutter_local_notifications:
   exif:
   media_picker_builder:
+    # path: ../media_picker_builder/ 
+    git: https://github.com/supergreenlab/media_picker_builder.git
   image:
   device_info:
   wifi_iot:
