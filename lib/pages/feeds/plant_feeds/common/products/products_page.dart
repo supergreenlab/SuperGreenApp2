@@ -144,9 +144,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      '''List the items you used for this grow for future reference and/or kowledge sharing:)
-
-Add your nutrients to keep track of their usage when watering/making nutrient mix.''',
+                      '''List the items you used for this grow for future reference and/or kowledge sharing.''',
                       style: TextStyle(color: Colors.white)),
                 ),
               ),

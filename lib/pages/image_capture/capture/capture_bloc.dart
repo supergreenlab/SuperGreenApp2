@@ -109,7 +109,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
       int i = 1;
       for (File file in files) {
         String filePath =
-            '${FeedMedias.makeFilePath()}-${i++}.${file.path.split('.').last}';
+            '${FeedMedias.makeFilePath()}-${i++}.${file.path.split('.').last.toLowerCase()}';
         await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
         String fileName = basename(filePath);
         String thumbnailPath =

@@ -449,7 +449,10 @@ class _CapturePageState extends State<CapturePage> {
           withVideos: true,
           onDone: (Set<MediaFile> selectedFiles) {
             print(selectedFiles);
-            List<File> files = selectedFiles.map((f) => File(f.path)).toList();
+            List<File> files = selectedFiles.map((f) {
+              print(f.path);
+              return File(f.path);
+            }).toList();
             BlocProvider.of<CaptureBloc>(context)
                 .add(CaptureBlocEventCreate(files: files));
             Navigator.pop(c);
