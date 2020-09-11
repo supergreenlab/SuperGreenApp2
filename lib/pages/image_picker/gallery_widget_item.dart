@@ -93,9 +93,11 @@ class GalleryWidgetItemState extends State<GalleryWidgetItem> {
                     } else if (snapshot.hasError) {
                       return Icon(Icons.error, color: Colors.red, size: 24);
                     } else {
-                      return Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: CircularProgressIndicator(),
+                      return Center(
+                        child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator()),
                       );
                     }
                   }),
