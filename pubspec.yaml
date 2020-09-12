@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
+  flutter_ffmpeg:
   enum_to_string:
   uni_links:
   tuple:

@@ -66,7 +66,10 @@ class _CapturePageState extends State<CapturePage> {
                 _cameraController.value.isInitialized == true) {
               if (state is CaptureBlocStateLoading) {
                 return Scaffold(
-                    body: FullscreenLoading(title: 'Copying medias..'));
+                    body: FullscreenLoading(
+                  title: state.title,
+                  percent: state.progress,
+                ));
               }
               if (_cameraController.value.isRecordingVideo == true) {
                 return _renderCameraRecording(context, state);
@@ -288,56 +291,8 @@ class _CapturePageState extends State<CapturePage> {
                   onPressed: () async {
                     _checkPermission().then((granted) {
                       if (!granted) return;
-
-                      // To build your own custom picker use this api
-//                MediaPickerBuilder.getAlbums(
-//                  withImages: true,
-//                  withVideos: true,
-//                ).then((albums) {
-//                  print(albums);
-//                });
-
-                      // If you are happy with the example picker then you use this!
                       _buildPicker(context);
                     });
-
-                    // List<Asset> resultList = await MultiImagePicker.pickImages(
-                    //   maxImages: 10,
-                    // );
-                    // if (resultList == null || resultList.length == 0) {
-                    //   return;
-                    // }
-                    // BlocProvider.of<CaptureBloc>(context)
-                    //     .add(CaptureBlocEventCreate(assets: resultList));
-
-                    // List<File> files = await FilePicker.getMultiFile(
-                    //   type: FileType.custom,
-                    // );
-                    // if (files == null) {
-                    //   return;
-                    // }
-                    // BlocProvider.of<CaptureBloc>(context)
-                    //     .add(CaptureBlocEventCreate(files));
-
-                    // if (_videoMode) {
-                    //   File video = await ImagePicker.pickVideo(
-                    //       source: ImageSource.gallery);
-                    //   if (video != null) {
-                    //     _filePath = '${FeedMedias.makeFilePath()}.mp4';
-                    //     await video
-                    //         .copy(FeedMedias.makeAbsoluteFilePath(_filePath));
-                    //     _endCapture(state);
-                    //   }
-                    // } else {
-                    //   File image = await ImagePicker.pickImage(
-                    //       source: ImageSource.gallery);
-                    //   if (image != null) {
-                    //     _filePath = '${FeedMedias.makeFilePath()}.jpg';
-                    //     await image
-                    //         .copy(FeedMedias.makeAbsoluteFilePath(_filePath));
-                    //     _endCapture(state);
-                    //   }
-                    // }
                   },
                 ),
               ],
@@ -448,9 +403,7 @@ class _CapturePageState extends State<CapturePage> {
           withImages: true,
           withVideos: true,
           onDone: (Set<MediaFile> selectedFiles) {
-            print(selectedFiles);
             List<File> files = selectedFiles.map((f) {
-              print(f.path);
               return File(f.path);
             }).toList();
             BlocProvider.of<CaptureBloc>(context)
@@ -458,7 +411,6 @@ class _CapturePageState extends State<CapturePage> {
             Navigator.pop(c);
           },
           onCancel: () {
-            print("Cancelled");
             Navigator.pop(c);
           },
         );
