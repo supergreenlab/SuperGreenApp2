@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:image/image.dart';
 import 'package:moor/moor.dart';
 import 'package:path/path.dart';
@@ -63,9 +64,15 @@ class CaptureBlocStateInit extends CaptureBlocState {
 }
 
 class CaptureBlocStateLoading extends CaptureBlocState {
-  CaptureBlocStateLoading(
-      bool videoEnabled, bool pickerEnabled, String overlayPath)
+  final String title;
+  final double progress;
+
+  CaptureBlocStateLoading(this.title, this.progress, bool videoEnabled,
+      bool pickerEnabled, String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
+
+  @override
+  List<Object> get props => [...super.props, title, progress];
 }
 
 class CaptureBlocStateDone extends CaptureBlocState {
@@ -76,7 +83,7 @@ class CaptureBlocStateDone extends CaptureBlocState {
       : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
-  List<Object> get props => [feedMedias];
+  List<Object> get props => [...super.props, feedMedias];
 }
 
 class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
@@ -94,26 +101,38 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
       yield CaptureBlocStateInit(
           args.videoEnabled, args.pickerEnabled, args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
-      yield CaptureBlocStateLoading(
-          args.videoEnabled, args.pickerEnabled, args.overlayPath);
       List<File> files = event.files;
-      // if (files == null) {
-      //   // TODO find something better than this..
-      //   for (Asset a in event.assets) {
-      //     File file = File('${AppDB().tmpPath}/${a.name}');
-      //     await file.writeAsBytes((await a.getByteData()).buffer.asInt32List());
-      //     files.add(file);
-      //   }
-      // }
       List<FeedMediasCompanion> feedMedias = [];
+      final FlutterFFmpeg flutterFFmpeg = FlutterFFmpeg();
       int i = 1;
       for (File file in files) {
-        String filePath =
-            '${FeedMedias.makeFilePath()}-${i++}.${file.path.split('.').last.toLowerCase()}';
-        await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
-        String fileName = basename(filePath);
+        yield CaptureBlocStateLoading('Copying files..', (i - 2) / files.length,
+            args.videoEnabled, args.pickerEnabled, args.overlayPath);
+        String ext = file.path.split('.').last.toLowerCase();
+        String fileName = '${FeedMedias.makeFilePath()}-${i++}';
+        String filePath = '$fileName.$ext';
+        if (ext == 'mov') {
+          yield CaptureBlocStateLoading(
+              'Converting mov to mp4..',
+              (i - 2) / files.length,
+              args.videoEnabled,
+              args.pickerEnabled,
+              args.overlayPath);
+          filePath = '$fileName.mp4';
+          await flutterFFmpeg.execute(
+              "-i ${file.path} -c:v mpeg4 ${FeedMedias.makeAbsoluteFilePath(filePath)}");
+          yield CaptureBlocStateLoading(
+              'Copying files..',
+              (i - 2) / files.length,
+              args.videoEnabled,
+              args.pickerEnabled,
+              args.overlayPath);
+        } else {
+          await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
+        }
+        String fileBaseName = basename(fileName);
         String thumbnailPath =
-            filePath.replaceFirst(fileName, 'thumbnail_$fileName');
+            filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
         if (thumbnailPath.endsWith('mp4')) {
           thumbnailPath = thumbnailPath.replaceFirst('.mp4', '.jpg');
           await VideoThumbnail.thumbnailFile(
