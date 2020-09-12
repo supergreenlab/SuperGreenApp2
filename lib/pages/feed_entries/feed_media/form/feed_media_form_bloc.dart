@@ -137,8 +137,10 @@ class FeedMediaFormBloc
         FeedEntryDraft draft = await RelDB.get()
             .feedsDAO
             .getEntryDraft(args.plant.feed, 'FE_MEDIA');
+        if (draft != null) {
         yield FeedMediaFormBlocStateDraft(
             FeedMediaDraft.fromJSON(draft.id, draft.params));
+        }
       } catch (e) {
         yield FeedMediaFormBlocStateNoDraft();
         Logger.log(e);

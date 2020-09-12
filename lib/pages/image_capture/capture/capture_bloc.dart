@@ -156,6 +156,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   }
 
   Future optimizePicture(String from, String to) async {
+    print('optimizePicture\nfrom: $from\nto: $to\n');
     Image image = decodeImage(
         await File(FeedMedias.makeAbsoluteFilePath(from)).readAsBytes());
     Image thumbnail = copyResize(image,
