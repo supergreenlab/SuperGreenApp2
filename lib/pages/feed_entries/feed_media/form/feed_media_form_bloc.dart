@@ -138,8 +138,10 @@ class FeedMediaFormBloc
             .feedsDAO
             .getEntryDraft(args.plant.feed, 'FE_MEDIA');
         if (draft != null) {
-        yield FeedMediaFormBlocStateDraft(
-            FeedMediaDraft.fromJSON(draft.id, draft.params));
+          yield FeedMediaFormBlocStateDraft(
+              FeedMediaDraft.fromJSON(draft.id, draft.params));
+        } else {
+          yield FeedMediaFormBlocStateNoDraft();
         }
       } catch (e) {
         yield FeedMediaFormBlocStateNoDraft();

@@ -226,7 +226,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         },
       ),
       FeedFormParamLayout(
-        title: 'Attached medias',
+        title: 'Attached media',
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
           medias: _medias,
