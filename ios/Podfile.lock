@@ -9,7 +9,7 @@ PODS:
   - devicelocale (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_ble_lib (2.3.0):
+  - flutter_ble_lib (2.2.9):
     - Flutter
     - MultiplatformBleAdapter (~> 0.1.6)
   - flutter_email_sender (0.0.1):
@@ -20,7 +20,6 @@ PODS:
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
-    - Toast
   - keyboard_visibility (0.5.0):
     - Flutter
     - Reachability
@@ -61,7 +60,6 @@ PODS:
     - sqlite3/json1
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
-  - Toast (4.0.0)
   - uni_links (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
@@ -103,7 +101,6 @@ SPEC REPOS:
     - MultiplatformBleAdapter
     - Reachability
     - sqlite3
-    - Toast
 
 EXTERNAL SOURCES:
   camera:
@@ -155,11 +152,11 @@ SPEC CHECKSUMS:
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   devicelocale: feebbe5e7a30adb8c4f83185de1b50ff19b44f00
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_ble_lib: 1d400af3aa9ea4b069974cd06c2bafefe0289086
+  flutter_ble_lib: 18c15b1ceaeebfecd2e0beae2628030e66cd8a19
   flutter_email_sender: f787522d0e82f50e5766c1213dbffff22fdcf009
   flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
-  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   media_picker_builder: 780750c1948670b37a2824f086043a9e69e3a6f4
@@ -170,7 +167,6 @@ SPEC CHECKSUMS:
   share_extend: b6748dc53695587891126a89533b862b92548c7b
   sqlite3: 8f7d2078ae27778699a622a94b853285793422a2
   sqlite3_flutter_libs: 5651f8ff48e3b44d910863c4ea5916085b1b245f
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
