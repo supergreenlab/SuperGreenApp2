@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -403,11 +404,13 @@ class _CapturePageState extends State<CapturePage> {
           withImages: true,
           withVideos: true,
           onDone: (Set<MediaFile> selectedFiles) {
-            List<File> files = selectedFiles.map((f) {
-              return File(f.path);
-            }).toList();
-            BlocProvider.of<CaptureBloc>(context)
-                .add(CaptureBlocEventCreate(files: files));
+            Timer(Duration(seconds: 1), () {
+              List<File> files = selectedFiles.map((f) {
+                return File(f.path);
+              }).toList();
+              BlocProvider.of<CaptureBloc>(context)
+                  .add(CaptureBlocEventCreate(files: files));
+            });
             Navigator.pop(c);
           },
           onCancel: () {
