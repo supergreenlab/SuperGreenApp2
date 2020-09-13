@@ -404,7 +404,7 @@ class _CapturePageState extends State<CapturePage> {
           withImages: true,
           withVideos: true,
           onDone: (Set<MediaFile> selectedFiles) {
-            Timer(Duration(seconds: 1), () {
+            Timer(Duration(milliseconds: 500), () {
               List<File> files = selectedFiles.map((f) {
                 return File(f.path);
               }).toList();

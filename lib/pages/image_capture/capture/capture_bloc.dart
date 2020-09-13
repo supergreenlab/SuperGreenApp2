@@ -29,6 +29,7 @@ import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:image/src/exif_data.dart';
 
 abstract class CaptureBlocEvent extends Equatable {}
 
@@ -108,58 +109,27 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
         String ext = file.path.split('.').last.toLowerCase();
         String fileName = '${FeedMedias.makeFilePath()}-${i++}';
         String filePath = '$fileName.$ext';
-        yield CaptureBlocStateLoading('Copying files..', (i - 2) / files.length,
-            args.videoEnabled, args.pickerEnabled, args.overlayPath);
+        yield loadingEvent('Copying files..', (i - 1) / files.length);
         if (ext == 'mov') {
-          yield CaptureBlocStateLoading(
-              'Converting mov to mp4..',
-              (i - 2) / files.length,
-              args.videoEnabled,
-              args.pickerEnabled,
-              args.overlayPath);
+          yield loadingEvent('Converting mov to mp4..', (i - 1) / files.length);
           filePath = '$fileName.mp4';
           // Should do the trick in most cases, using ffmpeg takes way too long..
           await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
-          //await flutterFFmpeg.execute(
-          //    "-i ${file.path} -c:v mpeg4 ${FeedMedias.makeAbsoluteFilePath(filePath)}");
-          yield CaptureBlocStateLoading(
-              'Copying files..',
-              (i - 2) / files.length,
-              args.videoEnabled,
-              args.pickerEnabled,
-              args.overlayPath);
+          yield loadingEvent('Copying files..', (i - 1) / files.length);
         } else if (ext == 'heic') {
-          yield CaptureBlocStateLoading(
-              'Converting heic to jpg..',
-              (i - 2) / files.length,
-              args.videoEnabled,
-              args.pickerEnabled,
-              args.overlayPath);
+          yield loadingEvent(
+              'Converting heic to jpg..', (i - 1) / files.length);
           String jpegPath = await HeicToJpg.convert(file.path);
-          yield CaptureBlocStateLoading(
-              'Copying files..',
-              (i - 2) / files.length,
-              args.videoEnabled,
-              args.pickerEnabled,
-              args.overlayPath);
+          yield loadingEvent('Copying files..', (i - 1) / files.length);
           filePath = '$fileName.jpg';
           await File(jpegPath).copy(FeedMedias.makeAbsoluteFilePath(filePath));
         } else if (ext == 'png') {
-          yield CaptureBlocStateLoading(
-              'Converting png to jpg..',
-              (i - 2) / files.length,
-              args.videoEnabled,
-              args.pickerEnabled,
-              args.overlayPath);
-          Image image = decodeImage(await File(filePath).readAsBytes());
+          yield loadingEvent('Converting png to jpg..', (i - 1) / files.length);
+          Image image = decodeImage(await file.readAsBytes());
           filePath = '$fileName.jpg';
-          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));
-          yield CaptureBlocStateLoading(
-              'Copying files..',
-              (i - 2) / files.length,
-              args.videoEnabled,
-              args.pickerEnabled,
-              args.overlayPath);
+          await File(FeedMedias.makeAbsoluteFilePath(filePath))
+              .writeAsBytes(encodeJpg(image));
+          yield loadingEvent('Copying files..', (i - 1) / files.length);
         } else {
           await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
         }
@@ -176,9 +146,11 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           );
           await optimizePicture(thumbnailPath, thumbnailPath);
         } else {
-          //Image image = bakeOrientation(decodeImage(await File(FeedMedias.makeAbsoluteFilePath(filePath)).readAsBytes()));
-          //print('bakedImage.exif.orientation:\n${image.exif.orientation} ${image.width} ${image.height}');
-          //await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));
+          Image image = decodeImage(
+              await File(FeedMedias.makeAbsoluteFilePath(filePath))
+                  .readAsBytes());
+          await File(FeedMedias.makeAbsoluteFilePath(filePath))
+              .writeAsBytes(encodeJpg(image));
           await optimizePicture(filePath, thumbnailPath);
         }
         feedMedias.add(FeedMediasCompanion(
@@ -197,9 +169,11 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
     Image thumbnail = copyResize(image,
         height: image.height > image.width ? 800 : null,
         width: image.width >= image.height ? 800 : null);
-    print('image.exif.orientation:\n${image.exif.orientation} ${image.width} ${image.height}');
-    print('thumbnail.exif.orientation:\n${thumbnail.exif.orientation} ${thumbnail.width} ${thumbnail.height}');
     await File(FeedMedias.makeAbsoluteFilePath(to))
         .writeAsBytes(encodeJpg(thumbnail, quality: 50));
   }
+
+  CaptureBlocStateLoading loadingEvent(String title, double progress) =>
+      CaptureBlocStateLoading(title, progress, args.videoEnabled,
+          args.pickerEnabled, args.overlayPath);
 }
