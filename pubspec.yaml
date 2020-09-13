@@ -70,6 +70,7 @@ dependencies:
     # path: ../media_picker_builder/ 
     git: https://github.com/supergreenlab/media_picker_builder.git
   image:
+    git: https://github.com/supergreenlab/image.git
   device_info:
   wifi_iot:
     git: https://github.com/alternadom/WiFiFlutter.git

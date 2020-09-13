@@ -528,9 +528,11 @@ packages:
   image:
     dependency: "direct main"
     description:
-      name: image
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "1cf1b59198ca13050e77c289c181ac71dafac34e"
+      url: "https://github.com/supergreenlab/image.git"
+    source: git
     version: "2.1.14"
   intl:
     dependency: "direct main"

@@ -153,7 +153,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
               args.overlayPath);
           Image image = decodeImage(await File(filePath).readAsBytes());
           filePath = '$fileName.jpg';
-          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));
+          await File(FeedMedias.makeAbsoluteFilePath(filePath))
+              .writeAsBytes(encodeJpg(image));
           yield CaptureBlocStateLoading(
               'Copying files..',
               (i - 2) / files.length,
@@ -197,8 +198,10 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
     Image thumbnail = copyResize(image,
         height: image.height > image.width ? 800 : null,
         width: image.width >= image.height ? 800 : null);
-    print('image.exif.orientation:\n${image.exif.orientation} ${image.width} ${image.height}');
-    print('thumbnail.exif.orientation:\n${thumbnail.exif.orientation} ${thumbnail.width} ${thumbnail.height}');
+    print(
+        'image.exif.orientation:\n${image.exif.orientation} ${image.width} ${image.height}');
+    print(
+        'thumbnail.exif.orientation:\n${thumbnail.exif.orientation} ${thumbnail.width} ${thumbnail.height}');
     await File(FeedMedias.makeAbsoluteFilePath(to))
         .writeAsBytes(encodeJpg(thumbnail, quality: 50));
   }
