@@ -100,6 +100,14 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
           Text('${params.ph}',
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
     }
+    if (params.ec != null) {
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          0,
+          'EC',
+          Text('${params.ec} μS/cm',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
+    }
     if (params.tds != null) {
       cards.add(renderCard(
           'assets/products/toolbox/icon_ph_ec.svg',

@@ -59,6 +59,7 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
   final String name;
   final double volume;
   final double ph;
+  final double ec;
   final double tds;
   final List<NutrientProduct> nutrientProducts;
   final String message;
@@ -71,6 +72,7 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
       this.name,
       this.volume,
       this.ph,
+      this.ec,
       this.tds,
       this.nutrientProducts,
       this.message,
@@ -84,7 +86,7 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
         name,
         volume,
         ph,
-        tds,
+        ec,
         nutrientProducts,
         message,
         plants,
@@ -202,6 +204,7 @@ class FeedNutrientMixFormBloc
                   name: event.name,
                   volume: event.volume,
                   ph: event.ph,
+                  ec: event.ec,
                   tds: event.tds,
                   nutrientProducts: event.nutrientProducts
                       .where((np) => np.quantity != null && np.quantity > 0)

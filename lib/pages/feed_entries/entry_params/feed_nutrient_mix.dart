@@ -66,6 +66,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
   final String name;
   final double volume;
   final double ph;
+  final double ec;
   final double tds;
   final List<NutrientProduct> nutrientProducts;
   final String message;
@@ -76,6 +77,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       {this.name,
       this.volume,
       this.ph,
+      this.ec,
       this.tds,
       this.nutrientProducts,
       this.message,
@@ -87,6 +89,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
           name: name ?? this.name,
           volume: this.volume,
           ph: this.ph,
+          ec: this.ec,
           tds: this.tds,
           nutrientProducts: this.nutrientProducts,
           message: message ?? this.message,
@@ -100,6 +103,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       name: map['name'],
       volume: map['volume'],
       ph: map['ph'],
+      ec: map['ec'],
       tds: map['tds'],
       nutrientProducts:
           (nps ?? []).map((np) => NutrientProduct.fromMap(np)).toList(),
@@ -117,6 +121,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       'name': name,
       'volume': volume,
       'ph': ph,
+      'ec': ec,
       'tds': tds,
       'nutrientProducts': (nutrientProducts).map((np) => np.toMap()).toList(),
       'message': message,
@@ -126,5 +131,6 @@ class FeedNutrientMixParams extends FeedEntryParams {
   }
 
   @override
-  List<Object> get props => [name, volume, ph, tds, nutrientProducts, message];
+  List<Object> get props =>
+      [name, volume, ph, ec, tds, nutrientProducts, message];
 }

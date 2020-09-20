@@ -43,6 +43,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   bool wateringLab = false;
   DateTime date = DateTime.now();
   TextEditingController phController = TextEditingController();
+  TextEditingController ecController = TextEditingController();
   TextEditingController tdsController = TextEditingController();
 
   final ScrollController listScrollController = ScrollController();
@@ -87,6 +88,10 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                           ? null
                           : double.parse(
                               phController.value.text.replaceAll(',', '.')),
+                      ecController.value.text == ''
+                          ? null
+                          : double.parse(
+                              ecController.value.text.replaceAll(',', '.')),
                       tdsController.value.text == ''
                           ? null
                           : double.parse(
@@ -153,53 +158,113 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                             ? renderNutrientList(context)
                             : Container()*/
       ),
-      FeedFormParamLayout(
-          icon: 'assets/feed_form/icon_metrics.svg',
-          title: 'Water metrics',
+      renderWaterMetrics(context),
+      _renderTextrea(context, state),
+    ];
+  }
+
+  Widget renderWaterMetrics(BuildContext context) {
+    return FeedFormParamLayout(
+        icon: 'assets/feed_form/icon_metrics.svg',
+        title: 'End mix metrics',
+        child: Container(
+          height: 245,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               children: <Widget>[
                 Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      Text('PH:',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: TextField(
-                          decoration: InputDecoration(hintText: 'ex: 6.5'),
-                          textCapitalization: TextCapitalization.words,
-                          keyboardType:
-                              TextInputType.numberWithOptions(decimal: true),
-                          controller: phController,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 20),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 36.0),
+                    child: Row(
+                      children: [
+                        Expanded(child: Container()),
+                        Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              Text('PH:',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green)),
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24.0),
+                                  child: TextField(
+                                    decoration:
+                                        InputDecoration(hintText: 'ex: 6.5'),
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    controller: phController,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Expanded(child: Container()),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
-                  child: Column(
+                  child: Row(
                     children: <Widget>[
-                      Text('TDS (ppm):',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green)),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text('EC (μS/cm):',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: TextField(
+                                decoration:
+                                    InputDecoration(hintText: 'ex: 1800'),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                                controller: ecController,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: TextField(
-                          decoration: InputDecoration(hintText: 'ex: 1200'),
-                          keyboardType:
-                              TextInputType.numberWithOptions(decimal: true),
-                          controller: tdsController,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 20),
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('OR', style: TextStyle(fontSize: 20))),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text('TDS (ppm):',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: TextField(
+                                decoration:
+                                    InputDecoration(hintText: 'ex: 1200'),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                                controller: tdsController,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -207,9 +272,8 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                 ),
               ],
             ),
-          )),
-      _renderTextrea(context, state),
-    ];
+          ),
+        ));
   }
 
   Widget renderNutrientList(BuildContext context) {

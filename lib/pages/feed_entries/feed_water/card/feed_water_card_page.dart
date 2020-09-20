@@ -29,6 +29,7 @@ import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_text.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedWaterCardPage extends StatefulWidget {
   final Animation animation;
@@ -79,78 +80,39 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
 
   Widget _renderLoaded(BuildContext context, FeedWaterState state) {
     FeedWaterParams params = state.params;
-    List<Widget> body = [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Text(
-          AppDB().getAppData().freedomUnits == true
-              ? '${params.volume / 4} gal'
-              : '${params.volume} L',
-          style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w300,
-              color: Color(0xff3bb30b)),
-        ),
-      ),
+    List<Widget> cards = [
+      renderCard(
+          'assets/feed_form/icon_volume.svg',
+          8,
+          'Water quantity',
+          Text('${params.volume} L',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
     ];
-    List<Widget> details = [];
-    if (params.tooDry != null) {
-      details.add(Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Text(
-          'Was dry: ${params.tooDry == true ? 'YES' : 'NO'}',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
-        ),
-      ));
-    }
-    if (params.nutrient != null) {
-      details.add(
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            'With nutes: ${params.nutrient == true ? 'YES' : 'NO'}',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
-          ),
-        ),
-      );
-    }
-    List<Widget> metrics = [];
     if (params.ph != null) {
-      metrics.add(
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            'PH: ${params.ph.toStringAsFixed(1)}',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
-          ),
-        ),
-      );
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          0,
+          'PH',
+          Text('${params.ph}',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
     }
     if (params.ec != null) {
-      metrics.add(
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text(
-            'TDS: ${params.ec.toInt()} ppm',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
-          ),
-        ),
-      );
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          0,
+          'EC',
+          Text('${params.ec} μS/cm',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
+    }
+    if (params.tds != null) {
+      cards.add(renderCard(
+          'assets/products/toolbox/icon_ph_ec.svg',
+          0,
+          'TDS',
+          Text('${params.tds} ppm',
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))));
     }
 
-    if (metrics.length != 0) {
-      details.add(Row(
-        children: metrics,
-      ));
-    }
-
-    if (details.length != 0) {
-      body.add(Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: details,
-      ));
-    }
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -172,11 +134,36 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
                   .add(FeedBlocEventDeleteEntry(state));
             },
           ),
-          Container(
-            height: 90,
-            alignment: Alignment.center,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.center, children: body),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                params.tooDry != null
+                    ? Text(
+                        'Was dry: ${params.tooDry == true ? 'YES' : 'NO'}',
+                        style: TextStyle(color: Color(0xffababab)),
+                      )
+                    : Container(),
+                params.nutrient != null
+                    ? Text(
+                        'With nutes: ${params.nutrient == true ? 'YES' : 'NO'}',
+                        style: TextStyle(color: Color(0xffababab)),
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
+          Container(
+            height: 130,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: cards,
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -203,6 +190,36 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
               : Container(),
         ],
       ),
+    );
+  }
+
+  Widget renderCard(
+      String icon, double iconPadding, String title, Widget child) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Container(
+          width: 200,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+              border: Border.all(color: Color(0xffdedede), width: 1),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            children: [
+              SectionTitle(
+                icon: icon,
+                iconPadding: iconPadding,
+                title: title,
+                backgroundColor: Colors.transparent,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: child,
+                ),
+              )
+            ],
+          )),
     );
   }
 }

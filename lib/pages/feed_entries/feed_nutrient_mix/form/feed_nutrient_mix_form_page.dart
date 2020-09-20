@@ -62,6 +62,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phController = TextEditingController();
+  TextEditingController ecController = TextEditingController();
   TextEditingController tdsController = TextEditingController();
   TextEditingController messageController = TextEditingController();
 
@@ -129,12 +130,15 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                 changed: true,
                 valid: true,
                 onOK: () async {
-                  double ph, ec;
+                  double ph, ec, tds;
                   if (phController.text != '') {
                     ph = double.parse(phController.text.replaceAll(',', '.'));
                   }
+                  if (ecController.text != '') {
+                    ec = double.parse(ecController.text.replaceAll(',', '.'));
+                  }
                   if (tdsController.text != '') {
-                    ec = double.parse(tdsController.text.replaceAll(',', '.'));
+                    tds = double.parse(ecController.text.replaceAll(',', '.'));
                   }
                   FeedNutrientMixParams nutrientProduct = lastNutrientMixParams
                       .firstWhere((np) => np.name == nameController.text,
@@ -165,6 +169,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           volume,
                           ph,
                           ec,
+                          tds,
                           nutrientProducts,
                           messageController.text,
                           plants,
@@ -388,56 +393,111 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     return FeedFormParamLayout(
         icon: 'assets/feed_form/icon_metrics.svg',
         title: 'End mix metrics',
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    Text('PH:',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: TextField(
-                        decoration: InputDecoration(hintText: 'ex: 6.5'),
-                        textCapitalization: TextCapitalization.words,
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
-                        controller: phController,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
-                      ),
+        child: Container(
+          height: 245,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 36.0),
+                    child: Row(
+                      children: [
+                        Expanded(child: Container()),
+                        Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              Text('PH:',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green)),
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24.0),
+                                  child: TextField(
+                                    decoration:
+                                        InputDecoration(hintText: 'ex: 6.5'),
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    controller: phController,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(child: Container()),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    Text('TDS (ppm):',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: TextField(
-                        decoration: InputDecoration(hintText: 'ex: 1200'),
-                        keyboardType:
-                            TextInputType.numberWithOptions(decimal: true),
-                        controller: tdsController,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                Expanded(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text('EC (μS/cm):',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: TextField(
+                                decoration:
+                                    InputDecoration(hintText: 'ex: 1800'),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                                controller: ecController,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('OR', style: TextStyle(fontSize: 20))),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text('TDS (ppm):',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: TextField(
+                                decoration:
+                                    InputDecoration(hintText: 'ex: 1200'),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
+                                controller: tdsController,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }
@@ -615,9 +675,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         phController =
             TextEditingController(text: '${lastNutrientMixParams.ph}');
       }
-      if (lastNutrientMixParams.tds != null) {
-        tdsController =
-            TextEditingController(text: '${lastNutrientMixParams.tds}');
+      if (lastNutrientMixParams.ec != null) {
+        ecController =
+            TextEditingController(text: '${lastNutrientMixParams.ec}');
       }
       //List<NutrientProduct> missingProducts = [];
       for (int i = 0; i < lastNutrientMixParams.nutrientProducts.length; ++i) {
