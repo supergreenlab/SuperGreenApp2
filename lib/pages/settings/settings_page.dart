@@ -121,6 +121,25 @@ class SettingsPage extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () async {
+                    final Email email = Email(
+                      subject: 'App feedback',
+                      body: 'Hey guys,\n\nHere\' some feedback:\n\n\nCheers,\n',
+                      recipients: ['towelie@supergreenlab.com'],
+                      isHTML: false,
+                    );
+                    await FlutterEmailSender.send(email);
+                  },
+                  leading: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset(
+                          'assets/settings/icon_feedback.svg')),
+                  title: Text('Send us some feedback!',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Tap to send over email'),
+                ),
+                ListTile(
+                  onTap: () async {
                     File logFile = File(await Logger.logFilePath());
                     final Directory tmpDir = await getTemporaryDirectory();
                     String tmpLogFile = '${tmpDir.path}/log.txt';
