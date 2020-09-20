@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -230,7 +229,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Stream<List<Plant>> watchPlants() {
-    return select(plants).watch();
+    return (select(plants)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .watch();
   }
 
   Future<List<Plant>> getUnsyncedPlants() {
@@ -272,7 +275,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<List<Box>> getBoxes() {
-    return select(boxes).get();
+    return (select(boxes)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .get();
   }
 
   Future<List<Box>> getUnsyncedBoxes() {
@@ -280,7 +287,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Stream<List<Box>> watchBoxes() {
-    return select(boxes).watch();
+    return (select(boxes)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .watch();
   }
 
   Stream<Box> watchBox(int id) {

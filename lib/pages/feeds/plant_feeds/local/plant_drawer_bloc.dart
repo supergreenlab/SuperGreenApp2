@@ -88,13 +88,11 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
 
   void _onPlantListChange(List<Plant> plants) {
     _plants = plants;
-    _plants.sort((p1, p2) => p1.name.compareTo(p2.name));
     add(PlantDrawerBlocEventBoxListUpdated(_plants, _boxes, _hasPending));
   }
 
   void _onBoxListChange(List<Box> boxes) {
     _boxes = boxes;
-    _boxes.sort((b1, b2) => b1.name.compareTo(b2.name));
     add(PlantDrawerBlocEventBoxListUpdated(_plants, _boxes, _hasPending));
   }
 

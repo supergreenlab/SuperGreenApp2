@@ -124,7 +124,11 @@ class DevicesDAO extends DatabaseAccessor<RelDB> with _$DevicesDAOMixin {
   }
 
   Stream<List<Device>> watchDevices() {
-    return select(devices).watch();
+    return (select(devices)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .watch();
   }
 
   Future updateDevice(DevicesCompanion device) {

@@ -15,11 +15,12 @@ class SettingsPlantsBlocEventInit extends SettingsPlantsBlocEvent {
 
 class SettingsPlantsblocEventPlantListChanged extends SettingsPlantsBlocEvent {
   final List<Plant> plants;
+  final List<Box> boxes;
 
-  SettingsPlantsblocEventPlantListChanged(this.plants);
+  SettingsPlantsblocEventPlantListChanged(this.plants, this.boxes);
 
   @override
-  List<Object> get props => [plants];
+  List<Object> get props => [plants, boxes];
 }
 
 class SettingsPlantsBlocEventDeletePlant extends SettingsPlantsBlocEvent {
@@ -45,17 +46,20 @@ class SettingsPlantsBlocStateLoading extends SettingsPlantsBlocState {
 
 class SettingsPlantsBlocStateLoaded extends SettingsPlantsBlocState {
   final List<Plant> plants;
+  final List<Box> boxes;
 
-  SettingsPlantsBlocStateLoaded(this.plants);
+  SettingsPlantsBlocStateLoaded(this.plants, this.boxes);
 
   @override
-  List<Object> get props => [plants];
+  List<Object> get props => [plants, boxes];
 }
 
 class SettingsPlantsBloc
     extends Bloc<SettingsPlantsBlocEvent, SettingsPlantsBlocState> {
-  List<Plant> plants;
+  List<Plant> plants = [];
+  List<Box> boxes = [];
   StreamSubscription<List<Plant>> _plantsStream;
+  StreamSubscription<List<Box>> _boxesStream;
 
   //ignore: unused_field
   final MainNavigateToSettingsPlants args;
@@ -70,8 +74,10 @@ class SettingsPlantsBloc
       yield SettingsPlantsBlocStateLoading();
       _plantsStream =
           RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
+      _boxesStream =
+          RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
     } else if (event is SettingsPlantsblocEventPlantListChanged) {
-      yield SettingsPlantsBlocStateLoaded(event.plants);
+      yield SettingsPlantsBlocStateLoaded(event.plants, event.boxes);
     } else if (event is SettingsPlantsBlocEventDeletePlant) {
       await PlantHelper.deletePlant(event.plant);
     }
@@ -79,13 +85,21 @@ class SettingsPlantsBloc
 
   void _onPlantListChange(List<Plant> p) {
     plants = p;
-    add(SettingsPlantsblocEventPlantListChanged(plants));
+    add(SettingsPlantsblocEventPlantListChanged(plants, boxes));
+  }
+
+  void _onBoxListChange(List<Box> b) {
+    boxes = b;
+    add(SettingsPlantsblocEventPlantListChanged(plants, boxes));
   }
 
   @override
   Future<void> close() async {
     if (_plantsStream != null) {
       await _plantsStream.cancel();
+    }
+    if (_boxesStream != null) {
+      await _boxesStream.cancel();
     }
     return super.close();
   }
