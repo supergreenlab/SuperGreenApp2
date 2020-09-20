@@ -628,10 +628,23 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                     child: ListTile(
                       leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
                       title: Text(b.name),
+                      trailing: InkWell(
+                          onTap: () {
+                            BlocProvider.of<MainNavigatorBloc>(context)
+                                .add(MainNavigateToSettingsBox(b));
+                          },
+                          child: Icon(Icons.settings)),
                     ),
                   ),
                 ];
                 content.addAll(plants.where((p) => p.box == b.id).map((p) {
+                  int nUnseen = 0;
+                  try {
+                    nUnseen = state.hasPending
+                        .where((e) => e.id == p.feed)
+                        .map<int>((e) => e.nNew)
+                        .reduce((a, e) => a + e);
+                  } catch (e) {}
                   Widget item = Padding(
                       padding: EdgeInsets.only(left: 16),
                       child: ListTile(
@@ -642,23 +655,27 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                                 color: Colors.green,
                               )
                             : Icon(Icons.crop_square),
+                        trailing: Container(
+                            width: 50,
+                            height: 30,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  nUnseen != null && nUnseen > 0
+                                      ? _renderBadge(nUnseen)
+                                      : Container(),
+                                  InkWell(
+                                      onTap: () {
+                                        BlocProvider.of<MainNavigatorBloc>(
+                                                context)
+                                            .add(
+                                                MainNavigateToSettingsPlant(p));
+                                      },
+                                      child: Icon(Icons.settings)),
+                                ])),
                         title: Text(p.name),
                         onTap: () => _selectPlant(context, p),
                       ));
-                  try {
-                    int nOthers = state.hasPending
-                        .where((e) => e.id == p.feed)
-                        .map<int>((e) => e.nNew)
-                        .reduce((a, e) => a + e);
-                    if (nOthers != null && nOthers > 0) {
-                      item = Stack(
-                        children: [
-                          item,
-                          _renderBadge(nOthers),
-                        ],
-                      );
-                    }
-                  } catch (e) {}
                   return item;
                 }).toList());
                 return Column(

@@ -94,13 +94,13 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                       fontWeight: FontWeight.w200,
                       color: Color(0xff3bb30b))),
             ),
-            GreenButton(
-              title: 'LOGOUT',
-              onPressed: () {
-                BlocProvider.of<SettingsAuthBloc>(context)
-                    .add(SettingsAuthBlocEventLogout());
-              },
-            ),
+            // GreenButton(
+            //   title: 'LOGOUT',
+            //   onPressed: () {
+            //     BlocProvider.of<SettingsAuthBloc>(context)
+            //         .add(SettingsAuthBlocEventLogout());
+            //   },
+            // ),
             _renderOptionCheckbx(context, 'Sync over mobile data too',
                 (bool newValue) {
               setState(() {
