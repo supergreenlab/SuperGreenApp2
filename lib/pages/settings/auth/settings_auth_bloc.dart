@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -39,11 +41,12 @@ class SettingsAuthBlocStateLoading extends SettingsAuthBlocState {
 class SettingsAuthBlocStateLoaded extends SettingsAuthBlocState {
   final bool isAuth;
   final bool syncOverGSM;
+  final User user;
 
-  SettingsAuthBlocStateLoaded(this.isAuth, this.syncOverGSM);
+  SettingsAuthBlocStateLoaded(this.isAuth, this.syncOverGSM, this.user);
 
   @override
-  List<Object> get props => [isAuth];
+  List<Object> get props => [isAuth, syncOverGSM, user];
 }
 
 class SettingsAuthBlocStateDone extends SettingsAuthBlocState {
@@ -67,7 +70,11 @@ class SettingsAuthBloc
       SettingsAuthBlocEvent event) async* {
     if (event is SettingsAuthBlocEventInit) {
       yield SettingsAuthBlocStateLoading();
-      yield SettingsAuthBlocStateLoaded(_isAuth, AppDB().getAppData().syncOverGSM);
+      yield SettingsAuthBlocStateLoaded(
+          _isAuth, AppDB().getAppData().syncOverGSM, null);
+      User user = await BackendAPI().usersAPI.me();
+      yield SettingsAuthBlocStateLoaded(
+          _isAuth, AppDB().getAppData().syncOverGSM, user);
     } else if (event is SettingsAuthBlocEventSetSyncedOverGSM) {
       AppDB().setSynceOverGSM(event.syncOverGSM);
     } else if (event is SettingsAuthBlocEventLogout) {

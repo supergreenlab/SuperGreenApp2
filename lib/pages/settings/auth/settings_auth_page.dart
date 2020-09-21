@@ -94,13 +94,25 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                       fontWeight: FontWeight.w200,
                       color: Color(0xff3bb30b))),
             ),
-            // GreenButton(
-            //   title: 'LOGOUT',
-            //   onPressed: () {
-            //     BlocProvider.of<SettingsAuthBloc>(context)
-            //         .add(SettingsAuthBlocEventLogout());
-            //   },
-            // ),
+            state.user != null
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Connected as '),
+                      Text(state.user.nickname,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  )
+                : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator()),
+                    ),
+                    Text('Loading user data..')
+                  ]),
             _renderOptionCheckbx(context, 'Sync over mobile data too',
                 (bool newValue) {
               setState(() {

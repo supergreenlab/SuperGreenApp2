@@ -692,9 +692,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   }
 
   Widget _renderBadge(int n) {
-    return Positioned(
-      top: 12,
-      right: 10,
+    return Padding(
+      padding: const EdgeInsets.only(right: 4.0),
       child: Container(
         padding: EdgeInsets.all(3),
         decoration: BoxDecoration(

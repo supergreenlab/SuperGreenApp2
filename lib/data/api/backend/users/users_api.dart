@@ -18,10 +18,25 @@
 
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+
+class User extends Equatable {
+  final String id;
+  final String nickname;
+
+  User({this.id, this.nickname});
+
+  factory User.fromMap(Map<String, dynamic> userMap) {
+    return User(id: userMap['id'], nickname: userMap['nickname']);
+  }
+
+  @override
+  List<Object> get props => [id, nickname];
+}
 
 class UsersAPI {
   bool get loggedIn => AppDB().getAppData().jwt != null;
@@ -55,5 +70,20 @@ class UsersAPI {
       Logger.log(resp.body);
       throw 'createUser failed';
     }
+  }
+
+  Future<User> me() async {
+    Response resp = await BackendAPI()
+        .apiClient
+        .get('${BackendAPI().serverHost}/users/me', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      Logger.log(resp.body);
+      throw 'me failed';
+    }
+    Map<String, dynamic> userMap = JsonDecoder().convert(resp.body);
+    return User.fromMap(userMap);
   }
 }
