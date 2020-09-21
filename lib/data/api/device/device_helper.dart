@@ -19,6 +19,7 @@
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:tuple/tuple.dart';
 
 class DeviceHelper {
   static Future updateDeviceName(Device device, String name) async {
@@ -51,17 +52,27 @@ class DeviceHelper {
     return value;
   }
 
-  static Future<int> updateHourParam(Device device, Param param, int hour,
+  static Future<Tuple2<int, int>> updateHourMinParams(
+      Device device, Param hourParam, Param minParam, int hour, int min,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    print(
+        "${DateTime.now().timeZoneOffset.inHours} ${DateTime.now().timeZoneOffset.inMinutes % 60}");
     hour = hour - DateTime.now().timeZoneOffset.inHours;
+    min = min - (DateTime.now().timeZoneOffset.inMinutes % 60);
+    if (min < 0) {
+      min += 60;
+      hour -= 1;
+    } else if (min > 59) {
+      min %= 60;
+      hour += 1;
+    }
     if (hour < 0) {
       hour += 24;
     }
     hour = hour % 24;
-    hour = await DeviceAPI.setIntParam(device.ip, param.key, hour,
-        timeout: timeout, nRetries: nRetries, wait: wait);
-    await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: hour));
-    return hour;
+    hour = await DeviceHelper.updateIntParam(device, hourParam, hour);
+    min = await DeviceHelper.updateIntParam(device, minParam, min);
+    return Tuple2<int, int>(hour, min);
   }
 
   static Future refreshStringParam(Device device, Param param,

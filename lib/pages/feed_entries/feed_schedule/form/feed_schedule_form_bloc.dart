@@ -147,12 +147,17 @@ class FeedScheduleFormBloc
         device = await db.devicesDAO.getDevice(box.device);
         Param onHour = await db.devicesDAO
             .getParam(device.id, 'BOX_${box.deviceBox}_ON_HOUR');
-        await DeviceHelper.updateHourParam(
-            device, onHour, schedules[schedule]['ON_HOUR']);
+        Param onMin = await db.devicesDAO
+            .getParam(device.id, 'BOX_${box.deviceBox}_ON_MIN');
+        await DeviceHelper.updateHourMinParams(device, onHour, onMin,
+            schedules[schedule]['ON_HOUR'], schedules[schedule]['ON_MIN']);
+
         Param offHour = await db.devicesDAO
             .getParam(device.id, 'BOX_${box.deviceBox}_OFF_HOUR');
-        await DeviceHelper.updateHourParam(
-            device, offHour, schedules[schedule]['OFF_HOUR']);
+        Param offMin = await db.devicesDAO
+            .getParam(device.id, 'BOX_${box.deviceBox}_OFF_MIN');
+        await DeviceHelper.updateHourMinParams(device, offHour, offMin,
+            schedules[schedule]['OFF_HOUR'], schedules[schedule]['OFF_MIN']);
       }
 
       BoxSettings boxSettings = BoxSettings.fromJSON(box.settings)

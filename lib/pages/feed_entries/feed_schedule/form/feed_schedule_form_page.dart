@@ -340,9 +340,10 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
             '2020-01-02 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
         duration = to2.difference(from);
       }
-      durationStr = 'ON for: ${duration.inHours}:${duration.inMinutes % 60}';
+      durationStr =
+          'ON for: ${duration.inHours} hours and ${duration.inMinutes % 60} mins';
       if (duration.inHours == 0 && duration.inMinutes == 0) {
-        durationStr = 'ON for: 24:00';
+        durationStr = 'ON for: 24 hours and 00 min';
       }
     } catch (e) {
       duration = Duration.zero;

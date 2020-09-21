@@ -838,24 +838,36 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             fontSize: 18,
             fontWeight: FontWeight.normal,
             title: 'Monitoring feature\nrequires an SGL controller',
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GreenButton(
-                  title: 'SHOP NOW',
-                  onPressed: () {
-                    launch('https://www.supergreenlab.com');
-                  },
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GreenButton(
+                      title: 'SHOP NOW',
+                      onPressed: () {
+                        launch('https://www.supergreenlab.com');
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('or',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    GreenButton(
+                      title: 'DIY NOW',
+                      onPressed: () {
+                        launch('https://github.com/supergreenlab');
+                      },
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child:
-                      Text('or', style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
+                Text('already got one?'),
                 GreenButton(
-                  title: 'DIY NOW',
+                  title: 'SETUP CONTROLLER',
                   onPressed: () {
-                    launch('https://github.com/supergreenlab');
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsBox(state.box));
                   },
                 ),
               ],

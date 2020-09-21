@@ -186,11 +186,15 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         final Module boxes = await db.getModule(deviceID, 'box');
         for (int i = 0; i < boxes.arrayLen; ++i) {
           final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
+          final Param onMin = await db.getParam(deviceID, 'BOX_${i}_ON_MIN');
+          await DeviceHelper.updateHourMinParams(
+              d, onHour, onMin, onHour.ivalue, onMin.ivalue);
+
           final Param offHour =
               await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
-
-          await DeviceHelper.updateHourParam(d, onHour, onHour.ivalue);
-          await DeviceHelper.updateHourParam(d, offHour, offHour.ivalue);
+          final Param offMin = await db.getParam(deviceID, 'BOX_${i}_OFF_MIN');
+          await DeviceHelper.updateHourMinParams(
+              d, offHour, offMin, offHour.ivalue, offMin.ivalue);
         }
       }
 

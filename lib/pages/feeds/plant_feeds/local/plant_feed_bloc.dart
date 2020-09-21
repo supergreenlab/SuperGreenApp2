@@ -80,6 +80,7 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   int nTimelapses;
   StreamSubscription<int> timelapsesStream;
   StreamSubscription<Plant> plantStream;
+  StreamSubscription<Box> boxStream;
 
   PlantFeedBloc(this.args) : super(PlantFeedBlocStateInit()) {
     this.add(PlantFeedBlocEventLoad());
@@ -104,6 +105,8 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
           .listen(_onNTimelapsesUpdated);
       plantStream =
           RelDB.get().plantsDAO.watchPlant(plant.id).listen(_onPlantUpdated);
+      boxStream =
+          RelDB.get().plantsDAO.watchBox(plant.id).listen(_onBoxUpdated);
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
     } else if (event is PlantFeedBlocEventUpdated) {
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
@@ -112,6 +115,11 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
 
   void _onPlantUpdated(Plant p) {
     plant = p;
+    add(PlantFeedBlocEventUpdated());
+  }
+
+  void _onBoxUpdated(Box b) {
+    box = b;
     add(PlantFeedBlocEventUpdated());
   }
 
