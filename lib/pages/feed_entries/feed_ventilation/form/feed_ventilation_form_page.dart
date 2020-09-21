@@ -39,7 +39,9 @@ class FeedVentilationFormPage extends StatefulWidget {
 class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
+
   bool _reachable = true;
+  bool _usingWifi = false;
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +105,26 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             } else if (state is FeedVentilationFormBlocStateLoaded) {
               Widget content = _renderParams(context, state);
               if (_reachable == false) {
+                String title = 'Looking for device..';
+                if (_usingWifi == false) {
+                  title =
+                      'Device unreachable!\n(You\'re not connected to any wifi)';
+                }
                 content = Stack(
                   children: <Widget>[
                     content,
                     Fullscreen(
-                        title: 'Device unreachable!',
+                        title: title,
                         backgroundColor: Colors.white54,
-                        child: Icon(Icons.error, color: Colors.red, size: 100)),
+                        child: _usingWifi == false
+                            ? Icon(Icons.error, color: Colors.red, size: 100)
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircularProgressIndicator()),
+                              )),
                   ],
                 );
               }
@@ -118,9 +133,11 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                       DeviceDaemonBlocState daemonState) {
                     if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
                         daemonState.device.id == state.box.device) {
-                      if (_reachable == daemonState.reachable) return;
+                      if (_reachable == daemonState.reachable &&
+                          _usingWifi == daemonState.usingWifi) return;
                       setState(() {
                         _reachable = daemonState.reachable;
+                        _usingWifi = daemonState.usingWifi;
                       });
                     }
                   },

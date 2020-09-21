@@ -74,7 +74,8 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   final PermissionHandler permissionHandler = PermissionHandler();
 
   NewDeviceBloc(this.args) : super(NewDeviceBlocState()) {
-    Future.delayed(const Duration(seconds: 1), () => this.add(NewDeviceBlocEventStartSearch()));
+    Future.delayed(const Duration(seconds: 1),
+        () => this.add(NewDeviceBlocEventStartSearch()));
   }
 
   @override
@@ -102,7 +103,9 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
     if (currentSSID != DefaultSSID) {
       yield NewDeviceBlocStateConnectingToSSID();
       if (await WiFiForIoTPlugin.connect(DefaultSSID,
-              password: DefaultPass, security: NetworkSecurity.WPA, joinOnce: false) ==
+              password: DefaultPass,
+              security: NetworkSecurity.WPA,
+              joinOnce: false) ==
           false) {
         yield NewDeviceBlocStateConnectionToSSIDFailed(args.popOnComplete);
         return;

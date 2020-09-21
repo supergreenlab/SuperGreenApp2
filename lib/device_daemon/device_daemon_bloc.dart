@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -48,18 +49,24 @@ class DeviceDaemonBlocStateDeviceReachable extends DeviceDaemonBlocState {
   final int rand = Random().nextInt(1 << 32);
   final Device device;
   final bool reachable;
+  final bool usingWifi;
 
-  DeviceDaemonBlocStateDeviceReachable(this.device, this.reachable);
+  DeviceDaemonBlocStateDeviceReachable(
+      this.device, this.reachable, this.usingWifi);
 
   @override
-  List<Object> get props => [rand, device, reachable];
+  List<Object> get props => [rand, device, reachable, usingWifi];
 }
 
 class DeviceDaemonBloc
     extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
+  StreamSubscription<ConnectivityResult> _connectivity;
+
   Timer _timer;
   List<Device> _devices = [];
   Map<int, bool> _deviceWorker = {};
+
+  bool _usingWifi = false;
 
   DeviceDaemonBloc() : super(DeviceDaemonBlocStateInit()) {
     add(DeviceDaemonBlocEventInit());
@@ -78,6 +85,13 @@ class DeviceDaemonBloc
   Stream<DeviceDaemonBlocState> mapEventToState(
       DeviceDaemonBlocEvent event) async* {
     if (event is DeviceDaemonBlocEventInit) {
+      _usingWifi =
+          await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
+      _connectivity = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) {
+        _usingWifi = (result == ConnectivityResult.wifi);
+      });
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
     } else if (event is DeviceDaemonBlocEventLoadDevice) {
       Device device = _devices.firstWhere((d) => d.id == event.deviceID,
@@ -85,9 +99,11 @@ class DeviceDaemonBloc
       if (device == null) {
         return;
       }
-      yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable);
+      yield DeviceDaemonBlocStateDeviceReachable(
+          device, device.isReachable, _usingWifi);
     } else if (event is DeviceDaemonBlocEventDeviceReachable) {
-      yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable);
+      yield DeviceDaemonBlocStateDeviceReachable(
+          event.device, event.reachable, _usingWifi);
     }
   }
 
@@ -181,6 +197,9 @@ class DeviceDaemonBloc
   Future<void> close() async {
     if (_timer != null) {
       _timer.cancel();
+    }
+    if (_connectivity != null) {
+      _connectivity.cancel();
     }
     return super.close();
   }
