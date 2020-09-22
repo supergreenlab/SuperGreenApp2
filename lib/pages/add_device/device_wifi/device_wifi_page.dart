@@ -173,8 +173,11 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                   onFieldSubmitted: (term) {
                 _ssidFocusNode.unfocus();
                 FocusScope.of(context).requestFocus(_passFocusNode);
-              }, focusNode: _ssidFocusNode,
-              error: state.error == true ? 'Make sure you are connected to the emoji wifi!' : ''),
+              },
+                  focusNode: _ssidFocusNode,
+                  error: state.error == true
+                      ? 'Make sure you are connected to the emoji wifi!'
+                      : ''),
               _renderInput(context, 'Enter your home wifi password', '...',
                   _passController, onFieldSubmitted: (term) {
                 _handleInput(context);
@@ -201,7 +204,10 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
 
   Widget _renderSearching(DeviceWifiBlocStateSearching state) {
     return FullscreenLoading(
-        title: 'Searching controller on network\nplease wait..', percent: state.tries / state.totalTries, circleText: 'Try\n${state.tries}/${state.totalTries}',);
+      title: 'Searching controller on network\nplease wait..',
+      percent: state.tries / state.totalTries,
+      circleText: 'Try\n${state.tries}/${state.totalTries}',
+    );
   }
 
   Widget _renderInput(BuildContext context, String title, String hint,
@@ -220,6 +226,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SGLTextField(
+              textCapitalization: TextCapitalization.none,
               hintText: hint,
               focusNode: focusNode,
               controller: controller,
