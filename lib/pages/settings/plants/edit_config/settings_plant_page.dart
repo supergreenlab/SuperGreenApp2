@@ -81,18 +81,45 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             } else if (state is SettingsPlantBlocStateLoaded) {
               body = _renderForm(context, state);
             }
-            return Scaffold(
-                appBar: SGLAppBar(
-                  '🍁',
-                  fontSize: 40,
-                  backgroundColor: Color(0xff0bb354),
-                  titleColor: Colors.white,
-                  iconColor: Colors.white,
-                  hideBackButton: state is SettingsPlantBlocStateDone,
-                ),
-                backgroundColor: Colors.white,
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body));
+            return WillPopScope(
+              onWillPop: () async {
+                return await showDialog<bool>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Unsaved changed'),
+                        content: Text('Changes will not be saved. Continue?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: Text('NO'),
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: Text('YES'),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              child: Scaffold(
+                  appBar: SGLAppBar(
+                    '🍁',
+                    fontSize: 40,
+                    backgroundColor: Color(0xff0bb354),
+                    titleColor: Colors.white,
+                    iconColor: Colors.white,
+                    hideBackButton: state is SettingsPlantBlocStateDone,
+                  ),
+                  backgroundColor: Colors.white,
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
+            );
           }),
     );
   }
@@ -130,14 +157,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                     }),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.all(8.0),
-                child: _renderOptionCheckbx(context, 'Make this plant public', (bool newValue) {
-                  setState(() {
-                    _public = newValue;
-                  });
-                }, _public)
-              ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: _renderOptionCheckbx(context, 'Make this plant public',
+                      (bool newValue) {
+                    setState(() {
+                      _public = newValue;
+                    });
+                  }, _public)),
               SectionTitle(
                 title: 'Plant lab',
                 icon: 'assets/settings/icon_lab.svg',

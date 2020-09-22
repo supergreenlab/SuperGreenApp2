@@ -73,24 +73,53 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
           builder: (BuildContext context, SettingsBoxBlocState state) {
             Widget body;
             if (state is SettingsDeviceBlocStateLoading) {
-              body = FullscreenLoading(title: 'Loading..',);
+              body = FullscreenLoading(
+                title: 'Loading..',
+              );
             } else if (state is SettingsBoxBlocStateDone) {
               body = _renderDone(state);
             } else if (state is SettingsBoxBlocStateLoaded) {
               body = _renderForm(context, state);
             }
-            return Scaffold(
-                appBar: SGLAppBar(
-                  '⚗️',
-                  fontSize: 35,
-                  backgroundColor: Colors.yellow,
-                  titleColor: Colors.green,
-                  iconColor: Colors.green,
-                  hideBackButton: state is SettingsBoxBlocStateDone,
-                ),
-                backgroundColor: Colors.white,
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body));
+            return WillPopScope(
+              onWillPop: () async {
+                return await showDialog<bool>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Unsaved changed'),
+                        content: Text('Changes will not be saved. Continue?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: Text('NO'),
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: Text('YES'),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              child: Scaffold(
+                  appBar: SGLAppBar(
+                    '⚗️',
+                    fontSize: 35,
+                    backgroundColor: Colors.yellow,
+                    titleColor: Colors.green,
+                    iconColor: Colors.green,
+                    hideBackButton: state is SettingsBoxBlocStateDone,
+                  ),
+                  backgroundColor: Colors.white,
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
+            );
           }),
     );
   }

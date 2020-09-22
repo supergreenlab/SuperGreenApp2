@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -82,18 +83,45 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
             } else if (state is SettingsDeviceBlocStateLoaded) {
               body = _renderForm(context, state);
             }
-            return Scaffold(
-                appBar: SGLAppBar(
-                  '🤖',
-                  fontSize: 40,
-                  backgroundColor: Color(0xff0b6ab3),
-                  titleColor: Colors.white,
-                  iconColor: Colors.white,
-                  hideBackButton: state is SettingsDeviceBlocStateDone,
-                ),
-                backgroundColor: Colors.white,
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body));
+            return WillPopScope(
+              onWillPop: () async {
+                return await showDialog<bool>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Unsaved changed'),
+                        content: Text('Changes will not be saved. Continue?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: Text('NO'),
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: Text('YES'),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              child: Scaffold(
+                  appBar: SGLAppBar(
+                    '🤖',
+                    fontSize: 40,
+                    backgroundColor: Color(0xff0b6ab3),
+                    titleColor: Colors.white,
+                    iconColor: Colors.white,
+                    hideBackButton: state is SettingsDeviceBlocStateDone,
+                  ),
+                  backgroundColor: Colors.white,
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
+            );
           }),
     );
   }
@@ -145,29 +173,31 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 titleColor: Colors.white,
                 elevation: 5,
               ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GreenButton(
-                      title: 'Wifi config',
-                      onPressed: () {
-                        BlocProvider.of<MainNavigatorBloc>(context).add(
-                            MainNavigateToDeviceWifiEvent(state.device, futureFn: (Future future) async {
-                              dynamic error = await future;
-                              if (error == null) {
-                                return;
-                              }
-                              if (error != true) {
-                                await Fluttertoast.showToast(msg: 'Wifi config changed successfully');
-                              } else {
-                                await Fluttertoast.showToast(msg: 'Wifi config change failed');
-                              }
-                            }));
-                      },
-                    ),
-                  ),
-                ],
+              ListTile(
+                leading: SvgPicture.asset('assets/feed_form/icon_wifi.svg'),
+                trailing: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                ),
+                title: Text('Wifi config'),
+                subtitle: Text('Change your controller\'s wifi config'),
+                onTap: () {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToDeviceWifiEvent(state.device,
+                          futureFn: (Future future) async {
+                    dynamic error = await future;
+                    if (error == null) {
+                      return;
+                    }
+                    if (error != true) {
+                      await Fluttertoast.showToast(
+                          msg: 'Wifi config changed successfully');
+                    } else {
+                      await Fluttertoast.showToast(
+                          msg: 'Wifi config change failed');
+                    }
+                  }));
+                },
               ),
               SectionTitle(
                 title: 'Edit controller box slots',
@@ -176,19 +206,18 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 titleColor: Colors.white,
                 elevation: 5,
               ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GreenButton(
-                      title: 'View slots',
-                      onPressed: () {
-                        BlocProvider.of<MainNavigatorBloc>(context).add(
-                            MainNavigateToSelectDeviceBoxEvent(state.device));
-                      },
-                    ),
-                  ),
-                ],
+              ListTile(
+                leading: SvgPicture.asset('assets/box_setup/icon_box.svg'),
+                trailing: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                ),
+                title: Text('View slots'),
+                subtitle: Text('Tap to view this controller\'s box slots'),
+                onTap: () {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToSelectDeviceBoxEvent(state.device));
+                },
               ),
               SectionTitle(
                 title: 'Refresh controller params',
@@ -197,19 +226,23 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 titleColor: Colors.white,
                 elevation: 5,
               ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GreenButton(
-                      title: 'Refresh params',
-                      onPressed: () {
-                        BlocProvider.of<SettingsDeviceBloc>(context)
-                            .add(SettingsDeviceBlocEventRefresh());
-                      },
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  leading:
+                      SvgPicture.asset('assets/box_setup/icon_controller.svg'),
+                  trailing: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: SvgPicture.asset('assets/settings/icon_go.svg'),
                   ),
-                ],
+                  title: Text('Refresh params'),
+                  subtitle: Text(
+                      'Use this button if there were changes made to the controller outside the app.'),
+                  onTap: () {
+                    BlocProvider.of<SettingsDeviceBloc>(context)
+                        .add(SettingsDeviceBlocEventRefresh());
+                  },
+                ),
               ),
               SectionTitle(
                 title: 'Admin interface',
@@ -218,19 +251,21 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 titleColor: Colors.white,
                 elevation: 5,
               ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GreenButton(
-                      color: 0xffff0000,
-                      title: 'Access admin',
-                      onPressed: () {
-                        launch('http://${state.device.ip}/fs/app.html');
-                      },
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  leading: SvgPicture.asset('assets/settings/icon_warning.svg'),
+                  trailing: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: SvgPicture.asset('assets/settings/icon_go.svg'),
                   ),
-                ],
+                  title: Text('Access admin'),
+                  subtitle: Text(
+                      'Open the controller\'s admin interface. Make sure you know what you\'re doing before going there.'),
+                  onTap: () {
+                    launch('http://${state.device.ip}/fs/app.html');
+                  },
+                ),
               ),
             ],
           ),
