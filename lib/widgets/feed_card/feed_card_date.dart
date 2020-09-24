@@ -96,10 +96,10 @@ class _FeedCardDateState extends State<FeedCardDate> {
     }
     List<String Function(Duration)> phases = [
       (Duration diff) => 'Germinated ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Vegging for ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Blooming for ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Drying for ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Curing for ${renderDuration(phaseData.item3)}'
+      (Duration diff) => 'Vegging ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Blooming ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Drying ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Curing ${renderDuration(phaseData.item3)}'
     ];
     return phases[phaseData.item1.index](phaseData.item3);
   }
@@ -109,8 +109,8 @@ class _FeedCardDateState extends State<FeedCardDate> {
     if (plantFeedState.plantSettings.germinationDate == null) {
       return 'Germination date not set.';
     }
-    Duration diff = plantFeedState.plantSettings.germinationDate
-        .difference(widget.feedEntryState.date);
+    Duration diff = widget.feedEntryState.date
+        .difference(plantFeedState.plantSettings.germinationDate);
     return renderDuration(diff);
   }
 
