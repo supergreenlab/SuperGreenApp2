@@ -96,10 +96,14 @@ class _FeedCardDateState extends State<FeedCardDate> {
     }
     List<String Function(Duration)> phases = [
       (Duration diff) => 'Germinated ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Vegging ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Blooming ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Drying ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Curing ${renderDuration(phaseData.item3)}'
+      (Duration diff) =>
+          'Vegging for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) =>
+          'Blooming for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) =>
+          'Drying for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) =>
+          'Curing for ${renderDuration(phaseData.item3, suffix: '')}'
     ];
     return phases[phaseData.item1.index](phaseData.item3);
   }
@@ -111,20 +115,22 @@ class _FeedCardDateState extends State<FeedCardDate> {
     }
     Duration diff = widget.feedEntryState.date
         .difference(plantFeedState.plantSettings.germinationDate);
-    return renderDuration(diff);
+    return 'Germinated ${renderDuration(diff)}';
   }
 
-  String renderDuration(Duration diff) {
+  String renderDuration(Duration diff, {suffix = ' ago'}) {
     int minuteDiff = diff.inMinutes;
     int hourDiff = diff.inHours;
     int dayDiff = diff.inDays;
     String format;
-    if (minuteDiff < 60) {
-      format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''} ago';
+    if (minuteDiff < 1) {
+      format = 'few seconds$suffix';
+    } else if (minuteDiff < 60) {
+      format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''}$suffix';
     } else if (hourDiff < 24) {
-      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ago';
+      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''}$suffix';
     } else {
-      format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ago';
+      format = '$dayDiff day${dayDiff > 1 ? 's' : ''}$suffix';
     }
     return format;
   }
