@@ -158,7 +158,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                             : () => _openForm('MEDIUM')),
                     PlantInfosWidget(
                         icon: 'icon_dimension.svg',
-                        title: 'Dimensions',
+                        title: 'Lab dimensions',
                         value: dimensions,
                         onEdit: state.plantInfos.editable == false
                             ? null

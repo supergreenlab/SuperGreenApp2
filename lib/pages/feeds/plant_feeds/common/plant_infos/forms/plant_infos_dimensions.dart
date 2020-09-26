@@ -56,9 +56,15 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
         text: widget.height == null ? '' : widget.height.toString() ?? '');
     depthController = TextEditingController(
         text: widget.depth == null ? '' : widget.depth.toString() ?? '');
-    widthController.addListener(() {setState((){});});
-    heightController.addListener(() {setState((){});});
-    depthController.addListener(() {setState((){});});
+    widthController.addListener(() {
+      setState(() {});
+    });
+    heightController.addListener(() {
+      setState(() {});
+    });
+    depthController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -67,7 +73,7 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
     bool freedomUnits = AppDB().getAppData().freedomUnits;
     String unit = freedomUnits ? imperialUnit : 'cm';
     return PlantInfosForm(
-      title: 'Dimensions',
+      title: 'Lab dimensions',
       icon: 'icon_dimension.svg',
       onCancel: widget.onCancel,
       onSubmit: widthController.value.text != '' &&
