@@ -541,6 +541,16 @@ class MainNavigateToPlantPickerEvent extends MainNavigatorEvent {
   List<Object> get props => [...super.props, preselectedPlants, title];
 }
 
+class MainNavigateToSelectPlantEvent extends MainNavigatorEvent {
+  final String title;
+
+  MainNavigateToSelectPlantEvent(this.title, {futureFn})
+      : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [...super.props, title];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -727,6 +737,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToPlantPickerEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/plantpicker', arguments: event);
+    } else if (event is MainNavigateToSelectPlantEvent) {
+      future = _navigatorKey.currentState
+          .pushNamed('/selectplant', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

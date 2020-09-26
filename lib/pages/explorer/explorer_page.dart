@@ -19,7 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -66,7 +68,31 @@ class _ExplorerPageState extends State<ExplorerPage> {
                         Icons.add,
                         color: Colors.white,
                       ),
-                      onPressed: () async {},
+                      onPressed: () async {
+                        if (state is ExplorerBlocStateLoaded &&
+                            state.loggedIn) {
+                          BlocProvider.of<MainNavigatorBloc>(context).add(
+                              MainNavigateToSelectPlantEvent(
+                                  'Select which plant you want to make public',
+                                  futureFn: (Future future) async {
+                            dynamic plant = await future;
+                            if (plant == null) {
+                              return;
+                            }
+                            if (plant is Plant) {
+                              BlocProvider.of<ExplorerBloc>(context)
+                                  .add(ExplorerBlocEventMakePublic(plant));
+                              plants.clear();
+                              BlocProvider.of<ExplorerBloc>(context)
+                                  .add(ExplorerBlocEventInit());
+                              Fluttertoast.showToast(
+                                  msg: 'Plant ${plant.name} is now public');
+                            }
+                          }));
+                        } else {
+                          _login(context);
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -141,5 +167,35 @@ class _ExplorerPageState extends State<ExplorerPage> {
         );
       },
     );
+  }
+
+  void _login(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Make a plant public'),
+            content: Text('You need to be logged in to make a plant public.'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
+    }
   }
 }

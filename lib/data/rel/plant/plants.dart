@@ -225,7 +225,11 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   }
 
   Future<List<Plant>> getPlants() {
-    return select(plants).get();
+    return (select(plants)
+          ..orderBy([
+            (t) => OrderingTerm(expression: t.name, mode: OrderingMode.asc)
+          ]))
+        .get();
   }
 
   Stream<List<Plant>> watchPlants() {

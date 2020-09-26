@@ -18,7 +18,10 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 class PlantState extends Equatable {
   final String id;
@@ -37,6 +40,15 @@ abstract class ExplorerBlocEvent extends Equatable {}
 class ExplorerBlocEventInit extends ExplorerBlocEvent {
   @override
   List<Object> get props => [];
+}
+
+class ExplorerBlocEventMakePublic extends ExplorerBlocEvent {
+  final Plant plant;
+
+  ExplorerBlocEventMakePublic(this.plant);
+
+  @override
+  List<Object> get props => [plant];
 }
 
 class ExplorerBlocEventLoadNextPage extends ExplorerBlocEvent {
@@ -58,11 +70,12 @@ class ExplorerBlocStateInit extends ExplorerBlocState {
 class ExplorerBlocStateLoaded extends ExplorerBlocState {
   final List<PlantState> plants;
   final bool eof;
+  final bool loggedIn;
 
-  ExplorerBlocStateLoaded(this.plants, this.eof);
+  ExplorerBlocStateLoaded(this.plants, this.eof, this.loggedIn);
 
   @override
-  List<Object> get props => [plants, eof];
+  List<Object> get props => [plants, eof, loggedIn];
 }
 
 const int N_PER_PAGE = 15;
@@ -75,9 +88,13 @@ class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
   @override
   Stream<ExplorerBlocState> mapEventToState(ExplorerBlocEvent event) async* {
     if (event is ExplorerBlocEventInit) {
+      yield ExplorerBlocStateInit();
       yield* loadPage(0);
     } else if (event is ExplorerBlocEventLoadNextPage) {
       yield* loadPage(event.offset);
+    } else if (event is ExplorerBlocEventMakePublic) {
+      await RelDB.get().plantsDAO.updatePlant(
+          PlantsCompanion(id: Value(event.plant.id), public: Value(true)));
     }
   }
 
@@ -91,6 +108,7 @@ class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
               p['thumbnailPath'],
             ))
         .toList();
-    yield ExplorerBlocStateLoaded(plants, plants.length < N_PER_PAGE);
+    yield ExplorerBlocStateLoaded(
+        plants, plants.length < N_PER_PAGE, BackendAPI().usersAPI.loggedIn);
   }
 }
