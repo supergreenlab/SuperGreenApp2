@@ -182,13 +182,13 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('NO'),
+                child: Text('CANCEL'),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('YES'),
+                child: Text('LOGIN / CREATE ACCOUNT'),
               ),
             ],
           );
