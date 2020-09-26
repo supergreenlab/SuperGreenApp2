@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
@@ -59,6 +60,15 @@ class _ExplorerPageState extends State<ExplorerPage> {
                   iconColor: Colors.white,
                   elevation: 10,
                   hideBackButton: true,
+                  actions: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                      onPressed: () async {},
+                    ),
+                  ],
                 ),
                 body: body);
           }),
@@ -92,6 +102,14 @@ class _ExplorerPageState extends State<ExplorerPage> {
   }
 
   Widget _renderPlant(BuildContext context, PlantState plant) {
+    Widget pic;
+    if (plant.thumbnailPath == '') {
+      pic = SvgPicture.asset('assets/explorer/no_pic.svg', fit: BoxFit.cover);
+    } else {
+      pic = Image.network(
+          BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
+          fit: BoxFit.cover);
+    }
     return LayoutBuilder(
       builder: (_, BoxConstraints constraints) {
         return InkWell(
@@ -104,9 +122,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
               Container(
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
-                child: Image.network(
-                    BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
-                    fit: BoxFit.cover),
+                child: pic,
               ),
               Center(
                   child: Padding(

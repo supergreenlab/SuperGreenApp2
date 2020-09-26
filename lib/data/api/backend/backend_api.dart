@@ -50,16 +50,16 @@ class BackendAPI {
     feedsAPI = FeedsAPI();
     productsAPI = ProductsAPI();
     timeSeriesAPI = TimeSeriesAPI();
-    if (kReleaseMode || Platform.isIOS) {
-      serverHost = 'https://api2.supergreenlab.com';
-      storageServerHost = 'https://storage.supergreenlab.com';
-      storageServerHostHeader = 'storage.supergreenlab.com';
-    } else {
-      initUrls();
-    }
+    // if (kReleaseMode || Platform.isIOS) {
+    serverHost = 'https://api2.supergreenlab.com';
+    storageServerHost = 'https://storage.supergreenlab.com';
+    storageServerHostHeader = 'storage.supergreenlab.com';
+    // } else {
+    // initAndroidDevUrls();
+    // }
   }
 
-  void initUrls() async {
+  void initAndroidDevUrls() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
