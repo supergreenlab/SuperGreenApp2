@@ -59,7 +59,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
         } else if (state is SettingsDeviceBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPop(mustPop: true));
           });
         }
       },

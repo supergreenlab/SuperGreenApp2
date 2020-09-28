@@ -64,7 +64,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
         } else if (state is SettingsBoxBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPop(mustPop: true));
           });
         }
       },

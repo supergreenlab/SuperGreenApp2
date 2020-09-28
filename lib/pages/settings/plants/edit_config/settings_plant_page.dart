@@ -64,7 +64,12 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
         } else if (state is SettingsPlantBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+                .add(MainNavigatorActionPop(mustPop: true));
+          });
+        } else if (state is SettingsPlantBlocStateError) {
+          Timer(const Duration(milliseconds: 3000), () {
+            BlocProvider.of<SettingsPlantBloc>(context)
+                .add(SettingsPlantBlocEventInit());
           });
         }
       },
@@ -80,6 +85,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               body = _renderDone(state);
             } else if (state is SettingsPlantBlocStateLoaded) {
               body = _renderForm(context, state);
+            } else if (state is SettingsPlantBlocStateError) {
+              body = _renderError(context, state);
             }
             return WillPopScope(
               onWillPop: () async {
@@ -125,8 +132,14 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   }
 
   Widget _renderDone(SettingsPlantBlocStateDone state) {
-    String subtitle =
-        'Plant ${_nameController.value.text} on lab ${_box.name} updated:)';
+    String subtitle;
+    if (state.archived) {
+      subtitle =
+          'Plant ${_nameController.value.text} on lab ${_box.name} archived:)';
+    } else {
+      subtitle =
+          'Plant ${_nameController.value.text} on lab ${_box.name} updated:)';
+    }
     return Fullscreen(
         title: 'Done!',
         subtitle: subtitle,
@@ -179,6 +192,30 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                 onTap: () {
                   _handleChangeBox(context);
                 },
+              ),
+              SectionTitle(
+                title: 'Archive plant',
+                icon: 'assets/settings/icon_archive.svg',
+                backgroundColor: Colors.red,
+                titleColor: Colors.white,
+                elevation: 5,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                child: ListTile(
+                  leading: SvgPicture.asset('assets/settings/icon_archive.svg'),
+                  title: Text('Archive your plant when it\'s done'),
+                  subtitle: Text(
+                      'Archiving your plant will remove the plant from the list and all assets from your mobile phone. The plant will still be accessible in the "archived plants" section of the explorer tab.\n\nThis action can\'t be reverted.'),
+                  trailing: Icon(Icons.archive),
+                  onTap: () {
+                    if (state.loggedIn) {
+                      handlerArchivePlant(context);
+                    } else {
+                      _login(context);
+                    }
+                  },
+                ),
               ),
             ],
           ),
@@ -253,5 +290,71 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
     _keyboardVisibility.removeListener(_listener);
     _nameController.dispose();
     super.dispose();
+  }
+
+  void handlerArchivePlant(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Archive plant?'),
+            content: Text('This can\'t be reverted. Continue?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<SettingsPlantBloc>(context)
+          .add(SettingsPlantBlocEventArchive());
+    }
+  }
+
+  void _login(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Archive plant'),
+            content: Text('Plant archiving requires a sgl account.'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('CANCEL'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('LOGIN / CREATE ACCOUNT'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
+    }
+  }
+
+  Widget _renderError(BuildContext context, SettingsPlantBlocStateError state) {
+    return Fullscreen(
+        title: state.message,
+        child: Icon(Icons.error, color: Colors.red, size: 100));
   }
 }

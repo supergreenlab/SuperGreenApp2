@@ -17,6 +17,7 @@
  */
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
@@ -31,7 +32,12 @@ class PlantHelper {
           serverID: Value(plant.serverID), type: Value('plants')));
     }
     Feed feed = await RelDB.get().feedsDAO.getFeed(plant.feed);
-    await FeedEntryHelper.deleteFeed(feed);
+    await FeedEntryHelper.deleteFeed(feed, addDeleted: addDeleted);
+    List<Timelapse> timelapses =
+        await RelDB.get().plantsDAO.getTimelapses(plant.id);
+    for (Timelapse timelapse in timelapses) {
+      await PlantHelper.deleteTimelapse(timelapse, addDeleted: addDeleted);
+    }
   }
 
   static Future deleteBox(Box box, {addDeleted: true}) async {

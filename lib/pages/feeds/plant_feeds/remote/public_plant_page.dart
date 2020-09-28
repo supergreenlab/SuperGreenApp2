@@ -66,7 +66,7 @@ class PublicPlantPage extends StatelessWidget {
             ),
             onPressed: () async {
               await ShareExtend.share(
-                  "sglapp://supergreenlab.com/public/plant?id=${state.plantID}",
+                  "https://supergreenlab.com/public/plant?id=${state.plantID}",
                   'text');
             },
           ),

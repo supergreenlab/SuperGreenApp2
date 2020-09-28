@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -60,7 +61,7 @@ class TimelapseViewerBloc
       yield* reloadTimelapses();
     } else if (event is TimelapseViewerBlocEventDelete) {
       yield TimelapseViewerBlocStateLoading();
-      await RelDB.get().plantsDAO.deleteTimelapse(event.timelapse);
+      await PlantHelper.deleteTimelapse(event.timelapse);
       yield* reloadTimelapses();
     }
   }

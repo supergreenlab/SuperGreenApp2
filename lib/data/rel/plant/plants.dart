@@ -41,7 +41,7 @@ class Plants extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<PlantsCompanion> fromMap(Map<String, dynamic> map) async {
-    if (map['deleted'] == true) {
+    if (map['deleted'] == true || map['archived'] == true) {
       return DeletedPlantsCompanion(Value(map['id'] as String));
     }
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);

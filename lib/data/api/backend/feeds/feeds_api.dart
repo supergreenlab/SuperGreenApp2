@@ -258,6 +258,18 @@ class FeedsAPI {
     return results;
   }
 
+  Future archivePlant(String id) async {
+    Response resp = await BackendAPI()
+        .apiClient
+        .post('${BackendAPI().serverHost}/plant/$id/archive', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'archivePlant failed: ${resp.body}';
+    }
+  }
+
   Future<List<dynamic>> publicPlants(int n, int offset) async {
     try {
       Map<String, dynamic> results =
