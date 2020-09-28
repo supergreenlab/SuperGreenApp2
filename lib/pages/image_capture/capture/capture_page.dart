@@ -105,23 +105,26 @@ class _CapturePageState extends State<CapturePage> {
               double height =
                   constraints.maxWidth / _cameraController.value.aspectRatio;
               Widget cameraPreview = Positioned(
-                  left: (constraints.maxWidth - width) / 2,
-                  top: (constraints.maxHeight - height) / 2,
+                  left: constraints.maxWidth / 2 - width / 2,
+                  top: constraints.maxHeight / 2 - height / 2,
                   child: SizedBox(
                       width: width,
                       height: height,
                       child: CameraPreview(_cameraController)));
               if (state.overlayPath != null) {
-                Widget overlay = SizedBox(
-                    width: width,
-                    height: height,
-                    child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: Opacity(
-                            opacity: 0.6,
-                            child: Image.file(File(
-                                FeedMedias.makeAbsoluteFilePath(
-                                    state.overlayPath))))));
+                Widget overlay = Positioned(
+                    left: constraints.maxWidth / 2 - width / 2,
+                    top: constraints.maxHeight / 2 - height / 2,
+                    child: SizedBox(
+                        width: width,
+                        height: height,
+                        child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Opacity(
+                                opacity: 0.6,
+                                child: Image.file(File(
+                                    FeedMedias.makeAbsoluteFilePath(
+                                        state.overlayPath)))))));
                 cameraPreview = Stack(children: [
                   cameraPreview,
                   overlay,
