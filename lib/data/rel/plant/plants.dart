@@ -173,12 +173,24 @@ class Timelapses extends Table {
         await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
         plant: Value(plant.id),
-        controllerID: Value(map['controllerID'] as String),
-        rotate: Value(map['rotate'] as String),
-        name: Value(map['name'] as String),
-        strain: Value(map['strain'] as String),
-        dropboxToken: Value(map['dropboxToken'] as String),
-        uploadName: Value(map['uploadName'] as String),
+        controllerID: map['controllerID']?.isEmpty ?? true
+            ? Value.absent()
+            : Value(map['controllerID'] as String),
+        rotate: map['rotate']?.isEmpty ?? true
+            ? Value.absent()
+            : Value(map['rotate'] as String),
+        name: map['name']?.isEmpty ?? true
+            ? Value.absent()
+            : Value(map['name'] as String),
+        strain: map['strain']?.isEmpty ?? true
+            ? Value.absent()
+            : Value(map['strain'] as String),
+        dropboxToken: map['dropboxToken']?.isEmpty ?? true
+            ? Value.absent()
+            : Value(map['dropboxToken'] as String),
+        uploadName: map['uploadName']?.isEmpty ?? true
+            ? Value.absent()
+            : Value(map['uploadName'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }

@@ -72,6 +72,11 @@ class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
   List<Object> get props => [box, plant, nTimelapses];
 }
 
+class PlantFeedBlocStatePlantRemoved extends PlantFeedBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   final HomeNavigateToPlantFeedEvent args;
 
@@ -109,6 +114,10 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
           RelDB.get().plantsDAO.watchBox(plant.box).listen(_onBoxUpdated);
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
     } else if (event is PlantFeedBlocEventUpdated) {
+      if (plant == null) {
+        yield PlantFeedBlocStatePlantRemoved();
+        return;
+      }
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
     }
   }

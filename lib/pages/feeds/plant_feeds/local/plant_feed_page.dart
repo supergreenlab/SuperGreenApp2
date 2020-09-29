@@ -62,6 +62,8 @@ enum SpeedDialType {
 }
 
 class _PlantFeedPageState extends State<PlantFeedPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
   ScrollController drawerScrollController;
@@ -131,7 +133,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 }
               },
               child: Scaffold(
-                  appBar: state is PlantFeedBlocStateNoPlant
+                  key: _scaffoldKey,
+                  appBar: state is PlantFeedBlocStateNoPlant ||
+                          state is PlantFeedBlocStatePlantRemoved
                       ? SGLAppBar(
                           'Plant feed',
                           fontSize: 20,
@@ -490,8 +494,32 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       );
     } else if (state is PlantFeedBlocStateNoPlant) {
       return _renderNoPlant(context);
+    } else if (state is PlantFeedBlocStatePlantRemoved) {
+      return _renderPlantRemoved(context);
     }
     return FullscreenLoading(title: 'Loading plant..');
+  }
+
+  Widget _renderPlantRemoved(BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+              child: Column(children: [
+            Icon(Icons.delete, color: Colors.grey, size: 100),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text('Plant was removed.',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+            ),
+            GreenButton(
+              title: 'OPEN PLANT LIST',
+              onPressed: () {
+                _scaffoldKey.currentState.openDrawer();
+              },
+            ),
+          ]))
+        ]);
   }
 
   Widget _renderNoPlant(BuildContext context) {
