@@ -80,6 +80,10 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
+import 'package:super_green_app/pages/feeds/box_feed/local/local_box_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/local/local_box_feed_page.dart';
+import 'package:super_green_app/pages/feeds/box_feed/remote/remote_box_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/remote/remote_box_feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_page.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
@@ -548,6 +552,14 @@ class _MainPageState extends State<MainPage> {
                 create: (context) => ProductSupplierBloc(settings.arguments)),
           ],
           child: ProductSupplierPage(),
+        );
+      case '/public/box':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) => RemoteBoxFeedBloc(settings.arguments)),
+          ],
+          child: RemoteBoxFeedPage(),
         );
     }
     return Text('Unknown route');

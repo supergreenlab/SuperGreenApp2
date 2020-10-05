@@ -43,6 +43,15 @@ class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent {
   List<Object> get props => [plant];
 }
 
+class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {
+  final Box box;
+
+  HomeNavigateToBoxFeedEvent(this.box);
+
+  @override
+  List<Object> get props => [box];
+}
+
 class HomeNavigateToSGLFeedEvent extends HomeNavigatorEvent {
   HomeNavigateToSGLFeedEvent() : super();
 
@@ -104,6 +113,10 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
     } else if (event is HomeNavigateToPlantFeedEvent) {
       _navigatorKey.currentState
           .pushReplacementNamed('/feed/plant', arguments: event);
+      yield HomeNavigatorState(1);
+    } else if (event is HomeNavigateToBoxFeedEvent) {
+      _navigatorKey.currentState
+          .pushReplacementNamed('/feed/box', arguments: event);
       yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToExplorerEvent) {
       _navigatorKey.currentState

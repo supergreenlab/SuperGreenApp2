@@ -551,6 +551,15 @@ class MainNavigateToSelectPlantEvent extends MainNavigatorEvent {
   List<Object> get props => [...super.props, title];
 }
 
+class MainNavigateToRemoteBoxEvent extends MainNavigatorEvent {
+  final String id;
+
+  MainNavigateToRemoteBoxEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -740,6 +749,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSelectPlantEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/selectplant', arguments: event);
+    } else if (event is MainNavigateToRemoteBoxEvent) {
+      future =
+          _navigatorKey.currentState.pushNamed('/public/box', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);

@@ -22,6 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
+import 'package:super_green_app/pages/feeds/box_feed/local/local_box_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feed/local/local_box_feed_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/local/plant_feed_page.dart';
@@ -193,6 +195,14 @@ class HomePage extends StatelessWidget {
                 ));
       case '/feed/plant':
         return _plantFeedRoute(context, settings, settings.arguments);
+      case '/feed/box':
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (context) => BlocProvider(
+                  create: (context) => LocalBoxFeedBloc(settings.arguments),
+                  child: TowelieHelper.wrapWidget(
+                      settings, context, LocalBoxFeedPage()),
+                ));
       case '/explorer':
         return MaterialPageRoute(
             settings: settings,

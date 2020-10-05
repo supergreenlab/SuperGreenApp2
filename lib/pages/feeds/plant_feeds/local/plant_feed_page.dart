@@ -654,6 +654,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                       color: Colors.white,
                     ),
                     child: ListTile(
+                      onTap: () {
+                        BlocProvider.of<HomeNavigatorBloc>(context)
+                            .add(HomeNavigateToBoxFeedEvent(b));
+                      },
                       leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
                       title: Text(b.name),
                       trailing: InkWell(
