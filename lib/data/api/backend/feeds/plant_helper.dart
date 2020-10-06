@@ -17,11 +17,10 @@
  */
 
 import 'package:moor/moor.dart';
-import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
 
 class PlantHelper {
   static Future deletePlant(Plant plant, {addDeleted: true}) async {

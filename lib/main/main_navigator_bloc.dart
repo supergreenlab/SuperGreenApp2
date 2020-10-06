@@ -27,7 +27,7 @@ import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
 
 class MainNavigatorEvent extends Equatable {
   final void Function(Future<dynamic> future) futureFn;

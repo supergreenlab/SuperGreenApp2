@@ -16,30 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feeds/box_feeds/remote/remote_box_feed_bloc.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
-
-class FeedLifeEventParams extends FeedEntryParams {
-  final PlantPhases phase;
-
-  FeedLifeEventParams(this.phase);
-
-  factory FeedLifeEventParams.fromJSON(String json) {
-    Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedLifeEventParams(
-        PlantPhases.values.firstWhere((p) => describeEnum(p) == map['phase']));
-  }
-
+class RemoteBoxFeedPage extends StatelessWidget {
   @override
-  String toJSON() {
-    return JsonEncoder().convert({
-      'phase': describeEnum(phase),
-    });
+  Widget build(BuildContext context) {
+    return BlocBuilder<RemoteBoxFeedBloc, RemoteBoxFeedBlocState>(
+      builder: (BuildContext context, RemoteBoxFeedBlocState state) {
+        return Text('RemoteBoxFeedPage');
+      },
+    );
   }
-
-  @override
-  List<Object> get props => [phase];
 }

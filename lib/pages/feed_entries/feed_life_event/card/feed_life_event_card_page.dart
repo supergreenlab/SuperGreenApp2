@@ -22,7 +22,7 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/plant_feed_state.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
@@ -114,55 +114,5 @@ class FeedLifeEventCardPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  List<Widget> _renderValues(
-      List<dynamic> values, List<dynamic> initialValues) {
-    int i = 0;
-    return values
-        .map<Map<String, int>>((v) {
-          return {
-            'i': i,
-            'from': initialValues[i++],
-            'to': v,
-          };
-        })
-        .where((v) => v['from'] != v['to'])
-        .map<Widget>((v) {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('channel'),
-                    Text('${v['i'] + 1}',
-                        style: TextStyle(
-                            fontSize: 45,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.grey)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('${v['from']}%',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w300)),
-                    Icon(Icons.arrow_forward, size: 18),
-                    Text('${v['to']}%',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.green)),
-                  ],
-                ),
-              ],
-            ),
-          );
-        })
-        .toList();
   }
 }

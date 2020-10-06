@@ -26,8 +26,8 @@ import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/box_settings.dart';
-import 'package:super_green_app/pages/feeds/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
 
 abstract class FeedScheduleFormBlocEvent extends Equatable {}
 

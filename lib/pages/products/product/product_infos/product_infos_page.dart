@@ -19,7 +19,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_infos/product_infos_bloc.dart';
-import 'package:super_green_app/pages/products/product/product_infos/specs/seeds_specs_form.dart';
 import 'package:super_green_app/pages/products/product/product_infos/specs_form.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 
