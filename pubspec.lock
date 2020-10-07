@@ -175,7 +175,7 @@ packages:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.1.4"
   clock:
     dependency: transitive
     description:
@@ -633,14 +633,14 @@ packages:
       name: moor
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.2"
+    version: "3.3.1"
   moor_generator:
     dependency: "direct dev"
     description:
       name: moor_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "3.3.1"
   multicast_dns:
     dependency: "direct main"
     description:
@@ -682,7 +682,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.0"
+    version: "1.8.0-nullsafety.1"
   path_drawing:
     dependency: transitive
     description:
@@ -884,6 +884,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  sqlite3:
+    dependency: transitive
+    description:
+      name: sqlite3
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.6"
   sqlite3_flutter_libs:
     dependency: "direct main"
     description:
@@ -897,7 +904,7 @@ packages:
       name: sqlparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.10.1"
   stack_trace:
     dependency: transitive
     description:

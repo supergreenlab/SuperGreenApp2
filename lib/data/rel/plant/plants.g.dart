@@ -7,30 +7,30 @@ part of 'plants.dart';
 // **************************************************************************
 
 mixin _$PlantsDAOMixin on DatabaseAccessor<RelDB> {
-  $PlantsTable get plants => db.plants;
-  $BoxesTable get boxes => db.boxes;
-  $ChartCachesTable get chartCaches => db.chartCaches;
-  $TimelapsesTable get timelapses => db.timelapses;
+  $PlantsTable get plants => attachedDatabase.plants;
+  $BoxesTable get boxes => attachedDatabase.boxes;
+  $ChartCachesTable get chartCaches => attachedDatabase.chartCaches;
+  $TimelapsesTable get timelapses => attachedDatabase.timelapses;
   Selectable<int> nPlants() {
-    return customSelectQuery('SELECT COUNT(*) FROM plants',
+    return customSelect('SELECT COUNT(*) FROM plants',
         variables: [],
         readsFrom: {plants}).map((QueryRow row) => row.readInt('COUNT(*)'));
   }
 
   Selectable<int> nBoxes() {
-    return customSelectQuery('SELECT COUNT(*) FROM boxes',
+    return customSelect('SELECT COUNT(*) FROM boxes',
         variables: [],
         readsFrom: {boxes}).map((QueryRow row) => row.readInt('COUNT(*)'));
   }
 
   Selectable<int> nTimelapses(int var1) {
-    return customSelectQuery('SELECT COUNT(*) FROM timelapses WHERE plant = ?',
+    return customSelect('SELECT COUNT(*) FROM timelapses WHERE plant = ?',
         variables: [Variable.withInt(var1)],
         readsFrom: {timelapses}).map((QueryRow row) => row.readInt('COUNT(*)'));
   }
 
   Selectable<int> nPlantsInBox(int var1) {
-    return customSelectQuery('SELECT COUNT(*) FROM plants WHERE box = ?',
+    return customSelect('SELECT COUNT(*) FROM plants WHERE box = ?',
         variables: [Variable.withInt(var1)],
         readsFrom: {plants}).map((QueryRow row) => row.readInt('COUNT(*)'));
   }

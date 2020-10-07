@@ -14,7 +14,7 @@ description: SuperGreenLab&#x27;s mobile app
 version: 1.2.5+44
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
   heic_to_jpg:
@@ -33,7 +33,7 @@ dependencies:
   rxdart:
   flutter_svg:
   permission_handler: 4.4.0+hotfix.2
-  moor:
+  moor: 3.3.1
   sqlite3_flutter_libs:
   path_provider:
   path:
@@ -78,9 +78,9 @@ dependencies:
     sdk: flutter
   cupertino_icons:
 
-dependency_overrides:
+# dependency_overrides:
   # analyzer: 0.39.14
-  path: 1.7.0
+  # path: 1.7.0
 
 dev_dependencies:
   hive_generator:

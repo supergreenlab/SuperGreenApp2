@@ -77,7 +77,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -112,6 +112,8 @@ class RelDB extends _$RelDB {
       await m.createTable(deletes);
     } else if (fromVersion == 7) {
       await m.addColumn(plants, plants.public);
+    } else if (fromVersion == 9) {
+      await m.addColumn(boxes, boxes.feed);
     }
   }
 

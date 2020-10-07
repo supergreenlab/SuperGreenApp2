@@ -5,7 +5,7 @@ author: pskink <pskink@gmail.com>
 homepage: https://github.com/pskink/matrix_gesture_detector
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
   flutter:
