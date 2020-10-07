@@ -32,8 +32,8 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/forms/plant_infos_strain.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_widget.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/box_settings.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantInfosPage<PlantInfosBloc> extends StatefulWidget {

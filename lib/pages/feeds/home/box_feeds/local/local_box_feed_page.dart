@@ -201,6 +201,9 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
 
   Widget _renderFeed(BuildContext context, LocalBoxFeedBlocState state) {
     if (state is LocalBoxFeedBlocStateLoaded) {
+      if (state.box.feed == null) {
+        return _renderBoxNotCreated(context);
+      }
       List<Widget> actions = [];
       if (state.box.device != null && _reachable) {
         actions.insert(
@@ -231,7 +234,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
       }
       return BlocProvider(
         key: Key('feed'),
-        create: (context) => FeedBloc(LocalBoxFeedBlocDelegate(null)),
+        create: (context) => FeedBloc(LocalBoxFeedBlocDelegate(state.box.feed)),
         child: FeedPage(
           color: Color(0xff063047),
           actions: actions,
@@ -244,7 +247,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
     } else if (state is LocalBoxFeedBlocStateBoxRemoved) {
       return _renderBoxRemoved(context);
     }
-    return FullscreenLoading(title: 'Loading plant..');
+    return FullscreenLoading(title: 'Loading box..');
   }
 
   Widget _renderOverlay(BuildContext context) {
@@ -263,6 +266,28 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
     );
   }
 
+  Widget _renderBoxNotCreated(BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+              child: Column(children: [
+            Icon(Icons.delete, color: Colors.grey, size: 100),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text('You can now create a box diary too!',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+            ),
+            GreenButton(
+              title: 'CREATE DIARY',
+              onPressed: () {
+                // TODO
+              },
+            ),
+          ]))
+        ]);
+  }
+
   Widget _renderBoxRemoved(BuildContext context) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -272,7 +297,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
             Icon(Icons.delete, color: Colors.grey, size: 100),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('Plant was removed.',
+              child: Text('Box was removed or archived.',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
             ),
             GreenButton(

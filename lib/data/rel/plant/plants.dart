@@ -111,7 +111,7 @@ class Boxes extends Table {
 
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     return BoxesCompanion(
-        // feed: Value(feed.id),
+        feed: Value(feed.id),
         device: Value(deviceID),
         deviceBox: Value(map['deviceBox'] as int),
         name: Value(map['name'] as String),
@@ -297,6 +297,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
   Future<Box> getBoxForServerID(String serverID) {
     return (select(boxes)..where((b) => b.serverID.equals(serverID)))
         .getSingle();
+  }
+
+  Future<Box> getBoxWithFeed(int feedID) {
+    return (select(boxes)..where((p) => p.feed.equals(feedID))).getSingle();
   }
 
   Future<List<Box>> getBoxes() {

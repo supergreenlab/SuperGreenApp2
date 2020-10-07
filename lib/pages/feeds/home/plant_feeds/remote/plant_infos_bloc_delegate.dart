@@ -18,8 +18,8 @@
 
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/box_settings.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   final String plantID;

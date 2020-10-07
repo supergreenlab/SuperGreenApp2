@@ -18,7 +18,7 @@
 
 import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:super_green_app/towelie/cards/plant/card_plant_tuto_take_pic.dart';
 import 'package:super_green_app/towelie/towelie_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';

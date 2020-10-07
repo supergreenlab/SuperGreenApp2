@@ -109,19 +109,19 @@ class HomePage extends StatelessWidget {
               items: [
                 BottomNavigationBarItem(
                   icon: sglIcon,
-                  title: Text('Towelie'),
+                  label: 'Towelie',
                 ),
                 BottomNavigationBarItem(
                   icon: homeIcon,
-                  title: Text('Lab'),
+                  label: 'Lab',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.explore),
-                  title: Text('Explore'),
+                  label: 'Explore',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings),
-                  title: Text('Settings'),
+                  label: 'Settings',
                 ),
               ],
             );
@@ -196,13 +196,7 @@ class HomePage extends StatelessWidget {
       case '/feed/plant':
         return _plantFeedRoute(context, settings, settings.arguments);
       case '/feed/box':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => LocalBoxFeedBloc(settings.arguments),
-                  child: TowelieHelper.wrapWidget(
-                      settings, context, LocalBoxFeedPage()),
-                ));
+        return _boxFeedRoute(context, settings, settings.arguments);
       case '/explorer':
         return MaterialPageRoute(
             settings: settings,
@@ -242,6 +236,22 @@ class HomePage extends StatelessWidget {
               ],
               child:
                   TowelieHelper.wrapWidget(settings, context, PlantFeedPage()),
+            ));
+  }
+
+  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings,
+      HomeNavigateToBoxFeedEvent event) {
+    return MaterialPageRoute(
+        settings: settings,
+        builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider<PlantDrawerBloc>(
+                    create: (context) => PlantDrawerBloc()),
+                BlocProvider<LocalBoxFeedBloc>(
+                    create: (context) => LocalBoxFeedBloc(event)),
+              ],
+              child: TowelieHelper.wrapWidget(
+                  settings, context, LocalBoxFeedPage()),
             ));
   }
 }

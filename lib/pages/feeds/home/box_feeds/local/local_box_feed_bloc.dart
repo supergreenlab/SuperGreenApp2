@@ -16,12 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 
 abstract class LocalBoxFeedBlocEvent extends Equatable {}
+
+class LocalBoxFeedBlocEventInit extends LocalBoxFeedBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class LocalBoxFeedBlocEventUpdated extends LocalBoxFeedBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
+  LocalBoxFeedBlocEventUpdated();
+
+  @override
+  List<Object> get props => [rand];
+}
 
 abstract class LocalBoxFeedBlocState extends Equatable {}
 
@@ -48,11 +65,42 @@ class LocalBoxFeedBlocStateBoxRemoved extends LocalBoxFeedBlocState {
 
 class LocalBoxFeedBloc
     extends Bloc<LocalBoxFeedBlocEvent, LocalBoxFeedBlocState> {
-  HomeNavigateToBoxFeedEvent args;
+  final HomeNavigateToBoxFeedEvent args;
 
-  LocalBoxFeedBloc(this.args) : super(LocalBoxFeedBlocStateInit());
+  StreamSubscription<Box> boxStream;
+  Box box;
+
+  LocalBoxFeedBloc(this.args) : super(LocalBoxFeedBlocStateInit()) {
+    add(LocalBoxFeedBlocEventInit());
+  }
 
   @override
   Stream<LocalBoxFeedBlocState> mapEventToState(
-      LocalBoxFeedBlocEvent event) async* {}
+      LocalBoxFeedBlocEvent event) async* {
+    if (event is LocalBoxFeedBlocEventInit) {
+      box = await RelDB.get().plantsDAO.getBox(args.box.id);
+      boxStream =
+          RelDB.get().plantsDAO.watchBox(args.box.id).listen(_onBoxUpdated);
+      yield LocalBoxFeedBlocStateLoaded(box);
+    } else if (event is LocalBoxFeedBlocEventUpdated) {
+      if (box == null) {
+        yield LocalBoxFeedBlocStateBoxRemoved();
+        return;
+      }
+      yield LocalBoxFeedBlocStateLoaded(box);
+    }
+  }
+
+  void _onBoxUpdated(Box b) {
+    box = b;
+    add(LocalBoxFeedBlocEventUpdated());
+  }
+
+  @override
+  Future<void> close() async {
+    if (boxStream != null) {
+      await boxStream.cancel();
+    }
+    return super.close();
+  }
 }

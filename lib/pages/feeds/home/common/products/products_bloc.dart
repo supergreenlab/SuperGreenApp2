@@ -19,8 +19,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/box_settings.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 abstract class ProductsBlocEvent extends Equatable {}
 

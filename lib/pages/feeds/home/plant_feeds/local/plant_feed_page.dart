@@ -32,9 +32,9 @@ import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_page.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/products/products_bloc.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/products/products_page.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/products/products_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/products/products_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/plant_feed_app_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/plant_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/local_plant_feed_delegate.dart';
@@ -504,7 +504,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             Icon(Icons.delete, color: Colors.grey, size: 100),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('Plant was removed.',
+              child: Text('Plant was removed or archived.',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
             ),
             GreenButton(

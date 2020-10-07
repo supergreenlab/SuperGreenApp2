@@ -1736,7 +1736,7 @@ class Box extends DataClass implements Insertable<Box> {
   final bool synced;
   Box(
       {@required this.id,
-      @required this.feed,
+      this.feed,
       this.device,
       this.deviceBox,
       @required this.name,
@@ -1926,15 +1926,14 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   });
   BoxesCompanion.insert({
     this.id = const Value.absent(),
-    @required int feed,
+    this.feed = const Value.absent(),
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
     @required String name,
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
-  })  : feed = Value(feed),
-        name = Value(name);
+  }) : name = Value(name);
   static Insertable<Box> custom({
     Expression<int> id,
     Expression<int> feed,
@@ -2045,7 +2044,7 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     return GeneratedIntColumn(
       'feed',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -2129,8 +2128,6 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
     if (data.containsKey('feed')) {
       context.handle(
           _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
-    } else if (isInserting) {
-      context.missing(_feedMeta);
     }
     if (data.containsKey('device')) {
       context.handle(_deviceMeta,

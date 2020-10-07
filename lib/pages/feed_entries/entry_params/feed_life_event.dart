@@ -20,7 +20,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class FeedLifeEventParams extends FeedEntryParams {
   final PlantPhases phase;
