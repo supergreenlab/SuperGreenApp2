@@ -186,12 +186,14 @@ class MainNavigateToFeedVentilationFormEvent
 
 class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   final Plant plant;
+  final Box box;
 
-  MainNavigateToFeedMediaFormEvent(this.plant, {pushAsReplacement = false})
+  MainNavigateToFeedMediaFormEvent(
+      {this.plant, this.box, pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [plant, box];
 }
 
 class MainNavigateToFeedMeasureFormEvent extends MainNavigateToFeedFormEvent {

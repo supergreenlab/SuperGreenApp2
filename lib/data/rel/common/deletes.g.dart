@@ -7,5 +7,5 @@ part of 'deletes.dart';
 // **************************************************************************
 
 mixin _$DeletesDAOMixin on DatabaseAccessor<RelDB> {
-  $DeletesTable get deletes => attachedDatabase.deletes;
+  $DeletesTable get deletes => db.deletes;
 }

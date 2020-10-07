@@ -86,6 +86,7 @@ class DeletedBoxesCompanion extends BoxesCompanion {
 @DataClassName("Box")
 class Boxes extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get feed => integer()();
   IntColumn get device => integer().nullable()();
   IntColumn get deviceBox => integer().nullable()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
@@ -107,7 +108,10 @@ class Boxes extends Table {
         deviceID = device.id;
       }
     }
+
+    Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
     return BoxesCompanion(
+        // feed: Value(feed.id),
         device: Value(deviceID),
         deviceBox: Value(map['deviceBox'] as int),
         name: Value(map['name'] as String),
@@ -117,10 +121,15 @@ class Boxes extends Table {
   }
 
   static Future<Map<String, dynamic>> toMap(Box box) async {
+    Feed feed = await RelDB.get().feedsDAO.getFeed(null);
+    if (feed.serverID == null) {
+      throw 'Missing serverID for feed relation';
+    }
     Map<String, dynamic> obj = {
       'id': box.serverID,
       'name': box.name,
       'settings': box.settings,
+      'feedID': feed.serverID,
       'deviceID': null,
     };
     if (box.device != null) {

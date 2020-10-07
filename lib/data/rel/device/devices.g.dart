@@ -7,11 +7,11 @@ part of 'devices.dart';
 // **************************************************************************
 
 mixin _$DevicesDAOMixin on DatabaseAccessor<RelDB> {
-  $DevicesTable get devices => attachedDatabase.devices;
-  $ModulesTable get modules => attachedDatabase.modules;
-  $ParamsTable get params => attachedDatabase.params;
+  $DevicesTable get devices => db.devices;
+  $ModulesTable get modules => db.modules;
+  $ParamsTable get params => db.params;
   Selectable<int> nDevices() {
-    return customSelect('SELECT COUNT(*) FROM devices',
+    return customSelectQuery('SELECT COUNT(*) FROM devices',
         variables: [],
         readsFrom: {devices}).map((QueryRow row) => row.readInt('COUNT(*)'));
   }

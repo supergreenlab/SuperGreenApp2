@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 
 abstract class LocalBoxFeedBlocEvent extends Equatable {}
@@ -25,6 +26,22 @@ abstract class LocalBoxFeedBlocEvent extends Equatable {}
 abstract class LocalBoxFeedBlocState extends Equatable {}
 
 class LocalBoxFeedBlocStateInit extends LocalBoxFeedBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class LocalBoxFeedBlocStateLoaded extends LocalBoxFeedBlocState {
+  final Box box;
+
+  LocalBoxFeedBlocStateLoaded(this.box);
+
+  @override
+  List<Object> get props => [box];
+}
+
+class LocalBoxFeedBlocStateBoxRemoved extends LocalBoxFeedBlocState {
+  LocalBoxFeedBlocStateBoxRemoved();
+
   @override
   List<Object> get props => [];
 }

@@ -39,7 +39,7 @@ class TowelieButtonPushRouteFeedMedia extends TowelieButton {
     int plantID = event.params['plantID'];
     Plant plant = await RelDB.get().plantsDAO.getPlant(plantID);
     yield TowelieBlocStateMainNavigation(
-        MainNavigateToFeedMediaFormEvent(plant));
+        MainNavigateToFeedMediaFormEvent(plant: plant));
     if (event.feedEntry != null) {
       FeedEntry feedEntry =
           await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);

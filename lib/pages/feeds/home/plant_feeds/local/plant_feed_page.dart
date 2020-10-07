@@ -25,11 +25,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/products/products_bloc.dart';
@@ -39,21 +39,14 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/plant
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/plant_feed_app_bar_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/local_plant_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/local_products_delegate.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/sunglasses_bloc.dart';
-import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-class PlantFeedPage extends StatefulWidget {
-  @override
-  _PlantFeedPageState createState() => _PlantFeedPageState();
-}
 
 enum SpeedDialType {
   general,
@@ -61,22 +54,21 @@ enum SpeedDialType {
   lifeevents,
 }
 
+class PlantFeedPage extends StatefulWidget {
+  @override
+  _PlantFeedPageState createState() => _PlantFeedPageState();
+}
+
 class _PlantFeedPageState extends State<PlantFeedPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _openCloseDial = ValueNotifier<int>(0);
   SpeedDialType _speedDialType = SpeedDialType.general;
-  ScrollController drawerScrollController;
+
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
   String _deviceIP = '';
-
-  @override
-  void initState() {
-    drawerScrollController = ScrollController();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +136,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                           iconColor: Colors.white,
                         )
                       : null,
-                  drawer: Drawer(child: this._drawerContent(context, state)),
+                  drawer: Drawer(
+                      child: PlantDrawerPage(
+                    selectedPlant:
+                        state is PlantFeedBlocStateLoaded ? state.plant : null,
+                  )),
                   body: AnimatedSwitcher(
                       child: body, duration: Duration(milliseconds: 200)),
                   floatingActionButton: state is PlantFeedBlocStateLoaded
@@ -354,8 +350,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
-                  state.plant,
-                  pushAsReplacement: pushAsReplacement))),
+                  plant: state.plant, pushAsReplacement: pushAsReplacement))),
       _renderSpeedDialChild(
           'Measure',
           'assets/feed_card/icon_measure.svg',
@@ -578,188 +573,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         );
       },
     );
-  }
-
-  Widget _drawerContent(BuildContext context, PlantFeedBlocState state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Container(
-          color: Color(0xff063047),
-          height: 120,
-          child: DrawerHeader(
-              child: Row(children: <Widget>[
-            SizedBox(
-              width: 50,
-              height: 50,
-              child:
-                  SvgPicture.asset("assets/super_green_lab_vertical_white.svg"),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text('Plant list',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w300)),
-            ),
-          ])),
-        ),
-        Expanded(
-          child: _plantList(context, state),
-        ),
-        Divider(),
-        Container(
-            child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Container(
-                    child: Column(
-                  children: <Widget>[
-                    ListTile(
-                        leading: Icon(Icons.add_circle),
-                        title: Text('Add new plant'),
-                        onTap: () => _onAddPlant(context)),
-                  ],
-                ))))
-      ],
-    );
-  }
-
-  Widget _plantList(BuildContext context, PlantFeedBlocState plantFeedState) {
-    return BlocBuilder<PlantDrawerBloc, PlantDrawerBlocState>(
-      cubit: BlocProvider.of<PlantDrawerBloc>(context),
-      buildWhen: (previousState, state) =>
-          state is PlantDrawerBlocStateLoadingPlantList ||
-          state is PlantDrawerBlocStatePlantListUpdated,
-      builder: (BuildContext context, PlantDrawerBlocState state) {
-        Widget content;
-        if (state is PlantDrawerBlocStateLoadingPlantList) {
-          content = FullscreenLoading(title: 'Loading..');
-        } else if (state is PlantDrawerBlocStatePlantListUpdated) {
-          List<Plant> plants = state.plants.toList();
-          List<Box> boxes = state.boxes;
-          content = ListView(
-              controller: drawerScrollController,
-              key: const PageStorageKey<String>('plants'),
-              children: boxes.map((b) {
-                List<Widget> content = [
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 1,
-                            offset: Offset(0, 2))
-                      ],
-                      color: Colors.white,
-                    ),
-                    child: ListTile(
-                      onTap: () {
-                        BlocProvider.of<HomeNavigatorBloc>(context)
-                            .add(HomeNavigateToBoxFeedEvent(b));
-                      },
-                      leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
-                      title: Text(b.name),
-                      trailing: InkWell(
-                          onTap: () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToSettingsBox(b));
-                          },
-                          child: Icon(Icons.settings)),
-                    ),
-                  ),
-                ];
-                content.addAll(plants.where((p) => p.box == b.id).map((p) {
-                  int nUnseen = 0;
-                  try {
-                    nUnseen = state.hasPending
-                        .where((e) => e.id == p.feed)
-                        .map<int>((e) => e.nNew)
-                        .reduce((a, e) => a + e);
-                  } catch (e) {}
-                  Widget item = Padding(
-                      padding: EdgeInsets.only(left: 16),
-                      child: ListTile(
-                        leading: (plantFeedState is PlantFeedBlocStateLoaded &&
-                                plantFeedState.plant.id == p.id)
-                            ? Icon(
-                                Icons.check_box,
-                                color: Colors.green,
-                              )
-                            : Icon(Icons.crop_square),
-                        trailing: Container(
-                            width: 50,
-                            height: 30,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  nUnseen != null && nUnseen > 0
-                                      ? _renderBadge(nUnseen)
-                                      : Container(),
-                                  InkWell(
-                                      onTap: () {
-                                        BlocProvider.of<MainNavigatorBloc>(
-                                                context)
-                                            .add(
-                                                MainNavigateToSettingsPlant(p));
-                                      },
-                                      child: Icon(Icons.settings)),
-                                ])),
-                        title: Text(p.name),
-                        onTap: () => _selectPlant(context, p),
-                      ));
-                  return item;
-                }).toList());
-                return Column(
-                  children: content,
-                );
-              }).toList());
-        }
-        return AnimatedSwitcher(
-          duration: Duration(milliseconds: 200),
-          child: content,
-        );
-      },
-    );
-  }
-
-  Widget _renderBadge(int n) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 4.0),
-      child: Container(
-        padding: EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        constraints: BoxConstraints(
-          minWidth: 20,
-          minHeight: 20,
-        ),
-        child: Text(
-          '$n',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-
-  void _selectPlant(BuildContext context, Plant plant) {
-    //ignore: close_sinks
-    HomeNavigatorBloc navigatorBloc =
-        BlocProvider.of<HomeNavigatorBloc>(context);
-    Navigator.pop(context);
-    Timer(Duration(milliseconds: 250),
-        () => navigatorBloc.add(HomeNavigateToPlantFeedEvent(plant)));
-  }
-
-  void _onAddPlant(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToCreatePlantEvent());
   }
 
   Widget _renderAppBar(BuildContext context, PlantFeedBlocStateLoaded state) {

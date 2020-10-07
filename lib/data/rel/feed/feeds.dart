@@ -386,7 +386,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
         .join([
       leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
     ]);
-    Expression<bool> where = feedEntries.type.equals(feedType);
+    Expression<bool, BoolType> where = feedEntries.type.equals(feedType);
     if (feedID != null) {
       where &= feedEntries.feed.equals(feedID);
     }

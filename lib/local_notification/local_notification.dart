@@ -144,7 +144,7 @@ class LocalNotificationBloc
         requestAlertPermission: false,
         onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
     var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: _onSelectNotification);
   }
@@ -185,7 +185,8 @@ class LocalNotificationBloc
         'Towelie can help you not forget anything about your grow.');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     NotificationDetails platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(id, title, body,
         scheduledNotificationDateTime, platformChannelSpecifics,
         androidAllowWhileIdle: true, payload: payload);

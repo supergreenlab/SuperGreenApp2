@@ -44,12 +44,18 @@ class CreateBoxBloc extends Bloc<CreateBoxBlocEvent, CreateBoxBlocState> {
   Stream<CreateBoxBlocState> mapEventToState(CreateBoxBlocEvent event) async* {
     if (event is CreateBoxBlocEventCreate) {
       final bdb = RelDB.get().plantsDAO;
+      final fdb = RelDB.get().feedsDAO;
+      final feed = FeedsCompanion.insert(name: event.name);
+      final feedID = await fdb.addFeed(feed);
       BoxesCompanion box;
       if (event.device == null && event.deviceBox == null) {
         box = BoxesCompanion.insert(
-            name: event.name, settings: Value(BoxSettings().toJSON()));
+            feed: feedID,
+            name: event.name,
+            settings: Value(BoxSettings().toJSON()));
       } else {
         box = BoxesCompanion.insert(
+            feed: feedID,
             name: event.name,
             device: Value(event.device.id),
             deviceBox: Value(event.deviceBox),

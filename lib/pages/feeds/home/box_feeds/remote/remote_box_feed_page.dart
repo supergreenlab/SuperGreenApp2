@@ -18,7 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/feeds/box_feeds/remote/remote_box_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/box_feeds/remote/remote_box_feed_bloc.dart';
 
 class RemoteBoxFeedPage extends StatelessWidget {
   @override
