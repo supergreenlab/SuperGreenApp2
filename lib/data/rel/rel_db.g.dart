@@ -2174,13 +2174,13 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
 
 class ChartCache extends DataClass implements Insertable<ChartCache> {
   final int id;
-  final int plant;
+  final int box;
   final String name;
   final DateTime date;
   final String values;
   ChartCache(
       {@required this.id,
-      @required this.plant,
+      @required this.box,
       @required this.name,
       @required this.date,
       @required this.values});
@@ -2192,7 +2192,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return ChartCache(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      plant: intType.mapFromDatabaseResponse(data['${effectivePrefix}plant']),
+      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
       date:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
@@ -2206,8 +2206,8 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     if (!nullToAbsent || id != null) {
       map['id'] = Variable<int>(id);
     }
-    if (!nullToAbsent || plant != null) {
-      map['plant'] = Variable<int>(plant);
+    if (!nullToAbsent || box != null) {
+      map['box'] = Variable<int>(box);
     }
     if (!nullToAbsent || name != null) {
       map['name'] = Variable<String>(name);
@@ -2224,8 +2224,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   ChartCachesCompanion toCompanion(bool nullToAbsent) {
     return ChartCachesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      plant:
-          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
+      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       values:
@@ -2238,7 +2237,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return ChartCache(
       id: serializer.fromJson<int>(json['id']),
-      plant: serializer.fromJson<int>(json['plant']),
+      box: serializer.fromJson<int>(json['box']),
       name: serializer.fromJson<String>(json['name']),
       date: serializer.fromJson<DateTime>(json['date']),
       values: serializer.fromJson<String>(json['values']),
@@ -2249,7 +2248,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'plant': serializer.toJson<int>(plant),
+      'box': serializer.toJson<int>(box),
       'name': serializer.toJson<String>(name),
       'date': serializer.toJson<DateTime>(date),
       'values': serializer.toJson<String>(values),
@@ -2257,10 +2256,10 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   }
 
   ChartCache copyWith(
-          {int id, int plant, String name, DateTime date, String values}) =>
+          {int id, int box, String name, DateTime date, String values}) =>
       ChartCache(
         id: id ?? this.id,
-        plant: plant ?? this.plant,
+        box: box ?? this.box,
         name: name ?? this.name,
         date: date ?? this.date,
         values: values ?? this.values,
@@ -2269,7 +2268,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   String toString() {
     return (StringBuffer('ChartCache(')
           ..write('id: $id, ')
-          ..write('plant: $plant, ')
+          ..write('box: $box, ')
           ..write('name: $name, ')
           ..write('date: $date, ')
           ..write('values: $values')
@@ -2280,14 +2279,14 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(plant.hashCode,
+      $mrjc(box.hashCode,
           $mrjc(name.hashCode, $mrjc(date.hashCode, values.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is ChartCache &&
           other.id == this.id &&
-          other.plant == this.plant &&
+          other.box == this.box &&
           other.name == this.name &&
           other.date == this.date &&
           other.values == this.values);
@@ -2295,36 +2294,36 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
 
 class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   final Value<int> id;
-  final Value<int> plant;
+  final Value<int> box;
   final Value<String> name;
   final Value<DateTime> date;
   final Value<String> values;
   const ChartCachesCompanion({
     this.id = const Value.absent(),
-    this.plant = const Value.absent(),
+    this.box = const Value.absent(),
     this.name = const Value.absent(),
     this.date = const Value.absent(),
     this.values = const Value.absent(),
   });
   ChartCachesCompanion.insert({
     this.id = const Value.absent(),
-    @required int plant,
+    @required int box,
     @required String name,
     @required DateTime date,
     this.values = const Value.absent(),
-  })  : plant = Value(plant),
+  })  : box = Value(box),
         name = Value(name),
         date = Value(date);
   static Insertable<ChartCache> custom({
     Expression<int> id,
-    Expression<int> plant,
+    Expression<int> box,
     Expression<String> name,
     Expression<DateTime> date,
     Expression<String> values,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (plant != null) 'plant': plant,
+      if (box != null) 'box': box,
       if (name != null) 'name': name,
       if (date != null) 'date': date,
       if (values != null) 'values': values,
@@ -2333,13 +2332,13 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
 
   ChartCachesCompanion copyWith(
       {Value<int> id,
-      Value<int> plant,
+      Value<int> box,
       Value<String> name,
       Value<DateTime> date,
       Value<String> values}) {
     return ChartCachesCompanion(
       id: id ?? this.id,
-      plant: plant ?? this.plant,
+      box: box ?? this.box,
       name: name ?? this.name,
       date: date ?? this.date,
       values: values ?? this.values,
@@ -2352,8 +2351,8 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (plant.present) {
-      map['plant'] = Variable<int>(plant.value);
+    if (box.present) {
+      map['box'] = Variable<int>(box.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -2371,7 +2370,7 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   String toString() {
     return (StringBuffer('ChartCachesCompanion(')
           ..write('id: $id, ')
-          ..write('plant: $plant, ')
+          ..write('box: $box, ')
           ..write('name: $name, ')
           ..write('date: $date, ')
           ..write('values: $values')
@@ -2394,13 +2393,13 @@ class $ChartCachesTable extends ChartCaches
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
-  final VerificationMeta _plantMeta = const VerificationMeta('plant');
-  GeneratedIntColumn _plant;
+  final VerificationMeta _boxMeta = const VerificationMeta('box');
+  GeneratedIntColumn _box;
   @override
-  GeneratedIntColumn get plant => _plant ??= _constructPlant();
-  GeneratedIntColumn _constructPlant() {
+  GeneratedIntColumn get box => _box ??= _constructBox();
+  GeneratedIntColumn _constructBox() {
     return GeneratedIntColumn(
-      'plant',
+      'box',
       $tableName,
       false,
     );
@@ -2437,7 +2436,7 @@ class $ChartCachesTable extends ChartCaches
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, plant, name, date, values];
+  List<GeneratedColumn> get $columns => [id, box, name, date, values];
   @override
   $ChartCachesTable get asDslTable => this;
   @override
@@ -2452,11 +2451,11 @@ class $ChartCachesTable extends ChartCaches
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
     }
-    if (data.containsKey('plant')) {
+    if (data.containsKey('box')) {
       context.handle(
-          _plantMeta, plant.isAcceptableOrUnknown(data['plant'], _plantMeta));
+          _boxMeta, box.isAcceptableOrUnknown(data['box'], _boxMeta));
     } else if (isInserting) {
-      context.missing(_plantMeta);
+      context.missing(_boxMeta);
     }
     if (data.containsKey('name')) {
       context.handle(

@@ -77,7 +77,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -114,6 +114,9 @@ class RelDB extends _$RelDB {
       await m.addColumn(plants, plants.public);
     } else if (fromVersion == 9) {
       await m.addColumn(boxes, boxes.feed);
+    } else if (fromVersion == 11) {
+      await m.issueCustomQuery("delete from ${chartCaches.actualTableName}");
+      await m.addColumn(chartCaches, chartCaches.box);
     }
   }
 

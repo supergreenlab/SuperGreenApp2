@@ -146,7 +146,7 @@ class Boxes extends Table {
 
 class ChartCaches extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get plant => integer()();
+  IntColumn get box => integer()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
   DateTimeColumn get date => dateTime()();
 
@@ -348,9 +348,9 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return into(chartCaches).insert(chartCache);
   }
 
-  Future<ChartCache> getChartCache(int plantID, String name) async {
+  Future<ChartCache> getChartCache(int boxID, String name) async {
     List<ChartCache> cs = await (select(chartCaches)
-          ..where((c) => c.plant.equals(plantID) & c.name.equals(name)))
+          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
         .get();
     if (cs.length == 0) {
       return null;
@@ -358,14 +358,14 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return cs[0];
   }
 
-  Stream<ChartCache> watchChartCache(int plantID, String name) {
+  Stream<ChartCache> watchChartCache(int boxID, String name) {
     return (select(chartCaches)
-          ..where((c) => c.plant.equals(plantID) & c.name.equals(name)))
+          ..where((c) => c.box.equals(boxID) & c.name.equals(name)))
         .watchSingle();
   }
 
-  Future deleteChartCacheForPlant(int plantID) {
-    return (delete(chartCaches)..where((cc) => cc.plant.equals(plantID))).go();
+  Future deleteChartCacheForBox(int boxID) {
+    return (delete(chartCaches)..where((cc) => cc.box.equals(boxID))).go();
   }
 
   Future deleteChartCache(ChartCache chartCache) {

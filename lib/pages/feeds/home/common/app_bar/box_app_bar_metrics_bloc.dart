@@ -50,19 +50,22 @@ class PlantFeedAppBarBlocStateInit extends PlantFeedAppBarBlocState {
 class PlantFeedAppBarBlocStateLoaded extends PlantFeedAppBarBlocState {
   final List<charts.Series<Metric, DateTime>> graphData;
   final Plant plant;
+  final Box box;
 
-  PlantFeedAppBarBlocStateLoaded(this.graphData, this.plant);
+  PlantFeedAppBarBlocStateLoaded(this.graphData, this.plant, this.box);
 
   @override
-  List<Object> get props => [graphData, plant];
+  List<Object> get props => [graphData, plant, box];
 }
 
-class PlantFeedAppBarBloc
+class BoxAppBarMetricsBloc
     extends Bloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
   Timer _timer;
   final Plant plant;
+  final Box box;
 
-  PlantFeedAppBarBloc(this.plant) : super(PlantFeedAppBarBlocStateInit()) {
+  BoxAppBarMetricsBloc({this.plant, this.box})
+      : super(PlantFeedAppBarBlocStateInit()) {
     add(PlantFeedAppBarBlocEventLoadChart());
     _timer = Timer.periodic(Duration(seconds: 30), (timer) {
       this.add(PlantFeedAppBarBlocEventReloadChart());
@@ -76,13 +79,13 @@ class PlantFeedAppBarBloc
       try {
         List<charts.Series<Metric, DateTime>> graphData =
             await updateChart(plant);
-        yield PlantFeedAppBarBlocStateLoaded(graphData, plant);
+        yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box);
       } catch (e) {}
     } else if (event is PlantFeedAppBarBlocEventReloadChart) {
       try {
         List<charts.Series<Metric, DateTime>> graphData =
             await updateChart(plant);
-        yield PlantFeedAppBarBlocStateLoaded(graphData, plant);
+        yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box);
       } catch (e) {}
     }
   }
@@ -103,7 +106,7 @@ class PlantFeedAppBarBloc
       int deviceBox = box.deviceBox;
       charts.Series<Metric, DateTime> temp =
           await TimeSeriesAPI.fetchTimeSeries(
-              plant,
+              box,
               identifier,
               'Temperature',
               'BOX_${deviceBox}_TEMP',
@@ -111,20 +114,20 @@ class PlantFeedAppBarBloc
               transform: _tempUnit);
       charts.Series<Metric, DateTime> humi =
           await TimeSeriesAPI.fetchTimeSeries(
-              plant,
+              box,
               identifier,
               'Humidity',
               'BOX_${deviceBox}_HUMI',
               charts.MaterialPalette.blue.shadeDefault);
       charts.Series<Metric, DateTime> ventilation =
           await TimeSeriesAPI.fetchTimeSeries(
-              plant,
+              box,
               identifier,
               'Ventilation',
               'BOX_${deviceBox}_BLOWER_DUTY',
               charts.MaterialPalette.cyan.shadeDefault);
       List<dynamic> timerOutput = await TimeSeriesAPI.fetchMetric(
-          plant, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
+          box, identifier, 'BOX_${deviceBox}_TIMER_OUTPUT');
       List<List<dynamic>> dims = [];
       Module lightModule =
           await RelDB.get().devicesDAO.getModule(device.id, "led");
@@ -135,7 +138,7 @@ class PlantFeedAppBarBloc
           continue;
         }
         List<dynamic> dim =
-            await TimeSeriesAPI.fetchMetric(plant, identifier, 'LED_${i}_DIM');
+            await TimeSeriesAPI.fetchMetric(box, identifier, 'LED_${i}_DIM');
         dims.add(dim);
       }
       List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);

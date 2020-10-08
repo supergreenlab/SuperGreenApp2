@@ -58,29 +58,28 @@ class TimeSeriesAPI {
     return result;
   }
 
-  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(Plant plant,
+  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(Box box,
       String controllerID, String graphID, String name, charts.Color color,
       {Function(double) transform}) async {
-    List<dynamic> values = await fetchMetric(plant, controllerID, name);
+    List<dynamic> values = await fetchMetric(box, controllerID, name);
     return toTimeSeries(values, graphID, color, transform: transform);
   }
 
   static Future<List<dynamic>> fetchMetric(
-      Plant plant, String controllerID, String name) async {
+      Box box, String controllerID, String name) async {
     List<dynamic> data;
-    ChartCache cache =
-        await RelDB.get().plantsDAO.getChartCache(plant.id, name);
+    ChartCache cache = await RelDB.get().plantsDAO.getChartCache(box.id, name);
     Duration diff = cache?.date?.difference(DateTime.now());
     if (cache == null || -diff.inSeconds >= 30) {
       if (cache != null) {
-        await RelDB.get().plantsDAO.deleteChartCacheForPlant(cache.plant);
+        await RelDB.get().plantsDAO.deleteChartCacheForBox(cache.box);
       }
       Response resp = await get(
           '${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50');
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
       await RelDB.get().plantsDAO.addChartCache(ChartCachesCompanion.insert(
-          plant: plant.id,
+          box: box.id,
           name: name,
           date: DateTime.now(),
           values: Value(JsonEncoder().convert(data))));

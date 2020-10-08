@@ -406,12 +406,14 @@ class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
 class MainNavigateToMetrics extends MainNavigateToFeedFormEvent {
   final List<charts.Series<Metric, DateTime>> graphData;
   final Plant plant;
+  final Box box;
 
-  MainNavigateToMetrics(this.plant, this.graphData, {pushAsReplacement = false})
+  MainNavigateToMetrics(this.graphData,
+      {this.plant, this.box, pushAsReplacement = false})
       : super(pushAsReplacement);
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [plant, box];
 }
 
 class MainNavigateToSettingsAuth extends MainNavigatorEvent {

@@ -8,25 +8,25 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/plant_feed_app_bar_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/box_app_bar_metrics_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 const minCharPoints = 10;
 
-class PlantFeedAppBarPage extends StatefulWidget {
+class BoxAppBarMetricsPage extends StatefulWidget {
   @override
-  _PlantFeedAppBarPageState createState() => _PlantFeedAppBarPageState();
+  _BoxAppBarMetricsPageState createState() => _BoxAppBarMetricsPageState();
 }
 
-class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
+class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
   int selectedGraphIndex;
 
   final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PlantFeedAppBarBloc, PlantFeedAppBarBlocState>(
+    return BlocListener<BoxAppBarMetricsBloc, PlantFeedAppBarBlocState>(
       listener: (BuildContext context, PlantFeedAppBarBlocState state) {
         if (state is PlantFeedAppBarBlocStateLoaded) {
           Timer(Duration(milliseconds: 500), () {
@@ -38,7 +38,7 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
           });
         }
       },
-      child: BlocBuilder<PlantFeedAppBarBloc, PlantFeedAppBarBlocState>(
+      child: BlocBuilder<BoxAppBarMetricsBloc, PlantFeedAppBarBlocState>(
         builder: (BuildContext context, PlantFeedAppBarBlocState state) {
           Widget body;
           if (state is PlantFeedAppBarBlocStateInit) {
@@ -155,7 +155,8 @@ class _PlantFeedAppBarPageState extends State<PlantFeedAppBarPage> {
                   icon: Icon(Icons.fullscreen, color: Colors.white70, size: 30),
                   onPressed: () {
                     BlocProvider.of<MainNavigatorBloc>(context).add(
-                        MainNavigateToMetrics(state.plant, state.graphData));
+                        MainNavigateToMetrics(state.graphData,
+                            plant: state.plant, box: state.box));
                   })),
         ],
       ),
