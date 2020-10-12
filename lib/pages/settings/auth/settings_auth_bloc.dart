@@ -90,7 +90,10 @@ class SettingsAuthBloc
       yield SettingsAuthBlocStateLoading();
       yield SettingsAuthBlocStateLoaded(
           _isAuth, AppDB().getAppData().syncOverGSM, null);
-      User user = await BackendAPI().usersAPI.me();
+      User user;
+      if (_isAuth) {
+        user = await BackendAPI().usersAPI.me();
+      }
       yield SettingsAuthBlocStateLoaded(
           _isAuth, AppDB().getAppData().syncOverGSM, user);
     } else if (event is SettingsAuthBlocEventSetSyncedOverGSM) {

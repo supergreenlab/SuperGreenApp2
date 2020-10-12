@@ -115,8 +115,8 @@ class RelDB extends _$RelDB {
     } else if (fromVersion == 9) {
       await m.addColumn(boxes, boxes.feed);
     } else if (fromVersion == 10) {
-      await m.issueCustomQuery("delete from ${chartCaches.actualTableName}");
-      await m.addColumn(chartCaches, chartCaches.box);
+      await m.drop(chartCaches);
+      await m.createTable(chartCaches);
     }
   }
 

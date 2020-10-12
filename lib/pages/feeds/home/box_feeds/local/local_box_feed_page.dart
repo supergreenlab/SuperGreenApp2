@@ -283,7 +283,8 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
             GreenButton(
               title: 'CREATE DIARY',
               onPressed: () {
-                // TODO
+                BlocProvider.of<LocalBoxFeedBloc>(context)
+                    .add(LocalBoxFeedBlocEventCreateFeed());
               },
             ),
           ]))

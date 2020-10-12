@@ -168,7 +168,7 @@ class DeviceAPI {
           }
         }
       }
-    } catch(e) {
+    } catch (e) {
       Logger.log(e);
     } finally {
       client.close(force: true);
@@ -200,7 +200,7 @@ class DeviceAPI {
           }
         }
       }
-    } catch(e) {
+    } catch (e) {
       Logger.log(e);
     } finally {
       client.close(force: true);

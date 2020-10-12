@@ -21,6 +21,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 
@@ -38,6 +39,13 @@ class LocalBoxFeedBlocEventUpdated extends LocalBoxFeedBlocEvent {
 
   @override
   List<Object> get props => [rand];
+}
+
+class LocalBoxFeedBlocEventCreateFeed extends LocalBoxFeedBlocEvent {
+  LocalBoxFeedBlocEventCreateFeed();
+
+  @override
+  List<Object> get props => [];
 }
 
 abstract class LocalBoxFeedBlocState extends Equatable {}
@@ -88,6 +96,14 @@ class LocalBoxFeedBloc
         return;
       }
       yield LocalBoxFeedBlocStateLoaded(box);
+    } else if (event is LocalBoxFeedBlocEventCreateFeed) {
+      FeedsCompanion feedsCompanion = FeedsCompanion.insert(name: box.name);
+      int feedID = await RelDB.get().feedsDAO.addFeed(feedsCompanion);
+      BoxesCompanion boxesCompanion = BoxesCompanion(
+        id: Value(box.id),
+        feed: Value(feedID),
+      );
+      await RelDB.get().plantsDAO.updateBox(boxesCompanion);
     }
   }
 

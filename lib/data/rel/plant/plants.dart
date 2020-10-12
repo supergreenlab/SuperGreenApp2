@@ -109,9 +109,15 @@ class Boxes extends Table {
       }
     }
 
-    Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
+    int feedID;
+    if (map['feedID'] != null) {
+      Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
+      if (feed != null) {
+        feedID = feed.id;
+      }
+    }
     return BoxesCompanion(
-        feed: Value(feed.id),
+        feed: Value(feedID),
         device: Value(deviceID),
         deviceBox: Value(map['deviceBox'] as int),
         name: Value(map['name'] as String),

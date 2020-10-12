@@ -80,13 +80,17 @@ class BoxAppBarMetricsBloc
         List<charts.Series<Metric, DateTime>> graphData =
             await updateChart(plant);
         yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box);
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     } else if (event is PlantFeedAppBarBlocEventReloadChart) {
       try {
         List<charts.Series<Metric, DateTime>> graphData =
             await updateChart(plant);
         yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box);
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
