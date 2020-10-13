@@ -125,6 +125,8 @@ class FeedMediaFormBloc
     extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent args;
 
+  int get feedID => args.plant?.feed ?? args.box.feed;
+
   FeedMediaFormBloc(this.args) : super(FeedMediaFormBlocStateLoadingDraft()) {
     add(FeedMediaFormBlocEventLoadDraft());
   }
@@ -134,9 +136,8 @@ class FeedMediaFormBloc
       FeedMediaFormBlocEvent event) async* {
     if (event is FeedMediaFormBlocEventLoadDraft) {
       try {
-        FeedEntryDraft draft = await RelDB.get()
-            .feedsDAO
-            .getEntryDraft(args.plant.feed, 'FE_MEDIA');
+        FeedEntryDraft draft =
+            await RelDB.get().feedsDAO.getEntryDraft(feedID, 'FE_MEDIA');
         if (draft != null) {
           yield FeedMediaFormBlocStateDraft(
               FeedMediaDraft.fromJSON(draft.id, draft.params));
@@ -158,7 +159,7 @@ class FeedMediaFormBloc
       } else {
         int draftID = await RelDB.get().feedsDAO.addFeedEntryDraft(
             FeedEntryDraftsCompanion(
-                feed: Value(args.plant.feed),
+                feed: Value(feedID),
                 type: Value('FE_MEDIA'),
                 params: Value(event.draft.toJSON())));
         yield FeedMediaFormBlocStateCurrentDraft(
@@ -170,14 +171,14 @@ class FeedMediaFormBloc
       int feedEntryID =
           await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: 'FE_MEDIA',
-        feed: args.plant.feed,
+        feed: feedID,
         date: event.date,
         params:
             Value(FeedMediaParams(event.message, event.helpRequest).toJSON()),
       ));
       for (FeedMediasCompanion m in event.medias) {
-        await db.feedsDAO.addFeedMedia(m.copyWith(
-            feed: Value(args.plant.feed), feedEntry: Value(feedEntryID)));
+        await db.feedsDAO.addFeedMedia(
+            m.copyWith(feed: Value(feedID), feedEntry: Value(feedEntryID)));
       }
 
       if (event.draft != null) {
