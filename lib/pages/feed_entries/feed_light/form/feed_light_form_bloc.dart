@@ -96,13 +96,12 @@ class FeedLightFormBlocStateCancelling extends FeedLightFormBlocState {
 }
 
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
-  final Plant plant;
   final FeedEntry feedEntry;
 
-  FeedLightFormBlocStateDone(this.plant, this.feedEntry);
+  FeedLightFormBlocStateDone(this.feedEntry);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [feedEntry];
 }
 
 class FeedLightFormBloc
@@ -122,7 +121,7 @@ class FeedLightFormBloc
       FeedLightFormBlocEvent event) async* {
     if (event is FeedLightFormBlocEventLoadLights) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65], box);
         return;
@@ -143,7 +142,7 @@ class FeedLightFormBloc
       yield FeedLightFormBlocStateLightsLoaded(values, box);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         return;
       }
@@ -155,12 +154,12 @@ class FeedLightFormBloc
       }
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         return;
       }
       yield FeedLightFormBlocStateLoading();
-      List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
+      List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
       FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {
         PlantSettings plantSettings =
@@ -180,12 +179,12 @@ class FeedLightFormBloc
           feedEntry = await db.feedsDAO.getFeedEntry(feedEntryID);
         }
       }
-      yield FeedLightFormBlocStateDone(args.plant, feedEntry);
+      yield FeedLightFormBlocStateDone(feedEntry);
     } else if (event is FeedLightFormBlocEventCancel) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
-        yield FeedLightFormBlocStateDone(args.plant, null);
+        yield FeedLightFormBlocStateDone(null);
         return;
       }
       yield FeedLightFormBlocStateCancelling();
@@ -198,7 +197,7 @@ class FeedLightFormBloc
           return;
         }
       }
-      yield FeedLightFormBlocStateDone(args.plant, null);
+      yield FeedLightFormBlocStateDone(null);
     }
   }
 }

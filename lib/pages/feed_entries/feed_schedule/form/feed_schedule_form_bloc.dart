@@ -124,7 +124,7 @@ class FeedScheduleFormBloc
       FeedScheduleFormBlocEvent event) async* {
     if (event is FeedScheduleFormBlocEventInit) {
       final db = RelDB.get();
-      box = await db.plantsDAO.getBox(args.plant.box);
+      box = await db.plantsDAO.getBox(args.box.id);
       device = await db.devicesDAO.getDevice(box.device);
       BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
       initialSchedule = schedule = boxSettings.schedule;
@@ -142,7 +142,7 @@ class FeedScheduleFormBloc
     } else if (event is FeedScheduleFormBlocEventCreate) {
       yield FeedScheduleFormBlocStateLoading();
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
 
       if (device != null) {
         device = await db.devicesDAO.getDevice(box.device);
@@ -168,7 +168,7 @@ class FeedScheduleFormBloc
           synced: Value(false),
           settings: Value(boxSettings.toJSON())));
       if (schedule == 'BLOOM') {
-        List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
+        List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
         for (int i = 0; i < plants.length; ++i) {
           PlantSettings plantSettings =
               PlantSettings.fromJSON(plants[i].settings);

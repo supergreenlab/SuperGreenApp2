@@ -62,7 +62,7 @@ class BoxAppBarMetricsBloc
     extends Bloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
   Timer _timer;
   final Plant plant;
-  final Box box;
+  Box box;
 
   BoxAppBarMetricsBloc({this.plant, this.box})
       : super(PlantFeedAppBarBlocStateInit()) {
@@ -77,16 +77,18 @@ class BoxAppBarMetricsBloc
       PlantFeedAppBarBlocEvent event) async* {
     if (event is PlantFeedAppBarBlocEventLoadChart) {
       try {
-        List<charts.Series<Metric, DateTime>> graphData =
-            await updateChart(plant);
+        if (box == null) {
+          final db = RelDB.get();
+          box = await db.plantsDAO.getBox(plant.box);
+        }
+        List<charts.Series<Metric, DateTime>> graphData = await updateChart();
         yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box);
       } catch (e) {
         print(e);
       }
     } else if (event is PlantFeedAppBarBlocEventReloadChart) {
       try {
-        List<charts.Series<Metric, DateTime>> graphData =
-            await updateChart(plant);
+        List<charts.Series<Metric, DateTime>> graphData = await updateChart();
         yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box);
       } catch (e) {
         print(e);
@@ -94,9 +96,7 @@ class BoxAppBarMetricsBloc
     }
   }
 
-  Future<List<charts.Series<Metric, DateTime>>> updateChart(Plant plant) async {
-    final db = RelDB.get();
-    Box box = await db.plantsDAO.getBox(plant.box);
+  Future<List<charts.Series<Metric, DateTime>>> updateChart() async {
     if (box.device == null) {
       return _createDummyData();
     } else {

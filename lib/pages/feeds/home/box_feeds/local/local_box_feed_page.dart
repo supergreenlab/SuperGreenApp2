@@ -34,10 +34,13 @@ import 'package:super_green_app/pages/feeds/home/box_feeds/local/local_box_feed_
 import 'package:super_green_app/pages/feeds/home/common/app_bar/box_app_bar_metrics_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/box_app_bar_metrics_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/environment/environments_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/sunglasses_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum SpeedDialType {
   general,
@@ -355,8 +358,8 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
       );
     }
 
-    List<Widget Function(BuildContext, LocalBoxFeedBlocStateLoaded)> tabs = [
-      _renderGraphs,
+    List<Widget Function()> tabs = [
+      () => EnvironmentsPage(state.box),
     ];
     return SafeArea(
       child: Column(
@@ -381,7 +384,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
               itemCount: tabs.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
-                return tabs[index](context, state);
+                return tabs[index]();
               },
               pagination: SwiperPagination(
                 builder: new DotSwiperPaginationBuilder(
@@ -392,14 +395,6 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _renderGraphs(
-      BuildContext context, LocalBoxFeedBlocStateLoaded state) {
-    return BlocProvider<BoxAppBarMetricsBloc>(
-      create: (context) => BoxAppBarMetricsBloc(box: state.box),
-      child: BoxAppBarMetricsPage(),
     );
   }
 }

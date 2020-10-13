@@ -55,12 +55,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
           });
           setState(() => values = List.from(state.values));
         } else if (state is FeedLightFormBlocStateDone) {
-          if (state.feedEntry != null) {
-            BlocProvider.of<TowelieBloc>(context).add(
-                TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
-          }
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigatorActionPop(mustPop: true, param: state.feedEntry));
         }
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(

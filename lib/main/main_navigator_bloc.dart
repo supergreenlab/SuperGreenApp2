@@ -146,27 +146,30 @@ class MainNavigateToDeviceTestEvent extends MainNavigatorEvent {
 class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
   final bool pushAsReplacement;
 
-  MainNavigateToFeedFormEvent(this.pushAsReplacement);
+  MainNavigateToFeedFormEvent(this.pushAsReplacement, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [pushAsReplacement];
 }
 
 class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
-  final Plant plant;
+  final Box box;
 
-  MainNavigateToFeedLightFormEvent(this.plant, {pushAsReplacement = false})
-      : super(pushAsReplacement);
+  MainNavigateToFeedLightFormEvent(this.box,
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
   final Plant plant;
 
-  MainNavigateToFeedWaterFormEvent(this.plant, {pushAsReplacement = false})
-      : super(pushAsReplacement);
+  MainNavigateToFeedWaterFormEvent(this.plant,
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
   List<Object> get props => [plant];
@@ -174,14 +177,14 @@ class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
 
 class MainNavigateToFeedVentilationFormEvent
     extends MainNavigateToFeedFormEvent {
-  final Plant plant;
+  final Box box;
 
-  MainNavigateToFeedVentilationFormEvent(this.plant,
-      {pushAsReplacement = false})
-      : super(pushAsReplacement);
+  MainNavigateToFeedVentilationFormEvent(this.box,
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
@@ -189,8 +192,8 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
   final Box box;
 
   MainNavigateToFeedMediaFormEvent(
-      {this.plant, this.box, pushAsReplacement = false})
-      : super(pushAsReplacement);
+      {this.plant, this.box, pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
   List<Object> get props => [plant, box];
@@ -199,8 +202,9 @@ class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
 class MainNavigateToFeedMeasureFormEvent extends MainNavigateToFeedFormEvent {
   final Plant plant;
 
-  MainNavigateToFeedMeasureFormEvent(this.plant, {pushAsReplacement = false})
-      : super(pushAsReplacement);
+  MainNavigateToFeedMeasureFormEvent(this.plant,
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
   List<Object> get props => [plant];
@@ -210,8 +214,9 @@ class MainNavigateToFeedCareCommonFormEvent
     extends MainNavigateToFeedFormEvent {
   final Plant plant;
 
-  MainNavigateToFeedCareCommonFormEvent(this.plant, {pushAsReplacement = false})
-      : super(pushAsReplacement);
+  MainNavigateToFeedCareCommonFormEvent(this.plant,
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
   List<Object> get props => [plant];
@@ -220,43 +225,47 @@ class MainNavigateToFeedCareCommonFormEvent
 class MainNavigateToFeedDefoliationFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
   MainNavigateToFeedDefoliationFormEvent(Plant plant,
-      {pushAsReplacement = false})
-      : super(plant, pushAsReplacement: pushAsReplacement);
+      {pushAsReplacement = false, futureFn})
+      : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
 }
 
 class MainNavigateToFeedToppingFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedToppingFormEvent(Plant plant, {pushAsReplacement = false})
-      : super(plant, pushAsReplacement: pushAsReplacement);
+  MainNavigateToFeedToppingFormEvent(Plant plant,
+      {pushAsReplacement = false, futureFn})
+      : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
 }
 
 class MainNavigateToFeedFimmingFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedFimmingFormEvent(Plant plant, {pushAsReplacement = false})
-      : super(plant, pushAsReplacement: pushAsReplacement);
+  MainNavigateToFeedFimmingFormEvent(Plant plant,
+      {pushAsReplacement = false, futureFn})
+      : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
 }
 
 class MainNavigateToFeedBendingFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
-  MainNavigateToFeedBendingFormEvent(Plant plant, {pushAsReplacement = false})
-      : super(plant, pushAsReplacement: pushAsReplacement);
+  MainNavigateToFeedBendingFormEvent(Plant plant,
+      {pushAsReplacement = false, futureFn})
+      : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
 }
 
 class MainNavigateToFeedTransplantFormEvent
     extends MainNavigateToFeedCareCommonFormEvent {
   MainNavigateToFeedTransplantFormEvent(Plant plant,
-      {pushAsReplacement = false})
-      : super(plant, pushAsReplacement: pushAsReplacement);
+      {pushAsReplacement = false, futureFn})
+      : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
 }
 
 class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
-  final Plant plant;
+  final Box box;
 
-  MainNavigateToFeedScheduleFormEvent(this.plant, {pushAsReplacement = false})
-      : super(pushAsReplacement);
+  MainNavigateToFeedScheduleFormEvent(this.box,
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToFeedLifeEventFormEvent extends MainNavigateToFeedFormEvent {
@@ -264,8 +273,8 @@ class MainNavigateToFeedLifeEventFormEvent extends MainNavigateToFeedFormEvent {
   final PlantPhases phase;
 
   MainNavigateToFeedLifeEventFormEvent(this.plant, this.phase,
-      {pushAsReplacement = false})
-      : super(pushAsReplacement);
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
   List<Object> get props => [plant];
@@ -276,8 +285,8 @@ class MainNavigateToFeedNutrientMixFormEvent
   final Plant plant;
 
   MainNavigateToFeedNutrientMixFormEvent(this.plant,
-      {pushAsReplacement = false})
-      : super(pushAsReplacement);
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
 
   @override
   List<Object> get props => [];
@@ -288,7 +297,8 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
   final String tipID;
   final MainNavigateToFeedFormEvent nextRoute;
 
-  MainNavigateToTipEvent(this.tipID, this.paths, this.nextRoute);
+  MainNavigateToTipEvent(this.tipID, this.paths, this.nextRoute, {futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [nextRoute];

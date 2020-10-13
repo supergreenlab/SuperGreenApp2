@@ -135,7 +135,7 @@ class FeedVentilationFormBloc
       FeedVentilationFormBlocEvent event) async* {
     if (event is FeedVentilationFormBlocEventLoadVentilations) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         yield FeedVentilationFormBlocStateNoDevice(15, 5, 15, 5, box);
         return;
@@ -151,7 +151,7 @@ class FeedVentilationFormBloc
           initialBlowerNight, blowerDay.ivalue, blowerNight.ivalue, box);
     } else if (event is FeedVentilationFormBlocBlowerDayChangedEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         return;
       }
@@ -162,7 +162,7 @@ class FeedVentilationFormBloc
           initialBlowerNight, blowerDay.ivalue, blowerNight.ivalue, box);
     } else if (event is FeedVentilationFormBlocBlowerNightChangedEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         return;
       }
@@ -173,12 +173,12 @@ class FeedVentilationFormBloc
           initialBlowerNight, blowerDay.ivalue, blowerNight.ivalue, box);
     } else if (event is FeedVentilationFormBlocEventCreate) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         return;
       }
       yield FeedVentilationFormBlocStateLoading('Saving..');
-      List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
+      List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
       for (int i = 0; i < plants.length; ++i) {
         PlantSettings plantSettings =
             PlantSettings.fromJSON(plants[i].settings);
@@ -201,7 +201,7 @@ class FeedVentilationFormBloc
       yield FeedVentilationFormBlocStateDone();
     } else if (event is FeedVentilationFormBlocEventCancelEvent) {
       final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.plant.box);
+      Box box = await db.plantsDAO.getBox(args.box.id);
       if (box.device == null) {
         return;
       }
