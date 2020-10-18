@@ -31,7 +31,7 @@ import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_c
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_unknown/feed_unknown_card_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/main/card/feed_ventilation_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';

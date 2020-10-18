@@ -76,8 +76,8 @@ import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_n
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/main/form/feed_ventilation_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/main/form/feed_ventilation_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/form/feed_water_form_page.dart';
 import 'package:super_green_app/pages/feeds/plant_feeds/remote/public_plant_bloc.dart';
