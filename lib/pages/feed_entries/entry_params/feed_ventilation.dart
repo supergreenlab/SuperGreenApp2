@@ -22,21 +22,59 @@ import 'package:equatable/equatable.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedVentilationParamsValues extends Equatable {
+  final int blowerRefSource;
+  final int blowerRefMin;
+  final int blowerRefMax;
+  final int blowerMin;
+  final int blowerMax;
+
+  // legacy params
   final int blowerDay;
   final int blowerNight;
 
-  FeedVentilationParamsValues(this.blowerDay, this.blowerNight);
+  FeedVentilationParamsValues({
+    this.blowerRefSource,
+    this.blowerRefMin,
+    this.blowerRefMax,
+    this.blowerMin,
+    this.blowerMax,
+    this.blowerDay,
+    this.blowerNight,
+  });
 
   factory FeedVentilationParamsValues.fromMap(Map<String, dynamic> map) {
-    return FeedVentilationParamsValues(map['blowerDay'], map['blowerNight']);
+    return FeedVentilationParamsValues(
+        blowerRefSource: map['blowerRefSource'],
+        blowerRefMin: map['blowerRefMin'],
+        blowerRefMax: map['blowerRefMax'],
+        blowerMin: map['blowerMin'],
+        blowerMax: map['blowerMax'],
+        blowerDay: map['blowerDay'],
+        blowerNight: map['blowerNight']);
   }
 
   Map<String, dynamic> toMap() {
-    return {'blowerDay': blowerDay, 'blowerNight': blowerNight};
+    return {
+      'blowerRefSource': blowerRefSource,
+      'blowerRefMin': blowerRefMin,
+      'blowerRefMax': blowerRefMax,
+      'blowerMin': blowerMin,
+      'blowerMax': blowerMax,
+      'blowerDay': blowerDay,
+      'blowerNight': blowerNight
+    };
   }
 
   @override
-  List<Object> get props => [blowerDay, blowerNight];
+  List<Object> get props => [
+        blowerRefSource,
+        blowerRefMin,
+        blowerRefMax,
+        blowerMin,
+        blowerMax,
+        blowerDay,
+        blowerNight
+      ];
 }
 
 class FeedVentilationParams extends FeedEntryParams {

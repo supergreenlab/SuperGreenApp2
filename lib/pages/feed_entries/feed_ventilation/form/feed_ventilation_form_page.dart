@@ -23,8 +23,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_legacy_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_v3_form_page.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
-import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -37,9 +38,6 @@ class FeedVentilationFormPage extends StatefulWidget {
 }
 
 class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
-  int _blowerDay = 0;
-  int _blowerNight = 0;
-
   bool _reachable = true;
   bool _usingWifi = false;
 
@@ -55,10 +53,6 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
             });
           }
-          setState(() {
-            _blowerDay = state.blowerDay;
-            _blowerNight = state.blowerNight;
-          });
         } else if (state is FeedVentilationFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(mustPop: true));
@@ -70,7 +64,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             Widget body;
             if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: state.text);
-            } else if (state is FeedVentilationFormBlocStateNoDevice) {
+            } else if (state is FeedVentilationFormBlocStateLoaded &&
+                state.noDevice == true) {
               body = Stack(
                 children: <Widget>[
                   _renderParams(context, state),
@@ -144,8 +139,13 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   child: content);
             }
             bool changed = state is FeedVentilationFormBlocStateLoaded &&
-                (state.blowerDay != state.initialBlowerDay ||
-                    state.blowerNight != state.initialBlowerNight);
+                (state.blowerMin?.isChanged == true ||
+                    state.blowerMax?.isChanged == true ||
+                    state.blowerRefMin?.isChanged == true ||
+                    state.blowerRefMax?.isChanged == true ||
+                    state.blowerRefSource?.isChanged == true ||
+                    state.blowerDay?.isChanged == true ||
+                    state.blowerNight?.isChanged == true);
             return FeedFormLayout(
                 title: '💨',
                 fontSize: 35,
@@ -154,16 +154,16 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 hideBackButton: ((_reachable == false && changed) ||
                     state is FeedVentilationFormBlocStateLoading),
                 onOK: () {
-                  BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                      FeedVentilationFormBlocEventCreate(
-                          _blowerDay, _blowerNight));
+                  BlocProvider.of<FeedVentilationFormBloc>(context)
+                      .add(FeedVentilationFormBlocEventCreate());
                 },
                 body: WillPopScope(
                   onWillPop: () async {
                     if (_reachable == false && changed) {
                       return false;
                     }
-                    if (state is FeedVentilationFormBlocStateNoDevice) {
+                    if (state is FeedVentilationFormBlocStateLoaded &&
+                        state.noDevice == true) {
                       return true;
                     }
                     if (changed) {
@@ -181,47 +181,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   }
 
   Widget _renderParams(
-      BuildContext context, FeedVentilationFormBlocState state) {
-    return ListView(
-      children: [
-        SliderFormParam(
-          key: Key('day'),
-          title: 'Blower day',
-          icon: 'assets/feed_form/icon_blower.svg',
-          value: _blowerDay.toDouble(),
-          min: 0,
-          max: 100,
-          color: Colors.yellow,
-          onChanged: (double newValue) {
-            setState(() {
-              _blowerDay = newValue.toInt();
-            });
-          },
-          onChangeEnd: (double newValue) {
-            BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                FeedVentilationFormBlocBlowerDayChangedEvent(newValue.round()));
-          },
-        ),
-        SliderFormParam(
-          key: Key('night'),
-          title: 'Blower night',
-          icon: 'assets/feed_form/icon_blower.svg',
-          value: _blowerNight.toDouble(),
-          min: 0,
-          max: 100,
-          color: Colors.blue,
-          onChanged: (double newValue) {
-            setState(() {
-              _blowerNight = newValue.toInt();
-            });
-          },
-          onChangeEnd: (double newValue) {
-            BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                FeedVentilationFormBlocBlowerNightChangedEvent(
-                    newValue.toInt()));
-          },
-        ),
-      ],
-    );
+      BuildContext context, FeedVentilationFormBlocStateLoaded state) {
+    if (state.isLegacy) {
+      return FeedVentilationLegacyFormPage(state);
+    }
+    return FeedVentilationV3FormPage(state);
   }
 }
