@@ -21,17 +21,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationV3FormPage extends StatefulWidget {
+class FeedVentilationTemperatureFormPage extends StatefulWidget {
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationV3FormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationTemperatureFormPage(this.state, {Key key})
+      : super(key: key);
 
   @override
-  _FeedVentilationV3FormPageState createState() =>
-      _FeedVentilationV3FormPageState();
+  _FeedVentilationTemperatureFormPageState createState() =>
+      _FeedVentilationTemperatureFormPageState();
 }
 
-class _FeedVentilationV3FormPageState extends State<FeedVentilationV3FormPage> {
+class _FeedVentilationTemperatureFormPageState
+    extends State<FeedVentilationTemperatureFormPage> {
   int _blowerMin = 0;
   int _blowerMax = 0;
   int _blowerRefMin = 0;
@@ -66,7 +68,7 @@ class _FeedVentilationV3FormPageState extends State<FeedVentilationV3FormPage> {
         child: ListView(
           children: [
             SliderFormParam(
-              key: Key('day'),
+              key: Key('max'),
               title: 'Blower min',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _blowerMin.toDouble(),
@@ -86,8 +88,8 @@ class _FeedVentilationV3FormPageState extends State<FeedVentilationV3FormPage> {
               },
             ),
             SliderFormParam(
-              key: Key('night'),
-              title: 'Blower night',
+              key: Key('max'),
+              title: 'Blower max',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _blowerMax.toDouble(),
               min: 0,

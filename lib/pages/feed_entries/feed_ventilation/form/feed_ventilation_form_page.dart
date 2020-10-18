@@ -24,7 +24,8 @@ import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_legacy_form_page.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_v3_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_temperature_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_timer_form_page.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_layout.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -185,6 +186,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     if (state.isLegacy) {
       return FeedVentilationLegacyFormPage(state);
     }
-    return FeedVentilationV3FormPage(state);
+
+    if (state.blowerRefSource.value >= 1 && state.blowerRefSource.value <= 3) {
+      return FeedVentilationTemperatureFormPage(state);
+    }
+    return FeedVentilationTimerFormPage(state);
   }
 }
