@@ -18,21 +18,33 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationFixFormPage extends StatefulWidget {
+class FeedVentilationManualFormPage extends StatefulWidget {
+  static String get instructionsManualTimerModeDescription {
+    return Intl.message(
+      '''This is the **manual blower control** mode, just set a value and the blower will stay at this power.''',
+      name: 'instructionsManualTimerModeDescription',
+      desc: 'Instructions for blower manual mode',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationFixFormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationManualFormPage(this.state, {Key key}) : super(key: key);
 
   @override
-  _FeedVentilationFixFormPageState createState() =>
-      _FeedVentilationFixFormPageState();
+  _FeedVentilationManualFormPageState createState() =>
+      _FeedVentilationManualFormPageState();
 }
 
-class _FeedVentilationFixFormPageState
-    extends State<FeedVentilationFixFormPage> {
+class _FeedVentilationManualFormPageState
+    extends State<FeedVentilationManualFormPage> {
   int _blowerValue = 0;
 
   @override
@@ -54,6 +66,15 @@ class _FeedVentilationFixFormPageState
         },
         child: ListView(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MarkdownBody(
+                data: FeedVentilationManualFormPage
+                    .instructionsManualTimerModeDescription,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
             SliderFormParam(
               key: Key('blower_value'),
               title: 'Blower value',

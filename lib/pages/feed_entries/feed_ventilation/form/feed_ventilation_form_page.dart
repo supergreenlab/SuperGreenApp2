@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_fix_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_manual_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_legacy_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_temperature_form_page.dart';
@@ -198,7 +198,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     } else if (isTempSource(state.blowerRefSource.value)) {
       body = FeedVentilationTemperatureFormPage(state);
     } else if (state.blowerRefSource.value == 0) {
-      body = FeedVentilationFixFormPage(state);
+      body = FeedVentilationManualFormPage(state);
     } else {
       body = Fullscreen(
         child: Icon(Icons.upgrade),
@@ -218,7 +218,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         child: ToggleButtons(
           children: <Widget>[
             Icon(Icons.timer),
-            Icon(Icons.cancel),
+            Icon(Icons.touch_app),
             Icon(Icons.device_thermostat),
           ],
           onPressed: (int index) {

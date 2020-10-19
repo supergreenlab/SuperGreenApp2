@@ -18,10 +18,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
 class FeedVentilationTimerFormPage extends StatefulWidget {
+  static String get instructionsBlowerTimerModeDescription {
+    return Intl.message(
+      '''This is the **timer based blower control**, in this mode the blower is **in sync with the light timer**.\n\nEx: when the timer says 100% (which means all lights are on), it will set the blower power at the **blower day** value below.''',
+      name: 'instructionsBlowerTimerModeDescription',
+      desc: 'Instructions for blower timer mode',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final FeedVentilationFormBlocStateLoaded state;
 
   const FeedVentilationTimerFormPage(this.state, {Key key}) : super(key: key);
@@ -57,9 +69,18 @@ class _FeedVentilationTimerFormPageState
         },
         child: ListView(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MarkdownBody(
+                data: FeedVentilationTimerFormPage
+                    .instructionsBlowerTimerModeDescription,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
             SliderFormParam(
               key: Key('blower_night'),
-              title: 'Blower night',
+              title: 'Blower night (when lights are off)',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _blowerNight.toDouble(),
               min: 0,
@@ -79,7 +100,7 @@ class _FeedVentilationTimerFormPageState
             ),
             SliderFormParam(
               key: Key('blower_day'),
-              title: 'Blower day',
+              title: 'Blower day (when lights are on)',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _blowerDay.toDouble(),
               min: 0,

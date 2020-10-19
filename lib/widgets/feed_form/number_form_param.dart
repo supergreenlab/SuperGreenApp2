@@ -27,6 +27,7 @@ class NumberFormParam extends StatelessWidget {
   final String unit;
   final double step;
   final void Function(double) onChange;
+  final String Function(double) displayFn;
   final double displayMultiplier;
   final Widget child;
 
@@ -38,10 +39,13 @@ class NumberFormParam extends StatelessWidget {
       this.onChange,
       this.unit = '',
       this.displayMultiplier = 1,
+      this.displayFn,
       this.child});
 
   @override
   Widget build(BuildContext context) {
+    String Function(double) displayFn =
+        this.displayFn ?? (v) => '${value * displayMultiplier}';
     return FeedFormParamLayout(
       icon: icon,
       title: title,
@@ -70,8 +74,8 @@ class NumberFormParam extends StatelessWidget {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     )),
                 Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Text('${value * displayMultiplier}$unit',
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('${displayFn(value)}$unit',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 ),

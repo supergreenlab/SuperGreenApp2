@@ -82,11 +82,13 @@ class DeviceHelper {
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
   }
 
-  static Future refreshIntParam(Device device, Param param,
+  static Future<Param> refreshIntParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
         timeout: timeout, nRetries: nRetries, wait: wait);
-    await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
+    Param newParam = param.copyWith(ivalue: value);
+    await RelDB.get().devicesDAO.updateParam(newParam);
+    return newParam;
   }
 
   static Future deleteDevice(Device device, {addDeleted: true}) async {

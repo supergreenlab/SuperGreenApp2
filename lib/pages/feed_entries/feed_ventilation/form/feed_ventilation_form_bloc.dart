@@ -31,28 +31,27 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 // TODO make device param management/module helpers based on VentilationControllerParam
 // TODO ref source values from config
 
-const int TIMER_REF_OFFSET = 0x1;
-const int TEMP_REF_OFFSET = 0x8;
+const int TEMP_REF_OFFSET = 0x1;
+const int TIMER_REF_OFFSET = 0x8;
 
-bool isTimerSource(int source) =>
-    source >= TIMER_REF_OFFSET && source < TEMP_REF_OFFSET;
-bool isTempSource(int source) => source >= TEMP_REF_OFFSET;
+bool isTempSource(int source) =>
+    source >= TEMP_REF_OFFSET && source < TIMER_REF_OFFSET;
+bool isTimerSource(int source) => source >= TIMER_REF_OFFSET;
 
-class VentilationControllerParam extends Equatable {
+class IntControllerParam extends Equatable {
   final Param _param;
   final int value;
   final int initialValue;
 
   bool get isChanged => value != initialValue;
 
-  VentilationControllerParam(this._param, this.value, this.initialValue);
+  IntControllerParam(this._param, this.value, this.initialValue);
 
-  VentilationControllerParam copyWith(
-          {Param param, int value, int initialValue}) =>
-      VentilationControllerParam(param ?? this._param, value ?? this.value,
+  IntControllerParam copyWith({Param param, int value, int initialValue}) =>
+      IntControllerParam(param ?? this._param, value ?? this.value,
           initialValue ?? this.initialValue);
 
-  Future<VentilationControllerParam> _syncParam(Device device) async {
+  Future<IntControllerParam> _syncParam(Device device) async {
     if (value != _param.ivalue) {
       int newValue = await DeviceHelper.updateIntParam(device, _param, value);
       Param param = _param.copyWith(ivalue: newValue);
@@ -61,7 +60,7 @@ class VentilationControllerParam extends Equatable {
     return this;
   }
 
-  Future<VentilationControllerParam> _cancelParam(Device device) async {
+  Future<IntControllerParam> _cancelParam(Device device) async {
     if (initialValue != _param.ivalue) {
       int newValue =
           await DeviceHelper.updateIntParam(device, _param, initialValue);
@@ -71,12 +70,12 @@ class VentilationControllerParam extends Equatable {
     return this;
   }
 
-  static Future<VentilationControllerParam> loadFromDB(
+  static Future<IntControllerParam> loadFromDB(
       Device device, Box box, String key) async {
     Param param = await RelDB.get()
         .devicesDAO
         .getParam(device.id, "BOX_${box.deviceBox}_$key");
-    return VentilationControllerParam(param, param.ivalue, param.ivalue);
+    return IntControllerParam(param, param.ivalue, param.ivalue);
   }
 
   @override
@@ -101,15 +100,15 @@ class FeedVentilationFormBlocEventCreate extends FeedVentilationFormBlocEvent {
 
 class FeedVentilationFormBlocParamsChangedEvent
     extends FeedVentilationFormBlocEvent {
-  final VentilationControllerParam blowerMin;
-  final VentilationControllerParam blowerMax;
-  final VentilationControllerParam blowerRefMin;
-  final VentilationControllerParam blowerRefMax;
-  final VentilationControllerParam blowerRefSource;
+  final IntControllerParam blowerMin;
+  final IntControllerParam blowerMax;
+  final IntControllerParam blowerRefMin;
+  final IntControllerParam blowerRefMax;
+  final IntControllerParam blowerRefSource;
 
   // legacy fields
-  final VentilationControllerParam blowerDay;
-  final VentilationControllerParam blowerNight;
+  final IntControllerParam blowerDay;
+  final IntControllerParam blowerNight;
 
   FeedVentilationFormBlocParamsChangedEvent({
     this.blowerMin,
@@ -150,20 +149,23 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
   final bool noDevice;
   final Box box;
 
+  final IntControllerParam temperature;
+
   final bool isLegacy;
-  final VentilationControllerParam blowerMin;
-  final VentilationControllerParam blowerMax;
-  final VentilationControllerParam blowerRefMin;
-  final VentilationControllerParam blowerRefMax;
-  final VentilationControllerParam blowerRefSource;
+  final IntControllerParam blowerMin;
+  final IntControllerParam blowerMax;
+  final IntControllerParam blowerRefMin;
+  final IntControllerParam blowerRefMax;
+  final IntControllerParam blowerRefSource;
 
   // legacy fields
-  final VentilationControllerParam blowerDay;
-  final VentilationControllerParam blowerNight;
+  final IntControllerParam blowerDay;
+  final IntControllerParam blowerNight;
 
   FeedVentilationFormBlocStateLoaded({
     this.noDevice = false,
     this.box,
+    this.temperature,
     this.isLegacy,
     this.blowerMin,
     this.blowerMax,
@@ -178,6 +180,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
   List<Object> get props => [
         noDevice,
         box,
+        temperature,
         isLegacy,
         blowerMin,
         blowerMax,
@@ -210,16 +213,18 @@ class FeedVentilationFormBloc
   Device device;
   Box box;
 
+  IntControllerParam temperature;
+
   bool isLegacy;
-  VentilationControllerParam blowerMin;
-  VentilationControllerParam blowerMax;
-  VentilationControllerParam blowerRefMin;
-  VentilationControllerParam blowerRefMax;
-  VentilationControllerParam blowerRefSource;
+  IntControllerParam blowerMin;
+  IntControllerParam blowerMax;
+  IntControllerParam blowerRefMin;
+  IntControllerParam blowerRefMax;
+  IntControllerParam blowerRefSource;
 
   // Legacy fields
-  VentilationControllerParam blowerDay;
-  VentilationControllerParam blowerNight;
+  IntControllerParam blowerDay;
+  IntControllerParam blowerNight;
 
   FeedVentilationFormBloc(this.args)
       : super(FeedVentilationFormBlocStateInit()) {
@@ -236,32 +241,38 @@ class FeedVentilationFormBloc
         yield FeedVentilationFormBlocStateLoaded(
             noDevice: true,
             isLegacy: false,
-            blowerMin: VentilationControllerParam(null, 5, 5),
-            blowerMax: VentilationControllerParam(null, 40, 40),
-            blowerRefMin: VentilationControllerParam(null, 20, 20),
-            blowerRefMax: VentilationControllerParam(null, 32, 32),
+            blowerMin: IntControllerParam(null, 5, 5),
+            blowerMax: IntControllerParam(null, 40, 40),
+            blowerRefMin: IntControllerParam(null, 20, 20),
+            blowerRefMax: IntControllerParam(null, 32, 32),
             box: box);
         return;
       }
       device = await db.devicesDAO.getDevice(box.device);
+
+      temperature = await IntControllerParam.loadFromDB(device, box, "TEMP");
+      temperature = temperature.copyWith(
+          param:
+              await DeviceHelper.refreshIntParam(device, temperature._param));
+
       try {
         isLegacy = true;
-        blowerDay = await VentilationControllerParam.loadFromDB(
-            device, box, "BLOWER_DAY");
-        blowerNight = await VentilationControllerParam.loadFromDB(
-            device, box, "BLOWER_NIGHT");
+        blowerDay =
+            await IntControllerParam.loadFromDB(device, box, "BLOWER_DAY");
+        blowerNight =
+            await IntControllerParam.loadFromDB(device, box, "BLOWER_NIGHT");
         yield loadedState();
       } catch (e) {
         isLegacy = false;
-        blowerMin = await VentilationControllerParam.loadFromDB(
-            device, box, "BLOWER_MIN");
-        blowerMax = await VentilationControllerParam.loadFromDB(
-            device, box, "BLOWER_MAX");
-        blowerRefMin = await VentilationControllerParam.loadFromDB(
-            device, box, "BLOWER_REF_MIN");
-        blowerRefMax = await VentilationControllerParam.loadFromDB(
-            device, box, "BLOWER_REF_MAX");
-        blowerRefSource = await VentilationControllerParam.loadFromDB(
+        blowerMin =
+            await IntControllerParam.loadFromDB(device, box, "BLOWER_MIN");
+        blowerMax =
+            await IntControllerParam.loadFromDB(device, box, "BLOWER_MAX");
+        blowerRefMin =
+            await IntControllerParam.loadFromDB(device, box, "BLOWER_REF_MIN");
+        blowerRefMax =
+            await IntControllerParam.loadFromDB(device, box, "BLOWER_REF_MAX");
+        blowerRefSource = await IntControllerParam.loadFromDB(
             device, box, "BLOWER_REF_SOURCE");
         yield loadedState();
       }
@@ -363,6 +374,7 @@ class FeedVentilationFormBloc
   FeedVentilationFormBlocStateLoaded loadedState() =>
       FeedVentilationFormBlocStateLoaded(
         box: box,
+        temperature: temperature,
         isLegacy: isLegacy,
         blowerMin: blowerMin,
         blowerMax: blowerMax,

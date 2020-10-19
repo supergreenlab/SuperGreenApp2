@@ -280,7 +280,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedLifeEventFormEvent(
                       state.plant, PlantPhases.GERMINATING,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_GERMINATING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'
@@ -293,7 +294,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedLifeEventFormEvent(
                       state.plant, PlantPhases.VEGGING,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_VEGGING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_does_vegetative_state_start/l/en'
@@ -306,7 +308,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedLifeEventFormEvent(
                       state.plant, PlantPhases.BLOOMING,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_BLOOMING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_does_flowering_start/l/en'
@@ -319,7 +322,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedLifeEventFormEvent(
                       state.plant, PlantPhases.DRYING,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_DRYING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_dry/l/en'
@@ -332,7 +336,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedLifeEventFormEvent(
                       state.plant, PlantPhases.CURING,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_CURING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/why_cure/l/en'
@@ -351,7 +356,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
                   plant: state.plant,
                   pushAsReplacement: pushAsReplacement,
-                  futureFn: futureFn))),
+                  futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
           'Measure',
           'assets/feed_card/icon_measure.svg',
@@ -360,7 +365,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedMeasureFormEvent(state.plant,
                       pushAsReplacement: pushAsReplacement,
-                      futureFn: futureFn))),
+                      futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
           'Nutrient mix',
           'assets/feed_card/icon_nutrient_mix.svg',
@@ -368,7 +373,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedNutrientMixFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_WATERING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_start_adding_nutrients/l/en',
@@ -382,7 +388,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(
                   state.plant,
                   pushAsReplacement: pushAsReplacement,
-                  futureFn: futureFn),
+                  futureFn: futureFn(context, state)),
               tipID: 'TIP_WATERING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
@@ -677,7 +683,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  Function(Future<dynamic>) futureFn(
+  void Function(Future<dynamic>) futureFn(
       BuildContext context, PlantFeedBlocStateLoaded state) {
     return (Future<dynamic> future) async {
       dynamic feedEntry = await future;
