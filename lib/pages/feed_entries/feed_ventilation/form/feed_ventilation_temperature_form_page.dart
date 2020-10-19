@@ -117,7 +117,7 @@ class _FeedVentilationTemperatureFormPageState
                       ],
                     )),
                 NumberFormParam(
-                  title: 'Temperature Min.',
+                  title: 'Temperature low',
                   icon: 'assets/feed_form/icon_blower.svg',
                   value: _blowerRefMin.toDouble(),
                   unit: unit,
@@ -185,7 +185,7 @@ class _FeedVentilationTemperatureFormPageState
                       ],
                     )),
                 NumberFormParam(
-                  title: 'Temperature Max.',
+                  title: 'Temperature high',
                   icon: 'assets/feed_form/icon_blower.svg',
                   value: _blowerRefMax.toDouble(),
                   unit: unit,

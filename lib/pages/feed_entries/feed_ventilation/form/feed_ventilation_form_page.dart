@@ -267,7 +267,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Change to ${modeNames[index]}?'),
-            content: Text('This might override some values, continue?'),
+            content: Text(
+                'This might override some values, but you can always cancel the changes with the arrow top left, continue?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
