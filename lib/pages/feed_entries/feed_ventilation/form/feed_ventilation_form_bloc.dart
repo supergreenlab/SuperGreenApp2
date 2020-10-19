@@ -313,7 +313,7 @@ class FeedVentilationFormBloc
           params: Value(FeedVentilationParams(
                   FeedVentilationParamsValues(
                       blowerMin: blowerMin?.value,
-                      blowerMax: blowerMin?.value,
+                      blowerMax: blowerMax?.value,
                       blowerRefMin: blowerRefMin?.value,
                       blowerRefMax: blowerRefMax?.value,
                       blowerRefSource: blowerRefSource?.value,
@@ -321,7 +321,7 @@ class FeedVentilationFormBloc
                       blowerNight: blowerNight?.value),
                   FeedVentilationParamsValues(
                       blowerMin: blowerMin?.initialValue,
-                      blowerMax: blowerMin?.initialValue,
+                      blowerMax: blowerMax?.initialValue,
                       blowerRefMin: blowerRefMin?.initialValue,
                       blowerRefMax: blowerRefMax?.initialValue,
                       blowerRefSource: blowerRefSource?.initialValue,

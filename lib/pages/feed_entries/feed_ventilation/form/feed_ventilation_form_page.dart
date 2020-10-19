@@ -64,7 +64,9 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) {
             Widget body;
-            if (state is FeedVentilationFormBlocStateLoading) {
+            if (state is FeedVentilationFormBlocStateInit) {
+              body = FullscreenLoading(title: 'Loading..');
+            } else if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: state.text);
             } else if (state is FeedVentilationFormBlocStateLoaded &&
                 state.noDevice == true) {

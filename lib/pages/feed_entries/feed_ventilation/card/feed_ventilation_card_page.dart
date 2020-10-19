@@ -18,14 +18,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_date.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedVentilationCardPage extends StatelessWidget {
   final Animation animation;
@@ -73,6 +77,12 @@ class FeedVentilationCardPage extends StatelessWidget {
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
     FeedVentilationParams params = state.params;
+    Widget body;
+    if (params.values.blowerRefSource == null) {
+      body = _renderLegacy();
+    } else {
+      body = _renderV3();
+    }
     return FeedCard(
       animation: animation,
       child: Column(
@@ -89,25 +99,165 @@ class FeedVentilationCardPage extends StatelessWidget {
                   .add(FeedBlocEventDeleteEntry(state));
             },
           ),
-          Container(
-            height: 120,
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _renderValues([
-                params.values.blowerDay,
-                params.values.blowerNight
-              ], [
-                params.initialValues.blowerDay,
-                params.initialValues.blowerNight
-              ]),
-            ),
-          ),
+          body,
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state, feedState),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _renderV3() {
+    FeedVentilationParams params = state.params;
+    if (isTempSource(params.values.blowerRefSource)) {
+      return _renderTemperatureMode();
+    } else if (isTimerSource(params.values.blowerRefSource)) {
+      return _renderTimerMode();
+    } else if (params.values.blowerRefSource == 0) {
+      return _renderManualMode();
+    }
+    return Fullscreen(
+      child: Icon(Icons.upgrade),
+      title:
+          'Unknown blower reference source, you might need to upgrade the app.',
+    );
+  }
+
+  Widget _renderTemperatureMode() {
+    FeedVentilationParams params = state.params;
+    String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
+    List<Widget> cards = [
+      renderCard(
+          'assets/feed_card/icon_blower.svg',
+          8,
+          'Low temperature\nsettings',
+          Column(
+            children: [
+              Text('${params.values.blowerMin}%',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.lightBlue)),
+              Text(
+                  'at ${_tempUnit(params.values.blowerRefMin.toDouble())}$unit',
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
+            ],
+          )),
+      renderCard(
+          'assets/feed_card/icon_blower.svg',
+          8,
+          'High temperature\nsettings',
+          Column(
+            children: [
+              Text('${params.values.blowerMax}%',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.red)),
+              Text(
+                  'at ${_tempUnit(params.values.blowerRefMax.toDouble())}$unit',
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
+            ],
+          )),
+    ];
+    return Container(
+      height: 170,
+      alignment: Alignment.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: cards,
+        ),
+      ),
+    );
+  }
+
+  Widget _renderTimerMode() {
+    FeedVentilationParams params = state.params;
+    List<Widget> cards = [
+      renderCard(
+          'assets/feed_card/icon_blower.svg',
+          8,
+          'Night settings',
+          Column(
+            children: [
+              Text('${params.values.blowerMin}%',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.blue)),
+            ],
+          )),
+      renderCard(
+          'assets/feed_card/icon_blower.svg',
+          8,
+          'Day settings',
+          Column(
+            children: [
+              Text('${params.values.blowerMax}%',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.orange)),
+            ],
+          )),
+    ];
+    return Container(
+      height: 130,
+      alignment: Alignment.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: cards,
+        ),
+      ),
+    );
+  }
+
+  Widget _renderManualMode() {
+    FeedVentilationParams params = state.params;
+    List<Widget> cards = [
+      renderCard(
+          'assets/feed_card/icon_blower.svg',
+          8,
+          'Blower power',
+          Column(
+            children: [
+              Text('${params.values.blowerMin}%',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 30,
+                      color: Colors.grey)),
+            ],
+          )),
+    ];
+    return Container(
+      height: 130,
+      alignment: Alignment.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: cards,
+        ),
+      ),
+    );
+  }
+
+  Widget _renderLegacy() {
+    FeedVentilationParams params = state.params;
+    return Container(
+      height: 120,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: _renderValues(
+            [params.values.blowerDay, params.values.blowerNight],
+            [params.initialValues.blowerDay, params.initialValues.blowerNight]),
       ),
     );
   }
@@ -159,5 +309,42 @@ class FeedVentilationCardPage extends StatelessWidget {
           );
         })
         .toList();
+  }
+
+  Widget renderCard(
+      String icon, double iconPadding, String title, Widget child) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Container(
+          width: 200,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+              border: Border.all(color: Color(0xffdedede), width: 1),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            children: [
+              SectionTitle(
+                icon: icon,
+                iconPadding: iconPadding,
+                title: title,
+                backgroundColor: Colors.transparent,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: child,
+                ),
+              )
+            ],
+          )),
+    );
+  }
+
+  double _tempUnit(double temp) {
+    if (AppDB().getAppData().freedomUnits == true) {
+      return temp * 9 / 5 + 32;
+    }
+    return temp;
   }
 }
