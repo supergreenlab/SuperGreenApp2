@@ -90,7 +90,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         children: [
           FeedCardTitle(
             'assets/feed_card/icon_media.svg',
-            'Grow log',
+            params.boxFeed == true ? 'Build log' : 'Grow log',
             state.synced,
             onEdit: () {
               setState(() {

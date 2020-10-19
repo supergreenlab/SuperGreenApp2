@@ -23,24 +23,25 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_param
 class FeedMediaParams extends FeedEntryParams {
   final String message;
   final bool helpRequest;
+  final bool boxFeed;
 
-  FeedMediaParams(this.message, this.helpRequest);
+  FeedMediaParams(this.message, this.helpRequest, {this.boxFeed = false});
 
-  FeedMediaParams copyWith(String message) => FeedMediaParams(message, this.helpRequest);
+  FeedMediaParams copyWith(String message) =>
+      FeedMediaParams(message, this.helpRequest);
 
   factory FeedMediaParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedMediaParams(map['message'], map['helpRequest']);
+    return FeedMediaParams(map['message'], map['helpRequest'],
+        boxFeed: map['boxFeed']);
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({
-      'message': message,
-      'helpRequest': helpRequest
-    });
+    return JsonEncoder().convert(
+        {'message': message, 'helpRequest': helpRequest, 'boxFeed': boxFeed});
   }
 
   @override
-  List<Object> get props => [message, helpRequest];
+  List<Object> get props => [message, helpRequest, boxFeed];
 }
