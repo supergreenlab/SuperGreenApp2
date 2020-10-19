@@ -94,8 +94,7 @@ class SelectPlantPage extends StatelessWidget {
                               title: Text('${++i}. ${p.name}',
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
-                              subtitle:
-                                  Text('Tap to open, Long press to delete.'),
+                              subtitle: Text('Tap to select'),
                               trailing: SizedBox(
                                   width: 30,
                                   height: 30,

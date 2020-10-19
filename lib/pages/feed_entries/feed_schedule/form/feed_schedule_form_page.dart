@@ -44,7 +44,7 @@ class FeedScheduleFormPage extends StatefulWidget {
 
   static String get instructionsBloomScheduleHelper {
     return Intl.message(
-      '**Bloom stage** is the phase between germination and blooming, the plant grows and develops it’s branches. It requires **at most 12h lights per days**, usual setting is **12h** per day.',
+      '**Bloom stage** is the phase where the plant develops its flowers. It requires **at most 12h lights per days**, usual setting is **12h** per day.',
       name: 'instructionsBloomScheduleHelper',
       desc: 'Bloom schedule helper',
       locale: SGLLocalizations.current.localeName,
