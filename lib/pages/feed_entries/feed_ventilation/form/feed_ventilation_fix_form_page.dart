@@ -21,32 +21,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationTemperatureFormPage extends StatefulWidget {
+class FeedVentilationFixFormPage extends StatefulWidget {
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationTemperatureFormPage(this.state, {Key key})
-      : super(key: key);
+  const FeedVentilationFixFormPage(this.state, {Key key}) : super(key: key);
 
   @override
-  _FeedVentilationTemperatureFormPageState createState() =>
-      _FeedVentilationTemperatureFormPageState();
+  _FeedVentilationFixFormPageState createState() =>
+      _FeedVentilationFixFormPageState();
 }
 
-class _FeedVentilationTemperatureFormPageState
-    extends State<FeedVentilationTemperatureFormPage> {
-  int _blowerMin = 0;
-  int _blowerMax = 0;
-  int _blowerRefMin = 0;
-  int _blowerRefMax = 0;
-  int _blowerRefSource = 0;
+class _FeedVentilationFixFormPageState
+    extends State<FeedVentilationFixFormPage> {
+  int _blowerValue = 0;
 
   @override
   void initState() {
-    _blowerMin = widget.state.blowerMin.value;
-    _blowerMax = widget.state.blowerMax.value;
-    _blowerRefMin = widget.state.blowerRefMin.value;
-    _blowerRefMax = widget.state.blowerRefMax.value;
-    _blowerRefSource = widget.state.blowerRefSource.value;
+    _blowerValue = widget.state.blowerMin.value;
     super.initState();
   }
 
@@ -57,54 +48,30 @@ class _FeedVentilationTemperatureFormPageState
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerMin = state.blowerMin.value;
-              _blowerMax = state.blowerMax.value;
-              _blowerRefMin = state.blowerRefMin.value;
-              _blowerRefMax = state.blowerRefMax.value;
-              _blowerRefSource = state.blowerRefSource.value;
+              _blowerValue = state.blowerMin.value;
             });
           }
         },
         child: ListView(
           children: [
             SliderFormParam(
-              key: Key('blower_temp_min'),
-              title: 'Blower min',
+              key: Key('blower_value'),
+              title: 'Blower value',
               icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerMin.toDouble(),
+              value: _blowerValue.toDouble(),
               min: 0,
               max: 100,
-              color: Colors.blue,
+              color: Colors.yellow,
               onChanged: (double newValue) {
                 setState(() {
-                  _blowerMin = newValue.toInt();
+                  _blowerValue = newValue.toInt();
                 });
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(
                     FeedVentilationFormBlocParamsChangedEvent(
                         blowerMin: widget.state.blowerMin
-                            .copyWith(value: _blowerMin)));
-              },
-            ),
-            SliderFormParam(
-              key: Key('blower_temp_max'),
-              title: 'Blower max',
-              icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerMax.toDouble(),
-              min: 0,
-              max: 100,
-              color: Colors.yellow,
-              onChanged: (double newValue) {
-                setState(() {
-                  _blowerMax = newValue.toInt();
-                });
-              },
-              onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                    FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMax: widget.state.blowerMax
-                            .copyWith(value: _blowerMax)));
+                            .copyWith(value: _blowerValue)));
               },
             ),
           ],

@@ -37,6 +37,13 @@ class _FeedVentilationTimerFormPageState
   int _blowerNight = 0;
 
   @override
+  void initState() {
+    _blowerDay = widget.state.blowerMax.value;
+    _blowerNight = widget.state.blowerMin.value;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener(
         cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
@@ -51,27 +58,7 @@ class _FeedVentilationTimerFormPageState
         child: ListView(
           children: [
             SliderFormParam(
-              key: Key('day'),
-              title: 'Blower day',
-              icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerDay.toDouble(),
-              min: 0,
-              max: 100,
-              color: Colors.yellow,
-              onChanged: (double newValue) {
-                setState(() {
-                  _blowerDay = newValue.toInt();
-                });
-              },
-              onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                    FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMax: widget.state.blowerMax
-                            .copyWith(value: _blowerDay)));
-              },
-            ),
-            SliderFormParam(
-              key: Key('night'),
+              key: Key('blower_night'),
               title: 'Blower night',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _blowerNight.toDouble(),
@@ -88,6 +75,26 @@ class _FeedVentilationTimerFormPageState
                     FeedVentilationFormBlocParamsChangedEvent(
                         blowerMin: widget.state.blowerMin
                             .copyWith(value: _blowerNight)));
+              },
+            ),
+            SliderFormParam(
+              key: Key('blower_day'),
+              title: 'Blower day',
+              icon: 'assets/feed_form/icon_blower.svg',
+              value: _blowerDay.toDouble(),
+              min: 0,
+              max: 100,
+              color: Colors.yellow,
+              onChanged: (double newValue) {
+                setState(() {
+                  _blowerDay = newValue.toInt();
+                });
+              },
+              onChangeEnd: (double newValue) {
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                    FeedVentilationFormBlocParamsChangedEvent(
+                        blowerMax: widget.state.blowerMax
+                            .copyWith(value: _blowerDay)));
               },
             ),
           ],

@@ -28,6 +28,16 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
+// TODO make device param management/module helpers based on VentilationControllerParam
+// TODO ref source values from config
+
+const int TIMER_REF_OFFSET = 0x1;
+const int TEMP_REF_OFFSET = 0x8;
+
+bool isTimerSource(int source) =>
+    source >= TIMER_REF_OFFSET && source < TEMP_REF_OFFSET;
+bool isTempSource(int source) => source >= TEMP_REF_OFFSET;
+
 class VentilationControllerParam extends Equatable {
   final Param _param;
   final int value;
@@ -38,7 +48,7 @@ class VentilationControllerParam extends Equatable {
   VentilationControllerParam(this._param, this.value, this.initialValue);
 
   VentilationControllerParam copyWith(
-          {Param param, int value, int initialValue, bool loadError}) =>
+          {Param param, int value, int initialValue}) =>
       VentilationControllerParam(param ?? this._param, value ?? this.value,
           initialValue ?? this.initialValue);
 
@@ -291,11 +301,21 @@ class FeedVentilationFormBloc
           date: DateTime.now(),
           params: Value(FeedVentilationParams(
                   FeedVentilationParamsValues(
-                      blowerDay: blowerDay.value,
-                      blowerNight: blowerNight.value),
+                      blowerMin: blowerMin?.value,
+                      blowerMax: blowerMin?.value,
+                      blowerRefMin: blowerRefMin?.value,
+                      blowerRefMax: blowerRefMax?.value,
+                      blowerRefSource: blowerRefSource?.value,
+                      blowerDay: blowerDay?.value,
+                      blowerNight: blowerNight?.value),
                   FeedVentilationParamsValues(
-                      blowerDay: blowerDay.initialValue,
-                      blowerNight: blowerNight.value))
+                      blowerMin: blowerMin?.initialValue,
+                      blowerMax: blowerMin?.initialValue,
+                      blowerRefMin: blowerRefMin?.initialValue,
+                      blowerRefMax: blowerRefMax?.initialValue,
+                      blowerRefSource: blowerRefSource?.initialValue,
+                      blowerDay: blowerDay?.initialValue,
+                      blowerNight: blowerNight?.initialValue))
               .toJSON()),
         ));
       }
@@ -349,5 +369,7 @@ class FeedVentilationFormBloc
         blowerRefMin: blowerRefMin,
         blowerRefMax: blowerRefMax,
         blowerRefSource: blowerRefSource,
+        blowerDay: blowerDay,
+        blowerNight: blowerNight,
       );
 }

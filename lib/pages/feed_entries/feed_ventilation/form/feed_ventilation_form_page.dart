@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_fix_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_legacy_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_temperature_form_page.dart';
@@ -186,10 +187,104 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     if (state.isLegacy) {
       return FeedVentilationLegacyFormPage(state);
     }
+    return _renderV3Params(context, state);
+  }
 
-    if (state.blowerRefSource.value >= 1 && state.blowerRefSource.value <= 3) {
-      return FeedVentilationTemperatureFormPage(state);
+  Widget _renderV3Params(
+      BuildContext context, FeedVentilationFormBlocStateLoaded state) {
+    Widget body;
+    if (isTimerSource(state.blowerRefSource.value)) {
+      body = FeedVentilationTimerFormPage(state);
+    } else if (isTempSource(state.blowerRefSource.value)) {
+      body = FeedVentilationTemperatureFormPage(state);
+    } else if (state.blowerRefSource.value == 0) {
+      body = FeedVentilationFixFormPage(state);
+    } else {
+      body = Fullscreen(
+        child: Icon(Icons.upgrade),
+        title:
+            'Unknown blower reference source, you might need to upgrade the app.',
+      );
     }
-    return FeedVentilationTimerFormPage(state);
+    List<bool> selection = [
+      isTimerSource(state.blowerRefSource.value),
+      state.blowerRefSource.value == 0,
+      isTempSource(state.blowerRefSource.value)
+    ];
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Center(
+          child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: ToggleButtons(
+          children: <Widget>[
+            Icon(Icons.timer),
+            Icon(Icons.cancel),
+            Icon(Icons.device_thermostat),
+          ],
+          onPressed: (int index) {
+            _changeRefSource(context, state, index);
+          },
+          isSelected: selection,
+        ),
+      )),
+      Expanded(
+          child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 200), child: body))
+    ]);
+  }
+
+  void _changeRefSource(BuildContext context,
+      FeedVentilationFormBlocStateLoaded state, int index) async {
+    List<String> modeNames = [
+      'Timer mode',
+      'Manual mode',
+      'Temperature mode',
+    ];
+    List<FeedVentilationFormBlocParamsChangedEvent Function()> eventFactory = [
+      () => FeedVentilationFormBlocParamsChangedEvent(
+            blowerRefMin: state.blowerRefMin.copyWith(value: 0),
+            blowerRefMax: state.blowerRefMax.copyWith(value: 100),
+            blowerRefSource: state.blowerRefSource
+                .copyWith(value: TIMER_REF_OFFSET + state.box.deviceBox),
+          ),
+      () => FeedVentilationFormBlocParamsChangedEvent(
+            blowerRefMin: state.blowerRefMin.copyWith(value: 0),
+            blowerRefMax: state.blowerRefMax.copyWith(value: 100),
+            blowerRefSource: state.blowerRefSource.copyWith(value: 0),
+          ),
+      () => FeedVentilationFormBlocParamsChangedEvent(
+            blowerRefMin: state.blowerRefMin.copyWith(value: 21),
+            blowerRefMax: state.blowerRefMax.copyWith(value: 30),
+            blowerRefSource: state.blowerRefSource
+                .copyWith(value: TEMP_REF_OFFSET + state.box.deviceBox),
+          ),
+    ];
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Change to ${modeNames[index]}?'),
+            content: Text('This might override some values, continue?'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('NO'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('YES'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<FeedVentilationFormBloc>(context)
+          .add(eventFactory[index]());
+    }
   }
 }
