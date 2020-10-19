@@ -127,15 +127,11 @@ class Boxes extends Table {
   }
 
   static Future<Map<String, dynamic>> toMap(Box box) async {
-    Feed feed = await RelDB.get().feedsDAO.getFeed(null);
-    if (feed.serverID == null) {
-      throw 'Missing serverID for feed relation';
-    }
     Map<String, dynamic> obj = {
       'id': box.serverID,
       'name': box.name,
       'settings': box.settings,
-      'feedID': feed.serverID,
+      'feedID': null,
       'deviceID': null,
     };
     if (box.device != null) {
@@ -145,6 +141,13 @@ class Boxes extends Table {
       }
       obj['deviceID'] = device.serverID;
       obj['deviceBox'] = box.deviceBox;
+    }
+    if (box.feed != null) {
+      Feed feed = await RelDB.get().feedsDAO.getFeed(box.feed);
+      if (feed.serverID == null) {
+        throw 'Missing serverID for feed relation';
+      }
+      obj['feedID'] = feed.serverID;
     }
     return obj;
   }

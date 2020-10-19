@@ -162,17 +162,24 @@ class FeedVentilationCardPage extends StatelessWidget {
             ],
           )),
     ];
-    return Container(
-      height: 170,
-      alignment: Alignment.center,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: cards,
-        ),
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Text('Temperature mode',
+            style: TextStyle(fontWeight: FontWeight.w600)),
       ),
-    );
+      Container(
+        height: 155,
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: cards,
+          ),
+        ),
+      )
+    ]);
   }
 
   Widget _renderTimerMode() {
@@ -205,17 +212,24 @@ class FeedVentilationCardPage extends StatelessWidget {
             ],
           )),
     ];
-    return Container(
-      height: 130,
-      alignment: Alignment.center,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: cards,
-        ),
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child:
+            Text('Timer mode', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
-    );
+      Container(
+        height: 130,
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: cards,
+          ),
+        ),
+      )
+    ]);
   }
 
   Widget _renderManualMode() {
@@ -235,17 +249,24 @@ class FeedVentilationCardPage extends StatelessWidget {
             ],
           )),
     ];
-    return Container(
-      height: 130,
-      alignment: Alignment.center,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: cards,
-        ),
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child:
+            Text('Manual mode', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
-    );
+      Container(
+        height: 130,
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: cards,
+          ),
+        ),
+      )
+    ]);
   }
 
   Widget _renderLegacy() {

@@ -245,6 +245,8 @@ class FeedVentilationFormBloc
             blowerMax: IntControllerParam(null, 40, 40),
             blowerRefMin: IntControllerParam(null, 20, 20),
             blowerRefMax: IntControllerParam(null, 32, 32),
+            blowerRefSource: IntControllerParam(null, 1, 1),
+            temperature: IntControllerParam(null, 25, 25),
             box: box);
         return;
       }

@@ -17,8 +17,10 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/api/backend/products/products_api.dart';
@@ -48,13 +50,13 @@ class BackendAPI {
     feedsAPI = FeedsAPI();
     productsAPI = ProductsAPI();
     timeSeriesAPI = TimeSeriesAPI();
-    // if (kReleaseMode || Platform.isIOS) {
-    serverHost = 'https://api2.supergreenlab.com';
-    storageServerHost = 'https://storage.supergreenlab.com';
-    storageServerHostHeader = 'storage.supergreenlab.com';
-    // } else {
-    //   initAndroidDevUrls();
-    // }
+    if (kReleaseMode || Platform.isIOS) {
+      serverHost = 'https://api2.supergreenlab.com';
+      storageServerHost = 'https://storage.supergreenlab.com';
+      storageServerHostHeader = 'storage.supergreenlab.com';
+    } else {
+      initAndroidDevUrls();
+    }
   }
 
   void initAndroidDevUrls() async {
