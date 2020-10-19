@@ -37,6 +37,13 @@ class _FeedVentilationLegacyFormPageState
   int _blowerNight = 0;
 
   @override
+  void initState() {
+    _blowerDay = widget.state.blowerDay.value;
+    _blowerNight = widget.state.blowerNight.value;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener(
         cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
