@@ -202,7 +202,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedDefoliationFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_DEFOLIATION',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'
@@ -214,7 +215,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedToppingFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_TOPPING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
@@ -227,7 +229,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedFimmingFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_FIMMING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_top/l/en',
@@ -240,7 +243,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedBendingFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_BENDING',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'
@@ -252,7 +256,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               context,
               ({pushAsReplacement = false}) =>
                   MainNavigateToFeedTransplantFormEvent(state.plant,
-                      pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                      pushAsReplacement: pushAsReplacement,
+                      futureFn: futureFn(context, state)),
               tipID: 'TIP_TRANSPLANT',
               tipPaths: [
                 't/supergreenlab/SuperGreenTips/master/s/when_to_repot_your_seedling/l/en',

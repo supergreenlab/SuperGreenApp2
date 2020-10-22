@@ -138,7 +138,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                     ec = double.parse(ecController.text.replaceAll(',', '.'));
                   }
                   if (tdsController.text != '') {
-                    tds = double.parse(ecController.text.replaceAll(',', '.'));
+                    tds = double.parse(tdsController.text.replaceAll(',', '.'));
                   }
                   FeedNutrientMixParams nutrientProduct = lastNutrientMixParams
                       .firstWhere((np) => np.name == nameController.text,
