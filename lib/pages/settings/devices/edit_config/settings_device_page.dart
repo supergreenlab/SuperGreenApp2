@@ -167,7 +167,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                     }),
               ),
               SectionTitle(
-                title: 'Edit wifi config',
+                title: 'Settings',
                 icon: 'assets/box_setup/icon_controller.svg',
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
@@ -199,13 +199,6 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   }));
                 },
               ),
-              SectionTitle(
-                title: 'Edit controller box slots',
-                icon: 'assets/box_setup/icon_controller.svg',
-                backgroundColor: Color(0xff0b6ab3),
-                titleColor: Colors.white,
-                elevation: 5,
-              ),
               ListTile(
                 leading: SvgPicture.asset('assets/box_setup/icon_box.svg'),
                 trailing: Padding(
@@ -218,13 +211,6 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   BlocProvider.of<MainNavigatorBloc>(context)
                       .add(MainNavigateToSelectDeviceBoxEvent(state.device));
                 },
-              ),
-              SectionTitle(
-                title: 'Refresh controller params',
-                icon: 'assets/box_setup/icon_controller.svg',
-                backgroundColor: Color(0xff0b6ab3),
-                titleColor: Colors.white,
-                elevation: 5,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -245,7 +231,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 ),
               ),
               SectionTitle(
-                title: 'Admin interface',
+                title: 'Red zone',
                 icon: 'assets/box_setup/icon_controller.svg',
                 backgroundColor: Colors.red,
                 titleColor: Colors.white,
@@ -264,6 +250,23 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                       'Open the controller\'s admin interface. Make sure you know what you\'re doing before going there.'),
                   onTap: () {
                     launch('http://${state.device.ip}/fs/app.html');
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  leading: SvgPicture.asset('assets/settings/icon_upgrade.svg'),
+                  trailing: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                  ),
+                  title: Text('Firmware upgrade'),
+                  subtitle: Text(
+                      'Check and perform controller firmware upgrade. Requires the controller to be reachable.'),
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsUpgradeDevice(state.device));
                   },
                 ),
               ),

@@ -123,6 +123,8 @@ import 'package:super_green_app/pages/settings/devices/edit_config/settings_devi
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_page.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_page.dart';
+import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_page.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_page.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
@@ -495,6 +497,12 @@ class _MainPageState extends State<MainPage> {
           create: (context) => SettingsDeviceBloc(settings.arguments),
           child: SettingsDevicePage(),
         );
+      case '/settings/device/upgrade':
+        return BlocProvider(
+          create: (context) => SettingsUpgradeDeviceBloc(settings.arguments),
+          child: SettingsUpgradeDevicePage(),
+        );
+
       case '/public/plant':
         return MultiBlocProvider(
           providers: [

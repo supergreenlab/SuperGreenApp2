@@ -75,6 +75,11 @@ class DeviceAPI {
 
   static Future<String> fetchStringParam(String controllerIP, String paramName,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}');
+  }
+
+  static Future<String> fetchString(String url,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -85,8 +90,7 @@ class DeviceAPI {
           await Future.delayed(Duration(seconds: wait));
         }
         try {
-          final req = await client.getUrl(
-              Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}'));
+          final req = await client.getUrl(Uri.parse(url));
           final HttpClientResponse resp = await req.close();
           if (resp.contentLength == 0) {
             return '';
