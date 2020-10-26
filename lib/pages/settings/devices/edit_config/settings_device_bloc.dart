@@ -14,8 +14,12 @@ class SettingsDeviceBlocEventInit extends SettingsDeviceBlocEvent {
 }
 
 class SettingsDeviceBlocEventRefresh extends SettingsDeviceBlocEvent {
+  final bool delete;
+
+  SettingsDeviceBlocEventRefresh({this.delete = false});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [delete];
 }
 
 class SettingsDeviceBlocEventRefreshing extends SettingsDeviceBlocEvent {
@@ -95,7 +99,7 @@ class SettingsDeviceBloc
       yield SettingsDeviceBlocStateLoaded(device);
     } else if (event is SettingsDeviceBlocEventRefresh) {
       yield SettingsDeviceBlocStateRefreshing(0);
-      refreshParams();
+      refreshParams(delete: event.delete);
     } else if (event is SettingsDeviceBlocEventRefreshing) {
       if (event.percent != 100) {
         yield SettingsDeviceBlocStateRefreshing(event.percent);
@@ -111,7 +115,7 @@ class SettingsDeviceBloc
     }
   }
 
-  void refreshParams() async {
+  void refreshParams({bool delete = false}) async {
     final deviceName =
         await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME");
     final mdnsDomain =
@@ -123,7 +127,7 @@ class SettingsDeviceBloc
         synced: Value(false)));
     await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
       add(SettingsDeviceBlocEventRefreshing(adv));
-    });
+    }, delete: delete);
     add(SettingsDeviceBlocEventRefreshing(100));
   }
 }

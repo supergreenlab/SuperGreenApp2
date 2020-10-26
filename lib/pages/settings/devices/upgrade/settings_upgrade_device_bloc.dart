@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +24,26 @@ class SettingsUpgradeDeviceBlocEventUpgrade
   List<Object> get props => [];
 }
 
+class SettingsUpgradeDeviceBlocEventUpgrading
+    extends SettingsUpgradeDeviceBlocEvent {
+  final String progressMessage;
+
+  SettingsUpgradeDeviceBlocEventUpgrading(this.progressMessage);
+
+  @override
+  List<Object> get props => [progressMessage];
+}
+
+class SettingsUpgradeDeviceBlocEventCheckUpgradeDone
+    extends SettingsUpgradeDeviceBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
+  SettingsUpgradeDeviceBlocEventCheckUpgradeDone();
+
+  @override
+  List<Object> get props => [rand];
+}
+
 abstract class SettingsUpgradeDeviceBlocState extends Equatable {}
 
 class SettingsUpgradeDeviceBlocStateInit
@@ -43,12 +64,12 @@ class SettingsUpgradeDeviceBlocStateLoaded
 
 class SettingsUpgradeDeviceBlocStateUpgrading
     extends SettingsUpgradeDeviceBlocState {
-  final int progress;
+  final String progressMessage;
 
-  SettingsUpgradeDeviceBlocStateUpgrading(this.progress);
+  SettingsUpgradeDeviceBlocStateUpgrading(this.progressMessage);
 
   @override
-  List<Object> get props => [progress];
+  List<Object> get props => [progressMessage];
 }
 
 class SettingsUpgradeDeviceBlocStateUpgradeDone
@@ -65,6 +86,9 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
 
   HttpServer server;
 
+  Param nRestarts;
+  Param otaTimestamp;
+
   SettingsUpgradeDeviceBloc(this.args)
       : super(SettingsUpgradeDeviceBlocStateInit()) {
     add(SettingsUpgradeDeviceBlocEventInit());
@@ -74,17 +98,20 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
   Stream<SettingsUpgradeDeviceBlocState> mapEventToState(
       SettingsUpgradeDeviceBlocEvent event) async* {
     if (event is SettingsUpgradeDeviceBlocEventInit) {
-      Param otaTimestamp = await RelDB.get()
+      otaTimestamp = await RelDB.get()
           .devicesDAO
           .getParam(args.device.id, 'OTA_TIMESTAMP');
       Param otaBaseDir =
           await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
+      nRestarts =
+          await RelDB.get().devicesDAO.getParam(args.device.id, 'N_RESTARTS');
+      nRestarts = await DeviceHelper.refreshIntParam(args.device, nRestarts);
       String localOTATimestamp = await rootBundle
           .loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
       yield SettingsUpgradeDeviceBlocStateLoaded(
           int.parse(localOTATimestamp) > otaTimestamp.ivalue);
     } else if (event is SettingsUpgradeDeviceBlocEventUpgrade) {
-      yield SettingsUpgradeDeviceBlocStateUpgrading(0);
+      yield SettingsUpgradeDeviceBlocStateUpgrading('Setting parameters..');
       Param otaServerIP = await RelDB.get()
           .devicesDAO
           .getParam(args.device.id, 'OTA_SERVER_IP');
@@ -93,9 +120,21 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
           .getParam(args.device.id, 'OTA_SERVER_PORT');
       String myip =
           await DeviceAPI.fetchString('http://${args.device.ip}/myip');
+
+      Param otaBaseDir =
+          await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
+      ByteData config = await rootBundle
+          .load('assets/firmware${otaBaseDir.svalue}/html_app/config.json');
+      await DeviceAPI.uploadFile(args.device.ip, 'config.json', config);
+      ByteData htmlApp = await rootBundle
+          .load('assets/firmware${otaBaseDir.svalue}/html_app/app.html');
+      await DeviceAPI.uploadFile(args.device.ip, 'app.html', htmlApp);
+
       server = await HttpServer.bind(InternetAddress.anyIPv6, 0);
       server.listen(listenRequest);
 
+      await Future.delayed(Duration(seconds: 1));
+      yield SettingsUpgradeDeviceBlocStateUpgrading('Rebooting controller..');
       await DeviceHelper.updateStringParam(args.device, otaServerIP, myip);
       await DeviceHelper.updateIntParam(
           args.device, otaServerPort, server.port);
@@ -107,11 +146,32 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
       } catch (e) {
         print(e);
       }
+      yield SettingsUpgradeDeviceBlocStateUpgrading(
+          'Waiting controller connection..');
+    } else if (event is SettingsUpgradeDeviceBlocEventUpgrading) {
+      yield SettingsUpgradeDeviceBlocStateUpgrading(event.progressMessage);
+    } else if (event is SettingsUpgradeDeviceBlocEventCheckUpgradeDone) {
+      yield SettingsUpgradeDeviceBlocStateUpgrading(
+          'Firmware sent, waiting for controller..');
+      Param otaBaseDir =
+          await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
+      String localOTATimestamp = await rootBundle
+          .loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
+      try {
+        otaTimestamp =
+            await DeviceHelper.refreshIntParam(args.device, otaTimestamp);
+      } catch (e) {}
+      if ((int.parse(localOTATimestamp) != otaTimestamp.ivalue)) {
+        add(SettingsUpgradeDeviceBlocEventCheckUpgradeDone());
+        return;
+      }
+      yield SettingsUpgradeDeviceBlocStateUpgradeDone();
     }
   }
 
   void listenRequest(HttpRequest request) async {
     if (request.requestedUri.pathSegments.last == 'last_timestamp') {
+      add(SettingsUpgradeDeviceBlocEventUpgrading('Controller connected'));
       Param otaBaseDir =
           await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
       String localOTATimestamp = await rootBundle
@@ -122,6 +182,7 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
       await request.response.close();
       return;
     } else if (request.requestedUri.pathSegments.last == 'firmware.bin') {
+      add(SettingsUpgradeDeviceBlocEventUpgrading('Downloading firmware..'));
       Param otaBaseDir =
           await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
       ByteData firmwareBin = await rootBundle
@@ -130,11 +191,12 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
       request.response.add(firmwareBin.buffer.asInt8List());
       await request.response.flush();
       await request.response.close();
+      add(SettingsUpgradeDeviceBlocEventCheckUpgradeDone());
       return;
     }
     request.response.statusCode = 404;
     request.response.write('Page not found');
-    request.response.close();
+    await request.response.close();
   }
 
   @override

@@ -265,8 +265,15 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   subtitle: Text(
                       'Check and perform controller firmware upgrade. Requires the controller to be reachable.'),
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsUpgradeDevice(state.device));
+                    BlocProvider.of<MainNavigatorBloc>(context).add(
+                        MainNavigateToSettingsUpgradeDevice(state.device,
+                            futureFn: (future) async {
+                      dynamic ret = await future;
+                      if (ret is bool && ret == true) {
+                        BlocProvider.of<SettingsDeviceBloc>(context)
+                            .add(SettingsDeviceBlocEventRefresh(delete: true));
+                      }
+                    }));
                   },
                 ),
               ),

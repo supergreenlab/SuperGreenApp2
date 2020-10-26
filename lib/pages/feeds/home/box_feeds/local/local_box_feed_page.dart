@@ -277,7 +277,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
         children: <Widget>[
           Center(
               child: Column(children: [
-            Icon(Icons.delete, color: Colors.grey, size: 100),
+            Icon(Icons.add, color: Colors.grey, size: 100),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text('You can now create a box diary too!',

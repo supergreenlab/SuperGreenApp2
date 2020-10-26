@@ -113,3 +113,8 @@ flutter:
     - assets/firmware/SoloV2.1/
     - assets/firmware/PickleV2.1/
     - assets/firmware/DriverV2.1/
+    - assets/firmware/ControllerV2.1/html_app/
+    - assets/firmware/ControllerV3/html_app/
+    - assets/firmware/SoloV2.1/html_app/
+    - assets/firmware/PickleV2.1/html_app/
+    - assets/firmware/DriverV2.1/html_app/

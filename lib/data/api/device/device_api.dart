@@ -20,6 +20,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:multicast_dns/multicast_dns.dart';
@@ -212,10 +213,44 @@ class DeviceAPI {
     return fetchIntParam(controllerIP, paramName);
   }
 
+  static Future uploadFile(String controllerIP, String fileName, ByteData data,
+      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    final client = new HttpClient();
+    if (timeout != null) {
+      client.connectionTimeout = Duration(seconds: timeout);
+    }
+    try {
+      for (int i = 0; i < nRetries; ++i) {
+        if (i != 0 && wait > 0) {
+          await Future.delayed(Duration(seconds: wait));
+        }
+        try {
+          final req = await client
+              .postUrl(Uri.parse('http://$controllerIP/fs/$fileName'));
+          req.contentLength = data.lengthInBytes;
+          req.add(data.buffer.asInt8List());
+          await req.flush();
+          await req.close();
+          break;
+        } catch (e) {
+          Logger.log(e);
+          if (i == nRetries - 1) {
+            throw e;
+          }
+        }
+      }
+    } catch (e) {
+      Logger.log(e);
+    } finally {
+      client.close(force: true);
+    }
+  }
+
   static Map<int, bool> fetchingAllParams = {};
 
   static Future fetchAllParams(
-      String ip, int deviceID, Function(double) advancement) async {
+      String ip, int deviceID, Function(double) advancement,
+      {bool delete = false}) async {
     if (DeviceAPI.fetchingAllParams[deviceID] == true) {
       return;
     }
@@ -223,6 +258,11 @@ class DeviceAPI {
     try {
       final db = RelDB.get().devicesDAO;
       final Map<String, int> modules = Map();
+
+      if (delete) {
+        await db.deleteParams(deviceID);
+        await db.deleteModules(deviceID);
+      }
 
       final config = await DeviceAPI.fetchConfig(ip);
       Map<String, dynamic> keys = json.decode(config);

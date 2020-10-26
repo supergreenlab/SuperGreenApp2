@@ -498,7 +498,9 @@ class MainNavigateToSettingsDevice extends MainNavigatorEvent {
 class MainNavigateToSettingsUpgradeDevice extends MainNavigatorEvent {
   final Device device;
 
-  MainNavigateToSettingsUpgradeDevice(this.device);
+  MainNavigateToSettingsUpgradeDevice(this.device,
+      {void Function(Future<dynamic> future) futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [device];

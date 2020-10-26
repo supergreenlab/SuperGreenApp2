@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -11,32 +14,43 @@ import 'package:super_green_app/widgets/section_title.dart';
 class SettingsUpgradeDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SettingsUpgradeDeviceBloc,
+    return BlocListener<SettingsUpgradeDeviceBloc,
         SettingsUpgradeDeviceBlocState>(
-      builder: (BuildContext context, SettingsUpgradeDeviceBlocState state) {
-        Widget body;
-        if (state is SettingsUpgradeDeviceBlocStateInit) {
-          body = FullscreenLoading();
-        } else if (state is SettingsUpgradeDeviceBlocStateLoaded) {
-          body = renderLoaded(context, state);
-        } else if (state is SettingsUpgradeDeviceBlocStateUpgrading) {
-          body = renderUpgrading(context, state);
-        } else if (state is SettingsUpgradeDeviceBlocStateUpgradeDone) {
-          body = renderUpgradeDone(context, state);
+      listener: (BuildContext context, SettingsUpgradeDeviceBlocState state) {
+        if (state is SettingsUpgradeDeviceBlocStateUpgradeDone) {
+          Timer(Duration(seconds: 3), () {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: true));
+          });
         }
-        return Scaffold(
-            appBar: SGLAppBar(
-              '🤖',
-              fontSize: 40,
-              backgroundColor: Color(0xff0b6ab3),
-              titleColor: Colors.white,
-              iconColor: Colors.white,
-              hideBackButton: state is SettingsDeviceBlocStateDone,
-            ),
-            backgroundColor: Colors.white,
-            body: AnimatedSwitcher(
-                duration: Duration(milliseconds: 200), child: body));
       },
+      child: BlocBuilder<SettingsUpgradeDeviceBloc,
+          SettingsUpgradeDeviceBlocState>(
+        builder: (BuildContext context, SettingsUpgradeDeviceBlocState state) {
+          Widget body;
+          if (state is SettingsUpgradeDeviceBlocStateInit) {
+            body = FullscreenLoading();
+          } else if (state is SettingsUpgradeDeviceBlocStateLoaded) {
+            body = renderLoaded(context, state);
+          } else if (state is SettingsUpgradeDeviceBlocStateUpgrading) {
+            body = renderUpgrading(context, state);
+          } else if (state is SettingsUpgradeDeviceBlocStateUpgradeDone) {
+            body = renderUpgradeDone(context, state);
+          }
+          return Scaffold(
+              appBar: SGLAppBar(
+                '🤖',
+                fontSize: 40,
+                backgroundColor: Color(0xff0b6ab3),
+                titleColor: Colors.white,
+                iconColor: Colors.white,
+                hideBackButton: state is SettingsDeviceBlocStateDone,
+              ),
+              backgroundColor: Colors.white,
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
+        },
+      ),
     );
   }
 
@@ -76,17 +90,15 @@ class SettingsUpgradeDevicePage extends StatelessWidget {
 
   Widget renderUpgrading(
       BuildContext context, SettingsUpgradeDeviceBlocStateUpgrading state) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Text('renderUpgrading')]);
+    return FullscreenLoading(title: state.progressMessage);
   }
 
   Widget renderUpgradeDone(
       BuildContext context, SettingsUpgradeDeviceBlocStateUpgradeDone state) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Text('renderUpgradeDone')]);
+    String subtitle = 'Controller upgraded!';
+    return Fullscreen(
+        title: 'Done!',
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 }
