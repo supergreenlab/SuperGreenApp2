@@ -157,13 +157,15 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
           await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
       String localOTATimestamp = await rootBundle
           .loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
-      try {
-        otaTimestamp =
-            await DeviceHelper.refreshIntParam(args.device, otaTimestamp);
-      } catch (e) {}
-      if ((int.parse(localOTATimestamp) != otaTimestamp.ivalue)) {
-        add(SettingsUpgradeDeviceBlocEventCheckUpgradeDone());
-        return;
+      for (int i = 0;
+          i < 3 && int.parse(localOTATimestamp) != otaTimestamp.ivalue;
+          ++i) {
+        try {
+          otaTimestamp =
+              await DeviceHelper.refreshIntParam(args.device, otaTimestamp);
+        } catch (e) {
+          await Future.delayed(Duration(seconds: 1));
+        }
       }
       yield SettingsUpgradeDeviceBlocStateUpgradeDone();
     }
@@ -191,6 +193,7 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
       request.response.add(firmwareBin.buffer.asInt8List());
       await request.response.flush();
       await request.response.close();
+      await Future.delayed(Duration(seconds: 4));
       add(SettingsUpgradeDeviceBlocEventCheckUpgradeDone());
       return;
     }
