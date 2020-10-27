@@ -71,18 +71,22 @@ class SettingsUpgradeDevicePage extends StatelessWidget {
           titleColor: Colors.white,
           elevation: 5,
         ),
-        ListTile(
-          leading: SvgPicture.asset('assets/settings/icon_upgrade.svg'),
-          trailing: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: SvgPicture.asset('assets/settings/icon_go.svg'),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: ListTile(
+            leading: SvgPicture.asset('assets/settings/icon_upgrade.svg'),
+            trailing: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: SvgPicture.asset('assets/settings/icon_go.svg'),
+            ),
+            title: Text('Upgrade controller'),
+            subtitle: Text(
+                'Tap to start the upgrade process. In some rare cases this could lead to the controller resetting to default, that can be fixed by removing and re-adding the controller to the app.'),
+            onTap: () {
+              BlocProvider.of<SettingsUpgradeDeviceBloc>(context)
+                  .add(SettingsUpgradeDeviceBlocEventUpgrade());
+            },
           ),
-          title: Text('Upgrade controller'),
-          subtitle: Text('Tap to start the upgrade process'),
-          onTap: () {
-            BlocProvider.of<SettingsUpgradeDeviceBloc>(context)
-                .add(SettingsUpgradeDeviceBlocEventUpgrade());
-          },
         ),
       ]))
     ]);
