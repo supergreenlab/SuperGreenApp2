@@ -163,7 +163,7 @@ SPEC CHECKSUMS:
   flutter_ble_lib: 1d400af3aa9ea4b069974cd06c2bafefe0289086
   flutter_email_sender: f787522d0e82f50e5766c1213dbffff22fdcf009
   flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
-  flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   heic_to_jpg: cce9d6463ab11852a7393daa61be23f98a951c64
   keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f

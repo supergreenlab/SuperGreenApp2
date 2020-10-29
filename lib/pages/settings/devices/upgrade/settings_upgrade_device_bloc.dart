@@ -86,7 +86,6 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
 
   HttpServer server;
 
-  Param nRestarts;
   Param otaTimestamp;
 
   SettingsUpgradeDeviceBloc(this.args)
@@ -103,9 +102,7 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent,
           .getParam(args.device.id, 'OTA_TIMESTAMP');
       Param otaBaseDir =
           await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
-      nRestarts =
-          await RelDB.get().devicesDAO.getParam(args.device.id, 'N_RESTARTS');
-      nRestarts = await DeviceHelper.refreshIntParam(args.device, nRestarts);
+
       String localOTATimestamp = await rootBundle
           .loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
       yield SettingsUpgradeDeviceBlocStateLoaded(
