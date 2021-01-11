@@ -85,7 +85,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                               plants.clear();
                               BlocProvider.of<ExplorerBloc>(context)
                                   .add(ExplorerBlocEventInit());
-                              Fluttertoast.showToast(
+                              Fluttertoast.showToast(context,
                                   msg: 'Plant ${plant.name} is now public');
                             }
                           }));

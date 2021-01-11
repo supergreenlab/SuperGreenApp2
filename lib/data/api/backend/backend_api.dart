@@ -64,10 +64,10 @@ class BackendAPI {
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
       serverHost = local
-          ? 'http://192.168.1.135:8080'
+          ? 'http://192.168.1.87:8080'
           : 'https://devapi2.supergreenlab.com';
       storageServerHost = local
-          ? 'http://192.168.1.135:9000'
+          ? 'http://192.168.1.87:9000'
           : 'https://devstorage.supergreenlab.com';
       storageServerHostHeader =
           local ? 'minio:9000' : 'devstorage.supergreenlab.com';

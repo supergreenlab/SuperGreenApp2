@@ -325,7 +325,8 @@ class _CapturePageState extends State<CapturePage> {
       }
       _filePath = '${FeedMedias.makeFilePath()}.jpg';
       String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
-      await _cameraController.takePicture(absolutePath);
+      XFile xfile = await _cameraController.takePicture();
+      xfile.saveTo(absolutePath);
       _endCapture(state);
     });
   }
@@ -335,17 +336,18 @@ class _CapturePageState extends State<CapturePage> {
       if (_filePath != null) {
         await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
       }
-      _filePath = '${FeedMedias.makeFilePath()}.mp4';
-      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
-      await _deleteFileIfExists(absolutePath);
-      await _cameraController.startVideoRecording(absolutePath);
+      await _cameraController.startVideoRecording();
       setState(() {});
     });
   }
 
   Widget _renderStopButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.stop, Colors.red, () async {
-      await _cameraController.stopVideoRecording();
+      _filePath = '${FeedMedias.makeFilePath()}.mp4';
+      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
+      await _deleteFileIfExists(absolutePath);
+      XFile xfile = await _cameraController.stopVideoRecording();
+      xfile.saveTo(absolutePath);
       _endCapture(state);
       setState(() {});
     });

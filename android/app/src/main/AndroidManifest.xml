@@ -25,7 +25,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="SuperGreenLab"
         android:icon="@mipmap/ic_launcher"
-        android:allowBackup="false">
+        android:allowBackup="false"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

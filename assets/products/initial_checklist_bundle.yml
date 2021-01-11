@@ -1,6 +1,6 @@
 products: 
   - title: Ninja bundle
-    description: The ultimate kit to transforma any furniture into a connected growbox.
+    description: The ultimate kit to transform any furniture into a connected growbox.
     picture: assets/products/bundle/ninja_bundle.jpg
     price: $329
     geo: us_us
@@ -8,7 +8,7 @@ products:
       type: external
       data: https://www.supergreenlab.com/bundle/micro-box-bundle
   - title: Ninja bundle
-    description: The ultimate kit to transforma any furniture into a connected growbox.
+    description: The ultimate kit to transform any furniture into a connected growbox.
     picture: assets/products/bundle/ninja_bundle.jpg
     price: $361.79
     geo: eu_de
@@ -16,7 +16,7 @@ products:
       type: external
       data: https://www.supergreenlab.com/bundle/micro-box-bundle
   - title: Ninja bundle
-    description: The ultimate kit to transforma any furniture into a connected growbox.
+    description: The ultimate kit to transform any furniture into a connected growbox.
     picture: assets/products/bundle/ninja_bundle.jpg
     price: $398.09
     geo: eu_fr
