@@ -93,8 +93,10 @@ class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
     } else if (event is ExplorerBlocEventLoadNextPage) {
       yield* loadPage(event.offset);
     } else if (event is ExplorerBlocEventMakePublic) {
-      await RelDB.get().plantsDAO.updatePlant(
-          PlantsCompanion(id: Value(event.plant.id), public: Value(true)));
+      await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
+          id: Value(event.plant.id),
+          public: Value(true),
+          synced: Value(false)));
     }
   }
 
