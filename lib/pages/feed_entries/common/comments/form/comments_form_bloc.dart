@@ -15,24 +15,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
-import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
-
-class FeedDefoliationCardPage extends FeedCareCommonCardPage {
-  FeedDefoliationCardPage(
-      Animation animation, FeedState feedState, FeedEntryState state,
-      {Key key})
-      : super(animation, feedState, state, key: key);
-
-  String iconPath() {
-    return 'assets/feed_card/icon_defoliation.svg';
-  }
-
-  @override
-  String title() {
-    return "Defoliation";
-  }
-}
