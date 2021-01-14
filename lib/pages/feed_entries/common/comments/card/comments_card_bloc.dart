@@ -16,9 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class CommentsCardBlocEvent extends Equatable {}
@@ -28,6 +32,17 @@ class CommentsCardBlocEventInit extends CommentsCardBlocEvent {
   List<Object> get props => [];
 }
 
+class CommentsCardBlocEventLoad extends CommentsCardBlocEvent {
+  final String feedEntryID;
+
+  CommentsCardBlocEventLoad(this.feedEntryID);
+
+  @override
+  List<Object> get props => [
+        feedEntryID,
+      ];
+}
+
 abstract class CommentsCardBlocState extends Equatable {}
 
 class CommentsCardBlocStateInit extends CommentsCardBlocState {
@@ -35,18 +50,26 @@ class CommentsCardBlocStateInit extends CommentsCardBlocState {
   List<Object> get props => [];
 }
 
+class CommentsCardBlocStateNotSynced extends CommentsCardBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class CommentsCardBlocStateLoaded extends CommentsCardBlocState {
+  final FeedEntryStateLoaded feedEntry;
   final List<Comment> comments;
 
-  CommentsCardBlocStateLoaded(this.comments);
+  CommentsCardBlocStateLoaded(this.feedEntry, this.comments);
 
   @override
-  List<Object> get props => [comments];
+  List<Object> get props => [feedEntry, comments];
 }
 
 class CommentsCardBloc
     extends Bloc<CommentsCardBlocEvent, CommentsCardBlocState> {
   final FeedEntryStateLoaded _feedEntry;
+
+  StreamSubscription<FeedEntry> _sub;
 
   CommentsCardBloc(this._feedEntry) : super(CommentsCardBlocStateInit()) {
     add(CommentsCardBlocEventInit());
@@ -57,7 +80,48 @@ class CommentsCardBloc
       CommentsCardBlocEvent event) async* {
     if (event is CommentsCardBlocEventInit) {
       yield CommentsCardBlocStateInit();
-      yield CommentsCardBlocStateLoaded([]);
+      String feedEntryID;
+      if (_feedEntry.remoteState) {
+        feedEntryID = _feedEntry.feedEntryID;
+      } else {
+        FeedEntry feedEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(_feedEntry.feedEntryID);
+        if (feedEntry.serverID == null) {
+          _sub = RelDB.get()
+              .feedsDAO
+              .watchFeedEntry(_feedEntry.feedEntryID)
+              .listen(listenFeedEntryChange);
+          yield CommentsCardBlocStateNotSynced();
+          return;
+        }
+        feedEntryID = feedEntry.serverID;
+      }
+      yield* fetchComments(feedEntryID);
+    } else if (event is CommentsCardBlocEventLoad) {
+      yield* fetchComments(event.feedEntryID);
     }
+  }
+
+  Stream<CommentsCardBlocState> fetchComments(String feedEntryID) async* {
+    List<Comment> comments =
+        await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID);
+    yield CommentsCardBlocStateLoaded(this._feedEntry, comments);
+  }
+
+  void listenFeedEntryChange(FeedEntry feedEntry) async {
+    if (feedEntry.serverID == null) {
+      return;
+    }
+    await _sub.cancel();
+    _sub = null;
+    add(CommentsCardBlocEventLoad(feedEntry.serverID));
+  }
+
+  @override
+  Future<void> close() async {
+    if (_sub != null) {
+      _sub.cancel();
+    }
+    return super.close();
   }
 }

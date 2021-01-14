@@ -54,6 +54,8 @@ import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart
 import 'package:super_green_app/pages/add_device/new_device/new_device_page.dart';
 import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_defoliation/form/feed_defoliation_form_bloc.dart';
@@ -401,6 +403,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => FeedNutrientMixFormBloc(settings.arguments),
           child: FeedNutrientMixFormPage(),
+        );
+      case '/feed/form/comment':
+        return BlocProvider(
+          create: (context) => CommentsFormBloc(settings.arguments),
+          child: CommentsFormPage(),
         );
       case '/tip':
         return BlocProvider(

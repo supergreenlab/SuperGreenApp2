@@ -17,7 +17,9 @@
  */
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_bloc.dart';
 
 class CommentsCardPage extends StatelessWidget {
@@ -25,8 +27,29 @@ class CommentsCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CommentsCardBloc, CommentsCardBlocState>(
       builder: (BuildContext context, CommentsCardBlocState state) {
-        return Text('pouet');
+        if (state is CommentsCardBlocStateInit) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text('Loading..'),
+          );
+        } else if (state is CommentsCardBlocStateNotSynced) {
+          return Container();
+        }
+        return renderLoaded(context, state);
       },
+    );
+  }
+
+  Widget renderLoaded(BuildContext context, CommentsCardBlocStateLoaded state) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToCommentFormEvent(state.feedEntry));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Text('pouet'),
+      ),
     );
   }
 }

@@ -27,6 +27,7 @@ import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class MainNavigatorEvent extends Equatable {
@@ -290,6 +291,19 @@ class MainNavigateToFeedNutrientMixFormEvent
 
   @override
   List<Object> get props => [];
+}
+
+class MainNavigateToCommentFormEvent extends MainNavigateToFeedFormEvent {
+  final FeedEntryStateLoaded _feedEntry;
+
+  MainNavigateToCommentFormEvent(this._feedEntry,
+      {pushAsReplacement = false, futureFn})
+      : super(pushAsReplacement, futureFn: futureFn);
+
+  @override
+  List<Object> get props => [
+        _feedEntry,
+      ];
 }
 
 class MainNavigateToTipEvent extends MainNavigatorEvent {
@@ -703,6 +717,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/feed/form/lifeevents', event);
     } else if (event is MainNavigateToFeedNutrientMixFormEvent) {
       future = _pushOrReplace('/feed/form/nutrient', event);
+    } else if (event is MainNavigateToCommentFormEvent) {
+      future = _pushOrReplace('/feed/form/comment', event);
     } else if (event is MainNavigateToTipEvent) {
       future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {

@@ -23,6 +23,7 @@ import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/common/deletes.dart';
@@ -52,6 +53,24 @@ class FeedsAPI {
       Logger.log(resp.body);
       throw 'sendDeletes failed';
     }
+  }
+
+  Future<List<Comment>> fetchCommentsForFeedEntry(String feedEntryID) async {
+    Response resp = await BackendAPI().apiClient.get(
+        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'fetchCommentsForFeedEntry failed: ${resp.body}';
+    }
+    Map<String, dynamic> data = JsonDecoder().convert(resp.body);
+    List<Comment> comments = [];
+    for (int i = 0; i < data['comments'].length; ++i) {
+      comments.add(Comment.fromMap(data['comments'][i]));
+    }
+    return comments;
   }
 
   Future syncPlant(Plant plant) async {

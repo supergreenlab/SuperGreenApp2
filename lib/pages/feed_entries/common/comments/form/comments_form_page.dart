@@ -15,3 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
+import 'package:super_green_app/widgets/appbar.dart';
+
+class CommentsFormPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CommentsFormBloc, CommentsFormBlocState>(
+        builder: (BuildContext context, CommentsFormBlocState state) {
+      return Scaffold(
+        appBar: SGLAppBar(
+          'Comments',
+          backgroundColor: Colors.white,
+          titleColor: Colors.black,
+          iconColor: Colors.black,
+          elevation: 2,
+        ),
+      );
+    });
+  }
+}

@@ -15,3 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
+
+abstract class CommentsFormBlocEvent extends Equatable {}
+
+class CommentsFormBlocEventInit extends CommentsFormBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+abstract class CommentsFormBlocState extends Equatable {}
+
+class CommentsFormBlocStateInit extends CommentsFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class CommentsFormBloc
+    extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
+  final MainNavigateToCommentFormEvent _feedEntry;
+
+  CommentsFormBloc(this._feedEntry) : super(CommentsFormBlocStateInit()) {
+    add(CommentsFormBlocEventInit());
+  }
+
+  @override
+  Stream<CommentsFormBlocState> mapEventToState(
+      CommentsFormBlocEvent event) async* {
+    if (event is CommentsFormBlocEventInit) {}
+  }
+}

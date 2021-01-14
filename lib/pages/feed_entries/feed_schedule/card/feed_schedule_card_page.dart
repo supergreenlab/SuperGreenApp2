@@ -109,8 +109,7 @@ class FeedScheduleCardPage extends StatelessWidget {
             ),
           ),
           BlocProvider<CommentsCardBloc>(
-            create: (BuildContext context) =>
-                CommentsCardBloc(state.feedEntryID),
+            create: (BuildContext context) => CommentsCardBloc(state),
             child: CommentsCardPage(),
           ),
           Padding(
