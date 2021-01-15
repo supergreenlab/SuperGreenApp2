@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/card/widgets/comment.dart';
 
 class CommentsCardPage extends StatelessWidget {
   @override
@@ -41,14 +42,30 @@ class CommentsCardPage extends StatelessWidget {
   }
 
   Widget renderLoaded(BuildContext context, CommentsCardBlocStateLoaded state) {
-    return InkWell(
-      onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigateToCommentFormEvent(state.feedEntry));
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Text('pouet'),
+    List<Widget> content = [];
+    if (state.n > 1) {
+      content.add(SmallCommentView(comment: state.comments[0]));
+      content.add(InkWell(
+          onTap: () {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToCommentFormEvent(state.feedEntry));
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              'View all ${state.n} comments',
+              style: TextStyle(color: Color(0xff898989)),
+            ),
+          )));
+      content.add(SmallCommentView(comment: state.comments[1]));
+    } else if (state.n == 1) {
+      content.add(SmallCommentView(comment: state.comments[0]));
+    }
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: content,
       ),
     );
   }

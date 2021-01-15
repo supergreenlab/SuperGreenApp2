@@ -58,11 +58,12 @@ class CommentsCardBlocStateNotSynced extends CommentsCardBlocState {
 class CommentsCardBlocStateLoaded extends CommentsCardBlocState {
   final FeedEntryStateLoaded feedEntry;
   final List<Comment> comments;
+  final int n;
 
-  CommentsCardBlocStateLoaded(this.feedEntry, this.comments);
+  CommentsCardBlocStateLoaded(this.feedEntry, this.comments, this.n);
 
   @override
-  List<Object> get props => [feedEntry, comments];
+  List<Object> get props => [feedEntry, comments, n];
 }
 
 class CommentsCardBloc
@@ -103,9 +104,13 @@ class CommentsCardBloc
   }
 
   Stream<CommentsCardBlocState> fetchComments(String feedEntryID) async* {
-    List<Comment> comments =
-        await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID);
-    yield CommentsCardBlocStateLoaded(this._feedEntry, comments);
+    List<Comment> comments = await BackendAPI()
+        .feedsAPI
+        .fetchCommentsForFeedEntry(feedEntryID, n: 2);
+    int n =
+        await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
+
+    yield CommentsCardBlocStateLoaded(this._feedEntry, comments, n);
   }
 
   void listenFeedEntryChange(FeedEntry feedEntry) async {

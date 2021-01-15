@@ -294,15 +294,15 @@ class MainNavigateToFeedNutrientMixFormEvent
 }
 
 class MainNavigateToCommentFormEvent extends MainNavigateToFeedFormEvent {
-  final FeedEntryStateLoaded _feedEntry;
+  final FeedEntryStateLoaded feedEntry;
 
-  MainNavigateToCommentFormEvent(this._feedEntry,
+  MainNavigateToCommentFormEvent(this.feedEntry,
       {pushAsReplacement = false, futureFn})
       : super(pushAsReplacement, futureFn: futureFn);
 
   @override
   List<Object> get props => [
-        _feedEntry,
+        feedEntry,
       ];
 }
 

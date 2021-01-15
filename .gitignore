@@ -38,3 +38,6 @@ lib/generated_plugin_registrant.dart
 
 vendor/flutter_matomo/example/ios/Flutter/flutter_export_environment.sh
 android/key.properties
+
+android-keystore
+tools/keystore.properties

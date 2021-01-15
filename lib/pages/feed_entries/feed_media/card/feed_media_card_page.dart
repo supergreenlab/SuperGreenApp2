@@ -20,7 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
+import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -126,10 +130,9 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   },
                 )
               : Container(),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: FeedCardDate(state, widget.feedState),
+          BlocProvider<SocialBarBloc>(
+            create: (BuildContext context) => SocialBarBloc(state),
+            child: SocialBarPage(),
           ),
           (params.message ?? '') != '' || editText == true
               ? FeedCardText(
@@ -144,6 +147,14 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   },
                 )
               : Container(),
+          BlocProvider<CommentsCardBloc>(
+            create: (BuildContext context) => CommentsCardBloc(state),
+            child: CommentsCardPage(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: FeedCardDate(state, widget.feedState),
+          ),
         ],
       ),
     );

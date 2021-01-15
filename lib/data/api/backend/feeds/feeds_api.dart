@@ -58,7 +58,7 @@ class FeedsAPI {
   Future<List<Comment>> fetchCommentsForFeedEntry(String feedEntryID,
       {int offset = 0, int n = 10}) async {
     Response resp = await BackendAPI().apiClient.get(
-        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&n=$n',
+        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$n',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -72,6 +72,21 @@ class FeedsAPI {
       comments.add(Comment.fromMap(data['comments'][i]));
     }
     return comments;
+  }
+
+  Future<int> fetchCommentCountForFeedEntry(String feedEntryID,
+      {int offset = 0, int n = 10}) async {
+    Response resp = await BackendAPI().apiClient.get(
+        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments/count',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'fetchCommentsForFeedEntry failed: ${resp.body}';
+    }
+    Map<String, dynamic> data = JsonDecoder().convert(resp.body);
+    return data['n'];
   }
 
   Future syncPlant(Plant plant) async {

@@ -18,7 +18,11 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class CommentsFormBlocEvent extends Equatable {}
 
@@ -34,17 +38,48 @@ class CommentsFormBlocStateInit extends CommentsFormBlocState {
   List<Object> get props => [];
 }
 
+class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
+  final FeedEntryStateLoaded feedEntry;
+  final List<Comment> comments;
+  final int n;
+
+  CommentsFormBlocStateLoaded(this.feedEntry, this.comments, this.n);
+
+  @override
+  List<Object> get props => [feedEntry, comments, n];
+}
+
 class CommentsFormBloc
     extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
-  final MainNavigateToCommentFormEvent _feedEntry;
+  final MainNavigateToCommentFormEvent args;
 
-  CommentsFormBloc(this._feedEntry) : super(CommentsFormBlocStateInit()) {
+  CommentsFormBloc(this.args) : super(CommentsFormBlocStateInit()) {
     add(CommentsFormBlocEventInit());
   }
 
   @override
   Stream<CommentsFormBlocState> mapEventToState(
       CommentsFormBlocEvent event) async* {
-    if (event is CommentsFormBlocEventInit) {}
+    if (event is CommentsFormBlocEventInit) {
+      String feedEntryID;
+      if (args.feedEntry.remoteState) {
+        feedEntryID = args.feedEntry.feedEntryID;
+      } else {
+        FeedEntry feedEntry =
+            await RelDB.get().feedsDAO.getFeedEntry(args.feedEntry.feedEntryID);
+        feedEntryID = feedEntry.serverID;
+      }
+      yield* fetchComments(feedEntryID);
+    }
+  }
+
+  Stream<CommentsFormBlocState> fetchComments(String feedEntryID) async* {
+    List<Comment> comments = await BackendAPI()
+        .feedsAPI
+        .fetchCommentsForFeedEntry(feedEntryID, n: 2);
+    int n =
+        await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
+
+    yield CommentsFormBlocStateLoaded(this.args.feedEntry, comments, n);
   }
 }

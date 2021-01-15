@@ -25,11 +25,13 @@ class Comment extends Equatable {
   final String feedEntryID;
   final String userID;
 
+  final String from;
+
   final String replyTo;
   final String text;
   final String type;
 
-  final Map<String, dynamic> params;
+  final String params;
 
   final DateTime createdAt;
 
@@ -37,6 +39,7 @@ class Comment extends Equatable {
       {this.id,
       this.feedEntryID,
       this.userID,
+      this.from,
       this.replyTo,
       this.text,
       this.type,
@@ -48,6 +51,7 @@ class Comment extends Equatable {
         id,
         feedEntryID,
         userID,
+        from,
         replyTo,
         text,
         type,
@@ -57,14 +61,11 @@ class Comment extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
       'feedEntryID': this.feedEntryID,
-      'userID': this.userID,
       'replyTo': this.replyTo,
       'text': this.text,
       'type': this.type,
       'params': this.params,
-      'cat': this.createdAt.toUtc().toIso8601String(),
     };
   }
 
@@ -73,6 +74,7 @@ class Comment extends Equatable {
       id: map['id'],
       feedEntryID: map['feedEntryID'],
       userID: map['userID'],
+      from: map['from'],
       replyTo: map['replyTo'],
       text: map['text'],
       type: map['type'],
