@@ -42,7 +42,7 @@ class SocialBarPage extends StatelessWidget {
 
   Widget renderLoaded(BuildContext context, SocialBarBlocStateLoaded state) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 10),
       child: Row(
         children: [
           renderButton(

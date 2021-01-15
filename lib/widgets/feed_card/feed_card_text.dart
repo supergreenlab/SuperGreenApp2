@@ -83,8 +83,8 @@ class _FeedCardTextState extends State<FeedCardText> {
       );
     }
     return Padding(
-      padding: const EdgeInsets.only(
-          top: 4.0, left: 16.0, right: 16.0, bottom: 16.0),
+      padding:
+          const EdgeInsets.only(top: 4.0, left: 8.0, right: 8.0, bottom: 8.0),
       child: text,
     );
   }
