@@ -33,8 +33,11 @@ class CommentsFormPage extends StatefulWidget {
 
 class _CommentsFormPageState extends State<CommentsFormPage> {
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  final FocusNode inputFocus = FocusNode();
   final ScrollController scrollController = ScrollController();
   final TextEditingController textEditingController = TextEditingController();
+
+  String type = 'COMMENT';
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +57,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
           iconColor: Colors.black,
           elevation: 2,
         ),
-        body: body,
+        body: AnimatedSwitcher(
+            duration: Duration(milliseconds: 200), child: body),
       );
     });
   }
@@ -84,6 +88,11 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Container(
+          height: 1,
+          color: Color(0xffcdcdcd),
+          margin: EdgeInsets.only(bottom: 10.0),
+        ),
         Text(
           'What kind of post do you want to do?',
           textAlign: TextAlign.center,
@@ -92,14 +101,14 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            renderType(
-                context, state, 'Comment', 'assets/feed_card/icon_comment.png'),
+            renderType(context, state, 'Comment',
+                'assets/feed_card/icon_comment.png', 'COMMENT'),
             renderType(context, state, 'Tips&tricks',
-                'assets/feed_card/icon_tips.png'),
+                'assets/feed_card/icon_tips.png', 'TIPS'),
             renderType(context, state, 'Diagnosis',
-                'assets/feed_card/icon_diagnosis.png'),
+                'assets/feed_card/icon_diagnosis.png', 'DIAGNOSIS'),
             renderType(context, state, 'Recommend',
-                'assets/feed_card/icon_recommend.png'),
+                'assets/feed_card/icon_recommend.png', 'RECOMMEND'),
           ],
         ),
         renderInput(context, state),
@@ -126,13 +135,14 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12.0),
+                          horizontal: 15, vertical: 0),
                       child: TextField(
+                        focusNode: inputFocus,
                         decoration: InputDecoration(
+                            border: InputBorder.none,
                             hintText: 'Add a comment as stant...'),
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(fontSize: 17),
-                        expands: true,
                         maxLines: null,
                         controller: textEditingController,
                       ),
@@ -163,7 +173,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
   }
 
   Widget renderType(BuildContext context, CommentsFormBlocStateLoaded state,
-      String name, String icon) {
+      String name, String icon, String type) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -177,14 +187,29 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
             margin: const EdgeInsets.all(5.0),
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-                border: Border.all(color: Color(0xffbdbdbd)),
+                border: Border.all(
+                    color: this.type == type
+                        ? Color(0xff3bb30b)
+                        : Color(0xffbdbdbd)),
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: InkWell(
+              onTap: () {
+                setState(() {
+                  this.type = type;
+                  inputFocus.requestFocus();
+                });
+              },
               child: Image.asset(icon, width: 25, height: 25),
             ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    inputFocus.dispose();
+    super.dispose();
   }
 }
