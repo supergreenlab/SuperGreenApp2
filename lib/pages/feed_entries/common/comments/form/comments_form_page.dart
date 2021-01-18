@@ -128,9 +128,10 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12.0),
                       child: TextField(
+                        decoration: InputDecoration(
+                            hintText: 'Add a comment as stant...'),
                         textCapitalization: TextCapitalization.sentences,
-                        decoration: null,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 17),
                         expands: true,
                         maxLines: null,
                         controller: textEditingController,

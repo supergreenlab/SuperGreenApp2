@@ -81,7 +81,7 @@ class CommentsFormBloc
         feedEntryID = feedEntry.serverID;
       }
       yield* fetchComments(feedEntryID);
-    }
+    } else if (event is CommentsFormBlocEventPostComment) {}
   }
 
   Stream<CommentsFormBlocState> fetchComments(String feedEntryID) async* {
