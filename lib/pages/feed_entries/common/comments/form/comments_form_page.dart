@@ -59,26 +59,27 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
               comments.insert(index, comment);
             });
           });
-          Timer(
-              Duration(milliseconds: 100),
-              () => scrollController.animateTo(0,
-                  duration: Duration(milliseconds: 500), curve: Curves.linear));
+          if (scrollController.offset != 0) {
+            Timer(
+                Duration(milliseconds: 100),
+                () => scrollController.animateTo(0,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear));
+          }
         }
       },
       child: BlocBuilder<CommentsFormBloc, CommentsFormBlocState>(
           builder: (BuildContext context, CommentsFormBlocState state) {
-        Widget body;
+        List<Widget> body;
         if (state is CommentsFormBlocStateInit) {
-          body = FullscreenLoading();
+          body = [FullscreenLoading()];
         } else if (state is CommentsFormBlocStateLoaded) {
-          body = renderLoaded(context);
+          body = [renderLoaded(context)];
         } else if (state is CommentsFormBlocStateLoading) {
-          body = Stack(
-            children: [
-              renderLoaded(context),
-              FullscreenLoading(),
-            ],
-          );
+          body = [
+            renderLoaded(context),
+            FullscreenLoading(),
+          ];
         }
         return Scaffold(
           appBar: SGLAppBar(
@@ -89,7 +90,10 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
             elevation: 2,
           ),
           body: AnimatedSwitcher(
-              duration: Duration(milliseconds: 200), child: body),
+              duration: Duration(milliseconds: 200),
+              child: Stack(
+                children: body,
+              )),
         );
       }),
     );
@@ -171,6 +175,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 0),
                       child: TextField(
+                        autofocus: true,
                         focusNode: inputFocus,
                         decoration: InputDecoration(
                             border: InputBorder.none,
