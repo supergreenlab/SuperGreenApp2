@@ -32,13 +32,13 @@ class CommentsFormBlocEventInit extends CommentsFormBlocEvent {
 }
 
 class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
-  final String message;
+  final String text;
 
-  CommentsFormBlocEventPostComment(this.message);
+  CommentsFormBlocEventPostComment(this.text);
 
   @override
   List<Object> get props => [
-        message,
+        text,
       ];
 }
 
@@ -81,7 +81,14 @@ class CommentsFormBloc
         feedEntryID = feedEntry.serverID;
       }
       yield* fetchComments(feedEntryID);
-    } else if (event is CommentsFormBlocEventPostComment) {}
+    } else if (event is CommentsFormBlocEventPostComment) {
+      yield CommentsFormBlocStateLoaded(
+          this.args.feedEntry,
+          [
+            Comment(from: 'stant', text: event.text, createdAt: DateTime.now()),
+          ],
+          10);
+    }
   }
 
   Stream<CommentsFormBlocState> fetchComments(String feedEntryID) async* {

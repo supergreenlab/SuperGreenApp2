@@ -255,6 +255,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
     _keyboardVisibility.removeListener(_listener);
     _ssidController.dispose();
     _passController.dispose();
+    _ssidFocusNode.dispose();
+    _passFocusNode.dispose();
     super.dispose();
   }
 }

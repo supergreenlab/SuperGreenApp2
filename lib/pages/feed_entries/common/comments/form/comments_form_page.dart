@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/widgets/comments.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
@@ -32,6 +35,8 @@ class CommentsFormPage extends StatefulWidget {
 }
 
 class _CommentsFormPageState extends State<CommentsFormPage> {
+  final List<Comment> comments = [];
+
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final FocusNode inputFocus = FocusNode();
   final ScrollController scrollController = ScrollController();
@@ -41,31 +46,49 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CommentsFormBloc, CommentsFormBlocState>(
-        builder: (BuildContext context, CommentsFormBlocState state) {
-      Widget body;
-      if (state is CommentsFormBlocStateInit) {
-        body = FullscreenLoading();
-      } else if (state is CommentsFormBlocStateLoaded) {
-        body = renderLoaded(context, state);
-      }
-      return Scaffold(
-        appBar: SGLAppBar(
-          'Comments',
-          backgroundColor: Colors.white,
-          titleColor: Colors.black,
-          iconColor: Colors.black,
-          elevation: 2,
-        ),
-        body: AnimatedSwitcher(
-            duration: Duration(milliseconds: 200), child: body),
-      );
-    });
+    return BlocListener<CommentsFormBloc, CommentsFormBlocState>(
+      listener: (BuildContext context, CommentsFormBlocState state) {
+        if (state is CommentsFormBlocStateLoaded) {
+          setState(() {
+            state.comments.forEach((comment) {
+              int index = comments
+                  .indexWhere((c) => c.createdAt.isAfter(comment.createdAt));
+              index = index < 0 ? 0 : index;
+              listKey.currentState
+                  .insertItem(index, duration: Duration(milliseconds: 200));
+              comments.insert(index, comment);
+            });
+          });
+          Timer(
+              Duration(milliseconds: 100),
+              () => scrollController.animateTo(0,
+                  duration: Duration(milliseconds: 500), curve: Curves.linear));
+        }
+      },
+      child: BlocBuilder<CommentsFormBloc, CommentsFormBlocState>(
+          builder: (BuildContext context, CommentsFormBlocState state) {
+        Widget body;
+        if (state is CommentsFormBlocStateInit) {
+          body = FullscreenLoading();
+        } else if (state is CommentsFormBlocStateLoaded) {
+          body = renderLoaded(context, state);
+        }
+        return Scaffold(
+          appBar: SGLAppBar(
+            'Comments',
+            backgroundColor: Colors.white,
+            titleColor: Colors.black,
+            iconColor: Colors.black,
+            elevation: 2,
+          ),
+          body: AnimatedSwitcher(
+              duration: Duration(milliseconds: 200), child: body),
+        );
+      }),
+    );
   }
 
   Widget renderLoaded(BuildContext context, CommentsFormBlocStateLoaded state) {
-    List<Widget> children =
-        state.comments.map((c) => CommentView(comment: c)).toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -75,8 +98,12 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
           controller: scrollController,
           itemBuilder:
               (BuildContext context, int index, Animation<double> animation) =>
-                  children[index],
-          initialItemCount: children.length,
+                  FadeTransition(
+                      opacity: animation,
+                      child: SizeTransition(
+                          sizeFactor: animation,
+                          child: CommentView(comment: comments[index]))),
+          initialItemCount: comments.length,
         )),
         renderInputContainer(context, state),
       ],
@@ -143,7 +170,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                             hintText: 'Add a comment as stant...'),
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(fontSize: 17),
-                        maxLines: null,
+                        minLines: 1,
+                        maxLines: 4,
                         controller: textEditingController,
                       ),
                     ),
@@ -153,6 +181,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                       BlocProvider.of<CommentsFormBloc>(context).add(
                           CommentsFormBlocEventPostComment(
                               textEditingController.text));
+                      textEditingController.text = '';
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),
@@ -181,13 +210,18 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         children: [
           Text(
             name,
-            style: TextStyle(color: Color(0xff474747), fontSize: 16),
+            style: TextStyle(
+                color: Color(0xff474747),
+                fontSize: 16,
+                fontWeight:
+                    this.type == type ? FontWeight.bold : FontWeight.normal),
           ),
           Container(
             margin: const EdgeInsets.all(5.0),
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 border: Border.all(
+                    width: this.type == type ? 2 : 1,
                     color: this.type == type
                         ? Color(0xff3bb30b)
                         : Color(0xffbdbdbd)),
