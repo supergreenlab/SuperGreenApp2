@@ -51,6 +51,11 @@ class CommentsFormBlocStateInit extends CommentsFormBlocState {
   List<Object> get props => [];
 }
 
+class CommentsFormBlocStateLoading extends CommentsFormBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   final FeedEntryStateLoaded feedEntry;
   final List<Comment> comments;
@@ -84,6 +89,8 @@ class CommentsFormBloc
       }
       yield* fetchComments(feedEntryID);
     } else if (event is CommentsFormBlocEventPostComment) {
+      yield CommentsFormBlocStateLoading();
+      await Future.delayed(Duration(milliseconds: 500));
       yield CommentsFormBlocStateLoaded(
           this.args.feedEntry,
           [

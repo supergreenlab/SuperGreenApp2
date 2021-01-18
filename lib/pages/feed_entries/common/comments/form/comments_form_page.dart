@@ -71,7 +71,14 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         if (state is CommentsFormBlocStateInit) {
           body = FullscreenLoading();
         } else if (state is CommentsFormBlocStateLoaded) {
-          body = renderLoaded(context, state);
+          body = renderLoaded(context);
+        } else if (state is CommentsFormBlocStateLoading) {
+          body = Stack(
+            children: [
+              renderLoaded(context),
+              FullscreenLoading(),
+            ],
+          );
         }
         return Scaffold(
           appBar: SGLAppBar(
@@ -88,7 +95,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
     );
   }
 
-  Widget renderLoaded(BuildContext context, CommentsFormBlocStateLoaded state) {
+  Widget renderLoaded(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -106,13 +113,12 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                               comment: comments[index], first: index == 0))),
           initialItemCount: comments.length,
         )),
-        renderInputContainer(context, state),
+        renderInputContainer(context),
       ],
     );
   }
 
-  Widget renderInputContainer(
-      BuildContext context, CommentsFormBlocStateLoaded state) {
+  Widget renderInputContainer(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -129,22 +135,22 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            renderType(context, state, 'Comment',
-                'assets/feed_card/icon_comment.png', 'COMMENT'),
-            renderType(context, state, 'Tips&tricks',
-                'assets/feed_card/icon_tips.png', 'TIPS'),
-            renderType(context, state, 'Diagnosis',
+            renderType(context, 'Comment', 'assets/feed_card/icon_comment.png',
+                'COMMENT'),
+            renderType(context, 'Tips&tricks', 'assets/feed_card/icon_tips.png',
+                'TIPS'),
+            renderType(context, 'Diagnosis',
                 'assets/feed_card/icon_diagnosis.png', 'DIAGNOSIS'),
-            renderType(context, state, 'Recommend',
+            renderType(context, 'Recommend',
                 'assets/feed_card/icon_recommend.png', 'RECOMMEND'),
           ],
         ),
-        renderInput(context, state),
+        renderInput(context),
       ],
     );
   }
 
-  Widget renderInput(BuildContext context, CommentsFormBlocStateLoaded state) {
+  Widget renderInput(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -203,8 +209,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
     );
   }
 
-  Widget renderType(BuildContext context, CommentsFormBlocStateLoaded state,
-      String name, String icon, String type) {
+  Widget renderType(
+      BuildContext context, String name, String icon, String type) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
