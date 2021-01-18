@@ -33,12 +33,14 @@ class CommentsFormBlocEventInit extends CommentsFormBlocEvent {
 
 class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final String text;
+  final String type;
 
-  CommentsFormBlocEventPostComment(this.text);
+  CommentsFormBlocEventPostComment(this.text, this.type);
 
   @override
   List<Object> get props => [
         text,
+        type,
       ];
 }
 
@@ -85,7 +87,11 @@ class CommentsFormBloc
       yield CommentsFormBlocStateLoaded(
           this.args.feedEntry,
           [
-            Comment(from: 'stant', text: event.text, createdAt: DateTime.now()),
+            Comment(
+                from: 'stant',
+                text: event.text,
+                createdAt: DateTime.now(),
+                type: event.type),
           ],
           10);
     }

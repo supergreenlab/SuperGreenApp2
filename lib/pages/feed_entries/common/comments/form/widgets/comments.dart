@@ -22,15 +22,21 @@ import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 
 class CommentView extends StatelessWidget {
   final Comment comment;
+  final bool first;
 
-  const CommentView({Key key, this.comment}) : super(key: key);
+  const CommentView({Key key, this.comment, this.first = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MarkdownBody(
-      data: '**${comment.from}** ${comment.text}',
-      styleSheet:
-          MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+    return Padding(
+      padding: EdgeInsets.only(
+          left: 8.0, right: 8.0, top: this.first ? 16.0 : 4.0, bottom: 4.0),
+      child: MarkdownBody(
+        data: '**${comment.from}** ${comment.text}',
+        styleSheet:
+            MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+      ),
     );
   }
 }

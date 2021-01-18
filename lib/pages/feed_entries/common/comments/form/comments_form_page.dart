@@ -102,7 +102,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                       opacity: animation,
                       child: SizeTransition(
                           sizeFactor: animation,
-                          child: CommentView(comment: comments[index]))),
+                          child: CommentView(
+                              comment: comments[index], first: index == 0))),
           initialItemCount: comments.length,
         )),
         renderInputContainer(context, state),
@@ -180,8 +181,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                     onTap: () {
                       BlocProvider.of<CommentsFormBloc>(context).add(
                           CommentsFormBlocEventPostComment(
-                              textEditingController.text));
-                      textEditingController.text = '';
+                              textEditingController.text, type));
+                      FocusScope.of(context).unfocus();
+                      textEditingController.clear();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),
