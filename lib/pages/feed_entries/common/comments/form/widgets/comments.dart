@@ -16,15 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 
-class SmallCommentView extends StatelessWidget {
+class CommentView extends StatelessWidget {
   final Comment comment;
 
-  const SmallCommentView({Key key, this.comment}) : super(key: key);
+  const CommentView({Key key, this.comment}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

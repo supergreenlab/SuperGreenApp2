@@ -16,22 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 
-class SmallCommentView extends StatelessWidget {
-  final Comment comment;
+class UserAvatar extends StatelessWidget {
+  final String icon;
 
-  const SmallCommentView({Key key, this.comment}) : super(key: key);
+  const UserAvatar({Key key, this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MarkdownBody(
-      data: '**${comment.from}** ${comment.text}',
-      styleSheet:
-          MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+    return Container(
+      margin: const EdgeInsets.all(5.0),
+      decoration: BoxDecoration(
+          border: Border.all(color: Color(0xffbdbdbd)),
+          borderRadius: BorderRadius.all(Radius.circular(25))),
+      child: InkWell(
+        child: Image.asset(icon, width: 40, height: 40),
+      ),
     );
   }
 }

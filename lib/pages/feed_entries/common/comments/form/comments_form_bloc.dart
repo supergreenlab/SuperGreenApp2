@@ -31,6 +31,17 @@ class CommentsFormBlocEventInit extends CommentsFormBlocEvent {
   List<Object> get props => [];
 }
 
+class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
+  final String message;
+
+  CommentsFormBlocEventPostComment(this.message);
+
+  @override
+  List<Object> get props => [
+        message,
+      ];
+}
+
 abstract class CommentsFormBlocState extends Equatable {}
 
 class CommentsFormBlocStateInit extends CommentsFormBlocState {
@@ -76,7 +87,7 @@ class CommentsFormBloc
   Stream<CommentsFormBlocState> fetchComments(String feedEntryID) async* {
     List<Comment> comments = await BackendAPI()
         .feedsAPI
-        .fetchCommentsForFeedEntry(feedEntryID, n: 2);
+        .fetchCommentsForFeedEntry(feedEntryID, n: 20);
     int n =
         await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
 
