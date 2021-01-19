@@ -26,6 +26,7 @@ class Comment extends Equatable {
   final String userID;
 
   final String from;
+  final String pic;
 
   final String replyTo;
   final String text;
@@ -40,11 +41,37 @@ class Comment extends Equatable {
       this.feedEntryID,
       this.userID,
       this.from,
+      this.pic,
       this.replyTo,
       this.text,
       this.type,
       this.params,
       this.createdAt});
+
+  Comment copyWith(
+      {String id,
+      String feedEntryID,
+      String userID,
+      String from,
+      String pic,
+      String replyTo,
+      String text,
+      String type,
+      String params,
+      DateTime createdAt}) {
+    return Comment(
+      id: id ?? this.id,
+      feedEntryID: feedEntryID ?? this.feedEntryID,
+      userID: userID ?? this.userID,
+      from: from ?? this.from,
+      pic: pic ?? this.pic,
+      replyTo: replyTo ?? this.replyTo,
+      text: text ?? this.text,
+      type: type ?? this.type,
+      params: params ?? this.params,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 
   @override
   List<Object> get props => [
@@ -52,6 +79,7 @@ class Comment extends Equatable {
         feedEntryID,
         userID,
         from,
+        pic,
         replyTo,
         text,
         type,
@@ -75,6 +103,7 @@ class Comment extends Equatable {
       feedEntryID: map['feedEntryID'],
       userID: map['userID'],
       from: map['from'],
+      pic: map['pic'],
       replyTo: map['replyTo'],
       text: map['text'],
       type: map['type'],

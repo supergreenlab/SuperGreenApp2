@@ -18,7 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
 
 class CommentView extends StatelessWidget {
   final Comment comment;
@@ -29,13 +31,26 @@ class CommentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String pic = comment.pic;
+    if (pic != null) {
+      pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
+    }
     return Padding(
       padding: EdgeInsets.only(
           left: 8.0, right: 8.0, top: this.first ? 16.0 : 4.0, bottom: 4.0),
-      child: MarkdownBody(
-        data: '**${comment.from}** ${comment.text}',
-        styleSheet:
-            MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          UserAvatar(icon: pic),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0, left: 4.0),
+            child: MarkdownBody(
+              data: '**${comment.from}** ${comment.text}',
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
+          ),
+        ],
       ),
     );
   }

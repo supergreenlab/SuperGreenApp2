@@ -55,8 +55,6 @@ class DeviceHelper {
   static Future<Tuple2<int, int>> updateHourMinParams(
       Device device, Param hourParam, Param minParam, int hour, int min,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    print(
-        "${DateTime.now().timeZoneOffset.inHours} ${DateTime.now().timeZoneOffset.inMinutes % 60}");
     hour = hour - DateTime.now().timeZoneOffset.inHours;
     min = min - (DateTime.now().timeZoneOffset.inMinutes % 60);
     if (min < 0) {

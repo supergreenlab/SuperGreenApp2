@@ -26,7 +26,7 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/common/comments/form/widgets/comments.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/form/widgets/comment.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -54,14 +54,18 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         if (state is CommentsFormBlocStateLoaded) {
           setState(() {
             this.user = state.user;
-            state.comments.forEach((comment) {
-              int index = comments
-                  .indexWhere((c) => c.createdAt.isAfter(comment.createdAt));
-              index = index < 0 ? 0 : index;
-              listKey.currentState
-                  .insertItem(index, duration: Duration(milliseconds: 200));
-              comments.insert(index, comment);
-            });
+            if (listKey.currentState != null) {
+              state.comments.forEach((comment) {
+                int index = comments
+                    .indexWhere((c) => c.createdAt.isAfter(comment.createdAt));
+                index = index < 0 ? 0 : index;
+                listKey.currentState
+                    .insertItem(index, duration: Duration(milliseconds: 200));
+                comments.insert(index, comment);
+              });
+            } else {
+              comments.addAll(state.comments);
+            }
           });
           if (scrollController.offset != 0) {
             Timer(

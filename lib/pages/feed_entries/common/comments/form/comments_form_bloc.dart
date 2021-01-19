@@ -73,6 +73,7 @@ class CommentsFormBloc
     extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
   User user;
+  String feedEntryID;
 
   CommentsFormBloc(this.args) : super(CommentsFormBlocStateInit()) {
     add(CommentsFormBlocEventInit());
@@ -82,7 +83,6 @@ class CommentsFormBloc
   Stream<CommentsFormBlocState> mapEventToState(
       CommentsFormBlocEvent event) async* {
     if (event is CommentsFormBlocEventInit) {
-      String feedEntryID;
       this.user = await BackendAPI().usersAPI.me();
       if (args.feedEntry.remoteState) {
         feedEntryID = args.feedEntry.feedEntryID;
@@ -94,15 +94,19 @@ class CommentsFormBloc
       yield* fetchComments(feedEntryID);
     } else if (event is CommentsFormBlocEventPostComment) {
       yield CommentsFormBlocStateLoading();
-      await Future.delayed(Duration(milliseconds: 500));
+      Comment comment = Comment(
+          feedEntryID: feedEntryID,
+          userID: this.user.id,
+          from: this.user.nickname,
+          text: event.text,
+          type: event.type,
+          createdAt: DateTime.now(),
+          params: "{}");
+      comment = await BackendAPI().feedsAPI.postComment(comment);
       yield CommentsFormBlocStateLoaded(
           this.args.feedEntry,
           [
-            Comment(
-                from: 'stant',
-                text: event.text,
-                createdAt: DateTime.now(),
-                type: event.type),
+            comment,
           ],
           10,
           this.user);

@@ -355,6 +355,12 @@ class FeedsAPI {
     }
   }
 
+  Future<Comment> postComment(Comment comment) async {
+    Map<String, dynamic> obj = comment.toMap();
+    String id = await BackendAPI().postPut('/comment', obj);
+    return comment.copyWith(id: id);
+  }
+
   Future download(String from, String to) async {
     Response fileResp = await BackendAPI().storageClient.get(
         '${BackendAPI().storageServerHost}$from',
