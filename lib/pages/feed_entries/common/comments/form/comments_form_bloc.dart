@@ -45,6 +45,15 @@ class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
       ];
 }
 
+class CommentsFormBlocEventLike extends CommentsFormBlocEvent {
+  final Comment comment;
+
+  CommentsFormBlocEventLike(this.comment);
+
+  @override
+  List<Object> get props => [comment];
+}
+
 abstract class CommentsFormBlocState extends Equatable {}
 
 class CommentsFormBlocStateInit extends CommentsFormBlocState {
@@ -67,6 +76,15 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
 
   @override
   List<Object> get props => [feedEntry, comments, n, user];
+}
+
+class CommentsFormBlocStateUpdateComment extends CommentsFormBlocState {
+  final Comment comment;
+
+  CommentsFormBlocStateUpdateComment(this.comment);
+
+  @override
+  List<Object> get props => [comment];
 }
 
 class CommentsFormBloc
@@ -92,6 +110,10 @@ class CommentsFormBloc
         feedEntryID = feedEntry.serverID;
       }
       yield* fetchComments(feedEntryID);
+    } else if (event is CommentsFormBlocEventLike) {
+      await BackendAPI().feedsAPI.likeComment(event.comment);
+      yield CommentsFormBlocStateUpdateComment(
+          event.comment.copyWith(liked: !event.comment.liked));
     } else if (event is CommentsFormBlocEventPostComment) {
       yield CommentsFormBlocStateLoading();
       Comment comment = Comment(

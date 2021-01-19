@@ -17,9 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
 
 class CommentView extends StatelessWidget {
@@ -35,6 +37,7 @@ class CommentView extends StatelessWidget {
     if (pic != null) {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
+    Duration diff = DateTime.now().difference(comment.createdAt);
     return Padding(
       padding: EdgeInsets.only(
           left: 8.0, right: 8.0, top: this.first ? 16.0 : 4.0, bottom: 4.0),
@@ -42,16 +45,71 @@ class CommentView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           UserAvatar(icon: pic),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0, left: 4.0),
-            child: MarkdownBody(
-              data: '**${comment.from}** ${comment.text}',
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 16)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 4.0, left: 4.0),
+                  child: MarkdownBody(
+                    data: '**${comment.from}** ${comment.text}',
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Colors.black, fontSize: 16)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          renderDuration(diff),
+                          style: TextStyle(color: Color(0xffababab)),
+                        ),
+                      ),
+                      Text(
+                        'Reply',
+                        style: TextStyle(color: Color(0xff717171)),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              BlocProvider.of<CommentsFormBloc>(context)
+                  .add(CommentsFormBlocEventLike(comment));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Image.asset(
+                  'assets/feed_card/button_like${comment.liked ? '_on' : ''}.png',
+                  width: 20,
+                  height: 20),
             ),
           ),
         ],
       ),
     );
+  }
+
+  String renderDuration(Duration diff, {suffix = ''}) {
+    int minuteDiff = diff.inMinutes;
+    int hourDiff = diff.inHours;
+    int dayDiff = diff.inDays;
+    String format;
+    if (minuteDiff < 1) {
+      format = 'few seconds$suffix';
+    } else if (minuteDiff < 60) {
+      format = '$minuteDiff min';
+    } else if (hourDiff < 24) {
+      format = '${hourDiff}h';
+    } else {
+      format = '$dayDiff day${dayDiff > 1 ? 's' : ''}';
+    }
+    return format;
   }
 }

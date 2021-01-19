@@ -63,21 +63,30 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                     .insertItem(index, duration: Duration(milliseconds: 200));
                 comments.insert(index, comment);
               });
+              if (scrollController.offset != 0) {
+                Timer(
+                    Duration(milliseconds: 100),
+                    () => scrollController.animateTo(0,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.linear));
+              }
             } else {
               comments.addAll(state.comments);
             }
           });
-          if (scrollController.offset != 0) {
-            Timer(
-                Duration(milliseconds: 100),
-                () => scrollController.animateTo(0,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.linear));
+        } else if (state is CommentsFormBlocStateUpdateComment) {
+          int i = comments.indexWhere((c) => c.id == state.comment.id);
+          if (i != -1) {
+            setState(() {
+              comments[i] = state.comment;
+            });
           }
         }
       },
       child: BlocBuilder<CommentsFormBloc, CommentsFormBlocState>(
-          builder: (BuildContext context, CommentsFormBlocState state) {
+          buildWhen: (CommentsFormBlocState s1, CommentsFormBlocState s2) {
+        return !(s2 is CommentsFormBlocStateUpdateComment);
+      }, builder: (BuildContext context, CommentsFormBlocState state) {
         List<Widget> body;
         if (state is CommentsFormBlocStateInit) {
           body = [FullscreenLoading()];

@@ -27,6 +27,7 @@ class Comment extends Equatable {
 
   final String from;
   final String pic;
+  final bool liked;
 
   final String replyTo;
   final String text;
@@ -42,6 +43,7 @@ class Comment extends Equatable {
       this.userID,
       this.from,
       this.pic,
+      this.liked,
       this.replyTo,
       this.text,
       this.type,
@@ -54,6 +56,7 @@ class Comment extends Equatable {
       String userID,
       String from,
       String pic,
+      bool liked,
       String replyTo,
       String text,
       String type,
@@ -65,6 +68,7 @@ class Comment extends Equatable {
       userID: userID ?? this.userID,
       from: from ?? this.from,
       pic: pic ?? this.pic,
+      liked: liked ?? this.liked,
       replyTo: replyTo ?? this.replyTo,
       text: text ?? this.text,
       type: type ?? this.type,
@@ -80,6 +84,7 @@ class Comment extends Equatable {
         userID,
         from,
         pic,
+        liked,
         replyTo,
         text,
         type,
@@ -104,6 +109,7 @@ class Comment extends Equatable {
       userID: map['userID'],
       from: map['from'],
       pic: map['pic'],
+      liked: map['liked'],
       replyTo: map['replyTo'],
       text: map['text'],
       type: map['type'],

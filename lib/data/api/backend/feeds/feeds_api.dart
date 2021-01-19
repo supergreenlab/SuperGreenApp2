@@ -24,6 +24,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/likes.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/common/deletes.dart';
@@ -358,6 +359,12 @@ class FeedsAPI {
   Future<Comment> postComment(Comment comment) async {
     Map<String, dynamic> obj = comment.toMap();
     String id = await BackendAPI().postPut('/comment', obj);
+    return comment.copyWith(id: id);
+  }
+
+  Future<Comment> likeComment(Comment comment) async {
+    Map<String, dynamic> obj = Like(commentID: comment.id).toMap();
+    String id = await BackendAPI().postPut('/like', obj);
     return comment.copyWith(id: id);
   }
 
