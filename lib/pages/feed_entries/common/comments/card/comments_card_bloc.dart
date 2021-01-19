@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -74,10 +75,24 @@ class CommentsCardBloc
   final FeedEntryStateLoaded _feedEntry;
   String feedEntryID;
 
+  List<StreamSubscription<dynamic>> listeners = [];
+
   StreamSubscription<FeedEntry> _sub;
 
   CommentsCardBloc(this._feedEntry) : super(CommentsCardBlocStateInit()) {
     add(CommentsCardBlocEventInit());
+    listeners.add(FeedEntryHelper.eventBus
+        .on<FeedEntryUpdateComment>()
+        .listen((FeedEntryUpdateComment evt) {
+      if (evt.comment.feedEntryID != feedEntryID) return;
+      add(CommentsCardBlocEventLoad());
+    }));
+    listeners.add(FeedEntryHelper.eventBus
+        .on<FeedEntryAddComment>()
+        .listen((FeedEntryAddComment evt) {
+      if (evt.comment.feedEntryID != feedEntryID) return;
+      add(CommentsCardBlocEventLoad());
+    }));
   }
 
   @override
@@ -123,6 +138,7 @@ class CommentsCardBloc
     if (feedEntry.serverID == null) {
       return;
     }
+    feedEntryID = feedEntry.serverID;
     await _sub.cancel();
     _sub = null;
     add(CommentsCardBlocEventLoad());
@@ -133,6 +149,7 @@ class CommentsCardBloc
     if (_sub != null) {
       _sub.cancel();
     }
+    listeners.forEach((l) => l.cancel());
     return super.close();
   }
 }

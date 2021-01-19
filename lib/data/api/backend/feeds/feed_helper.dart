@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:event_bus/event_bus.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -40,6 +41,18 @@ class FeedEntryDeleteEvent {
   final FeedEntry feedEntry;
 
   FeedEntryDeleteEvent(this.feedEntry);
+}
+
+class FeedEntryAddComment {
+  final Comment comment;
+
+  FeedEntryAddComment(this.comment);
+}
+
+class FeedEntryUpdateComment {
+  final Comment comment;
+
+  FeedEntryUpdateComment(this.comment);
 }
 
 class FeedEntryHelper {

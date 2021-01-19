@@ -44,7 +44,8 @@ class CommentsCardPage extends StatelessWidget {
   Widget renderLoaded(BuildContext context, CommentsCardBlocStateLoaded state) {
     List<Widget> content = [];
     if (state.n > 1) {
-      content.add(SmallCommentView(comment: state.comments[0]));
+      content.add(SmallCommentView(
+          feedEntry: state.feedEntry, comment: state.comments[0]));
       content.add(InkWell(
           onTap: () {
             BlocProvider.of<MainNavigatorBloc>(context)
@@ -57,9 +58,11 @@ class CommentsCardPage extends StatelessWidget {
               style: TextStyle(color: Color(0xff898989)),
             ),
           )));
-      content.add(SmallCommentView(comment: state.comments[1]));
+      content.add(SmallCommentView(
+          feedEntry: state.feedEntry, comment: state.comments[1]));
     } else if (state.n == 1) {
-      content.add(SmallCommentView(comment: state.comments[0]));
+      content.add(SmallCommentView(
+          feedEntry: state.feedEntry, comment: state.comments[0]));
     }
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),

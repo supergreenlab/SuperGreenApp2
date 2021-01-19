@@ -22,12 +22,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class SmallCommentView extends StatelessWidget {
+  final FeedEntryStateLoaded feedEntry;
   final Comment comment;
 
-  const SmallCommentView({Key key, this.comment}) : super(key: key);
+  const SmallCommentView(
+      {Key key, @required this.feedEntry, @required this.comment})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +43,16 @@ class SmallCommentView extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: MarkdownBody(
-            data: '**${comment.from}** ${comment.text}',
-            styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 16)),
+          child: InkWell(
+            onTap: () {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToCommentFormEvent(false, feedEntry));
+            },
+            child: MarkdownBody(
+              data: '**${comment.from}** ${comment.text}',
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
           ),
         ),
         InkWell(
@@ -50,7 +61,8 @@ class SmallCommentView extends StatelessWidget {
                 .add(CommentsCardBlocEventLike(comment));
           },
           child: Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.only(
+                left: 8.0, right: 4.0, top: 4.0, bottom: 8.0),
             child: Image.asset(
                 'assets/feed_card/button_like${comment.liked ? '_on' : ''}.png',
                 width: 20,

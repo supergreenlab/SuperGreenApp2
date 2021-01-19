@@ -19,6 +19,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -114,6 +115,7 @@ class CommentsFormBloc
       yield* fetchComments(feedEntryID);
     } else if (event is CommentsFormBlocEventLike) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
+      FeedEntryHelper.eventBus.fire(FeedEntryUpdateComment(event.comment));
       yield CommentsFormBlocStateUpdateComment(
           event.comment.copyWith(liked: !event.comment.liked));
     } else if (event is CommentsFormBlocEventPostComment) {
@@ -129,6 +131,7 @@ class CommentsFormBloc
           liked: false,
           params: "{}");
       comment = await BackendAPI().feedsAPI.postComment(comment);
+      FeedEntryHelper.eventBus.fire(FeedEntryAddComment(comment));
       yield CommentsFormBlocStateLoaded(
           this.args.autoFocus,
           this.args.feedEntry,
