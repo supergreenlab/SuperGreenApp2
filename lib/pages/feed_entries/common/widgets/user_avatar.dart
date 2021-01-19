@@ -16,22 +16,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class UserAvatar extends StatelessWidget {
   final String icon;
+  final double size;
 
-  const UserAvatar({Key key, this.icon}) : super(key: key);
+  const UserAvatar({Key key, this.icon, this.size = 40}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String icon = this.icon ?? 'assets/feed_card/icon_noavatar.png';
+    Image image;
+    if (icon.startsWith("http")) {
+      image = Image.network(
+        icon,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          }
+          return FullscreenLoading(
+              percent: loadingProgress.cumulativeBytesLoaded /
+                  loadingProgress.expectedTotalBytes);
+        },
+      );
+    } else if (icon.startsWith('assets/')) {
+      image = Image.asset(icon, fit: BoxFit.cover, width: size, height: size);
+    } else {
+      image =
+          Image.file(File(icon), fit: BoxFit.cover, width: size, height: size);
+    }
     return Container(
       margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
           border: Border.all(color: Color(0xffbdbdbd)),
-          borderRadius: BorderRadius.all(Radius.circular(25))),
+          borderRadius: BorderRadius.all(Radius.circular(size / 2))),
       child: InkWell(
-        child: Image.asset(icon, width: 40, height: 40),
+        child: image,
       ),
     );
   }

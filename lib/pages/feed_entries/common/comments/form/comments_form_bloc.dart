@@ -20,6 +20,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -60,16 +61,18 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   final FeedEntryStateLoaded feedEntry;
   final List<Comment> comments;
   final int n;
+  final User user;
 
-  CommentsFormBlocStateLoaded(this.feedEntry, this.comments, this.n);
+  CommentsFormBlocStateLoaded(this.feedEntry, this.comments, this.n, this.user);
 
   @override
-  List<Object> get props => [feedEntry, comments, n];
+  List<Object> get props => [feedEntry, comments, n, user];
 }
 
 class CommentsFormBloc
     extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
+  User user;
 
   CommentsFormBloc(this.args) : super(CommentsFormBlocStateInit()) {
     add(CommentsFormBlocEventInit());
@@ -80,6 +83,7 @@ class CommentsFormBloc
       CommentsFormBlocEvent event) async* {
     if (event is CommentsFormBlocEventInit) {
       String feedEntryID;
+      this.user = await BackendAPI().usersAPI.me();
       if (args.feedEntry.remoteState) {
         feedEntryID = args.feedEntry.feedEntryID;
       } else {
@@ -100,7 +104,8 @@ class CommentsFormBloc
                 createdAt: DateTime.now(),
                 type: event.type),
           ],
-          10);
+          10,
+          this.user);
     }
   }
 
@@ -111,6 +116,7 @@ class CommentsFormBloc
     int n =
         await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
 
-    yield CommentsFormBlocStateLoaded(this.args.feedEntry, comments, n);
+    yield CommentsFormBlocStateLoaded(
+        this.args.feedEntry, comments, n, this.user);
   }
 }

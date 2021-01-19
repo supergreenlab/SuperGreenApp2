@@ -22,7 +22,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/widgets/comments.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
@@ -36,6 +38,7 @@ class CommentsFormPage extends StatefulWidget {
 
 class _CommentsFormPageState extends State<CommentsFormPage> {
   final List<Comment> comments = [];
+  User user;
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final FocusNode inputFocus = FocusNode();
@@ -50,6 +53,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
       listener: (BuildContext context, CommentsFormBlocState state) {
         if (state is CommentsFormBlocStateLoaded) {
           setState(() {
+            this.user = state.user;
             state.comments.forEach((comment) {
               int index = comments
                   .indexWhere((c) => c.createdAt.isAfter(comment.createdAt));
@@ -155,12 +159,16 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
   }
 
   Widget renderInput(BuildContext context) {
+    String pic = user.pic;
+    if (pic != null) {
+      pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
+    }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           UserAvatar(
-            icon: 'assets/feed_card/icon_noavatar.png',
+            icon: pic,
           ),
           Expanded(
             child: Container(
@@ -216,42 +224,42 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
 
   Widget renderType(
       BuildContext context, String name, String icon, String type) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            name,
-            style: TextStyle(
-                color: Color(0xff474747),
-                fontSize: 16,
-                fontWeight:
-                    this.type == type ? FontWeight.bold : FontWeight.normal),
+    return InkWell(
+        onTap: () {
+          setState(() {
+            this.type = type;
+            inputFocus.requestFocus();
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                    color: Color(0xff474747),
+                    fontSize: 16,
+                    fontWeight: this.type == type
+                        ? FontWeight.bold
+                        : FontWeight.normal),
+              ),
+              Container(
+                margin: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        width: this.type == type ? 2 : 1,
+                        color: this.type == type
+                            ? Color(0xff3bb30b)
+                            : Color(0xffbdbdbd)),
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
+                child: Image.asset(icon, width: 25, height: 25),
+              ),
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.all(5.0),
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-                border: Border.all(
-                    width: this.type == type ? 2 : 1,
-                    color: this.type == type
-                        ? Color(0xff3bb30b)
-                        : Color(0xffbdbdbd)),
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  this.type = type;
-                  inputFocus.requestFocus();
-                });
-              },
-              child: Image.asset(icon, width: 25, height: 25),
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   @override

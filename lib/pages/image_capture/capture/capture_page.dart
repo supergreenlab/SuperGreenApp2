@@ -401,7 +401,7 @@ class _CapturePageState extends State<CapturePage> {
     } catch (e) {}
   }
 
-  _buildPicker(BuildContext context) {
+  void _buildPicker(BuildContext context) {
     showModalBottomSheet<Set<MediaFile>>(
       context: context,
       builder: (BuildContext c) {

@@ -10,6 +10,7 @@ import 'multi_selector_model.dart';
 class PickerWidget extends StatefulWidget {
   final bool withImages;
   final bool withVideos;
+  final bool multiple;
   final Function(Set<MediaFile> selectedFiles) onDone;
   final Function() onCancel;
 
@@ -17,7 +18,8 @@ class PickerWidget extends StatefulWidget {
       {@required this.withImages,
       @required this.withVideos,
       @required this.onDone,
-      @required this.onCancel});
+      @required this.onCancel,
+      this.multiple = true});
 
   @override
   State<StatefulWidget> createState() => PickerWidgetState();
@@ -32,6 +34,11 @@ class PickerWidgetState extends State<PickerWidget> {
   @override
   void initState() {
     super.initState();
+    if (!widget.multiple) {
+      _selector.addListener(() {
+        widget.onDone(_selector.selectedItems);
+      });
+    }
     MediaPickerBuilder.getAlbums(
       withImages: widget.withImages,
       withVideos: widget.withVideos,
@@ -54,7 +61,7 @@ class PickerWidgetState extends State<PickerWidget> {
         : _buildWidget();
   }
 
-  _buildWidget() {
+  Widget _buildWidget() {
     if (_albums.isEmpty)
       return Center(child: Text("You have no folders to select from"));
 
@@ -79,8 +86,8 @@ class PickerWidgetState extends State<PickerWidget> {
       }).toList(),
     );
 
-    return ChangeNotifierProvider<MultiSelectorModel>(
-      create: (context) => _selector,
+    return ChangeNotifierProvider<MultiSelectorModel>.value(
+      value: _selector,
       child: Container(
         height: double.infinity,
         color: Colors.white,

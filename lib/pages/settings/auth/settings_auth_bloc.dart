@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -42,6 +44,15 @@ class SettingsAuthBlocEventSetSyncedOverGSM extends SettingsAuthBlocEvent {
 class SettingsAuthBlocEventLogout extends SettingsAuthBlocEvent {
   @override
   List<Object> get props => [];
+}
+
+class SettingsAuthBlocEventUpdatePic extends SettingsAuthBlocEvent {
+  final List<File> files;
+
+  SettingsAuthBlocEventUpdatePic(this.files);
+
+  @override
+  List<Object> get props => [files];
 }
 
 abstract class SettingsAuthBlocState extends Equatable {}
@@ -101,6 +112,10 @@ class SettingsAuthBloc
     } else if (event is SettingsAuthBlocEventLogout) {
       AppDB().setJWT(null);
       yield SettingsAuthBlocStateDone();
+    } else if (event is SettingsAuthBlocEventUpdatePic) {
+      yield SettingsAuthBlocStateLoading();
+      await BackendAPI().usersAPI.uploadProfilePic(event.files[0]);
+      add(SettingsAuthBlocEventInit());
     }
   }
 }

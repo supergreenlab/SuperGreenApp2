@@ -70,7 +70,7 @@ class BackendAPI {
           ? 'http://192.168.1.87:9000'
           : 'https://devstorage.supergreenlab.com';
       storageServerHostHeader =
-          local ? 'minio:9000' : 'devstorage.supergreenlab.com';
+          local ? 'minio:9002' : 'devstorage.supergreenlab.com';
     } else {
       serverHost = 'http://10.0.2.2:8080';
       storageServerHost = 'http://10.0.2.2:9000';

@@ -17,11 +17,18 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:media_picker_builder/data/media_file.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
+import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
+import 'package:super_green_app/pages/image_picker/picker_widget.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -94,11 +101,23 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
 
   Widget _renderAuthBody(
       BuildContext context, SettingsAuthBlocStateLoaded state) {
+    String pic = state.user.pic;
+    if (pic != null) {
+      pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
+    }
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
               child: Column(children: <Widget>[
+            InkWell(
+                onTap: () {
+                  _checkPermission().then((granted) {
+                    if (!granted) return;
+                    _buildPicker(context);
+                  });
+                },
+                child: UserAvatar(icon: pic, size: 100)),
             Text(
               'Already connected to your',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
@@ -224,5 +243,41 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
         ),
       ],
     );
+  }
+
+  void _buildPicker(BuildContext context) {
+    showModalBottomSheet<Set<MediaFile>>(
+      context: context,
+      builder: (BuildContext c) {
+        return PickerWidget(
+          withImages: true,
+          withVideos: true,
+          multiple: false,
+          onDone: (Set<MediaFile> selectedFiles) {
+            Timer(Duration(milliseconds: 500), () {
+              List<File> files = selectedFiles.map((f) {
+                return File(f.path);
+              }).toList();
+              BlocProvider.of<SettingsAuthBloc>(context)
+                  .add(SettingsAuthBlocEventUpdatePic(files));
+            });
+            Navigator.pop(c);
+          },
+          onCancel: () {
+            Navigator.pop(c);
+          },
+        );
+      },
+    );
+  }
+
+  Future<bool> _checkPermission() async {
+    final permissionStorageGroup =
+        Platform.isIOS ? PermissionGroup.photos : PermissionGroup.storage;
+    Map<PermissionGroup, PermissionStatus> res =
+        await PermissionHandler().requestPermissions([
+      permissionStorageGroup,
+    ]);
+    return res[permissionStorageGroup] == PermissionStatus.granted;
   }
 }
