@@ -47,12 +47,12 @@ class SettingsAuthBlocEventLogout extends SettingsAuthBlocEvent {
 }
 
 class SettingsAuthBlocEventUpdatePic extends SettingsAuthBlocEvent {
-  final List<File> files;
+  final File file;
 
-  SettingsAuthBlocEventUpdatePic(this.files);
+  SettingsAuthBlocEventUpdatePic(this.file);
 
   @override
-  List<Object> get props => [files];
+  List<Object> get props => [file];
 }
 
 abstract class SettingsAuthBlocState extends Equatable {}
@@ -99,8 +99,8 @@ class SettingsAuthBloc
       SettingsAuthBlocEvent event) async* {
     if (event is SettingsAuthBlocEventInit) {
       yield SettingsAuthBlocStateLoading();
-      yield SettingsAuthBlocStateLoaded(
-          _isAuth, AppDB().getAppData().syncOverGSM, null);
+      /*yield SettingsAuthBlocStateLoaded(
+          _isAuth, AppDB().getAppData().syncOverGSM, null);*/
       User user;
       if (_isAuth) {
         user = await BackendAPI().usersAPI.me();
@@ -114,7 +114,7 @@ class SettingsAuthBloc
       yield SettingsAuthBlocStateDone();
     } else if (event is SettingsAuthBlocEventUpdatePic) {
       yield SettingsAuthBlocStateLoading();
-      await BackendAPI().usersAPI.uploadProfilePic(event.files[0]);
+      await BackendAPI().usersAPI.uploadProfilePic(event.file);
       add(SettingsAuthBlocEventInit());
     }
   }

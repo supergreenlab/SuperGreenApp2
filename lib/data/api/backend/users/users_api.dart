@@ -98,6 +98,13 @@ class UsersAPI {
         throw 'upload failed';
       }
     }
+    await BackendAPI().apiClient.put('${BackendAPI().serverHost}/user',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        },
+        body: JsonEncoder().convert(
+            {'pic': Uri.parse(uploadUrl['filePath']).path.split('/')[2]}));
   }
 
   Future<User> me() async {

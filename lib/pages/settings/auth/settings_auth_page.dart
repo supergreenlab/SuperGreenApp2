@@ -255,11 +255,9 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
           multiple: false,
           onDone: (Set<MediaFile> selectedFiles) {
             Timer(Duration(milliseconds: 500), () {
-              List<File> files = selectedFiles.map((f) {
-                return File(f.path);
-              }).toList();
-              BlocProvider.of<SettingsAuthBloc>(context)
-                  .add(SettingsAuthBlocEventUpdatePic(files));
+              BlocProvider.of<SettingsAuthBloc>(context).add(
+                  SettingsAuthBlocEventUpdatePic(
+                      File(selectedFiles.toList()[0].path)));
             });
             Navigator.pop(c);
           },
