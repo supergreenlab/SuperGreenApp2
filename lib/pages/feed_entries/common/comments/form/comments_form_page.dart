@@ -39,6 +39,7 @@ class CommentsFormPage extends StatefulWidget {
 class _CommentsFormPageState extends State<CommentsFormPage> {
   final List<Comment> comments = [];
   User user;
+  bool autoFocus;
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final FocusNode inputFocus = FocusNode();
@@ -53,6 +54,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
       listener: (BuildContext context, CommentsFormBlocState state) {
         if (state is CommentsFormBlocStateLoaded) {
           setState(() {
+            this.autoFocus = state.autoFocus;
             this.user = state.user;
             if (listKey.currentState != null) {
               state.comments.forEach((comment) {
@@ -196,7 +198,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 0),
                       child: TextField(
-                        autofocus: true,
+                        autofocus: autoFocus,
                         focusNode: inputFocus,
                         decoration: InputDecoration(
                             border: InputBorder.none,

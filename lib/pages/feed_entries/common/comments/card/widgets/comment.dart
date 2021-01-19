@@ -18,9 +18,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_bloc.dart';
 
 class SmallCommentView extends StatelessWidget {
   final Comment comment;
@@ -33,10 +35,29 @@ class SmallCommentView extends StatelessWidget {
     if (pic != null) {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
-    return MarkdownBody(
-      data: '**${comment.from}** ${comment.text}',
-      styleSheet:
-          MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+    return Row(
+      children: [
+        Expanded(
+          child: MarkdownBody(
+            data: '**${comment.from}** ${comment.text}',
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            BlocProvider.of<CommentsCardBloc>(context)
+                .add(CommentsCardBlocEventLike(comment));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Image.asset(
+                'assets/feed_card/button_like${comment.liked ? '_on' : ''}.png',
+                width: 20,
+                height: 20),
+          ),
+        ),
+      ],
     );
   }
 }

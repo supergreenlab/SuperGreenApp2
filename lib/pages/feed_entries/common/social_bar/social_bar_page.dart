@@ -76,7 +76,7 @@ class SocialBarPage extends StatelessWidget {
 
   void onComment(BuildContext context, SocialBarBlocStateLoaded state) {
     BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToCommentFormEvent(state.feedEntry));
+        .add(MainNavigateToCommentFormEvent(true, state.feedEntry));
   }
 
   void onShare(BuildContext context, SocialBarBlocStateLoaded state) {}

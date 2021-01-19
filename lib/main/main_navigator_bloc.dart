@@ -294,9 +294,10 @@ class MainNavigateToFeedNutrientMixFormEvent
 }
 
 class MainNavigateToCommentFormEvent extends MainNavigateToFeedFormEvent {
+  final bool autoFocus;
   final FeedEntryStateLoaded feedEntry;
 
-  MainNavigateToCommentFormEvent(this.feedEntry,
+  MainNavigateToCommentFormEvent(this.autoFocus, this.feedEntry,
       {pushAsReplacement = false, futureFn})
       : super(pushAsReplacement, futureFn: futureFn);
 

@@ -67,15 +67,17 @@ class CommentsFormBlocStateLoading extends CommentsFormBlocState {
 }
 
 class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
+  final bool autoFocus;
   final FeedEntryStateLoaded feedEntry;
   final List<Comment> comments;
   final int n;
   final User user;
 
-  CommentsFormBlocStateLoaded(this.feedEntry, this.comments, this.n, this.user);
+  CommentsFormBlocStateLoaded(
+      this.autoFocus, this.feedEntry, this.comments, this.n, this.user);
 
   @override
-  List<Object> get props => [feedEntry, comments, n, user];
+  List<Object> get props => [autoFocus, feedEntry, comments, n, user];
 }
 
 class CommentsFormBlocStateUpdateComment extends CommentsFormBlocState {
@@ -120,12 +122,15 @@ class CommentsFormBloc
           feedEntryID: feedEntryID,
           userID: this.user.id,
           from: this.user.nickname,
+          pic: this.user.pic,
           text: event.text,
           type: event.type,
           createdAt: DateTime.now(),
+          liked: false,
           params: "{}");
       comment = await BackendAPI().feedsAPI.postComment(comment);
       yield CommentsFormBlocStateLoaded(
+          this.args.autoFocus,
           this.args.feedEntry,
           [
             comment,
@@ -143,6 +148,6 @@ class CommentsFormBloc
         await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
 
     yield CommentsFormBlocStateLoaded(
-        this.args.feedEntry, comments, n, this.user);
+        this.args.autoFocus, this.args.feedEntry, comments, n, this.user);
   }
 }

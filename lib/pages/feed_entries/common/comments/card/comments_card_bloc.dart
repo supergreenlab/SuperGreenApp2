@@ -33,14 +33,17 @@ class CommentsCardBlocEventInit extends CommentsCardBlocEvent {
 }
 
 class CommentsCardBlocEventLoad extends CommentsCardBlocEvent {
-  final String feedEntryID;
+  @override
+  List<Object> get props => [];
+}
 
-  CommentsCardBlocEventLoad(this.feedEntryID);
+class CommentsCardBlocEventLike extends CommentsCardBlocEvent {
+  final Comment comment;
+
+  CommentsCardBlocEventLike(this.comment);
 
   @override
-  List<Object> get props => [
-        feedEntryID,
-      ];
+  List<Object> get props => [comment];
 }
 
 abstract class CommentsCardBlocState extends Equatable {}
@@ -69,6 +72,7 @@ class CommentsCardBlocStateLoaded extends CommentsCardBlocState {
 class CommentsCardBloc
     extends Bloc<CommentsCardBlocEvent, CommentsCardBlocState> {
   final FeedEntryStateLoaded _feedEntry;
+  String feedEntryID;
 
   StreamSubscription<FeedEntry> _sub;
 
@@ -81,7 +85,6 @@ class CommentsCardBloc
       CommentsCardBlocEvent event) async* {
     if (event is CommentsCardBlocEventInit) {
       yield CommentsCardBlocStateInit();
-      String feedEntryID;
       if (_feedEntry.remoteState) {
         feedEntryID = _feedEntry.feedEntryID;
       } else {
@@ -97,13 +100,16 @@ class CommentsCardBloc
         }
         feedEntryID = feedEntry.serverID;
       }
-      yield* fetchComments(feedEntryID);
+      yield* fetchComments();
     } else if (event is CommentsCardBlocEventLoad) {
-      yield* fetchComments(event.feedEntryID);
+      yield* fetchComments();
+    } else if (event is CommentsCardBlocEventLike) {
+      await BackendAPI().feedsAPI.likeComment(event.comment);
+      yield* fetchComments();
     }
   }
 
-  Stream<CommentsCardBlocState> fetchComments(String feedEntryID) async* {
+  Stream<CommentsCardBlocState> fetchComments() async* {
     List<Comment> comments = await BackendAPI()
         .feedsAPI
         .fetchCommentsForFeedEntry(feedEntryID, n: 2);
@@ -119,7 +125,7 @@ class CommentsCardBloc
     }
     await _sub.cancel();
     _sub = null;
-    add(CommentsCardBlocEventLoad(feedEntry.serverID));
+    add(CommentsCardBlocEventLoad());
   }
 
   @override

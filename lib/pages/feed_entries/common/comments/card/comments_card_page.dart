@@ -48,7 +48,7 @@ class CommentsCardPage extends StatelessWidget {
       content.add(InkWell(
           onTap: () {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToCommentFormEvent(state.feedEntry));
+                .add(MainNavigateToCommentFormEvent(false, state.feedEntry));
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
