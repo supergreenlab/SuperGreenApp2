@@ -36,13 +36,15 @@ class CommentsFormBlocEventInit extends CommentsFormBlocEvent {
 class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final String text;
   final CommentType type;
+  final Comment replyTo;
 
-  CommentsFormBlocEventPostComment(this.text, this.type);
+  CommentsFormBlocEventPostComment(this.text, this.type, this.replyTo);
 
   @override
   List<Object> get props => [
         text,
         type,
+        replyTo,
       ];
 }
 
@@ -125,6 +127,7 @@ class CommentsFormBloc
           userID: this.user.id,
           from: this.user.nickname,
           pic: this.user.pic,
+          replyTo: event.replyTo?.id,
           text: event.text,
           type: event.type,
           createdAt: DateTime.now(),

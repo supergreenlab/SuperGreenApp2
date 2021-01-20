@@ -132,7 +132,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
 
   Widget _renderDone(SettingsPlantBlocStateDone state) {
     String subtitle;
-    if (state.archived) {
+    if (state.archived ?? false) {
       subtitle =
           'Plant ${_nameController.value.text} on lab ${_box.name} archived:)';
     } else {

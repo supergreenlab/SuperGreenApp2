@@ -65,6 +65,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   final List<Comment> comments = [];
   User user;
   bool autoFocus;
+  Comment replyTo;
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final FocusNode inputFocus = FocusNode();
@@ -83,14 +84,31 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             this.user = state.user;
             if (listKey.currentState != null) {
               state.comments.forEach((comment) {
-                int index = comments
-                    .indexWhere((c) => c.createdAt.isAfter(comment.createdAt));
-                index = index < 0 ? 0 : index;
+                int index;
+                if (comment.replyTo != null) {
+                  int startIndex = comments.lastIndexWhere((c) =>
+                          c.id == comment.replyTo ||
+                          c.replyTo == comment.replyTo) +
+                      1;
+                  index = comments.lastIndexWhere(
+                      (c) =>
+                          c.replyTo == comment.replyTo &&
+                          c.createdAt.isAfter(comment.createdAt),
+                      startIndex);
+                  index = index < 0 ? startIndex : index;
+                } else {
+                  index = comments.indexWhere((c) =>
+                      c.replyTo == null &&
+                      c.createdAt.isAfter(comment.createdAt));
+                  index = index < 0 ? 0 : index;
+                }
                 listKey.currentState
                     .insertItem(index, duration: Duration(milliseconds: 200));
                 comments.insert(index, comment);
               });
-              if (scrollController.offset != 0) {
+              bool wasReplyPosted = state.comments.length == 1 &&
+                  state.comments[0].replyTo != null;
+              if (scrollController.offset != 0 && !wasReplyPosted) {
                 Timer(
                     Duration(milliseconds: 100),
                     () => scrollController.animateTo(0,
@@ -158,7 +176,19 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                       child: SizeTransition(
                           sizeFactor: animation,
                           child: CommentView(
-                              comment: comments[index], first: index == 0))),
+                            comment: comments[index],
+                            first: index == 0,
+                            replyTo: () {
+                              setState(() {
+                                replyTo = comments[index];
+                                inputFocus.requestFocus();
+                                type = CommentType.COMMENT;
+                                textEditingController.text = '@stant ';
+                                //textEditingController =
+                                //    TextEditingController(text: '@stant ');
+                              });
+                            },
+                          ))),
           initialItemCount: comments.length,
         )),
         renderInputContainer(context),
@@ -169,7 +199,61 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   Widget renderInputContainer(BuildContext context) {
     Widget content;
 
-    if (type == CommentType.COMMENT) {
+    if (replyTo != null) {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              UserAvatar(
+                icon: replyTo.pic,
+                size: 25,
+              ),
+              Text(
+                'Replying to ',
+                style: TextStyle(
+                  color: Color(0xff474747),
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                replyTo.from,
+                style: TextStyle(
+                  color: Color(0xff474747),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    type = CommentType.COMMENT;
+                    FocusScope.of(context).unfocus();
+                    replyTo = null;
+                  });
+                },
+                icon: Icon(Icons.close, size: 15),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Text(
+              replyTo.text,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              softWrap: false,
+              style: TextStyle(
+                color: Color(0xff474747),
+                fontSize: 15,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+        ],
+      );
+    } else if (type == CommentType.COMMENT) {
       content = Column(children: [
         Text(
           'What kind of post do you want to do?',
@@ -216,7 +300,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
       Container(
         height: 1,
         color: Color(0xffcdcdcd),
-        margin: EdgeInsets.only(bottom: 10.0),
+        margin: EdgeInsets.only(bottom: 6.0),
       ),
       AnimatedSizeAndFade(
           vsync: this,
@@ -269,10 +353,11 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                     onTap: () {
                       BlocProvider.of<CommentsFormBloc>(context).add(
                           CommentsFormBlocEventPostComment(
-                              textEditingController.text, type));
+                              textEditingController.text, type, replyTo));
                       FocusScope.of(context).unfocus();
                       textEditingController.clear();
                       type = CommentType.COMMENT;
+                      replyTo = null;
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),

@@ -27,8 +27,9 @@ import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.da
 class CommentView extends StatelessWidget {
   final Comment comment;
   final bool first;
+  final Function replyTo;
 
-  const CommentView({Key key, this.comment, this.first = false})
+  const CommentView({Key key, this.comment, this.first = false, this.replyTo})
       : super(key: key);
 
   @override
@@ -40,7 +41,10 @@ class CommentView extends StatelessWidget {
     Duration diff = DateTime.now().difference(comment.createdAt);
     return Padding(
       padding: EdgeInsets.only(
-          left: 8.0, right: 8.0, top: this.first ? 16.0 : 4.0, bottom: 4.0),
+          left: comment.replyTo != null ? 24 : 8.0,
+          right: 8.0,
+          top: this.first ? 16.0 : 4.0,
+          bottom: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -68,10 +72,17 @@ class CommentView extends StatelessWidget {
                           style: TextStyle(color: Color(0xffababab)),
                         ),
                       ),
-                      Text(
-                        'Reply',
-                        style: TextStyle(color: Color(0xff717171)),
-                      ),
+                      comment.replyTo == null
+                          ? InkWell(
+                              onTap: () {
+                                replyTo();
+                              },
+                              child: Text(
+                                'Reply',
+                                style: TextStyle(color: Color(0xff717171)),
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                 ),

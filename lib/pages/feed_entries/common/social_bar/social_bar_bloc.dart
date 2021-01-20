@@ -27,6 +27,11 @@ class SocialBarBlocEventInit extends SocialBarBlocEvent {
   List<Object> get props => [];
 }
 
+class SocialBarBlocEventLike extends SocialBarBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 abstract class SocialBarBlocState extends Equatable {}
 
 class SocialBarBlocStateInit extends SocialBarBlocState {
@@ -54,6 +59,6 @@ class SocialBarBloc extends Bloc<SocialBarBlocEvent, SocialBarBlocState> {
   Stream<SocialBarBlocState> mapEventToState(SocialBarBlocEvent event) async* {
     if (event is SocialBarBlocEventInit) {
       yield SocialBarBlocStateLoaded(this.feedEntry);
-    }
+    } else if (event is SocialBarBlocEventLike) {}
   }
 }
