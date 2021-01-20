@@ -18,7 +18,15 @@
 
 import 'dart:convert';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+
+enum CommentType {
+  COMMENT,
+  TIPS,
+  DIAGNOSIS,
+  RECOMMEND,
+}
 
 class Comment extends Equatable {
   final String id;
@@ -31,7 +39,7 @@ class Comment extends Equatable {
 
   final String replyTo;
   final String text;
-  final String type;
+  final CommentType type;
 
   final String params;
 
@@ -59,7 +67,7 @@ class Comment extends Equatable {
       bool liked,
       String replyTo,
       String text,
-      String type,
+      CommentType type,
       String params,
       DateTime createdAt}) {
     return Comment(
@@ -97,7 +105,7 @@ class Comment extends Equatable {
       'feedEntryID': this.feedEntryID,
       'replyTo': this.replyTo,
       'text': this.text,
-      'type': this.type,
+      'type': EnumToString.convertToString(this.type),
       'params': this.params,
     };
   }
@@ -112,7 +120,7 @@ class Comment extends Equatable {
       liked: map['liked'],
       replyTo: map['replyTo'],
       text: map['text'],
-      type: map['type'],
+      type: EnumToString.fromString(CommentType.values, map['type'] as String),
       params: map['params'],
       createdAt: DateTime.parse(map['cat'] as String).toLocal(),
     );

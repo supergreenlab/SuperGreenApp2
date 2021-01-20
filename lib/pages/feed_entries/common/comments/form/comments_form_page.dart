@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,12 +32,36 @@ import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.da
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
+const Map<CommentType, Map<String, String>> commentTypes = {
+  CommentType.COMMENT: {
+    'name': 'Comment',
+    'pic': 'assets/feed_card/icon_comment.png',
+    'prompt': 'Type your comment',
+  },
+  CommentType.TIPS: {
+    'name': 'Tips&tricks',
+    'pic': 'assets/feed_card/icon_tips.png',
+    'prompt': 'Type your tips&tricks',
+  },
+  CommentType.DIAGNOSIS: {
+    'name': 'Diagnosis',
+    'pic': 'assets/feed_card/icon_diagnosis.png',
+    'prompt': 'Type your diagnosis',
+  },
+  CommentType.RECOMMEND: {
+    'name': 'Recommend',
+    'pic': 'assets/feed_card/icon_recommend.png',
+    'prompt': 'Type your recommendation',
+  },
+};
+
 class CommentsFormPage extends StatefulWidget {
   @override
   _CommentsFormPageState createState() => _CommentsFormPageState();
 }
 
-class _CommentsFormPageState extends State<CommentsFormPage> {
+class _CommentsFormPageState extends State<CommentsFormPage>
+    with TickerProviderStateMixin {
   final List<Comment> comments = [];
   User user;
   bool autoFocus;
@@ -46,7 +71,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
   final ScrollController scrollController = ScrollController();
   final TextEditingController textEditingController = TextEditingController();
 
-  String type = 'COMMENT';
+  CommentType type = CommentType.COMMENT;
 
   @override
   Widget build(BuildContext context) {
@@ -142,14 +167,10 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
   }
 
   Widget renderInputContainer(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          height: 1,
-          color: Color(0xffcdcdcd),
-          margin: EdgeInsets.only(bottom: 10.0),
-        ),
+    Widget content;
+
+    if (type == CommentType.COMMENT) {
+      content = Column(children: [
         Text(
           'What kind of post do you want to do?',
           textAlign: TextAlign.center,
@@ -158,19 +179,52 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            renderType(context, 'Comment', 'assets/feed_card/icon_comment.png',
-                'COMMENT'),
-            renderType(context, 'Tips&tricks', 'assets/feed_card/icon_tips.png',
-                'TIPS'),
-            renderType(context, 'Diagnosis',
-                'assets/feed_card/icon_diagnosis.png', 'DIAGNOSIS'),
-            renderType(context, 'Recommend',
-                'assets/feed_card/icon_recommend.png', 'RECOMMEND'),
+            renderType(context, CommentType.COMMENT),
+            renderType(context, CommentType.TIPS),
+            renderType(context, CommentType.DIAGNOSIS),
+            renderType(context, CommentType.RECOMMEND),
           ],
         ),
-        renderInput(context),
-      ],
-    );
+      ]);
+    } else {
+      Map<String, String> commentType = commentTypes[type];
+      content = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset(commentType['pic'], width: 25, height: 25),
+        ),
+        Text(
+          commentType['name'],
+          style: TextStyle(
+            color: Color(0xff474747),
+            fontSize: 16,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              type = CommentType.COMMENT;
+              FocusScope.of(context).unfocus();
+            });
+          },
+          icon: Icon(Icons.close),
+        ),
+      ]);
+    }
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Container(
+        height: 1,
+        color: Color(0xffcdcdcd),
+        margin: EdgeInsets.only(bottom: 10.0),
+      ),
+      AnimatedSizeAndFade(
+          vsync: this,
+          fadeDuration: Duration(milliseconds: 200),
+          sizeDuration: Duration(milliseconds: 200),
+          child: content),
+      renderInput(context),
+    ]);
   }
 
   Widget renderInput(BuildContext context) {
@@ -218,6 +272,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                               textEditingController.text, type));
                       FocusScope.of(context).unfocus();
                       textEditingController.clear();
+                      type = CommentType.COMMENT;
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),
@@ -237,11 +292,15 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
     );
   }
 
-  Widget renderType(
-      BuildContext context, String name, String icon, String type) {
+  Widget renderType(BuildContext context, CommentType type) {
+    Map<String, String> commentType = commentTypes[type];
     return InkWell(
         onTap: () {
           setState(() {
+            if (type == CommentType.COMMENT) {
+              return;
+            }
+
             this.type = type;
             inputFocus.requestFocus();
           });
@@ -252,7 +311,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                name,
+                commentType['name'],
                 style: TextStyle(
                     color: Color(0xff474747),
                     fontSize: 16,
@@ -270,7 +329,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
                             ? Color(0xff3bb30b)
                             : Color(0xffbdbdbd)),
                     borderRadius: BorderRadius.all(Radius.circular(25))),
-                child: Image.asset(icon, width: 25, height: 25),
+                child: Image.asset(commentType['pic'], width: 25, height: 25),
               ),
             ],
           ),

@@ -35,7 +35,7 @@ class CommentsFormBlocEventInit extends CommentsFormBlocEvent {
 
 class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final String text;
-  final String type;
+  final CommentType type;
 
   CommentsFormBlocEventPostComment(this.text, this.type);
 
