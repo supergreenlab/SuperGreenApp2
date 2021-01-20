@@ -82,41 +82,41 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           setState(() {
             this.autoFocus = state.autoFocus;
             this.user = state.user;
-            if (listKey.currentState != null) {
-              state.comments.forEach((comment) {
-                int index;
-                if (comment.replyTo != null) {
-                  int startIndex = comments.lastIndexWhere((c) =>
-                          c.id == comment.replyTo ||
-                          c.replyTo == comment.replyTo) +
-                      1;
-                  index = comments.lastIndexWhere(
-                      (c) =>
-                          c.replyTo == comment.replyTo &&
-                          c.createdAt.isAfter(comment.createdAt),
-                      startIndex);
-                  index = index < 0 ? startIndex : index;
-                } else {
-                  index = comments.indexWhere((c) =>
-                      c.replyTo == null &&
-                      c.createdAt.isAfter(comment.createdAt));
-                  index = index < 0 ? 0 : index;
-                }
+            state.comments.forEach((comment) {
+              int index;
+              if (comment.replyTo != null) {
+                int startIndex = comments.lastIndexWhere((c) =>
+                        c.id == comment.replyTo ||
+                        c.replyTo == comment.replyTo) +
+                    1;
+                index = comments.lastIndexWhere(
+                    (c) =>
+                        c.replyTo == comment.replyTo &&
+                        c.createdAt.isAfter(comment.createdAt),
+                    startIndex);
+                index = index < 0 ? startIndex : index;
+              } else {
+                index = comments.indexWhere((c) =>
+                    c.replyTo == null &&
+                    c.createdAt.isBefore(comment.createdAt));
+                index = index < 0 ? comments.length : index;
+              }
+              if (listKey.currentState != null) {
                 listKey.currentState
                     .insertItem(index, duration: Duration(milliseconds: 200));
-                comments.insert(index, comment);
-              });
-              bool wasReplyPosted = state.comments.length == 1 &&
-                  state.comments[0].replyTo != null;
-              if (scrollController.offset != 0 && !wasReplyPosted) {
-                Timer(
-                    Duration(milliseconds: 100),
-                    () => scrollController.animateTo(0,
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.linear));
               }
-            } else {
-              comments.addAll(state.comments);
+              comments.insert(index, comment);
+            });
+            bool wasReplyPosted =
+                state.comments.length == 1 && state.comments[0].replyTo != null;
+            if (scrollController.hasClients &&
+                scrollController.offset != 0 &&
+                !wasReplyPosted) {
+              Timer(
+                  Duration(milliseconds: 100),
+                  () => scrollController.animateTo(0,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.linear));
             }
           });
         } else if (state is CommentsFormBlocStateUpdateComment) {
