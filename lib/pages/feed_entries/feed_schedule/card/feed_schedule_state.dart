@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedScheduleState extends FeedEntryStateLoaded {
-  FeedScheduleState(FeedEntryState from, { bool remoteState=false }) : super.copy(from, remoteState: remoteState);
+  FeedScheduleState(FeedEntryState from,
+      {FeedEntrySocialState socialState, bool remoteState})
+      : super.copy(from, socialState: socialState, remoteState: remoteState);
 }

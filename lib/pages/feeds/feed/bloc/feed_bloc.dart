@@ -18,6 +18,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -133,6 +134,24 @@ class FeedBlocEventDeleteEntry extends FeedBlocEvent {
   List<Object> get props => [entry];
 }
 
+class FeedBlocEventLikeComment extends FeedBlocEvent {
+  final Comment comment;
+
+  FeedBlocEventLikeComment(this.comment);
+
+  @override
+  List<Object> get props => [comment];
+}
+
+class FeedBlocEventLikeFeedEntry extends FeedBlocEvent {
+  final FeedEntryState entry;
+
+  FeedBlocEventLikeFeedEntry(this.entry);
+
+  @override
+  List<Object> get props => [entry];
+}
+
 abstract class FeedBlocState extends Equatable {}
 
 class FeedBlocStateInit extends FeedBlocState {
@@ -193,11 +212,11 @@ class FeedBlocStateRemoveEntry extends FeedBlocState {
 }
 
 class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
-  FeedBlocDelegate provider;
+  FeedBlocDelegate delegate;
   bool initialLoad = true;
   List<FeedEntryState> entries = [];
 
-  FeedBloc(this.provider) : super(FeedBlocStateInit()) {
+  FeedBloc(this.delegate) : super(FeedBlocStateInit()) {
     add(FeedBlocEventInit());
     add(FeedBlocEventLoadEntries(10, entries.length));
   }
@@ -205,19 +224,19 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
   @override
   Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {
     if (event is FeedBlocEventInit) {
-      await provider.init(this.add);
-      provider.loadFeed();
+      await delegate.init(this.add);
+      delegate.loadFeed();
     } else if (event is FeedBlocEventFeedLoaded) {
       yield FeedBlocStateFeedLoaded(event.feed);
     } else if (event is FeedBlocEventLoadEntries) {
       List<FeedEntryState> fes =
-          await provider.loadEntries(event.n, entries.length);
+          await delegate.loadEntries(event.n, entries.length);
       entries.addAll(fes);
       yield FeedBlocStateEntriesLoaded(fes, fes.length < event.n, initialLoad);
       initialLoad = false;
     } else if (event is FeedBlocEventEntryVisible) {
       FeedEntryState e = entries[event.index];
-      FeedEntryLoader loader = provider.loaderForType(e.type);
+      FeedEntryLoader loader = delegate.loaderForType(e.type);
       if (e is FeedEntryStateNotLoaded) {
         e = await loader.load(e);
         entries[event.index] = e;
@@ -226,7 +245,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       loader.startListenEntryChanges(e);
     } else if (event is FeedBlocEventEntryHidden) {
       FeedEntryState e = entries[event.index];
-      FeedEntryLoader loader = provider.loaderForType(e.type);
+      FeedEntryLoader loader = delegate.loaderForType(e.type);
       loader.cancelListenEntryChanges(entries[event.index]);
     } else if (event is FeedBlocEventAddedEntry) {
       int index = _insertIndex(event.entry);
@@ -252,14 +271,14 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
         yield* _insertEntryAt(newIndex, event.entry);
       }
     } else if (event is FeedBlocEventMarkAsRead) {
-      await provider.markAsRead(entries[event.index].feedEntryID);
+      await delegate.markAsRead(entries[event.index].feedEntryID);
     } else if (event is FeedBlocEventSetStoreGeo) {
       AppDB().setStoreGeo(event.storeGeo);
     } else if (event is FeedBlocEventEditParams) {
-      FeedEntryLoader loader = provider.loaderForType(event.entry.type);
+      FeedEntryLoader loader = delegate.loaderForType(event.entry.type);
       await loader.update(event.entry, event.params);
     } else if (event is FeedBlocEventDeleteEntry) {
-      await provider.deleteFeedEntry(event.entry.feedEntryID);
+      await delegate.deleteFeedEntry(event.entry.feedEntryID);
     }
   }
 
@@ -284,7 +303,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
 
   @override
   Future<void> close() async {
-    await provider.close();
+    await delegate.close();
     return super.close();
   }
 }

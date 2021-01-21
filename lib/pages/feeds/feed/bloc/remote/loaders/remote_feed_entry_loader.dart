@@ -62,6 +62,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
         DateTime.parse(feedEntryMap['date']),
         FeedEntriesParamHelpers.paramForFeedEntryType(
             feedEntryMap['type'], feedEntryMap['params']),
-        remoteState: true);
+        remoteState: true,
+        data: feedEntryMap);
   }
 }

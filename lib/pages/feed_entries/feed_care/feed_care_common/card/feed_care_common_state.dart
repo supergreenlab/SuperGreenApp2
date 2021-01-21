@@ -17,13 +17,16 @@
  */
 
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedCareCommonState extends FeedEntryStateLoaded {
   final List<MediaState> beforeMedias;
   final List<MediaState> afterMedias;
 
-  FeedCareCommonState(FeedEntryState from, this.beforeMedias, this.afterMedias, { bool remoteState=false }) : super.copy(from, remoteState: remoteState);
+  FeedCareCommonState(FeedEntryState from, this.beforeMedias, this.afterMedias,
+      {FeedEntrySocialState socialState, bool remoteState})
+      : super.copy(from, socialState: socialState, remoteState: remoteState);
 
   @override
   List<Object> get props => [...super.props, beforeMedias, afterMedias];

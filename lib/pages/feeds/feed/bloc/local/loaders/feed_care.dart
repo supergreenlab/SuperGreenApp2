@@ -63,6 +63,17 @@ class FeedCareLoader extends LocalFeedEntryLoader {
             JsonDecoder().convert(m.params),
             m.synced))
         .toList();
+
+    /*FeedEntry feedEntry = state.data as FeedEntry;
+    if (feedEntry.serverID != null) {
+      List<Comment> comments = await BackendAPI()
+          .feedsAPI
+          .fetchCommentsForFeedEntry(feedEntryID, n: 2);
+      int n = await BackendAPI()
+          .feedsAPI
+          .fetchCommentCountForFeedEntry(feedEntryID);
+    }*/
+
     return FeedCareCommonState(state, beforeMedias, afterMedias);
   }
 

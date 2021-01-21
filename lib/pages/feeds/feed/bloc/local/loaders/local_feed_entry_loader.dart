@@ -89,6 +89,7 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         feedEntry.synced,
         feedEntry.date,
         FeedEntriesParamHelpers.paramForFeedEntryType(
-            feedEntry.type, feedEntry.params));
+            feedEntry.type, feedEntry.params),
+        data: feedEntry);
   }
 }

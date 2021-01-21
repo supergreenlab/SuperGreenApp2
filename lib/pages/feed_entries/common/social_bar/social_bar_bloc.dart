@@ -18,6 +18,8 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class SocialBarBlocEvent extends Equatable {}
@@ -28,6 +30,11 @@ class SocialBarBlocEventInit extends SocialBarBlocEvent {
 }
 
 class SocialBarBlocEventLike extends SocialBarBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class SocialBarBlocEventFeedEntryUpdated extends SocialBarBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -50,6 +57,7 @@ class SocialBarBlocStateLoaded extends SocialBarBlocState {
 
 class SocialBarBloc extends Bloc<SocialBarBlocEvent, SocialBarBlocState> {
   final FeedEntryStateLoaded feedEntry;
+  String feedEntryID;
 
   SocialBarBloc(this.feedEntry) : super(SocialBarBlocStateInit()) {
     add(SocialBarBlocEventInit());
@@ -59,6 +67,10 @@ class SocialBarBloc extends Bloc<SocialBarBlocEvent, SocialBarBlocState> {
   Stream<SocialBarBlocState> mapEventToState(SocialBarBlocEvent event) async* {
     if (event is SocialBarBlocEventInit) {
       yield SocialBarBlocStateLoaded(this.feedEntry);
-    } else if (event is SocialBarBlocEventLike) {}
+      if (feedEntry.remoteState) {
+        feedEntryID = feedEntry.feedEntryID;
+      } else {}
+    } else if (event is SocialBarBlocEventLike) {
+    } else if (event is SocialBarBlocEventFeedEntryUpdated) {}
   }
 }

@@ -46,14 +46,19 @@ class SocialBarPage extends StatelessWidget {
       child: Row(
         children: [
           renderButton(
-              context, state, 'button_like', () => onLike(context, state)),
+              context,
+              state,
+              'button_like',
+              state.feedEntry.remoteState
+                  ? () => onLike(context, state)
+                  : null),
           renderButton(context, state, 'button_comment',
-              () => onComment(context, state)),
-          renderButton(
-              context, state, 'button_share', () => onShare(context, state)),
+              state.feedEntry.synced ? () => onComment(context, state) : null),
+          renderButton(context, state, 'button_share',
+              state.feedEntry.synced ? () => onShare(context, state) : null),
           Expanded(child: Container()),
           renderButton(context, state, 'button_bookmark',
-              () => onBookmark(context, state),
+              state.feedEntry.synced ? () => onBookmark(context, state) : null,
               last: true),
         ],
       ),
@@ -67,7 +72,10 @@ class SocialBarPage extends StatelessWidget {
       onTap: onClick,
       child: Padding(
         padding: EdgeInsets.only(right: last ? 0 : 8),
-        child: Image.asset('assets/feed_card/$icon.png', width: 30, height: 30),
+        child: Opacity(
+            opacity: onClick == null ? 0.4 : 1,
+            child: Image.asset('assets/feed_card/$icon.png',
+                width: 30, height: 30)),
       ),
     );
   }
