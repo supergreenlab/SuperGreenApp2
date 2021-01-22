@@ -36,7 +36,7 @@ class CommentParam extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      "recommend": recommend.map((p) => p.toMap()).toList(),
+      "recommend": (recommend ?? []).map((p) => p.toMap()).toList(),
     };
   }
 

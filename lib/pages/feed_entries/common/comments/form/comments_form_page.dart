@@ -178,19 +178,22 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                       opacity: animation,
                       child: SizeTransition(
                           sizeFactor: animation,
-                          child: CommentView(
-                            comment: comments[index],
-                            first: index == 0,
-                            replyTo: () {
-                              setState(() {
-                                replyTo = comments[index];
-                                inputFocus.requestFocus();
-                                type = CommentType.COMMENT;
-                                textEditingController.text = '@stant ';
-                                //textEditingController =
-                                //    TextEditingController(text: '@stant ');
-                              });
-                            },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: CommentView(
+                              comment: comments[index],
+                              first: index == 0,
+                              replyTo: () {
+                                setState(() {
+                                  replyTo = comments[index];
+                                  inputFocus.requestFocus();
+                                  type = CommentType.COMMENT;
+                                  textEditingController.text = '@stant ';
+                                  //textEditingController =
+                                  //    TextEditingController(text: '@stant ');
+                                });
+                              },
+                            ),
                           ))),
           initialItemCount: comments.length,
         )),
