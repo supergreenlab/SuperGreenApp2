@@ -287,9 +287,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       FeedEntryLoader loader = delegate.loaderForType(event.entry.type);
       loader.loadSocialState(event.entry);
     } else if (event is FeedBlocEventLikeFeedEntry) {
-      await BackendAPI().feedsAPI.likeFeedEntry(event.entry.feedEntryID);
-      FeedEntryLoader loader = delegate.loaderForType(event.entry.type);
-      loader.loadSocialState(event.entry);
+      delegate.likeFeedEntry(event.entry);
     }
   }
 
@@ -354,5 +352,6 @@ abstract class FeedBlocDelegate {
   Future<List<FeedEntryState>> loadEntries(int n, int offset);
   Future deleteFeedEntry(dynamic feedEntryID);
   Future markAsRead(dynamic feedEntryID);
+  Future likeFeedEntry(FeedEntryState entry);
   Future<void> close();
 }

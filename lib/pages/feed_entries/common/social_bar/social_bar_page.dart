@@ -23,6 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
@@ -48,7 +50,12 @@ class SocialBarPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 10),
       child: Row(
         children: [
-          renderButton(context, 'button_like', () => onLike(context)),
+          renderButton(
+              context,
+              (state.socialState as FeedEntrySocialStateLoaded).isLiked
+                  ? 'button_like_on'
+                  : 'button_like',
+              () => onLike(context)),
           renderButton(context, 'button_comment', () => onComment(context)),
           renderButton(context, 'button_share', () => onShare(context)),
           Expanded(child: Container()),
@@ -73,7 +80,9 @@ class SocialBarPage extends StatelessWidget {
     );
   }
 
-  void onLike(BuildContext context) {}
+  void onLike(BuildContext context) {
+    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLikeFeedEntry(state));
+  }
 
   void onComment(BuildContext context) {
     BlocProvider.of<MainNavigatorBloc>(context)

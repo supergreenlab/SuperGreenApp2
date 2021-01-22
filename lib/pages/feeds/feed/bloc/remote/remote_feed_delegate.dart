@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_care.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_light.dart';
@@ -29,6 +30,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_unknow
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_ventilation.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/feed_water.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
   Function(FeedBlocEvent) add;
@@ -68,6 +70,13 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future deleteFeedEntry(feedEntryID) async {}
+
+  @override
+  Future likeFeedEntry(FeedEntryState entry) async {
+    await BackendAPI().feedsAPI.likeFeedEntry(entry.feedEntryID);
+    FeedEntryLoader loader = this.loaderForType(entry.type);
+    loader.loadSocialState(entry);
+  }
 
   @override
   Future markAsRead(dynamic feedEntryID) async {}

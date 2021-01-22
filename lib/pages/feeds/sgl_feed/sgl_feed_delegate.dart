@@ -23,6 +23,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_delegate.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
@@ -54,4 +55,7 @@ class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
     await appDataStream.cancel();
     await super.close();
   }
+
+  @override
+  Future likeFeedEntry(FeedEntryState entry) async {}
 }

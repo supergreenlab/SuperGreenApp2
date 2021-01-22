@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -116,6 +117,16 @@ class LocalFeedBlocDelegate extends FeedBlocDelegate {
   Future deleteFeedEntry(feedEntryID) async {
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
     await FeedEntryHelper.deleteFeedEntry(feedEntry);
+  }
+
+  @override
+  Future likeFeedEntry(FeedEntryState entry) async {
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+
+    await BackendAPI().feedsAPI.likeFeedEntry(feedEntry.serverID);
+    FeedEntryLoader loader = this.loaderForType(entry.type);
+    loader.loadSocialState(entry);
   }
 
   @override
