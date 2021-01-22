@@ -249,7 +249,6 @@ class _CommentsFormPageState extends State<CommentsFormPage>
               replyTo.text,
               overflow: TextOverflow.fade,
               maxLines: 3,
-              softWrap: false,
               style: TextStyle(
                 color: Color(0xff474747),
                 fontSize: 15,
