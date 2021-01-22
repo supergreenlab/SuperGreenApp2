@@ -66,7 +66,10 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
         FeedMedias.makeAbsoluteFilePath(currentMedia[0].thumbnailPath),
         JsonDecoder().convert(currentMedia[0].params),
         currentMedia[0].synced);
-    return FeedMeasureState(state, current, previous);
+
+    state = FeedMeasureState(state, current: current, previous: previous);
+    this.loadSocialState(state);
+    return super.load(state);
   }
 
   @override

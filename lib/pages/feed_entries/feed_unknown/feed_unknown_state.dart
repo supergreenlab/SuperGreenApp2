@@ -23,4 +23,11 @@ class FeedUnknownState extends FeedEntryStateLoaded {
   FeedUnknownState(FeedEntryState from,
       {FeedEntrySocialState socialState, bool remoteState})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedUnknownState(
+      this,
+      socialState: socialState,
+    );
+  }
 }

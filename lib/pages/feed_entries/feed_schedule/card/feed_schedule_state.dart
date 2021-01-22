@@ -23,4 +23,11 @@ class FeedScheduleState extends FeedEntryStateLoaded {
   FeedScheduleState(FeedEntryState from,
       {FeedEntrySocialState socialState, bool remoteState})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedScheduleState(
+      this,
+      socialState: socialState,
+    );
+  }
 }

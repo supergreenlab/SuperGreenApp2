@@ -18,9 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
-import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -110,14 +108,8 @@ class FeedScheduleCardPage extends StatelessWidget {
               ],
             ),
           ),
-          BlocProvider<SocialBarBloc>(
-            create: (BuildContext context) => SocialBarBloc(state),
-            child: SocialBarPage(),
-          ),
-          BlocProvider<CommentsCardBloc>(
-            create: (BuildContext context) => CommentsCardBloc(state),
-            child: CommentsCardPage(),
-          ),
+          SocialBarPage(state: state, feedState: feedState),
+          CommentsCardPage(state: state, feedState: feedState),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state, feedState),

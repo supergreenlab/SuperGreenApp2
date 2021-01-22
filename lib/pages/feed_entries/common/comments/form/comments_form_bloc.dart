@@ -117,7 +117,6 @@ class CommentsFormBloc
       yield* fetchComments(feedEntryID);
     } else if (event is CommentsFormBlocEventLike) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
-      FeedEntryHelper.eventBus.fire(FeedEntryUpdateComment(event.comment));
       yield CommentsFormBlocStateUpdateComment(
           event.comment.copyWith(liked: !event.comment.liked));
     } else if (event is CommentsFormBlocEventPostComment) {
@@ -134,7 +133,6 @@ class CommentsFormBloc
           liked: false,
           params: "{}");
       comment = await BackendAPI().feedsAPI.postComment(comment);
-      FeedEntryHelper.eventBus.fire(FeedEntryAddComment(comment));
       yield CommentsFormBlocStateLoaded(
           this.args.autoFocus,
           this.args.feedEntry,

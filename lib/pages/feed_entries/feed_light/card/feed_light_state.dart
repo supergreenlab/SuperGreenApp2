@@ -23,4 +23,11 @@ class FeedLightState extends FeedEntryStateLoaded {
   FeedLightState(FeedEntryState from,
       {FeedEntrySocialState socialState, bool remoteState = false})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedLightState(
+      this,
+      socialState: socialState,
+    );
+  }
 }

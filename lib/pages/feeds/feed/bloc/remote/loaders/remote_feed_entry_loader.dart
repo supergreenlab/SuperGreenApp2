@@ -21,26 +21,50 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
+  final Map<String, FeedEntryState> cache = {};
+
   RemoteFeedEntryLoader(Function(FeedBlocEvent) add) : super(add);
+
+  @mustCallSuper
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    cache[state.feedEntryID] = state;
+    return state;
+  }
+
+  Future<List<Comment>> fetchComments(FeedEntryState state) async {
+    List<Comment> comments = await BackendAPI()
+        .feedsAPI
+        .fetchCommentsForFeedEntry(state.feedEntryID, n: 2);
+    return comments;
+  }
+
+  void onFeedEntryStateUpdated(FeedEntryState state) {
+    add(FeedBlocEventUpdatedEntry(state));
+    cache[state.feedEntryID] = state;
+  }
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {}
 
+  @override
   @mustCallSuper
   void startListenEntryChanges(FeedEntryStateLoaded entry) {}
 
+  @override
   @mustCallSuper
   Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry) async {}
 
-  @mustCallSuper
   @override
+  @mustCallSuper
   Future<void> close() async {}
 
   MediaState stateForFeedMediaMap(Map<String, dynamic> feedMediaMap) {
@@ -53,16 +77,25 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   }
 
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntryMap) {
+    if (cache[feedEntryMap['id']] != null &&
+        mapEquals(cache[feedEntryMap['id']].data, feedEntryMap)) {
+      return cache[feedEntryMap['id']];
+    }
     return FeedEntryStateNotLoaded(
-        feedEntryMap['id'],
-        feedEntryMap['feedID'],
-        feedEntryMap['type'],
-        false,
-        true,
-        DateTime.parse(feedEntryMap['date']),
-        FeedEntriesParamHelpers.paramForFeedEntryType(
+        feedEntryID: feedEntryMap['id'],
+        feedID: feedEntryMap['feedID'],
+        type: feedEntryMap['type'],
+        isNew: false,
+        synced: true,
+        date: DateTime.parse(feedEntryMap['date']),
+        params: FeedEntriesParamHelpers.paramForFeedEntryType(
             feedEntryMap['type'], feedEntryMap['params']),
         remoteState: true,
-        data: feedEntryMap);
+        data: feedEntryMap,
+        socialState: FeedEntrySocialStateLoaded(
+            isLiked: feedEntryMap['isLiked'],
+            nComments: feedEntryMap['nComments'],
+            nLikes: feedEntryMap['nLikes'],
+            comments: []));
   }
 }

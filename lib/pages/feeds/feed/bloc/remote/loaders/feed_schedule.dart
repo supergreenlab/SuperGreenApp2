@@ -19,6 +19,7 @@
 import 'package:super_green_app/pages/feed_entries/feed_schedule/card/feed_schedule_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedScheduleLoader extends RemoteFeedEntryLoader {
@@ -26,8 +27,12 @@ class FeedScheduleLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedScheduleState(state, remoteState: true);
+      super.load(FeedScheduleState(state,
+          remoteState: true,
+          socialState: (state.socialState as FeedEntrySocialStateLoaded)
+              .copyWith(comments: await this.fetchComments(state))));
 
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedScheduleState(super.stateForFeedEntryMap(feedEntry), remoteState: true);
+      FeedScheduleState(super.stateForFeedEntryMap(feedEntry),
+          remoteState: true);
 }

@@ -23,6 +23,7 @@ import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedCareLoader extends RemoteFeedEntryLoader {
@@ -36,10 +37,13 @@ class FeedCareLoader extends RemoteFeedEntryLoader {
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
-    return FeedCareCommonState(
-        state,
-        medias.where((m) => m.params['before'] == true).toList() ?? [],
-        medias.where((m) => m.params['before'] != true).toList() ?? [],
-        remoteState: true);
+    return super.load(FeedCareCommonState(state,
+        beforeMedias:
+            medias.where((m) => m.params['before'] == true).toList() ?? [],
+        afterMedias:
+            medias.where((m) => m.params['before'] != true).toList() ?? [],
+        remoteState: true,
+        socialState: (state.socialState as FeedEntrySocialStateLoaded)
+            .copyWith(comments: await this.fetchComments(state))));
   }
 }

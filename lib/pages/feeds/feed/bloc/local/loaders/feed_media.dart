@@ -47,7 +47,10 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
             JsonDecoder().convert(m.params),
             m.synced))
         .toList();
-    return FeedMediaState(state, medias);
+
+    state = FeedMediaState(state, medias: medias);
+    this.loadSocialState(state);
+    return super.load(state);
   }
 
   @override

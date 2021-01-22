@@ -26,8 +26,11 @@ class FeedTowelieInfoLoader extends LocalFeedEntryLoader {
   FeedTowelieInfoLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedTowelieInfoState(state);
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    state = FeedTowelieInfoState(state);
+    this.loadSocialState(state);
+    return super.load(state);
+  }
 
   @override
   FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>

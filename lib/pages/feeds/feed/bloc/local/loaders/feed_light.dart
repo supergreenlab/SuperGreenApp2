@@ -26,9 +26,13 @@ class FeedLightLoader extends LocalFeedEntryLoader {
   FeedLightLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedLightState(state);
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    state = FeedLightState(state);
+    this.loadSocialState(state);
+    return super.load(state);
+  }
 
   @override
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) => FeedLightState(super.stateForFeedEntry(feedEntry));
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>
+      FeedLightState(super.stateForFeedEntry(feedEntry));
 }

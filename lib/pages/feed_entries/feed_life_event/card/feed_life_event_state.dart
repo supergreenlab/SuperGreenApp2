@@ -23,4 +23,11 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
   FeedLifeEventState(FeedEntryState from,
       {FeedEntrySocialState socialState, bool remoteState = false})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedLifeEventState(
+      this,
+      socialState: socialState,
+    );
+  }
 }

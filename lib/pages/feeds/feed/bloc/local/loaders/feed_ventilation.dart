@@ -26,8 +26,11 @@ class FeedVentilationLoader extends LocalFeedEntryLoader {
   FeedVentilationLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedVentilationState(state);
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    state = FeedVentilationState(state);
+    this.loadSocialState(state);
+    return super.load(state);
+  }
 
   @override
   FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>

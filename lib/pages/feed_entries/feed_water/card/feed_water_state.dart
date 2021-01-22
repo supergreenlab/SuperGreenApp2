@@ -23,4 +23,11 @@ class FeedWaterState extends FeedEntryStateLoaded {
   FeedWaterState(FeedEntryState from,
       {FeedEntrySocialState socialState, bool remoteState})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedWaterState(
+      this,
+      socialState: socialState,
+    );
+  }
 }

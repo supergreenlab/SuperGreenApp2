@@ -24,10 +24,22 @@ class FeedMeasureState extends FeedEntryStateLoaded {
   final MediaState current;
   final MediaState previous;
 
-  FeedMeasureState(FeedEntryState from, this.current, this.previous,
-      {FeedEntrySocialState socialState, bool remoteState})
+  FeedMeasureState(FeedEntryState from,
+      {this.current,
+      this.previous,
+      FeedEntrySocialState socialState,
+      bool remoteState})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
 
   @override
   List<Object> get props => [...super.props, current, previous];
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedMeasureState(
+      this,
+      current: this.current,
+      previous: this.previous,
+      socialState: socialState,
+    );
+  }
 }

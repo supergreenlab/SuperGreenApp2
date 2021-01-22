@@ -23,4 +23,11 @@ class FeedNutrientMixState extends FeedEntryStateLoaded {
   FeedNutrientMixState(FeedEntryState from,
       {FeedEntrySocialState socialState, bool remoteState})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedNutrientMixState(
+      this,
+      socialState: socialState,
+    );
+  }
 }

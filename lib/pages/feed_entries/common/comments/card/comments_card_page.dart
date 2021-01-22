@@ -20,49 +20,54 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/widgets/comment.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class CommentsCardPage extends StatelessWidget {
+  final FeedEntryState state;
+  final FeedState feedState;
+
+  const CommentsCardPage({Key key, this.state, this.feedState})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CommentsCardBloc, CommentsCardBlocState>(
-      builder: (BuildContext context, CommentsCardBlocState state) {
-        if (state is CommentsCardBlocStateInit) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Text('Loading..'),
-          );
-        } else if (state is CommentsCardBlocStateNotSynced) {
-          return Container();
-        }
-        return renderLoaded(context, state);
-      },
-    );
+    if (state.socialState is FeedEntrySocialStateNotLoaded) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Text('Loading..'),
+      );
+    } else if (state.synced == false) {
+      return Container();
+    }
+    return renderLoaded(context, state.socialState);
   }
 
-  Widget renderLoaded(BuildContext context, CommentsCardBlocStateLoaded state) {
+  Widget renderLoaded(
+      BuildContext context, FeedEntrySocialStateLoaded socialState) {
     List<Widget> content = [];
-    if (state.n > 1) {
-      content.add(SmallCommentView(
-          feedEntry: state.feedEntry, comment: state.comments[0]));
+    if (socialState.comments?.length == 2) {
+      content.add(
+          SmallCommentView(feedEntry: state, comment: socialState.comments[0]));
       content.add(InkWell(
           onTap: () {
             BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToCommentFormEvent(false, state.feedEntry));
+                .add(MainNavigateToCommentFormEvent(false, state));
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-              'View all ${state.n} comments',
+              'View all ${socialState.nComments} comments',
               style: TextStyle(color: Color(0xff898989)),
             ),
           )));
-      content.add(SmallCommentView(
-          feedEntry: state.feedEntry, comment: state.comments[1]));
-    } else if (state.n == 1) {
-      content.add(SmallCommentView(
-          feedEntry: state.feedEntry, comment: state.comments[0]));
+      content.add(
+          SmallCommentView(feedEntry: state, comment: socialState.comments[1]));
+    } else if (socialState.comments?.length == 1) {
+      content.add(
+          SmallCommentView(feedEntry: state, comment: socialState.comments[0]));
     }
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),

@@ -18,6 +18,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
@@ -314,6 +315,7 @@ abstract class FeedEntryLoader {
   FeedEntryLoader(this.add);
 
   Future<FeedEntryStateLoaded> load(FeedEntryState state);
+
   Future update(FeedEntryState entry, FeedEntryParams params);
   void startListenEntryChanges(FeedEntryStateLoaded entry);
   Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry);

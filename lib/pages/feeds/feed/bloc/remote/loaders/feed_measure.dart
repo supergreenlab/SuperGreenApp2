@@ -24,6 +24,7 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dar
 import 'package:super_green_app/pages/feed_entries/feed_measure/card/feed_measure_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedMeasureLoader extends RemoteFeedEntryLoader {
@@ -44,7 +45,11 @@ class FeedMeasureLoader extends RemoteFeedEntryLoader {
         previousMedia = stateForFeedMediaMap(previousMediaMap);
       }
     }
-    return FeedMeasureState(state, currentMedia, previousMedia,
-        remoteState: true);
+    return super.load(FeedMeasureState(state,
+        current: currentMedia,
+        previous: previousMedia,
+        remoteState: true,
+        socialState: (state.socialState as FeedEntrySocialStateLoaded)
+            .copyWith(comments: await this.fetchComments(state))));
   }
 }

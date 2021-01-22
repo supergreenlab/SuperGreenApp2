@@ -23,6 +23,7 @@ import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/feed_media/card/feed_media_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedMediaLoader extends RemoteFeedEntryLoader {
@@ -37,6 +38,10 @@ class FeedMediaLoader extends RemoteFeedEntryLoader {
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
-    return FeedMediaState(state, medias, remoteState: true);
+    return super.load(FeedMediaState(state,
+        medias: medias,
+        remoteState: true,
+        socialState: (state.socialState as FeedEntrySocialStateLoaded)
+            .copyWith(comments: await this.fetchComments(state))));
   }
 }

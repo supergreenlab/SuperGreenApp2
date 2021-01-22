@@ -19,6 +19,7 @@
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedVentilationLoader extends RemoteFeedEntryLoader {
@@ -26,9 +27,13 @@ class FeedVentilationLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedVentilationState(state, remoteState: true);
+      super.load(FeedVentilationState(state,
+          remoteState: true,
+          socialState: (state.socialState as FeedEntrySocialStateLoaded)
+              .copyWith(comments: await this.fetchComments(state))));
 
   @override
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedVentilationState(super.stateForFeedEntryMap(feedEntry), remoteState: true);
+      FeedVentilationState(super.stateForFeedEntryMap(feedEntry),
+          remoteState: true);
 }

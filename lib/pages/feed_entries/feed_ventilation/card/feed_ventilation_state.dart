@@ -23,4 +23,11 @@ class FeedVentilationState extends FeedEntryStateLoaded {
   FeedVentilationState(FeedEntryState from,
       {FeedEntrySocialState socialState, bool remoteState})
       : super.copy(from, socialState: socialState, remoteState: remoteState);
+
+  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+    return FeedVentilationState(
+      this,
+      socialState: socialState,
+    );
+  }
 }

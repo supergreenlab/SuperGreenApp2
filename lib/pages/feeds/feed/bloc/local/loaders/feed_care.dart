@@ -64,17 +64,10 @@ class FeedCareLoader extends LocalFeedEntryLoader {
             m.synced))
         .toList();
 
-    /*FeedEntry feedEntry = state.data as FeedEntry;
-    if (feedEntry.serverID != null) {
-      List<Comment> comments = await BackendAPI()
-          .feedsAPI
-          .fetchCommentsForFeedEntry(feedEntryID, n: 2);
-      int n = await BackendAPI()
-          .feedsAPI
-          .fetchCommentCountForFeedEntry(feedEntryID);
-    }*/
-
-    return FeedCareCommonState(state, beforeMedias, afterMedias);
+    state = FeedCareCommonState(state,
+        beforeMedias: beforeMedias, afterMedias: afterMedias);
+    this.loadSocialState(state);
+    return super.load(state);
   }
 
   @override

@@ -29,8 +29,11 @@ class FeedWaterLoader extends LocalFeedEntryLoader {
   FeedWaterLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedWaterState(state);
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    state = FeedWaterState(state);
+    this.loadSocialState(state);
+    return super.load(state);
+  }
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {

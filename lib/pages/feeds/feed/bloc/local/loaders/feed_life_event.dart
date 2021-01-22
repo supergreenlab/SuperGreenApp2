@@ -26,8 +26,11 @@ class FeedLifeEventLoader extends LocalFeedEntryLoader {
   FeedLifeEventLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedLifeEventState(state);
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    state = FeedLifeEventState(state);
+    this.loadSocialState(state);
+    return super.load(state);
+  }
 
   @override
   FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>

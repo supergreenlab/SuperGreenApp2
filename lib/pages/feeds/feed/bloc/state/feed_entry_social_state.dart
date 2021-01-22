@@ -45,6 +45,12 @@ class FeedEntrySocialStateLoaded extends FeedEntrySocialState {
     );
   }
 
+  factory FeedEntrySocialStateLoaded.fromMap(Map<String, dynamic> map) =>
+      FeedEntrySocialStateLoaded(
+          isLiked: map['liked'],
+          nComments: map['nComments'],
+          nLikes: map['nLikes']);
+
   @override
   List<Object> get props => [
         isLiked,

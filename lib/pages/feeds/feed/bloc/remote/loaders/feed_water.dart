@@ -19,6 +19,7 @@
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed_entry_loader.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedWaterLoader extends RemoteFeedEntryLoader {
@@ -26,7 +27,10 @@ class FeedWaterLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      FeedWaterState(state, remoteState: true);
+      super.load(FeedWaterState(state,
+          remoteState: true,
+          socialState: (state.socialState as FeedEntrySocialStateLoaded)
+              .copyWith(comments: await this.fetchComments(state))));
 
   @override
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
