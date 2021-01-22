@@ -25,7 +25,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/widgets/comment.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
@@ -66,6 +68,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   User user;
   bool autoFocus;
   Comment replyTo;
+  List<Product> recommended;
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final FocusNode inputFocus = FocusNode();
@@ -241,7 +244,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Text(
               replyTo.text,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.fade,
               maxLines: 3,
               softWrap: false,
               style: TextStyle(
@@ -266,34 +269,83 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             renderType(context, CommentType.COMMENT),
             renderType(context, CommentType.TIPS),
             renderType(context, CommentType.DIAGNOSIS),
-            renderType(context, CommentType.RECOMMEND),
+            renderType(context, CommentType.RECOMMEND, onTap: () {
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToSelectNewProductEvent([],
+                      futureFn: (future) async {
+                List<Product> products = await future;
+                if (products == null || products.length == 0) {
+                  return;
+                }
+                setState(() {
+                  this.recommended = products;
+                  this.type = CommentType.RECOMMEND;
+                  inputFocus.requestFocus();
+                });
+              }));
+            }),
           ],
         ),
       ]);
     } else {
       Map<String, String> commentType = commentTypes[type];
-      content = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset(commentType['pic'], width: 25, height: 25),
+      Widget name = Text(
+        commentType['name'],
+        style: TextStyle(
+          color: Color(0xff474747),
+          fontSize: 16,
         ),
-        Text(
-          commentType['name'],
-          style: TextStyle(
-            color: Color(0xff474747),
-            fontSize: 16,
+      );
+      if (type == CommentType.RECOMMEND && recommended.length > 0) {
+        name = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            name,
+            Row(children: [
+              Text(recommended[0].name,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              recommended[0].supplier != null
+                  ? Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Text(
+                          recommended[0].supplier.url,
+                          overflow: TextOverflow.fade,
+                          softWrap: false,
+                        ),
+                      ),
+                    )
+                  : Container(),
+              recommended.length > 1
+                  ? Text(
+                      '(+${recommended.length - 1} other)',
+                      style: TextStyle(color: Color(0xff919191)),
+                    )
+                  : Container(),
+            ]),
+          ],
+        );
+      }
+
+      content = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 24, top: 8.0, bottom: 8.0),
+            child: Image.asset(commentType['pic'], width: 25, height: 25),
           ),
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              type = CommentType.COMMENT;
-              FocusScope.of(context).unfocus();
-            });
-          },
-          icon: Icon(Icons.close),
-        ),
-      ]);
+          Expanded(child: name),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                type = CommentType.COMMENT;
+                FocusScope.of(context).unfocus();
+              });
+            },
+            icon: Icon(Icons.close),
+          ),
+        ]),
+      );
     }
 
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -353,7 +405,10 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                     onTap: () {
                       BlocProvider.of<CommentsFormBloc>(context).add(
                           CommentsFormBlocEventPostComment(
-                              textEditingController.text, type, replyTo));
+                              textEditingController.text,
+                              type,
+                              replyTo,
+                              recommended));
                       FocusScope.of(context).unfocus();
                       textEditingController.clear();
                       type = CommentType.COMMENT;
@@ -377,19 +432,20 @@ class _CommentsFormPageState extends State<CommentsFormPage>
     );
   }
 
-  Widget renderType(BuildContext context, CommentType type) {
+  Widget renderType(BuildContext context, CommentType type, {Function onTap}) {
     Map<String, String> commentType = commentTypes[type];
     return InkWell(
-        onTap: () {
-          setState(() {
-            if (type == CommentType.COMMENT) {
-              return;
-            }
-
-            this.type = type;
-            inputFocus.requestFocus();
-          });
-        },
+        onTap: onTap ??
+            () {
+              setState(() {
+                if (type == CommentType.COMMENT) {
+                  return;
+                }
+                this.type = type;
+                inputFocus.requestFocus();
+                this.recommended = null;
+              });
+            },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

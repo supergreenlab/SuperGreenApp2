@@ -16,11 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
-import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -37,14 +39,17 @@ class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final String text;
   final CommentType type;
   final Comment replyTo;
+  final List<Product> recommend;
 
-  CommentsFormBlocEventPostComment(this.text, this.type, this.replyTo);
+  CommentsFormBlocEventPostComment(
+      this.text, this.type, this.replyTo, this.recommend);
 
   @override
   List<Object> get props => [
         text,
         type,
         replyTo,
+        recommend,
       ];
 }
 
@@ -131,7 +136,8 @@ class CommentsFormBloc
           type: event.type,
           createdAt: DateTime.now(),
           liked: false,
-          params: "{}");
+          params: JsonEncoder()
+              .convert(CommentParam(recommend: event.recommend).toMap()));
       comment = await BackendAPI().feedsAPI.postComment(comment);
       yield CommentsFormBlocStateLoaded(
           this.args.autoFocus,

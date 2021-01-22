@@ -20,12 +20,34 @@ import 'dart:convert';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/products/models.dart';
 
 enum CommentType {
   COMMENT,
   TIPS,
   DIAGNOSIS,
   RECOMMEND,
+}
+
+class CommentParam extends Equatable {
+  final List<Product> recommend;
+
+  CommentParam({this.recommend});
+
+  Map<String, dynamic> toMap() {
+    return {
+      "recommend": recommend.map((p) => p.toMap()).toList(),
+    };
+  }
+
+  static CommentParam fromMap(Map<String, dynamic> map) {
+    return CommentParam(
+        recommend:
+            (map['recommend'] ?? []).map((r) => Product.fromMap(r)).toList());
+  }
+
+  @override
+  List<Object> get props => [recommend];
 }
 
 class Comment extends Equatable {
