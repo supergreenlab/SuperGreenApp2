@@ -38,10 +38,12 @@ class FeedMediaLoader extends RemoteFeedEntryLoader {
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
-    return super.load(FeedMediaState(state,
+    state = FeedMediaState(state,
         medias: medias,
         remoteState: true,
         socialState: (state.socialState as FeedEntrySocialStateLoaded)
-            .copyWith(comments: await this.fetchComments(state))));
+            .copyWith(comments: await this.fetchComments(state)));
+    loadComments(state.socialState, state);
+    return super.load(state);
   }
 }

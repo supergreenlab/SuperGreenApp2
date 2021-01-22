@@ -19,6 +19,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
@@ -137,8 +138,9 @@ class FeedBlocEventDeleteEntry extends FeedBlocEvent {
 
 class FeedBlocEventLikeComment extends FeedBlocEvent {
   final Comment comment;
+  final FeedEntryState entry;
 
-  FeedBlocEventLikeComment(this.comment);
+  FeedBlocEventLikeComment(this.comment, this.entry);
 
   @override
   List<Object> get props => [comment];
@@ -280,6 +282,14 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       await loader.update(event.entry, event.params);
     } else if (event is FeedBlocEventDeleteEntry) {
       await delegate.deleteFeedEntry(event.entry.feedEntryID);
+    } else if (event is FeedBlocEventLikeComment) {
+      await BackendAPI().feedsAPI.likeComment(event.comment);
+      FeedEntryLoader loader = delegate.loaderForType(event.entry.type);
+      loader.loadSocialState(event.entry);
+    } else if (event is FeedBlocEventLikeFeedEntry) {
+      await BackendAPI().feedsAPI.likeFeedEntry(event.entry.feedEntryID);
+      FeedEntryLoader loader = delegate.loaderForType(event.entry.type);
+      loader.loadSocialState(event.entry);
     }
   }
 
@@ -310,16 +320,29 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
 }
 
 abstract class FeedEntryLoader {
+  final Map<dynamic, FeedEntryState> cache = {};
+
   final Function(FeedBlocEvent) add;
 
   FeedEntryLoader(this.add);
 
-  Future<FeedEntryStateLoaded> load(FeedEntryState state);
+  @mustCallSuper
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    cache[state.feedEntryID] = state;
+    return state;
+  }
 
-  Future update(FeedEntryState entry, FeedEntryParams params);
+  Future update(FeedEntryState entry, FeedEntryParams params) async {}
   void startListenEntryChanges(FeedEntryStateLoaded entry);
   Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry);
   Future<void> close();
+
+  Future<void> loadSocialState(FeedEntryState state);
+
+  void onFeedEntryStateUpdated(FeedEntryState state) {
+    cache[state.feedEntryID] = state;
+    add(FeedBlocEventUpdatedEntry(state));
+  }
 }
 
 abstract class FeedBlocDelegate {

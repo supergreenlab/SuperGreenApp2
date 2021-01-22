@@ -37,13 +37,15 @@ class FeedCareLoader extends RemoteFeedEntryLoader {
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
-    return super.load(FeedCareCommonState(state,
+    state = FeedCareCommonState(state,
         beforeMedias:
             medias.where((m) => m.params['before'] == true).toList() ?? [],
         afterMedias:
             medias.where((m) => m.params['before'] != true).toList() ?? [],
         remoteState: true,
         socialState: (state.socialState as FeedEntrySocialStateLoaded)
-            .copyWith(comments: await this.fetchComments(state))));
+            .copyWith(comments: await this.fetchComments(state)));
+    loadComments(state.socialState, state);
+    return super.load(state);
   }
 }

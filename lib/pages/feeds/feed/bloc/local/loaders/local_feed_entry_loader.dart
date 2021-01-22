@@ -24,45 +24,45 @@ import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class LocalFeedEntryLoader extends FeedEntryLoader {
-  final Map<int, FeedEntryState> cache = {};
-
   Map<dynamic, StreamSubscription<FeedEntryUpdateEvent>> subscriptions = {};
 
   LocalFeedEntryLoader(Function(FeedBlocEvent) add) : super(add);
 
-  @mustCallSuper
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    cache[state.feedEntryID] = state;
-    return state;
-  }
-
+  @override
   Future<void> loadSocialState(FeedEntryState state) async {
     FeedEntry feedEntry = state.data as FeedEntry;
+    FeedEntryState cached = cache[feedEntry.id];
     if (feedEntry.serverID != null) {
       Map<String, dynamic> socialMap = await BackendAPI()
           .feedsAPI
           .fetchSocialForFeedEntry(feedEntry.serverID);
       FeedEntrySocialStateLoaded socialState =
           FeedEntrySocialStateLoaded.fromMap(socialMap);
+      if (cached != null && cached.socialState is FeedEntrySocialStateLoaded) {
+        socialState = socialState.copyWith(
+            comments:
+                (cached.socialState as FeedEntrySocialStateLoaded).comments);
+      }
       onFeedEntryStateUpdated(state.copyWithSocialState(socialState));
 
-      List<Comment> comments = await BackendAPI()
-          .feedsAPI
-          .fetchCommentsForFeedEntry(feedEntry.serverID,
-              offset: 0, n: 2, rootCommentsOnly: true);
+      List<Comment> comments = [];
+
+      if (socialState.nComments > 0) {
+        comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(
+            feedEntry.serverID,
+            offset: 0,
+            n: 2,
+            rootCommentsOnly: true);
+      }
       onFeedEntryStateUpdated(
           state.copyWithSocialState(socialState.copyWith(comments: comments)));
     }
   }
-
-  @override
-  Future update(FeedEntryState entry, FeedEntryParams params) async {}
 
   @mustCallSuper
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
@@ -87,13 +87,10 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     FeedEntryState newState = stateForFeedEntry(feedEntry);
     if (newState is FeedEntryStateNotLoaded) {
       newState = await load(newState);
+    } else {
+      loadSocialState(newState);
     }
     onFeedEntryStateUpdated(newState);
-  }
-
-  void onFeedEntryStateUpdated(FeedEntryState state) {
-    add(FeedBlocEventUpdatedEntry(state));
-    cache[state.feedEntryID] = state;
   }
 
   @mustCallSuper
@@ -116,8 +113,12 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
   }
 
   FeedEntryState stateForFeedEntry(FeedEntry feedEntry) {
-    if (cache[feedEntry.id] != null && cache[feedEntry.id].data == feedEntry) {
-      return cache[feedEntry.id];
+    FeedEntrySocialState socialState = FeedEntrySocialStateNotLoaded();
+    if (cache[feedEntry.id] != null) {
+      if (cache[feedEntry.id].data == feedEntry) {
+        return cache[feedEntry.id];
+      }
+      socialState = cache[feedEntry.id].socialState;
     }
     return FeedEntryStateNotLoaded(
         feedEntryID: feedEntry.id,
@@ -129,6 +130,6 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         params: FeedEntriesParamHelpers.paramForFeedEntryType(
             feedEntry.type, feedEntry.params),
         data: feedEntry,
-        socialState: FeedEntrySocialStateNotLoaded());
+        socialState: socialState);
   }
 }

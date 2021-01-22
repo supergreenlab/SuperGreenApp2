@@ -58,7 +58,7 @@ class SmallCommentView extends StatelessWidget {
         InkWell(
           onTap: () {
             BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventLikeComment(comment));
+                .add(FeedBlocEventLikeComment(comment, feedEntry));
           },
           child: Padding(
             padding: const EdgeInsets.only(

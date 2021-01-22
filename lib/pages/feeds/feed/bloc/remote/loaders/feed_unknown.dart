@@ -26,11 +26,14 @@ class FeedUnknownLoader extends RemoteFeedEntryLoader {
   FeedUnknownLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      super.load(FeedUnknownState(state,
-          remoteState: true,
-          socialState: (state.socialState as FeedEntrySocialStateLoaded)
-              .copyWith(comments: await this.fetchComments(state))));
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    state = FeedUnknownState(state,
+        remoteState: true,
+        socialState: (state.socialState as FeedEntrySocialStateLoaded)
+            .copyWith(comments: await this.fetchComments(state)));
+    loadComments(state.socialState, state);
+    return super.load(state);
+  }
 
   @override
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>

@@ -26,11 +26,14 @@ class FeedLightLoader extends RemoteFeedEntryLoader {
   FeedLightLoader(Function(FeedBlocEvent) add) : super(add);
 
   @override
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async =>
-      super.load(FeedLightState(state,
-          remoteState: true,
-          socialState: (state.socialState as FeedEntrySocialStateLoaded)
-              .copyWith(comments: await this.fetchComments(state))));
+  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
+    state = FeedLightState(state,
+        remoteState: true,
+        socialState: (state.socialState as FeedEntrySocialStateLoaded)
+            .copyWith(comments: await this.fetchComments(state)));
+    loadComments(state.socialState, state);
+    return super.load(state);
+  }
 
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
       FeedLightState(super.stateForFeedEntryMap(feedEntry), remoteState: true);

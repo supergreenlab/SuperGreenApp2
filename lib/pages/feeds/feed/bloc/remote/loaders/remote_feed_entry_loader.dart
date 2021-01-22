@@ -24,20 +24,42 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
-  final Map<String, FeedEntryState> cache = {};
-
   RemoteFeedEntryLoader(Function(FeedBlocEvent) add) : super(add);
 
-  @mustCallSuper
-  Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    cache[state.feedEntryID] = state;
-    return state;
+  @override
+  Future<void> loadSocialState(FeedEntryState state) async {
+    FeedEntryState cached = cache[state.feedEntryID];
+    Map<String, dynamic> socialMap =
+        await BackendAPI().feedsAPI.fetchSocialForFeedEntry(state.feedEntryID);
+    FeedEntrySocialStateLoaded socialState =
+        FeedEntrySocialStateLoaded.fromMap(socialMap);
+    if (cached != null && cached.socialState is FeedEntrySocialStateLoaded) {
+      socialState = socialState.copyWith(
+          comments:
+              (cached.socialState as FeedEntrySocialStateLoaded).comments);
+    }
+    onFeedEntryStateUpdated(state.copyWithSocialState(socialState));
+    loadComments(socialState, state);
+  }
+
+  Future<void> loadComments(
+      FeedEntrySocialStateLoaded socialState, FeedEntryState state) async {
+    List<Comment> comments = [];
+
+    if (socialState.nComments > 0) {
+      comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(
+          state.feedEntryID,
+          offset: 0,
+          n: 2,
+          rootCommentsOnly: true);
+    }
+    onFeedEntryStateUpdated(
+        state.copyWithSocialState(socialState.copyWith(comments: comments)));
   }
 
   Future<List<Comment>> fetchComments(FeedEntryState state) async {
@@ -46,14 +68,6 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
         .fetchCommentsForFeedEntry(state.feedEntryID, n: 2);
     return comments;
   }
-
-  void onFeedEntryStateUpdated(FeedEntryState state) {
-    add(FeedBlocEventUpdatedEntry(state));
-    cache[state.feedEntryID] = state;
-  }
-
-  @override
-  Future update(FeedEntryState entry, FeedEntryParams params) async {}
 
   @override
   @mustCallSuper
@@ -77,9 +91,18 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   }
 
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntryMap) {
-    if (cache[feedEntryMap['id']] != null &&
-        mapEquals(cache[feedEntryMap['id']].data, feedEntryMap)) {
-      return cache[feedEntryMap['id']];
+    FeedEntrySocialState socialState;
+    if (cache[feedEntryMap['id']] != null) {
+      if (mapEquals(cache[feedEntryMap['id']].data, feedEntryMap)) {
+        return cache[feedEntryMap['id']];
+      }
+      socialState = cache[feedEntryMap['id']].socialState;
+    } else {
+      socialState = FeedEntrySocialStateLoaded(
+          isLiked: feedEntryMap['isLiked'],
+          nComments: feedEntryMap['nComments'],
+          nLikes: feedEntryMap['nLikes'],
+          comments: []);
     }
     return FeedEntryStateNotLoaded(
         feedEntryID: feedEntryMap['id'],
@@ -92,10 +115,6 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
             feedEntryMap['type'], feedEntryMap['params']),
         remoteState: true,
         data: feedEntryMap,
-        socialState: FeedEntrySocialStateLoaded(
-            isLiked: feedEntryMap['isLiked'],
-            nComments: feedEntryMap['nComments'],
-            nLikes: feedEntryMap['nLikes'],
-            comments: []));
+        socialState: socialState);
   }
 }

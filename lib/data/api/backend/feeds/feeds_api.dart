@@ -377,10 +377,14 @@ class FeedsAPI {
     return comment.copyWith(id: id);
   }
 
-  Future<Comment> likeComment(Comment comment) async {
+  Future likeComment(Comment comment) async {
     Map<String, dynamic> obj = Like(commentID: comment.id).toMap();
-    String id = await BackendAPI().postPut('/like', obj);
-    return comment.copyWith(id: id);
+    await BackendAPI().postPut('/like', obj);
+  }
+
+  Future likeFeedEntry(String feedEntryID) async {
+    Map<String, dynamic> obj = Like(feedEntryID: feedEntryID).toMap();
+    await BackendAPI().postPut('/like', obj);
   }
 
   Future download(String from, String to) async {
