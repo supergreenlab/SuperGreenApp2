@@ -293,7 +293,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
     } else {
       Map<String, String> commentType = commentTypes[type];
       Widget name = Text(
-        commentType['name'],
+        commentType['prompt'],
         style: TextStyle(
           color: Color(0xff474747),
           fontSize: 16,

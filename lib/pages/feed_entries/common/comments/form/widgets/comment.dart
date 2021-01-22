@@ -16,13 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CommentView extends StatelessWidget {
   final Comment comment;
@@ -39,6 +43,63 @@ class CommentView extends StatelessWidget {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
     Duration diff = DateTime.now().difference(comment.createdAt);
+    Widget avatar = UserAvatar(icon: pic);
+    if (comment.type != CommentType.COMMENT) {
+      avatar = Stack(
+        children: [
+          avatar,
+          Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Color(0xffcdcdcd), width: 1),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Image.asset(commentTypes[comment.type]['pic'],
+                    width: 30, height: 30),
+              )),
+        ],
+      );
+    }
+    Widget recommendations = Container();
+    if (comment.type == CommentType.RECOMMEND) {
+      CommentParam params =
+          CommentParam.fromMap(JsonDecoder().convert(comment.params));
+      recommendations = Padding(
+        padding: const EdgeInsets.all(8.0),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          ...params.recommend.map((p) {
+            return Row(
+              children: [
+                Text(p.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                p.supplier != null
+                    ? Expanded(
+                        child: InkWell(
+                        onTap: () {
+                          launch(p.supplier.url);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            p.supplier.url,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                          ),
+                        ),
+                      ))
+                    : Container(),
+              ],
+            );
+          }),
+        ]),
+      );
+    }
     return Padding(
       padding: EdgeInsets.only(
           left: comment.replyTo != null ? 24 : 8.0,
@@ -48,7 +109,7 @@ class CommentView extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserAvatar(icon: pic),
+          avatar,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -61,6 +122,7 @@ class CommentView extends StatelessWidget {
                         p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
                 ),
+                recommendations,
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 4.0),
                   child: Row(

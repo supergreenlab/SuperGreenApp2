@@ -42,8 +42,9 @@ class CommentParam extends Equatable {
 
   static CommentParam fromMap(Map<String, dynamic> map) {
     return CommentParam(
-        recommend:
-            (map['recommend'] ?? []).map((r) => Product.fromMap(r)).toList());
+        recommend: (map['recommend'] ?? [])
+            .map<Product>((r) => Product.fromMap(r))
+            .toList());
   }
 
   @override
