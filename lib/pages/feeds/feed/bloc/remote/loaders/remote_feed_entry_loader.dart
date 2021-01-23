@@ -99,7 +99,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
       socialState = cache[feedEntryMap['id']].socialState;
     } else {
       socialState = FeedEntrySocialStateLoaded(
-          isLiked: feedEntryMap['isLiked'],
+          isLiked: feedEntryMap['liked'],
           nComments: feedEntryMap['nComments'],
           nLikes: feedEntryMap['nLikes'],
           comments: []);

@@ -22,7 +22,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -36,7 +35,7 @@ class SocialBarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state is SocialBarBlocStateInit) {
+    if (state is FeedEntrySocialStateNotLoaded) {
       return Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: Text('Loading..'),
