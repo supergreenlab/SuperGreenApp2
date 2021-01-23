@@ -134,17 +134,15 @@ class CommentView extends StatelessWidget {
                           style: TextStyle(color: Color(0xffababab)),
                         ),
                       ),
-                      comment.replyTo == null
-                          ? InkWell(
-                              onTap: () {
-                                replyTo();
-                              },
-                              child: Text(
-                                'Reply',
-                                style: TextStyle(color: Color(0xff717171)),
-                              ),
-                            )
-                          : Container(),
+                      InkWell(
+                        onTap: () {
+                          replyTo();
+                        },
+                        child: Text(
+                          'Reply',
+                          style: TextStyle(color: Color(0xff717171)),
+                        ),
+                      )
                     ],
                   ),
                 ),

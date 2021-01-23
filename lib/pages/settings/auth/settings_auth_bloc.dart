@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image/image.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -83,6 +84,15 @@ class SettingsAuthBlocStateDone extends SettingsAuthBlocState {
   List<Object> get props => [];
 }
 
+class SettingsAuthBlocStateError extends SettingsAuthBlocState {
+  final String message;
+
+  SettingsAuthBlocStateError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class SettingsAuthBloc
     extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
   //ignore: unused_field
@@ -114,6 +124,20 @@ class SettingsAuthBloc
       yield SettingsAuthBlocStateDone();
     } else if (event is SettingsAuthBlocEventUpdatePic) {
       yield SettingsAuthBlocStateLoading();
+      String ext = event.file.path.split('.').last.toLowerCase();
+      if (!['jpg', 'jpeg', 'png'].contains(ext)) {
+        yield SettingsAuthBlocStateError("Avatar can only be a picture.");
+        await Future.delayed(Duration(milliseconds: 2000));
+        add(SettingsAuthBlocEventInit());
+        return;
+      }
+
+      Image image = decodeImage(await event.file.readAsBytes());
+      Image thumbnail = copyResize(image,
+          height: image.height > image.width ? 300 : null,
+          width: image.width >= image.height ? 300 : null);
+      await event.file.writeAsBytes(encodeJpg(thumbnail, quality: 50));
+
       await BackendAPI().usersAPI.uploadProfilePic(event.file);
       add(SettingsAuthBlocEventInit());
     }

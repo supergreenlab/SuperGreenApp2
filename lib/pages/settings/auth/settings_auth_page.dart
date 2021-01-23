@@ -27,7 +27,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
-import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_picker/picker_widget.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -79,6 +78,15 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
               child: Icon(
                 Icons.check,
                 color: Color(0xff3bb30b),
+                size: 100,
+              ),
+            );
+          } else if (state is SettingsAuthBlocStateError) {
+            body = Fullscreen(
+              title: state.message,
+              child: Icon(
+                Icons.error,
+                color: Colors.red,
                 size: 100,
               ),
             );

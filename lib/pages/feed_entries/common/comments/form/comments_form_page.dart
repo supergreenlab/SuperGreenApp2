@@ -68,6 +68,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   User user;
   bool autoFocus;
   Comment replyTo;
+  Comment replyToDisplay;
   List<Product> recommended;
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
@@ -172,29 +173,35 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             child: AnimatedList(
           key: listKey,
           controller: scrollController,
-          itemBuilder:
-              (BuildContext context, int index, Animation<double> animation) =>
-                  FadeTransition(
-                      opacity: animation,
-                      child: SizeTransition(
-                          sizeFactor: animation,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: CommentView(
-                              comment: comments[index],
-                              first: index == 0,
-                              replyTo: () {
-                                setState(() {
-                                  replyTo = comments[index];
-                                  inputFocus.requestFocus();
-                                  type = CommentType.COMMENT;
-                                  textEditingController.text = '@stant ';
-                                  //textEditingController =
-                                  //    TextEditingController(text: '@stant ');
-                                });
-                              },
-                            ),
-                          ))),
+          itemBuilder: (BuildContext context, int index,
+                  Animation<double> animation) =>
+              FadeTransition(
+                  opacity: animation,
+                  child: SizeTransition(
+                      sizeFactor: animation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: CommentView(
+                          comment: comments[index],
+                          first: index == 0,
+                          replyTo: () {
+                            setState(() {
+                              replyTo = comments[index];
+                              replyToDisplay = replyTo;
+                              if (replyTo.replyTo != null) {
+                                replyTo = comments
+                                    .firstWhere((c) => c.id == replyTo.replyTo);
+                              }
+                              inputFocus.requestFocus();
+                              type = CommentType.COMMENT;
+                              textEditingController.text =
+                                  '@${replyToDisplay.from} ';
+                              //textEditingController =
+                              //    TextEditingController(text: '@stant ');
+                            });
+                          },
+                        ),
+                      ))),
           initialItemCount: comments.length,
         )),
         renderInputContainer(context),
@@ -213,7 +220,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               UserAvatar(
-                icon: replyTo.pic,
+                icon: (replyToDisplay ?? replyTo).pic,
                 size: 25,
               ),
               Text(
@@ -224,7 +231,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                 ),
               ),
               Text(
-                replyTo.from,
+                (replyToDisplay ?? replyTo).from,
                 style: TextStyle(
                   color: Color(0xff474747),
                   fontSize: 16,
@@ -236,7 +243,8 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                   setState(() {
                     type = CommentType.COMMENT;
                     FocusScope.of(context).unfocus();
-                    replyTo = null;
+                    this.replyTo = null;
+                    this.replyToDisplay = null;
                   });
                 },
                 icon: Icon(Icons.close, size: 15),
@@ -246,7 +254,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Text(
-              replyTo.text,
+              (replyToDisplay ?? replyTo).text,
               overflow: TextOverflow.fade,
               maxLines: 3,
               style: TextStyle(
@@ -283,6 +291,8 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                   this.recommended = products;
                   this.type = CommentType.RECOMMEND;
                   inputFocus.requestFocus();
+                  this.replyTo = null;
+                  this.replyToDisplay = null;
                 });
               }));
             }),
@@ -342,6 +352,8 @@ class _CommentsFormPageState extends State<CommentsFormPage>
               setState(() {
                 type = CommentType.COMMENT;
                 FocusScope.of(context).unfocus();
+                this.replyTo = null;
+                this.replyToDisplay = null;
               });
             },
             icon: Icon(Icons.close),
@@ -414,7 +426,8 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                       FocusScope.of(context).unfocus();
                       textEditingController.clear();
                       type = CommentType.COMMENT;
-                      replyTo = null;
+                      this.replyTo = null;
+                      this.replyToDisplay = null;
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),
@@ -446,6 +459,8 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                 this.type = type;
                 inputFocus.requestFocus();
                 this.recommended = null;
+                this.replyTo = null;
+                this.replyToDisplay = null;
               });
             },
         child: Padding(
