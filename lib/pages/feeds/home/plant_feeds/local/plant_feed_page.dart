@@ -42,6 +42,7 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/local/local_product
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/sunglasses_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/widgets/plant_dial_button.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -161,8 +162,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         animationSpeed: 50,
         curve: Curves.bounceIn,
         backgroundColor: Color(0xff3bb30b),
-        animatedIcon: AnimatedIcons.menu_close,
-        animatedIconTheme: IconThemeData(size: 22.0),
+        child: PlantDialButton(
+          openned: _speedDialOpen,
+        ),
         overlayOpacity: 0.8,
         openCloseDial: _openCloseDial,
         closeManually: true,
