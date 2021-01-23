@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -167,9 +169,9 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FeedCardDate(state, widget.feedState),
+          SocialBarPage(
+            state: state,
+            feedState: widget.feedState,
           ),
           (params.message ?? '') != '' || editText == true
               ? Padding(
@@ -191,6 +193,14 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
                   },
                 )
               : Container(),
+          CommentsCardPage(
+            state: state,
+            feedState: widget.feedState,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FeedCardDate(state, widget.feedState),
+          ),
         ],
       ),
     );

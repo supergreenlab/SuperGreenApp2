@@ -33,6 +33,7 @@ class FeedUnknownLoader extends LocalFeedEntryLoader {
   }
 
   @override
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>
-      FeedUnknownState(super.stateForFeedEntry(feedEntry));
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry,
+          {bool forceNew = false}) =>
+      FeedUnknownState(super.stateForFeedEntry(feedEntry, forceNew: forceNew));
 }

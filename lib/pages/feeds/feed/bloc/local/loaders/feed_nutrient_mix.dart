@@ -42,8 +42,4 @@ class FeedNutrientMixLoader extends LocalFeedEntryLoader {
         params: Value(params.toJSON()),
         synced: Value(false)));
   }
-
-  @override
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>
-      FeedNutrientMixState(super.stateForFeedEntry(feedEntry));
 }

@@ -69,7 +69,7 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
       FeedEntry feedEntry =
           await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
       if (feedEntry != null) {
-        await updateFeedEntryState(feedEntry);
+        await updateFeedEntryState(feedEntry, forceNew: true);
       }
     });
   }

@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -106,6 +108,14 @@ class FeedLifeEventCardPage extends StatelessWidget {
                       fontSize: 40,
                       fontWeight: FontWeight.bold)),
             ),
+          ),
+          SocialBarPage(
+            state: state,
+            feedState: feedState,
+          ),
+          CommentsCardPage(
+            state: state,
+            feedState: feedState,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),

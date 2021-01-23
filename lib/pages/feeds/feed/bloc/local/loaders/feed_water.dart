@@ -42,8 +42,4 @@ class FeedWaterLoader extends LocalFeedEntryLoader {
         params: Value(params.toJSON()),
         synced: Value(false)));
   }
-
-  @override
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>
-      FeedWaterState(super.stateForFeedEntry(feedEntry));
 }

@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -105,9 +107,9 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
               .add(FeedBlocEventDeleteEntry(state));
         },
       ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FeedCardDate(widget.state, widget.feedState),
+      SocialBarPage(
+        state: state,
+        feedState: widget.feedState,
       ),
     ];
     if ((params.message ?? '') != '' || editText == true) {
@@ -123,6 +125,16 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
         },
       ));
     }
+    body.addAll([
+      CommentsCardPage(
+        state: state,
+        feedState: widget.feedState,
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FeedCardDate(widget.state, widget.feedState),
+      ),
+    ]);
     if (state.beforeMedias.length > 0) {
       body.insert(
         1,

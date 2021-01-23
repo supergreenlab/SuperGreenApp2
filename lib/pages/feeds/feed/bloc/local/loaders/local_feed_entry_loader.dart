@@ -83,8 +83,9 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     });
   }
 
-  Future<void> updateFeedEntryState(FeedEntry feedEntry) async {
-    FeedEntryState newState = stateForFeedEntry(feedEntry);
+  Future<void> updateFeedEntryState(FeedEntry feedEntry,
+      {bool forceNew = false}) async {
+    FeedEntryState newState = stateForFeedEntry(feedEntry, forceNew: forceNew);
     if (newState is FeedEntryStateNotLoaded) {
       newState = await load(newState);
     } else {
@@ -112,10 +113,11 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     Future.wait(promises);
   }
 
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) {
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry,
+      {bool forceNew = false}) {
     FeedEntrySocialState socialState = FeedEntrySocialStateNotLoaded();
     if (cache[feedEntry.id] != null) {
-      if (cache[feedEntry.id].data == feedEntry) {
+      if (!forceNew || cache[feedEntry.id].data == feedEntry) {
         return cache[feedEntry.id];
       }
       socialState = cache[feedEntry.id].socialState;

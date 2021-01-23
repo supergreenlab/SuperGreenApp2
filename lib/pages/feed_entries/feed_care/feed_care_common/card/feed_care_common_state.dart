@@ -39,7 +39,7 @@ class FeedCareCommonState extends FeedEntryStateLoaded {
       this,
       beforeMedias: beforeMedias,
       afterMedias: afterMedias,
-      remoteState: remoteState,
+      socialState: socialState,
     );
   }
 }

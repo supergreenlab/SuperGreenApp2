@@ -33,6 +33,7 @@ class FeedProductsLoader extends LocalFeedEntryLoader {
   }
 
   @override
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry) =>
-      FeedProductsState(super.stateForFeedEntry(feedEntry));
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry,
+          {bool forceNew = false}) =>
+      FeedProductsState(super.stateForFeedEntry(feedEntry, forceNew: forceNew));
 }
