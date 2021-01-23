@@ -51,7 +51,8 @@ class SocialBarPage extends StatelessWidget {
         children: [
           renderButton(
               context,
-              (state.socialState as FeedEntrySocialStateLoaded).isLiked
+              state.socialState is FeedEntrySocialStateLoaded &&
+                      (state.socialState as FeedEntrySocialStateLoaded).isLiked
                   ? 'button_like_on'
                   : 'button_like',
               () => onLike(context)),
