@@ -30,4 +30,10 @@ class FeedLifeEventLoader extends LocalFeedEntryLoader {
     this.loadSocialState(state);
     return super.load(state);
   }
+
+  @override
+  void startListenEntryChanges(FeedEntryStateLoaded entry) {
+    super.startListenEntryChanges(entry);
+    loadSocialState(entry);
+  }
 }

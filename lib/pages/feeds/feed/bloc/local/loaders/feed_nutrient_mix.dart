@@ -42,4 +42,10 @@ class FeedNutrientMixLoader extends LocalFeedEntryLoader {
         params: Value(params.toJSON()),
         synced: Value(false)));
   }
+
+  @override
+  void startListenEntryChanges(FeedEntryStateLoaded entry) {
+    super.startListenEntryChanges(entry);
+    loadSocialState(entry);
+  }
 }
