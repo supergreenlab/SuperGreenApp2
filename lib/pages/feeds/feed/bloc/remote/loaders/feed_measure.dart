@@ -49,8 +49,7 @@ class FeedMeasureLoader extends RemoteFeedEntryLoader {
         current: currentMedia,
         previous: previousMedia,
         remoteState: true,
-        socialState: (state.socialState as FeedEntrySocialStateLoaded)
-            .copyWith(comments: await this.fetchComments(state)));
+        socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);
   }

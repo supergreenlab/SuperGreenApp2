@@ -41,8 +41,7 @@ class FeedMediaLoader extends RemoteFeedEntryLoader {
     state = FeedMediaState(state,
         medias: medias,
         remoteState: true,
-        socialState: (state.socialState as FeedEntrySocialStateLoaded)
-            .copyWith(comments: await this.fetchComments(state)));
+        socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);
   }

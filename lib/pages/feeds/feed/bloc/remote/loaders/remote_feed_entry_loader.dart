@@ -43,7 +43,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
           comments:
               (cached.socialState as FeedEntrySocialStateLoaded).comments);
     }
-    onFeedEntryStateUpdated(state.copyWithSocialState(socialState));
+    onFeedEntryStateUpdated(state = state.copyWithSocialState(socialState));
     loadComments(socialState, state);
   }
 
@@ -62,16 +62,11 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
         state.copyWithSocialState(socialState.copyWith(comments: comments)));
   }
 
-  Future<List<Comment>> fetchComments(FeedEntryState state) async {
-    List<Comment> comments = await BackendAPI()
-        .feedsAPI
-        .fetchCommentsForFeedEntry(state.feedEntryID, n: 2);
-    return comments;
-  }
-
   @override
   @mustCallSuper
-  void startListenEntryChanges(FeedEntryStateLoaded entry) {}
+  void startListenEntryChanges(FeedEntryStateLoaded entry) {
+    loadComments(entry.socialState, entry);
+  }
 
   @override
   @mustCallSuper

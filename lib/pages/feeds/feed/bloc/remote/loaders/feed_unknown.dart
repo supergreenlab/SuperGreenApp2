@@ -29,8 +29,7 @@ class FeedUnknownLoader extends RemoteFeedEntryLoader {
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     state = FeedUnknownState(state,
         remoteState: true,
-        socialState: (state.socialState as FeedEntrySocialStateLoaded)
-            .copyWith(comments: await this.fetchComments(state)));
+        socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);
   }
