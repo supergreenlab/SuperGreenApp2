@@ -50,7 +50,8 @@ class PublicPlantPage extends StatelessWidget {
       _renderProducts,
     ];
     return BlocProvider(
-      create: (context) => FeedBloc(RemotePlantFeedBlocDelegate(state.plantID)),
+      create: (context) => FeedBloc(
+          RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID)),
       child: FeedPage(
         title: state.plantName ?? '',
         pinned: true,

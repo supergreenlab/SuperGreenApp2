@@ -234,7 +234,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventLoadEntries) {
       List<FeedEntryState> fes =
           await delegate.loadEntries(event.n, entries.length);
-      entries.addAll(fes);
+      entries.addAll(fes.map((f) => delegate.postProcess(f)));
       yield FeedBlocStateEntriesLoaded(fes, fes.length < event.n, initialLoad);
       initialLoad = false;
     } else if (event is FeedBlocEventEntryVisible) {
@@ -242,7 +242,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       FeedEntryLoader loader = delegate.loaderForType(e.type);
       if (e is FeedEntryStateNotLoaded) {
         e = await loader.load(e);
-        entries[event.index] = e;
+        entries[event.index] = delegate.postProcess(e);
         yield FeedBlocStateUpdateEntry(event.index, e);
       }
       loader.startListenEntryChanges(e);
@@ -262,16 +262,17 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventUpdatedEntry) {
       int index =
           entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
-      int newIndex = _insertIndex(event.entry);
+      FeedEntryState entry = delegate.postProcess(event.entry);
+      int newIndex = _insertIndex(entry);
       if (index == newIndex) {
-        entries[index] = event.entry;
-        yield FeedBlocStateUpdateEntry(index, event.entry);
+        entries[index] = entry;
+        yield FeedBlocStateUpdateEntry(index, entry);
       } else {
         yield* _removeEntryAt(index);
         if (index < newIndex) {
           --newIndex;
         }
-        yield* _insertEntryAt(newIndex, event.entry);
+        yield* _insertEntryAt(newIndex, entry);
       }
     } else if (event is FeedBlocEventMarkAsRead) {
       await delegate.markAsRead(entries[event.index].feedEntryID);
@@ -349,6 +350,7 @@ abstract class FeedBlocDelegate {
 
   Future init(Function(FeedBlocEvent) add);
   void loadFeed();
+  FeedEntryState postProcess(FeedEntryState state);
   Future<List<FeedEntryState>> loadEntries(int n, int offset);
   Future deleteFeedEntry(dynamic feedEntryID);
   Future markAsRead(dynamic feedEntryID);

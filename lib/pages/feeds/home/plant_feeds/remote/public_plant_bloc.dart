@@ -30,23 +30,26 @@ class PublicPlantBlocEventLoadPlant extends PublicPlantBlocEvent {
 
 class PublicPlantBlocState extends Equatable {
   final String plantID;
+  final String feedEntryID;
   final String plantName;
 
-  PublicPlantBlocState(this.plantID, this.plantName) : super();
+  PublicPlantBlocState(this.plantID, this.feedEntryID, this.plantName)
+      : super();
 
   @override
   List<Object> get props => [plantID];
 }
 
 class PublicPlantBlocStateInit extends PublicPlantBlocState {
-  PublicPlantBlocStateInit(String id, String name) : super(id, name);
+  PublicPlantBlocStateInit(String id, String feedEntryID, String name)
+      : super(id, feedEntryID, name);
 }
 
 class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
   final MainNavigateToPublicPlant args;
 
   PublicPlantBloc(this.args)
-      : super(PublicPlantBlocStateInit(args.id, args.name)) {
+      : super(PublicPlantBlocStateInit(args.id, args.feedEntryID, args.name)) {
     if (args.name == null) {
       add(PublicPlantBlocEventLoadPlant());
     }
@@ -58,7 +61,7 @@ class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
     if (event is PublicPlantBlocEventLoadPlant) {
       Map<String, dynamic> plant =
           await BackendAPI().feedsAPI.publicPlant(args.id);
-      yield PublicPlantBlocStateInit(args.id, plant['name']);
+      yield PublicPlantBlocStateInit(args.id, args.feedEntryID, plant['name']);
     }
   }
 }

@@ -33,6 +33,11 @@ class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
   SGLFeedBlocDelegate(int feedID) : super(feedID);
 
   @override
+  FeedEntryState postProcess(FeedEntryState state) {
+    return state.copyWith(shareLink: 'pouet');
+  }
+
+  @override
   void loadFeed() async {
     AppData appData = AppDB().getAppData();
     feedState = FeedState(appData.storeGeo);

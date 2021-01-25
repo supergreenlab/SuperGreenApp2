@@ -29,6 +29,7 @@ import 'package:super_green_app/pages/feeds/home/box_feeds/common/box_feed_state
 import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
 
 class LocalBoxFeedBlocDelegate extends LocalFeedBlocDelegate {
+  Box box;
   BoxFeedState feedState;
   StreamSubscription<Box> boxStream;
   StreamSubscription<hive.BoxEvent> appDataStream;
@@ -36,8 +37,19 @@ class LocalBoxFeedBlocDelegate extends LocalFeedBlocDelegate {
   LocalBoxFeedBlocDelegate(int feedID) : super(feedID);
 
   @override
+  FeedEntryState postProcess(FeedEntryState state) {
+    FeedEntry feedEntry = state.data as FeedEntry;
+    if (box.serverID == null || feedEntry.serverID == null) {
+      return state;
+    }
+    return state.copyWith(
+        shareLink:
+            'https://supergreenlab.com/public/box?id=${box.serverID}&feid=${feedEntry.serverID}');
+  }
+
+  @override
   void loadFeed() async {
-    Box box = await RelDB.get().plantsDAO.getBoxWithFeed(feedID);
+    box = await RelDB.get().plantsDAO.getBoxWithFeed(feedID);
     AppData appData = AppDB().getAppData();
     feedState =
         BoxFeedState(appData.storeGeo, BoxSettings.fromJSON(box.settings));
@@ -48,6 +60,7 @@ class LocalBoxFeedBlocDelegate extends LocalFeedBlocDelegate {
   }
 
   void boxUpdated(Box box) {
+    this.box = box;
     feedState = feedState.copyWith(
       boxSettings: BoxSettings.fromJSON(box.settings),
     );

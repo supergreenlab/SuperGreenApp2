@@ -34,18 +34,21 @@ abstract class FeedEntryState extends Equatable {
   final FeedEntrySocialState socialState;
 
   final bool remoteState;
+  final String shareLink;
 
-  FeedEntryState(
-      {this.feedEntryID,
-      this.feedID,
-      this.type,
-      this.isNew,
-      this.synced,
-      this.date,
-      this.params,
-      this.data,
-      this.socialState,
-      this.remoteState = false});
+  FeedEntryState({
+    this.feedEntryID,
+    this.feedID,
+    this.type,
+    this.isNew,
+    this.synced,
+    this.date,
+    this.params,
+    this.data,
+    this.socialState,
+    this.remoteState = false,
+    this.shareLink,
+  });
 
   @override
   List<Object> get props => [
@@ -57,48 +60,60 @@ abstract class FeedEntryState extends Equatable {
         date,
         params,
         remoteState,
-        socialState
+        socialState,
+        shareLink,
       ];
 
-  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState);
+  FeedEntryState copyWith({
+    FeedEntrySocialState socialState,
+    String shareLink,
+  });
 }
 
 class FeedEntryStateNotLoaded extends FeedEntryState {
-  FeedEntryStateNotLoaded(
-      {dynamic feedEntryID,
-      dynamic feedID,
-      String type,
-      bool isNew,
-      bool synced,
-      DateTime date,
-      dynamic params,
-      bool remoteState = false,
-      dynamic data,
-      FeedEntrySocialState socialState})
-      : super(
-            feedEntryID: feedEntryID,
-            feedID: feedID,
-            type: type,
-            isNew: isNew,
-            synced: synced,
-            date: date,
-            params: params,
-            data: data,
-            socialState: socialState,
-            remoteState: remoteState);
+  FeedEntryStateNotLoaded({
+    dynamic feedEntryID,
+    dynamic feedID,
+    String type,
+    bool isNew,
+    bool synced,
+    DateTime date,
+    dynamic params,
+    bool remoteState = false,
+    dynamic data,
+    FeedEntrySocialState socialState,
+    String shareLink,
+  }) : super(
+          feedEntryID: feedEntryID,
+          feedID: feedID,
+          type: type,
+          isNew: isNew,
+          synced: synced,
+          date: date,
+          params: params,
+          data: data,
+          remoteState: remoteState,
+          socialState: socialState,
+          shareLink: shareLink,
+        );
 
-  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+  FeedEntryState copyWith({
+    FeedEntrySocialState socialState,
+    String shareLink,
+  }) {
     return FeedEntryStateNotLoaded(
-        feedEntryID: this.feedEntryID,
-        feedID: this.feedID,
-        type: this.type,
-        isNew: this.isNew,
-        synced: this.synced,
-        date: this.date,
-        params: this.params,
-        data: this.data,
-        socialState: socialState,
-        remoteState: this.remoteState);
+      feedEntryID: this.feedEntryID,
+      feedID: this.feedID,
+      type: this.type,
+      isNew: this.isNew,
+      synced: this.synced,
+      date: this.date,
+      params: this.params,
+      data: this.data,
+      remoteState: this.remoteState,
+      socialState: this.socialState ?? socialState,
+      shareLink: this.shareLink ?? shareLink,
+    );
   }
 }
 
@@ -115,6 +130,7 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
     bool remoteState = false,
     dynamic data,
     FeedEntrySocialState socialState,
+    String shareLink,
   }) : super(
           feedEntryID: feedEntryID ?? from.feedEntryID,
           feedID: feedID ?? from.feedID,
@@ -126,5 +142,6 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
           data: data ?? from.data,
           socialState: socialState ?? from.socialState,
           remoteState: remoteState ?? from.remoteState,
+          shareLink: shareLink ?? from.shareLink,
         );
 }

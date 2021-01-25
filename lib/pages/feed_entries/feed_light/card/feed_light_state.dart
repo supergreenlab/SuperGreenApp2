@@ -21,13 +21,22 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 
 class FeedLightState extends FeedEntryStateLoaded {
   FeedLightState(FeedEntryState from,
-      {FeedEntrySocialState socialState, bool remoteState = false})
-      : super.copy(from, socialState: socialState, remoteState: remoteState);
+      {FeedEntrySocialState socialState,
+      bool remoteState = false,
+      String shareLink})
+      : super.copy(from,
+            socialState: socialState,
+            remoteState: remoteState,
+            shareLink: shareLink);
 
-  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+  FeedEntryState copyWith({
+    FeedEntrySocialState socialState,
+    String shareLink,
+  }) {
     return FeedLightState(
       this,
       socialState: socialState,
+      shareLink: shareLink,
     );
   }
 }

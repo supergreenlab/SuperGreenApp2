@@ -43,7 +43,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
           comments:
               (cached.socialState as FeedEntrySocialStateLoaded).comments);
     }
-    onFeedEntryStateUpdated(state = state.copyWithSocialState(socialState));
+    onFeedEntryStateUpdated(state = state.copyWith(socialState: socialState));
     loadComments(socialState, state);
   }
 
@@ -59,7 +59,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
           rootCommentsOnly: true);
     }
     onFeedEntryStateUpdated(
-        state.copyWithSocialState(socialState.copyWith(comments: comments)));
+        state.copyWith(socialState: socialState.copyWith(comments: comments)));
   }
 
   @override

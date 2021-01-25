@@ -23,18 +23,31 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 class FeedMediaState extends FeedEntryStateLoaded {
   final List<MediaState> medias;
 
-  FeedMediaState(FeedEntryState from,
-      {this.medias, FeedEntrySocialState socialState, bool remoteState})
-      : super.copy(from, socialState: socialState, remoteState: remoteState);
+  FeedMediaState(
+    FeedEntryState from, {
+    this.medias,
+    FeedEntrySocialState socialState,
+    bool remoteState,
+    String shareLink,
+  }) : super.copy(
+          from,
+          socialState: from.socialState ?? socialState,
+          remoteState: from.remoteState ?? remoteState,
+          shareLink: from.shareLink ?? shareLink,
+        );
 
   @override
   List<Object> get props => [...super.props, medias];
 
-  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+  FeedEntryState copyWith({
+    FeedEntrySocialState socialState,
+    String shareLink,
+  }) {
     return FeedMediaState(
       this,
       medias: this.medias,
-      socialState: socialState,
+      socialState: this.socialState ?? socialState,
+      shareLink: this.shareLink ?? shareLink,
     );
   }
 }

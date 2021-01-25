@@ -351,6 +351,16 @@ class FeedsAPI {
     }
   }
 
+  Future<Map<String, dynamic>> publicFeedEntry(String id) async {
+    try {
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/feedEntry/$id');
+      return results['entry'];
+    } catch (e) {
+      throw 'publicFeedEntries failed: $e';
+    }
+  }
+
   Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
     try {
       Map<String, dynamic> results =

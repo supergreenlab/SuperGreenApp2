@@ -48,7 +48,7 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
             comments:
                 (cached.socialState as FeedEntrySocialStateLoaded).comments);
       }
-      onFeedEntryStateUpdated(state.copyWithSocialState(socialState));
+      onFeedEntryStateUpdated(state.copyWith(socialState: socialState));
 
       List<Comment> comments = [];
 
@@ -59,8 +59,8 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
             limit: 2,
             rootCommentsOnly: true);
       }
-      onFeedEntryStateUpdated(
-          state.copyWithSocialState(socialState.copyWith(comments: comments)));
+      onFeedEntryStateUpdated(state.copyWith(
+          socialState: socialState.copyWith(comments: comments)));
     }
   }
 
@@ -132,6 +132,7 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         params: FeedEntriesParamHelpers.paramForFeedEntryType(
             feedEntry.type, feedEntry.params),
         data: feedEntry,
-        socialState: socialState);
+        socialState: socialState,
+        shareLink: feedEntry.serverID != null ? '' : null);
   }
 }

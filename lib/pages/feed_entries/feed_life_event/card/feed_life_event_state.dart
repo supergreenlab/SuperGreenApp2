@@ -20,14 +20,26 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_st
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class FeedLifeEventState extends FeedEntryStateLoaded {
-  FeedLifeEventState(FeedEntryState from,
-      {FeedEntrySocialState socialState, bool remoteState = false})
-      : super.copy(from, socialState: socialState, remoteState: remoteState);
+  FeedLifeEventState(
+    FeedEntryState from, {
+    FeedEntrySocialState socialState,
+    bool remoteState = false,
+    String shareLink,
+  }) : super.copy(
+          from,
+          socialState: socialState,
+          remoteState: remoteState,
+          shareLink: shareLink,
+        );
 
-  FeedEntryState copyWithSocialState(FeedEntrySocialState socialState) {
+  FeedEntryState copyWith({
+    FeedEntrySocialState socialState,
+    String shareLink,
+  }) {
     return FeedLifeEventState(
       this,
       socialState: socialState,
+      shareLink: shareLink,
     );
   }
 }

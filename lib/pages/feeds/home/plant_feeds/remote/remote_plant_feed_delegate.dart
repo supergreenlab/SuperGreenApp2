@@ -27,10 +27,23 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 
 class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   final String plantID;
-  RemotePlantFeedBlocDelegate(this.plantID);
+  final String feedEntryID;
+  RemotePlantFeedBlocDelegate(this.plantID, this.feedEntryID);
+
+  @override
+  FeedEntryState postProcess(FeedEntryState state) {
+    return state.copyWith(
+        shareLink:
+            'https://supergreenlab.com/public/plant?id=${plantID}&feid=${state.feedEntryID}');
+  }
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
+    if (feedEntryID != null) {
+      Map<String, dynamic> entryMap =
+          await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
+      return [loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap)];
+    }
     List<dynamic> entriesMap =
         await BackendAPI().feedsAPI.publicFeedEntries(plantID, n, offset);
     return entriesMap.map<FeedEntryState>((dynamic em) {

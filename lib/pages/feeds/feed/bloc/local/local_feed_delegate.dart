@@ -40,7 +40,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/local/loaders/local_feed_e
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
-class LocalFeedBlocDelegate extends FeedBlocDelegate {
+abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   Function(FeedBlocEvent) add;
   final int feedID;
   Map<String, LocalFeedEntryLoader> loaders = {};

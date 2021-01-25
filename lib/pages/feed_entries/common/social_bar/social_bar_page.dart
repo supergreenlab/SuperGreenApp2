@@ -21,6 +21,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
@@ -89,7 +90,9 @@ class SocialBarPage extends StatelessWidget {
         .add(MainNavigateToCommentFormEvent(true, state));
   }
 
-  void onShare(BuildContext context) {}
+  void onShare(BuildContext context) async {
+    await ShareExtend.share(state.shareLink, 'text');
+  }
 
   void onBookmark(BuildContext context) {}
 }

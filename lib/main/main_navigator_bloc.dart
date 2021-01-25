@@ -524,11 +524,12 @@ class MainNavigateToSettingsUpgradeDevice extends MainNavigatorEvent {
 class MainNavigateToPublicPlant extends MainNavigatorEvent {
   final String id;
   final String name;
+  final String feedEntryID;
 
-  MainNavigateToPublicPlant(this.id, {this.name});
+  MainNavigateToPublicPlant(this.id, {this.name, this.feedEntryID});
 
   @override
-  List<Object> get props => [id, name];
+  List<Object> get props => [id, name, feedEntryID];
 }
 
 class MainNavigateToSelectNewProductEvent extends MainNavigatorEvent {

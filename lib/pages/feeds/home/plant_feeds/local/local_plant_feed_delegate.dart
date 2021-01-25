@@ -26,11 +26,15 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/local/local_feed_delegate.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_feed_state.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
+  Plant plant;
+  Box box;
+
   PlantFeedState feedState;
   StreamSubscription<Box> boxStream;
   StreamSubscription<Plant> plantStream;
@@ -39,9 +43,20 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   LocalPlantFeedBlocDelegate(int feedID) : super(feedID);
 
   @override
+  FeedEntryState postProcess(FeedEntryState state) {
+    FeedEntry feedEntry = state.data as FeedEntry;
+    if (plant.serverID == null || feedEntry.serverID == null) {
+      return state;
+    }
+    return state.copyWith(
+        shareLink:
+            'https://supergreenlab.com/public/plant?id=${plant.serverID}&feid=${feedEntry.serverID}');
+  }
+
+  @override
   void loadFeed() async {
-    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
-    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
+    plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
+    box = await RelDB.get().plantsDAO.getBox(plant.box);
     AppData appData = AppDB().getAppData();
     feedState = PlantFeedState(
         appData.storeGeo,
@@ -57,7 +72,6 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
 
   @override
   Future deleteFeedEntry(feedEntryID) async {
-    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
     // TODO find something to do for feedEntry destructors.
     if (feedEntry.type == 'FE_LIFE_EVENT') {
@@ -76,6 +90,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   }
 
   void plantUpdated(Plant plant) {
+    this.plant = plant;
     feedState = feedState.copyWith(
       plantSettings: PlantSettings.fromJSON(plant.settings),
     );
@@ -83,6 +98,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   }
 
   void boxUpdated(Box box) {
+    this.box = box;
     feedState = feedState.copyWith(
       boxSettings: BoxSettings.fromJSON(box.settings),
     );
