@@ -111,8 +111,8 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
       params: this.params,
       data: this.data,
       remoteState: this.remoteState,
-      socialState: this.socialState ?? socialState,
-      shareLink: this.shareLink ?? shareLink,
+      socialState: socialState ?? this.socialState,
+      shareLink: shareLink ?? this.shareLink,
     );
   }
 }

@@ -27,9 +27,9 @@ class FeedTowelieInfoState extends FeedEntryStateLoaded {
     String shareLink,
   }) : super.copy(
           from,
-          socialState: socialState,
-          remoteState: remoteState,
-          shareLink: shareLink,
+          socialState: socialState ?? from.socialState,
+          remoteState: remoteState ?? from.remoteState,
+          shareLink: shareLink ?? from.shareLink,
         );
 
   FeedEntryState copyWith({
@@ -38,8 +38,8 @@ class FeedTowelieInfoState extends FeedEntryStateLoaded {
   }) {
     return FeedTowelieInfoState(
       this,
-      socialState: socialState,
-      shareLink: shareLink,
+      socialState: socialState ?? this.socialState,
+      shareLink: shareLink ?? this.shareLink,
     );
   }
 }

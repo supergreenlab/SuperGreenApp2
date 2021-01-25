@@ -25,9 +25,9 @@ class FeedLightState extends FeedEntryStateLoaded {
       bool remoteState = false,
       String shareLink})
       : super.copy(from,
-            socialState: socialState,
-            remoteState: remoteState,
-            shareLink: shareLink);
+            socialState: socialState ?? from.socialState,
+            remoteState: remoteState ?? from.remoteState,
+            shareLink: shareLink ?? from.shareLink);
 
   FeedEntryState copyWith({
     FeedEntrySocialState socialState,
@@ -35,8 +35,8 @@ class FeedLightState extends FeedEntryStateLoaded {
   }) {
     return FeedLightState(
       this,
-      socialState: socialState,
-      shareLink: shareLink,
+      socialState: socialState ?? this.socialState,
+      shareLink: shareLink ?? this.shareLink,
     );
   }
 }

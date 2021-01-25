@@ -33,9 +33,9 @@ class FeedMeasureState extends FeedEntryStateLoaded {
     String shareLink,
   }) : super.copy(
           from,
-          socialState: from.socialState ?? socialState,
-          remoteState: from.remoteState ?? remoteState,
-          shareLink: from.shareLink ?? shareLink,
+          socialState: socialState ?? from.socialState,
+          remoteState: remoteState ?? from.remoteState,
+          shareLink: shareLink ?? from.shareLink,
         );
 
   @override
@@ -49,8 +49,8 @@ class FeedMeasureState extends FeedEntryStateLoaded {
       this,
       current: this.current,
       previous: this.previous,
-      socialState: this.socialState ?? socialState,
-      shareLink: this.shareLink ?? shareLink,
+      socialState: socialState ?? this.socialState,
+      shareLink: shareLink ?? this.shareLink,
     );
   }
 }
