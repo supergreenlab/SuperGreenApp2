@@ -24,12 +24,16 @@ class FullscreenLoading extends StatelessWidget {
   final double percent;
   final Color textColor;
   final String circleText;
+  final double fontSize;
+  final double size;
 
   const FullscreenLoading(
       {this.title = 'Loading..',
       this.percent,
       this.textColor,
-      this.circleText});
+      this.circleText,
+      this.fontSize = 18,
+      this.size = 60});
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +42,15 @@ class FullscreenLoading extends StatelessWidget {
       child = Stack(
         children: [
           SizedBox(
-              width: 60,
-              height: 60,
+              width: size,
+              height: size,
               child: CircularProgressIndicator(
                 value: percent,
                 strokeWidth: 4.0,
               )),
           SizedBox(
-              width: 60,
-              height: 60,
+              width: size,
+              height: size,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -54,7 +58,7 @@ class FullscreenLoading extends StatelessWidget {
                     circleText ?? '${(percent * 100).toInt()}%',
                     style: TextStyle(
                         fontWeight: FontWeight.w900,
-                        fontSize: 18,
+                        fontSize: fontSize,
                         color: textColor ?? Color(0xffababab)),
                     textAlign: TextAlign.center,
                   ),
@@ -63,15 +67,20 @@ class FullscreenLoading extends StatelessWidget {
         ],
       );
     } else {
-      child = CircularProgressIndicator(
-        value: percent,
-        strokeWidth: 4.0,
+      child = SizedBox(
+        width: size,
+        height: size,
+        child: CircularProgressIndicator(
+          value: percent,
+          strokeWidth: 4.0,
+        ),
       );
     }
     return Fullscreen(
       title: title,
       child: child,
       textColor: textColor,
+      fontSize: fontSize,
     );
   }
 }

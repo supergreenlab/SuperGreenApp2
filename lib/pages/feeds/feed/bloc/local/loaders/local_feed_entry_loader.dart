@@ -56,7 +56,7 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(
             feedEntry.serverID,
             offset: 0,
-            n: 2,
+            limit: 2,
             rootCommentsOnly: true);
       }
       onFeedEntryStateUpdated(

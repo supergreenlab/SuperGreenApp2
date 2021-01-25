@@ -68,31 +68,37 @@ class Comment extends Equatable {
 
   final DateTime createdAt;
 
-  Comment(
-      {this.id,
-      this.feedEntryID,
-      this.userID,
-      this.from,
-      this.pic,
-      this.liked,
-      this.replyTo,
-      this.text,
-      this.type,
-      this.params,
-      this.createdAt});
+  final bool isNew;
 
-  Comment copyWith(
-      {String id,
-      String feedEntryID,
-      String userID,
-      String from,
-      String pic,
-      bool liked,
-      String replyTo,
-      String text,
-      CommentType type,
-      String params,
-      DateTime createdAt}) {
+  Comment({
+    this.id,
+    this.feedEntryID,
+    this.userID,
+    this.from,
+    this.pic,
+    this.liked,
+    this.replyTo,
+    this.text,
+    this.type,
+    this.params,
+    this.createdAt,
+    this.isNew,
+  });
+
+  Comment copyWith({
+    String id,
+    String feedEntryID,
+    String userID,
+    String from,
+    String pic,
+    bool liked,
+    String replyTo,
+    String text,
+    CommentType type,
+    String params,
+    DateTime createdAt,
+    bool isNew,
+  }) {
     return Comment(
       id: id ?? this.id,
       feedEntryID: feedEntryID ?? this.feedEntryID,
@@ -105,6 +111,7 @@ class Comment extends Equatable {
       type: type ?? this.type,
       params: params ?? this.params,
       createdAt: createdAt ?? this.createdAt,
+      isNew: isNew ?? this.isNew,
     );
   }
 

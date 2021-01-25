@@ -55,7 +55,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
       comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(
           state.feedEntryID,
           offset: 0,
-          n: 2,
+          limit: 2,
           rootCommentsOnly: true);
     }
     onFeedEntryStateUpdated(

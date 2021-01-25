@@ -71,6 +71,8 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   Comment replyToDisplay;
   List<Product> recommended;
 
+  bool eof = false;
+
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final FocusNode inputFocus = FocusNode();
   final ScrollController scrollController = ScrollController();
@@ -86,55 +88,42 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           setState(() {
             this.autoFocus = state.autoFocus;
             this.user = state.user;
+            this.eof = state.eof;
             state.comments.forEach((comment) {
-              int index;
-              if (comment.replyTo != null) {
-                int startIndex = comments.lastIndexWhere((c) =>
-                        c.id == comment.replyTo ||
-                        c.replyTo == comment.replyTo) +
-                    1;
-                index = comments.lastIndexWhere(
-                    (c) =>
-                        c.replyTo == comment.replyTo &&
-                        c.createdAt.isAfter(comment.createdAt),
-                    startIndex);
-                index = index < 0 ? startIndex : index;
-              } else {
-                index = comments.indexWhere((c) =>
-                    c.replyTo == null &&
-                    c.createdAt.isBefore(comment.createdAt));
-                index = index < 0 ? comments.length : index;
+              int existsIndex = comments.indexWhere((c) => c.id == comment.id);
+              if (existsIndex != -1) {
+                setState(() {
+                  comments[existsIndex] = comment;
+                });
+                return;
               }
-              if (listKey.currentState != null) {
-                listKey.currentState
-                    .insertItem(index, duration: Duration(milliseconds: 200));
-              }
-              comments.insert(index, comment);
+              insertNewComment(comment);
             });
-            bool wasReplyPosted =
-                state.comments.length == 1 && state.comments[0].replyTo != null;
-            if (scrollController.hasClients &&
-                scrollController.offset != 0 &&
-                !wasReplyPosted) {
-              Timer(
-                  Duration(milliseconds: 100),
-                  () => scrollController.animateTo(0,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.linear));
-            }
           });
         } else if (state is CommentsFormBlocStateUpdateComment) {
-          int i = comments.indexWhere((c) => c.id == state.comment.id);
+          int i = comments.indexWhere((c) => c.id == state.commentID);
           if (i != -1) {
             setState(() {
               comments[i] = state.comment;
             });
           }
+        } else if (state is CommentsFormBlocStateAddComment) {
+          insertNewComment(state.comment);
+          if (scrollController.hasClients &&
+              scrollController.offset != 0 &&
+              state.comment.replyTo == null) {
+            Timer(
+                Duration(milliseconds: 100),
+                () => scrollController.animateTo(0,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear));
+          }
         }
       },
       child: BlocBuilder<CommentsFormBloc, CommentsFormBlocState>(
           buildWhen: (CommentsFormBlocState s1, CommentsFormBlocState s2) {
-        return !(s2 is CommentsFormBlocStateUpdateComment);
+        return !(s2 is CommentsFormBlocStateUpdateComment) &&
+            !(s2 is CommentsFormBlocStateAddComment);
       }, builder: (BuildContext context, CommentsFormBlocState state) {
         List<Widget> body;
         if (state is CommentsFormBlocStateInit) {
@@ -173,36 +162,51 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             child: AnimatedList(
           key: listKey,
           controller: scrollController,
-          itemBuilder: (BuildContext context, int index,
-                  Animation<double> animation) =>
-              FadeTransition(
-                  opacity: animation,
-                  child: SizeTransition(
-                      sizeFactor: animation,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: CommentView(
-                          comment: comments[index],
-                          first: index == 0,
-                          replyTo: () {
-                            setState(() {
-                              replyTo = comments[index];
-                              replyToDisplay = replyTo;
-                              if (replyTo.replyTo != null) {
-                                replyTo = comments
-                                    .firstWhere((c) => c.id == replyTo.replyTo);
-                              }
-                              inputFocus.requestFocus();
-                              type = CommentType.COMMENT;
-                              textEditingController.text =
-                                  '@${replyToDisplay.from} ';
-                              //textEditingController =
-                              //    TextEditingController(text: '@stant ');
-                            });
-                          },
-                        ),
-                      ))),
-          initialItemCount: comments.length,
+          itemBuilder:
+              (BuildContext context, int index, Animation<double> animation) {
+            if (index >= comments.length) {
+              if (eof) {
+                return null;
+              }
+              BlocProvider.of<CommentsFormBloc>(context).add(
+                  CommentsFormBlocEventLoadComments(
+                      comments.where((c) => c.replyTo == null).length));
+              return Container(
+                height: 100,
+                child: FullscreenLoading(
+                  title: 'Loading more comments..',
+                  fontSize: 15,
+                  size: 25,
+                ),
+              );
+            }
+            return FadeTransition(
+                opacity: animation,
+                child: SizeTransition(
+                    sizeFactor: animation,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: CommentView(
+                        comment: comments[index],
+                        first: index == 0,
+                        replyTo: () {
+                          setState(() {
+                            replyTo = comments[index];
+                            replyToDisplay = replyTo;
+                            if (replyTo.replyTo != null) {
+                              replyTo = comments
+                                  .firstWhere((c) => c.id == replyTo.replyTo);
+                            }
+                            inputFocus.requestFocus();
+                            type = CommentType.COMMENT;
+                            textEditingController.text =
+                                '@${replyToDisplay.from} ';
+                          });
+                        },
+                      ),
+                    )));
+          },
+          initialItemCount: eof ? comments.length : comments.length + 1,
         )),
         renderInputContainer(context),
       ],
@@ -492,6 +496,30 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             ],
           ),
         ));
+  }
+
+  void insertNewComment(Comment comment) {
+    int index;
+    if (comment.replyTo != null) {
+      int startIndex = comments.lastIndexWhere(
+              (c) => c.id == comment.replyTo || c.replyTo == comment.replyTo) +
+          1;
+      index = comments.lastIndexWhere(
+          (c) =>
+              c.replyTo == comment.replyTo &&
+              c.createdAt.isAfter(comment.createdAt),
+          startIndex);
+      index = index < 0 ? startIndex : index;
+    } else {
+      index = comments.indexWhere(
+          (c) => c.replyTo == null && c.createdAt.isBefore(comment.createdAt));
+      index = index < 0 ? comments.length : index;
+    }
+    if (listKey.currentState != null) {
+      listKey.currentState
+          .insertItem(index, duration: Duration(milliseconds: 200));
+    }
+    comments.insert(index, comment);
   }
 
   @override

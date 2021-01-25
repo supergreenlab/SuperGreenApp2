@@ -57,9 +57,9 @@ class FeedsAPI {
   }
 
   Future<List<Comment>> fetchCommentsForFeedEntry(String feedEntryID,
-      {int offset = 0, int n = 10, rootCommentsOnly = false}) async {
+      {int offset = 0, int limit = 10, rootCommentsOnly = false}) async {
     Response resp = await BackendAPI().apiClient.get(
-        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$n&rootCommentsOnly=$rootCommentsOnly',
+        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$limit&rootCommentsOnly=$rootCommentsOnly',
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',

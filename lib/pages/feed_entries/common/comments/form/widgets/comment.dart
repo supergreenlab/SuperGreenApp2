@@ -142,7 +142,14 @@ class CommentView extends StatelessWidget {
                           'Reply',
                           style: TextStyle(color: Color(0xff717171)),
                         ),
-                      )
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      this.comment.isNew == true
+                          ? Text('Sending comment..',
+                              style: TextStyle(color: Colors.red))
+                          : Container(),
                     ],
                   ),
                 ),

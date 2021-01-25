@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
@@ -62,6 +63,15 @@ class CommentsFormBlocEventLike extends CommentsFormBlocEvent {
   List<Object> get props => [comment];
 }
 
+class CommentsFormBlocEventLoadComments extends CommentsFormBlocEvent {
+  final int offset;
+
+  CommentsFormBlocEventLoadComments(this.offset);
+
+  @override
+  List<Object> get props => [offset];
+}
+
 abstract class CommentsFormBlocState extends Equatable {}
 
 class CommentsFormBlocStateInit extends CommentsFormBlocState {
@@ -80,18 +90,31 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   final List<Comment> comments;
   final int n;
   final User user;
+  final bool eof;
 
-  CommentsFormBlocStateLoaded(
-      this.autoFocus, this.feedEntry, this.comments, this.n, this.user);
+  CommentsFormBlocStateLoaded(this.autoFocus, this.feedEntry, this.comments,
+      this.n, this.user, this.eof);
 
   @override
   List<Object> get props => [autoFocus, feedEntry, comments, n, user];
 }
 
 class CommentsFormBlocStateUpdateComment extends CommentsFormBlocState {
+  final String oldID;
   final Comment comment;
 
-  CommentsFormBlocStateUpdateComment(this.comment);
+  String get commentID => oldID ?? comment.id;
+
+  CommentsFormBlocStateUpdateComment(this.comment, {this.oldID});
+
+  @override
+  List<Object> get props => [comment, oldID];
+}
+
+class CommentsFormBlocStateAddComment extends CommentsFormBlocState {
+  final Comment comment;
+
+  CommentsFormBlocStateAddComment(this.comment);
 
   @override
   List<Object> get props => [comment];
@@ -119,14 +142,15 @@ class CommentsFormBloc
             await RelDB.get().feedsDAO.getFeedEntry(args.feedEntry.feedEntryID);
         feedEntryID = feedEntry.serverID;
       }
-      yield* fetchComments(feedEntryID);
+      yield* fetchComments();
     } else if (event is CommentsFormBlocEventLike) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
       yield CommentsFormBlocStateUpdateComment(
           event.comment.copyWith(liked: !event.comment.liked));
     } else if (event is CommentsFormBlocEventPostComment) {
-      yield CommentsFormBlocStateLoading();
+      String tempID = Uuid().v4();
       Comment comment = Comment(
+          id: tempID,
           feedEntryID: feedEntryID,
           userID: this.user.id,
           from: this.user.nickname,
@@ -137,27 +161,30 @@ class CommentsFormBloc
           createdAt: DateTime.now(),
           liked: false,
           params: JsonEncoder()
-              .convert(CommentParam(recommend: event.recommend).toMap()));
+              .convert(CommentParam(recommend: event.recommend).toMap()),
+          isNew: true);
+      yield CommentsFormBlocStateAddComment(comment);
       comment = await BackendAPI().feedsAPI.postComment(comment);
-      yield CommentsFormBlocStateLoaded(
-          this.args.autoFocus,
-          this.args.feedEntry,
-          [
-            comment,
-          ],
-          10,
-          this.user);
+      yield CommentsFormBlocStateUpdateComment(comment, oldID: tempID);
+      yield* fetchComments();
+    } else if (event is CommentsFormBlocEventLoadComments) {
+      yield* fetchComments(offset: event.offset);
     }
   }
 
-  Stream<CommentsFormBlocState> fetchComments(String feedEntryID) async* {
+  Stream<CommentsFormBlocState> fetchComments({offset = 0, limit = 20}) async* {
     List<Comment> comments = await BackendAPI()
         .feedsAPI
-        .fetchCommentsForFeedEntry(feedEntryID, n: 20);
+        .fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
     int n =
         await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
 
     yield CommentsFormBlocStateLoaded(
-        this.args.autoFocus, this.args.feedEntry, comments, n, this.user);
+        this.args.autoFocus,
+        this.args.feedEntry,
+        comments,
+        n,
+        this.user,
+        comments.where((c) => c.replyTo == null).length != limit);
   }
 }
