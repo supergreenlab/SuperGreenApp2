@@ -79,6 +79,13 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
   }
 
   @override
+  Future bookmarkFeedEntry(FeedEntryState entry) async {
+    await BackendAPI().feedsAPI.bookmarkFeedEntry(entry.feedEntryID);
+    FeedEntryLoader loader = this.loaderForType(entry.type);
+    loader.loadSocialState(entry);
+  }
+
+  @override
   Future markAsRead(dynamic feedEntryID) async {}
 
   @override

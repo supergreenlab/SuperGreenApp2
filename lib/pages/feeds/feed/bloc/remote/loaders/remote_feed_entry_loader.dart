@@ -93,11 +93,8 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
       }
       socialState = cache[feedEntryMap['id']].socialState;
     } else {
-      socialState = FeedEntrySocialStateLoaded(
-          isLiked: feedEntryMap['liked'],
-          nComments: feedEntryMap['nComments'],
-          nLikes: feedEntryMap['nLikes'],
-          comments: []);
+      socialState = FeedEntrySocialStateLoaded.fromMap(feedEntryMap)
+          .copyWith(comments: []);
     }
     return FeedEntryStateNotLoaded(
         feedEntryID: feedEntryMap['id'],

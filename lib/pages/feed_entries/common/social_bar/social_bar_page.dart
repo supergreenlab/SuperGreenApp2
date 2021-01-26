@@ -60,7 +60,14 @@ class SocialBarPage extends StatelessWidget {
           renderButton(context, 'button_comment', () => onComment(context)),
           renderButton(context, 'button_share', () => onShare(context)),
           Expanded(child: Container()),
-          renderButton(context, 'button_bookmark', () => onBookmark(context),
+          renderButton(
+              context,
+              state.socialState is FeedEntrySocialStateLoaded &&
+                      (state.socialState as FeedEntrySocialStateLoaded)
+                          .isBookmarked
+                  ? 'button_bookmark_on'
+                  : 'button_bookmark',
+              () => onBookmark(context),
               last: true),
         ],
       ),
@@ -94,5 +101,8 @@ class SocialBarPage extends StatelessWidget {
     await ShareExtend.share(state.shareLink, 'text');
   }
 
-  void onBookmark(BuildContext context) {}
+  void onBookmark(BuildContext context) {
+    BlocProvider.of<FeedBloc>(context)
+        .add(FeedBlocEventBookmarkFeedEntry(state));
+  }
 }

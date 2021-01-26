@@ -23,6 +23,7 @@ import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/bookmarks.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/likes.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -385,6 +386,11 @@ class FeedsAPI {
     Map<String, dynamic> obj = comment.toMap();
     String id = await BackendAPI().postPut('/comment', obj);
     return comment.copyWith(id: id);
+  }
+
+  Future bookmarkFeedEntry(String feedEntryID) async {
+    Map<String, dynamic> obj = Bookmark(feedEntryID: feedEntryID).toMap();
+    await BackendAPI().postPut('/bookmark', obj);
   }
 
   Future likeComment(Comment comment) async {

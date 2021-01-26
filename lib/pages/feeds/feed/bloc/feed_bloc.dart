@@ -155,6 +155,15 @@ class FeedBlocEventLikeFeedEntry extends FeedBlocEvent {
   List<Object> get props => [entry];
 }
 
+class FeedBlocEventBookmarkFeedEntry extends FeedBlocEvent {
+  final FeedEntryState entry;
+
+  FeedBlocEventBookmarkFeedEntry(this.entry);
+
+  @override
+  List<Object> get props => [entry];
+}
+
 abstract class FeedBlocState extends Equatable {}
 
 class FeedBlocStateInit extends FeedBlocState {
@@ -289,6 +298,8 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       loader.loadSocialState(event.entry);
     } else if (event is FeedBlocEventLikeFeedEntry) {
       delegate.likeFeedEntry(event.entry);
+    } else if (event is FeedBlocEventBookmarkFeedEntry) {
+      delegate.bookmarkFeedEntry(event.entry);
     }
   }
 
@@ -355,5 +366,6 @@ abstract class FeedBlocDelegate {
   Future deleteFeedEntry(dynamic feedEntryID);
   Future markAsRead(dynamic feedEntryID);
   Future likeFeedEntry(FeedEntryState entry);
+  Future bookmarkFeedEntry(FeedEntryState entry);
   Future<void> close();
 }

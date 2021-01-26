@@ -130,6 +130,16 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   }
 
   @override
+  Future bookmarkFeedEntry(FeedEntryState entry) async {
+    FeedEntry feedEntry =
+        await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+
+    await BackendAPI().feedsAPI.bookmarkFeedEntry(feedEntry.serverID);
+    FeedEntryLoader loader = this.loaderForType(entry.type);
+    loader.loadSocialState(entry);
+  }
+
+  @override
   Future markAsRead(dynamic feedEntryID) async {
     await FeedEntryHelper.updateFeedEntry(
         FeedEntriesCompanion(id: Value(feedEntryID), isNew: Value(false)));
