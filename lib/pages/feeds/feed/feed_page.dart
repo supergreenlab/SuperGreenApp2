@@ -35,15 +35,18 @@ class FeedPage extends StatefulWidget {
   final double appBarHeight;
   final bool bottomPadding;
   final List<Widget> actions;
+  final Widget bottom;
 
-  const FeedPage(
-      {@required this.title,
-      this.pinned = false,
-      @required this.color,
-      this.appBar,
-      @required this.appBarHeight,
-      this.bottomPadding = false,
-      this.actions});
+  const FeedPage({
+    @required this.title,
+    this.pinned = false,
+    @required this.color,
+    this.appBar,
+    @required this.appBarHeight,
+    this.bottomPadding = false,
+    this.actions,
+    this.bottom,
+  });
 
   @override
   _FeedPageState createState() => _FeedPageState();
@@ -110,7 +113,15 @@ class _FeedPageState extends State<FeedPage> {
       child: BlocBuilder<FeedBloc, FeedBlocState>(
         cubit: BlocProvider.of<FeedBloc>(context),
         builder: (BuildContext context, FeedBlocState state) {
-          return _renderCards(context);
+          if (widget.bottom == null) {
+            return _renderCards(context);
+          }
+          return Column(
+            children: [
+              Expanded(child: _renderCards(context)),
+              widget.bottom,
+            ],
+          );
         },
       ),
     );

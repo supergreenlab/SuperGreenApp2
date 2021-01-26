@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
@@ -49,45 +50,80 @@ class PublicPlantPage extends StatelessWidget {
       _renderPlantInfos,
       _renderProducts,
     ];
+    Widget bottom;
+    if (state.feedEntryID != null) {
+      bottom = InkWell(
+        onTap: () {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToPublicPlant(state.plantID));
+        },
+        child: Container(
+          color: Color(0xff3bb30b),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Viewing single log entry',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'View complete diary',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.underline,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return BlocProvider(
       create: (context) => FeedBloc(
           RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID)),
       child: FeedPage(
-        title: state.plantName ?? '',
-        pinned: true,
-        color: Colors.indigo,
-        appBarHeight: 380,
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.share,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              await ShareExtend.share(
-                  "https://supergreenlab.com/public/plant?id=${state.plantID}",
-                  'text');
-            },
-          ),
-        ],
-        appBar: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 45.0),
-            child: Swiper(
-              itemCount: tabs.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return tabs[index](context, state);
-              },
-              pagination: SwiperPagination(
-                builder: new DotSwiperPaginationBuilder(
-                    color: Colors.white, activeColor: Color(0xff3bb30b)),
+          title: state.plantName ?? '',
+          pinned: true,
+          color: Colors.indigo,
+          appBarHeight: 380,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.share,
+                color: Colors.white,
               ),
-              loop: false,
+              onPressed: () async {
+                await ShareExtend.share(
+                    "https://supergreenlab.com/public/plant?id=${state.plantID}",
+                    'text');
+              },
+            ),
+          ],
+          appBar: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 45.0),
+              child: Swiper(
+                itemCount: tabs.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return tabs[index](context, state);
+                },
+                pagination: SwiperPagination(
+                  builder: new DotSwiperPaginationBuilder(
+                      color: Colors.white, activeColor: Color(0xff3bb30b)),
+                ),
+                loop: false,
+              ),
             ),
           ),
-        ),
-      ),
+          bottom: bottom),
     );
   }
 

@@ -48,33 +48,33 @@ class CommentsCardPage extends StatelessWidget {
   Widget renderLoaded(
       BuildContext context, FeedEntrySocialStateLoaded socialState) {
     List<Widget> content = [];
-    if (socialState.comments?.length == 2) {
+    if (socialState.nComments >= 2) {
       content.add(
           SmallCommentView(feedEntry: state, comment: socialState.comments[0]));
-      content.add(InkWell(
-          onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToCommentFormEvent(false, state));
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              'View all ${socialState.nComments} comments',
-              style: TextStyle(color: Color(0xff898989)),
-            ),
-          )));
+      content.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Text(
+          'View all ${socialState.nComments} comments',
+          style: TextStyle(color: Color(0xff898989)),
+        ),
+      ));
       content.add(
           SmallCommentView(feedEntry: state, comment: socialState.comments[1]));
     } else if (socialState.comments?.length == 1) {
       content.add(
           SmallCommentView(feedEntry: state, comment: socialState.comments[0]));
     }
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: content,
-      ),
-    );
+    return InkWell(
+        onTap: () {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToCommentFormEvent(false, state));
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: content,
+          ),
+        ));
   }
 }

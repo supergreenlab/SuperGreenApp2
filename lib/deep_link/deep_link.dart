@@ -63,7 +63,7 @@ class DeepLinkBloc extends Bloc<DeepLinkBlocEvent, DeepLinkBlocState> {
       if (event.uri.path == '/public/plant') {
         yield DeepLinkBlocStateMainNavigation(MainNavigateToPublicPlant(
             event.uri.queryParameters['id'],
-            feedEntryID: event.uri.queryParameters['eid']));
+            feedEntryID: event.uri.queryParameters['feid']));
       }
     }
   }

@@ -22,7 +22,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
@@ -43,16 +42,10 @@ class SmallCommentView extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: InkWell(
-            onTap: () {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToCommentFormEvent(false, feedEntry));
-            },
-            child: MarkdownBody(
-              data: '**${comment.from}** ${comment.text}',
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 16)),
-            ),
+          child: MarkdownBody(
+            data: '**${comment.from}** ${comment.text}',
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
         InkWell(
