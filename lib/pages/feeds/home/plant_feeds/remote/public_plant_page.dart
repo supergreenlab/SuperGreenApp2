@@ -77,6 +77,7 @@ class PublicPlantPage extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold,
                   ),
                 )
               ],
