@@ -16,9 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:hive/hive.dart' as hive;
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -72,6 +76,15 @@ class CommentsFormBlocEventLoadComments extends CommentsFormBlocEvent {
   List<Object> get props => [offset];
 }
 
+class CommentsFormBlocEventUser extends CommentsFormBlocEvent {
+  final User user;
+
+  CommentsFormBlocEventUser(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
 abstract class CommentsFormBlocState extends Equatable {}
 
 class CommentsFormBlocStateInit extends CommentsFormBlocState {
@@ -120,9 +133,20 @@ class CommentsFormBlocStateAddComment extends CommentsFormBlocState {
   List<Object> get props => [comment];
 }
 
+class CommentsFormBlocStateUser extends CommentsFormBlocState {
+  final User user;
+
+  CommentsFormBlocStateUser(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
+
 class CommentsFormBloc
     extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
+
+  StreamSubscription<hive.BoxEvent> appDataStream;
   User user;
   String feedEntryID;
 
@@ -134,7 +158,11 @@ class CommentsFormBloc
   Stream<CommentsFormBlocState> mapEventToState(
       CommentsFormBlocEvent event) async* {
     if (event is CommentsFormBlocEventInit) {
-      this.user = await BackendAPI().usersAPI.me();
+      if (AppDB().getAppData().jwt != null) {
+        this.user = await BackendAPI().usersAPI.me();
+      } else {
+        appDataStream = AppDB().watchAppData().listen(appDataUpdated);
+      }
       if (args.feedEntry.remoteState) {
         feedEntryID = args.feedEntry.feedEntryID;
       } else {
@@ -169,6 +197,8 @@ class CommentsFormBloc
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventLoadComments) {
       yield* fetchComments(offset: event.offset);
+    } else if (event is CommentsFormBlocEventUser) {
+      yield CommentsFormBlocStateUser(event.user);
     }
   }
 
@@ -186,5 +216,18 @@ class CommentsFormBloc
         n,
         this.user,
         comments.where((c) => c.replyTo == null).length != limit);
+  }
+
+  void appDataUpdated(hive.BoxEvent boxEvent) async {
+    if ((boxEvent.value as AppData).jwt != null) {
+      this.user = await BackendAPI().usersAPI.me();
+    }
+    add(CommentsFormBlocEventUser(this.user));
+  }
+
+  @override
+  Future<void> close() async {
+    await appDataStream.cancel();
+    await super.close();
   }
 }

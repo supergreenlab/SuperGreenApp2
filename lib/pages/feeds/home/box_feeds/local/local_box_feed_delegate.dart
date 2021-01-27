@@ -51,8 +51,8 @@ class LocalBoxFeedBlocDelegate extends LocalFeedBlocDelegate {
   void loadFeed() async {
     box = await RelDB.get().plantsDAO.getBoxWithFeed(feedID);
     AppData appData = AppDB().getAppData();
-    feedState =
-        BoxFeedState(appData.storeGeo, BoxSettings.fromJSON(box.settings));
+    feedState = BoxFeedState(appData.jwt != null, appData.storeGeo,
+        BoxSettings.fromJSON(box.settings));
     add(FeedBlocEventFeedLoaded(feedState));
 
     boxStream = RelDB.get().plantsDAO.watchBox(box.id).listen(boxUpdated);
@@ -69,6 +69,7 @@ class LocalBoxFeedBlocDelegate extends LocalFeedBlocDelegate {
 
   void appDataUpdated(hive.BoxEvent boxEvent) {
     feedState = feedState.copyWith(
+      loggedIn: (boxEvent.value as AppData).jwt != null,
       storeGeo: (boxEvent.value as AppData).storeGeo,
     );
     add(FeedBlocEventFeedLoaded(feedState));

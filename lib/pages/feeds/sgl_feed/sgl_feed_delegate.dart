@@ -40,7 +40,7 @@ class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
   @override
   void loadFeed() async {
     AppData appData = AppDB().getAppData();
-    feedState = FeedState(appData.storeGeo);
+    feedState = FeedState(appData.jwt != null, appData.storeGeo);
     add(FeedBlocEventFeedLoaded(feedState));
 
     appDataStream =
@@ -51,6 +51,7 @@ class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
 
   void appDataUpdated(hive.BoxEvent boxEvent) {
     add(FeedBlocEventFeedLoaded(feedState.copyWith(
+      loggedIn: (boxEvent.value as AppData).jwt != null,
       storeGeo: (boxEvent.value as AppData).storeGeo,
     )));
   }

@@ -118,12 +118,17 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear));
           }
+        } else if (state is CommentsFormBlocStateUser) {
+          setState(() {
+            this.user = state.user;
+          });
         }
       },
       child: BlocBuilder<CommentsFormBloc, CommentsFormBlocState>(
           buildWhen: (CommentsFormBlocState s1, CommentsFormBlocState s2) {
         return !(s2 is CommentsFormBlocStateUpdateComment) &&
-            !(s2 is CommentsFormBlocStateAddComment);
+            !(s2 is CommentsFormBlocStateAddComment) &&
+            !(s2 is CommentsFormBlocStateUser);
       }, builder: (BuildContext context, CommentsFormBlocState state) {
         List<Widget> body;
         if (state is CommentsFormBlocStateInit) {
@@ -187,6 +192,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: CommentView(
+                        loggedIn: this.user != null,
                         comment: comments[index],
                         first: index == 0,
                         replyTo: () {
@@ -214,6 +220,25 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   }
 
   Widget renderInputContainer(BuildContext context) {
+    if (user == null) {
+      return InkWell(
+        onTap: () {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToSettingsAuth());
+        },
+        child: Center(
+            child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text('Please login to add a comment',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline)),
+        )),
+      );
+    }
+
     Widget content;
 
     if (replyTo != null) {

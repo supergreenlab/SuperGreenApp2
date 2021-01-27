@@ -100,7 +100,8 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   void loadFeed() {
-    add(FeedBlocEventFeedLoaded(FeedState(AppDB().getAppData().storeGeo)));
+    add(FeedBlocEventFeedLoaded(FeedState(
+        AppDB().getAppData().jwt != null, AppDB().getAppData().storeGeo)));
   }
 
   @override

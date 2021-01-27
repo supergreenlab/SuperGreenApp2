@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
@@ -32,9 +33,15 @@ class CommentView extends StatelessWidget {
   final Comment comment;
   final bool first;
   final Function replyTo;
+  final bool loggedIn;
 
-  const CommentView({Key key, this.comment, this.first = false, this.replyTo})
-      : super(key: key);
+  const CommentView({
+    Key key,
+    this.comment,
+    this.first = false,
+    this.replyTo,
+    this.loggedIn,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +143,10 @@ class CommentView extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
+                          if (!loggedIn) {
+                            createAccountOrLogin(context);
+                            return;
+                          }
                           replyTo();
                         },
                         child: Text(
@@ -158,6 +169,10 @@ class CommentView extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+              if (!loggedIn) {
+                createAccountOrLogin(context);
+                return;
+              }
               BlocProvider.of<CommentsFormBloc>(context)
                   .add(CommentsFormBlocEventLike(comment));
             },
@@ -189,5 +204,35 @@ class CommentView extends StatelessWidget {
       format = '$dayDiff day${dayDiff > 1 ? 's' : ''}';
     }
     return format;
+  }
+
+  void createAccountOrLogin(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login required'),
+            content: Text('Please log in or create an account.'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('CANCEL'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('LOGIN / CREATE ACCOUNT'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
+    }
   }
 }

@@ -19,17 +19,20 @@
 import 'package:equatable/equatable.dart';
 
 class FeedState extends Equatable {
+  final bool loggedIn;
   final String storeGeo;
 
-  FeedState(this.storeGeo);
+  FeedState(this.loggedIn, this.storeGeo);
 
   @override
   List<Object> get props => [storeGeo];
 
   FeedState copyWith({
+    bool loggedIn,
     String storeGeo,
   }) {
     return FeedState(
+      loggedIn ?? this.loggedIn,
       storeGeo ?? this.storeGeo,
     );
   }

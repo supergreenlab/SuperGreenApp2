@@ -16,16 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
+import 'package:hive/hive.dart' as hive;
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_feed_state.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
+  FeedState feedState;
+  StreamSubscription<hive.BoxEvent> appDataStream;
+
   final String plantID;
   final String feedEntryID;
   RemotePlantFeedBlocDelegate(this.plantID, this.feedEntryID);
@@ -56,10 +64,28 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   void loadFeed() async {
     Map<String, dynamic> plant =
         await BackendAPI().feedsAPI.publicPlant(plantID);
-    add(FeedBlocEventFeedLoaded(PlantFeedState(
+    feedState = PlantFeedState(
+      AppDB().getAppData().jwt != null,
       AppDB().getAppData().storeGeo,
       PlantSettings.fromJSON(plant['settings']),
       BoxSettings.fromJSON(plant['boxSettings']),
-    )));
+    );
+    add(FeedBlocEventFeedLoaded(feedState));
+
+    appDataStream = AppDB().watchAppData().listen(appDataUpdated);
+  }
+
+  void appDataUpdated(hive.BoxEvent boxEvent) {
+    feedState = feedState.copyWith(
+      loggedIn: (boxEvent.value as AppData).jwt != null,
+      storeGeo: (boxEvent.value as AppData).storeGeo,
+    );
+    add(FeedBlocEventFeedLoaded(feedState));
+  }
+
+  @override
+  Future<void> close() async {
+    await appDataStream.cancel();
+    await super.close();
   }
 }

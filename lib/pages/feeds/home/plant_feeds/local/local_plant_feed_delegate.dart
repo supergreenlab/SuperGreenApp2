@@ -59,6 +59,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
     box = await RelDB.get().plantsDAO.getBox(plant.box);
     AppData appData = AppDB().getAppData();
     feedState = PlantFeedState(
+        appData.jwt != null,
         appData.storeGeo,
         PlantSettings.fromJSON(plant.settings),
         BoxSettings.fromJSON(box.settings));
@@ -107,6 +108,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
 
   void appDataUpdated(hive.BoxEvent boxEvent) {
     feedState = feedState.copyWith(
+      loggedIn: (boxEvent.value as AppData).jwt != null,
       storeGeo: (boxEvent.value as AppData).storeGeo,
     );
     add(FeedBlocEventFeedLoaded(feedState));

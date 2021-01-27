@@ -36,12 +36,6 @@ class SocialBarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (state is FeedEntrySocialStateNotLoaded) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Text('Loading..'),
-      );
-    }
     return renderLoaded(context);
   }
 
@@ -76,12 +70,18 @@ class SocialBarPage extends StatelessWidget {
 
   Widget renderButton(BuildContext context, String icon, Function onClick,
       {bool last = false}) {
+    if (!feedState.loggedIn) {
+      onClick = () => createAccountOrLogin(context);
+    } else {
+      onClick =
+          state.socialState is FeedEntrySocialStateLoaded ? onClick : null;
+    }
     return InkWell(
-      onTap: state.synced ? onClick : null,
+      onTap: onClick,
       child: Padding(
         padding: EdgeInsets.only(right: last ? 0 : 8),
         child: Opacity(
-            opacity: !state.synced ? 0.4 : 1,
+            opacity: onClick == null ? 0.4 : 1,
             child: Image.asset('assets/feed_card/$icon.png',
                 width: 30, height: 30)),
       ),
@@ -104,5 +104,35 @@ class SocialBarPage extends StatelessWidget {
   void onBookmark(BuildContext context) {
     BlocProvider.of<FeedBloc>(context)
         .add(FeedBlocEventBookmarkFeedEntry(state));
+  }
+
+  void createAccountOrLogin(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login required'),
+            content: Text('Please log in or create an account.'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('CANCEL'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('LOGIN / CREATE ACCOUNT'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
+    }
   }
 }

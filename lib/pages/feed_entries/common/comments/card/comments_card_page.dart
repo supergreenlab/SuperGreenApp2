@@ -35,10 +35,7 @@ class CommentsCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.socialState is FeedEntrySocialStateNotLoaded) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Text('Loading..'),
-      );
+      return Container();
     } else if (state.synced == false) {
       return Container();
     }
@@ -48,9 +45,12 @@ class CommentsCardPage extends StatelessWidget {
   Widget renderLoaded(
       BuildContext context, FeedEntrySocialStateLoaded socialState) {
     List<Widget> content = [];
-    if (socialState.nComments >= 2) {
-      content.add(
-          SmallCommentView(feedEntry: state, comment: socialState.comments[0]));
+    if ((socialState.comments?.length ?? 0) == 2) {
+      content.add(SmallCommentView(
+        feedEntry: state,
+        comment: socialState.comments[0],
+        loggedIn: feedState.loggedIn,
+      ));
       content.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Text(
@@ -58,11 +58,15 @@ class CommentsCardPage extends StatelessWidget {
           style: TextStyle(color: Color(0xff898989)),
         ),
       ));
-      content.add(
-          SmallCommentView(feedEntry: state, comment: socialState.comments[1]));
-    } else if (socialState.comments?.length == 1) {
-      content.add(
-          SmallCommentView(feedEntry: state, comment: socialState.comments[0]));
+      content.add(SmallCommentView(
+          feedEntry: state,
+          comment: socialState.comments[1],
+          loggedIn: feedState.loggedIn));
+    } else if ((socialState.comments?.length ?? 0) == 1) {
+      content.add(SmallCommentView(
+          feedEntry: state,
+          comment: socialState.comments[0],
+          loggedIn: feedState.loggedIn));
     }
     return InkWell(
         onTap: () {

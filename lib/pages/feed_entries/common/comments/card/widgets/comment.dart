@@ -22,15 +22,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 class SmallCommentView extends StatelessWidget {
   final FeedEntryStateLoaded feedEntry;
   final Comment comment;
+  final bool loggedIn;
 
   const SmallCommentView(
-      {Key key, @required this.feedEntry, @required this.comment})
+      {Key key,
+      @required this.feedEntry,
+      @required this.comment,
+      @required this.loggedIn})
       : super(key: key);
 
   @override
@@ -50,6 +55,10 @@ class SmallCommentView extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
+            if (!loggedIn) {
+              createAccountOrLogin(context);
+              return;
+            }
             BlocProvider.of<FeedBloc>(context)
                 .add(FeedBlocEventLikeComment(comment, feedEntry));
           },
@@ -64,5 +73,35 @@ class SmallCommentView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void createAccountOrLogin(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login required'),
+            content: Text('Please log in or create an account.'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('CANCEL'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('LOGIN / CREATE ACCOUNT'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
+    }
   }
 }
