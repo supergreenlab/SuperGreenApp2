@@ -59,7 +59,8 @@ class UserAvatar extends StatelessWidget {
           border: Border.all(color: Color(0xffbdbdbd)),
           borderRadius: BorderRadius.all(Radius.circular(size / 2))),
       child: InkWell(
-        child: image,
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(size / 2), child: image),
       ),
     );
   }
