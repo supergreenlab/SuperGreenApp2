@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_st
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
-class CommentsCardPage extends StatelessWidget {
+class CommentsCardPage extends StatefulWidget {
   final FeedEntryState state;
   final FeedState feedState;
 
@@ -33,13 +34,23 @@ class CommentsCardPage extends StatelessWidget {
       : super(key: key);
 
   @override
+  _CommentsCardPageState createState() => _CommentsCardPageState();
+}
+
+class _CommentsCardPageState extends State<CommentsCardPage>
+    with TickerProviderStateMixin {
+  @override
   Widget build(BuildContext context) {
-    if (state.socialState is FeedEntrySocialStateNotLoaded) {
+    if (widget.state.socialState is FeedEntrySocialStateNotLoaded) {
       return Container();
-    } else if (state.synced == false) {
+    } else if (widget.state.synced == false) {
       return Container();
     }
-    return renderLoaded(context, state.socialState);
+    return AnimatedSizeAndFade(
+        vsync: this,
+        fadeDuration: Duration(milliseconds: 200),
+        sizeDuration: Duration(milliseconds: 200),
+        child: renderLoaded(context, widget.state.socialState));
   }
 
   Widget renderLoaded(
@@ -47,9 +58,9 @@ class CommentsCardPage extends StatelessWidget {
     List<Widget> content = [];
     if ((socialState.comments?.length ?? 0) == 2) {
       content.add(SmallCommentView(
-        feedEntry: state,
+        feedEntry: widget.state,
         comment: socialState.comments[0],
-        loggedIn: feedState.loggedIn,
+        loggedIn: widget.feedState.loggedIn,
       ));
       content.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -59,19 +70,19 @@ class CommentsCardPage extends StatelessWidget {
         ),
       ));
       content.add(SmallCommentView(
-          feedEntry: state,
+          feedEntry: widget.state,
           comment: socialState.comments[1],
-          loggedIn: feedState.loggedIn));
+          loggedIn: widget.feedState.loggedIn));
     } else if ((socialState.comments?.length ?? 0) == 1) {
       content.add(SmallCommentView(
-          feedEntry: state,
+          feedEntry: widget.state,
           comment: socialState.comments[0],
-          loggedIn: feedState.loggedIn));
+          loggedIn: widget.feedState.loggedIn));
     }
     return InkWell(
         onTap: () {
           BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToCommentFormEvent(false, state));
+              .add(MainNavigateToCommentFormEvent(false, widget.state));
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),
