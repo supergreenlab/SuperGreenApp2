@@ -190,10 +190,10 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                       return;
                     }
                     if (error != true) {
-                      await Fluttertoast.showToast(context,
+                      await Fluttertoast.showToast(
                           msg: 'Wifi config changed successfully');
                     } else {
-                      await Fluttertoast.showToast(context,
+                      await Fluttertoast.showToast(
                           msg: 'Wifi config change failed');
                     }
                   }));

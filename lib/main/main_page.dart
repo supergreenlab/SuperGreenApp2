@@ -24,7 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/local_notification/local_notification.dart';
+import 'package:super_green_app/notifications/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_bloc.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_page.dart';

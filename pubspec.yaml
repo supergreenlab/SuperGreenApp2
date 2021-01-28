@@ -67,6 +67,8 @@ dependencies:
   matrix_gesture_detector:
     path: ./vendor/matrix_gesture_detector
   connectivity:
+  firebase_messaging: ^8.0.0-dev.14
+  firebase_core: ^0.7.0
   flutter_local_notifications:
   exif:
   media_picker_builder:

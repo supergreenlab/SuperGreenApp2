@@ -22,7 +22,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/local_notification/local_notification.dart';
+import 'package:super_green_app/notifications/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/actions/towelie_action_appinit.dart';
@@ -139,7 +139,7 @@ class TowelieBlocEventButtonPressed extends TowelieBlocEvent {
   final dynamic feed;
   final dynamic feedEntry;
 
-  TowelieBlocEventButtonPressed(this.params, { this.feed, this.feedEntry });
+  TowelieBlocEventButtonPressed(this.params, {this.feed, this.feedEntry});
 
   @override
   List<Object> get props => [rand, params, feed, feedEntry];
@@ -188,7 +188,7 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final List<Map<String, dynamic>> buttons;
 
   TowelieBlocStateHelper(this.settings, this.text,
-      {this.hasNext=false, this.buttons});
+      {this.hasNext = false, this.buttons});
 
   @override
   List<Object> get props => [rand, settings, text, hasNext, buttons];
@@ -208,10 +208,8 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
     TowelieActionAppInit(),
     TowelieActionPlantCreated(),
-
     TowelieActionHelpCreatePlant(),
     TowelieActionHelpCreateLab(),
-
     TowelieActionHelpSelectDevice(),
     TowelieActionHelpAddDevice(),
     TowelieActionHelpAddExistingDevice(),
@@ -219,14 +217,11 @@ class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
     TowelieActionHelpSelectPlantDeviceBox(),
     TowelieActionHelpTestDevice(),
     TowelieActionHelpWifi(),
-
     TowelieActionHelpFormMeasure(),
     TowelieActionHelpFormTakePic(),
-
     TowelieActionHelpMeasureReminder(),
     TowelieActionHelpWaterReminder(),
     TowelieActionHelpMeasureAfterStretch(),
-
     TowelieActionHelpNotification(),
   ];
 
