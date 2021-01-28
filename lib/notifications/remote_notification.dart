@@ -20,6 +20,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/main.dart';
 
 abstract class RemoteNotificationBlocEvent extends Equatable {}
@@ -44,28 +47,17 @@ class RemoteNotificationBloc
   Stream<RemoteNotificationBlocState> mapEventToState(
       RemoteNotificationBlocEvent event) async* {
     if (event is RemoteNotificationBlocEventInit) {
-      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      NotificationSettings settings =
+          await FirebaseMessaging.instance.getNotificationSettings();
 
-      NotificationSettings settings = await messaging.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
-
-      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        print('User granted permission');
-        String token = await FirebaseMessaging.instance.getToken();
+      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+          settings.authorizationStatus == AuthorizationStatus.provisional) {
+        try {
+          await sendToken();
+        } catch (e) {
+          Logger.log(e);
+        }
         FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
-        saveToken(token);
-      } else if (settings.authorizationStatus ==
-          AuthorizationStatus.provisional) {
-        print('User granted provisional permission');
-      } else {
-        print('User declined or has not accepted permission');
       }
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -81,8 +73,45 @@ class RemoteNotificationBloc
     }
   }
 
-  Future saveToken(String token) async {
+  static Future saveToken(String token) async {
     print(token);
+    if (AppDB().getAppData().notificationToken != token) {
+      AppDB().getAppData().notificationToken = token;
+      AppDB().getAppData().notificationTokenSent = false;
+      sendToken();
+    }
+  }
+
+  static Future sendToken() async {
+    if (AppDB().getAppData().jwt != null &&
+        AppDB().getAppData().notificationTokenSent == false) {
+      await BackendAPI()
+          .feedsAPI
+          .updateNotificationToken(AppDB().getAppData().notificationToken);
+      AppDB().getAppData().notificationTokenSent = true;
+    }
+  }
+
+  static Future<bool> requestPermissions() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+        settings.authorizationStatus == AuthorizationStatus.provisional) {
+      String token = await FirebaseMessaging.instance.getToken();
+      FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
+      saveToken(token);
+      return true;
+    }
+    return false;
   }
 
   void androidForegroundNotification(RemoteMessage message) {

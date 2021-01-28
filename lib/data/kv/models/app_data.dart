@@ -36,4 +36,8 @@ class AppData {
   String storeGeo;
   @HiveField(6)
   bool syncOverGSM = false;
+  @HiveField(7)
+  String notificationToken;
+  @HiveField(8)
+  bool notificationTokenSent;
 }

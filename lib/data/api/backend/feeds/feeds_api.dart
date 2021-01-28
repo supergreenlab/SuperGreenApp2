@@ -39,6 +39,12 @@ class FeedsAPI {
     return BackendAPI().postPut('/userend', {});
   }
 
+  Future updateNotificationToken(String token) async {
+    return BackendAPI().postPut('/userend', {
+      'notificationToken': token,
+    });
+  }
+
   Future sendDeletes(List<Delete> deletes) async {
     Response resp =
         await BackendAPI().apiClient.post('${BackendAPI().serverHost}/deletes',
