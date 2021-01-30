@@ -55,7 +55,7 @@ abstract class NotificationData extends Equatable {
       case NotificationDataType.COMMENT:
         return NotificationDataComment.fromMap(data);
       case NotificationDataType.REMINDER:
-        return NotificationDataComment.fromMap(data);
+        return NotificationDataReminder.fromMap(data);
     }
     throw 'Unknown type ${data['type']}';
   }
@@ -109,6 +109,22 @@ class NotificationDataReminder extends NotificationData {
             body: body);
   NotificationDataReminder.fromMap(Map<String, dynamic> data)
       : super(data: data);
+
+  int get plantID => data['plantID'];
+}
+
+class NotificationDataAlert extends NotificationData {
+  NotificationDataAlert(
+      {int id, String title, String body, @required int plantID})
+      : super(
+            id: id,
+            data: {
+              'plantID': plantID,
+            },
+            type: NotificationDataType.REMINDER,
+            title: title,
+            body: body);
+  NotificationDataAlert.fromMap(Map<String, dynamic> data) : super(data: data);
 
   int get plantID => data['plantID'];
 }

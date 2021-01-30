@@ -146,6 +146,14 @@ class NotificationsBloc
         AppDB().setLastPlant(notificationData.plantID);
         yield NotificationsBlocStateMainNavigation(
             MainNavigateToHomeEvent(plant: plant));
+      } else if (notificationData is NotificationDataAlert) {
+        yield NotificationsBlocStateNotification(event.notificationData);
+        Plant plant =
+            await RelDB.get().plantsDAO.getPlant(notificationData.plantID);
+        if (plant == null) return;
+        AppDB().setLastPlant(notificationData.plantID);
+        yield NotificationsBlocStateMainNavigation(
+            MainNavigateToHomeEvent(plant: plant));
       }
     } else if (event is NotificationsBlocEventReminder) {
       await localNotifications.reminderNotification(event.id,

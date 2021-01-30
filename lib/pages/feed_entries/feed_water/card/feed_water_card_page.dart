@@ -66,7 +66,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
               showSyncStatus: !state.remoteState,
               showControls: !state.remoteState),
           Container(
-            height: 100,
+            height: 200,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),
