@@ -44,6 +44,12 @@ class RemoteNotifications {
       }
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
     }
+    RemoteMessage initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      Logger.log('initialMessage is not null');
+      notificationSelected(initialMessage);
+    }
     FirebaseMessaging.onMessage.listen(notificationReceived);
     FirebaseMessaging.onMessageOpenedApp.listen(notificationSelected);
   }

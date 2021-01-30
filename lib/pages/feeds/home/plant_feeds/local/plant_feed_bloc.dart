@@ -115,14 +115,14 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
       boxStream =
           RelDB.get().plantsDAO.watchBox(plant.box).listen(_onBoxUpdated);
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses,
-          feedEntry: args.feedEntry);
+          feedEntry: args?.feedEntry);
     } else if (event is PlantFeedBlocEventUpdated) {
       if (plant == null) {
         yield PlantFeedBlocStatePlantRemoved();
         return;
       }
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses,
-          feedEntry: args.feedEntry);
+          feedEntry: args?.feedEntry);
     }
   }
 
