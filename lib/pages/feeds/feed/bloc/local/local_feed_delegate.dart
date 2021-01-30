@@ -107,14 +107,14 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
-    List<FeedEntry> fe;
     if (feedEntryID != null) {
       FeedEntry feedEntry =
           await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
-      fe = [feedEntry];
-    } else {
-      fe = await RelDB.get().feedsDAO.getFeedEntries(feedID, n, offset);
+      LocalFeedEntryLoader loader = loaderForType(feedEntry.type);
+      return [await loader.load(loader.stateForFeedEntry(feedEntry))];
     }
+    List<FeedEntry> fe =
+        await RelDB.get().feedsDAO.getFeedEntries(feedID, n, offset);
     return fe
         .map<FeedEntryState>(
             (fe) => loaderForType(fe.type).stateForFeedEntry(fe))

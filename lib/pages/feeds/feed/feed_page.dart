@@ -36,6 +36,7 @@ class FeedPage extends StatefulWidget {
   final bool bottomPadding;
   final List<Widget> actions;
   final Widget bottom;
+  final bool single;
 
   const FeedPage({
     @required this.title,
@@ -46,6 +47,7 @@ class FeedPage extends StatefulWidget {
     this.bottomPadding = false,
     this.actions,
     this.bottom,
+    this.single,
   });
 
   @override
@@ -84,18 +86,14 @@ class _FeedPageState extends State<FeedPage> {
             loaded = true;
             eof = state.eof;
           });
+          if (widget.single == true) {
+            scrollToTop(height: 0);
+          }
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
           listKey.currentState
               .insertItem(state.index, duration: Duration(milliseconds: 500));
-          if (scrollController.offset == 0) {
-            // this is to prevent a bug with animateTo not triggering when offset == 0
-            scrollController.jumpTo(30);
-          }
-          Timer(
-              Duration(milliseconds: 100),
-              () => scrollController.animateTo(widget.appBarHeight - 56.0,
-                  duration: Duration(milliseconds: 500), curve: Curves.linear));
+          scrollToTop();
         } else if (state is FeedBlocStateUpdateEntry) {
           setState(() {
             entries[state.index] = state.entry;
@@ -214,5 +212,16 @@ class _FeedPageState extends State<FeedPage> {
         slivers: content,
       ),
     );
+  }
+
+  void scrollToTop({double height = 56.0}) {
+    if (scrollController.offset == 0) {
+      // this is to prevent a bug with animateTo not triggering when offset == 0
+      scrollController.jumpTo(30);
+    }
+    Timer(
+        Duration(milliseconds: 100),
+        () => scrollController.animateTo(widget.appBarHeight - height,
+            duration: Duration(milliseconds: 500), curve: Curves.linear));
   }
 }

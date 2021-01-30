@@ -56,7 +56,6 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) {
-    if (feedEntryID != null) {}
     return super.loadEntries(n, offset);
   }
 

@@ -534,6 +534,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             state.plant.feed,
             feedEntryID: state.feedEntry?.id)),
         child: FeedPage(
+          single: state.feedEntry != null,
           color: Color(0xff063047),
           actions: actions,
           bottomPadding: true,
