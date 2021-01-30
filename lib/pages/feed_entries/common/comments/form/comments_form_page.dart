@@ -142,6 +142,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           ];
         }
         return Scaffold(
+          backgroundColor: Colors.white,
           appBar: SGLAppBar(
             'Comments',
             backgroundColor: Colors.white,
