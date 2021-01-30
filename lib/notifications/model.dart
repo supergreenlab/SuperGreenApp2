@@ -25,6 +25,7 @@ import 'package:flutter/material.dart';
 enum NotificationDataType {
   COMMENT,
   REMINDER,
+  ALERT,
 }
 
 abstract class NotificationData extends Equatable {
@@ -56,6 +57,8 @@ abstract class NotificationData extends Equatable {
         return NotificationDataComment.fromMap(data);
       case NotificationDataType.REMINDER:
         return NotificationDataReminder.fromMap(data);
+      case NotificationDataType.ALERT:
+        return NotificationDataAlert.fromMap(data);
     }
     throw 'Unknown type ${data['type']}';
   }
@@ -115,7 +118,7 @@ class NotificationDataReminder extends NotificationData {
 
 class NotificationDataAlert extends NotificationData {
   NotificationDataAlert(
-      {int id, String title, String body, @required int plantID})
+      {int id, String title, String body, @required String plantID})
       : super(
             id: id,
             data: {
@@ -126,5 +129,5 @@ class NotificationDataAlert extends NotificationData {
             body: body);
   NotificationDataAlert.fromMap(Map<String, dynamic> data) : super(data: data);
 
-  int get plantID => data['plantID'];
+  String get plantID => data['plantID'];
 }

@@ -143,15 +143,16 @@ class NotificationsBloc
         Plant plant =
             await RelDB.get().plantsDAO.getPlant(notificationData.plantID);
         if (plant == null) return;
-        AppDB().setLastPlant(notificationData.plantID);
+        AppDB().setLastPlant(plant.id);
         yield NotificationsBlocStateMainNavigation(
             MainNavigateToHomeEvent(plant: plant));
       } else if (notificationData is NotificationDataAlert) {
         yield NotificationsBlocStateNotification(event.notificationData);
-        Plant plant =
-            await RelDB.get().plantsDAO.getPlant(notificationData.plantID);
+        Plant plant = await RelDB.get()
+            .plantsDAO
+            .getPlantForServerID(notificationData.plantID);
         if (plant == null) return;
-        AppDB().setLastPlant(notificationData.plantID);
+        AppDB().setLastPlant(plant.id);
         yield NotificationsBlocStateMainNavigation(
             MainNavigateToHomeEvent(plant: plant));
       }
