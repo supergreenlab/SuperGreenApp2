@@ -64,12 +64,14 @@ class PlantFeedBlocStateNoPlant extends PlantFeedBlocState {
 class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
   final Box box;
   final Plant plant;
+  final FeedEntry feedEntry;
   final int nTimelapses;
 
-  PlantFeedBlocStateLoaded(this.box, this.plant, this.nTimelapses);
+  PlantFeedBlocStateLoaded(this.box, this.plant, this.nTimelapses,
+      {this.feedEntry});
 
   @override
-  List<Object> get props => [box, plant, nTimelapses];
+  List<Object> get props => [box, plant, nTimelapses, feedEntry];
 }
 
 class PlantFeedBlocStatePlantRemoved extends PlantFeedBlocState {
@@ -112,13 +114,15 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
           RelDB.get().plantsDAO.watchPlant(plant.id).listen(_onPlantUpdated);
       boxStream =
           RelDB.get().plantsDAO.watchBox(plant.box).listen(_onBoxUpdated);
-      yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
+      yield PlantFeedBlocStateLoaded(box, plant, nTimelapses,
+          feedEntry: args.feedEntry);
     } else if (event is PlantFeedBlocEventUpdated) {
       if (plant == null) {
         yield PlantFeedBlocStatePlantRemoved();
         return;
       }
-      yield PlantFeedBlocStateLoaded(box, plant, nTimelapses);
+      yield PlantFeedBlocStateLoaded(box, plant, nTimelapses,
+          feedEntry: args.feedEntry);
     }
   }
 

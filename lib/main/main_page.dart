@@ -24,8 +24,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/notifications/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_bloc.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_page.dart';
 import 'package:super_green_app/pages/add_plant/create_plant/create_plant_bloc.dart';
@@ -170,9 +170,9 @@ class _MainPageState extends State<MainPage> {
           // currentFocus.unfocus();
         }
       },
-      child: BlocListener<LocalNotificationBloc, LocalNotificationBlocState>(
-        listener: (BuildContext context, LocalNotificationBlocState state) {
-          if (state is LocalNotificationBlocStateMainNavigation) {
+      child: BlocListener<NotificationsBloc, NotificationsBlocState>(
+        listener: (BuildContext context, NotificationsBlocState state) {
+          if (state is NotificationsBlocStateMainNavigation) {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(state.mainNavigatorEvent);
           }
@@ -183,7 +183,7 @@ class _MainPageState extends State<MainPage> {
               BlocProvider.of<MainNavigatorBloc>(context)
                   .add(state.mainNavigatorEvent);
             } else if (state is TowelieBlocStateLocalNotification) {
-              BlocProvider.of<LocalNotificationBloc>(context)
+              BlocProvider.of<NotificationsBloc>(context)
                   .add(state.localNotificationBlocEventReminder);
             }
           },

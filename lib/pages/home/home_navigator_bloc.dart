@@ -36,8 +36,9 @@ class HomeNavigateEventInit extends HomeNavigatorEvent {
 
 class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent {
   final Plant plant;
+  final FeedEntry feedEntry;
 
-  HomeNavigateToPlantFeedEvent(this.plant);
+  HomeNavigateToPlantFeedEvent(this.plant, {this.feedEntry});
 
   @override
   List<Object> get props => [plant];
@@ -99,7 +100,8 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
     if (args.plant != null) {
       // TODO find something better
       Timer(Duration(seconds: 1), () {
-        add(HomeNavigateToPlantFeedEvent(args.plant));
+        add(HomeNavigateToPlantFeedEvent(args.plant,
+            feedEntry: args.feedEntry));
       });
     }
   }

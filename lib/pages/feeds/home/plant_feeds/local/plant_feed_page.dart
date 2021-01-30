@@ -43,6 +43,7 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bl
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/sunglasses_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/widgets/plant_dial_button.dart';
+import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -490,10 +491,48 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ),
             ));
       }
+      Widget bottom;
+      if (state.feedEntry != null) {
+        bottom = InkWell(
+          onTap: () {
+            BlocProvider.of<HomeNavigatorBloc>(context)
+                .add(HomeNavigateToPlantFeedEvent(state.plant));
+          },
+          child: Container(
+            color: Color(0xff3bb30b),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Viewing single log entry',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    'View complete diary',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+
       return BlocProvider(
         key: Key('feed'),
-        create: (context) =>
-            FeedBloc(LocalPlantFeedBlocDelegate(state.plant.feed)),
+        create: (context) => FeedBloc(LocalPlantFeedBlocDelegate(
+            state.plant.feed,
+            feedEntryID: state.feedEntry?.id)),
         child: FeedPage(
           color: Color(0xff063047),
           actions: actions,
@@ -501,6 +540,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           title: '',
           appBarHeight: 380,
           appBar: _renderAppBar(context, state),
+          bottom: bottom,
         ),
       );
     } else if (state is PlantFeedBlocStateNoPlant) {

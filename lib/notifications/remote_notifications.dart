@@ -16,64 +16,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/main.dart';
+import 'package:super_green_app/notifications/model.dart';
 
-abstract class RemoteNotificationBlocEvent extends Equatable {}
+class RemoteNotifications {
+  final Function(NotificationData) onNotificationData;
 
-class RemoteNotificationBlocEventInit extends RemoteNotificationBlocEvent {
-  @override
-  List<Object> get props => [];
-}
+  RemoteNotifications(this.onNotificationData);
 
-abstract class RemoteNotificationBlocState extends Equatable {}
-
-class RemoteNotificationBlocStateInit extends RemoteNotificationBlocState {
-  @override
-  List<Object> get props => [];
-}
-
-class RemoteNotificationBloc
-    extends Bloc<RemoteNotificationBlocEvent, RemoteNotificationBlocState> {
-  RemoteNotificationBloc() : super(RemoteNotificationBlocStateInit());
-
-  @override
-  Stream<RemoteNotificationBlocState> mapEventToState(
-      RemoteNotificationBlocEvent event) async* {
-    if (event is RemoteNotificationBlocEventInit) {
-      NotificationSettings settings =
-          await FirebaseMessaging.instance.getNotificationSettings();
-
-      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
-          settings.authorizationStatus == AuthorizationStatus.provisional) {
-        try {
-          await sendToken();
-        } catch (e) {
-          Logger.log(e);
-        }
-        FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
+  Future init() async {
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.getNotificationSettings();
+    if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+        settings.authorizationStatus == AuthorizationStatus.provisional) {
+      Logger.log(await FirebaseMessaging.instance.getToken());
+      try {
+        await sendToken();
+      } catch (e) {
+        Logger.log(e);
       }
-
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        androidForegroundNotification(message);
-        print('Got a message whilst in the foreground!');
-        print('Message data: ${message.data}');
-
-        if (message.notification != null) {
-          print(
-              'Message also contained a notification: ${message.notification}');
-        }
-      });
+      FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
     }
+    FirebaseMessaging.onMessage.listen(notificationReceived);
+    FirebaseMessaging.onMessageOpenedApp.listen(notificationSelected);
   }
 
-  static Future saveToken(String token) async {
+  void notificationReceived(RemoteMessage message) {
+    androidForegroundNotification(message);
+    this._printDebugInfos(message);
+  }
+
+  void notificationSelected(RemoteMessage message) {
+    NotificationData notificationData = NotificationData.fromMap(message.data);
+    onNotificationData(notificationData);
+  }
+
+  Future saveToken(String token) async {
     print(token);
     if (AppDB().getAppData().notificationToken != token) {
       AppDB().getAppData().notificationToken = token;
@@ -82,7 +67,7 @@ class RemoteNotificationBloc
     }
   }
 
-  static Future sendToken() async {
+  Future sendToken() async {
     if (AppDB().getAppData().jwt != null &&
         AppDB().getAppData().notificationTokenSent == false) {
       await BackendAPI()
@@ -92,7 +77,7 @@ class RemoteNotificationBloc
     }
   }
 
-  static Future<bool> requestPermissions() async {
+  Future<bool> requestPermissions() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
@@ -130,7 +115,17 @@ class RemoteNotificationBloc
               channel.description,
               icon: android?.smallIcon,
             ),
-          ));
+          ),
+          payload: JsonEncoder().convert(message.data));
+    }
+  }
+
+  void _printDebugInfos(RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
     }
   }
 }

@@ -22,8 +22,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/notifications/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/towelie/actions/towelie_action_appinit.dart';
 import 'package:super_green_app/towelie/actions/towelie_action_plant_created.dart';
@@ -172,7 +172,7 @@ class TowelieBlocStateHomeNavigation extends TowelieBlocState {
 
 class TowelieBlocStateLocalNotification extends TowelieBlocState {
   final int rand = Random().nextInt(1 << 32);
-  final LocalNotificationBlocEventReminder localNotificationBlocEventReminder;
+  final NotificationsBlocEventReminder localNotificationBlocEventReminder;
 
   TowelieBlocStateLocalNotification(this.localNotificationBlocEventReminder);
 

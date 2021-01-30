@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/notifications/model.dart';
 import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -42,45 +43,49 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
       TowelieBlocEventFeedEntryCreated event) async* {
     Plant plant =
         await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
-    String notificationPayload = 'plant.${plant.id}';
     yield TowelieBlocStateHelper(
         RouteSettings(name: '/feed/plant', arguments: null),
         TowelieActionHelpMeasureReminder.towelieHelperMeasureReminder,
         buttons: [
           TowelieButtonReminder.createButton(
               '1 day',
-              event.feedEntry.id,
-              'Take the next measure',
-              '${plant.name} was measured 1 day ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Take the next measure',
+                  body: '${plant.name} was measured 1 day ago.',
+                  plantID: plant.id),
               60 * 24),
           TowelieButtonReminder.createButton(
               '2 days',
-              event.feedEntry.id,
-              'Take the next measure',
-              '${plant.name} was measured 2 days ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Take the next measure',
+                  body: '${plant.name} was measured 2 day ago.',
+                  plantID: plant.id),
               60 * 24 * 2),
           TowelieButtonReminder.createButton(
               '3 days',
-              event.feedEntry.id,
-              'Take the next measure',
-              '${plant.name} was measured 3 days ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Take the next measure',
+                  body: '${plant.name} was measured 3 day ago.',
+                  plantID: plant.id),
               60 * 24 * 3),
           TowelieButtonReminder.createButton(
               '4 days',
-              event.feedEntry.id,
-              'Take the next measure',
-              notificationPayload,
-              '${plant.name} was measured 4 days ago.',
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Take the next measure',
+                  body: '${plant.name} was measured 4 day ago.',
+                  plantID: plant.id),
               60 * 24 * 4),
           TowelieButtonReminder.createButton(
               '6 days',
-              event.feedEntry.id,
-              'Take the next measure',
-              '${plant.name} was measured 6 days ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Take the next measure',
+                  body: '${plant.name} was measured 6 day ago.',
+                  plantID: plant.id),
               60 * 24 * 6)
         ]);
   }

@@ -26,10 +26,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
-import 'package:super_green_app/notifications/local_notification.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
-import 'package:super_green_app/notifications/remote_notification.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/helpers/misc/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -79,25 +78,19 @@ void main() async {
             BlocProvider<DeviceDaemonBloc>(
                 create: (context) => DeviceDaemonBloc()),
             BlocProvider<SyncerBloc>(create: (context) => SyncerBloc()),
-            BlocProvider<LocalNotificationBloc>(
-                create: (context) => LocalNotificationBloc()),
-            BlocProvider<RemoteNotificationBloc>(
-                create: (context) => RemoteNotificationBloc()),
+            BlocProvider<NotificationsBloc>(
+                create: (context) => NotificationsBloc()),
             BlocProvider<DeepLinkBloc>(create: (context) => DeepLinkBloc()),
           ],
-          child:
-              BlocListener<LocalNotificationBloc, LocalNotificationBlocState>(
-                  listener:
-                      (BuildContext context, LocalNotificationBlocState state) {
-                    if (state is LocalNotificationBlocStateNotification) {
-                      BlocProvider.of<TowelieBloc>(context).add(
-                          TowelieBlocEventTrigger(
-                              TowelieActionHelpNotification.id,
-                              state,
-                              ModalRoute.of(context).settings.name));
-                    }
-                  },
-                  child: MainPage(navigatorKey))));
+          child: BlocListener<NotificationsBloc, NotificationsBlocState>(
+              listener: (BuildContext context, NotificationsBlocState state) {
+                if (state is NotificationsBlocStateNotification) {
+                  BlocProvider.of<TowelieBloc>(context).add(
+                      TowelieBlocEventTrigger(TowelieActionHelpNotification.id,
+                          state, ModalRoute.of(context).settings.name));
+                }
+              },
+              child: MainPage(navigatorKey))));
     },
     (dynamic error, StackTrace stackTrace) {
       Logger.log('$error\n$stackTrace');

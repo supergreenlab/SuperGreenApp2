@@ -40,7 +40,8 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   StreamSubscription<Plant> plantStream;
   StreamSubscription<hive.BoxEvent> appDataStream;
 
-  LocalPlantFeedBlocDelegate(int feedID) : super(feedID);
+  LocalPlantFeedBlocDelegate(int feedID, {int feedEntryID})
+      : super(feedID, feedEntryID: feedEntryID);
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
@@ -51,6 +52,12 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
     return state.copyWith(
         shareLink:
             'https://supergreenlab.com/public/plant?id=${plant.serverID}&feid=${feedEntry.serverID}');
+  }
+
+  @override
+  Future<List<FeedEntryState>> loadEntries(int n, int offset) {
+    if (feedEntryID != null) {}
+    return super.loadEntries(n, offset);
   }
 
   @override

@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/notifications/model.dart';
 import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
 import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
@@ -42,7 +43,6 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
       TowelieBlocEventFeedEntryCreated event) async* {
     Plant plant =
         await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
-    String notificationPayload = 'plant.${plant.id}';
     yield TowelieBlocStateHelper(
         RouteSettings(name: '/feed/plant', arguments: null),
         TowelieActionHelpWaterReminder.towelieHelperWaterReminder,
@@ -56,31 +56,35 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
           //     1),
           TowelieButtonReminder.createButton(
               '2 days',
-              event.feedEntry.id,
-              'Water your plant',
-              '${plant.name} last watered 2 days ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Water your plant',
+                  body: '${plant.name} last watered 2 days ago.',
+                  plantID: plant.id),
               60 * 48),
           TowelieButtonReminder.createButton(
               '3 days',
-              event.feedEntry.id,
-              'Water your plant',
-              '${plant.name} last watered 3 days ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Water your plant',
+                  body: '${plant.name} last watered 3 days ago.',
+                  plantID: plant.id),
               60 * 72),
           TowelieButtonReminder.createButton(
               '4 days',
-              event.feedEntry.id,
-              'Water your plant',
-              '${plant.name} last watered 4 days ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Water your plant',
+                  body: '${plant.name} last watered 4 days ago.',
+                  plantID: plant.id),
               60 * 96),
           TowelieButtonReminder.createButton(
               '6 days',
-              event.feedEntry.id,
-              'Water your plant',
-              '${plant.name} last watered 6 days ago.',
-              notificationPayload,
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Water your plant',
+                  body: '${plant.name} last watered 6 days ago.',
+                  plantID: plant.id),
               60 * 144)
         ]);
   }

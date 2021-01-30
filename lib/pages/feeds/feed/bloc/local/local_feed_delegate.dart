@@ -43,12 +43,13 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   Function(FeedBlocEvent) add;
   final int feedID;
+  final int feedEntryID;
   Map<String, LocalFeedEntryLoader> loaders = {};
   FeedUnknownLoader unknownLoader;
   StreamSubscription<FeedEntryInsertEvent> insertSubscription;
   StreamSubscription<FeedEntryDeleteEvent> deleteSubscription;
 
-  LocalFeedBlocDelegate(this.feedID);
+  LocalFeedBlocDelegate(this.feedID, {this.feedEntryID});
 
   @override
   Future init(Function(FeedBlocEvent) add) async {
@@ -106,8 +107,14 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
-    List<FeedEntry> fe =
-        await RelDB.get().feedsDAO.getFeedEntries(feedID, n, offset);
+    List<FeedEntry> fe;
+    if (feedEntryID != null) {
+      FeedEntry feedEntry =
+          await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
+      fe = [feedEntry];
+    } else {
+      fe = await RelDB.get().feedsDAO.getFeedEntries(feedID, n, offset);
+    }
     return fe
         .map<FeedEntryState>(
             (fe) => loaderForType(fe.type).stateForFeedEntry(fe))
