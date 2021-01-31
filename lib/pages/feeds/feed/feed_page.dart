@@ -39,6 +39,7 @@ class FeedPage extends StatefulWidget {
   final Widget bottom;
   final bool single;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
+  final Function(bool hasCards) onLoaded;
 
   const FeedPage({
     @required this.title,
@@ -52,6 +53,7 @@ class FeedPage extends StatefulWidget {
     this.bottom,
     this.single,
     this.cardActions,
+    this.onLoaded,
   });
 
   @override
@@ -92,6 +94,9 @@ class _FeedPageState extends State<FeedPage> {
           });
           if (widget.single == true) {
             scrollToTop(height: 0);
+          }
+          if (widget.onLoaded != null) {
+            widget.onLoaded(state.entries.length != 0);
           }
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);

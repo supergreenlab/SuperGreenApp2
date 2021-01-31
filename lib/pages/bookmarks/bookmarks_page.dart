@@ -25,9 +25,17 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class BookmarksPage extends StatelessWidget {
+class BookmarksPage extends StatefulWidget {
+  @override
+  _BookmarksPageState createState() => _BookmarksPageState();
+}
+
+class _BookmarksPageState extends State<BookmarksPage> {
+  bool hasCards = true;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BookmarksBloc, BookmarksBlocState>(
@@ -38,6 +46,14 @@ class BookmarksPage extends StatelessWidget {
             body = FullscreenLoading();
           } else if (state is BookmarksBlocStateLoaded) {
             body = renderFeed(context);
+            if (!hasCards) {
+              body = Stack(
+                children: [
+                  body,
+                  renderNoCard(context),
+                ],
+              );
+            }
           }
           return Scaffold(
               appBar: SGLAppBar(
@@ -59,6 +75,11 @@ class BookmarksPage extends StatelessWidget {
         pinned: true,
         color: Colors.indigo,
         appBarEnabled: false,
+        onLoaded: (bool hasCards) {
+          setState(() {
+            this.hasCards = hasCards;
+          });
+        },
         cardActions: (FeedEntryState state) {
           return [
             IconButton(
@@ -74,6 +95,19 @@ class BookmarksPage extends StatelessWidget {
             )
           ];
         },
+      ),
+    );
+  }
+
+  Widget renderNoCard(BuildContext context) {
+    return Fullscreen(
+      title: 'No bookmarks yet',
+      subtitle:
+          'You can add important diary entries here, checkout the plant diaries to add some now!',
+      child: Icon(
+        Icons.bookmark,
+        color: Color(0xff3bb30b),
+        size: 100,
       ),
     );
   }
