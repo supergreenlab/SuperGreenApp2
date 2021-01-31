@@ -39,8 +39,10 @@ class FeedMediaCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedMediaCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedMediaCardPage(this.animation, this.feedState, this.state,
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -90,30 +92,29 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-            'assets/feed_card/icon_media.svg',
-            params.boxFeed == true ? 'Build log' : 'Grow log',
-            state.synced,
-            onEdit: () {
-              setState(() {
-                editText = true;
-              });
-            },
-            onShare: () {
-              MediaState media = state.medias[mediaShown];
-              if (media.filePath.endsWith('.mp4')) {
-                ShareExtend.share(media.filePath, "video");
-              } else if (media.filePath.endsWith('.jpg')) {
-                ShareExtend.share(media.filePath, "image");
-              }
-            },
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
-            onDelete: () {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventDeleteEntry(state));
-            },
-          ),
+          FeedCardTitle('assets/feed_card/icon_media.svg',
+              params.boxFeed == true ? 'Build log' : 'Grow log', state.synced,
+              onEdit: () {
+                setState(() {
+                  editText = true;
+                });
+              },
+              onShare: () {
+                MediaState media = state.medias[mediaShown];
+                if (media.filePath.endsWith('.mp4')) {
+                  ShareExtend.share(media.filePath, "video");
+                } else if (media.filePath.endsWith('.jpg')) {
+                  ShareExtend.share(media.filePath, "image");
+                }
+              },
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState,
+              onDelete: () {
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventDeleteEntry(state));
+              },
+              actions:
+                  widget.cardActions != null ? widget.cardActions(state) : []),
           state.medias.length > 0
               ? MediaList(
                   state.medias,

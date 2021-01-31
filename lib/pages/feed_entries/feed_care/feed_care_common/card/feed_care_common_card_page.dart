@@ -37,9 +37,10 @@ abstract class FeedCareCommonCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
   const FeedCareCommonCardPage(this.animation, this.feedState, this.state,
-      {Key key})
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -91,22 +92,19 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
   Widget _renderLoaded(BuildContext context, FeedCareCommonState state) {
     FeedCareParams params = state.params;
     List<Widget> body = [
-      FeedCardTitle(
-        widget.iconPath(),
-        widget.title(),
-        widget.state.synced,
-        onEdit: () {
-          setState(() {
-            editText = true;
-          });
-        },
-        showSyncStatus: !state.remoteState,
-        showControls: !state.remoteState,
-        onDelete: () {
-          BlocProvider.of<FeedBloc>(context)
-              .add(FeedBlocEventDeleteEntry(state));
-        },
-      ),
+      FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced,
+          onEdit: () {
+            setState(() {
+              editText = true;
+            });
+          },
+          showSyncStatus: !state.remoteState,
+          showControls: !state.remoteState,
+          onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
+          },
+          actions: widget.cardActions != null ? widget.cardActions(state) : []),
       SocialBarPage(
         state: state,
         feedState: widget.feedState,

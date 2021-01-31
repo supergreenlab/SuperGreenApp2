@@ -533,6 +533,13 @@ class MainNavigateToPublicPlant extends MainNavigatorEvent {
   List<Object> get props => [id, name, feedEntryID];
 }
 
+class MainNavigateToBookmarks extends MainNavigatorEvent {
+  MainNavigateToBookmarks();
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigateToSelectNewProductEvent extends MainNavigatorEvent {
   final List<Product> selectedProducts;
   final ProductCategoryID categoryID;
@@ -778,6 +785,9 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToPublicPlant) {
       future = _navigatorKey.currentState
           .pushNamed('/public/plant', arguments: event);
+    } else if (event is MainNavigateToBookmarks) {
+      future =
+          _navigatorKey.currentState.pushNamed('/bookmarks', arguments: event);
     } else if (event is MainNavigateToSelectNewProductEvent) {
       future = _navigatorKey.currentState
           .pushNamed('/product/select', arguments: event);

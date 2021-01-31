@@ -33,21 +33,25 @@ class FeedPage extends StatefulWidget {
   final bool pinned;
   final Widget appBar;
   final double appBarHeight;
+  final bool appBarEnabled;
   final bool bottomPadding;
   final List<Widget> actions;
   final Widget bottom;
   final bool single;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
   const FeedPage({
     @required this.title,
     this.pinned = false,
     @required this.color,
     this.appBar,
-    @required this.appBarHeight,
+    this.appBarHeight,
+    this.appBarEnabled = true,
     this.bottomPadding = false,
     this.actions,
     this.bottom,
     this.single,
+    this.cardActions,
   });
 
   @override
@@ -126,25 +130,28 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Widget _renderCards(BuildContext context) {
-    List<Widget> content = [
-      SliverAppBar(
-        title: Text(widget.title),
-        pinned: widget.pinned,
-        actions: widget.actions,
-        backgroundColor: widget.color,
-        expandedHeight: widget.appBarHeight ?? 56.0,
-        iconTheme: IconThemeData(color: Colors.white),
-        elevation: 4,
-        forceElevated: true,
-        flexibleSpace: FlexibleSpaceBar(
-          background: this.widget.appBar,
-          centerTitle: this.widget.appBar == null,
-          title: this.widget.appBar == null
-              ? Text(widget.title, style: TextStyle(color: Color(0xff404040)))
-              : null,
+    List<Widget> content = [];
+    if (widget.appBarEnabled) {
+      content.add(
+        SliverAppBar(
+          title: Text(widget.title),
+          pinned: widget.pinned,
+          actions: widget.actions,
+          backgroundColor: widget.color,
+          expandedHeight: widget.appBarHeight ?? 56.0,
+          iconTheme: IconThemeData(color: Colors.white),
+          elevation: 4,
+          forceElevated: true,
+          flexibleSpace: FlexibleSpaceBar(
+            background: this.widget.appBar,
+            centerTitle: this.widget.appBar == null,
+            title: this.widget.appBar == null
+                ? Text(widget.title, style: TextStyle(color: Color(0xff404040)))
+                : null,
+          ),
         ),
-      ),
-    ];
+      );
+    }
     if (!loaded) {
       content.add(SliverFillRemaining(
           hasScrollBody: false,
@@ -170,7 +177,8 @@ class _FeedPageState extends State<FeedPage> {
           }
           FeedEntryState feedEntry = entries[index];
           Widget card = FeedEntriesCardHelpers.cardForFeedEntry(
-              animation, feedState, feedEntry);
+              animation, feedState, feedEntry,
+              cardActions: widget.cardActions);
           if (index == 0) {
             card = Padding(padding: EdgeInsets.only(top: 10), child: card);
           } else if (index == entries.length - 1 && eof) {

@@ -68,30 +68,16 @@ class _ExplorerPageState extends State<ExplorerPage> {
                         Icons.add,
                         color: Colors.white,
                       ),
-                      onPressed: () async {
-                        if (state is ExplorerBlocStateLoaded &&
-                            state.loggedIn) {
-                          BlocProvider.of<MainNavigatorBloc>(context).add(
-                              MainNavigateToSelectPlantEvent(
-                                  'Select which plant you want to make public',
-                                  futureFn: (Future future) async {
-                            dynamic plant = await future;
-                            if (plant == null) {
-                              return;
-                            }
-                            if (plant is Plant) {
-                              BlocProvider.of<ExplorerBloc>(context)
-                                  .add(ExplorerBlocEventMakePublic(plant));
-                              plants.clear();
-                              BlocProvider.of<ExplorerBloc>(context)
-                                  .add(ExplorerBlocEventInit());
-                              Fluttertoast.showToast(
-                                  msg: 'Plant ${plant.name} is now public');
-                            }
-                          }));
-                        } else {
-                          _login(context);
-                        }
+                      onPressed: () => onMakePublic(state),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.bookmark,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        BlocProvider.of<MainNavigatorBloc>(context)
+                            .add(MainNavigateToBookmarks());
                       },
                     ),
                   ],
@@ -167,6 +153,29 @@ class _ExplorerPageState extends State<ExplorerPage> {
         );
       },
     );
+  }
+
+  void onMakePublic(ExplorerBlocState state) {
+    if (state is ExplorerBlocStateLoaded && state.loggedIn) {
+      BlocProvider.of<MainNavigatorBloc>(context).add(
+          MainNavigateToSelectPlantEvent(
+              'Select which plant you want to make public',
+              futureFn: (Future future) async {
+        dynamic plant = await future;
+        if (plant == null) {
+          return;
+        }
+        if (plant is Plant) {
+          BlocProvider.of<ExplorerBloc>(context)
+              .add(ExplorerBlocEventMakePublic(plant));
+          plants.clear();
+          BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventInit());
+          Fluttertoast.showToast(msg: 'Plant ${plant.name} is now public');
+        }
+      }));
+    } else {
+      _login(context);
+    }
   }
 
   void _login(BuildContext context) async {

@@ -34,9 +34,10 @@ class FeedLifeEventCardPage extends StatelessWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
   const FeedLifeEventCardPage(this.animation, this.feedState, this.state,
-      {Key key})
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -86,17 +87,13 @@ class FeedLifeEventCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-            'assets/feed_card/icon_life_events.svg',
-            'Life Event',
-            state.synced,
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
-            onDelete: () {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventDeleteEntry(state));
-            },
-          ),
+          FeedCardTitle('assets/feed_card/icon_life_events.svg', 'Life Event',
+              state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
+          }, actions: cardActions != null ? cardActions(state) : []),
           Container(
             height: 130,
             alignment: Alignment.center,

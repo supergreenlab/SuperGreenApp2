@@ -29,7 +29,8 @@ class FeedCard extends StatefulWidget {
   _FeedCardState createState() => _FeedCardState();
 }
 
-class _FeedCardState extends State<FeedCard> with AutomaticKeepAliveClientMixin {
+class _FeedCardState extends State<FeedCard>
+    with AutomaticKeepAliveClientMixin {
   double _opacity = 0;
 
   @override

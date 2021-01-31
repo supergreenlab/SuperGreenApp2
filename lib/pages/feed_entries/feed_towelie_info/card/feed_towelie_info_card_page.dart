@@ -34,8 +34,10 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedTowelieInfoCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedTowelieInfoCardPage(this.animation, this.feedState, this.state,
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -53,7 +55,8 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
+              'assets/feed_card/icon_towelie.png', 'Towelie', state.synced,
+              actions: cardActions != null ? cardActions(state) : []),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FeedCardDate(state, feedState),
@@ -79,8 +82,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
       ),
     ];
     if (params.selectedButton != null) {
-      content
-          .add(_renderSelectedButton(context, params.selectedButton));
+      content.add(_renderSelectedButton(context, params.selectedButton));
     } else if (params.buttons != null && params.buttons.length > 0) {
       content.add(_renderButtonBar(context, params.buttons));
     }
@@ -111,7 +113,8 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  ButtonBar _renderButtonBar(BuildContext context, List<FeedTowelieParamsButton> buttons) {
+  ButtonBar _renderButtonBar(
+      BuildContext context, List<FeedTowelieParamsButton> buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),

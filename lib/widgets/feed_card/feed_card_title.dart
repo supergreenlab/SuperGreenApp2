@@ -28,13 +28,15 @@ class FeedCardTitle extends StatelessWidget {
   final Function onShare;
   final bool showSyncStatus;
   final bool showControls;
+  final List<Widget> actions;
 
   const FeedCardTitle(this.icon, this.title, this.synced,
       {this.onEdit,
       this.onDelete,
       this.onShare,
       this.showSyncStatus = true,
-      this.showControls = true});
+      this.showControls = true,
+      this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +103,7 @@ class FeedCardTitle extends StatelessWidget {
         ),
       );
     }
+    content.addAll(actions ?? []);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 3.0),
       child: Row(

@@ -36,9 +36,10 @@ class FeedNutrientMixCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
   const FeedNutrientMixCardPage(this.animation, this.feedState, this.state,
-      {Key key})
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -63,13 +64,13 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-            'assets/feed_card/icon_nutrient_mix.svg',
-            'Nutrient mix',
-            widget.state.synced,
-            showSyncStatus: !widget.state.remoteState,
-            showControls: !widget.state.remoteState,
-          ),
+          FeedCardTitle('assets/feed_card/icon_nutrient_mix.svg',
+              'Nutrient mix', widget.state.synced,
+              showSyncStatus: !widget.state.remoteState,
+              showControls: !widget.state.remoteState,
+              actions: widget.cardActions != null
+                  ? widget.cardActions(widget.state)
+                  : []),
           Container(
             height: 140,
             alignment: Alignment.center,

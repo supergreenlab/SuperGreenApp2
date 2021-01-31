@@ -33,8 +33,10 @@ class FeedLightCardPage extends StatelessWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedLightCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedLightCardPage(this.animation, this.feedState, this.state,
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -76,17 +78,13 @@ class FeedLightCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-            'assets/feed_card/icon_light.svg',
-            'Stretch control',
-            state.synced,
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
-            onDelete: () {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventDeleteEntry(state));
-            },
-          ),
+          FeedCardTitle('assets/feed_card/icon_light.svg', 'Stretch control',
+              state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
+          }, actions: cardActions != null ? cardActions(state) : []),
           Container(
             height: 130,
             alignment: Alignment.center,

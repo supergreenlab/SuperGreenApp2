@@ -24,8 +24,8 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 class FeedDefoliationCardPage extends FeedCareCommonCardPage {
   FeedDefoliationCardPage(
       Animation animation, FeedState feedState, FeedEntryState state,
-      {Key key})
-      : super(animation, feedState, state, key: key);
+      {Key key, cardActions})
+      : super(animation, feedState, state, key: key, cardActions: cardActions);
 
   String iconPath() {
     return 'assets/feed_card/icon_defoliation.svg';

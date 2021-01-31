@@ -97,8 +97,7 @@ class FeedsAPI {
     return data;
   }
 
-  Future<int> fetchCommentCountForFeedEntry(String feedEntryID,
-      {int offset = 0, int n = 10}) async {
+  Future<int> fetchCommentCountForFeedEntry(String feedEntryID) async {
     Response resp = await BackendAPI().apiClient.get(
         '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments/count?allComments=true',
         headers: {
@@ -110,6 +109,20 @@ class FeedsAPI {
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data['n'];
+  }
+
+  Future<List<dynamic>> fetchBookmarks({int offset = 0, int limit = 10}) async {
+    Response resp = await BackendAPI().apiClient.get(
+        '${BackendAPI().serverHost}/bookmarks?offset=$offset&limit=$limit',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'fetchBookmarks failed: ${resp.body}';
+    }
+    Map<String, dynamic> data = JsonDecoder().convert(resp.body);
+    return data['bookmarks'];
   }
 
   Future syncPlant(Plant plant) async {

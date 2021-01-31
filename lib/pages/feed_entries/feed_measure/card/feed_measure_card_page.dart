@@ -37,9 +37,10 @@ class FeedMeasureCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
   const FeedMeasureCardPage(this.animation, this.feedState, this.state,
-      {Key key})
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -104,21 +105,18 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_measure.svg',
-            'Measure',
-            state.synced,
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
-            onEdit: () {
-              setState(() {
-                editText = true;
-              });
-            },
-            onDelete: () {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventDeleteEntry(state));
-            },
-          ),
+              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState, onEdit: () {
+            setState(() {
+              editText = true;
+            });
+          }, onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
+          },
+              actions:
+                  widget.cardActions != null ? widget.cardActions(state) : []),
           MediaList(
             [state.current],
             showSyncStatus: !state.remoteState,

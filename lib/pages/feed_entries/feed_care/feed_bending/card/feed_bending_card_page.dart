@@ -22,8 +22,10 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class FeedBendingCardPage extends FeedCareCommonCardPage {
-
-  FeedBendingCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key}) : super(animation, feedState, state, key: key);
+  FeedBendingCardPage(
+      Animation animation, FeedState feedState, FeedEntryState state,
+      {Key key, cardActions})
+      : super(animation, feedState, state, key: key, cardActions: cardActions);
 
   String iconPath() {
     return 'assets/feed_card/icon_bending.svg';
@@ -33,5 +35,4 @@ class FeedBendingCardPage extends FeedCareCommonCardPage {
   String title() {
     return "Bending";
   }
-
 }

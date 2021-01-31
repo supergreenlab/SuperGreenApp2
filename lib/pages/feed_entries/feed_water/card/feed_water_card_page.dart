@@ -36,8 +36,10 @@ class FeedWaterCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
+  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedWaterCardPage(this.animation, this.feedState, this.state, {Key key})
+  const FeedWaterCardPage(this.animation, this.feedState, this.state,
+      {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -120,21 +122,18 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_watering.svg',
-            'Watering',
-            state.synced,
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
-            onEdit: () {
-              setState(() {
-                editText = true;
-              });
-            },
-            onDelete: () {
-              BlocProvider.of<FeedBloc>(context)
-                  .add(FeedBlocEventDeleteEntry(state));
-            },
-          ),
+              'assets/feed_card/icon_watering.svg', 'Watering', state.synced,
+              showSyncStatus: !state.remoteState,
+              showControls: !state.remoteState, onEdit: () {
+            setState(() {
+              editText = true;
+            });
+          }, onDelete: () {
+            BlocProvider.of<FeedBloc>(context)
+                .add(FeedBlocEventDeleteEntry(state));
+          },
+              actions:
+                  widget.cardActions != null ? widget.cardActions(state) : []),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(

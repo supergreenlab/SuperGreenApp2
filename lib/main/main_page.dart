@@ -54,6 +54,8 @@ import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart
 import 'package:super_green_app/pages/add_device/new_device/new_device_page.dart';
 import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_page.dart';
+import 'package:super_green_app/pages/bookmarks/bookmarks_bloc.dart';
+import 'package:super_green_app/pages/bookmarks/bookmarks_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_bloc.dart';
@@ -517,6 +519,14 @@ class _MainPageState extends State<MainPage> {
                 create: (context) => PublicPlantBloc(settings.arguments)),
           ],
           child: PublicPlantPage(),
+        );
+      case '/bookmarks':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) => BookmarksBloc(settings.arguments)),
+          ],
+          child: BookmarksPage(),
         );
       case '/product/select':
         return MultiBlocProvider(
