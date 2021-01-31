@@ -70,17 +70,17 @@ class _ExplorerPageState extends State<ExplorerPage> {
                       ),
                       onPressed: () => onMakePublic(state),
                     ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.bookmark,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(MainNavigateToBookmarks());
-                      },
-                    ),
                   ],
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.bookmark,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToBookmarks());
+                    },
+                  ),
                 ),
                 body: body);
           }),
