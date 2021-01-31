@@ -105,7 +105,8 @@ class FeedCardTitle extends StatelessWidget {
     }
     content.addAll(actions ?? []);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 3.0),
+      padding:
+          const EdgeInsets.only(left: 12.0, right: 0, top: 3.0, bottom: 3.0),
       child: Row(
         children: content,
       ),

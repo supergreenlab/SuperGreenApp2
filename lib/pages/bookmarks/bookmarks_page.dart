@@ -83,9 +83,12 @@ class _BookmarksPageState extends State<BookmarksPage> {
         cardActions: (FeedEntryState state) {
           return [
             IconButton(
-              icon: Icon(
-                Icons.open_in_browser,
-                color: Colors.grey,
+              icon: Text(
+                'Open plant',
+                style: TextStyle(
+                    fontSize: 12.0,
+                    color: Color(0xff3bb30b),
+                    fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
