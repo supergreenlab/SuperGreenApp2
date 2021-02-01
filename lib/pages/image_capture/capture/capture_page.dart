@@ -103,7 +103,7 @@ class _CapturePageState extends State<CapturePage> {
             LayoutBuilder(builder: (context, constraints) {
               double width = constraints.maxWidth;
               double height =
-                  constraints.maxWidth / _cameraController.value.aspectRatio;
+                  constraints.maxWidth * _cameraController.value.aspectRatio;
               Widget cameraPreview = Positioned(
                   left: constraints.maxWidth / 2 - width / 2,
                   top: constraints.maxHeight / 2 - height / 2,
