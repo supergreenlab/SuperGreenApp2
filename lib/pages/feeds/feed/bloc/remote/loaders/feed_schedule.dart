@@ -27,14 +27,12 @@ class FeedScheduleLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    state = FeedScheduleState(state,
-        remoteState: true,
-        socialState: (state.socialState as FeedEntrySocialStateLoaded));
+    state =
+        FeedScheduleState(state, isRemoteState: true, socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);
   }
 
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedScheduleState(super.stateForFeedEntryMap(feedEntry),
-          remoteState: true);
+      FeedScheduleState(super.stateForFeedEntryMap(feedEntry), isRemoteState: true);
 }

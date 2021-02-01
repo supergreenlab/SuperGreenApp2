@@ -47,8 +47,7 @@ class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final Comment replyTo;
   final List<Product> recommend;
 
-  CommentsFormBlocEventPostComment(
-      this.text, this.type, this.replyTo, this.recommend);
+  CommentsFormBlocEventPostComment(this.text, this.type, this.replyTo, this.recommend);
 
   @override
   List<Object> get props => [
@@ -106,8 +105,7 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   final User user;
   final bool eof;
 
-  CommentsFormBlocStateLoaded(this.autoFocus, this.feedEntry, this.comments,
-      this.n, this.user, this.eof);
+  CommentsFormBlocStateLoaded(this.autoFocus, this.feedEntry, this.comments, this.n, this.user, this.eof);
 
   @override
   List<Object> get props => [autoFocus, feedEntry, comments, n, user];
@@ -143,8 +141,7 @@ class CommentsFormBlocStateUser extends CommentsFormBlocState {
   List<Object> get props => [user];
 }
 
-class CommentsFormBloc
-    extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
+class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
 
   StreamSubscription<hive.BoxEvent> appDataStream;
@@ -156,26 +153,23 @@ class CommentsFormBloc
   }
 
   @override
-  Stream<CommentsFormBlocState> mapEventToState(
-      CommentsFormBlocEvent event) async* {
+  Stream<CommentsFormBlocState> mapEventToState(CommentsFormBlocEvent event) async* {
     if (event is CommentsFormBlocEventInit) {
       if (AppDB().getAppData().jwt != null) {
         this.user = await BackendAPI().usersAPI.me();
       } else {
         appDataStream = AppDB().watchAppData().listen(appDataUpdated);
       }
-      if (args.feedEntry.remoteState) {
+      if (args.feedEntry.isRemoteState) {
         feedEntryID = args.feedEntry.feedEntryID;
       } else {
-        FeedEntry feedEntry =
-            await RelDB.get().feedsDAO.getFeedEntry(args.feedEntry.feedEntryID);
+        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(args.feedEntry.feedEntryID);
         feedEntryID = feedEntry.serverID;
       }
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventLike) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
-      yield CommentsFormBlocStateUpdateComment(
-          event.comment.copyWith(liked: !event.comment.liked));
+      yield CommentsFormBlocStateUpdateComment(event.comment.copyWith(liked: !event.comment.liked));
     } else if (event is CommentsFormBlocEventPostComment) {
       String tempID = Uuid().v4();
       Comment comment = Comment(
@@ -189,8 +183,7 @@ class CommentsFormBloc
           type: event.type,
           createdAt: DateTime.now(),
           liked: false,
-          params: JsonEncoder()
-              .convert(CommentParam(recommend: event.recommend).toMap()),
+          params: JsonEncoder().convert(CommentParam(recommend: event.recommend).toMap()),
           isNew: true);
       yield CommentsFormBlocStateAddComment(comment);
       comment = await BackendAPI().feedsAPI.postComment(comment);
@@ -205,18 +198,11 @@ class CommentsFormBloc
   }
 
   Stream<CommentsFormBlocState> fetchComments({offset = 0, limit = 20}) async* {
-    List<Comment> comments = await BackendAPI()
-        .feedsAPI
-        .fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
-    int n =
-        await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
+    List<Comment> comments =
+        await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
+    int n = await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
 
-    yield CommentsFormBlocStateLoaded(
-        this.args.autoFocus,
-        this.args.feedEntry,
-        comments,
-        n,
-        this.user,
+    yield CommentsFormBlocStateLoaded(this.args.autoFocus, this.args.feedEntry, comments, n, this.user,
         comments.where((c) => c.replyTo == null).length != limit);
   }
 

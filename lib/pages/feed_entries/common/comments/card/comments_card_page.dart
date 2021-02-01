@@ -30,20 +30,16 @@ class CommentsCardPage extends StatefulWidget {
   final FeedEntryState state;
   final FeedState feedState;
 
-  const CommentsCardPage({Key key, this.state, this.feedState})
-      : super(key: key);
+  const CommentsCardPage({Key key, this.state, this.feedState}) : super(key: key);
 
   @override
   _CommentsCardPageState createState() => _CommentsCardPageState();
 }
 
-class _CommentsCardPageState extends State<CommentsCardPage>
-    with TickerProviderStateMixin {
+class _CommentsCardPageState extends State<CommentsCardPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (widget.state.socialState is FeedEntrySocialStateNotLoaded) {
-      return Container();
-    } else if (widget.state.synced == false) {
       return Container();
     }
     return AnimatedSizeAndFade(
@@ -53,8 +49,7 @@ class _CommentsCardPageState extends State<CommentsCardPage>
         child: renderLoaded(context, widget.state.socialState));
   }
 
-  Widget renderLoaded(
-      BuildContext context, FeedEntrySocialStateLoaded socialState) {
+  Widget renderLoaded(BuildContext context, FeedEntrySocialStateLoaded socialState) {
     List<Widget> content = [];
     if ((socialState.comments?.length ?? 0) == 2) {
       content.add(SmallCommentView(
@@ -70,19 +65,14 @@ class _CommentsCardPageState extends State<CommentsCardPage>
         ),
       ));
       content.add(SmallCommentView(
-          feedEntry: widget.state,
-          comment: socialState.comments[1],
-          loggedIn: widget.feedState.loggedIn));
+          feedEntry: widget.state, comment: socialState.comments[1], loggedIn: widget.feedState.loggedIn));
     } else if ((socialState.comments?.length ?? 0) == 1) {
       content.add(SmallCommentView(
-          feedEntry: widget.state,
-          comment: socialState.comments[0],
-          loggedIn: widget.feedState.loggedIn));
+          feedEntry: widget.state, comment: socialState.comments[0], loggedIn: widget.feedState.loggedIn));
     }
     return InkWell(
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToCommentFormEvent(false, widget.state));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(false, widget.state));
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),

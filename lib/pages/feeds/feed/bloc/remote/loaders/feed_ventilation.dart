@@ -28,14 +28,12 @@ class FeedVentilationLoader extends RemoteFeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     state = FeedVentilationState(state,
-        remoteState: true,
-        socialState: (state.socialState as FeedEntrySocialStateLoaded));
+        isRemoteState: true, socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);
   }
 
   @override
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedVentilationState(super.stateForFeedEntryMap(feedEntry),
-          remoteState: true);
+      FeedVentilationState(super.stateForFeedEntryMap(feedEntry), isRemoteState: true);
 }

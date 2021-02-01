@@ -28,14 +28,12 @@ class FeedNutrientMixLoader extends RemoteFeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     state = FeedNutrientMixState(state,
-        remoteState: true,
-        socialState: (state.socialState as FeedEntrySocialStateLoaded));
+        isRemoteState: true, socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);
   }
 
   @override
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntry) =>
-      FeedNutrientMixState(super.stateForFeedEntryMap(feedEntry),
-          remoteState: true);
+      FeedNutrientMixState(super.stateForFeedEntryMap(feedEntry), isRemoteState: true);
 }

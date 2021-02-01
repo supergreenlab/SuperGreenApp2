@@ -32,23 +32,20 @@ class FeedMeasureLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<dynamic> feedMediasMap = await BackendAPI()
-        .feedsAPI
-        .publicFeedMediasForFeedEntry(state.feedEntryID);
+    List<dynamic> feedMediasMap = await BackendAPI().feedsAPI.publicFeedMediasForFeedEntry(state.feedEntryID);
     MediaState currentMedia = stateForFeedMediaMap(feedMediasMap[0]);
     MediaState previousMedia;
     if ((state.params as FeedMeasureParams).previous is String) {
       String previous = (state.params as FeedMeasureParams).previous;
       if (previous != null) {
-        Map<String, dynamic> previousMediaMap =
-            await BackendAPI().feedsAPI.publicFeedMedia(previous);
+        Map<String, dynamic> previousMediaMap = await BackendAPI().feedsAPI.publicFeedMedia(previous);
         previousMedia = stateForFeedMediaMap(previousMediaMap);
       }
     }
     state = FeedMeasureState(state,
         current: currentMedia,
         previous: previousMedia,
-        remoteState: true,
+        isRemoteState: true,
         socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);

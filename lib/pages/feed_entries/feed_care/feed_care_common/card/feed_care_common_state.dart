@@ -29,11 +29,11 @@ class FeedCareCommonState extends FeedEntryStateLoaded {
     this.beforeMedias,
     this.afterMedias,
     FeedEntrySocialState socialState,
-    bool remoteState,
+    bool isRemoteState,
     String shareLink,
   }) : super.copy(from,
             socialState: socialState ?? from.socialState,
-            remoteState: remoteState ?? from.remoteState,
+            isRemoteState: isRemoteState ?? from.isRemoteState,
             shareLink: shareLink ?? from.shareLink);
 
   @override

@@ -27,12 +27,12 @@ class FeedMediaState extends FeedEntryStateLoaded {
     FeedEntryState from, {
     this.medias,
     FeedEntrySocialState socialState,
-    bool remoteState,
+    bool isRemoteState,
     String shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
-          remoteState: remoteState ?? from.remoteState,
+          isRemoteState: isRemoteState ?? from.isRemoteState,
           shareLink: shareLink ?? from.shareLink,
         );
 

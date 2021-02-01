@@ -39,9 +39,7 @@ class FeedMeasureCardPage extends StatefulWidget {
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedMeasureCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
-      : super(key: key);
+  const FeedMeasureCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
 
   @override
   _FeedMeasureCardPageState createState() => _FeedMeasureCardPageState();
@@ -64,10 +62,8 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+          FeedCardTitle('assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 350,
             alignment: Alignment.center,
@@ -104,35 +100,26 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-              'assets/feed_card/icon_measure.svg', 'Measure', state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState, onEdit: () {
+          FeedCardTitle('assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onEdit: () {
             setState(() {
               editText = true;
             });
           }, onDelete: () {
-            BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventDeleteEntry(state));
-          },
-              actions:
-                  widget.cardActions != null ? widget.cardActions(state) : []),
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
+          }, actions: widget.cardActions != null ? widget.cardActions(state) : []),
           MediaList(
             [state.current],
-            showSyncStatus: !state.remoteState,
+            showSyncStatus: !state.isRemoteState,
             showTapIcon: state.previous != null,
             onMediaTapped: (media) {
               if (state.previous != null) {
-                BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToFullscreenMedia(
-                        state.previous.thumbnailPath, state.previous.filePath,
-                        overlayPath: state.current.filePath,
-                        heroPath: state.current.filePath,
-                        sliderTitle: sliderTitle));
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToFullscreenMedia(
+                    state.previous.thumbnailPath, state.previous.filePath,
+                    overlayPath: state.current.filePath, heroPath: state.current.filePath, sliderTitle: sliderTitle));
               } else {
-                BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToFullscreenMedia(
-                        state.current.thumbnailPath, state.current.filePath));
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToFullscreenMedia(state.current.thumbnailPath, state.current.filePath));
               }
             },
           ),
@@ -145,8 +132,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
                   params.message ?? '',
                   edit: editText,
                   onEdited: (value) {
-                    BlocProvider.of<FeedBloc>(context).add(
-                        FeedBlocEventEditParams(state, params.copyWith(value)));
+                    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(state, params.copyWith(value)));
                     setState(() {
                       editText = false;
                     });

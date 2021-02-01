@@ -36,8 +36,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedLifeEventCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
+  const FeedLifeEventCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -54,10 +53,8 @@ class FeedLifeEventCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_life_events.svg', 'Life Event',
-              state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+          FeedCardTitle('assets/feed_card/icon_life_events.svg', 'Life Event', state.synced,
+              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 100,
             alignment: Alignment.center,
@@ -72,8 +69,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
     );
   }
 
-  Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state,
-      PlantFeedState feedState) {
+  Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state, PlantFeedState feedState) {
     FeedLifeEventParams params = state.params;
     const List<String> phases = [
       'Germination!',
@@ -87,12 +83,9 @@ class FeedLifeEventCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_life_events.svg', 'Life Event',
-              state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState, onDelete: () {
-            BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventDeleteEntry(state));
+          FeedCardTitle('assets/feed_card/icon_life_events.svg', 'Life Event', state.synced,
+              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions(state) : []),
           Container(
             height: 130,
@@ -100,10 +93,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(phases[params.phase.index],
-                  style: TextStyle(
-                      color: Color(0xff3bb30b),
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: Color(0xff3bb30b), fontSize: 40, fontWeight: FontWeight.bold)),
             ),
           ),
           SocialBarPage(

@@ -33,7 +33,8 @@ abstract class FeedEntryState extends Equatable {
 
   final FeedEntrySocialState socialState;
 
-  final bool remoteState;
+  final bool isRemoteState;
+  final bool isBackedUp;
   final String shareLink;
 
   FeedEntryState({
@@ -46,7 +47,8 @@ abstract class FeedEntryState extends Equatable {
     this.params,
     this.data,
     this.socialState,
-    this.remoteState = false,
+    this.isRemoteState,
+    this.isBackedUp,
     this.shareLink,
   });
 
@@ -59,7 +61,8 @@ abstract class FeedEntryState extends Equatable {
         synced,
         date,
         params,
-        remoteState,
+        isRemoteState,
+        isBackedUp,
         socialState,
         shareLink,
       ];
@@ -79,7 +82,8 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
     bool synced,
     DateTime date,
     dynamic params,
-    bool remoteState = false,
+    bool isRemoteState,
+    bool isBackedUp,
     dynamic data,
     FeedEntrySocialState socialState,
     String shareLink,
@@ -92,7 +96,8 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
           date: date,
           params: params,
           data: data,
-          remoteState: remoteState,
+          isRemoteState: isRemoteState,
+          isBackedUp: isBackedUp,
           socialState: socialState,
           shareLink: shareLink,
         );
@@ -110,7 +115,8 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
       date: this.date,
       params: this.params,
       data: this.data,
-      remoteState: this.remoteState,
+      isRemoteState: this.isRemoteState,
+      isBackedUp: this.isBackedUp,
       socialState: socialState ?? this.socialState,
       shareLink: shareLink ?? this.shareLink,
     );
@@ -127,7 +133,8 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
     bool synced,
     DateTime date,
     dynamic params,
-    bool remoteState = false,
+    bool isRemoteState,
+    bool isBackedUp,
     dynamic data,
     FeedEntrySocialState socialState,
     String shareLink,
@@ -141,7 +148,8 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
           params: params ?? from.params,
           data: data ?? from.data,
           socialState: socialState ?? from.socialState,
-          remoteState: remoteState ?? from.remoteState,
+          isRemoteState: isRemoteState ?? from.isRemoteState,
+          isBackedUp: isBackedUp ?? from.isBackedUp,
           shareLink: shareLink ?? from.shareLink,
         );
 }

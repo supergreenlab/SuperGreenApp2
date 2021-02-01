@@ -39,8 +39,7 @@ abstract class FeedCareCommonCardPage extends StatefulWidget {
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedCareCommonCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
+  const FeedCareCommonCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -72,7 +71,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             widget.iconPath(),
             widget.title(),
             widget.state.synced,
-            showSyncStatus: !state.remoteState,
+            showSyncStatus: !state.isRemoteState,
             showControls: false,
           ),
           Container(
@@ -98,11 +97,10 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
               editText = true;
             });
           },
-          showSyncStatus: !state.remoteState,
-          showControls: !state.remoteState,
+          showSyncStatus: !state.isRemoteState,
+          showControls: !state.isRemoteState,
           onDelete: () {
-            BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventDeleteEntry(state));
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           },
           actions: widget.cardActions != null ? widget.cardActions(state) : []),
       SocialBarPage(
@@ -115,8 +113,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
         params.message ?? '',
         edit: editText,
         onEdited: (value) {
-          BlocProvider.of<FeedBloc>(context)
-              .add(FeedBlocEventEditParams(state, params.copyWith(value)));
+          BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(state, params.copyWith(value)));
           setState(() {
             editText = false;
           });
@@ -142,9 +139,8 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             state.beforeMedias,
             prefix: 'Before ',
             onMediaTapped: (media) {
-              BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToFullscreenMedia(
-                      media.thumbnailPath, media.filePath));
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
             },
           ),
         ),
@@ -159,9 +155,8 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
               state.afterMedias,
               prefix: 'After ',
               onMediaTapped: (media) {
-                BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToFullscreenMedia(
-                        media.thumbnailPath, media.filePath));
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
               },
             ),
           ));

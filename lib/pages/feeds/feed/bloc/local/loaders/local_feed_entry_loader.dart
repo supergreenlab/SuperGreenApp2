@@ -38,29 +38,21 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     FeedEntry feedEntry = state.data as FeedEntry;
     FeedEntryState cached = cache[feedEntry.id];
     if (feedEntry.serverID != null) {
-      Map<String, dynamic> socialMap = await BackendAPI()
-          .feedsAPI
-          .fetchSocialForFeedEntry(feedEntry.serverID);
-      FeedEntrySocialStateLoaded socialState =
-          FeedEntrySocialStateLoaded.fromMap(socialMap);
+      Map<String, dynamic> socialMap = await BackendAPI().feedsAPI.fetchSocialForFeedEntry(feedEntry.serverID);
+      FeedEntrySocialStateLoaded socialState = FeedEntrySocialStateLoaded.fromMap(socialMap);
       if (cached != null && cached.socialState is FeedEntrySocialStateLoaded) {
-        socialState = socialState.copyWith(
-            comments:
-                (cached.socialState as FeedEntrySocialStateLoaded).comments);
+        socialState = socialState.copyWith(comments: (cached.socialState as FeedEntrySocialStateLoaded).comments);
       }
       onFeedEntryStateUpdated(state.copyWith(socialState: socialState));
 
       List<Comment> comments = [];
 
       if (socialState.nComments > 0) {
-        comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(
-            feedEntry.serverID,
-            offset: 0,
-            limit: 2,
-            rootCommentsOnly: true);
+        comments = await BackendAPI()
+            .feedsAPI
+            .fetchCommentsForFeedEntry(feedEntry.serverID, offset: 0, limit: 2, rootCommentsOnly: true);
       }
-      onFeedEntryStateUpdated(state.copyWith(
-          socialState: socialState.copyWith(comments: comments)));
+      onFeedEntryStateUpdated(state.copyWith(socialState: socialState.copyWith(comments: comments)));
     }
   }
 
@@ -69,9 +61,8 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     if (subscriptions[entry.feedEntryID] != null) {
       subscriptions[entry.feedEntryID].cancel();
     }
-    subscriptions[entry.feedEntryID] = FeedEntryHelper.eventBus
-        .on<FeedEntryUpdateEvent>()
-        .listen((FeedEntryUpdateEvent event) async {
+    subscriptions[entry.feedEntryID] =
+        FeedEntryHelper.eventBus.on<FeedEntryUpdateEvent>().listen((FeedEntryUpdateEvent event) async {
       FeedEntry feedEntry = event.feedEntry;
       if (feedEntry == null) {
         return;
@@ -79,12 +70,11 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
       if (feedEntry.id != entry.feedEntryID) {
         return;
       }
-      await updateFeedEntryState(feedEntry);
+      await updateFeedEntryState(feedEntry, forceNew: true);
     });
   }
 
-  Future<void> updateFeedEntryState(FeedEntry feedEntry,
-      {bool forceNew = false}) async {
+  Future<void> updateFeedEntryState(FeedEntry feedEntry, {bool forceNew = false}) async {
     FeedEntryState newState = stateForFeedEntry(feedEntry, forceNew: forceNew);
     if (newState is FeedEntryStateNotLoaded) {
       newState = await load(newState);
@@ -113,11 +103,10 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     Future.wait(promises);
   }
 
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry,
-      {bool forceNew = false}) {
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry, {bool forceNew = false}) {
     FeedEntrySocialState socialState = FeedEntrySocialStateNotLoaded();
     if (cache[feedEntry.id] != null) {
-      if (!forceNew || cache[feedEntry.id].data == feedEntry) {
+      if (!forceNew && cache[feedEntry.id].data == feedEntry) {
         return cache[feedEntry.id];
       }
       socialState = cache[feedEntry.id].socialState;
@@ -129,10 +118,11 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         isNew: feedEntry.isNew,
         synced: feedEntry.synced,
         date: feedEntry.date,
-        params: FeedEntriesParamHelpers.paramForFeedEntryType(
-            feedEntry.type, feedEntry.params),
+        params: FeedEntriesParamHelpers.paramForFeedEntryType(feedEntry.type, feedEntry.params),
         data: feedEntry,
         socialState: socialState,
+        isRemoteState: false,
+        isBackedUp: feedEntry.serverID != null,
         shareLink: feedEntry.serverID != null ? '' : null);
   }
 }

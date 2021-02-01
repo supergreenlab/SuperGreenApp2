@@ -23,12 +23,12 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
   FeedLifeEventState(
     FeedEntryState from, {
     FeedEntrySocialState socialState,
-    bool remoteState = false,
+    bool isRemoteState = false,
     String shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
-          remoteState: remoteState ?? from.remoteState,
+          isRemoteState: isRemoteState ?? from.isRemoteState,
           shareLink: shareLink ?? from.shareLink,
         );
 

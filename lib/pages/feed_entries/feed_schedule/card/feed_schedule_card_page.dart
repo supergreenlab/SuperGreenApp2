@@ -35,9 +35,7 @@ class FeedScheduleCardPage extends StatelessWidget {
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedScheduleCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
-      : super(key: key);
+  const FeedScheduleCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +55,8 @@ class FeedScheduleCardPage extends StatelessWidget {
             'assets/feed_card/icon_schedule.svg',
             'Schedule change',
             state.synced,
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
+            showSyncStatus: !state.isRemoteState,
+            showControls: !state.isRemoteState,
           ),
           Container(
             height: 100,
@@ -81,12 +79,9 @@ class FeedScheduleCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change',
-              state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState, onDelete: () {
-            BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventDeleteEntry(state));
+          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change', state.synced,
+              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions(state) : []),
           Container(
             height: 100,
@@ -97,10 +92,7 @@ class FeedScheduleCardPage extends StatelessWidget {
                 Text(
                   'Flipped to\n${params.schedule}!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w300,
-                      color: Color(0xff3bb30b)),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300, color: Color(0xff3bb30b)),
                 ),
               ],
             ),

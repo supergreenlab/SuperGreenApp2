@@ -41,9 +41,7 @@ class FeedMediaCardPage extends StatefulWidget {
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedMediaCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
-      : super(key: key);
+  const FeedMediaCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
 
   @override
   _FeedMediaCardPageState createState() => _FeedMediaCardPageState();
@@ -67,10 +65,8 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_media.svg', 'Grow log',
-              widget.state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState),
+          FeedCardTitle('assets/feed_card/icon_media.svg', 'Grow log', widget.state.synced,
+              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 350,
             alignment: Alignment.center,
@@ -92,8 +88,8 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_media.svg',
-              params.boxFeed == true ? 'Build log' : 'Grow log', state.synced,
+          FeedCardTitle(
+              'assets/feed_card/icon_media.svg', params.boxFeed == true ? 'Build log' : 'Grow log', state.synced,
               onEdit: () {
                 setState(() {
                   editText = true;
@@ -107,25 +103,22 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   ShareExtend.share(media.filePath, "image");
                 }
               },
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState,
+              showSyncStatus: !state.isRemoteState,
+              showControls: !state.isRemoteState,
               onDelete: () {
-                BlocProvider.of<FeedBloc>(context)
-                    .add(FeedBlocEventDeleteEntry(state));
+                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
               },
-              actions:
-                  widget.cardActions != null ? widget.cardActions(state) : []),
+              actions: widget.cardActions != null ? widget.cardActions(state) : []),
           state.medias.length > 0
               ? MediaList(
                   state.medias,
-                  showSyncStatus: !state.remoteState,
+                  showSyncStatus: !state.isRemoteState,
                   onMediaShown: (int i) {
                     mediaShown = i;
                   },
                   onMediaTapped: (media) {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(
-                        MainNavigateToFullscreenMedia(
-                            media.thumbnailPath, media.filePath));
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToFullscreenMedia(media.thumbnailPath, media.filePath));
                   },
                 )
               : Container(),
@@ -138,8 +131,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   params.message ?? '',
                   edit: editText,
                   onEdited: (value) {
-                    BlocProvider.of<FeedBloc>(context).add(
-                        FeedBlocEventEditParams(state, params.copyWith(value)));
+                    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEditParams(state, params.copyWith(value)));
                     setState(() {
                       editText = false;
                     });

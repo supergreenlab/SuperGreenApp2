@@ -39,8 +39,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedVentilationCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
+  const FeedVentilationCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -61,8 +60,8 @@ class FeedVentilationCardPage extends StatelessWidget {
             'assets/feed_card/icon_blower.svg',
             'Ventilation change',
             state.synced,
-            showSyncStatus: !state.remoteState,
-            showControls: !state.remoteState,
+            showSyncStatus: !state.isRemoteState,
+            showControls: !state.isRemoteState,
           ),
           Container(
             height: 120,
@@ -91,12 +90,9 @@ class FeedVentilationCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_blower.svg',
-              'Ventilation change', state.synced,
-              showSyncStatus: !state.remoteState,
-              showControls: !state.remoteState, onDelete: () {
-            BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventDeleteEntry(state));
+          FeedCardTitle('assets/feed_card/icon_blower.svg', 'Ventilation change', state.synced,
+              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions(state) : []),
           body,
           SocialBarPage(
@@ -127,8 +123,7 @@ class FeedVentilationCardPage extends StatelessWidget {
     }
     return Fullscreen(
       child: Icon(Icons.upgrade),
-      title:
-          'Unknown blower reference source, you might need to upgrade the app.',
+      title: 'Unknown blower reference source, you might need to upgrade the app.',
     );
   }
 
@@ -143,12 +138,8 @@ class FeedVentilationCardPage extends StatelessWidget {
           Column(
             children: [
               Text('${params.values.blowerMin}%',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 30,
-                      color: Colors.lightBlue)),
-              Text(
-                  'at ${_tempUnit(params.values.blowerRefMin.toDouble())}$unit',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.lightBlue)),
+              Text('at ${_tempUnit(params.values.blowerRefMin.toDouble())}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
           )),
@@ -159,12 +150,8 @@ class FeedVentilationCardPage extends StatelessWidget {
           Column(
             children: [
               Text('${params.values.blowerMax}%',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 30,
-                      color: Colors.red)),
-              Text(
-                  'at ${_tempUnit(params.values.blowerRefMax.toDouble())}$unit',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.red)),
+              Text('at ${_tempUnit(params.values.blowerRefMax.toDouble())}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
           )),
@@ -172,8 +159,7 @@ class FeedVentilationCardPage extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Text('Temperature mode',
-            style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text('Temperature mode', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(
         height: 155,
@@ -199,10 +185,7 @@ class FeedVentilationCardPage extends StatelessWidget {
           Column(
             children: [
               Text('${params.values.blowerMin}%',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 30,
-                      color: Colors.blue)),
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.blue)),
             ],
           )),
       renderCard(
@@ -212,18 +195,14 @@ class FeedVentilationCardPage extends StatelessWidget {
           Column(
             children: [
               Text('${params.values.blowerMax}%',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 30,
-                      color: Colors.orange)),
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.orange)),
             ],
           )),
     ];
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child:
-            Text('Timer mode', style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text('Timer mode', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(
         height: 130,
@@ -249,18 +228,14 @@ class FeedVentilationCardPage extends StatelessWidget {
           Column(
             children: [
               Text('${params.values.blowerMin}%',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 30,
-                      color: Colors.grey)),
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.grey)),
             ],
           )),
     ];
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child:
-            Text('Manual mode', style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text('Manual mode', style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(
         height: 130,
@@ -283,15 +258,13 @@ class FeedVentilationCardPage extends StatelessWidget {
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _renderValues(
-            [params.values.blowerDay, params.values.blowerNight],
+        children: _renderValues([params.values.blowerDay, params.values.blowerNight],
             [params.initialValues.blowerDay, params.initialValues.blowerNight]),
       ),
     );
   }
 
-  List<Widget> _renderValues(
-      List<dynamic> values, List<dynamic> initialValues) {
+  List<Widget> _renderValues(List<dynamic> values, List<dynamic> initialValues) {
     int i = 0;
     return values
         .map<Map<String, int>>((v) {
@@ -312,24 +285,16 @@ class FeedVentilationCardPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text('${v['i'] == 0 ? 'Day' : 'Night'}',
-                        style: TextStyle(
-                            fontSize: 45,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.grey)),
+                        style: TextStyle(fontSize: 45, fontWeight: FontWeight.w300, color: Colors.grey)),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('${v['from']}%',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w300)),
+                    Text('${v['from']}%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
                     Icon(Icons.arrow_forward, size: 18),
                     Text('${v['to']}%',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.green)),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: Colors.green)),
                   ],
                 ),
               ],
@@ -339,8 +304,7 @@ class FeedVentilationCardPage extends StatelessWidget {
         .toList();
   }
 
-  Widget renderCard(
-      String icon, double iconPadding, String title, Widget child) {
+  Widget renderCard(String icon, double iconPadding, String title, Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(

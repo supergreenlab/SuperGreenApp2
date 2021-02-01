@@ -68,8 +68,7 @@ class _FeedPageState extends State<FeedPage> {
   final Map<dynamic, bool> visibleEntries = {};
 
   final ScrollController scrollController = ScrollController();
-  final GlobalKey<SliverAnimatedListState> listKey =
-      GlobalKey<SliverAnimatedListState>();
+  final GlobalKey<SliverAnimatedListState> listKey = GlobalKey<SliverAnimatedListState>();
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +83,7 @@ class _FeedPageState extends State<FeedPage> {
           entries.addAll(state.entries);
           if (state.initialLoad == false) {
             for (int i = 0; i < state.entries.length; ++i) {
-              listKey.currentState.insertItem(nEntries + i,
-                  duration: Duration(milliseconds: 500));
+              listKey.currentState.insertItem(nEntries + i, duration: Duration(milliseconds: 500));
             }
           }
           setState(() {
@@ -100,9 +98,10 @@ class _FeedPageState extends State<FeedPage> {
           }
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
-          listKey.currentState
-              .insertItem(state.index, duration: Duration(milliseconds: 500));
-          scrollToTop();
+          listKey.currentState.insertItem(state.index, duration: Duration(milliseconds: 500));
+          if (state.index == 0) {
+            scrollToTop();
+          }
         } else if (state is FeedBlocStateUpdateEntry) {
           setState(() {
             entries[state.index] = state.entry;
@@ -111,9 +110,7 @@ class _FeedPageState extends State<FeedPage> {
           FeedEntryState entry = state.entry;
           entries.removeAt(state.index);
           listKey.currentState.removeItem(
-              state.index,
-              (context, animation) => FeedEntriesCardHelpers.cardForFeedEntry(
-                  animation, feedState, entry),
+              state.index, (context, animation) => FeedEntriesCardHelpers.cardForFeedEntry(animation, feedState, entry),
               duration: Duration(milliseconds: 500));
         }
       },
@@ -150,29 +147,23 @@ class _FeedPageState extends State<FeedPage> {
           flexibleSpace: FlexibleSpaceBar(
             background: this.widget.appBar,
             centerTitle: this.widget.appBar == null,
-            title: this.widget.appBar == null
-                ? Text(widget.title, style: TextStyle(color: Color(0xff404040)))
-                : null,
+            title: this.widget.appBar == null ? Text(widget.title, style: TextStyle(color: Color(0xff404040))) : null,
           ),
         ),
       );
     }
     if (!loaded) {
       content.add(SliverFillRemaining(
-          hasScrollBody: false,
-          fillOverscroll: false,
-          child: FullscreenLoading(title: 'Loading feed...')));
+          hasScrollBody: false, fillOverscroll: false, child: FullscreenLoading(title: 'Loading feed...')));
     } else {
       content.add(SliverAnimatedList(
         key: listKey,
-        itemBuilder:
-            (BuildContext context, int index, Animation<double> animation) {
+        itemBuilder: (BuildContext context, int index, Animation<double> animation) {
           if (index == entries.length) {
             if (eof) {
               return null;
             }
-            BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventLoadEntries(10, entries.length));
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLoadEntries(10, entries.length));
             return Container(
               height: 100,
               child: FullscreenLoading(title: 'loading more cards..'),
@@ -181,9 +172,8 @@ class _FeedPageState extends State<FeedPage> {
             return null;
           }
           FeedEntryState feedEntry = entries[index];
-          Widget card = FeedEntriesCardHelpers.cardForFeedEntry(
-              animation, feedState, feedEntry,
-              cardActions: widget.cardActions);
+          Widget card =
+              FeedEntriesCardHelpers.cardForFeedEntry(animation, feedState, feedEntry, cardActions: widget.cardActions);
           if (index == 0) {
             card = Padding(padding: EdgeInsets.only(top: 10), child: card);
           } else if (index == entries.length - 1 && eof) {
@@ -192,27 +182,21 @@ class _FeedPageState extends State<FeedPage> {
           return VisibilityDetector(
               key: Key('feed_entry_${feedEntry.feedEntryID}'),
               onVisibilityChanged: (VisibilityInfo info) {
-                if (!(visibleEntries[feedEntry.feedEntryID] ?? false) &&
-                    info.visibleFraction > 0) {
+                if (!(visibleEntries[feedEntry.feedEntryID] ?? false) && info.visibleFraction > 0) {
                   visibleEntries[feedEntry.feedEntryID] = true;
-                  BlocProvider.of<FeedBloc>(context)
-                      .add(FeedBlocEventEntryVisible(index));
+                  BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEntryVisible(index));
                   if (feedEntry.isNew && ModalRoute.of(context).isCurrent) {
-                    BlocProvider.of<FeedBloc>(context)
-                        .add(FeedBlocEventMarkAsRead(index));
+                    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventMarkAsRead(index));
                   }
                 }
-                if (visibleEntries[feedEntry.feedEntryID] == true &&
-                    info.visibleFraction == 0) {
+                if (visibleEntries[feedEntry.feedEntryID] == true && info.visibleFraction == 0) {
                   visibleEntries.remove(feedEntry.feedEntryID);
-                  BlocProvider.of<FeedBloc>(context)
-                      .add(FeedBlocEventEntryHidden(index));
+                  BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEntryHidden(index));
                 }
               },
               child: SlideTransition(
                   position: animation.drive(
-                      Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero)
-                          .chain(CurveTween(curve: Curves.linear))),
+                      Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero).chain(CurveTween(curve: Curves.linear))),
                   child: card));
         },
         initialItemCount: entries.length + (eof ? 0 : 1),

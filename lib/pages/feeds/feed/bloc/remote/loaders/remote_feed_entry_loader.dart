@@ -34,32 +34,24 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   @override
   Future<void> loadSocialState(FeedEntryState state) async {
     FeedEntryState cached = cache[state.feedEntryID];
-    Map<String, dynamic> socialMap =
-        await BackendAPI().feedsAPI.fetchSocialForFeedEntry(state.feedEntryID);
-    FeedEntrySocialStateLoaded socialState =
-        FeedEntrySocialStateLoaded.fromMap(socialMap);
+    Map<String, dynamic> socialMap = await BackendAPI().feedsAPI.fetchSocialForFeedEntry(state.feedEntryID);
+    FeedEntrySocialStateLoaded socialState = FeedEntrySocialStateLoaded.fromMap(socialMap);
     if (cached != null && cached.socialState is FeedEntrySocialStateLoaded) {
-      socialState = socialState.copyWith(
-          comments:
-              (cached.socialState as FeedEntrySocialStateLoaded).comments);
+      socialState = socialState.copyWith(comments: (cached.socialState as FeedEntrySocialStateLoaded).comments);
     }
     onFeedEntryStateUpdated(state = state.copyWith(socialState: socialState));
     loadComments(socialState, state);
   }
 
-  Future<void> loadComments(
-      FeedEntrySocialStateLoaded socialState, FeedEntryState state) async {
+  Future<void> loadComments(FeedEntrySocialStateLoaded socialState, FeedEntryState state) async {
     List<Comment> comments = [];
 
     if (socialState.nComments > 0) {
-      comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(
-          state.feedEntryID,
-          offset: 0,
-          limit: 2,
-          rootCommentsOnly: true);
+      comments = await BackendAPI()
+          .feedsAPI
+          .fetchCommentsForFeedEntry(state.feedEntryID, offset: 0, limit: 2, rootCommentsOnly: true);
     }
-    onFeedEntryStateUpdated(
-        state.copyWith(socialState: socialState.copyWith(comments: comments)));
+    onFeedEntryStateUpdated(state.copyWith(socialState: socialState.copyWith(comments: comments)));
   }
 
   @override
@@ -94,8 +86,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
       }
       socialState = cache[feedEntryMap['id']].socialState;
     } else {
-      socialState = FeedEntrySocialStateLoaded.fromMap(feedEntryMap)
-          .copyWith(comments: []);
+      socialState = FeedEntrySocialStateLoaded.fromMap(feedEntryMap).copyWith(comments: []);
     }
     return FeedEntryStateNotLoaded(
         feedEntryID: feedEntryMap['id'],
@@ -104,9 +95,9 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
         isNew: false,
         synced: true,
         date: DateTime.parse(feedEntryMap['date']),
-        params: FeedEntriesParamHelpers.paramForFeedEntryType(
-            feedEntryMap['type'], feedEntryMap['params']),
-        remoteState: true,
+        params: FeedEntriesParamHelpers.paramForFeedEntryType(feedEntryMap['type'], feedEntryMap['params']),
+        isRemoteState: true,
+        isBackedUp: true,
         data: feedEntryMap,
         socialState: socialState);
   }

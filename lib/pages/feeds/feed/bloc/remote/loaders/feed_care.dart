@@ -31,18 +31,15 @@ class FeedCareLoader extends RemoteFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<dynamic> feedMediasMap =
-        await FeedsAPI().publicFeedMediasForFeedEntry(state.feedEntryID);
+    List<dynamic> feedMediasMap = await FeedsAPI().publicFeedMediasForFeedEntry(state.feedEntryID);
     List<MediaState> medias = [];
     for (Map<String, dynamic> feedMediaMap in feedMediasMap) {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
     state = FeedCareCommonState(state,
-        beforeMedias:
-            medias.where((m) => m.params['before'] == true).toList() ?? [],
-        afterMedias:
-            medias.where((m) => m.params['before'] != true).toList() ?? [],
-        remoteState: true,
+        beforeMedias: medias.where((m) => m.params['before'] == true).toList() ?? [],
+        afterMedias: medias.where((m) => m.params['before'] != true).toList() ?? [],
+        isRemoteState: true,
         socialState: (state.socialState as FeedEntrySocialStateLoaded));
     loadComments(state.socialState, state);
     return super.load(state);
