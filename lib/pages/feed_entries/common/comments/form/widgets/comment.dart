@@ -17,6 +17,7 @@
  */
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,20 +64,17 @@ class CommentView extends StatelessWidget {
                     color: Colors.white,
                     border: Border.all(color: Color(0xffcdcdcd), width: 1),
                     borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(commentTypes[comment.type]['pic'],
-                    width: 30, height: 30),
+                child: Image.asset(commentTypes[comment.type]['pic'], width: 30, height: 30),
               )),
         ],
       );
     }
     Widget recommendations = Container();
     if (comment.type == CommentType.RECOMMEND) {
-      CommentParam params =
-          CommentParam.fromMap(JsonDecoder().convert(comment.params));
+      CommentParam params = CommentParam.fromMap(JsonDecoder().convert(comment.params));
       recommendations = Padding(
         padding: const EdgeInsets.all(8.0),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           ...params.recommend.map((p) {
             return Row(
               children: [
@@ -109,10 +107,7 @@ class CommentView extends StatelessWidget {
     }
     return Padding(
       padding: EdgeInsets.only(
-          left: comment.replyTo != null ? 24 : 8.0,
-          right: 8.0,
-          top: this.first ? 16.0 : 4.0,
-          bottom: 4.0),
+          left: comment.replyTo != null ? 24 : 8.0, right: 8.0, top: this.first ? 16.0 : 4.0, bottom: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -125,8 +120,7 @@ class CommentView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 4.0, left: 4.0),
                   child: MarkdownBody(
                     data: '**${comment.from}** ${comment.text}',
-                    styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(color: Colors.black, fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
                 ),
                 recommendations,
@@ -141,16 +135,32 @@ class CommentView extends StatelessWidget {
                           style: TextStyle(color: Color(0xffababab)),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            if (!loggedIn) {
+                              createAccountOrLogin(context);
+                              return;
+                            }
+                            replyTo();
+                          },
+                          child: Text(
+                            'Reply',
+                            style: TextStyle(color: Color(0xff717171)),
+                          ),
+                        ),
+                      ),
                       InkWell(
                         onTap: () {
                           if (!loggedIn) {
                             createAccountOrLogin(context);
                             return;
                           }
-                          replyTo();
+                          createReport(context);
                         },
                         child: Text(
-                          'Reply',
+                          'Report',
                           style: TextStyle(color: Color(0xff717171)),
                         ),
                       ),
@@ -158,8 +168,7 @@ class CommentView extends StatelessWidget {
                         child: Container(),
                       ),
                       this.comment.isNew == true
-                          ? Text('Sending comment..',
-                              style: TextStyle(color: Colors.red))
+                          ? Text('Sending comment..', style: TextStyle(color: Colors.red))
                           : Container(),
                     ],
                   ),
@@ -173,15 +182,12 @@ class CommentView extends StatelessWidget {
                 createAccountOrLogin(context);
                 return;
               }
-              BlocProvider.of<CommentsFormBloc>(context)
-                  .add(CommentsFormBlocEventLike(comment));
+              BlocProvider.of<CommentsFormBloc>(context).add(CommentsFormBlocEventLike(comment));
             },
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: Image.asset(
-                  'assets/feed_card/button_like${comment.liked ? '_on' : ''}.png',
-                  width: 20,
-                  height: 20),
+              child:
+                  Image.asset('assets/feed_card/button_like${comment.liked ? '_on' : ''}.png', width: 20, height: 20),
             ),
           ),
         ],
@@ -231,8 +237,40 @@ class CommentView extends StatelessWidget {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context)
-          .add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+    }
+  }
+
+  void createReport(BuildContext context) async {
+    String c = comment.text;
+    if (c.length > 40) {
+      c = '${c.substring(0, 40)}...';
+    }
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Report this comment?'),
+            content: Text('Comment was: "$c"'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('CANCEL'),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<CommentsFormBloc>(context).add(CommentsFormBlocEventReport(comment));
     }
   }
 }

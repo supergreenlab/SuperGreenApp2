@@ -67,6 +67,15 @@ class CommentsFormBlocEventLike extends CommentsFormBlocEvent {
   List<Object> get props => [comment];
 }
 
+class CommentsFormBlocEventReport extends CommentsFormBlocEvent {
+  final Comment comment;
+
+  CommentsFormBlocEventReport(this.comment);
+
+  @override
+  List<Object> get props => [comment];
+}
+
 class CommentsFormBlocEventLoadComments extends CommentsFormBlocEvent {
   final int offset;
 
@@ -170,6 +179,8 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
     } else if (event is CommentsFormBlocEventLike) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
       yield CommentsFormBlocStateUpdateComment(event.comment.copyWith(liked: !event.comment.liked));
+    } else if (event is CommentsFormBlocEventReport) {
+      await BackendAPI().feedsAPI.reportComment(event.comment);
     } else if (event is CommentsFormBlocEventPostComment) {
       String tempID = Uuid().v4();
       Comment comment = Comment(
