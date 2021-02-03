@@ -103,8 +103,12 @@ class _CapturePageState extends State<CapturePage> {
               Widget cameraPreview = GestureDetector(
                   onTapUp: (TapUpDetails details) {
                     _cameraController.setFocusMode(FocusMode.locked);
+                    double yFocus = details.localPosition.dy / height;
+                    if (Platform.isAndroid) {
+                      yFocus = (height - details.localPosition.dy) / height;
+                    }
                     _cameraController.setFocusPoint(
-                        Offset(details.localPosition.dx / width, (height - details.localPosition.dy) / height));
+                        Offset(details.localPosition.dx / width, yFocus));
                   },
                   child: Positioned(
                       left: constraints.maxWidth / 2 - width / 2,
@@ -378,8 +382,8 @@ class _CapturePageState extends State<CapturePage> {
       await old.dispose();
     }
     _cameraController = CameraController(_cameras[0], ResolutionPreset.veryHigh, enableAudio: _enableAudio);
-    _cameraController.setFocusMode(focusMode);
     await _cameraController.initialize();
+    _cameraController.setFocusMode(focusMode);
     setState(() {});
   }
 
