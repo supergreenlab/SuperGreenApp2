@@ -179,8 +179,8 @@ class _CapturePageState extends State<CapturePage> {
       child: Stack(
         children: [
           LayoutBuilder(builder: (context, constraints) {
-            double width = constraints.maxHeight * _cameraController.value.aspectRatio;
-            double height = constraints.maxHeight;
+            double width = constraints.maxWidth;
+            double height = constraints.maxWidth * _cameraController.value.aspectRatio;
             return Stack(children: [
               Positioned(
                   left: (constraints.maxWidth - width) / 2,
