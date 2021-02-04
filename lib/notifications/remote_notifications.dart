@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -32,8 +33,7 @@ class RemoteNotifications {
   RemoteNotifications(this.onNotificationData);
 
   Future init() async {
-    NotificationSettings settings =
-        await FirebaseMessaging.instance.getNotificationSettings();
+    NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
       Logger.log(await FirebaseMessaging.instance.getToken());
@@ -44,11 +44,12 @@ class RemoteNotifications {
       }
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
     }
-    RemoteMessage initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       Logger.log('initialMessage is not null');
-      notificationSelected(initialMessage);
+      Timer(Duration(milliseconds: 300), () {
+        notificationSelected(initialMessage);
+      });
     }
     FirebaseMessaging.onMessage.listen(notificationReceived);
     FirebaseMessaging.onMessageOpenedApp.listen(notificationSelected);
@@ -74,11 +75,8 @@ class RemoteNotifications {
   }
 
   Future sendToken() async {
-    if (AppDB().getAppData().jwt != null &&
-        AppDB().getAppData().notificationTokenSent == false) {
-      await BackendAPI()
-          .feedsAPI
-          .updateNotificationToken(AppDB().getAppData().notificationToken);
+    if (AppDB().getAppData().jwt != null && AppDB().getAppData().notificationTokenSent == false) {
+      await BackendAPI().feedsAPI.updateNotificationToken(AppDB().getAppData().notificationToken);
       AppDB().getAppData().notificationTokenSent = true;
     }
   }
