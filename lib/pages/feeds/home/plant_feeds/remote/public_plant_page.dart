@@ -55,7 +55,9 @@ class PublicPlantPage extends StatelessWidget {
         title: 'Viewing single log entry',
         button: 'View complete diary',
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(state.plantID));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+            state.plantID,
+          ));
         },
       );
     }
