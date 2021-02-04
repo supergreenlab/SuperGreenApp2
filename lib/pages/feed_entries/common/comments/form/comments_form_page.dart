@@ -296,7 +296,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         title: 'Viewing single comment',
         button: 'View all comments',
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(false, feedEntry));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToCommentFormEvent(false, feedEntry, pushAsReplacement: true));
         },
       );
     } else if (type == CommentType.COMMENT) {
