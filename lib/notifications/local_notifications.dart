@@ -26,21 +26,19 @@ class LocalNotifications {
   LocalNotifications(this.onNotificationData);
 
   Future init() async {
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_notification');
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
     var initializationSettingsIOS = IOSInitializationSettings(
         requestSoundPermission: false,
         requestBadgePermission: false,
         requestAlertPermission: false,
         onDidReceiveLocalNotification: _onDidReceiveLocalNotification);
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: _onSelectNotification);
   }
 
-  Future _onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {
+  Future _onDidReceiveLocalNotification(int id, String title, String body, String payload) async {
     NotificationData notificationData = NotificationData.fromJSON(payload);
     onNotificationData(notificationData);
   }
@@ -52,8 +50,7 @@ class LocalNotifications {
 
   Future<bool> checkPermissions() async {
     return flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-                IOSFlutterLocalNotificationsPlugin>()
+            .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
             ?.requestPermissions(
               alert: true,
               badge: true,
@@ -62,29 +59,19 @@ class LocalNotifications {
         true;
   }
 
-  Future reminderNotification(
-      int id, int afterMinutes, NotificationData notificationData) async {
+  Future reminderNotification(int id, int afterMinutes, NotificationData notificationData) async {
     if (!await this.checkPermissions()) {
       return;
     }
 
-    var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(minutes: afterMinutes));
+    var scheduledNotificationDateTime = DateTime.now().add(Duration(minutes: afterMinutes));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'REMINDERS',
-        'Towelie\'s reminders',
-        'Towelie can help you not forget anything about your grow.');
+        'REMINDERS', 'Towelie\'s reminders', 'Towelie can help you not forget anything about your grow.');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-        id,
-        notificationData.title,
-        notificationData.body,
-        scheduledNotificationDateTime,
-        platformChannelSpecifics,
-        androidAllowWhileIdle: true,
-        payload: notificationData.toJSON());
+        id, notificationData.title, notificationData.body, scheduledNotificationDateTime, platformChannelSpecifics,
+        androidAllowWhileIdle: true, payload: notificationData.toJSON());
   }
 }

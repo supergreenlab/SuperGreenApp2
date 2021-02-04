@@ -301,36 +301,49 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         },
       );
     } else if (type == CommentType.COMMENT) {
+      List<Widget> types = [
+        renderType(context, CommentType.COMMENT),
+        renderType(context, CommentType.TIPS),
+        renderType(context, CommentType.DIAGNOSIS),
+        renderType(context, CommentType.RECOMMEND, onTap: () {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToSelectNewProductEvent([], futureFn: (future) async {
+            List<Product> products = await future;
+            if (products == null || products.length == 0) {
+              return;
+            }
+            setState(() {
+              this.recommended = products;
+              this.type = CommentType.RECOMMEND;
+              inputFocus.requestFocus();
+              this.replyTo = null;
+              this.replyToDisplay = null;
+            });
+          }));
+        }),
+      ];
+      Widget typesContainer;
+      if (MediaQuery.of(context).size.width < 350) {
+        typesContainer = Container(
+          height: 90.0,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: types,
+          ),
+        );
+      } else {
+        typesContainer = Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: types,
+        );
+      }
       content = Column(children: [
         Text(
           'What kind of post do you want to do?',
           textAlign: TextAlign.center,
           style: TextStyle(color: Color(0xff787878), fontSize: 17),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            renderType(context, CommentType.COMMENT),
-            renderType(context, CommentType.TIPS),
-            renderType(context, CommentType.DIAGNOSIS),
-            renderType(context, CommentType.RECOMMEND, onTap: () {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToSelectNewProductEvent([], futureFn: (future) async {
-                List<Product> products = await future;
-                if (products == null || products.length == 0) {
-                  return;
-                }
-                setState(() {
-                  this.recommended = products;
-                  this.type = CommentType.RECOMMEND;
-                  inputFocus.requestFocus();
-                  this.replyTo = null;
-                  this.replyToDisplay = null;
-                });
-              }));
-            }),
-          ],
-        ),
+        typesContainer,
       ]);
     } else {
       Map<String, String> commentType = commentTypes[type];
