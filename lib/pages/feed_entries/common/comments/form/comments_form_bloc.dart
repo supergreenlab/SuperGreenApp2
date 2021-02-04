@@ -134,6 +134,7 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
         comments,
         n,
         user,
+        eof,
         commentID,
         replyTo,
       ];

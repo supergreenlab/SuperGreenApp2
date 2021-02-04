@@ -27,6 +27,7 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/products/products_page.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/single_feed_entry.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/public_plant_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_plant_feed_delegate.dart';
@@ -50,37 +51,12 @@ class PublicPlantPage extends StatelessWidget {
     ];
     Widget bottom;
     if (state.feedEntryID != null) {
-      bottom = InkWell(
+      bottom = SingleFeedEntry(
+        title: 'Viewing single log entry',
+        button: 'View complete diary',
         onTap: () {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(state.plantID));
         },
-        child: Container(
-          color: Color(0xff3bb30b),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Viewing single log entry',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'View complete diary',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
       );
     }
     return BlocProvider(

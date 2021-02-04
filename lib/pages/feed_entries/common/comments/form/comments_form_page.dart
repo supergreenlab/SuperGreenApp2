@@ -31,6 +31,8 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/widgets/comment.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/single_feed_entry.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
@@ -62,9 +64,9 @@ class CommentsFormPage extends StatefulWidget {
   _CommentsFormPageState createState() => _CommentsFormPageState();
 }
 
-class _CommentsFormPageState extends State<CommentsFormPage>
-    with TickerProviderStateMixin {
+class _CommentsFormPageState extends State<CommentsFormPage> with TickerProviderStateMixin {
   final List<Comment> comments = [];
+  FeedEntryStateLoaded feedEntry;
   User user;
   bool autoFocus;
   Comment replyTo;
@@ -72,6 +74,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   List<Product> recommended;
 
   bool eof = false;
+  bool single = false;
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   final FocusNode inputFocus = FocusNode();
@@ -87,8 +90,10 @@ class _CommentsFormPageState extends State<CommentsFormPage>
         if (state is CommentsFormBlocStateLoaded) {
           setState(() {
             this.autoFocus = state.autoFocus;
+            this.feedEntry = state.feedEntry;
             this.user = state.user;
             this.eof = state.eof;
+            this.single = state.commentID != null;
             state.comments.forEach((comment) {
               int existsIndex = comments.indexWhere((c) => c.id == comment.id);
               if (existsIndex != -1) {
@@ -109,14 +114,9 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           }
         } else if (state is CommentsFormBlocStateAddComment) {
           insertNewComment(state.comment);
-          if (scrollController.hasClients &&
-              scrollController.offset != 0 &&
-              state.comment.replyTo == null) {
-            Timer(
-                Duration(milliseconds: 100),
-                () => scrollController.animateTo(0,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.linear));
+          if (scrollController.hasClients && scrollController.offset != 0 && state.comment.replyTo == null) {
+            Timer(Duration(milliseconds: 100),
+                () => scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.linear));
           }
         } else if (state is CommentsFormBlocStateUser) {
           setState(() {
@@ -168,15 +168,13 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             child: AnimatedList(
           key: listKey,
           controller: scrollController,
-          itemBuilder:
-              (BuildContext context, int index, Animation<double> animation) {
+          itemBuilder: (BuildContext context, int index, Animation<double> animation) {
             if (index >= comments.length) {
               if (eof) {
                 return null;
               }
-              BlocProvider.of<CommentsFormBloc>(context).add(
-                  CommentsFormBlocEventLoadComments(
-                      comments.where((c) => c.replyTo == null).length));
+              BlocProvider.of<CommentsFormBloc>(context)
+                  .add(CommentsFormBlocEventLoadComments(comments.where((c) => c.replyTo == null).length));
               return Container(
                 height: 100,
                 child: FullscreenLoading(
@@ -201,13 +199,11 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                             replyTo = comments[index];
                             replyToDisplay = replyTo;
                             if (replyTo.replyTo != null) {
-                              replyTo = comments
-                                  .firstWhere((c) => c.id == replyTo.replyTo);
+                              replyTo = comments.firstWhere((c) => c.id == replyTo.replyTo);
                             }
                             inputFocus.requestFocus();
                             type = CommentType.COMMENT;
-                            textEditingController.text =
-                                '@${replyToDisplay.from} ';
+                            textEditingController.text = '@${replyToDisplay.from} ';
                           });
                         },
                       ),
@@ -224,8 +220,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
     if (user == null) {
       return InkWell(
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToSettingsAuth());
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
         },
         child: Center(
             child: Padding(
@@ -296,6 +291,14 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           ),
         ],
       );
+    } else if (single) {
+      content = SingleFeedEntry(
+        title: 'Viewing single comment',
+        button: 'View all comments',
+        onTap: () {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(false, feedEntry));
+        },
+      );
     } else if (type == CommentType.COMMENT) {
       content = Column(children: [
         Text(
@@ -310,9 +313,8 @@ class _CommentsFormPageState extends State<CommentsFormPage>
             renderType(context, CommentType.TIPS),
             renderType(context, CommentType.DIAGNOSIS),
             renderType(context, CommentType.RECOMMEND, onTap: () {
-              BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToSelectNewProductEvent([],
-                      futureFn: (future) async {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToSelectNewProductEvent([], futureFn: (future) async {
                 List<Product> products = await future;
                 if (products == null || products.length == 0) {
                   return;
@@ -344,8 +346,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           children: [
             name,
             Row(children: [
-              Text(recommended[0].name,
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(recommended[0].name, style: TextStyle(fontWeight: FontWeight.bold)),
               recommended[0].supplier != null
                   ? Expanded(
                       child: Padding(
@@ -403,7 +404,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           fadeDuration: Duration(milliseconds: 200),
           sizeDuration: Duration(milliseconds: 200),
           child: content),
-      renderInput(context),
+      !single || replyTo != null ? renderInput(context) : Container(),
     ]);
   }
 
@@ -422,21 +423,17 @@ class _CommentsFormPageState extends State<CommentsFormPage>
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.black26),
-                  borderRadius: BorderRadius.circular(25.0)),
+                  border: Border.all(width: 1, color: Colors.black26), borderRadius: BorderRadius.circular(25.0)),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 0),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                       child: TextField(
                         autofocus: autoFocus,
                         focusNode: inputFocus,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Add a comment as stant...'),
+                        decoration: InputDecoration(border: InputBorder.none, hintText: 'Add a comment as stant...'),
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(fontSize: 17),
                         minLines: 1,
@@ -448,11 +445,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                   InkWell(
                     onTap: () {
                       BlocProvider.of<CommentsFormBloc>(context).add(
-                          CommentsFormBlocEventPostComment(
-                              textEditingController.text,
-                              type,
-                              replyTo,
-                              recommended));
+                          CommentsFormBlocEventPostComment(textEditingController.text, type, replyTo, recommended));
                       FocusScope.of(context).unfocus();
                       textEditingController.clear();
                       type = CommentType.COMMENT;
@@ -462,10 +455,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),
                       child: Text('Post',
-                          style: TextStyle(
-                              color: Color(0xff001AFF),
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold)),
+                          style: TextStyle(color: Color(0xff001AFF), fontSize: 18.0, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
@@ -503,9 +493,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                 style: TextStyle(
                     color: Color(0xff474747),
                     fontSize: 16,
-                    fontWeight: this.type == type
-                        ? FontWeight.bold
-                        : FontWeight.normal),
+                    fontWeight: this.type == type ? FontWeight.bold : FontWeight.normal),
               ),
               Container(
                 margin: const EdgeInsets.all(5.0),
@@ -513,9 +501,7 @@ class _CommentsFormPageState extends State<CommentsFormPage>
                 decoration: BoxDecoration(
                     border: Border.all(
                         width: this.type == type ? 2 : 1,
-                        color: this.type == type
-                            ? Color(0xff3bb30b)
-                            : Color(0xffbdbdbd)),
+                        color: this.type == type ? Color(0xff3bb30b) : Color(0xffbdbdbd)),
                     borderRadius: BorderRadius.all(Radius.circular(25))),
                 child: Image.asset(commentType['pic'], width: 25, height: 25),
               ),
@@ -527,23 +513,16 @@ class _CommentsFormPageState extends State<CommentsFormPage>
   void insertNewComment(Comment comment) {
     int index;
     if (comment.replyTo != null) {
-      int startIndex = comments.lastIndexWhere(
-              (c) => c.id == comment.replyTo || c.replyTo == comment.replyTo) +
-          1;
+      int startIndex = comments.lastIndexWhere((c) => c.id == comment.replyTo || c.replyTo == comment.replyTo) + 1;
       index = comments.lastIndexWhere(
-          (c) =>
-              c.replyTo == comment.replyTo &&
-              c.createdAt.isAfter(comment.createdAt),
-          startIndex);
+          (c) => c.replyTo == comment.replyTo && c.createdAt.isAfter(comment.createdAt), startIndex);
       index = index < 0 ? startIndex : index;
     } else {
-      index = comments.indexWhere(
-          (c) => c.replyTo == null && c.createdAt.isBefore(comment.createdAt));
+      index = comments.indexWhere((c) => c.replyTo == null && c.createdAt.isBefore(comment.createdAt));
       index = index < 0 ? comments.length : index;
     }
     if (listKey.currentState != null) {
-      listKey.currentState
-          .insertItem(index, duration: Duration(milliseconds: 200));
+      listKey.currentState.insertItem(index, duration: Duration(milliseconds: 200));
     }
     comments.insert(index, comment);
   }
