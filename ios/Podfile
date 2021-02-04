@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '9.3'
+platform :ios, '10.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -55,4 +55,9 @@ post_install do |installer|
       ]
     end
   end
+end
+
+target 'ImageNotification' do
+  use_frameworks!
+  pod 'Firebase/Messaging'
 end
