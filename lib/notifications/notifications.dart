@@ -43,8 +43,7 @@ class NotificationsBlocEventReminder extends NotificationsBlocEvent {
   final String body;
   final String payload;
 
-  NotificationsBlocEventReminder(
-      this.id, this.afterMinutes, this.title, this.body, this.payload);
+  NotificationsBlocEventReminder(this.id, this.afterMinutes, this.title, this.body, this.payload);
 
   @override
   List<Object> get props => [id, afterMinutes, title, body, payload];
@@ -99,8 +98,7 @@ class NotificationsBlocStateHomeNavigation extends NotificationsBlocState {
   List<Object> get props => [rand, homeNavigatorEvent];
 }
 
-class NotificationsBloc
-    extends Bloc<NotificationsBlocEvent, NotificationsBlocState> {
+class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocState> {
   static RemoteNotifications remoteNotifications;
   static LocalNotifications localNotifications;
 
@@ -111,8 +109,7 @@ class NotificationsBloc
   }
 
   @override
-  Stream<NotificationsBlocState> mapEventToState(
-      NotificationsBlocEvent event) async* {
+  Stream<NotificationsBlocState> mapEventToState(NotificationsBlocEvent event) async* {
     if (event is NotificationsBlocEventInit) {
       await Future.wait([
         remoteNotifications.init(),
@@ -120,45 +117,61 @@ class NotificationsBloc
       ]);
     } else if (event is NotificationsBlocEventReceived) {
       NotificationData notificationData = event.notificationData;
-      if (notificationData is NotificationDataComment) {
-        Logger.log(
-            'Opening comment for plant ${notificationData.plantID}, entry ${notificationData.feedEntryID}');
-        Plant plant = await RelDB.get()
-            .plantsDAO
-            .getPlantForServerID(notificationData.plantID);
-        FeedEntry feedEntry = await RelDB.get()
-            .feedsDAO
-            .getFeedEntryForServerID(notificationData.feedEntryID);
+      if (notificationData is NotificationDataPlantComment) {
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
         if (plant != null && feedEntry != null) {
           AppDB().setLastPlant(plant.id);
-          yield NotificationsBlocStateMainNavigation(
-              MainNavigateToHomeEvent(plant: plant, feedEntry: feedEntry));
+          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant, feedEntry: feedEntry));
         } else {
-          yield NotificationsBlocStateMainNavigation(MainNavigateToPublicPlant(
-              notificationData.plantID,
-              feedEntryID: notificationData.feedEntryID));
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToPublicPlant(notificationData.plantID, feedEntryID: notificationData.feedEntryID));
         }
       } else if (notificationData is NotificationDataReminder) {
         yield NotificationsBlocStateNotification(event.notificationData);
-        Plant plant =
-            await RelDB.get().plantsDAO.getPlant(notificationData.plantID);
+        Plant plant = await RelDB.get().plantsDAO.getPlant(notificationData.plantID);
         if (plant == null) return;
         AppDB().setLastPlant(plant.id);
-        yield NotificationsBlocStateMainNavigation(
-            MainNavigateToHomeEvent(plant: plant));
+        yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
       } else if (notificationData is NotificationDataAlert) {
         yield NotificationsBlocStateNotification(event.notificationData);
-        Plant plant = await RelDB.get()
-            .plantsDAO
-            .getPlantForServerID(notificationData.plantID);
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
         if (plant == null) return;
         AppDB().setLastPlant(plant.id);
-        yield NotificationsBlocStateMainNavigation(
-            MainNavigateToHomeEvent(plant: plant));
+        yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+      } else if (notificationData is NotificationDataLikePlantFeedEntry) {
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
+        if (plant != null && feedEntry != null) {
+          AppDB().setLastPlant(plant.id);
+          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant, feedEntry: feedEntry));
+        } else {
+          yield NotificationsBlocStateMainNavigation(
+              MainNavigateToPublicPlant(notificationData.plantID, feedEntryID: notificationData.feedEntryID));
+        }
+      } else if (notificationData is NotificationDataLikePlantComment) {
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
+        if (plant != null && feedEntry != null) {
+          AppDB().setLastPlant(plant.id);
+          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(
+            plant: plant,
+            feedEntry: feedEntry,
+            commentID: notificationData.commentID,
+            replyTo: notificationData.replyTo,
+          ));
+        } else {
+          yield NotificationsBlocStateMainNavigation(MainNavigateToPublicPlant(
+            notificationData.plantID,
+            feedEntryID: notificationData.feedEntryID,
+            commentID: notificationData.commentID,
+            replyTo: notificationData.replyTo,
+          ));
+        }
       }
     } else if (event is NotificationsBlocEventReminder) {
-      await localNotifications.reminderNotification(event.id,
-          event.afterMinutes, NotificationData.fromJSON(event.payload));
+      await localNotifications.reminderNotification(
+          event.id, event.afterMinutes, NotificationData.fromJSON(event.payload));
     }
   }
 

@@ -35,13 +35,11 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_produ
 class PublicPlantPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<PublicPlantBloc, PublicPlantBlocState>(
-        cubit: BlocProvider.of<PublicPlantBloc>(context),
-        builder: (BuildContext context, PublicPlantBlocState state) {
-          return _renderFeed(context, state);
-        },
-      ),
+    return BlocBuilder<PublicPlantBloc, PublicPlantBlocState>(
+      cubit: BlocProvider.of<PublicPlantBloc>(context),
+      builder: (BuildContext context, PublicPlantBlocState state) {
+        return Scaffold(body: _renderFeed(context, state));
+      },
     );
   }
 
@@ -54,8 +52,7 @@ class PublicPlantPage extends StatelessWidget {
     if (state.feedEntryID != null) {
       bottom = InkWell(
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToPublicPlant(state.plantID));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(state.plantID));
         },
         child: Container(
           color: Color(0xff3bb30b),
@@ -87,8 +84,8 @@ class PublicPlantPage extends StatelessWidget {
       );
     }
     return BlocProvider(
-      create: (context) => FeedBloc(
-          RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID)),
+      create: (context) =>
+          FeedBloc(RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID, state.commentID, state.replyTo)),
       child: FeedPage(
           title: state.plantName ?? '',
           pinned: true,
@@ -101,9 +98,7 @@ class PublicPlantPage extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () async {
-                await ShareExtend.share(
-                    "https://supergreenlab.com/public/plant?id=${state.plantID}",
-                    'text');
+                await ShareExtend.share("https://supergreenlab.com/public/plant?id=${state.plantID}", 'text');
               },
             ),
           ],
@@ -117,8 +112,7 @@ class PublicPlantPage extends StatelessWidget {
                   return tabs[index](context, state);
                 },
                 pagination: SwiperPagination(
-                  builder: new DotSwiperPaginationBuilder(
-                      color: Colors.white, activeColor: Color(0xff3bb30b)),
+                  builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
                 ),
                 loop: false,
               ),
@@ -130,15 +124,12 @@ class PublicPlantPage extends StatelessWidget {
 
   Widget _renderPlantInfos(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-        create: (context) =>
-            PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)),
-        child: PlantInfosPage());
+        create: (context) => PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)), child: PlantInfosPage());
   }
 
   Widget _renderProducts(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-      create: (context) =>
-          ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
+      create: (context) => ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
       child: ProductsPage(
         editable: false,
       ),

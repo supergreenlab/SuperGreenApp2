@@ -80,6 +80,22 @@ class FeedsAPI {
     return comments;
   }
 
+  Future<List<Comment>> fetchComment(String commentID) async {
+    Response resp = await BackendAPI().apiClient.get('${BackendAPI().serverHost}/comment/$commentID', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      throw 'fetchCommentsForFeedEntry failed: ${resp.body}';
+    }
+    Map<String, dynamic> data = JsonDecoder().convert(resp.body);
+    List<Comment> comments = [];
+    for (int i = 0; i < data['comments'].length; ++i) {
+      comments.add(Comment.fromMap(data['comments'][i]));
+    }
+    return comments;
+  }
+
   Future<Map<String, dynamic>> fetchSocialForFeedEntry(String feedEntryID, {int offset = 0, int n = 10}) async {
     Response resp =
         await BackendAPI().apiClient.get('${BackendAPI().serverHost}/feedEntry/$feedEntryID/social', headers: {

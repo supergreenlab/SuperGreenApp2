@@ -37,11 +37,13 @@ class HomeNavigateEventInit extends HomeNavigatorEvent {
 class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent {
   final Plant plant;
   final FeedEntry feedEntry;
+  final String commentID;
+  final String replyTo;
 
-  HomeNavigateToPlantFeedEvent(this.plant, {this.feedEntry});
+  HomeNavigateToPlantFeedEvent(this.plant, {this.feedEntry, this.commentID, this.replyTo});
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [plant, commentID, replyTo];
 }
 
 class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {
@@ -93,15 +95,12 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   HomeNavigatorBloc(this.args, this._navigatorKey)
-      : super(HomeNavigatorState(
-            (AppDB().getAppData().lastPlantID != null || args.plant != null)
-                ? 1
-                : 0)) {
+      : super(HomeNavigatorState((AppDB().getAppData().lastPlantID != null || args.plant != null) ? 1 : 0)) {
     if (args.plant != null) {
       // TODO find something better
       Timer(Duration(seconds: 1), () {
         add(HomeNavigateToPlantFeedEvent(args.plant,
-            feedEntry: args.feedEntry));
+            feedEntry: args.feedEntry, commentID: args.commentID, replyTo: args.replyTo));
       });
     }
   }
@@ -109,24 +108,19 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
     if (event is HomeNavigateToSGLFeedEvent) {
-      _navigatorKey.currentState
-          .pushReplacementNamed('/feed/sgl', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/feed/sgl', arguments: event);
       yield HomeNavigatorState(0);
     } else if (event is HomeNavigateToPlantFeedEvent) {
-      _navigatorKey.currentState
-          .pushReplacementNamed('/feed/plant', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/feed/plant', arguments: event);
       yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToBoxFeedEvent) {
-      _navigatorKey.currentState
-          .pushReplacementNamed('/feed/box', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/feed/box', arguments: event);
       yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToExplorerEvent) {
-      _navigatorKey.currentState
-          .pushReplacementNamed('/explorer', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/explorer', arguments: event);
       yield HomeNavigatorState(2);
     } else if (event is HomeNavigateToSettingsEvent) {
-      _navigatorKey.currentState
-          .pushReplacementNamed('/settings', arguments: event);
+      _navigatorKey.currentState.pushReplacementNamed('/settings', arguments: event);
       yield HomeNavigatorState(3);
     } else {
       yield HomeNavigatorState(0);

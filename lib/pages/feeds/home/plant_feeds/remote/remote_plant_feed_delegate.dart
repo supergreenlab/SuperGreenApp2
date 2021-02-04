@@ -35,25 +35,21 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   StreamSubscription<hive.BoxEvent> appDataStream;
 
   final String plantID;
-  final String feedEntryID;
-  RemotePlantFeedBlocDelegate(this.plantID, this.feedEntryID);
+  RemotePlantFeedBlocDelegate(this.plantID, String feedEntryID, String commentID, String replyTo)
+      : super(feedEntryID: feedEntryID, commentID: commentID, replyTo: replyTo);
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
-    return state.copyWith(
-        shareLink:
-            'https://supergreenlab.com/public/plant?id=$plantID&feid=${state.feedEntryID}');
+    return state.copyWith(shareLink: 'https://supergreenlab.com/public/plant?id=$plantID&feid=${state.feedEntryID}');
   }
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
     if (feedEntryID != null) {
-      Map<String, dynamic> entryMap =
-          await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
+      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
       return [loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap)];
     }
-    List<dynamic> entriesMap =
-        await BackendAPI().feedsAPI.publicFeedEntries(plantID, n, offset);
+    List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicFeedEntries(plantID, n, offset);
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
       return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap);
@@ -62,8 +58,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   void loadFeed() async {
-    Map<String, dynamic> plant =
-        await BackendAPI().feedsAPI.publicPlant(plantID);
+    Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
     feedState = PlantFeedState(
       AppDB().getAppData().jwt != null,
       AppDB().getAppData().storeGeo,

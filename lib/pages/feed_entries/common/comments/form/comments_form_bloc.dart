@@ -113,11 +113,30 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   final int n;
   final User user;
   final bool eof;
+  final String commentID;
+  final String replyTo;
 
-  CommentsFormBlocStateLoaded(this.autoFocus, this.feedEntry, this.comments, this.n, this.user, this.eof);
+  CommentsFormBlocStateLoaded(
+    this.autoFocus,
+    this.feedEntry,
+    this.comments,
+    this.n,
+    this.user,
+    this.eof,
+    this.commentID,
+    this.replyTo,
+  );
 
   @override
-  List<Object> get props => [autoFocus, feedEntry, comments, n, user];
+  List<Object> get props => [
+        autoFocus,
+        feedEntry,
+        comments,
+        n,
+        user,
+        commentID,
+        replyTo,
+      ];
 }
 
 class CommentsFormBlocStateUpdateComment extends CommentsFormBlocState {
@@ -209,12 +228,18 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
   }
 
   Stream<CommentsFormBlocState> fetchComments({offset = 0, limit = 20}) async* {
-    List<Comment> comments =
-        await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
-    int n = await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
+    List<Comment> comments;
+    int n;
+    if (args.commentID != null) {
+      comments = await BackendAPI().feedsAPI.fetchComment(args.replyTo ?? args.commentID);
+      n = 1;
+    } else {
+      comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
+      n = await BackendAPI().feedsAPI.fetchCommentCountForFeedEntry(feedEntryID);
+    }
 
     yield CommentsFormBlocStateLoaded(this.args.autoFocus, this.args.feedEntry, comments, n, this.user,
-        comments.where((c) => c.replyTo == null).length != limit);
+        comments.where((c) => c.replyTo == null).length != limit, this.args.commentID, this.args.replyTo);
   }
 
   void appDataUpdated(hive.BoxEvent boxEvent) async {

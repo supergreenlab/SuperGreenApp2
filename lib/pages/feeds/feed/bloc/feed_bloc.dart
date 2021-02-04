@@ -223,6 +223,17 @@ class FeedBlocStateRemoveEntry extends FeedBlocState {
   List<Object> get props => [index, entry];
 }
 
+class FeedBlocStateOpenComment extends FeedBlocState {
+  final FeedEntryStateLoaded entry;
+  final String commentID;
+  final String replyTo;
+
+  FeedBlocStateOpenComment(this.entry, this.commentID, this.replyTo);
+
+  @override
+  List<Object> get props => [entry, commentID, replyTo];
+}
+
 class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
   FeedBlocDelegate delegate;
   bool initialLoad = true;
@@ -241,10 +252,12 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
     } else if (event is FeedBlocEventFeedLoaded) {
       yield FeedBlocStateFeedLoaded(event.feed);
     } else if (event is FeedBlocEventLoadEntries) {
-      List<FeedEntryState> fes =
-          await delegate.loadEntries(event.n, entries.length);
+      List<FeedEntryState> fes = await delegate.loadEntries(event.n, entries.length);
       entries.addAll(fes.map((f) => delegate.postProcess(f)));
       yield FeedBlocStateEntriesLoaded(fes, fes.length < event.n, initialLoad);
+      if (initialLoad) {
+        yield* delegate.onInitialLoad();
+      }
       initialLoad = false;
     } else if (event is FeedBlocEventEntryVisible) {
       FeedEntryState e = entries[event.index];
@@ -263,14 +276,12 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       int index = _insertIndex(event.entry);
       yield* _insertEntryAt(index, event.entry);
     } else if (event is FeedBlocEventDeletedFeedEntry) {
-      int index =
-          entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
+      int index = entries.indexWhere((fe) => fe.feedEntryID == event.feedEntryID);
       if (index >= 0) {
         yield* _removeEntryAt(index);
       }
     } else if (event is FeedBlocEventUpdatedEntry) {
-      int index =
-          entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
+      int index = entries.indexWhere((e) => e.feedEntryID == event.entry.feedEntryID);
       FeedEntryState entry = delegate.postProcess(event.entry);
       int newIndex = _insertIndex(entry);
       if (index == newIndex) {
@@ -305,9 +316,7 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
 
   int _insertIndex(FeedEntryState feedEntry) {
     int index = 0;
-    for (;
-        index < entries.length && entries[index].date.isAfter(feedEntry.date);
-        ++index) {}
+    for (; index < entries.length && entries[index].date.isAfter(feedEntry.date); ++index) {}
     return index;
   }
 
@@ -361,6 +370,7 @@ abstract class FeedBlocDelegate {
 
   Future init(Function(FeedBlocEvent) add);
   void loadFeed();
+  Stream<FeedBlocState> onInitialLoad() async* {}
   FeedEntryState postProcess(FeedEntryState state);
   Future<List<FeedEntryState>> loadEntries(int n, int offset);
   Future deleteFeedEntry(dynamic feedEntryID);

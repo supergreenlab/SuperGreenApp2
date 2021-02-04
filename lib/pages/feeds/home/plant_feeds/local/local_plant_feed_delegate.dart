@@ -40,8 +40,8 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   StreamSubscription<Plant> plantStream;
   StreamSubscription<hive.BoxEvent> appDataStream;
 
-  LocalPlantFeedBlocDelegate(int feedID, {int feedEntryID})
-      : super(feedID, feedEntryID: feedEntryID);
+  LocalPlantFeedBlocDelegate(int feedID, {int feedEntryID, String commentID, String replyTo})
+      : super(feedID, feedEntryID: feedEntryID, commentID: commentID, replyTo: replyTo);
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
@@ -50,8 +50,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
       return state;
     }
     return state.copyWith(
-        shareLink:
-            'https://supergreenlab.com/public/plant?id=${plant.serverID}&feid=${feedEntry.serverID}');
+        shareLink: 'https://supergreenlab.com/public/plant?id=${plant.serverID}&feid=${feedEntry.serverID}');
   }
 
   @override
@@ -64,15 +63,11 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
     plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
     box = await RelDB.get().plantsDAO.getBox(plant.box);
     AppData appData = AppDB().getAppData();
-    feedState = PlantFeedState(
-        appData.jwt != null,
-        appData.storeGeo,
-        PlantSettings.fromJSON(plant.settings),
+    feedState = PlantFeedState(appData.jwt != null, appData.storeGeo, PlantSettings.fromJSON(plant.settings),
         BoxSettings.fromJSON(box.settings));
     add(FeedBlocEventFeedLoaded(feedState));
 
-    plantStream =
-        RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
+    plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
     boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
     appDataStream = AppDB().watchAppData().listen(appDataUpdated);
   }
@@ -82,8 +77,7 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
     // TODO find something to do for feedEntry destructors.
     if (feedEntry.type == 'FE_LIFE_EVENT') {
-      FeedLifeEventParams params =
-          FeedLifeEventParams.fromJSON(feedEntry.params);
+      FeedLifeEventParams params = FeedLifeEventParams.fromJSON(feedEntry.params);
       PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
       plantSettings = plantSettings.removeDateForPhase(params.phase);
       PlantsCompanion plantsCompanion = PlantsCompanion(

@@ -21,44 +21,43 @@ import 'dart:convert';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 
 enum NotificationDataType {
-  COMMENT,
+  PLANT_COMMENT,
   REMINDER,
   ALERT,
+  LIKE_PLANT_COMMENT,
+  LIKE_PLANT_FEEDENTRY,
 }
 
 abstract class NotificationData extends Equatable {
   final Map<String, dynamic> data;
 
-  NotificationData(
-      {this.data,
-      NotificationDataType type,
-      String title,
-      String body,
-      int id}) {
-    data['type'] = (type != null ? EnumToString.convertToString(type) : null) ??
-        data['type'];
+  NotificationData({this.data, NotificationDataType type, String title, String body, int id}) {
+    data['type'] = (type != null ? EnumToString.convertToString(type) : null) ?? data['type'];
     data['id'] = id ?? data['id'];
     data['title'] = title ?? data['title'];
     data['body'] = body ?? data['body'];
   }
 
-  NotificationDataType get type =>
-      EnumToString.fromString(NotificationDataType.values, data['type']);
+  NotificationDataType get type => EnumToString.fromString(NotificationDataType.values, data['type']);
   int get id => data['id'];
   String get title => data['title'];
   String get body => data['body'];
 
   factory NotificationData.fromMap(Map<String, dynamic> data) {
-    switch (
-        EnumToString.fromString(NotificationDataType.values, data['type'])) {
-      case NotificationDataType.COMMENT:
-        return NotificationDataComment.fromMap(data);
+    switch (EnumToString.fromString(NotificationDataType.values, data['type'])) {
+      case NotificationDataType.PLANT_COMMENT:
+        return NotificationDataPlantComment.fromMap(data);
       case NotificationDataType.REMINDER:
         return NotificationDataReminder.fromMap(data);
       case NotificationDataType.ALERT:
         return NotificationDataAlert.fromMap(data);
+      case NotificationDataType.LIKE_PLANT_COMMENT:
+        return NotificationDataLikePlantComment.fromMap(data);
+      case NotificationDataType.LIKE_PLANT_FEEDENTRY:
+        return NotificationDataLikePlantFeedEntry.fromMap(data);
     }
     throw 'Unknown type ${data['type']}';
   }
@@ -78,30 +77,34 @@ abstract class NotificationData extends Equatable {
       ];
 }
 
-class NotificationDataComment extends NotificationData {
-  NotificationDataComment(
+class NotificationDataPlantComment extends NotificationData {
+  NotificationDataPlantComment(
       {int id,
       String title,
       String body,
       @required String plantID,
-      @required String feedEntryID})
+      @required String feedEntryID,
+      @required CommentType commentType})
       : super(
           id: id,
-          data: {'plantID': plantID, 'feedEntryID': feedEntryID},
-          type: NotificationDataType.COMMENT,
+          data: {
+            'plantID': plantID,
+            'feedEntryID': feedEntryID,
+            'commentType': EnumToString.convertToString(commentType)
+          },
+          type: NotificationDataType.PLANT_COMMENT,
           title: title,
           body: body,
         );
-  NotificationDataComment.fromMap(Map<String, dynamic> data)
-      : super(data: data);
+  NotificationDataPlantComment.fromMap(Map<String, dynamic> data) : super(data: data);
 
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
+  CommentType get commentType => EnumToString.fromString(CommentType.values, data['commentType']);
 }
 
 class NotificationDataReminder extends NotificationData {
-  NotificationDataReminder(
-      {int id, String title, String body, @required int plantID})
+  NotificationDataReminder({int id, String title, String body, @required int plantID})
       : super(
             id: id,
             data: {
@@ -110,24 +113,62 @@ class NotificationDataReminder extends NotificationData {
             type: NotificationDataType.REMINDER,
             title: title,
             body: body);
-  NotificationDataReminder.fromMap(Map<String, dynamic> data)
-      : super(data: data);
+  NotificationDataReminder.fromMap(Map<String, dynamic> data) : super(data: data);
 
   int get plantID => data['plantID'];
 }
 
 class NotificationDataAlert extends NotificationData {
-  NotificationDataAlert(
-      {int id, String title, String body, @required String plantID})
+  NotificationDataAlert({int id, String title, String body, @required String plantID})
       : super(
             id: id,
             data: {
               'plantID': plantID,
             },
-            type: NotificationDataType.REMINDER,
+            type: NotificationDataType.ALERT,
             title: title,
             body: body);
   NotificationDataAlert.fromMap(Map<String, dynamic> data) : super(data: data);
 
   String get plantID => data['plantID'];
+}
+
+class NotificationDataLikePlantComment extends NotificationData {
+  NotificationDataLikePlantComment(
+      {int id,
+      String title,
+      String body,
+      @required String plantID,
+      @required String feedEntryID,
+      @required String commentID,
+      String replyTo})
+      : super(
+          id: id,
+          data: {'plantID': plantID, 'feedEntryID': feedEntryID, 'commentID': commentID, 'replyTo': replyTo},
+          type: NotificationDataType.LIKE_PLANT_COMMENT,
+          title: title,
+          body: body,
+        );
+  NotificationDataLikePlantComment.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
+  String get feedEntryID => data['feedEntryID'];
+  String get commentID => data['commentID'];
+  String get replyTo => data['replyTo'];
+}
+
+class NotificationDataLikePlantFeedEntry extends NotificationData {
+  NotificationDataLikePlantFeedEntry(
+      {int id, String title, String body, @required String plantID, @required String feedEntryID})
+      : super(
+          id: id,
+          data: {'plantID': plantID, 'feedEntryID': feedEntryID},
+          type: NotificationDataType.LIKE_PLANT_FEEDENTRY,
+          title: title,
+          body: body,
+        );
+  NotificationDataLikePlantFeedEntry.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
+  String get feedEntryID => data['feedEntryID'];
 }

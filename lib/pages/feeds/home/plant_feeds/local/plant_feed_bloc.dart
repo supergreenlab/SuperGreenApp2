@@ -64,14 +64,15 @@ class PlantFeedBlocStateNoPlant extends PlantFeedBlocState {
 class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
   final Box box;
   final Plant plant;
-  final FeedEntry feedEntry;
   final int nTimelapses;
+  final FeedEntry feedEntry;
+  final String commentID;
+  final String replyTo;
 
-  PlantFeedBlocStateLoaded(this.box, this.plant, this.nTimelapses,
-      {this.feedEntry});
+  PlantFeedBlocStateLoaded(this.box, this.plant, this.nTimelapses, {this.feedEntry, this.commentID, this.replyTo});
 
   @override
-  List<Object> get props => [box, plant, nTimelapses, feedEntry];
+  List<Object> get props => [box, plant, nTimelapses, feedEntry, commentID, replyTo];
 }
 
 class PlantFeedBlocStatePlantRemoved extends PlantFeedBlocState {
@@ -103,26 +104,19 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
       }
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(plant.box);
-      nTimelapses =
-          await RelDB.get().plantsDAO.nTimelapses(plant.id).getSingle();
-      timelapsesStream = RelDB.get()
-          .plantsDAO
-          .nTimelapses(plant.id)
-          .watchSingle()
-          .listen(_onNTimelapsesUpdated);
-      plantStream =
-          RelDB.get().plantsDAO.watchPlant(plant.id).listen(_onPlantUpdated);
-      boxStream =
-          RelDB.get().plantsDAO.watchBox(plant.box).listen(_onBoxUpdated);
+      nTimelapses = await RelDB.get().plantsDAO.nTimelapses(plant.id).getSingle();
+      timelapsesStream = RelDB.get().plantsDAO.nTimelapses(plant.id).watchSingle().listen(_onNTimelapsesUpdated);
+      plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(_onPlantUpdated);
+      boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(_onBoxUpdated);
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses,
-          feedEntry: args?.feedEntry);
+          feedEntry: args?.feedEntry, commentID: args?.commentID, replyTo: args?.replyTo);
     } else if (event is PlantFeedBlocEventUpdated) {
       if (plant == null) {
         yield PlantFeedBlocStatePlantRemoved();
         return;
       }
       yield PlantFeedBlocStateLoaded(box, plant, nTimelapses,
-          feedEntry: args?.feedEntry);
+          feedEntry: args?.feedEntry, commentID: args?.commentID, replyTo: args?.replyTo);
     }
   }
 

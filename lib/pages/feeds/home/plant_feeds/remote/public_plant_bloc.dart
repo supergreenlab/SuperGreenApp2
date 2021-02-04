@@ -32,36 +32,35 @@ class PublicPlantBlocState extends Equatable {
   final String plantID;
   final String feedEntryID;
   final String plantName;
+  final String commentID;
+  final String replyTo;
 
-  PublicPlantBlocState(this.plantID, this.feedEntryID, this.plantName)
-      : super();
+  PublicPlantBlocState(this.plantID, this.feedEntryID, this.plantName, this.commentID, this.replyTo) : super();
 
   @override
-  List<Object> get props => [plantID];
+  List<Object> get props => [plantID, feedEntryID, commentID, replyTo];
 }
 
 class PublicPlantBlocStateInit extends PublicPlantBlocState {
-  PublicPlantBlocStateInit(String id, String feedEntryID, String name)
-      : super(id, feedEntryID, name);
+  PublicPlantBlocStateInit(String id, String feedEntryID, String name, String commentID, String replyTo)
+      : super(id, feedEntryID, name, commentID, replyTo);
 }
 
 class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
   final MainNavigateToPublicPlant args;
 
   PublicPlantBloc(this.args)
-      : super(PublicPlantBlocStateInit(args.id, args.feedEntryID, args.name)) {
+      : super(PublicPlantBlocStateInit(args.id, args.feedEntryID, args.name, args.commentID, args.replyTo)) {
     if (args.name == null) {
       add(PublicPlantBlocEventLoadPlant());
     }
   }
 
   @override
-  Stream<PublicPlantBlocState> mapEventToState(
-      PublicPlantBlocEvent event) async* {
+  Stream<PublicPlantBlocState> mapEventToState(PublicPlantBlocEvent event) async* {
     if (event is PublicPlantBlocEventLoadPlant) {
-      Map<String, dynamic> plant =
-          await BackendAPI().feedsAPI.publicPlant(args.id);
-      yield PublicPlantBlocStateInit(args.id, args.feedEntryID, plant['name']);
+      Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(args.id);
+      yield PublicPlantBlocStateInit(args.id, args.feedEntryID, plant['name'], args.commentID, args.replyTo);
     }
   }
 }

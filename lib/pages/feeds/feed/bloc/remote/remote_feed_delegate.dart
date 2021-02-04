@@ -37,7 +37,20 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
   Map<String, RemoteFeedEntryLoader> loaders = {};
   FeedUnknownLoader unknownLoader;
 
-  RemoteFeedBlocDelegate();
+  final String feedEntryID;
+  final String commentID;
+  final String replyTo;
+
+  RemoteFeedBlocDelegate({this.feedEntryID, this.commentID, this.replyTo});
+
+  Stream<FeedBlocState> onInitialLoad() async* {
+    if (commentID != null) {
+      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
+      RemoteFeedEntryLoader feedEntryLoader = loaderForType(entryMap['type']);
+      FeedEntryStateLoaded feedEntry = await feedEntryLoader.load(feedEntryLoader.stateForFeedEntryMap(entryMap));
+      yield FeedBlocStateOpenComment(feedEntry, this.commentID, this.replyTo);
+    }
+  }
 
   @override
   Future init(Function(FeedBlocEvent) add) async {

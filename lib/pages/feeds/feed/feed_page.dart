@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_entries_card_helpers.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -112,6 +113,9 @@ class _FeedPageState extends State<FeedPage> {
           listKey.currentState.removeItem(
               state.index, (context, animation) => FeedEntriesCardHelpers.cardForFeedEntry(animation, feedState, entry),
               duration: Duration(milliseconds: 500));
+        } else if (state is FeedBlocStateOpenComment) {
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToCommentFormEvent(false, state.entry, commentID: state.commentID, replyTo: state.replyTo));
         }
       },
       child: BlocBuilder<FeedBloc, FeedBlocState>(
