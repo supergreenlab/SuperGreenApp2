@@ -93,7 +93,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(phases[params.phase.index],
-                  style: TextStyle(color: Color(0xff3bb30b), fontSize: 40, fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: Color(0xff3bb30b), fontSize: 40, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
             ),
           ),
           SocialBarPage(
