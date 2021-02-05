@@ -51,15 +51,13 @@ class DeviceDaemonBlocStateDeviceReachable extends DeviceDaemonBlocState {
   final bool reachable;
   final bool usingWifi;
 
-  DeviceDaemonBlocStateDeviceReachable(
-      this.device, this.reachable, this.usingWifi);
+  DeviceDaemonBlocStateDeviceReachable(this.device, this.reachable, this.usingWifi);
 
   @override
   List<Object> get props => [rand, device, reachable, usingWifi];
 }
 
-class DeviceDaemonBloc
-    extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
+class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
   StreamSubscription<ConnectivityResult> _connectivity;
 
   Timer _timer;
@@ -68,8 +66,29 @@ class DeviceDaemonBloc
 
   bool _usingWifi = false;
 
-  DeviceDaemonBloc() : super(DeviceDaemonBlocStateInit()) {
-    add(DeviceDaemonBlocEventInit());
+  DeviceDaemonBloc() : super(DeviceDaemonBlocStateInit());
+
+  @override
+  Stream<DeviceDaemonBlocState> mapEventToState(DeviceDaemonBlocEvent event) async* {
+    if (event is DeviceDaemonBlocEventInit) {
+      _scheduleUpdate();
+      _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
+      _connectivity = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+        _usingWifi = (result == ConnectivityResult.wifi);
+      });
+      RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
+    } else if (event is DeviceDaemonBlocEventLoadDevice) {
+      Device device = _devices.firstWhere((d) => d.id == event.deviceID, orElse: () => null);
+      if (device == null) {
+        return;
+      }
+      yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable, _usingWifi);
+    } else if (event is DeviceDaemonBlocEventDeviceReachable) {
+      yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable, _usingWifi);
+    }
+  }
+
+  void _scheduleUpdate() {
     _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
       for (int i = 0; i < _devices.length; ++i) {
         try {
@@ -79,32 +98,6 @@ class DeviceDaemonBloc
         }
       }
     });
-  }
-
-  @override
-  Stream<DeviceDaemonBlocState> mapEventToState(
-      DeviceDaemonBlocEvent event) async* {
-    if (event is DeviceDaemonBlocEventInit) {
-      _usingWifi =
-          await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
-      _connectivity = Connectivity()
-          .onConnectivityChanged
-          .listen((ConnectivityResult result) {
-        _usingWifi = (result == ConnectivityResult.wifi);
-      });
-      RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
-    } else if (event is DeviceDaemonBlocEventLoadDevice) {
-      Device device = _devices.firstWhere((d) => d.id == event.deviceID,
-          orElse: () => null);
-      if (device == null) {
-        return;
-      }
-      yield DeviceDaemonBlocStateDeviceReachable(
-          device, device.isReachable, _usingWifi);
-    } else if (event is DeviceDaemonBlocEventDeviceReachable) {
-      yield DeviceDaemonBlocStateDeviceReachable(
-          event.device, event.reachable, _usingWifi);
-    }
   }
 
   void _updateDeviceStatus(Device device) async {
@@ -117,37 +110,30 @@ class DeviceDaemonBloc
     try {
       var ddb = RelDB.get().devicesDAO;
       try {
-        String identifier = await DeviceAPI.fetchStringParam(
-            device.ip, 'BROKER_CLIENTID',
-            nRetries: 1);
+        String identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1);
         if (identifier == device.identifier) {
           Logger.log('Device ${device.name} (${device.identifier}) found.');
           if (device.isSetup == false) {
             await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null);
           }
-          await ddb.updateDevice(
-              DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
+          await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
           add(DeviceDaemonBlocEventDeviceReachable(device, true));
           await _updateDeviceTime(device);
         } else {
           throw "Wrong identifier for device ${device.name}";
         }
       } catch (e) {
-        Logger.log(
-            'Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
-        await RelDB.get().devicesDAO.updateDevice(
-            DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
+        Logger.log('Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
+        await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
         add(DeviceDaemonBlocEventDeviceReachable(device, false));
         String ip;
         await new Future.delayed(const Duration(seconds: 2));
         ip = await DeviceAPI.resolveLocalName(device.mdns);
         if (ip != null && ip != "") {
           try {
-            String identifier =
-                await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
+            String identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
             if (identifier == device.identifier) {
-              Logger.log(
-                  'Device ${device.name} (${device.identifier}) found with mdns lookup.');
+              Logger.log('Device ${device.name} (${device.identifier}) found with mdns lookup.');
               if (device.isSetup == false) {
                 await DeviceAPI.fetchAllParams(ip, device.id, (_) => null);
               }
@@ -161,17 +147,15 @@ class DeviceDaemonBloc
               throw "Wrong identifier for device ${device.name}";
             }
           } catch (e) {
-            Logger.log(
-                'Device ${device.name} (${device.identifier}) not found, aborting.');
-            await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-                id: Value(device.id), isReachable: Value(false)));
+            Logger.log('Device ${device.name} (${device.identifier}) not found, aborting.');
+            await RelDB.get()
+                .devicesDAO
+                .updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
             add(DeviceDaemonBlocEventDeviceReachable(device, false));
           }
         } else {
-          Logger.log(
-              'Device ${device.name} (${device.identifier}) not found, aborting.');
-          await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-              id: Value(device.id), isReachable: Value(false)));
+          Logger.log('Device ${device.name} (${device.identifier}) not found, aborting.');
+          await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
           add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
       }
@@ -189,8 +173,7 @@ class DeviceDaemonBloc
 
   Future<void> _updateDeviceTime(Device device) async {
     final Param time = await RelDB.get().devicesDAO.getParam(device.id, 'TIME');
-    await DeviceHelper.updateIntParam(
-        device, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+    await DeviceHelper.updateIntParam(device, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
   }
 
   @override

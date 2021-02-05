@@ -104,7 +104,6 @@ class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocSt
   NotificationsBloc() : super(NotificationsBlocStateInit()) {
     remoteNotifications = RemoteNotifications(onNotificationData);
     localNotifications = LocalNotifications(onNotificationData);
-    add(NotificationsBlocEventInit());
   }
 
   @override
