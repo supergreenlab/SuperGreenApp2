@@ -22,15 +22,13 @@ class FeedCard extends StatefulWidget {
   final Widget child;
   final Animation animation;
 
-  const FeedCard({Key key, @required this.child, @required this.animation})
-      : super(key: key);
+  const FeedCard({Key key, @required this.child, @required this.animation}) : super(key: key);
 
   @override
   _FeedCardState createState() => _FeedCardState();
 }
 
-class _FeedCardState extends State<FeedCard>
-    with AutomaticKeepAliveClientMixin {
+class _FeedCardState extends State<FeedCard> with AutomaticKeepAliveClientMixin {
   double _opacity = 0;
 
   @override

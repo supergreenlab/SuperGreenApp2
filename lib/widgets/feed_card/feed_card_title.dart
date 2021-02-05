@@ -31,38 +31,27 @@ class FeedCardTitle extends StatelessWidget {
   final List<Widget> actions;
 
   const FeedCardTitle(this.icon, this.title, this.synced,
-      {this.onEdit,
-      this.onDelete,
-      this.onShare,
-      this.showSyncStatus = true,
-      this.showControls = true,
-      this.actions});
+      {this.onEdit, this.onDelete, this.onShare, this.showSyncStatus = true, this.showControls = true, this.actions});
 
   @override
   Widget build(BuildContext context) {
     List<Widget> content = <Widget>[
       Padding(
         padding: const EdgeInsets.only(right: 8.0),
-        child: SizedBox(
-            width: 40,
-            height: 40,
-            child: icon.endsWith('svg')
-                ? SvgPicture.asset(icon)
-                : Image.asset(icon)),
+        child:
+            SizedBox(width: 40, height: 40, child: icon.endsWith('svg') ? SvgPicture.asset(icon) : Image.asset(icon)),
       ),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(title,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.black87)),
-          showSyncStatus
-              ? Text(synced ? 'Synced' : 'Not synced',
-                  style: TextStyle(color: synced ? Colors.green : Colors.red))
-              : Container(),
-        ],
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: Colors.black87)),
+            showSyncStatus
+                ? Text(synced ? 'Synced' : 'Not synced', style: TextStyle(color: synced ? Colors.green : Colors.red))
+                : Container(),
+          ],
+        ),
       ),
       Expanded(
         child: Container(),
@@ -105,8 +94,7 @@ class FeedCardTitle extends StatelessWidget {
     }
     content.addAll(actions ?? []);
     return Padding(
-      padding:
-          const EdgeInsets.only(left: 12.0, right: 0, top: 3.0, bottom: 3.0),
+      padding: const EdgeInsets.only(left: 12.0, right: 0, top: 3.0, bottom: 3.0),
       child: Row(
         children: content,
       ),
