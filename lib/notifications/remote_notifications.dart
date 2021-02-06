@@ -45,13 +45,13 @@ class RemoteNotifications {
         Logger.log(e);
       }
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
+    } else if (BackendAPI().usersAPI.loggedIn) {
+      Timer(Duration(milliseconds: 3000), () {
+        add(NotificationsBlocEventRequestPermission());
+      });
     }
-    Timer(Duration(milliseconds: 3000), () {
-      add(NotificationsBlocEventRequestPermission());
-    });
     RemoteMessage initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      Logger.log('initialMessage is not null');
       Timer(Duration(milliseconds: 300), () {
         notificationSelected(initialMessage);
       });
@@ -80,7 +80,7 @@ class RemoteNotifications {
   }
 
   Future sendToken() async {
-    if (AppDB().getAppData().jwt != null && AppDB().getAppData().notificationTokenSent == false) {
+    if (BackendAPI().usersAPI.loggedIn && AppDB().getAppData().notificationTokenSent == false) {
       await BackendAPI().feedsAPI.updateNotificationToken(AppDB().getAppData().notificationToken);
       AppDB().getAppData().notificationTokenSent = true;
     }

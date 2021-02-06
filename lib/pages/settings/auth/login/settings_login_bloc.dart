@@ -59,7 +59,7 @@ class SettingsLoginBloc extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocSt
   bool _isAuth;
 
   SettingsLoginBloc(this.args) : super(SettingsLoginBlocStateInit()) {
-    _isAuth = AppDB().getAppData().jwt != null;
+    _isAuth = BackendAPI().usersAPI.loggedIn;
     add(SettingsLoginBlocEventInit());
   }
 

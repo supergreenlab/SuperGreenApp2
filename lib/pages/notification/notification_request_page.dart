@@ -103,14 +103,20 @@ class NotificationRequestPage extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-            child: MarkdownBody(
-              fitContent: false,
-              data: NotificationRequestPage.notificationPurposes,
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 16),
-                  strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16)),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: ListView(
+                children: [
+                  MarkdownBody(
+                    fitContent: false,
+                    data: NotificationRequestPage.notificationPurposes,
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Colors.black, fontSize: 16),
+                        strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16)),
+                  ),
+                ],
+              ),
             ),
           ),
           Row(

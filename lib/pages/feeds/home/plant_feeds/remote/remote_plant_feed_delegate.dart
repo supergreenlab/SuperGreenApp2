@@ -60,7 +60,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   void loadFeed() async {
     Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
     feedState = PlantFeedState(
-      AppDB().getAppData().jwt != null,
+      BackendAPI().usersAPI.loggedIn,
       AppDB().getAppData().storeGeo,
       PlantSettings.fromJSON(plant['settings']),
       BoxSettings.fromJSON(plant['boxSettings']),
