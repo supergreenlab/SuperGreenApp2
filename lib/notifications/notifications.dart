@@ -127,7 +127,6 @@ class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocSt
         remoteNotifications.init(),
         localNotifications.init(),
       ]);
-      yield NotificationsBlocStateRequestPermission();
     } else if (event is NotificationsBlocEventReceived) {
       NotificationData notificationData = event.notificationData;
       if (notificationData is NotificationDataPlantComment) {
