@@ -164,44 +164,50 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  BuildContext lastRouteContext;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
 
-        if (!currentFocus.hasPrimaryFocus) {
-          FocusScope.of(context).requestFocus(FocusNode());
-          // currentFocus.unfocus();
-        }
-      },
-      child: MaterialApp(
-        //navigatorObservers: [_analyticsObserver,],
-        localizationsDelegates: [
-          const SGLLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en'),
-          const Locale('es'),
-          const Locale('fr'),
-        ],
-        navigatorKey: widget._navigatorKey,
-        onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context).title,
-        onGenerateRoute: (settings) => CupertinoPageRoute(
-            settings: settings,
-            builder: (context) => wrapListeners(
-                wrapSyncIndicator(TowelieHelper.wrapWidget(settings, context, _onGenerateRoute(context, settings))))),
-        theme: ThemeData(
-          fontFamily: 'Roboto',
-        ),
-        home: wrapListeners(BlocProvider<AppInitBloc>(
-          create: (context) => AppInitBloc(),
-          child: AppInitPage(),
-        )),
-      ),
-    );
+          if (!currentFocus.hasPrimaryFocus) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            // currentFocus.unfocus();
+          }
+        },
+        child: wrapListeners(
+          MaterialApp(
+            //navigatorObservers: [_analyticsObserver,],
+            localizationsDelegates: [
+              const SGLLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en'),
+              const Locale('es'),
+              const Locale('fr'),
+            ],
+            navigatorKey: widget._navigatorKey,
+            onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context).title,
+            onGenerateRoute: (settings) => CupertinoPageRoute(
+                settings: settings,
+                builder: (context) {
+                  lastRouteContext = context;
+                  return wrapSyncIndicator(
+                      TowelieHelper.wrapWidget(settings, context, _onGenerateRoute(context, settings)));
+                }),
+            theme: ThemeData(
+              fontFamily: 'Roboto',
+            ),
+            home: BlocProvider<AppInitBloc>(
+              create: (context) => AppInitBloc(),
+              child: AppInitPage(),
+            ),
+          ),
+        ));
   }
 
   Widget wrapListeners(Widget body) {
@@ -210,7 +216,8 @@ class _MainPageState extends State<MainPage> {
           if (state is NotificationsBlocStateMainNavigation) {
             BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
           } else if (state is NotificationsBlocStateRequestPermission) {
-            _requestNotificationPermissions(context);
+            print('pouet');
+            _requestNotificationPermissions(lastRouteContext);
           } else if (state is NotificationsBlocStateNotification) {
             BlocProvider.of<TowelieBloc>(context).add(
                 TowelieBlocEventTrigger(TowelieActionHelpNotification.id, state, ModalRoute.of(context).settings.name));

@@ -25,7 +25,6 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/notifications/remote_notifications.dart';
 
 abstract class SettingsAuthBlocEvent extends Equatable {}
