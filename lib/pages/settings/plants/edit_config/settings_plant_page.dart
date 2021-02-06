@@ -62,7 +62,9 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
           _box = state.box;
         } else if (state is SettingsPlantBlocStateDone) {
           if (_public) {
-            BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+            Timer(const Duration(milliseconds: 1000), () {
+              BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+            });
           }
           Timer(const Duration(milliseconds: 2000), () {
             BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));

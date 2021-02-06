@@ -87,6 +87,24 @@ class AppDB {
     setAppData(appData);
   }
 
+  void setNotificationToken(String notificationToken) {
+    AppData appData = getAppData();
+    appData.notificationToken = notificationToken;
+    setAppData(appData);
+  }
+
+  void setNotificationTokenSent(bool notificationTokenSent) {
+    AppData appData = getAppData();
+    appData.notificationTokenSent = notificationTokenSent;
+    setAppData(appData);
+  }
+
+  void setNotificationOnStartAsked(bool notificationOnStartAsked) {
+    AppData appData = getAppData();
+    appData.notificationOnStartAsked = notificationOnStartAsked;
+    setAppData(appData);
+  }
+
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
   }

@@ -60,10 +60,12 @@ class NotificationsBlocEventReceived extends NotificationsBlocEvent {
 }
 
 class NotificationsBlocEventRequestPermission extends NotificationsBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
   NotificationsBlocEventRequestPermission();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [rand];
 }
 
 abstract class NotificationsBlocState extends Equatable {}
@@ -86,6 +88,7 @@ class NotificationsBlocStateNotification extends NotificationsBlocState {
 
 class NotificationsBlocStateMainNavigation extends NotificationsBlocState {
   final int rand = Random().nextInt(1 << 32);
+
   final MainNavigatorEvent mainNavigatorEvent;
 
   NotificationsBlocStateMainNavigation(this.mainNavigatorEvent);
@@ -105,10 +108,12 @@ class NotificationsBlocStateHomeNavigation extends NotificationsBlocState {
 }
 
 class NotificationsBlocStateRequestPermission extends NotificationsBlocState {
+  final int rand = Random().nextInt(1 << 32);
+
   NotificationsBlocStateRequestPermission();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [rand];
 }
 
 class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocState> {
