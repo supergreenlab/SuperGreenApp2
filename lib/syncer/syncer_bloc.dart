@@ -76,7 +76,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       _timerOut = Timer.periodic(Duration(seconds: 5), (_) async {
         if (_workingOut == true) return;
         _workingOut = true;
-        if (!await _validJWT()) {
+        if (!BackendAPI().usersAPI.loggedIn) {
           _workingOut = false;
           return;
         }
@@ -91,7 +91,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       _timerIn = Timer.periodic(Duration(seconds: 5), (_) async {
         if (_workingIn == true) return;
         _workingIn = true;
-        if (!await _validJWT()) {
+        if (!BackendAPI().usersAPI.loggedIn) {
           _workingIn = false;
           return;
         }
@@ -439,11 +439,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       Timelapse timelapse = timelapses[i];
       await BackendAPI().feedsAPI.syncTimelapse(timelapse);
     }
-  }
-
-  Future<bool> _validJWT() async {
-    if (BackendAPI().usersAPI.loggedIn) return false;
-    return true;
   }
 
   Future _deleteFileIfExists(String filePath) async {

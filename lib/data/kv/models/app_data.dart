@@ -40,4 +40,6 @@ class AppData {
   String notificationToken;
   @HiveField(8)
   bool notificationTokenSent;
+  @HiveField(9)
+  bool notificationOnStartAsked = false;
 }

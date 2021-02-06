@@ -73,7 +73,7 @@ class SettingsCreateAccountBloc extends Bloc<SettingsCreateAccountBlocEvent, Set
       try {
         await BackendAPI().usersAPI.createUser(event.nickname, event.password);
         await BackendAPI().usersAPI.login(event.nickname, event.password);
-        await BackendAPI().feedsAPI.createUserEnd();
+        await BackendAPI().feedsAPI.createUserEnd(notificationToken: AppDB().getAppData().notificationToken);
       } catch (e) {
         Logger.log(e);
         yield SettingsCreateAccountBlocStateError();

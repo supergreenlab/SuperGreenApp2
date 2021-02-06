@@ -38,7 +38,8 @@ class RemoteNotifications {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
-      Logger.log(await FirebaseMessaging.instance.getToken());
+      String token = await FirebaseMessaging.instance.getToken();
+      await saveToken(token);
       try {
         await sendToken();
       } catch (e) {
