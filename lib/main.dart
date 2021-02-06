@@ -30,7 +30,6 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/main/main_page.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
-import 'package:super_green_app/towelie/helpers/misc/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
@@ -49,48 +48,31 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   playSound: true,
 );
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() async {
   runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       await Firebase.initializeApp();
-      FirebaseMessaging.onBackgroundMessage(
-          _firebaseMessagingBackgroundHandler);
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
       await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true, // Required to display a heads up notification
         badge: true,
         sound: true,
       );
 
-      runApp(MultiBlocProvider(
-          providers: <BlocProvider>[
-            BlocProvider<MainNavigatorBloc>(
-                create: (context) => MainNavigatorBloc(navigatorKey)),
-            BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
-            BlocProvider<DeviceDaemonBloc>(
-                create: (context) => DeviceDaemonBloc()),
-            BlocProvider<SyncerBloc>(create: (context) => SyncerBloc()),
-            BlocProvider<NotificationsBloc>(
-                create: (context) => NotificationsBloc()),
-            BlocProvider<DeepLinkBloc>(create: (context) => DeepLinkBloc()),
-          ],
-          child: BlocListener<NotificationsBloc, NotificationsBlocState>(
-              listener: (BuildContext context, NotificationsBlocState state) {
-                if (state is NotificationsBlocStateNotification) {
-                  BlocProvider.of<TowelieBloc>(context).add(
-                      TowelieBlocEventTrigger(TowelieActionHelpNotification.id,
-                          state, ModalRoute.of(context).settings.name));
-                }
-              },
-              child: MainPage(navigatorKey))));
+      runApp(MultiBlocProvider(providers: <BlocProvider>[
+        BlocProvider<MainNavigatorBloc>(create: (context) => MainNavigatorBloc(navigatorKey)),
+        BlocProvider<TowelieBloc>(create: (context) => TowelieBloc()),
+        BlocProvider<DeviceDaemonBloc>(create: (context) => DeviceDaemonBloc()),
+        BlocProvider<SyncerBloc>(create: (context) => SyncerBloc()),
+        BlocProvider<NotificationsBloc>(create: (context) => NotificationsBloc()),
+        BlocProvider<DeepLinkBloc>(create: (context) => DeepLinkBloc()),
+      ], child: MainPage(navigatorKey)));
     },
     (dynamic error, StackTrace stackTrace) {
       Logger.log('$error\n$stackTrace');

@@ -59,6 +59,13 @@ class NotificationsBlocEventReceived extends NotificationsBlocEvent {
       ];
 }
 
+class NotificationsBlocEventRequestPermission extends NotificationsBlocEvent {
+  NotificationsBlocEventRequestPermission();
+
+  @override
+  List<Object> get props => [];
+}
+
 abstract class NotificationsBlocState extends Equatable {}
 
 class NotificationsBlocStateInit extends NotificationsBlocState {
@@ -97,13 +104,20 @@ class NotificationsBlocStateHomeNavigation extends NotificationsBlocState {
   List<Object> get props => [rand, homeNavigatorEvent];
 }
 
+class NotificationsBlocStateRequestPermission extends NotificationsBlocState {
+  NotificationsBlocStateRequestPermission();
+
+  @override
+  List<Object> get props => [];
+}
+
 class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocState> {
   static RemoteNotifications remoteNotifications;
   static LocalNotifications localNotifications;
 
   NotificationsBloc() : super(NotificationsBlocStateInit()) {
-    remoteNotifications = RemoteNotifications(onNotificationData);
-    localNotifications = LocalNotifications(onNotificationData);
+    remoteNotifications = RemoteNotifications(this.add, onNotificationData);
+    localNotifications = LocalNotifications(this.add, onNotificationData);
   }
 
   @override
@@ -170,6 +184,10 @@ class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocSt
     } else if (event is NotificationsBlocEventReminder) {
       await localNotifications.reminderNotification(
           event.id, event.afterMinutes, NotificationData.fromJSON(event.payload));
+    } else if (event is NotificationsBlocEventRequestPermission) {
+      if (!await remoteNotifications.requestPermissions()) {
+        yield NotificationsBlocStateRequestPermission();
+      }
     }
   }
 

@@ -28,6 +28,7 @@ import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/widgets/comment.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
@@ -108,6 +109,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         } else if (state is CommentsFormBlocStateUpdateComment) {
           int i = comments.indexWhere((c) => c.id == state.commentID);
           if (i != -1) {
+            if (comments[i].isNew && !state.comment.isNew) {
+              BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+            }
             setState(() {
               comments[i] = state.comment;
             });

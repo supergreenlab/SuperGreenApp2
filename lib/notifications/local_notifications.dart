@@ -19,11 +19,13 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:super_green_app/main.dart';
 import 'package:super_green_app/notifications/model.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 
 class LocalNotifications {
   final Function(NotificationData) onNotificationData;
+  final Function(NotificationsBlocEvent) add;
 
-  LocalNotifications(this.onNotificationData);
+  LocalNotifications(this.add, this.onNotificationData);
 
   Future init() async {
     var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');

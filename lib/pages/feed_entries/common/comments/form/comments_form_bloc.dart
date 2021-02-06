@@ -23,7 +23,6 @@ import 'package:hive/hive.dart' as hive;
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
-import 'package:super_green_app/notifications/notifications.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -218,9 +217,8 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
           isNew: true);
       yield CommentsFormBlocStateAddComment(comment);
       comment = await BackendAPI().feedsAPI.postComment(comment);
-      yield CommentsFormBlocStateUpdateComment(comment, oldID: tempID);
+      yield CommentsFormBlocStateUpdateComment(comment.copyWith(isNew: false), oldID: tempID);
       yield* fetchComments();
-      await NotificationsBloc.remoteNotifications.requestPermissions();
     } else if (event is CommentsFormBlocEventLoadComments) {
       yield* fetchComments(offset: event.offset);
     } else if (event is CommentsFormBlocEventUser) {

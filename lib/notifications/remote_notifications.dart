@@ -26,11 +26,13 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/main.dart';
 import 'package:super_green_app/notifications/model.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 
 class RemoteNotifications {
   final Function(NotificationData) onNotificationData;
+  final Function(NotificationsBlocEvent) add;
 
-  RemoteNotifications(this.onNotificationData);
+  RemoteNotifications(this.add, this.onNotificationData);
 
   Future init() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
@@ -44,6 +46,9 @@ class RemoteNotifications {
       }
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
     }
+    Timer(Duration(milliseconds: 3000), () {
+      add(NotificationsBlocEventRequestPermission());
+    });
     RemoteMessage initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       Logger.log('initialMessage is not null');

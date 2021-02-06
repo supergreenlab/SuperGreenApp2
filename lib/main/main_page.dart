@@ -101,6 +101,8 @@ import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_page.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_page.dart';
+import 'package:super_green_app/pages/notification/notification_request_bloc.dart';
+import 'package:super_green_app/pages/notification/notification_request_page.dart';
 import 'package:super_green_app/pages/plant_picker/plant_picker_bloc.dart';
 import 'package:super_green_app/pages/plant_picker/plant_picker_page.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_category_bloc.dart';
@@ -144,6 +146,7 @@ import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewe
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
 import 'package:super_green_app/pages/tip/tip_page.dart';
 import 'package:super_green_app/syncer/syncer_bloc.dart';
+import 'package:super_green_app/towelie/helpers/misc/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
 
@@ -172,56 +175,63 @@ class _MainPageState extends State<MainPage> {
           // currentFocus.unfocus();
         }
       },
-      child: BlocListener<NotificationsBloc, NotificationsBlocState>(
+      child: MaterialApp(
+        //navigatorObservers: [_analyticsObserver,],
+        localizationsDelegates: [
+          const SGLLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+          const Locale('es'),
+          const Locale('fr'),
+        ],
+        navigatorKey: widget._navigatorKey,
+        onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context).title,
+        onGenerateRoute: (settings) => CupertinoPageRoute(
+            settings: settings,
+            builder: (context) => wrapListeners(
+                wrapSyncIndicator(TowelieHelper.wrapWidget(settings, context, _onGenerateRoute(context, settings))))),
+        theme: ThemeData(
+          fontFamily: 'Roboto',
+        ),
+        home: wrapListeners(BlocProvider<AppInitBloc>(
+          create: (context) => AppInitBloc(),
+          child: AppInitPage(),
+        )),
+      ),
+    );
+  }
+
+  Widget wrapListeners(Widget body) {
+    return BlocListener<NotificationsBloc, NotificationsBlocState>(
         listener: (BuildContext context, NotificationsBlocState state) {
           if (state is NotificationsBlocStateMainNavigation) {
             BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
+          } else if (state is NotificationsBlocStateRequestPermission) {
+            _requestNotificationPermissions(context);
+          } else if (state is NotificationsBlocStateNotification) {
+            BlocProvider.of<TowelieBloc>(context).add(
+                TowelieBlocEventTrigger(TowelieActionHelpNotification.id, state, ModalRoute.of(context).settings.name));
           }
         },
         child: BlocListener<TowelieBloc, TowelieBlocState>(
-          listener: (BuildContext context, state) {
-            if (state is TowelieBlocStateMainNavigation) {
-              BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
-            } else if (state is TowelieBlocStateLocalNotification) {
-              BlocProvider.of<NotificationsBloc>(context).add(state.localNotificationBlocEventReminder);
-            }
-          },
-          child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
             listener: (BuildContext context, state) {
-              if (state is DeepLinkBlocStateMainNavigation) {
+              if (state is TowelieBlocStateMainNavigation) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
+              } else if (state is TowelieBlocStateLocalNotification) {
+                BlocProvider.of<NotificationsBloc>(context).add(state.localNotificationBlocEventReminder);
               }
             },
-            child: MaterialApp(
-              //navigatorObservers: [_analyticsObserver,],
-              localizationsDelegates: [
-                const SGLLocalizationsDelegate(),
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: [
-                const Locale('en'),
-                const Locale('es'),
-                const Locale('fr'),
-              ],
-              navigatorKey: widget._navigatorKey,
-              onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context).title,
-              onGenerateRoute: (settings) => CupertinoPageRoute(
-                  settings: settings,
-                  builder: (context) => wrapSyncIndicator(
-                      TowelieHelper.wrapWidget(settings, context, _onGenerateRoute(context, settings)))),
-              theme: ThemeData(
-                fontFamily: 'Roboto',
-              ),
-              home: BlocProvider<AppInitBloc>(
-                create: (context) => AppInitBloc(),
-                child: AppInitPage(),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+            child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
+              listener: (BuildContext context, state) {
+                if (state is DeepLinkBlocStateMainNavigation) {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
+                }
+              },
+              child: body,
+            )));
   }
 
   Widget wrapSyncIndicator(Widget body) {
@@ -567,5 +577,19 @@ class _MainPageState extends State<MainPage> {
         );
     }
     return Text('Unknown route');
+  }
+
+  void _requestNotificationPermissions(BuildContext context) {
+    showModalBottomSheet<bool>(
+      context: context,
+      builder: (BuildContext c) {
+        return BlocProvider<NotificationRequestBloc>(
+          create: (BuildContext context) => NotificationRequestBloc(onClose: () {
+            Navigator.pop(context);
+          }),
+          child: NotificationRequestPage(),
+        );
+      },
+    );
   }
 }
