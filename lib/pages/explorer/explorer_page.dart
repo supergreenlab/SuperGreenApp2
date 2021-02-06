@@ -23,6 +23,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -77,8 +78,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToBookmarks());
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToBookmarks());
                     },
                   ),
                 ),
@@ -101,8 +101,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
           if (state.eof) {
             return null;
           }
-          BlocProvider.of<ExplorerBloc>(context)
-              .add(ExplorerBlocEventLoadNextPage(plants.length));
+          BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventLoadNextPage(plants.length));
           return FullscreenLoading();
         }
         return _renderPlant(context, plants[index]);
@@ -118,16 +117,13 @@ class _ExplorerPageState extends State<ExplorerPage> {
     if (plant.thumbnailPath == '') {
       pic = SvgPicture.asset('assets/explorer/no_pic.svg', fit: BoxFit.cover);
     } else {
-      pic = Image.network(
-          BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
-          fit: BoxFit.cover);
+      pic = Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath), fit: BoxFit.cover);
     }
     return LayoutBuilder(
       builder: (_, BoxConstraints constraints) {
         return InkWell(
           onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToPublicPlant(plant.id, name: plant.name));
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(plant.id, name: plant.name));
           },
           child: Stack(
             children: <Widget>[
@@ -141,10 +137,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
                   '${plant.name}',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               )),
@@ -158,19 +151,17 @@ class _ExplorerPageState extends State<ExplorerPage> {
   void onMakePublic(ExplorerBlocState state) {
     if (state is ExplorerBlocStateLoaded && state.loggedIn) {
       BlocProvider.of<MainNavigatorBloc>(context).add(
-          MainNavigateToSelectPlantEvent(
-              'Select which plant you want to make public',
-              futureFn: (Future future) async {
+          MainNavigateToSelectPlantEvent('Select which plant you want to make public', futureFn: (Future future) async {
         dynamic plant = await future;
         if (plant == null) {
           return;
         }
         if (plant is Plant) {
-          BlocProvider.of<ExplorerBloc>(context)
-              .add(ExplorerBlocEventMakePublic(plant));
+          BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventMakePublic(plant));
           plants.clear();
           BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventInit());
           Fluttertoast.showToast(msg: 'Plant ${plant.name} is now public');
+          BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
         }
       }));
     } else {
@@ -203,8 +194,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context)
-          .add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }
 }
