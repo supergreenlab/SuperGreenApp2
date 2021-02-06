@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -161,7 +163,9 @@ class _ExplorerPageState extends State<ExplorerPage> {
           plants.clear();
           BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventInit());
           Fluttertoast.showToast(msg: 'Plant ${plant.name} is now public');
-          BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+          Timer(Duration(milliseconds: 1000), () {
+            BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+          });
         }
       }));
     } else {

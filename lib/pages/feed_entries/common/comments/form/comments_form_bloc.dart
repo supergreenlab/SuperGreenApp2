@@ -183,7 +183,7 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
   @override
   Stream<CommentsFormBlocState> mapEventToState(CommentsFormBlocEvent event) async* {
     if (event is CommentsFormBlocEventInit) {
-      if (AppDB().getAppData().jwt != null) {
+      if (BackendAPI().usersAPI.loggedIn) {
         this.user = await BackendAPI().usersAPI.me();
       } else {
         appDataStream = AppDB().watchAppData().listen(appDataUpdated);

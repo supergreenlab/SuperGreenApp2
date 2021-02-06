@@ -93,20 +93,18 @@ class SettingsAuthBlocStateError extends SettingsAuthBlocState {
   List<Object> get props => [message];
 }
 
-class SettingsAuthBloc
-    extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
+class SettingsAuthBloc extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsAuth args;
   bool _isAuth;
 
   SettingsAuthBloc(this.args) : super(SettingsAuthBlocStateInit()) {
-    _isAuth = AppDB().getAppData().jwt != null;
+    _isAuth = BackendAPI().usersAPI.loggedIn;
     add(SettingsAuthBlocEventInit());
   }
 
   @override
-  Stream<SettingsAuthBlocState> mapEventToState(
-      SettingsAuthBlocEvent event) async* {
+  Stream<SettingsAuthBlocState> mapEventToState(SettingsAuthBlocEvent event) async* {
     if (event is SettingsAuthBlocEventInit) {
       yield SettingsAuthBlocStateLoading();
       /*yield SettingsAuthBlocStateLoaded(
@@ -115,8 +113,7 @@ class SettingsAuthBloc
       if (_isAuth) {
         user = await BackendAPI().usersAPI.me();
       }
-      yield SettingsAuthBlocStateLoaded(
-          _isAuth, AppDB().getAppData().syncOverGSM, user);
+      yield SettingsAuthBlocStateLoaded(_isAuth, AppDB().getAppData().syncOverGSM, user);
     } else if (event is SettingsAuthBlocEventSetSyncedOverGSM) {
       AppDB().setSynceOverGSM(event.syncOverGSM);
     } else if (event is SettingsAuthBlocEventLogout) {
@@ -134,8 +131,7 @@ class SettingsAuthBloc
 
       Image image = decodeImage(await event.file.readAsBytes());
       Image thumbnail = copyResize(image,
-          height: image.height > image.width ? 300 : null,
-          width: image.width >= image.height ? 300 : null);
+          height: image.height > image.width ? 300 : null, width: image.width >= image.height ? 300 : null);
       await event.file.writeAsBytes(encodeJpg(thumbnail, quality: 50));
 
       await BackendAPI().usersAPI.uploadProfilePic(event.file);

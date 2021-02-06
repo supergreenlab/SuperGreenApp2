@@ -69,11 +69,8 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   @override
   Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {
     if (event is SyncerBlocEventInit) {
-      _usingWifi =
-          await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
-      _connectivity = Connectivity()
-          .onConnectivityChanged
-          .listen((ConnectivityResult result) {
+      _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
+      _connectivity = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
         _usingWifi = (result == ConnectivityResult.wifi);
       });
       _timerOut = Timer.periodic(Duration(seconds: 5), (_) async {
@@ -133,66 +130,52 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'feed: ${i + 1}/${feeds.length}'));
       FeedsCompanion feedsCompanion = feeds[i];
-      Feed exists = await RelDB.get()
-          .feedsDAO
-          .getFeedForServerID(feedsCompanion.serverID.value);
+      Feed exists = await RelDB.get().feedsDAO.getFeedForServerID(feedsCompanion.serverID.value);
       if (feedsCompanion is DeletedFeedsCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeed(exists, addDeleted: false);
         }
       } else {
         if (exists != null) {
-          await RelDB.get()
-              .feedsDAO
-              .updateFeed(feedsCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().feedsDAO.updateFeed(feedsCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().feedsDAO.addFeed(feedsCompanion);
         }
       }
-      await BackendAPI()
-          .feedsAPI
-          .setSynced("feed", feedsCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("feed", feedsCompanion.serverID.value);
       Logger.log("Synced feed");
     }
   }
 
   Future _syncInFeedEntries() async {
     Logger.log("Syncing feedEntries");
-    List<FeedEntriesCompanion> feedEntries =
-        await BackendAPI().feedsAPI.unsyncedFeedEntries();
+    List<FeedEntriesCompanion> feedEntries = await BackendAPI().feedsAPI.unsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(
-          true, 'entry: ${i + 1}/${feedEntries.length}'));
+      add(SyncerBlocEventSyncing(true, 'entry: ${i + 1}/${feedEntries.length}'));
       FeedEntriesCompanion feedEntriesCompanion = feedEntries[i];
-      FeedEntry exists = await RelDB.get()
-          .feedsDAO
-          .getFeedEntryForServerID(feedEntriesCompanion.serverID.value);
+      FeedEntry exists = await RelDB.get().feedsDAO.getFeedEntryForServerID(feedEntriesCompanion.serverID.value);
       if (feedEntriesCompanion is DeletedFeedEntriesCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeedEntry(exists, addDeleted: false);
         }
       } else {
         if (exists != null) {
-          await FeedEntryHelper.updateFeedEntry(
-              feedEntriesCompanion.copyWith(id: Value(exists.id)));
+          await FeedEntryHelper.updateFeedEntry(feedEntriesCompanion.copyWith(id: Value(exists.id)));
         } else {
           await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
         }
       }
-      await BackendAPI()
-          .feedsAPI
-          .setSynced("feedEntry", feedEntriesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("feedEntry", feedEntriesCompanion.serverID.value);
       Logger.log("Synced feedEntry");
     }
   }
 
   Future _syncInFeedMedias() async {
     Logger.log("Syncing feedMedias");
-    List<FeedMediasCompanion> feedMedias =
-        await BackendAPI().feedsAPI.unsyncedFeedMedias();
+    List<FeedMediasCompanion> feedMedias = await BackendAPI().feedsAPI.unsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -200,9 +183,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
       add(SyncerBlocEventSyncing(true, 'media: ${i + 1}/${feedMedias.length}'));
       FeedMediasCompanion feedMediasCompanion = feedMedias[i];
-      FeedMedia exists = await RelDB.get()
-          .feedsDAO
-          .getFeedMediaForServerID(feedMediasCompanion.serverID.value);
+      FeedMedia exists = await RelDB.get().feedsDAO.getFeedMediaForServerID(feedMediasCompanion.serverID.value);
       if (feedMediasCompanion is DeletedFeedMediasCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeedMedia(exists, addDeleted: false);
@@ -212,66 +193,51 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
             '${FeedMedias.makeFilePath()}.${feedMediasCompanion.filePath.value.split('.')[1].split('?')[0]}';
         String thumbnailPath =
             '${FeedMedias.makeFilePath(prefix: 'thumbnail_')}.${feedMediasCompanion.thumbnailPath.value.split('.')[1].split('?')[0]}';
-        await BackendAPI().feedsAPI.download(feedMediasCompanion.filePath.value,
-            FeedMedias.makeAbsoluteFilePath(filePath));
-        await BackendAPI().feedsAPI.download(
-            feedMediasCompanion.thumbnailPath.value,
-            FeedMedias.makeAbsoluteFilePath(thumbnailPath));
+        await BackendAPI()
+            .feedsAPI
+            .download(feedMediasCompanion.filePath.value, FeedMedias.makeAbsoluteFilePath(filePath));
+        await BackendAPI()
+            .feedsAPI
+            .download(feedMediasCompanion.thumbnailPath.value, FeedMedias.makeAbsoluteFilePath(thumbnailPath));
         if (exists != null) {
-          await _deleteFileIfExists(
-              FeedMedias.makeAbsoluteFilePath(exists.filePath));
-          await _deleteFileIfExists(
-              FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
-          await RelDB.get().feedsDAO.updateFeedMedia(
-              feedMediasCompanion.copyWith(
-                  id: Value(exists.id),
-                  filePath: Value(filePath),
-                  thumbnailPath: Value(thumbnailPath)));
+          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(exists.filePath));
+          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(exists.thumbnailPath));
+          await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion.copyWith(
+              id: Value(exists.id), filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
         } else {
-          await RelDB.get().feedsDAO.addFeedMedia(feedMediasCompanion.copyWith(
-              filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
+          await RelDB.get().feedsDAO.addFeedMedia(
+              feedMediasCompanion.copyWith(filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
         }
       }
-      await BackendAPI()
-          .feedsAPI
-          .setSynced("feedMedia", feedMediasCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("feedMedia", feedMediasCompanion.serverID.value);
       Logger.log("Synced feedMedia");
     }
   }
 
   Future _syncInDevices() async {
     Logger.log("Syncing devices");
-    List<DevicesCompanion> devices =
-        await BackendAPI().feedsAPI.unsyncedDevices();
+    List<DevicesCompanion> devices = await BackendAPI().feedsAPI.unsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
       add(SyncerBlocEventSyncing(true, 'device: ${i + 1}/${devices.length}'));
       DevicesCompanion devicesCompanion = devices[i];
-      Device exists = await RelDB.get()
-          .devicesDAO
-          .getDeviceForServerID(devicesCompanion.serverID.value);
+      Device exists = await RelDB.get().devicesDAO.getDeviceForServerID(devicesCompanion.serverID.value);
       if (devicesCompanion is DeletedDevicesCompanion) {
         if (exists != null) {
           await DeviceHelper.deleteDevice(exists, addDeleted: false);
         }
       } else {
         if (exists != null) {
-          await RelDB.get()
-              .devicesDAO
-              .updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().devicesDAO.updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
         } else {
-          int deviceID =
-              await RelDB.get().devicesDAO.addDevice(devicesCompanion);
+          int deviceID = await RelDB.get().devicesDAO.addDevice(devicesCompanion);
           // No await, that's intentional
-          DeviceAPI.fetchAllParams(
-              devicesCompanion.ip.value, deviceID, (adv) {});
+          DeviceAPI.fetchAllParams(devicesCompanion.ip.value, deviceID, (adv) {});
         }
       }
-      await BackendAPI()
-          .feedsAPI
-          .setSynced("device", devicesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("device", devicesCompanion.serverID.value);
       Logger.log("Synced device");
     }
   }
@@ -285,25 +251,19 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'box: ${i + 1}/${boxes.length}'));
       BoxesCompanion boxesCompanion = boxes[i];
-      Box exists = await RelDB.get()
-          .plantsDAO
-          .getBoxForServerID(boxesCompanion.serverID.value);
+      Box exists = await RelDB.get().plantsDAO.getBoxForServerID(boxesCompanion.serverID.value);
       if (boxesCompanion is DeletedBoxesCompanion) {
         if (exists != null) {
           await PlantHelper.deleteBox(exists, addDeleted: false);
         }
       } else {
         if (exists != null) {
-          await RelDB.get()
-              .plantsDAO
-              .updateBox(boxesCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().plantsDAO.updateBox(boxesCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().plantsDAO.addBox(boxesCompanion);
         }
       }
-      await BackendAPI()
-          .feedsAPI
-          .setSynced("box", boxesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("box", boxesCompanion.serverID.value);
       Logger.log("Synced box");
     }
   }
@@ -317,58 +277,45 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'plant: ${i + 1}/${plants.length}'));
       PlantsCompanion plantsCompanion = plants[i];
-      Plant exists = await RelDB.get()
-          .plantsDAO
-          .getPlantForServerID(plantsCompanion.serverID.value);
+      Plant exists = await RelDB.get().plantsDAO.getPlantForServerID(plantsCompanion.serverID.value);
       if (plantsCompanion is DeletedPlantsCompanion) {
         if (exists != null) {
           await PlantHelper.deletePlant(exists, addDeleted: false);
         }
       } else {
         if (exists != null) {
-          await RelDB.get()
-              .plantsDAO
-              .updatePlant(plantsCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().plantsDAO.updatePlant(plantsCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().plantsDAO.addPlant(plantsCompanion);
         }
       }
-      await BackendAPI()
-          .feedsAPI
-          .setSynced("plant", plantsCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("plant", plantsCompanion.serverID.value);
       Logger.log("Synced plant");
     }
   }
 
   Future _syncInTimelapses() async {
     Logger.log("Syncing timelapses");
-    List<TimelapsesCompanion> timelapses =
-        await BackendAPI().feedsAPI.unsyncedTimelapses();
+    List<TimelapsesCompanion> timelapses = await BackendAPI().feedsAPI.unsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(
-          true, 'timelapse: ${i + 1}/${timelapses.length}'));
+      add(SyncerBlocEventSyncing(true, 'timelapse: ${i + 1}/${timelapses.length}'));
       TimelapsesCompanion timelapsesCompanion = timelapses[i];
-      Timelapse exists = await RelDB.get()
-          .plantsDAO
-          .getTimelapseForServerID(timelapsesCompanion.serverID.value);
+      Timelapse exists = await RelDB.get().plantsDAO.getTimelapseForServerID(timelapsesCompanion.serverID.value);
       if (timelapsesCompanion is DeletedTimelapsesCompanion) {
         if (exists != null) {
           await PlantHelper.deleteTimelapse(exists, addDeleted: false);
         }
       } else {
         if (exists != null) {
-          await RelDB.get().plantsDAO.updateTimelapse(
-              timelapsesCompanion.copyWith(id: Value(exists.id)));
+          await RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion.copyWith(id: Value(exists.id)));
         } else {
           await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
         }
       }
-      await BackendAPI()
-          .feedsAPI
-          .setSynced("timelapse", timelapsesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("timelapse", timelapsesCompanion.serverID.value);
       Logger.log("Synced timelapse");
     }
   }
@@ -411,8 +358,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future _syncOutFeedEntries() async {
     Logger.log("Sending feedEntries");
-    List<FeedEntry> feedEntries =
-        await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
+    List<FeedEntry> feedEntries = await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -425,8 +371,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future _syncOutOrphanedFeedMedias() async {
     Logger.log("Sending orphaned feedMedias");
-    List<FeedMedia> feedMedias =
-        await RelDB.get().feedsDAO.getOrphanedFeedMedias();
+    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getOrphanedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -438,8 +383,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future _syncOutFeedMedias(int feedEntryID) async {
     Logger.log("Sending feedMedias");
-    List<FeedMedia> feedMedias =
-        await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
+    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -487,8 +431,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   Future _syncOutTimelapses() async {
     Logger.log("Sending timelapses");
-    List<Timelapse> timelapses =
-        await RelDB.get().plantsDAO.getUnsyncedTimelapses();
+    List<Timelapse> timelapses = await RelDB.get().plantsDAO.getUnsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
@@ -499,7 +442,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future<bool> _validJWT() async {
-    if (AppDB().getAppData().jwt == null) return false;
+    if (BackendAPI().usersAPI.loggedIn) return false;
     return true;
   }
 
