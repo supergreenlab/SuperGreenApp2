@@ -108,6 +108,12 @@ class RemoteNotifications {
     return false;
   }
 
+  Future<bool> checkPermissions() async {
+    NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
+    return settings.authorizationStatus == AuthorizationStatus.authorized ||
+        settings.authorizationStatus == AuthorizationStatus.provisional;
+  }
+
   void androidForegroundNotification(RemoteMessage message) {
     RemoteNotification notification = message.notification;
     AndroidNotification android = message.notification?.android;
