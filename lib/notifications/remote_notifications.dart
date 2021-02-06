@@ -108,7 +108,7 @@ class RemoteNotifications {
     return false;
   }
 
-  Future<bool> checkPermissions() async {
+  static Future<bool> checkPermissions() async {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     return settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional;

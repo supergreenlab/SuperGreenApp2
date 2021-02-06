@@ -25,6 +25,8 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/notifications/notifications.dart';
+import 'package:super_green_app/notifications/remote_notifications.dart';
 
 abstract class SettingsAuthBlocEvent extends Equatable {}
 
@@ -70,13 +72,14 @@ class SettingsAuthBlocStateLoading extends SettingsAuthBlocState {
 
 class SettingsAuthBlocStateLoaded extends SettingsAuthBlocState {
   final bool isAuth;
+  final bool notificationEnabled;
   final bool syncOverGSM;
   final User user;
 
-  SettingsAuthBlocStateLoaded(this.isAuth, this.syncOverGSM, this.user);
+  SettingsAuthBlocStateLoaded(this.isAuth, this.notificationEnabled, this.syncOverGSM, this.user);
 
   @override
-  List<Object> get props => [isAuth, syncOverGSM, user];
+  List<Object> get props => [isAuth, notificationEnabled, syncOverGSM, user];
 }
 
 class SettingsAuthBlocStateDone extends SettingsAuthBlocState {
@@ -110,10 +113,12 @@ class SettingsAuthBloc extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState
       /*yield SettingsAuthBlocStateLoaded(
           _isAuth, AppDB().getAppData().syncOverGSM, null);*/
       User user;
+      bool notificationEnabled = false;
       if (_isAuth) {
         user = await BackendAPI().usersAPI.me();
+        notificationEnabled = await RemoteNotifications.checkPermissions();
       }
-      yield SettingsAuthBlocStateLoaded(_isAuth, AppDB().getAppData().syncOverGSM, user);
+      yield SettingsAuthBlocStateLoaded(_isAuth, notificationEnabled, AppDB().getAppData().syncOverGSM, user);
     } else if (event is SettingsAuthBlocEventSetSyncedOverGSM) {
       AppDB().setSynceOverGSM(event.syncOverGSM);
     } else if (event is SettingsAuthBlocEventLogout) {

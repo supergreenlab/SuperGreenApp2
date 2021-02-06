@@ -185,7 +185,7 @@ class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocSt
       await localNotifications.reminderNotification(
           event.id, event.afterMinutes, NotificationData.fromJSON(event.payload));
     } else if (event is NotificationsBlocEventRequestPermission) {
-      if (!await remoteNotifications.checkPermissions()) {
+      if (!await RemoteNotifications.checkPermissions()) {
         yield NotificationsBlocStateRequestPermission();
       }
     }
