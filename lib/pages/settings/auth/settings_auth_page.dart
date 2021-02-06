@@ -153,7 +153,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
             BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlocEventSetSyncedOverGSM(_syncOverGSM));
           });
         }, _syncOverGSM == true),
-        state.notificationEnabled
+        !state.notificationEnabled
             ? GreenButton(
                 title: 'ACTIVATE NOTIFICATION',
                 onPressed: () {

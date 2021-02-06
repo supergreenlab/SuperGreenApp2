@@ -216,7 +216,6 @@ class _MainPageState extends State<MainPage> {
           if (state is NotificationsBlocStateMainNavigation) {
             BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
           } else if (state is NotificationsBlocStateRequestPermission) {
-            print('pouet');
             _requestNotificationPermissions(lastRouteContext);
           } else if (state is NotificationsBlocStateNotification) {
             BlocProvider.of<TowelieBloc>(context).add(
