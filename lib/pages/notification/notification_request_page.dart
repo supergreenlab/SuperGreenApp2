@@ -29,7 +29,7 @@ import 'package:super_green_app/widgets/green_button.dart';
 class NotificationRequestPage extends StatelessWidget {
   static String get notificationRequestButton {
     return Intl.message(
-      '''ACTIVATE''',
+      '''NOTIFY ME''',
       name: 'notificationRequestButton',
       desc: 'Notification request button',
       locale: SGLLocalizations.current.localeName,

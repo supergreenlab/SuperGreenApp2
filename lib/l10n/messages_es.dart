@@ -34,7 +34,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "instructionsNewDeviceWifiFailed2" : MessageLookupByLibrary.simpleMessage("Then press the **DONE** button below"),
     "instructionsVegScheduleHelper" : MessageLookupByLibrary.simpleMessage("**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day."),
     "notificationPurposes" : MessageLookupByLibrary.simpleMessage("You will get notified for:\n- **Likes** on comments and public diary entry\n- **Comments** on public diary entries\n- **Replies** to your comments\n- **Smart reminders** and **grow tips**\n- **Temperature** and **humidity** alerts"),
-    "notificationRequestButton" : MessageLookupByLibrary.simpleMessage("ACTIVATE"),
+    "notificationRequestButton" : MessageLookupByLibrary.simpleMessage("NOTIFY ME"),
     "notificationRequestButtonCancel" : MessageLookupByLibrary.simpleMessage("NO THANKS"),
     "notificationRequestTitle" : MessageLookupByLibrary.simpleMessage("Would you like to activate notifications?"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),
