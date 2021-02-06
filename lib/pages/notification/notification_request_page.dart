@@ -57,12 +57,11 @@ class NotificationRequestPage extends StatelessWidget {
   static String get notificationPurposes {
     return Intl.message(
       '''You will get notified for:
-- **Likes** on **comments** and public diary entry
+- **Likes** on comments and public diary entry
 - **Comments** on public diary entries
-- **Replies** to you comments
+- **Replies** to your comments
 - **Smart reminders** and **grow tips**
-- **Temperature** and **humidity** alerts
-- **Inactivity** alerts''',
+- **Temperature** and **humidity** alerts''',
       name: 'notificationPurposes',
       desc: 'Notification purpose',
       locale: SGLLocalizations.current.localeName,
@@ -72,7 +71,7 @@ class NotificationRequestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 370,
+      height: 345,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 16.0,
