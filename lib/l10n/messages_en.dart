@@ -21,12 +21,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(progress) => "Syncing - ${progress}";
 
-  static m1(name) => "Delete controller ${name}?";
+  static m1(leds) => "Led channels: ${leds}";
 
-  static m2(time) => "(100% power for ${time} s)";
+  static m2(number) => "Box #${number}";
+
+  static m3(index, name) => "Reset box #${index} on controller ${name}?";
+
+  static m4(name) => "Delete controller ${name}?";
+
+  static m5(time) => "(100% power for ${time} s)";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "done" : MessageLookupByLibrary.simpleMessage("Done!"),
     "formAllowAnalytics" : MessageLookupByLibrary.simpleMessage("**Help us** discern what\'s **useful** from what\'s **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*"),
     "formCGU" : MessageLookupByLibrary.simpleMessage("*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. "),
     "instructionsAutoScheduleHelper" : MessageLookupByLibrary.simpleMessage("Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another."),
@@ -45,6 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ledTestingValidate" : MessageLookupByLibrary.simpleMessage("OK, ALL GOOD"),
     "loading" : MessageLookupByLibrary.simpleMessage("Loading..."),
     "mainNavigatorUnknownRoute" : MessageLookupByLibrary.simpleMessage("Unknown route"),
+    "no" : MessageLookupByLibrary.simpleMessage("NO"),
     "notificationPurposes" : MessageLookupByLibrary.simpleMessage("You will get notified for:\n- **Likes** on comments and public diary entry\n- **Comments** on public diary entries\n- **Replies** to your comments\n- **Smart reminders** and **grow tips**\n- **Temperature** and **humidity** alerts"),
     "notificationRequestButton" : MessageLookupByLibrary.simpleMessage("NOTIFY ME"),
     "notificationRequestButtonCancel" : MessageLookupByLibrary.simpleMessage("NO THANKS"),
@@ -53,12 +61,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceAdd" : MessageLookupByLibrary.simpleMessage("ADD"),
     "selectDeviceAddFirst" : MessageLookupByLibrary.simpleMessage("Add a first"),
     "selectDeviceAddFirstController" : MessageLookupByLibrary.simpleMessage("CONTROLLER"),
+    "selectDeviceBoxAlreadyRunning" : MessageLookupByLibrary.simpleMessage("Already running"),
+    "selectDeviceBoxAvailable" : MessageLookupByLibrary.simpleMessage("Available"),
+    "selectDeviceBoxLedChannelDescription" : m1,
+    "selectDeviceBoxNoLedChannelAssigned" : MessageLookupByLibrary.simpleMessage("No led channels assigned"),
+    "selectDeviceBoxNoMoreLED" : MessageLookupByLibrary.simpleMessage("No more free led channels"),
+    "selectDeviceBoxNumber" : m2,
+    "selectDeviceBoxResetDialogTitle" : m3,
+    "selectDeviceBoxSettingUp" : MessageLookupByLibrary.simpleMessage("Setting up.."),
+    "selectDeviceBoxSlot" : MessageLookupByLibrary.simpleMessage("Select controller\'s box slot"),
     "selectDeviceContinueWithoutController" : MessageLookupByLibrary.simpleMessage("Continue without controller"),
     "selectDeviceDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
     "selectDeviceDeleteControllerDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
-    "selectDeviceDeleteControllerDialogTitle" : m1,
-    "selectDeviceDeleteControllerNO" : MessageLookupByLibrary.simpleMessage("NO"),
-    "selectDeviceDeleteControllerYES" : MessageLookupByLibrary.simpleMessage("YES"),
+    "selectDeviceDeleteControllerDialogTitle" : m4,
     "selectDeviceListItemInstruction" : MessageLookupByLibrary.simpleMessage("Tap to select"),
     "selectDeviceListTitle" : MessageLookupByLibrary.simpleMessage("Select a controller below"),
     "selectDeviceNewController" : MessageLookupByLibrary.simpleMessage("NEW CONTROLLER"),
@@ -66,7 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceOr" : MessageLookupByLibrary.simpleMessage("OR"),
     "selectDeviceShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
     "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
-    "testLEDTiming" : m2,
+    "testLEDTiming" : m5,
     "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
     "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),
@@ -112,6 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "towelieProductsNutrients" : MessageLookupByLibrary.simpleMessage("**Keep it simple, stupid - use soil!**\n\nOne single product from seedling to harvest, mix it in every watering\nand enjoy **lush plant** that yield **top quality** nugs every single time!\n"),
     "towelieProductsSeeds" : MessageLookupByLibrary.simpleMessage("**#1 rule of cannabis growing; genetics matter!**\n\nWith the overwhelming number of **strains available** and new ones coming out regularly;\nit\'s essential that you pick something that **meets your needs**!\nThe **SuperGreenLab** community seebank list is here to help you find **the strain for you**.\n"),
     "towelieWelcomeApp" : MessageLookupByLibrary.simpleMessage("Welcome to SuperGreenLab\'s grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n\nTo start off on a right foot, we made a **quick start checklist** of all the stuffs you\'ll need to **start growing**.\n\nDo you need a hand to start growing?\n"),
-    "towelieWelcomePlant" : MessageLookupByLibrary.simpleMessage("**Welcome to your plant feed!**\nThis is where you can **keep a history** of your plant\'s life.\n\nEverytime you **water**, **train**, or even just **observe something** about your plant,\nyou can **add an item** to the feed.\n\nSo you can see the **evolution** of your plant, **repeat it** later, or **share it!**")
+    "towelieWelcomePlant" : MessageLookupByLibrary.simpleMessage("**Welcome to your plant feed!**\nThis is where you can **keep a history** of your plant\'s life.\n\nEverytime you **water**, **train**, or even just **observe something** about your plant,\nyou can **add an item** to the feed.\n\nSo you can see the **evolution** of your plant, **repeat it** later, or **share it!**"),
+    "yes" : MessageLookupByLibrary.simpleMessage("YES")
   };
 }

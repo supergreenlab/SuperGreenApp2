@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-08T15:32:34.188723",
+  "@@last_modified": "2021-02-08T16:46:54.526326",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -19,6 +19,24 @@
   "loading": "Loading...",
   "@loading": {
     "description": "Loading message usually displayed on the fullscreen overlay",
+    "type": "text",
+    "placeholders": {}
+  },
+  "done": "Done!",
+  "@done": {
+    "description": "Success message usually displayed on the fullscreen overlay",
+    "type": "text",
+    "placeholders": {}
+  },
+  "no": "NO",
+  "@no": {
+    "description": "Used in confirmation dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "yes": "YES",
+  "@yes": {
+    "description": "Used in confirmation dialogs",
     "type": "text",
     "placeholders": {}
   },
@@ -460,18 +478,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "selectDeviceDeleteControllerNO": "NO",
-  "@selectDeviceDeleteControllerNO": {
-    "description": "Controller deletion NO",
-    "type": "text",
-    "placeholders": {}
-  },
-  "selectDeviceDeleteControllerYES": "YES",
-  "@selectDeviceDeleteControllerYES": {
-    "description": "Controller deletion YES",
-    "type": "text",
-    "placeholders": {}
-  },
   "instructionsExistingDeviceTitle": "Enter controller name or IP",
   "@instructionsExistingDeviceTitle": {
     "description": "Instructions existing device title",
@@ -483,6 +489,67 @@
     "description": "Instructions existing device",
     "type": "text",
     "placeholders": {}
+  },
+  "selectDeviceBoxSettingUp": "Setting up..",
+  "@selectDeviceBoxSettingUp": {
+    "description": "Message while app is configuring new box",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceBoxSlot": "Select controller's box slot",
+  "@selectDeviceBoxSlot": {
+    "description": "Select device box slot",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceBoxAlreadyRunning": "Already running",
+  "@selectDeviceBoxAlreadyRunning": {
+    "description": "Select device box slot",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceBoxAvailable": "Available",
+  "@selectDeviceBoxAvailable": {
+    "description": "Select device box slot available",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceBoxNoMoreLED": "No more free led channels",
+  "@selectDeviceBoxNoMoreLED": {
+    "description": "Select device box slot no more channels",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceBoxNumber": "Box #{number}",
+  "@selectDeviceBoxNumber": {
+    "description": "Box slot number",
+    "type": "text",
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "selectDeviceBoxLedChannelDescription": "Led channels: {leds}",
+  "@selectDeviceBoxLedChannelDescription": {
+    "description": "Box slot channel description",
+    "type": "text",
+    "placeholders": {
+      "leds": {}
+    }
+  },
+  "selectDeviceBoxNoLedChannelAssigned": "No led channels assigned",
+  "@selectDeviceBoxNoLedChannelAssigned": {
+    "description": "Box slot no led channel assigned yet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceBoxResetDialogTitle": "Reset box #{index} on controller {name}?",
+  "@selectDeviceBoxResetDialogTitle": {
+    "description": "Box slot reset dialog title",
+    "type": "text",
+    "placeholders": {
+      "index": {},
+      "name": {}
+    }
   },
   "instructionsNewDeviceWifiFailed": "**Couldn't connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:",
   "@instructionsNewDeviceWifiFailed": {
