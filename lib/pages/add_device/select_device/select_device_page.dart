@@ -72,6 +72,115 @@ class SelectDevicePage extends StatefulWidget {
     );
   }
 
+  static String get selectDeviceNoController {
+    return Intl.message(
+      '''You have no controller\nfor your new lab.''',
+      name: 'selectDeviceNoController',
+      desc: 'Message on the select device screen when no controller added yet',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceAddFirst {
+    return Intl.message(
+      '''Add a first''',
+      name: 'selectDeviceAddFirst',
+      desc: 'First half of the "Add a first controller" instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceAddFirstController {
+    return Intl.message(
+      '''CONTROLLER''',
+      name: 'selectDeviceAddFirstController',
+      desc: 'Second half of the "Add a first controller" instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceAdd {
+    return Intl.message(
+      '''ADD''',
+      name: 'selectDeviceAdd',
+      desc: 'First part of the "Add or Shop now" instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceOr {
+    return Intl.message(
+      '''OR''',
+      name: 'selectDeviceOr',
+      desc: 'Second part of the "Add or Shop now" instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceShopNow {
+    return Intl.message(
+      '''SHOP NOW''',
+      name: 'selectDeviceShopNow',
+      desc: 'Last part of the "Add or Shop now" instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceDIYNow {
+    return Intl.message(
+      '''DIY NOW''',
+      name: 'selectDeviceDIYNow',
+      desc: 'After the "Add or Shop now" instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceContinueWithoutController {
+    return Intl.message(
+      '''Continue without controller''',
+      name: 'selectDeviceContinueWithoutController',
+      desc: 'Skip select controller',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String selectDeviceDeleteControllerDialogTitle(String name) {
+    return Intl.message(
+      '''Delete controller $name?''',
+      args: [name],
+      name: 'selectDeviceDeleteControllerDialogTitle',
+      desc: 'Title for the delete controller dialog',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceDeleteControllerDialogBody {
+    return Intl.message(
+      '''This can\'t be reverted. Continue?''',
+      name: 'selectDeviceDeleteControllerDialogBody',
+      desc: 'Confirm controller deletion',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceDeleteControllerNO {
+    return Intl.message(
+      '''NO''',
+      name: 'selectDeviceDeleteControllerNO',
+      desc: 'Controller deletion NO',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceDeleteControllerYES {
+    return Intl.message(
+      '''YES''',
+      name: 'selectDeviceDeleteControllerYES',
+      desc: 'Controller deletion YES',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _SelectDevicePageState createState() => _SelectDevicePageState();
 }
@@ -191,23 +300,23 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 24.0),
                           child: Text(
-                            'You have no controller\nfor your new lab.',
+                            SelectDevicePage.selectDeviceNoController,
                             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         Text(
-                          'Add a first',
+                          SelectDevicePage.selectDeviceAddFirst,
                           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                           textAlign: TextAlign.center,
                         ),
-                        Text('CONTROLLER',
+                        Text(SelectDevicePage.selectDeviceAddFirstController,
                             style: TextStyle(fontSize: 45, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
                       ],
                     ),
                   ),
                   GreenButton(
-                    title: 'ADD',
+                    title: SelectDevicePage.selectDeviceAdd,
                     onPressed: () {
                       _addNewDevice(context);
                     },
@@ -215,7 +324,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'OR',
+                      SelectDevicePage.selectDeviceOr,
                       style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                     ),
                   ),
@@ -223,7 +332,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GreenButton(
-                        title: 'SHOP NOW',
+                        title: SelectDevicePage.selectDeviceShopNow,
                         onPressed: () {
                           launch('https://www.supergreenlab.com');
                         },
@@ -233,7 +342,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                         child: Text('/'),
                       ),
                       GreenButton(
-                        title: 'DIY NOW',
+                        title: SelectDevicePage.selectDeviceDIYNow,
                         onPressed: () {
                           launch('https://github.com/supergreenlab/');
                         },
@@ -250,7 +359,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
             onPressed: () {
               BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
             },
-            child: Text('Continue without controller',
+            child: Text(SelectDevicePage.selectDeviceContinueWithoutController,
                 style: TextStyle(decoration: TextDecoration.underline, fontSize: 15, color: Colors.grey)),
           ),
         ),
@@ -283,20 +392,20 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Delete controller ${device.name}?'),
-            content: Text('This can\'t be reverted. Continue?'),
+            title: Text(SelectDevicePage.selectDeviceDeleteControllerDialogTitle(device.name)),
+            content: Text(SelectDevicePage.selectDeviceDeleteControllerDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('NO'),
+                child: Text(SelectDevicePage.selectDeviceDeleteControllerNO),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('YES'),
+                child: Text(SelectDevicePage.selectDeviceDeleteControllerYES),
               ),
             ],
           );

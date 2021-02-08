@@ -28,4 +28,13 @@ class CommonL10N {
       locale: SGLLocalizations.current.localeName,
     );
   }
+
+  static String get done {
+    return Intl.message(
+      '''Done!''',
+      name: 'done',
+      desc: 'Success message usually displayed on the fullscreen overlay',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
 }

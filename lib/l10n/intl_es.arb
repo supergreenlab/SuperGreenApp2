@@ -1,5 +1,27 @@
 {
-  "@@last_modified": "2021-02-06T13:38:06.896827",
+  "@@last_modified": "2021-02-08T15:32:34.188723",
+  "redBarSyncingProgress": "Syncing - {progress}",
+  "@redBarSyncingProgress": {
+    "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
+    "type": "text",
+    "placeholders": {
+      "progress": {
+        "example": "medias 12/17"
+      }
+    }
+  },
+  "mainNavigatorUnknownRoute": "Unknown route",
+  "@mainNavigatorUnknownRoute": {
+    "description": "Unknown route message (shouldnt appear)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading message usually displayed on the fullscreen overlay",
+    "type": "text",
+    "placeholders": {}
+  },
   "towelieButtonViewPlant": "View plant",
   "@towelieButtonViewPlant": {
     "description": "Towelie Button view plant",
@@ -303,6 +325,150 @@
   "formCGU": "*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. ",
   "@formCGU": {
     "description": "Form CGU",
+    "type": "text",
+    "placeholders": {}
+  },
+  "testLEDTiming": "(100% power for {time} s)",
+  "@testLEDTiming": {
+    "description": "Wait message when setting a led to 100% for a few seconds when setting up a new controller.",
+    "type": "text",
+    "placeholders": {
+      "time": {
+        "example": 0.34
+      }
+    }
+  },
+  "testingLEDTitle": "Testing LED",
+  "@testingLEDTitle": {
+    "description": "Title for the led testing page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "testingLEDDone": "Testing done",
+  "@testingLEDDone": {
+    "description": "Title for the led testing page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ledTestingInstructions": "Press a led channel\nto switch it on/off:",
+  "@ledTestingInstructions": {
+    "description": "Intructions for the LED test page during new controller setup",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ledTestingChannelTitle": "Light",
+  "@ledTestingChannelTitle": {
+    "description": "The word displayed on each led channel widget",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ledTestingValidate": "OK, ALL GOOD",
+  "@ledTestingValidate": {
+    "description": "Confirmation button for the LED testing page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ledTestingPageTitle": "NEW BOX SETUP",
+  "@ledTestingPageTitle": {
+    "description": "Led testing page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceSkipAddDevice": "NO SGL DEVICE",
+  "@selectDeviceSkipAddDevice": {
+    "description": "Button to skip the sgl device config",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceNewController": "NEW CONTROLLER",
+  "@selectDeviceNewController": {
+    "description": "Add new controller button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceListTitle": "Select a controller below",
+  "@selectDeviceListTitle": {
+    "description": "Instruction title above the controller list.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceListItemInstruction": "Tap to select",
+  "@selectDeviceListItemInstruction": {
+    "description": "Instruction for controller list items.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceNoController": "You have no controller\nfor your new lab.",
+  "@selectDeviceNoController": {
+    "description": "Message on the select device screen when no controller added yet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceAddFirst": "Add a first",
+  "@selectDeviceAddFirst": {
+    "description": "First half of the \"Add a first controller\" instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceAddFirstController": "CONTROLLER",
+  "@selectDeviceAddFirstController": {
+    "description": "Second half of the \"Add a first controller\" instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceAdd": "ADD",
+  "@selectDeviceAdd": {
+    "description": "First part of the \"Add or Shop now\" instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceOr": "OR",
+  "@selectDeviceOr": {
+    "description": "Second part of the \"Add or Shop now\" instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceShopNow": "SHOP NOW",
+  "@selectDeviceShopNow": {
+    "description": "Last part of the \"Add or Shop now\" instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceDIYNow": "DIY NOW",
+  "@selectDeviceDIYNow": {
+    "description": "After the \"Add or Shop now\" instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceContinueWithoutController": "Continue without controller",
+  "@selectDeviceContinueWithoutController": {
+    "description": "Skip select controller",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceDeleteControllerDialogTitle": "Delete controller {name}?",
+  "@selectDeviceDeleteControllerDialogTitle": {
+    "description": "Title for the delete controller dialog",
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "selectDeviceDeleteControllerDialogBody": "This can't be reverted. Continue?",
+  "@selectDeviceDeleteControllerDialogBody": {
+    "description": "Confirm controller deletion",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceDeleteControllerNO": "NO",
+  "@selectDeviceDeleteControllerNO": {
+    "description": "Controller deletion NO",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceDeleteControllerYES": "YES",
+  "@selectDeviceDeleteControllerYES": {
+    "description": "Controller deletion YES",
     "type": "text",
     "placeholders": {}
   },

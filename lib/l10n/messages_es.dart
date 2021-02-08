@@ -19,6 +19,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'es';
 
+  static m0(progress) => "Syncing - ${progress}";
+
+  static m1(name) => "Delete controller ${name}?";
+
+  static m2(time) => "(100% power for ${time} s)";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "formAllowAnalytics" : MessageLookupByLibrary.simpleMessage("**Help us** discern what\'s **useful** from what\'s **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*"),
@@ -33,10 +39,36 @@ class MessageLookup extends MessageLookupByLibrary {
     "instructionsNewDeviceWifiFailed" : MessageLookupByLibrary.simpleMessage("**Couldn\'t connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:"),
     "instructionsNewDeviceWifiFailed2" : MessageLookupByLibrary.simpleMessage("Then press the **DONE** button below"),
     "instructionsVegScheduleHelper" : MessageLookupByLibrary.simpleMessage("**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day."),
+    "ledTestingChannelTitle" : MessageLookupByLibrary.simpleMessage("Light"),
+    "ledTestingInstructions" : MessageLookupByLibrary.simpleMessage("Press a led channel\nto switch it on/off:"),
+    "ledTestingPageTitle" : MessageLookupByLibrary.simpleMessage("NEW BOX SETUP"),
+    "ledTestingValidate" : MessageLookupByLibrary.simpleMessage("OK, ALL GOOD"),
+    "loading" : MessageLookupByLibrary.simpleMessage("Loading..."),
+    "mainNavigatorUnknownRoute" : MessageLookupByLibrary.simpleMessage("Unknown route"),
     "notificationPurposes" : MessageLookupByLibrary.simpleMessage("You will get notified for:\n- **Likes** on comments and public diary entry\n- **Comments** on public diary entries\n- **Replies** to your comments\n- **Smart reminders** and **grow tips**\n- **Temperature** and **humidity** alerts"),
     "notificationRequestButton" : MessageLookupByLibrary.simpleMessage("NOTIFY ME"),
     "notificationRequestButtonCancel" : MessageLookupByLibrary.simpleMessage("NO THANKS"),
     "notificationRequestTitle" : MessageLookupByLibrary.simpleMessage("Would you like to activate notifications?"),
+    "redBarSyncingProgress" : m0,
+    "selectDeviceAdd" : MessageLookupByLibrary.simpleMessage("ADD"),
+    "selectDeviceAddFirst" : MessageLookupByLibrary.simpleMessage("Add a first"),
+    "selectDeviceAddFirstController" : MessageLookupByLibrary.simpleMessage("CONTROLLER"),
+    "selectDeviceContinueWithoutController" : MessageLookupByLibrary.simpleMessage("Continue without controller"),
+    "selectDeviceDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
+    "selectDeviceDeleteControllerDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
+    "selectDeviceDeleteControllerDialogTitle" : m1,
+    "selectDeviceDeleteControllerNO" : MessageLookupByLibrary.simpleMessage("NO"),
+    "selectDeviceDeleteControllerYES" : MessageLookupByLibrary.simpleMessage("YES"),
+    "selectDeviceListItemInstruction" : MessageLookupByLibrary.simpleMessage("Tap to select"),
+    "selectDeviceListTitle" : MessageLookupByLibrary.simpleMessage("Select a controller below"),
+    "selectDeviceNewController" : MessageLookupByLibrary.simpleMessage("NEW CONTROLLER"),
+    "selectDeviceNoController" : MessageLookupByLibrary.simpleMessage("You have no controller\nfor your new lab."),
+    "selectDeviceOr" : MessageLookupByLibrary.simpleMessage("OR"),
+    "selectDeviceShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
+    "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
+    "testLEDTiming" : m2,
+    "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
+    "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),
     "towelieButtonCreatePlant" : MessageLookupByLibrary.simpleMessage("GO!"),
     "towelieButtonEndChecklist" : MessageLookupByLibrary.simpleMessage("Create plant"),
