@@ -75,6 +75,45 @@ class SelectDeviceBoxPage extends StatefulWidget {
     );
   }
 
+  static String selectDeviceBoxNumber(int number) {
+    return Intl.message(
+      '''Box #$number''',
+      args: [number],
+      name: 'selectDeviceBoxNumber',
+      desc: 'Box slot number',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String selectDeviceBoxLedChannelDescription(String leds) {
+    return Intl.message(
+      '''Led channels: $leds''',
+      args: [leds],
+      name: 'selectDeviceBoxLedChannelDescription',
+      desc: 'Box slot channel description',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceBoxNoLedChannelAssigned {
+    return Intl.message(
+      '''No led channels assigned''',
+      name: 'selectDeviceBoxNoLedChannelAssigned',
+      desc: 'Box slot no led channel assigned yet',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String selectDeviceBoxResetDialogTitle(int index, String name) {
+    return Intl.message(
+      '''Reset box #$index on controller $name?''',
+      args: [index, name],
+      name: 'selectDeviceBoxResetDialogTitle',
+      desc: 'Box slot reset dialog title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   State<StatefulWidget> createState() => SelectDeviceBoxPageState();
 }
@@ -186,12 +225,14 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SvgPicture.asset('assets/box_setup/icon_box.svg'),
-                  Text('Box #${state.boxes[index].box + 1}', style: TextStyle(fontWeight: FontWeight.w300)),
+                  Text(SelectDeviceBoxPage.selectDeviceBoxNumber(state.boxes[index].box + 1),
+                      style: TextStyle(fontWeight: FontWeight.w300)),
                 ],
               ),
               subtitle: Text(state.boxes[index].leds.length > 0
-                  ? 'Led channels: ${state.boxes[index].leds.map((l) => l + 1).join(', ')}'
-                  : 'No led channels assigned'),
+                  ? SelectDeviceBoxPage.selectDeviceBoxLedChannelDescription(
+                      state.boxes[index].leds.map((l) => l + 1).join(', '))
+                  : SelectDeviceBoxPage.selectDeviceBoxNoLedChannelAssigned),
             );
           },
         ),
@@ -205,19 +246,19 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Reset box #${index + 1} on controller ${state.device.name}?'),
+            title: Text(SelectDeviceBoxPage.selectDeviceBoxResetDialogTitle(index + 1, state.device.name)),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('NO'),
+                child: Text(CommonL10N.no),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('YES'),
+                child: Text(CommonL10N.yes),
               ),
             ],
           );

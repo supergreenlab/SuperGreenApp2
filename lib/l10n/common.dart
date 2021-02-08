@@ -37,4 +37,22 @@ class CommonL10N {
       locale: SGLLocalizations.current.localeName,
     );
   }
+
+  static String get no {
+    return Intl.message(
+      '''NO''',
+      name: 'no',
+      desc: 'Used in confirmation dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get yes {
+    return Intl.message(
+      '''YES''',
+      name: 'yes',
+      desc: 'Used in confirmation dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
 }

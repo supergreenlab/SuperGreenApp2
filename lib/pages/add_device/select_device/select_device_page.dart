@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device/select_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -159,24 +160,6 @@ class SelectDevicePage extends StatefulWidget {
       '''This can\'t be reverted. Continue?''',
       name: 'selectDeviceDeleteControllerDialogBody',
       desc: 'Confirm controller deletion',
-      locale: SGLLocalizations.current.localeName,
-    );
-  }
-
-  static String get selectDeviceDeleteControllerNO {
-    return Intl.message(
-      '''NO''',
-      name: 'selectDeviceDeleteControllerNO',
-      desc: 'Controller deletion NO',
-      locale: SGLLocalizations.current.localeName,
-    );
-  }
-
-  static String get selectDeviceDeleteControllerYES {
-    return Intl.message(
-      '''YES''',
-      name: 'selectDeviceDeleteControllerYES',
-      desc: 'Controller deletion YES',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -399,13 +382,13 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text(SelectDevicePage.selectDeviceDeleteControllerNO),
+                child: Text(CommonL10N.no),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text(SelectDevicePage.selectDeviceDeleteControllerYES),
+                child: Text(CommonL10N.yes),
               ),
             ],
           );
