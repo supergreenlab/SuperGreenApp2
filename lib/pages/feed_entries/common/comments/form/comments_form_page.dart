@@ -109,7 +109,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         } else if (state is CommentsFormBlocStateUpdateComment) {
           int i = comments.indexWhere((c) => c.id == state.commentID);
           if (i != -1) {
-            if (comments[i].isNew && !state.comment.isNew) {
+            if (comments[i].isNew == true && (state.comment.isNew ?? false) == false) {
               BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
             }
             setState(() {
