@@ -18,7 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device/select_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -34,6 +36,42 @@ class SelectBoxDeviceData {
 }
 
 class SelectDevicePage extends StatefulWidget {
+  static String get selectDeviceSkipAddDevice {
+    return Intl.message(
+      '''NO SGL DEVICE''',
+      name: 'selectDeviceSkipAddDevice',
+      desc: 'Button to skip the sgl device config',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceNewController {
+    return Intl.message(
+      '''NEW CONTROLLER''',
+      name: 'selectDeviceNewController',
+      desc: 'Add new controller button',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceListTitle {
+    return Intl.message(
+      '''Select a controller below''',
+      name: 'selectDeviceListTitle',
+      desc: 'Instruction title above the controller list.',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceListItemInstruction {
+    return Intl.message(
+      '''Tap to select''',
+      name: 'selectDeviceListItemInstruction',
+      desc: 'Instruction for controller list items.',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _SelectDevicePageState createState() => _SelectDevicePageState();
 }
@@ -44,9 +82,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
     return BlocListener<SelectDeviceBloc, SelectDeviceBlocState>(
       listener: (BuildContext context, state) {
         if (state is SelectDeviceBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(
-              MainNavigatorActionPop(
-                  param: SelectBoxDeviceData(state.device, state.deviceBox)));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: SelectBoxDeviceData(state.device, state.deviceBox)));
         }
       },
       child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
@@ -63,7 +100,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       color: Color(0xff0b6ab3),
                     ),
                     SectionTitle(
-                      title: 'Select a controller below',
+                      title: SelectDevicePage.selectDeviceListTitle,
                       icon: 'assets/box_setup/icon_controller.svg',
                       backgroundColor: Color(0xff0b6ab3),
                       titleColor: Colors.white,
@@ -71,35 +108,32 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       elevation: 5,
                     ),
                     Expanded(child: _deviceList(context, state)),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          FlatButton(
-                            textColor: Colors.red,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.close),
-                                Text('NO SGL DEVICE'),
-                              ],
-                            ),
-                            onPressed: () {
-                              BlocProvider.of<MainNavigatorBloc>(context)
-                                  .add(MainNavigatorActionPop(param: false));
-                            },
-                          ),
-                          FlatButton(
-                            textColor: Colors.blue,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.add),
-                                Text('NEW CONTROLLER'),
-                              ],
-                            ),
-                            onPressed: () {
-                              _addNewDevice(context);
-                            },
-                          ),
-                        ])
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+                      FlatButton(
+                        textColor: Colors.red,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.close),
+                            Text(SelectDevicePage.selectDeviceSkipAddDevice),
+                          ],
+                        ),
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
+                        },
+                      ),
+                      FlatButton(
+                        textColor: Colors.blue,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.add),
+                            Text(SelectDevicePage.selectDeviceNewController),
+                          ],
+                        ),
+                        onPressed: () {
+                          _addNewDevice(context);
+                        },
+                      ),
+                    ])
                   ],
                 );
               } else {
@@ -119,8 +153,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
     );
   }
 
-  Widget _deviceList(
-      BuildContext context, SelectDeviceBlocStateDeviceListUpdated state) {
+  Widget _deviceList(BuildContext context, SelectDeviceBlocStateDeviceListUpdated state) {
     int i = 1;
     return ListView(
       children: state.devices
@@ -135,7 +168,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                   '${i++} - ${d.name}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                 ),
-                subtitle: Text('Tap to select'),
+                subtitle: Text(SelectDevicePage.selectDeviceListItemInstruction),
               ))
           .toList(),
     );
@@ -152,30 +185,24 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                   child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32.0, vertical: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
                     child: Column(
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(bottom: 24.0),
                           child: Text(
                             'You have no controller\nfor your new lab.',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.w200),
+                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         Text(
                           'Add a first',
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w300),
+                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                           textAlign: TextAlign.center,
                         ),
                         Text('CONTROLLER',
-                            style: TextStyle(
-                                fontSize: 45,
-                                fontWeight: FontWeight.w200,
-                                color: Color(0xff3bb30b))),
+                            style: TextStyle(fontSize: 45, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
                       ],
                     ),
                   ),
@@ -221,14 +248,10 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         Center(
           child: FlatButton(
             onPressed: () {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigatorActionPop(param: false));
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
             },
             child: Text('Continue without controller',
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: 15,
-                    color: Colors.grey)),
+                style: TextStyle(decoration: TextDecoration.underline, fontSize: 15, color: Colors.grey)),
           ),
         ),
       ],
@@ -236,8 +259,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
   }
 
   void _addNewDevice(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToAddDeviceEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToAddDeviceEvent(futureFn: (future) async {
       Device device = await future;
       if (device != null) {
         _selectDevice(context, device);
@@ -246,12 +268,11 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
   }
 
   void _selectDevice(BuildContext context, Device device) {
-    BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToSelectDeviceBoxEvent(device, futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToSelectDeviceBoxEvent(device, futureFn: (future) async {
       dynamic deviceBox = await future;
       if (deviceBox is int) {
-        BlocProvider.of<SelectDeviceBloc>(context)
-            .add(SelectDeviceBlocEventSelect(device, deviceBox));
+        BlocProvider.of<SelectDeviceBloc>(context).add(SelectDeviceBlocEventSelect(device, deviceBox));
       }
     }));
   }
@@ -281,8 +302,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<SelectDeviceBloc>(context)
-          .add(SelectDeviceBlocEventDelete(device));
+      BlocProvider.of<SelectDeviceBloc>(context).add(SelectDeviceBlocEventDelete(device));
     }
   }
 }

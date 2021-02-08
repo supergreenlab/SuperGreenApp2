@@ -22,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -155,6 +156,26 @@ final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 //final RouteObserver<PageRoute> _analyticsObserver = AnalyticsObserver();
 
 class MainPage extends StatefulWidget {
+  static String redBarSyncingProgress(progress) {
+    return Intl.message(
+      '''Syncing - $progress''',
+      args: [progress],
+      name: 'redBarSyncingProgress',
+      desc: 'Syncing progress indicator in top red bar, when fetching all new diary cards',
+      locale: SGLLocalizations.current.localeName,
+      examples: const {'progress': 'medias 12/17'},
+    );
+  }
+
+  static String get mainNavigatorUnknownRoute {
+    return Intl.message(
+      '''Unknown route''',
+      name: 'mainNavigatorUnknownRoute',
+      desc: 'Unknown route message (shouldnt appear)',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final GlobalKey<NavigatorState> _navigatorKey;
 
   MainPage(this._navigatorKey);
@@ -255,7 +276,9 @@ class _MainPageState extends State<MainPage> {
                     color: Colors.red,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 21.0),
-                      child: Center(child: Text('Syncing - ${state.text}', style: TextStyle(color: Colors.white))),
+                      child: Center(
+                          child:
+                              Text(MainPage.redBarSyncingProgress(state.text), style: TextStyle(color: Colors.white))),
                     )),
               )));
         }
@@ -582,7 +605,7 @@ class _MainPageState extends State<MainPage> {
           child: RemoteBoxFeedPage(),
         );
     }
-    return Text('Unknown route');
+    return Text(MainPage.mainNavigatorUnknownRoute);
   }
 
   void _requestNotificationPermissions(BuildContext context) {
