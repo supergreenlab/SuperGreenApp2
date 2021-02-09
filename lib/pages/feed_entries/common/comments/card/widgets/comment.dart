@@ -20,8 +20,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -31,11 +34,7 @@ class SmallCommentView extends StatelessWidget {
   final Comment comment;
   final bool loggedIn;
 
-  const SmallCommentView(
-      {Key key,
-      @required this.feedEntry,
-      @required this.comment,
-      @required this.loggedIn})
+  const SmallCommentView({Key key, @required this.feedEntry, @required this.comment, @required this.loggedIn})
       : super(key: key);
 
   @override
@@ -49,8 +48,7 @@ class SmallCommentView extends StatelessWidget {
         Expanded(
           child: MarkdownBody(
             data: '**${comment.from}** ${comment.text}',
-            styleSheet: MarkdownStyleSheet(
-                p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
         InkWell(
@@ -59,16 +57,11 @@ class SmallCommentView extends StatelessWidget {
               createAccountOrLogin(context);
               return;
             }
-            BlocProvider.of<FeedBloc>(context)
-                .add(FeedBlocEventLikeComment(comment, feedEntry));
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLikeComment(comment, feedEntry));
           },
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: 8.0, right: 4.0, top: 4.0, bottom: 8.0),
-            child: Image.asset(
-                'assets/feed_card/button_like${comment.liked ? '_on' : ''}.png',
-                width: 20,
-                height: 20),
+            padding: const EdgeInsets.only(left: 8.0, right: 4.0, top: 4.0, bottom: 8.0),
+            child: Image.asset('assets/feed_card/button_like${comment.liked ? '_on' : ''}.png', width: 20, height: 20),
           ),
         ),
       ],
@@ -81,27 +74,26 @@ class SmallCommentView extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Login required'),
-            content: Text('Please log in or create an account.'),
+            title: Text(CommonL10N.loginRequiredDialogTitle),
+            content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('CANCEL'),
+                child: Text(CommonL10N.cancel),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('LOGIN / CREATE ACCOUNT'),
+                child: Text(CommonL10N.loginCreateAccount),
               ),
             ],
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context)
-          .add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }
 }

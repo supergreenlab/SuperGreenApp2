@@ -19,21 +19,34 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'fr';
 
-  static m0(progress) => "Syncing - ${progress}";
+  static m0(name) => "Plant ${name} is now public";
 
-  static m1(leds) => "Led channels: ${leds}";
+  static m1(progress) => "Syncing - ${progress}";
 
-  static m2(number) => "Box #${number}";
+  static m2(leds) => "Led channels: ${leds}";
 
-  static m3(index, name) => "Reset box #${index} on controller ${name}?";
+  static m3(number) => "Box #${number}";
 
-  static m4(name) => "Delete controller ${name}?";
+  static m4(index, name) => "Reset box #${index} on controller ${name}?";
 
-  static m5(time) => "(100% power for ${time} s)";
+  static m5(name) => "Delete controller ${name}?";
+
+  static m6(time) => "(100% power for ${time} s)";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "cancel" : MessageLookupByLibrary.simpleMessage("CANCEL"),
+    "commentsFormPageCommentTypeTitle" : MessageLookupByLibrary.simpleMessage("What kind of post do you want to do?"),
+    "commentsFormPagePleaseLogin" : MessageLookupByLibrary.simpleMessage("Please login to add a comment"),
+    "commentsFormPageReplyingTo" : MessageLookupByLibrary.simpleMessage("Replying to "),
+    "commentsFormPageViewAllComments" : MessageLookupByLibrary.simpleMessage("View all comments"),
+    "commentsFormPageViewingSingleComment" : MessageLookupByLibrary.simpleMessage("Viewing single comment"),
     "done" : MessageLookupByLibrary.simpleMessage("Done!"),
+    "explorerPagePleaseLoginDialogBody" : MessageLookupByLibrary.simpleMessage("You need to be logged in to make a plant public."),
+    "explorerPagePleaseLoginDialogTitle" : MessageLookupByLibrary.simpleMessage("Make a plant public"),
+    "explorerPagePublicPlantConfirmation" : m0,
+    "explorerPageSelectPlantTitle" : MessageLookupByLibrary.simpleMessage("Select which plant you want to make public"),
+    "explorerPageTitle" : MessageLookupByLibrary.simpleMessage("Explorer"),
     "formAllowAnalytics" : MessageLookupByLibrary.simpleMessage("**Help us** discern what\'s **useful** from what\'s **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*"),
     "formCGU" : MessageLookupByLibrary.simpleMessage("*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. "),
     "instructionsAutoScheduleHelper" : MessageLookupByLibrary.simpleMessage("Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another."),
@@ -51,37 +64,52 @@ class MessageLookup extends MessageLookupByLibrary {
     "ledTestingPageTitle" : MessageLookupByLibrary.simpleMessage("NEW BOX SETUP"),
     "ledTestingValidate" : MessageLookupByLibrary.simpleMessage("OK, ALL GOOD"),
     "loading" : MessageLookupByLibrary.simpleMessage("Loading..."),
+    "loginCreateAccount" : MessageLookupByLibrary.simpleMessage("LOGIN / CREATE ACCOUNT"),
+    "loginRequiredDialogBody" : MessageLookupByLibrary.simpleMessage("Please log in or create an account."),
+    "loginRequiredDialogTitle" : MessageLookupByLibrary.simpleMessage("Login required"),
     "mainNavigatorUnknownRoute" : MessageLookupByLibrary.simpleMessage("Unknown route"),
     "no" : MessageLookupByLibrary.simpleMessage("NO"),
     "notificationPurposes" : MessageLookupByLibrary.simpleMessage("You will get notified for:\n- **Likes** on comments and public diary entry\n- **Comments** on public diary entries\n- **Replies** to your comments\n- **Smart reminders** and **grow tips**\n- **Temperature** and **humidity** alerts"),
     "notificationRequestButton" : MessageLookupByLibrary.simpleMessage("NOTIFY ME"),
     "notificationRequestButtonCancel" : MessageLookupByLibrary.simpleMessage("NO THANKS"),
     "notificationRequestTitle" : MessageLookupByLibrary.simpleMessage("Would you like to activate notifications?"),
-    "redBarSyncingProgress" : m0,
+    "redBarSyncingProgress" : m1,
+    "selectBoxPageAddNewGreenLab" : MessageLookupByLibrary.simpleMessage("Add new green lab"),
+    "selectBoxPageCreateFirst" : MessageLookupByLibrary.simpleMessage("Create your first"),
+    "selectBoxPageCreateFirstLab" : MessageLookupByLibrary.simpleMessage("GREEN LAB"),
+    "selectBoxPageCreateLabButton" : MessageLookupByLibrary.simpleMessage("CREATE"),
+    "selectBoxPageNoLab" : MessageLookupByLibrary.simpleMessage("You have no lab yet"),
+    "selectBoxPageTapSelect" : MessageLookupByLibrary.simpleMessage("Tap to select"),
     "selectDeviceAdd" : MessageLookupByLibrary.simpleMessage("ADD"),
     "selectDeviceAddFirst" : MessageLookupByLibrary.simpleMessage("Add a first"),
     "selectDeviceAddFirstController" : MessageLookupByLibrary.simpleMessage("CONTROLLER"),
     "selectDeviceBoxAlreadyRunning" : MessageLookupByLibrary.simpleMessage("Already running"),
     "selectDeviceBoxAvailable" : MessageLookupByLibrary.simpleMessage("Available"),
-    "selectDeviceBoxLedChannelDescription" : m1,
+    "selectDeviceBoxLedChannelDescription" : m2,
     "selectDeviceBoxNoLedChannelAssigned" : MessageLookupByLibrary.simpleMessage("No led channels assigned"),
     "selectDeviceBoxNoMoreLED" : MessageLookupByLibrary.simpleMessage("No more free led channels"),
-    "selectDeviceBoxNumber" : m2,
-    "selectDeviceBoxResetDialogTitle" : m3,
+    "selectDeviceBoxNumber" : m3,
+    "selectDeviceBoxResetDialogTitle" : m4,
     "selectDeviceBoxSettingUp" : MessageLookupByLibrary.simpleMessage("Setting up.."),
     "selectDeviceBoxSlot" : MessageLookupByLibrary.simpleMessage("Select controller\'s box slot"),
     "selectDeviceContinueWithoutController" : MessageLookupByLibrary.simpleMessage("Continue without controller"),
     "selectDeviceDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
     "selectDeviceDeleteControllerDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
-    "selectDeviceDeleteControllerDialogTitle" : m4,
+    "selectDeviceDeleteControllerDialogTitle" : m5,
     "selectDeviceListItemInstruction" : MessageLookupByLibrary.simpleMessage("Tap to select"),
     "selectDeviceListTitle" : MessageLookupByLibrary.simpleMessage("Select a controller below"),
+    "selectDeviceNewBoxAvailableLEDChannels" : MessageLookupByLibrary.simpleMessage("Available LED channels"),
+    "selectDeviceNewBoxLEDChannel" : MessageLookupByLibrary.simpleMessage("LED chan"),
+    "selectDeviceNewBoxNoMoreBox" : MessageLookupByLibrary.simpleMessage("Device can\'t handle\nmore box!"),
+    "selectDeviceNewBoxSelectedLEDChannels" : MessageLookupByLibrary.simpleMessage("Selected LED channels"),
+    "selectDeviceNewBoxSettingUp" : MessageLookupByLibrary.simpleMessage("Setting up.."),
+    "selectDeviceNewBoxSetupBox" : MessageLookupByLibrary.simpleMessage("SETUP BOX"),
     "selectDeviceNewController" : MessageLookupByLibrary.simpleMessage("NEW CONTROLLER"),
     "selectDeviceNoController" : MessageLookupByLibrary.simpleMessage("You have no controller\nfor your new lab."),
     "selectDeviceOr" : MessageLookupByLibrary.simpleMessage("OR"),
     "selectDeviceShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
     "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
-    "testLEDTiming" : m5,
+    "testLEDTiming" : m6,
     "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
     "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),

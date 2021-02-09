@@ -55,4 +55,40 @@ class CommonL10N {
       locale: SGLLocalizations.current.localeName,
     );
   }
+
+  static String get cancel {
+    return Intl.message(
+      '''CANCEL''',
+      name: 'cancel',
+      desc: 'Used in confirmation dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get loginCreateAccount {
+    return Intl.message(
+      '''LOGIN / CREATE ACCOUNT''',
+      name: 'loginCreateAccount',
+      desc: 'Used in "please login" dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get loginRequiredDialogTitle {
+    return Intl.message(
+      '''Login required''',
+      name: 'loginRequiredDialogTitle',
+      desc: 'Used in "please login" dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get loginRequiredDialogBody {
+    return Intl.message(
+      '''Please log in or create an account.''',
+      name: 'loginRequiredDialogBody',
+      desc: 'Used in "please login" dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
 }

@@ -23,10 +23,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
@@ -61,6 +63,51 @@ const Map<CommentType, Map<String, String>> commentTypes = {
 };
 
 class CommentsFormPage extends StatefulWidget {
+  static String get commentsFormPagePleaseLogin {
+    return Intl.message(
+      '''Please login to add a comment''',
+      name: 'commentsFormPagePleaseLogin',
+      desc: 'Used in "please login" dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageReplyingTo {
+    return Intl.message(
+      '''Replying to ''',
+      name: 'commentsFormPageReplyingTo',
+      desc: 'Followed by a username when replying to a comment (trailing space is important)',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageViewingSingleComment {
+    return Intl.message(
+      '''Viewing single comment''',
+      name: 'commentsFormPageViewingSingleComment',
+      desc: 'Button displayed when viewing a single comment',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageViewAllComments {
+    return Intl.message(
+      '''View all comments''',
+      name: 'commentsFormPageViewAllComments',
+      desc: 'Button displayed when viewing a single comment',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageCommentTypeTitle {
+    return Intl.message(
+      '''What kind of post do you want to do?''',
+      name: 'commentsFormPageCommentTypeTitle',
+      desc: 'Title displayed above the comment types',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _CommentsFormPageState createState() => _CommentsFormPageState();
 }
@@ -229,7 +276,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         child: Center(
             child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text('Please login to add a comment',
+          child: Text(CommentsFormPage.commentsFormPagePleaseLogin,
               style: TextStyle(
                   fontSize: 15.0,
                   color: Colors.blue,
@@ -253,7 +300,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                 size: 25,
               ),
               Text(
-                'Replying to ',
+                CommentsFormPage.commentsFormPageReplyingTo,
                 style: TextStyle(
                   color: Color(0xff474747),
                   fontSize: 16,
@@ -297,8 +344,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
       );
     } else if (single) {
       content = SingleFeedEntry(
-        title: 'Viewing single comment',
-        button: 'View all comments',
+        title: CommentsFormPage.commentsFormPageViewingSingleComment,
+        button: CommentsFormPage.commentsFormPageViewAllComments,
         onTap: () {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(false, feedEntry));
         },
@@ -342,7 +389,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
       }
       content = Column(children: [
         Text(
-          'What kind of post do you want to do?',
+          CommentsFormPage.commentsFormPageCommentTypeTitle,
           textAlign: TextAlign.center,
           style: TextStyle(color: Color(0xff787878), fontSize: 17),
         ),

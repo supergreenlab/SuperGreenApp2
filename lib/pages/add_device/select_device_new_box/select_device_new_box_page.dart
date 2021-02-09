@@ -18,6 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device_new_box/select_device_new_box_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -27,6 +30,60 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class SelectDeviceNewBoxPage extends StatefulWidget {
+  static String get selectDeviceNewBoxSettingUp {
+    return Intl.message(
+      '''Setting up..''',
+      name: 'selectDeviceNewBoxSettingUp',
+      desc: 'Message displayed while setting the controller\'s parameters',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceNewBoxNoMoreBox {
+    return Intl.message(
+      '''Device can\'t handle\nmore box!''',
+      name: 'selectDeviceNewBoxNoMoreBox',
+      desc: 'Message displayed when all box slots are already taken',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceNewBoxAvailableLEDChannels {
+    return Intl.message(
+      '''Available LED channels''',
+      name: 'selectDeviceNewBoxAvailableLEDChannels',
+      desc: 'Available LED channels list title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceNewBoxSelectedLEDChannels {
+    return Intl.message(
+      '''Selected LED channels''',
+      name: 'selectDeviceNewBoxSelectedLEDChannels',
+      desc: 'Available LED channels list title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceNewBoxSetupBox {
+    return Intl.message(
+      '''SETUP BOX''',
+      name: 'selectDeviceNewBoxSetupBox',
+      desc: 'Confirmation button',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get selectDeviceNewBoxLEDChannel {
+    return Intl.message(
+      '''LED chan''',
+      name: 'selectDeviceNewBoxLEDChannel',
+      desc: 'LED channels list items label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   State<StatefulWidget> createState() => SelectDeviceNewBoxPageState();
 }
@@ -46,8 +103,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
       cubit: BlocProvider.of<SelectDeviceNewBoxBloc>(context),
       listener: (context, state) {
         if (state is SelectDeviceNewBoxBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
         }
       },
       child: BlocBuilder<SelectDeviceNewBoxBloc, SelectDeviceNewBoxBlocState>(
@@ -55,13 +111,11 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           builder: (context, state) {
             Widget body;
             if (state is SelectDeviceNewBoxBlocStateLoading) {
-              body = FullscreenLoading(title: 'Setting up..');
+              body = FullscreenLoading(title: SelectDeviceNewBoxPage.selectDeviceNewBoxSettingUp);
             } else if (state is SelectDeviceNewBoxBlocStateDeviceFull) {
               body = _renderNoLedsAvailable(context, state);
             } else if (state is SelectDeviceNewBoxBlocStateDone) {
-              body = Fullscreen(
-                  title: 'Done!',
-                  child: Icon(Icons.done, color: Color(0xff0b6ab3), size: 100));
+              body = Fullscreen(title: CommonL10N.done, child: Icon(Icons.done, color: Color(0xff0b6ab3), size: 100));
             } else {
               body = _renderLedSelection(context, state);
             }
@@ -73,15 +127,14 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
   Widget _renderNoLedsAvailable(context, state) {
     return Fullscreen(
-        title: 'Device can\'t handle\nmore box!',
+        title: SelectDeviceNewBoxPage.selectDeviceNewBoxNoMoreBox,
         child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
@@ -94,25 +147,22 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: 'Available LED channels',
+          title: SelectDeviceNewBoxPage.selectDeviceNewBoxAvailableLEDChannels,
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
           elevation: 5,
         ),
-        _renderLeds(
-            state.leds.where((l) => !_selectedLeds.contains(l)).toList(),
-            (int led) {
+        _renderLeds(state.leds.where((l) => !_selectedLeds.contains(l)).toList(), (int led) {
           setState(() {
             _selectedLeds.add(led);
-            BlocProvider.of<SelectDeviceNewBoxBloc>(context)
-                .add(SelectDeviceNewBoxBlocEventSelectLed(led));
+            BlocProvider.of<SelectDeviceNewBoxBloc>(context).add(SelectDeviceNewBoxBlocEventSelectLed(led));
           });
         }),
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: SectionTitle(
-            title: 'Selected LED channels',
+            title: SelectDeviceNewBoxPage.selectDeviceNewBoxSelectedLEDChannels,
             icon: 'assets/box_setup/icon_controller.svg',
             backgroundColor: Color(0xff0b6ab3),
             titleColor: Colors.white,
@@ -122,8 +172,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
         _renderLeds(_selectedLeds, (int led) {
           setState(() {
             _selectedLeds.remove(led);
-            BlocProvider.of<SelectDeviceNewBoxBloc>(context)
-                .add(SelectDeviceNewBoxBlocEventUnselectLed(led));
+            BlocProvider.of<SelectDeviceNewBoxBloc>(context).add(SelectDeviceNewBoxBlocEventUnselectLed(led));
           });
         }),
         Expanded(
@@ -134,10 +183,8 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           child: Align(
             alignment: Alignment.centerRight,
             child: GreenButton(
-              title: 'SETUP BOX',
-              onPressed: _selectedLeds.length == 0
-                  ? null
-                  : () => _handleInput(context),
+              title: SelectDeviceNewBoxPage.selectDeviceNewBoxSetupBox,
+              onPressed: _selectedLeds.length == 0 ? null : () => _handleInput(context),
             ),
           ),
         ),
@@ -158,11 +205,10 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: <Widget>[
-                          Text('LED chan', style: TextStyle(fontSize: 10)),
+                          Text(SelectDeviceNewBoxPage.selectDeviceNewBoxLEDChannel, style: TextStyle(fontSize: 10)),
                           Text(
                             '${led + 1}',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -173,12 +219,10 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
   }
 
   void _handleInput(BuildContext context) {
-    BlocProvider.of<SelectDeviceNewBoxBloc>(context)
-        .add(SelectDeviceNewBoxBlocEventSelectLeds(_selectedLeds));
+    BlocProvider.of<SelectDeviceNewBoxBloc>(context).add(SelectDeviceNewBoxBlocEventSelectLeds(_selectedLeds));
   }
 
-  Widget _renderBox(
-      Key key, BuildContext context, Function onPressed, Widget content) {
+  Widget _renderBox(Key key, BuildContext context, Function onPressed, Widget content) {
     return SizedBox(
         key: key,
         width: 100,
@@ -188,9 +232,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
           child: RawMaterialButton(
             onPressed: onPressed,
             child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.black12,
-                    borderRadius: BorderRadius.circular(10)),
+                decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(10)),
                 child: content),
           ),
         ));

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-08T16:46:54.526326",
+  "@@last_modified": "2021-02-09T07:10:53.118644",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -37,6 +37,30 @@
   "yes": "YES",
   "@yes": {
     "description": "Used in confirmation dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "CANCEL",
+  "@cancel": {
+    "description": "Used in confirmation dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "loginCreateAccount": "LOGIN / CREATE ACCOUNT",
+  "@loginCreateAccount": {
+    "description": "Used in \"please login\" dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "loginRequiredDialogTitle": "Login required",
+  "@loginRequiredDialogTitle": {
+    "description": "Used in \"please login\" dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "loginRequiredDialogBody": "Please log in or create an account.",
+  "@loginRequiredDialogBody": {
+    "description": "Used in \"please login\" dialogs",
     "type": "text",
     "placeholders": {}
   },
@@ -334,6 +358,36 @@
     "type": "text",
     "placeholders": {}
   },
+  "commentsFormPagePleaseLogin": "Please login to add a comment",
+  "@commentsFormPagePleaseLogin": {
+    "description": "Used in \"please login\" dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageReplyingTo": "Replying to ",
+  "@commentsFormPageReplyingTo": {
+    "description": "Followed by a username when replying to a comment (trailing space is important)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageViewingSingleComment": "Viewing single comment",
+  "@commentsFormPageViewingSingleComment": {
+    "description": "Button displayed when viewing a single comment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageViewAllComments": "View all comments",
+  "@commentsFormPageViewAllComments": {
+    "description": "Button displayed when viewing a single comment",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageCommentTypeTitle": "What kind of post do you want to do?",
+  "@commentsFormPageCommentTypeTitle": {
+    "description": "Title displayed above the comment types",
+    "type": "text",
+    "placeholders": {}
+  },
   "formAllowAnalytics": "**Help us** discern what's **useful** from what's **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*",
   "@formAllowAnalytics": {
     "description": "Form allow analytics",
@@ -343,6 +397,38 @@
   "formCGU": "*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. ",
   "@formCGU": {
     "description": "Form CGU",
+    "type": "text",
+    "placeholders": {}
+  },
+  "explorerPageTitle": "Explorer",
+  "@explorerPageTitle": {
+    "description": "Explorer page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "explorerPageSelectPlantTitle": "Select which plant you want to make public",
+  "@explorerPageSelectPlantTitle": {
+    "description": "Title of the select page when selecting a plant to make public",
+    "type": "text",
+    "placeholders": {}
+  },
+  "explorerPagePublicPlantConfirmation": "Plant {name} is now public",
+  "@explorerPagePublicPlantConfirmation": {
+    "description": "Confirmation text when a plant is now public",
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "explorerPagePleaseLoginDialogTitle": "Make a plant public",
+  "@explorerPagePleaseLoginDialogTitle": {
+    "description": "Title for the dialog when the user is not connected",
+    "type": "text",
+    "placeholders": {}
+  },
+  "explorerPagePleaseLoginDialogBody": "You need to be logged in to make a plant public.",
+  "@explorerPagePleaseLoginDialogBody": {
+    "description": "Content for the dialog when the user is not connected",
     "type": "text",
     "placeholders": {}
   },
@@ -563,6 +649,42 @@
     "type": "text",
     "placeholders": {}
   },
+  "selectDeviceNewBoxSettingUp": "Setting up..",
+  "@selectDeviceNewBoxSettingUp": {
+    "description": "Message displayed while setting the controller's parameters",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceNewBoxNoMoreBox": "Device can't handle\nmore box!",
+  "@selectDeviceNewBoxNoMoreBox": {
+    "description": "Message displayed when all box slots are already taken",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceNewBoxAvailableLEDChannels": "Available LED channels",
+  "@selectDeviceNewBoxAvailableLEDChannels": {
+    "description": "Available LED channels list title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceNewBoxSelectedLEDChannels": "Selected LED channels",
+  "@selectDeviceNewBoxSelectedLEDChannels": {
+    "description": "Available LED channels list title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceNewBoxSetupBox": "SETUP BOX",
+  "@selectDeviceNewBoxSetupBox": {
+    "description": "Confirmation button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectDeviceNewBoxLEDChannel": "LED chan",
+  "@selectDeviceNewBoxLEDChannel": {
+    "description": "LED channels list items label",
+    "type": "text",
+    "placeholders": {}
+  },
   "notificationRequestButton": "NOTIFY ME",
   "@notificationRequestButton": {
     "description": "Notification request button",
@@ -584,6 +706,42 @@
   "notificationPurposes": "You will get notified for:\n- **Likes** on comments and public diary entry\n- **Comments** on public diary entries\n- **Replies** to your comments\n- **Smart reminders** and **grow tips**\n- **Temperature** and **humidity** alerts",
   "@notificationPurposes": {
     "description": "Notification purpose",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectBoxPageNoLab": "You have no lab yet",
+  "@selectBoxPageNoLab": {
+    "description": "Message displayed when the app has no lab created yet.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectBoxPageCreateFirst": "Create your first",
+  "@selectBoxPageCreateFirst": {
+    "description": "First part of the \"Create your first GREEN LAB\" text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectBoxPageCreateFirstLab": "GREEN LAB",
+  "@selectBoxPageCreateFirstLab": {
+    "description": "Displayed under the selectBoxPageCreateFirstLab text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectBoxPageCreateLabButton": "CREATE",
+  "@selectBoxPageCreateLabButton": {
+    "description": "Lab creation button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectBoxPageAddNewGreenLab": "Add new green lab",
+  "@selectBoxPageAddNewGreenLab": {
+    "description": "Last item of the Lab list is a button to create a new one",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectBoxPageTapSelect": "Tap to select",
+  "@selectBoxPageTapSelect": {
+    "description": "Label for the Labs list items",
     "type": "text",
     "placeholders": {}
   },

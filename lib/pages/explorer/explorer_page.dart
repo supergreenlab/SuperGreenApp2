@@ -22,8 +22,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
@@ -31,6 +35,52 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class ExplorerPage extends StatefulWidget {
+  static String get explorerPageTitle {
+    return Intl.message(
+      '''Explorer''',
+      name: 'explorerPageTitle',
+      desc: 'Explorer page title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get explorerPageSelectPlantTitle {
+    return Intl.message(
+      '''Select which plant you want to make public''',
+      name: 'explorerPageSelectPlantTitle',
+      desc: 'Title of the select page when selecting a plant to make public',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String explorerPagePublicPlantConfirmation(String name) {
+    return Intl.message(
+      '''Plant $name is now public''',
+      args: [name],
+      name: 'explorerPagePublicPlantConfirmation',
+      desc: 'Confirmation text when a plant is now public',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get explorerPagePleaseLoginDialogTitle {
+    return Intl.message(
+      '''Make a plant public''',
+      name: 'explorerPagePleaseLoginDialogTitle',
+      desc: 'Title for the dialog when the user is not connected',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get explorerPagePleaseLoginDialogBody {
+    return Intl.message(
+      '''You need to be logged in to make a plant public.''',
+      name: 'explorerPagePleaseLoginDialogBody',
+      desc: 'Content for the dialog when the user is not connected',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _ExplorerPageState createState() => _ExplorerPageState();
 }
@@ -59,7 +109,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
             }
             return Scaffold(
                 appBar: SGLAppBar(
-                  'Explorer',
+                  ExplorerPage.explorerPageTitle,
                   backgroundColor: Colors.deepPurple,
                   titleColor: Colors.yellow,
                   iconColor: Colors.white,
@@ -153,7 +203,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
   void onMakePublic(ExplorerBlocState state) {
     if (state is ExplorerBlocStateLoaded && state.loggedIn) {
       BlocProvider.of<MainNavigatorBloc>(context).add(
-          MainNavigateToSelectPlantEvent('Select which plant you want to make public', futureFn: (Future future) async {
+          MainNavigateToSelectPlantEvent(ExplorerPage.explorerPageSelectPlantTitle, futureFn: (Future future) async {
         dynamic plant = await future;
         if (plant == null) {
           return;
@@ -162,7 +212,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
           BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventMakePublic(plant));
           plants.clear();
           BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventInit());
-          Fluttertoast.showToast(msg: 'Plant ${plant.name} is now public');
+          Fluttertoast.showToast(msg: ExplorerPage.explorerPagePublicPlantConfirmation(plant.name));
           Timer(Duration(milliseconds: 1000), () {
             BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
           });
@@ -179,20 +229,20 @@ class _ExplorerPageState extends State<ExplorerPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Make a plant public'),
-            content: Text('You need to be logged in to make a plant public.'),
+            title: Text(ExplorerPage.explorerPagePleaseLoginDialogTitle),
+            content: Text(ExplorerPage.explorerPagePleaseLoginDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('CANCEL'),
+                child: Text(CommonL10N.cancel),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('LOGIN / CREATE ACCOUNT'),
+                child: Text(CommonL10N.loginCreateAccount),
               ),
             ],
           );
