@@ -21,8 +21,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
@@ -30,6 +33,51 @@ import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.da
 import 'package:url_launcher/url_launcher.dart';
 
 class CommentView extends StatelessWidget {
+  static String get commentsFormPageSendingCommentLoading {
+    return Intl.message(
+      '''Sending comment..''',
+      name: 'commentsFormPageLoadingMoreComments',
+      desc: 'Comments page auto-loading message at end of scroll',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageReplyButton {
+    return Intl.message(
+      '''Reply''',
+      name: 'commentsFormPageReplyButton',
+      desc: 'Comments page reply button for comments',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageReportButton {
+    return Intl.message(
+      '''Report''',
+      name: 'commentsFormPageReportButton',
+      desc: 'Comments page report button for comments',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String commentsFormPageReportDialogBody(String comment) {
+    return Intl.message(
+      '''Comment was: "$comment"''',
+      name: 'commentsFormPageReportDialogBody',
+      desc: 'Comments page report dialog body',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageReportDialogTitle {
+    return Intl.message(
+      '''Report this comment?''',
+      name: 'commentsFormPageReportDialogTitle',
+      desc: 'Comments page report dialog title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Comment comment;
   final bool first;
   final Function replyTo;
@@ -145,7 +193,7 @@ class CommentView extends StatelessWidget {
                             replyTo();
                           },
                           child: Text(
-                            'Reply',
+                            CommentView.commentsFormPageReplyButton,
                             style: TextStyle(color: Color(0xff717171)),
                           ),
                         ),
@@ -159,7 +207,7 @@ class CommentView extends StatelessWidget {
                           createReport(context);
                         },
                         child: Text(
-                          'Report',
+                          CommentView.commentsFormPageReportButton,
                           style: TextStyle(color: Color(0xff717171)),
                         ),
                       ),
@@ -167,7 +215,7 @@ class CommentView extends StatelessWidget {
                         child: Container(),
                       ),
                       this.comment.isNew == true
-                          ? Text('Sending comment..', style: TextStyle(color: Colors.red))
+                          ? Text(CommentView.commentsFormPageSendingCommentLoading, style: TextStyle(color: Colors.red))
                           : Container(),
                     ],
                   ),
@@ -217,20 +265,20 @@ class CommentView extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Login required'),
-            content: Text('Please log in or create an account.'),
+            title: Text(CommonL10N.loginRequiredDialogTitle),
+            content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('CANCEL'),
+                child: Text(CommonL10N.cancel),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('LOGIN / CREATE ACCOUNT'),
+                child: Text(CommonL10N.loginCreateAccount),
               ),
             ],
           );
@@ -250,20 +298,20 @@ class CommentView extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Report this comment?'),
-            content: Text('Comment was: "$c"'),
+            title: Text(CommentView.commentsFormPageReportDialogTitle),
+            content: Text(CommentView.commentsFormPageReportDialogBody(c)),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('CANCEL'),
+                child: Text(CommonL10N.cancel),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('OK'),
+                child: Text(CommonL10N.ok),
               ),
             ],
           );

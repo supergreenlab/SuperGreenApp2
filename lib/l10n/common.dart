@@ -56,6 +56,15 @@ class CommonL10N {
     );
   }
 
+  static String get ok {
+    return Intl.message(
+      '''OK''',
+      name: 'ok',
+      desc: 'Used in confirmation dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get cancel {
     return Intl.message(
       '''CANCEL''',
@@ -88,6 +97,24 @@ class CommonL10N {
       '''Please log in or create an account.''',
       name: 'loginRequiredDialogBody',
       desc: 'Used in "please login" dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get unsavedChangeDialogTitle {
+    return Intl.message(
+      '''Unsaved changes''',
+      name: 'unsavedChangeDialogTitle',
+      desc: 'Title for the "unsaved changes" dialog when pressing back',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get unsavedChangeDialogBody {
+    return Intl.message(
+      '''Changes will not be saved. Continue?''',
+      name: 'unsavedChangeDialogBody',
+      desc: 'Body for the "unsaved changes" dialog when pressing back',
       locale: SGLLocalizations.current.localeName,
     );
   }

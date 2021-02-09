@@ -22,9 +22,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/feed_entry_draft.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/form/feed_care_common_form_bloc.dart';
@@ -44,21 +47,15 @@ class FeedCareCommonDraft extends FeedEntryDraftState {
   final List<MediaDraftState> afterMedias;
   final String message;
 
-  FeedCareCommonDraft(
-      int draftID, this.time, this.beforeMedias, this.afterMedias, this.message)
-      : super(draftID);
+  FeedCareCommonDraft(int draftID, this.time, this.beforeMedias, this.afterMedias, this.message) : super(draftID);
 
   factory FeedCareCommonDraft.fromJSON(int draftID, String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedCareCommonDraft(
       draftID,
       map['time'],
-      map['beforeMedias']
-          .map<MediaDraftState>((bm) => MediaDraftState.fromMap(bm))
-          .toList(),
-      map['afterMedias']
-          .map<MediaDraftState>((am) => MediaDraftState.fromMap(am))
-          .toList(),
+      map['beforeMedias'].map<MediaDraftState>((bm) => MediaDraftState.fromMap(bm)).toList(),
+      map['afterMedias'].map<MediaDraftState>((am) => MediaDraftState.fromMap(am)).toList(),
       map['message'],
     );
   }
@@ -67,10 +64,8 @@ class FeedCareCommonDraft extends FeedEntryDraftState {
   String toJSON() {
     return JsonEncoder().convert({
       'time': time,
-      'beforeMedias':
-          beforeMedias.map<Map<String, dynamic>>((bm) => bm.toMap()).toList(),
-      'afterMedias':
-          afterMedias.map<Map<String, dynamic>>((am) => am.toMap()).toList(),
+      'beforeMedias': beforeMedias.map<Map<String, dynamic>>((bm) => bm.toMap()).toList(),
+      'afterMedias': afterMedias.map<Map<String, dynamic>>((am) => am.toMap()).toList(),
       'message': message,
     });
   }
@@ -80,22 +75,90 @@ class FeedCareCommonDraft extends FeedEntryDraftState {
 
   @override
   FeedCareCommonDraft copyWithDraftID(int draftID) {
-    return FeedCareCommonDraft(
-        draftID, time, beforeMedias, afterMedias, message);
+    return FeedCareCommonDraft(draftID, time, beforeMedias, afterMedias, message);
   }
 }
 
-abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc>
-    extends StatefulWidget {
+abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> extends StatefulWidget {
+  static String get feedCareCommonDraftSaving {
+    return Intl.message(
+      '''Saving..''',
+      name: 'feedCareCommonDraftSaving',
+      desc: 'Displayd as a fullscreen loading',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedCareCommonBeforePics {
+    return Intl.message(
+      '''Before pics''',
+      name: 'feedCareCommonBeforePics',
+      desc: 'Title for the "before pics" list',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedCareCommonAfterPics {
+    return Intl.message(
+      '''After pics''',
+      name: 'feedCareCommonAfterPics',
+      desc: 'Title for the "after pics" list',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedCareCommonDeletePicDialogTitle {
+    return Intl.message(
+      '''Delete this pic?''',
+      name: 'feedCareCommonDeletePicDialogTitle',
+      desc: 'Title for the pic deletion confirmation dialog',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedCareCommonDeletePicDialogBody {
+    return Intl.message(
+      '''This can\'t be reverted. Continue?''',
+      name: 'feedCareCommonDeletePicDialogBody',
+      desc: 'Body for the pic deletion confirmation dialog',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedCareCommonObservations {
+    return Intl.message(
+      '''Observations''',
+      name: 'feedCareCommonObservations',
+      desc: 'Observations field label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedCareCommonDraftRecoveryDialogTitle {
+    return Intl.message(
+      '''Draft recovery''',
+      name: 'feedCareCommonDraftRecoveryDialogTitle',
+      desc: 'Draft recovery dialog title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedCareCommonDraftRecoveryDialogBody(String title) {
+    return Intl.message(
+      '''Resume previous $title card draft?''',
+      name: 'feedCareCommonDraftRecoveryDialogBody',
+      desc: 'Draft recovery dialog body',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
-  _FeedCareCommonFormPageState<FormBloc> createState() =>
-      _FeedCareCommonFormPageState<FormBloc>(title());
+  _FeedCareCommonFormPageState<FormBloc> createState() => _FeedCareCommonFormPageState<FormBloc>(title());
 
   String title();
 }
 
-class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
-    extends State<FeedCareCommonFormPage> {
+class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> extends State<FeedCareCommonFormPage> {
   DateTime date = DateTime.now();
 
   final String title;
@@ -109,8 +172,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
 
   bool _helpRequest = false;
 
-  KeyboardVisibilityNotification _keyboardVisibility =
-      KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
   int _listener;
   bool _keyboardVisible = false;
 
@@ -156,16 +218,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
           } else if (state is FeedCareCommonFormBlocStateCurrentDraft) {
             draft = state.draft;
           } else if (state is FeedCareCommonFormBlocStateDone) {
-            BlocProvider.of<TowelieBloc>(context).add(
-                TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
           }
         },
         child: BlocBuilder<FeedCareCommonFormBloc, FeedCareCommonFormBlocState>(
             cubit: BlocProvider.of<FormBloc>(context),
-            buildWhen: (FeedCareCommonFormBlocState beforeState,
-                FeedCareCommonFormBlocState afterState) {
+            buildWhen: (FeedCareCommonFormBlocState beforeState, FeedCareCommonFormBlocState afterState) {
               return afterState is FeedCareCommonFormBlocStateLoading ||
                   afterState is FeedCareCommonFormBlocStateDone ||
                   afterState is FeedCareCommonFormBlocState;
@@ -178,7 +237,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                       title,
                       fontSize: 35,
                     ),
-                    body: FullscreenLoading(title: 'Saving..'));
+                    body: FullscreenLoading(title: FeedCareCommonFormPage.feedCareCommonDraftSaving));
               } else if (state is FeedCareCommonFormBlocStateDone) {
                 body = Scaffold(
                     appBar: SGLAppBar(
@@ -186,27 +245,17 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                       fontSize: 35,
                     ),
                     body: Fullscreen(
-                      title: 'Saving..',
+                      title: FeedCareCommonFormPage.feedCareCommonDraftSaving,
                       child: Icon(Icons.check, color: Colors.green),
                     ));
               } else {
                 body = FeedFormLayout(
                   title: title,
                   fontSize: 35,
-                  changed: _afterMedias.length != 0 ||
-                      _beforeMedias.length != 0 ||
-                      _textController.value.text != '',
-                  valid: _afterMedias.length != 0 ||
-                      _beforeMedias.length != 0 ||
-                      _textController.value.text != '',
-                  onOK: () => BlocProvider.of<FormBloc>(context).add(
-                      FeedCareCommonFormBlocEventCreate(
-                          date,
-                          _beforeMedias,
-                          _afterMedias,
-                          _textController.text,
-                          _helpRequest,
-                          draft)),
+                  changed: _afterMedias.length != 0 || _beforeMedias.length != 0 || _textController.value.text != '',
+                  valid: _afterMedias.length != 0 || _beforeMedias.length != 0 || _textController.value.text != '',
+                  onOK: () => BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventCreate(
+                      date, _beforeMedias, _afterMedias, _textController.text, _helpRequest, draft)),
                   onCancel: () async {
                     for (FeedMediasCompanion media in _beforeMedias) {
                       await _deleteFileIfExists(media.filePath.value);
@@ -217,24 +266,19 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                       await _deleteFileIfExists(media.thumbnailPath.value);
                     }
                     if (draft != null) {
-                      BlocProvider.of<FormBloc>(context)
-                          .add(FeedCareCommonFormBlocEventDeleteDraft(draft));
+                      BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventDeleteDraft(draft));
                     }
                   },
                   body: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: _keyboardVisible
-                          ? [_renderTextrea(context, state)]
-                          : _renderBody(context, state)),
+                      children: _keyboardVisible ? [_renderTextrea(context, state)] : _renderBody(context, state)),
                 );
               }
-              return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body);
+              return AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body);
             }));
   }
 
-  List<Widget> _renderBody(
-      BuildContext context, FeedCareCommonFormBlocState state) {
+  List<Widget> _renderBody(BuildContext context, FeedCareCommonFormBlocState state) {
     return [
       FeedFormDatePicker(
         date,
@@ -246,7 +290,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         },
       ),
       FeedFormParamLayout(
-        title: 'Before pics',
+        title: FeedCareCommonFormPage.feedCareCommonBeforePics,
         icon: 'assets/feed_form/icon_before_pic.svg',
         child: FeedFormMediaList(
           medias: _beforeMedias,
@@ -256,20 +300,20 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 barrierDismissible: false,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Delete this pic?'),
-                    content: Text('This can\'t be reverted. Continue?'),
+                    title: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogTitle),
+                    content: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogBody),
                     actions: <Widget>[
                       FlatButton(
                         onPressed: () {
                           Navigator.pop(context, false);
                         },
-                        child: Text('NO'),
+                        child: Text(CommonL10N.no),
                       ),
                       FlatButton(
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
-                        child: Text('YES'),
+                        child: Text(CommonL10N.yes),
                       ),
                     ],
                   );
@@ -285,8 +329,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
           },
           onPressed: (FeedMediasCompanion media) async {
             if (media == null) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
                 List<FeedMediasCompanion> feedMedias = await f;
                 if (feedMedias != null) {
                   setState(() {
@@ -296,11 +339,9 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 }
               }));
             } else {
-              FutureFn ff =
-                  BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+              FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
               BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
-                      futureFn: ff.futureFn, okButton: 'OK'));
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value, futureFn: ff.futureFn, okButton: 'OK'));
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
@@ -318,7 +359,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         ),
       ),
       FeedFormParamLayout(
-        title: 'After pics',
+        title: FeedCareCommonFormPage.feedCareCommonAfterPics,
         icon: 'assets/feed_form/icon_after_pic.svg',
         child: FeedFormMediaList(
           medias: _afterMedias,
@@ -328,20 +369,20 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 barrierDismissible: false,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Delete this pic?'),
-                    content: Text('This can\'t be reverted. Continue?'),
+                    title: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogTitle),
+                    content: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogBody),
                     actions: <Widget>[
                       FlatButton(
                         onPressed: () {
                           Navigator.pop(context, false);
                         },
-                        child: Text('NO'),
+                        child: Text(CommonL10N.no),
                       ),
                       FlatButton(
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
-                        child: Text('YES'),
+                        child: Text(CommonL10N.yes),
                       ),
                     ],
                   );
@@ -357,8 +398,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
           },
           onPressed: (FeedMediasCompanion media) async {
             if (media == null) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
                 List<FeedMediasCompanion> feedMedias = await f;
                 if (feedMedias != null) {
                   setState(() {
@@ -368,11 +408,9 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
                 }
               }));
             } else {
-              FutureFn ff =
-                  BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+              FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
               BlocProvider.of<MainNavigatorBloc>(context).add(
-                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
-                      futureFn: ff.futureFn, okButton: 'OK'));
+                  MainNavigateToImageCapturePlaybackEvent(media.filePath.value, futureFn: ff.futureFn, okButton: 'OK'));
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
@@ -396,18 +434,16 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
 
   Future<List<FeedMediasCompanion>> _takePic(BuildContext context) async {
     FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
     List<FeedMediasCompanion> feedMedias = await futureFn.future;
     return feedMedias;
   }
 
-  Widget _renderTextrea(
-      BuildContext context, FeedCareCommonFormBlocState state) {
+  Widget _renderTextrea(BuildContext context, FeedCareCommonFormBlocState state) {
     return Expanded(
       key: Key('TEXTAREA'),
       child: FeedFormParamLayout(
-        title: 'Observations',
+        title: FeedCareCommonFormPage.feedCareCommonObservations,
         icon: 'assets/feed_form/icon_note.svg',
         child: Expanded(
           child: FeedFormTextarea(
@@ -418,8 +454,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
     );
   }
 
-  Widget _renderOptions(
-      BuildContext context, FeedCareCommonFormBlocState state) {
+  Widget _renderOptions(BuildContext context, FeedCareCommonFormBlocState state) {
     return Row(
       children: <Widget>[],
     );
@@ -431,20 +466,20 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Draft recovery'),
-            content: Text('Resume previous ${widget.title()} card draft?'),
+            title: Text(FeedCareCommonFormPage.feedCareCommonDraftRecoveryDialogTitle),
+            content: Text(FeedCareCommonFormPage.feedCareCommonDraftRecoveryDialogBody(widget.title())),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('NO'),
+                child: Text(CommonL10N.no),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('YES'),
+                child: Text(CommonL10N.yes),
               ),
             ],
           );
@@ -458,16 +493,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
         await _deleteFileIfExists(media.filePath);
         await _deleteFileIfExists(media.thumbnailPath);
       }
-      BlocProvider.of<FormBloc>(context)
-          .add(FeedCareCommonFormBlocEventDeleteDraft(newDraft));
+      BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventDeleteDraft(newDraft));
     } else {
       draft = newDraft;
       setState(() {
         date = DateTime.fromMillisecondsSinceEpoch(draft.time * 1000);
-        _beforeMedias.addAll(
-            draft.beforeMedias.map((e) => e.toFeedMediaCompanion()).toList());
-        _afterMedias.addAll(
-            draft.afterMedias.map((e) => e.toFeedMediaCompanion()).toList());
+        _beforeMedias.addAll(draft.beforeMedias.map((e) => e.toFeedMediaCompanion()).toList());
+        _afterMedias.addAll(draft.afterMedias.map((e) => e.toFeedMediaCompanion()).toList());
         _textController.text = draft.message;
       });
     }
@@ -477,17 +509,10 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc>
     draft = FeedCareCommonDraft(
         draft?.draftID,
         date.millisecondsSinceEpoch ~/ 1000,
-        _beforeMedias
-            .map<MediaDraftState>(
-                (e) => MediaDraftState.fromFeedMediaCompanion(e))
-            .toList(),
-        _afterMedias
-            .map<MediaDraftState>(
-                (e) => MediaDraftState.fromFeedMediaCompanion(e))
-            .toList(),
+        _beforeMedias.map<MediaDraftState>((e) => MediaDraftState.fromFeedMediaCompanion(e)).toList(),
+        _afterMedias.map<MediaDraftState>((e) => MediaDraftState.fromFeedMediaCompanion(e)).toList(),
         _textController.text);
-    BlocProvider.of<FormBloc>(context)
-        .add(FeedCareCommonFormBlocEventSaveDraft(draft));
+    BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventSaveDraft(draft));
   }
 
   Future _deleteFileIfExists(String filePath) async {

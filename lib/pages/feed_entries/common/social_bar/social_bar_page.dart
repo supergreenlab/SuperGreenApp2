@@ -22,6 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
@@ -42,39 +43,51 @@ class SocialBarPage extends StatelessWidget {
   Widget renderLoaded(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 10),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          renderButton(
-              context,
-              state.socialState is FeedEntrySocialStateLoaded &&
-                      (state.socialState as FeedEntrySocialStateLoaded).isLiked
-                  ? 'button_like_on'
-                  : 'button_like',
-              () => onLike(context)),
-          renderButton(context, 'button_comment', () => onComment(context)),
-          renderButton(context, 'button_share', () => onShare(context)),
-          Expanded(child: Container()),
-          renderButton(
-              context,
-              state.socialState is FeedEntrySocialStateLoaded &&
-                      (state.socialState as FeedEntrySocialStateLoaded)
-                          .isBookmarked
-                  ? 'button_bookmark_on'
-                  : 'button_bookmark',
-              () => onBookmark(context),
-              last: true),
+          Row(
+            children: [
+              renderButton(
+                  context,
+                  state.socialState is FeedEntrySocialStateLoaded &&
+                          (state.socialState as FeedEntrySocialStateLoaded).isLiked
+                      ? 'button_like_on'
+                      : 'button_like',
+                  () => onLike(context)),
+              renderButton(context, 'button_comment', () => onComment(context)),
+              renderButton(context, 'button_share', () => onShare(context)),
+              Expanded(child: Container()),
+              renderButton(
+                  context,
+                  state.socialState is FeedEntrySocialStateLoaded &&
+                          (state.socialState as FeedEntrySocialStateLoaded).isBookmarked
+                      ? 'button_bookmark_on'
+                      : 'button_bookmark',
+                  () => onBookmark(context),
+                  last: true),
+            ],
+          ),
+          state.socialState is FeedEntrySocialStateLoaded &&
+                  (state.socialState as FeedEntrySocialStateLoaded).nLikes > 10
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 4.0, top: 4.0),
+                  child: Text(
+                    'Liked by ${(state.socialState as FeedEntrySocialStateLoaded).nLikes} people',
+                    style: TextStyle(color: Color(0xff565656), fontSize: 15),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
   }
 
-  Widget renderButton(BuildContext context, String icon, Function onClick,
-      {bool last = false}) {
+  Widget renderButton(BuildContext context, String icon, Function onClick, {bool last = false}) {
     if (!feedState.loggedIn) {
       onClick = () => createAccountOrLogin(context);
     } else {
-      onClick =
-          state.socialState is FeedEntrySocialStateLoaded ? onClick : null;
+      onClick = state.socialState is FeedEntrySocialStateLoaded ? onClick : null;
     }
     return InkWell(
       onTap: onClick,
@@ -82,8 +95,7 @@ class SocialBarPage extends StatelessWidget {
         padding: EdgeInsets.only(right: last ? 0 : 8),
         child: Opacity(
             opacity: onClick == null ? 0.4 : 1,
-            child: Image.asset('assets/feed_card/$icon.png',
-                width: 30, height: 30)),
+            child: Image.asset('assets/feed_card/$icon.png', width: 30, height: 30)),
       ),
     );
   }
@@ -93,8 +105,7 @@ class SocialBarPage extends StatelessWidget {
   }
 
   void onComment(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToCommentFormEvent(true, state));
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(true, state));
   }
 
   void onShare(BuildContext context) async {
@@ -102,8 +113,7 @@ class SocialBarPage extends StatelessWidget {
   }
 
   void onBookmark(BuildContext context) {
-    BlocProvider.of<FeedBloc>(context)
-        .add(FeedBlocEventBookmarkFeedEntry(state));
+    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventBookmarkFeedEntry(state));
   }
 
   void createAccountOrLogin(BuildContext context) async {
@@ -112,27 +122,26 @@ class SocialBarPage extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Login required'),
-            content: Text('Please log in or create an account.'),
+            title: Text(CommonL10N.loginRequiredDialogTitle),
+            content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('CANCEL'),
+                child: Text(CommonL10N.cancel),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('LOGIN / CREATE ACCOUNT'),
+                child: Text(CommonL10N.loginCreateAccount),
               ),
             ],
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context)
-          .add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }
 }

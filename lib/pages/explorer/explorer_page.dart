@@ -24,7 +24,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
-import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';

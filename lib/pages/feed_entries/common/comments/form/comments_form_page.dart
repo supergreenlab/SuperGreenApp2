@@ -63,6 +63,15 @@ const Map<CommentType, Map<String, String>> commentTypes = {
 };
 
 class CommentsFormPage extends StatefulWidget {
+  static String get commentsFormPageTitle {
+    return Intl.message(
+      '''Comments''',
+      name: 'commentsFormPageTitle',
+      desc: 'Comments page title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get commentsFormPagePleaseLogin {
     return Intl.message(
       '''Please login to add a comment''',
@@ -104,6 +113,44 @@ class CommentsFormPage extends StatefulWidget {
       '''What kind of post do you want to do?''',
       name: 'commentsFormPageCommentTypeTitle',
       desc: 'Title displayed above the comment types',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageLoadingMoreComments {
+    return Intl.message(
+      '''Loading more comments..''',
+      name: 'commentsFormPageLoadingMoreComments',
+      desc: 'Comments page auto-loading message at end of scroll',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String commentsFormPageNOtherRecommendations(int n) {
+    return Intl.message(
+      '''(+$n other)''',
+      args: [n],
+      name: 'commentsFormPageLoadingMoreComments',
+      desc: 'Comments page auto-loading message at end of scroll',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String commentsFormPageInputHintText(String nickname) {
+    return Intl.message(
+      '''Add a comment as $nickname...''',
+      args: [nickname],
+      name: 'commentsFormPageInputHintText',
+      desc: 'Comments page input hint text',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get commentsFormPageSubmitComment {
+    return Intl.message(
+      '''Post''',
+      name: 'commentsFormPageSubmitComment',
+      desc: 'Comments page input submit button',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -195,7 +242,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: SGLAppBar(
-            'Comments',
+            CommentsFormPage.commentsFormPageTitle,
             backgroundColor: Colors.white,
             titleColor: Colors.black,
             iconColor: Colors.black,
@@ -229,7 +276,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
               return Container(
                 height: 100,
                 child: FullscreenLoading(
-                  title: 'Loading more comments..',
+                  title: CommentsFormPage.commentsFormPageLoadingMoreComments,
                   fontSize: 15,
                   size: 25,
                 ),
@@ -425,7 +472,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                   : Container(),
               recommended.length > 1
                   ? Text(
-                      '(+${recommended.length - 1} other)',
+                      CommentsFormPage.commentsFormPageNOtherRecommendations(recommended.length - 1),
                       style: TextStyle(color: Color(0xff919191)),
                     )
                   : Container(),
@@ -497,7 +544,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                       child: TextField(
                         autofocus: autoFocus,
                         focusNode: inputFocus,
-                        decoration: InputDecoration(border: InputBorder.none, hintText: 'Add a comment as stant...'),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: CommentsFormPage.commentsFormPageInputHintText(user.nickname)),
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(fontSize: 17),
                         minLines: 1,
@@ -518,7 +567,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(14.0),
-                      child: Text('Post',
+                      child: Text(CommentsFormPage.commentsFormPageSubmitComment,
                           style: TextStyle(color: Color(0xff001AFF), fontSize: 18.0, fontWeight: FontWeight.bold)),
                     ),
                   ),

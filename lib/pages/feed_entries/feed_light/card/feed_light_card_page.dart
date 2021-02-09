@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_light.dart';
@@ -30,6 +32,15 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedLightCardPage extends StatelessWidget {
+  static String get feedLightCardPageChannel {
+    return Intl.message(
+      '''channel''',
+      name: 'feedLightCardPageChannel',
+      desc: 'LED power widget label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -127,7 +138,7 @@ class FeedLightCardPage extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('channel'),
+                    Text(FeedLightCardPage.feedLightCardPageChannel),
                     Text('${v['i'] + 1}',
                         style: TextStyle(fontSize: 45, fontWeight: FontWeight.w300, color: Colors.grey)),
                   ],
