@@ -80,10 +80,10 @@ class FeedCareCommonDraft extends FeedEntryDraftState {
 }
 
 abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> extends StatefulWidget {
-  static String get feedCareCommonDraftSaving {
+  static String get feedCareCommonFormSaving {
     return Intl.message(
       '''Saving..''',
-      name: 'feedCareCommonDraftSaving',
+      name: 'feedCareCommonFormSaving',
       desc: 'Displayd as a fullscreen loading',
       locale: SGLLocalizations.current.localeName,
     );
@@ -146,6 +146,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
   static String feedCareCommonDraftRecoveryDialogBody(String title) {
     return Intl.message(
       '''Resume previous $title card draft?''',
+      args: [title],
       name: 'feedCareCommonDraftRecoveryDialogBody',
       desc: 'Draft recovery dialog body',
       locale: SGLLocalizations.current.localeName,
@@ -237,7 +238,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                       title,
                       fontSize: 35,
                     ),
-                    body: FullscreenLoading(title: FeedCareCommonFormPage.feedCareCommonDraftSaving));
+                    body: FullscreenLoading(title: FeedCareCommonFormPage.feedCareCommonFormSaving));
               } else if (state is FeedCareCommonFormBlocStateDone) {
                 body = Scaffold(
                     appBar: SGLAppBar(
@@ -245,7 +246,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                       fontSize: 35,
                     ),
                     body: Fullscreen(
-                      title: FeedCareCommonFormPage.feedCareCommonDraftSaving,
+                      title: FeedCareCommonFormPage.feedCareCommonFormSaving,
                       child: Icon(Icons.check, color: Colors.green),
                     ));
               } else {

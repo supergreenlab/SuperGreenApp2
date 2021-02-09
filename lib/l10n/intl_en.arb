@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-09T07:10:53.118644",
+  "@@last_modified": "2021-02-09T19:04:26.030557",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -40,6 +40,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "ok": "OK",
+  "@ok": {
+    "description": "Used in confirmation dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
   "cancel": "CANCEL",
   "@cancel": {
     "description": "Used in confirmation dialogs",
@@ -61,6 +67,18 @@
   "loginRequiredDialogBody": "Please log in or create an account.",
   "@loginRequiredDialogBody": {
     "description": "Used in \"please login\" dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unsavedChangeDialogTitle": "Unsaved changes",
+  "@unsavedChangeDialogTitle": {
+    "description": "Title for the \"unsaved changes\" dialog when pressing back",
+    "type": "text",
+    "placeholders": {}
+  },
+  "unsavedChangeDialogBody": "Changes will not be saved. Continue?",
+  "@unsavedChangeDialogBody": {
+    "description": "Body for the \"unsaved changes\" dialog when pressing back",
     "type": "text",
     "placeholders": {}
   },
@@ -340,6 +358,56 @@
     "type": "text",
     "placeholders": {}
   },
+  "feedCareCommonFormSaving": "Saving..",
+  "@feedCareCommonFormSaving": {
+    "description": "Displayd as a fullscreen loading",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedCareCommonBeforePics": "Before pics",
+  "@feedCareCommonBeforePics": {
+    "description": "Title for the \"before pics\" list",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedCareCommonAfterPics": "After pics",
+  "@feedCareCommonAfterPics": {
+    "description": "Title for the \"after pics\" list",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedCareCommonDeletePicDialogTitle": "Delete this pic?",
+  "@feedCareCommonDeletePicDialogTitle": {
+    "description": "Title for the pic deletion confirmation dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedCareCommonDeletePicDialogBody": "This can't be reverted. Continue?",
+  "@feedCareCommonDeletePicDialogBody": {
+    "description": "Body for the pic deletion confirmation dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedCareCommonObservations": "Observations",
+  "@feedCareCommonObservations": {
+    "description": "Observations field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedCareCommonDraftRecoveryDialogTitle": "Draft recovery",
+  "@feedCareCommonDraftRecoveryDialogTitle": {
+    "description": "Draft recovery dialog title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedCareCommonDraftRecoveryDialogBody": "Resume previous {title} card draft?",
+  "@feedCareCommonDraftRecoveryDialogBody": {
+    "description": "Draft recovery dialog body",
+    "type": "text",
+    "placeholders": {
+      "title": {}
+    }
+  },
   "instructionsBlowerTemperatureModeDescription": "This is the **Temperature based blower control**, in this mode the blower is **in sync with the box temperature sensor**.",
   "@instructionsBlowerTemperatureModeDescription": {
     "description": "Instructions for blower temperature mode",
@@ -355,6 +423,44 @@
   "instructionsManualTimerModeDescription": "This is the **manual blower control** mode, just set a value and the blower will stay at this power.",
   "@instructionsManualTimerModeDescription": {
     "description": "Instructions for blower manual mode",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageSendingCommentLoading": "Sending comment..",
+  "@commentsFormPageSendingCommentLoading": {
+    "description": "Comments page auto-loading message at end of scroll",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageReplyButton": "Reply",
+  "@commentsFormPageReplyButton": {
+    "description": "Comments page reply button for comments",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageReportButton": "Report",
+  "@commentsFormPageReportButton": {
+    "description": "Comments page report button for comments",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageReportDialogBody": "Comment was: \"{comment}\"",
+  "@commentsFormPageReportDialogBody": {
+    "description": "Comments page report dialog body",
+    "type": "text",
+    "placeholders": {
+      "comment": {}
+    }
+  },
+  "commentsFormPageReportDialogTitle": "Report this comment?",
+  "@commentsFormPageReportDialogTitle": {
+    "description": "Comments page report dialog title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageTitle": "Comments",
+  "@commentsFormPageTitle": {
+    "description": "Comments page title",
     "type": "text",
     "placeholders": {}
   },
@@ -385,6 +491,76 @@
   "commentsFormPageCommentTypeTitle": "What kind of post do you want to do?",
   "@commentsFormPageCommentTypeTitle": {
     "description": "Title displayed above the comment types",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageLoadingMoreComments": "Loading more comments..",
+  "@commentsFormPageLoadingMoreComments": {
+    "description": "Comments page auto-loading message at end of scroll",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commentsFormPageNOtherRecommendations": "(+{n} other)",
+  "@commentsFormPageNOtherRecommendations": {
+    "description": "Comments page auto-loading message at end of scroll",
+    "type": "text",
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "commentsFormPageInputHintText": "Add a comment as {nickname}...",
+  "@commentsFormPageInputHintText": {
+    "description": "Comments page input hint text",
+    "type": "text",
+    "placeholders": {
+      "nickname": {}
+    }
+  },
+  "commentsFormPageSubmitComment": "Post",
+  "@commentsFormPageSubmitComment": {
+    "description": "Comments page input submit button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightCardPageChannel": "channel",
+  "@feedLightCardPageChannel": {
+    "description": "LED power widget label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightFormPageSaving": "Saving..",
+  "@feedLightFormPageSaving": {
+    "description": "Fullscreen loading",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightFormPageCancelling": "Cancelling..",
+  "@feedLightFormPageCancelling": {
+    "description": "Fullscreen message when resetting all parameters",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightFormPageControllerRequired": "Dimming control\nrequires an SGL controller",
+  "@feedLightFormPageControllerRequired": {
+    "description": "Fullscreen message displayed with no controller is available for light control",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightFormPageShopNow": "SHOP NOW",
+  "@feedLightFormPageShopNow": {
+    "description": "Shop now button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightFormPageDIYNow": "DIY NOW",
+  "@feedLightFormPageDIYNow": {
+    "description": "DIY now button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightFormPageOr": "or",
+  "@feedLightFormPageOr": {
+    "description": "The \"or\" in \"Shop now or diy\"",
     "type": "text",
     "placeholders": {}
   },
@@ -706,6 +882,64 @@
   "notificationPurposes": "You will get notified for:\n- **Likes** on comments and public diary entry\n- **Comments** on public diary entries\n- **Replies** to your comments\n- **Smart reminders** and **grow tips**\n- **Temperature** and **humidity** alerts",
   "@notificationPurposes": {
     "description": "Notification purpose",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDevicePageLoading": "Refreshing..",
+  "@settingsDevicePageLoading": {
+    "description": "Loading screen while refreshing parameters",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDevicePageControllerRefreshed": "Controller {name} refreshed!",
+  "@settingsDevicePageControllerRefreshed": {
+    "description": "Controller params refreshed confirmation text",
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsDevicePageControllerDone": "Controller {name} updated!",
+  "@settingsDevicePageControllerDone": {
+    "description": "Controller updated confirmation text",
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsDevicePageControllerNameSection": "Controller name",
+  "@settingsDevicePageControllerNameSection": {
+    "description": "Controller name input section",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDevicePageControllerSettingsSection": "Settings",
+  "@settingsDevicePageControllerSettingsSection": {
+    "description": "Controller name input section",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDevicePageWifiSettingsSection": "Wifi config",
+  "@settingsDevicePageWifiSettingsSection": {
+    "description": "Wifi settings button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDevicePageWifiSettingsLabel": "Change your controller's wifi config",
+  "@settingsDevicePageWifiSettingsLabel": {
+    "description": "Wifi settings button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDevicePageWifiConfigSuccess": "Wifi config changed successfully",
+  "@settingsDevicePageWifiConfigSuccess": {
+    "description": "Wifi config successful message",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDevicePageWifiConfigFailed": "Wifi config change failed",
+  "@settingsDevicePageWifiConfigFailed": {
+    "description": "Wifi config failed message",
     "type": "text",
     "placeholders": {}
   },

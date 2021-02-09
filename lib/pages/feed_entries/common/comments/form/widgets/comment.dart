@@ -36,7 +36,7 @@ class CommentView extends StatelessWidget {
   static String get commentsFormPageSendingCommentLoading {
     return Intl.message(
       '''Sending comment..''',
-      name: 'commentsFormPageLoadingMoreComments',
+      name: 'commentsFormPageSendingCommentLoading',
       desc: 'Comments page auto-loading message at end of scroll',
       locale: SGLLocalizations.current.localeName,
     );
@@ -63,6 +63,7 @@ class CommentView extends StatelessWidget {
   static String commentsFormPageReportDialogBody(String comment) {
     return Intl.message(
       '''Comment was: "$comment"''',
+      args: [comment],
       name: 'commentsFormPageReportDialogBody',
       desc: 'Comments page report dialog body',
       locale: SGLLocalizations.current.localeName,

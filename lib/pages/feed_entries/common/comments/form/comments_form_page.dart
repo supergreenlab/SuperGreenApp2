@@ -130,7 +130,7 @@ class CommentsFormPage extends StatefulWidget {
     return Intl.message(
       '''(+$n other)''',
       args: [n],
-      name: 'commentsFormPageLoadingMoreComments',
+      name: 'commentsFormPageNOtherRecommendations',
       desc: 'Comments page auto-loading message at end of scroll',
       locale: SGLLocalizations.current.localeName,
     );

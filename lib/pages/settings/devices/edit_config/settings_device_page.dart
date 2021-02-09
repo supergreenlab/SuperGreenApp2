@@ -31,6 +31,7 @@ class SettingsDevicePage extends StatefulWidget {
   static String settingsDevicePageControllerRefreshed(String name) {
     return Intl.message(
       '''Controller $name refreshed!''',
+      args: [name],
       name: 'settingsDevicePageControllerRefreshed',
       desc: 'Controller params refreshed confirmation text',
       locale: SGLLocalizations.current.localeName,
@@ -40,6 +41,7 @@ class SettingsDevicePage extends StatefulWidget {
   static String settingsDevicePageControllerDone(String name) {
     return Intl.message(
       '''Controller $name updated!''',
+      args: [name],
       name: 'settingsDevicePageControllerDone',
       desc: 'Controller updated confirmation text',
       locale: SGLLocalizations.current.localeName,
@@ -86,7 +88,7 @@ class SettingsDevicePage extends StatefulWidget {
     return Intl.message(
       '''Wifi config changed successfully''',
       name: 'settingsDevicePageWifiConfigSuccess',
-      desc: 'Wifi config successfuly changed message',
+      desc: 'Wifi config successful message',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -94,8 +96,8 @@ class SettingsDevicePage extends StatefulWidget {
   static String get settingsDevicePageWifiConfigFailed {
     return Intl.message(
       '''Wifi config change failed''',
-      name: 'settingsDevicePageWifiConfigSuccess',
-      desc: 'Wifi config successfuly changed message',
+      name: 'settingsDevicePageWifiConfigFailed',
+      desc: 'Wifi config failed message',
       locale: SGLLocalizations.current.localeName,
     );
   }

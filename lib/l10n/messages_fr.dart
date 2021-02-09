@@ -19,34 +19,71 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'fr';
 
-  static m0(name) => "Plant ${name} is now public";
+  static m0(nickname) => "Add a comment as ${nickname}...";
 
-  static m1(progress) => "Syncing - ${progress}";
+  static m1(n) => "(+${n} other)";
 
-  static m2(leds) => "Led channels: ${leds}";
+  static m2(comment) => "Comment was: \"${comment}\"";
 
-  static m3(number) => "Box #${number}";
+  static m3(name) => "Plant ${name} is now public";
 
-  static m4(index, name) => "Reset box #${index} on controller ${name}?";
+  static m4(title) => "Resume previous ${title} card draft?";
 
-  static m5(name) => "Delete controller ${name}?";
+  static m5(progress) => "Syncing - ${progress}";
 
-  static m6(time) => "(100% power for ${time} s)";
+  static m6(leds) => "Led channels: ${leds}";
+
+  static m7(number) => "Box #${number}";
+
+  static m8(index, name) => "Reset box #${index} on controller ${name}?";
+
+  static m9(name) => "Delete controller ${name}?";
+
+  static m10(name) => "Controller ${name} updated!";
+
+  static m11(name) => "Controller ${name} refreshed!";
+
+  static m12(time) => "(100% power for ${time} s)";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "cancel" : MessageLookupByLibrary.simpleMessage("CANCEL"),
     "commentsFormPageCommentTypeTitle" : MessageLookupByLibrary.simpleMessage("What kind of post do you want to do?"),
+    "commentsFormPageInputHintText" : m0,
+    "commentsFormPageLoadingMoreComments" : MessageLookupByLibrary.simpleMessage("Loading more comments.."),
+    "commentsFormPageNOtherRecommendations" : m1,
     "commentsFormPagePleaseLogin" : MessageLookupByLibrary.simpleMessage("Please login to add a comment"),
+    "commentsFormPageReplyButton" : MessageLookupByLibrary.simpleMessage("Reply"),
     "commentsFormPageReplyingTo" : MessageLookupByLibrary.simpleMessage("Replying to "),
+    "commentsFormPageReportButton" : MessageLookupByLibrary.simpleMessage("Report"),
+    "commentsFormPageReportDialogBody" : m2,
+    "commentsFormPageReportDialogTitle" : MessageLookupByLibrary.simpleMessage("Report this comment?"),
+    "commentsFormPageSendingCommentLoading" : MessageLookupByLibrary.simpleMessage("Sending comment.."),
+    "commentsFormPageSubmitComment" : MessageLookupByLibrary.simpleMessage("Post"),
+    "commentsFormPageTitle" : MessageLookupByLibrary.simpleMessage("Comments"),
     "commentsFormPageViewAllComments" : MessageLookupByLibrary.simpleMessage("View all comments"),
     "commentsFormPageViewingSingleComment" : MessageLookupByLibrary.simpleMessage("Viewing single comment"),
     "done" : MessageLookupByLibrary.simpleMessage("Done!"),
     "explorerPagePleaseLoginDialogBody" : MessageLookupByLibrary.simpleMessage("You need to be logged in to make a plant public."),
     "explorerPagePleaseLoginDialogTitle" : MessageLookupByLibrary.simpleMessage("Make a plant public"),
-    "explorerPagePublicPlantConfirmation" : m0,
+    "explorerPagePublicPlantConfirmation" : m3,
     "explorerPageSelectPlantTitle" : MessageLookupByLibrary.simpleMessage("Select which plant you want to make public"),
     "explorerPageTitle" : MessageLookupByLibrary.simpleMessage("Explorer"),
+    "feedCareCommonAfterPics" : MessageLookupByLibrary.simpleMessage("After pics"),
+    "feedCareCommonBeforePics" : MessageLookupByLibrary.simpleMessage("Before pics"),
+    "feedCareCommonDeletePicDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
+    "feedCareCommonDeletePicDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete this pic?"),
+    "feedCareCommonDraftRecoveryDialogBody" : m4,
+    "feedCareCommonDraftRecoveryDialogTitle" : MessageLookupByLibrary.simpleMessage("Draft recovery"),
+    "feedCareCommonFormSaving" : MessageLookupByLibrary.simpleMessage("Saving.."),
+    "feedCareCommonObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
+    "feedLightCardPageChannel" : MessageLookupByLibrary.simpleMessage("channel"),
+    "feedLightFormPageCancelling" : MessageLookupByLibrary.simpleMessage("Cancelling.."),
+    "feedLightFormPageControllerRequired" : MessageLookupByLibrary.simpleMessage("Dimming control\nrequires an SGL controller"),
+    "feedLightFormPageDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
+    "feedLightFormPageOr" : MessageLookupByLibrary.simpleMessage("or"),
+    "feedLightFormPageSaving" : MessageLookupByLibrary.simpleMessage("Saving.."),
+    "feedLightFormPageShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
     "formAllowAnalytics" : MessageLookupByLibrary.simpleMessage("**Help us** discern what\'s **useful** from what\'s **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*"),
     "formCGU" : MessageLookupByLibrary.simpleMessage("*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. "),
     "instructionsAutoScheduleHelper" : MessageLookupByLibrary.simpleMessage("Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another."),
@@ -73,7 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "notificationRequestButton" : MessageLookupByLibrary.simpleMessage("NOTIFY ME"),
     "notificationRequestButtonCancel" : MessageLookupByLibrary.simpleMessage("NO THANKS"),
     "notificationRequestTitle" : MessageLookupByLibrary.simpleMessage("Would you like to activate notifications?"),
-    "redBarSyncingProgress" : m1,
+    "ok" : MessageLookupByLibrary.simpleMessage("OK"),
+    "redBarSyncingProgress" : m5,
     "selectBoxPageAddNewGreenLab" : MessageLookupByLibrary.simpleMessage("Add new green lab"),
     "selectBoxPageCreateFirst" : MessageLookupByLibrary.simpleMessage("Create your first"),
     "selectBoxPageCreateFirstLab" : MessageLookupByLibrary.simpleMessage("GREEN LAB"),
@@ -85,17 +123,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceAddFirstController" : MessageLookupByLibrary.simpleMessage("CONTROLLER"),
     "selectDeviceBoxAlreadyRunning" : MessageLookupByLibrary.simpleMessage("Already running"),
     "selectDeviceBoxAvailable" : MessageLookupByLibrary.simpleMessage("Available"),
-    "selectDeviceBoxLedChannelDescription" : m2,
+    "selectDeviceBoxLedChannelDescription" : m6,
     "selectDeviceBoxNoLedChannelAssigned" : MessageLookupByLibrary.simpleMessage("No led channels assigned"),
     "selectDeviceBoxNoMoreLED" : MessageLookupByLibrary.simpleMessage("No more free led channels"),
-    "selectDeviceBoxNumber" : m3,
-    "selectDeviceBoxResetDialogTitle" : m4,
+    "selectDeviceBoxNumber" : m7,
+    "selectDeviceBoxResetDialogTitle" : m8,
     "selectDeviceBoxSettingUp" : MessageLookupByLibrary.simpleMessage("Setting up.."),
     "selectDeviceBoxSlot" : MessageLookupByLibrary.simpleMessage("Select controller\'s box slot"),
     "selectDeviceContinueWithoutController" : MessageLookupByLibrary.simpleMessage("Continue without controller"),
     "selectDeviceDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
     "selectDeviceDeleteControllerDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
-    "selectDeviceDeleteControllerDialogTitle" : m5,
+    "selectDeviceDeleteControllerDialogTitle" : m9,
     "selectDeviceListItemInstruction" : MessageLookupByLibrary.simpleMessage("Tap to select"),
     "selectDeviceListTitle" : MessageLookupByLibrary.simpleMessage("Select a controller below"),
     "selectDeviceNewBoxAvailableLEDChannels" : MessageLookupByLibrary.simpleMessage("Available LED channels"),
@@ -109,7 +147,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceOr" : MessageLookupByLibrary.simpleMessage("OR"),
     "selectDeviceShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
     "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
-    "testLEDTiming" : m6,
+    "settingsDevicePageControllerDone" : m10,
+    "settingsDevicePageControllerNameSection" : MessageLookupByLibrary.simpleMessage("Controller name"),
+    "settingsDevicePageControllerRefreshed" : m11,
+    "settingsDevicePageControllerSettingsSection" : MessageLookupByLibrary.simpleMessage("Settings"),
+    "settingsDevicePageLoading" : MessageLookupByLibrary.simpleMessage("Refreshing.."),
+    "settingsDevicePageWifiConfigFailed" : MessageLookupByLibrary.simpleMessage("Wifi config change failed"),
+    "settingsDevicePageWifiConfigSuccess" : MessageLookupByLibrary.simpleMessage("Wifi config changed successfully"),
+    "settingsDevicePageWifiSettingsLabel" : MessageLookupByLibrary.simpleMessage("Change your controller\'s wifi config"),
+    "settingsDevicePageWifiSettingsSection" : MessageLookupByLibrary.simpleMessage("Wifi config"),
+    "testLEDTiming" : m12,
     "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
     "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),
@@ -156,6 +203,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "towelieProductsSeeds" : MessageLookupByLibrary.simpleMessage("**#1 rule of cannabis growing; genetics matter!**\n\nWith the overwhelming number of **strains available** and new ones coming out regularly;\nit\'s essential that you pick something that **meets your needs**!\nThe **SuperGreenLab** community seebank list is here to help you find **the strain for you**.\n"),
     "towelieWelcomeApp" : MessageLookupByLibrary.simpleMessage("Welcome to SuperGreenLab\'s grow diary app!\n===\nHey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!\n\nTo start off on a right foot, we made a **quick start checklist** of all the stuffs you\'ll need to **start growing**.\n\nDo you need a hand to start growing?\n"),
     "towelieWelcomePlant" : MessageLookupByLibrary.simpleMessage("**Welcome to your plant feed!**\nThis is where you can **keep a history** of your plant\'s life.\n\nEverytime you **water**, **train**, or even just **observe something** about your plant,\nyou can **add an item** to the feed.\n\nSo you can see the **evolution** of your plant, **repeat it** later, or **share it!**"),
+    "unsavedChangeDialogBody" : MessageLookupByLibrary.simpleMessage("Changes will not be saved. Continue?"),
+    "unsavedChangeDialogTitle" : MessageLookupByLibrary.simpleMessage("Unsaved changes"),
     "yes" : MessageLookupByLibrary.simpleMessage("YES")
   };
 }
