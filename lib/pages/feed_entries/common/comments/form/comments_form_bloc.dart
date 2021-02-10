@@ -197,7 +197,8 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventLike) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
-      yield CommentsFormBlocStateUpdateComment(event.comment.copyWith(liked: !event.comment.liked));
+      yield CommentsFormBlocStateUpdateComment(
+          event.comment.copyWith(liked: !event.comment.liked, nLikes: event.comment.nLikes + 1));
     } else if (event is CommentsFormBlocEventReport) {
       await BackendAPI().feedsAPI.reportComment(event.comment);
     } else if (event is CommentsFormBlocEventPostComment) {

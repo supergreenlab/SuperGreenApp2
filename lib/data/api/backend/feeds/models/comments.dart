@@ -41,10 +41,7 @@ class CommentParam extends Equatable {
   }
 
   static CommentParam fromMap(Map<String, dynamic> map) {
-    return CommentParam(
-        recommend: (map['recommend'] ?? [])
-            .map<Product>((r) => Product.fromMap(r))
-            .toList());
+    return CommentParam(recommend: (map['recommend'] ?? []).map<Product>((r) => Product.fromMap(r)).toList());
   }
 
   @override
@@ -59,6 +56,7 @@ class Comment extends Equatable {
   final String from;
   final String pic;
   final bool liked;
+  final int nLikes;
 
   final String replyTo;
   final String text;
@@ -77,6 +75,7 @@ class Comment extends Equatable {
     this.from,
     this.pic,
     this.liked,
+    this.nLikes,
     this.replyTo,
     this.text,
     this.type,
@@ -92,6 +91,7 @@ class Comment extends Equatable {
     String from,
     String pic,
     bool liked,
+    int nLikes,
     String replyTo,
     String text,
     CommentType type,
@@ -106,6 +106,7 @@ class Comment extends Equatable {
       from: from ?? this.from,
       pic: pic ?? this.pic,
       liked: liked ?? this.liked,
+      nLikes: nLikes ?? this.nLikes,
       replyTo: replyTo ?? this.replyTo,
       text: text ?? this.text,
       type: type ?? this.type,
@@ -123,6 +124,7 @@ class Comment extends Equatable {
         from,
         pic,
         liked,
+        nLikes,
         replyTo,
         text,
         type,
@@ -148,6 +150,7 @@ class Comment extends Equatable {
       from: map['from'],
       pic: map['pic'],
       liked: map['liked'],
+      nLikes: map['nLikes'],
       replyTo: map['replyTo'],
       text: map['text'],
       type: EnumToString.fromString(CommentType.values, map['type'] as String),

@@ -42,6 +42,19 @@ class CommentView extends StatelessWidget {
     );
   }
 
+  static String commentsFormPageCommentLikeCount(int count) {
+    return Intl.plural(
+      count,
+      zero: '',
+      one: '$count like',
+      other: '$count likes',
+      args: [count],
+      name: 'commentsFormPageCommentLikeCount',
+      desc: 'Comments page reply button for comments',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get commentsFormPageReplyButton {
     return Intl.message(
       '''Reply''',
@@ -183,6 +196,15 @@ class CommentView extends StatelessWidget {
                           style: TextStyle(color: Color(0xffababab)),
                         ),
                       ),
+                      comment.nLikes > 0
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                CommentView.commentsFormPageCommentLikeCount(comment.nLikes),
+                                style: TextStyle(color: Color(0xffababab)),
+                              ),
+                            )
+                          : Container(),
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: InkWell(
