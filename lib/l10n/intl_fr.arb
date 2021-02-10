@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-10T10:49:09.040562",
+  "@@last_modified": "2021-02-10T18:15:08.733733",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -25,6 +25,12 @@
   "saving": "Saving...",
   "@saving": {
     "description": "Saving message usually displayed on the fullscreen overlay",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingParameters": "Setting parameters..",
+  "@settingParameters": {
+    "description": "Setting parameter message usually displayed on the fullscreen overlay",
     "type": "text",
     "placeholders": {}
   },
@@ -690,9 +696,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "commentsFormPageCommentLikeCount": "{count,plural, =1{{count} like}other{{count} likes}}",
+  "commentsFormPageCommentLikeCount": "{count,plural, =1{1 like}other{{count} likes}}",
   "@commentsFormPageCommentLikeCount": {
-    "description": "Comments page reply button for comments",
+    "description": "Number of likes on a comment",
     "type": "text",
     "placeholders": {
       "count": {}
@@ -1017,6 +1023,75 @@
     "description": "Instructions existing device",
     "type": "text",
     "placeholders": {}
+  },
+  "deviceWifiPageTitle": "Controller Wifi setup",
+  "@deviceWifiPageTitle": {
+    "description": "Device wifi configuration page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageNoControllerFound": "Couldn't find the controller\non your network.",
+  "@deviceWifiPageNoControllerFound": {
+    "description": "Device wifi page controller not found on network after setting wifi credentials.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageNotFoundRetry": "Sometime it just takes a bit more time,\nretry search:",
+  "@deviceWifiPageNotFoundRetry": {
+    "description": "Device wifi page controller not found on network after setting wifi credentials.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageRetrySearch": "RETRY SEARCH",
+  "@deviceWifiPageRetrySearch": {
+    "description": "Retry search button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageNotFoundInstructions": "Is the emoji wifi back?\nThen the entered credentials were wrong.\nConnect to it, then tap this button:",
+  "@deviceWifiPageNotFoundInstructions": {
+    "description": "Instruction message to check wether connection failed or not",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageRetryCredentials": "RETRY CREDENTIALS",
+  "@deviceWifiPageRetryCredentials": {
+    "description": "Retry credentials button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageWifiInputLabel": "Enter your home wifi SSID",
+  "@deviceWifiPageWifiInputLabel": {
+    "description": "Label for the wifi ssid input field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageWifiPasswordLabel": "Enter your home wifi password",
+  "@deviceWifiPageWifiPasswordLabel": {
+    "description": "Label for the wifi password input field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageErrorConnectionEmoji": "Make sure you are connected to the emoji wifi!",
+  "@deviceWifiPageErrorConnectionEmoji": {
+    "description": "Error message when the controller is unreachable",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageSearchingController": "Searching controller on network\nplease wait..",
+  "@deviceWifiPageSearchingController": {
+    "description": "Loading message displayed when searching for controller on network",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageSearchingControllerTries": "Try\n{tries}/{totalTries}",
+  "@deviceWifiPageSearchingControllerTries": {
+    "description": "Loading message displayed when searching for controller on network",
+    "type": "text",
+    "placeholders": {
+      "tries": {},
+      "totalTries": {}
+    }
   },
   "selectDeviceBoxSettingUp": "Setting up..",
   "@selectDeviceBoxSettingUp": {

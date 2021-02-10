@@ -1,6 +1,6 @@
 #!/bin/bash
 
-flutter pub pub run intl_translation:extract_to_arb --output-dir=assets/l10n/ $(find lib -name '*.dart')
+flutter pub pub run intl_translation:extract_to_arb --output-dir=assets/l10n/ $(find lib -name '*.dart' | grep -v l10n/messages_)
 cp assets/l10n/intl_messages.arb lib/l10n/intl_en.arb && \
 cp assets/l10n/intl_messages.arb lib/l10n/intl_es.arb && \
 cp assets/l10n/intl_messages.arb lib/l10n/intl_fr.arb

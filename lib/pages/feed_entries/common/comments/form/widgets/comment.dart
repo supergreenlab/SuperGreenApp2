@@ -35,7 +35,7 @@ import 'package:url_launcher/url_launcher.dart';
 class CommentView extends StatelessWidget {
   static String get commentsFormPageSendingCommentLoading {
     return Intl.message(
-      '''Sending comment..''',
+      'Sending comment..',
       name: 'commentsFormPageSendingCommentLoading',
       desc: 'Comments page auto-loading message at end of scroll',
       locale: SGLLocalizations.current.localeName,
@@ -45,18 +45,18 @@ class CommentView extends StatelessWidget {
   static String commentsFormPageCommentLikeCount(int count) {
     return Intl.plural(
       count,
-      one: '$count like',
+      one: '1 like',
       other: '$count likes',
       args: [count],
       name: 'commentsFormPageCommentLikeCount',
-      desc: 'Comments page reply button for comments',
+      desc: 'Number of likes on a comment',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
   static String get commentsFormPageReplyButton {
     return Intl.message(
-      '''Reply''',
+      'Reply',
       name: 'commentsFormPageReplyButton',
       desc: 'Comments page reply button for comments',
       locale: SGLLocalizations.current.localeName,
@@ -65,7 +65,7 @@ class CommentView extends StatelessWidget {
 
   static String get commentsFormPageReportButton {
     return Intl.message(
-      '''Report''',
+      'Report',
       name: 'commentsFormPageReportButton',
       desc: 'Comments page report button for comments',
       locale: SGLLocalizations.current.localeName,
@@ -74,7 +74,7 @@ class CommentView extends StatelessWidget {
 
   static String commentsFormPageReportDialogBody(String comment) {
     return Intl.message(
-      '''Comment was: "$comment"''',
+      'Comment was: "$comment"',
       args: [comment],
       name: 'commentsFormPageReportDialogBody',
       desc: 'Comments page report dialog body',
@@ -84,7 +84,7 @@ class CommentView extends StatelessWidget {
 
   static String get commentsFormPageReportDialogTitle {
     return Intl.message(
-      '''Report this comment?''',
+      'Report this comment?',
       name: 'commentsFormPageReportDialogTitle',
       desc: 'Comments page report dialog title',
       locale: SGLLocalizations.current.localeName,

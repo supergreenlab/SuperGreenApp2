@@ -22,7 +22,7 @@ import 'package:super_green_app/l10n.dart';
 class CommonL10N {
   static String get loading {
     return Intl.message(
-      '''Loading...''',
+      'Loading...',
       name: 'loading',
       desc: 'Loading message usually displayed on the fullscreen overlay',
       locale: SGLLocalizations.current.localeName,
@@ -31,16 +31,25 @@ class CommonL10N {
 
   static String get saving {
     return Intl.message(
-      '''Saving...''',
+      'Saving...',
       name: 'saving',
       desc: 'Saving message usually displayed on the fullscreen overlay',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
+  static String get settingParameters {
+    return Intl.message(
+      'Setting parameters..',
+      name: 'settingParameters',
+      desc: 'Setting parameter message usually displayed on the fullscreen overlay',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get done {
     return Intl.message(
-      '''Done!''',
+      'Done!',
       name: 'done',
       desc: 'Success message usually displayed on the fullscreen overlay',
       locale: SGLLocalizations.current.localeName,
@@ -49,7 +58,7 @@ class CommonL10N {
 
   static String get no {
     return Intl.message(
-      '''NO''',
+      'NO',
       name: 'no',
       desc: 'Used in confirmation dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -58,7 +67,7 @@ class CommonL10N {
 
   static String get yes {
     return Intl.message(
-      '''YES''',
+      'YES',
       name: 'yes',
       desc: 'Used in confirmation dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -67,7 +76,7 @@ class CommonL10N {
 
   static String get ok {
     return Intl.message(
-      '''OK''',
+      'OK',
       name: 'ok',
       desc: 'Used in confirmation dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -76,7 +85,7 @@ class CommonL10N {
 
   static String get or {
     return Intl.message(
-      '''OR''',
+      'OR',
       name: 'or',
       desc: 'Used in confirmation dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -85,7 +94,7 @@ class CommonL10N {
 
   static String get cancel {
     return Intl.message(
-      '''CANCEL''',
+      'CANCEL',
       name: 'cancel',
       desc: 'Used in confirmation dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -94,7 +103,7 @@ class CommonL10N {
 
   static String get loginCreateAccount {
     return Intl.message(
-      '''LOGIN / CREATE ACCOUNT''',
+      'LOGIN / CREATE ACCOUNT',
       name: 'loginCreateAccount',
       desc: 'Used in "please login" dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -103,7 +112,7 @@ class CommonL10N {
 
   static String get loginRequiredDialogTitle {
     return Intl.message(
-      '''Login required''',
+      'Login required',
       name: 'loginRequiredDialogTitle',
       desc: 'Used in "please login" dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -112,7 +121,7 @@ class CommonL10N {
 
   static String get loginRequiredDialogBody {
     return Intl.message(
-      '''Please log in or create an account.''',
+      'Please log in or create an account.',
       name: 'loginRequiredDialogBody',
       desc: 'Used in "please login" dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -121,7 +130,7 @@ class CommonL10N {
 
   static String get unsavedChangeDialogTitle {
     return Intl.message(
-      '''Unsaved changes''',
+      'Unsaved changes',
       name: 'unsavedChangeDialogTitle',
       desc: 'Title for the "unsaved changes" dialog when pressing back',
       locale: SGLLocalizations.current.localeName,
@@ -130,7 +139,7 @@ class CommonL10N {
 
   static String get unsavedChangeDialogBody {
     return Intl.message(
-      '''Changes will not be saved. Continue?''',
+      'Changes will not be saved. Continue?',
       name: 'unsavedChangeDialogBody',
       desc: 'Body for the "unsaved changes" dialog when pressing back',
       locale: SGLLocalizations.current.localeName,

@@ -19,7 +19,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'es';
 
-  static m0(count) => "${Intl.plural(count, one: '${count} like', other: '${count} likes')}";
+  static m0(count) => "${Intl.plural(count, one: '1 like', other: '${count} likes')}";
 
   static m1(nickname) => "Add a comment as ${nickname}...";
 
@@ -27,31 +27,33 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m3(comment) => "Comment was: \"${comment}\"";
 
-  static m4(name) => "Plant ${name} is now public";
+  static m4(tries, totalTries) => "Try\n${tries}/${totalTries}";
 
-  static m5(title) => "Resume previous ${title} card draft?";
+  static m5(name) => "Plant ${name} is now public";
 
-  static m6(basedOn) => "From: ${basedOn}";
+  static m6(title) => "Resume previous ${title} card draft?";
 
-  static m7(phase) => "Phase: ${phase}";
+  static m7(basedOn) => "From: ${basedOn}";
 
-  static m8(name) => "Update ${name}?";
+  static m8(phase) => "Phase: ${phase}";
 
-  static m9(progress) => "Syncing - ${progress}";
+  static m9(name) => "Update ${name}?";
 
-  static m10(leds) => "Led channels: ${leds}";
+  static m10(progress) => "Syncing - ${progress}";
 
-  static m11(number) => "Box #${number}";
+  static m11(leds) => "Led channels: ${leds}";
 
-  static m12(index, name) => "Reset box #${index} on controller ${name}?";
+  static m12(number) => "Box #${number}";
 
-  static m13(name) => "Delete controller ${name}?";
+  static m13(index, name) => "Reset box #${index} on controller ${name}?";
 
-  static m14(name) => "Controller ${name} updated!";
+  static m14(name) => "Delete controller ${name}?";
 
-  static m15(name) => "Controller ${name} refreshed!";
+  static m15(name) => "Controller ${name} updated!";
 
-  static m16(time) => "(100% power for ${time} s)";
+  static m16(name) => "Controller ${name} refreshed!";
+
+  static m17(time) => "(100% power for ${time} s)";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -73,17 +75,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "commentsFormPageViewAllComments" : MessageLookupByLibrary.simpleMessage("View all comments"),
     "commentsFormPageViewingSingleComment" : MessageLookupByLibrary.simpleMessage("Viewing single comment"),
     "confirmUnRevertableChange" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
+    "deviceWifiPageErrorConnectionEmoji" : MessageLookupByLibrary.simpleMessage("Make sure you are connected to the emoji wifi!"),
+    "deviceWifiPageNoControllerFound" : MessageLookupByLibrary.simpleMessage("Couldn\'t find the controller\non your network."),
+    "deviceWifiPageNotFoundInstructions" : MessageLookupByLibrary.simpleMessage("Is the emoji wifi back?\nThen the entered credentials were wrong.\nConnect to it, then tap this button:"),
+    "deviceWifiPageNotFoundRetry" : MessageLookupByLibrary.simpleMessage("Sometime it just takes a bit more time,\nretry search:"),
+    "deviceWifiPageRetryCredentials" : MessageLookupByLibrary.simpleMessage("RETRY CREDENTIALS"),
+    "deviceWifiPageRetrySearch" : MessageLookupByLibrary.simpleMessage("RETRY SEARCH"),
+    "deviceWifiPageSearchingController" : MessageLookupByLibrary.simpleMessage("Searching controller on network\nplease wait.."),
+    "deviceWifiPageSearchingControllerTries" : m4,
+    "deviceWifiPageTitle" : MessageLookupByLibrary.simpleMessage("Controller Wifi setup"),
+    "deviceWifiPageWifiInputLabel" : MessageLookupByLibrary.simpleMessage("Enter your home wifi SSID"),
+    "deviceWifiPageWifiPasswordLabel" : MessageLookupByLibrary.simpleMessage("Enter your home wifi password"),
     "done" : MessageLookupByLibrary.simpleMessage("Done!"),
     "explorerPagePleaseLoginDialogBody" : MessageLookupByLibrary.simpleMessage("You need to be logged in to make a plant public."),
     "explorerPagePleaseLoginDialogTitle" : MessageLookupByLibrary.simpleMessage("Make a plant public"),
-    "explorerPagePublicPlantConfirmation" : m4,
+    "explorerPagePublicPlantConfirmation" : m5,
     "explorerPageSelectPlantTitle" : MessageLookupByLibrary.simpleMessage("Select which plant you want to make public"),
     "explorerPageTitle" : MessageLookupByLibrary.simpleMessage("Explorer"),
     "feedCareCommonAfterPics" : MessageLookupByLibrary.simpleMessage("After pics"),
     "feedCareCommonBeforePics" : MessageLookupByLibrary.simpleMessage("Before pics"),
     "feedCareCommonDeletePicDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
     "feedCareCommonDeletePicDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete this pic?"),
-    "feedCareCommonDraftRecoveryDialogBody" : m5,
+    "feedCareCommonDraftRecoveryDialogBody" : m6,
     "feedCareCommonDraftRecoveryDialogTitle" : MessageLookupByLibrary.simpleMessage("Draft recovery"),
     "feedCareCommonFormSaving" : MessageLookupByLibrary.simpleMessage("Saving.."),
     "feedCareCommonObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
@@ -105,9 +118,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "feedMediaFormPageDraftRecoveryDialogTitle" : MessageLookupByLibrary.simpleMessage("Draft recovery"),
     "feedMediaFormPageHelpRequest" : MessageLookupByLibrary.simpleMessage("Help request?"),
     "feedMediaFormPageObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
-    "feedNutrientMixCardFrom" : m6,
+    "feedNutrientMixCardFrom" : m7,
     "feedNutrientMixCardObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
-    "feedNutrientMixCardPhase" : m7,
+    "feedNutrientMixCardPhase" : m8,
     "feedNutrientMixCardTitle" : MessageLookupByLibrary.simpleMessage("Nutrient mix"),
     "feedNutrientMixCardWaterQuantity" : MessageLookupByLibrary.simpleMessage("Water quantity"),
     "feedNutrientMixFormPageEndMixMetricsSectionTitle" : MessageLookupByLibrary.simpleMessage("End mix metrics"),
@@ -129,7 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "feedNutrientMixFormPageSolid" : MessageLookupByLibrary.simpleMessage("Solid"),
     "feedNutrientMixFormPageUpdateExistingDialogBody" : MessageLookupByLibrary.simpleMessage("A nutrient mix with that name already exists, overwrite?"),
     "feedNutrientMixFormPageUpdateExistingDialogNo" : MessageLookupByLibrary.simpleMessage("NO, CHANGE NAME"),
-    "feedNutrientMixFormPageUpdateExistingDialogTitle" : m8,
+    "feedNutrientMixFormPageUpdateExistingDialogTitle" : m9,
     "feedNutrientMixFormPageVolume" : MessageLookupByLibrary.simpleMessage("Water quantity"),
     "feedProductsCardPageTitle" : MessageLookupByLibrary.simpleMessage("Towelie\'s selection"),
     "feedProductsCardPageViewButton" : MessageLookupByLibrary.simpleMessage("View"),
@@ -161,7 +174,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "notificationRequestTitle" : MessageLookupByLibrary.simpleMessage("Would you like to activate notifications?"),
     "ok" : MessageLookupByLibrary.simpleMessage("OK"),
     "or" : MessageLookupByLibrary.simpleMessage("OR"),
-    "redBarSyncingProgress" : m9,
+    "redBarSyncingProgress" : m10,
     "saving" : MessageLookupByLibrary.simpleMessage("Saving..."),
     "selectBoxPageAddNewGreenLab" : MessageLookupByLibrary.simpleMessage("Add new green lab"),
     "selectBoxPageCreateFirst" : MessageLookupByLibrary.simpleMessage("Create your first"),
@@ -174,17 +187,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceAddFirstController" : MessageLookupByLibrary.simpleMessage("CONTROLLER"),
     "selectDeviceBoxAlreadyRunning" : MessageLookupByLibrary.simpleMessage("Already running"),
     "selectDeviceBoxAvailable" : MessageLookupByLibrary.simpleMessage("Available"),
-    "selectDeviceBoxLedChannelDescription" : m10,
+    "selectDeviceBoxLedChannelDescription" : m11,
     "selectDeviceBoxNoLedChannelAssigned" : MessageLookupByLibrary.simpleMessage("No led channels assigned"),
     "selectDeviceBoxNoMoreLED" : MessageLookupByLibrary.simpleMessage("No more free led channels"),
-    "selectDeviceBoxNumber" : m11,
-    "selectDeviceBoxResetDialogTitle" : m12,
+    "selectDeviceBoxNumber" : m12,
+    "selectDeviceBoxResetDialogTitle" : m13,
     "selectDeviceBoxSettingUp" : MessageLookupByLibrary.simpleMessage("Setting up.."),
     "selectDeviceBoxSlot" : MessageLookupByLibrary.simpleMessage("Select controller\'s box slot"),
     "selectDeviceContinueWithoutController" : MessageLookupByLibrary.simpleMessage("Continue without controller"),
     "selectDeviceDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
     "selectDeviceDeleteControllerDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
-    "selectDeviceDeleteControllerDialogTitle" : m13,
+    "selectDeviceDeleteControllerDialogTitle" : m14,
     "selectDeviceListItemInstruction" : MessageLookupByLibrary.simpleMessage("Tap to select"),
     "selectDeviceListTitle" : MessageLookupByLibrary.simpleMessage("Select a controller below"),
     "selectDeviceNewBoxAvailableLEDChannels" : MessageLookupByLibrary.simpleMessage("Available LED channels"),
@@ -198,16 +211,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceOr" : MessageLookupByLibrary.simpleMessage("OR"),
     "selectDeviceShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
     "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
-    "settingsDevicePageControllerDone" : m14,
+    "settingParameters" : MessageLookupByLibrary.simpleMessage("Setting parameters.."),
+    "settingsDevicePageControllerDone" : m15,
     "settingsDevicePageControllerNameSection" : MessageLookupByLibrary.simpleMessage("Controller name"),
-    "settingsDevicePageControllerRefreshed" : m15,
+    "settingsDevicePageControllerRefreshed" : m16,
     "settingsDevicePageControllerSettingsSection" : MessageLookupByLibrary.simpleMessage("Settings"),
     "settingsDevicePageLoading" : MessageLookupByLibrary.simpleMessage("Refreshing.."),
     "settingsDevicePageWifiConfigFailed" : MessageLookupByLibrary.simpleMessage("Wifi config change failed"),
     "settingsDevicePageWifiConfigSuccess" : MessageLookupByLibrary.simpleMessage("Wifi config changed successfully"),
     "settingsDevicePageWifiSettingsLabel" : MessageLookupByLibrary.simpleMessage("Change your controller\'s wifi config"),
     "settingsDevicePageWifiSettingsSection" : MessageLookupByLibrary.simpleMessage("Wifi config"),
-    "testLEDTiming" : m16,
+    "testLEDTiming" : m17,
     "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
     "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),
