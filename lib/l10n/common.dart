@@ -110,11 +110,11 @@ class CommonL10N {
     );
   }
 
-  static String get unsavedChangeDialogBody {
+  static String get confirmUnRevertableChange {
     return Intl.message(
       '''Changes will not be saved. Continue?''',
-      name: 'unsavedChangeDialogBody',
-      desc: 'Body for the "unsaved changes" dialog when pressing back',
+      name: 'confirmUnRevertableChange',
+      desc: 'Body for the delete dialog',
       locale: SGLLocalizations.current.localeName,
     );
   }
