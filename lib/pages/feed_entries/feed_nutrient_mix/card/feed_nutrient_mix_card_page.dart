@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
@@ -33,6 +35,53 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedNutrientMixCardPage extends StatefulWidget {
+  static String get feedNutrientMixCardObservations {
+    return Intl.message(
+      'Observations',
+      name: 'feedNutrientMixCardObservations',
+      desc: 'Observation field label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixCardTitle {
+    return Intl.message(
+      'Nutrient mix',
+      name: 'feedNutrientMixCardTitle',
+      desc: 'Nutrient mix card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixCardWaterQuantity {
+    return Intl.message(
+      'Water quantity',
+      name: 'feedNutrientMixCardWaterQuantity',
+      desc: 'Volume field label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedNutrientMixCardFrom(String basedOn) {
+    return Intl.message(
+      'From: $basedOn',
+      args: [basedOn],
+      name: 'feedNutrientMixCardFrom',
+      desc: '"Based on" field label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedNutrientMixCardPhase(String phase) {
+    return Intl.message(
+      'Phase: $phase',
+      args: [phase],
+      name: 'feedNutrientMixCardPhase',
+      desc: '"Phase" field label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -62,7 +111,8 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_nutrient_mix.svg', 'Nutrient mix', widget.state.synced,
+          FeedCardTitle('assets/feed_card/icon_nutrient_mix.svg', FeedNutrientMixCardPage.feedNutrientMixCardTitle,
+              widget.state.synced,
               showSyncStatus: !widget.state.isRemoteState,
               showControls: !widget.state.isRemoteState,
               actions: widget.cardActions != null ? widget.cardActions(widget.state) : []),
@@ -83,7 +133,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
     FeedNutrientMixParams params = state.params;
     List<Widget> cards = [
-      renderCard('assets/feed_form/icon_volume.svg', 8, 'Water quantity',
+      renderCard('assets/feed_form/icon_volume.svg', 8, FeedNutrientMixCardPage.feedNutrientMixCardWaterQuantity,
           Text('${params.volume} L', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
     ];
     if (params.ph != null) {
@@ -106,7 +156,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
         children: [
           FeedCardTitle(
             'assets/feed_card/icon_nutrient_mix.svg',
-            'Nutrient mix',
+            FeedNutrientMixCardPage.feedNutrientMixCardTitle,
             state.synced,
             showSyncStatus: !state.isRemoteState,
             showControls: !state.isRemoteState,
@@ -125,10 +175,12 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 (params.basedOn ?? '') != ''
-                    ? Text('From: ${params.basedOn}', style: TextStyle(color: Color(0xffababab)))
+                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardFrom(params.basedOn),
+                        style: TextStyle(color: Color(0xffababab)))
                     : Container(),
                 (params.phase ?? '') != ''
-                    ? Text('Phase: ${nutrientMixPhasesUI[params.phase]}', style: TextStyle(color: Color(0xffababab)))
+                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardPhase(nutrientMixPhasesUI[params.phase]),
+                        style: TextStyle(color: Color(0xffababab)))
                     : Container(),
               ],
             ),
@@ -151,7 +203,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
           (params.message ?? '') != '' || editText == true
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Observations', style: TextStyle()),
+                  child: Text(FeedNutrientMixCardPage.feedNutrientMixCardObservations, style: TextStyle()),
                 )
               : Container(),
           (params.message ?? '') != '' || editText == true

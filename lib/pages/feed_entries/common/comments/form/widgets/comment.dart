@@ -45,7 +45,6 @@ class CommentView extends StatelessWidget {
   static String commentsFormPageCommentLikeCount(int count) {
     return Intl.plural(
       count,
-      zero: '',
       one: '$count like',
       other: '$count likes',
       args: [count],

@@ -21,9 +21,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_bloc.dart';
@@ -45,9 +48,198 @@ Map<NutrientMixPhase, String> nutrientMixPhasesUI = {
 };
 
 class FeedNutrientMixFormPage extends StatefulWidget {
+  static String get feedNutrientMixFormPageSelectPlant {
+    return Intl.message(
+      'Which plant(s) will receive this mix?',
+      name: 'feedNutrientMixFormPageSelectPlant',
+      desc: 'Plant picker title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageNutrientInYourMixPart1 {
+    return Intl.message(
+      'Nutrients in your ',
+      name: 'feedNutrientMixFormPageNutrientInYourMixPart1',
+      desc: 'First part of the "Nutrient in you mix" sentence, trailing space is important',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageNutrientInYourMixPart2 {
+    return Intl.message(
+      'mix',
+      name: 'feedNutrientMixFormPageNutrientInYourMixPart2',
+      desc: 'Second part of the "Nutrient in you mix" sentence',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageMetricsObservations {
+    return Intl.message(
+      'Metrics & Observations',
+      name: 'feedNutrientMixFormPageMetricsObservations',
+      desc: 'Label for the metrics & observations field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageSaveMix {
+    return Intl.message(
+      'Save this nutrient mix',
+      name: 'feedNutrientMixFormPageSaveMix',
+      desc: 'Label for the mix name field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageSaveMixInstructions {
+    return Intl.message(
+      'You can give this nutrient mix a name, for future reuse. (optional)',
+      name: 'feedNutrientMixFormPageSaveMixInstructions',
+      desc: 'Instructions for the mix name field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageSaveMixSectionTitle {
+    return Intl.message(
+      'Save for future re-use?',
+      name: 'feedNutrientMixFormPageSaveMixSectionTitle',
+      desc: 'Label for the mix name field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageNameHint {
+    return Intl.message(
+      'Ex: Veg-1',
+      name: 'feedNutrientMixFormPageNameHint',
+      desc: 'Hint text for the mix name field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageNameLabel {
+    return Intl.message(
+      'Mix name',
+      name: 'feedNutrientMixFormPageNameLabel',
+      desc: 'Label for the mix name field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageVolume {
+    return Intl.message(
+      'Water quantity',
+      name: 'feedNutrientMixFormPageVolume',
+      desc: 'Volume field label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageNoToolsYet {
+    return Intl.message(
+      'No nutrients in your toolbox yet.\nPress the + button up here.',
+      name: 'feedNutrientMixFormPageNoToolsYet',
+      desc: 'Text displayed when no nutrient in the toolbox yet',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageEndMixMetricsSectionTitle {
+    return Intl.message(
+      'End mix metrics',
+      name: 'feedNutrientMixFormPageEndMixMetricsSectionTitle',
+      desc: 'End mix metrics section title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageSolid {
+    return Intl.message(
+      'Solid',
+      name: 'feedNutrientMixFormPageSolid',
+      desc: 'Nutrient type toggle button "Solid" or "Liquid"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageLiquid {
+    return Intl.message(
+      'Liquid',
+      name: 'feedNutrientMixFormPageLiquid',
+      desc: 'Nutrient type toggle button "Solid" or "Liquid"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageReuseValuesSectionTitle {
+    return Intl.message(
+      'Reuse previous mix values?',
+      name: 'feedNutrientMixFormPageReuseValuesSectionTitle',
+      desc: 'Reuse previous values section title, followed by a list of saved mixes',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageObservations {
+    return Intl.message(
+      'Observations',
+      name: 'feedNutrientMixFormPageObservations',
+      desc: 'Observations field label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageMixPhaseSectionTitle {
+    return Intl.message(
+      'Mix phase',
+      name: 'feedNutrientMixFormPageMixPhaseSectionTitle',
+      desc: 'Mix phase section title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageMixPhaseInstruction {
+    return Intl.message(
+      'Set the right phase for this nutrient mix for better categorization.',
+      name: 'feedNutrientMixFormPageMixPhaseInstruction',
+      desc: 'Mix phase instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedNutrientMixFormPageUpdateExistingDialogTitle(String name) {
+    return Intl.message(
+      'Update $name?',
+      args: [name],
+      name: 'feedNutrientMixFormPageUpdateExistingDialogTitle',
+      desc: 'Title for the dialog displayed when updating an existing mix',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageUpdateExistingDialogBody {
+    return Intl.message(
+      'A nutrient mix with that name already exists, overwrite?',
+      name: 'feedNutrientMixFormPageUpdateExistingDialogBody',
+      desc: 'Body for the dialog displayed when updating an existing mix',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPageUpdateExistingDialogNo {
+    return Intl.message(
+      'NO, CHANGE NAME',
+      name: 'feedNutrientMixFormPageUpdateExistingDialogNo',
+      desc: '"No" button for the dialog displayed when updating an existing mix',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
-  _FeedNutrientMixFormPageState createState() =>
-      _FeedNutrientMixFormPageState();
+  _FeedNutrientMixFormPageState createState() => _FeedNutrientMixFormPageState();
 }
 
 class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
@@ -91,23 +283,19 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             quantityControllers = [];
             lastNutrientMixParams = state.lastNutrientMixParams;
             for (Product product in state.products) {
-              NutrientProduct nutrientProduct = nutrientProducts.singleWhere(
-                  (pi) => pi.product.id == product.id,
-                  orElse: () => null);
+              NutrientProduct nutrientProduct =
+                  nutrientProducts.singleWhere((pi) => pi.product.id == product.id, orElse: () => null);
               if (nutrientProduct == null) {
-                nutrientProducts.add(
-                    NutrientProduct(product: product, quantity: 0, unit: 'g'));
+                nutrientProducts.add(NutrientProduct(product: product, quantity: 0, unit: 'g'));
                 quantityControllers.add(TextEditingController(text: null));
               } else {
                 nutrientProducts.add(nutrientProduct);
-                quantityControllers.add(
-                    TextEditingController(text: '${nutrientProduct.quantity}'));
+                quantityControllers.add(TextEditingController(text: '${nutrientProduct.quantity}'));
               }
             }
           });
         } else if (state is FeedNutrientMixFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<FeedNutrientMixFormBloc, FeedNutrientMixFormBlocState>(
@@ -116,11 +304,11 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             Widget body;
             if (state is FeedNutrientMixFormBlocStateLoading) {
               body = FullscreenLoading(
-                title: 'Saving..',
+                title: CommonL10N.saving,
               );
             } else if (state is FeedNutrientMixFormBlocStateInit) {
               body = FullscreenLoading(
-                title: 'Loading..',
+                title: CommonL10N.loading,
               );
             } else if (state is FeedNutrientMixFormBlocStateLoaded) {
               body = renderBody(context, state);
@@ -140,41 +328,34 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                   if (tdsController.text != '') {
                     tds = double.parse(tdsController.text.replaceAll(',', '.'));
                   }
-                  FeedNutrientMixParams nutrientProduct = lastNutrientMixParams
-                      .firstWhere((np) => np.name == nameController.text,
-                          orElse: () => null);
-                  if (nutrientProduct != null &&
-                      await confirmUpdate(context, nutrientProduct) == false) {
-                    scrollController.animateTo(1000,
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.linear);
+                  FeedNutrientMixParams nutrientProduct =
+                      lastNutrientMixParams.firstWhere((np) => np.name == nameController.text, orElse: () => null);
+                  if (nutrientProduct != null && await confirmUpdate(context, nutrientProduct) == false) {
+                    scrollController.animateTo(1000, duration: Duration(milliseconds: 300), curve: Curves.linear);
                     nameFocusNode.requestFocus();
                     return;
                   }
                   Completer<List<Plant>> plantsFuture = Completer();
-                  BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToPlantPickerEvent(
-                          [plant], 'Which plant(s) will receive this mix?',
-                          futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPlantPickerEvent(
+                      [plant], FeedNutrientMixFormPage.feedNutrientMixFormPageSelectPlant, futureFn: (future) async {
                     plantsFuture.complete(await future);
                   }));
                   List<Plant> plants = await plantsFuture.future;
                   if (plants == null || plants.length == 0) {
                     return;
                   }
-                  BlocProvider.of<FeedNutrientMixFormBloc>(context).add(
-                      FeedNutrientMixFormBlocEventCreate(
-                          date,
-                          nameController.text,
-                          volume,
-                          ph,
-                          ec,
-                          tds,
-                          nutrientProducts,
-                          messageController.text,
-                          plants,
-                          phase,
-                          baseNutrientMixParams));
+                  BlocProvider.of<FeedNutrientMixFormBloc>(context).add(FeedNutrientMixFormBlocEventCreate(
+                      date,
+                      nameController.text,
+                      volume,
+                      ph,
+                      ec,
+                      tds,
+                      nutrientProducts,
+                      messageController.text,
+                      plants,
+                      phase,
+                      baseNutrientMixParams));
                 },
                 body: AnimatedSwitcher(
                   child: body,
@@ -184,8 +365,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     );
   }
 
-  Widget renderBody(
-      BuildContext context, FeedNutrientMixFormBlocStateLoaded state) {
+  Widget renderBody(BuildContext context, FeedNutrientMixFormBlocStateLoaded state) {
     List<Widget> children = [];
     if (lastNutrientMixParams.length > 0 && hideRestore == false) {
       children.add(renderRestoreLastNutrientMix(lastNutrientMixParams));
@@ -205,35 +385,25 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         child: Row(
           children: [
             Text(
-              'Nutrients in your ',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.black87),
+              FeedNutrientMixFormPage.feedNutrientMixFormPageNutrientInYourMixPart1,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
             ),
             Text(
-              'mix',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Color(0xff3bb30b)),
+              FeedNutrientMixFormPage.feedNutrientMixFormPageNutrientInYourMixPart2,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xff3bb30b)),
             ),
             Expanded(child: Container()),
             InkWell(
                 onTap: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToSelectNewProductEvent([],
-                          categoryID: ProductCategoryID.FERTILIZER,
-                          futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectNewProductEvent([],
+                      categoryID: ProductCategoryID.FERTILIZER, futureFn: (future) async {
                     List<Product> products = await future;
                     if (products == null || products.length == 0) {
                       return;
                     }
                     setState(() {
-                      nutrientProducts.addAll(products
-                          .map((p) => NutrientProduct(product: p, unit: 'g')));
-                      quantityControllers.addAll(
-                          products.map((p) => TextEditingController(text: '')));
+                      nutrientProducts.addAll(products.map((p) => NutrientProduct(product: p, unit: 'g')));
+                      quantityControllers.addAll(products.map((p) => TextEditingController(text: '')));
                     });
                   }));
                 },
@@ -248,9 +418,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       for (NutrientProduct productIntake in nutrientProducts) {
         int index = i;
         fertilizers.add(FeedFormParamLayout(
-            child:
-                renderFertilizer(context, productIntake, quantityControllers[i],
-                    (NutrientProduct newProductIntake) {
+            child: renderFertilizer(context, productIntake, quantityControllers[i], (NutrientProduct newProductIntake) {
               setState(() {
                 nutrientProducts[index] = newProductIntake;
               });
@@ -270,9 +438,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
         child: Text(
-          'Metrics & Observations',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+          FeedNutrientMixFormPage.feedNutrientMixFormPageMetricsObservations,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
         ),
       ),
       renderWaterMetrics(context),
@@ -280,9 +447,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
         child: Text(
-          'Save this nutrient mix',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+          FeedNutrientMixFormPage.feedNutrientMixFormPageSaveMix,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
         ),
       ),
       renderName(context),
@@ -291,9 +457,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     return AnimatedList(
       key: listKey,
       controller: scrollController,
-      itemBuilder:
-          (BuildContext context, int index, Animation<double> animation) =>
-              children[index],
+      itemBuilder: (BuildContext context, int index, Animation<double> animation) => children[index],
       initialItemCount: children.length,
     );
   }
@@ -307,8 +471,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                    'You can give this nutrient mix a name, for future reuse. (optional)'),
+                child: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageSaveMixInstructions),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -317,15 +480,13 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                     child: TextFormField(
                       focusNode: nameFocusNode,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 4.0, horizontal: 8.0),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
                         filled: true,
                         fillColor: Colors.white10,
-                        hintText: 'Ex: Veg-1',
-                        labelText: 'Mix name',
+                        hintText: FeedNutrientMixFormPage.feedNutrientMixFormPageNameHint,
+                        labelText: FeedNutrientMixFormPage.feedNutrientMixFormPageNameLabel,
                       ),
-                      style: TextStyle(
-                          color: Colors.black, decoration: TextDecoration.none),
+                      style: TextStyle(color: Colors.black, decoration: TextDecoration.none),
                       controller: nameController,
                     ),
                   ),
@@ -344,14 +505,14 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           ),
         ),
         icon: 'assets/feed_form/icon_save.svg',
-        title: 'Save for future re-use?');
+        title: FeedNutrientMixFormPage.feedNutrientMixFormPageSaveMixSectionTitle);
   }
 
   Widget renderVolume(BuildContext context) {
     bool freedomUnits = AppDB().getAppData().freedomUnits == true;
     return NumberFormParam(
       icon: 'assets/feed_form/icon_volume.svg',
-      title: 'Water quantity',
+      title: FeedNutrientMixFormPage.feedNutrientMixFormPageVolume,
       value: volume,
       step: 1,
       displayMultiplier: freedomUnits ? 0.25 : 1,
@@ -377,12 +538,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: SvgPicture.asset('assets/products/toolbox/toolbox.svg',
-                      width: 110, height: 110),
+                  child: SvgPicture.asset('assets/products/toolbox/toolbox.svg', width: 110, height: 110),
                 ),
-                Text(
-                    'No nutrients in your toolbox yet.\nPress the + button up here.',
-                    textAlign: TextAlign.center),
+                Text(FeedNutrientMixFormPage.feedNutrientMixFormPageNoToolsYet, textAlign: TextAlign.center),
               ],
             ))
           ],
@@ -392,7 +550,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   Widget renderWaterMetrics(BuildContext context) {
     return FeedFormParamLayout(
         icon: 'assets/feed_form/icon_metrics.svg',
-        title: 'End mix metrics',
+        title: FeedNutrientMixFormPage.feedNutrientMixFormPageEndMixMetricsSectionTitle,
         child: Container(
           height: 245,
           child: Padding(
@@ -409,22 +567,14 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           child: Column(
                             children: <Widget>[
                               Text('PH:',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green)),
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
                               Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
                                   child: TextField(
-                                    decoration:
-                                        InputDecoration(hintText: 'ex: 6.5'),
-                                    textCapitalization:
-                                        TextCapitalization.words,
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
+                                    decoration: InputDecoration(hintText: 'ex: 6.5'),
+                                    textCapitalization: TextCapitalization.words,
+                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
                                     controller: phController,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20),
@@ -446,18 +596,12 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                         child: Column(
                           children: [
                             Text('EC (μS/cm):',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green)),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
                               child: TextField(
-                                decoration:
-                                    InputDecoration(hintText: 'ex: 1800'),
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
+                                decoration: InputDecoration(hintText: 'ex: 1800'),
+                                keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 controller: ecController,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20),
@@ -466,25 +610,17 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           ],
                         ),
                       ),
-                      Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('OR', style: TextStyle(fontSize: 20))),
+                      Padding(padding: EdgeInsets.all(8.0), child: Text(CommonL10N.or, style: TextStyle(fontSize: 20))),
                       Expanded(
                         child: Column(
                           children: [
                             Text('TDS (ppm):',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green)),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
                               child: TextField(
-                                decoration:
-                                    InputDecoration(hintText: 'ex: 1200'),
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
+                                decoration: InputDecoration(hintText: 'ex: 1200'),
+                                keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 controller: tdsController,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20),
@@ -502,11 +638,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         ));
   }
 
-  Widget renderFertilizer(
-      BuildContext context,
-      NutrientProduct productIntake,
-      TextEditingController textEditingController,
-      Function(NutrientProduct) onChange) {
+  Widget renderFertilizer(BuildContext context, NutrientProduct productIntake,
+      TextEditingController textEditingController, Function(NutrientProduct) onChange) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -514,15 +647,14 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Solid'),
+              Text(FeedNutrientMixFormPage.feedNutrientMixFormPageSolid),
               Switch(
                 onChanged: (bool value) {
-                  onChange(
-                      productIntake.copyWith(unit: value == true ? 'mL' : 'g'));
+                  onChange(productIntake.copyWith(unit: value == true ? 'mL' : 'g'));
                 },
                 value: productIntake.unit == 'mL',
               ),
-              Text('Liquid'),
+              Text(FeedNutrientMixFormPage.feedNutrientMixFormPageLiquid),
             ],
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -537,26 +669,23 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 20),
                   onChanged: (String value) {
-                    onChange(
-                        productIntake.copyWith(quantity: double.parse(value)));
+                    onChange(productIntake.copyWith(quantity: double.parse(value)));
                   },
                 ),
               ),
             ),
-            Text(productIntake.unit,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            Text(productIntake.unit, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
           ]),
         ],
       ),
     );
   }
 
-  Widget renderRestoreLastNutrientMix(
-      List<FeedNutrientMixParams> lastNutrientMixParams,
+  Widget renderRestoreLastNutrientMix(List<FeedNutrientMixParams> lastNutrientMixParams,
       {Animation<double> animation}) {
     Widget body = FeedFormParamLayout(
       icon: 'assets/feed_form/icon_restore_nutrient_mix.svg',
-      title: 'Reuse previous mix values?',
+      title: FeedNutrientMixFormPage.feedNutrientMixFormPageEndMixMetricsSectionTitle,
       child: Container(
         height: 70,
         child: ListView(
@@ -583,9 +712,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                           listKey.currentState.removeItem(
                               0,
                               (context, animation) =>
-                                  renderRestoreLastNutrientMix(
-                                      lastNutrientMixParams,
-                                      animation: animation),
+                                  renderRestoreLastNutrientMix(lastNutrientMixParams, animation: animation),
                               duration: Duration(milliseconds: 700));
                           baseNutrientMixParams = lastNutrientMixParams[i];
                           setState(() {
@@ -611,13 +738,12 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     return body;
   }
 
-  Widget renderObservations(
-      BuildContext context, FeedNutrientMixFormBlocState state) {
+  Widget renderObservations(BuildContext context, FeedNutrientMixFormBlocState state) {
     return Container(
       height: 200,
       key: Key('TEXTAREA'),
       child: FeedFormParamLayout(
-        title: 'Observations',
+        title: FeedNutrientMixFormPage.feedNutrientMixFormPageMetricsObservations,
         icon: 'assets/feed_form/icon_note.svg',
         child: Expanded(
           child: FeedFormTextarea(
@@ -628,10 +754,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     );
   }
 
-  Widget renderPhases(
-      BuildContext context, FeedNutrientMixFormBlocState state) {
+  Widget renderPhases(BuildContext context, FeedNutrientMixFormBlocState state) {
     return FeedFormParamLayout(
-      title: 'Mix phase',
+      title: FeedNutrientMixFormPage.feedNutrientMixFormPageMixPhaseSectionTitle,
       icon: 'assets/plant_infos/icon_vegging_since.svg',
       child: Container(
           height: 110,
@@ -639,16 +764,14 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                    'Set the right phase for this nutrient mix for better categorization.'),
+                child: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageMixPhaseInstruction),
               ),
               Expanded(
                 child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: NutrientMixPhase.values
                         .map((p) => Padding(
-                            padding: const EdgeInsets.only(
-                                right: 16.0, top: 8, bottom: 8, left: 8),
+                            padding: const EdgeInsets.only(right: 16.0, top: 8, bottom: 8, left: 8),
                             child: Container(
                                 width: 120,
                                 child: FeedFormButton(
@@ -672,27 +795,23 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       volume = lastNutrientMixParams.volume;
       nameController = TextEditingController(text: lastNutrientMixParams.name);
       if (lastNutrientMixParams.ph != null) {
-        phController =
-            TextEditingController(text: '${lastNutrientMixParams.ph}');
+        phController = TextEditingController(text: '${lastNutrientMixParams.ph}');
       }
       if (lastNutrientMixParams.ec != null) {
-        ecController =
-            TextEditingController(text: '${lastNutrientMixParams.ec}');
+        ecController = TextEditingController(text: '${lastNutrientMixParams.ec}');
       }
       //List<NutrientProduct> missingProducts = [];
       for (int i = 0; i < lastNutrientMixParams.nutrientProducts.length; ++i) {
-        int index = nutrientProducts.indexWhere((np) =>
-            np.product.id ==
-            lastNutrientMixParams.nutrientProducts[i].product.id);
+        int index =
+            nutrientProducts.indexWhere((np) => np.product.id == lastNutrientMixParams.nutrientProducts[i].product.id);
         if (index == -1) {
           //missingProducts.add(lastNutrientMixParams.nutrientProducts[i]);
           nutrientProducts.add(lastNutrientMixParams.nutrientProducts[i]);
-          quantityControllers.add(TextEditingController(
-              text: '${lastNutrientMixParams.nutrientProducts[i].quantity}'));
+          quantityControllers.add(TextEditingController(text: '${lastNutrientMixParams.nutrientProducts[i].quantity}'));
         } else {
           nutrientProducts[index] = lastNutrientMixParams.nutrientProducts[i];
-          quantityControllers[index] = TextEditingController(
-              text: '${lastNutrientMixParams.nutrientProducts[i].quantity}');
+          quantityControllers[index] =
+              TextEditingController(text: '${lastNutrientMixParams.nutrientProducts[i].quantity}');
         }
       }
       phase = lastNutrientMixParams.phase;
@@ -703,30 +822,28 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     });
   }
 
-  Future<bool> confirmUpdate(
-          BuildContext context, FeedNutrientMixParams lastNutrientMixParams) =>
-      showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Update ${lastNutrientMixParams.name}?'),
-              content: Text(
-                  'A nutrient mix with that name already exists, overwrite?'),
-              actions: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text('NO, CHANGE NAME'),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  child: Text('YES'),
-                ),
-              ],
-            );
-          });
+  Future<bool> confirmUpdate(BuildContext context, FeedNutrientMixParams lastNutrientMixParams) => showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+              FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogTitle(lastNutrientMixParams.name)),
+          content: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogBody),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogNo),
+            ),
+            FlatButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: Text(CommonL10N.yes),
+            ),
+          ],
+        );
+      });
 }

@@ -115,6 +115,24 @@ class FeedMediaFormPage extends StatefulWidget {
     );
   }
 
+  static String get feedMediaFormPageDraftRecoveryDialogTitle {
+    return Intl.message(
+      'Draft recovery',
+      name: 'feedMediaFormPageDraftRecoveryDialogTitle',
+      desc: 'Help request checkbox label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedMediaFormPageDraftRecoveryDialogBody {
+    return Intl.message(
+      'Resume previous grow log?',
+      name: 'feedMediaFormPageDraftRecoveryDialogBody',
+      desc: 'Help request checkbox label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _FeedMediaFormPageState createState() => _FeedMediaFormPageState();
 }
@@ -373,20 +391,20 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Draft recovery'),
-            content: Text('Resume previous grow log?'),
+            title: Text(FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogTitle),
+            content: Text(FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
-                child: Text('NO'),
+                child: Text(CommonL10N.no),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
-                child: Text('YES'),
+                child: Text(CommonL10N.yes),
               ),
             ],
           );

@@ -29,6 +29,15 @@ class CommonL10N {
     );
   }
 
+  static String get saving {
+    return Intl.message(
+      '''Saving...''',
+      name: 'saving',
+      desc: 'Saving message usually displayed on the fullscreen overlay',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get done {
     return Intl.message(
       '''Done!''',
@@ -60,6 +69,15 @@ class CommonL10N {
     return Intl.message(
       '''OK''',
       name: 'ok',
+      desc: 'Used in confirmation dialogs',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get or {
+    return Intl.message(
+      '''OR''',
+      name: 'or',
       desc: 'Used in confirmation dialogs',
       locale: SGLLocalizations.current.localeName,
     );
@@ -110,11 +128,20 @@ class CommonL10N {
     );
   }
 
-  static String get confirmUnRevertableChange {
+  static String get unsavedChangeDialogBody {
     return Intl.message(
       '''Changes will not be saved. Continue?''',
+      name: 'unsavedChangeDialogBody',
+      desc: 'Body for the "unsaved changes" dialog when pressing back',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get confirmUnRevertableChange {
+    return Intl.message(
+      'This can\'t be reverted. Continue?',
       name: 'confirmUnRevertableChange',
-      desc: 'Body for the delete dialog',
+      desc: 'Body for the delete dialog confirmation',
       locale: SGLLocalizations.current.localeName,
     );
   }

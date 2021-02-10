@@ -19,61 +19,71 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(nickname) => "Add a comment as ${nickname}...";
+  static m0(count) => "${Intl.plural(count, one: '${count} like', other: '${count} likes')}";
 
-  static m1(n) => "(+${n} other)";
+  static m1(nickname) => "Add a comment as ${nickname}...";
 
-  static m2(comment) => "Comment was: \"${comment}\"";
+  static m2(n) => "(+${n} other)";
 
-  static m3(name) => "Plant ${name} is now public";
+  static m3(comment) => "Comment was: \"${comment}\"";
 
-  static m4(title) => "Resume previous ${title} card draft?";
+  static m4(name) => "Plant ${name} is now public";
 
-  static m5(progress) => "Syncing - ${progress}";
+  static m5(title) => "Resume previous ${title} card draft?";
 
-  static m6(leds) => "Led channels: ${leds}";
+  static m6(basedOn) => "From: ${basedOn}";
 
-  static m7(number) => "Box #${number}";
+  static m7(phase) => "Phase: ${phase}";
 
-  static m8(index, name) => "Reset box #${index} on controller ${name}?";
+  static m8(name) => "Update ${name}?";
 
-  static m9(name) => "Delete controller ${name}?";
+  static m9(progress) => "Syncing - ${progress}";
 
-  static m10(name) => "Controller ${name} updated!";
+  static m10(leds) => "Led channels: ${leds}";
 
-  static m11(name) => "Controller ${name} refreshed!";
+  static m11(number) => "Box #${number}";
 
-  static m12(time) => "(100% power for ${time} s)";
+  static m12(index, name) => "Reset box #${index} on controller ${name}?";
+
+  static m13(name) => "Delete controller ${name}?";
+
+  static m14(name) => "Controller ${name} updated!";
+
+  static m15(name) => "Controller ${name} refreshed!";
+
+  static m16(time) => "(100% power for ${time} s)";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "cancel" : MessageLookupByLibrary.simpleMessage("CANCEL"),
+    "commentsFormPageCommentLikeCount" : m0,
     "commentsFormPageCommentTypeTitle" : MessageLookupByLibrary.simpleMessage("What kind of post do you want to do?"),
-    "commentsFormPageInputHintText" : m0,
+    "commentsFormPageInputHintText" : m1,
     "commentsFormPageLoadingMoreComments" : MessageLookupByLibrary.simpleMessage("Loading more comments.."),
-    "commentsFormPageNOtherRecommendations" : m1,
+    "commentsFormPageNOtherRecommendations" : m2,
     "commentsFormPagePleaseLogin" : MessageLookupByLibrary.simpleMessage("Please login to add a comment"),
     "commentsFormPageReplyButton" : MessageLookupByLibrary.simpleMessage("Reply"),
     "commentsFormPageReplyingTo" : MessageLookupByLibrary.simpleMessage("Replying to "),
     "commentsFormPageReportButton" : MessageLookupByLibrary.simpleMessage("Report"),
-    "commentsFormPageReportDialogBody" : m2,
+    "commentsFormPageReportDialogBody" : m3,
     "commentsFormPageReportDialogTitle" : MessageLookupByLibrary.simpleMessage("Report this comment?"),
     "commentsFormPageSendingCommentLoading" : MessageLookupByLibrary.simpleMessage("Sending comment.."),
     "commentsFormPageSubmitComment" : MessageLookupByLibrary.simpleMessage("Post"),
     "commentsFormPageTitle" : MessageLookupByLibrary.simpleMessage("Comments"),
     "commentsFormPageViewAllComments" : MessageLookupByLibrary.simpleMessage("View all comments"),
     "commentsFormPageViewingSingleComment" : MessageLookupByLibrary.simpleMessage("Viewing single comment"),
+    "confirmUnRevertableChange" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
     "done" : MessageLookupByLibrary.simpleMessage("Done!"),
     "explorerPagePleaseLoginDialogBody" : MessageLookupByLibrary.simpleMessage("You need to be logged in to make a plant public."),
     "explorerPagePleaseLoginDialogTitle" : MessageLookupByLibrary.simpleMessage("Make a plant public"),
-    "explorerPagePublicPlantConfirmation" : m3,
+    "explorerPagePublicPlantConfirmation" : m4,
     "explorerPageSelectPlantTitle" : MessageLookupByLibrary.simpleMessage("Select which plant you want to make public"),
     "explorerPageTitle" : MessageLookupByLibrary.simpleMessage("Explorer"),
     "feedCareCommonAfterPics" : MessageLookupByLibrary.simpleMessage("After pics"),
     "feedCareCommonBeforePics" : MessageLookupByLibrary.simpleMessage("Before pics"),
     "feedCareCommonDeletePicDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
     "feedCareCommonDeletePicDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete this pic?"),
-    "feedCareCommonDraftRecoveryDialogBody" : m4,
+    "feedCareCommonDraftRecoveryDialogBody" : m5,
     "feedCareCommonDraftRecoveryDialogTitle" : MessageLookupByLibrary.simpleMessage("Draft recovery"),
     "feedCareCommonFormSaving" : MessageLookupByLibrary.simpleMessage("Saving.."),
     "feedCareCommonObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
@@ -84,6 +94,45 @@ class MessageLookup extends MessageLookupByLibrary {
     "feedLightFormPageOr" : MessageLookupByLibrary.simpleMessage("or"),
     "feedLightFormPageSaving" : MessageLookupByLibrary.simpleMessage("Saving.."),
     "feedLightFormPageShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
+    "feedMeasureFormPageDeletePicDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete this pic?"),
+    "feedMeasureFormPageObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
+    "feedMeasureFormPagePreviousMeasure" : MessageLookupByLibrary.simpleMessage("Previous measures"),
+    "feedMeasureFormPageTodayMeasure" : MessageLookupByLibrary.simpleMessage("Today\'s measure"),
+    "feedMeasureFormPageUnselectMeasureDialogTitle" : MessageLookupByLibrary.simpleMessage("Unselect this measure?"),
+    "feedMediaFormPageAttachedMedia" : MessageLookupByLibrary.simpleMessage("Attached media"),
+    "feedMediaFormPageDeletePicDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete this pic?"),
+    "feedMediaFormPageDraftRecoveryDialogBody" : MessageLookupByLibrary.simpleMessage("Resume previous grow log?"),
+    "feedMediaFormPageDraftRecoveryDialogTitle" : MessageLookupByLibrary.simpleMessage("Draft recovery"),
+    "feedMediaFormPageHelpRequest" : MessageLookupByLibrary.simpleMessage("Help request?"),
+    "feedMediaFormPageObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
+    "feedNutrientMixCardFrom" : m6,
+    "feedNutrientMixCardObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
+    "feedNutrientMixCardPhase" : m7,
+    "feedNutrientMixCardTitle" : MessageLookupByLibrary.simpleMessage("Nutrient mix"),
+    "feedNutrientMixCardWaterQuantity" : MessageLookupByLibrary.simpleMessage("Water quantity"),
+    "feedNutrientMixFormPageEndMixMetricsSectionTitle" : MessageLookupByLibrary.simpleMessage("End mix metrics"),
+    "feedNutrientMixFormPageLiquid" : MessageLookupByLibrary.simpleMessage("Liquid"),
+    "feedNutrientMixFormPageMetricsObservations" : MessageLookupByLibrary.simpleMessage("Metrics & Observations"),
+    "feedNutrientMixFormPageMixPhaseInstruction" : MessageLookupByLibrary.simpleMessage("Set the right phase for this nutrient mix for better categorization."),
+    "feedNutrientMixFormPageMixPhaseSectionTitle" : MessageLookupByLibrary.simpleMessage("Mix phase"),
+    "feedNutrientMixFormPageNameHint" : MessageLookupByLibrary.simpleMessage("Ex: Veg-1"),
+    "feedNutrientMixFormPageNameLabel" : MessageLookupByLibrary.simpleMessage("Mix name"),
+    "feedNutrientMixFormPageNoToolsYet" : MessageLookupByLibrary.simpleMessage("No nutrients in your toolbox yet.\nPress the + button up here."),
+    "feedNutrientMixFormPageNutrientInYourMixPart1" : MessageLookupByLibrary.simpleMessage("Nutrients in your "),
+    "feedNutrientMixFormPageNutrientInYourMixPart2" : MessageLookupByLibrary.simpleMessage("mix"),
+    "feedNutrientMixFormPageObservations" : MessageLookupByLibrary.simpleMessage("Observations"),
+    "feedNutrientMixFormPageReuseValuesSectionTitle" : MessageLookupByLibrary.simpleMessage("Reuse previous mix values?"),
+    "feedNutrientMixFormPageSaveMix" : MessageLookupByLibrary.simpleMessage("Save this nutrient mix"),
+    "feedNutrientMixFormPageSaveMixInstructions" : MessageLookupByLibrary.simpleMessage("You can give this nutrient mix a name, for future reuse. (optional)"),
+    "feedNutrientMixFormPageSaveMixSectionTitle" : MessageLookupByLibrary.simpleMessage("Save for future re-use?"),
+    "feedNutrientMixFormPageSelectPlant" : MessageLookupByLibrary.simpleMessage("Which plant(s) will receive this mix?"),
+    "feedNutrientMixFormPageSolid" : MessageLookupByLibrary.simpleMessage("Solid"),
+    "feedNutrientMixFormPageUpdateExistingDialogBody" : MessageLookupByLibrary.simpleMessage("A nutrient mix with that name already exists, overwrite?"),
+    "feedNutrientMixFormPageUpdateExistingDialogNo" : MessageLookupByLibrary.simpleMessage("NO, CHANGE NAME"),
+    "feedNutrientMixFormPageUpdateExistingDialogTitle" : m8,
+    "feedNutrientMixFormPageVolume" : MessageLookupByLibrary.simpleMessage("Water quantity"),
+    "feedProductsCardPageTitle" : MessageLookupByLibrary.simpleMessage("Towelie\'s selection"),
+    "feedProductsCardPageViewButton" : MessageLookupByLibrary.simpleMessage("View"),
     "formAllowAnalytics" : MessageLookupByLibrary.simpleMessage("**Help us** discern what\'s **useful** from what\'s **useless** by sharing **anonymous** usage data.\n*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*"),
     "formCGU" : MessageLookupByLibrary.simpleMessage("*By proceeding, **you explicitly agree** that you are acting in coordinance with local, state, and federal or national laws. **SuperGreenLab will not be liable** for\nconsequences surrounding the legality of how the app, lights or grow bundle are used. "),
     "instructionsAutoScheduleHelper" : MessageLookupByLibrary.simpleMessage("Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another."),
@@ -111,7 +160,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "notificationRequestButtonCancel" : MessageLookupByLibrary.simpleMessage("NO THANKS"),
     "notificationRequestTitle" : MessageLookupByLibrary.simpleMessage("Would you like to activate notifications?"),
     "ok" : MessageLookupByLibrary.simpleMessage("OK"),
-    "redBarSyncingProgress" : m5,
+    "or" : MessageLookupByLibrary.simpleMessage("OR"),
+    "redBarSyncingProgress" : m9,
+    "saving" : MessageLookupByLibrary.simpleMessage("Saving..."),
     "selectBoxPageAddNewGreenLab" : MessageLookupByLibrary.simpleMessage("Add new green lab"),
     "selectBoxPageCreateFirst" : MessageLookupByLibrary.simpleMessage("Create your first"),
     "selectBoxPageCreateFirstLab" : MessageLookupByLibrary.simpleMessage("GREEN LAB"),
@@ -123,17 +174,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceAddFirstController" : MessageLookupByLibrary.simpleMessage("CONTROLLER"),
     "selectDeviceBoxAlreadyRunning" : MessageLookupByLibrary.simpleMessage("Already running"),
     "selectDeviceBoxAvailable" : MessageLookupByLibrary.simpleMessage("Available"),
-    "selectDeviceBoxLedChannelDescription" : m6,
+    "selectDeviceBoxLedChannelDescription" : m10,
     "selectDeviceBoxNoLedChannelAssigned" : MessageLookupByLibrary.simpleMessage("No led channels assigned"),
     "selectDeviceBoxNoMoreLED" : MessageLookupByLibrary.simpleMessage("No more free led channels"),
-    "selectDeviceBoxNumber" : m7,
-    "selectDeviceBoxResetDialogTitle" : m8,
+    "selectDeviceBoxNumber" : m11,
+    "selectDeviceBoxResetDialogTitle" : m12,
     "selectDeviceBoxSettingUp" : MessageLookupByLibrary.simpleMessage("Setting up.."),
     "selectDeviceBoxSlot" : MessageLookupByLibrary.simpleMessage("Select controller\'s box slot"),
     "selectDeviceContinueWithoutController" : MessageLookupByLibrary.simpleMessage("Continue without controller"),
     "selectDeviceDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
     "selectDeviceDeleteControllerDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
-    "selectDeviceDeleteControllerDialogTitle" : m9,
+    "selectDeviceDeleteControllerDialogTitle" : m13,
     "selectDeviceListItemInstruction" : MessageLookupByLibrary.simpleMessage("Tap to select"),
     "selectDeviceListTitle" : MessageLookupByLibrary.simpleMessage("Select a controller below"),
     "selectDeviceNewBoxAvailableLEDChannels" : MessageLookupByLibrary.simpleMessage("Available LED channels"),
@@ -147,16 +198,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceOr" : MessageLookupByLibrary.simpleMessage("OR"),
     "selectDeviceShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
     "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
-    "settingsDevicePageControllerDone" : m10,
+    "settingsDevicePageControllerDone" : m14,
     "settingsDevicePageControllerNameSection" : MessageLookupByLibrary.simpleMessage("Controller name"),
-    "settingsDevicePageControllerRefreshed" : m11,
+    "settingsDevicePageControllerRefreshed" : m15,
     "settingsDevicePageControllerSettingsSection" : MessageLookupByLibrary.simpleMessage("Settings"),
     "settingsDevicePageLoading" : MessageLookupByLibrary.simpleMessage("Refreshing.."),
     "settingsDevicePageWifiConfigFailed" : MessageLookupByLibrary.simpleMessage("Wifi config change failed"),
     "settingsDevicePageWifiConfigSuccess" : MessageLookupByLibrary.simpleMessage("Wifi config changed successfully"),
     "settingsDevicePageWifiSettingsLabel" : MessageLookupByLibrary.simpleMessage("Change your controller\'s wifi config"),
     "settingsDevicePageWifiSettingsSection" : MessageLookupByLibrary.simpleMessage("Wifi config"),
-    "testLEDTiming" : m12,
+    "testLEDTiming" : m16,
     "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
     "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),

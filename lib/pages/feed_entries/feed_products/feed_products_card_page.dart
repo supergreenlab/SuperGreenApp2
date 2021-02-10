@@ -22,6 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -41,14 +43,30 @@ const _storeGeoNames = {
 };
 
 class FeedProductsCardPage extends StatelessWidget {
+  static String get feedProductsCardPageTitle {
+    return Intl.message(
+      'Towelie\'s selection',
+      name: 'feedProductsCardPageTitle',
+      desc: 'Title for the product cards, they display a list of products.',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedProductsCardPageViewButton {
+    return Intl.message(
+      'View',
+      name: 'feedProductsCardPageViewButton',
+      desc: 'Opens the product web page',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedProductsCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
-      : super(key: key);
+  const FeedProductsCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +82,8 @@ class FeedProductsCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_towelie.png',
-              'Towelie\'s selection', state.synced),
+          FeedCardTitle(
+              'assets/feed_card/icon_towelie.png', FeedProductsCardPage.feedProductsCardPageTitle, state.synced),
           Container(
             height: 150,
             alignment: Alignment.center,
@@ -81,7 +99,7 @@ class FeedProductsCardPage extends StatelessWidget {
     List<Widget> content = [
       FeedCardTitle(
         'assets/feed_card/icon_towelie.png',
-        'Towelie\'s selection',
+        FeedProductsCardPage.feedProductsCardPageTitle,
         state.synced,
       ),
       Padding(
@@ -116,9 +134,7 @@ class FeedProductsCardPage extends StatelessWidget {
           ));
     }
     body.add(_renderStoreGeos(context, cardState));
-    body.addAll(params.products
-        .where((p) => p.geo == feedState.storeGeo)
-        .map<Widget>((FeedProductsItemParams product) {
+    body.addAll(params.products.where((p) => p.geo == feedState.storeGeo).map<Widget>((FeedProductsItemParams product) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -138,19 +154,15 @@ class FeedProductsCardPage extends StatelessWidget {
                   ),
                   MarkdownBody(
                       data: product.description,
-                      styleSheet: MarkdownStyleSheet(
-                          strong: TextStyle(),
-                          p: TextStyle(color: Colors.black, fontSize: 14))),
+                      styleSheet:
+                          MarkdownStyleSheet(strong: TextStyle(), p: TextStyle(color: Colors.black, fontSize: 14))),
                 ],
               ),
             ),
           ),
           ButtonTheme(
-            padding: EdgeInsets.symmetric(
-                vertical: 16.0,
-                horizontal: 16.0), //adds padding inside the button
-            materialTapTargetSize: MaterialTapTargetSize
-                .shrinkWrap, //limits the touch area to the button area
+            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0), //adds padding inside the button
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
             minWidth: 0, //wraps child's width
             height: 0,
             child: FlatButton(
@@ -161,7 +173,7 @@ class FeedProductsCardPage extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                     textAlign: TextAlign.center,
                   ),
-                  Text('View', style: TextStyle(color: Colors.blue)),
+                  Text(FeedProductsCardPage.feedProductsCardPageViewButton, style: TextStyle(color: Colors.blue)),
                 ],
               ),
               onPressed: () async {
@@ -198,14 +210,11 @@ class FeedProductsCardPage extends StatelessWidget {
           bool selected = sg == feedState.storeGeo;
           return FlatButton(
             child: Text(_storeGeoNames[sg],
-                style: TextStyle(
-                    color:
-                        sg == feedState.storeGeo ? Colors.black : Colors.blue)),
+                style: TextStyle(color: sg == feedState.storeGeo ? Colors.black : Colors.blue)),
             onPressed: selected
                 ? null
                 : () async {
-                    BlocProvider.of<FeedBloc>(context)
-                        .add(FeedBlocEventSetStoreGeo(sg));
+                    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetStoreGeo(sg));
                   },
           );
         }).toList(),
@@ -224,26 +233,19 @@ class FeedProductsCardPage extends StatelessWidget {
 
   Widget _renderButton(BuildContext context, FeedProductsButtonParams button) {
     return FlatButton(
-      child: Text(button.title.toUpperCase(),
-          style: TextStyle(color: Colors.blue, fontSize: 12)),
+      child: Text(button.title.toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
-        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(
-            button.params,
-            feed: state.feedID,
-            feedEntry: state.feedEntryID));
+        BlocProvider.of<TowelieBloc>(context)
+            .add(TowelieBlocEventButtonPressed(button.params, feed: state.feedID, feedEntry: state.feedEntryID));
       },
     );
   }
 
-  Widget _renderSelectedButton(
-      BuildContext context, FeedProductsButtonParams button) {
+  Widget _renderSelectedButton(BuildContext context, FeedProductsButtonParams button) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
       child: Text('➡️ ${button.title.toUpperCase()}',
-          style: TextStyle(
-              color: Color(0xff565656),
-              fontSize: 12,
-              fontWeight: FontWeight.bold)),
+          style: TextStyle(color: Color(0xff565656), fontSize: 12, fontWeight: FontWeight.bold)),
     );
   }
 }

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-09T19:04:26.030557",
+  "@@last_modified": "2021-02-10T10:49:09.040562",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -19,6 +19,12 @@
   "loading": "Loading...",
   "@loading": {
     "description": "Loading message usually displayed on the fullscreen overlay",
+    "type": "text",
+    "placeholders": {}
+  },
+  "saving": "Saving...",
+  "@saving": {
+    "description": "Saving message usually displayed on the fullscreen overlay",
     "type": "text",
     "placeholders": {}
   },
@@ -42,6 +48,12 @@
   },
   "ok": "OK",
   "@ok": {
+    "description": "Used in confirmation dialogs",
+    "type": "text",
+    "placeholders": {}
+  },
+  "or": "OR",
+  "@or": {
     "description": "Used in confirmation dialogs",
     "type": "text",
     "placeholders": {}
@@ -79,6 +91,12 @@
   "unsavedChangeDialogBody": "Changes will not be saved. Continue?",
   "@unsavedChangeDialogBody": {
     "description": "Body for the \"unsaved changes\" dialog when pressing back",
+    "type": "text",
+    "placeholders": {}
+  },
+  "confirmUnRevertableChange": "This can't be reverted. Continue?",
+  "@confirmUnRevertableChange": {
+    "description": "Body for the delete dialog confirmation",
     "type": "text",
     "placeholders": {}
   },
@@ -408,6 +426,246 @@
       "title": {}
     }
   },
+  "feedNutrientMixCardObservations": "Observations",
+  "@feedNutrientMixCardObservations": {
+    "description": "Observation field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixCardTitle": "Nutrient mix",
+  "@feedNutrientMixCardTitle": {
+    "description": "Nutrient mix card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixCardWaterQuantity": "Water quantity",
+  "@feedNutrientMixCardWaterQuantity": {
+    "description": "Volume field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixCardFrom": "From: {basedOn}",
+  "@feedNutrientMixCardFrom": {
+    "description": "\"Based on\" field label",
+    "type": "text",
+    "placeholders": {
+      "basedOn": {}
+    }
+  },
+  "feedNutrientMixCardPhase": "Phase: {phase}",
+  "@feedNutrientMixCardPhase": {
+    "description": "\"Phase\" field label",
+    "type": "text",
+    "placeholders": {
+      "phase": {}
+    }
+  },
+  "feedNutrientMixFormPageSelectPlant": "Which plant(s) will receive this mix?",
+  "@feedNutrientMixFormPageSelectPlant": {
+    "description": "Plant picker title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageNutrientInYourMixPart1": "Nutrients in your ",
+  "@feedNutrientMixFormPageNutrientInYourMixPart1": {
+    "description": "First part of the \"Nutrient in you mix\" sentence, trailing space is important",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageNutrientInYourMixPart2": "mix",
+  "@feedNutrientMixFormPageNutrientInYourMixPart2": {
+    "description": "Second part of the \"Nutrient in you mix\" sentence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageMetricsObservations": "Metrics & Observations",
+  "@feedNutrientMixFormPageMetricsObservations": {
+    "description": "Label for the metrics & observations field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageSaveMix": "Save this nutrient mix",
+  "@feedNutrientMixFormPageSaveMix": {
+    "description": "Label for the mix name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageSaveMixInstructions": "You can give this nutrient mix a name, for future reuse. (optional)",
+  "@feedNutrientMixFormPageSaveMixInstructions": {
+    "description": "Instructions for the mix name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageSaveMixSectionTitle": "Save for future re-use?",
+  "@feedNutrientMixFormPageSaveMixSectionTitle": {
+    "description": "Label for the mix name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageNameHint": "Ex: Veg-1",
+  "@feedNutrientMixFormPageNameHint": {
+    "description": "Hint text for the mix name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageNameLabel": "Mix name",
+  "@feedNutrientMixFormPageNameLabel": {
+    "description": "Label for the mix name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageVolume": "Water quantity",
+  "@feedNutrientMixFormPageVolume": {
+    "description": "Volume field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageNoToolsYet": "No nutrients in your toolbox yet.\nPress the + button up here.",
+  "@feedNutrientMixFormPageNoToolsYet": {
+    "description": "Text displayed when no nutrient in the toolbox yet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageEndMixMetricsSectionTitle": "End mix metrics",
+  "@feedNutrientMixFormPageEndMixMetricsSectionTitle": {
+    "description": "End mix metrics section title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageSolid": "Solid",
+  "@feedNutrientMixFormPageSolid": {
+    "description": "Nutrient type toggle button \"Solid\" or \"Liquid\"",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageLiquid": "Liquid",
+  "@feedNutrientMixFormPageLiquid": {
+    "description": "Nutrient type toggle button \"Solid\" or \"Liquid\"",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageReuseValuesSectionTitle": "Reuse previous mix values?",
+  "@feedNutrientMixFormPageReuseValuesSectionTitle": {
+    "description": "Reuse previous values section title, followed by a list of saved mixes",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageObservations": "Observations",
+  "@feedNutrientMixFormPageObservations": {
+    "description": "Observations field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageMixPhaseSectionTitle": "Mix phase",
+  "@feedNutrientMixFormPageMixPhaseSectionTitle": {
+    "description": "Mix phase section title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageMixPhaseInstruction": "Set the right phase for this nutrient mix for better categorization.",
+  "@feedNutrientMixFormPageMixPhaseInstruction": {
+    "description": "Mix phase instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageUpdateExistingDialogTitle": "Update {name}?",
+  "@feedNutrientMixFormPageUpdateExistingDialogTitle": {
+    "description": "Title for the dialog displayed when updating an existing mix",
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "feedNutrientMixFormPageUpdateExistingDialogBody": "A nutrient mix with that name already exists, overwrite?",
+  "@feedNutrientMixFormPageUpdateExistingDialogBody": {
+    "description": "Body for the dialog displayed when updating an existing mix",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPageUpdateExistingDialogNo": "NO, CHANGE NAME",
+  "@feedNutrientMixFormPageUpdateExistingDialogNo": {
+    "description": "\"No\" button for the dialog displayed when updating an existing mix",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMeasureFormPagePreviousMeasure": "Previous measures",
+  "@feedMeasureFormPagePreviousMeasure": {
+    "description": "Title for the previous measure selection",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMeasureFormPageUnselectMeasureDialogTitle": "Unselect this measure?",
+  "@feedMeasureFormPageUnselectMeasureDialogTitle": {
+    "description": "Title for the cancel previous measure dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMeasureFormPageTodayMeasure": "Today's measure",
+  "@feedMeasureFormPageTodayMeasure": {
+    "description": "Title for the today measure selection",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMeasureFormPageDeletePicDialogTitle": "Delete this pic?",
+  "@feedMeasureFormPageDeletePicDialogTitle": {
+    "description": "Title for the delete measure dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMeasureFormPageObservations": "Observations",
+  "@feedMeasureFormPageObservations": {
+    "description": "Observation field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedProductsCardPageTitle": "Towelie's selection",
+  "@feedProductsCardPageTitle": {
+    "description": "Title for the product cards, they display a list of products.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedProductsCardPageViewButton": "View",
+  "@feedProductsCardPageViewButton": {
+    "description": "Opens the product web page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMediaFormPageAttachedMedia": "Attached media",
+  "@feedMediaFormPageAttachedMedia": {
+    "description": "Title for the image upload section",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMediaFormPageDeletePicDialogTitle": "Delete this pic?",
+  "@feedMediaFormPageDeletePicDialogTitle": {
+    "description": "Title for the delete dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMediaFormPageObservations": "Observations",
+  "@feedMediaFormPageObservations": {
+    "description": "Observation field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMediaFormPageHelpRequest": "Help request?",
+  "@feedMediaFormPageHelpRequest": {
+    "description": "Help request checkbox label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMediaFormPageDraftRecoveryDialogTitle": "Draft recovery",
+  "@feedMediaFormPageDraftRecoveryDialogTitle": {
+    "description": "Help request checkbox label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMediaFormPageDraftRecoveryDialogBody": "Resume previous grow log?",
+  "@feedMediaFormPageDraftRecoveryDialogBody": {
+    "description": "Help request checkbox label",
+    "type": "text",
+    "placeholders": {}
+  },
   "instructionsBlowerTemperatureModeDescription": "This is the **Temperature based blower control**, in this mode the blower is **in sync with the box temperature sensor**.",
   "@instructionsBlowerTemperatureModeDescription": {
     "description": "Instructions for blower temperature mode",
@@ -431,6 +689,14 @@
     "description": "Comments page auto-loading message at end of scroll",
     "type": "text",
     "placeholders": {}
+  },
+  "commentsFormPageCommentLikeCount": "{count,plural, =1{{count} like}other{{count} likes}}",
+  "@commentsFormPageCommentLikeCount": {
+    "description": "Comments page reply button for comments",
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
   },
   "commentsFormPageReplyButton": "Reply",
   "@commentsFormPageReplyButton": {
