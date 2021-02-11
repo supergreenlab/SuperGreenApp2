@@ -22,6 +22,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/new_device/new_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -30,6 +31,24 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class NewDevicePage extends StatelessWidget {
+  static String get newDevicePageTitle {
+    return Intl.message(
+      'Add controller',
+      name: 'existingDevicePageTitle',
+      desc: 'Existing device page title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get newDevicePageEmojiWifiSectionTitle {
+    return Intl.message(
+      'Connecting to controller\'s wifi',
+      name: 'newDevicePageEmojiWifiSectionTitle',
+      desc: 'New device page emoji wifi section title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get instructionsNewDeviceWifiFailed {
     return Intl.message(
       '''**Couldn\'t connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:''',
@@ -41,9 +60,27 @@ class NewDevicePage extends StatelessWidget {
 
   static String get instructionsNewDeviceWifiFailed2 {
     return Intl.message(
-      '''Then press the **DONE** button below''',
+      'SSID: 🤖🍁\nPassword: multipass',
       name: 'instructionsNewDeviceWifiFailed2',
       desc: 'Instructions new device wifi failed2',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get instructionsNewDeviceWifiFailed3 {
+    return Intl.message(
+      '''Then press the **DONE** button below''',
+      name: 'instructionsNewDeviceWifiFailed3',
+      desc: 'Instructions new device wifi failed3',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get newDeviceAutoConnect {
+    return Intl.message(
+      'Trying to connect\nautomatically',
+      name: 'newDeviceAutoConnect',
+      desc: 'Waiting wifi connection loading',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -55,8 +92,7 @@ class NewDevicePage extends StatelessWidget {
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
           if (state.popOnComplete) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop());
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
           } else {
             _startSetup(context);
           }
@@ -75,7 +111,7 @@ class NewDevicePage extends StatelessWidget {
             }
             return Scaffold(
               appBar: SGLAppBar(
-                'Add controller',
+                NewDevicePage.newDevicePageTitle,
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
@@ -89,7 +125,7 @@ class NewDevicePage extends StatelessWidget {
                     color: Color(0xff0b6ab3),
                   ),
                   SectionTitle(
-                    title: 'Connecting to controller\'s wifi',
+                    title: NewDevicePage.newDevicePageEmojiWifiSectionTitle,
                     icon: 'assets/box_setup/icon_search.svg',
                     backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
@@ -113,8 +149,7 @@ class NewDevicePage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: MarkdownBody(
               data: NewDevicePage.instructionsNewDeviceWifiFailed,
-              styleSheet: MarkdownStyleSheet(
-                  p: TextStyle(color: Colors.black, fontSize: 16)),
+              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
             ),
           ),
           Expanded(
@@ -125,7 +160,7 @@ class NewDevicePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'SSID: 🤖🍁\nPassword: multipass',
+                    NewDevicePage.instructionsNewDeviceWifiFailed2,
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
@@ -133,9 +168,8 @@ class NewDevicePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
-                    data: NewDevicePage.instructionsNewDeviceWifiFailed2,
-                    styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(color: Colors.black, fontSize: 16)),
+                    data: NewDevicePage.instructionsNewDeviceWifiFailed3,
+                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
                 ),
               ],
@@ -146,11 +180,10 @@ class NewDevicePage extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerRight,
               child: GreenButton(
-                title: 'DONE',
+                title: CommonL10N.doneButton,
                 onPressed: () {
                   if (state.popOnComplete) {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigatorActionPop());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
                   } else {
                     _startSetup(context);
                   }
@@ -164,16 +197,14 @@ class NewDevicePage extends StatelessWidget {
   }
 
   Widget _renderLoading() {
-    return Expanded(
-        child: FullscreenLoading(title: 'Trying to connect\nautomatically'));
+    return Expanded(child: FullscreenLoading(title: NewDevicePage.newDeviceAutoConnect));
   }
 
   void _startSetup(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(
-        MainNavigateToDeviceSetupEvent('192.168.4.1', futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToDeviceSetupEvent('192.168.4.1', futureFn: (future) async {
       Device device = await future;
-      BlocProvider.of<MainNavigatorBloc>(context)
-          .add(MainNavigatorActionPop(param: device));
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
     }));
   }
 }

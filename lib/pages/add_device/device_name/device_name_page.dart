@@ -18,7 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -29,6 +32,42 @@ import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
 class DeviceNamePage extends StatefulWidget {
+  static String get deviceNamePageTitle {
+    return Intl.message(
+      'Add controller',
+      name: 'deviceNamePageTitle',
+      desc: 'Device name page title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get deviceNamePageLoading {
+    return Intl.message(
+      'Setting controller name..',
+      name: 'deviceNamePageLoading',
+      desc: 'Loading text when setting controller name',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get deviceNamePageSetNameSectionTitle {
+    return Intl.message(
+      'Set controller\'s name',
+      name: 'deviceNamePageSetNameSectionTitle',
+      desc: 'Section title for the controller name input',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get deviceNamePageSetNameHint {
+    return Intl.message(
+      'ex: controller',
+      name: 'deviceNamePageSetNameHint',
+      desc: 'Hint for the controller name input',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   State<StatefulWidget> createState() => DeviceNamePageState();
 }
@@ -36,8 +75,7 @@ class DeviceNamePage extends StatefulWidget {
 class DeviceNamePageState extends State<DeviceNamePage> {
   final _nameController = TextEditingController();
 
-  KeyboardVisibilityNotification _keyboardVisibility =
-      KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
   int _listener;
   bool _keyboardVisible = false;
 
@@ -68,16 +106,13 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         if (state is DeviceNameBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
           FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-          BlocProvider.of<MainNavigatorBloc>(context).add(
-              MainNavigateToDeviceTestEvent(state.device,
-                  futureFn: ff.futureFn));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToDeviceTestEvent(state.device, futureFn: ff.futureFn));
           bool done = await ff.future;
           if (done == true) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(mustPop: true, param: state.device));
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
           } else {
-            BlocProvider.of<DeviceNameBloc>(context)
-                .add(DeviceNameBlocEventReset());
+            BlocProvider.of<DeviceNameBloc>(context).add(DeviceNameBlocEventReset());
           }
         }
       },
@@ -89,7 +124,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
               body = _renderLoading();
             } else if (state is DeviceNameBlocStateDone) {
               body = Fullscreen(
-                title: 'Done',
+                title: CommonL10N.done,
                 child: Icon(
                   Icons.check,
                   color: Color(0xff3bb30b),
@@ -103,21 +138,20 @@ class DeviceNamePageState extends State<DeviceNamePage> {
               onWillPop: () async => false,
               child: Scaffold(
                   appBar: SGLAppBar(
-                    'Add controller',
+                    DeviceNamePage.deviceNamePageTitle,
                     hideBackButton: true,
                     backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
                     iconColor: Colors.white,
                   ),
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200),
-                  child: body)),
+                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
   }
 
   Widget _renderLoading() {
-    return FullscreenLoading(title: 'Setting controller name..');
+    return FullscreenLoading(title: DeviceNamePage.deviceNamePageLoading);
   }
 
   Widget _renderForm() {
@@ -129,7 +163,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: 'Set controller\'s name',
+          title: DeviceNamePage.deviceNamePageSetNameSectionTitle,
           icon: 'assets/box_setup/icon_controller.svg',
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
@@ -140,10 +174,9 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
-                  hintText: 'ex: Controller1',
+                  hintText: DeviceNamePage.deviceNamePageSetNameHint,
                   controller: _nameController,
                   onChanged: (_) {
                     setState(() {});

@@ -31,9 +31,27 @@ import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
 class ExistingDevicePage extends StatefulWidget {
+  static String get existingDevicePageTitle {
+    return Intl.message(
+      'Add controller',
+      name: 'existingDevicePageTitle',
+      desc: 'Existing device page title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get existingDeviceSearching {
+    return Intl.message(
+      'Searching controller..',
+      name: 'existingDeviceSearching',
+      desc: 'Searching controller loading text',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get instructionsExistingDeviceTitle {
     return Intl.message(
-      '''Enter controller name or IP''',
+      'Enter controller name or IP',
       name: 'instructionsExistingDeviceTitle',
       desc: 'Instructions existing device title',
       locale: SGLLocalizations.current.localeName,
@@ -46,6 +64,34 @@ class ExistingDevicePage extends StatefulWidget {
 Then we\'ll search for it **by name** or **by IP**, please **fill** the following text field.''',
       name: 'instructionsExistingDevice',
       desc: 'Instructions existing device',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get existingDeviceNameHint {
+    return Intl.message(
+      'Ex: supergreencontroller or IP address',
+      name: 'existingDeviceNameHint',
+      desc: 'Hint text for the device name field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String existingDeviceNotFound(String controller) {
+    return Intl.message(
+      'Controller "$controller" not found!',
+      args: [controller],
+      name: 'existingDeviceNameHint',
+      desc: 'Hint text for the device name field',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get existingDeviceSearchButton {
+    return Intl.message(
+      'SEARCH CONTROLLER',
+      name: 'existingDeviceSearchButton',
+      desc: 'Label for the search controller button',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -63,12 +109,10 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
       cubit: BlocProvider.of<ExistingDeviceBloc>(context),
       listener: (BuildContext context, ExistingDeviceBlocState state) {
         if (state is ExistingDeviceBlocStateFound) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(
-              MainNavigateToDeviceSetupEvent(state.ip,
-                  futureFn: (future) async {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToDeviceSetupEvent(state.ip, futureFn: (future) async {
             Device device = await future;
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(param: device));
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
           }));
         }
       },
@@ -79,7 +123,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
 
             if (state is ExistingDeviceBlocStateResolving) {
               body = FullscreenLoading(
-                title: 'Searching controller..',
+                title: ExistingDevicePage.existingDeviceSearching,
               );
             } else {
               final form = <Widget>[
@@ -95,14 +139,13 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: MarkdownBody(
                     data: ExistingDevicePage.instructionsExistingDevice,
-                    styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(color: Colors.black, fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SGLTextField(
-                      hintText: 'Ex: supergreencontroller or IP address',
+                      hintText: ExistingDevicePage.existingDeviceNameHint,
                       controller: _nameController,
                       onChanged: (_) {
                         setState(() {});
@@ -112,10 +155,8 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
               if (state is ExistingDeviceBlocStateNotFound) {
                 form.add(Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      'Controller "${_nameController.value.text}" not found!',
-                      style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.w500)),
+                  child: Text(ExistingDevicePage.existingDeviceNotFound(_nameController.value.text),
+                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500)),
                 ));
               }
               body = Column(
@@ -131,10 +172,8 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: GreenButton(
-                        title: 'SEARCH CONTROLLER',
-                        onPressed: _nameController.value.text != ''
-                            ? () => _handleInput(context)
-                            : null,
+                        title: ExistingDevicePage.existingDeviceSearchButton,
+                        onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
                       ),
                     ),
                   ),
@@ -143,22 +182,20 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
             }
             return Scaffold(
               appBar: SGLAppBar(
-                'Add controller',
+                ExistingDevicePage.existingDevicePageTitle,
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 iconColor: Colors.white,
                 hideBackButton: state is ExistingDeviceBlocStateResolving,
               ),
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body),
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
             );
           }),
     );
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<ExistingDeviceBloc>(context)
-        .add(ExistingDeviceBlocEventStartSearch(_nameController.value.text));
+    BlocProvider.of<ExistingDeviceBloc>(context).add(ExistingDeviceBlocEventStartSearch(_nameController.value.text));
   }
 
   @override

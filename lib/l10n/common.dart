@@ -56,6 +56,15 @@ class CommonL10N {
     );
   }
 
+  static String get doneButton {
+    return Intl.message(
+      'DONE',
+      name: 'doneButton',
+      desc: '"Done" label for confirmation buttons',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get no {
     return Intl.message(
       'NO',
