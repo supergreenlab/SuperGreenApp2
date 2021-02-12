@@ -39,15 +39,69 @@ import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 Map<NutrientMixPhase, String> nutrientMixPhasesUI = {
-  NutrientMixPhase.EARLY_VEG: 'Early veg',
-  NutrientMixPhase.MID_VEG: 'Mid veg',
-  NutrientMixPhase.LATE_VEG: 'Late veg',
-  NutrientMixPhase.EARLY_BLOOM: 'Early bloom',
-  NutrientMixPhase.MID_BLOOM: 'Mid bloom',
-  NutrientMixPhase.LATE_BLOOM: 'Late bloom',
+  NutrientMixPhase.EARLY_VEG: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseEarlyVeg,
+  NutrientMixPhase.MID_VEG: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseMidVeg,
+  NutrientMixPhase.LATE_VEG: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseLateVeg,
+  NutrientMixPhase.EARLY_BLOOM: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseEarlyBloom,
+  NutrientMixPhase.MID_BLOOM: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseMidBloom,
+  NutrientMixPhase.LATE_BLOOM: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseLateBloom,
 };
 
 class FeedNutrientMixFormPage extends StatefulWidget {
+  static String get feedNutrientMixFormPagePhaseEarlyVeg {
+    return Intl.message(
+      'Early veg',
+      name: 'feedNutrientMixFormPagePhaseEarlyVeg',
+      desc: 'Nutrient mix phase name "Early veg"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPagePhaseMidVeg {
+    return Intl.message(
+      'Mid veg',
+      name: 'feedNutrientMixFormPagePhaseMidVeg',
+      desc: 'Nutrient mix phase name "Mid veg"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPagePhaseLateVeg {
+    return Intl.message(
+      'Late veg',
+      name: 'feedNutrientMixFormPagePhaseLateVeg',
+      desc: 'Nutrient mix phase name "Late veg"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPagePhaseEarlyBloom {
+    return Intl.message(
+      'Early bloom',
+      name: 'feedNutrientMixFormPagePhaseEarlyBloom',
+      desc: 'Nutrient mix phase name "Early bloom"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPagePhaseMidBloom {
+    return Intl.message(
+      'Mid bloom',
+      name: 'feedNutrientMixFormPagePhaseMidBloom',
+      desc: 'Nutrient mix phase name "Mid bloom"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedNutrientMixFormPagePhaseLateBloom {
+    return Intl.message(
+      'Late bloom',
+      name: 'feedNutrientMixFormPagePhaseLateBloom',
+      desc: 'Nutrient mix phase name "Late bloom"',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get feedNutrientMixFormPageSelectPlant {
     return Intl.message(
       'Which plant(s) will receive this mix?',

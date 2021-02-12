@@ -67,7 +67,7 @@ class FeedWaterCardPage extends StatefulWidget {
     return Intl.message(
       'With nutes: $yesNo',
       args: [yesNo],
-      name: 'feedWateringCardPageWithNute',
+      name: 'feedWateringCardPageWithNutes',
       desc: 'Feed watering card with nutes',
       locale: SGLLocalizations.current.localeName,
     );

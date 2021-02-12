@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-10T18:15:08.733733",
+  "@@last_modified": "2021-02-12T12:58:14.286671",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -37,6 +37,12 @@
   "done": "Done!",
   "@done": {
     "description": "Success message usually displayed on the fullscreen overlay",
+    "type": "text",
+    "placeholders": {}
+  },
+  "doneButton": "DONE",
+  "@doneButton": {
+    "description": "\"Done\" label for confirmation buttons",
     "type": "text",
     "placeholders": {}
   },
@@ -364,6 +370,20 @@
     "type": "text",
     "placeholders": {}
   },
+  "feedScheduleCardPageTitle": "Schedule change",
+  "@feedScheduleCardPageTitle": {
+    "description": "Feed schedule card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedScheduleCardPagePhase": "Flipped to\n{phase}",
+  "@feedScheduleCardPagePhase": {
+    "description": "Feed schedule card phase",
+    "type": "text",
+    "placeholders": {
+      "phase": {}
+    }
+  },
   "instructionsVegScheduleHelper": "**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day.",
   "@instructionsVegScheduleHelper": {
     "description": "Veg schedule helper",
@@ -379,6 +399,148 @@
   "instructionsAutoScheduleHelper": "Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another.",
   "@instructionsAutoScheduleHelper": {
     "description": "Auto schedule helper",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventCardPageTitle": "Life event",
+  "@feedLifeEventCardPageTitle": {
+    "description": "Life event card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventCardPageGermination": "Germination!",
+  "@feedLifeEventCardPageGermination": {
+    "description": "Germination life event",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventCardPageVeggingStarted": "Vegging Started!",
+  "@feedLifeEventCardPageVeggingStarted": {
+    "description": "Vegging started life event",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventCardPageBloomingStarted": "Blooming Started!",
+  "@feedLifeEventCardPageBloomingStarted": {
+    "description": "Blooming started life event",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventCardPageDryingStarted": "Drying Started!",
+  "@feedLifeEventCardPageDryingStarted": {
+    "description": "Drying started life event",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventCardPageCuringStarted": "Curing Started!",
+  "@feedLifeEventCardPageCuringStarted": {
+    "description": "Curing started life event",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPagePhaseLabelGermination": "Germination date",
+  "@feedLifeEventFormPagePhaseLabelGermination": {
+    "description": "Life event germination label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPagePhaseLabelVegging": "Vegging since",
+  "@feedLifeEventFormPagePhaseLabelVegging": {
+    "description": "Life event vegging label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPagePhaseLabelBlooming": "Blooming since",
+  "@feedLifeEventFormPagePhaseLabelBlooming": {
+    "description": "Life event blooming label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPagePhaseLabelDrying": "Drying since",
+  "@feedLifeEventFormPagePhaseLabelDrying": {
+    "description": "Life event drying label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPagePhaseLabelCuring": "Curing since",
+  "@feedLifeEventFormPagePhaseLabelCuring": {
+    "description": "Life event curing label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPagePhaseLabel": "Phase",
+  "@feedLifeEventFormPagePhaseLabel": {
+    "description": "Label for phase",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPageChangeButton": "change",
+  "@feedLifeEventFormPageChangeButton": {
+    "description": "\"Change\" button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPageNotSet": "Not set",
+  "@feedLifeEventFormPageNotSet": {
+    "description": "Displayed when date is not set yet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLifeEventFormPageSetButton": "set",
+  "@feedLifeEventFormPageSetButton": {
+    "description": "\"Set\" button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedWateringCardPageTitle": "Watering",
+  "@feedWateringCardPageTitle": {
+    "description": "Feed watering card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedWateringCardPageVolume": "Water quantity",
+  "@feedWateringCardPageVolume": {
+    "description": "Feed watering card volume",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedWateringCardPageWasDry": "Was dry: {yesNo}",
+  "@feedWateringCardPageWasDry": {
+    "description": "Feed watering card was dry",
+    "type": "text",
+    "placeholders": {
+      "yesNo": {}
+    }
+  },
+  "feedWateringCardPageWithNutes": "With nutes: {yesNo}",
+  "@feedWateringCardPageWithNutes": {
+    "description": "Feed watering card with nutes",
+    "type": "text",
+    "placeholders": {
+      "yesNo": {}
+    }
+  },
+  "feedWateringCardPageObservations": "Observations",
+  "@feedWateringCardPageObservations": {
+    "description": "Feed watering observations label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedDefoliationCardPageTitle": "Defoliation",
+  "@feedDefoliationCardPageTitle": {
+    "description": "Defoliation card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedTransplantCardPageTitle": "Transplant",
+  "@feedTransplantCardPageTitle": {
+    "description": "Transplant card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedBendingCardPageTitle": "Bending",
+  "@feedBendingCardPageTitle": {
+    "description": "Bending card title",
     "type": "text",
     "placeholders": {}
   },
@@ -432,6 +594,12 @@
       "title": {}
     }
   },
+  "feedToppingCardPageTitle": "Topping",
+  "@feedToppingCardPageTitle": {
+    "description": "Topping card title",
+    "type": "text",
+    "placeholders": {}
+  },
   "feedNutrientMixCardObservations": "Observations",
   "@feedNutrientMixCardObservations": {
     "description": "Observation field label",
@@ -465,6 +633,42 @@
     "placeholders": {
       "phase": {}
     }
+  },
+  "feedNutrientMixFormPagePhaseEarlyVeg": "Early veg",
+  "@feedNutrientMixFormPagePhaseEarlyVeg": {
+    "description": "Nutrient mix phase name \"Early veg\"",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPagePhaseMidVeg": "Mid veg",
+  "@feedNutrientMixFormPagePhaseMidVeg": {
+    "description": "Nutrient mix phase name \"Mid veg\"",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPagePhaseLateVeg": "Late veg",
+  "@feedNutrientMixFormPagePhaseLateVeg": {
+    "description": "Nutrient mix phase name \"Late veg\"",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPagePhaseEarlyBloom": "Early bloom",
+  "@feedNutrientMixFormPagePhaseEarlyBloom": {
+    "description": "Nutrient mix phase name \"Early bloom\"",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPagePhaseMidBloom": "Mid bloom",
+  "@feedNutrientMixFormPagePhaseMidBloom": {
+    "description": "Nutrient mix phase name \"Mid bloom\"",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedNutrientMixFormPagePhaseLateBloom": "Late bloom",
+  "@feedNutrientMixFormPagePhaseLateBloom": {
+    "description": "Nutrient mix phase name \"Late bloom\"",
+    "type": "text",
+    "placeholders": {}
   },
   "feedNutrientMixFormPageSelectPlant": "Which plant(s) will receive this mix?",
   "@feedNutrientMixFormPageSelectPlant": {
@@ -594,6 +798,53 @@
     "type": "text",
     "placeholders": {}
   },
+  "feedMeasureCardPageTitle": "Measure",
+  "@feedMeasureCardPageTitle": {
+    "description": "Feed measure card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMeasureCardPageDays": "{days} days",
+  "@feedMeasureCardPageDays": {
+    "description": "Feed measure card duration in days",
+    "type": "text",
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "feedMeasureCardPageSeconds": "{seconds} s",
+  "@feedMeasureCardPageSeconds": {
+    "description": "Feed measure card duration in seconds",
+    "type": "text",
+    "placeholders": {
+      "seconds": {}
+    }
+  },
+  "feedMeasureCardPageMinutes": "{seconds} min",
+  "@feedMeasureCardPageMinutes": {
+    "description": "Feed measure card duration in minutes",
+    "type": "text",
+    "placeholders": {
+      "seconds": {}
+    }
+  },
+  "feedMeasureCardPageHours": "{hours} hours",
+  "@feedMeasureCardPageHours": {
+    "description": "Feed measure card duration in hours",
+    "type": "text",
+    "placeholders": {
+      "hours": {}
+    }
+  },
+  "feedMeasureCardPageDaysAndHours": "{days} days and {hours} hours",
+  "@feedMeasureCardPageDaysAndHours": {
+    "description": "Feed measure card duration in days and hours",
+    "type": "text",
+    "placeholders": {
+      "days": {},
+      "hours": {}
+    }
+  },
   "feedMeasureFormPagePreviousMeasure": "Previous measures",
   "@feedMeasureFormPagePreviousMeasure": {
     "description": "Title for the previous measure selection",
@@ -636,6 +887,18 @@
     "type": "text",
     "placeholders": {}
   },
+  "feedMediaCardPageTitle": "Grow log",
+  "@feedMediaCardPageTitle": {
+    "description": "Feed media card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedMediaCardPageBoxTitle": "Build log",
+  "@feedMediaCardPageBoxTitle": {
+    "description": "Feed media card title, different name when used in a box feed",
+    "type": "text",
+    "placeholders": {}
+  },
   "feedMediaFormPageAttachedMedia": "Attached media",
   "@feedMediaFormPageAttachedMedia": {
     "description": "Title for the image upload section",
@@ -669,6 +932,78 @@
   "feedMediaFormPageDraftRecoveryDialogBody": "Resume previous grow log?",
   "@feedMediaFormPageDraftRecoveryDialogBody": {
     "description": "Help request checkbox label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageTitle": "Ventilation change",
+  "@feedVentilationCardPageTitle": {
+    "description": "Feed ventilation card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageUpgrade": "Unknown blower reference source, you might need to upgrade the app.",
+  "@feedVentilationCardPageUpgrade": {
+    "description": "Feed ventilation card upgrade",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageLowTempSettings": "Low temperature\nsettings",
+  "@feedVentilationCardPageLowTempSettings": {
+    "description": "Feed ventilation card low temperature settings",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageHighTempSettings": "High temperature\nsettings",
+  "@feedVentilationCardPageHighTempSettings": {
+    "description": "Feed ventilation card high temperature settings",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageTemperatureMode": "Temperature mode",
+  "@feedVentilationCardPageTemperatureMode": {
+    "description": "Feed ventilation card temperature mode",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageNightSettings": "Night settings",
+  "@feedVentilationCardPageNightSettings": {
+    "description": "Feed ventilation card night settings",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageDaySettings": "Day settings",
+  "@feedVentilationCardPageDaySettings": {
+    "description": "Feed ventilation card day settings",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageTimerMode": "Timer mode",
+  "@feedVentilationCardPageTimerMode": {
+    "description": "Feed ventilation card timer mode",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageBlowerPower": "Blower power",
+  "@feedVentilationCardPageBlowerPower": {
+    "description": "Feed ventilation card blower power",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageManualMode": "Manual mode",
+  "@feedVentilationCardPageManualMode": {
+    "description": "Feed ventilation card manual mode",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageDay": "Day",
+  "@feedVentilationCardPageDay": {
+    "description": "Label for the \"Day\" blower settings",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedVentilationCardPageNight": "Night",
+  "@feedVentilationCardPageNight": {
+    "description": "Label for the \"Night\" blower settings",
     "type": "text",
     "placeholders": {}
   },
@@ -791,6 +1126,24 @@
   "commentsFormPageSubmitComment": "Post",
   "@commentsFormPageSubmitComment": {
     "description": "Comments page input submit button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedUnknownCardPageTitle": "Unknown card",
+  "@feedUnknownCardPageTitle": {
+    "description": "Feed unknown card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedUnknownCardPageUpgradeApp": "Upgrade your app",
+  "@feedUnknownCardPageUpgradeApp": {
+    "description": "Feed unknown card upgrade app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedLightCardPageTitle": "Stretch control",
+  "@feedLightCardPageTitle": {
+    "description": "Feed Light dimming control card title",
     "type": "text",
     "placeholders": {}
   },
@@ -1012,6 +1365,18 @@
     "type": "text",
     "placeholders": {}
   },
+  "existingDevicePageTitle": "Add controller",
+  "@existingDevicePageTitle": {
+    "description": "Existing device page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "existingDeviceSearching": "Searching controller..",
+  "@existingDeviceSearching": {
+    "description": "Searching controller loading text",
+    "type": "text",
+    "placeholders": {}
+  },
   "instructionsExistingDeviceTitle": "Enter controller name or IP",
   "@instructionsExistingDeviceTitle": {
     "description": "Instructions existing device title",
@@ -1021,6 +1386,26 @@
   "instructionsExistingDevice": "Please make sure your **mobile phone** is **connected to your home wifi**.\nThen we'll search for it **by name** or **by IP**, please **fill** the following text field.",
   "@instructionsExistingDevice": {
     "description": "Instructions existing device",
+    "type": "text",
+    "placeholders": {}
+  },
+  "existingDeviceNameHint": "Ex: supergreencontroller or IP address",
+  "@existingDeviceNameHint": {
+    "description": "Hint text for the device name field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "existingDeviceNotFound": "Controller \"{controller}\" not found!",
+  "@existingDeviceNotFound": {
+    "description": "Hint text for the device name field",
+    "type": "text",
+    "placeholders": {
+      "controller": {}
+    }
+  },
+  "existingDeviceSearchButton": "SEARCH CONTROLLER",
+  "@existingDeviceSearchButton": {
+    "description": "Label for the search controller button",
     "type": "text",
     "placeholders": {}
   },
@@ -1154,15 +1539,63 @@
       "name": {}
     }
   },
+  "deviceNamePageTitle": "Add controller",
+  "@deviceNamePageTitle": {
+    "description": "Device name page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceNamePageLoading": "Setting controller name..",
+  "@deviceNamePageLoading": {
+    "description": "Loading text when setting controller name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceNamePageSetNameSectionTitle": "Set controller's name",
+  "@deviceNamePageSetNameSectionTitle": {
+    "description": "Section title for the controller name input",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceNamePageSetNameHint": "ex: controller",
+  "@deviceNamePageSetNameHint": {
+    "description": "Hint for the controller name input",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newDevicePageTitle": "Add controller",
+  "@newDevicePageTitle": {
+    "description": "New device page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newDevicePageEmojiWifiSectionTitle": "Connecting to controller's wifi",
+  "@newDevicePageEmojiWifiSectionTitle": {
+    "description": "New device page emoji wifi section title",
+    "type": "text",
+    "placeholders": {}
+  },
   "instructionsNewDeviceWifiFailed": "**Couldn't connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:",
   "@instructionsNewDeviceWifiFailed": {
     "description": "Instructions new device wifi failed",
     "type": "text",
     "placeholders": {}
   },
-  "instructionsNewDeviceWifiFailed2": "Then press the **DONE** button below",
+  "instructionsNewDeviceWifiFailed2": "SSID: 🤖🍁\nPassword: multipass",
   "@instructionsNewDeviceWifiFailed2": {
     "description": "Instructions new device wifi failed2",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionsNewDeviceWifiFailed3": "Then press the **DONE** button below",
+  "@instructionsNewDeviceWifiFailed3": {
+    "description": "Instructions new device wifi failed3",
+    "type": "text",
+    "placeholders": {}
+  },
+  "newDeviceAutoConnect": "Trying to connect\nautomatically",
+  "@newDeviceAutoConnect": {
+    "description": "Waiting wifi connection loading",
     "type": "text",
     "placeholders": {}
   },

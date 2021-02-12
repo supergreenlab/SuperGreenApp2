@@ -81,7 +81,7 @@ Then we\'ll search for it **by name** or **by IP**, please **fill** the followin
     return Intl.message(
       'Controller "$controller" not found!',
       args: [controller],
-      name: 'existingDeviceNameHint',
+      name: 'existingDeviceNotFound',
       desc: 'Hint text for the device name field',
       locale: SGLLocalizations.current.localeName,
     );

@@ -34,8 +34,8 @@ class NewDevicePage extends StatelessWidget {
   static String get newDevicePageTitle {
     return Intl.message(
       'Add controller',
-      name: 'existingDevicePageTitle',
-      desc: 'Existing device page title',
+      name: 'newDevicePageTitle',
+      desc: 'New device page title',
       locale: SGLLocalizations.current.localeName,
     );
   }

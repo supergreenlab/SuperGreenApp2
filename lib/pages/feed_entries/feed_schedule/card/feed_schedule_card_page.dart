@@ -44,6 +44,7 @@ class FeedScheduleCardPage extends StatelessWidget {
   static String feedScheduleCardPagePhase(String phase) {
     return Intl.message(
       'Flipped to\n$phase',
+      args: [phase],
       name: 'feedScheduleCardPagePhase',
       desc: 'Feed schedule card phase',
       locale: SGLLocalizations.current.localeName,

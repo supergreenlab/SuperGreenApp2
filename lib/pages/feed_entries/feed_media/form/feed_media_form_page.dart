@@ -213,14 +213,14 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
               String title = '🧐';
               Widget body;
               if (state is FeedMediaFormBlocStateLoadingDraft) {
-                body = Scaffold(body: FullscreenLoading(title: 'Loading..'));
+                body = Scaffold(body: FullscreenLoading(title: CommonL10N.loading));
               } else if (state is FeedMediaFormBlocStateLoading) {
                 body = Scaffold(
                     appBar: SGLAppBar(
                       title,
                       fontSize: 35,
                     ),
-                    body: FullscreenLoading(title: 'Saving..'));
+                    body: FullscreenLoading(title: CommonL10N.saving));
               } else if (state is FeedMediaFormBlocStateDone) {
                 body = Scaffold(
                     appBar: SGLAppBar(
@@ -228,7 +228,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                       fontSize: 35,
                     ),
                     body: Fullscreen(
-                      title: 'Done!',
+                      title: CommonL10N.done,
                       child: Icon(Icons.check, color: Colors.green),
                     ));
               } else {

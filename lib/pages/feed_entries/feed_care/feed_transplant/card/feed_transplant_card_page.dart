@@ -24,10 +24,10 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class FeedTransplantCardPage extends FeedCareCommonCardPage {
-  static String get feedToppingCardPageTitle {
+  static String get feedTransplantCardPageTitle {
     return Intl.message(
       'Transplant',
-      name: 'feedTranslplantCardPageTitle',
+      name: 'feedTransplantCardPageTitle',
       desc: 'Transplant card title',
       locale: SGLLocalizations.current.localeName,
     );
@@ -42,6 +42,6 @@ class FeedTransplantCardPage extends FeedCareCommonCardPage {
 
   @override
   String title() {
-    return FeedTransplantCardPage.feedToppingCardPageTitle;
+    return FeedTransplantCardPage.feedTransplantCardPageTitle;
   }
 }
