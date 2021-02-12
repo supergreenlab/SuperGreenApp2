@@ -24,9 +24,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
@@ -57,6 +59,33 @@ enum SpeedDialType {
 }
 
 class PlantFeedPage extends StatefulWidget {
+  static String get publicPlantPageTitle {
+    return Intl.message(
+      'Plant feed',
+      name: 'publicPlantPageSingleEntry',
+      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageSingleEntry {
+    return Intl.message(
+      'Viewing single log entry',
+      name: 'publicPlantPageSingleEntry',
+      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageSingleEntryButton {
+    return Intl.message(
+      'View complete diary',
+      name: 'publicPlantPageSingleEntryButton',
+      desc: 'Button that shows the complete diary when looking at a single feed entry',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _PlantFeedPageState createState() => _PlantFeedPageState();
 }
@@ -128,7 +157,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                   key: _scaffoldKey,
                   appBar: state is PlantFeedBlocStateNoPlant || state is PlantFeedBlocStatePlantRemoved
                       ? SGLAppBar(
-                          'Plant feed',
+                          PlantFeedPage.publicPlantPageTitle,
                           fontSize: 20,
                           backgroundColor: Color(0xff063047),
                           titleColor: Colors.white,

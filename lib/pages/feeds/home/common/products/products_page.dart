@@ -19,7 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/products/products_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_categories.dart';
@@ -27,6 +29,60 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductsPage extends StatefulWidget {
+  static String get productsPageLoadingPlantData {
+    return Intl.message(
+      'Loading plant data',
+      name: 'productsPageLoadingPlantData',
+      desc: 'Products page loading plant data',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get productsPageTitle {
+    return Intl.message(
+      'Toolbox',
+      name: 'productsPageTitle',
+      desc: 'Products page title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get productsPageToolboxEmptyOwnPlant {
+    return Intl.message(
+      'Toolbox is empty\nuse the “+” above to add your first item.',
+      name: 'productsPageToolboxEmptyOwnPlant',
+      desc: 'Products page empty toolbox message when looking at own plant',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get productsPageToolboxEmpty {
+    return Intl.message(
+      'Toolbox is empty',
+      name: 'productsPageToolboxEmpty',
+      desc: 'Products page empty toolbox message when looking at another plant',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get productsPageToolboxInstructions {
+    return Intl.message(
+      'List the items you used for this grow for future reference and/or kowledge sharing.',
+      name: 'productsPageToolboxInstructions',
+      desc: 'Products toolbox instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get productsPageToolboxBy {
+    return Intl.message(
+      'by ',
+      name: 'productsPageToolboxBy',
+      desc: 'Products toolbox "by " prefix for brand name',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final bool editable;
 
   const ProductsPage({Key key, this.editable = true}) : super(key: key);
@@ -61,14 +117,14 @@ class _ProductsPageState extends State<ProductsPage> {
 
   Widget _renderLoading(BuildContext context, ProductsBlocStateLoading state) {
     return FullscreenLoading(
-      title: "Loading plant data",
+      title: ProductsPage.productsPageLoadingPlantData,
     );
   }
 
   Widget _renderLoaded(BuildContext context, ProductsBlocStateLoaded state) {
     List<Widget> topBar = [
       Text(
-        'Toolbox',
+        ProductsPage.productsPageTitle,
         style: TextStyle(color: Colors.white, fontSize: 20),
       ),
     ];
@@ -84,15 +140,13 @@ class _ProductsPageState extends State<ProductsPage> {
             size: 40,
           ),
           onPressed: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToSelectNewProductEvent(products,
-                    futureFn: (future) async {
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToSelectNewProductEvent(products, futureFn: (future) async {
               List<Product> products = await future;
               if (products == null) {
                 return;
               }
-              BlocProvider.of<ProductsBloc>(context)
-                  .add(ProductsBlocEventUpdate(products));
+              BlocProvider.of<ProductsBloc>(context).add(ProductsBlocEventUpdate(products));
             }));
           },
         ),
@@ -109,9 +163,7 @@ class _ProductsPageState extends State<ProductsPage> {
           height: 1,
           color: Colors.white54,
         ),
-        state.products.length == 0
-            ? _renderEmptyList(context)
-            : _renderList(context, state),
+        state.products.length == 0 ? _renderEmptyList(context) : _renderList(context, state),
       ]),
     );
   }
@@ -124,14 +176,10 @@ class _ProductsPageState extends State<ProductsPage> {
             child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
               child: Text(
-                widget.editable
-                    ? 'Toolbox is empty\nuse the “+” above to add your first item.'
-                    : 'Toolbox is empty',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                widget.editable ? ProductsPage.productsPageToolboxEmptyOwnPlant : ProductsPage.productsPageToolboxEmpty,
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -143,9 +191,7 @@ class _ProductsPageState extends State<ProductsPage> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      '''List the items you used for this grow for future reference and/or kowledge sharing.''',
-                      style: TextStyle(color: Colors.white)),
+                  child: Text(ProductsPage.productsPageToolboxInstructions, style: TextStyle(color: Colors.white)),
                 ),
               ),
             ]),
@@ -160,13 +206,11 @@ class _ProductsPageState extends State<ProductsPage> {
       child: ListView(
         children: state.products.map<Widget>((p) {
           final ProductCategoryUI categoryUI = productCategories[p.category];
-          List<Widget> subtitle = [
-            Text(p.name, style: TextStyle(fontSize: 20, color: Colors.white))
-          ];
+          List<Widget> subtitle = [Text(p.name, style: TextStyle(fontSize: 20, color: Colors.white))];
           if (p.specs != null && p.specs.by != null) {
             subtitle.addAll([
               Row(children: [
-                Text('by ', style: TextStyle(color: Colors.white)),
+                Text(ProductsPage.productsPageToolboxBy, style: TextStyle(color: Colors.white)),
                 Text(p.specs.by, style: TextStyle(color: Color(0xff3bb30b))),
               ])
             ]);
@@ -174,9 +218,7 @@ class _ProductsPageState extends State<ProductsPage> {
           return ListTile(
             leading: SvgPicture.asset(categoryUI.icon),
             title: Text(categoryUI.name, style: TextStyle(color: Colors.white)),
-            subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: subtitle),
+            subtitle: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: subtitle),
             trailing: p.supplier != null && p.supplier.url != null
                 ? InkWell(
                     child: Icon(

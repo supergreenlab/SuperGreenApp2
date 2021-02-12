@@ -19,7 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:intl/intl.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
@@ -34,6 +36,24 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_plant
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_products_delegate.dart';
 
 class PublicPlantPage extends StatelessWidget {
+  static String get publicPlantPageSingleEntry {
+    return Intl.message(
+      'Viewing single log entry',
+      name: 'publicPlantPageSingleEntry',
+      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageSingleEntryButton {
+    return Intl.message(
+      'View complete diary',
+      name: 'publicPlantPageSingleEntryButton',
+      desc: 'Button that shows the complete diary when looking at a single feed entry',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PublicPlantBloc, PublicPlantBlocState>(
@@ -52,8 +72,8 @@ class PublicPlantPage extends StatelessWidget {
     Widget bottom;
     if (state.feedEntryID != null) {
       bottom = SingleFeedEntry(
-        title: 'Viewing single log entry',
-        button: 'View complete diary',
+        title: PublicPlantPage.publicPlantPageSingleEntry,
+        button: PublicPlantPage.publicPlantPageSingleEntryButton,
         onTap: () {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
             state.plantID,

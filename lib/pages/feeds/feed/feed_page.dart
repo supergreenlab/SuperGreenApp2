@@ -20,6 +20,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_entries_card_helpers.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -29,6 +31,15 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class FeedPage extends StatefulWidget {
+  static String get feedPageLoading {
+    return Intl.message(
+      'loading more cards...',
+      name: 'feedPageLoading',
+      desc: 'Loading message usually displayed on the fullscreen overlay',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Color color;
   final String title;
   final bool pinned;
@@ -170,7 +181,7 @@ class _FeedPageState extends State<FeedPage> {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLoadEntries(10, entries.length));
             return Container(
               height: 100,
-              child: FullscreenLoading(title: 'loading more cards..'),
+              child: FullscreenLoading(title: FeedPage.feedPageLoading),
             );
           } else if (index > entries.length) {
             return null;
