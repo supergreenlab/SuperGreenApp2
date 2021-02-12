@@ -23,15 +23,15 @@ import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieActionHelpFormTakePic extends TowelieActionHelp {
-  static   String get towelieHelperFormTakePic {
+  static String get towelieHelperFormTakePic {
     return Intl.message(
-      '''Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You'll be glad you took regular pictures on your next grow!**''',
+      'Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You\'ll be glad you took regular pictures on your next grow!**',
       name: 'towelieHelperFormTakePic',
       desc: 'Towelie Helper form take pic',
       locale: SGLLocalizations.current.localeName,
     );
   }
-  
+
   @override
   String get route => '/feed/form/media';
 
@@ -39,8 +39,7 @@ class TowelieActionHelpFormTakePic extends TowelieActionHelp {
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     int nPics = await RelDB.get().feedsDAO.getNFeedEntriesWithType('FE_MEDIA').getSingle();
     if (nPics == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpFormTakePic.towelieHelperFormTakePic);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormTakePic.towelieHelperFormTakePic);
     }
   }
 }

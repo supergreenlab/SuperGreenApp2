@@ -28,7 +28,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
   static String get towelieHelperMeasureReminder {
     return Intl.message(
-      '''Do you want me to **set a reminder** so you don't forget to take a measure again soon?''',
+      'Do you want me to **set a reminder** so you don\'t forget to take a measure again soon?',
       name: 'towelieHelperMeasureReminder',
       desc: 'Towelie Helper measure reminder',
       locale: SGLLocalizations.current.localeName,
@@ -39,12 +39,9 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
   String get feedEntryType => 'FE_MEASURE';
 
   @override
-  Stream<TowelieBlocState> feedEntryTrigger(
-      TowelieBlocEventFeedEntryCreated event) async* {
-    Plant plant =
-        await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
-    yield TowelieBlocStateHelper(
-        RouteSettings(name: '/feed/plant', arguments: null),
+  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {
+    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
+    yield TowelieBlocStateHelper(RouteSettings(name: '/feed/plant', arguments: null),
         TowelieActionHelpMeasureReminder.towelieHelperMeasureReminder,
         buttons: [
           TowelieButtonReminder.createButton(

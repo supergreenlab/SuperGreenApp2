@@ -33,7 +33,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 class SelectBoxPage extends StatelessWidget {
   static String get selectBoxPageNoLab {
     return Intl.message(
-      '''You have no lab yet''',
+      'You have no lab yet',
       name: 'selectBoxPageNoLab',
       desc: 'Message displayed when the app has no lab created yet.',
       locale: SGLLocalizations.current.localeName,
@@ -42,7 +42,7 @@ class SelectBoxPage extends StatelessWidget {
 
   static String get selectBoxPageCreateFirst {
     return Intl.message(
-      '''Create your first''',
+      'Create your first',
       name: 'selectBoxPageCreateFirst',
       desc: 'First part of the "Create your first GREEN LAB" text',
       locale: SGLLocalizations.current.localeName,
@@ -51,7 +51,7 @@ class SelectBoxPage extends StatelessWidget {
 
   static String get selectBoxPageCreateFirstLab {
     return Intl.message(
-      '''GREEN LAB''',
+      'GREEN LAB',
       name: 'selectBoxPageCreateFirstLab',
       desc: 'Displayed under the selectBoxPageCreateFirstLab text',
       locale: SGLLocalizations.current.localeName,
@@ -60,7 +60,7 @@ class SelectBoxPage extends StatelessWidget {
 
   static String get selectBoxPageCreateLabButton {
     return Intl.message(
-      '''CREATE''',
+      'CREATE',
       name: 'selectBoxPageCreateLabButton',
       desc: 'Lab creation button label',
       locale: SGLLocalizations.current.localeName,
@@ -69,7 +69,7 @@ class SelectBoxPage extends StatelessWidget {
 
   static String get selectBoxPageAddNewGreenLab {
     return Intl.message(
-      '''Add new green lab''',
+      'Add new green lab',
       name: 'selectBoxPageAddNewGreenLab',
       desc: 'Last item of the Lab list is a button to create a new one',
       locale: SGLLocalizations.current.localeName,
@@ -78,7 +78,7 @@ class SelectBoxPage extends StatelessWidget {
 
   static String get selectBoxPageTapSelect {
     return Intl.message(
-      '''Tap to select''',
+      'Tap to select',
       name: 'selectBoxPageTapSelect',
       desc: 'Label for the Labs list items',
       locale: SGLLocalizations.current.localeName,

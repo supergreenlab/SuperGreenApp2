@@ -32,7 +32,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 class SelectDeviceNewBoxPage extends StatefulWidget {
   static String get selectDeviceNewBoxSettingUp {
     return Intl.message(
-      '''Setting up..''',
+      'Setting up..',
       name: 'selectDeviceNewBoxSettingUp',
       desc: 'Message displayed while setting the controller\'s parameters',
       locale: SGLLocalizations.current.localeName,
@@ -41,7 +41,7 @@ class SelectDeviceNewBoxPage extends StatefulWidget {
 
   static String get selectDeviceNewBoxNoMoreBox {
     return Intl.message(
-      '''Device can\'t handle\nmore box!''',
+      'Device can\'t handle\nmore box!',
       name: 'selectDeviceNewBoxNoMoreBox',
       desc: 'Message displayed when all box slots are already taken',
       locale: SGLLocalizations.current.localeName,
@@ -50,7 +50,7 @@ class SelectDeviceNewBoxPage extends StatefulWidget {
 
   static String get selectDeviceNewBoxAvailableLEDChannels {
     return Intl.message(
-      '''Available LED channels''',
+      'Available LED channels',
       name: 'selectDeviceNewBoxAvailableLEDChannels',
       desc: 'Available LED channels list title',
       locale: SGLLocalizations.current.localeName,
@@ -59,7 +59,7 @@ class SelectDeviceNewBoxPage extends StatefulWidget {
 
   static String get selectDeviceNewBoxSelectedLEDChannels {
     return Intl.message(
-      '''Selected LED channels''',
+      'Selected LED channels',
       name: 'selectDeviceNewBoxSelectedLEDChannels',
       desc: 'Available LED channels list title',
       locale: SGLLocalizations.current.localeName,
@@ -68,7 +68,7 @@ class SelectDeviceNewBoxPage extends StatefulWidget {
 
   static String get selectDeviceNewBoxSetupBox {
     return Intl.message(
-      '''SETUP BOX''',
+      'SETUP BOX',
       name: 'selectDeviceNewBoxSetupBox',
       desc: 'Confirmation button',
       locale: SGLLocalizations.current.localeName,
@@ -77,7 +77,7 @@ class SelectDeviceNewBoxPage extends StatefulWidget {
 
   static String get selectDeviceNewBoxLEDChannel {
     return Intl.message(
-      '''LED chan''',
+      'LED chan',
       name: 'selectDeviceNewBoxLEDChannel',
       desc: 'LED channels list items label',
       locale: SGLLocalizations.current.localeName,

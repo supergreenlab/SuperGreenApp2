@@ -25,7 +25,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class TowelieActionHelpTestDevice extends TowelieActionHelp {
   static String get towelieHelperTestDevice {
     return Intl.message(
-      '''This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.''',
+      'This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.',
       name: 'towelieHelperTestDevice',
       desc: 'Towelie Helper test device',
       locale: SGLLocalizations.current.localeName,
@@ -40,8 +40,7 @@ class TowelieActionHelpTestDevice extends TowelieActionHelp {
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 1) {
-      yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpTestDevice.towelieHelperTestDevice);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpTestDevice.towelieHelperTestDevice);
     }
   }
 }

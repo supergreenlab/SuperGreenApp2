@@ -28,7 +28,7 @@ const _showProductsID = 'SHOW_PRODUCTS_GROWBOX';
 class TowelieButtonShowProductsGrowbox extends TowelieButton {
   static String get towelieButtonGoToChecklist {
     return Intl.message(
-      '''Go to checklist''',
+      'Go to checklist',
       name: 'towelieButtonGoToChecklist',
       desc: 'Towelie Button go to checklist',
       locale: SGLLocalizations.current.localeName,
@@ -38,14 +38,12 @@ class TowelieButtonShowProductsGrowbox extends TowelieButton {
   @override
   String get id => _showProductsID;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_showProductsID, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_showProductsID, {
         'title': TowelieButtonShowProductsGrowbox.towelieButtonGoToChecklist,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await CardProductsGrowbox.createProductsGrowbox(feed);

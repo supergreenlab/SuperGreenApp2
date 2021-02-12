@@ -26,7 +26,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
   static String get towelieHelperMeasureAfterStretch {
     return Intl.message(
-      '''**Hey**! it might be a good idea to **take a measure** of your plant to **monitor the stretch**.''',
+      '**Hey**! it might be a good idea to **take a measure** of your plant to **monitor the stretch**.',
       name: 'towelieHelperMeasureAfterStretch',
       desc: 'Towelie Helper measure after stretch',
       locale: SGLLocalizations.current.localeName,
@@ -37,14 +37,12 @@ class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
   String get feedEntryType => 'FE_LIGHT';
 
   @override
-  Stream<TowelieBlocState> feedEntryTrigger(
-      TowelieBlocEventFeedEntryCreated event) async* {
+  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {
     yield TowelieBlocStateHelper(
       RouteSettings(name: '/feed/plant', arguments: null),
       TowelieActionHelpMeasureAfterStretch.towelieHelperMeasureAfterStretch,
       buttons: [
-        TowelieButtonPushRouteMeasure.createButton(
-            'Take measure', event.plant.id),
+        TowelieButtonPushRouteMeasure.createButton('Take measure', event.plant.id),
       ],
     );
   }

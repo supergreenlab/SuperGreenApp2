@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_life_event.dart';
@@ -31,6 +33,60 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedLifeEventCardPage extends StatelessWidget {
+  static String get feedLifeEventCardPageTitle {
+    return Intl.message(
+      'Life event',
+      name: 'feedLifeEventCardPageTitle',
+      desc: 'Life event card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedLifeEventCardPageGermination {
+    return Intl.message(
+      'Germination!',
+      name: 'feedLifeEventCardPageGermination',
+      desc: 'Germination life event',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedLifeEventCardPageVeggingStarted {
+    return Intl.message(
+      'Vegging Started!',
+      name: 'feedLifeEventCardPageVeggingStarted',
+      desc: 'Vegging started life event',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedLifeEventCardPageBloomingStarted {
+    return Intl.message(
+      'Blooming Started!',
+      name: 'feedLifeEventCardPageBloomingStarted',
+      desc: 'Blooming started life event',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedLifeEventCardPageDryingStarted {
+    return Intl.message(
+      'Drying Started!',
+      name: 'feedLifeEventCardPageDryingStarted',
+      desc: 'Drying started life event',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedLifeEventCardPageCuringStarted {
+    return Intl.message(
+      'Curing Started!',
+      name: 'feedLifeEventCardPageCuringStarted',
+      desc: 'Curing started life event',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -53,7 +109,8 @@ class FeedLifeEventCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_life_events.svg', 'Life Event', state.synced,
+          FeedCardTitle(
+              'assets/feed_card/icon_life_events.svg', FeedLifeEventCardPage.feedLifeEventCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 100,
@@ -71,19 +128,20 @@ class FeedLifeEventCardPage extends StatelessWidget {
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state, PlantFeedState feedState) {
     FeedLifeEventParams params = state.params;
-    const List<String> phases = [
-      'Germination!',
-      'Vegging Started!',
-      'Blooming Started!',
-      'Drying Started!',
-      'Curing Started!'
+    List<String> phases = [
+      FeedLifeEventCardPage.feedLifeEventCardPageGermination,
+      FeedLifeEventCardPage.feedLifeEventCardPageVeggingStarted,
+      FeedLifeEventCardPage.feedLifeEventCardPageBloomingStarted,
+      FeedLifeEventCardPage.feedLifeEventCardPageDryingStarted,
+      FeedLifeEventCardPage.feedLifeEventCardPageCuringStarted,
     ];
     return FeedCard(
       animation: animation,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_life_events.svg', 'Life Event', state.synced,
+          FeedCardTitle(
+              'assets/feed_card/icon_life_events.svg', FeedLifeEventCardPage.feedLifeEventCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions(state) : []),
@@ -92,8 +150,11 @@ class FeedLifeEventCardPage extends StatelessWidget {
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(phases[params.phase.index],
-                  style: TextStyle(color: Color(0xff3bb30b), fontSize: 40, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              child: Text(
+                phases[params.phase.index],
+                style: TextStyle(color: Color(0xff3bb30b), fontSize: 40, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           SocialBarPage(

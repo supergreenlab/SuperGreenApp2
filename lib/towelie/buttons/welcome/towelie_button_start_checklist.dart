@@ -27,7 +27,7 @@ const _id = 'CREATE_PLANT';
 class TowelieButtonStartChecklist extends TowelieButton {
   static String get towelieButtonStartChecklist {
     return Intl.message(
-      '''Start''',
+      'Start',
       name: 'towelieButtonStartChecklist',
       desc: 'Towelie Button start checklist',
       locale: SGLLocalizations.current.localeName,
@@ -37,14 +37,12 @@ class TowelieButtonStartChecklist extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_id, {
         'title': TowelieButtonStartChecklist.towelieButtonStartChecklist,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     yield TowelieBlocStateMainNavigation(MainNavigateToCreatePlantEvent());
   }
 }

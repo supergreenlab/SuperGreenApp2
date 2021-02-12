@@ -36,7 +36,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 class DeviceTestPage extends StatefulWidget {
   static String testLEDTiming(time) {
     return Intl.message(
-      '''(100% power for $time s)''',
+      '(100% power for $time s)',
       args: [time],
       name: 'testLEDTiming',
       desc: 'Wait message when setting a led to 100% for a few seconds when setting up a new controller.',
@@ -47,7 +47,7 @@ class DeviceTestPage extends StatefulWidget {
 
   static String get testingLEDTitle {
     return Intl.message(
-      '''Testing LED''',
+      'Testing LED',
       name: 'testingLEDTitle',
       desc: 'Title for the led testing page',
       locale: SGLLocalizations.current.localeName,
@@ -56,7 +56,7 @@ class DeviceTestPage extends StatefulWidget {
 
   static String get testingLEDDone {
     return Intl.message(
-      '''Testing done''',
+      'Testing done',
       name: 'testingLEDDone',
       desc: 'Title for the led testing page',
       locale: SGLLocalizations.current.localeName,
@@ -65,7 +65,7 @@ class DeviceTestPage extends StatefulWidget {
 
   static String get ledTestingInstructions {
     return Intl.message(
-      '''Press a led channel\nto switch it on/off:''',
+      'Press a led channel\nto switch it on/off:',
       name: 'ledTestingInstructions',
       desc: 'Intructions for the LED test page during new controller setup',
       locale: SGLLocalizations.current.localeName,
@@ -74,7 +74,7 @@ class DeviceTestPage extends StatefulWidget {
 
   static String get ledTestingChannelTitle {
     return Intl.message(
-      '''Light''',
+      'Light',
       name: 'ledTestingChannelTitle',
       desc: 'The word displayed on each led channel widget',
       locale: SGLLocalizations.current.localeName,
@@ -83,7 +83,7 @@ class DeviceTestPage extends StatefulWidget {
 
   static String get ledTestingValidate {
     return Intl.message(
-      '''OK, ALL GOOD''',
+      'OK, ALL GOOD',
       name: 'ledTestingValidate',
       desc: 'Confirmation button for the LED testing page',
       locale: SGLLocalizations.current.localeName,
@@ -92,7 +92,7 @@ class DeviceTestPage extends StatefulWidget {
 
   static String get ledTestingPageTitle {
     return Intl.message(
-      '''NEW BOX SETUP''',
+      'NEW BOX SETUP',
       name: 'ledTestingPageTitle',
       desc: 'Led testing page title',
       locale: SGLLocalizations.current.localeName,

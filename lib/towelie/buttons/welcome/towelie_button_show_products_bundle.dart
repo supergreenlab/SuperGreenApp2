@@ -28,7 +28,7 @@ const _id = 'SHOW_PRODUCTS_BUNDLE';
 class TowelieButtonShowProductsBundle extends TowelieButton {
   static String get towelieButtonShowProductsBundle {
     return Intl.message(
-      '''Next''',
+      'Next',
       name: 'towelieButtonShowProductsBundle',
       desc: 'Towelie button show products bundle',
       locale: SGLLocalizations.current.localeName,
@@ -38,15 +38,12 @@ class TowelieButtonShowProductsBundle extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
-        'title':
-            TowelieButtonShowProductsBundle.towelieButtonShowProductsBundle,
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_id, {
+        'title': TowelieButtonShowProductsBundle.towelieButtonShowProductsBundle,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await CardProductsBundle.createProductsBundle(feed);

@@ -36,7 +36,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 class ExplorerPage extends StatefulWidget {
   static String get explorerPageTitle {
     return Intl.message(
-      '''Explorer''',
+      'Explorer',
       name: 'explorerPageTitle',
       desc: 'Explorer page title',
       locale: SGLLocalizations.current.localeName,
@@ -45,7 +45,7 @@ class ExplorerPage extends StatefulWidget {
 
   static String get explorerPageSelectPlantTitle {
     return Intl.message(
-      '''Select which plant you want to make public''',
+      'Select which plant you want to make public',
       name: 'explorerPageSelectPlantTitle',
       desc: 'Title of the select page when selecting a plant to make public',
       locale: SGLLocalizations.current.localeName,
@@ -54,7 +54,7 @@ class ExplorerPage extends StatefulWidget {
 
   static String explorerPagePublicPlantConfirmation(String name) {
     return Intl.message(
-      '''Plant $name is now public''',
+      'Plant $name is now public',
       args: [name],
       name: 'explorerPagePublicPlantConfirmation',
       desc: 'Confirmation text when a plant is now public',
@@ -64,7 +64,7 @@ class ExplorerPage extends StatefulWidget {
 
   static String get explorerPagePleaseLoginDialogTitle {
     return Intl.message(
-      '''Make a plant public''',
+      'Make a plant public',
       name: 'explorerPagePleaseLoginDialogTitle',
       desc: 'Title for the dialog when the user is not connected',
       locale: SGLLocalizations.current.localeName,
@@ -73,7 +73,7 @@ class ExplorerPage extends StatefulWidget {
 
   static String get explorerPagePleaseLoginDialogBody {
     return Intl.message(
-      '''You need to be logged in to make a plant public.''',
+      'You need to be logged in to make a plant public.',
       name: 'explorerPagePleaseLoginDialogBody',
       desc: 'Content for the dialog when the user is not connected',
       locale: SGLLocalizations.current.localeName,

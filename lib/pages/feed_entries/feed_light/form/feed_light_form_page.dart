@@ -35,7 +35,7 @@ import 'package:url_launcher/url_launcher.dart';
 class FeedLightFormPage extends StatefulWidget {
   static String get feedLightFormPageSaving {
     return Intl.message(
-      '''Saving..''',
+      'Saving..',
       name: 'feedLightFormPageSaving',
       desc: 'Fullscreen loading',
       locale: SGLLocalizations.current.localeName,
@@ -44,7 +44,7 @@ class FeedLightFormPage extends StatefulWidget {
 
   static String get feedLightFormPageCancelling {
     return Intl.message(
-      '''Cancelling..''',
+      'Cancelling..',
       name: 'feedLightFormPageCancelling',
       desc: 'Fullscreen message when resetting all parameters',
       locale: SGLLocalizations.current.localeName,
@@ -53,7 +53,7 @@ class FeedLightFormPage extends StatefulWidget {
 
   static String get feedLightFormPageControllerRequired {
     return Intl.message(
-      '''Dimming control\nrequires an SGL controller''',
+      'Dimming control\nrequires an SGL controller',
       name: 'feedLightFormPageControllerRequired',
       desc: 'Fullscreen message displayed with no controller is available for light control',
       locale: SGLLocalizations.current.localeName,
@@ -62,7 +62,7 @@ class FeedLightFormPage extends StatefulWidget {
 
   static String get feedLightFormPageShopNow {
     return Intl.message(
-      '''SHOP NOW''',
+      'SHOP NOW',
       name: 'feedLightFormPageShopNow',
       desc: 'Shop now button',
       locale: SGLLocalizations.current.localeName,
@@ -71,7 +71,7 @@ class FeedLightFormPage extends StatefulWidget {
 
   static String get feedLightFormPageDIYNow {
     return Intl.message(
-      '''DIY NOW''',
+      'DIY NOW',
       name: 'feedLightFormPageDIYNow',
       desc: 'DIY now button',
       locale: SGLLocalizations.current.localeName,
@@ -80,7 +80,7 @@ class FeedLightFormPage extends StatefulWidget {
 
   static String get feedLightFormPageOr {
     return Intl.message(
-      '''or''',
+      'or',
       name: 'feedLightFormPageOr',
       desc: 'The "or" in "Shop now or diy"',
       locale: SGLLocalizations.current.localeName,

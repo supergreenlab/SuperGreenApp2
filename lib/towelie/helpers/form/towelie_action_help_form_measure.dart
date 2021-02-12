@@ -25,7 +25,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class TowelieActionHelpFormMeasure extends TowelieActionHelp {
   static String get towelieHelperFormMeasure {
     return Intl.message(
-      '''This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**. And as a **bonus feature**, it does **timelapses** of all the measures you've taken!''',
+      'This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**. And as a **bonus feature**, it does **timelapses** of all the measures you\'ve taken!',
       name: 'towelieHelperFormMeasure',
       desc: 'Towelie Helper measure form 2',
       locale: SGLLocalizations.current.localeName,
@@ -34,7 +34,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
 
   static String get towelieHelperFormMeasure2 {
     return Intl.message(
-      '''It's the **first time** you're using it, so there is no "before" picture **to compare to**. Take a pic of what you **want to measure**, and take a measure again in **a few days** to have a **difference**.''',
+      'It\'s the **first time** you\'re using it, so there is no "before" picture **to compare to**. Take a pic of what you **want to measure**, and take a measure again in **a few days** to have a **difference**.',
       name: 'towelieHelperFormMeasure2',
       desc: 'Towelie Helper measure form 2',
       locale: SGLLocalizations.current.localeName,
@@ -43,7 +43,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
 
   static String get towelieHelperFormMeasure3 {
     return Intl.message(
-      '''Looks like you **already took a measure**, you can select it in the **"Previous measures"** section, then press the **"Today's measure"** button to add a new measure. The previous one will be **displayed as a transparent overlay** for more accuracy.''',
+      'Looks like you **already took a measure**, you can select it in the **"Previous measures"** section, then press the **"Today\'s measure"** button to add a new measure. The previous one will be **displayed as a transparent overlay** for more accuracy.',
       name: 'towelieHelperFormMeasure3',
       desc: 'Towelie Helper measure form 3',
       locale: SGLLocalizations.current.localeName,
@@ -57,12 +57,10 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {
     int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
     if (nMeasures == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure,
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure,
           hasNext: true);
     } else if (nMeasures == 1) {
-      yield TowelieBlocStateHelper(event.settings,
-          TowelieActionHelpFormMeasure.towelieHelperFormMeasure3,
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure3,
           hasNext: false);
     }
   }
@@ -71,8 +69,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
   Stream<TowelieBlocState> getNext(TowelieBlocEventHelperNext event) async* {
     int nMeasures = await RelDB.get().feedsDAO.getNMeasures();
     if (nMeasures == 0) {
-      yield TowelieBlocStateHelper(event.settings,
-          TowelieActionHelpFormMeasure.towelieHelperFormMeasure2);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpFormMeasure.towelieHelperFormMeasure2);
     }
   }
 }

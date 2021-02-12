@@ -29,7 +29,7 @@ const _needHelpID = 'PLANT_I_NEED_HELP';
 class TowelieButtonINeedHelp extends TowelieButton {
   static String get towelieButtonINeedHelp {
     return Intl.message(
-      '''Yes I want help!''',
+      'Yes I want help!',
       name: 'towelieButtonINeedHelp',
       desc: 'Towelie Button I need help',
       locale: SGLLocalizations.current.localeName,
@@ -39,17 +39,14 @@ class TowelieButtonINeedHelp extends TowelieButton {
   @override
   String get id => _needHelpID;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_needHelpID, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_needHelpID, {
         'title': TowelieButtonINeedHelp.towelieButtonINeedHelp,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
-    FeedEntry feedEntry =
-        await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await CardProductsIntro.createProductsIntro(feed);
     await selectButtons(feedEntry, selectedButtonID: id);
   }
@@ -60,7 +57,7 @@ const _dontNeedHelpID = 'PLANT_I_DONT_NEED_HELP';
 class TowelieButtonIDontNeedHelp extends TowelieButton {
   static String get towelieButtonIDontNeedHelp {
     return Intl.message(
-      '''Nope already got it all.''',
+      'Nope already got it all.',
       name: 'towelieButtonIDontNeedHelp',
       desc: 'Towelie Button I dont need help',
       locale: SGLLocalizations.current.localeName,
@@ -70,14 +67,12 @@ class TowelieButtonIDontNeedHelp extends TowelieButton {
   @override
   String get id => _dontNeedHelpID;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_dontNeedHelpID, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_dontNeedHelpID, {
         'title': TowelieButtonIDontNeedHelp.towelieButtonIDontNeedHelp,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await CardCreatePlant.createCreatePlantCard(feed);

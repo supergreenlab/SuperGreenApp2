@@ -27,7 +27,7 @@ import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 class FeedVentilationManualFormPage extends StatefulWidget {
   static String get instructionsManualTimerModeDescription {
     return Intl.message(
-      '''This is the **manual blower control** mode, just set a value and the blower will stay at this power.''',
+      'This is the **manual blower control** mode, just set a value and the blower will stay at this power.',
       name: 'instructionsManualTimerModeDescription',
       desc: 'Instructions for blower manual mode',
       locale: SGLLocalizations.current.localeName,
@@ -39,12 +39,10 @@ class FeedVentilationManualFormPage extends StatefulWidget {
   const FeedVentilationManualFormPage(this.state, {Key key}) : super(key: key);
 
   @override
-  _FeedVentilationManualFormPageState createState() =>
-      _FeedVentilationManualFormPageState();
+  _FeedVentilationManualFormPageState createState() => _FeedVentilationManualFormPageState();
 }
 
-class _FeedVentilationManualFormPageState
-    extends State<FeedVentilationManualFormPage> {
+class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFormPage> {
   int _blowerValue = 0;
 
   @override
@@ -69,10 +67,8 @@ class _FeedVentilationManualFormPageState
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MarkdownBody(
-                data: FeedVentilationManualFormPage
-                    .instructionsManualTimerModeDescription,
-                styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: FeedVentilationManualFormPage.instructionsManualTimerModeDescription,
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
             SliderFormParam(
@@ -89,10 +85,8 @@ class _FeedVentilationManualFormPageState
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                    FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMin: widget.state.blowerMin
-                            .copyWith(value: _blowerValue)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                    blowerMin: widget.state.blowerMin.copyWith(value: _blowerValue)));
               },
             ),
           ],

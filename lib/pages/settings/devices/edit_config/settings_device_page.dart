@@ -21,7 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SettingsDevicePage extends StatefulWidget {
   static String get settingsDevicePageLoading {
     return Intl.message(
-      '''Refreshing..''',
+      'Refreshing..',
       name: 'settingsDevicePageLoading',
       desc: 'Loading screen while refreshing parameters',
       locale: SGLLocalizations.current.localeName,
@@ -30,7 +30,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String settingsDevicePageControllerRefreshed(String name) {
     return Intl.message(
-      '''Controller $name refreshed!''',
+      'Controller $name refreshed!',
       args: [name],
       name: 'settingsDevicePageControllerRefreshed',
       desc: 'Controller params refreshed confirmation text',
@@ -40,7 +40,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String settingsDevicePageControllerDone(String name) {
     return Intl.message(
-      '''Controller $name updated!''',
+      'Controller $name updated!',
       args: [name],
       name: 'settingsDevicePageControllerDone',
       desc: 'Controller updated confirmation text',
@@ -50,7 +50,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String get settingsDevicePageControllerNameSection {
     return Intl.message(
-      '''Controller name''',
+      'Controller name',
       name: 'settingsDevicePageControllerNameSection',
       desc: 'Controller name input section',
       locale: SGLLocalizations.current.localeName,
@@ -59,7 +59,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String get settingsDevicePageControllerSettingsSection {
     return Intl.message(
-      '''Settings''',
+      'Settings',
       name: 'settingsDevicePageControllerSettingsSection',
       desc: 'Controller name input section',
       locale: SGLLocalizations.current.localeName,
@@ -68,7 +68,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String get settingsDevicePageWifiSettingsSection {
     return Intl.message(
-      '''Wifi config''',
+      'Wifi config',
       name: 'settingsDevicePageWifiSettingsSection',
       desc: 'Wifi settings button',
       locale: SGLLocalizations.current.localeName,
@@ -77,7 +77,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String get settingsDevicePageWifiSettingsLabel {
     return Intl.message(
-      '''Change your controller\'s wifi config''',
+      'Change your controller\'s wifi config',
       name: 'settingsDevicePageWifiSettingsLabel',
       desc: 'Wifi settings button label',
       locale: SGLLocalizations.current.localeName,
@@ -86,7 +86,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String get settingsDevicePageWifiConfigSuccess {
     return Intl.message(
-      '''Wifi config changed successfully''',
+      'Wifi config changed successfully',
       name: 'settingsDevicePageWifiConfigSuccess',
       desc: 'Wifi config successful message',
       locale: SGLLocalizations.current.localeName,
@@ -95,7 +95,7 @@ class SettingsDevicePage extends StatefulWidget {
 
   static String get settingsDevicePageWifiConfigFailed {
     return Intl.message(
-      '''Wifi config change failed''',
+      'Wifi config change failed',
       name: 'settingsDevicePageWifiConfigFailed',
       desc: 'Wifi config failed message',
       locale: SGLLocalizations.current.localeName,

@@ -27,7 +27,7 @@ const _id = 'CREATE_PLANT';
 class TowelieButtonCreatePlant extends TowelieButton {
   static String get towelieButtonCreatePlant {
     return Intl.message(
-      '''GO!''',
+      'GO!',
       name: 'towelieButtonCreatePlant',
       desc: 'Towelie button create plant',
       locale: SGLLocalizations.current.localeName,
@@ -37,14 +37,12 @@ class TowelieButtonCreatePlant extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_id, {
         'title': TowelieButtonCreatePlant.towelieButtonCreatePlant,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     yield TowelieBlocStateMainNavigation(MainNavigateToCreatePlantEvent());
   }
 }

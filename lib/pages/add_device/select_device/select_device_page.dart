@@ -39,7 +39,7 @@ class SelectBoxDeviceData {
 class SelectDevicePage extends StatefulWidget {
   static String get selectDeviceSkipAddDevice {
     return Intl.message(
-      '''NO SGL DEVICE''',
+      'NO SGL DEVICE',
       name: 'selectDeviceSkipAddDevice',
       desc: 'Button to skip the sgl device config',
       locale: SGLLocalizations.current.localeName,
@@ -48,7 +48,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceNewController {
     return Intl.message(
-      '''NEW CONTROLLER''',
+      'NEW CONTROLLER',
       name: 'selectDeviceNewController',
       desc: 'Add new controller button',
       locale: SGLLocalizations.current.localeName,
@@ -57,7 +57,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceListTitle {
     return Intl.message(
-      '''Select a controller below''',
+      'Select a controller below',
       name: 'selectDeviceListTitle',
       desc: 'Instruction title above the controller list.',
       locale: SGLLocalizations.current.localeName,
@@ -66,7 +66,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceListItemInstruction {
     return Intl.message(
-      '''Tap to select''',
+      'Tap to select',
       name: 'selectDeviceListItemInstruction',
       desc: 'Instruction for controller list items.',
       locale: SGLLocalizations.current.localeName,
@@ -75,7 +75,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceNoController {
     return Intl.message(
-      '''You have no controller\nfor your new lab.''',
+      'You have no controller\nfor your new lab.',
       name: 'selectDeviceNoController',
       desc: 'Message on the select device screen when no controller added yet',
       locale: SGLLocalizations.current.localeName,
@@ -84,7 +84,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceAddFirst {
     return Intl.message(
-      '''Add a first''',
+      'Add a first',
       name: 'selectDeviceAddFirst',
       desc: 'First half of the "Add a first controller" instructions',
       locale: SGLLocalizations.current.localeName,
@@ -93,7 +93,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceAddFirstController {
     return Intl.message(
-      '''CONTROLLER''',
+      'CONTROLLER',
       name: 'selectDeviceAddFirstController',
       desc: 'Second half of the "Add a first controller" instructions',
       locale: SGLLocalizations.current.localeName,
@@ -102,7 +102,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceAdd {
     return Intl.message(
-      '''ADD''',
+      'ADD',
       name: 'selectDeviceAdd',
       desc: 'First part of the "Add or Shop now" instructions',
       locale: SGLLocalizations.current.localeName,
@@ -111,7 +111,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceOr {
     return Intl.message(
-      '''OR''',
+      'OR',
       name: 'selectDeviceOr',
       desc: 'Second part of the "Add or Shop now" instructions',
       locale: SGLLocalizations.current.localeName,
@@ -120,7 +120,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceShopNow {
     return Intl.message(
-      '''SHOP NOW''',
+      'SHOP NOW',
       name: 'selectDeviceShopNow',
       desc: 'Last part of the "Add or Shop now" instructions',
       locale: SGLLocalizations.current.localeName,
@@ -129,7 +129,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceDIYNow {
     return Intl.message(
-      '''DIY NOW''',
+      'DIY NOW',
       name: 'selectDeviceDIYNow',
       desc: 'After the "Add or Shop now" instructions',
       locale: SGLLocalizations.current.localeName,
@@ -138,7 +138,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceContinueWithoutController {
     return Intl.message(
-      '''Continue without controller''',
+      'Continue without controller',
       name: 'selectDeviceContinueWithoutController',
       desc: 'Skip select controller',
       locale: SGLLocalizations.current.localeName,
@@ -147,7 +147,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String selectDeviceDeleteControllerDialogTitle(String name) {
     return Intl.message(
-      '''Delete controller $name?''',
+      'Delete controller $name?',
       args: [name],
       name: 'selectDeviceDeleteControllerDialogTitle',
       desc: 'Title for the delete controller dialog',
@@ -157,7 +157,7 @@ class SelectDevicePage extends StatefulWidget {
 
   static String get selectDeviceDeleteControllerDialogBody {
     return Intl.message(
-      '''This can\'t be reverted. Continue?''',
+      'This can\'t be reverted. Continue?',
       name: 'selectDeviceDeleteControllerDialogBody',
       desc: 'Confirm controller deletion',
       locale: SGLLocalizations.current.localeName,

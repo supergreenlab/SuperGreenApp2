@@ -32,7 +32,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 class SelectDeviceBoxPage extends StatefulWidget {
   static String get selectDeviceBoxSettingUp {
     return Intl.message(
-      '''Setting up..''',
+      'Setting up..',
       name: 'selectDeviceBoxSettingUp',
       desc: 'Message while app is configuring new box',
       locale: SGLLocalizations.current.localeName,
@@ -41,7 +41,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String get selectDeviceBoxSlot {
     return Intl.message(
-      '''Select controller\'s box slot''',
+      'Select controller\'s box slot',
       name: 'selectDeviceBoxSlot',
       desc: 'Select device box slot',
       locale: SGLLocalizations.current.localeName,
@@ -50,7 +50,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String get selectDeviceBoxAlreadyRunning {
     return Intl.message(
-      '''Already running''',
+      'Already running',
       name: 'selectDeviceBoxAlreadyRunning',
       desc: 'Select device box slot',
       locale: SGLLocalizations.current.localeName,
@@ -59,7 +59,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String get selectDeviceBoxAvailable {
     return Intl.message(
-      '''Available''',
+      'Available',
       name: 'selectDeviceBoxAvailable',
       desc: 'Select device box slot available',
       locale: SGLLocalizations.current.localeName,
@@ -68,7 +68,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String get selectDeviceBoxNoMoreLED {
     return Intl.message(
-      '''No more free led channels''',
+      'No more free led channels',
       name: 'selectDeviceBoxNoMoreLED',
       desc: 'Select device box slot no more channels',
       locale: SGLLocalizations.current.localeName,
@@ -77,7 +77,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String selectDeviceBoxNumber(int number) {
     return Intl.message(
-      '''Box #$number''',
+      'Box #$number',
       args: [number],
       name: 'selectDeviceBoxNumber',
       desc: 'Box slot number',
@@ -87,7 +87,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String selectDeviceBoxLedChannelDescription(String leds) {
     return Intl.message(
-      '''Led channels: $leds''',
+      'Led channels: $leds',
       args: [leds],
       name: 'selectDeviceBoxLedChannelDescription',
       desc: 'Box slot channel description',
@@ -97,7 +97,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String get selectDeviceBoxNoLedChannelAssigned {
     return Intl.message(
-      '''No led channels assigned''',
+      'No led channels assigned',
       name: 'selectDeviceBoxNoLedChannelAssigned',
       desc: 'Box slot no led channel assigned yet',
       locale: SGLLocalizations.current.localeName,
@@ -106,7 +106,7 @@ class SelectDeviceBoxPage extends StatefulWidget {
 
   static String selectDeviceBoxResetDialogTitle(int index, String name) {
     return Intl.message(
-      '''Reset box #$index on controller $name?''',
+      'Reset box #$index on controller $name?',
       args: [index, name],
       name: 'selectDeviceBoxResetDialogTitle',
       desc: 'Box slot reset dialog title',

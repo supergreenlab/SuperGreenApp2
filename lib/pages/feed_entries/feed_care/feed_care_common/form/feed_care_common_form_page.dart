@@ -82,7 +82,7 @@ class FeedCareCommonDraft extends FeedEntryDraftState {
 abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> extends StatefulWidget {
   static String get feedCareCommonFormSaving {
     return Intl.message(
-      '''Saving..''',
+      'Saving..',
       name: 'feedCareCommonFormSaving',
       desc: 'Displayd as a fullscreen loading',
       locale: SGLLocalizations.current.localeName,
@@ -91,7 +91,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
 
   static String get feedCareCommonBeforePics {
     return Intl.message(
-      '''Before pics''',
+      'Before pics',
       name: 'feedCareCommonBeforePics',
       desc: 'Title for the "before pics" list',
       locale: SGLLocalizations.current.localeName,
@@ -100,7 +100,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
 
   static String get feedCareCommonAfterPics {
     return Intl.message(
-      '''After pics''',
+      'After pics',
       name: 'feedCareCommonAfterPics',
       desc: 'Title for the "after pics" list',
       locale: SGLLocalizations.current.localeName,
@@ -109,7 +109,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
 
   static String get feedCareCommonDeletePicDialogTitle {
     return Intl.message(
-      '''Delete this pic?''',
+      'Delete this pic?',
       name: 'feedCareCommonDeletePicDialogTitle',
       desc: 'Title for the pic deletion confirmation dialog',
       locale: SGLLocalizations.current.localeName,
@@ -118,7 +118,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
 
   static String get feedCareCommonDeletePicDialogBody {
     return Intl.message(
-      '''This can\'t be reverted. Continue?''',
+      'This can\'t be reverted. Continue?',
       name: 'feedCareCommonDeletePicDialogBody',
       desc: 'Body for the pic deletion confirmation dialog',
       locale: SGLLocalizations.current.localeName,
@@ -127,7 +127,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
 
   static String get feedCareCommonObservations {
     return Intl.message(
-      '''Observations''',
+      'Observations',
       name: 'feedCareCommonObservations',
       desc: 'Observations field label',
       locale: SGLLocalizations.current.localeName,
@@ -136,7 +136,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
 
   static String get feedCareCommonDraftRecoveryDialogTitle {
     return Intl.message(
-      '''Draft recovery''',
+      'Draft recovery',
       name: 'feedCareCommonDraftRecoveryDialogTitle',
       desc: 'Draft recovery dialog title',
       locale: SGLLocalizations.current.localeName,
@@ -145,7 +145,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
 
   static String feedCareCommonDraftRecoveryDialogBody(String title) {
     return Intl.message(
-      '''Resume previous $title card draft?''',
+      'Resume previous $title card draft?',
       args: [title],
       name: 'feedCareCommonDraftRecoveryDialogBody',
       desc: 'Draft recovery dialog body',

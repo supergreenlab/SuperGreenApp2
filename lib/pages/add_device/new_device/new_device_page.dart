@@ -51,7 +51,7 @@ class NewDevicePage extends StatelessWidget {
 
   static String get instructionsNewDeviceWifiFailed {
     return Intl.message(
-      '''**Couldn\'t connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:''',
+      '**Couldn\'t connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:',
       name: 'instructionsNewDeviceWifiFailed',
       desc: 'Instructions new device wifi failed',
       locale: SGLLocalizations.current.localeName,
@@ -69,7 +69,7 @@ class NewDevicePage extends StatelessWidget {
 
   static String get instructionsNewDeviceWifiFailed3 {
     return Intl.message(
-      '''Then press the **DONE** button below''',
+      'Then press the **DONE** button below',
       name: 'instructionsNewDeviceWifiFailed3',
       desc: 'Instructions new device wifi failed3',
       locale: SGLLocalizations.current.localeName,

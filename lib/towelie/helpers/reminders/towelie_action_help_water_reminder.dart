@@ -28,7 +28,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class TowelieActionHelpWaterReminder extends TowelieActionHelp {
   static String get towelieHelperWaterReminder {
     return Intl.message(
-      '''Do you want me to **set a reminder** so you don't forget to water again soon?''',
+      'Do you want me to **set a reminder** so you don\'t forget to water again soon?',
       name: 'towelieHelperWaterReminder',
       desc: 'Towelie Helper water reminder',
       locale: SGLLocalizations.current.localeName,
@@ -39,13 +39,10 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
   String get feedEntryType => 'FE_WATER';
 
   @override
-  Stream<TowelieBlocState> feedEntryTrigger(
-      TowelieBlocEventFeedEntryCreated event) async* {
-    Plant plant =
-        await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
+  Stream<TowelieBlocState> feedEntryTrigger(TowelieBlocEventFeedEntryCreated event) async* {
+    Plant plant = await RelDB.get().plantsDAO.getPlantWithFeed(event.feedEntry.feed);
     yield TowelieBlocStateHelper(
-        RouteSettings(name: '/feed/plant', arguments: null),
-        TowelieActionHelpWaterReminder.towelieHelperWaterReminder,
+        RouteSettings(name: '/feed/plant', arguments: null), TowelieActionHelpWaterReminder.towelieHelperWaterReminder,
         buttons: [
           // TowelieButtonReminder.createButton(
           // '1 min',

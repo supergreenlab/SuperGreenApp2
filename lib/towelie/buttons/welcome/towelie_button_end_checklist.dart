@@ -28,7 +28,7 @@ const _id = 'END_CHECKLIST';
 class TowelieButtonEndChecklist extends TowelieButton {
   static String get towelieButtonEndChecklist {
     return Intl.message(
-      '''Create plant''',
+      'Create plant',
       name: 'towelieButtonEndChecklist',
       desc: 'Towelie button end checklist',
       locale: SGLLocalizations.current.localeName,
@@ -38,14 +38,12 @@ class TowelieButtonEndChecklist extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_id, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_id, {
         'title': TowelieButtonEndChecklist.towelieButtonEndChecklist,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await CardCreatePlant.createCreatePlantCard(feed);

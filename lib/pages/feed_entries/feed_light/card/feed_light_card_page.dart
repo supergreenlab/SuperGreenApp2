@@ -32,9 +32,18 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedLightCardPage extends StatelessWidget {
+  static String get feedLightCardPageTitle {
+    return Intl.message(
+      'Stretch control',
+      name: 'feedLightCardPageTitle',
+      desc: 'Feed Light dimming control card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get feedLightCardPageChannel {
     return Intl.message(
-      '''channel''',
+      'channel',
       name: 'feedLightCardPageChannel',
       desc: 'LED power widget label',
       locale: SGLLocalizations.current.localeName,

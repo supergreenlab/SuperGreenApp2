@@ -158,7 +158,7 @@ final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey();
 class MainPage extends StatefulWidget {
   static String redBarSyncingProgress(progress) {
     return Intl.message(
-      '''Syncing - $progress''',
+      'Syncing - $progress',
       args: [progress],
       name: 'redBarSyncingProgress',
       desc: 'Syncing progress indicator in top red bar, when fetching all new diary cards',
@@ -169,7 +169,7 @@ class MainPage extends StatefulWidget {
 
   static String get mainNavigatorUnknownRoute {
     return Intl.message(
-      '''Unknown route''',
+      'Unknown route',
       name: 'mainNavigatorUnknownRoute',
       desc: 'Unknown route message (shouldnt appear)',
       locale: SGLLocalizations.current.localeName,

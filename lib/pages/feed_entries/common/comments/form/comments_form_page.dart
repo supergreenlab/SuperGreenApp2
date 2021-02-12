@@ -65,7 +65,7 @@ const Map<CommentType, Map<String, String>> commentTypes = {
 class CommentsFormPage extends StatefulWidget {
   static String get commentsFormPageTitle {
     return Intl.message(
-      '''Comments''',
+      'Comments',
       name: 'commentsFormPageTitle',
       desc: 'Comments page title',
       locale: SGLLocalizations.current.localeName,
@@ -74,7 +74,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String get commentsFormPagePleaseLogin {
     return Intl.message(
-      '''Please login to add a comment''',
+      'Please login to add a comment',
       name: 'commentsFormPagePleaseLogin',
       desc: 'Used in "please login" dialogs',
       locale: SGLLocalizations.current.localeName,
@@ -83,7 +83,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String get commentsFormPageReplyingTo {
     return Intl.message(
-      '''Replying to ''',
+      'Replying to ',
       name: 'commentsFormPageReplyingTo',
       desc: 'Followed by a username when replying to a comment (trailing space is important)',
       locale: SGLLocalizations.current.localeName,
@@ -92,7 +92,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String get commentsFormPageViewingSingleComment {
     return Intl.message(
-      '''Viewing single comment''',
+      'Viewing single comment',
       name: 'commentsFormPageViewingSingleComment',
       desc: 'Button displayed when viewing a single comment',
       locale: SGLLocalizations.current.localeName,
@@ -101,7 +101,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String get commentsFormPageViewAllComments {
     return Intl.message(
-      '''View all comments''',
+      'View all comments',
       name: 'commentsFormPageViewAllComments',
       desc: 'Button displayed when viewing a single comment',
       locale: SGLLocalizations.current.localeName,
@@ -110,7 +110,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String get commentsFormPageCommentTypeTitle {
     return Intl.message(
-      '''What kind of post do you want to do?''',
+      'What kind of post do you want to do?',
       name: 'commentsFormPageCommentTypeTitle',
       desc: 'Title displayed above the comment types',
       locale: SGLLocalizations.current.localeName,
@@ -119,7 +119,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String get commentsFormPageLoadingMoreComments {
     return Intl.message(
-      '''Loading more comments..''',
+      'Loading more comments..',
       name: 'commentsFormPageLoadingMoreComments',
       desc: 'Comments page auto-loading message at end of scroll',
       locale: SGLLocalizations.current.localeName,
@@ -128,7 +128,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String commentsFormPageNOtherRecommendations(int n) {
     return Intl.message(
-      '''(+$n other)''',
+      '(+$n other)',
       args: [n],
       name: 'commentsFormPageNOtherRecommendations',
       desc: 'Comments page auto-loading message at end of scroll',
@@ -138,7 +138,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String commentsFormPageInputHintText(String nickname) {
     return Intl.message(
-      '''Add a comment as $nickname...''',
+      'Add a comment as $nickname...',
       args: [nickname],
       name: 'commentsFormPageInputHintText',
       desc: 'Comments page input hint text',
@@ -148,7 +148,7 @@ class CommentsFormPage extends StatefulWidget {
 
   static String get commentsFormPageSubmitComment {
     return Intl.message(
-      '''Post''',
+      'Post',
       name: 'commentsFormPageSubmitComment',
       desc: 'Comments page input submit button',
       locale: SGLLocalizations.current.localeName,

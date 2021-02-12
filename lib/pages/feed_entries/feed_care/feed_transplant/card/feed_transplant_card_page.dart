@@ -17,14 +17,23 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class FeedTransplantCardPage extends FeedCareCommonCardPage {
-  FeedTransplantCardPage(
-      Animation animation, FeedState feedState, FeedEntryState state,
-      {Key key, cardActions})
+  static String get feedToppingCardPageTitle {
+    return Intl.message(
+      'Transplant',
+      name: 'feedTranslplantCardPageTitle',
+      desc: 'Transplant card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  FeedTransplantCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key, cardActions})
       : super(animation, feedState, state, key: key, cardActions: cardActions);
 
   String iconPath() {
@@ -33,6 +42,6 @@ class FeedTransplantCardPage extends FeedCareCommonCardPage {
 
   @override
   String title() {
-    return "Transplant";
+    return FeedTransplantCardPage.feedToppingCardPageTitle;
   }
 }

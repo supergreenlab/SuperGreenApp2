@@ -17,14 +17,23 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_care_common/card/feed_care_common_card_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class FeedBendingCardPage extends FeedCareCommonCardPage {
-  FeedBendingCardPage(
-      Animation animation, FeedState feedState, FeedEntryState state,
-      {Key key, cardActions})
+  static String get feedBendingCardPageTitle {
+    return Intl.message(
+      'Bending',
+      name: 'feedBendingCardPageTitle',
+      desc: 'Bending card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  FeedBendingCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key, cardActions})
       : super(animation, feedState, state, key: key, cardActions: cardActions);
 
   String iconPath() {
@@ -33,6 +42,6 @@ class FeedBendingCardPage extends FeedCareCommonCardPage {
 
   @override
   String title() {
-    return "Bending";
+    return FeedBendingCardPage.feedBendingCardPageTitle;
   }
 }
