@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
@@ -33,6 +35,53 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedWaterCardPage extends StatefulWidget {
+  static String get feedWateringCardPageTitle {
+    return Intl.message(
+      'Watering',
+      name: 'feedWateringCardPageTitle',
+      desc: 'Feed watering card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedWateringCardPageVolume {
+    return Intl.message(
+      'Water quantity',
+      name: 'feedWateringCardPageVolume',
+      desc: 'Feed watering card volume',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedWateringCardPageWasDry(String yesNo) {
+    return Intl.message(
+      'Was dry: $yesNo',
+      args: [yesNo],
+      name: 'feedWateringCardPageWasDry',
+      desc: 'Feed watering card was dry',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedWateringCardPageWithNutes(String yesNo) {
+    return Intl.message(
+      'With nutes: $yesNo',
+      args: [yesNo],
+      name: 'feedWateringCardPageWithNute',
+      desc: 'Feed watering card with nutes',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedWateringCardPageObservations {
+    return Intl.message(
+      'Observations',
+      name: 'feedWateringCardPageObservations',
+      desc: 'Feed watering observations label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -61,7 +110,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_watering.svg', 'Watering', state.synced,
+          FeedCardTitle('assets/feed_card/icon_watering.svg', FeedWaterCardPage.feedWateringCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 200,
@@ -80,7 +129,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
   Widget _renderLoaded(BuildContext context, FeedWaterState state) {
     FeedWaterParams params = state.params;
     List<Widget> cards = [
-      renderCard('assets/feed_form/icon_volume.svg', 8, 'Water quantity',
+      renderCard('assets/feed_form/icon_volume.svg', 8, FeedWaterCardPage.feedWateringCardPageVolume,
           Text('${params.volume} L', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
     ];
     if (params.ph != null) {
@@ -101,7 +150,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_watering.svg', 'Watering', state.synced,
+          FeedCardTitle('assets/feed_card/icon_watering.svg', FeedWaterCardPage.feedWateringCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onEdit: () {
             setState(() {
               editText = true;
@@ -116,13 +165,13 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
               children: [
                 params.tooDry != null
                     ? Text(
-                        'Was dry: ${params.tooDry == true ? 'YES' : 'NO'}',
+                        FeedWaterCardPage.feedWateringCardPageWasDry(params.tooDry == true ? 'YES' : 'NO'),
                         style: TextStyle(color: Color(0xffababab)),
                       )
                     : Container(),
                 params.nutrient != null
                     ? Text(
-                        'With nutes: ${params.nutrient == true ? 'YES' : 'NO'}',
+                        FeedWaterCardPage.feedWateringCardPageWithNutes(params.nutrient == true ? 'YES' : 'NO'),
                         style: TextStyle(color: Color(0xffababab)),
                       )
                     : Container(),
@@ -147,7 +196,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
           (params.message ?? '') != '' || editText == true
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Observations', style: TextStyle()),
+                  child: Text(FeedWaterCardPage.feedWateringCardPageObservations, style: TextStyle()),
                 )
               : Container(),
           (params.message ?? '') != '' || editText == true

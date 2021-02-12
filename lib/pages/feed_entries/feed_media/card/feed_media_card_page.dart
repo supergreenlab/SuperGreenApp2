@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
@@ -36,6 +38,24 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 class FeedMediaCardPage extends StatefulWidget {
+  static String get feedMediaCardPageTitle {
+    return Intl.message(
+      'Grow log',
+      name: 'feedMediaCardPageTitle',
+      desc: 'Feed media card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedMediaCardPageBoxTitle {
+    return Intl.message(
+      'Build log',
+      name: 'feedMediaCardPageBoxTitle',
+      desc: 'Feed media card title, different name when used in a box feed',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -65,7 +85,8 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_media.svg', 'Grow log', widget.state.synced,
+          FeedCardTitle(
+              'assets/feed_card/icon_media.svg', FeedMediaCardPage.feedMediaCardPageTitle, widget.state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 350,
@@ -89,7 +110,11 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_media.svg', params.boxFeed == true ? 'Build log' : 'Grow log', state.synced,
+              'assets/feed_card/icon_media.svg',
+              params.boxFeed == true
+                  ? FeedMediaCardPage.feedMediaCardPageBoxTitle
+                  : FeedMediaCardPage.feedMediaCardPageTitle,
+              state.synced,
               onEdit: () {
                 setState(() {
                   editText = true;

@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
@@ -30,6 +32,24 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FeedScheduleCardPage extends StatelessWidget {
+  static String get feedScheduleCardPageTitle {
+    return Intl.message(
+      'Schedule change',
+      name: 'feedScheduleCardPageTitle',
+      desc: 'Feed schedule card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedScheduleCardPagePhase(String phase) {
+    return Intl.message(
+      'Flipped to\n$phase',
+      name: 'feedScheduleCardPagePhase',
+      desc: 'Feed schedule card phase',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -53,7 +73,7 @@ class FeedScheduleCardPage extends StatelessWidget {
         children: [
           FeedCardTitle(
             'assets/feed_card/icon_schedule.svg',
-            'Schedule change',
+            FeedScheduleCardPage.feedScheduleCardPageTitle,
             state.synced,
             showSyncStatus: !state.isRemoteState,
             showControls: !state.isRemoteState,
@@ -79,7 +99,8 @@ class FeedScheduleCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_schedule.svg', 'Schedule change', state.synced,
+          FeedCardTitle(
+              'assets/feed_card/icon_schedule.svg', FeedScheduleCardPage.feedScheduleCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions(state) : []),
@@ -90,7 +111,7 @@ class FeedScheduleCardPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Flipped to\n${params.schedule}!',
+                  FeedScheduleCardPage.feedScheduleCardPagePhase(params.schedule),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300, color: Color(0xff3bb30b)),
                 ),

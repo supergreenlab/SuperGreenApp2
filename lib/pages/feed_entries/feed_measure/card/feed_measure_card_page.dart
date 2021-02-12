@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
@@ -34,6 +36,65 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 class FeedMeasureCardPage extends StatefulWidget {
+  static String get feedMeasureCardPageTitle {
+    return Intl.message(
+      'Measure',
+      name: 'feedMeasureCardPageTitle',
+      desc: 'Feed measure card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedMeasureCardPageDays(int days) {
+    return Intl.message(
+      '$days days',
+      args: [days],
+      name: 'feedMeasureCardPageDays',
+      desc: 'Feed measure card duration in days',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedMeasureCardPageSeconds(int seconds) {
+    return Intl.message(
+      '$seconds s',
+      args: [seconds],
+      name: 'feedMeasureCardPageSeconds',
+      desc: 'Feed measure card duration in seconds',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedMeasureCardPageMinutes(int seconds) {
+    return Intl.message(
+      '$seconds min',
+      args: [seconds],
+      name: 'feedMeasureCardPageMinutes',
+      desc: 'Feed measure card duration in minutes',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedMeasureCardPageHours(int hours) {
+    return Intl.message(
+      '$hours hours',
+      args: [hours],
+      name: 'feedMeasureCardPageHours',
+      desc: 'Feed measure card duration in hours',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String feedMeasureCardPageDaysAndHours(int days, int hours) {
+    return Intl.message(
+      '$days days and $hours hours',
+      args: [days, hours],
+      name: 'feedMeasureCardPageDaysAndHours',
+      desc: 'Feed measure card duration in days and hours',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -62,7 +123,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+          FeedCardTitle('assets/feed_card/icon_measure.svg', FeedMeasureCardPage.feedMeasureCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 350,
@@ -83,16 +144,16 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
     String sliderTitle;
     if (params.time != null) {
       Duration time = Duration(seconds: params.time);
-      sliderTitle = '${Duration(seconds: params.time).inDays} days';
+      sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDays(Duration(seconds: params.time).inDays);
       if (time.inMinutes == 0) {
-        sliderTitle = '${Duration(seconds: params.time).inSeconds} s';
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageSeconds(Duration(seconds: params.time).inSeconds);
       } else if (time.inHours == 0) {
-        sliderTitle = '${Duration(seconds: params.time).inMinutes} min';
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageMinutes(Duration(seconds: params.time).inMinutes);
       } else if (time.inDays == 0) {
-        sliderTitle = '${Duration(seconds: params.time).inHours} hours';
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageHours(Duration(seconds: params.time).inHours);
       } else if (time.inDays < 4) {
-        sliderTitle =
-            '${Duration(seconds: params.time).inDays} days and ${Duration(seconds: params.time).inHours % 24} hours';
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDaysAndHours(
+            Duration(seconds: params.time).inDays, Duration(seconds: params.time).inHours % 24);
       }
     }
     return FeedCard(
@@ -100,7 +161,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_measure.svg', 'Measure', state.synced,
+          FeedCardTitle('assets/feed_card/icon_measure.svg', FeedMeasureCardPage.feedMeasureCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onEdit: () {
             setState(() {
               editText = true;

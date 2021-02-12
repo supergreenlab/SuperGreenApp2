@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 import 'package:super_green_app/widgets/feed_card/feed_card.dart';
@@ -26,6 +28,24 @@ import 'package:super_green_app/widgets/feed_card/feed_card_title.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 
 class FeedUnknownCardPage extends StatelessWidget {
+  static String get feedUnknownCardPageTitle {
+    return Intl.message(
+      'Unknown card',
+      name: 'feedUnknownCardPageTitle',
+      desc: 'Feed unknown card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedUnknownCardPageUpgradeApp {
+    return Intl.message(
+      'Upgrade your app',
+      name: 'feedUnknownCardPageUpgradeApp',
+      desc: 'Feed unknown card upgrade app',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -39,7 +59,7 @@ class FeedUnknownCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_unknown.svg', 'Unknown card', state.synced,
+          FeedCardTitle('assets/feed_card/icon_unknown.svg', FeedUnknownCardPage.feedUnknownCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -49,8 +69,8 @@ class FeedUnknownCardPage extends StatelessWidget {
             height: 150,
             alignment: Alignment.center,
             child: Fullscreen(
-              title: 'Unknown card',
-              subtitle: 'Upgrade your app',
+              title: FeedUnknownCardPage.feedUnknownCardPageTitle,
+              subtitle: FeedUnknownCardPage.feedUnknownCardPageUpgradeApp,
               child: SvgPicture.asset('assets/feed_card/icon_unknown.svg', height: 70),
             ),
           ),

@@ -18,7 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
@@ -34,6 +36,114 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class FeedVentilationCardPage extends StatelessWidget {
+  static String get feedVentilationCardPageTitle {
+    return Intl.message(
+      'Ventilation change',
+      name: 'feedVentilationCardPageTitle',
+      desc: 'Feed ventilation card title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageUpgrade {
+    return Intl.message(
+      'Unknown blower reference source, you might need to upgrade the app.',
+      name: 'feedVentilationCardPageUpgrade',
+      desc: 'Feed ventilation card upgrade',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageLowTempSettings {
+    return Intl.message(
+      'Low temperature\nsettings',
+      name: 'feedVentilationCardPageLowTempSettings',
+      desc: 'Feed ventilation card low temperature settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageHighTempSettings {
+    return Intl.message(
+      'High temperature\nsettings',
+      name: 'feedVentilationCardPageHighTempSettings',
+      desc: 'Feed ventilation card high temperature settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageTemperatureMode {
+    return Intl.message(
+      'Temperature mode',
+      name: 'feedVentilationCardPageTemperatureMode',
+      desc: 'Feed ventilation card temperature mode',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageNightSettings {
+    return Intl.message(
+      'Night settings',
+      name: 'feedVentilationCardPageNightSettings',
+      desc: 'Feed ventilation card night settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageDaySettings {
+    return Intl.message(
+      'Day settings',
+      name: 'feedVentilationCardPageDaySettings',
+      desc: 'Feed ventilation card day settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageTimerMode {
+    return Intl.message(
+      'Timer mode',
+      name: 'feedVentilationCardPageTimerMode',
+      desc: 'Feed ventilation card timer mode',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageBlowerPower {
+    return Intl.message(
+      'Blower power',
+      name: 'feedVentilationCardPageBlowerPower',
+      desc: 'Feed ventilation card blower power',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageManualMode {
+    return Intl.message(
+      'Manual mode',
+      name: 'feedVentilationCardPageManualMode',
+      desc: 'Feed ventilation card manual mode',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageDay {
+    return Intl.message(
+      'Day',
+      name: 'feedVentilationCardPageDay',
+      desc: 'Label for the "Day" blower settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageNight {
+    return Intl.message(
+      'Night',
+      name: 'feedVentilationCardPageNight',
+      desc: 'Label for the "Night" blower settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
@@ -58,7 +168,7 @@ class FeedVentilationCardPage extends StatelessWidget {
         children: [
           FeedCardTitle(
             'assets/feed_card/icon_blower.svg',
-            'Ventilation change',
+            FeedVentilationCardPage.feedVentilationCardPageTitle,
             state.synced,
             showSyncStatus: !state.isRemoteState,
             showControls: !state.isRemoteState,
@@ -90,7 +200,8 @@ class FeedVentilationCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_blower.svg', 'Ventilation change', state.synced,
+          FeedCardTitle(
+              'assets/feed_card/icon_blower.svg', FeedVentilationCardPage.feedVentilationCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           }, actions: cardActions != null ? cardActions(state) : []),
@@ -123,7 +234,7 @@ class FeedVentilationCardPage extends StatelessWidget {
     }
     return Fullscreen(
       child: Icon(Icons.upgrade),
-      title: 'Unknown blower reference source, you might need to upgrade the app.',
+      title: FeedVentilationCardPage.feedVentilationCardPageUpgrade,
     );
   }
 
@@ -134,7 +245,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       renderCard(
           'assets/feed_card/icon_blower.svg',
           8,
-          'Low temperature\nsettings',
+          FeedVentilationCardPage.feedVentilationCardPageLowTempSettings,
           Column(
             children: [
               Text('${params.values.blowerMin}%',
@@ -146,7 +257,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       renderCard(
           'assets/feed_card/icon_blower.svg',
           8,
-          'High temperature\nsettings',
+          FeedVentilationCardPage.feedVentilationCardPageHighTempSettings,
           Column(
             children: [
               Text('${params.values.blowerMax}%',
@@ -159,7 +270,8 @@ class FeedVentilationCardPage extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Text('Temperature mode', style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text(FeedVentilationCardPage.feedVentilationCardPageTemperatureMode,
+            style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(
         height: 155,
@@ -181,7 +293,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       renderCard(
           'assets/feed_card/icon_blower.svg',
           8,
-          'Night settings',
+          FeedVentilationCardPage.feedVentilationCardPageNightSettings,
           Column(
             children: [
               Text('${params.values.blowerMin}%',
@@ -191,7 +303,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       renderCard(
           'assets/feed_card/icon_blower.svg',
           8,
-          'Day settings',
+          FeedVentilationCardPage.feedVentilationCardPageDaySettings,
           Column(
             children: [
               Text('${params.values.blowerMax}%',
@@ -202,7 +314,8 @@ class FeedVentilationCardPage extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Text('Timer mode', style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text(FeedVentilationCardPage.feedVentilationCardPageTimerMode,
+            style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(
         height: 130,
@@ -224,7 +337,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       renderCard(
           'assets/feed_card/icon_blower.svg',
           8,
-          'Blower power',
+          FeedVentilationCardPage.feedVentilationCardPageBlowerPower,
           Column(
             children: [
               Text('${params.values.blowerMin}%',
@@ -235,7 +348,8 @@ class FeedVentilationCardPage extends StatelessWidget {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Text('Manual mode', style: TextStyle(fontWeight: FontWeight.w600)),
+        child: Text(FeedVentilationCardPage.feedVentilationCardPageManualMode,
+            style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(
         height: 130,
@@ -284,7 +398,10 @@ class FeedVentilationCardPage extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('${v['i'] == 0 ? 'Day' : 'Night'}',
+                    Text(
+                        v['i'] == 0
+                            ? FeedVentilationCardPage.feedVentilationCardPageDay
+                            : FeedVentilationCardPage.feedVentilationCardPageNight,
                         style: TextStyle(fontSize: 45, fontWeight: FontWeight.w300, color: Colors.grey)),
                   ],
                 ),
