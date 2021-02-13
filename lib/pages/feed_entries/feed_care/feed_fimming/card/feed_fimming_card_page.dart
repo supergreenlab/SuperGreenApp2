@@ -24,11 +24,11 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class FeedFimmingCardPage extends FeedCareCommonCardPage {
-  static String get feedDefoliationCardPageTitle {
+  static String get feedFimingCardPageTitle {
     return Intl.message(
-      'Defoliation',
-      name: 'feedDefoliationCardPageTitle',
-      desc: 'Defoliation card title',
+      'Fimming',
+      name: 'feedFimmingCardPageTitle',
+      desc: 'Fimming card title',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -42,6 +42,6 @@ class FeedFimmingCardPage extends FeedCareCommonCardPage {
 
   @override
   String title() {
-    return FeedFimmingCardPage.feedDefoliationCardPageTitle;
+    return FeedFimmingCardPage.feedFimingCardPageTitle;
   }
 }

@@ -86,6 +86,213 @@ class PlantFeedPage extends StatefulWidget {
     );
   }
 
+  static String get publicPlantPageMenuDefoliation {
+    return Intl.message(
+      'Defoliation',
+      name: 'publicPlantPageMenuDefoliation',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuTopping {
+    return Intl.message(
+      'Topping',
+      name: 'publicPlantPageMenuTopping',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuFimming {
+    return Intl.message(
+      'Fimming',
+      name: 'publicPlantPageMenuFimming',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuBending {
+    return Intl.message(
+      'Bending',
+      name: 'publicPlantPageMenuBending',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuTransplant {
+    return Intl.message(
+      'Transplant',
+      name: 'publicPlantPageMenuTransplant',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuGerminating {
+    return Intl.message(
+      'Germinating',
+      name: 'publicPlantPageMenuGerminating',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuVegging {
+    return Intl.message(
+      'Vegging',
+      name: 'publicPlantPageMenuVegging',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuBlooming {
+    return Intl.message(
+      'Blooming',
+      name: 'publicPlantPageMenuBlooming',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuDrying {
+    return Intl.message(
+      'Drying',
+      name: 'publicPlantPageMenuDrying',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuCuring {
+    return Intl.message(
+      'Curing',
+      name: 'publicPlantPageMenuCuring',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuGrowlog {
+    return Intl.message(
+      'Grow log',
+      name: 'publicPlantPageMenuGrowlog',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuMeasure {
+    return Intl.message(
+      'Measure',
+      name: 'publicPlantPageMenuMeasure',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuNutrientMix {
+    return Intl.message(
+      'Nutrient mix',
+      name: 'publicPlantPageMenuNutrientMix',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuWatering {
+    return Intl.message(
+      'Watering',
+      name: 'publicPlantPageMenuWatering',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuPlantTraining {
+    return Intl.message(
+      'Plant training',
+      name: 'publicPlantPageMenuPlantTraining',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageMenuLifeEvents {
+    return Intl.message(
+      'Life events',
+      name: 'publicPlantPageMenuLifeEvents',
+      desc: 'Speed dial (lower right menu) button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageLoading {
+    return Intl.message(
+      'Loading plant..',
+      name: 'publicPlantPageLoading',
+      desc: 'Loading message while fetching plant from db',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageArchived {
+    return Intl.message(
+      'Plant was removed or archived.',
+      name: 'publicPlantPageArchived',
+      desc: 'Message displayed when the plant that was displayed has be removed or archived',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageOpenPlantMenu {
+    return Intl.message(
+      'OPEN PLANT LIST',
+      name: 'publicPlantPageOpenPlantMenu',
+      desc: 'Button displayed under publicPlantPageArchived, opens the plant menu',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageNoPlantYet {
+    return Intl.message(
+      'You have no plant yet.',
+      name: 'publicPlantPageNoPlantYet',
+      desc: 'Displayed when no plant has been added to the app yet',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageAddFirstPlantPart1 {
+    return Intl.message(
+      'Add your first',
+      name: 'publicPlantPageAddFirstPlantPart1',
+      desc: 'First part of the "Add your first PLANT" text when no plant yet',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageAddFirstPlantPart2 {
+    return Intl.message(
+      'PLANT',
+      name: 'publicPlantPageAddFirstPlantPart2',
+      desc: 'Second part of the "Add your first PLANT" text when no plant yet',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get publicPlantPageStart {
+    return Intl.message(
+      'START',
+      name: 'publicPlantPageStart',
+      desc: 'Button displayed under publicPlantPageAddFirstPlantPart2, opens the plant creation user flow',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _PlantFeedPageState createState() => _PlantFeedPageState();
 }
@@ -220,7 +427,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             });
           }),
       _renderSpeedDialChild(
-          'Defoliation',
+          PlantFeedPage.publicPlantPageMenuDefoliation,
           'assets/feed_card/icon_defoliation.svg',
           _onSpeedDialSelected(
               context,
@@ -229,7 +436,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipID: 'TIP_DEFOLIATION',
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'])),
       _renderSpeedDialChild(
-          'Topping',
+          PlantFeedPage.publicPlantPageMenuTopping,
           'assets/feed_card/icon_topping.svg',
           _onSpeedDialSelected(
               context,
@@ -241,7 +448,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 't/supergreenlab/SuperGreenTips/master/s/how_to_top/l/en'
               ])),
       _renderSpeedDialChild(
-          'Fimming',
+          PlantFeedPage.publicPlantPageMenuFimming,
           'assets/feed_card/icon_fimming.svg',
           _onSpeedDialSelected(
               context,
@@ -253,7 +460,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 't/supergreenlab/SuperGreenTips/master/s/how_to_top/l/en'
               ])),
       _renderSpeedDialChild(
-          'Bending',
+          PlantFeedPage.publicPlantPageMenuBending,
           'assets/feed_card/icon_bending.svg',
           _onSpeedDialSelected(
               context,
@@ -262,7 +469,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipID: 'TIP_BENDING',
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'])),
       _renderSpeedDialChild(
-          'Transplant',
+          PlantFeedPage.publicPlantPageMenuTransplant,
           'assets/feed_card/icon_transplant.svg',
           _onSpeedDialSelected(
               context,
@@ -287,7 +494,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             });
           }),
       _renderSpeedDialChild(
-          'Germinating',
+          PlantFeedPage.publicPlantPageMenuGerminating,
           'assets/plant_infos/icon_germination_date.svg',
           _onSpeedDialSelected(
               context,
@@ -297,7 +504,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipID: 'TIP_GERMINATING',
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'])),
       _renderSpeedDialChild(
-          'Vegging',
+          PlantFeedPage.publicPlantPageMenuVegging,
           'assets/plant_infos/icon_vegging_since.svg',
           _onSpeedDialSelected(
               context,
@@ -306,7 +513,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipID: 'TIP_VEGGING',
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_does_vegetative_state_start/l/en'])),
       _renderSpeedDialChild(
-          'Blooming',
+          PlantFeedPage.publicPlantPageMenuBlooming,
           'assets/plant_infos/icon_blooming_since.svg',
           _onSpeedDialSelected(
               context,
@@ -315,7 +522,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipID: 'TIP_BLOOMING',
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_does_flowering_start/l/en'])),
       _renderSpeedDialChild(
-          'Drying',
+          PlantFeedPage.publicPlantPageMenuDrying,
           'assets/plant_infos/icon_drying_since.svg',
           _onSpeedDialSelected(
               context,
@@ -324,7 +531,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipID: 'TIP_DRYING',
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_dry/l/en'])),
       _renderSpeedDialChild(
-          'Curing',
+          PlantFeedPage.publicPlantPageMenuCuring,
           'assets/plant_infos/icon_curing_since.svg',
           _onSpeedDialSelected(
               context,
@@ -338,21 +545,21 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   List<SpeedDialChild> _renderGeneralSpeedDials(BuildContext context, PlantFeedBlocStateLoaded state) {
     return [
       _renderSpeedDialChild(
-          'Grow log',
+          PlantFeedPage.publicPlantPageMenuGrowlog,
           'assets/feed_card/icon_media.svg',
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
                   plant: state.plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
-          'Measure',
+          PlantFeedPage.publicPlantPageMenuMeasure,
           'assets/feed_card/icon_measure.svg',
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMeasureFormEvent(state.plant,
                   pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
-          'Nutrient mix',
+          PlantFeedPage.publicPlantPageMenuNutrientMix,
           'assets/feed_card/icon_nutrient_mix.svg',
           _onSpeedDialSelected(
               context,
@@ -364,7 +571,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 't/supergreenlab/SuperGreenTips/master/s/how_to_prepare_nutrients/l/en'
               ])),
       _renderSpeedDialChild(
-          'Watering',
+          PlantFeedPage.publicPlantPageMenuWatering,
           'assets/feed_card/icon_watering.svg',
           _onSpeedDialSelected(
               context,
@@ -377,7 +584,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ])),
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_training.svg'),
-          label: 'Plant training',
+          label: PlantFeedPage.publicPlantPageMenuPlantTraining,
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
           onTap: () {
             setState(() {
@@ -386,7 +593,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           }),
       SpeedDialChild(
           child: SvgPicture.asset('assets/feed_card/icon_life_events.svg'),
-          label: 'Life events',
+          label: PlantFeedPage.publicPlantPageMenuLifeEvents,
           labelStyle: TextStyle(fontWeight: FontWeight.bold),
           onTap: () {
             setState(() {
@@ -461,8 +668,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
       Widget bottom;
       if (state.feedEntry != null) {
         bottom = SingleFeedEntry(
-          title: 'Viewing single log entry',
-          button: 'View complete diary',
+          title: PlantFeedPage.publicPlantPageSingleEntry,
+          button: PlantFeedPage.publicPlantPageSingleEntryButton,
           onTap: () {
             BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToPlantFeedEvent(state.plant));
           },
@@ -489,7 +696,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     } else if (state is PlantFeedBlocStatePlantRemoved) {
       return _renderPlantRemoved(context);
     }
-    return FullscreenLoading(title: 'Loading plant..');
+    return FullscreenLoading(title: PlantFeedPage.publicPlantPageLoading);
   }
 
   Widget _renderPlantRemoved(BuildContext context) {
@@ -499,10 +706,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         Icon(Icons.delete, color: Colors.grey, size: 100),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text('Plant was removed or archived.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+          child:
+              Text(PlantFeedPage.publicPlantPageArchived, style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
         ),
         GreenButton(
-          title: 'OPEN PLANT LIST',
+          title: PlantFeedPage.publicPlantPageOpenPlantMenu,
           onPressed: () {
             _scaffoldKey.currentState.openDrawer();
           },
@@ -524,15 +732,18 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('You have no plant yet.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                    child: Text(PlantFeedPage.publicPlantPageNoPlantYet,
+                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
-                  Text('Add your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
-                  Text('PLANT', style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
+                  Text(PlantFeedPage.publicPlantPageAddFirstPlantPart1,
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                  Text(PlantFeedPage.publicPlantPageAddFirstPlantPart2,
+                      style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
                 ],
               ),
             ),
             GreenButton(
-              title: 'START',
+              title: PlantFeedPage.publicPlantPageStart,
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
               },
