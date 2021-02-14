@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-14T07:48:15.500256",
+  "@@last_modified": "2021-02-14T10:25:58.916065",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -1281,6 +1281,18 @@
     "type": "text",
     "placeholders": {}
   },
+  "plantDrawerPagePlantList": "Plant list",
+  "@plantDrawerPagePlantList": {
+    "description": "Plant list title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plantDrawerPageAddPlantLabel": "Add new plant",
+  "@plantDrawerPageAddPlantLabel": {
+    "description": "Add plant button label",
+    "type": "text",
+    "placeholders": {}
+  },
   "environmentsPageControllerRequired": "Monitoring feature\nrequires an SGL controller",
   "@environmentsPageControllerRequired": {
     "description": "Message over the graphs when controller is missing",
@@ -1978,6 +1990,63 @@
   "settingsDevicePageWifiConfigFailed": "Wifi config change failed",
   "@settingsDevicePageWifiConfigFailed": {
     "description": "Wifi config failed message",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createPlantPageDoneMessage": "Plant {name} on lab {boxName} created:)",
+  "@createPlantPageDoneMessage": {
+    "description": "Message displayed when the plant has been created",
+    "type": "text",
+    "placeholders": {
+      "name": {},
+      "boxName": {}
+    }
+  },
+  "createPlantPageNameLabel": "Let's name your new plant:",
+  "@createPlantPageNameLabel": {
+    "description": "New plant name label text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createPlantPageNameHint": "Ex: Gorilla Kush",
+  "@createPlantPageNameHint": {
+    "description": "New plant name hint text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createPlantPageSinglePlantDiarySectionTitle": "Is this a single or multiple plant\ngrow diary?",
+  "@createPlantPageSinglePlantDiarySectionTitle": {
+    "description": "Section title for the \"single plant\" checkbox",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createPlantPageSinglePlantDiaryLabel": "Single plant grow diary",
+  "@createPlantPageSinglePlantDiaryLabel": {
+    "description": "Label for the \"single plant\" checkbox",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createPlantPageCreatePlantButton": "CREATE PLANT",
+  "@createPlantPageCreatePlantButton": {
+    "description": "Button to validate the plant creation",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createBoxPageNewLabLabel": "New green lab's name:",
+  "@createBoxPageNewLabLabel": {
+    "description": "New lab label for the name input",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createBoxPageNewLabHint": "Ex: IkeHigh",
+  "@createBoxPageNewLabHint": {
+    "description": "New lab hint for the name input",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createBoxPageNewLabButton": "CREATE LAB",
+  "@createBoxPageNewLabButton": {
+    "description": "New lab button for the name input",
     "type": "text",
     "placeholders": {}
   },

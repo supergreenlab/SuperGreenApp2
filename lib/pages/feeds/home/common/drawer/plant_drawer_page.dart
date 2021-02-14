@@ -25,7 +25,7 @@ class PlantDrawerPage extends StatefulWidget {
   static String get plantDrawerPageAddPlantLabel {
     return Intl.message(
       'Add new plant',
-      name: 'plantDrawerPageAddPlant',
+      name: 'plantDrawerPageAddPlantLabel',
       desc: 'Add plant button label',
       locale: SGLLocalizations.current.localeName,
     );
