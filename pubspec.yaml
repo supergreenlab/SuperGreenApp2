@@ -17,6 +17,10 @@ environment:
   sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
+  flutter_countdown_timer: ^3.0.0
+  flutter_spinkit: "^4.1.2"
+  vibration: ^1.7.3
+  fluttertoastalert: any 
   heic_to_jpg:
   enum_to_string:
   uni_links:
@@ -94,6 +98,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/lockscreen/
     - assets/feed_form/
     - assets/plant_infos/
     - assets/feed_card/

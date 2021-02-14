@@ -50,7 +50,9 @@ class _ExplorerPageState extends State<ExplorerPage> {
           builder: (context, state) {
             Widget body;
             if (state is ExplorerBlocStateInit) {
-              body = FullscreenLoading();
+              body = FullscreenLoading(
+                duration: 3,
+              );
             } else if (state is ExplorerBlocStateLoaded) {
               body = _renderList(context, state);
             }

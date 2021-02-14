@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 
 class FullscreenLoading extends StatelessWidget {
@@ -24,11 +25,13 @@ class FullscreenLoading extends StatelessWidget {
   final double percent;
   final Color textColor;
   final String circleText;
+  final int duration;
 
   const FullscreenLoading(
       {this.title = 'Loading..',
       this.percent,
       this.textColor,
+      this.duration = 3,
       this.circleText});
 
   @override
@@ -37,13 +40,10 @@ class FullscreenLoading extends StatelessWidget {
     if (percent != null) {
       child = Stack(
         children: [
-          SizedBox(
-              width: 60,
-              height: 60,
-              child: CircularProgressIndicator(
-                value: percent,
-                strokeWidth: 4.0,
-              )),
+          SpinKitThreeBounce(
+              size: 50.0,
+              color: Colors.grey,
+              duration: Duration(seconds: duration)),
           SizedBox(
               width: 60,
               height: 60,
@@ -63,10 +63,8 @@ class FullscreenLoading extends StatelessWidget {
         ],
       );
     } else {
-      child = CircularProgressIndicator(
-        value: percent,
-        strokeWidth: 4.0,
-      );
+      child = SpinKitThreeBounce(
+          color: Colors.grey, duration: Duration(seconds: duration));
     }
     return Fullscreen(
       title: title,
