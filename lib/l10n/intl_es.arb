@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-12T12:58:14.286671",
+  "@@last_modified": "2021-02-14T07:48:15.500256",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -526,9 +526,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "feedDefoliationCardPageTitle": "Defoliation",
-  "@feedDefoliationCardPageTitle": {
-    "description": "Defoliation card title",
+  "feedFimmingCardPageTitle": "Fimming",
+  "@feedFimmingCardPageTitle": {
+    "description": "Fimming card title",
     "type": "text",
     "placeholders": {}
   },
@@ -597,6 +597,12 @@
   "feedToppingCardPageTitle": "Topping",
   "@feedToppingCardPageTitle": {
     "description": "Topping card title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedDefoliationCardPageTitle": "Defoliation",
+  "@feedDefoliationCardPageTitle": {
+    "description": "Defoliation card title",
     "type": "text",
     "placeholders": {}
   },
@@ -1230,6 +1236,264 @@
   "explorerPagePleaseLoginDialogBody": "You need to be logged in to make a plant public.",
   "@explorerPagePleaseLoginDialogBody": {
     "description": "Content for the dialog when the user is not connected",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedPageLoading": "loading more cards...",
+  "@feedPageLoading": {
+    "description": "Loading message usually displayed on the fullscreen overlay",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productsPageLoadingPlantData": "Loading plant data",
+  "@productsPageLoadingPlantData": {
+    "description": "Products page loading plant data",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productsPageTitle": "Toolbox",
+  "@productsPageTitle": {
+    "description": "Products page title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productsPageToolboxEmptyOwnPlant": "Toolbox is empty\nuse the “+” above to add your first item.",
+  "@productsPageToolboxEmptyOwnPlant": {
+    "description": "Products page empty toolbox message when looking at own plant",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productsPageToolboxEmpty": "Toolbox is empty",
+  "@productsPageToolboxEmpty": {
+    "description": "Products page empty toolbox message when looking at another plant",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productsPageToolboxInstructions": "List the items you used for this grow for future reference and/or kowledge sharing.",
+  "@productsPageToolboxInstructions": {
+    "description": "Products toolbox instructions",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productsPageToolboxBy": "by ",
+  "@productsPageToolboxBy": {
+    "description": "Products toolbox \"by \" prefix for brand name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageControllerRequired": "Monitoring feature\nrequires an SGL controller",
+  "@environmentsPageControllerRequired": {
+    "description": "Message over the graphs when controller is missing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageShopNow": "SHOP NOW",
+  "@environmentsPageShopNow": {
+    "description": "SHOW NOW button displayed when controller is missing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageOr": "or",
+  "@environmentsPageOr": {
+    "description": "SHOW NOW *or* DIY NOW displayed when controller is missing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageDIYNow": "DIY NOW",
+  "@environmentsPageDIYNow": {
+    "description": "DIY NOW button displayed when controller is missing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageAlreadyGotOne": "already got one?",
+  "@environmentsPageAlreadyGotOne": {
+    "description": "label for the SETUP CONTROLLER button displayed when controller is missing, opens the select controller dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageSetupController": "SETUP CONTROLLER",
+  "@environmentsPageSetupController": {
+    "description": "SETUP CONTROLLER displayed when controller is missing, opens the select controller dialog",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageControlTitle": "Environment control",
+  "@environmentsPageControlTitle": {
+    "description": "Title displayed above the environment control buttons",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageLight": "Light",
+  "@environmentsPageLight": {
+    "description": "Label for the light dimming control page button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageVentilation": "Ventil",
+  "@environmentsPageVentilation": {
+    "description": "Label for the ventilation control page button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "environmentsPageSchedule": "Schedule",
+  "@environmentsPageSchedule": {
+    "description": "Label for the schedule control page button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageSingleEntry": "Viewing single log entry",
+  "@publicPlantPageSingleEntry": {
+    "description": "Label for the button that shows the complete diary when looking at a single feed entry",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageSingleEntryButton": "View complete diary",
+  "@publicPlantPageSingleEntryButton": {
+    "description": "Button that shows the complete diary when looking at a single feed entry",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageTitle": "Plant feed",
+  "@publicPlantPageTitle": {
+    "description": "Label for the button that shows the complete diary when looking at a single feed entry",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuDefoliation": "Defoliation",
+  "@publicPlantPageMenuDefoliation": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuTopping": "Topping",
+  "@publicPlantPageMenuTopping": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuFimming": "Fimming",
+  "@publicPlantPageMenuFimming": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuBending": "Bending",
+  "@publicPlantPageMenuBending": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuTransplant": "Transplant",
+  "@publicPlantPageMenuTransplant": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuGerminating": "Germinating",
+  "@publicPlantPageMenuGerminating": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuVegging": "Vegging",
+  "@publicPlantPageMenuVegging": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuBlooming": "Blooming",
+  "@publicPlantPageMenuBlooming": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuDrying": "Drying",
+  "@publicPlantPageMenuDrying": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuCuring": "Curing",
+  "@publicPlantPageMenuCuring": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuGrowlog": "Grow log",
+  "@publicPlantPageMenuGrowlog": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuMeasure": "Measure",
+  "@publicPlantPageMenuMeasure": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuNutrientMix": "Nutrient mix",
+  "@publicPlantPageMenuNutrientMix": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuWatering": "Watering",
+  "@publicPlantPageMenuWatering": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuPlantTraining": "Plant training",
+  "@publicPlantPageMenuPlantTraining": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageMenuLifeEvents": "Life events",
+  "@publicPlantPageMenuLifeEvents": {
+    "description": "Speed dial (lower right menu) button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageLoading": "Loading plant..",
+  "@publicPlantPageLoading": {
+    "description": "Loading message while fetching plant from db",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageArchived": "Plant was removed or archived.",
+  "@publicPlantPageArchived": {
+    "description": "Message displayed when the plant that was displayed has be removed or archived",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageOpenPlantMenu": "OPEN PLANT LIST",
+  "@publicPlantPageOpenPlantMenu": {
+    "description": "Button displayed under publicPlantPageArchived, opens the plant menu",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageNoPlantYet": "You have no plant yet.",
+  "@publicPlantPageNoPlantYet": {
+    "description": "Displayed when no plant has been added to the app yet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageAddFirstPlantPart1": "Add your first",
+  "@publicPlantPageAddFirstPlantPart1": {
+    "description": "First part of the \"Add your first PLANT\" text when no plant yet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageAddFirstPlantPart2": "PLANT",
+  "@publicPlantPageAddFirstPlantPart2": {
+    "description": "Second part of the \"Add your first PLANT\" text when no plant yet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "publicPlantPageStart": "START",
+  "@publicPlantPageStart": {
+    "description": "Button displayed under publicPlantPageAddFirstPlantPart2, opens the plant creation user flow",
     "type": "text",
     "placeholders": {}
   },

@@ -3,18 +3,38 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantDrawerPage extends StatefulWidget {
+  static String get plantDrawerPagePlantList {
+    return Intl.message(
+      'Plant list',
+      name: 'plantDrawerPagePlantList',
+      desc: 'Plant list title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get plantDrawerPageAddPlantLabel {
+    return Intl.message(
+      'Add new plant',
+      name: 'plantDrawerPageAddPlant',
+      desc: 'Add plant button label',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Plant selectedPlant;
   final Box selectedBox;
 
-  const PlantDrawerPage({Key key, this.selectedPlant, this.selectedBox})
-      : super(key: key);
+  const PlantDrawerPage({Key key, this.selectedPlant, this.selectedBox}) : super(key: key);
 
   @override
   _PlantDrawerPageState createState() => _PlantDrawerPageState();
@@ -44,16 +64,12 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                 SizedBox(
                   width: 50,
                   height: 50,
-                  child: SvgPicture.asset(
-                      "assets/super_green_lab_vertical_white.svg"),
+                  child: SvgPicture.asset("assets/super_green_lab_vertical_white.svg"),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text('Plant list',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w300)),
+                  child: Text(PlantDrawerPage.plantDrawerPagePlantList,
+                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300)),
                 ),
               ])),
             ),
@@ -69,7 +85,7 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                       children: <Widget>[
                         ListTile(
                             leading: Icon(Icons.add_circle),
-                            title: Text('Add new plant'),
+                            title: Text(PlantDrawerPage.plantDrawerPageAddPlantLabel),
                             onTap: () => _onAddPlant(context)),
                       ],
                     ))))
@@ -82,12 +98,11 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
   Widget _plantList(BuildContext context) {
     return BlocBuilder<PlantDrawerBloc, PlantDrawerBlocState>(
       buildWhen: (previousState, state) =>
-          state is PlantDrawerBlocStateLoadingPlantList ||
-          state is PlantDrawerBlocStatePlantListUpdated,
+          state is PlantDrawerBlocStateLoadingPlantList || state is PlantDrawerBlocStatePlantListUpdated,
       builder: (BuildContext context, PlantDrawerBlocState state) {
         Widget content;
         if (state is PlantDrawerBlocStateLoadingPlantList) {
-          content = FullscreenLoading(title: 'Loading..');
+          content = FullscreenLoading(title: CommonL10N.loading);
         } else if (state is PlantDrawerBlocStatePlantListUpdated) {
           List<Plant> plants = state.plants.toList();
           List<Box> boxes = state.boxes;
@@ -98,26 +113,19 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                 List<Widget> content = [
                   Container(
                     decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 1,
-                            offset: Offset(0, 2))
-                      ],
+                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1, offset: Offset(0, 2))],
                       color: Colors.white,
                     ),
                     child: ListTile(
                       onTap: () {
-                        BlocProvider.of<HomeNavigatorBloc>(context)
-                            .add(HomeNavigateToBoxFeedEvent(b));
+                        BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToBoxFeedEvent(b));
                       },
                       leading: Container(
                         width: 60,
                         height: 30,
                         child: Row(
                           children: [
-                            (widget.selectedBox != null &&
-                                    widget.selectedBox.id == b.id)
+                            (widget.selectedBox != null && widget.selectedBox.id == b.id)
                                 ? Icon(
                                     Icons.check_box,
                                     color: Colors.green,
@@ -130,8 +138,7 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                       title: Text(b.name),
                       trailing: InkWell(
                           onTap: () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToSettingsBox(b));
+                            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(b));
                           },
                           child: Icon(Icons.settings)),
                     ),
@@ -140,16 +147,13 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                 content.addAll(plants.where((p) => p.box == b.id).map((p) {
                   int nUnseen = 0;
                   try {
-                    nUnseen = state.hasPending
-                        .where((e) => e.id == p.feed)
-                        .map<int>((e) => e.nNew)
-                        .reduce((a, e) => a + e);
+                    nUnseen =
+                        state.hasPending.where((e) => e.id == p.feed).map<int>((e) => e.nNew).reduce((a, e) => a + e);
                   } catch (e) {}
                   Widget item = Padding(
                       padding: EdgeInsets.only(left: 16),
                       child: ListTile(
-                        leading: (widget.selectedPlant != null &&
-                                widget.selectedPlant.id == p.id)
+                        leading: (widget.selectedPlant != null && widget.selectedPlant.id == p.id)
                             ? Icon(
                                 Icons.check_box,
                                 color: Colors.green,
@@ -158,21 +162,14 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                         trailing: Container(
                             width: 50,
                             height: 30,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  nUnseen != null && nUnseen > 0
-                                      ? _renderBadge(nUnseen)
-                                      : Container(),
-                                  InkWell(
-                                      onTap: () {
-                                        BlocProvider.of<MainNavigatorBloc>(
-                                                context)
-                                            .add(
-                                                MainNavigateToSettingsPlant(p));
-                                      },
-                                      child: Icon(Icons.settings)),
-                                ])),
+                            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                              nUnseen != null && nUnseen > 0 ? _renderBadge(nUnseen) : Container(),
+                              InkWell(
+                                  onTap: () {
+                                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlant(p));
+                                  },
+                                  child: Icon(Icons.settings)),
+                            ])),
                         title: Text(p.name),
                         onTap: () => _selectPlant(context, p),
                       ));
@@ -218,15 +215,12 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
 
   void _selectPlant(BuildContext context, Plant plant) {
     //ignore: close_sinks
-    HomeNavigatorBloc navigatorBloc =
-        BlocProvider.of<HomeNavigatorBloc>(context);
+    HomeNavigatorBloc navigatorBloc = BlocProvider.of<HomeNavigatorBloc>(context);
     Navigator.pop(context);
-    Timer(Duration(milliseconds: 250),
-        () => navigatorBloc.add(HomeNavigateToPlantFeedEvent(plant)));
+    Timer(Duration(milliseconds: 250), () => navigatorBloc.add(HomeNavigateToPlantFeedEvent(plant)));
   }
 
   void _onAddPlant(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToCreatePlantEvent());
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
   }
 }

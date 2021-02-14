@@ -62,7 +62,7 @@ class PlantFeedPage extends StatefulWidget {
   static String get publicPlantPageTitle {
     return Intl.message(
       'Plant feed',
-      name: 'publicPlantPageSingleEntry',
+      name: 'publicPlantPageTitle',
       desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current.localeName,
     );

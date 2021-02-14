@@ -24,7 +24,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class FeedFimmingCardPage extends FeedCareCommonCardPage {
-  static String get feedFimingCardPageTitle {
+  static String get feedFimmingCardPageTitle {
     return Intl.message(
       'Fimming',
       name: 'feedFimmingCardPageTitle',
@@ -42,6 +42,6 @@ class FeedFimmingCardPage extends FeedCareCommonCardPage {
 
   @override
   String title() {
-    return FeedFimmingCardPage.feedFimingCardPageTitle;
+    return FeedFimmingCardPage.feedFimmingCardPageTitle;
   }
 }
