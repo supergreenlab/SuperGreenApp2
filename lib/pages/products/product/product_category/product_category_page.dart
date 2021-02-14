@@ -19,7 +19,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_categories.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_category_bloc.dart';
@@ -28,6 +30,24 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class ProductTypePage extends StatefulWidget {
+  static String get productTypePageSelectCategorySectionTitle {
+    return Intl.message(
+      'Please choose the new product\'s\ncategory.',
+      name: 'productTypePageSelectCategorySectionTitle',
+      desc: 'Section title for the product category list',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get productTypePageSelectCategoryNextButton {
+    return Intl.message(
+      'NEXT',
+      name: 'productTypePageSelectCategoryNextButton',
+      desc: 'Validation button for the select category page',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _ProductTypePageState createState() => _ProductTypePageState();
 }
@@ -46,7 +66,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: SectionTitle(
-                  title: 'Please choose the new product\'s\ncategory.',
+                  title: ProductTypePage.productTypePageSelectCategorySectionTitle,
                   icon: 'assets/products/toolbox/icon_item_type.svg',
                   iconPadding: 0,
                 ),
@@ -54,10 +74,8 @@ class _ProductTypePageState extends State<ProductTypePage> {
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 4,
-                  children: productCategories.keys
-                      .map<Widget>((ProductCategoryID name) {
-                    final ProductCategoryUI categoryUI =
-                        productCategories[name];
+                  children: productCategories.keys.map<Widget>((ProductCategoryID name) {
+                    final ProductCategoryUI categoryUI = productCategories[name];
                     return InkWell(
                       onTap: () {
                         setState(() {
@@ -73,19 +91,13 @@ class _ProductTypePageState extends State<ProductTypePage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    border: selectedCategory == name
-                                        ? Border.all(color: Colors.green)
-                                        : null,
-                                    borderRadius: selectedCategory == name
-                                        ? BorderRadius.all(Radius.circular(25))
-                                        : null),
+                                    border: selectedCategory == name ? Border.all(color: Colors.green) : null,
+                                    borderRadius:
+                                        selectedCategory == name ? BorderRadius.all(Radius.circular(25)) : null),
                                 child: SvgPicture.asset(categoryUI.icon)),
                           ),
                           Text(categoryUI.name,
-                              style: TextStyle(
-                                  fontWeight: selectedCategory == name
-                                      ? FontWeight.bold
-                                      : null))
+                              style: TextStyle(fontWeight: selectedCategory == name ? FontWeight.bold : null))
                         ],
                       ),
                     );
@@ -97,19 +109,16 @@ class _ProductTypePageState extends State<ProductTypePage> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: GreenButton(
-                    title: 'NEXT',
+                    title: ProductTypePage.productTypePageSelectCategoryNextButton,
                     onPressed: selectedCategory == null
                         ? null
                         : () {
-                            BlocProvider.of<MainNavigatorBloc>(context).add(
-                                MainNavigateToProductInfosEvent(
-                                    selectedCategory, futureFn: (future) async {
+                            BlocProvider.of<MainNavigatorBloc>(context)
+                                .add(MainNavigateToProductInfosEvent(selectedCategory, futureFn: (future) async {
                               Product product = await future;
                               if (product != null) {
-                                BlocProvider.of<MainNavigatorBloc>(context).add(
-                                    MainNavigatorActionPop(
-                                        param: product.copyWith(
-                                            category: selectedCategory)));
+                                BlocProvider.of<MainNavigatorBloc>(context)
+                                    .add(MainNavigatorActionPop(param: product.copyWith(category: selectedCategory)));
                               }
                             }));
                           },
@@ -127,8 +136,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                 iconColor: Colors.white,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
