@@ -125,6 +125,8 @@ import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dar
 import 'package:super_green_app/pages/settings/devices/settings_devices_page.dart';
 import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_page.dart';
+import 'package:super_green_app/pages/settings/pin_screen/settings_pin_screen_bloc.dart';
+import 'package:super_green_app/pages/settings/pin_screen/settings_pin_screen_page.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_page.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
@@ -171,25 +173,21 @@ class _MainPageState extends State<MainPage> {
       child: BlocListener<LocalNotificationBloc, LocalNotificationBlocState>(
         listener: (BuildContext context, LocalNotificationBlocState state) {
           if (state is LocalNotificationBlocStateMainNavigation) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(state.mainNavigatorEvent);
+            BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
           }
         },
         child: BlocListener<TowelieBloc, TowelieBlocState>(
           listener: (BuildContext context, state) {
             if (state is TowelieBlocStateMainNavigation) {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(state.mainNavigatorEvent);
+              BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
             } else if (state is TowelieBlocStateLocalNotification) {
-              BlocProvider.of<LocalNotificationBloc>(context)
-                  .add(state.localNotificationBlocEventReminder);
+              BlocProvider.of<LocalNotificationBloc>(context).add(state.localNotificationBlocEventReminder);
             }
           },
           child: BlocListener<DeepLinkBloc, DeepLinkBlocState>(
             listener: (BuildContext context, state) {
               if (state is DeepLinkBlocStateMainNavigation) {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(state.mainNavigatorEvent);
+                BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
               }
             },
             child: MaterialApp(
@@ -205,13 +203,11 @@ class _MainPageState extends State<MainPage> {
                 const Locale('fr'),
               ],
               navigatorKey: widget._navigatorKey,
-              onGenerateTitle: (BuildContext context) =>
-                  SGLLocalizations.of(context).title,
+              onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context).title,
               onGenerateRoute: (settings) => CupertinoPageRoute(
                   settings: settings,
                   builder: (context) => wrapSyncIndicator(
-                      TowelieHelper.wrapWidget(settings, context,
-                          _onGenerateRoute(context, settings)))),
+                      TowelieHelper.wrapWidget(settings, context, _onGenerateRoute(context, settings)))),
               theme: ThemeData(
                 fontFamily: 'Roboto',
               ),
@@ -241,9 +237,7 @@ class _MainPageState extends State<MainPage> {
                     color: Colors.red,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 21.0),
-                      child: Center(
-                          child: Text('Syncing - ${state.text}',
-                              style: TextStyle(color: Colors.white))),
+                      child: Center(child: Text('Syncing - ${state.text}', style: TextStyle(color: Colors.white))),
                     )),
               )));
         }
@@ -256,16 +250,14 @@ class _MainPageState extends State<MainPage> {
 
   Widget _onGenerateRoute(BuildContext context, RouteSettings settings) {
     Timer(Duration(milliseconds: 100), () {
-      BlocProvider.of<TowelieBloc>(context)
-          .add(TowelieBlocEventRoute(settings));
+      BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventRoute(settings));
     });
     switch (settings.name) {
       case '/home':
         return MultiBlocProvider(
           providers: [
             BlocProvider<HomeNavigatorBloc>(
-                create: (context) =>
-                    HomeNavigatorBloc(settings.arguments, _homeNavigatorKey)),
+                create: (context) => HomeNavigatorBloc(settings.arguments, _homeNavigatorKey)),
             BlocProvider<HomeBloc>(
               create: (context) => HomeBloc(),
             )
@@ -506,66 +498,63 @@ class _MainPageState extends State<MainPage> {
       case '/public/plant':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => PublicPlantBloc(settings.arguments)),
+            BlocProvider(create: (context) => PublicPlantBloc(settings.arguments)),
           ],
           child: PublicPlantPage(),
         );
       case '/product/select':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => SelectNewProductBloc(settings.arguments)),
+            BlocProvider(create: (context) => SelectNewProductBloc(settings.arguments)),
           ],
           child: SelectNewProductPage(),
         );
       case '/product/new/infos':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => ProductInfosBloc(settings.arguments)),
+            BlocProvider(create: (context) => ProductInfosBloc(settings.arguments)),
           ],
           child: ProductInfosPage(),
         );
       case '/product/new/type':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => ProductTypeBloc(settings.arguments)),
+            BlocProvider(create: (context) => ProductTypeBloc(settings.arguments)),
           ],
           child: ProductTypePage(),
         );
       case '/plantpicker':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => PlantPickerBloc(settings.arguments)),
+            BlocProvider(create: (context) => PlantPickerBloc(settings.arguments)),
           ],
           child: PlantPickerPage(),
         );
       case '/selectplant':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => SelectPlantBloc(settings.arguments)),
+            BlocProvider(create: (context) => SelectPlantBloc(settings.arguments)),
           ],
           child: SelectPlantPage(),
         );
       case '/product/new/supplier':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => ProductSupplierBloc(settings.arguments)),
+            BlocProvider(create: (context) => ProductSupplierBloc(settings.arguments)),
           ],
           child: ProductSupplierPage(),
         );
       case '/public/box':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-                create: (context) => RemoteBoxFeedBloc(settings.arguments)),
+            BlocProvider(create: (context) => RemoteBoxFeedBloc(settings.arguments)),
           ],
           child: RemoteBoxFeedPage(),
+        );
+      case '/settings/pinscreen':
+        return BlocProvider(
+          create: (context) => SettingsPinScreenBloc(settings.arguments),
+          child: SettingsPinScreenPage(),
         );
     }
     return Text('Unknown route');

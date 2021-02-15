@@ -46,8 +46,7 @@ class SettingsPage extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<SettingsBloc>(context).add(
-                        SettingsBlocEventSetFreedomUnit(!state.freedomUnits));
+                    BlocProvider.of<SettingsBloc>(context).add(SettingsBlocEventSetFreedomUnit(!state.freedomUnits));
                   },
                   leading: SizedBox(
                       width: 40,
@@ -55,68 +54,54 @@ class SettingsPage extends StatelessWidget {
                       child: SvgPicture.asset(state.freedomUnits
                           ? 'assets/settings/icon_imperial.svg'
                           : 'assets/settings/icon_metric.svg')),
-                  title: Text(
-                      state.freedomUnits
-                          ? 'Imperial unit system'
-                          : 'Metric unit system',
+                  title: Text(state.freedomUnits ? 'Imperial unit system' : 'Metric unit system',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text(
-                      'Tap to change to ${state.freedomUnits ? 'metric' : 'imperial'}'),
+                  subtitle: Text('Tap to change to ${state.freedomUnits ? 'metric' : 'imperial'}'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsAuth());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPinScreenEvent());
                   },
                   leading: SizedBox(
                       width: 40,
                       height: 40,
-                      child:
-                          SvgPicture.asset('assets/settings/icon_account.svg')),
-                  title: Text('SGL Account',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle:
-                      Text('Enable backups, remote control, sharing, etc..'),
+                      child: SvgPicture.asset(state.freedomUnits
+                          ? 'assets/settings/icon_imperial.svg'
+                          : 'assets/settings/icon_metric.svg')),
+                  title: Text('Set pin code', style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Tap to create or change pin code'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsPlants());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
                   },
-                  leading: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child:
-                          SvgPicture.asset('assets/settings/icon_plants.svg')),
-                  title: Text('Plants',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_account.svg')),
+                  title: Text('SGL Account', style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('Enable backups, remote control, sharing, etc..'),
+                ),
+                ListTile(
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlants());
+                  },
+                  leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_plants.svg')),
+                  title: Text('Plants', style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Move to new box & delete plants.'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsBoxes());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBoxes());
                   },
-                  leading: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: SvgPicture.asset('assets/settings/icon_lab.svg')),
-                  title: Text('Labs',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_lab.svg')),
+                  title: Text('Labs', style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Change controller & delete labs.'),
                 ),
                 ListTile(
                   onTap: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsDevices());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsDevices());
                   },
-                  leading: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: SvgPicture.asset(
-                          'assets/settings/icon_controller.svg')),
-                  title: Text('Controllers',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading:
+                      SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_controller.svg')),
+                  title: Text('Controllers', style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Edit & delete controllers.'),
                 ),
                 ListTile(
@@ -129,13 +114,9 @@ class SettingsPage extends StatelessWidget {
                     );
                     await FlutterEmailSender.send(email);
                   },
-                  leading: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: SvgPicture.asset(
-                          'assets/settings/icon_feedback.svg')),
-                  title: Text('Send us some feedback!',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading:
+                      SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_feedback.svg')),
+                  title: Text('Send us some feedback!', style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Tap to send over email'),
                 ),
                 ListTile(
@@ -153,12 +134,8 @@ class SettingsPage extends StatelessWidget {
                     );
                     await FlutterEmailSender.send(email);
                   },
-                  leading: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: Image.asset('assets/settings/avatar.jpg')),
-                  title: Text('Send my logs to stant',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  leading: SizedBox(width: 40, height: 40, child: Image.asset('assets/settings/avatar.jpg')),
+                  title: Text('Send my logs to stant', style: TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Tap to send over email'),
                 )
               ],
