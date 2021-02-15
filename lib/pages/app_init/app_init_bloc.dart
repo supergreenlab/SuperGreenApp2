@@ -50,6 +50,13 @@ class AppInitBlocEventAllowAnalytics extends AppInitBlocEvent {
   List<Object> get props => [allowAnalytics];
 }
 
+class AppInitBlocEventPinCodeSuccess extends AppInitBlocEvent {
+  AppInitBlocEventPinCodeSuccess();
+
+  @override
+  List<Object> get props => [];
+}
+
 abstract class AppInitBlocState extends Equatable {}
 
 class AppInitBlocStateLoading extends AppInitBlocState {
@@ -59,11 +66,12 @@ class AppInitBlocStateLoading extends AppInitBlocState {
 
 class AppInitBlocStateReady extends AppInitBlocState {
   final bool firstStart;
+  final String pinCode;
 
-  AppInitBlocStateReady(this.firstStart);
+  AppInitBlocStateReady(this.firstStart, this.pinCode);
 
   @override
-  List<Object> get props => [firstStart];
+  List<Object> get props => [firstStart, pinCode];
 }
 
 class AppInitBlocStateDone extends AppInitBlocState {
@@ -120,13 +128,15 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       // if (appData.allowAnalytics == true) {
       //   _allowAnalytics();
       // }
-      yield AppInitBlocStateReady(appData.firstStart);
+      yield AppInitBlocStateReady(appData.firstStart, appData.pinCode);
     } else if (event is AppInitBlocEventAllowAnalytics) {
       _db.setFirstStart(false);
       _db.setAllowAnalytics(event.allowAnalytics);
       // if (event.allowAnalytics == true) {
       //   _allowAnalytics();
       // }
+      yield AppInitBlocStateDone();
+    } else if (event is AppInitBlocEventPinCodeSuccess) {
       yield AppInitBlocStateDone();
     }
   }

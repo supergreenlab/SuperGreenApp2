@@ -34,20 +34,17 @@ class AppInitPage extends StatelessWidget {
       cubit: BlocProvider.of<AppInitBloc>(context),
       listener: (BuildContext context, AppInitBlocState state) {
         if (state is AppInitBlocStateReady) {
-          BlocProvider.of<LocalNotificationBloc>(context)
-              .add(LocalNotificationBlocEventInit());
-          BlocProvider.of<DeviceDaemonBloc>(
-              context); // force-instanciate DeviceDaemonBloc
+          BlocProvider.of<LocalNotificationBloc>(context).add(LocalNotificationBlocEventInit());
+          BlocProvider.of<DeviceDaemonBloc>(context); // force-instanciate DeviceDaemonBloc
           BlocProvider.of<SyncerBloc>(context); // force-instanciate SyncerBloc
-          BlocProvider.of<DeepLinkBloc>(
-              context); // force-instanciate DeepLinkBloc
+          BlocProvider.of<DeepLinkBloc>(context); // force-instanciate DeepLinkBloc
           if (state.firstStart == false) {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToHomeEvent());
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
           } else {
-            BlocProvider.of<TowelieBloc>(context)
-                .add(TowelieBlocEventAppInit());
+            BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventAppInit());
           }
+        } else if (state is AppInitBlocStateDone) {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
         }
       },
       child: BlocBuilder<AppInitBloc, AppInitBlocState>(

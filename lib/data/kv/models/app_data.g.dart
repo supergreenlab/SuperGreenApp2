@@ -23,13 +23,14 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..freedomUnits = fields[3] as bool
       ..jwt = fields[4] as String
       ..storeGeo = fields[5] as String
-      ..syncOverGSM = fields[6] as bool;
+      ..syncOverGSM = fields[6] as bool
+      ..pinCode = fields[10] as String;
   }
 
   @override
   void write(BinaryWriter writer, AppData obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.firstStart)
       ..writeByte(1)
@@ -43,7 +44,9 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..writeByte(5)
       ..write(obj.storeGeo)
       ..writeByte(6)
-      ..write(obj.syncOverGSM);
+      ..write(obj.syncOverGSM)
+      ..writeByte(10)
+      ..write(obj.pinCode);
   }
 
   @override

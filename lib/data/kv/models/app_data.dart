@@ -36,4 +36,6 @@ class AppData {
   String storeGeo;
   @HiveField(6)
   bool syncOverGSM = false;
+  @HiveField(10)
+  String pinCode;
 }
