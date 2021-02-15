@@ -57,9 +57,7 @@ class HomePage extends StatelessWidget {
           Widget body;
           Widget navbar;
           if (state is HomeBlocStateInit) {
-            body = FullscreenLoading(
-              title: 'Loading..',
-            );
+            body = FullscreenLoading();
           } else if (state is HomeBlocStateLoaded) {
             body = Navigator(
               //observers: [_analyticsObserver],
