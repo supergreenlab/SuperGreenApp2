@@ -67,32 +67,12 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
   final NutrientMixPhase phase;
   final FeedNutrientMixParams baseNutrientMixParams;
 
-  FeedNutrientMixFormBlocEventCreate(
-      this.date,
-      this.name,
-      this.volume,
-      this.ph,
-      this.ec,
-      this.tds,
-      this.nutrientProducts,
-      this.message,
-      this.plants,
-      this.phase,
-      this.baseNutrientMixParams);
+  FeedNutrientMixFormBlocEventCreate(this.date, this.name, this.volume, this.ph, this.ec, this.tds,
+      this.nutrientProducts, this.message, this.plants, this.phase, this.baseNutrientMixParams);
 
   @override
-  List<Object> get props => [
-        date,
-        name,
-        volume,
-        ph,
-        ec,
-        nutrientProducts,
-        message,
-        plants,
-        phase,
-        baseNutrientMixParams
-      ];
+  List<Object> get props =>
+      [date, name, volume, ph, ec, nutrientProducts, message, plants, phase, baseNutrientMixParams];
 }
 
 abstract class FeedNutrientMixFormBlocState extends Equatable {}
@@ -105,15 +85,15 @@ class FeedNutrientMixFormBlocStateInit extends FeedNutrientMixFormBlocState {
 }
 
 class FeedNutrientMixFormBlocStateLoaded extends FeedNutrientMixFormBlocState {
+  final int nPlants;
   final Plant plant;
   final List<Product> products;
   final List<FeedNutrientMixParams> lastNutrientMixParams;
 
-  FeedNutrientMixFormBlocStateLoaded(
-      this.plant, this.products, this.lastNutrientMixParams);
+  FeedNutrientMixFormBlocStateLoaded(this.nPlants, this.plant, this.products, this.lastNutrientMixParams);
 
   @override
-  List<Object> get props => [plant, products, lastNutrientMixParams];
+  List<Object> get props => [this.nPlants, plant, products, lastNutrientMixParams];
 }
 
 class FeedNutrientMixFormBlocStateLoading extends FeedNutrientMixFormBlocState {
@@ -130,41 +110,33 @@ class FeedNutrientMixFormBlocStateDone extends FeedNutrientMixFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedNutrientMixFormBloc
-    extends Bloc<FeedNutrientMixFormBlocEvent, FeedNutrientMixFormBlocState> {
+class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNutrientMixFormBlocState> {
   final MainNavigateToFeedNutrientMixFormEvent args;
 
   List<FeedNutrientMixParams> lastNutrientMixParams = [];
   StreamSubscription<Plant> plantStream;
 
-  FeedNutrientMixFormBloc(this.args)
-      : super(FeedNutrientMixFormBlocStateInit()) {
+  FeedNutrientMixFormBloc(this.args) : super(FeedNutrientMixFormBlocStateInit()) {
     add(FeedNutrientMixFormBlocEventInit());
   }
 
   @override
-  Stream<FeedNutrientMixFormBlocState> mapEventToState(
-      FeedNutrientMixFormBlocEvent event) async* {
+  Stream<FeedNutrientMixFormBlocState> mapEventToState(FeedNutrientMixFormBlocEvent event) async* {
     if (event is FeedNutrientMixFormBlocEventInit) {
-      List<FeedEntry> nutrientMixes =
-          await RelDB.get().feedsDAO.getFeedEntriesWithType('FE_NUTRIENT_MIX');
+      List<FeedEntry> nutrientMixes = await RelDB.get().feedsDAO.getFeedEntriesWithType('FE_NUTRIENT_MIX');
       Map<String, FeedEntry> lastNutrientMixParamsMap = {};
       for (FeedEntry nutrientMix in nutrientMixes) {
-        FeedNutrientMixParams params =
-            FeedNutrientMixParams.fromJSON(nutrientMix.params);
+        FeedNutrientMixParams params = FeedNutrientMixParams.fromJSON(nutrientMix.params);
         if (params.name != null && params.name != '') {
           if (lastNutrientMixParamsMap[params.name] == null) {
             lastNutrientMixParamsMap[params.name] = nutrientMix;
-          } else if (lastNutrientMixParamsMap[params.name]
-              .date
-              .isBefore(nutrientMix.date)) {
+          } else if (lastNutrientMixParamsMap[params.name].date.isBefore(nutrientMix.date)) {
             lastNutrientMixParamsMap[params.name] = nutrientMix;
           }
         }
       }
-      lastNutrientMixParams = lastNutrientMixParamsMap.values
-          .map((nm) => FeedNutrientMixParams.fromJSON(nm.params))
-          .toList();
+      lastNutrientMixParams =
+          lastNutrientMixParamsMap.values.map((nm) => FeedNutrientMixParams.fromJSON(nm.params)).toList();
       lastNutrientMixParams.sort((np1, np2) {
         if (np1.phase == null && np2.phase == null) {
           return 0;
@@ -175,23 +147,22 @@ class FeedNutrientMixFormBloc
         }
         return np1.phase.index - np2.phase.index;
       });
-      plantStream =
-          RelDB.get().plantsDAO.watchPlant(args.plant.id).listen(plantUpdated);
+      plantStream = RelDB.get().plantsDAO.watchPlant(args.plant.id).listen(plantUpdated);
+      int nPlants = await RelDB.get().plantsDAO.nPlants().getSingle();
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
       yield FeedNutrientMixFormBlocStateLoaded(
+          nPlants,
           plant,
-          plantSettings.products
-              .where((p) => p.category == ProductCategoryID.FERTILIZER)
-              .toList(),
+          plantSettings.products.where((p) => p.category == ProductCategoryID.FERTILIZER).toList(),
           lastNutrientMixParams);
       // } else if (event is FeedNutrientMixFormBlocEventAddNutrients) {
       //   Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       //   addProductsToPlant(plant, event.missingProducts);
     } else if (event is FeedNutrientMixFormBlocEventLoaded) {
+      int nPlants = await RelDB.get().plantsDAO.nPlants().getSingle();
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
-      yield FeedNutrientMixFormBlocStateLoaded(
-          plant, event.products, lastNutrientMixParams);
+      yield FeedNutrientMixFormBlocStateLoaded(nPlants, plant, event.products, lastNutrientMixParams);
     } else if (event is FeedNutrientMixFormBlocEventCreate) {
       yield FeedNutrientMixFormBlocStateLoading();
       for (Plant plant in event.plants) {
@@ -206,9 +177,8 @@ class FeedNutrientMixFormBloc
                   ph: event.ph,
                   ec: event.ec,
                   tds: event.tds,
-                  nutrientProducts: event.nutrientProducts
-                      .where((np) => np.quantity != null && np.quantity > 0)
-                      .toList(),
+                  nutrientProducts:
+                      event.nutrientProducts.where((np) => np.quantity != null && np.quantity > 0).toList(),
                   message: event.message,
                   phase: event.phase,
                   basedOn: event.baseNutrientMixParams?.name)
@@ -219,35 +189,28 @@ class FeedNutrientMixFormBloc
     }
   }
 
-  Future addProductsToPlant(
-      Plant plant, List<NutrientProduct> nutrientProducts) async {
+  Future addProductsToPlant(Plant plant, List<NutrientProduct> nutrientProducts) async {
     bool updatePlant = false;
     PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
     for (NutrientProduct nutrientProduct in nutrientProducts) {
       if (nutrientProduct.quantity != null && nutrientProduct.quantity == 0) {
         continue;
       }
-      if (plantSettings.products.firstWhere(
-              (p) => p.id == nutrientProduct.product.id,
-              orElse: () => null) ==
-          null) {
+      if (plantSettings.products.firstWhere((p) => p.id == nutrientProduct.product.id, orElse: () => null) == null) {
         plantSettings.products.add(nutrientProduct.product);
         updatePlant = true;
       }
     }
     if (updatePlant) {
-      await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
-          id: Value(plant.id),
-          settings: Value(plantSettings.toJSON()),
-          synced: Value(false)));
+      await RelDB.get().plantsDAO.updatePlant(
+          PlantsCompanion(id: Value(plant.id), settings: Value(plantSettings.toJSON()), synced: Value(false)));
     }
   }
 
   void plantUpdated(Plant plant) {
     PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
-    add(FeedNutrientMixFormBlocEventLoaded(plantSettings.products
-        .where((p) => p.category == ProductCategoryID.FERTILIZER)
-        .toList()));
+    add(FeedNutrientMixFormBlocEventLoaded(
+        plantSettings.products.where((p) => p.category == ProductCategoryID.FERTILIZER).toList()));
   }
 
   @override

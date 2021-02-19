@@ -21,7 +21,9 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -30,6 +32,15 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class SocialBarPage extends StatelessWidget {
+  static String socialBarPagePageLikedBy(int count) {
+    return Intl.message(
+      'Liked by $count people',
+      name: 'commentsFormPageSendingCommentLoading',
+      desc: 'Number of likes on a post',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final FeedEntryState state;
   final FeedState feedState;
 
@@ -69,11 +80,11 @@ class SocialBarPage extends StatelessWidget {
             ],
           ),
           state.socialState is FeedEntrySocialStateLoaded &&
-                  (state.socialState as FeedEntrySocialStateLoaded).nLikes > 10
+                  (state.socialState as FeedEntrySocialStateLoaded).nLikes > 2
               ? Padding(
                   padding: const EdgeInsets.only(left: 4.0, top: 4.0),
                   child: Text(
-                    'Liked by ${(state.socialState as FeedEntrySocialStateLoaded).nLikes} people',
+                    SocialBarPage.socialBarPagePageLikedBy((state.socialState as FeedEntrySocialStateLoaded).nLikes),
                     style: TextStyle(color: Color(0xff565656), fontSize: 15),
                   ),
                 )

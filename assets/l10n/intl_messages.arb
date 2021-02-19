@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-14T10:25:58.916065",
+  "@@last_modified": "2021-02-17T11:18:56.706736",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -367,6 +367,18 @@
   "toweliePlantCreated": "Awesome, **you created your first plant**!\n\nYou can access your newly plant feed either by **pressing the home button below**, or the **View plant** button below.\n",
   "@toweliePlantCreated": {
     "description": "Towelie Plant Created",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productTypePageSelectCategorySectionTitle": "Please choose the new product's\ncategory.",
+  "@productTypePageSelectCategorySectionTitle": {
+    "description": "Section title for the product category list",
+    "type": "text",
+    "placeholders": {}
+  },
+  "productTypePageSelectCategoryNextButton": "NEXT",
+  "@productTypePageSelectCategoryNextButton": {
+    "description": "Validation button for the select category page",
     "type": "text",
     "placeholders": {}
   },
@@ -1992,6 +2004,14 @@
     "description": "Wifi config failed message",
     "type": "text",
     "placeholders": {}
+  },
+  "plantPickerPageSelectButton": "SELECT ({count})",
+  "@plantPickerPageSelectButton": {
+    "description": "Confirmation button for the plant picker page",
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
   },
   "createPlantPageDoneMessage": "Plant {name} on lab {boxName} created:)",
   "@createPlantPageDoneMessage": {

@@ -59,21 +59,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m19(yesNo) => "With nutes: ${yesNo}";
 
-  static m20(progress) => "Syncing - ${progress}";
+  static m20(count) => "SELECT (${count})";
 
-  static m21(leds) => "Led channels: ${leds}";
+  static m21(progress) => "Syncing - ${progress}";
 
-  static m22(number) => "Box #${number}";
+  static m22(leds) => "Led channels: ${leds}";
 
-  static m23(index, name) => "Reset box #${index} on controller ${name}?";
+  static m23(number) => "Box #${number}";
 
-  static m24(name) => "Delete controller ${name}?";
+  static m24(index, name) => "Reset box #${index} on controller ${name}?";
 
-  static m25(name) => "Controller ${name} updated!";
+  static m25(name) => "Delete controller ${name}?";
 
-  static m26(name) => "Controller ${name} refreshed!";
+  static m26(name) => "Controller ${name} updated!";
 
-  static m27(time) => "(100% power for ${time} s)";
+  static m27(name) => "Controller ${name} refreshed!";
+
+  static m28(time) => "(100% power for ${time} s)";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -286,6 +288,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "or" : MessageLookupByLibrary.simpleMessage("OR"),
     "plantDrawerPageAddPlantLabel" : MessageLookupByLibrary.simpleMessage("Add new plant"),
     "plantDrawerPagePlantList" : MessageLookupByLibrary.simpleMessage("Plant list"),
+    "plantPickerPageSelectButton" : m20,
+    "productTypePageSelectCategoryNextButton" : MessageLookupByLibrary.simpleMessage("NEXT"),
+    "productTypePageSelectCategorySectionTitle" : MessageLookupByLibrary.simpleMessage("Please choose the new product\'s\ncategory."),
     "productsPageLoadingPlantData" : MessageLookupByLibrary.simpleMessage("Loading plant data"),
     "productsPageTitle" : MessageLookupByLibrary.simpleMessage("Toolbox"),
     "productsPageToolboxBy" : MessageLookupByLibrary.simpleMessage("by "),
@@ -320,7 +325,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "publicPlantPageSingleEntryButton" : MessageLookupByLibrary.simpleMessage("View complete diary"),
     "publicPlantPageStart" : MessageLookupByLibrary.simpleMessage("START"),
     "publicPlantPageTitle" : MessageLookupByLibrary.simpleMessage("Plant feed"),
-    "redBarSyncingProgress" : m20,
+    "redBarSyncingProgress" : m21,
     "saving" : MessageLookupByLibrary.simpleMessage("Saving..."),
     "selectBoxPageAddNewGreenLab" : MessageLookupByLibrary.simpleMessage("Add new green lab"),
     "selectBoxPageCreateFirst" : MessageLookupByLibrary.simpleMessage("Create your first"),
@@ -333,17 +338,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceAddFirstController" : MessageLookupByLibrary.simpleMessage("CONTROLLER"),
     "selectDeviceBoxAlreadyRunning" : MessageLookupByLibrary.simpleMessage("Already running"),
     "selectDeviceBoxAvailable" : MessageLookupByLibrary.simpleMessage("Available"),
-    "selectDeviceBoxLedChannelDescription" : m21,
+    "selectDeviceBoxLedChannelDescription" : m22,
     "selectDeviceBoxNoLedChannelAssigned" : MessageLookupByLibrary.simpleMessage("No led channels assigned"),
     "selectDeviceBoxNoMoreLED" : MessageLookupByLibrary.simpleMessage("No more free led channels"),
-    "selectDeviceBoxNumber" : m22,
-    "selectDeviceBoxResetDialogTitle" : m23,
+    "selectDeviceBoxNumber" : m23,
+    "selectDeviceBoxResetDialogTitle" : m24,
     "selectDeviceBoxSettingUp" : MessageLookupByLibrary.simpleMessage("Setting up.."),
     "selectDeviceBoxSlot" : MessageLookupByLibrary.simpleMessage("Select controller\'s box slot"),
     "selectDeviceContinueWithoutController" : MessageLookupByLibrary.simpleMessage("Continue without controller"),
     "selectDeviceDIYNow" : MessageLookupByLibrary.simpleMessage("DIY NOW"),
     "selectDeviceDeleteControllerDialogBody" : MessageLookupByLibrary.simpleMessage("This can\'t be reverted. Continue?"),
-    "selectDeviceDeleteControllerDialogTitle" : m24,
+    "selectDeviceDeleteControllerDialogTitle" : m25,
     "selectDeviceListItemInstruction" : MessageLookupByLibrary.simpleMessage("Tap to select"),
     "selectDeviceListTitle" : MessageLookupByLibrary.simpleMessage("Select a controller below"),
     "selectDeviceNewBoxAvailableLEDChannels" : MessageLookupByLibrary.simpleMessage("Available LED channels"),
@@ -358,16 +363,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceShopNow" : MessageLookupByLibrary.simpleMessage("SHOP NOW"),
     "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
     "settingParameters" : MessageLookupByLibrary.simpleMessage("Setting parameters.."),
-    "settingsDevicePageControllerDone" : m25,
+    "settingsDevicePageControllerDone" : m26,
     "settingsDevicePageControllerNameSection" : MessageLookupByLibrary.simpleMessage("Controller name"),
-    "settingsDevicePageControllerRefreshed" : m26,
+    "settingsDevicePageControllerRefreshed" : m27,
     "settingsDevicePageControllerSettingsSection" : MessageLookupByLibrary.simpleMessage("Settings"),
     "settingsDevicePageLoading" : MessageLookupByLibrary.simpleMessage("Refreshing.."),
     "settingsDevicePageWifiConfigFailed" : MessageLookupByLibrary.simpleMessage("Wifi config change failed"),
     "settingsDevicePageWifiConfigSuccess" : MessageLookupByLibrary.simpleMessage("Wifi config changed successfully"),
     "settingsDevicePageWifiSettingsLabel" : MessageLookupByLibrary.simpleMessage("Change your controller\'s wifi config"),
     "settingsDevicePageWifiSettingsSection" : MessageLookupByLibrary.simpleMessage("Wifi config"),
-    "testLEDTiming" : m27,
+    "testLEDTiming" : m28,
     "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
     "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),

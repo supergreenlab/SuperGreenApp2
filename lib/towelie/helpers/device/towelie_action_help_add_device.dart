@@ -26,7 +26,7 @@ class TowelieActionHelpAddDevice extends TowelieActionHelp {
   static String get towelieHelperAddDevice {
     return Intl.message(
       '''**Good**.
-Now this is when you should **plug the controller to it\'s power supply** if not already.
+Now this is when you should **plug the controller to its power supply** if not already.
 Then you will choose one of the options above to **connect to the controller**.''',
       name: 'towelieHelperAddDevice',
       desc: 'Towelie Helper Add device',
@@ -42,8 +42,7 @@ Then you will choose one of the options above to **connect to the controller**.'
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpAddDevice.towelieHelperAddDevice);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpAddDevice.towelieHelperAddDevice);
     }
   }
 }

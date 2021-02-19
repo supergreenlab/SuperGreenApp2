@@ -25,7 +25,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 class TowelieActionHelpFormTakePic extends TowelieActionHelp {
   static String get towelieHelperFormTakePic {
     return Intl.message(
-      'Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You\'ll be glad you took regular pictures on your next grow!**',
+      'Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You\'ll be glad you took pictures regularly during your next grow!**',
       name: 'towelieHelperFormTakePic',
       desc: 'Towelie Helper form take pic',
       locale: SGLLocalizations.current.localeName,

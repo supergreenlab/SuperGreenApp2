@@ -389,14 +389,17 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                     nameFocusNode.requestFocus();
                     return;
                   }
-                  Completer<List<Plant>> plantsFuture = Completer();
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPlantPickerEvent(
-                      [plant], FeedNutrientMixFormPage.feedNutrientMixFormPageSelectPlant, futureFn: (future) async {
-                    plantsFuture.complete(await future);
-                  }));
-                  List<Plant> plants = await plantsFuture.future;
-                  if (plants == null || plants.length == 0) {
-                    return;
+                  List<Plant> plants = [plant];
+                  if ((state as FeedNutrientMixFormBlocStateLoaded).nPlants > 1) {
+                    Completer<List<Plant>> plantsFuture = Completer();
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPlantPickerEvent(
+                        plants, FeedNutrientMixFormPage.feedNutrientMixFormPageSelectPlant, futureFn: (future) async {
+                      plantsFuture.complete(await future);
+                    }));
+                    plants = await plantsFuture.future;
+                    if (plants == null || plants.length == 0) {
+                      return;
+                    }
                   }
                   BlocProvider.of<FeedNutrientMixFormBloc>(context).add(FeedNutrientMixFormBlocEventCreate(
                       date,

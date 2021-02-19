@@ -58,8 +58,7 @@ class CaptureBlocState extends Equatable {
 }
 
 class CaptureBlocStateInit extends CaptureBlocState {
-  CaptureBlocStateInit(
-      bool videoEnabled, bool pickerEnabled, String overlayPath)
+  CaptureBlocStateInit(bool videoEnabled, bool pickerEnabled, String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 }
 
@@ -67,8 +66,7 @@ class CaptureBlocStateLoading extends CaptureBlocState {
   final String title;
   final double progress;
 
-  CaptureBlocStateLoading(this.title, this.progress, bool videoEnabled,
-      bool pickerEnabled, String overlayPath)
+  CaptureBlocStateLoading(this.title, this.progress, bool videoEnabled, bool pickerEnabled, String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
@@ -78,8 +76,7 @@ class CaptureBlocStateLoading extends CaptureBlocState {
 class CaptureBlocStateDone extends CaptureBlocState {
   final List<FeedMediasCompanion> feedMedias;
 
-  CaptureBlocStateDone(this.feedMedias, bool videoEnabled, bool pickerEnabled,
-      String overlayPath)
+  CaptureBlocStateDone(this.feedMedias, bool videoEnabled, bool pickerEnabled, String overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
@@ -89,17 +86,14 @@ class CaptureBlocStateDone extends CaptureBlocState {
 class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   final MainNavigateToImageCaptureEvent args;
 
-  CaptureBloc(this.args)
-      : super(CaptureBlocState(
-            args.videoEnabled, args.pickerEnabled, args.overlayPath)) {
+  CaptureBloc(this.args) : super(CaptureBlocState(args.videoEnabled, args.pickerEnabled, args.overlayPath)) {
     add(CaptureBlocEventInit());
   }
 
   @override
   Stream<CaptureBlocState> mapEventToState(CaptureBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield CaptureBlocStateInit(
-          args.videoEnabled, args.pickerEnabled, args.overlayPath);
+      yield CaptureBlocStateInit(args.videoEnabled, args.pickerEnabled, args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
       List<File> files = event.files;
       List<FeedMediasCompanion> feedMedias = [];
@@ -116,8 +110,7 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
           yield loadingEvent('Copying files..', (i - 1) / files.length);
         } else if (ext == 'heic') {
-          yield loadingEvent(
-              'Converting heic to jpg..', (i - 1) / files.length);
+          yield loadingEvent('Converting heic to jpg..', (i - 1) / files.length);
           String jpegPath = await HeicToJpg.convert(file.path);
           yield loadingEvent('Copying files..', (i - 1) / files.length);
           filePath = '$fileName.jpg';
@@ -126,15 +119,13 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           yield loadingEvent('Converting png to jpg..', (i - 1) / files.length);
           Image image = decodeImage(await file.readAsBytes());
           filePath = '$fileName.jpg';
-          await File(FeedMedias.makeAbsoluteFilePath(filePath))
-              .writeAsBytes(encodeJpg(image));
+          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));
           yield loadingEvent('Copying files..', (i - 1) / files.length);
         } else {
           await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
         }
         String fileBaseName = basename(fileName);
-        String thumbnailPath =
-            filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
+        String thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
         if (thumbnailPath.endsWith('mp4')) {
           thumbnailPath = thumbnailPath.replaceFirst('.mp4', '.jpg');
           await VideoThumbnail.thumbnailFile(
@@ -145,11 +136,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           );
           await optimizePicture(thumbnailPath, thumbnailPath);
         } else {
-          Image image = decodeImage(
-              await File(FeedMedias.makeAbsoluteFilePath(filePath))
-                  .readAsBytes());
-          await File(FeedMedias.makeAbsoluteFilePath(filePath))
-              .writeAsBytes(encodeJpg(image));
+          Image image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(filePath)).readAsBytes());
+          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));
           await optimizePicture(filePath, thumbnailPath);
         }
         feedMedias.add(FeedMediasCompanion(
@@ -157,22 +145,17 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           thumbnailPath: Value(thumbnailPath),
         ));
       }
-      yield CaptureBlocStateDone(
-          feedMedias, args.videoEnabled, args.pickerEnabled, args.overlayPath);
+      yield CaptureBlocStateDone(feedMedias, args.videoEnabled, args.pickerEnabled, args.overlayPath);
     }
   }
 
   Future optimizePicture(String from, String to) async {
-    Image image = decodeImage(
-        await File(FeedMedias.makeAbsoluteFilePath(from)).readAsBytes());
+    Image image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(from)).readAsBytes());
     Image thumbnail = copyResize(image,
-        height: image.height > image.width ? 800 : null,
-        width: image.width >= image.height ? 800 : null);
-    await File(FeedMedias.makeAbsoluteFilePath(to))
-        .writeAsBytes(encodeJpg(thumbnail, quality: 50));
+        height: image.height > image.width ? 800 : null, width: image.width >= image.height ? 800 : null);
+    await File(FeedMedias.makeAbsoluteFilePath(to)).writeAsBytes(encodeJpg(thumbnail, quality: 50));
   }
 
   CaptureBlocStateLoading loadingEvent(String title, double progress) =>
-      CaptureBlocStateLoading(title, progress, args.videoEnabled,
-          args.pickerEnabled, args.overlayPath);
+      CaptureBlocStateLoading(title, progress, args.videoEnabled, args.pickerEnabled, args.overlayPath);
 }

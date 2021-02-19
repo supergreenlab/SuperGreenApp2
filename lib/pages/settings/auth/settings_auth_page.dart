@@ -22,6 +22,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:media_picker_builder/data/media_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -114,14 +115,25 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       Center(
           child: Column(children: <Widget>[
-        InkWell(
-            onTap: () {
-              _checkPermission().then((granted) {
-                if (!granted) return;
-                _buildPicker(context);
-              });
-            },
-            child: UserAvatar(icon: pic, size: 100)),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: InkWell(
+              onTap: () {
+                _checkPermission().then((granted) {
+                  if (!granted) return;
+                  _buildPicker(context);
+                });
+              },
+              child: Column(
+                children: [
+                  UserAvatar(icon: pic, size: 150),
+                  Text(
+                    "Tap to change",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ],
+              )),
+        ),
         Text(
           'Already connected to your',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),

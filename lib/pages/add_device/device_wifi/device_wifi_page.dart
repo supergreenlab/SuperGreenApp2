@@ -97,7 +97,7 @@ class DeviceWifiPage extends StatefulWidget {
   static String get deviceWifiPageWifiPasswordLabel {
     return Intl.message(
       'Enter your home wifi password',
-      name: 'deviceWifiPageWifiPasswordLabel',
+      name: 'deviceWifiPageWifPasswordLabel',
       desc: 'Label for the wifi password input field',
       locale: SGLLocalizations.current.localeName,
     );
@@ -272,7 +272,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
               },
                   focusNode: _ssidFocusNode,
                   error: state.error == true ? DeviceWifiPage.deviceWifiPageErrorConnectionEmoji : ''),
-              _renderInput(context, DeviceWifiPage.deviceWifiPageWifiInputLabel, '...', _passController,
+              _renderInput(context, DeviceWifiPage.deviceWifiPageWifiPasswordLabel, '...', _passController,
                   onFieldSubmitted: (term) {
                 _handleInput(context);
               }, focusNode: _passFocusNode),

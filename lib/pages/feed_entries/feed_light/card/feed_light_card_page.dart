@@ -74,7 +74,7 @@ class FeedLightCardPage extends StatelessWidget {
           FeedCardTitle('assets/feed_card/icon_light.svg', 'Stretch control', state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
-            height: 100,
+            height: 130,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),

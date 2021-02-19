@@ -58,7 +58,6 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   @mustCallSuper
   void startListenEntryChanges(FeedEntryStateLoaded entry) async {
     await loadSocialState(entry);
-    await loadComments(entry.socialState, entry);
   }
 
   @override
