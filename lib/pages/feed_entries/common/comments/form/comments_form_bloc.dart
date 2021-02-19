@@ -204,18 +204,20 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
     } else if (event is CommentsFormBlocEventPostComment) {
       String tempID = Uuid().v4();
       Comment comment = Comment(
-          id: tempID,
-          feedEntryID: feedEntryID,
-          userID: this.user.id,
-          from: this.user.nickname,
-          pic: this.user.pic,
-          replyTo: event.replyTo?.id,
-          text: event.text,
-          type: event.type,
-          createdAt: DateTime.now(),
-          liked: false,
-          params: JsonEncoder().convert(CommentParam(recommend: event.recommend).toMap()),
-          isNew: true);
+        id: tempID,
+        feedEntryID: feedEntryID,
+        userID: this.user.id,
+        from: this.user.nickname,
+        pic: this.user.pic,
+        replyTo: event.replyTo?.id,
+        text: event.text,
+        type: event.type,
+        createdAt: DateTime.now(),
+        liked: false,
+        params: JsonEncoder().convert(CommentParam(recommend: event.recommend).toMap()),
+        isNew: true,
+        nLikes: 0,
+      );
       yield CommentsFormBlocStateAddComment(comment);
       comment = await BackendAPI().feedsAPI.postComment(comment);
       yield CommentsFormBlocStateUpdateComment(comment.copyWith(isNew: false), oldID: tempID);

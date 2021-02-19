@@ -557,6 +557,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                   ),
                   InkWell(
                     onTap: () {
+                      if (textEditingController.text.length == 0) {
+                        return;
+                      }
                       BlocProvider.of<CommentsFormBloc>(context).add(
                           CommentsFormBlocEventPostComment(textEditingController.text, type, replyTo, recommended));
                       FocusScope.of(context).unfocus();
