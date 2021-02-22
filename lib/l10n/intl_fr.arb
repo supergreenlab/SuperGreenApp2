@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-17T11:18:56.706736",
+  "@@last_modified": "2021-02-21T14:11:14.831885",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -244,7 +244,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperAddDevice": "**Good**.\nNow this is when you should **plug the controller to it's power supply** if not already.\nThen you will choose one of the options above to **connect to the controller**.",
+  "towelieHelperAddDevice": "**Good**.\nNow this is when you should **plug the controller to its power supply** if not already.\nThen you will choose one of the options above to **connect to the controller**.",
   "@towelieHelperAddDevice": {
     "description": "Towelie Helper Add device",
     "type": "text",
@@ -256,7 +256,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "towelieHelperFormTakePic": "Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You'll be glad you took regular pictures on your next grow!**",
+  "towelieHelperFormTakePic": "Welcome to the **take pic** page, this screen is to take picture of your plant **and note observations**. **You'll be glad you took pictures regularly during your next grow!**",
   "@towelieHelperFormTakePic": {
     "description": "Towelie Helper form take pic",
     "type": "text",
@@ -1736,12 +1736,6 @@
   "deviceWifiPageWifiInputLabel": "Enter your home wifi SSID",
   "@deviceWifiPageWifiInputLabel": {
     "description": "Label for the wifi ssid input field",
-    "type": "text",
-    "placeholders": {}
-  },
-  "deviceWifiPageWifiPasswordLabel": "Enter your home wifi password",
-  "@deviceWifiPageWifiPasswordLabel": {
-    "description": "Label for the wifi password input field",
     "type": "text",
     "placeholders": {}
   },

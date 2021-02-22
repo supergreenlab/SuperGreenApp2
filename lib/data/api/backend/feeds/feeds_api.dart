@@ -41,9 +41,12 @@ class FeedsAPI {
   }
 
   Future updateNotificationToken(String token) async {
-    return BackendAPI().postPut('/userend', {
-      'notificationToken': token,
-    });
+    return BackendAPI().postPut(
+        '/userend',
+        {
+          'notificationToken': token,
+        },
+        forcePut: true);
   }
 
   Future sendDeletes(List<Delete> deletes) async {
