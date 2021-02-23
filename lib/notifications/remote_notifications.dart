@@ -46,7 +46,7 @@ class RemoteNotifications {
         Logger.log(e);
       }
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
-    } else if (BackendAPI().usersAPI.loggedIn && !AppDB().getAppData().notificationOnStartAsked) {
+    } else if (BackendAPI().usersAPI.loggedIn && AppDB().getAppData().notificationOnStartAsked != true) {
       Timer(Duration(milliseconds: 1000), () {
         add(NotificationsBlocEventRequestPermission());
         AppDB().setNotificationOnStartAsked(true);
