@@ -25,6 +25,7 @@ import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 
 enum NotificationDataType {
   PLANT_COMMENT,
+  PLANT_COMMENT_REPLY,
   REMINDER,
   ALERT,
   LIKE_PLANT_COMMENT,
@@ -50,6 +51,8 @@ abstract class NotificationData extends Equatable {
     switch (EnumToString.fromString(NotificationDataType.values, data['type'])) {
       case NotificationDataType.PLANT_COMMENT:
         return NotificationDataPlantComment.fromMap(data);
+      case NotificationDataType.PLANT_COMMENT_REPLY:
+        return NotificationDataPlantCommentReply.fromMap(data);
       case NotificationDataType.REMINDER:
         return NotificationDataReminder.fromMap(data);
       case NotificationDataType.ALERT:
@@ -101,6 +104,35 @@ class NotificationDataPlantComment extends NotificationData {
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
   CommentType get commentType => EnumToString.fromString(CommentType.values, data['commentType']);
+}
+
+class NotificationDataPlantCommentReply extends NotificationData {
+  NotificationDataPlantCommentReply({
+    int id,
+    String title,
+    String body,
+    @required String plantID,
+    @required String feedEntryID,
+    @required String commentID,
+    String replyTo,
+  }) : super(
+          id: id,
+          data: {
+            'plantID': plantID,
+            'feedEntryID': feedEntryID,
+            'commentID': commentID,
+            'replyTo': replyTo,
+          },
+          type: NotificationDataType.PLANT_COMMENT,
+          title: title,
+          body: body,
+        );
+  NotificationDataPlantCommentReply.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
+  String get feedEntryID => data['feedEntryID'];
+  String get commentID => data['commentID'];
+  String get replyTo => data['replyTo'];
 }
 
 class NotificationDataReminder extends NotificationData {

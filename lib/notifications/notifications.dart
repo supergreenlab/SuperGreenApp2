@@ -144,6 +144,25 @@ class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocSt
           yield NotificationsBlocStateMainNavigation(
               MainNavigateToPublicPlant(notificationData.plantID, feedEntryID: notificationData.feedEntryID));
         }
+      } else if (notificationData is NotificationDataPlantCommentReply) {
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(notificationData.feedEntryID);
+        if (plant != null && feedEntry != null) {
+          AppDB().setLastPlant(plant.id);
+          yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(
+            plant: plant,
+            feedEntry: feedEntry,
+            commentID: notificationData.commentID,
+            replyTo: notificationData.replyTo,
+          ));
+        } else {
+          yield NotificationsBlocStateMainNavigation(MainNavigateToPublicPlant(
+            notificationData.plantID,
+            feedEntryID: notificationData.feedEntryID,
+            commentID: notificationData.commentID,
+            replyTo: notificationData.replyTo,
+          ));
+        }
       } else if (notificationData is NotificationDataReminder) {
         yield NotificationsBlocStateNotification(event.notificationData);
         Plant plant = await RelDB.get().plantsDAO.getPlant(notificationData.plantID);

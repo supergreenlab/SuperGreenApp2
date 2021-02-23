@@ -72,7 +72,10 @@ class SettingsLoginBloc extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocSt
       yield SettingsLoginBlocStateLoading();
       try {
         await BackendAPI().usersAPI.login(event.nickname, event.password);
-        await BackendAPI().feedsAPI.createUserEnd(notificationToken: AppDB().getAppData().notificationToken);
+        String notificationToken = AppDB().getAppData().notificationToken ?? "";
+        await BackendAPI()
+            .feedsAPI
+            .createUserEnd(notificationToken: notificationToken == "" ? null : notificationToken);
       } catch (e) {
         Logger.log(e);
         yield SettingsLoginBlocStateError();
