@@ -75,7 +75,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m27(name) => "Controller ${name} refreshed!";
 
-  static m28(time) => "(100% power for ${time} s)";
+  static m28(count) => "Liked by ${count} people";
+
+  static m29(time) => "(100% power for ${time} s)";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -120,6 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "deviceWifiPageSearchingControllerTries" : m5,
     "deviceWifiPageTitle" : MessageLookupByLibrary.simpleMessage("Controller Wifi setup"),
     "deviceWifiPageWifiInputLabel" : MessageLookupByLibrary.simpleMessage("Enter your home wifi SSID"),
+    "deviceWifiPageWifiPasswordLabel" : MessageLookupByLibrary.simpleMessage("Enter your home wifi password"),
     "done" : MessageLookupByLibrary.simpleMessage("Done!"),
     "doneButton" : MessageLookupByLibrary.simpleMessage("DONE"),
     "environmentsPageAlreadyGotOne" : MessageLookupByLibrary.simpleMessage("already got one?"),
@@ -371,7 +374,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "settingsDevicePageWifiConfigSuccess" : MessageLookupByLibrary.simpleMessage("Wifi config changed successfully"),
     "settingsDevicePageWifiSettingsLabel" : MessageLookupByLibrary.simpleMessage("Change your controller\'s wifi config"),
     "settingsDevicePageWifiSettingsSection" : MessageLookupByLibrary.simpleMessage("Wifi config"),
-    "testLEDTiming" : m28,
+    "socialBarPagePageLikedBy" : m28,
+    "testLEDTiming" : m29,
     "testingLEDDone" : MessageLookupByLibrary.simpleMessage("Testing done"),
     "testingLEDTitle" : MessageLookupByLibrary.simpleMessage("Testing LED"),
     "title" : MessageLookupByLibrary.simpleMessage("SuperGreenLab"),

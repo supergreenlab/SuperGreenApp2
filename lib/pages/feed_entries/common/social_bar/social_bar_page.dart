@@ -35,7 +35,8 @@ class SocialBarPage extends StatelessWidget {
   static String socialBarPagePageLikedBy(int count) {
     return Intl.message(
       'Liked by $count people',
-      name: 'commentsFormPageSendingCommentLoading',
+      args: [count],
+      name: 'socialBarPagePageLikedBy',
       desc: 'Number of likes on a post',
       locale: SGLLocalizations.current.localeName,
     );
@@ -80,7 +81,7 @@ class SocialBarPage extends StatelessWidget {
             ],
           ),
           state.socialState is FeedEntrySocialStateLoaded &&
-                  (state.socialState as FeedEntrySocialStateLoaded).nLikes > 2
+                  (state.socialState as FeedEntrySocialStateLoaded).nLikes > 0
               ? Padding(
                   padding: const EdgeInsets.only(left: 4.0, top: 4.0),
                   child: Text(

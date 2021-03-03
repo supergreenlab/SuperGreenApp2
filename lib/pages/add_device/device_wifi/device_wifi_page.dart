@@ -97,7 +97,7 @@ class DeviceWifiPage extends StatefulWidget {
   static String get deviceWifiPageWifiPasswordLabel {
     return Intl.message(
       'Enter your home wifi password',
-      name: 'deviceWifiPageWifPasswordLabel',
+      name: 'deviceWifiPageWifiPasswordLabel',
       desc: 'Label for the wifi password input field',
       locale: SGLLocalizations.current.localeName,
     );

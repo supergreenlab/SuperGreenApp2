@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-02-21T14:11:14.831885",
+  "@@last_modified": "2021-03-03T11:16:12.880",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -1043,6 +1043,14 @@
     "type": "text",
     "placeholders": {}
   },
+  "socialBarPagePageLikedBy": "Liked by {count} people",
+  "@socialBarPagePageLikedBy": {
+    "description": "Number of likes on a post",
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
+  },
   "commentsFormPageSendingCommentLoading": "Sending comment..",
   "@commentsFormPageSendingCommentLoading": {
     "description": "Comments page auto-loading message at end of scroll",
@@ -1736,6 +1744,12 @@
   "deviceWifiPageWifiInputLabel": "Enter your home wifi SSID",
   "@deviceWifiPageWifiInputLabel": {
     "description": "Label for the wifi ssid input field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deviceWifiPageWifiPasswordLabel": "Enter your home wifi password",
+  "@deviceWifiPageWifiPasswordLabel": {
+    "description": "Label for the wifi password input field",
     "type": "text",
     "placeholders": {}
   },
