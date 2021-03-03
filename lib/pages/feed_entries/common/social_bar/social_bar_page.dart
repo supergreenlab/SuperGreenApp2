@@ -33,8 +33,10 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class SocialBarPage extends StatelessWidget {
   static String socialBarPagePageLikedBy(int count) {
-    return Intl.message(
-      'Liked by $count people',
+    return Intl.plural(
+      count,
+      one: 'Liked by 1',
+      other: 'Liked by $count',
       args: [count],
       name: 'socialBarPagePageLikedBy',
       desc: 'Number of likes on a post',

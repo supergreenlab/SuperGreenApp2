@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-03T11:16:12.880",
+  "@@last_modified": "2021-03-03T11:37:37.713870",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -1043,7 +1043,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "socialBarPagePageLikedBy": "Liked by {count} people",
+  "socialBarPagePageLikedBy": "{count,plural, =1{1 like}other{{count} likes}}",
   "@socialBarPagePageLikedBy": {
     "description": "Number of likes on a post",
     "type": "text",

@@ -75,7 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m27(name) => "Controller ${name} refreshed!";
 
-  static m28(count) => "Liked by ${count} people";
+  static m28(count) => "${Intl.plural(count, one: '1 like', other: '${count} likes')}";
 
   static m29(time) => "(100% power for ${time} s)";
 
