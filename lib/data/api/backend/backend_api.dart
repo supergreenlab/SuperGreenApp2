@@ -57,7 +57,7 @@ class BackendAPI {
       storageServerHostHeader = 'storage.supergreenlab.com';
       // serverHost = 'http://192.168.1.87:8080';
       // storageServerHost = 'http://192.168.1.87:9000';
-      // storageServerHostHeader = 'minio:9002';
+      // storageServerHostHeader = 'minio:9000';
     } else {
       initAndroidDevUrls();
     }
@@ -69,7 +69,7 @@ class BackendAPI {
       bool local = true;
       serverHost = local ? 'http://192.168.1.87:8080' : 'https://devapi2.supergreenlab.com';
       storageServerHost = local ? 'http://192.168.1.87:9000' : 'https://devstorage.supergreenlab.com';
-      storageServerHostHeader = local ? 'minio:9002' : 'devstorage.supergreenlab.com';
+      storageServerHostHeader = local ? 'minio:9000' : 'devstorage.supergreenlab.com';
     } else {
       serverHost = 'http://10.0.2.2:8080';
       storageServerHost = 'http://10.0.2.2:9000';
