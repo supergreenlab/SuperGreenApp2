@@ -83,6 +83,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons:
+  package_info:
 
 # dependency_overrides:
   # analyzer: 0.39.14

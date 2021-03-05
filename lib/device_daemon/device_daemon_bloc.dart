@@ -117,7 +117,12 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
           add(DeviceDaemonBlocEventDeviceReachable(device, true));
           await _updateDeviceTime(device);
         } else {
-          Logger.throwError("Wrong identifier for device ${device.name}", data: {"device": device});
+          if (identifier != null) {
+            Logger.throwError("Wrong identifier for device ${device.name}",
+                data: {"device": device, "identifier": identifier});
+          } else {
+            throw '';
+          }
         }
       } catch (e) {
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
