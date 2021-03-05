@@ -34,12 +34,39 @@ class Logger {
   static void log(Object message) {
     print(message);
     try {
+      logFile.writeAsStringSync('${DateTime.now().toIso8601String()} - $message\n', mode: FileMode.append, flush: true);
+    } catch (e, stackTrace) {
+      print(e);
+      print(stackTrace);
+    }
+  }
+
+  static void logError(dynamic error, StackTrace stackTrace, {Map<String, dynamic> data, bool fwdThrow = false}) {
+    String dataStr = (data ?? {}).keys.map<String>((String key) {
+      return "$key=$data[$key]";
+    }).join("\n");
+    print(error);
+    print(stackTrace);
+    print(dataStr);
+    try {
       logFile.writeAsStringSync(
-          '${DateTime.now().toIso8601String()} - $message\n',
+          '===============\nError:\n${DateTime.now().toIso8601String()} - $error\nData:\n$dataStr\nTrace:\n$stackTrace\n===============\n',
           mode: FileMode.append,
           flush: true);
-    } catch (e) {
-      print(e);
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+    }
+    if (fwdThrow == true) {
+      throw error;
+    }
+  }
+
+  static void throwError(String error, {Map<String, dynamic> data}) {
+    try {
+      throw error;
+    } catch (e, trace) {
+      logError(e, trace, data: data);
     }
   }
 

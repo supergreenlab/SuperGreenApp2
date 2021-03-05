@@ -126,31 +126,25 @@ class RelDB extends _$RelDB {
 
       for (int i = 0; i < tmpBoxes.length; ++i) {
         Plant plant = await plantsDAO.getPlant(int.parse(tmpBoxes[i].settings));
-        await plantsDAO.updatePlant(
-            PlantsCompanion(id: Value(plant.id), box: Value(tmpBoxes[i].id)));
-        await plantsDAO.updateBox(
-            BoxesCompanion(id: Value(tmpBoxes[i].id), settings: Value('{}')));
+        await plantsDAO.updatePlant(PlantsCompanion(id: Value(plant.id), box: Value(tmpBoxes[i].id)));
+        await plantsDAO.updateBox(BoxesCompanion(id: Value(tmpBoxes[i].id), settings: Value('{}')));
       }
     } else if (fromVersion == 2) {
       Feed feed = await feedsDAO.getFeed(1);
-      await feedsDAO.updateFeed(
-          FeedsCompanion(id: Value(feed.id), isNewsFeed: Value(true)));
+      await feedsDAO.updateFeed(FeedsCompanion(id: Value(feed.id), isNewsFeed: Value(true)));
     } else if (fromVersion == 3) {
       List<Plant> plants = await plantsDAO.getPlants();
       for (int i = 0; i < plants.length; ++i) {
         Map<String, dynamic> settings = jsonDecode(plants[i].settings);
         settings['isSingle'] = plants[i].single;
-        plantsDAO.updatePlant(PlantsCompanion(
-            id: Value(plants[i].id), settings: Value(jsonEncode(settings))));
+        plantsDAO.updatePlant(PlantsCompanion(id: Value(plants[i].id), settings: Value(jsonEncode(settings))));
       }
     } else if (fromVersion == 4) {
       List<FeedMedia> feedMedias = await feedsDAO.getAllFeedMedias();
       for (int i = 0; i < feedMedias.length; ++i) {
         FeedMedia feedMedia = feedMedias[i];
-        String filePath =
-            FeedMedias.makeRelativeFilePath(basename(feedMedia.filePath));
-        String thumbnailPath =
-            FeedMedias.makeRelativeFilePath(basename(feedMedia.thumbnailPath));
+        String filePath = FeedMedias.makeRelativeFilePath(basename(feedMedia.filePath));
+        String thumbnailPath = FeedMedias.makeRelativeFilePath(basename(feedMedia.thumbnailPath));
         await feedsDAO.updateFeedMedia(FeedMediasCompanion(
           id: Value(feedMedia.id),
           filePath: Value(filePath),
@@ -158,8 +152,7 @@ class RelDB extends _$RelDB {
         ));
       }
     } else if (fromVersion == 5) {
-      List<FeedEntry> measures =
-          await feedsDAO.getFeedEntriesWithType('FE_MEASURE');
+      List<FeedEntry> measures = await feedsDAO.getFeedEntriesWithType('FE_MEASURE');
       for (FeedEntry measure in measures) {
         try {
           FeedMeasureParams params = FeedMeasureParams.fromJSON(measure.params);
@@ -172,45 +165,28 @@ class RelDB extends _$RelDB {
           } else {
             previous = await feedsDAO.getFeedMedia(params.previous);
           }
-          FeedEntry previousEntry =
-              await feedsDAO.getFeedEntry(previous.feedEntry);
+          FeedEntry previousEntry = await feedsDAO.getFeedEntry(previous.feedEntry);
           await feedsDAO.updateFeedEntry(FeedEntriesCompanion(
             id: Value(measure.id),
             synced: Value(false),
             params: Value(FeedMeasureParams(
-                    params.message,
-                    measure.date.difference(previousEntry.date).inSeconds,
-                    params.previous)
+                    params.message, measure.date.difference(previousEntry.date).inSeconds, params.previous)
                 .toJSON()),
           ));
-        } catch (e) {
-          Logger.log(e);
+        } catch (e, trace) {
+          Logger.logError(e, trace);
         }
       }
     } else if (fromVersion == 6) {
       List<Device> devices = await devicesDAO.getDevices();
       for (Device device in devices) {
         if (device.synced == true && device.serverID == null) {
-          await devicesDAO.updateDevice(
-              DevicesCompanion(id: Value(device.id), synced: Value(false)));
+          await devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), synced: Value(false)));
         }
       }
     } else if (fromVersion == 8) {
       List<FeedMedia> feedMedias = await feedsDAO.getAllFeedMedias();
-      List<int> mp4Header = [
-        0x00,
-        0x00,
-        0x00,
-        0x18,
-        0x66,
-        0x74,
-        0x79,
-        0x70,
-        0x6D,
-        0x70,
-        0x34,
-        0x32
-      ];
+      List<int> mp4Header = [0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70, 0x6D, 0x70, 0x34, 0x32];
       for (int i = 0; i < feedMedias.length; ++i) {
         FeedMedia feedMedia = feedMedias[i];
         if (feedMedia.filePath.indexOf('.') != -1) {
@@ -218,10 +194,9 @@ class RelDB extends _$RelDB {
         }
         try {
           String filePath = FeedMedias.makeAbsoluteFilePath(feedMedia.filePath);
-          String thumbnailPath =
-              FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath);
-          List<int> header = (await File(filePath).openRead(0, 12).toList())
-              .reduce((value, element) => value..addAll(element));
+          String thumbnailPath = FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath);
+          List<int> header =
+              (await File(filePath).openRead(0, 12).toList()).reduce((value, element) => value..addAll(element));
           if (listEquals(header, mp4Header)) {
             File(filePath).renameSync('$filePath.mp4');
             File(thumbnailPath).renameSync('$thumbnailPath.jpg');

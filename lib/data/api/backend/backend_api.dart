@@ -27,6 +27,7 @@ import 'package:super_green_app/data/api/backend/products/products_api.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 
 class BackendAPI {
   static final BackendAPI _instance = BackendAPI._newInstance();
@@ -85,7 +86,7 @@ class BackendAPI {
         },
         body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {
-      throw '_postPut failed: ${resp.body}';
+      Logger.throwError('_postPut failed: ${resp.body}');
     }
     if (resp.headers['x-sgl-token'] != null) {
       AppDB().setJWT(resp.headers['x-sgl-token']);
@@ -103,7 +104,7 @@ class BackendAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'get failed: ${resp.body}';
+      Logger.throwError('get failed: ${resp.body}');
     }
     return JsonDecoder().convert(resp.body);
   }

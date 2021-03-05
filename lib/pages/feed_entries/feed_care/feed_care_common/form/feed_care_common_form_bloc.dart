@@ -45,8 +45,7 @@ class FeedCareCommonFormBlocEventSaveDraft extends FeedCareCommonFormBlocEvent {
   List<Object> get props => [draft];
 }
 
-class FeedCareCommonFormBlocEventDeleteDraft
-    extends FeedCareCommonFormBlocEvent {
+class FeedCareCommonFormBlocEventDeleteDraft extends FeedCareCommonFormBlocEvent {
   final FeedCareCommonDraft draft;
 
   FeedCareCommonFormBlocEventDeleteDraft(this.draft);
@@ -64,12 +63,11 @@ class FeedCareCommonFormBlocEventCreate extends FeedCareCommonFormBlocEvent {
 
   final FeedCareCommonDraft draft;
 
-  FeedCareCommonFormBlocEventCreate(this.date, this.beforeMedias,
-      this.afterMedias, this.message, this.helpRequest, this.draft);
+  FeedCareCommonFormBlocEventCreate(
+      this.date, this.beforeMedias, this.afterMedias, this.message, this.helpRequest, this.draft);
 
   @override
-  List<Object> get props =>
-      [date, beforeMedias, afterMedias, message, helpRequest];
+  List<Object> get props => [date, beforeMedias, afterMedias, message, helpRequest];
 }
 
 class FeedCareCommonFormBlocState extends Equatable {
@@ -88,8 +86,7 @@ class FeedCareCommonFormBlocStateDraft extends FeedCareCommonFormBlocState {
   List<Object> get props => [draft];
 }
 
-class FeedCareCommonFormBlocStateCurrentDraft
-    extends FeedCareCommonFormBlocState {
+class FeedCareCommonFormBlocStateCurrentDraft extends FeedCareCommonFormBlocState {
   final FeedCareCommonDraft draft;
 
   FeedCareCommonFormBlocStateCurrentDraft(this.draft);
@@ -109,8 +106,7 @@ class FeedCareCommonFormBlocStateDone extends FeedCareCommonFormBlocState {
   FeedCareCommonFormBlocStateDone(this.plant, this.feedEntry);
 }
 
-abstract class FeedCareCommonFormBloc
-    extends Bloc<FeedCareCommonFormBlocEvent, FeedCareCommonFormBlocState> {
+abstract class FeedCareCommonFormBloc extends Bloc<FeedCareCommonFormBlocEvent, FeedCareCommonFormBlocState> {
   final MainNavigateToFeedCareCommonFormEvent args;
 
   FeedCareCommonFormBloc(this.args) : super(FeedCareCommonFormBlocState()) {
@@ -118,40 +114,29 @@ abstract class FeedCareCommonFormBloc
   }
 
   @override
-  Stream<FeedCareCommonFormBlocState> mapEventToState(
-      FeedCareCommonFormBlocEvent event) async* {
+  Stream<FeedCareCommonFormBlocState> mapEventToState(FeedCareCommonFormBlocEvent event) async* {
     if (event is FeedCareCommonFormBlocEventLoadDraft) {
       try {
-        FeedEntryDraft draft = await RelDB.get()
-            .feedsDAO
-            .getEntryDraft(args.plant.feed, cardType());
-        yield FeedCareCommonFormBlocStateDraft(
-            FeedCareCommonDraft.fromJSON(draft.id, draft.params));
-      } catch (e) {
-        Logger.log(e);
+        FeedEntryDraft draft = await RelDB.get().feedsDAO.getEntryDraft(args.plant.feed, cardType());
+        yield FeedCareCommonFormBlocStateDraft(FeedCareCommonDraft.fromJSON(draft.id, draft.params));
+      } catch (e, trace) {
+        Logger.logError(e, trace);
       }
     } else if (event is FeedCareCommonFormBlocEventDeleteDraft) {
       await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);
     } else if (event is FeedCareCommonFormBlocEventSaveDraft) {
       if (event.draft.draftID != null) {
         await RelDB.get().feedsDAO.updateFeedEntryDraft(
-            FeedEntryDraftsCompanion(
-                id: Value(event.draft.draftID),
-                params: Value(event.draft.toJSON())));
+            FeedEntryDraftsCompanion(id: Value(event.draft.draftID), params: Value(event.draft.toJSON())));
       } else {
-        int draftID = await RelDB.get().feedsDAO.addFeedEntryDraft(
-            FeedEntryDraftsCompanion(
-                feed: Value(args.plant.feed),
-                type: Value(cardType()),
-                params: Value(event.draft.toJSON())));
-        yield FeedCareCommonFormBlocStateCurrentDraft(
-            event.draft.copyWithDraftID(draftID));
+        int draftID = await RelDB.get().feedsDAO.addFeedEntryDraft(FeedEntryDraftsCompanion(
+            feed: Value(args.plant.feed), type: Value(cardType()), params: Value(event.draft.toJSON())));
+        yield FeedCareCommonFormBlocStateCurrentDraft(event.draft.copyWithDraftID(draftID));
       }
     } else if (event is FeedCareCommonFormBlocEventCreate) {
       yield FeedCareCommonFormBlocStateLoading();
       final db = RelDB.get();
-      int feedEntryID =
-          await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+      int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
         type: cardType(),
         feed: args.plant.feed,
         date: event.date,

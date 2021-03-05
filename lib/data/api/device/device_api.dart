@@ -98,14 +98,13 @@ class DeviceAPI {
           }, onError: completer.completeError);
           return completer.future;
         } catch (e) {
-          Logger.log(e);
           if (i == nRetries - 1) {
             throw e;
           }
         }
       }
-    } catch (e) {
-      Logger.log(e);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"url": url});
     }
     return null;
   }
@@ -131,14 +130,13 @@ class DeviceAPI {
           }, onError: completer.completeError);
           return completer.future;
         } catch (e) {
-          Logger.log(e);
           if (i == nRetries - 1) {
             throw e;
           }
         }
       }
-    } catch (e) {
-      Logger.log(e);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName});
     }
     return null;
   }
@@ -160,14 +158,13 @@ class DeviceAPI {
           await req.close();
           break;
         } catch (e) {
-          Logger.log(e);
           if (i == nRetries - 1) {
             throw e;
           }
         }
       }
-    } catch (e) {
-      Logger.log(e);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
     } finally {
       client.close(force: true);
     }
@@ -190,14 +187,13 @@ class DeviceAPI {
           await req.close();
           break;
         } catch (e) {
-          Logger.log(e);
           if (i == nRetries - 1) {
             throw e;
           }
         }
       }
-    } catch (e) {
-      Logger.log(e);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
     } finally {
       client.close(force: true);
     }
@@ -223,14 +219,13 @@ class DeviceAPI {
           await req.close();
           break;
         } catch (e) {
-          Logger.log(e);
           if (i == nRetries - 1) {
             throw e;
           }
         }
       }
-    } catch (e) {
-      Logger.log(e);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "fileName": fileName});
     } finally {
       client.close(force: true);
     }
@@ -283,8 +278,8 @@ class DeviceAPI {
             } else {
               await db.updateParam(exists.copyWith(ivalue: value));
             }
-          } catch (e) {
-            Logger.log(e);
+          } catch (e, trace) {
+            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']});
             throw e;
           }
         } else {
@@ -297,8 +292,8 @@ class DeviceAPI {
             } else {
               await db.updateParam(exists.copyWith(svalue: value));
             }
-          } catch (e) {
-            Logger.log(e);
+          } catch (e, trace) {
+            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']});
             throw e;
           }
         }
@@ -309,8 +304,8 @@ class DeviceAPI {
         id: Value(deviceID),
         isSetup: Value(true),
       ));
-    } catch (e) {
-      Logger.log(e);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID});
       throw e;
     } finally {
       DeviceAPI.fetchingAllParams[deviceID] = false;

@@ -88,7 +88,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
 
       await Logger.init();
       FlutterError.onError = (FlutterErrorDetails details) {
-        Logger.log(details.toString());
+        Logger.logError(details.exception, details.stack);
       };
 
       final Directory appDocDir = await getApplicationDocumentsDirectory();

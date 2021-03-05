@@ -37,16 +37,24 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedsAPI {
   Future createUserEnd({String notificationToken}) async {
-    return BackendAPI().postPut('/userend', {'notificationToken': notificationToken});
+    try {
+      await BackendAPI().postPut('/userend', {'notificationToken': notificationToken});
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"notificationToken": notificationToken}, fwdThrow: true);
+    }
   }
 
   Future updateNotificationToken(String token) async {
-    return BackendAPI().postPut(
-        '/userend',
-        {
-          'notificationToken': token,
-        },
-        forcePut: true);
+    try {
+      BackendAPI().postPut(
+          '/userend',
+          {
+            'notificationToken': token,
+          },
+          forcePut: true);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"token": token}, fwdThrow: true);
+    }
   }
 
   Future sendDeletes(List<Delete> deletes) async {
@@ -59,8 +67,7 @@ class FeedsAPI {
           "deletes": deletes.map<Map<String, dynamic>>((d) => Deletes.toMap(d)).toList(),
         }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.log(resp.body);
-      throw 'sendDeletes failed';
+      Logger.throwError('SendDeletes failed with error: ${resp.body}', data: {"deletes": deletes});
     }
   }
 
@@ -73,7 +80,8 @@ class FeedsAPI {
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
         });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchCommentsForFeedEntry failed: ${resp.body}';
+      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
+          data: {"feedEntryID": feedEntryID, "offset": offset, "limit": limit, "rootCommentsOnly": rootCommentsOnly});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     List<Comment> comments = [];
@@ -89,7 +97,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchCommentsForFeedEntry failed: ${resp.body}';
+      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}', data: {"commentID": commentID});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     List<Comment> comments = [];
@@ -106,7 +114,8 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchCommentsForFeedEntry failed: ${resp.body}';
+      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
+          data: {"commentID": feedEntryID, "offset": offset, "n": n});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data;
@@ -120,7 +129,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchCommentsForFeedEntry failed: ${resp.body}';
+      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}', data: {"feedEntryID": feedEntryID});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data['n'];
@@ -133,7 +142,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'fetchBookmarks failed: ${resp.body}';
+      Logger.throwError('fetchBookmarks failed: ${resp.body}', data: {"offset": offset, "limit": limit});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data['bookmarks'];
@@ -217,20 +226,20 @@ class FeedsAPI {
           'fileName': feedMedia.filePath,
         }));
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'feedMediaUploadURL failed';
+      Logger.throwError('feedMediaUploadURL failed with error: ${resp.body}', data: {"feedMedia": feedMedia});
     }
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
     {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
       if (await file.exists()) {
-        Logger.log('Trying to upload file ${feedMedia.filePath} (size: ${file.lengthSync()})');
         Response resp = await BackendAPI().storageClient.put(
             '${BackendAPI().storageServerHost}${uploadUrls['filePath']}',
             body: file.readAsBytesSync(),
             headers: {'Host': BackendAPI().storageServerHostHeader});
         if (resp.statusCode ~/ 100 != 2) {
-          throw 'upload failed';
+          Logger.throwError('Upload failed with error: ${resp.body}',
+              data: {"feedMedia": feedMedia, "filePath": feedMedia.filePath, "fileSize": file.lengthSync()});
         }
       }
     }
@@ -238,13 +247,13 @@ class FeedsAPI {
     {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
       if (await file.exists()) {
-        Logger.log('Trying to upload file ${feedMedia.thumbnailPath} (size: ${file.lengthSync()})');
         Response resp = await BackendAPI().storageClient.put(
             '${BackendAPI().storageServerHost}${uploadUrls['thumbnailPath']}',
             body: file.readAsBytesSync(),
             headers: {'Host': BackendAPI().storageServerHostHeader});
         if (resp.statusCode ~/ 100 != 2) {
-          throw 'upload failed';
+          Logger.throwError('Upload failed with error: ${resp.body}',
+              data: {"feedMedia": feedMedia, "thumbnailPath": feedMedia.thumbnailPath, "fileSize": file.lengthSync()});
         }
       }
     }
@@ -254,11 +263,15 @@ class FeedsAPI {
 
     String serverID = await BackendAPI().postPut('/feedMedia', obj);
 
-    FeedMediasCompanion feedMediasCompanion = FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
-    if (serverID != null) {
-      feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(serverID));
+    try {
+      FeedMediasCompanion feedMediasCompanion = FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
+      if (serverID != null) {
+        feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(serverID));
+      }
+      await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"feedMedia": feedMedia}, fwdThrow: true);
     }
-    await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
   }
 
   Future<List<PlantsCompanion>> unsyncedPlants() async {
@@ -266,7 +279,11 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<PlantsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Plants.fromMap(maps[i]));
+      try {
+        results.add(await Plants.fromMap(maps[i]));
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
     }
     return results;
   }
@@ -276,7 +293,11 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<BoxesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Boxes.fromMap(maps[i]));
+      try {
+        results.add(await Boxes.fromMap(maps[i]));
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
     }
     return results;
   }
@@ -286,7 +307,11 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<TimelapsesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Timelapses.fromMap(maps[i]));
+      try {
+        results.add(await Timelapses.fromMap(maps[i]));
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
     }
     return results;
   }
@@ -302,7 +327,11 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await Feeds.fromMap(maps[i]));
+      try {
+        results.add(await Feeds.fromMap(maps[i]));
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
     }
     return results;
   }
@@ -312,7 +341,11 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedEntriesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await FeedEntries.fromMap(maps[i]));
+      try {
+        results.add(await FeedEntries.fromMap(maps[i]));
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
     }
     return results;
   }
@@ -322,7 +355,11 @@ class FeedsAPI {
     List<dynamic> maps = syncData['items'];
     List<FeedMediasCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
-      results.add(await FeedMedias.fromMap(maps[i]));
+      try {
+        results.add(await FeedMedias.fromMap(maps[i]));
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
     }
     return results;
   }
@@ -333,7 +370,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'archivePlant failed: ${resp.body}';
+      Logger.throwError('archivePlant failed with error: ${resp.body}', data: {"id": id});
     }
   }
 
@@ -341,8 +378,9 @@ class FeedsAPI {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/plants?limit=$n&offset=$offset');
       return results['plants'];
-    } catch (e) {
-      throw 'publicPlants failed: $e';
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
     }
   }
 
@@ -350,8 +388,9 @@ class FeedsAPI {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/plant/$id');
       return results;
-    } catch (e) {
-      throw 'publicPlant failed: $e';
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"id": id});
+      throw e;
     }
   }
 
@@ -359,8 +398,9 @@ class FeedsAPI {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/plant/$id/feedEntries?limit=$n&offset=$offset');
       return results['entries'];
-    } catch (e) {
-      throw 'publicFeedEntries failed: $e';
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"id": id, "n": n, "offset": offset});
+      throw e;
     }
   }
 
@@ -368,8 +408,9 @@ class FeedsAPI {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/feedEntry/$id');
       return results['entry'];
-    } catch (e) {
-      throw 'publicFeedEntries failed: $e';
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"id": id});
+      throw e;
     }
   }
 
@@ -377,8 +418,9 @@ class FeedsAPI {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/feedEntry/$id/feedMedias');
       return results['medias'];
-    } catch (e) {
-      throw 'publicFeedMediasForFeedEntry failed: $e';
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"id": id});
+      throw e;
     }
   }
 
@@ -386,8 +428,9 @@ class FeedsAPI {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/feedMedia/$id');
       return results;
-    } catch (e) {
-      throw 'publicFeedMedia failed: $e';
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"id": id});
+      throw e;
     }
   }
 
@@ -428,10 +471,14 @@ class FeedsAPI {
   }
 
   Future download(String from, String to) async {
-    Response fileResp = await BackendAPI()
-        .storageClient
-        .get('${BackendAPI().storageServerHost}$from', headers: {'Host': BackendAPI().storageServerHostHeader});
-    await File(to).writeAsBytes(fileResp.bodyBytes);
+    try {
+      Response fileResp = await BackendAPI()
+          .storageClient
+          .get('${BackendAPI().storageServerHost}$from', headers: {'Host': BackendAPI().storageServerHostHeader});
+      await File(to).writeAsBytes(fileResp.bodyBytes);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"from": from, "to": to}, fwdThrow: true);
+    }
   }
 
   String absoluteFileURL(String path) {
@@ -444,7 +491,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw 'setSynced failed: ${resp.body}';
+      Logger.throwError('setSynced failed: ${resp.body}', data: {"type": type, "id": id});
     }
   }
 
@@ -454,7 +501,7 @@ class FeedsAPI {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      throw '_unsynced failed: ${resp.body}';
+      Logger.throwError('_unsynced failed: ${resp.body}', data: {"type": type});
     }
     return JsonDecoder().convert(resp.body);
   }

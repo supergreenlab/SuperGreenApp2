@@ -76,8 +76,8 @@ class SettingsLoginBloc extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocSt
         await BackendAPI()
             .feedsAPI
             .createUserEnd(notificationToken: notificationToken == "" ? null : notificationToken);
-      } catch (e) {
-        Logger.log(e);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
         yield SettingsLoginBlocStateError();
         await Future.delayed(Duration(seconds: 2));
         yield SettingsLoginBlocStateLoaded(_isAuth);

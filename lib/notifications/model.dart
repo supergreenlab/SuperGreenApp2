@@ -22,6 +22,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 
 enum NotificationDataType {
   PLANT_COMMENT,
@@ -62,7 +63,12 @@ abstract class NotificationData extends Equatable {
       case NotificationDataType.LIKE_PLANT_FEEDENTRY:
         return NotificationDataLikePlantFeedEntry.fromMap(data);
     }
-    throw 'Unknown type ${data['type']}';
+    try {
+      throw 'Unknown type ${data['type']}';
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: data);
+      throw e;
+    }
   }
 
   factory NotificationData.fromJSON(String data) {

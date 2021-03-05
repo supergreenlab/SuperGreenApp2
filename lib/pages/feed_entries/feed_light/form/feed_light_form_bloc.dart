@@ -79,10 +79,8 @@ class FeedLightFormBlocStateLightsLoaded extends FeedLightFormBlocState {
   List<Object> get props => [values, box];
 }
 
-class FeedLightFormBlocStateNoDevice
-    extends FeedLightFormBlocStateLightsLoaded {
-  FeedLightFormBlocStateNoDevice(List<int> values, Box box)
-      : super(values, box);
+class FeedLightFormBlocStateNoDevice extends FeedLightFormBlocStateLightsLoaded {
+  FeedLightFormBlocStateNoDevice(List<int> values, Box box) : super(values, box);
 }
 
 class FeedLightFormBlocStateLoading extends FeedLightFormBlocState {
@@ -104,8 +102,7 @@ class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
   List<Object> get props => [feedEntry];
 }
 
-class FeedLightFormBloc
-    extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
+class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
   final MainNavigateToFeedLightFormEvent args;
 
   Device device;
@@ -117,8 +114,7 @@ class FeedLightFormBloc
   }
 
   @override
-  Stream<FeedLightFormBlocState> mapEventToState(
-      FeedLightFormBlocEvent event) async* {
+  Stream<FeedLightFormBlocState> mapEventToState(FeedLightFormBlocEvent event) async* {
     if (event is FeedLightFormBlocEventLoadLights) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(args.box.id);
@@ -130,11 +126,9 @@ class FeedLightFormBloc
       Module lightModule = await db.devicesDAO.getModule(device.id, "led");
       lightParams = [];
       for (int i = 0; i < lightModule.arrayLen; ++i) {
-        Param boxParam =
-            await db.devicesDAO.getParam(device.id, "LED_${i}_BOX");
+        Param boxParam = await db.devicesDAO.getParam(device.id, "LED_${i}_BOX");
         if (boxParam.ivalue == box.deviceBox) {
-          lightParams
-              .add(await db.devicesDAO.getParam(device.id, "LED_${i}_DIM"));
+          lightParams.add(await db.devicesDAO.getParam(device.id, "LED_${i}_DIM"));
         }
       }
       List<int> values = lightParams.map((l) => l.ivalue).toList();
@@ -147,10 +141,9 @@ class FeedLightFormBloc
         return;
       }
       try {
-        await DeviceHelper.updateIntParam(
-            device, lightParams[event.i], (event.value).toInt());
-      } catch (e) {
-        Logger.log(e);
+        await DeviceHelper.updateIntParam(device, lightParams[event.i], (event.value).toInt());
+      } catch (e, trace) {
+        Logger.logError(e, trace);
       }
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
@@ -162,14 +155,11 @@ class FeedLightFormBloc
       List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
       FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {
-        PlantSettings plantSettings =
-            PlantSettings.fromJSON(plants[i].settings);
-        if (plantSettings.dryingStart != null ||
-            plantSettings.curingStart != null) {
+        PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
+        if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
           continue;
         }
-        int feedEntryID =
-            await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+        int feedEntryID = await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
           type: 'FE_LIGHT',
           feed: plants[i].feed,
           date: DateTime.now(),
@@ -190,10 +180,9 @@ class FeedLightFormBloc
       yield FeedLightFormBlocStateCancelling();
       for (int i = 0; i < lightParams.length; ++i) {
         try {
-          await DeviceHelper.updateIntParam(
-              device, lightParams[i], initialValues[i]);
-        } catch (e) {
-          Logger.log(e);
+          await DeviceHelper.updateIntParam(device, lightParams[i], initialValues[i]);
+        } catch (e, trace) {
+          Logger.logError(e, trace);
           return;
         }
       }

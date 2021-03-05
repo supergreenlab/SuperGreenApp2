@@ -93,17 +93,15 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
       for (int i = 0; i < _devices.length; ++i) {
         try {
           _updateDeviceStatus(_devices[i]);
-        } catch (e) {
-          Logger.log(e);
+        } catch (e, trace) {
+          Logger.logError(e, trace, data: {"device": _devices[i]});
         }
       }
     });
   }
 
   void _updateDeviceStatus(Device device) async {
-    print('_updateDeviceStatus start ${device.name}');
     if (_deviceWorker[device.id] == true) {
-      Logger.log('blocking ${device.name}');
       return;
     }
     _deviceWorker[device.id] = true;
@@ -112,7 +110,6 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
       try {
         String identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1);
         if (identifier == device.identifier) {
-          Logger.log('Device ${device.name} (${device.identifier}) found.');
           if (device.isSetup == false) {
             await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null);
           }
@@ -120,10 +117,9 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
           add(DeviceDaemonBlocEventDeviceReachable(device, true));
           await _updateDeviceTime(device);
         } else {
-          throw "Wrong identifier for device ${device.name}";
+          Logger.throwError("Wrong identifier for device ${device.name}", data: {"device": device});
         }
       } catch (e) {
-        Logger.log('Device ${device.name} (${device.identifier}) not found, trying mdns lookup.');
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
         add(DeviceDaemonBlocEventDeviceReachable(device, false));
         String ip;
@@ -133,7 +129,6 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
           try {
             String identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
             if (identifier == device.identifier) {
-              Logger.log('Device ${device.name} (${device.identifier}) found with mdns lookup.');
               if (device.isSetup == false) {
                 await DeviceAPI.fetchAllParams(ip, device.id, (_) => null);
               }
@@ -144,26 +139,24 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
                   synced: Value(device.synced ? ip == device.ip : false)));
               add(DeviceDaemonBlocEventDeviceReachable(device, true));
             } else {
-              throw "Wrong identifier for device ${device.name}";
+              Logger.throwError("Wrong identifier for device ${device.name}", data: {"device": device});
             }
-          } catch (e) {
-            Logger.log('Device ${device.name} (${device.identifier}) not found, aborting.');
+          } catch (e, trace) {
+            Logger.logError(e, trace, data: {"device": device});
             await RelDB.get()
                 .devicesDAO
                 .updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
             add(DeviceDaemonBlocEventDeviceReachable(device, false));
           }
         } else {
-          Logger.log('Device ${device.name} (${device.identifier}) not found, aborting.');
           await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
           add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
       }
-    } catch (e) {
-      Logger.log(e);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"device": device});
     } finally {
       _deviceWorker[device.id] = false;
-      print('_updateDeviceStatus stop ${device.name}');
     }
   }
 

@@ -82,8 +82,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
         try {
           await _syncOut();
-        } catch (e) {
-          Logger.log(e);
+        } catch (e, trace) {
+          if (e != 'Can\'t sync over GSM') {
+            Logger.logError(e, trace);
+          }
         }
         _workingOut = false;
       });
@@ -97,8 +99,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
         try {
           await _syncIn();
-        } catch (e) {
-          Logger.log(e);
+        } catch (e, trace) {
+          if (e != 'Can\'t sync over GSM') {
+            Logger.logError(e, trace);
+          }
         }
         _workingIn = false;
       });
@@ -122,7 +126,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncInFeeds() async {
-    Logger.log("Syncing feeds");
     List<FeedsCompanion> feeds = await BackendAPI().feedsAPI.unsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -143,12 +146,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
       }
       await BackendAPI().feedsAPI.setSynced("feed", feedsCompanion.serverID.value);
-      Logger.log("Synced feed");
     }
   }
 
   Future _syncInFeedEntries() async {
-    Logger.log("Syncing feedEntries");
     List<FeedEntriesCompanion> feedEntries = await BackendAPI().feedsAPI.unsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -169,12 +170,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
       }
       await BackendAPI().feedsAPI.setSynced("feedEntry", feedEntriesCompanion.serverID.value);
-      Logger.log("Synced feedEntry");
     }
   }
 
   Future _syncInFeedMedias() async {
-    Logger.log("Syncing feedMedias");
     List<FeedMediasCompanion> feedMedias = await BackendAPI().feedsAPI.unsyncedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -210,12 +209,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
       }
       await BackendAPI().feedsAPI.setSynced("feedMedia", feedMediasCompanion.serverID.value);
-      Logger.log("Synced feedMedia");
     }
   }
 
   Future _syncInDevices() async {
-    Logger.log("Syncing devices");
     List<DevicesCompanion> devices = await BackendAPI().feedsAPI.unsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -238,12 +235,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
       }
       await BackendAPI().feedsAPI.setSynced("device", devicesCompanion.serverID.value);
-      Logger.log("Synced device");
     }
   }
 
   Future _syncInBoxes() async {
-    Logger.log("Syncing boxes");
     List<BoxesCompanion> boxes = await BackendAPI().feedsAPI.unsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -264,12 +259,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
       }
       await BackendAPI().feedsAPI.setSynced("box", boxesCompanion.serverID.value);
-      Logger.log("Synced box");
     }
   }
 
   Future _syncInPlants() async {
-    Logger.log("Syncing plants");
     List<PlantsCompanion> plants = await BackendAPI().feedsAPI.unsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -290,12 +283,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
       }
       await BackendAPI().feedsAPI.setSynced("plant", plantsCompanion.serverID.value);
-      Logger.log("Synced plant");
     }
   }
 
   Future _syncInTimelapses() async {
-    Logger.log("Syncing timelapses");
     List<TimelapsesCompanion> timelapses = await BackendAPI().feedsAPI.unsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -316,7 +307,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
         }
       }
       await BackendAPI().feedsAPI.setSynced("timelapse", timelapsesCompanion.serverID.value);
-      Logger.log("Synced timelapse");
     }
   }
 
@@ -335,7 +325,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutDeletes() async {
-    Logger.log("Sending deletes");
     List<Delete> deletes = await RelDB.get().deletesDAO.getDeletes();
     if (deletes.length == 0) {
       return;
@@ -345,7 +334,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutFeeds() async {
-    Logger.log("Sending feeds");
     List<Feed> feeds = await RelDB.get().feedsDAO.getUnsyncedFeeds();
     for (int i = 0; i < feeds.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -357,7 +345,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutFeedEntries() async {
-    Logger.log("Sending feedEntries");
     List<FeedEntry> feedEntries = await RelDB.get().feedsDAO.getUnsyncedFeedEntries();
     for (int i = 0; i < feedEntries.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -370,7 +357,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutOrphanedFeedMedias() async {
-    Logger.log("Sending orphaned feedMedias");
     List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getOrphanedFeedMedias();
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -382,7 +368,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutFeedMedias(int feedEntryID) async {
-    Logger.log("Sending feedMedias");
     List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getUnsyncedFeedMedias(feedEntryID);
     for (int i = 0; i < feedMedias.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -394,7 +379,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutDevices() async {
-    Logger.log("Sending devices");
     List<Device> devices = await RelDB.get().devicesDAO.getUnsyncedDevices();
     for (int i = 0; i < devices.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -406,7 +390,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutBoxes() async {
-    Logger.log("Sending boxes");
     List<Box> boxes = await RelDB.get().plantsDAO.getUnsyncedBoxes();
     for (int i = 0; i < boxes.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -418,7 +401,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutPlants() async {
-    Logger.log("Sending plants");
     List<Plant> plants = await RelDB.get().plantsDAO.getUnsyncedPlants();
     for (int i = 0; i < plants.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -430,7 +412,6 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncOutTimelapses() async {
-    Logger.log("Sending timelapses");
     List<Timelapse> timelapses = await RelDB.get().plantsDAO.getUnsyncedTimelapses();
     for (int i = 0; i < timelapses.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
@@ -445,7 +426,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
     final File file = File(filePath);
     try {
       await file.delete();
-    } catch (e) {}
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"filePath": filePath});
+    }
   }
 
   @override

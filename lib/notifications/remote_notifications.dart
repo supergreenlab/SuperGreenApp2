@@ -42,8 +42,8 @@ class RemoteNotifications {
       await saveToken(token);
       try {
         await sendToken();
-      } catch (e) {
-        Logger.log(e);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
       }
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
     } else if (BackendAPI().usersAPI.loggedIn && AppDB().getAppData().notificationOnStartAsked != true) {

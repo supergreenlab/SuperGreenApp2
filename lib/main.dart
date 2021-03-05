@@ -75,7 +75,7 @@ void main() async {
       ], child: MainPage(navigatorKey)));
     },
     (dynamic error, StackTrace stackTrace) {
-      Logger.log('$error\n$stackTrace');
+      Logger.logError(error, stackTrace);
     },
   );
 }

@@ -112,8 +112,7 @@ class TimelapseSetupBlocStateDone extends TimelapseSetupBlocState {
 const ServiceUUID = "7bfdeb0b-f06d-480f-a82c-cde56ab3d686";
 const CharacteristicUUID = "ec0e";
 
-class TimelapseSetupBloc
-    extends Bloc<TimelapseSetupBlocEvent, TimelapseSetupBlocState> {
+class TimelapseSetupBloc extends Bloc<TimelapseSetupBlocEvent, TimelapseSetupBlocState> {
   final BleManager bleManager = BleManager();
   ScanResult scanResult;
 
@@ -124,8 +123,7 @@ class TimelapseSetupBloc
   }
 
   @override
-  Stream<TimelapseSetupBlocState> mapEventToState(
-      TimelapseSetupBlocEvent event) async* {
+  Stream<TimelapseSetupBlocState> mapEventToState(TimelapseSetupBlocEvent event) async* {
     if (event is TimelapseSetupBlocEventInit) {
       await bleManager.createClient();
       BluetoothState currentState = await bleManager.bluetoothState();
@@ -138,8 +136,7 @@ class TimelapseSetupBloc
       Box box = await db.plantsDAO.getBox(args.plant.box);
       String controllerid;
       if (box.device != null) {
-        Device device =
-            await db.devicesDAO.getDevice(box.device);
+        Device device = await db.devicesDAO.getDevice(box.device);
         controllerid = device.identifier;
       }
       yield TimelapseSetupBlocStateDeviceFound(controllerid);
@@ -153,8 +150,8 @@ class TimelapseSetupBloc
           await _checkPermissions();
           yield TimelapseSetupBlocStateScanning();
           startScan();
-        } catch (e) {
-          Logger.log(e);
+        } catch (e, trace) {
+          Logger.logError(e, trace);
         }
       }
     } else if (event is TimelapseSetupBlocEventSetConfig) {
@@ -166,8 +163,7 @@ class TimelapseSetupBloc
         await peripheral.connect();
       }
       await peripheral.discoverAllServicesAndCharacteristics();
-      await peripheral.writeCharacteristic(ServiceUUID, CharacteristicUUID,
-          Uint8List.fromList(value.codeUnits), true);
+      await peripheral.writeCharacteristic(ServiceUUID, CharacteristicUUID, Uint8List.fromList(value.codeUnits), true);
       await peripheral.disconnectOrCancelConnection();
 
       await RelDB.get().plantsDAO.addTimelapse(TimelapsesCompanion.insert(
@@ -193,10 +189,7 @@ class TimelapseSetupBloc
       if (scanResult != null) {
         return;
       }
-      Logger.log(
-          '${sr.peripheral.name} ${sr.peripheral.identifier}');
-      if (sr.peripheral.name == 'sgl-cam' ||
-          sr.peripheral.name == 'supergreenlivepi') {
+      if (sr.peripheral.name == 'sgl-cam' || sr.peripheral.name == 'supergreenlivepi') {
         scanResult = sr;
         add(TimelapseSetupBlocEventDeviceFound());
         bleManager.stopPeripheralScan();
@@ -206,11 +199,9 @@ class TimelapseSetupBloc
 
   Future<void> _checkPermissions() async {
     if (Platform.isAndroid) {
-      var permissionStatus = await PermissionHandler()
-          .requestPermissions([PermissionGroup.location]);
+      var permissionStatus = await PermissionHandler().requestPermissions([PermissionGroup.location]);
 
-      PermissionStatus locationPermissionStatus =
-          permissionStatus[PermissionGroup.location];
+      PermissionStatus locationPermissionStatus = permissionStatus[PermissionGroup.location];
 
       if (locationPermissionStatus != PermissionStatus.granted) {
         return Future.error(Exception("Location permission not granted"));

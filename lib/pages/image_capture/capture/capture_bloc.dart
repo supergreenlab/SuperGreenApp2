@@ -136,8 +136,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
           );
           await optimizePicture(thumbnailPath, thumbnailPath);
         } else {
-          Image image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(filePath)).readAsBytes());
-          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));
+          /*Image image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(filePath)).readAsBytes());
+          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));*/
           await optimizePicture(filePath, thumbnailPath);
         }
         feedMedias.add(FeedMediasCompanion(

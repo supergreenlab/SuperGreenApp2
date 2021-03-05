@@ -20,6 +20,7 @@ import 'dart:convert';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'feeds.g.dart';
@@ -91,14 +92,14 @@ class FeedEntries extends Table {
   static Future<Map<String, dynamic>> toMap(FeedEntry feedEntry) async {
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
     if (feed.serverID == null) {
-      throw 'Missing serverID for feed relation';
+      Logger.throwError('Missing serverID for feed relation');
     }
     Map<String, dynamic> params = JsonDecoder().convert(feedEntry.params);
     if (params['previous'] != null && params['previous'] is int) {
-      FeedMedia feedMedia =
-          await RelDB.get().feedsDAO.getFeedMedia(params['previous']);
+      FeedMedia feedMedia = await RelDB.get().feedsDAO.getFeedMedia(params['previous']);
       if (feedMedia.serverID == null) {
-        throw 'Missing serverID for feedMedia relation';
+        Logger.throwError('Missing serverID for feedMedia relation',
+            data: {"feedEntry": feedEntry, "feedMedia": feedMedia});
       }
       params['previous'] = feedMedia.serverID;
     }
@@ -140,8 +141,7 @@ class FeedMedias extends Table {
     if (map['deleted'] == true) {
       return DeletedFeedMediasCompanion(Value(map['id'] as String));
     }
-    FeedEntry feedEntry =
-        await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
     return FeedMediasCompanion(
         feed: Value(feed.id),
@@ -154,10 +154,9 @@ class FeedMedias extends Table {
   }
 
   static Future<Map<String, dynamic>> toMap(FeedMedia feedMedia) async {
-    FeedEntry feedEntry =
-        await RelDB.get().feedsDAO.getFeedEntry(feedMedia.feedEntry);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedMedia.feedEntry);
     if (feedEntry.serverID == null) {
-      throw 'Missing serverID for feedEntry relation';
+      Logger.throwError('Missing serverID for feedEntry relation', data: {"feedMedia": feedMedia});
     }
 
     return {
@@ -225,8 +224,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future updateFeed(FeedsCompanion feed) {
-    return (update(feeds)..where((tbl) => tbl.id.equals(feed.id.value)))
-        .write(feed);
+    return (update(feeds)..where((tbl) => tbl.id.equals(feed.id.value))).write(feed);
   }
 
   Future<Feed> getFeed(int feedID) {
@@ -234,8 +232,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future<Feed> getFeedForServerID(String serverID) {
-    return (select(feeds)..where((f) => f.serverID.equals(serverID)))
-        .getSingle();
+    return (select(feeds)..where((f) => f.serverID.equals(serverID))).getSingle();
   }
 
   Future<List<Feed>> getUnsyncedFeeds() {
@@ -246,12 +243,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return delete(feeds).delete(feed);
   }
 
-  SimpleSelectStatement<FeedEntries, FeedEntry> _selectFeedEntries(
-      int feedID, int limit, int offset) {
+  SimpleSelectStatement<FeedEntries, FeedEntry> _selectFeedEntries(int feedID, int limit, int offset) {
     return (select(feedEntries)
       ..where((fe) => fe.feed.equals(feedID))
-      ..orderBy(
-          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)])
+      ..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)])
       ..limit(limit, offset: offset));
   }
 
@@ -271,13 +266,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (select(feedEntries)..where((fe) => fe.type.equals(type))).get();
   }
 
-  Future<List<FeedEntry>> getFeedEntriesForFeedWithType(
-      int feedID, String type) {
+  Future<List<FeedEntry>> getFeedEntriesForFeedWithType(int feedID, String type) {
     return (select(feedEntries)
           ..where((fe) => fe.type.equals(type) & fe.feed.equals(feedID))
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
-          ]))
+          ..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]))
         .get();
   }
 
@@ -289,16 +281,8 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (select(feedEntries)
           ..where((fe) =>
               fe.feed.equals(feedID) &
-              fe.type.isIn([
-                'FE_LIGHT',
-                'FE_VENTILATION',
-                'FE_SCHEDULE',
-                'FE_WATER',
-                'FE_TRANSPLANT'
-              ]))
-          ..orderBy([
-            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)
-          ]))
+              fe.type.isIn(['FE_LIGHT', 'FE_VENTILATION', 'FE_SCHEDULE', 'FE_WATER', 'FE_TRANSPLANT']))
+          ..orderBy([(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]))
         .get();
   }
 
@@ -307,18 +291,15 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future<FeedEntry> getFeedEntry(int feedEntryID) {
-    return (select(feedEntries)..where((f) => f.id.equals(feedEntryID)))
-        .getSingle();
+    return (select(feedEntries)..where((f) => f.id.equals(feedEntryID))).getSingle();
   }
 
   Stream<FeedEntry> watchFeedEntry(int feedEntryID) {
-    return (select(feedEntries)..where((f) => f.id.equals(feedEntryID)))
-        .watchSingle();
+    return (select(feedEntries)..where((f) => f.id.equals(feedEntryID))).watchSingle();
   }
 
   Future<FeedEntry> getFeedEntryForServerID(String serverID) {
-    return (select(feedEntries)..where((fe) => fe.serverID.equals(serverID)))
-        .getSingle();
+    return (select(feedEntries)..where((fe) => fe.serverID.equals(serverID))).getSingle();
   }
 
   Future<int> getNMeasures() {
@@ -328,16 +309,12 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   Future<List<FeedEntry>> getUnsyncedFeedEntries() {
     return (select(feedEntries)
           ..where((f) => f.synced.equals(false))
-          ..orderBy([
-            (fe) => OrderingTerm(expression: fe.id, mode: OrderingMode.asc)
-          ]))
+          ..orderBy([(fe) => OrderingTerm(expression: fe.id, mode: OrderingMode.asc)]))
         .get();
   }
 
   Future updateFeedEntry(FeedEntriesCompanion feedEntry) {
-    return (update(feedEntries)
-          ..where((tbl) => tbl.id.equals(feedEntry.id.value)))
-        .write(feedEntry);
+    return (update(feedEntries)..where((tbl) => tbl.id.equals(feedEntry.id.value))).write(feedEntry);
   }
 
   Future deleteFeedEntry(FeedEntry feedEntry) {
@@ -349,9 +326,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future<FeedEntryDraft> getEntryDraft(int feedID, String type) {
-    return (select(feedEntryDrafts)
-          ..where((fe) => fe.type.equals(type) & fe.feed.equals(feedID)))
-        .getSingle();
+    return (select(feedEntryDrafts)..where((fe) => fe.type.equals(type) & fe.feed.equals(feedID))).getSingle();
   }
 
   Future<int> addFeedEntryDraft(FeedEntryDraftsCompanion feedEntryDraft) {
@@ -359,15 +334,11 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future updateFeedEntryDraft(FeedEntryDraftsCompanion feedEntryDraft) {
-    return (update(feedEntryDrafts)
-          ..where((fed) => fed.id.equals(feedEntryDraft.id.value)))
-        .write(feedEntryDraft);
+    return (update(feedEntryDrafts)..where((fed) => fed.id.equals(feedEntryDraft.id.value))).write(feedEntryDraft);
   }
 
   Future deleteFeedEntryDraft(int feedEntryDraftID) {
-    return (delete(feedEntryDrafts)
-          ..where((fed) => fed.id.equals(feedEntryDraftID)))
-        .go();
+    return (delete(feedEntryDrafts)..where((fed) => fed.id.equals(feedEntryDraftID))).go();
   }
 
   Future<int> addFeedMedia(FeedMediasCompanion feedMediaEntry) {
@@ -375,17 +346,13 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future updateFeedMedia(FeedMediasCompanion feedMedia) {
-    return (update(feedMedias)
-          ..where((tbl) => tbl.id.equals(feedMedia.id.value)))
-        .write(feedMedia);
+    return (update(feedMedias)..where((tbl) => tbl.id.equals(feedMedia.id.value))).write(feedMedia);
   }
 
   Future<List<FeedMedia>> getFeedMediasWithType(String feedType,
       {int feedID, bool synced, bool feedEntrySynced}) async {
-    JoinedSelectStatement<FeedMedias, FeedMedia> query = select(feedMedias)
-        .join([
-      leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
-    ]);
+    JoinedSelectStatement<FeedMedias, FeedMedia> query =
+        select(feedMedias).join([leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))]);
     Expression<bool> where = feedEntries.type.equals(feedType);
     if (feedID != null) {
       where &= feedEntries.feed.equals(feedID);
@@ -397,25 +364,16 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
       where &= feedMedias.synced.equals(synced);
     }
     query.where(where);
-    query.orderBy(
-        [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
-    return (await query.get())
-        .map<FeedMedia>((e) => e.readTable(feedMedias))
-        .toList();
+    query.orderBy([OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
+    return (await query.get()).map<FeedMedia>((e) => e.readTable(feedMedias)).toList();
   }
 
   Future<List<FeedMedia>> getOrphanedFeedMedias() async {
-    JoinedSelectStatement<FeedMedias, FeedMedia> query = select(feedMedias)
-        .join([
-      leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
-    ]);
-    query.where(
-        feedEntries.synced.equals(true) & feedMedias.synced.equals(false));
-    query.orderBy(
-        [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
-    return (await query.get())
-        .map<FeedMedia>((e) => e.readTable(feedMedias))
-        .toList();
+    JoinedSelectStatement<FeedMedias, FeedMedia> query =
+        select(feedMedias).join([leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))]);
+    query.where(feedEntries.synced.equals(true) & feedMedias.synced.equals(false));
+    query.orderBy([OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
+    return (await query.get()).map<FeedMedia>((e) => e.readTable(feedMedias)).toList();
   }
 
   Future<List<FeedMedia>> getAllFeedMedias() {
@@ -423,52 +381,40 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future<List<FeedMedia>> getFeedMedias(int feedEntryID) {
-    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID)))
-        .get();
+    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID))).get();
   }
 
   Stream<List<FeedMedia>> watchFeedMedias(int feedEntryID) {
-    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID)))
-        .watch();
+    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID))).watch();
   }
 
   Future<List<FeedMedia>> getUnsyncedFeedMedias(int feedEntryID) {
-    return (select(feedMedias)
-          ..where(
-              (f) => f.feedEntry.equals(feedEntryID) & f.synced.equals(false)))
-        .get();
+    return (select(feedMedias)..where((f) => f.feedEntry.equals(feedEntryID) & f.synced.equals(false))).get();
   }
 
   Future<FeedMedia> getFeedMedia(int feedMediaID) {
-    return (select(feedMedias)..where((f) => f.id.equals(feedMediaID)))
-        .getSingle();
+    return (select(feedMedias)..where((f) => f.id.equals(feedMediaID))).getSingle();
   }
 
   Stream<FeedMedia> watchLastFeedMedia(int feedID) {
-    JoinedSelectStatement<FeedMedias, FeedMedia> query = select(feedMedias)
-        .join([
-      leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))
-    ]);
+    JoinedSelectStatement<FeedMedias, FeedMedia> query =
+        select(feedMedias).join([leftOuterJoin(feedEntries, feedEntries.id.equalsExp(feedMedias.feedEntry))]);
     query.where(feedEntries.feed.equals(feedID));
-    query.orderBy(
-        [OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
+    query.orderBy([OrderingTerm(expression: feedEntries.date, mode: OrderingMode.desc)]);
     query.limit(1);
     return (query.watchSingle()).map((e) => e.readTable(feedMedias));
   }
 
   Stream<FeedMedia> watchFeedMedia(int feedMediaID) {
-    return (select(feedMedias)..where((f) => f.id.equals(feedMediaID)))
-        .watchSingle();
+    return (select(feedMedias)..where((f) => f.id.equals(feedMediaID))).watchSingle();
   }
 
   Future<FeedMedia> getFeedMediaForServerID(String serverID) {
-    return (select(feedMedias)..where((fe) => fe.serverID.equals(serverID)))
-        .getSingle();
+    return (select(feedMedias)..where((fe) => fe.serverID.equals(serverID))).getSingle();
   }
 
   Stream<FeedMedia> watchFeedMediaForServerID(String serverID) {
-    return (select(feedMedias)..where((fe) => fe.serverID.equals(serverID)))
-        .watchSingle();
+    return (select(feedMedias)..where((fe) => fe.serverID.equals(serverID))).watchSingle();
   }
 
   Future deleteFeedMedia(FeedMedia feedMedia) {
@@ -480,7 +426,6 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
   }
 
   Future deleteFeedMediasForFeedEntry(int feedEntryID) {
-    return (delete(feedMedias)..where((fm) => fm.feedEntry.equals(feedEntryID)))
-        .go();
+    return (delete(feedMedias)..where((fm) => fm.feedEntry.equals(feedEntryID))).go();
   }
 }
