@@ -75,10 +75,11 @@ dependencies:
     # path: ../media_picker_builder/ 
     git: https://github.com/supergreenlab/media_picker_builder.git
   image:
-    git: https://github.com/supergreenlab/image.git
+    # git: https://github.com/supergreenlab/image.git
+  # flutter_image_compress:
   device_info:
   wifi_iot:
-    git: https://github.com/alternadom/WiFiFlutter.git
+    # git: https://github.com/alternadom/WiFiFlutter.git
   flutter:
     sdk: flutter
   cupertino_icons:

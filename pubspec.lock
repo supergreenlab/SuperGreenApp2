@@ -591,12 +591,10 @@ packages:
   image:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "1cf1b59198ca13050e77c289c181ac71dafac34e"
-      url: "https://github.com/supergreenlab/image.git"
-    source: git
-    version: "2.1.14"
+      name: image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.19"
   intl:
     dependency: "direct main"
     description:
@@ -1188,12 +1186,10 @@ packages:
   wifi_iot:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "352e91cfca2092977856a62c29f9c5cd88b2c350"
-      url: "https://github.com/alternadom/WiFiFlutter.git"
-    source: git
-    version: "0.2.0"
+      name: wifi_iot
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   win32:
     dependency: transitive
     description:

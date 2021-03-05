@@ -341,7 +341,8 @@ class _CapturePageState extends State<CapturePage> {
       String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
       await _deleteFileIfExists(absolutePath);
       XFile xfile = await _cameraController.stopVideoRecording();
-      xfile.saveTo(absolutePath);
+      // ignore: await_only_futures
+      await xfile.saveTo(absolutePath);
       _endCapture(state);
       setState(() {});
     });

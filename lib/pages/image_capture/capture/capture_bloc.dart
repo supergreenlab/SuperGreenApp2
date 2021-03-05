@@ -25,6 +25,7 @@ import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:image/image.dart';
 import 'package:moor/moor.dart';
 import 'package:path/path.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -97,53 +98,60 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
     } else if (event is CaptureBlocEventCreate) {
       List<File> files = event.files;
       List<FeedMediasCompanion> feedMedias = [];
-      int i = 1;
       for (File file in files) {
-        String ext = file.path.split('.').last.toLowerCase();
-        String fileName = '${FeedMedias.makeFilePath()}-${i++}';
-        String filePath = '$fileName.$ext';
-        yield loadingEvent('Copying files..', (i - 1) / files.length);
-        if (ext == 'mov') {
-          yield loadingEvent('Converting mov to mp4..', (i - 1) / files.length);
-          filePath = '$fileName.mp4';
-          // Should do the trick in most cases, using ffmpeg takes way too long..
-          await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
-          yield loadingEvent('Copying files..', (i - 1) / files.length);
-        } else if (ext == 'heic') {
-          yield loadingEvent('Converting heic to jpg..', (i - 1) / files.length);
-          String jpegPath = await HeicToJpg.convert(file.path);
-          yield loadingEvent('Copying files..', (i - 1) / files.length);
-          filePath = '$fileName.jpg';
-          await File(jpegPath).copy(FeedMedias.makeAbsoluteFilePath(filePath));
-        } else if (ext == 'png') {
-          yield loadingEvent('Converting png to jpg..', (i - 1) / files.length);
-          Image image = decodeImage(await file.readAsBytes());
-          filePath = '$fileName.jpg';
-          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));
-          yield loadingEvent('Copying files..', (i - 1) / files.length);
-        } else {
-          await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
+        int i = files.indexOf(file);
+        try {
+          String ext = file.path.split('.').last.toLowerCase();
+          String fileName = '${FeedMedias.makeFilePath()}-${i + 1}';
+          String filePath = '$fileName.$ext';
+          String thumbnailPath;
+          String fileBaseName = basename(fileName);
+          yield loadingEvent('Copying files ${i + 1}/${files.length}', (i) / (files.length));
+          if (ext == 'mov' || ext == 'mp4') {
+            if (ext == 'mov') {
+              yield loadingEvent('Converting mov to mp4 ${i + 1}/${files.length}', (i + 0.25) / (files.length));
+              filePath = '$fileName.mp4';
+              // Should do the trick in most cases, using ffmpeg takes way too long..
+            }
+            await file.copy(FeedMedias.makeAbsoluteFilePath(filePath));
+            yield loadingEvent('Optimizing pic ${i + 1}/${files.length}', (i + 0.75) / (files.length));
+            thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
+            thumbnailPath = thumbnailPath.replaceFirst('.mp4', '.jpg');
+            await VideoThumbnail.thumbnailFile(
+              video: FeedMedias.makeAbsoluteFilePath(filePath),
+              thumbnailPath: FeedMedias.makeAbsoluteFilePath(thumbnailPath),
+              imageFormat: ImageFormat.JPEG,
+              quality: 50,
+            );
+            await optimizePicture(thumbnailPath, thumbnailPath);
+          } else if (ext == 'heic') {
+            yield loadingEvent('Converting heic to jpg ${i + 1}/${files.length}', (i + 0.5) / (files.length));
+            String jpegPath = await HeicToJpg.convert(file.path);
+            yield loadingEvent('Optimizing pic ${i + 1}/${files.length}', (i + 0.75) / (files.length));
+            filePath = '$fileName.jpg';
+            await File(jpegPath).copy(FeedMedias.makeAbsoluteFilePath(filePath));
+            thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
+            await optimizePicture(filePath, thumbnailPath);
+          } else if (ext == 'png' || ext == 'jpg' || ext == 'jpeg') {
+            Image image = decodeImage(await file.readAsBytes());
+            if (ext == 'png') {
+              yield loadingEvent('Converting png to jpg ${i + 1}/${files.length}', (i + 0.25) / (files.length));
+              filePath = '$fileName.jpg';
+            }
+            await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image), flush: true);
+            yield loadingEvent('Optimizing pic ${i + 1}/${files.length}', (i + 0.75) / (files.length));
+            thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
+            await optimizePictureFromImage(image, thumbnailPath);
+          } else {
+            throw 'Unknown file type $ext';
+          }
+          feedMedias.add(FeedMediasCompanion(
+            filePath: Value(filePath),
+            thumbnailPath: Value(thumbnailPath),
+          ));
+        } catch (e, stack) {
+          Logger.logError(e, stack, data: {"file": file});
         }
-        String fileBaseName = basename(fileName);
-        String thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
-        if (thumbnailPath.endsWith('mp4')) {
-          thumbnailPath = thumbnailPath.replaceFirst('.mp4', '.jpg');
-          await VideoThumbnail.thumbnailFile(
-            video: FeedMedias.makeAbsoluteFilePath(filePath),
-            thumbnailPath: FeedMedias.makeAbsoluteFilePath(thumbnailPath),
-            imageFormat: ImageFormat.JPEG,
-            quality: 50,
-          );
-          await optimizePicture(thumbnailPath, thumbnailPath);
-        } else {
-          /*Image image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(filePath)).readAsBytes());
-          await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image));*/
-          await optimizePicture(filePath, thumbnailPath);
-        }
-        feedMedias.add(FeedMediasCompanion(
-          filePath: Value(filePath),
-          thumbnailPath: Value(thumbnailPath),
-        ));
       }
       yield CaptureBlocStateDone(feedMedias, args.videoEnabled, args.pickerEnabled, args.overlayPath);
     }
@@ -151,9 +159,13 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
 
   Future optimizePicture(String from, String to) async {
     Image image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(from)).readAsBytes());
+    await optimizePictureFromImage(image, to);
+  }
+
+  Future optimizePictureFromImage(Image image, String to) async {
     Image thumbnail = copyResize(image,
         height: image.height > image.width ? 800 : null, width: image.width >= image.height ? 800 : null);
-    await File(FeedMedias.makeAbsoluteFilePath(to)).writeAsBytes(encodeJpg(thumbnail, quality: 50));
+    await File(FeedMedias.makeAbsoluteFilePath(to)).writeAsBytes(encodeJpg(thumbnail, quality: 50), flush: true);
   }
 
   CaptureBlocStateLoading loadingEvent(String title, double progress) =>

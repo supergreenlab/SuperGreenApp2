@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-03-03T11:50:36.497992",
+  "@@last_modified": "2021-03-05T11:45:49.719859",
   "redBarSyncingProgress": "Syncing - {progress}",
   "@redBarSyncingProgress": {
     "description": "Syncing progress indicator in top red bar, when fetching all new diary cards",
@@ -1385,147 +1385,159 @@
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageTitle": "Plant feed",
-  "@publicPlantPageTitle": {
+  "plantFeedPageTitle": "Plant feed",
+  "@plantFeedPageTitle": {
     "description": "Label for the button that shows the complete diary when looking at a single feed entry",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuDefoliation": "Defoliation",
-  "@publicPlantPageMenuDefoliation": {
+  "plantFeedPageSingleEntry": "Viewing single log entry",
+  "@plantFeedPageSingleEntry": {
+    "description": "Label for the button that shows the complete diary when looking at a single feed entry",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plantFeedPageSingleEntryButton": "View complete diary",
+  "@plantFeedPageSingleEntryButton": {
+    "description": "Button that shows the complete diary when looking at a single feed entry",
+    "type": "text",
+    "placeholders": {}
+  },
+  "plantFeedPageMenuDefoliation": "Defoliation",
+  "@plantFeedPageMenuDefoliation": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuTopping": "Topping",
-  "@publicPlantPageMenuTopping": {
+  "plantFeedPageMenuTopping": "Topping",
+  "@plantFeedPageMenuTopping": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuFimming": "Fimming",
-  "@publicPlantPageMenuFimming": {
+  "plantFeedPageMenuFimming": "Fimming",
+  "@plantFeedPageMenuFimming": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuBending": "Bending",
-  "@publicPlantPageMenuBending": {
+  "plantFeedPageMenuBending": "Bending",
+  "@plantFeedPageMenuBending": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuTransplant": "Transplant",
-  "@publicPlantPageMenuTransplant": {
+  "plantFeedPageMenuTransplant": "Transplant",
+  "@plantFeedPageMenuTransplant": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuGerminating": "Germinating",
-  "@publicPlantPageMenuGerminating": {
+  "plantFeedPageMenuGerminating": "Germinating",
+  "@plantFeedPageMenuGerminating": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuVegging": "Vegging",
-  "@publicPlantPageMenuVegging": {
+  "plantFeedPageMenuVegging": "Vegging",
+  "@plantFeedPageMenuVegging": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuBlooming": "Blooming",
-  "@publicPlantPageMenuBlooming": {
+  "plantFeedPageMenuBlooming": "Blooming",
+  "@plantFeedPageMenuBlooming": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuDrying": "Drying",
-  "@publicPlantPageMenuDrying": {
+  "plantFeedPageMenuDrying": "Drying",
+  "@plantFeedPageMenuDrying": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuCuring": "Curing",
-  "@publicPlantPageMenuCuring": {
+  "plantFeedPageMenuCuring": "Curing",
+  "@plantFeedPageMenuCuring": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuGrowlog": "Grow log",
-  "@publicPlantPageMenuGrowlog": {
+  "plantFeedPageMenuGrowlog": "Grow log",
+  "@plantFeedPageMenuGrowlog": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuMeasure": "Measure",
-  "@publicPlantPageMenuMeasure": {
+  "plantFeedPageMenuMeasure": "Measure",
+  "@plantFeedPageMenuMeasure": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuNutrientMix": "Nutrient mix",
-  "@publicPlantPageMenuNutrientMix": {
+  "plantFeedPageMenuNutrientMix": "Nutrient mix",
+  "@plantFeedPageMenuNutrientMix": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuWatering": "Watering",
-  "@publicPlantPageMenuWatering": {
+  "plantFeedPageMenuWatering": "Watering",
+  "@plantFeedPageMenuWatering": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuPlantTraining": "Plant training",
-  "@publicPlantPageMenuPlantTraining": {
+  "plantFeedPageMenuPlantTraining": "Plant training",
+  "@plantFeedPageMenuPlantTraining": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageMenuLifeEvents": "Life events",
-  "@publicPlantPageMenuLifeEvents": {
+  "plantFeedPageMenuLifeEvents": "Life events",
+  "@plantFeedPageMenuLifeEvents": {
     "description": "Speed dial (lower right menu) button label",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageLoading": "Loading plant..",
-  "@publicPlantPageLoading": {
+  "plantFeedPageLoading": "Loading plant..",
+  "@plantFeedPageLoading": {
     "description": "Loading message while fetching plant from db",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageArchived": "Plant was removed or archived.",
-  "@publicPlantPageArchived": {
+  "plantFeedPageArchived": "Plant was removed or archived.",
+  "@plantFeedPageArchived": {
     "description": "Message displayed when the plant that was displayed has be removed or archived",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageOpenPlantMenu": "OPEN PLANT LIST",
-  "@publicPlantPageOpenPlantMenu": {
-    "description": "Button displayed under publicPlantPageArchived, opens the plant menu",
+  "plantFeedPageOpenPlantMenu": "OPEN PLANT LIST",
+  "@plantFeedPageOpenPlantMenu": {
+    "description": "Button displayed under plantFeedPageArchived, opens the plant menu",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageNoPlantYet": "You have no plant yet.",
-  "@publicPlantPageNoPlantYet": {
+  "plantFeedPageNoPlantYet": "You have no plant yet.",
+  "@plantFeedPageNoPlantYet": {
     "description": "Displayed when no plant has been added to the app yet",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageAddFirstPlantPart1": "Add your first",
-  "@publicPlantPageAddFirstPlantPart1": {
+  "plantFeedPageAddFirstPlantPart1": "Add your first",
+  "@plantFeedPageAddFirstPlantPart1": {
     "description": "First part of the \"Add your first PLANT\" text when no plant yet",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageAddFirstPlantPart2": "PLANT",
-  "@publicPlantPageAddFirstPlantPart2": {
+  "plantFeedPageAddFirstPlantPart2": "PLANT",
+  "@plantFeedPageAddFirstPlantPart2": {
     "description": "Second part of the \"Add your first PLANT\" text when no plant yet",
     "type": "text",
     "placeholders": {}
   },
-  "publicPlantPageStart": "START",
-  "@publicPlantPageStart": {
-    "description": "Button displayed under publicPlantPageAddFirstPlantPart2, opens the plant creation user flow",
+  "plantFeedPageStart": "START",
+  "@plantFeedPageStart": {
+    "description": "Button displayed under plantFeedPageAddFirstPlantPart2, opens the plant creation user flow",
     "type": "text",
     "placeholders": {}
   },
