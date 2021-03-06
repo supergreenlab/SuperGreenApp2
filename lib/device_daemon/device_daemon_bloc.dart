@@ -145,7 +145,8 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
               add(DeviceDaemonBlocEventDeviceReachable(device, true));
             } else {
               if (identifier != null) {
-                Logger.throwError("Wrong identifier for device ${device.name}", data: {"device": device});
+                Logger.throwError("Wrong identifier for device ${device.name}",
+                    data: {"device": device, "identifier": identifier});
               } else {
                 throw 'Couldn\'t connect to device';
               }
