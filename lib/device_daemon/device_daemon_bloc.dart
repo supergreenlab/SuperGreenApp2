@@ -121,7 +121,7 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
             Logger.throwError("Wrong identifier for device ${device.name}",
                 data: {"device": device, "identifier": identifier});
           } else {
-            throw '';
+            throw 'Couldn\'t connect to device';
           }
         }
       } catch (e) {
@@ -144,7 +144,11 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
                   synced: Value(device.synced ? ip == device.ip : false)));
               add(DeviceDaemonBlocEventDeviceReachable(device, true));
             } else {
-              Logger.throwError("Wrong identifier for device ${device.name}", data: {"device": device});
+              if (identifier != null) {
+                Logger.throwError("Wrong identifier for device ${device.name}", data: {"device": device});
+              } else {
+                throw 'Couldn\'t connect to device';
+              }
             }
           } catch (e, trace) {
             Logger.logError(e, trace, data: {"device": device});
