@@ -46,10 +46,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> initPackageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    print(packageInfo);
     setState(() {
       version = packageInfo.version;
       buildNumber = packageInfo.buildNumber;
+      Logger.log('APP VERSION: $version ($buildNumber)');
     });
   }
 
