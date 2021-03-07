@@ -53,28 +53,22 @@ class SliderFormParam extends StatelessWidget {
               child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   double newValue = math.max(min, value - 1);
                   onChanged(newValue);
                   onChangeEnd(newValue);
                 },
-                child: Text('-',
-                    style: TextStyle(fontSize: 50, color: Colors.grey)),
+                child: Text('-', style: TextStyle(fontSize: 50, color: Colors.grey)),
               ),
-              Text('$value%',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff3bb30b))),
-              FlatButton(
+              Text('$value%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b))),
+              TextButton(
                 onPressed: () {
                   double newValue = math.min(max, value + 1);
                   onChanged(newValue);
                   onChangeEnd(newValue);
                 },
-                child: Text('+',
-                    style: TextStyle(fontSize: 30, color: Colors.grey)),
+                child: Text('+', style: TextStyle(fontSize: 30, color: Colors.grey)),
               ),
             ],
           )),

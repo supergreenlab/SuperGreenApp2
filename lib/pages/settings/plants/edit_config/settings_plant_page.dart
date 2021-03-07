@@ -100,13 +100,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                         title: Text('Unsaved changed'),
                         content: Text('Changes will not be saved. Continue?'),
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Navigator.pop(context, false);
                             },
                             child: Text('NO'),
                           ),
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Navigator.pop(context, true);
                             },
@@ -289,13 +289,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             title: Text('Archive plant?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -318,13 +318,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             title: Text('Archive plant'),
             content: Text('Plant archiving requires a sgl account.'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('CANCEL'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

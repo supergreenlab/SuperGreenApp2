@@ -888,13 +888,13 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
               FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogTitle(lastNutrientMixParams.name)),
           content: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogBody),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context, false);
               },
               child: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogNo),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },

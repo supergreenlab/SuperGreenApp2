@@ -217,13 +217,13 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                   title: Text(FeedMeasureFormPage.feedMeasureFormPageUnselectMeasureDialogTitle),
                   content: Text(''),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, false);
                       },
                       child: Text(CommonL10N.no),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, true);
                       },
@@ -289,13 +289,13 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                   title: Text(FeedMeasureFormPage.feedMeasureFormPageDeletePicDialogTitle),
                   content: Text(CommonL10N.confirmUnRevertableChange),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, false);
                       },
                       child: Text(CommonL10N.no),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, true);
                       },

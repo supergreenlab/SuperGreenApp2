@@ -282,13 +282,13 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
                     title: Text(FeedMediaFormPage.feedMediaFormPageDeletePicDialogTitle),
                     content: Text(CommonL10N.confirmUnRevertableChange),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, false);
                         },
                         child: Text(CommonL10N.no),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
@@ -394,13 +394,13 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
             title: Text(FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogTitle),
             content: Text(FeedMediaFormPage.feedMediaFormPageDraftRecoveryDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.no),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

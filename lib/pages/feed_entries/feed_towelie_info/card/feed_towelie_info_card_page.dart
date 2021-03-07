@@ -36,8 +36,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   final FeedEntryState state;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
 
-  const FeedTowelieInfoCardPage(this.animation, this.feedState, this.state,
-      {Key key, this.cardActions})
+  const FeedTowelieInfoCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
       : super(key: key);
 
   @override
@@ -54,8 +53,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle(
-              'assets/feed_card/icon_towelie.png', 'Towelie', state.synced,
+          FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie', state.synced,
               actions: cardActions != null ? cardActions(state) : []),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -74,8 +72,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   Widget _renderLoaded(BuildContext context, FeedTowelieInfoState state) {
     FeedTowelieInfoParams params = state.params;
     List<Widget> content = [
-      FeedCardTitle(
-          'assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
+      FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
         child: _renderBody(context, state),
@@ -113,8 +110,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
     );
   }
 
-  ButtonBar _renderButtonBar(
-      BuildContext context, List<FeedTowelieParamsButton> buttons) {
+  ButtonBar _renderButtonBar(BuildContext context, List<FeedTowelieParamsButton> buttons) {
     return ButtonBar(
       alignment: MainAxisAlignment.start,
       buttonPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
@@ -123,29 +119,24 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   }
 
   Widget _renderButton(BuildContext context, FeedTowelieParamsButton button) {
-    return FlatButton(
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      padding: EdgeInsets.all(0),
-      child: Text(button.title.toUpperCase(),
-          style: TextStyle(color: Colors.blue, fontSize: 12)),
+    return TextButton(
+      style: ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: MaterialStateProperty.all(EdgeInsets.all(0)),
+      ),
+      child: Text(button.title.toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
-        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(
-            button.params,
-            feed: state.feedID,
-            feedEntry: state.feedEntryID));
+        BlocProvider.of<TowelieBloc>(context)
+            .add(TowelieBlocEventButtonPressed(button.params, feed: state.feedID, feedEntry: state.feedEntryID));
       },
     );
   }
 
-  Widget _renderSelectedButton(
-      BuildContext context, FeedTowelieParamsButton button) {
+  Widget _renderSelectedButton(BuildContext context, FeedTowelieParamsButton button) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, bottom: 24),
       child: Text('➡️ ${button.title.toUpperCase()}',
-          style: TextStyle(
-              color: Color(0xff565656),
-              fontSize: 12,
-              fontWeight: FontWeight.bold)),
+          style: TextStyle(color: Color(0xff565656), fontSize: 12, fontWeight: FontWeight.bold)),
     );
   }
 }

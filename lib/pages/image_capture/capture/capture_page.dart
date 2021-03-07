@@ -285,8 +285,8 @@ class _CapturePageState extends State<CapturePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                FlatButton(
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                TextButton(
+                  style: ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                   child: Icon(Icons.library_books, color: Colors.white54),
                   onPressed: () async {
                     _checkPermission().then((granted) {

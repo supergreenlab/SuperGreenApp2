@@ -30,8 +30,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToTimelapseSetup(state.plant));
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTimelapseSetup(state.plant));
                 },
               ),
             ];
@@ -42,13 +41,11 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                 actions: actions,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
         });
   }
 
-  Widget _renderTimelapses(
-      BuildContext context, TimelapseViewerBlocStateLoaded state) {
+  Widget _renderTimelapses(BuildContext context, TimelapseViewerBlocStateLoaded state) {
     return ListView.builder(
       itemCount: state.images.length + 1,
       itemBuilder: (context, index) {
@@ -57,9 +54,8 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
         }
         return InkWell(
           onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToFullscreenPicture(
-                    state.timelapses[index].id, state.images[index]));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToFullscreenPicture(state.timelapses[index].id, state.images[index]));
           },
           onLongPress: () {
             _deleteTimelapse(context, state.timelapses[index]);
@@ -79,10 +75,8 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                             strokeWidth: 4.0,
                           ),
                         ),
-                        Text(
-                            'Pictures are uploaded every 10min,\nPlease wait..',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey)),
+                        Text('Pictures are uploaded every 10min,\nPlease wait..',
+                            textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
                       ],
                     ))
                   ],
@@ -99,8 +93,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
     );
   }
 
-  Widget _renderAdd(
-      BuildContext context, TimelapseViewerBlocStateLoaded state) {
+  Widget _renderAdd(BuildContext context, TimelapseViewerBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -108,14 +101,11 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24),
                   child: MarkdownBody(
-                      data:
-                          'Want another one?\n**Support us** by using this **link** ❤️',
+                      data: 'Want another one?\n**Support us** by using this **link** ❤️',
                       styleSheet: MarkdownStyleSheet(
-                          textAlign: WrapAlignment.center,
-                          p: TextStyle(fontSize: 22, color: Colors.black)))),
+                          textAlign: WrapAlignment.center, p: TextStyle(fontSize: 22, color: Colors.black)))),
               GreenButton(
                 title: 'SHOP NOW',
                 onPressed: () {
@@ -124,11 +114,10 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(
-                        MainNavigateToTimelapseSetup(state.plant,
-                            pushAsReplacement: true));
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToTimelapseSetup(state.plant, pushAsReplacement: true));
                   },
                   child: Text(
                     'ADD A NEW ONE',
@@ -136,11 +125,10 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                   ),
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToTimelapseConnect(state.plant,
-                          pushAsReplacement: true));
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToTimelapseConnect(state.plant, pushAsReplacement: true));
                 },
                 child: Text(
                   'CONNECT ONE',
@@ -163,13 +151,13 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
             title: Text('Delete timelapse ${timelapse.uploadName}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -179,8 +167,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<TimelapseViewerBloc>(context)
-          .add(TimelapseViewerBlocEventDelete(timelapse));
+      BlocProvider.of<TimelapseViewerBloc>(context).add(TimelapseViewerBlocEventDelete(timelapse));
     }
   }
 }

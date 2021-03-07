@@ -201,8 +201,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                     ),
                     Expanded(child: _deviceList(context, state)),
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-                      FlatButton(
-                        textColor: Colors.red,
+                      TextButton(
+                        //textColor: Colors.red,
                         child: Row(
                           children: <Widget>[
                             Icon(Icons.close),
@@ -213,8 +213,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
                         },
                       ),
-                      FlatButton(
-                        textColor: Colors.blue,
+                      TextButton(
+                        //textColor: Colors.blue,
                         child: Row(
                           children: <Widget>[
                             Icon(Icons.add),
@@ -338,7 +338,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
           ),
         ),
         Center(
-          child: FlatButton(
+          child: TextButton(
             onPressed: () {
               BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
             },
@@ -378,13 +378,13 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
             title: Text(SelectDevicePage.selectDeviceDeleteControllerDialogTitle(device.name)),
             content: Text(SelectDevicePage.selectDeviceDeleteControllerDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.no),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

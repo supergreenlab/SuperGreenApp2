@@ -165,7 +165,7 @@ class FeedProductsCardPage extends StatelessWidget {
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
             minWidth: 0, //wraps child's width
             height: 0,
-            child: FlatButton(
+            child: TextButton(
               child: Column(
                 children: <Widget>[
                   Text(
@@ -208,7 +208,7 @@ class FeedProductsCardPage extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: storeGeos.map<Widget>((sg) {
           bool selected = sg == feedState.storeGeo;
-          return FlatButton(
+          return TextButton(
             child: Text(_storeGeoNames[sg],
                 style: TextStyle(color: sg == feedState.storeGeo ? Colors.black : Colors.blue)),
             onPressed: selected
@@ -232,7 +232,7 @@ class FeedProductsCardPage extends StatelessWidget {
   }
 
   Widget _renderButton(BuildContext context, FeedProductsButtonParams button) {
-    return FlatButton(
+    return TextButton(
       child: Text(button.title.toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
         BlocProvider.of<TowelieBloc>(context)

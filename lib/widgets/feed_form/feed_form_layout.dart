@@ -46,8 +46,7 @@ class FeedFormLayout extends StatelessWidget {
     List<Widget> actions = [];
     if (this.onOK != null) {
       actions.add(IconButton(
-        icon: Icon(Icons.check,
-            color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
+        icon: Icon(Icons.check, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
         onPressed: this.valid ? onOK : null,
       ));
     }
@@ -62,13 +61,13 @@ class FeedFormLayout extends StatelessWidget {
                   title: Text('Unsaved changed'),
                   content: Text('Changes will not be saved. Continue?'),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, false);
                       },
                       child: Text('NO'),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, true);
                         if (onCancel != null) {

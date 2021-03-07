@@ -304,13 +304,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                     title: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogTitle),
                     content: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogBody),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, false);
                         },
                         child: Text(CommonL10N.no),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
@@ -373,13 +373,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                     title: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogTitle),
                     content: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogBody),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, false);
                         },
                         child: Text(CommonL10N.no),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
@@ -470,13 +470,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
             title: Text(FeedCareCommonFormPage.feedCareCommonDraftRecoveryDialogTitle),
             content: Text(FeedCareCommonFormPage.feedCareCommonDraftRecoveryDialogBody(widget.title())),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.no),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

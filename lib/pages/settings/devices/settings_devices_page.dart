@@ -38,17 +38,14 @@ class SettingsDevicesPage extends StatelessWidget {
                 itemCount: state.devices.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    leading: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: SvgPicture.asset(
-                            'assets/settings/icon_controller.svg')),
+                    leading:
+                        SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_controller.svg')),
                     onLongPress: () {
                       _deleteBox(context, state.devices[index]);
                     },
                     onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(
-                          MainNavigateToSettingsDevice(state.devices[index]));
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToSettingsDevice(state.devices[index]));
                     },
                     title: Text('${index + 1}. ${state.devices[index].name}',
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -72,10 +69,9 @@ class SettingsDevicesPage extends StatelessWidget {
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsDevicesBlocStateLoaded),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToAddDeviceEvent());
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToAddDeviceEvent());
                     },
                     child: Icon(
                       Icons.add,
@@ -85,8 +81,7 @@ class SettingsDevicesPage extends StatelessWidget {
                 ],
                 elevation: 10,
               ),
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
@@ -103,46 +98,38 @@ class SettingsDevicesPage extends StatelessWidget {
                   child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32.0, vertical: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
                     child: Column(
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(bottom: 24.0),
                           child: Text(
                             'You have no controller yet.',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.w200),
+                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         Text(
                           'Add a first',
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w300),
+                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                           textAlign: TextAlign.center,
                         ),
                         Text('CONTROLLER',
-                            style: TextStyle(
-                                fontSize: 45,
-                                fontWeight: FontWeight.w200,
-                                color: Color(0xff3bb30b))),
+                            style: TextStyle(fontSize: 45, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
                       ],
                     ),
                   ),
                   GreenButton(
                     title: 'ADD',
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToAddDeviceEvent());
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToAddDeviceEvent());
                     },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       'OR',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                     ),
                   ),
                   Row(
@@ -184,13 +171,13 @@ class SettingsDevicesPage extends StatelessWidget {
             title: Text('Delete device ${device.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -200,8 +187,7 @@ class SettingsDevicesPage extends StatelessWidget {
           );
         });
     if (confirm) {
-      BlocProvider.of<SettingsDevicesBloc>(context)
-          .add(SettingsDevicesBlocEventDeleteDevice(device));
+      BlocProvider.of<SettingsDevicesBloc>(context).add(SettingsDevicesBlocEventDeleteDevice(device));
     }
   }
 }

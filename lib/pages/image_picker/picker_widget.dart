@@ -56,14 +56,11 @@ class PickerWidgetState extends State<PickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _loading
-        ? Center(child: CircularProgressIndicator())
-        : _buildWidget();
+    return _loading ? Center(child: CircularProgressIndicator()) : _buildWidget();
   }
 
   Widget _buildWidget() {
-    if (_albums.isEmpty)
-      return Center(child: Text("You have no folders to select from"));
+    if (_albums.isEmpty) return Center(child: Text("You have no folders to select from"));
 
     final dropDownAlbumsWidget = DropdownButton<Album>(
       value: _selectedAlbum,
@@ -101,9 +98,11 @@ class PickerWidgetState extends State<PickerWidget> {
                 children: [
                   SizedBox(
                     width: 50,
-                    child: FlatButton(
-                      padding: EdgeInsets.all(0),
-                      textColor: Colors.blue,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        textStyle: MaterialStateProperty.all(TextStyle(color: Colors.blue)),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(0)),
+                      ),
                       onPressed: () => widget.onCancel(),
                       child: Text("Cancel"),
                     ),
@@ -113,11 +112,12 @@ class PickerWidgetState extends State<PickerWidget> {
                     builder: (context, selector, child) {
                       return ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 60),
-                        child: FlatButton(
-                          padding: EdgeInsets.all(0),
-                          textColor: Colors.blue,
-                          onPressed: () =>
-                              widget.onDone(_selector.selectedItems),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            textStyle: MaterialStateProperty.all(TextStyle(color: Colors.blue)),
+                            padding: MaterialStateProperty.all(EdgeInsets.all(0)),
+                          ),
+                          onPressed: () => widget.onDone(_selector.selectedItems),
                           child: Text(
                             "Done (${selector.selectedItems.length})",
                             overflow: TextOverflow.ellipsis,

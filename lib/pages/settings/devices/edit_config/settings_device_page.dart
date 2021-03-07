@@ -177,13 +177,13 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                         title: Text(CommonL10N.unsavedChangeDialogTitle),
                         content: Text(CommonL10N.unsavedChangeDialogBody),
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Navigator.pop(context, false);
                             },
                             child: Text(CommonL10N.no),
                           ),
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Navigator.pop(context, true);
                             },

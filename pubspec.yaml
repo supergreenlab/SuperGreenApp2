@@ -13,79 +13,86 @@ description: SuperGreenLab&#x27;s mobile app
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.2.11+53
 
+publish_to: 'none'
+
 environment:
   sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
-  uuid:
-  rive:
-  animated_size_and_fade:
-  heic_to_jpg:
-  enum_to_string:
-  uni_links:
-  tuple:
-  share_extend:
-  fluttertoast:
-  flutter_email_sender:
-  visibility_detector:
-  devicelocale:
-  yaml:
-  camera:
-  multicast_dns:
-  http:
-  rxdart:
-  flutter_svg:
-  permission_handler: 4.4.0+hotfix.2
-  moor: 3.3.1
-  sqlite3_flutter_libs:
-  path_provider:
-  path:
-  hive:
-  hive_flutter:
-  bloc:
-  flutter_bloc:
-  provider:
-  equatable:
-  url_launcher:
-  basic_utils:
+  uuid: ^2.2.2
+  rive: ^0.6.7
+  animated_size_and_fade: ^1.1.4
+  heic_to_jpg: ^0.1.3
+  enum_to_string: ^1.0.14
+  uni_links: ^0.4.0
+  tuple: ^1.0.3
+  share_extend: ^1.1.9
+  fluttertoast: ^7.1.6
+  flutter_email_sender: ^4.0.0
+  visibility_detector: ^0.1.5
+  devicelocale: ^0.3.3
+  yaml: ^2.2.1
+  camera: ^0.7.0
+  multicast_dns: ^0.2.2
+  http: ^0.12.2
+  rxdart: ^0.25.0
+  flutter_svg: ^0.20.0-nullsafety.3
+  permission_handler: ^4.4.0+hotfix.2
+  moor: ^3.3.1
+  sqlite3_flutter_libs: ^0.3.0
+  path_provider: ^1.6.27
+  path: ^1.8.0-nullsafety.1
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
+  bloc: ^6.1.1
+  flutter_bloc: ^6.1.1
+  provider: ^4.3.3
+  equatable: ^1.2.5
+  url_launcher: ^5.7.10
+  basic_utils: ^2.3.0
   flutter_speed_dial:
     path: ./vendor/flutter_speed_dial
-  event_bus:
-  video_player:
-  keyboard_visibility:
-  video_thumbnail:
+  event_bus: ^1.1.1
+  video_player: ^1.0.1
+  keyboard_visibility: ^0.5.6
+  video_thumbnail: ^0.2.5
   flutter_localizations:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
-  intl:
-  intl_translation:
-  flutter_swiper:
-  charts_flutter:
-  flutter_markdown:
-  flutter_ble_lib:
-  youtube_player_flutter:
+  intl: ^0.17.0
+  intl_translation: ^0.17.10
+  flutter_swiper: ^1.1.6
+  charts_flutter: ^0.9.0
+  flutter_markdown: ^0.5.2
+  flutter_ble_lib: ^2.3.1
+  youtube_player_flutter: ^7.0.0
   matrix_gesture_detector:
     path: ./vendor/matrix_gesture_detector
-  connectivity:
+  connectivity: ^2.0.2
   firebase_messaging: ^8.0.0-dev.14
   firebase_core: ^0.7.0
-  flutter_local_notifications:
-  exif:
+  flutter_local_notifications: ^3.0.3
+  exif: ^1.0.3
   media_picker_builder:
     # path: ../media_picker_builder/ 
     git: https://github.com/supergreenlab/media_picker_builder.git
-  image:
+  image: ^3.0.1
     # git: https://github.com/supergreenlab/image.git
   # flutter_image_compress:
-  device_info:
-  wifi_iot:
+  device_info: ^1.0.0
+  wifi_iot: ^0.2.2
     # git: https://github.com/alternadom/WiFiFlutter.git
   flutter:
     sdk: flutter
-  cupertino_icons:
-  package_info:
+  cupertino_icons: ^1.0.0
+  package_info: ^0.4.3
 
-# dependency_overrides:
+dependency_overrides:
+  intl: ^0.17.0
+  intl_translation:
+    git:
+      url: git://github.com/dart-lang/intl_translation.git
+      ref: 1a18d5a676ce94918f486ef699cb479f7578fdb6
   # analyzer: 0.39.14
   # path: 1.7.0
 

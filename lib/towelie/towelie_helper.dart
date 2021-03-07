@@ -32,12 +32,10 @@ class TowelieHelper extends StatefulWidget {
   @override
   _TowelieHelperState createState() => _TowelieHelperState();
 
-  static Widget wrapWidget(
-      RouteSettings settings, BuildContext context, Widget widget) {
+  static Widget wrapWidget(RouteSettings settings, BuildContext context, Widget widget) {
     return WillPopScope(
       onWillPop: () async {
-        BlocProvider.of<TowelieBloc>(context)
-            .add(TowelieBlocEventRoutePop(settings));
+        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventRoutePop(settings));
         return true;
       },
       child: Stack(children: [
@@ -58,18 +56,14 @@ class _TowelieHelperState extends State<TowelieHelper> {
   Widget build(BuildContext context) {
     return BlocListener<TowelieBloc, TowelieBlocState>(
       listener: (BuildContext context, TowelieBlocState state) {
-        if (state is TowelieBlocStateHelper &&
-            state.settings.name == widget.settings.name) {
+        if (state is TowelieBlocStateHelper && state.settings.name == widget.settings.name) {
           _prepareShow(state);
-        } else if (state is TowelieBlocStateHelperPop &&
-            state.settings.name == widget.settings.name) {
+        } else if (state is TowelieBlocStateHelperPop && state.settings.name == widget.settings.name) {
           _prepareHide();
         }
       },
       child: BlocBuilder<TowelieBloc, TowelieBlocState>(
-        buildWhen: (context, state) =>
-            state is TowelieBlocStateHelper &&
-            state.settings.name == widget.settings.name,
+        buildWhen: (context, state) => state is TowelieBlocStateHelper && state.settings.name == widget.settings.name,
         builder: (BuildContext context, TowelieBlocState state) {
           if (visible) {
             return _renderBody(state as TowelieBlocStateHelper);
@@ -87,44 +81,42 @@ class _TowelieHelperState extends State<TowelieHelper> {
           child: MarkdownBody(
             data: state.text,
             styleSheet: MarkdownStyleSheet(
-                strong: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal),
-                p: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300)),
+                strong: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal),
+                p: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w300)),
           )),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('(Tap to close)', style: TextStyle(color: Colors.grey.shade300), textAlign: TextAlign.end,),
-          ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          '(Tap to close)',
+          style: TextStyle(color: Colors.grey.shade300),
+          textAlign: TextAlign.end,
+        ),
+      ),
     ];
     List<Widget> buttons = [];
     if ((state.buttons?.length ?? 0) > 0) {
       for (int i = 0; i < state.buttons.length; ++i) {
         Map<String, dynamic> button = state.buttons[i];
-        buttons.add(FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        buttons.add(TextButton(
+            style: ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
             onPressed: () {
-              BlocProvider.of<TowelieBloc>(context)
-                  .add(TowelieBlocEventButtonPressed(button));
+              BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventButtonPressed(button));
               _prepareHide();
             },
-            child: Text(button['title'].toUpperCase(),
-                style: TextStyle(color: Colors.blue, fontSize: 12))));
+            child: Text(button['title'].toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12))));
       }
     }
     if (state.hasNext) {
-      buttons.add(FlatButton(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      buttons.add(TextButton(
+          style: ButtonStyle(
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
           onPressed: () {
-            BlocProvider.of<TowelieBloc>(context)
-                .add(TowelieBlocEventHelperNext(widget.settings));
+            BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventHelperNext(widget.settings));
           },
-          child: Text('Next'.toUpperCase(),
-              style: TextStyle(color: Colors.blue, fontSize: 12))));
+          child: Text('Next'.toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12))));
     }
     if (buttons.length > 0) {
       content.add(
@@ -171,12 +163,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
                     padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
                     child: Container(
                       decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 2,
-                                color: Colors.black38,
-                                offset: Offset(2, 2))
-                          ],
+                          boxShadow: [BoxShadow(blurRadius: 2, color: Colors.black38, offset: Offset(2, 2))],
                           border: Border.all(color: Colors.black26, width: 1),
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(5))),
@@ -187,22 +174,17 @@ class _TowelieHelperState extends State<TowelieHelper> {
                     ),
                   )),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        right: 4.0, bottom: 8.0, left: 2.0),
+                    padding: const EdgeInsets.only(right: 4.0, bottom: 8.0, left: 2.0),
                     child: Container(
                       decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Color(0xffdedede), width: 2),
+                          border: Border.all(color: Color(0xffdedede), width: 2),
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(50))),
                       child: Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.rotationY(pi),
-                          child: SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: Image.asset(
-                                  'assets/feed_card/icon_towelie.png'))),
+                          child:
+                              SizedBox(width: 60, height: 60, child: Image.asset('assets/feed_card/icon_towelie.png'))),
                     ),
                   ),
                 ],

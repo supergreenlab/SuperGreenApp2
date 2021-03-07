@@ -92,7 +92,7 @@ class FeedLightFormPage extends StatefulWidget {
 }
 
 class _FeedLightFormPageState extends State<FeedLightFormPage> {
-  List<int> values = List();
+  List<int> values = [];
   bool _reachable = true;
   bool _usingWifi = false;
 

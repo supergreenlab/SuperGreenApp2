@@ -37,17 +37,12 @@ class SettingsBoxesPage extends StatelessWidget {
                 itemCount: state.boxes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                      leading: SizedBox(
-                          width: 40,
-                          height: 40,
-                          child:
-                              SvgPicture.asset('assets/settings/icon_lab.svg')),
+                      leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_lab.svg')),
                       onLongPress: () {
                         _deleteBox(context, state.boxes[index]);
                       },
                       onTap: () {
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(MainNavigateToSettingsBox(state.boxes[index]));
+                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(state.boxes[index]));
                       },
                       title: Text('${index + 1}. ${state.boxes[index].name}',
                           style: TextStyle(fontWeight: FontWeight.bold)),
@@ -70,10 +65,9 @@ class SettingsBoxesPage extends StatelessWidget {
                 iconColor: Colors.green,
                 hideBackButton: !(state is SettingsBoxesBlocStateLoaded),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToCreateBoxEvent());
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateBoxEvent());
                     },
                     child: Icon(
                       Icons.add,
@@ -83,8 +77,7 @@ class SettingsBoxesPage extends StatelessWidget {
                 ],
                 elevation: 10,
               ),
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
@@ -98,24 +91,16 @@ class SettingsBoxesPage extends StatelessWidget {
             child: Column(
           children: <Widget>[
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('You have no lab yet',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.w200)),
+                    child: Text('You have no lab yet', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
-                  Text('Create your first',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                  Text('Create your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('GREEN LAB',
-                      style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xff3bb30b)),
+                      style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b)),
                       textAlign: TextAlign.center),
                 ],
               ),
@@ -123,8 +108,7 @@ class SettingsBoxesPage extends StatelessWidget {
             GreenButton(
               title: 'CREATE',
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToCreateBoxEvent());
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateBoxEvent());
               },
             ),
           ],
@@ -142,13 +126,13 @@ class SettingsBoxesPage extends StatelessWidget {
             title: Text('Delete lab ${box.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -158,8 +142,7 @@ class SettingsBoxesPage extends StatelessWidget {
           );
         });
     if (confirm) {
-      BlocProvider.of<SettingsBoxesBloc>(context)
-          .add(SettingsBoxesBlocEventDeleteBox(box));
+      BlocProvider.of<SettingsBoxesBloc>(context).add(SettingsBoxesBlocEventDeleteBox(box));
     }
   }
 }

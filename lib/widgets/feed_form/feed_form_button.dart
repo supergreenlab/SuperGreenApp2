@@ -25,25 +25,21 @@ class FeedFormButton extends StatelessWidget {
   final TextStyle textStyle;
   final void Function() onPressed;
 
-  const FeedFormButton(
-      {this.title,
-      this.border = false,
-      this.onPressed,
-      this.textStyle,
-      this.icon});
+  const FeedFormButton({this.title, this.border = false, this.onPressed, this.textStyle, this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.black12,
-        border: Border.all(
-            color: border ? Color(0xff3bb30b) : Colors.transparent, width: 2),
+        border: Border.all(color: border ? Color(0xff3bb30b) : Colors.transparent, width: 2),
         borderRadius: BorderRadius.circular(5),
       ),
-      child: FlatButton(
-        highlightColor: Colors.white54,
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      child: TextButton(
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all(Colors.white54),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
         onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

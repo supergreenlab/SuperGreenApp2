@@ -29,8 +29,7 @@ class FeedFormDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String format =
-        AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       child: Container(
@@ -38,12 +37,10 @@ class FeedFormDatePicker extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset('assets/feed_form/icon_calendar.svg',
-                  width: 30, height: 30),
+              child: SvgPicture.asset('assets/feed_form/icon_calendar.svg', width: 30, height: 30),
             ),
-            Expanded(
-                child: Text('Event date: ${DateFormat(format).format(date)}')),
-            FlatButton(
+            Expanded(child: Text('Event date: ${DateFormat(format).format(date)}')),
+            TextButton(
                 onPressed: () async {
                   DateTime newDate = await showDatePicker(
                       context: context,

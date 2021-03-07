@@ -231,13 +231,13 @@ class _ExplorerPageState extends State<ExplorerPage> {
             title: Text(ExplorerPage.explorerPagePleaseLoginDialogTitle),
             content: Text(ExplorerPage.explorerPagePleaseLoginDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

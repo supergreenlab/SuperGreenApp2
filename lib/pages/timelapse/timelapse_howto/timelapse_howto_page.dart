@@ -45,15 +45,12 @@ class _TimelapseHowtoPageState extends State<TimelapseHowtoPage> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 24),
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24),
                           child: MarkdownBody(
                               data:
                                   '**Support us** by using this **link**,\nget a **bonus** pre-configured **sd-card** ❤️',
                               styleSheet: MarkdownStyleSheet(
-                                  textAlign: WrapAlignment.center,
-                                  p: TextStyle(
-                                      fontSize: 22, color: Colors.black)))),
+                                  textAlign: WrapAlignment.center, p: TextStyle(fontSize: 22, color: Colors.black)))),
                       GreenButton(
                         title: 'SHOP NOW',
                         onPressed: () {
@@ -62,7 +59,7 @@ class _TimelapseHowtoPageState extends State<TimelapseHowtoPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: () {
                             BlocProvider.of<MainNavigatorBloc>(context)
                                 .add(MainNavigateToTimelapseSetup(state.plant, pushAsReplacement: true));
@@ -73,7 +70,7 @@ class _TimelapseHowtoPageState extends State<TimelapseHowtoPage> {
                           ),
                         ),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           BlocProvider.of<MainNavigatorBloc>(context)
                               .add(MainNavigateToTimelapseConnect(state.plant, pushAsReplacement: true));
@@ -96,8 +93,7 @@ class _TimelapseHowtoPageState extends State<TimelapseHowtoPage> {
               'Timelapse',
             ),
             backgroundColor: Colors.white,
-            body: AnimatedSwitcher(
-                duration: Duration(milliseconds: 200), child: body));
+            body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
       },
     );
   }

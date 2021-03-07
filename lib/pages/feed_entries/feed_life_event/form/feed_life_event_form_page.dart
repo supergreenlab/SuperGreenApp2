@@ -190,7 +190,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             text,
             style: TextStyle(fontSize: 20, color: Colors.grey.shade700),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () async {
               DateTime newDate = await showDatePicker(
                   context: context,
