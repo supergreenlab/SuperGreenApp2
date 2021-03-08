@@ -100,6 +100,8 @@ PODS:
     - nanopb/encode (= 2.30907.0)
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
+  - package_info (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (4.4.0+hotfix.2)":
@@ -156,6 +158,7 @@ DEPENDENCIES:
   - heic_to_jpg (from `.symlinks/plugins/heic_to_jpg/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - media_picker_builder (from `.symlinks/plugins/media_picker_builder/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share_extend (from `.symlinks/plugins/share_extend/ios`)
@@ -215,6 +218,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/keyboard_visibility/ios"
   media_picker_builder:
     :path: ".symlinks/plugins/media_picker_builder/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
@@ -261,6 +266,7 @@ SPEC CHECKSUMS:
   media_picker_builder: 780750c1948670b37a2824f086043a9e69e3a6f4
   MultiplatformBleAdapter: 975cfb2a333b2c42b7a11628bd100ccb61872da2
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: d5d46b2ca93671e8dcf870b949e304c7ddb65ad0
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
