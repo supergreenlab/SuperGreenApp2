@@ -96,6 +96,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
     if (event is CaptureBlocEventInit) {
       yield CaptureBlocStateInit(args.videoEnabled, args.pickerEnabled, args.overlayPath);
     } else if (event is CaptureBlocEventCreate) {
+      yield loadingEvent('Copying files..', 0);
+      await Future.delayed(Duration(milliseconds: 500)); // Adding a small delay for
       List<File> files = event.files;
       List<FeedMediasCompanion> feedMedias = [];
       for (File file in files) {

@@ -73,7 +73,7 @@ dependencies:
   exif:
   media_picker_builder:
     # path: ../media_picker_builder/ 
-    git: https://github.com/supergreenlab/media_picker_builder.git
+    git: https://github.com/VidCamera/media_picker_builder.git
   image:
     # git: https://github.com/supergreenlab/image.git
   # flutter_image_compress:
