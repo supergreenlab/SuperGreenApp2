@@ -22,15 +22,17 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_matomo/flutter_matomo.dart';
+import 'package:matomo/matomo.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:logging/logging.dart' as l;
 
 abstract class AppInitBlocEvent extends Equatable {}
 
@@ -117,23 +119,21 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
 
       BackendAPI(); // force init
 
-      // if (appData.allowAnalytics == true) {
-      //   _allowAnalytics();
-      // }
+      l.Logger.root.level = l.Level.FINEST;
+      l.Logger.root.onRecord.listen((l.LogRecord rec) {
+        print('[${rec.time}][${rec.level.name}][${rec.loggerName}] ${rec.message}');
+      });
+      await MatomoTracker().initialize(
+        siteId: kReleaseMode || Platform.isIOS ? 5 : 8,
+        url: 'https://analytics.supergreenlab.com/matomo.php',
+      );
+      MatomoTracker().setOptOut(!appData.allowAnalytics);
       yield AppInitBlocStateReady(appData.firstStart);
     } else if (event is AppInitBlocEventAllowAnalytics) {
       _db.setFirstStart(false);
       _db.setAllowAnalytics(event.allowAnalytics);
-      // if (event.allowAnalytics == true) {
-      //   _allowAnalytics();
-      // }
+      MatomoTracker().setOptOut(!event.allowAnalytics);
       yield AppInitBlocStateDone();
     }
   }
-
-  // void _allowAnalytics() async {
-  //   await FlutterMatomo.initializeTracker(
-  //       'https://analytics.supergreenlab.com/piwik.php', 3);
-  //   BlocSupervisor.delegate = AnalyticsBlocDelegate();
-  // }
 }

@@ -33,8 +33,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
             if (_scrollController.hasClients == false) {
               return;
             }
-            _scrollController.animateTo(50,
-                duration: Duration(seconds: 15), curve: Curves.linear);
+            _scrollController.animateTo(50, duration: Duration(seconds: 15), curve: Curves.linear);
           });
         }
       },
@@ -69,31 +68,23 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
               body = _renderGraphs(context, state);
             }
           }
-          return AnimatedSwitcher(
-              duration: Duration(milliseconds: 200), child: body);
+          return AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body);
         },
       ),
     );
   }
 
-  Widget _renderGraphs(
-      BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
+  Widget _renderGraphs(BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
     String tempUnit = AppDB().getAppData().freedomUnits ? '°F' : '°C';
-    DateTime metricDate = state.graphData[0]
-        .data[selectedGraphIndex ?? state.graphData[0].data.length - 1].time;
-    String format = AppDB().getAppData().freedomUnits
-        ? 'MM/dd/yyyy HH:mm'
-        : 'dd/MM/yyyy HH:mm';
+    DateTime metricDate = state.graphData[0].data[selectedGraphIndex ?? state.graphData[0].data.length - 1].time;
+    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
     Widget dateText = Text('${DateFormat(format).format(metricDate)}',
-        style: TextStyle(
-            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold));
+        style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold));
     List<charts.LineAnnotationSegment> annotations;
     if (selectedGraphIndex != null) {
       annotations = [
-        charts.LineAnnotationSegment(
-            metricDate, charts.RangeAnnotationAxisType.domain,
-            labelStyleSpec:
-                charts.TextStyleSpec(color: charts.MaterialPalette.white),
+        charts.LineAnnotationSegment(metricDate, charts.RangeAnnotationAxisType.domain,
+            labelStyleSpec: charts.TextStyleSpec(color: charts.MaterialPalette.white),
             color: charts.MaterialPalette.gray.shade500)
       ];
       dateText = Row(
@@ -102,8 +93,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           Expanded(
             child: Text(
               'tap to reset',
-              style: TextStyle(
-                  color: Colors.white, decoration: TextDecoration.underline),
+              style: TextStyle(color: Colors.white, decoration: TextDecoration.underline),
               textAlign: TextAlign.right,
             ),
           ),
@@ -116,50 +106,47 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
         color: Colors.white70,
         border: Border.all(color: Color(0xffdedede), width: 1),
       ),
-      child: Stack(
-        children: [
+      child: /*Stack(
+        children: [*/
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Hero(
-              tag: 'graphs',
-              child: charts.TimeSeriesChart(
-                state.graphData,
-                animate: false,
-                behaviors: selectedGraphIndex != null
-                    ? [
-                        charts.RangeAnnotation(annotations),
-                      ]
-                    : null,
-                customSeriesRenderers: [
-                  charts.PointRendererConfig(customRendererId: 'customPoint')
-                ],
-                selectionModels: [
-                  new charts.SelectionModelConfig(
-                      type: charts.SelectionModelType.info,
-                      changedListener: (charts.SelectionModel model) {
-                        if (!model.hasAnySelection) {
-                          return;
-                        }
-                        setState(() {
-                          selectedGraphIndex = model.selectedDatum[0].index;
-                        });
-                      }),
-                ],
-              ),
-            ),
+        padding: const EdgeInsets.all(8.0),
+        child: Hero(
+          tag: 'graphs',
+          child: charts.TimeSeriesChart(
+            state.graphData,
+            animate: false,
+            behaviors: selectedGraphIndex != null
+                ? [
+                    charts.RangeAnnotation(annotations),
+                  ]
+                : null,
+            customSeriesRenderers: [charts.PointRendererConfig(customRendererId: 'customPoint')],
+            selectionModels: [
+              new charts.SelectionModelConfig(
+                  type: charts.SelectionModelType.info,
+                  changedListener: (charts.SelectionModel model) {
+                    if (!model.hasAnySelection) {
+                      return;
+                    }
+                    setState(() {
+                      selectedGraphIndex = model.selectedDatum[0].index;
+                    });
+                  }),
+            ],
           ),
-          Positioned(
+        ),
+      ),
+      /*Positioned(
               bottom: 0,
               right: -3,
               child: IconButton(
                   icon: Icon(Icons.fullscreen, color: Colors.white70, size: 30),
                   onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(
-                        MainNavigateToMetrics(state.graphData,
-                            plant: state.plant, box: state.box));
-                  })),
-        ],
-      ),
+                    BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToMetrics(state.graphData, plant: state.plant, box: state.box));
+                  })),*/
+      // ],
+      // ),
     );
     if (state.graphData[0].data.length < minCharPoints &&
         state.graphData[1].data.length < minCharPoints &&
@@ -247,8 +234,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
     );
   }
 
-  Widget _renderMetric(
-      Color color, String name, String value, String min, String max) {
+  Widget _renderMetric(Color color, String name, String value, String min, String max) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
@@ -264,12 +250,8 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                   )),
               Column(
                 children: <Widget>[
-                  Text(max,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w300)),
-                  Text(min,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w300)),
+                  Text(max, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
+                  Text(min, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
                 ],
               )
             ],

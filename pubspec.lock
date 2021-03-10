@@ -591,9 +591,11 @@ packages:
   image:
     dependency: "direct main"
     description:
-      name: image
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: b48f135eccbee0b114f2dd602b8355b802f38505
+      url: "https://github.com/supergreenlab/image.git"
+    source: git
     version: "2.1.19"
   intl:
     dependency: "direct main"
@@ -670,10 +672,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "90a1088f458cdb9ee2ad07140a2073ebcf7a4e4e"
-      url: "https://github.com/supergreenlab/media_picker_builder.git"
+      resolved-ref: "18663acee161e7b08218635f4fb2830542675ed4"
+      url: "https://github.com/VidCamera/media_picker_builder.git"
     source: git
-    version: "1.3.1"
+    version: "1.2.5"
   meta:
     dependency: transitive
     description:
