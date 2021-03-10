@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -18,7 +19,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsDevicePage extends StatefulWidget {
+class SettingsDevicePage extends TraceableStatefulWidget {
   static String get settingsDevicePageLoading {
     return Intl.message(
       'Refreshing..',

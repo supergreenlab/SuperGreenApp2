@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_bloc.dart';
@@ -11,21 +12,18 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class SettingsUpgradeDevicePage extends StatelessWidget {
+class SettingsUpgradeDevicePage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SettingsUpgradeDeviceBloc,
-        SettingsUpgradeDeviceBlocState>(
+    return BlocListener<SettingsUpgradeDeviceBloc, SettingsUpgradeDeviceBlocState>(
       listener: (BuildContext context, SettingsUpgradeDeviceBlocState state) {
         if (state is SettingsUpgradeDeviceBlocStateUpgradeDone) {
           Timer(Duration(seconds: 3), () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(param: true));
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
           });
         }
       },
-      child: BlocBuilder<SettingsUpgradeDeviceBloc,
-          SettingsUpgradeDeviceBlocState>(
+      child: BlocBuilder<SettingsUpgradeDeviceBloc, SettingsUpgradeDeviceBlocState>(
         builder: (BuildContext context, SettingsUpgradeDeviceBlocState state) {
           Widget body;
           if (state is SettingsUpgradeDeviceBlocStateInit) {
@@ -47,19 +45,15 @@ class SettingsUpgradeDevicePage extends StatelessWidget {
                 hideBackButton: state is SettingsDeviceBlocStateDone,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
   }
 
-  Widget renderLoaded(
-      BuildContext context, SettingsUpgradeDeviceBlocStateLoaded state) {
+  Widget renderLoaded(BuildContext context, SettingsUpgradeDeviceBlocStateLoaded state) {
     if (!state.needsUpgrade) {
-      return Fullscreen(
-          title: 'You\'re up to date',
-          child: Icon(Icons.check, color: Color(0xff3bb30b), size: 100));
+      return Fullscreen(title: 'You\'re up to date', child: Icon(Icons.check, color: Color(0xff3bb30b), size: 100));
     }
     return Column(children: <Widget>[
       Expanded(
@@ -83,8 +77,7 @@ class SettingsUpgradeDevicePage extends StatelessWidget {
             subtitle: Text(
                 'Tap to start the upgrade process. In some rare cases this could lead to the controller resetting to default, that can be fixed by removing and re-adding the controller to the app.'),
             onTap: () {
-              BlocProvider.of<SettingsUpgradeDeviceBloc>(context)
-                  .add(SettingsUpgradeDeviceBlocEventUpgrade());
+              BlocProvider.of<SettingsUpgradeDeviceBloc>(context).add(SettingsUpgradeDeviceBlocEventUpgrade());
             },
           ),
         ),
@@ -92,17 +85,12 @@ class SettingsUpgradeDevicePage extends StatelessWidget {
     ]);
   }
 
-  Widget renderUpgrading(
-      BuildContext context, SettingsUpgradeDeviceBlocStateUpgrading state) {
+  Widget renderUpgrading(BuildContext context, SettingsUpgradeDeviceBlocStateUpgrading state) {
     return FullscreenLoading(title: state.progressMessage);
   }
 
-  Widget renderUpgradeDone(
-      BuildContext context, SettingsUpgradeDeviceBlocStateUpgradeDone state) {
+  Widget renderUpgradeDone(BuildContext context, SettingsUpgradeDeviceBlocStateUpgradeDone state) {
     String subtitle = 'Controller upgraded!';
-    return Fullscreen(
-        title: 'Done!',
-        subtitle: subtitle,
-        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+    return Fullscreen(title: 'Done!', subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 }

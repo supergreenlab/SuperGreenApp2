@@ -22,12 +22,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:video_player/video_player.dart';
 
-class FullscreenMediaPage extends StatefulWidget {
+class FullscreenMediaPage extends TraceableStatefulWidget {
   @override
   _FullscreenMediaPageState createState() => _FullscreenMediaPageState();
 }
@@ -57,11 +58,9 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
           if (state is FullscreenMediaBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
               if (state.filePath.startsWith('http')) {
-                _videoPlayerController =
-                    VideoPlayerController.network(state.filePath);
+                _videoPlayerController = VideoPlayerController.network(state.filePath);
               } else {
-                _videoPlayerController =
-                    VideoPlayerController.file(File(state.filePath));
+                _videoPlayerController = VideoPlayerController.file(File(state.filePath));
               }
               await _videoPlayerController.initialize();
               _videoPlayerController.play();
@@ -78,27 +77,22 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                   return Hero(
                       tag: 'FeedMedia:${state.heroPath ?? state.filePath}',
                       child: GestureDetector(onTap: () {
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(MainNavigatorActionPop());
+                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
                       }, child: LayoutBuilder(
                         builder: (context, constraints) {
                           Widget body;
                           if (state.isVideo) {
-                            if (_videoPlayerController != null &&
-                                _videoPlayerController.value.isPlaying) {
+                            if (_videoPlayerController != null && _videoPlayerController.value.isPlaying) {
                               body = Stack(
                                 children: <Widget>[
-                                  _renderPicturePlayer(
-                                      context, state, constraints),
-                                  _renderVideoPlayer(
-                                      context, state, constraints)
+                                  _renderPicturePlayer(context, state, constraints),
+                                  _renderVideoPlayer(context, state, constraints)
                                 ],
                               );
                             } else {
                               body = Stack(
                                 children: <Widget>[
-                                  _renderPicturePlayer(
-                                      context, state, constraints),
+                                  _renderPicturePlayer(context, state, constraints),
                                   Positioned(
                                     top: constraints.maxHeight / 2 - 20,
                                     height: 40,
@@ -112,8 +106,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                               );
                             }
                           } else {
-                            body = _renderPicturePlayer(
-                                context, state, constraints);
+                            body = _renderPicturePlayer(context, state, constraints);
                           }
                           return body;
                         },
@@ -125,38 +118,30 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
     );
   }
 
-  Widget _renderVideoPlayer(BuildContext context,
-      FullscreenMediaBlocState state, BoxConstraints constraints) {
-    double width =
-        constraints.maxHeight * _videoPlayerController.value.aspectRatio;
+  Widget _renderVideoPlayer(BuildContext context, FullscreenMediaBlocState state, BoxConstraints constraints) {
+    double width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
     double height = constraints.maxHeight;
     return Stack(children: [
       Positioned(
           left: (constraints.maxWidth - width) / 2,
           top: (constraints.maxHeight - height) / 2,
-          child: SizedBox(
-              width: width,
-              height: height,
-              child: VideoPlayer(_videoPlayerController))),
+          child: SizedBox(width: width, height: height, child: VideoPlayer(_videoPlayerController))),
     ]);
   }
 
-  Widget _renderPicturePlayer(BuildContext context,
-      FullscreenMediaBlocState state, BoxConstraints constraints) {
+  Widget _renderPicturePlayer(BuildContext context, FullscreenMediaBlocState state, BoxConstraints constraints) {
     String filePath = state.isVideo ? state.thumbnailPath : state.filePath;
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: filePath.startsWith('http')
-            ? Image.network(filePath, fit: BoxFit.contain, loadingBuilder:
-                (BuildContext context, Widget child,
-                    ImageChunkEvent loadingProgress) {
+            ? Image.network(filePath, fit: BoxFit.contain,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 }
                 return FullscreenLoading(
-                    percent: loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes);
+                    percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
               })
             : Image.file(
                 File(filePath),
@@ -172,17 +157,14 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                 height: constraints.maxHeight,
                 child: state.overlayPath.startsWith('http')
                     ? Image.network(state.overlayPath, fit: BoxFit.contain,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent loadingProgress) {
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                         if (loadingProgress == null) {
                           return child;
                         }
                         return FullscreenLoading(
-                            percent: loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes);
+                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
                       })
-                    : Image.file(File(state.overlayPath),
-                        fit: BoxFit.contain))),
+                    : Image.file(File(state.overlayPath), fit: BoxFit.contain))),
         Positioned(
           left: 30,
           right: 30,
@@ -191,10 +173,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             children: <Widget>[
               Text(state.sliderTitle ?? '',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
               Slider(
                 onChanged: (double value) {
                   setState(() {
@@ -219,9 +198,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             _matrix = Matrix4.identity();
           });
         },
-        child: Transform(
-            transform: _matrix,
-            child: Container(color: Colors.black, child: picture)));
+        child: Transform(transform: _matrix, child: Container(color: Colors.black, child: picture)));
   }
 
   @override

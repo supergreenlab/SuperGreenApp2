@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
@@ -27,7 +28,7 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class DeviceSetupPage extends StatelessWidget {
+class DeviceSetupPage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -36,28 +37,24 @@ class DeviceSetupPage extends StatelessWidget {
         if (state is DeviceSetupBlocStateDone) {
           Device device = state.device;
           if (state.requiresInititalSetup) {
-            FutureFn ff1 =
-                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
+            FutureFn ff1 = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
             device = await ff1.future;
           }
           if (state.requiresWifiSetup) {
-            FutureFn ff2 =
-                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToDeviceWifiEvent(device, futureFn: ff2.futureFn));
+            FutureFn ff2 = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToDeviceWifiEvent(device, futureFn: ff2.futureFn));
             device = await ff2.future;
           }
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: device, mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device, mustPop: true));
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
           cubit: Provider.of<DeviceSetupBloc>(context),
           builder: (context, state) {
-            bool canGoBack = state is DeviceSetupBlocStateAlreadyExists ||
-                state is DeviceSetupBlocStateLoadingError;
+            bool canGoBack = state is DeviceSetupBlocStateAlreadyExists || state is DeviceSetupBlocStateLoadingError;
             Widget body;
             if (state is DeviceSetupBlocStateAlreadyExists) {
               body = _renderAlreadyAdded(context);
@@ -76,8 +73,7 @@ class DeviceSetupPage extends StatelessWidget {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body),
+                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
               ),
             );
           }),
@@ -92,8 +88,7 @@ class DeviceSetupPage extends StatelessWidget {
 
   Widget _renderAlreadyAdded(BuildContext context) {
     return Fullscreen(
-        title: 'This controller is already added!',
-        child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
+        title: 'This controller is already added!', child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
   Widget _renderLoading(BuildContext context, DeviceSetupBlocState state) {
@@ -112,9 +107,7 @@ class DeviceSetupPage extends StatelessWidget {
           large: true,
           elevation: 5,
         ),
-        Expanded(
-            child: FullscreenLoading(
-                title: 'Loading please wait..', percent: state.percent)),
+        Expanded(child: FullscreenLoading(title: 'Loading please wait..', percent: state.percent)),
       ],
     );
   }

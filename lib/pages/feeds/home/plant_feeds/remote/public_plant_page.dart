@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -35,7 +36,7 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/public_plant
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_plant_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_products_delegate.dart';
 
-class PublicPlantPage extends StatelessWidget {
+class PublicPlantPage extends TraceableStatelessWidget {
   static String get publicPlantPageSingleEntry {
     return Intl.message(
       'Viewing single log entry',

@@ -21,12 +21,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
 import 'package:video_player/video_player.dart';
 
-class PlaybackPage extends StatefulWidget {
+class PlaybackPage extends TraceableStatefulWidget {
   @override
   _PlaybackPageState createState() => _PlaybackPageState();
 }
@@ -74,8 +75,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
 
   Widget _renderPlayer(BuildContext context, PlaybackBlocState state) {
     if (state.isVideo) {
-      if (_videoPlayerController == null ||
-          !_videoPlayerController.value.initialized) {
+      if (_videoPlayerController == null || !_videoPlayerController.value.initialized) {
         return Container();
       }
     }
@@ -115,29 +115,23 @@ class _PlaybackPageState extends State<PlaybackPage> {
     );
   }
 
-  Widget _renderVideoPlayer(BuildContext context, PlaybackBlocState state,
-      BoxConstraints constraints) {
-    double width =
-        constraints.maxHeight * _videoPlayerController.value.aspectRatio;
+  Widget _renderVideoPlayer(BuildContext context, PlaybackBlocState state, BoxConstraints constraints) {
+    double width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
     double height = constraints.maxHeight;
     return Stack(children: [
       Positioned(
           left: (constraints.maxWidth - width) / 2,
           top: (constraints.maxHeight - height) / 2,
-          child: SizedBox(
-              width: width,
-              height: height,
-              child: VideoPlayer(_videoPlayerController))),
+          child: SizedBox(width: width, height: height, child: VideoPlayer(_videoPlayerController))),
     ]);
   }
 
-  Widget _renderPicturePlayer(BuildContext context, PlaybackBlocState state,
-      BoxConstraints constraints) {
+  Widget _renderPicturePlayer(BuildContext context, PlaybackBlocState state, BoxConstraints constraints) {
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child: FittedBox(
-            fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)))));
+        child:
+            FittedBox(fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)))));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
@@ -147,8 +141,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath)))))),
+                    fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath)))))),
         Positioned(
           left: 30,
           right: 30,
@@ -170,8 +163,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
   Widget _renderCloseButton(BuildContext context) {
     return RawMaterialButton(
       onPressed: () {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigatorActionPop());
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
       },
       shape: new CircleBorder(),
       child: new Icon(
@@ -182,23 +174,18 @@ class _PlaybackPageState extends State<PlaybackPage> {
     );
   }
 
-  List<Widget> _renderPreviewMode(
-      BuildContext context, PlaybackBlocState state) {
+  List<Widget> _renderPreviewMode(BuildContext context, PlaybackBlocState state) {
     return [
       RawMaterialButton(
-        child: Text(state.cancelButton,
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(state.cancelButton, style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: false));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
         },
       ),
       RawMaterialButton(
-        child: Text(state.okButton,
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(state.okButton, style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
         },
       ),
     ];

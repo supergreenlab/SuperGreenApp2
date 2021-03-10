@@ -20,10 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_bloc.dart';
 
-class FullscreenPicturePage extends StatefulWidget {
+class FullscreenPicturePage extends TraceableStatefulWidget {
   @override
   _FullscreenPicturePageState createState() => _FullscreenPicturePageState();
 }
@@ -53,13 +54,11 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
                 return Hero(
                     tag: 'Timelapse:${state.id}',
                     child: GestureDetector(onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigatorActionPop());
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
                     }, child: LayoutBuilder(
                       builder: (context, constraints) {
                         Widget body;
-                        body =
-                            _renderPicturePlayer(context, state, constraints);
+                        body = _renderPicturePlayer(context, state, constraints);
                         return body;
                       },
                     )));
@@ -69,8 +68,7 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
     );
   }
 
-  Widget _renderPicturePlayer(BuildContext context,
-      FullscreenPictureBlocState state, BoxConstraints constraints) {
+  Widget _renderPicturePlayer(BuildContext context, FullscreenPictureBlocState state, BoxConstraints constraints) {
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
@@ -89,9 +87,7 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
             _matrix = Matrix4.identity();
           });
         },
-        child: Transform(
-            transform: _matrix,
-            child: Container(color: Colors.black, child: picture)));
+        child: Transform(transform: _matrix, child: Container(color: Colors.black, child: picture)));
   }
 
   @override

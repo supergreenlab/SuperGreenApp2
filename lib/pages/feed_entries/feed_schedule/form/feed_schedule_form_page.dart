@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -32,7 +33,7 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class FeedScheduleFormPage extends StatefulWidget {
+class FeedScheduleFormPage extends TraceableStatefulWidget {
   static String get instructionsVegScheduleHelper {
     return Intl.message(
       '**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day.',
@@ -83,13 +84,11 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
         if (state is FeedScheduleFormBlocStateLoaded) {
           if (state.box.device != null) {
             Timer(Duration(milliseconds: 100), () {
-              BlocProvider.of<DeviceDaemonBloc>(context)
-                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+              BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoadDevice(state.box.device));
             });
           }
         } else if (state is FeedScheduleFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
@@ -107,8 +106,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 title: 'Loading..',
               );
             } else if (state is FeedScheduleFormBlocStateLoaded) {
-              changed = valid =
-                  state.schedule != state.initialSchedule || editedSchedule;
+              changed = valid = state.schedule != state.initialSchedule || editedSchedule;
               Widget content = _renderSchedules(context, state);
               if (scheduleChange != null) {
                 content = Stack(
@@ -124,8 +122,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 if (_reachable == false) {
                   String title = 'Looking for device..';
                   if (_usingWifi == false) {
-                    title =
-                        'Device unreachable!\n(You\'re not connected to any wifi)';
+                    title = 'Device unreachable!\n(You\'re not connected to any wifi)';
                   }
                   content = Stack(
                     children: <Widget>[
@@ -137,21 +134,16 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                               ? Icon(Icons.error, color: Colors.red, size: 100)
                               : Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      width: 50,
-                                      height: 50,
-                                      child: CircularProgressIndicator()),
+                                  child: Container(width: 50, height: 50, child: CircularProgressIndicator()),
                                 )),
                     ],
                   );
                 }
                 body = BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-                    listener: (BuildContext context,
-                        DeviceDaemonBlocState daemonState) {
+                    listener: (BuildContext context, DeviceDaemonBlocState daemonState) {
                       if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
                           daemonState.device.id == state.box.device) {
-                        if (_reachable == daemonState.reachable &&
-                            _usingWifi == daemonState.usingWifi) return;
+                        if (_reachable == daemonState.reachable && _usingWifi == daemonState.usingWifi) return;
                         setState(() {
                           _reachable = daemonState.reachable;
                           _usingWifi = daemonState.usingWifi;
@@ -165,8 +157,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 title: '🌞🌙',
                 changed: changed,
                 valid: valid,
-                onOK: () => BlocProvider.of<FeedScheduleFormBloc>(context)
-                    .add(FeedScheduleFormBlocEventCreate()),
+                onOK: () => BlocProvider.of<FeedScheduleFormBloc>(context).add(FeedScheduleFormBlocEventCreate()),
                 body: AnimatedSwitcher(
                   child: body,
                   duration: Duration(milliseconds: 200),
@@ -175,8 +166,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
     );
   }
 
-  Widget _renderSchedules(
-      BuildContext context, FeedScheduleFormBlocStateLoaded state) {
+  Widget _renderSchedules(BuildContext context, FeedScheduleFormBlocStateLoaded state) {
     return Column(
       children: <Widget>[
         Expanded(
@@ -188,8 +178,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 'assets/feed_form/icon_veg.svg',
                 FeedScheduleFormPage.instructionsVegScheduleHelper,
                 state.schedule == 'VEG', () {
-              BlocProvider.of<FeedScheduleFormBloc>(context)
-                  .add(FeedScheduleFormBlocEventSetSchedule('VEG'));
+              BlocProvider.of<FeedScheduleFormBloc>(context).add(FeedScheduleFormBlocEventSetSchedule('VEG'));
             }, () {
               setState(() {
                 scheduleChange = 'VEG';
@@ -203,8 +192,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 'assets/feed_form/icon_bloom.svg',
                 FeedScheduleFormPage.instructionsBloomScheduleHelper,
                 state.schedule == 'BLOOM', () {
-              BlocProvider.of<FeedScheduleFormBloc>(context)
-                  .add(FeedScheduleFormBlocEventSetSchedule('BLOOM'));
+              BlocProvider.of<FeedScheduleFormBloc>(context).add(FeedScheduleFormBlocEventSetSchedule('BLOOM'));
             }, () {
               setState(() {
                 scheduleChange = 'BLOOM';
@@ -218,8 +206,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                 'assets/feed_form/icon_autoflower.svg',
                 FeedScheduleFormPage.instructionsAutoScheduleHelper,
                 state.schedule == 'AUTO', () {
-              BlocProvider.of<FeedScheduleFormBloc>(context)
-                  .add(FeedScheduleFormBlocEventSetSchedule('AUTO'));
+              BlocProvider.of<FeedScheduleFormBloc>(context).add(FeedScheduleFormBlocEventSetSchedule('AUTO'));
             }, () {
               setState(() {
                 scheduleChange = 'AUTO';
@@ -232,15 +219,8 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
     );
   }
 
-  Widget _renderSchedule(
-      BuildContext context,
-      Map<String, dynamic> schedule,
-      String title,
-      String icon,
-      String helper,
-      bool selected,
-      Function onPressed,
-      Function onEdit) {
+  Widget _renderSchedule(BuildContext context, Map<String, dynamic> schedule, String title, String icon, String helper,
+      bool selected, Function onPressed, Function onEdit) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: FeedFormParamLayout(
@@ -254,14 +234,8 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
               MarkdownBody(
                 data: helper,
                 styleSheet: MarkdownStyleSheet(
-                    strong: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal),
-                    p: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300)),
+                    strong: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal),
+                    p: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w300)),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,8 +243,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                   Row(
                     children: <Widget>[
                       ButtonTheme(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 4.0, horizontal: 4.0),
+                          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                           minWidth: 0,
                           height: 0,
                           child: RaisedButton(
@@ -296,8 +269,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
     );
   }
 
-  Widget _renderScheduleTimes(
-      BuildContext context, Map<String, dynamic> schedule) {
+  Widget _renderScheduleTimes(BuildContext context, Map<String, dynamic> schedule) {
     final pad = (s) => s.toString().padLeft(2, '0');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,8 +296,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
     return t.length == 1 ? '0$t' : t;
   }
 
-  Widget _renderScheduleChange(
-      BuildContext context, FeedScheduleFormBlocStateLoaded state) {
+  Widget _renderScheduleChange(BuildContext context, FeedScheduleFormBlocStateLoaded state) {
     Duration duration;
     String durationStr = '';
     try {
@@ -340,8 +311,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
             '2020-01-02 ${_pad(offHourEditingController.value.text)}:${_pad(offMinEditingController.value.text)}:00Z');
         duration = to2.difference(from);
       }
-      durationStr =
-          'ON for: ${duration.inHours} hours and ${duration.inMinutes % 60} mins';
+      durationStr = 'ON for: ${duration.inHours} hours and ${duration.inMinutes % 60} mins';
       if (duration.inHours == 0 && duration.inMinutes == 0) {
         durationStr = 'ON for: 24 hours and 00 min';
       }
@@ -358,17 +328,14 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
             child: Container(
               width: 250,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.grey)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.grey)),
               child: Form(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12.0),
-                      child: Text('Edit $scheduleChange schedules',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Edit $scheduleChange schedules', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -424,25 +391,19 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
-                      child: Text(durationStr,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(durationStr, style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 12.0),
                       child: GreenButton(
                         title: 'SET',
                         onPressed: () {
-                          BlocProvider.of<FeedScheduleFormBloc>(context).add(
-                              FeedScheduleFormBlocEventUpdatePreset(
-                                  scheduleChange, {
-                            "ON_HOUR":
-                                int.parse(onHourEditingController.value.text),
-                            "ON_MIN":
-                                int.parse(onMinEditingController.value.text),
-                            "OFF_HOUR":
-                                int.parse(offHourEditingController.value.text),
-                            "OFF_MIN":
-                                int.parse(offMinEditingController.value.text),
+                          BlocProvider.of<FeedScheduleFormBloc>(context)
+                              .add(FeedScheduleFormBlocEventUpdatePreset(scheduleChange, {
+                            "ON_HOUR": int.parse(onHourEditingController.value.text),
+                            "ON_MIN": int.parse(onMinEditingController.value.text),
+                            "OFF_HOUR": int.parse(offHourEditingController.value.text),
+                            "OFF_MIN": int.parse(offMinEditingController.value.text),
                           }));
                           setState(() {
                             scheduleChange = null;
@@ -462,13 +423,9 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
   }
 
   void _setupEditingControllers(FeedScheduleFormBlocStateLoaded state) {
-    onHourEditingController = TextEditingController(
-        text: state.schedules[scheduleChange]['ON_HOUR'].toString());
-    onMinEditingController = TextEditingController(
-        text: state.schedules[scheduleChange]['ON_MIN'].toString());
-    offHourEditingController = TextEditingController(
-        text: state.schedules[scheduleChange]['OFF_HOUR'].toString());
-    offMinEditingController = TextEditingController(
-        text: state.schedules[scheduleChange]['OFF_MIN'].toString());
+    onHourEditingController = TextEditingController(text: state.schedules[scheduleChange]['ON_HOUR'].toString());
+    onMinEditingController = TextEditingController(text: state.schedules[scheduleChange]['ON_MIN'].toString());
+    offHourEditingController = TextEditingController(text: state.schedules[scheduleChange]['OFF_HOUR'].toString());
+    offMinEditingController = TextEditingController(text: state.schedules[scheduleChange]['OFF_MIN'].toString());
   }
 }

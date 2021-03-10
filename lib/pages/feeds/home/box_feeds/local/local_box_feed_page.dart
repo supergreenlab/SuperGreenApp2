@@ -68,8 +68,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           if (state.box.device != null) {
             // TODO find something better than this
             Timer(Duration(milliseconds: 100), () {
-              BlocProvider.of<DeviceDaemonBloc>(context)
-                  .add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+              BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoadDevice(state.box.device));
             });
           }
         }
@@ -94,11 +93,9 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           }
 
           return BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-            listener:
-                (BuildContext context, DeviceDaemonBlocState daemonState) {
+            listener: (BuildContext context, DeviceDaemonBlocState daemonState) {
               if (state is LocalBoxFeedBlocStateLoaded) {
-                if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
-                    daemonState.device.id == state.box.device) {
+                if (daemonState is DeviceDaemonBlocStateDeviceReachable && daemonState.device.id == state.box.device) {
                   setState(() {
                     _reachable = daemonState.reachable;
                     _deviceIP = daemonState.device.ip;
@@ -119,22 +116,17 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
                     : null,
                 drawer: Drawer(
                     child: PlantDrawerPage(
-                  selectedBox:
-                      state is LocalBoxFeedBlocStateLoaded ? state.box : null,
+                  selectedBox: state is LocalBoxFeedBlocStateLoaded ? state.box : null,
                 )),
-                body: AnimatedSwitcher(
-                    child: body, duration: Duration(milliseconds: 200)),
-                floatingActionButton: state is LocalBoxFeedBlocStateLoaded
-                    ? _renderSpeedDial(context, state)
-                    : null),
+                body: AnimatedSwitcher(child: body, duration: Duration(milliseconds: 200)),
+                floatingActionButton: state is LocalBoxFeedBlocStateLoaded ? _renderSpeedDial(context, state) : null),
           );
         },
       ),
     );
   }
 
-  SpeedDial _renderSpeedDial(
-      BuildContext context, LocalBoxFeedBlocStateLoaded state) {
+  SpeedDial _renderSpeedDial(BuildContext context, LocalBoxFeedBlocStateLoaded state) {
     return SpeedDial(
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
@@ -163,21 +155,19 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
         ][_speedDialType.index]);
   }
 
-  List<SpeedDialChild> _renderGeneralSpeedDials(
-      BuildContext context, LocalBoxFeedBlocStateLoaded state) {
+  List<SpeedDialChild> _renderGeneralSpeedDials(BuildContext context, LocalBoxFeedBlocStateLoaded state) {
     return [
       _renderSpeedDialChild(
           'Build log',
           'assets/feed_card/icon_media.svg',
           _onSpeedDialSelected(
               context,
-              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
-                  box: state.box, pushAsReplacement: pushAsReplacement))),
+              ({pushAsReplacement = false}) =>
+                  MainNavigateToFeedMediaFormEvent(box: state.box, pushAsReplacement: pushAsReplacement))),
     ];
   }
 
-  SpeedDialChild _renderSpeedDialChild(
-      String label, String icon, void Function() navigateTo) {
+  SpeedDialChild _renderSpeedDialChild(String label, String icon, void Function() navigateTo) {
     return SpeedDialChild(
       child: SvgPicture.asset(icon),
       label: label,
@@ -186,14 +176,14 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
     );
   }
 
-  void Function() _onSpeedDialSelected(BuildContext context,
-      MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
+  void Function() _onSpeedDialSelected(
+      BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
       {String tipID, List<String> tipPaths}) {
     return () {
       _openCloseDial.value = Random().nextInt(1 << 32);
       if (tipPaths != null && !AppDB().isTipDone(tipID)) {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
-            tipID, tipPaths, navigatorEvent(pushAsReplacement: true)));
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigateToTipEvent(tipID, tipPaths, navigatorEvent(pushAsReplacement: true)));
       } else {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }
@@ -210,20 +200,17 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
         actions.insert(
             0,
             BlocProvider<SunglassesBloc>(
-              create: (BuildContext context) =>
-                  SunglassesBloc(state.box.device, state.box.deviceBox),
+              create: (BuildContext context) => SunglassesBloc(state.box.device, state.box.deviceBox),
               child: BlocBuilder<SunglassesBloc, SunglassesBlocState>(
                 builder: (BuildContext context, SunglassesBlocState state) {
                   if (state is SunglassesBlocStateLoaded) {
                     return Opacity(
                       opacity: state.sunglassesOn ? 0.5 : 1,
                       child: IconButton(
-                        icon:
-                            SvgPicture.asset('assets/home/icon_sunglasses.svg'),
+                        icon: SvgPicture.asset('assets/home/icon_sunglasses.svg'),
                         tooltip: 'Sunglasses mode',
                         onPressed: () {
-                          BlocProvider.of<SunglassesBloc>(context)
-                              .add(SunglassesBlocEventOnOff());
+                          BlocProvider.of<SunglassesBloc>(context).add(SunglassesBlocEventOnOff());
                         },
                       ),
                     );
@@ -258,62 +245,52 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           onTap: () {
             _openCloseDial.value = Random().nextInt(1 << 32);
           },
-          child: Container(
-              width: constraints.maxWidth,
-              height: constraints.maxHeight,
-              color: Colors.white60),
+          child: Container(width: constraints.maxWidth, height: constraints.maxHeight, color: Colors.white60),
         );
       },
     );
   }
 
   Widget _renderBoxNotCreated(BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-              child: Column(children: [
-            Icon(Icons.add, color: Colors.grey, size: 100),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('You can now create a box diary too!',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
-            ),
-            GreenButton(
-              title: 'CREATE DIARY',
-              onPressed: () {
-                BlocProvider.of<LocalBoxFeedBloc>(context)
-                    .add(LocalBoxFeedBlocEventCreateFeed());
-              },
-            ),
-          ]))
-        ]);
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Center(
+          child: Column(children: [
+        Icon(Icons.add, color: Colors.grey, size: 100),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child:
+              Text('You can now create a box diary too!', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+        ),
+        GreenButton(
+          title: 'CREATE DIARY',
+          onPressed: () {
+            BlocProvider.of<LocalBoxFeedBloc>(context).add(LocalBoxFeedBlocEventCreateFeed());
+          },
+        ),
+      ]))
+    ]);
   }
 
   Widget _renderBoxRemoved(BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-              child: Column(children: [
-            Icon(Icons.delete, color: Colors.grey, size: 100),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('Box was removed or archived.',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
-            ),
-            GreenButton(
-              title: 'OPEN PLANT LIST',
-              onPressed: () {
-                _scaffoldKey.currentState.openDrawer();
-              },
-            ),
-          ]))
-        ]);
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Center(
+          child: Column(children: [
+        Icon(Icons.delete, color: Colors.grey, size: 100),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text('Box was removed or archived.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+        ),
+        GreenButton(
+          title: 'OPEN PLANT LIST',
+          onPressed: () {
+            _scaffoldKey.currentState.openDrawer();
+          },
+        ),
+      ]))
+    ]);
   }
 
-  Widget _renderAppBar(
-      BuildContext context, LocalBoxFeedBlocStateLoaded state) {
+  Widget _renderAppBar(BuildContext context, LocalBoxFeedBlocStateLoaded state) {
     String name = state.box.name;
 
     Widget nameText;
@@ -322,10 +299,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
         children: <Widget>[
           Text(
             name,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 15.0,
-                fontWeight: FontWeight.normal),
+            style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.normal),
           ),
           Text(_deviceIP,
               style: TextStyle(
@@ -337,8 +311,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
     } else {
       nameText = Text(
         name,
-        style: TextStyle(
-            color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.w200),
+        style: TextStyle(color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.w200),
       );
     }
     if (state.box.device != null) {
@@ -347,8 +320,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           nameText,
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Icon(Icons.offline_bolt,
-                color: _reachable ? Colors.green : Colors.grey, size: 20),
+            child: Icon(Icons.offline_bolt, color: _reachable ? Colors.green : Colors.grey, size: 20),
           ),
         ],
       );
@@ -383,8 +355,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
                 return tabs[index]();
               },
               pagination: SwiperPagination(
-                builder: new DotSwiperPaginationBuilder(
-                    color: Colors.white, activeColor: Color(0xff3bb30b)),
+                builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
               ),
               loop: false,
             ),

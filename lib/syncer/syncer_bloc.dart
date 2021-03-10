@@ -62,9 +62,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   bool _usingWifi = false;
 
-  SyncerBloc() : super(SyncerBlocStateInit()) {
-    add(SyncerBlocEventInit());
-  }
+  SyncerBloc() : super(SyncerBlocStateInit());
 
   @override
   Stream<SyncerBlocState> mapEventToState(SyncerBlocEvent event) async* {

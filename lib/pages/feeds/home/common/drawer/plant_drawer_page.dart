@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
@@ -12,7 +13,7 @@ import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_bloc
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class PlantDrawerPage extends StatefulWidget {
+class PlantDrawerPage extends TraceableStatefulWidget {
   static String get plantDrawerPagePlantList {
     return Intl.message(
       'Plant list',

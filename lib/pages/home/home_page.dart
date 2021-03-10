@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
@@ -38,7 +39,7 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/towelie/towelie_helper.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends TraceableStatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
   HomePage(this._navigatorKey);

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/bookmarks/bookmarks_bloc.dart';
 import 'package:super_green_app/pages/bookmarks/bookmarks_feed_delegate.dart';
@@ -28,7 +29,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class BookmarksPage extends StatefulWidget {
+class BookmarksPage extends TraceableStatefulWidget {
   @override
   _BookmarksPageState createState() => _BookmarksPageState();
 }
@@ -85,15 +86,11 @@ class _BookmarksPageState extends State<BookmarksPage> {
             IconButton(
               icon: Text(
                 'Open plant',
-                style: TextStyle(
-                    fontSize: 12.0,
-                    color: Color(0xff3bb30b),
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToPublicPlant(state.data['plantID'],
-                        feedEntryID: state.feedEntryID));
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToPublicPlant(state.data['plantID'], feedEntryID: state.feedEntryID));
               },
             )
           ];
@@ -105,8 +102,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Widget renderNoCard(BuildContext context) {
     return Fullscreen(
       title: 'No bookmarks yet',
-      subtitle:
-          'You can add important diary entries here, checkout the plant diaries to add some now!',
+      subtitle: 'You can add important diary entries here, checkout the plant diaries to add some now!',
       child: Icon(
         Icons.bookmark,
         color: Color(0xff3bb30b),

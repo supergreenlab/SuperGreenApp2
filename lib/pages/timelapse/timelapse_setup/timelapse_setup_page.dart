@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_setup/timelapse_setup_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -10,7 +11,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class TimelapseSetupPage extends StatefulWidget {
+class TimelapseSetupPage extends TraceableStatefulWidget {
   @override
   _TimelapseSetupPageState createState() => _TimelapseSetupPageState();
 }
@@ -35,9 +36,8 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
           _controllerid = TextEditingController(text: state.controllerid);
         } else if (state is TimelapseSetupBlocStateDone) {
           Timer(Duration(seconds: 3), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToTimelapseViewer(state.plant,
-                    pushAsReplacement: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToTimelapseViewer(state.plant, pushAsReplacement: true));
           });
         }
       },
@@ -55,57 +55,46 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
                 title: 'Setting up bluetooth',
               );
             } else if (state is TimelapseSetupBlocStateBleOFF) {
-              body = Fullscreen(
-                  title: 'Bluetooth is OFF',
-                  child: Icon(Icons.bluetooth_disabled));
+              body = Fullscreen(title: 'Bluetooth is OFF', child: Icon(Icons.bluetooth_disabled));
             } else if (state is TimelapseSetupBlocStateUnauthorized) {
-              body = Fullscreen(
-                  title: 'Bluetooth is not authorized',
-                  child: Icon(Icons.bluetooth_disabled));
+              body = Fullscreen(title: 'Bluetooth is not authorized', child: Icon(Icons.bluetooth_disabled));
             } else if (state is TimelapseSetupBlocStateDeviceFound) {
               body = Form(
                   child: Column(
                 children: <Widget>[
-                  SectionTitle(
-                      title: 'Timelapse configuration',
-                      icon: 'assets/feed_card/icon_media.svg'),
+                  SectionTitle(title: 'Timelapse configuration', icon: 'assets/feed_card/icon_media.svg'),
                   Expanded(
                     child: ListView(
                       children: <Widget>[
-                        SectionTitle(
-                            title: 'Wifi config',
-                            icon: 'assets/feed_form/icon_wifi.svg'),
+                        SectionTitle(title: 'Wifi config', icon: 'assets/feed_form/icon_wifi.svg'),
                         _renderInput('Wifi SSID', _ssid),
                         _renderInput('Wifi password', _password),
-                        SectionTitle(
-                            title: 'Display config',
-                            icon: 'assets/feed_form/icon_display.svg'),
+                        SectionTitle(title: 'Display config', icon: 'assets/feed_form/icon_display.svg'),
                         _renderInput('Controller ID', _controllerid),
                         _renderInput('Rotate (true or false)', _rotate),
                         _renderInput('Name (displayed on frames)', _name),
                         _renderInput('Strain (displayed on frames)', _strain),
-                        SectionTitle(
-                            title: 'Storage config',
-                            icon: 'assets/feed_form/icon_storage.svg'),
+                        SectionTitle(title: 'Storage config', icon: 'assets/feed_form/icon_storage.svg'),
                         _renderInput('Dropbox token', _dropboxToken),
                         _renderInput('Upload name', _uploadName),
                         Align(
                           alignment: Alignment.centerRight,
                           child: GreenButton(
                             title: 'OK',
-                            onPressed: _valid ? () {
-                              if (!_valid) return;
-                              BlocProvider.of<TimelapseSetupBloc>(context).add(
-                                  TimelapseSetupBlocEventSetConfig(
-                                      ssid: _ssid.value.text,
-                                      password: _password.value.text,
-                                      controllerID: _controllerid.value.text,
-                                      dropboxToken: _dropboxToken.value.text,
-                                      name: _name.value.text,
-                                      strain: _strain.value.text,
-                                      uploadName: _uploadName.value.text,
-                                      rotate: _rotate.value.text));
-                            } : null,
+                            onPressed: _valid
+                                ? () {
+                                    if (!_valid) return;
+                                    BlocProvider.of<TimelapseSetupBloc>(context).add(TimelapseSetupBlocEventSetConfig(
+                                        ssid: _ssid.value.text,
+                                        password: _password.value.text,
+                                        controllerID: _controllerid.value.text,
+                                        dropboxToken: _dropboxToken.value.text,
+                                        name: _name.value.text,
+                                        strain: _strain.value.text,
+                                        uploadName: _uploadName.value.text,
+                                        rotate: _rotate.value.text));
+                                  }
+                                : null,
                           ),
                         ),
                         Container(height: 50),
@@ -133,8 +122,7 @@ class _TimelapseSetupPageState extends State<TimelapseSetupPage> {
                   'Timelapse',
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

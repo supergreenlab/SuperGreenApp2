@@ -24,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:media_picker_builder/data/media_file.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
@@ -35,7 +36,7 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class SettingsAuthPage extends StatefulWidget {
+class SettingsAuthPage extends TraceableStatefulWidget {
   @override
   _SettingsAuthPageState createState() => _SettingsAuthPageState();
 }

@@ -19,12 +19,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_delegate.dart';
 
-class SGLFeedPage extends StatelessWidget {
+class SGLFeedPage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

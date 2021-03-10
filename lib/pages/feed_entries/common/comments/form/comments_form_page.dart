@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
@@ -62,7 +63,7 @@ const Map<CommentType, Map<String, String>> commentTypes = {
   },
 };
 
-class CommentsFormPage extends StatefulWidget {
+class CommentsFormPage extends TraceableStatefulWidget {
   static String get commentsFormPageTitle {
     return Intl.message(
       'Comments',
