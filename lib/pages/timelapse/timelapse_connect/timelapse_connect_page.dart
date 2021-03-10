@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -9,7 +10,7 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class TimelapseConnectPage extends StatefulWidget {
+class TimelapseConnectPage extends TraceableStatefulWidget {
   @override
   _TimelapseConnectPageState createState() => _TimelapseConnectPageState();
 }
@@ -24,9 +25,8 @@ class _TimelapseConnectPageState extends State<TimelapseConnectPage> {
       listener: (BuildContext context, TimelapseConnectBlocState state) {
         if (state is TimelapseConnectBlocStateDone) {
           Timer(Duration(seconds: 3), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(
-                MainNavigateToTimelapseViewer(state.plant,
-                    pushAsReplacement: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToTimelapseViewer(state.plant, pushAsReplacement: true));
           });
         }
       },
@@ -47,15 +47,11 @@ class _TimelapseConnectPageState extends State<TimelapseConnectPage> {
               body = Form(
                   child: Column(
                 children: <Widget>[
-                  SectionTitle(
-                      title: 'Timelapse configuration',
-                      icon: 'assets/feed_card/icon_media.svg'),
+                  SectionTitle(title: 'Timelapse configuration', icon: 'assets/feed_card/icon_media.svg'),
                   Expanded(
                     child: ListView(
                       children: <Widget>[
-                        SectionTitle(
-                            title: 'Storage config',
-                            icon: 'assets/feed_form/icon_storage.svg'),
+                        SectionTitle(title: 'Storage config', icon: 'assets/feed_form/icon_storage.svg'),
                         _renderInput('Dropbox token', _dropboxToken),
                         _renderInput('Upload name', _uploadName),
                         Align(
@@ -63,10 +59,8 @@ class _TimelapseConnectPageState extends State<TimelapseConnectPage> {
                           child: GreenButton(
                             title: 'OK',
                             onPressed: () {
-                              BlocProvider.of<TimelapseConnectBloc>(context)
-                                  .add(TimelapseConnectBlocEventSaveConfig(
-                                      dropboxToken: _dropboxToken.value.text,
-                                      uploadName: _uploadName.value.text));
+                              BlocProvider.of<TimelapseConnectBloc>(context).add(TimelapseConnectBlocEventSaveConfig(
+                                  dropboxToken: _dropboxToken.value.text, uploadName: _uploadName.value.text));
                             },
                           ),
                         ),
@@ -82,8 +76,7 @@ class _TimelapseConnectPageState extends State<TimelapseConnectPage> {
                   'Timelapse',
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device/select_device_page.dart';
@@ -16,7 +17,7 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
-class SettingsBoxPage extends StatefulWidget {
+class SettingsBoxPage extends TraceableStatefulWidget {
   @override
   _SettingsBoxPageState createState() => _SettingsBoxPageState();
 }
@@ -26,8 +27,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   Device _device;
   int _deviceBox;
 
-  KeyboardVisibilityNotification _keyboardVisibility =
-      KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
 
   int _listener;
 
@@ -63,8 +63,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
           _deviceBox = state.deviceBox;
         } else if (state is SettingsBoxBlocStateDone) {
           Timer(const Duration(milliseconds: 2000), () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
           });
         }
       },
@@ -117,8 +116,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                     hideBackButton: state is SettingsBoxBlocStateDone,
                   ),
                   backgroundColor: Colors.white,
-                  body: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
@@ -128,10 +126,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
     String subtitle = _device != null
         ? 'Lab ${_nameController.value.text} on controller ${_device.name} updated:)'
         : 'Lab ${_nameController.value.text}';
-    return Fullscreen(
-        title: 'Done!',
-        subtitle: subtitle,
-        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+    return Fullscreen(title: 'Done!', subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm(BuildContext context, SettingsBoxBlocStateLoaded state) {
@@ -148,8 +143,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                 elevation: 5,
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
                     hintText: 'Ex: Gorilla Kush',
                     controller: _nameController,
@@ -166,8 +160,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
               ),
               _device != null
                   ? ListTile(
-                      leading: SvgPicture.asset(
-                          'assets/box_setup/icon_controller.svg'),
+                      leading: SvgPicture.asset('assets/box_setup/icon_controller.svg'),
                       title: Text('${_device.name} box #${_deviceBox + 1}'),
                       subtitle: Text('Tap to change'),
                       trailing: Icon(Icons.edit),
@@ -176,8 +169,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
                       },
                     )
                   : ListTile(
-                      leading: SvgPicture.asset(
-                          'assets/settings/icon_nocontroller.svg'),
+                      leading: SvgPicture.asset('assets/settings/icon_nocontroller.svg'),
                       title: Text('Lab isn\'t linked to any controller'),
                       subtitle: Text('Tap to add one'),
                       trailing: Icon(Icons.edit),
@@ -194,9 +186,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
             alignment: Alignment.centerRight,
             child: GreenButton(
               title: 'UPDATE LAB',
-              onPressed: _nameController.value.text != ''
-                  ? () => _handleInput(context)
-                  : null,
+              onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
             ),
           ),
         ),
@@ -205,8 +195,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   }
 
   void _handleChangeController(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToSelectDeviceEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
         setState(() {

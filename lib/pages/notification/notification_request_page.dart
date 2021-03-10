@@ -21,12 +21,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/notification/notification_request_bloc.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class NotificationRequestPage extends StatelessWidget {
+class NotificationRequestPage extends TraceableStatelessWidget {
   static String get notificationRequestButton {
     return Intl.message(
       'NOTIFY ME',

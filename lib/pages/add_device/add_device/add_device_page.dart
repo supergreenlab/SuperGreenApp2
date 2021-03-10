@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_bloc.dart';
@@ -25,7 +26,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class AddDevicePage extends StatelessWidget {
+class AddDevicePage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddDeviceBloc, AddDeviceBlocState>(
@@ -45,12 +46,11 @@ class AddDevicePage extends StatelessWidget {
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the controller is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
                     'CONNECT CONTROLLER', () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
                     Device device = await future;
                     if (device != null) {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigatorActionPop(param: device));
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
                     }
                   }));
                 }),
@@ -60,13 +60,11 @@ class AddDevicePage extends StatelessWidget {
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the controller is already running and connected to your home wifi.',
                     'SEARCH CONTROLLER', () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(
-                      MainNavigateToExistingDeviceEvent(
-                          futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
                     Device device = await future;
                     if (device != null) {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigatorActionPop(param: device));
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
                     }
                   }));
                 }),
@@ -74,8 +72,8 @@ class AddDevicePage extends StatelessWidget {
             )));
   }
 
-  Widget _renderChoice(BuildContext context, String title, String icon,
-      String description, String buttonTitle, Function onPressed) {
+  Widget _renderChoice(
+      BuildContext context, String title, String icon, String description, String buttonTitle, Function onPressed) {
     return Column(children: [
       SectionTitle(
         title: title,

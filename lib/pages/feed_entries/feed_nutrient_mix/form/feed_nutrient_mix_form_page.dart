@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -47,7 +48,7 @@ Map<NutrientMixPhase, String> nutrientMixPhasesUI = {
   NutrientMixPhase.LATE_BLOOM: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseLateBloom,
 };
 
-class FeedNutrientMixFormPage extends StatefulWidget {
+class FeedNutrientMixFormPage extends TraceableStatefulWidget {
   static String get feedNutrientMixFormPagePhaseEarlyVeg {
     return Intl.message(
       'Early veg',

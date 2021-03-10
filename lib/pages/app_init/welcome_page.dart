@@ -64,14 +64,12 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     final widgets = <Widget>[this._logo()];
     if (this.widget._loading == false) {
-      widgets.add(Align(
-          alignment: Alignment.centerRight, child: this._nextButton(context)));
+      widgets.add(Align(alignment: Alignment.centerRight, child: this._nextButton(context)));
     }
     return BlocListener<AppInitBloc, AppInitBlocState>(
       listener: (BuildContext context, AppInitBlocState state) {
         if (state is AppInitBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToHomeEvent());
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
         }
       },
       child: Scaffold(
@@ -92,10 +90,7 @@ class _WelcomePageState extends State<WelcomePage> {
     List<Widget> body = <Widget>[
       Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SizedBox(
-            width: 200,
-            height: 200,
-            child: SvgPicture.asset('assets/super_green_lab_vertical.svg')),
+        child: SizedBox(width: 200, height: 200, child: SvgPicture.asset('assets/super_green_lab_vertical.svg')),
       ),
     ];
     if (!widget._loading) {
@@ -105,8 +100,7 @@ class _WelcomePageState extends State<WelcomePage> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
-                child: _renderOptionCheckbx(
-                    context, WelcomePage.formAllowAnalytics, (newValue) {
+                child: _renderOptionCheckbx(context, WelcomePage.formAllowAnalytics, (newValue) {
                   setState(() {
                     _allowAnalytics = newValue;
                   });
@@ -114,8 +108,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),
-                child: _renderOptionCheckbx(context, WelcomePage.formCGU,
-                    (newValue) {
+                child: _renderOptionCheckbx(context, WelcomePage.formCGU, (newValue) {
                   setState(() {
                     _acceptCGU = newValue;
                   });
@@ -127,9 +120,7 @@ class _WelcomePageState extends State<WelcomePage> {
       );
     }
     return Expanded(
-      child: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, children: body)),
+      child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: body)),
     );
   }
 
@@ -141,12 +132,10 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   void _next(BuildContext context) {
-    BlocProvider.of<AppInitBloc>(context)
-        .add(AppInitBlocEventAllowAnalytics(_allowAnalytics));
+    BlocProvider.of<AppInitBloc>(context).add(AppInitBlocEventAllowAnalytics(_allowAnalytics));
   }
 
-  Widget _renderOptionCheckbx(
-      BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -163,8 +152,7 @@ class _WelcomePageState extends State<WelcomePage> {
               child: MarkdownBody(
                 fitContent: true,
                 data: text,
-                styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: Colors.black, fontSize: 14)),
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
               ),
             ),
           ),

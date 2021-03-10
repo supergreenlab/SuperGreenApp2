@@ -84,7 +84,8 @@ dependencies:
     sdk: flutter
   cupertino_icons:
   package_info:
-  matomo:
+  flutter_user_agent:
+  shared_preferences:
 
 # dependency_overrides:
   # analyzer: 0.39.14

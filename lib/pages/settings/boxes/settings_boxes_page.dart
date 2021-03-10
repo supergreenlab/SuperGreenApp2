@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 
-class SettingsBoxesPage extends StatelessWidget {
+class SettingsBoxesPage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SettingsBoxesBloc, SettingsBoxesBlocState>(
@@ -37,17 +38,12 @@ class SettingsBoxesPage extends StatelessWidget {
                 itemCount: state.boxes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                      leading: SizedBox(
-                          width: 40,
-                          height: 40,
-                          child:
-                              SvgPicture.asset('assets/settings/icon_lab.svg')),
+                      leading: SizedBox(width: 40, height: 40, child: SvgPicture.asset('assets/settings/icon_lab.svg')),
                       onLongPress: () {
                         _deleteBox(context, state.boxes[index]);
                       },
                       onTap: () {
-                        BlocProvider.of<MainNavigatorBloc>(context)
-                            .add(MainNavigateToSettingsBox(state.boxes[index]));
+                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(state.boxes[index]));
                       },
                       title: Text('${index + 1}. ${state.boxes[index].name}',
                           style: TextStyle(fontWeight: FontWeight.bold)),
@@ -72,8 +68,7 @@ class SettingsBoxesPage extends StatelessWidget {
                 actions: <Widget>[
                   FlatButton(
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToCreateBoxEvent());
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateBoxEvent());
                     },
                     child: Icon(
                       Icons.add,
@@ -83,8 +78,7 @@ class SettingsBoxesPage extends StatelessWidget {
                 ],
                 elevation: 10,
               ),
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
@@ -98,24 +92,16 @@ class SettingsBoxesPage extends StatelessWidget {
             child: Column(
           children: <Widget>[
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
               child: Column(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text('You have no lab yet',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.w200)),
+                    child: Text('You have no lab yet', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
                   ),
-                  Text('Create your first',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
+                  Text('Create your first', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300)),
                   Text('GREEN LAB',
-                      style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xff3bb30b)),
+                      style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200, color: Color(0xff3bb30b)),
                       textAlign: TextAlign.center),
                 ],
               ),
@@ -123,8 +109,7 @@ class SettingsBoxesPage extends StatelessWidget {
             GreenButton(
               title: 'CREATE',
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToCreateBoxEvent());
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateBoxEvent());
               },
             ),
           ],
@@ -158,8 +143,7 @@ class SettingsBoxesPage extends StatelessWidget {
           );
         });
     if (confirm) {
-      BlocProvider.of<SettingsBoxesBloc>(context)
-          .add(SettingsBoxesBlocEventDeleteBox(box));
+      BlocProvider.of<SettingsBoxesBloc>(context).add(SettingsBoxesBlocEventDeleteBox(box));
     }
   }
 }

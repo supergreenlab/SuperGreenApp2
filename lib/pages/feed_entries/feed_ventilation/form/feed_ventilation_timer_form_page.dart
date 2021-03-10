@@ -20,11 +20,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationTimerFormPage extends StatefulWidget {
+class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
   static String get instructionsBlowerTimerModeDescription {
     return Intl.message(
       '''This is the **timer based blower control**, in this mode the blower is **in sync with the light timer**. Perfect if the box doesn't have a temperature sensor.\n\nEx: when the timer says 100% (which means all lights are on), it will set the blower power at the **blower day** value below.''',
@@ -39,12 +40,10 @@ class FeedVentilationTimerFormPage extends StatefulWidget {
   const FeedVentilationTimerFormPage(this.state, {Key key}) : super(key: key);
 
   @override
-  _FeedVentilationTimerFormPageState createState() =>
-      _FeedVentilationTimerFormPageState();
+  _FeedVentilationTimerFormPageState createState() => _FeedVentilationTimerFormPageState();
 }
 
-class _FeedVentilationTimerFormPageState
-    extends State<FeedVentilationTimerFormPage> {
+class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
 
@@ -72,10 +71,8 @@ class _FeedVentilationTimerFormPageState
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MarkdownBody(
-                data: FeedVentilationTimerFormPage
-                    .instructionsBlowerTimerModeDescription,
-                styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription,
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
             SliderFormParam(
@@ -92,10 +89,8 @@ class _FeedVentilationTimerFormPageState
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                    FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMin: widget.state.blowerMin
-                            .copyWith(value: _blowerNight)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                    blowerMin: widget.state.blowerMin.copyWith(value: _blowerNight)));
               },
             ),
             SliderFormParam(
@@ -112,10 +107,8 @@ class _FeedVentilationTimerFormPageState
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                    FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMax: widget.state.blowerMax
-                            .copyWith(value: _blowerDay)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                    blowerMax: widget.state.blowerMax.copyWith(value: _blowerDay)));
               },
             ),
           ],

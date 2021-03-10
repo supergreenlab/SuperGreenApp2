@@ -18,11 +18,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/pages/products/product/product_infos/product_infos_bloc.dart';
 import 'package:super_green_app/pages/products/product/product_infos/specs_form.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 
-class ProductInfosPage extends StatefulWidget {
+class ProductInfosPage extends TraceableStatefulWidget {
   @override
   _ProductInfosPageState createState() => _ProductInfosPageState();
 }
@@ -44,8 +45,7 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
                 iconColor: Colors.white,
               ),
               backgroundColor: Colors.white,
-              body: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );

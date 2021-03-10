@@ -19,9 +19,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class UserAvatar extends StatelessWidget {
+class UserAvatar extends TraceableStatelessWidget {
   final String icon;
   final double size;
 
@@ -37,30 +38,24 @@ class UserAvatar extends StatelessWidget {
         width: size,
         height: size,
         fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child,
-            ImageChunkEvent loadingProgress) {
+        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
           if (loadingProgress == null) {
             return child;
           }
-          return FullscreenLoading(
-              percent: loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes);
+          return FullscreenLoading(percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
         },
       );
     } else if (icon.startsWith('assets/')) {
       image = Image.asset(icon, fit: BoxFit.cover, width: size, height: size);
     } else {
-      image =
-          Image.file(File(icon), fit: BoxFit.cover, width: size, height: size);
+      image = Image.file(File(icon), fit: BoxFit.cover, width: size, height: size);
     }
     return Container(
       margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
-          border: Border.all(color: Color(0xffbdbdbd)),
-          borderRadius: BorderRadius.all(Radius.circular(size / 2))),
+          border: Border.all(color: Color(0xffbdbdbd)), borderRadius: BorderRadius.all(Radius.circular(size / 2))),
       child: InkWell(
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(size / 2), child: image),
+        child: ClipRRect(borderRadius: BorderRadius.circular(size / 2), child: image),
       ),
     );
   }

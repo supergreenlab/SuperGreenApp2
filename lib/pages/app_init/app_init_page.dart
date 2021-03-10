@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:matomo/matomo.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -35,7 +34,6 @@ class AppInitPage extends StatelessWidget {
       cubit: BlocProvider.of<AppInitBloc>(context),
       listener: (BuildContext context, AppInitBlocState state) {
         if (state is AppInitBlocStateReady) {
-          MatomoTracker.trackScreen(context, '');
           BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventInit());
           BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventInit());
           BlocProvider.of<SyncerBloc>(context).add(SyncerBlocEventInit()); // force-instanciate SyncerBloc

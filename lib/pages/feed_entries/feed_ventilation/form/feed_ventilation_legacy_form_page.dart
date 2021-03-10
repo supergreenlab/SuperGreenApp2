@@ -18,21 +18,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
-class FeedVentilationLegacyFormPage extends StatefulWidget {
+class FeedVentilationLegacyFormPage extends TraceableStatefulWidget {
   final FeedVentilationFormBlocStateLoaded state;
 
   const FeedVentilationLegacyFormPage(this.state, {Key key}) : super(key: key);
 
   @override
-  _FeedVentilationLegacyFormPageState createState() =>
-      _FeedVentilationLegacyFormPageState();
+  _FeedVentilationLegacyFormPageState createState() => _FeedVentilationLegacyFormPageState();
 }
 
-class _FeedVentilationLegacyFormPageState
-    extends State<FeedVentilationLegacyFormPage> {
+class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
 
@@ -71,10 +70,8 @@ class _FeedVentilationLegacyFormPageState
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                    FeedVentilationFormBlocParamsChangedEvent(
-                        blowerDay: widget.state.blowerDay
-                            .copyWith(value: _blowerDay)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                    blowerDay: widget.state.blowerDay.copyWith(value: _blowerDay)));
               },
             ),
             SliderFormParam(
@@ -91,10 +88,8 @@ class _FeedVentilationLegacyFormPageState
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                    FeedVentilationFormBlocParamsChangedEvent(
-                        blowerNight: widget.state.blowerNight
-                            .copyWith(value: _blowerNight)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                    blowerNight: widget.state.blowerNight.copyWith(value: _blowerNight)));
               },
             ),
           ],

@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -29,7 +30,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class SelectDeviceNewBoxPage extends StatefulWidget {
+class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
   static String get selectDeviceNewBoxSettingUp {
     return Intl.message(
       'Setting up..',
