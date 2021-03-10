@@ -263,7 +263,7 @@ SPEC CHECKSUMS:
   heic_to_jpg: cce9d6463ab11852a7393daa61be23f98a951c64
   keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
-  media_picker_builder: 780750c1948670b37a2824f086043a9e69e3a6f4
+  media_picker_builder: 89eaf7402aa86f7b64d389411d20ce864d99bfe7
   MultiplatformBleAdapter: 975cfb2a333b2c42b7a11628bd100ccb61872da2
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
