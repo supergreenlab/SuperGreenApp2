@@ -136,9 +136,10 @@ class SettingsAuthBloc extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState
       Image image = decodeImage(await event.file.readAsBytes());
       Image thumbnail = copyResize(image,
           height: image.height > image.width ? 300 : null, width: image.width >= image.height ? 300 : null);
-      await event.file.writeAsBytes(encodeJpg(thumbnail, quality: 50));
+      File tmpDest = File('${AppDB().tmpPath}/avatar.$ext');
+      await tmpDest.writeAsBytes(encodeJpg(thumbnail, quality: 50));
 
-      await BackendAPI().usersAPI.uploadProfilePic(event.file);
+      await BackendAPI().usersAPI.uploadProfilePic(tmpDest);
       add(SettingsAuthBlocEventInit());
     }
   }

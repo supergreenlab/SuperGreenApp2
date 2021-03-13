@@ -210,7 +210,7 @@ class MatomoTracker {
 
   void _dequeue() {
     assert(initialized);
-    Logger.log('Processing queue ${_queue.length}');
+    //Logger.log('Processing queue ${_queue.length}');
     while (_queue.length > 0) {
       var event = _queue.removeFirst();
       if (!_optout) {
@@ -333,13 +333,13 @@ class _MatomoDispatcher {
       var value = Uri.encodeFull(map[key].toString());
       url = '$url$key=$value&';
     }
-    Logger.log(' -> $url');
+    //Logger.log(' -> $url');
     http.post(url, headers: headers).then((http.Response response) {
       final int statusCode = response.statusCode;
-      Logger.log(' <- $statusCode');
+      //Logger.log(' <- $statusCode');
       if (statusCode != 200) {}
     }).catchError((e) {
-      Logger.log(' <- ${e.toString()}');
+      Logger.throwError(e.toString(), data: map, fwdThrow: false);
     });
   }
 }

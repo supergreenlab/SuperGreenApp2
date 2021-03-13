@@ -62,11 +62,11 @@ class Logger {
     }
   }
 
-  static void throwError(String error, {Map<String, dynamic> data}) {
+  static void throwError(String error, {Map<String, dynamic> data, bool fwdThrow = false}) {
     try {
       throw error;
     } catch (e, trace) {
-      logError(e, trace, data: data);
+      logError(e, trace, data: data, fwdThrow: fwdThrow);
     }
   }
 
