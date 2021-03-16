@@ -47,7 +47,8 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           } else if (state is PlantFeedAppBarBlocStateLoaded) {
             if (state.graphData[0].data.length == 0 &&
                 state.graphData[1].data.length == 0 &&
-                state.graphData[2].data.length == 0) {
+                state.graphData[2].data.length == 0 &&
+                state.graphData[3].data.length == 0) {
               body = Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -149,7 +150,8 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
     );
     if (state.graphData[0].data.length < minCharPoints &&
         state.graphData[1].data.length < minCharPoints &&
-        state.graphData[2].data.length < minCharPoints) {
+        state.graphData[2].data.length < minCharPoints &&
+        state.graphData[3].data.length < minCharPoints) {
       graphs = Stack(children: [
         graphs,
         Container(
@@ -171,7 +173,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8, left: 0, right: 0, bottom: 0),
+      padding: const EdgeInsets.only(top: 4, left: 0, right: 0, bottom: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -181,10 +183,10 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                 selectedGraphIndex = null;
               });
             },
-            child: Padding(padding: const EdgeInsets.all(8.0), child: dateText),
+            child: Padding(padding: const EdgeInsets.all(6.0), child: dateText),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.only(bottom: 3.0),
             child: Container(
               height: 60,
               child: Center(
@@ -208,17 +210,23 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                         '${TimeSeriesAPI.min(state.graphData[1].data).metric.toInt()}%',
                         '${TimeSeriesAPI.max(state.graphData[1].data).metric.toInt()}%'),
                     _renderMetric(
+                        Colors.orange,
+                        'VPD',
+                        '${state.graphData[2].data[selectedGraphIndex ?? state.graphData[2].data.length - 1].metric / 40}',
+                        '${TimeSeriesAPI.min(state.graphData[2].data).metric / 40}',
+                        '${TimeSeriesAPI.max(state.graphData[2].data).metric / 40}'),
+                    _renderMetric(
                         Colors.cyan,
                         'Ventilation',
-                        '${state.graphData[3].data[selectedGraphIndex ?? state.graphData[3].data.length - 1].metric.toInt()}%',
-                        '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
-                        '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%'),
+                        '${state.graphData[4].data[selectedGraphIndex ?? state.graphData[4].data.length - 1].metric.toInt()}%',
+                        '${TimeSeriesAPI.min(state.graphData[4].data).metric.toInt()}%',
+                        '${TimeSeriesAPI.max(state.graphData[4].data).metric.toInt()}%'),
                     _renderMetric(
                         Colors.yellow,
                         'Light',
-                        '${state.graphData[2].data[selectedGraphIndex ?? state.graphData[2].data.length - 1].metric.toInt()}%',
-                        '${TimeSeriesAPI.min(state.graphData[2].data).metric.toInt()}%',
-                        '${TimeSeriesAPI.max(state.graphData[2].data).metric.toInt()}%'),
+                        '${state.graphData[3].data[selectedGraphIndex ?? state.graphData[3].data.length - 1].metric.toInt()}%',
+                        '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
+                        '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%'),
                     Container(width: 4),
                   ],
                 ),
@@ -228,6 +236,8 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           Expanded(
             child: graphs,
           ),
+          Text("*VPD chart is experimental, please report any inconsistencies",
+              style: TextStyle(fontSize: 9, color: Colors.white)),
         ],
       ),
     );

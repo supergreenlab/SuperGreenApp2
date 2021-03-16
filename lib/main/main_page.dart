@@ -93,8 +93,6 @@ import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dar
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_page.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_page.dart';
 import 'package:super_green_app/pages/fullscreen_picture/fullscreen_picture_bloc.dart';
-import 'package:super_green_app/pages/graphs/metrics_bloc.dart';
-import 'package:super_green_app/pages/graphs/metrics_page.dart';
 import 'package:super_green_app/pages/home/home_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/home/home_page.dart';
@@ -484,11 +482,6 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => TimelapseViewerBloc(settings.arguments),
           child: TimelapseViewerPage(),
-        );
-      case '/metrics':
-        return BlocProvider(
-          create: (context) => MetricsBloc(settings.arguments),
-          child: MetricsPage(),
         );
       case '/settings/auth':
         return BlocProvider(

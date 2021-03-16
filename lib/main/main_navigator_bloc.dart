@@ -24,9 +24,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
-import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
@@ -393,17 +391,6 @@ class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
   List<Object> get props => [plant];
 }
 
-class MainNavigateToMetrics extends MainNavigateToFeedFormEvent {
-  final List<charts.Series<Metric, DateTime>> graphData;
-  final Plant plant;
-  final Box box;
-
-  MainNavigateToMetrics(this.graphData, {this.plant, this.box, pushAsReplacement = false}) : super(pushAsReplacement);
-
-  @override
-  List<Object> get props => [plant, box];
-}
-
 class MainNavigateToSettingsAuth extends MainNavigatorEvent {
   MainNavigateToSettingsAuth();
 
@@ -690,8 +677,6 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _pushOrReplace('/timelapse/connect', event);
     } else if (event is MainNavigateToTimelapseViewer) {
       future = _pushOrReplace('/timelapse/viewer', event);
-    } else if (event is MainNavigateToMetrics) {
-      future = _pushOrReplace('/metrics', event);
     } else if (event is MainNavigateToSettingsAuth) {
       future = _navigatorKey.currentState.pushNamed('/settings/auth', arguments: event);
     } else if (event is MainNavigateToSettingsLogin) {
