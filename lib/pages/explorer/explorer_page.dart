@@ -24,13 +24,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
-import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
+import 'package:super_green_app/pages/explorer/explorer_feed_delegate.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
@@ -105,26 +107,22 @@ class _ExplorerPageState extends State<ExplorerPage> {
             if (state is ExplorerBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is ExplorerBlocStateLoaded) {
-              body = _renderList(context, state);
+              body = _renderFeed(context, state);
             }
             return Scaffold(
-                appBar: SGLAppBar(
-                  ExplorerPage.explorerPageTitle,
-                  backgroundColor: Colors.deepPurple,
-                  titleColor: Colors.yellow,
-                  iconColor: Colors.white,
-                  elevation: 10,
-                  hideBackButton: true,
-                  actions: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                      onPressed: () => onMakePublic(state),
-                    ),
-                  ],
-                  leading: IconButton(
+              appBar: SGLAppBar(
+                '',
+                backgroundColor: Colors.deepPurple,
+                titleColor: Colors.yellow,
+                iconColor: Colors.white,
+                hideBackButton: true,
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child:
+                      SizedBox(width: 100, height: 100, child: SvgPicture.asset('assets/explorer/logo_sgl_white.svg')),
+                ),
+                actions: [
+                  IconButton(
                     icon: Icon(
                       Icons.bookmark,
                       color: Colors.white,
@@ -133,70 +131,35 @@ class _ExplorerPageState extends State<ExplorerPage> {
                       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToBookmarks());
                     },
                   ),
-                ),
-                body: body);
+                  IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => onMakePublic(state),
+                  ),
+                ],
+              ),
+              body: body,
+            );
           }),
     );
   }
 
-  Widget _renderList(BuildContext context, ExplorerBlocStateLoaded state) {
-    if (plants.length == 0) {
-      return FullscreenLoading();
-    }
-    return GridView.builder(
-      itemCount: state.eof ? plants.length : plants.length + 1,
-      itemBuilder: (BuildContext context, int index) {
-        if (index > plants.length) {
-          return null;
-        }
-        if (index == plants.length) {
-          if (state.eof) {
-            return null;
-          }
-          BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventLoadNextPage(plants.length));
-          return FullscreenLoading();
-        }
-        return _renderPlant(context, plants[index]);
-      },
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+  Widget _renderFeed(BuildContext context, ExplorerBlocStateLoaded state) {
+    return BlocProvider(
+      create: (context) => FeedBloc(ExplorerFeedBlocDelegate()),
+      child: FeedPage(
+        title: '',
+        color: Colors.white,
+        feedColor: Colors.white,
+        elevate: false,
+        appBarEnabled: false,
+        firstItem: Container(
+          height: 100,
+          child: Text('pouet'),
+        ),
       ),
-    );
-  }
-
-  Widget _renderPlant(BuildContext context, PlantState plant) {
-    Widget pic;
-    if (plant.thumbnailPath == '') {
-      pic = SvgPicture.asset('assets/explorer/no_pic.svg', fit: BoxFit.cover);
-    } else {
-      pic = Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath), fit: BoxFit.cover);
-    }
-    return LayoutBuilder(
-      builder: (_, BoxConstraints constraints) {
-        return InkWell(
-          onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(plant.id, name: plant.name));
-          },
-          child: Stack(
-            children: <Widget>[
-              Container(
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-                child: pic,
-              ),
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  '${plant.name}',
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-              )),
-            ],
-          ),
-        );
-      },
     );
   }
 

@@ -26,21 +26,17 @@ import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_feed_state.dart';
-import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
-import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
-class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
+class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
   FeedState feedState;
   StreamSubscription<hive.BoxEvent> appDataStream;
 
-  final String plantID;
-  RemotePlantFeedBlocDelegate(this.plantID, String feedEntryID, String commentID, String replyTo)
-      : super(feedEntryID: feedEntryID, commentID: commentID, replyTo: replyTo);
+  ExplorerFeedBlocDelegate() : super();
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
-    return state.copyWith(shareLink: 'https://supergreenlab.com/public/plant?id=$plantID&feid=${state.feedEntryID}');
+    return state;
+    // return state.copyWith(shareLink: 'https://supergreenlab.com/public/plant?id=$plantID&feid=${state.feedEntryID}');
   }
 
   @override
@@ -49,7 +45,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
       Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
       return [loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap)];
     }
-    List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicPlantFeedEntries(plantID, n, offset);
+    List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicFeedEntries(n, offset);
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
       return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap);
@@ -58,12 +54,9 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   void loadFeed() async {
-    Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
-    feedState = PlantFeedState(
+    feedState = FeedState(
       BackendAPI().usersAPI.loggedIn,
       AppDB().getAppData().storeGeo,
-      PlantSettings.fromJSON(plant['settings']),
-      BoxSettings.fromJSON(plant['boxSettings']),
     );
     add(FeedBlocEventFeedLoaded(feedState));
 

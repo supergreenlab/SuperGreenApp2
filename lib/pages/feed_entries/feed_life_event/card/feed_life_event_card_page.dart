@@ -113,7 +113,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
               'assets/feed_card/icon_life_events.svg', FeedLifeEventCardPage.feedLifeEventCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
-            height: 100,
+            height: 130,
             alignment: Alignment.center,
             child: FullscreenLoading(),
           ),

@@ -399,7 +399,47 @@ class FeedsAPI {
     }
   }
 
-  Future<List<dynamic>> publicFeedEntries(String id, int n, int offset) async {
+  Future<List<dynamic>> publicFeedEntries(int n, int offset) async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntries?limit=$n&offset=$offset');
+      return results['entries'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
+  Future<List<dynamic>> followedPlants(int n, int offset) async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/public/plants/followed?limit=$n&offset=$offset');
+      return results['plants'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
+  Future<List<dynamic>> publicCommentedFeedEntries(int n, int offset) async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntries/commented?limit=$n&offset=$offset');
+      return results['entries'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
+  Future<List<dynamic>> publicLiked(int n, int offset) async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/public/liked?limit=$n&offset=$offset');
+      return results['entries'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
+  Future<List<dynamic>> publicPlantFeedEntries(String id, int n, int offset) async {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/plant/$id/feedEntries?limit=$n&offset=$offset');
       return results['entries'];

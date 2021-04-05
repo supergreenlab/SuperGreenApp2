@@ -52,6 +52,10 @@ class FeedPage extends StatefulWidget {
   final bool single;
   final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
   final Function(bool hasCards) onLoaded;
+  final bool elevate;
+  final Color feedColor;
+  final Widget leading;
+  final Widget firstItem;
 
   const FeedPage({
     @required this.title,
@@ -66,6 +70,10 @@ class FeedPage extends StatefulWidget {
     this.single,
     this.cardActions,
     this.onLoaded,
+    this.elevate = true,
+    this.feedColor,
+    this.leading,
+    this.firstItem,
   });
 
   @override
@@ -151,14 +159,17 @@ class _FeedPageState extends State<FeedPage> {
     if (widget.appBarEnabled) {
       content.add(
         SliverAppBar(
+          automaticallyImplyLeading: false,
           title: Text(widget.title),
           pinned: widget.pinned,
+          floating: true,
+          leading: widget.leading,
           actions: widget.actions,
           backgroundColor: widget.color,
           expandedHeight: widget.appBarHeight ?? 56.0,
           iconTheme: IconThemeData(color: Colors.white),
-          elevation: 4,
-          forceElevated: true,
+          elevation: widget.elevate ? 4 : 0,
+          forceElevated: widget.elevate,
           flexibleSpace: FlexibleSpaceBar(
             background: this.widget.appBar,
             centerTitle: this.widget.appBar == null,
@@ -174,6 +185,12 @@ class _FeedPageState extends State<FeedPage> {
       content.add(SliverAnimatedList(
         key: listKey,
         itemBuilder: (BuildContext context, int index, Animation<double> animation) {
+          if (widget.firstItem != null && index == 0) {
+            return widget.firstItem;
+          }
+          if (widget.firstItem != null) {
+            index--;
+          }
           if (index == entries.length) {
             if (eof) {
               return null;
@@ -214,11 +231,11 @@ class _FeedPageState extends State<FeedPage> {
                       Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset.zero).chain(CurveTween(curve: Curves.linear))),
                   child: card));
         },
-        initialItemCount: entries.length + (eof ? 0 : 1),
+        initialItemCount: (entries.length + (widget.firstItem != null ? 1 : 0)) + (eof ? 0 : 1),
       ));
     }
     return Container(
-      color: Color(0xffeeeeee),
+      color: widget.feedColor ?? Color(0xffeeeeee),
       child: CustomScrollView(
         controller: scrollController,
         slivers: content,
