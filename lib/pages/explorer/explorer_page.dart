@@ -31,6 +31,9 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_feed_delegate.dart';
+import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/followed/followed_page.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -156,8 +159,19 @@ class _ExplorerPageState extends State<ExplorerPage> {
         elevate: false,
         appBarEnabled: false,
         firstItem: Container(
-          height: 100,
-          child: Text('pouet'),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                BlocProvider(
+                  create: (context) => FollowedBloc(),
+                  child: FollowedPage(),
+                ),
+                ListTitle(title: 'Last plant updates'),
+              ],
+            ),
+          ),
         ),
       ),
     );
