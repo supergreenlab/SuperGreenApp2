@@ -17,10 +17,27 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class PublicPlant extends Equatable {
   final String id;
+  final String name;
+  final String thumbnailPath;
+  final bool followed;
+  final PlantSettings settings;
+  final BoxSettings boxSettings;
+
+  PublicPlant({this.id, this.name, this.thumbnailPath, this.followed, this.settings, this.boxSettings});
+
+  static PublicPlant fromMap(Map<String, dynamic> map) => PublicPlant(
+      id: map['id'],
+      name: map['name'],
+      thumbnailPath: map['thumbnailPath'],
+      followed: map['followed'],
+      settings: PlantSettings.fromJSON(map['settings'] ?? '{}'),
+      boxSettings: BoxSettings.fromJSON(map['boxSettings'] ?? '{}'));
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [id, name, thumbnailPath, followed, settings, boxSettings];
 }

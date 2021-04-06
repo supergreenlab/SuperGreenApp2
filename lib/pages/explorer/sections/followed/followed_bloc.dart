@@ -16,35 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/pages/explorer/models/plants.dart';
+import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
 
-abstract class FollowedBlocEvent extends Equatable {}
-
-class FollowedBlocEventInit extends FollowedBlocEvent {
-  @override
-  List<Object> get props => [];
-}
-
-abstract class FollowedBlocAction extends Equatable {}
-
-class FollowedBlocActionInit extends FollowedBlocAction {
-  @override
-  List<Object> get props => [];
-}
-
-class FollowedBlocActionLoaded extends FollowedBlocAction {
-  final List<>
-
-  @override
-  List<Object> get props => [];
-}
-
-class FollowedBloc extends Bloc<FollowedBlocEvent, FollowedBlocAction> {
-  FollowedBloc() : super(FollowedBlocActionInit()) {
-    add(FollowedBlocEventInit());
-  }
-
-  @override
-  Stream<FollowedBlocAction> mapEventToState(FollowedBlocEvent event) async* {}
+class FollowedBloc extends SectionBloc<PublicPlant> {
+  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.followedPlants(10, 0);
+  PublicPlant itemFromMap(Map<String, dynamic> map) => PublicPlant.fromMap(map);
 }

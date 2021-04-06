@@ -17,19 +17,12 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
+import 'package:super_green_app/pages/explorer/models/plants.dart';
+import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/section/section_page.dart';
 
-class FollowedPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTitle(
-          title: 'Plants you follow',
-          actionText: 'View as feed',
-          actionFn: () {},
-        ),
-      ],
-    );
+class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
+  Widget itemBuilder(BuildContext context, PublicPlant plant) {
+    return Text(plant.name);
   }
 }
