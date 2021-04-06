@@ -18,7 +18,6 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:super_green_app/data/api/backend/backend_api.dart';
 
 abstract class SectionBlocEvent extends Equatable {}
 
@@ -45,11 +44,12 @@ class SectionBlocStateInit extends SectionBlocState {
 
 class SectionBlocStateLoaded<ItemType> extends SectionBlocState {
   final List<ItemType> items;
+  final bool eof;
 
-  SectionBlocStateLoaded(this.items);
+  SectionBlocStateLoaded(this.items, this.eof);
 
   @override
-  List<Object> get props => [items];
+  List<Object> get props => [items, eof];
 }
 
 abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocState> {
@@ -60,14 +60,20 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
   @override
   Stream<SectionBlocState> mapEventToState(SectionBlocEvent event) async* {
     if (event is SectionBlocEventInit) {
-      final List<ItemType> items = [];
-      final List<dynamic> itemsMaps = await loadItems(10, 0);
-      for (Map<String, dynamic> itemsMap in itemsMaps) {
-        ItemType item = itemFromMap(itemsMap);
-        items.add(item);
-      }
-      yield SectionBlocStateLoaded(items);
+      yield* loadItemsState(10, 0);
+    } else if (event is SectionBlocEventLoad) {
+      yield* loadItemsState(10, event.offset);
     }
+  }
+
+  Stream<SectionBlocState> loadItemsState(int n, int offset) async* {
+    final List<ItemType> items = [];
+    final List<dynamic> itemsMaps = await loadItems(n, offset);
+    for (Map<String, dynamic> itemMap in itemsMaps) {
+      ItemType item = itemFromMap(itemMap);
+      items.add(item);
+    }
+    yield SectionBlocStateLoaded(items, items.length < n);
   }
 
   Future<List<dynamic>> loadItems(int n, int offset);

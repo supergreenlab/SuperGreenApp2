@@ -17,12 +17,21 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_page.dart';
 
 class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   Widget itemBuilder(BuildContext context, PublicPlant plant) {
-    return Text(plant.name);
+    return Column(
+      children: [
+        Row(
+          children: [
+            Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath)),
+          ],
+        )
+      ],
+    );
   }
 }

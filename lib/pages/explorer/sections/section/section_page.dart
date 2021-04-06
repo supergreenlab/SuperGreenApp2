@@ -45,7 +45,7 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
       child: BlocBuilder<BlocType, SectionBlocState>(
         builder: (BuildContext context, SectionBlocState state) {
           Widget body;
-          if (state is SectionBlocStateInit) {
+          if (items.length == 0) {
             body = FullscreenLoading();
           } else {
             body = renderList(context, state);
@@ -70,7 +70,16 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
         height: 200,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) => widget.itemBuilder(context, items[index])));
+            itemCount: items.length + (state.eof ? 0 : 1),
+            itemBuilder: (BuildContext context, int index) {
+              if (index == items.length) {
+                BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
+                return Container(
+                  width: 50,
+                  child: FullscreenLoading(),
+                );
+              }
+              return widget.itemBuilder(context, items[index]);
+            }));
   }
 }
