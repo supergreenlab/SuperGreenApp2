@@ -20,7 +20,7 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
 
-class FollowedBloc extends SectionBloc<PublicPlant> {
-  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.followedPlants(n, offset);
+class LastUpdateBloc extends SectionBloc<PublicPlant> {
+  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.publicPlants(n, offset);
   PublicPlant itemFromMap(Map<String, dynamic> map) => PublicPlant.fromMap(map);
 }

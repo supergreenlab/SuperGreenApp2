@@ -19,11 +19,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
-import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends StatefulWidget {
   Widget itemBuilder(BuildContext context, ItemType item);
+  Widget sectionTitle(BuildContext context);
 
   @override
   _SectionPageState createState() => _SectionPageState<BlocType>();
@@ -52,12 +52,8 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
           }
           return Column(
             children: [
-              ListTitle(
-                title: 'Plants you follow',
-                actionText: 'View as feed',
-                actionFn: () {},
-              ),
-              body
+              widget.sectionTitle(context),
+              body,
             ],
           );
         },
@@ -72,16 +68,22 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
             scrollDirection: Axis.horizontal,
             itemCount: items.length + (state.eof ? 0 : 1),
             itemBuilder: (BuildContext context, int index) {
+              Widget body;
               if (index == items.length) {
                 BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
-                return Container(
+                body = Container(
                   width: 250,
                   child: FullscreenLoading(),
                 );
+              } else {
+                body = Container(
+                  width: 250,
+                  child: widget.itemBuilder(context, items[index]),
+                );
               }
-              return Container(
-                width: 250,
-                child: widget.itemBuilder(context, items[index]),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: body,
               );
             }));
   }

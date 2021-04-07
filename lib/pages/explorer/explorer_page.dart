@@ -31,8 +31,12 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_feed_delegate.dart';
+import 'package:super_green_app/pages/explorer/sections/discussions/discussions_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/discussions/discussions_page.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_page.dart';
+import 'package:super_green_app/pages/explorer/sections/last_update/last_update_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/last_update/last_update_page.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
@@ -159,18 +163,23 @@ class _ExplorerPageState extends State<ExplorerPage> {
         elevate: false,
         appBarEnabled: false,
         firstItem: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                BlocProvider(
-                  create: (context) => FollowedBloc(),
-                  child: FollowedPage(),
-                ),
-                ListTitle(title: 'Last plant updates'),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              BlocProvider(
+                create: (context) => FollowedBloc(),
+                child: FollowedPage(),
+              ),
+              BlocProvider(
+                create: (context) => DiscussionsBloc(),
+                child: DiscussionsPage(),
+              ),
+              BlocProvider(
+                create: (context) => LastUpdateBloc(),
+                child: LastUpdatePage(),
+              ),
+              ListTitle(title: 'Last plant updates'),
+            ],
           ),
         ),
       ),

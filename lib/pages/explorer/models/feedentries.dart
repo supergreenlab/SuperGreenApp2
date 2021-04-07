@@ -21,6 +21,8 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class PublicFeedEntry extends Equatable {
   final String id;
@@ -28,6 +30,9 @@ class PublicFeedEntry extends Equatable {
   final String feedID;
   final DateTime date;
   final String type;
+
+  final PlantSettings plantSettings;
+  final BoxSettings boxSettings;
 
   final FeedEntryParams params;
   final Map<String, dynamic> meta;
@@ -52,6 +57,8 @@ class PublicFeedEntry extends Equatable {
       this.feedID,
       this.date,
       this.type,
+      this.plantSettings,
+      this.boxSettings,
       this.params,
       this.meta,
       this.liked,
@@ -71,6 +78,8 @@ class PublicFeedEntry extends Equatable {
       feedID: map['feedID'],
       date: DateTime.parse(map['date'] as String),
       type: map['type'],
+      plantSettings: PlantSettings.fromJSON(map['plantSettings'] ?? '{}'),
+      boxSettings: BoxSettings.fromJSON(map['boxSettings'] ?? '{}'),
       params: FeedEntriesParamHelpers.paramForFeedEntryType(map['type'], map['params'] ?? '{}'),
       meta: JsonDecoder().convert(map['meta'] ?? '{}'),
       liked: map['liked'],
@@ -91,6 +100,8 @@ class PublicFeedEntry extends Equatable {
         feedID,
         date,
         type,
+        plantSettings,
+        boxSettings,
         params,
         meta,
         liked,

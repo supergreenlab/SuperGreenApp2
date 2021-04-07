@@ -18,25 +18,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:tuple/tuple.dart';
 
 class PlantPhase extends StatelessWidget {
-  final PublicPlant plant;
+  final PlantSettings plantSettings;
 
-  const PlantPhase({Key key, this.plant}) : super(key: key);
+  const PlantPhase({Key key, this.plantSettings}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String germinationText = 'Not set.';
-    if (plant.settings.germinationDate != null) {
-      Duration diff = DateTime.now().difference(plant.settings.germinationDate);
+    if (plantSettings.germinationDate != null) {
+      Duration diff = DateTime.now().difference(plantSettings.germinationDate);
       germinationText = renderDuration(diff);
     }
     String phaseTitle;
     String bloomingText = 'Not set.';
-    Tuple3<PlantPhases, DateTime, Duration> phaseData = plant.settings.phaseAt(DateTime.now());
+    Tuple3<PlantPhases, DateTime, Duration> phaseData = plantSettings.phaseAt(DateTime.now());
     if (phaseData != null && phaseData.item1 != PlantPhases.GERMINATING) {
       List<String> phases = [
         'Germinated:',
@@ -92,20 +91,6 @@ class PlantPhase extends StatelessWidget {
   }
 
   // TODO DRY with feed_card_date.dart
-  String renderSincePhase() {
-    Tuple3<PlantPhases, DateTime, Duration> phaseData = plant.settings.phaseAt(DateTime.now());
-    if (phaseData == null) {
-      return 'Life events not set.';
-    }
-    List<String Function(Duration)> phases = [
-      (Duration diff) => 'Germinated ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Vegging for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) => 'Blooming for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) => 'Drying for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) => 'Curing for ${renderDuration(phaseData.item3, suffix: '')}'
-    ];
-    return phases[phaseData.item1.index](phaseData.item3);
-  }
 
   String renderDuration(Duration diff, {suffix = ' ago'}) {
     int minuteDiff = diff.inMinutes;

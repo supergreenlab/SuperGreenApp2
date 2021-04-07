@@ -18,17 +18,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:super_green_app/pages/explorer/models/plants.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class PlantStrain extends StatelessWidget {
-  final PublicPlant plant;
+  final PlantSettings plantSettings;
 
-  const PlantStrain({Key key, this.plant}) : super(key: key);
+  const PlantStrain({Key key, this.plantSettings}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> body = [];
-    if (plant.settings.strain == null) {
+    if (plantSettings.strain == null) {
       body = [
         Text('Strain not set',
             style: TextStyle(
@@ -37,7 +37,7 @@ class PlantStrain extends StatelessWidget {
       ];
     } else {
       body = [
-        Text(plant.settings.strain,
+        Text(plantSettings.strain,
             style: TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 18,
@@ -45,7 +45,7 @@ class PlantStrain extends StatelessWidget {
         Row(
           children: [
             Text('from ', style: TextStyle(fontWeight: FontWeight.w300)),
-            Text(plant.settings.seedbank,
+            Text(plantSettings.seedbank,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color(0xff3bb30b),

@@ -21,14 +21,14 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/explorer/models/plants.dart';
-import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/last_update/last_update_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_page.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
+class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
   Widget itemBuilder(BuildContext context, PublicPlant plant) {
     String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Container(
@@ -109,9 +109,7 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
 
   Widget sectionTitle(BuildContext context) {
     return ListTitle(
-      title: 'Plants you follow',
-      actionText: 'View as feed',
-      actionFn: () {},
+      title: 'Last plant updates',
     );
   }
 }

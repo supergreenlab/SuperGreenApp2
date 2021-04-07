@@ -17,10 +17,10 @@
  */
 
 import 'package:super_green_app/data/api/backend/backend_api.dart';
-import 'package:super_green_app/pages/explorer/models/plants.dart';
+import 'package:super_green_app/pages/explorer/models/feedentries.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
 
-class FollowedBloc extends SectionBloc<PublicPlant> {
-  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.followedPlants(n, offset);
-  PublicPlant itemFromMap(Map<String, dynamic> map) => PublicPlant.fromMap(map);
+class DiscussionsBloc extends SectionBloc<PublicFeedEntry> {
+  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.publicCommentedFeedEntries(n, offset);
+  PublicFeedEntry itemFromMap(Map<String, dynamic> map) => PublicFeedEntry.fromMap(map);
 }
