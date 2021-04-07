@@ -17,21 +17,92 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_page.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   Widget itemBuilder(BuildContext context, PublicPlant plant) {
-    return Column(
-      children: [
-        Row(
+    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    return Container(
+      decoration:
+          BoxDecoration(border: Border.all(width: 1, color: Colors.black26), borderRadius: BorderRadius.circular(5.0)),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath)),
+            Expanded(
+              child: Stack(
+                children: [
+                  Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath), fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return FullscreenLoading(
+                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                  }),
+                  Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Text(
+                      plant.name,
+                      style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, shadows: [
+                        Shadow(
+                            // bottomLeft
+                            offset: Offset(-1.5, -1.5),
+                            color: Colors.white),
+                        Shadow(
+                            // bottomRight
+                            offset: Offset(1.5, -1.5),
+                            color: Colors.white),
+                        Shadow(
+                            // topRight
+                            offset: Offset(1.5, 1.5),
+                            color: Colors.white),
+                        Shadow(
+                            // topLeft
+                            offset: Offset(-1.5, 1.5),
+                            color: Colors.white),
+                      ]),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      color: Colors.black45,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
+                          vertical: 2.0,
+                        ),
+                        child: Text(
+                          'Last update: ${DateFormat(format).format(plant.lastUpdate)}',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(height: 4),
+            PlantStrain(plant: plant),
+            PlantPhase(plant: plant),
           ],
-        )
-      ],
+        ),
+      ),
     );
   }
 }

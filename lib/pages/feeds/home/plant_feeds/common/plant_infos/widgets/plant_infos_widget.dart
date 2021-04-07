@@ -25,22 +25,16 @@ class PlantInfosWidget extends StatelessWidget {
   final String title;
   final String value;
   final Function onEdit;
+  final Color color;
 
-  const PlantInfosWidget(
-      {Key key,
-      this.icon,
-      @required this.title,
-      @required this.value,
-      this.onEdit})
+  const PlantInfosWidget({Key key, this.icon, this.title, @required this.value, this.onEdit, this.color = Colors.white})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget valueWidget;
     if (onEdit != null) {
-      valueWidget = InkWell(
-          onTap: onEdit,
-          child: value == null ? _renderNoValue() : _renderValue());
+      valueWidget = InkWell(onTap: onEdit, child: value == null ? _renderNoValue() : _renderValue());
     } else {
       valueWidget = value == null ? _renderNoValue() : _renderValue();
     }
@@ -51,15 +45,13 @@ class PlantInfosWidget extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: icon != null
-                  ? SvgPicture.asset("assets/plant_infos/$icon")
-                  : Container(),
+              child: icon != null ? SvgPicture.asset("assets/plant_infos/$icon") : Container(),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Text(title, style: TextStyle(color: Colors.white)),
+                  title != null ? Text(title, style: TextStyle(color: this.color)) : Container(),
                   valueWidget,
                 ],
               ),
@@ -72,12 +64,10 @@ class PlantInfosWidget extends StatelessWidget {
 
   Widget _renderNoValue() {
     if (onEdit == null) {
-      return Text("Not set",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300));
+      return Text("Not set", style: TextStyle(color: this.color, fontWeight: FontWeight.w300));
     }
     return Container(
-        decoration: BoxDecoration(
-            color: Colors.white24, borderRadius: BorderRadius.circular(2)),
+        decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Row(
@@ -85,8 +75,7 @@ class PlantInfosWidget extends StatelessWidget {
               Expanded(
                   child: Text(
                 "Tap to set",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w300),
+                style: TextStyle(color: this.color, fontWeight: FontWeight.w300),
                 textAlign: TextAlign.center,
               )),
               SvgPicture.asset("assets/plant_infos/edit.svg"),
@@ -98,8 +87,7 @@ class PlantInfosWidget extends StatelessWidget {
   Widget _renderValue() {
     return Container(
         decoration: BoxDecoration(
-            color: value == null ? Colors.white24 : Colors.transparent,
-            borderRadius: BorderRadius.circular(2)),
+            color: value == null ? Colors.white24 : Colors.transparent, borderRadius: BorderRadius.circular(2)),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Row(
@@ -108,19 +96,11 @@ class PlantInfosWidget extends StatelessWidget {
                   child: MarkdownBody(
                 data: value,
                 styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: Colors.white, fontSize: 16),
-                    h1: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                    strong: TextStyle(
-                        color: Color(0xff3bb30b),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
+                    p: TextStyle(color: this.color, fontSize: 16),
+                    h1: TextStyle(color: this.color, fontSize: 20, fontWeight: FontWeight.bold),
+                    strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16, fontWeight: FontWeight.bold)),
               )),
-              onEdit == null
-                  ? Container()
-                  : SvgPicture.asset("assets/plant_infos/edit.svg"),
+              onEdit == null ? Container() : SvgPicture.asset("assets/plant_infos/edit.svg"),
             ],
           ),
         ));

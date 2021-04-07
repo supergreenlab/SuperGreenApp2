@@ -23,21 +23,24 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 class PublicPlant extends Equatable {
   final String id;
   final String name;
+  final DateTime lastUpdate;
   final String thumbnailPath;
   final bool followed;
   final PlantSettings settings;
   final BoxSettings boxSettings;
 
-  PublicPlant({this.id, this.name, this.thumbnailPath, this.followed, this.settings, this.boxSettings});
+  PublicPlant(
+      {this.id, this.name, this.lastUpdate, this.thumbnailPath, this.followed, this.settings, this.boxSettings});
 
   static PublicPlant fromMap(Map<String, dynamic> map) => PublicPlant(
       id: map['id'],
       name: map['name'],
       thumbnailPath: map['thumbnailPath'],
+      lastUpdate: DateTime.parse(map['lastUpdate'] as String),
       followed: map['followed'],
       settings: PlantSettings.fromJSON(map['settings'] ?? '{}'),
       boxSettings: BoxSettings.fromJSON(map['boxSettings'] ?? '{}'));
 
   @override
-  List<Object> get props => [id, name, thumbnailPath, followed, settings, boxSettings];
+  List<Object> get props => [id, name, lastUpdate, thumbnailPath, followed, settings, boxSettings];
 }
