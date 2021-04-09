@@ -121,7 +121,7 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
 
   Widget sectionTitle(BuildContext context) {
     return ListTitle(
-      title: 'Latest discussions',
+      title: 'Latest likes',
     );
   }
 }

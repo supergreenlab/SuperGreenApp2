@@ -180,10 +180,6 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 create: (context) => LikesBloc(),
                 child: LikesPage(),
               ),
-              BlocProvider(
-                create: (context) => LastUpdateBloc(),
-                child: LastUpdatePage(),
-              ),
               ListTitle(title: 'Latest pics'),
             ],
           ),
