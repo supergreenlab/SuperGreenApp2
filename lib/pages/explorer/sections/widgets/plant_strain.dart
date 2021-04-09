@@ -40,7 +40,7 @@ class PlantStrain extends StatelessWidget {
         Text(plantSettings.strain,
             style: TextStyle(
               fontWeight: FontWeight.normal,
-              fontSize: 18,
+              fontSize: 17,
             )),
         Row(
           children: [
@@ -54,20 +54,23 @@ class PlantStrain extends StatelessWidget {
         ),
       ];
     }
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 4.0, right: 8.0),
-            child: SvgPicture.asset("assets/explorer/icon_seeds.svg", width: 40, height: 40),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: body,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4.0, top: 4.0),
+      child: Container(
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 4.0, right: 8.0, bottom: 3.0),
+              child: SvgPicture.asset("assets/explorer/icon_seeds.svg", width: 40, height: 40),
             ),
-          ),
-        ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: body,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
