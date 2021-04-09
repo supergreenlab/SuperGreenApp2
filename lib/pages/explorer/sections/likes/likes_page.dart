@@ -103,7 +103,7 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           )),
-                      Text(' liked a diary entry:'),
+                      Text(feedEntry.commentID != null ? ' liked a comment' : ' liked a diary entry:'),
                     ],
                   ),
                   Text(feedEntry.plantName,
