@@ -107,7 +107,7 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
         builder: (BuildContext context, SectionBlocState state) {
           Widget body;
           if (items.length == 0) {
-            body = FullscreenLoading();
+            body = Container(height: widget.listHeight(), child: FullscreenLoading());
           } else {
             body = widget.renderBody(context, state, items);
           }
