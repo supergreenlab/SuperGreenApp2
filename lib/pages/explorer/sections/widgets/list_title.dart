@@ -34,7 +34,7 @@ class ListTitle extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xff464646)),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff464646)),
           ),
           this.actionText != null && this.actionFn != null
               ? InkWell(

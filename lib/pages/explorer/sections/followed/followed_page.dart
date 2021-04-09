@@ -29,6 +29,16 @@ import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dar
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
+  @override
+  double listItemWidth() {
+    return 250;
+  }
+
+  @override
+  double listHeight() {
+    return 250;
+  }
+
   Widget itemBuilder(BuildContext context, PublicPlant plant) {
     String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Container(

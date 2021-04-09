@@ -56,6 +56,7 @@ class FeedPage extends StatefulWidget {
   final Color feedColor;
   final Widget leading;
   final Widget firstItem;
+  final bool automaticallyImplyLeading;
 
   const FeedPage({
     @required this.title,
@@ -74,6 +75,7 @@ class FeedPage extends StatefulWidget {
     this.feedColor,
     this.leading,
     this.firstItem,
+    this.automaticallyImplyLeading = false,
   });
 
   @override
@@ -159,7 +161,7 @@ class _FeedPageState extends State<FeedPage> {
     if (widget.appBarEnabled) {
       content.add(
         SliverAppBar(
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: widget.automaticallyImplyLeading,
           title: Text(widget.title),
           pinned: widget.pinned,
           floating: true,

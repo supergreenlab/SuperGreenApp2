@@ -86,6 +86,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
       create: (context) =>
           FeedBloc(RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID, state.commentID, state.replyTo)),
       child: FeedPage(
+          automaticallyImplyLeading: true,
           title: state.plantName ?? '',
           pinned: true,
           color: Colors.indigo,

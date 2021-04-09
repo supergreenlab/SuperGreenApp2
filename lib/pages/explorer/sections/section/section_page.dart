@@ -25,8 +25,69 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
   Widget itemBuilder(BuildContext context, ItemType item);
   Widget sectionTitle(BuildContext context);
 
+  double listHeight();
+  double listItemWidth();
+
   @override
   _SectionPageState createState() => _SectionPageState<BlocType>();
+
+  Widget renderBody(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
+    return renderList(context, state, items);
+  }
+
+  Widget renderList(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
+    return Container(
+        height: listHeight(),
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: items.length + (state.eof ? 0 : 1),
+            itemBuilder: (BuildContext context, int index) {
+              Widget body;
+              if (index == items.length) {
+                BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
+                body = Container(
+                  width: listItemWidth(),
+                  child: FullscreenLoading(),
+                );
+              } else {
+                body = Container(
+                  width: listItemWidth(),
+                  child: itemBuilder(context, items[index]),
+                );
+              }
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: body,
+              );
+            }));
+  }
+
+  Widget renderGrid(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
+    return Container(
+        height: listHeight(),
+        child: GridView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: items.length + (state.eof ? 0 : 1),
+          itemBuilder: (BuildContext context, int index) {
+            Widget body;
+            if (index == items.length) {
+              BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
+              body = Container(
+                width: listItemWidth(),
+                child: FullscreenLoading(),
+              );
+            } else {
+              body = Container(
+                width: listItemWidth(),
+                child: itemBuilder(context, items[index]),
+              );
+            }
+            return body;
+          },
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, mainAxisSpacing: 3, crossAxisSpacing: 3, childAspectRatio: 0.25),
+        ));
+  }
 }
 
 class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage> {
@@ -48,7 +109,7 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
           if (items.length == 0) {
             body = FullscreenLoading();
           } else {
-            body = renderList(context, state);
+            body = widget.renderBody(context, state, items);
           }
           return Column(
             children: [
@@ -59,32 +120,5 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
         },
       ),
     );
-  }
-
-  Widget renderList(BuildContext context, SectionBlocStateLoaded state) {
-    return Container(
-        height: 250,
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: items.length + (state.eof ? 0 : 1),
-            itemBuilder: (BuildContext context, int index) {
-              Widget body;
-              if (index == items.length) {
-                BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
-                body = Container(
-                  width: 250,
-                  child: FullscreenLoading(),
-                );
-              } else {
-                body = Container(
-                  width: 250,
-                  child: widget.itemBuilder(context, items[index]),
-                );
-              }
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: body,
-              );
-            }));
   }
 }

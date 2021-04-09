@@ -17,43 +17,131 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/pages/explorer/models/feedentries.dart';
 import 'package:super_green_app/pages/explorer/sections/discussions/discussions_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_page.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
+import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
+  @override
+  double listItemWidth() {
+    return 370;
+  }
+
+  @override
+  double listHeight() {
+    return 150;
+  }
+
   Widget itemBuilder(BuildContext context, PublicFeedEntry feedEntry) {
+    String pic = feedEntry.pic;
+    if (pic != null) {
+      pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
+    }
+    Duration diff = DateTime.now().difference(feedEntry.commentDate);
+    Widget avatar = UserAvatar(
+      icon: pic,
+      size: 40,
+    );
+    if (feedEntry.commentType != CommentType.COMMENT) {
+      avatar = Stack(
+        children: [
+          avatar,
+          Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Color(0xffcdcdcd), width: 1),
+                    borderRadius: BorderRadius.circular(20)),
+                child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 30, height: 30),
+              )),
+        ],
+      );
+    }
     return Container(
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: Color(0xffdedede)), borderRadius: BorderRadius.circular(5.0)),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0),
+        padding: const EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Stack(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
                 children: [
-                  Image.network(BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath), fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    return FullscreenLoading(
-                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                  }),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 20, height: 20),
+                  ),
+                  Text(feedEntry.plantName,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      )),
                 ],
               ),
             ),
-            Text(feedEntry.comment),
-            Container(height: 4),
-            PlantStrain(plantSettings: feedEntry.plantSettings),
-            PlantPhase(plantSettings: feedEntry.plantSettings),
+            Expanded(
+              child: Row(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Color(0xffdedede)),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: Stack(
+                      children: [
+                        Image.network(
+                            BackendAPI()
+                                .feedsAPI
+                                .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                            fit: BoxFit.cover,
+                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return FullscreenLoading(
+                              percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                        }),
+                        Positioned(
+                          child: avatar,
+                          top: -4,
+                          right: -4,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4.0),
+                            child: MarkdownBody(
+                              data: '**${feedEntry.nickname}** ${feedEntry.comment}',
+                              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

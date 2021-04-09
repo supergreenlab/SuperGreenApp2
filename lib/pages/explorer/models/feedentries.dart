@@ -18,7 +18,9 @@
 
 import 'dart:convert';
 
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_param_helpers.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
@@ -44,9 +46,14 @@ class PublicFeedEntry extends Equatable {
 
   final String plantID;
   final String plantName;
+  final String plantThumbnailPath;
 
+  final String nickname;
+  final String pic;
   final String commentID;
   final String comment;
+  final CommentType commentType;
+  final DateTime commentDate;
 
   final DateTime likeDate;
   final String thumbnailPath;
@@ -67,8 +74,13 @@ class PublicFeedEntry extends Equatable {
       this.nLikes,
       this.plantID,
       this.plantName,
+      this.plantThumbnailPath,
+      this.nickname,
+      this.pic,
       this.commentID,
       this.comment,
+      this.commentType,
+      this.commentDate,
       this.likeDate,
       this.thumbnailPath});
 
@@ -88,8 +100,13 @@ class PublicFeedEntry extends Equatable {
       nLikes: map['nLikes'],
       plantID: map['plantID'],
       plantName: map['plantName'],
+      plantThumbnailPath: map['plantThumbnailPath'],
+      nickname: map['nickname'],
+      pic: map['pic'],
       commentID: map['commentID'],
       comment: map['comment'],
+      commentType: EnumToString.fromString(CommentType.values, map['commentType']),
+      commentDate: map['commentDate'] == null ? null : DateTime.parse(map['commentDate'] as String),
       likeDate: map['likeDate'] == null ? null : DateTime.parse(map['likeDate'] as String),
       thumbnailPath: map['thumbnailPath']);
 
@@ -110,8 +127,13 @@ class PublicFeedEntry extends Equatable {
         nLikes,
         plantID,
         plantName,
+        plantThumbnailPath,
+        nickname,
+        pic,
         commentID,
         comment,
+        commentType,
+        commentDate,
         likeDate,
         thumbnailPath,
       ];

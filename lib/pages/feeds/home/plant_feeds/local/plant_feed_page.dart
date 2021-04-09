@@ -411,10 +411,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           });
         },
         children: [
-          _renderGeneralSpeedDials(context, state),
-          _renderTrimSpeedDials(context, state),
-          _renderLifeEvents(context, state),
-        ][_speedDialType.index]);
+          () => _renderGeneralSpeedDials(context, state),
+          () => _renderTrimSpeedDials(context, state),
+          () => _renderLifeEvents(context, state),
+        ][_speedDialType.index]());
   }
 
   List<SpeedDialChild> _renderTrimSpeedDials(BuildContext context, PlantFeedBlocStateLoaded state) {
@@ -682,6 +682,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         create: (context) => FeedBloc(LocalPlantFeedBlocDelegate(state.plant.feed,
             feedEntryID: state.feedEntry?.id, commentID: state.commentID, replyTo: state.replyTo)),
         child: FeedPage(
+          automaticallyImplyLeading: true,
           single: state.feedEntry != null,
           color: Color(0xff063047),
           actions: actions,
