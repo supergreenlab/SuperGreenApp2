@@ -98,9 +98,6 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                   Container(
                     width: 100,
                     height: 100,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Color(0xffdedede)),
-                        borderRadius: BorderRadius.circular(5.0)),
                     child: Stack(
                       children: [
                         Image.network(
