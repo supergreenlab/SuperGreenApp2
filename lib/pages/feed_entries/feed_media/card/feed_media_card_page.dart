@@ -22,6 +22,8 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
@@ -86,8 +88,24 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_media.svg', FeedMediaCardPage.feedMediaCardPageTitle, widget.state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
+            'assets/feed_card/icon_media.svg',
+            FeedMediaCardPage.feedMediaCardPageTitle,
+            widget.state.synced,
+            showSyncStatus: !state.isRemoteState,
+            showControls: !state.isRemoteState,
+            title2: widget.state.showPlantInfos ? widget.state.plantName : null,
+          ),
+          state.showPlantInfos
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                    ],
+                  ),
+                )
+              : Container(),
           Container(
             height: 350,
             alignment: Alignment.center,
@@ -120,6 +138,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   editText = true;
                 });
               },
+              title2: widget.state.showPlantInfos ? widget.state.plantName : null,
               onShare: () {
                 MediaState media = state.medias[mediaShown];
                 if (media.filePath.endsWith('.mp4')) {
@@ -134,6 +153,17 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                 BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
               },
               actions: widget.cardActions != null ? widget.cardActions(state) : []),
+          state.showPlantInfos
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                    ],
+                  ),
+                )
+              : Container(),
           state.medias.length > 0
               ? MediaList(
                   state.medias,

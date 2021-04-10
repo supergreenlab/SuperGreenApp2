@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_care.dart';
@@ -73,7 +75,19 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             widget.state.synced,
             showSyncStatus: !state.isRemoteState,
             showControls: false,
+            title2: widget.state.showPlantInfos ? widget.state.plantName : null,
           ),
+          state.showPlantInfos
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                    ],
+                  ),
+                )
+              : Container(),
           Container(
             height: 700,
             alignment: Alignment.center,
@@ -97,12 +111,24 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
               editText = true;
             });
           },
+          title2: widget.state.showPlantInfos ? widget.state.plantName : null,
           showSyncStatus: !state.isRemoteState,
           showControls: !state.isRemoteState,
           onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           },
           actions: widget.cardActions != null ? widget.cardActions(state) : []),
+      state.showPlantInfos
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                children: [
+                  Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
+                  Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                ],
+              ),
+            )
+          : Container(),
       SocialBarPage(
         state: state,
         feedState: widget.feedState,

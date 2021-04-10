@@ -21,6 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_measure.dart';
@@ -123,8 +125,25 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_measure.svg', FeedMeasureCardPage.feedMeasureCardPageTitle, state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
+          FeedCardTitle(
+            'assets/feed_card/icon_measure.svg',
+            FeedMeasureCardPage.feedMeasureCardPageTitle,
+            state.synced,
+            showSyncStatus: !state.isRemoteState,
+            showControls: !state.isRemoteState,
+            title2: widget.state.showPlantInfos ? widget.state.plantName : null,
+          ),
+          state.showPlantInfos
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                    ],
+                  ),
+                )
+              : Container(),
           Container(
             height: 350,
             alignment: Alignment.center,
@@ -162,13 +181,26 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle('assets/feed_card/icon_measure.svg', FeedMeasureCardPage.feedMeasureCardPageTitle, state.synced,
-              showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onEdit: () {
+              title2: widget.state.showPlantInfos ? widget.state.plantName : null,
+              showSyncStatus: !state.isRemoteState,
+              showControls: !state.isRemoteState, onEdit: () {
             setState(() {
               editText = true;
             });
           }, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           }, actions: widget.cardActions != null ? widget.cardActions(state) : []),
+          state.showPlantInfos
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                    ],
+                  ),
+                )
+              : Container(),
           MediaList(
             [state.current],
             showSyncStatus: !state.isRemoteState,

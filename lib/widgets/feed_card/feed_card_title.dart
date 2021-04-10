@@ -22,6 +22,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class FeedCardTitle extends StatelessWidget {
   final String icon;
   final String title;
+  final String title2;
   final bool synced;
   final Function onEdit;
   final Function onDelete;
@@ -31,7 +32,13 @@ class FeedCardTitle extends StatelessWidget {
   final List<Widget> actions;
 
   const FeedCardTitle(this.icon, this.title, this.synced,
-      {this.onEdit, this.onDelete, this.onShare, this.showSyncStatus = true, this.showControls = true, this.actions});
+      {this.onEdit,
+      this.title2,
+      this.onDelete,
+      this.onShare,
+      this.showSyncStatus = true,
+      this.showControls = true,
+      this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +53,12 @@ class FeedCardTitle extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300, color: Colors.black87)),
+            Text(title,
+                style:
+                    TextStyle(fontSize: title2 != null ? 17 : 20, fontWeight: FontWeight.w300, color: Colors.black87)),
+            title2 != null
+                ? Text(title2, style: TextStyle(color: Color(0xff2c820a), fontSize: 19, fontWeight: FontWeight.bold))
+                : Container(),
             showSyncStatus
                 ? Text(synced ? 'Synced' : 'Not synced', style: TextStyle(color: synced ? Colors.green : Colors.red))
                 : Container(),
