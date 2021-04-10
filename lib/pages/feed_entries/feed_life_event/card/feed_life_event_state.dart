@@ -23,11 +23,13 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
   FeedLifeEventState(
     FeedEntryState from, {
     FeedEntrySocialState socialState,
+    bool showPlantInfos,
     bool isRemoteState = false,
     String shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
+          showPlantInfos: showPlantInfos ?? from.showPlantInfos,
           isRemoteState: isRemoteState ?? from.isRemoteState,
           shareLink: shareLink ?? from.shareLink,
         );
@@ -35,9 +37,11 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
   FeedEntryState copyWith({
     FeedEntrySocialState socialState,
     String shareLink,
+    bool showPlantInfos,
   }) {
     return FeedLifeEventState(
       this,
+      showPlantInfos: showPlantInfos ?? this.showPlantInfos,
       socialState: socialState ?? this.socialState,
       shareLink: shareLink ?? this.shareLink,
     );

@@ -19,7 +19,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
+// TODO merge this with explorer PublicFeedEntry
 abstract class FeedEntryState extends Equatable {
   final dynamic data;
 
@@ -31,8 +34,14 @@ abstract class FeedEntryState extends Equatable {
   final DateTime date;
   final FeedEntryParams params;
 
+  final String plantID;
+  final String plantName;
+  final PlantSettings plantSettings;
+  final BoxSettings boxSettings;
+
   final FeedEntrySocialState socialState;
 
+  final bool showPlantInfos;
   final bool isRemoteState;
   final bool isBackedUp;
   final String shareLink;
@@ -45,8 +54,13 @@ abstract class FeedEntryState extends Equatable {
     this.synced,
     this.date,
     this.params,
+    this.plantID,
+    this.plantName,
+    this.plantSettings,
+    this.boxSettings,
     this.data,
     this.socialState,
+    this.showPlantInfos,
     this.isRemoteState,
     this.isBackedUp,
     this.shareLink,
@@ -61,15 +75,21 @@ abstract class FeedEntryState extends Equatable {
         synced,
         date,
         params,
+        plantID,
+        plantName,
+        plantSettings,
+        boxSettings,
+        socialState,
+        showPlantInfos,
         isRemoteState,
         isBackedUp,
-        socialState,
         shareLink,
       ];
 
   FeedEntryState copyWith({
     FeedEntrySocialState socialState,
     String shareLink,
+    bool showPlantInfos,
   });
 }
 
@@ -82,6 +102,11 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
     bool synced,
     DateTime date,
     dynamic params,
+    String plantID,
+    String plantName,
+    PlantSettings plantSettings,
+    BoxSettings boxSettings,
+    bool showPlantInfos,
     bool isRemoteState,
     bool isBackedUp,
     dynamic data,
@@ -95,7 +120,12 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
           synced: synced,
           date: date,
           params: params,
+          plantID: plantID,
+          plantName: plantName,
+          plantSettings: plantSettings,
+          boxSettings: boxSettings,
           data: data,
+          showPlantInfos: showPlantInfos,
           isRemoteState: isRemoteState,
           isBackedUp: isBackedUp,
           socialState: socialState,
@@ -105,6 +135,7 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
   FeedEntryState copyWith({
     FeedEntrySocialState socialState,
     String shareLink,
+    bool showPlantInfos,
   }) {
     return FeedEntryStateNotLoaded(
       feedEntryID: this.feedEntryID,
@@ -114,7 +145,12 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
       synced: this.synced,
       date: this.date,
       params: this.params,
+      plantID: this.plantID,
+      plantName: this.plantName,
+      plantSettings: this.plantSettings,
+      boxSettings: this.boxSettings,
       data: this.data,
+      showPlantInfos: showPlantInfos ?? this.showPlantInfos,
       isRemoteState: this.isRemoteState,
       isBackedUp: this.isBackedUp,
       socialState: socialState ?? this.socialState,
@@ -133,6 +169,11 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
     bool synced,
     DateTime date,
     dynamic params,
+    String plantID,
+    String plantName,
+    PlantSettings plantSettings,
+    BoxSettings boxSettings,
+    bool showPlantInfos,
     bool isRemoteState,
     bool isBackedUp,
     dynamic data,
@@ -146,8 +187,13 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
           synced: synced ?? from.synced,
           date: date ?? from.date,
           params: params ?? from.params,
+          plantID: plantID ?? from.plantID,
+          plantName: plantName ?? from.plantName,
+          plantSettings: plantSettings ?? from.plantSettings,
+          boxSettings: boxSettings ?? from.boxSettings,
           data: data ?? from.data,
           socialState: socialState ?? from.socialState,
+          showPlantInfos: showPlantInfos ?? from.showPlantInfos,
           isRemoteState: isRemoteState ?? from.isRemoteState,
           isBackedUp: isBackedUp ?? from.isBackedUp,
           shareLink: shareLink ?? from.shareLink,

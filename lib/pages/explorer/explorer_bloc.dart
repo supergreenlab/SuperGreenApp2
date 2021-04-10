@@ -68,17 +68,13 @@ class ExplorerBlocStateInit extends ExplorerBlocState {
 }
 
 class ExplorerBlocStateLoaded extends ExplorerBlocState {
-  final List<PlantState> plants;
-  final bool eof;
   final bool loggedIn;
 
-  ExplorerBlocStateLoaded(this.plants, this.eof, this.loggedIn);
+  ExplorerBlocStateLoaded(this.loggedIn);
 
   @override
-  List<Object> get props => [plants, eof, loggedIn];
+  List<Object> get props => [loggedIn];
 }
-
-const int N_PER_PAGE = 15;
 
 class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
   ExplorerBloc() : super(ExplorerBlocStateInit()) {
@@ -89,28 +85,11 @@ class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
   Stream<ExplorerBlocState> mapEventToState(ExplorerBlocEvent event) async* {
     if (event is ExplorerBlocEventInit) {
       yield ExplorerBlocStateInit();
-      yield* loadPage(0);
-    } else if (event is ExplorerBlocEventLoadNextPage) {
-      yield* loadPage(event.offset);
+      yield ExplorerBlocStateLoaded(BackendAPI().usersAPI.loggedIn);
     } else if (event is ExplorerBlocEventMakePublic) {
-      await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
-          id: Value(event.plant.id),
-          public: Value(true),
-          synced: Value(false)));
+      await RelDB.get()
+          .plantsDAO
+          .updatePlant(PlantsCompanion(id: Value(event.plant.id), public: Value(true), synced: Value(false)));
     }
-  }
-
-  Stream<ExplorerBlocState> loadPage(int offset) async* {
-    List<dynamic> plantsMap = await FeedsAPI().publicPlants(N_PER_PAGE, offset);
-    List<PlantState> plants = plantsMap
-        .map<PlantState>((p) => PlantState(
-              p['id'],
-              p['name'],
-              p['filePath'],
-              p['thumbnailPath'],
-            ))
-        .toList();
-    yield ExplorerBlocStateLoaded(
-        plants, plants.length < N_PER_PAGE, BackendAPI().usersAPI.loggedIn);
   }
 }

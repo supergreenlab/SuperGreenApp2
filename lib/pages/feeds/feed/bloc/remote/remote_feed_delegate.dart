@@ -37,6 +37,7 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
   Map<String, RemoteFeedEntryLoader> loaders = {};
   FeedUnknownLoader unknownLoader;
 
+  // TODO this shouldn't be there
   final String feedEntryID;
   final String commentID;
   final String replyTo;
@@ -44,6 +45,7 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
   RemoteFeedBlocDelegate({this.feedEntryID, this.commentID, this.replyTo});
 
   Stream<FeedBlocState> onInitialLoad() async* {
+    // TODO this shouldn't be there
     if (commentID != null) {
       Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
       RemoteFeedEntryLoader feedEntryLoader = loaderForType(entryMap['type']);

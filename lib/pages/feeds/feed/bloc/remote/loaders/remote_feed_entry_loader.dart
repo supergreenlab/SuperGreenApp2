@@ -27,6 +27,8 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_entries_par
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_social_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
+import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   RemoteFeedEntryLoader(Function(FeedBlocEvent) add) : super(add);
@@ -95,6 +97,11 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
         synced: true,
         date: DateTime.parse(feedEntryMap['date']),
         params: FeedEntriesParamHelpers.paramForFeedEntryType(feedEntryMap['type'], feedEntryMap['params']),
+        plantID: feedEntryMap['plantID'],
+        plantName: feedEntryMap['plantName'],
+        plantSettings:
+            feedEntryMap['plantSettings'] == null ? null : PlantSettings.fromJSON(feedEntryMap['plantSettings']),
+        boxSettings: feedEntryMap['boxSettings'] == null ? null : BoxSettings.fromJSON(feedEntryMap['boxSettings']),
         isRemoteState: true,
         isBackedUp: true,
         data: feedEntryMap,

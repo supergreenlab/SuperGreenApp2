@@ -29,11 +29,13 @@ class FeedMeasureState extends FeedEntryStateLoaded {
     this.current,
     this.previous,
     FeedEntrySocialState socialState,
+    bool showPlantInfos,
     bool isRemoteState,
     String shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
+          showPlantInfos: showPlantInfos ?? from.showPlantInfos,
           isRemoteState: isRemoteState ?? from.isRemoteState,
           shareLink: shareLink ?? from.shareLink,
         );
@@ -43,12 +45,14 @@ class FeedMeasureState extends FeedEntryStateLoaded {
 
   FeedEntryState copyWith({
     FeedEntrySocialState socialState,
+    bool showPlantInfos,
     String shareLink,
   }) {
     return FeedMeasureState(
       this,
       current: this.current,
       previous: this.previous,
+      showPlantInfos: showPlantInfos ?? this.showPlantInfos,
       socialState: socialState ?? this.socialState,
       shareLink: shareLink ?? this.shareLink,
     );

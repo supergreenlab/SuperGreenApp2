@@ -35,20 +35,16 @@ class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
-    return state;
-    // return state.copyWith(shareLink: 'https://supergreenlab.com/public/plant?id=$plantID&feid=${state.feedEntryID}');
+    return state.copyWith(
+        shareLink: 'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
   }
 
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
-    if (feedEntryID != null) {
-      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
-      return [loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap)];
-    }
     List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicFeedEntries(n, offset);
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
-      return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap);
+      return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap).copyWith(showPlantInfos: true);
     }).toList();
   }
 

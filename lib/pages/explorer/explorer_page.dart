@@ -97,17 +97,11 @@ class ExplorerPage extends TraceableStatefulWidget {
 }
 
 class _ExplorerPageState extends State<ExplorerPage> {
-  List<PlantState> plants = [];
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<ExplorerBloc, ExplorerBlocState>(
       listener: (BuildContext context, ExplorerBlocState state) {
-        if (state is ExplorerBlocStateLoaded) {
-          setState(() {
-            plants.addAll(state.plants);
-          });
-        }
+        if (state is ExplorerBlocStateLoaded) {}
       },
       child: BlocBuilder<ExplorerBloc, ExplorerBlocState>(
           cubit: BlocProvider.of<ExplorerBloc>(context),
@@ -133,7 +127,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 actions: [
                   IconButton(
                     icon: Icon(
-                      Icons.bookmark,
+                      Icons.bookmark_outline_sharp,
                       color: Colors.white,
                     ),
                     onPressed: () {
@@ -168,6 +162,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              _renderSearchField(context, state),
               BlocProvider(
                 create: (context) => FollowedBloc(),
                 child: FollowedPage(),
@@ -188,6 +183,38 @@ class _ExplorerPageState extends State<ExplorerPage> {
     );
   }
 
+  Widget _renderSearchField(BuildContext context, ExplorerBlocStateLoaded state) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          color: Color(0xffe9e9e9),
+          border: Border.all(width: 1, color: Color(0xffd8d8d8)),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(children: [
+            Expanded(
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
+              ),
+            ),
+            SvgPicture.asset('assets/explorer/icon_search.svg'),
+          ]),
+        ),
+      ),
+    );
+  }
+
   void onMakePublic(ExplorerBlocState state) {
     if (state is ExplorerBlocStateLoaded && state.loggedIn) {
       BlocProvider.of<MainNavigatorBloc>(context).add(
@@ -198,8 +225,6 @@ class _ExplorerPageState extends State<ExplorerPage> {
         }
         if (plant is Plant) {
           BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventMakePublic(plant));
-          plants.clear();
-          BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventInit());
           Fluttertoast.showToast(msg: ExplorerPage.explorerPagePublicPlantConfirmation(plant.name));
           Timer(Duration(milliseconds: 1000), () {
             BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());

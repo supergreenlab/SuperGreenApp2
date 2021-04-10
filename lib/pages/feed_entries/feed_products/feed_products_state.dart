@@ -23,21 +23,25 @@ class FeedProductsState extends FeedEntryStateLoaded {
   FeedProductsState(
     FeedEntryState from, {
     FeedEntrySocialState socialState,
+    bool showPlantInfos,
     bool isRemoteState,
     String shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
+          showPlantInfos: showPlantInfos ?? from.showPlantInfos,
           isRemoteState: isRemoteState ?? from.isRemoteState,
           shareLink: shareLink ?? from.shareLink,
         );
 
   FeedEntryState copyWith({
+    bool showPlantInfos,
     FeedEntrySocialState socialState,
     String shareLink,
   }) {
     return FeedProductsState(
       this,
+      showPlantInfos: showPlantInfos ?? this.showPlantInfos,
       socialState: socialState ?? this.socialState,
       shareLink: shareLink ?? this.shareLink,
     );
