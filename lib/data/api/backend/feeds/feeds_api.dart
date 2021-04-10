@@ -25,6 +25,7 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/bookmarks.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/data/api/backend/feeds/models/follows.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/likes.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/reports.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -498,6 +499,11 @@ class FeedsAPI {
   Future bookmarkFeedEntry(String feedEntryID) async {
     Map<String, dynamic> obj = Bookmark(feedEntryID: feedEntryID).toMap();
     await BackendAPI().postPut('/bookmark', obj);
+  }
+
+  Future followPlant(String plantID) async {
+    Map<String, dynamic> obj = Follow(plantID: plantID).toMap();
+    await BackendAPI().postPut('/follow', obj);
   }
 
   Future likeComment(Comment comment) async {

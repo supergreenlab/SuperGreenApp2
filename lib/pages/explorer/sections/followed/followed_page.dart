@@ -47,6 +47,7 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
       onTap: () {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
           plant.id,
+          name: plant.name,
         ));
       },
       child: Container(

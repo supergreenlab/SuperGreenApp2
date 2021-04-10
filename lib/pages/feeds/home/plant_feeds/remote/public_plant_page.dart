@@ -82,6 +82,42 @@ class PublicPlantPage extends TraceableStatelessWidget {
         },
       );
     }
+    List<Widget> actions = [
+      IconButton(
+        icon: Icon(
+          Icons.share,
+          color: Colors.white,
+        ),
+        onPressed: () async {
+          await ShareExtend.share("https://supergreenlab.com/public/plant?id=${state.plantID}", 'text');
+        },
+      ),
+    ];
+    if (state.follows != null) {
+      actions.insert(
+          0,
+          InkWell(
+            highlightColor: Colors.transparent,
+            onTap: () {
+              BlocProvider.of<PublicPlantBloc>(context).add(PublicPlantBlocEventFollowPlant());
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: Color(0xff3bb30b),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                    child: Text(state.follows ? 'Following (${state.nFollows})' : 'Follow'),
+                  ),
+                ),
+              ],
+            ),
+          ));
+    }
     return BlocProvider(
       create: (context) =>
           FeedBloc(RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID, state.commentID, state.replyTo)),
@@ -91,17 +127,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
           pinned: true,
           color: Colors.indigo,
           appBarHeight: 380,
-          actions: [
-            IconButton(
-              icon: Icon(
-                Icons.share,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                await ShareExtend.share("https://supergreenlab.com/public/plant?id=${state.plantID}", 'text');
-              },
-            ),
-          ],
+          actions: actions,
           appBar: SafeArea(
             child: Padding(
               padding: const EdgeInsets.only(top: 45.0),

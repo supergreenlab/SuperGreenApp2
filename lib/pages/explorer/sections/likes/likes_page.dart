@@ -58,6 +58,7 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
       onTap: () {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
           feedEntry.plantID,
+          name: feedEntry.plantName,
           feedEntryID: feedEntry.id,
           commentID: feedEntry.commentID,
           replyTo: feedEntry.replyTo,

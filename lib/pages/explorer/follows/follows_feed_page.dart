@@ -91,8 +91,8 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
                 style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToPublicPlant(state.plantID, name: state.plantName, feedEntryID: state.feedEntryID));
               },
             )
           ];

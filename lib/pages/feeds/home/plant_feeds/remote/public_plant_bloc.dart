@@ -28,39 +28,51 @@ class PublicPlantBlocEventLoadPlant extends PublicPlantBlocEvent {
   List<Object> get props => [];
 }
 
+class PublicPlantBlocEventFollowPlant extends PublicPlantBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class PublicPlantBlocState extends Equatable {
   final String plantID;
   final String feedEntryID;
   final String plantName;
   final String commentID;
   final String replyTo;
+  final bool follows;
+  final int nFollows;
 
-  PublicPlantBlocState(this.plantID, this.feedEntryID, this.plantName, this.commentID, this.replyTo) : super();
+  PublicPlantBlocState(
+      this.plantID, this.feedEntryID, this.plantName, this.commentID, this.replyTo, this.follows, this.nFollows)
+      : super();
 
   @override
-  List<Object> get props => [plantID, feedEntryID, commentID, replyTo];
+  List<Object> get props => [plantID, feedEntryID, commentID, replyTo, follows, nFollows];
 }
 
 class PublicPlantBlocStateInit extends PublicPlantBlocState {
-  PublicPlantBlocStateInit(String id, String feedEntryID, String name, String commentID, String replyTo)
-      : super(id, feedEntryID, name, commentID, replyTo);
+  PublicPlantBlocStateInit(
+      String id, String feedEntryID, String name, String commentID, String replyTo, bool follows, int nFollows)
+      : super(id, feedEntryID, name, commentID, replyTo, follows, nFollows);
 }
 
 class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
   final MainNavigateToPublicPlant args;
 
   PublicPlantBloc(this.args)
-      : super(PublicPlantBlocStateInit(args.id, args.feedEntryID, args.name, args.commentID, args.replyTo)) {
-    if (args.name == null) {
-      add(PublicPlantBlocEventLoadPlant());
-    }
+      : super(PublicPlantBlocStateInit(args.id, args.feedEntryID, args.name, args.commentID, args.replyTo, null, 0)) {
+    add(PublicPlantBlocEventLoadPlant());
   }
 
   @override
   Stream<PublicPlantBlocState> mapEventToState(PublicPlantBlocEvent event) async* {
     if (event is PublicPlantBlocEventLoadPlant) {
       Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(args.id);
-      yield PublicPlantBlocStateInit(args.id, args.feedEntryID, plant['name'], args.commentID, args.replyTo);
+      yield PublicPlantBlocStateInit(
+          args.id, args.feedEntryID, plant['name'], args.commentID, args.replyTo, plant['followed'], plant['nFollows']);
+    } else if (event is PublicPlantBlocEventFollowPlant) {
+      await BackendAPI().feedsAPI.followPlant(args.id);
+      add(PublicPlantBlocEventLoadPlant());
     }
   }
 }

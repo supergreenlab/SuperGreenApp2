@@ -47,6 +47,7 @@ class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
       onTap: () {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
           plant.id,
+          name: plant.name,
         ));
       },
       child: Container(
