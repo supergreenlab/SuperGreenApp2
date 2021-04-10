@@ -57,6 +57,8 @@ import 'package:super_green_app/pages/app_init/app_init_bloc.dart';
 import 'package:super_green_app/pages/app_init/app_init_page.dart';
 import 'package:super_green_app/pages/bookmarks/bookmarks_bloc.dart';
 import 'package:super_green_app/pages/bookmarks/bookmarks_page.dart';
+import 'package:super_green_app/pages/explorer/follows/follows_feed_bloc.dart';
+import 'package:super_green_app/pages/explorer/follows/follows_feed_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_care/feed_bending/form/feed_bending_form_bloc.dart';
@@ -596,6 +598,13 @@ class _MainPageState extends State<MainPage> {
             BlocProvider(create: (context) => RemoteBoxFeedBloc(settings.arguments)),
           ],
           child: RemoteBoxFeedPage(),
+        );
+      case '/public/follows':
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => FollowsFeedBloc(settings.arguments)),
+          ],
+          child: FollowsFeedPage(),
         );
     }
     return Text(MainPage.mainNavigatorUnknownRoute);

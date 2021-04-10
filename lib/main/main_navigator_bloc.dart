@@ -553,6 +553,13 @@ class MainNavigateToRemoteBoxEvent extends MainNavigatorEvent {
   List<Object> get props => [id];
 }
 
+class MainNavigateToFollowsFeedEvent extends MainNavigatorEvent {
+  MainNavigateToFollowsFeedEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -715,6 +722,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState.pushNamed('/selectplant', arguments: event);
     } else if (event is MainNavigateToRemoteBoxEvent) {
       future = _navigatorKey.currentState.pushNamed('/public/box', arguments: event);
+    } else if (event is MainNavigateToFollowsFeedEvent) {
+      future = _navigatorKey.currentState.pushNamed('/public/follows', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn(future);
