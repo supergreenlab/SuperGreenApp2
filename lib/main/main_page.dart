@@ -194,8 +194,7 @@ class _MainPageState extends State<MainPage> {
           FocusScopeNode currentFocus = FocusScope.of(context);
 
           if (!currentFocus.hasPrimaryFocus) {
-            FocusScope.of(context).requestFocus(FocusNode());
-            // currentFocus.unfocus();
+            FocusManager.instance.primaryFocus.unfocus();
           }
         },
         child: wrapListeners(
