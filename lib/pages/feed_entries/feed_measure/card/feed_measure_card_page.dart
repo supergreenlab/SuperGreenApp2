@@ -139,7 +139,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
                   child: Row(
                     children: [
                       Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
                     ],
                   ),
                 )
@@ -196,7 +196,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
                   child: Row(
                     children: [
                       Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
                     ],
                   ),
                 )

@@ -22,15 +22,16 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 import 'package:tuple/tuple.dart';
 
 class PlantPhase extends StatelessWidget {
+  final DateTime time;
   final PlantSettings plantSettings;
 
-  const PlantPhase({Key key, this.plantSettings}) : super(key: key);
+  const PlantPhase({Key key, this.plantSettings, this.time}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String germinationText = 'Date not set';
     if (plantSettings.germinationDate != null) {
-      Duration diff = DateTime.now().difference(plantSettings.germinationDate);
+      Duration diff = (this.time ?? DateTime.now()).difference(plantSettings.germinationDate);
       germinationText = renderDuration(diff, suffix: '');
     }
     String phaseTitle;

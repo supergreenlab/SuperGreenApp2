@@ -101,7 +101,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   child: Row(
                     children: [
                       Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
                     ],
                   ),
                 )
@@ -159,7 +159,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   child: Row(
                     children: [
                       Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
                     ],
                   ),
                 )

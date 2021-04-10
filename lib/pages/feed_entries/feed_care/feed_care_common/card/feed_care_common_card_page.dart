@@ -83,7 +83,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
                   child: Row(
                     children: [
                       Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
                     ],
                   ),
                 )
@@ -124,7 +124,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
               child: Row(
                 children: [
                   Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                  Expanded(child: PlantPhase(plantSettings: state.plantSettings)),
+                  Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
                 ],
               ),
             )
