@@ -17,10 +17,99 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/explorer/follows/follows_feed_delegate.dart';
+import 'package:super_green_app/pages/explorer/follows/follows_feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
+import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
+import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class FollowsFeedPage extends StatelessWidget {
+class FollowsFeedPage extends StatefulWidget {
+  @override
+  _FollowsFeedPageState createState() => _FollowsFeedPageState();
+}
+
+class _FollowsFeedPageState extends State<FollowsFeedPage> {
+  bool hasCards = true;
+
   @override
   Widget build(BuildContext context) {
-    return Text('pouet');
+    return BlocListener<FollowsFeedBloc, FollowsFeedBlocState>(
+      listener: (BuildContext context, FollowsFeedBlocState state) {
+        if (state is FollowsFeedBlocStateLoaded) {}
+      },
+      child: BlocBuilder<FollowsFeedBloc, FollowsFeedBlocState>(
+          cubit: BlocProvider.of<FollowsFeedBloc>(context),
+          builder: (context, state) {
+            Widget body;
+            if (state is FollowsFeedBlocStateInit) {
+              body = FullscreenLoading();
+            } else if (state is FollowsFeedBlocStateLoaded) {
+              if (hasCards == false) {
+                body = renderNoCard(context);
+              } else {
+                body = _renderFeed(context, state);
+              }
+            }
+            return Scaffold(
+              appBar: SGLAppBar(
+                'Follow feed',
+                backgroundColor: Colors.deepPurple,
+                titleColor: Colors.yellow,
+                iconColor: Colors.white,
+                hideBackButton: false,
+              ),
+              body: body,
+            );
+          }),
+    );
+  }
+
+  Widget _renderFeed(BuildContext context, FollowsFeedBlocStateLoaded state) {
+    return BlocProvider(
+      create: (context) => FeedBloc(FollowsFeedBlocDelegate()),
+      child: FeedPage(
+        title: '',
+        color: Colors.white,
+        feedColor: Colors.white,
+        elevate: false,
+        appBarEnabled: false,
+        onLoaded: (bool hasCards) {
+          setState(() {
+            this.hasCards = hasCards;
+          });
+        },
+        cardActions: (FeedEntryState state) {
+          return [
+            IconButton(
+              icon: Text(
+                'Open plant',
+                style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+              },
+            )
+          ];
+        },
+      ),
+    );
+  }
+
+  Widget renderNoCard(BuildContext context) {
+    return Fullscreen(
+      title: 'Not following any plants yet',
+      subtitle: 'You can follow plant diaries, only their cards will show up here.',
+      child: Icon(
+        Icons.follow_the_signs,
+        color: Color(0xff3bb30b),
+        size: 100,
+      ),
+    );
   }
 }

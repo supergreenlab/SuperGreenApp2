@@ -409,6 +409,16 @@ class FeedsAPI {
     }
   }
 
+  Future<List<dynamic>> publicFollowedFeedEntries(int n, int offset) async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntries/followed?limit=$n&offset=$offset');
+      return results['entries'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
   Future<List<dynamic>> followedPlants(int n, int offset) async {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/plants/followed?limit=$n&offset=$offset');

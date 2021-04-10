@@ -121,6 +121,7 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
         params: FeedEntriesParamHelpers.paramForFeedEntryType(feedEntry.type, feedEntry.params),
         data: feedEntry,
         socialState: socialState,
+        showPlantInfos: false,
         isRemoteState: false,
         isBackedUp: feedEntry.serverID != null,
         shareLink: feedEntry.serverID != null ? '' : null);
