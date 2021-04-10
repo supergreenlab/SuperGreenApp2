@@ -40,7 +40,7 @@ class PlantStrain extends StatelessWidget {
         Text(plantSettings.strain,
             style: TextStyle(
               fontWeight: FontWeight.normal,
-              fontSize: 17,
+              fontSize: 16,
             )),
         Row(
           children: [
@@ -61,7 +61,7 @@ class PlantStrain extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(left: 4.0, right: 8.0, bottom: 3.0),
-              child: SvgPicture.asset("assets/explorer/icon_seeds.svg", width: 40, height: 40),
+              child: SvgPicture.asset("assets/explorer/icon_seeds.svg", width: 35, height: 35),
             ),
             Expanded(
               child: Column(

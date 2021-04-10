@@ -90,7 +90,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
               ),
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToPublicPlant(state.data['plantID'], feedEntryID: state.feedEntryID));
+                    .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
               },
             )
           ];

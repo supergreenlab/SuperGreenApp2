@@ -17,9 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/models/feedentries.dart';
 import 'package:super_green_app/pages/explorer/sections/discussions/discussions_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_page.dart';
@@ -33,12 +35,12 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
   @override
   double listItemWidth() {
-    return 370;
+    return 435;
   }
 
   @override
   double listHeight() {
-    return 150;
+    return 160;
   }
 
   Widget itemBuilder(BuildContext context, PublicFeedEntry feedEntry) {
@@ -63,83 +65,100 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                     color: Colors.white,
                     border: Border.all(color: Color(0xffcdcdcd), width: 1),
                     borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 30, height: 30),
+                child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 25, height: 25),
               )),
         ],
       );
     }
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Color(0xffdedede)), borderRadius: BorderRadius.circular(5.0)),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4.0),
-                    child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 20, height: 20),
-                  ),
-                  Text(feedEntry.plantName,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    child: Stack(
-                      children: [
-                        Image.network(
-                            BackendAPI()
-                                .feedsAPI
-                                .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
-                            fit: BoxFit.cover,
-                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return FullscreenLoading(
-                              percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                        }),
-                        Positioned(
-                          child: avatar,
-                          top: -4,
-                          right: -4,
-                        ),
-                      ],
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+          feedEntry.plantID,
+          feedEntryID: feedEntry.id,
+          commentID: feedEntry.commentID,
+          replyTo: feedEntry.replyTo,
+        ));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Color(0xffdedede)), borderRadius: BorderRadius.circular(5.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 20, height: 20),
                     ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4.0),
-                            child: MarkdownBody(
-                              data: '**${feedEntry.nickname}** ${feedEntry.comment}',
-                              styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                    Text(feedEntry.plantName,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      child: Stack(
+                        children: [
+                          Image.network(
+                              BackendAPI()
+                                  .feedsAPI
+                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                              fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return FullscreenLoading(
+                                percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                          }),
+                          Positioned(
+                            child: avatar,
+                            top: -4,
+                            right: -4,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4.0),
+                              child: MarkdownBody(
+                                data: '**${feedEntry.nickname}** ${feedEntry.comment}',
+                                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: PlantStrain(plantSettings: feedEntry.plantSettings)),
+                  Expanded(child: PlantPhase(plantSettings: feedEntry.plantSettings)),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

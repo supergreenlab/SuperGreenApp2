@@ -35,9 +35,8 @@ class BookmarksFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   FeedEntryState postProcess(FeedEntryState state) {
-    Map<String, dynamic> data = state.data;
     return state.copyWith(
-        shareLink: 'https://supergreenlab.com/public/plant?id=${data['plantID']}&feid=${state.feedEntryID}');
+        shareLink: 'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
   }
 
   @override

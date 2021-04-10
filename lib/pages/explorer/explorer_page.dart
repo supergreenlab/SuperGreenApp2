@@ -41,6 +41,7 @@ import 'package:super_green_app/pages/explorer/sections/likes/likes_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/likes/likes_page.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -158,6 +159,20 @@ class _ExplorerPageState extends State<ExplorerPage> {
         feedColor: Colors.white,
         elevate: false,
         appBarEnabled: false,
+        cardActions: (FeedEntryState state) {
+          return [
+            IconButton(
+              icon: Text(
+                'Open plant',
+                style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+              },
+            )
+          ];
+        },
         firstItem: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -17,8 +17,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/models/feedentries.dart';
 import 'package:super_green_app/pages/explorer/sections/likes/likes_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
@@ -52,69 +54,82 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
       icon: pic,
       size: 20,
     );
-    return Container(
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Container(
-              width: 60,
-              height: 60,
-              child: Stack(
-                children: [
-                  Image.network(
-                      BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
-                      fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    return FullscreenLoading(
-                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                  }),
-                  Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: SvgPicture.asset(
-                        'assets/explorer/heart_mask.svg',
-                        fit: BoxFit.fill,
-                      )),
-                  Positioned(
-                    child: avatar,
-                    bottom: 0,
-                    right: 0,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+          feedEntry.plantID,
+          feedEntryID: feedEntry.id,
+          commentID: feedEntry.commentID,
+          replyTo: feedEntry.replyTo,
+        ));
+      },
+      child: Container(
+        child: Row(
+          children: [
+            Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Text(feedEntry.nickname,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          )),
-                      Text(feedEntry.commentID != null ? ' liked a comment' : ' liked a diary entry:'),
-                    ],
-                  ),
-                  Text(feedEntry.plantName,
-                      style: TextStyle(
-                        color: Color(0xff464646),
-                      ))
-                ],
+              child: Container(
+                width: 60,
+                height: 60,
+                child: Stack(
+                  children: [
+                    Image.network(
+                        BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return FullscreenLoading(
+                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                    }),
+                    Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: SvgPicture.asset(
+                          'assets/explorer/heart_mask.svg',
+                          fit: BoxFit.fill,
+                        )),
+                    Positioned(
+                      child: avatar,
+                      bottom: 0,
+                      right: 0,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(feedEntry.nickname,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Text(feedEntry.commentID != null
+                            ? (feedEntry.replyTo != null ? ' liked a reply' : ' liked a comment')
+                            : ' liked a diary entry'),
+                      ],
+                    ),
+                    Text(feedEntry.plantName,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff464646),
+                        ))
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

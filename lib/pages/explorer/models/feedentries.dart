@@ -52,6 +52,7 @@ class PublicFeedEntry extends Equatable {
   final String pic;
   final String commentID;
   final String comment;
+  final String replyTo;
   final CommentType commentType;
   final DateTime commentDate;
 
@@ -79,6 +80,7 @@ class PublicFeedEntry extends Equatable {
       this.pic,
       this.commentID,
       this.comment,
+      this.replyTo,
       this.commentType,
       this.commentDate,
       this.likeDate,
@@ -105,6 +107,7 @@ class PublicFeedEntry extends Equatable {
       pic: map['pic'],
       commentID: map['commentID'],
       comment: map['comment'],
+      replyTo: map['commentReplyTo'],
       commentType: EnumToString.fromString(CommentType.values, map['commentType']),
       commentDate: map['commentDate'] == null ? null : DateTime.parse(map['commentDate'] as String),
       likeDate: map['likeDate'] == null ? null : DateTime.parse(map['likeDate'] as String),
@@ -132,6 +135,7 @@ class PublicFeedEntry extends Equatable {
         pic,
         commentID,
         comment,
+        replyTo,
         commentType,
         commentDate,
         likeDate,

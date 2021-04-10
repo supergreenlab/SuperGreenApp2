@@ -28,31 +28,31 @@ class PlantPhase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String germinationText = 'Not set.';
+    String germinationText = 'Date not set';
     if (plantSettings.germinationDate != null) {
       Duration diff = DateTime.now().difference(plantSettings.germinationDate);
-      germinationText = renderDuration(diff);
+      germinationText = renderDuration(diff, suffix: '');
     }
     String phaseTitle;
     String bloomingText = 'Not set.';
     Tuple3<PlantPhases, DateTime, Duration> phaseData = plantSettings.phaseAt(DateTime.now());
     if (phaseData != null && phaseData.item1 != PlantPhases.GERMINATING) {
       List<String> phases = [
-        'Germinated:',
-        'Vegging for:',
-        'Blooming for:',
-        'Drying for:',
-        'Curing for:',
+        'Germinated: ',
+        'Vegging for: ',
+        'Blooming for: ',
+        'Drying for: ',
+        'Curing for: ',
       ];
       phaseTitle = phases[phaseData.item1.index];
-      bloomingText = renderDuration(phaseData.item3);
+      bloomingText = renderDuration(phaseData.item3, suffix: '');
     }
     return Container(
       child: Row(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 4.0, right: 8.0),
-            child: SvgPicture.asset("assets/explorer/icon_phase.svg", width: 40, height: 40),
+            child: SvgPicture.asset("assets/explorer/icon_phase.svg", width: 35, height: 35),
           ),
           Expanded(
             child: Column(
@@ -60,7 +60,7 @@ class PlantPhase extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('Germinated: ',
+                    Text('Age: ',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
