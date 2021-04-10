@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/explorer/models/plants.dart';
 
 abstract class SearchBlocEvent extends Equatable {}
@@ -29,11 +30,12 @@ class SearchBlocEventInit extends SearchBlocEvent {
 
 class SearchBlocEventSearch extends SearchBlocEvent {
   final String search;
+  final int offset;
 
-  SearchBlocEventSearch(this.search);
+  SearchBlocEventSearch(this.search, this.offset);
 
   @override
-  List<Object> get props => [search];
+  List<Object> get props => [search, offset];
 }
 
 abstract class SearchBlocState extends Equatable {}
@@ -45,11 +47,13 @@ class SearchBlocStateInit extends SearchBlocState {
 
 class SearchBlocStateLoaded extends SearchBlocState {
   final List<PublicPlant> plants;
+  final bool eof;
+  final String search;
 
-  SearchBlocStateLoaded(this.plants);
+  SearchBlocStateLoaded(this.plants, this.eof, this.search);
 
   @override
-  List<Object> get props => [plants];
+  List<Object> get props => [plants, eof, search];
 }
 
 class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
@@ -60,7 +64,11 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   @override
   Stream<SearchBlocState> mapEventToState(SearchBlocEvent event) async* {
     if (event is SearchBlocEventInit) {
-      yield SearchBlocStateLoaded([]);
-    } else if (event is SearchBlocEventSearch) {}
+      yield SearchBlocStateLoaded([], true, null);
+    } else if (event is SearchBlocEventSearch) {
+      List<dynamic> plantMaps = await BackendAPI().feedsAPI.searchPlants(event.search, 10, event.offset);
+      List<PublicPlant> plants = plantMaps.map<PublicPlant>((m) => PublicPlant.fromMap(m)).toList();
+      yield SearchBlocStateLoaded(plants, plants.length < 10, event.search);
+    }
   }
 }

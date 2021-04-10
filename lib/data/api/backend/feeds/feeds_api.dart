@@ -390,6 +390,17 @@ class FeedsAPI {
     }
   }
 
+  Future<List<dynamic>> searchPlants(String q, int n, int offset) async {
+    try {
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/plants/search?q=${Uri.encodeComponent(q)}&limit=$n&offset=$offset');
+      return results['plants'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
   Future<Map<String, dynamic>> publicPlant(String id) async {
     try {
       Map<String, dynamic> results = await BackendAPI().get('/public/plant/$id');

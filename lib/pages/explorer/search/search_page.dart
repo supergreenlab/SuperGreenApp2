@@ -18,25 +18,53 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/explorer/search/search_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class SearchPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  List<PublicPlant> plants = [];
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchBloc, SearchBlocState>(builder: (BuildContext context, SearchBlocState state) {
-      if (state is SearchBlocStateInit) {
-        return FullscreenLoading();
-      }
-      return renderLoaded(context, state);
-    });
+    return BlocListener<SearchBloc, SearchBlocState>(
+      listener: (BuildContext context, SearchBlocState state) {
+        if (state is SearchBlocStateLoaded) {
+          setState(() {
+            plants.addAll(state.plants);
+          });
+        }
+      },
+      child: BlocBuilder<SearchBloc, SearchBlocState>(builder: (BuildContext context, SearchBlocState state) {
+        if (state is SearchBlocStateInit) {
+          return FullscreenLoading();
+        }
+        return renderLoaded(context, state);
+      }),
+    );
   }
 
   Widget renderLoaded(BuildContext context, SearchBlocStateLoaded state) {
     return ListView.separated(
-        itemCount: state.plants.length + 10,
+        itemCount: plants.length + (state.eof ? 0 : 1),
         itemBuilder: (BuildContext context, int index) {
-          return Container(height: 50);
+          if (index >= plants.length && !state.eof) {
+            BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(state.search, plants.length));
+            return Container(
+              height: 50,
+              child: FullscreenLoading(),
+            );
+          }
+          return Container(
+              height: 50,
+              child: Row(
+                children: [Text(plants[index].name)],
+              ));
         },
         separatorBuilder: (BuildContext context, int index) => Divider());
   }
