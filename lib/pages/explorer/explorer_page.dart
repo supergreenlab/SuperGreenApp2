@@ -31,12 +31,11 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_feed_delegate.dart';
+import 'package:super_green_app/pages/explorer/search/search_page.dart';
 import 'package:super_green_app/pages/explorer/sections/discussions/discussions_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/discussions/discussions_page.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_page.dart';
-import 'package:super_green_app/pages/explorer/sections/last_update/last_update_bloc.dart';
-import 'package:super_green_app/pages/explorer/sections/last_update/last_update_page.dart';
 import 'package:super_green_app/pages/explorer/sections/likes/likes_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/likes/likes_page.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
@@ -98,6 +97,19 @@ class ExplorerPage extends TraceableStatefulWidget {
 }
 
 class _ExplorerPageState extends State<ExplorerPage> {
+  final TextEditingController searchController = TextEditingController();
+  bool showSearchResults = false;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController.addListener(() {
+      setState(() {
+        showSearchResults = searchController.text != '';
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ExplorerBloc, ExplorerBlocState>(
@@ -151,50 +163,75 @@ class _ExplorerPageState extends State<ExplorerPage> {
   }
 
   Widget _renderFeed(BuildContext context, ExplorerBlocStateLoaded state) {
-    return BlocProvider(
-      create: (context) => FeedBloc(ExplorerFeedBlocDelegate()),
-      child: FeedPage(
-        title: '',
-        color: Colors.white,
-        feedColor: Colors.white,
-        elevate: false,
-        appBarEnabled: false,
-        cardActions: (FeedEntryState state) {
-          return [
-            IconButton(
-              icon: Text(
-                'Open plant',
-                style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
-              },
-            )
-          ];
-        },
-        firstItem: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _renderSearchField(context, state),
-              BlocProvider(
-                create: (context) => FollowedBloc(),
-                child: FollowedPage(),
-              ),
-              BlocProvider(
-                create: (context) => DiscussionsBloc(),
-                child: DiscussionsPage(),
-              ),
-              BlocProvider(
-                create: (context) => LikesBloc(),
-                child: LikesPage(),
-              ),
-              ListTitle(title: 'Latest pics'),
-            ],
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _renderSearchField(context, state),
+        Expanded(
+          child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+            return Stack(
+              clipBehavior: Clip.hardEdge,
+              children: [
+                BlocProvider(
+                  create: (context) => FeedBloc(ExplorerFeedBlocDelegate()),
+                  child: FeedPage(
+                    title: '',
+                    color: Colors.white,
+                    feedColor: Colors.white,
+                    elevate: false,
+                    appBarEnabled: false,
+                    cardActions: (FeedEntryState state) {
+                      return [
+                        IconButton(
+                          icon: Text(
+                            'Open plant',
+                            style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            BlocProvider.of<MainNavigatorBloc>(context)
+                                .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+                          },
+                        )
+                      ];
+                    },
+                    firstItem: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          BlocProvider(
+                            create: (context) => FollowedBloc(),
+                            child: FollowedPage(),
+                          ),
+                          BlocProvider(
+                            create: (context) => DiscussionsBloc(),
+                            child: DiscussionsPage(),
+                          ),
+                          BlocProvider(
+                            create: (context) => LikesBloc(),
+                            child: LikesPage(),
+                          ),
+                          ListTitle(title: 'Latest pics'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                AnimatedPositioned(
+                  key: Key('Search'),
+                  bottom: showSearchResults ? 0 : constraints.maxHeight,
+                  duration: Duration(milliseconds: 500),
+                  child: Container(
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    color: Colors.white,
+                    child: SearchPage(),
+                  ),
+                ),
+              ],
+            );
+          }),
         ),
-      ),
+      ],
     );
   }
 
@@ -213,6 +250,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
           child: Row(children: [
             Expanded(
               child: TextFormField(
+                controller: searchController,
                 decoration: InputDecoration(
                   hintText: 'Search',
                   border: InputBorder.none,

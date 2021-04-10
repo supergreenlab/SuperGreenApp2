@@ -24,6 +24,7 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
+import 'package:super_green_app/pages/explorer/search/search_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/box_feeds/local/local_box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/box_feeds/local/local_box_feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_bloc.dart';
@@ -182,8 +183,11 @@ class HomePage extends TraceableStatelessWidget {
       case '/explorer':
         return MaterialPageRoute(
             settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => ExplorerBloc(),
+            builder: (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(create: (context) => ExplorerBloc()),
+                    BlocProvider(create: (context) => SearchBloc()),
+                  ],
                   child: TowelieHelper.wrapWidget(settings, context, ExplorerPage()),
                 ));
       case '/settings':
