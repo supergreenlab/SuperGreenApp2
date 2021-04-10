@@ -130,7 +130,9 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
     return ListTitle(
       title: 'Plants you follow',
       actionText: 'View as feed',
-      actionFn: () {},
+      actionFn: () {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToFollowsFeedEvent());
+      },
     );
   }
 }
