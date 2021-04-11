@@ -31,7 +31,6 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_feed_delegate.dart';
-import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/explorer/search/search_bloc.dart';
 import 'package:super_green_app/pages/explorer/search/search_page.dart';
 import 'package:super_green_app/pages/explorer/sections/discussions/discussions_bloc.dart';
@@ -100,10 +99,10 @@ class ExplorerPage extends TraceableStatefulWidget {
 
 class _ExplorerPageState extends State<ExplorerPage> {
   final TextEditingController searchController = TextEditingController();
+  final FocusNode searchFocus = FocusNode();
   bool showSearchResults = false;
 
   Timer autocompleteTimer;
-  bool searchLoading = false;
 
   @override
   void initState() {
@@ -241,50 +240,74 @@ class _ExplorerPageState extends State<ExplorerPage> {
   }
 
   Widget _renderSearchField(BuildContext context, ExplorerBlocStateLoaded state) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          color: Color(0xffe9e9e9),
-          border: Border.all(width: 1, color: Color(0xffd8d8d8)),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(children: [
-            Expanded(
-              child: TextFormField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    searchLoading = true;
-                  });
-                  if (autocompleteTimer != null) {
-                    autocompleteTimer.cancel();
-                  }
-                  autocompleteTimer = Timer(Duration(milliseconds: 500), () {
-                    BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(value, 0));
-                    autocompleteTimer = null;
-                    setState(() {
-                      searchLoading = false;
-                    });
-                  });
-                },
-              ),
+    return BlocBuilder<SearchBloc, SearchBlocState>(
+      builder: (BuildContext context, SearchBlocState searchState) {
+        Widget trailing;
+        if (searchState is SearchBlocStateLoaded) {
+          if (searchController.text == '') {
+            trailing = SvgPicture.asset('assets/explorer/icon_search.svg');
+          } else {
+            trailing = InkWell(
+              child: Icon(Icons.clear),
+              onTap: () {
+                setState(() {
+                  searchController.text = '';
+                  searchFocus.unfocus();
+                });
+              },
+            );
+          }
+        } else {
+          trailing = SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 3.0,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
             ),
-            SvgPicture.asset('assets/explorer/icon_search.svg'),
-          ]),
-        ),
-      ),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 40,
+            decoration: BoxDecoration(
+              color: Color(0xffe9e9e9),
+              border: Border.all(width: 1, color: Color(0xffd8d8d8)),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(children: [
+                Expanded(
+                  child: TextFormField(
+                    focusNode: searchFocus,
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      if (autocompleteTimer != null) {
+                        autocompleteTimer.cancel();
+                      }
+                      autocompleteTimer = Timer(Duration(milliseconds: 500), () {
+                        BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(value, 0));
+                        autocompleteTimer = null;
+                      });
+                    },
+                  ),
+                ),
+                trailing,
+              ]),
+            ),
+          ),
+        );
+      },
     );
   }
 

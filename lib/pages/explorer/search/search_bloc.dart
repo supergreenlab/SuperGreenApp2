@@ -45,15 +45,21 @@ class SearchBlocStateInit extends SearchBlocState {
   List<Object> get props => [];
 }
 
+class SearchBlocStateLoading extends SearchBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 class SearchBlocStateLoaded extends SearchBlocState {
   final List<PublicPlant> plants;
   final bool eof;
+  final int offset;
   final String search;
 
-  SearchBlocStateLoaded(this.plants, this.eof, this.search);
+  SearchBlocStateLoaded(this.plants, this.eof, this.offset, this.search);
 
   @override
-  List<Object> get props => [plants, eof, search];
+  List<Object> get props => [plants, eof, offset, search];
 }
 
 class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
@@ -64,11 +70,12 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   @override
   Stream<SearchBlocState> mapEventToState(SearchBlocEvent event) async* {
     if (event is SearchBlocEventInit) {
-      yield SearchBlocStateLoaded([], true, null);
+      yield SearchBlocStateLoaded([], true, 0, null);
     } else if (event is SearchBlocEventSearch) {
+      yield SearchBlocStateLoading();
       List<dynamic> plantMaps = await BackendAPI().feedsAPI.searchPlants(event.search, 10, event.offset);
       List<PublicPlant> plants = plantMaps.map<PublicPlant>((m) => PublicPlant.fromMap(m)).toList();
-      yield SearchBlocStateLoaded(plants, plants.length < 10, event.search);
+      yield SearchBlocStateLoaded(plants, plants.length < 10, event.offset, event.search);
     }
   }
 }

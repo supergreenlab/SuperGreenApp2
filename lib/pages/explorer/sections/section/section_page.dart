@@ -47,7 +47,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
                 BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
                 body = Container(
                   width: listItemWidth(),
-                  child: FullscreenLoading(),
+                  child: renderLoading(),
                 );
               } else {
                 body = Container(
@@ -74,7 +74,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
               BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
               body = Container(
                 width: listItemWidth(),
-                child: FullscreenLoading(),
+                child: renderLoading(),
               );
             } else {
               body = Container(
@@ -87,6 +87,19 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, mainAxisSpacing: 3, crossAxisSpacing: 3, childAspectRatio: 0.25),
         ));
+  }
+
+  Widget renderLoading() {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      SizedBox(
+        height: 40,
+        width: 40,
+        child: CircularProgressIndicator(
+          strokeWidth: 3.0,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+        ),
+      )
+    ]);
   }
 }
 

@@ -18,8 +18,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/models/plants.dart';
 import 'package:super_green_app/pages/explorer/search/search_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
+import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class SearchPage extends StatefulWidget {
@@ -36,11 +40,16 @@ class _SearchPageState extends State<SearchPage> {
       listener: (BuildContext context, SearchBlocState state) {
         if (state is SearchBlocStateLoaded) {
           setState(() {
+            if (state.offset == 0) {
+              plants.clear();
+            }
             plants.addAll(state.plants);
           });
         }
       },
-      child: BlocBuilder<SearchBloc, SearchBlocState>(builder: (BuildContext context, SearchBlocState state) {
+      child: BlocBuilder<SearchBloc, SearchBlocState>(buildWhen: (SearchBlocState state1, SearchBlocState state2) {
+        return !(state2 is SearchBlocStateLoading);
+      }, builder: (BuildContext context, SearchBlocState state) {
         if (state is SearchBlocStateInit) {
           return FullscreenLoading();
         }
@@ -56,15 +65,61 @@ class _SearchPageState extends State<SearchPage> {
           if (index >= plants.length && !state.eof) {
             BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(state.search, plants.length));
             return Container(
-              height: 50,
+              height: 120,
               child: FullscreenLoading(),
             );
           }
-          return Container(
-              height: 50,
-              child: Row(
-                children: [Text(plants[index].name)],
+          PublicPlant plant = plants[index];
+          return InkWell(
+            onTap: () {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+                plant.id,
+                name: plant.name,
               ));
+            },
+            child: Container(
+              height: 120,
+              child: Row(
+                children: [
+                  Container(
+                    width: 120,
+                    child: Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath), fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return FullscreenLoading(
+                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                    }),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          plant.name,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff454545),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              PlantStrain(plantSettings: plant.settings),
+                              PlantPhase(plantSettings: plant.settings),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
         },
         separatorBuilder: (BuildContext context, int index) => Divider());
   }
