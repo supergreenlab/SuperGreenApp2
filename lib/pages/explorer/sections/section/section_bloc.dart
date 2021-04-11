@@ -16,9 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
+import 'package:hive/hive.dart' as hive;
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 
 abstract class SectionBlocEvent extends Equatable {}
 
@@ -59,6 +63,8 @@ class SectionBlocStateNotLogged extends SectionBlocState {
 }
 
 abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocState> {
+  StreamSubscription<hive.BoxEvent> appDataStream;
+
   SectionBloc() : super(SectionBlocStateInit()) {
     add(SectionBlocEventInit());
   }
@@ -68,6 +74,7 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
     if (event is SectionBlocEventInit) {
       if (requiresAuth()) {
         if (!BackendAPI().usersAPI.loggedIn) {
+          appDataStream = AppDB().watchAppData().listen(appDataUpdated);
           yield SectionBlocStateNotLogged();
           return;
         }
@@ -92,5 +99,19 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
   ItemType itemFromMap(Map<String, dynamic> map);
   bool requiresAuth() {
     return false;
+  }
+
+  void appDataUpdated(hive.BoxEvent boxEvent) {
+    if (BackendAPI().usersAPI.loggedIn) {
+      add(SectionBlocEventInit());
+    }
+  }
+
+  @override
+  Future<void> close() async {
+    if (appDataStream != null) {
+      await appDataStream.cancel();
+    }
+    await super.close();
   }
 }

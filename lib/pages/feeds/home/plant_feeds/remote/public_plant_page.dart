@@ -22,8 +22,11 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
@@ -99,7 +102,11 @@ class PublicPlantPage extends TraceableStatelessWidget {
           InkWell(
             highlightColor: Colors.transparent,
             onTap: () {
-              BlocProvider.of<PublicPlantBloc>(context).add(PublicPlantBlocEventFollowPlant());
+              if (BackendAPI().usersAPI.loggedIn) {
+                BlocProvider.of<PublicPlantBloc>(context).add(PublicPlantBlocEventFollowPlant());
+              } else {
+                _login(context);
+              }
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -160,5 +167,34 @@ class PublicPlantPage extends TraceableStatelessWidget {
         editable: false,
       ),
     );
+  }
+
+  void _login(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(CommonL10N.loginRequiredDialogTitle),
+            content: Text(CommonL10N.loginRequiredDialogBody),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text(CommonL10N.cancel),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text(CommonL10N.loginCreateAccount),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+    }
   }
 }

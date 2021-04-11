@@ -164,7 +164,7 @@ class _FeedPageState extends State<FeedPage> {
           automaticallyImplyLeading: widget.automaticallyImplyLeading,
           title: Text(widget.title),
           pinned: widget.pinned,
-          floating: true,
+          // floating: true,
           leading: widget.leading,
           actions: widget.actions,
           backgroundColor: widget.color,

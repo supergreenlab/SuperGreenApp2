@@ -62,7 +62,8 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
               Expanded(
                 child: Stack(
                   children: [
-                    Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath), fit: BoxFit.cover,
+                    Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
+                        fit: BoxFit.cover, headers: {'Host': BackendAPI().storageServerHostHeader},
                         loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                       if (loadingProgress == null) {
                         return child;
