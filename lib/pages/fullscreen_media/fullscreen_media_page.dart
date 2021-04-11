@@ -23,6 +23,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/fullscreen_media/fullscreen_media_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -135,7 +136,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: filePath.startsWith('http')
-            ? Image.network(filePath, fit: BoxFit.contain,
+            ? Image.network(filePath, fit: BoxFit.contain, headers: {'Host': BackendAPI().storageServerHostHeader},
                 loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
@@ -156,7 +157,8 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: state.overlayPath.startsWith('http')
-                    ? Image.network(state.overlayPath, fit: BoxFit.contain,
+                    ? Image.network(state.overlayPath,
+                        fit: BoxFit.contain, headers: {'Host': BackendAPI().storageServerHostHeader},
                         loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                         if (loadingProgress == null) {
                           return child;

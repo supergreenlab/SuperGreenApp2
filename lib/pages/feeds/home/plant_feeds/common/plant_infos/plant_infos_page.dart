@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/products/specs/seed_specs.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -219,6 +220,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
           child: state.plantInfos.thumbnailPath.startsWith("http")
               ? Image.network(
                   state.plantInfos.thumbnailPath,
+                  headers: {'Host': BackendAPI().storageServerHostHeader},
                   fit: BoxFit.contain,
                   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) {
