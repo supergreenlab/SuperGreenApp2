@@ -32,6 +32,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final ScrollController scrollController = ScrollController();
+
   List<PublicPlant> plants = [];
 
   @override
@@ -42,6 +44,11 @@ class _SearchPageState extends State<SearchPage> {
           setState(() {
             if (state.offset == 0) {
               plants.clear();
+              scrollController.animateTo(
+                0,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.linear,
+              );
             }
             plants.addAll(state.plants);
           });
@@ -60,6 +67,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget renderLoaded(BuildContext context, SearchBlocStateLoaded state) {
     return ListView.separated(
+        controller: scrollController,
         itemCount: plants.length + (state.eof ? 0 : 1),
         itemBuilder: (BuildContext context, int index) {
           if (index >= plants.length && !state.eof) {

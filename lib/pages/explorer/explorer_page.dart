@@ -37,6 +37,8 @@ import 'package:super_green_app/pages/explorer/sections/discussions/discussions_
 import 'package:super_green_app/pages/explorer/sections/discussions/discussions_page.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/followed/followed_page.dart';
+import 'package:super_green_app/pages/explorer/sections/last_update/last_update_bloc.dart';
+import 'package:super_green_app/pages/explorer/sections/last_update/last_update_page.dart';
 import 'package:super_green_app/pages/explorer/sections/likes/likes_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/likes/likes_page.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
@@ -213,6 +215,10 @@ class _ExplorerPageState extends State<ExplorerPage> {
                           BlocProvider(
                             create: (context) => LikesBloc(),
                             child: LikesPage(),
+                          ),
+                          BlocProvider(
+                            create: (context) => LastUpdateBloc(),
+                            child: LastUpdatePage(),
                           ),
                           ListTitle(title: 'Latest pics'),
                         ],
