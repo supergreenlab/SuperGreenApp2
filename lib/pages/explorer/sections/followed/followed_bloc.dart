@@ -23,4 +23,8 @@ import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dar
 class FollowedBloc extends SectionBloc<PublicPlant> {
   Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.followedPlants(n, offset);
   PublicPlant itemFromMap(Map<String, dynamic> map) => PublicPlant.fromMap(map);
+
+  bool requiresAuth() {
+    return true;
+  }
 }

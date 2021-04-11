@@ -18,8 +18,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends StatefulWidget {
   Widget itemBuilder(BuildContext context, ItemType item);
@@ -101,10 +103,63 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
       )
     ]);
   }
+
+  Widget renderEmpty(BuildContext context) {
+    return Container(
+      height: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Nothing to see here (yet)',
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.grey,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget renderNotLogged(BuildContext context) {
+    return Container(
+      height: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Create an account',
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.grey,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          GreenButton(
+            onPressed: () {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+            },
+            title: 'Login or create account',
+          )
+        ],
+      ),
+    );
+  }
 }
 
 class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage> {
   List<dynamic> items = [];
+  bool empty = false;
 
   @override
   Widget build(BuildContext context) {
@@ -113,16 +168,25 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
         if (state is SectionBlocStateLoaded) {
           setState(() {
             items.addAll(state.items);
+            if (items.length == 0) {
+              empty = true;
+            }
           });
         }
       },
       child: BlocBuilder<BlocType, SectionBlocState>(
         builder: (BuildContext context, SectionBlocState state) {
           Widget body;
-          if (items.length == 0) {
-            body = Container(height: widget.listHeight(), child: FullscreenLoading());
+          if (state is SectionBlocStateNotLogged) {
+            body = widget.renderNotLogged(context);
           } else {
-            body = widget.renderBody(context, state, items);
+            if (empty) {
+              body = widget.renderEmpty(context);
+            } else if (items.length == 0) {
+              body = Container(height: widget.listHeight(), child: FullscreenLoading());
+            } else {
+              body = widget.renderBody(context, state, items);
+            }
           }
           return Column(
             children: [

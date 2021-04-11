@@ -74,16 +74,24 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                 height: 60,
                 child: Stack(
                   children: [
-                    Image.network(
-                        BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
-                        fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return FullscreenLoading(
-                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                    }),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      child: Image.network(
+                          BackendAPI()
+                              .feedsAPI
+                              .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                          fit: BoxFit.cover,
+                          width: 60,
+                          height: 60,
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return FullscreenLoading(
+                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                      }),
+                    ),
                     Positioned(
                         top: 0,
                         left: 0,

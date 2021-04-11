@@ -116,7 +116,10 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                               BackendAPI()
                                   .feedsAPI
                                   .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                              height: 100,
+                              width: 100,
                               fit: BoxFit.cover,
+                              headers: {'Host': BackendAPI().storageServerHostHeader},
                               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                             if (loadingProgress == null) {
                               return child;

@@ -89,17 +89,18 @@ class _SearchPageState extends State<SearchPage> {
               height: 120,
               child: Row(
                 children: [
-                  Container(
-                    width: 120,
-                    child: Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath), fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return FullscreenLoading(
-                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                    }),
-                  ),
+                  Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                      headers: {'Host': BackendAPI().storageServerHostHeader},
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return FullscreenLoading(
+                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                  }),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -29,6 +29,7 @@ import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart'
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   @override
@@ -134,6 +135,60 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
       actionFn: () {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToFollowsFeedEvent());
       },
+    );
+  }
+
+  @override
+  Widget renderEmpty(BuildContext context) {
+    return Container(
+      height: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'You\'re not following any plant diaries yet.',
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.grey,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget renderNotLogged(BuildContext context) {
+    return Container(
+      height: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Create an account to follow plant diaries',
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.grey,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          GreenButton(
+            onPressed: () {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+            },
+            title: 'Login or create account',
+          )
+        ],
+      ),
     );
   }
 }

@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 
 abstract class SectionBlocEvent extends Equatable {}
 
@@ -52,6 +53,11 @@ class SectionBlocStateLoaded<ItemType> extends SectionBlocState {
   List<Object> get props => [items, eof];
 }
 
+class SectionBlocStateNotLogged extends SectionBlocState {
+  @override
+  List<Object> get props => [];
+}
+
 abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocState> {
   SectionBloc() : super(SectionBlocStateInit()) {
     add(SectionBlocEventInit());
@@ -60,6 +66,12 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
   @override
   Stream<SectionBlocState> mapEventToState(SectionBlocEvent event) async* {
     if (event is SectionBlocEventInit) {
+      if (requiresAuth()) {
+        if (!BackendAPI().usersAPI.loggedIn) {
+          yield SectionBlocStateNotLogged();
+          return;
+        }
+      }
       yield* loadItemsState(10, 0);
     } else if (event is SectionBlocEventLoad) {
       yield* loadItemsState(10, event.offset);
@@ -78,4 +90,7 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
 
   Future<List<dynamic>> loadItems(int n, int offset);
   ItemType itemFromMap(Map<String, dynamic> map);
+  bool requiresAuth() {
+    return false;
+  }
 }

@@ -61,14 +61,19 @@ class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
               Expanded(
                 child: Stack(
                   children: [
-                    Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath), fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return FullscreenLoading(
-                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                    }),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      child: Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
+                          width: 250, fit: BoxFit.cover, headers: {'Host': BackendAPI().storageServerHostHeader},
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return FullscreenLoading(
+                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                      }),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Text(
