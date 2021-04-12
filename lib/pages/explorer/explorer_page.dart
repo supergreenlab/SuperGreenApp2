@@ -103,6 +103,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
   final TextEditingController searchController = TextEditingController();
   final FocusNode searchFocus = FocusNode();
   bool showSearchResults = false;
+  bool showSearchField = true;
 
   Timer autocompleteTimer;
 
@@ -169,153 +170,167 @@ class _ExplorerPageState extends State<ExplorerPage> {
   }
 
   Widget _renderFeed(BuildContext context, ExplorerBlocStateLoaded state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _renderSearchField(context, state),
-        Expanded(
-          child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-            return Stack(
-              clipBehavior: Clip.hardEdge,
-              fit: StackFit.expand,
-              children: [
-                BlocProvider(
-                  create: (context) => FeedBloc(ExplorerFeedBlocDelegate()),
-                  child: FeedPage(
-                    title: '',
-                    color: Colors.white,
-                    feedColor: Colors.white,
-                    elevate: false,
-                    appBarEnabled: false,
-                    cardActions: (FeedEntryState state) {
-                      return [
-                        IconButton(
-                          icon: Text(
-                            'Open plant',
-                            style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
-                          ),
-                          onPressed: () {
-                            BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
-                          },
-                        )
-                      ];
-                    },
-                    firstItem: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          BlocProvider(
-                            create: (context) => FollowedBloc(),
-                            child: FollowedPage(),
-                          ),
-                          BlocProvider(
-                            create: (context) => DiscussionsBloc(),
-                            child: DiscussionsPage(),
-                          ),
-                          BlocProvider(
-                            create: (context) => LikesBloc(),
-                            child: LikesPage(),
-                          ),
-                          BlocProvider(
-                            create: (context) => LastUpdateBloc(),
-                            child: LastUpdatePage(),
-                          ),
-                          ListTitle(title: 'Latest pics'),
-                        ],
-                      ),
+    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+      return Stack(
+        clipBehavior: Clip.hardEdge,
+        fit: StackFit.expand,
+        children: [
+          BlocProvider(
+            create: (context) => FeedBloc(ExplorerFeedBlocDelegate()),
+            child: FeedPage(
+              title: '',
+              color: Colors.white,
+              feedColor: Colors.white,
+              elevate: false,
+              appBarEnabled: false,
+              onScroll: (ScrollController scrollController) {
+                bool newShowSearchField = scrollController.offset < 300;
+                if (showSearchField == newShowSearchField) {
+                  return;
+                }
+                setState(() {
+                  showSearchField = newShowSearchField;
+                });
+              },
+              cardActions: (FeedEntryState state) {
+                return [
+                  IconButton(
+                    icon: Text(
+                      'Open plant',
+                      style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
                     ),
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+                    },
+                  )
+                ];
+              },
+              firstItem: Padding(
+                padding: const EdgeInsets.only(top: 56.0),
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BlocProvider(
+                        create: (context) => FollowedBloc(),
+                        child: FollowedPage(),
+                      ),
+                      BlocProvider(
+                        create: (context) => DiscussionsBloc(),
+                        child: DiscussionsPage(),
+                      ),
+                      BlocProvider(
+                        create: (context) => LikesBloc(),
+                        child: LikesPage(),
+                      ),
+                      BlocProvider(
+                        create: (context) => LastUpdateBloc(),
+                        child: LastUpdatePage(),
+                      ),
+                      ListTitle(title: 'Latest pics'),
+                    ],
                   ),
                 ),
-                AnimatedPositioned(
-                  bottom: showSearchResults ? 0 : constraints.maxHeight,
-                  duration: Duration(milliseconds: 500),
-                  child: Container(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    color: Colors.white,
-                    child: SearchPage(requestUnfocus: () {
-                      searchFocus.unfocus();
-                    }),
-                  ),
-                ),
-              ],
-            );
-          }),
-        ),
-      ],
-    );
+              ),
+            ),
+          ),
+          AnimatedPositioned(
+            bottom: showSearchResults ? 0 : constraints.maxHeight,
+            duration: Duration(milliseconds: 300),
+            child: Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              color: Colors.white,
+              child: SearchPage(requestUnfocus: () {
+                searchFocus.unfocus();
+              }),
+            ),
+          ),
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 250),
+            top: showSearchField ? 0 : -56,
+            child: Container(
+              width: constraints.maxWidth,
+              height: 56,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _renderSearchField(context, state),
+              ),
+            ),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _renderSearchField(BuildContext context, ExplorerBlocStateLoaded state) {
-    return BlocBuilder<SearchBloc, SearchBlocState>(
-      builder: (BuildContext context, SearchBlocState searchState) {
-        Widget trailing;
-        if (searchState is SearchBlocStateLoaded) {
-          if (searchController.text == '') {
-            trailing = SvgPicture.asset('assets/explorer/icon_search.svg');
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        color: Color(0xffe9e9e9),
+        border: Border.all(width: 1, color: Color(0xffd8d8d8)),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: BlocBuilder<SearchBloc, SearchBlocState>(
+        builder: (BuildContext context, SearchBlocState searchState) {
+          Widget trailing;
+          if (searchState is SearchBlocStateLoaded) {
+            if (searchController.text == '') {
+              trailing = SvgPicture.asset('assets/explorer/icon_search.svg');
+            } else {
+              trailing = InkWell(
+                child: Icon(Icons.clear),
+                onTap: () {
+                  setState(() {
+                    searchController.text = '';
+                    searchFocus.unfocus();
+                  });
+                },
+              );
+            }
           } else {
-            trailing = InkWell(
-              child: Icon(Icons.clear),
-              onTap: () {
-                setState(() {
-                  searchController.text = '';
-                  searchFocus.unfocus();
-                });
-              },
+            trailing = SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 3.0,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+              ),
             );
           }
-        } else {
-          trailing = SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-              strokeWidth: 3.0,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-            ),
-          );
-        }
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              color: Color(0xffe9e9e9),
-              border: Border.all(width: 1, color: Color(0xffd8d8d8)),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(children: [
-                Expanded(
-                  child: TextFormField(
-                    focusNode: searchFocus,
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      if (autocompleteTimer != null) {
-                        autocompleteTimer.cancel();
-                      }
-                      autocompleteTimer = Timer(Duration(milliseconds: 500), () {
-                        BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(value, 0));
-                        autocompleteTimer = null;
-                      });
-                    },
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(children: [
+              Expanded(
+                child: TextFormField(
+                  focusNode: searchFocus,
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
                   ),
+                  onChanged: (value) {
+                    if (autocompleteTimer != null) {
+                      autocompleteTimer.cancel();
+                    }
+                    autocompleteTimer = Timer(Duration(milliseconds: 500), () {
+                      BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(value, 0));
+                      autocompleteTimer = null;
+                    });
+                  },
                 ),
-                trailing,
-              ]),
-            ),
-          ),
-        );
-      },
+              ),
+              trailing,
+            ]),
+          );
+        },
+      ),
     );
   }
 

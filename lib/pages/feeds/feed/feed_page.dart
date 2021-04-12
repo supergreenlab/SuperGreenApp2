@@ -57,6 +57,7 @@ class FeedPage extends StatefulWidget {
   final Widget leading;
   final Widget firstItem;
   final bool automaticallyImplyLeading;
+  final Function(ScrollController) onScroll;
 
   const FeedPage({
     @required this.title,
@@ -76,6 +77,7 @@ class FeedPage extends StatefulWidget {
     this.leading,
     this.firstItem,
     this.automaticallyImplyLeading = false,
+    this.onScroll,
   });
 
   @override
@@ -93,6 +95,16 @@ class _FeedPageState extends State<FeedPage> {
   final GlobalKey<SliverAnimatedListState> listKey = GlobalKey<SliverAnimatedListState>();
 
   @override
+  void initState() {
+    scrollController.addListener(() {
+      if (widget.onScroll != null) {
+        widget.onScroll(scrollController);
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<FeedBloc, FeedBlocState>(
       listener: (BuildContext context, state) {
@@ -102,6 +114,9 @@ class _FeedPageState extends State<FeedPage> {
           });
         } else if (state is FeedBlocStateEntriesLoaded) {
           int nEntries = entries.length;
+          if (widget.firstItem != null) {
+            nEntries++;
+          }
           entries.addAll(state.entries);
           if (state.initialLoad == false) {
             for (int i = 0; i < state.entries.length; ++i) {
@@ -120,7 +135,11 @@ class _FeedPageState extends State<FeedPage> {
           }
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
-          listKey.currentState.insertItem(state.index, duration: Duration(milliseconds: 500));
+          int insertItemIndex = state.index;
+          if (widget.firstItem != null) {
+            insertItemIndex++;
+          }
+          listKey.currentState.insertItem(insertItemIndex, duration: Duration(milliseconds: 500));
           if (state.index == 0) {
             scrollToTop();
           }
@@ -131,8 +150,12 @@ class _FeedPageState extends State<FeedPage> {
         } else if (state is FeedBlocStateRemoveEntry) {
           FeedEntryState entry = state.entry;
           entries.removeAt(state.index);
-          listKey.currentState.removeItem(
-              state.index, (context, animation) => FeedEntriesCardHelpers.cardForFeedEntry(animation, feedState, entry),
+          int removeItemIndex = state.index;
+          if (widget.firstItem != null) {
+            removeItemIndex++;
+          }
+          listKey.currentState.removeItem(removeItemIndex,
+              (context, animation) => FeedEntriesCardHelpers.cardForFeedEntry(animation, feedState, entry),
               duration: Duration(milliseconds: 500));
         } else if (state is FeedBlocStateOpenComment) {
           BlocProvider.of<MainNavigatorBloc>(context).add(

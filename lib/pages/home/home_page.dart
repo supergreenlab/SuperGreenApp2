@@ -110,7 +110,7 @@ class HomePage extends TraceableStatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.explore),
-                  label: 'Explore',
+                  label: 'Community',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings),
