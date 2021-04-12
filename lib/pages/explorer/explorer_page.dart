@@ -234,7 +234,9 @@ class _ExplorerPageState extends State<ExplorerPage> {
                     width: constraints.maxWidth,
                     height: constraints.maxHeight,
                     color: Colors.white,
-                    child: SearchPage(),
+                    child: SearchPage(requestUnfocus: () {
+                      searchFocus.unfocus();
+                    }),
                   ),
                 ),
               ],

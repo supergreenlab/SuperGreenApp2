@@ -171,7 +171,7 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
             if (empty) {
               body = widget.renderEmpty(context);
             } else if (items.length == 0) {
-              body = Container(height: widget.listHeight(), child: FullscreenLoading());
+              body = Container(height: widget.listHeight(), child: ItemLoading());
             } else {
               body = widget.renderBody(context, state, items);
             }

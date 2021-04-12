@@ -27,6 +27,10 @@ import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dar
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class SearchPage extends StatefulWidget {
+  final Function requestUnfocus;
+
+  const SearchPage({Key key, this.requestUnfocus}) : super(key: key);
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -35,6 +39,14 @@ class _SearchPageState extends State<SearchPage> {
   final ScrollController scrollController = ScrollController();
 
   List<PublicPlant> plants = [];
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      widget.requestUnfocus();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,27 +116,30 @@ class _SearchPageState extends State<SearchPage> {
                         percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
                   }),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          plant.name,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff454545),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            plant.name,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff454545),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              PlantStrain(plantSettings: plant.settings),
-                              PlantPhase(plantSettings: plant.settings),
-                            ],
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                PlantStrain(plantSettings: plant.settings),
+                                PlantPhase(plantSettings: plant.settings),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                 ],
