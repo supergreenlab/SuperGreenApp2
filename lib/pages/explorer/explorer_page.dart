@@ -206,9 +206,10 @@ class _ExplorerPageState extends State<ExplorerPage> {
                   )
                 ];
               },
-              firstItem: Padding(
-                padding: const EdgeInsets.only(top: 56.0),
-                child: Container(
+              firstItem: Container(
+                height: 1020,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 56.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
