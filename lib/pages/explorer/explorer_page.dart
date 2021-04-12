@@ -207,7 +207,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 ];
               },
               firstItem: Container(
-                height: 1020,
+                height: 1170,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 56.0),
                   child: Column(

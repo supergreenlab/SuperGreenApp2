@@ -28,7 +28,6 @@ import 'package:super_green_app/pages/explorer/sections/section/section_page.dar
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
-import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/item_loading.dart';
 
 class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
