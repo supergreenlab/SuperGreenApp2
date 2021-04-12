@@ -80,73 +80,76 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget renderLoaded(BuildContext context, SearchBlocStateLoaded state) {
-    return ListView.separated(
-        controller: scrollController,
-        itemCount: plants.length + (state.eof ? 0 : 1),
-        itemBuilder: (BuildContext context, int index) {
-          if (index >= plants.length && !state.eof) {
-            BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(state.search, plants.length));
-            return Container(
-              height: 120,
-              child: FullscreenLoading(),
-            );
-          }
-          PublicPlant plant = plants[index];
-          return InkWell(
-            onTap: () {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
-                plant.id,
-                name: plant.name,
-              ));
-            },
-            child: Container(
-              height: 120,
-              child: Row(
-                children: [
-                  Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.cover,
-                      headers: {'Host': BackendAPI().storageServerHostHeader},
-                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    return FullscreenLoading(
-                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                  }),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            plant.name,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff454545),
+    return Padding(
+      padding: const EdgeInsets.only(top: 56.0),
+      child: ListView.separated(
+          controller: scrollController,
+          itemCount: plants.length + (state.eof ? 0 : 1),
+          itemBuilder: (BuildContext context, int index) {
+            if (index >= plants.length && !state.eof) {
+              BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(state.search, plants.length));
+              return Container(
+                height: 120,
+                child: FullscreenLoading(),
+              );
+            }
+            PublicPlant plant = plants[index];
+            return InkWell(
+              onTap: () {
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+                  plant.id,
+                  name: plant.name,
+                ));
+              },
+              child: Container(
+                height: 120,
+                child: Row(
+                  children: [
+                    Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                        headers: {'Host': BackendAPI().storageServerHostHeader},
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return FullscreenLoading(
+                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                    }),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              plant.name,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff454545),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                PlantStrain(plantSettings: plant.settings),
-                                PlantPhase(plantSettings: plant.settings),
-                              ],
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  PlantStrain(plantSettings: plant.settings),
+                                  PlantPhase(plantSettings: plant.settings),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => Divider());
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) => Divider()),
+    );
   }
 }
