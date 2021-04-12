@@ -56,6 +56,8 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_user_agent (1.2.2):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -110,6 +112,8 @@ PODS:
   - Reachability (3.2)
   - share_extend (0.0.1):
     - Flutter
+  - shared_preferences (0.0.1):
+    - Flutter
   - sqlite3 (3.32.3):
     - sqlite3/common (= 3.32.3)
   - sqlite3/common (3.32.3)
@@ -154,6 +158,7 @@ DEPENDENCIES:
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_user_agent (from `.symlinks/plugins/flutter_user_agent/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - heic_to_jpg (from `.symlinks/plugins/heic_to_jpg/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
@@ -162,6 +167,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share_extend (from `.symlinks/plugins/share_extend/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -210,6 +216,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_user_agent:
+    :path: ".symlinks/plugins/flutter_user_agent/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   heic_to_jpg:
@@ -226,6 +234,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler/ios"
   share_extend:
     :path: ".symlinks/plugins/share_extend/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
   sqlite3_flutter_libs:
     :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
   uni_links:
@@ -257,6 +267,7 @@ SPEC CHECKSUMS:
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_user_agent: 27c45d034dc31b80948d29998cea52cd3a7bf936
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: d866834472f1324d080496bc67ab3ce5d0d46027
@@ -272,6 +283,7 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   share_extend: b6748dc53695587891126a89533b862b92548c7b
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqlite3: 8f7d2078ae27778699a622a94b853285793422a2
   sqlite3_flutter_libs: 5651f8ff48e3b44d910863c4ea5916085b1b245f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
