@@ -227,7 +227,6 @@ class _ExplorerPageState extends State<ExplorerPage> {
                   ),
                 ),
                 AnimatedPositioned(
-                  key: Key('Search'),
                   bottom: showSearchResults ? 0 : constraints.maxHeight,
                   duration: Duration(milliseconds: 500),
                   child: Container(
@@ -365,5 +364,13 @@ class _ExplorerPageState extends State<ExplorerPage> {
     if (confirm) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
+  }
+
+  @override
+  void dispose() {
+    if (autocompleteTimer != null) {
+      autocompleteTimer.cancel();
+    }
+    super.dispose();
   }
 }

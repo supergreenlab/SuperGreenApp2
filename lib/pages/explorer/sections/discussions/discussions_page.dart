@@ -30,7 +30,7 @@ import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
-import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/item_loading.dart';
 
 class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
   @override
@@ -109,23 +109,20 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                   children: [
                     Container(
                       width: 100,
-                      height: 100,
                       child: Stack(
+                        fit: StackFit.expand,
                         children: [
                           Image.network(
                               BackendAPI()
                                   .feedsAPI
                                   .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
-                              height: 100,
-                              width: 100,
                               fit: BoxFit.cover,
                               headers: {'Host': BackendAPI().storageServerHostHeader},
                               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
                             if (loadingProgress == null) {
                               return child;
                             }
-                            return FullscreenLoading(
-                                percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                            return ItemLoading();
                           }),
                           Positioned(
                             child: avatar,

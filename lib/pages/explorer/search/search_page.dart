@@ -44,11 +44,13 @@ class _SearchPageState extends State<SearchPage> {
           setState(() {
             if (state.offset == 0) {
               plants.clear();
-              scrollController.animateTo(
-                0,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.linear,
-              );
+              if (scrollController.hasClients) {
+                scrollController.animateTo(
+                  0,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.linear,
+                );
+              }
             }
             plants.addAll(state.plants);
           });

@@ -69,6 +69,8 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
     add(SectionBlocEventInit());
   }
 
+  int get nItemsLoad => 10;
+
   @override
   Stream<SectionBlocState> mapEventToState(SectionBlocEvent event) async* {
     if (event is SectionBlocEventInit) {
@@ -79,9 +81,9 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
           return;
         }
       }
-      yield* loadItemsState(10, 0);
+      yield* loadItemsState(this.nItemsLoad, 0);
     } else if (event is SectionBlocEventLoad) {
-      yield* loadItemsState(10, event.offset);
+      yield* loadItemsState(this.nItemsLoad, event.offset);
     }
   }
 

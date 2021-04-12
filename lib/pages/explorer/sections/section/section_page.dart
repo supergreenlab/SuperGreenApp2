@@ -22,6 +22,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/item_loading.dart';
 
 abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends StatefulWidget {
   Widget itemBuilder(BuildContext context, ItemType item);
@@ -49,7 +50,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
                 BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
                 body = Container(
                   width: listItemWidth(),
-                  child: renderLoading(),
+                  child: ItemLoading(),
                 );
               } else {
                 body = Container(
@@ -76,7 +77,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
               BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
               body = Container(
                 width: listItemWidth(),
-                child: renderLoading(),
+                child: ItemLoading(),
               );
             } else {
               body = Container(
@@ -89,19 +90,6 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, mainAxisSpacing: 3, crossAxisSpacing: 3, childAspectRatio: 0.25),
         ));
-  }
-
-  Widget renderLoading() {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SizedBox(
-        height: 40,
-        width: 40,
-        child: CircularProgressIndicator(
-          strokeWidth: 3.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-        ),
-      )
-    ]);
   }
 
   Widget renderEmpty(BuildContext context) {

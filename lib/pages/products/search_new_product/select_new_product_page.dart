@@ -459,4 +459,12 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     }
     return diff;
   }
+
+  @override
+  void dispose() {
+    if (autocompleteTimer != null) {
+      autocompleteTimer.cancel();
+    }
+    super.dispose();
+  }
 }

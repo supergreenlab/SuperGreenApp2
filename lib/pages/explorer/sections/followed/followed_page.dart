@@ -28,8 +28,8 @@ import 'package:super_green_app/pages/explorer/sections/section/section_page.dar
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
-import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/item_loading.dart';
 
 class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   @override
@@ -61,6 +61,7 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
             children: [
               Expanded(
                 child: Stack(
+                  fit: StackFit.expand,
                   children: [
                     Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
                         fit: BoxFit.cover, headers: {'Host': BackendAPI().storageServerHostHeader},
@@ -68,8 +69,7 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
                       if (loadingProgress == null) {
                         return child;
                       }
-                      return FullscreenLoading(
-                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                      return ItemLoading();
                     }),
                     Padding(
                       padding: const EdgeInsets.all(3.0),

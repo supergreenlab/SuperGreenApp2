@@ -16,14 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/api/backend/backend_api.dart';
-import 'package:super_green_app/pages/explorer/models/feedentries.dart';
-import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dart';
+import 'package:flutter/material.dart';
 
-class LikesBloc extends SectionBloc<PublicFeedEntry> {
+class ItemLoading extends StatelessWidget {
+  final double size;
+
+  const ItemLoading({Key key, this.size = 40}) : super(key: key);
+
   @override
-  int get nItemsLoad => 20;
-
-  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.publicLiked(n, offset);
-  PublicFeedEntry itemFromMap(Map<String, dynamic> map) => PublicFeedEntry.fromMap(map);
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      SizedBox(
+        height: size,
+        width: size,
+        child: CircularProgressIndicator(
+          strokeWidth: 3.0,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+        ),
+      )
+    ]);
+  }
 }

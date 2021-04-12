@@ -27,7 +27,7 @@ import 'package:super_green_app/pages/explorer/sections/section/section_bloc.dar
 import 'package:super_green_app/pages/explorer/sections/section/section_page.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
-import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/item_loading.dart';
 
 class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
   @override
@@ -73,34 +73,21 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                 width: 60,
                 height: 60,
                 child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: Image.network(
-                          BackendAPI()
-                              .feedsAPI
-                              .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
-                          fit: BoxFit.cover,
-                          width: 60,
-                          height: 60,
-                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return FullscreenLoading(
-                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                      }),
+                    Image.network(
+                        BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return ItemLoading();
+                    }),
+                    SvgPicture.asset(
+                      'assets/explorer/heart_mask.svg',
+                      fit: BoxFit.fill,
                     ),
-                    Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: SvgPicture.asset(
-                          'assets/explorer/heart_mask.svg',
-                          fit: BoxFit.fill,
-                        )),
                     Positioned(
                       child: avatar,
                       bottom: 0,

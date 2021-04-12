@@ -29,6 +29,7 @@ import 'package:super_green_app/pages/explorer/sections/widgets/list_title.dart'
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/item_loading.dart';
 
 class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
   @override
@@ -59,67 +60,71 @@ class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
-                          width: 250, fit: BoxFit.cover, headers: {'Host': BackendAPI().storageServerHostHeader},
-                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return FullscreenLoading(
-                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
-                      }),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Text(
-                        plant.name,
-                        style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, shadows: [
-                          Shadow(
-                              // bottomLeft
-                              offset: Offset(-1.5, -1.5),
-                              color: Colors.white),
-                          Shadow(
-                              // bottomRight
-                              offset: Offset(1.5, -1.5),
-                              color: Colors.white),
-                          Shadow(
-                              // topRight
-                              offset: Offset(1.5, 1.5),
-                              color: Colors.white),
-                          Shadow(
-                              // topLeft
-                              offset: Offset(-1.5, 1.5),
-                              color: Colors.white),
-                        ]),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      left: 0,
-                      child: Container(
-                        color: Colors.black45,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 4.0,
-                            vertical: 2.0,
-                          ),
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
+                            fit: BoxFit.cover, headers: {'Host': BackendAPI().storageServerHostHeader},
+                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Container(
+                            width: constraints.maxWidth,
+                            height: constraints.maxHeight,
+                            child: ItemLoading(),
+                          );
+                        }),
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
                           child: Text(
-                            'Last update: ${DateFormat(format).format(plant.lastUpdate)}',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                            textAlign: TextAlign.right,
+                            plant.name,
+                            style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, shadows: [
+                              Shadow(
+                                  // bottomLeft
+                                  offset: Offset(-1.5, -1.5),
+                                  color: Colors.white),
+                              Shadow(
+                                  // bottomRight
+                                  offset: Offset(1.5, -1.5),
+                                  color: Colors.white),
+                              Shadow(
+                                  // topRight
+                                  offset: Offset(1.5, 1.5),
+                                  color: Colors.white),
+                              Shadow(
+                                  // topLeft
+                                  offset: Offset(-1.5, 1.5),
+                                  color: Colors.white),
+                            ]),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          left: 0,
+                          child: Container(
+                            color: Colors.black45,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4.0,
+                                vertical: 2.0,
+                              ),
+                              child: Text(
+                                'Last update: ${DateFormat(format).format(plant.lastUpdate)}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               Container(height: 4),
