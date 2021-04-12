@@ -86,7 +86,7 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                     }),
                     SvgPicture.asset(
                       'assets/explorer/heart_mask.svg',
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ),
                     Positioned(
                       child: avatar,

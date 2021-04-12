@@ -177,6 +177,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
           child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
             return Stack(
               clipBehavior: Clip.hardEdge,
+              fit: StackFit.expand,
               children: [
                 BlocProvider(
                   create: (context) => FeedBloc(ExplorerFeedBlocDelegate()),
