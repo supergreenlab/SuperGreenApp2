@@ -118,17 +118,6 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           },
           actions: widget.cardActions != null ? widget.cardActions(state) : []),
-      state.showPlantInfos
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Row(
-                children: [
-                  Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                  Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
-                ],
-              ),
-            )
-          : Container(),
       SocialBarPage(
         state: state,
         feedState: widget.feedState,
@@ -186,6 +175,20 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
               },
             ),
           ));
+    }
+    if (state.showPlantInfos) {
+      body.insert(
+        1,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Row(
+            children: [
+              Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
+              Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+            ],
+          ),
+        ),
+      );
     }
     return FeedCard(
       animation: widget.animation,

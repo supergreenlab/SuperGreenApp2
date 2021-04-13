@@ -264,6 +264,12 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         date,
         onChange: (DateTime newDate) {
           setState(() {
+            newDate.add(Duration(
+              hours: date.hour,
+              minutes: date.minute,
+              seconds: date.second,
+              milliseconds: date.millisecond,
+            ));
             date = newDate;
             _saveDraft();
           });
