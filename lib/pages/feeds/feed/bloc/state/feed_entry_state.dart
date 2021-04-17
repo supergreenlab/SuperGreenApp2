@@ -38,6 +38,7 @@ abstract class FeedEntryState extends Equatable {
   final String plantName;
   final PlantSettings plantSettings;
   final BoxSettings boxSettings;
+  final bool followed;
 
   final FeedEntrySocialState socialState;
 
@@ -58,6 +59,7 @@ abstract class FeedEntryState extends Equatable {
     this.plantName,
     this.plantSettings,
     this.boxSettings,
+    this.followed,
     this.data,
     this.socialState,
     this.showPlantInfos,
@@ -79,6 +81,7 @@ abstract class FeedEntryState extends Equatable {
         plantName,
         plantSettings,
         boxSettings,
+        followed,
         socialState,
         showPlantInfos,
         isRemoteState,
@@ -90,6 +93,7 @@ abstract class FeedEntryState extends Equatable {
     FeedEntrySocialState socialState,
     String shareLink,
     bool showPlantInfos,
+    bool followed,
   });
 }
 
@@ -106,6 +110,7 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
     String plantName,
     PlantSettings plantSettings,
     BoxSettings boxSettings,
+    bool followed,
     bool showPlantInfos,
     bool isRemoteState,
     bool isBackedUp,
@@ -124,6 +129,7 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
           plantName: plantName,
           plantSettings: plantSettings,
           boxSettings: boxSettings,
+          followed: followed,
           data: data,
           showPlantInfos: showPlantInfos,
           isRemoteState: isRemoteState,
@@ -136,6 +142,7 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
     FeedEntrySocialState socialState,
     String shareLink,
     bool showPlantInfos,
+    bool followed,
   }) {
     return FeedEntryStateNotLoaded(
       feedEntryID: this.feedEntryID,
@@ -149,6 +156,7 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
       plantName: this.plantName,
       plantSettings: this.plantSettings,
       boxSettings: this.boxSettings,
+      followed: followed ?? this.followed,
       data: this.data,
       showPlantInfos: showPlantInfos ?? this.showPlantInfos,
       isRemoteState: this.isRemoteState,
@@ -173,6 +181,7 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
     String plantName,
     PlantSettings plantSettings,
     BoxSettings boxSettings,
+    bool followed,
     bool showPlantInfos,
     bool isRemoteState,
     bool isBackedUp,
@@ -191,6 +200,7 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
           plantName: plantName ?? from.plantName,
           plantSettings: plantSettings ?? from.plantSettings,
           boxSettings: boxSettings ?? from.boxSettings,
+          followed: followed ?? from.followed,
           data: data ?? from.data,
           socialState: socialState ?? from.socialState,
           showPlantInfos: showPlantInfos ?? from.showPlantInfos,

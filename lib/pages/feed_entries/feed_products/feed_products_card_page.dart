@@ -64,7 +64,7 @@ class FeedProductsCardPage extends StatelessWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
 
   const FeedProductsCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
 

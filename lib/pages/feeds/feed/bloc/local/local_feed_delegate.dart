@@ -147,6 +147,9 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   }
 
   @override
+  Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {}
+
+  @override
   Future markAsRead(dynamic feedEntryID) async {
     await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(id: Value(feedEntryID), isNew: Value(false)));
   }

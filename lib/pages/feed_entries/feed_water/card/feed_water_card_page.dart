@@ -85,7 +85,7 @@ class FeedWaterCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
 
   const FeedWaterCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
 
@@ -157,7 +157,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
             });
           }, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: widget.cardActions != null ? widget.cardActions(state) : []),
+          }, actions: widget.cardActions != null ? widget.cardActions(context, state) : []),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(

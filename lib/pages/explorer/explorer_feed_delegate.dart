@@ -27,6 +27,15 @@ import 'package:super_green_app/pages/feeds/feed/bloc/remote/remote_feed_delegat
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
+class ExplorerFeedBlocDelegateFollowEvent extends FeedBlocEvent {
+  final FeedEntryState entry;
+
+  ExplorerFeedBlocDelegateFollowEvent(this.entry);
+
+  @override
+  List<Object> get props => [entry];
+}
+
 class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
   FeedState feedState;
   StreamSubscription<hive.BoxEvent> appDataStream;
@@ -37,6 +46,17 @@ class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
   FeedEntryState postProcess(FeedEntryState state) {
     return state.copyWith(
         shareLink: 'https://supergreenlab.com/public/plant?id=${state.plantID}&feid=${state.feedEntryID}');
+  }
+
+  @override
+  Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {
+    if (event is ExplorerFeedBlocDelegateFollowEvent) {
+      await BackendAPI().feedsAPI.followPlant(event.entry.plantID);
+      FeedEntryLoader loader = this.loaderForType(event.entry.type);
+      loader.onFeedEntryStateUpdated(event.entry.copyWith(followed: true));
+    } else {
+      yield* super.mapEventToState(event);
+    }
   }
 
   @override

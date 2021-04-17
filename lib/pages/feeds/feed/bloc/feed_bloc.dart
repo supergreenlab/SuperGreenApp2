@@ -311,6 +311,8 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
       delegate.likeFeedEntry(event.entry);
     } else if (event is FeedBlocEventBookmarkFeedEntry) {
       delegate.bookmarkFeedEntry(event.entry);
+    } else {
+      yield* delegate.mapEventToState(event);
     }
   }
 
@@ -377,5 +379,6 @@ abstract class FeedBlocDelegate {
   Future markAsRead(dynamic feedEntryID);
   Future likeFeedEntry(FeedEntryState entry);
   Future bookmarkFeedEntry(FeedEntryState entry);
+  Stream<FeedBlocState> mapEventToState(FeedBlocEvent event);
   Future<void> close();
 }

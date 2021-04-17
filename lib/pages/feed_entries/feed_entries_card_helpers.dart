@@ -39,61 +39,45 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 class FeedEntriesCardHelpers {
   static Map<
       String,
-      Widget Function(
-          Animation animation, FeedState feedState, FeedEntryState state,
-          {Function cardActions})> _cards = {
+      Widget Function(Animation animation, FeedState feedState, FeedEntryState state,
+          {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions})> _cards = {
     'FE_LIGHT': (animation, feedState, state, {cardActions}) =>
-        FeedLightCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedLightCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_MEDIA': (animation, feedState, state, {cardActions}) =>
-        FeedMediaCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedMediaCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_MEASURE': (animation, feedState, state, {cardActions}) =>
-        FeedMeasureCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedMeasureCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_SCHEDULE': (animation, feedState, state, {cardActions}) =>
-        FeedScheduleCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedScheduleCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_TOPPING': (animation, feedState, state, {cardActions}) =>
-        FeedToppingCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedToppingCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_DEFOLIATION': (animation, feedState, state, {cardActions}) =>
-        FeedDefoliationCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedDefoliationCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_FIMMING': (animation, feedState, state, {cardActions}) =>
-        FeedFimmingCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedFimmingCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_BENDING': (animation, feedState, state, {cardActions}) =>
-        FeedBendingCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedBendingCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_TRANSPLANT': (animation, feedState, state, {cardActions}) =>
-        FeedTransplantCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedTransplantCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_VENTILATION': (animation, feedState, state, {cardActions}) =>
-        FeedVentilationCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedVentilationCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_WATER': (animation, feedState, state, {cardActions}) =>
-        FeedWaterCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedWaterCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_TOWELIE_INFO': (animation, feedState, state, {cardActions}) =>
-        FeedTowelieInfoCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedTowelieInfoCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_PRODUCTS': (animation, feedState, state, {cardActions}) =>
-        FeedProductsCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedProductsCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_LIFE_EVENT': (animation, feedState, state, {cardActions}) =>
-        FeedLifeEventCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedLifeEventCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_NUTRIENT_MIX': (animation, feedState, state, {cardActions}) =>
-        FeedNutrientMixCardPage(animation, feedState, state,
-            cardActions: cardActions),
+        FeedNutrientMixCardPage(animation, feedState, state, cardActions: cardActions),
   };
 
-  static Widget cardForFeedEntry(
-      Animation animation, FeedState feedState, FeedEntryState state,
-      {List<Widget> Function(FeedEntryState feedEntryState) cardActions}) {
+  static Widget cardForFeedEntry(Animation animation, FeedState feedState, FeedEntryState state,
+      {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions}) {
     Widget Function(Animation, FeedState, FeedEntryState,
-        {Function cardActions}) builder = _cards[state.type];
+            {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions}) builder =
+        _cards[state.type];
     if (builder == null) {
       return FeedUnknownCardPage(animation, feedState, state);
     }

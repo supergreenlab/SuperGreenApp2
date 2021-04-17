@@ -34,12 +34,12 @@ import 'package:super_green_app/widgets/item_loading.dart';
 
 class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
   @override
-  double listItemWidth() {
+  double get listItemWidth {
     return 435;
   }
 
   @override
-  double listHeight() {
+  double get listHeight {
     return 160;
   }
 

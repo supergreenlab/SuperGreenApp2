@@ -83,7 +83,7 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
             this.hasCards = hasCards;
           });
         },
-        cardActions: (FeedEntryState state) {
+        cardActions: (BuildContext context, FeedEntryState state) {
           return [
             IconButton(
               icon: Text(

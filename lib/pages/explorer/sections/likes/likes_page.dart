@@ -31,12 +31,12 @@ import 'package:super_green_app/widgets/item_loading.dart';
 
 class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
   @override
-  double listItemWidth() {
+  double get listItemWidth {
     return 100;
   }
 
   @override
-  double listHeight() {
+  double get listHeight {
     return 150;
   }
 

@@ -90,7 +90,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
 
   const FeedLifeEventCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
       : super(key: key);
@@ -144,7 +144,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
               'assets/feed_card/icon_life_events.svg', FeedLifeEventCardPage.feedLifeEventCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: cardActions != null ? cardActions(state) : []),
+          }, actions: cardActions != null ? cardActions(context, state) : []),
           Container(
             height: 130,
             alignment: Alignment.center,

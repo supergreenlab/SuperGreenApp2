@@ -26,7 +26,6 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';

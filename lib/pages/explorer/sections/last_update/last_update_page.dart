@@ -32,12 +32,12 @@ import 'package:super_green_app/widgets/item_loading.dart';
 
 class LastUpdatePage extends SectionPage<LastUpdateBloc, PublicPlant> {
   @override
-  double listItemWidth() {
+  double get listItemWidth {
     return 250;
   }
 
   @override
-  double listHeight() {
+  double get listHeight {
     return 250;
   }
 

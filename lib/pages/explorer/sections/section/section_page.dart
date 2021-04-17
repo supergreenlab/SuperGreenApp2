@@ -27,8 +27,8 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
   Widget itemBuilder(BuildContext context, ItemType item);
   Widget sectionTitle(BuildContext context);
 
-  double listHeight();
-  double listItemWidth();
+  double get listHeight;
+  double get listItemWidth;
 
   @override
   _SectionPageState createState() => _SectionPageState<BlocType>();
@@ -39,7 +39,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
 
   Widget renderList(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
     return Container(
-        height: listHeight(),
+        height: listHeight,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: items.length + (state.eof ? 0 : 1),
@@ -48,12 +48,12 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
               if (index == items.length) {
                 BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
                 body = Container(
-                  width: listItemWidth(),
+                  width: listItemWidth,
                   child: ItemLoading(),
                 );
               } else {
                 body = Container(
-                  width: listItemWidth(),
+                  width: listItemWidth,
                   child: itemBuilder(context, items[index]),
                 );
               }
@@ -66,7 +66,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
 
   Widget renderGrid(BuildContext context, SectionBlocStateLoaded state, List<dynamic> items) {
     return Container(
-        height: listHeight(),
+        height: listHeight,
         child: GridView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: items.length + (state.eof ? 0 : 1),
@@ -75,12 +75,12 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
             if (index == items.length) {
               BlocProvider.of<BlocType>(context).add(SectionBlocEventLoad(items.length));
               body = Container(
-                width: listItemWidth(),
+                width: listItemWidth,
                 child: ItemLoading(),
               );
             } else {
               body = Container(
-                width: listItemWidth(),
+                width: listItemWidth,
                 child: itemBuilder(context, items[index]),
               );
             }
@@ -93,7 +93,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
 
   Widget renderEmpty(BuildContext context) {
     return Container(
-      height: 100,
+      height: listHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,7 +116,7 @@ abstract class SectionPage<BlocType extends SectionBloc, ItemType> extends State
 
   Widget renderNotLogged(BuildContext context) {
     return Container(
-      height: 100,
+      height: listHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,9 +159,14 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
               empty = true;
             }
           });
+        } else if (state is SectionBlocStateClear) {
+          setState(() {
+            items.clear();
+          });
         }
       },
       child: BlocBuilder<BlocType, SectionBlocState>(
+        buildWhen: (SectionBlocState s1, SectionBlocState s2) => !(s2 is SectionBlocStateClear),
         builder: (BuildContext context, SectionBlocState state) {
           Widget body;
           if (state is SectionBlocStateNotLogged) {
@@ -170,7 +175,7 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
             if (empty) {
               body = widget.renderEmpty(context);
             } else if (items.length == 0) {
-              body = Container(height: widget.listHeight(), child: ItemLoading());
+              body = Container(height: widget.listHeight, child: ItemLoading());
             } else {
               body = widget.renderBody(context, state, items);
             }

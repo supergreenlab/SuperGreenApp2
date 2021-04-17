@@ -147,7 +147,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
 
   const FeedVentilationCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
       : super(key: key);
@@ -204,7 +204,7 @@ class FeedVentilationCardPage extends StatelessWidget {
               'assets/feed_card/icon_blower.svg', FeedVentilationCardPage.feedVentilationCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: cardActions != null ? cardActions(state) : []),
+          }, actions: cardActions != null ? cardActions(context, state) : []),
           body,
           SocialBarPage(
             state: state,

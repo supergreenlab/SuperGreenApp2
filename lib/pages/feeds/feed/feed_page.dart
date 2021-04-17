@@ -50,7 +50,7 @@ class FeedPage extends StatefulWidget {
   final List<Widget> actions;
   final Widget bottom;
   final bool single;
-  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
   final Function(bool hasCards) onLoaded;
   final bool elevate;
   final Color feedColor;

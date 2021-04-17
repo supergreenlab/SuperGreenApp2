@@ -102,6 +102,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
         plantSettings:
             feedEntryMap['plantSettings'] == null ? null : PlantSettings.fromJSON(feedEntryMap['plantSettings']),
         boxSettings: feedEntryMap['boxSettings'] == null ? null : BoxSettings.fromJSON(feedEntryMap['boxSettings']),
+        followed: feedEntryMap['followed'],
         showPlantInfos: false,
         isRemoteState: true,
         isBackedUp: true,

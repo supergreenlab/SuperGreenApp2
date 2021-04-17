@@ -85,7 +85,7 @@ class FeedNutrientMixCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
 
   const FeedNutrientMixCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
       : super(key: key);
@@ -115,7 +115,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               widget.state.synced,
               showSyncStatus: !widget.state.isRemoteState,
               showControls: !widget.state.isRemoteState,
-              actions: widget.cardActions != null ? widget.cardActions(widget.state) : []),
+              actions: widget.cardActions != null ? widget.cardActions(context, widget.state) : []),
           Container(
             height: 140,
             alignment: Alignment.center,

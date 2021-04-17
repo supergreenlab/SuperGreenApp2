@@ -40,9 +40,19 @@ class SectionBlocEventLoad extends SectionBlocEvent {
   List<Object> get props => [offset];
 }
 
+class SectionBlocEventReload extends SectionBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 abstract class SectionBlocState extends Equatable {}
 
 class SectionBlocStateInit extends SectionBlocState {
+  @override
+  List<Object> get props => [];
+}
+
+class SectionBlocStateClear extends SectionBlocState {
   @override
   List<Object> get props => [];
 }
@@ -81,6 +91,9 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
           return;
         }
       }
+      yield* loadItemsState(this.nItemsLoad, 0);
+    } else if (event is SectionBlocEventReload) {
+      yield SectionBlocStateClear();
       yield* loadItemsState(this.nItemsLoad, 0);
     } else if (event is SectionBlocEventLoad) {
       yield* loadItemsState(this.nItemsLoad, event.offset);

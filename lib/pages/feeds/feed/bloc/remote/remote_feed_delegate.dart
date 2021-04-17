@@ -103,6 +103,9 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
   }
 
   @override
+  Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {}
+
+  @override
   Future markAsRead(dynamic feedEntryID) async {}
 
   @override

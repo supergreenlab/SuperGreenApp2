@@ -33,12 +33,12 @@ import 'package:super_green_app/widgets/item_loading.dart';
 
 class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   @override
-  double listItemWidth() {
+  double get listItemWidth {
     return 250;
   }
 
   @override
-  double listHeight() {
+  double get listHeight {
     return 250;
   }
 
@@ -142,7 +142,7 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   @override
   Widget renderEmpty(BuildContext context) {
     return Container(
-      height: 100,
+      height: listHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -166,7 +166,7 @@ class FollowedPage extends SectionPage<FollowedBloc, PublicPlant> {
   @override
   Widget renderNotLogged(BuildContext context) {
     return Container(
-      height: 100,
+      height: listHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

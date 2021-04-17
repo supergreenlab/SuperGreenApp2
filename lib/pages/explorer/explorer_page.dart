@@ -24,6 +24,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
@@ -192,12 +193,40 @@ class _ExplorerPageState extends State<ExplorerPage> {
                   showSearchField = newShowSearchField;
                 });
               },
-              cardActions: (FeedEntryState state) {
+              cardActions: (BuildContext context, FeedEntryState state) {
                 return [
+                  state.followed == false
+                      ? InkWell(
+                          highlightColor: Colors.transparent,
+                          onTap: () {
+                            if (BackendAPI().usersAPI.loggedIn) {
+                              BlocProvider.of<FeedBloc>(context).add(ExplorerFeedBlocDelegateFollowEvent(state));
+                            } else {
+                              _login(context);
+                            }
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: Color(0xff3bb30b),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                                  child: Text('Follow', style: TextStyle(color: Colors.white)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Text('Followed', style: TextStyle(color: Color(0xff3bb30b))),
                   IconButton(
                     icon: Text(
                       'Open plant',
                       style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
                     onPressed: () {
                       BlocProvider.of<MainNavigatorBloc>(context)

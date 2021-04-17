@@ -81,7 +81,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
             this.hasCards = hasCards;
           });
         },
-        cardActions: (FeedEntryState state) {
+        cardActions: (BuildContext context, FeedEntryState state) {
           return [
             IconButton(
               icon: Text(
