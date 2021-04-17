@@ -38,6 +38,16 @@ class FeedCardDate extends StatefulWidget {
 
   const FeedCardDate(this.feedEntryState, this.feedState);
 
+  // TODO there is a problem with accessing plantSettings on multi-plant feeds, will be worst with box cards
+  PlantSettings get plantSettings {
+    if (feedState is PlantFeedState) {
+      PlantFeedState plantFeedState = feedState;
+      return plantFeedState.plantSettings;
+    } else {
+      return feedEntryState.plantSettings;
+    }
+  }
+
   @override
   _FeedCardDateState createState() => _FeedCardDateState();
 }
@@ -47,18 +57,12 @@ class _FeedCardDateState extends State<FeedCardDate> {
 
   @override
   Widget build(BuildContext context) {
-    String format = [
-      renderAbsoluteDate,
-      renderSinceNow,
-      renderSincePhase,
-      renderSinceGermination
-    ][display.index]();
+    String format = [renderAbsoluteDate, renderSinceNow, renderSincePhase, renderSinceGermination][display.index]();
     return InkWell(
         onTap: () {
           int index = FeedCardDateDisplay.values.indexOf(display);
           index = (index + 1) % FeedCardDateDisplay.values.length;
-          if (FeedCardDateDisplay.values[index] ==
-                  FeedCardDateDisplay.SINCE_PHASE &&
+          if (FeedCardDateDisplay.values[index] == FeedCardDateDisplay.SINCE_PHASE &&
               !(widget.feedState is PlantFeedState)) {
             index = (index + 1) % FeedCardDateDisplay.values.length;
           }
@@ -76,8 +80,7 @@ class _FeedCardDateState extends State<FeedCardDate> {
   }
 
   String renderAbsoluteDate() {
-    String format =
-        AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     DateFormat f = DateFormat(format);
     return f.format(widget.feedEntryState.date);
   }
@@ -88,33 +91,27 @@ class _FeedCardDateState extends State<FeedCardDate> {
   }
 
   String renderSincePhase() {
-    PlantFeedState plantFeedState = widget.feedState;
-    Tuple3<PlantPhases, DateTime, Duration> phaseData =
-        plantFeedState.plantSettings.phaseAt(widget.feedEntryState.date);
+    PlantSettings plantSettings = widget.plantSettings;
+
+    Tuple3<PlantPhases, DateTime, Duration> phaseData = plantSettings.phaseAt(widget.feedEntryState.date);
     if (phaseData == null) {
       return 'Life events not set.';
     }
     List<String Function(Duration)> phases = [
       (Duration diff) => 'Germinated ${renderDuration(phaseData.item3)}',
-      (Duration diff) =>
-          'Vegging for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) =>
-          'Blooming for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) =>
-          'Drying for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) =>
-          'Curing for ${renderDuration(phaseData.item3, suffix: '')}'
+      (Duration diff) => 'Vegging for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) => 'Blooming for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) => 'Drying for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) => 'Curing for ${renderDuration(phaseData.item3, suffix: '')}'
     ];
     return phases[phaseData.item1.index](phaseData.item3);
   }
 
   String renderSinceGermination() {
-    PlantFeedState plantFeedState = widget.feedState;
-    if (plantFeedState.plantSettings.germinationDate == null) {
+    if (widget.plantSettings.germinationDate == null) {
       return 'Germination date not set.';
     }
-    Duration diff = widget.feedEntryState.date
-        .difference(plantFeedState.plantSettings.germinationDate);
+    Duration diff = widget.feedEntryState.date.difference(widget.plantSettings.germinationDate);
     return 'Germinated ${renderDuration(diff)}';
   }
 

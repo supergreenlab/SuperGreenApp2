@@ -95,7 +95,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
             showControls: !state.isRemoteState,
             title2: widget.state.showPlantInfos ? widget.state.plantName : null,
           ),
-          state.showPlantInfos
+          state.showPlantInfos // TODO this is wrong, will make problems with box feed cards
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
