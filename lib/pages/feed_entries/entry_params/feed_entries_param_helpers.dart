@@ -24,6 +24,7 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart'
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_schedule.dart';
+import 'package:super_green_app/pages/feed_entries/entry_params/feed_timelapse.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_towelie_info.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_unknown.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
@@ -46,6 +47,7 @@ abstract class FeedEntriesParamHelpers {
     'FE_PRODUCTS': (json) => FeedProductsParams.fromJSON(json),
     'FE_LIFE_EVENT': (json) => FeedLifeEventParams.fromJSON(json),
     'FE_NUTRIENT_MIX': (json) => FeedNutrientMixParams.fromJSON(json),
+    'FE_TIMELAPSE': (json) => FeedTimelapseParams.fromJSON(json),
   };
 
   static dynamic paramForFeedEntryType(String type, String json) {

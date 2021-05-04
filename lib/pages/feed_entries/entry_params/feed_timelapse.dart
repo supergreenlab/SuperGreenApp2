@@ -20,25 +20,19 @@ import 'dart:convert';
 
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
-class FeedMediaParams extends FeedEntryParams {
-  final String message;
-  final bool helpRequest;
-  final bool boxFeed;
+class FeedTimelapseParams extends FeedEntryParams {
+  FeedTimelapseParams();
 
-  FeedMediaParams(this.message, this.helpRequest, {this.boxFeed = false});
-
-  FeedMediaParams copyWith(String message) => FeedMediaParams(message, this.helpRequest, boxFeed: boxFeed);
-
-  factory FeedMediaParams.fromJSON(String json) {
-    Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedMediaParams(map['message'], map['helpRequest'], boxFeed: map['boxFeed']);
+  factory FeedTimelapseParams.fromJSON(String json) {
+    //Map<String, dynamic> map = JsonDecoder().convert(json);
+    return FeedTimelapseParams();
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert({'message': message, 'helpRequest': helpRequest, 'boxFeed': boxFeed});
+    return JsonEncoder().convert({});
   }
 
   @override
-  List<Object> get props => [message, helpRequest, boxFeed];
+  List<Object> get props => [];
 }

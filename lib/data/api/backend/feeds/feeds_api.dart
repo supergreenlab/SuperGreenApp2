@@ -236,7 +236,7 @@ class FeedsAPI {
       // TODO check video files length in capture page (max 200mB, cloudflare limit)
       if (file.lengthSync() >= 199 * 1024 * 1024) {
         Logger.log('Ignoring feed medias sync: file too large (${file.lengthSync() / (1024 * 1024)} MB)');
-        return;
+        return; // TODO continue with thumbnail upload
       }
       if (await file.exists()) {
         Response resp = await BackendAPI().storageClient.put(

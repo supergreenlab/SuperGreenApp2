@@ -36,6 +36,8 @@ import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_ca
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
+import 'feed_timelapse/card/feed_timelapse_card_page.dart';
+
 class FeedEntriesCardHelpers {
   static Map<
       String,
@@ -71,6 +73,8 @@ class FeedEntriesCardHelpers {
         FeedLifeEventCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_NUTRIENT_MIX': (animation, feedState, state, {cardActions}) =>
         FeedNutrientMixCardPage(animation, feedState, state, cardActions: cardActions),
+    'FE_TIMELAPSE': (animation, feedState, state, {cardActions}) =>
+        FeedTimelapseCardPage(animation, feedState, state, cardActions: cardActions),
   };
 
   static Widget cardForFeedEntry(Animation animation, FeedState feedState, FeedEntryState state,
