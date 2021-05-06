@@ -2493,6 +2493,8 @@ class $ChartCachesTable extends ChartCaches
 class Timelapse extends DataClass implements Insertable<Timelapse> {
   final int id;
   final int plant;
+  final String type;
+  final String settings;
   final String ssid;
   final String password;
   final String controllerID;
@@ -2506,6 +2508,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   Timelapse(
       {@required this.id,
       @required this.plant,
+      @required this.type,
+      @required this.settings,
       this.ssid,
       this.password,
       this.controllerID,
@@ -2525,6 +2529,9 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     return Timelapse(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       plant: intType.mapFromDatabaseResponse(data['${effectivePrefix}plant']),
+      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      settings: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
       ssid: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
       password: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}password']),
@@ -2553,6 +2560,12 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     }
     if (!nullToAbsent || plant != null) {
       map['plant'] = Variable<int>(plant);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    if (!nullToAbsent || settings != null) {
+      map['settings'] = Variable<String>(settings);
     }
     if (!nullToAbsent || ssid != null) {
       map['ssid'] = Variable<String>(ssid);
@@ -2592,6 +2605,10 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       plant:
           plant == null && nullToAbsent ? const Value.absent() : Value(plant),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      settings: settings == null && nullToAbsent
+          ? const Value.absent()
+          : Value(settings),
       ssid: ssid == null && nullToAbsent ? const Value.absent() : Value(ssid),
       password: password == null && nullToAbsent
           ? const Value.absent()
@@ -2624,6 +2641,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     return Timelapse(
       id: serializer.fromJson<int>(json['id']),
       plant: serializer.fromJson<int>(json['plant']),
+      type: serializer.fromJson<String>(json['type']),
+      settings: serializer.fromJson<String>(json['settings']),
       ssid: serializer.fromJson<String>(json['ssid']),
       password: serializer.fromJson<String>(json['password']),
       controllerID: serializer.fromJson<String>(json['controllerID']),
@@ -2642,6 +2661,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'plant': serializer.toJson<int>(plant),
+      'type': serializer.toJson<String>(type),
+      'settings': serializer.toJson<String>(settings),
       'ssid': serializer.toJson<String>(ssid),
       'password': serializer.toJson<String>(password),
       'controllerID': serializer.toJson<String>(controllerID),
@@ -2658,6 +2679,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   Timelapse copyWith(
           {int id,
           int plant,
+          String type,
+          String settings,
           String ssid,
           String password,
           String controllerID,
@@ -2671,6 +2694,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       Timelapse(
         id: id ?? this.id,
         plant: plant ?? this.plant,
+        type: type ?? this.type,
+        settings: settings ?? this.settings,
         ssid: ssid ?? this.ssid,
         password: password ?? this.password,
         controllerID: controllerID ?? this.controllerID,
@@ -2687,6 +2712,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
     return (StringBuffer('Timelapse(')
           ..write('id: $id, ')
           ..write('plant: $plant, ')
+          ..write('type: $type, ')
+          ..write('settings: $settings, ')
           ..write('ssid: $ssid, ')
           ..write('password: $password, ')
           ..write('controllerID: $controllerID, ')
@@ -2707,29 +2734,37 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       $mrjc(
           plant.hashCode,
           $mrjc(
-              ssid.hashCode,
+              type.hashCode,
               $mrjc(
-                  password.hashCode,
+                  settings.hashCode,
                   $mrjc(
-                      controllerID.hashCode,
+                      ssid.hashCode,
                       $mrjc(
-                          rotate.hashCode,
+                          password.hashCode,
                           $mrjc(
-                              name.hashCode,
+                              controllerID.hashCode,
                               $mrjc(
-                                  strain.hashCode,
+                                  rotate.hashCode,
                                   $mrjc(
-                                      dropboxToken.hashCode,
+                                      name.hashCode,
                                       $mrjc(
-                                          uploadName.hashCode,
-                                          $mrjc(serverID.hashCode,
-                                              synced.hashCode))))))))))));
+                                          strain.hashCode,
+                                          $mrjc(
+                                              dropboxToken.hashCode,
+                                              $mrjc(
+                                                  uploadName.hashCode,
+                                                  $mrjc(
+                                                      serverID.hashCode,
+                                                      synced
+                                                          .hashCode))))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Timelapse &&
           other.id == this.id &&
           other.plant == this.plant &&
+          other.type == this.type &&
+          other.settings == this.settings &&
           other.ssid == this.ssid &&
           other.password == this.password &&
           other.controllerID == this.controllerID &&
@@ -2745,6 +2780,8 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
 class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   final Value<int> id;
   final Value<int> plant;
+  final Value<String> type;
+  final Value<String> settings;
   final Value<String> ssid;
   final Value<String> password;
   final Value<String> controllerID;
@@ -2758,6 +2795,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   const TimelapsesCompanion({
     this.id = const Value.absent(),
     this.plant = const Value.absent(),
+    this.type = const Value.absent(),
+    this.settings = const Value.absent(),
     this.ssid = const Value.absent(),
     this.password = const Value.absent(),
     this.controllerID = const Value.absent(),
@@ -2772,6 +2811,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   TimelapsesCompanion.insert({
     this.id = const Value.absent(),
     @required int plant,
+    @required String type,
+    this.settings = const Value.absent(),
     this.ssid = const Value.absent(),
     this.password = const Value.absent(),
     this.controllerID = const Value.absent(),
@@ -2782,10 +2823,13 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     this.uploadName = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
-  }) : plant = Value(plant);
+  })  : plant = Value(plant),
+        type = Value(type);
   static Insertable<Timelapse> custom({
     Expression<int> id,
     Expression<int> plant,
+    Expression<String> type,
+    Expression<String> settings,
     Expression<String> ssid,
     Expression<String> password,
     Expression<String> controllerID,
@@ -2800,6 +2844,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (plant != null) 'plant': plant,
+      if (type != null) 'type': type,
+      if (settings != null) 'settings': settings,
       if (ssid != null) 'ssid': ssid,
       if (password != null) 'password': password,
       if (controllerID != null) 'controller_i_d': controllerID,
@@ -2816,6 +2862,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   TimelapsesCompanion copyWith(
       {Value<int> id,
       Value<int> plant,
+      Value<String> type,
+      Value<String> settings,
       Value<String> ssid,
       Value<String> password,
       Value<String> controllerID,
@@ -2829,6 +2877,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     return TimelapsesCompanion(
       id: id ?? this.id,
       plant: plant ?? this.plant,
+      type: type ?? this.type,
+      settings: settings ?? this.settings,
       ssid: ssid ?? this.ssid,
       password: password ?? this.password,
       controllerID: controllerID ?? this.controllerID,
@@ -2850,6 +2900,12 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     }
     if (plant.present) {
       map['plant'] = Variable<int>(plant.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (settings.present) {
+      map['settings'] = Variable<String>(settings.value);
     }
     if (ssid.present) {
       map['ssid'] = Variable<String>(ssid.value);
@@ -2889,6 +2945,8 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     return (StringBuffer('TimelapsesCompanion(')
           ..write('id: $id, ')
           ..write('plant: $plant, ')
+          ..write('type: $type, ')
+          ..write('settings: $settings, ')
           ..write('ssid: $ssid, ')
           ..write('password: $password, ')
           ..write('controllerID: $controllerID, ')
@@ -2928,6 +2986,24 @@ class $TimelapsesTable extends Timelapses
       $tableName,
       false,
     );
+  }
+
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  GeneratedTextColumn _type;
+  @override
+  GeneratedTextColumn get type => _type ??= _constructType();
+  GeneratedTextColumn _constructType() {
+    return GeneratedTextColumn('type', $tableName, false,
+        minTextLength: 1, maxTextLength: 32);
+  }
+
+  final VerificationMeta _settingsMeta = const VerificationMeta('settings');
+  GeneratedTextColumn _settings;
+  @override
+  GeneratedTextColumn get settings => _settings ??= _constructSettings();
+  GeneratedTextColumn _constructSettings() {
+    return GeneratedTextColumn('settings', $tableName, false,
+        defaultValue: Constant('{}'));
   }
 
   final VerificationMeta _ssidMeta = const VerificationMeta('ssid');
@@ -3028,6 +3104,8 @@ class $TimelapsesTable extends Timelapses
   List<GeneratedColumn> get $columns => [
         id,
         plant,
+        type,
+        settings,
         ssid,
         password,
         controllerID,
@@ -3058,6 +3136,16 @@ class $TimelapsesTable extends Timelapses
           _plantMeta, plant.isAcceptableOrUnknown(data['plant'], _plantMeta));
     } else if (isInserting) {
       context.missing(_plantMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('settings')) {
+      context.handle(_settingsMeta,
+          settings.isAcceptableOrUnknown(data['settings'], _settingsMeta));
     }
     if (data.containsKey('ssid')) {
       context.handle(

@@ -168,6 +168,10 @@ class DeletedTimelapsesCompanion extends TimelapsesCompanion {
 class Timelapses extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get plant => integer()();
+
+  TextColumn get type => text().withLength(min: 1, max: 32)();
+  TextColumn get settings => text().withDefault(Constant('{}'))();
+
   TextColumn get ssid => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get password => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get controllerID => text().withLength(min: 1, max: 64).nullable()();
@@ -344,6 +348,10 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
 
   Future<List<Timelapse>> getTimelapses(int plantID) {
     return (select(timelapses)..where((t) => t.plant.equals(plantID))).get();
+  }
+
+  Future<List<Timelapse>> getAllTimelapses() {
+    return select(timelapses).get();
   }
 
   Future<Timelapse> getTimelapse(int timelapseID) {

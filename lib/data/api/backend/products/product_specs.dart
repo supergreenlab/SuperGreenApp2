@@ -38,8 +38,7 @@ import 'package:super_green_app/data/api/backend/products/specs/ventilation_spec
 abstract class ProductSpecs extends Equatable {
   ProductSpecs();
 
-  factory ProductSpecs.fromMap(
-      ProductCategoryID categoryID, Map<String, dynamic> map) {
+  factory ProductSpecs.fromMap(ProductCategoryID categoryID, Map<String, dynamic> map) {
     return productSpecsBuilders[categoryID].fromMap(map);
   }
 

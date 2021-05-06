@@ -25,6 +25,8 @@ import 'package:moor/moor.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:super_green_app/data/api/backend/plants/timelapse/dropbox.dart';
+import 'package:super_green_app/data/api/backend/plants/timelapse/timelapse_settings.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/common/deletes.dart';
 import 'package:super_green_app/data/rel/plant/plants.dart';
@@ -77,7 +79,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -117,6 +119,9 @@ class RelDB extends _$RelDB {
     } else if (fromVersion == 10) {
       await m.drop(chartCaches);
       await m.createTable(chartCaches);
+    } else if (fromVersion == 11) {
+      await m.addColumn(timelapses, timelapses.type);
+      await m.addColumn(timelapses, timelapses.settings);
     }
   }
 
@@ -217,6 +222,22 @@ class RelDB extends _$RelDB {
         } catch (e) {
           print(e);
         }
+      }
+    } else if (fromVersion == 11) {
+      List<Timelapse> timelapses = await plantsDAO.getAllTimelapses();
+      for (int i = 0; i < timelapses.length; ++i) {
+        Timelapse timelapse = timelapses[i];
+        TimelapseSettings meta = DropboxMeta(
+          ssid: timelapse.ssid,
+          password: timelapse.password,
+          controllerID: timelapse.controllerID,
+          rotate: timelapse.rotate,
+          name: timelapse.rotate,
+          strain: timelapse.strain,
+          dropboxToken: timelapse.dropboxToken,
+          uploadName: timelapse.uploadName,
+        );
+        await plantsDAO.updateTimelapse(timelapse.toCompanion(true).copyWith(settings: Value(meta.toJSON())));
       }
     }
   }

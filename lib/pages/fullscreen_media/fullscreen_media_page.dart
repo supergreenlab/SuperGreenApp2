@@ -120,8 +120,13 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
   }
 
   Widget _renderVideoPlayer(BuildContext context, FullscreenMediaBlocState state, BoxConstraints constraints) {
-    double width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
-    double height = constraints.maxHeight;
+    double width = constraints.maxWidth;
+    double height = constraints.maxWidth / _videoPlayerController.value.aspectRatio;
+    double ratio = constraints.maxWidth / constraints.maxHeight;
+    if (_videoPlayerController.value.aspectRatio < ratio) {
+      width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
+      height = constraints.maxHeight;
+    }
     return Stack(children: [
       Positioned(
           left: (constraints.maxWidth - width) / 2,
