@@ -169,7 +169,7 @@ class Timelapses extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get plant => integer()();
 
-  TextColumn get type => text().withLength(min: 1, max: 32)();
+  TextColumn get type => text().withDefault(Constant('dropbox')).withLength(min: 1, max: 32)();
   TextColumn get settings => text().withDefault(Constant('{}'))();
 
   // TODO: remove those fields
