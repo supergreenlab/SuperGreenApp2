@@ -22,24 +22,14 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
         cubit: BlocProvider.of<TimelapseViewerBloc>(context),
         builder: (BuildContext context, TimelapseViewerBlocState state) {
           Widget body;
-          List<Widget> actions;
           if (state is TimelapseViewerBlocStateLoading) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TimelapseViewerBlocStateLoaded) {
             body = _renderTimelapses(context, state);
-            actions = [
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTimelapseSetup(state.plant));
-                },
-              ),
-            ];
           }
           return Scaffold(
               appBar: SGLAppBar(
                 'Timelapses',
-                actions: actions,
               ),
               backgroundColor: Colors.white,
               body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
@@ -112,29 +102,6 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                 onPressed: () {
                   launch('https://www.supergreenlab.com');
                 },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FlatButton(
-                  onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToTimelapseSetup(state.plant, pushAsReplacement: true));
-                  },
-                  child: Text(
-                    'ADD A NEW ONE',
-                    style: TextStyle(color: Colors.blue, fontSize: 22),
-                  ),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToTimelapseConnect(state.plant, pushAsReplacement: true));
-                },
-                child: Text(
-                  'CONNECT ONE',
-                  style: TextStyle(color: Colors.blue, fontSize: 20),
-                ),
               ),
             ],
           ),

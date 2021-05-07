@@ -122,6 +122,41 @@ class FeedsAPI {
     return data;
   }
 
+  Future<Map<String, dynamic>> fetchLatestTimelapseFrame(String timelapseID) async {
+    Response resp =
+        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/timelapse/$timelapseID/latest', headers: {
+      'Content-Type': 'application/json',
+      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+    });
+    if (resp.statusCode ~/ 100 != 2) {
+      Logger.throwError('fetchLatestTimelapseFrame failed: ${resp.body}', data: {"timelapseID": timelapseID});
+    }
+    Map<String, dynamic> data = JsonDecoder().convert(resp.body);
+    return data;
+  }
+
+  Future<Uint8List> sglOverlay(Box box, Plant plant, Map<String, dynamic> meta, String url) async {
+    Map<String, dynamic> params = {
+      "box": await Boxes.toMap(box),
+      "plant": await Plants.toMap(plant),
+      "meta": meta,
+      "url": url,
+      "host": BackendAPI().storageServerHostHeader,
+    };
+    Response resp = await BackendAPI().apiClient.post(
+          '${BackendAPI().serverHost}/sgloverlay',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+          },
+          body: JsonEncoder().convert(params),
+        );
+    if (resp.statusCode ~/ 100 != 2) {
+      Logger.throwError('sglOverlay failed: ${resp.body}', data: params);
+    }
+    return resp.bodyBytes;
+  }
+
   Future<int> fetchCommentCountForFeedEntry(String feedEntryID) async {
     Response resp = await BackendAPI()
         .apiClient

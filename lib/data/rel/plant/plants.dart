@@ -172,6 +172,7 @@ class Timelapses extends Table {
   TextColumn get type => text().withLength(min: 1, max: 32)();
   TextColumn get settings => text().withDefault(Constant('{}'))();
 
+  // TODO: remove those fields
   TextColumn get ssid => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get password => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get controllerID => text().withLength(min: 1, max: 64).nullable()();
@@ -180,6 +181,7 @@ class Timelapses extends Table {
   TextColumn get strain => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get dropboxToken => text().withLength(min: 1, max: 64).nullable()();
   TextColumn get uploadName => text().withLength(min: 1, max: 64).nullable()();
+  // /TODO
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
@@ -191,12 +193,8 @@ class Timelapses extends Table {
     Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
         plant: Value(plant.id),
-        controllerID: map['controllerID']?.isEmpty ?? true ? Value.absent() : Value(map['controllerID'] as String),
-        rotate: map['rotate']?.isEmpty ?? true ? Value.absent() : Value(map['rotate'] as String),
-        name: map['name']?.isEmpty ?? true ? Value.absent() : Value(map['name'] as String),
-        strain: map['strain']?.isEmpty ?? true ? Value.absent() : Value(map['strain'] as String),
-        dropboxToken: map['dropboxToken']?.isEmpty ?? true ? Value.absent() : Value(map['dropboxToken'] as String),
-        uploadName: map['uploadName']?.isEmpty ?? true ? Value.absent() : Value(map['uploadName'] as String),
+        type: Value(map['type']),
+        settings: Value(map['settings']),
         synced: Value(true),
         serverID: Value(map['id'] as String));
   }
@@ -209,12 +207,8 @@ class Timelapses extends Table {
     return {
       'id': timelapse.serverID,
       'plantID': plant.serverID,
-      'controllerID': timelapse.controllerID,
-      'rotate': timelapse.rotate,
-      'name': timelapse.name,
-      'strain': timelapse.strain,
-      'dropboxToken': timelapse.dropboxToken,
-      'uploadName': timelapse.uploadName,
+      'type': timelapse.type,
+      'settings': timelapse.settings,
     };
   }
 }

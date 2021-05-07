@@ -136,12 +136,6 @@ import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_page.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_page.dart';
-import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_bloc.dart';
-import 'package:super_green_app/pages/timelapse/timelapse_connect/timelapse_connect_page.dart';
-import 'package:super_green_app/pages/timelapse/timelapse_howto/timelapse_howto_bloc.dart';
-import 'package:super_green_app/pages/timelapse/timelapse_howto/timelapse_howto_page.dart';
-import 'package:super_green_app/pages/timelapse/timelapse_setup/timelapse_setup_bloc.dart';
-import 'package:super_green_app/pages/timelapse/timelapse_setup/timelapse_setup_page.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_bloc.dart';
 import 'package:super_green_app/pages/timelapse/timelapse_viewer/timelapse_viewer_page.dart';
 import 'package:super_green_app/pages/tip/tip_bloc.dart';
@@ -463,21 +457,6 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => FullscreenPictureBloc(settings.arguments),
           child: FullscreenPicturePage(),
-        );
-      case '/timelapse/howto':
-        return BlocProvider(
-          create: (context) => TimelapseHowtoBloc(settings.arguments),
-          child: TimelapseHowtoPage(),
-        );
-      case '/timelapse/setup':
-        return BlocProvider(
-          create: (context) => TimelapseSetupBloc(settings.arguments),
-          child: TimelapseSetupPage(),
-        );
-      case '/timelapse/connect':
-        return BlocProvider(
-          create: (context) => TimelapseConnectBloc(settings.arguments),
-          child: TimelapseConnectPage(),
         );
       case '/timelapse/viewer':
         return BlocProvider(
