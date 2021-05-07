@@ -232,7 +232,7 @@ class RelDB extends _$RelDB {
           password: timelapse.password,
           controllerID: timelapse.controllerID,
           rotate: timelapse.rotate,
-          name: timelapse.rotate,
+          name: timelapse.name,
           strain: timelapse.strain,
           dropboxToken: timelapse.dropboxToken,
           uploadName: timelapse.uploadName,

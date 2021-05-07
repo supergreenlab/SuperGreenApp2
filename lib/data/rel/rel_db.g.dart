@@ -2811,7 +2811,7 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   TimelapsesCompanion.insert({
     this.id = const Value.absent(),
     @required int plant,
-    @required String type,
+    this.type = const Value.absent(),
     this.settings = const Value.absent(),
     this.ssid = const Value.absent(),
     this.password = const Value.absent(),
@@ -2823,8 +2823,7 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     this.uploadName = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
-  })  : plant = Value(plant),
-        type = Value(type);
+  }) : plant = Value(plant);
   static Insertable<Timelapse> custom({
     Expression<int> id,
     Expression<int> plant,
@@ -2994,7 +2993,7 @@ class $TimelapsesTable extends Timelapses
   GeneratedTextColumn get type => _type ??= _constructType();
   GeneratedTextColumn _constructType() {
     return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
+        minTextLength: 1, maxTextLength: 32, defaultValue: Constant('dropbox'));
   }
 
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
@@ -3140,8 +3139,6 @@ class $TimelapsesTable extends Timelapses
     if (data.containsKey('type')) {
       context.handle(
           _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
     }
     if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
