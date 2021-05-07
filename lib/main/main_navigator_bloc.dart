@@ -355,33 +355,6 @@ class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
   List<Object> get props => [id, image];
 }
 
-class MainNavigateToTimelapseHowto extends MainNavigateToFeedFormEvent {
-  final Plant plant;
-
-  MainNavigateToTimelapseHowto(this.plant, {pushAsReplacement = false}) : super(pushAsReplacement);
-
-  @override
-  List<Object> get props => [plant];
-}
-
-class MainNavigateToTimelapseSetup extends MainNavigateToFeedFormEvent {
-  final Plant plant;
-
-  MainNavigateToTimelapseSetup(this.plant, {pushAsReplacement = false}) : super(pushAsReplacement);
-
-  @override
-  List<Object> get props => [plant];
-}
-
-class MainNavigateToTimelapseConnect extends MainNavigateToFeedFormEvent {
-  final Plant plant;
-
-  MainNavigateToTimelapseConnect(this.plant, {pushAsReplacement = false}) : super(pushAsReplacement);
-
-  @override
-  List<Object> get props => [plant];
-}
-
 class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
   final Plant plant;
 
@@ -676,12 +649,6 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState.pushNamed('/media', arguments: event);
     } else if (event is MainNavigateToFullscreenPicture) {
       future = _navigatorKey.currentState.pushNamed('/picture', arguments: event);
-    } else if (event is MainNavigateToTimelapseHowto) {
-      future = _pushOrReplace('/timelapse/howto', event);
-    } else if (event is MainNavigateToTimelapseSetup) {
-      future = _pushOrReplace('/timelapse/setup', event);
-    } else if (event is MainNavigateToTimelapseConnect) {
-      future = _pushOrReplace('/timelapse/connect', event);
     } else if (event is MainNavigateToTimelapseViewer) {
       future = _pushOrReplace('/timelapse/viewer', event);
     } else if (event is MainNavigateToSettingsAuth) {

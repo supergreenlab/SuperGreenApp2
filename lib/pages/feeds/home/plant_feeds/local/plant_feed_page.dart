@@ -634,11 +634,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           icon: Icon(Icons.remove_red_eye),
           tooltip: 'View live cams',
           onPressed: () {
-            if (state.nTimelapses == 0) {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTimelapseHowto(state.plant));
-            } else {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTimelapseViewer(state.plant));
-            }
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTimelapseViewer(state.plant));
           },
         ),
       ];
