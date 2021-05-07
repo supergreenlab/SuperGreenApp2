@@ -9,9 +9,9 @@ abstract class TimelapseSettings extends Equatable {
 
   factory TimelapseSettings.fromMap(String type, Map<String, dynamic> map) {
     if (type == "dropbox") {
-      return DropboxMeta.fromMap(map);
+      return DropboxSettings.fromMap(map);
     } else if (type == "sglstorage") {
-      return SGLStorageMeta.fromMap(map);
+      return SGLStorageSettings.fromMap(map);
     }
     throw 'Unknown type $type';
   }

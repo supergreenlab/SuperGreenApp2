@@ -18,7 +18,7 @@
 
 import 'package:super_green_app/data/api/backend/plants/timelapse/timelapse_settings.dart';
 
-class DropboxMeta extends TimelapseSettings {
+class DropboxSettings extends TimelapseSettings {
   final String ssid;
   final String password;
   final String controllerID;
@@ -28,7 +28,7 @@ class DropboxMeta extends TimelapseSettings {
   final String dropboxToken;
   final String uploadName;
 
-  DropboxMeta(
+  DropboxSettings(
       {this.ssid,
       this.password,
       this.controllerID,
@@ -50,8 +50,8 @@ class DropboxMeta extends TimelapseSettings {
         uploadName,
       ];
 
-  factory DropboxMeta.fromMap(Map<String, dynamic> map) {
-    return DropboxMeta(
+  factory DropboxSettings.fromMap(Map<String, dynamic> map) {
+    return DropboxSettings(
       ssid: map['ssid'],
       password: map['password'],
       controllerID: map['controllerID'],

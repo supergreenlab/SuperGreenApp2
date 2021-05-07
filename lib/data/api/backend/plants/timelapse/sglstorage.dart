@@ -18,11 +18,11 @@
 
 import 'package:super_green_app/data/api/backend/plants/timelapse/timelapse_settings.dart';
 
-class SGLStorageMeta extends TimelapseSettings {
-  SGLStorageMeta();
+class SGLStorageSettings extends TimelapseSettings {
+  SGLStorageSettings();
 
-  factory SGLStorageMeta.fromMap(Map<String, dynamic> map) {
-    return SGLStorageMeta();
+  factory SGLStorageSettings.fromMap(Map<String, dynamic> map) {
+    return SGLStorageSettings();
   }
 
   @override

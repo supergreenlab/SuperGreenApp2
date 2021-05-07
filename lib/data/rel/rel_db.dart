@@ -227,7 +227,7 @@ class RelDB extends _$RelDB {
       List<Timelapse> timelapses = await plantsDAO.getAllTimelapses();
       for (int i = 0; i < timelapses.length; ++i) {
         Timelapse timelapse = timelapses[i];
-        TimelapseSettings meta = DropboxMeta(
+        TimelapseSettings meta = DropboxSettings(
           ssid: timelapse.ssid,
           password: timelapse.password,
           controllerID: timelapse.controllerID,

@@ -25,11 +25,18 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
           if (state is TimelapseViewerBlocStateLoading) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TimelapseViewerBlocStateLoaded) {
-            body = _renderTimelapses(context, state);
+            if (state.timelapses.length != 0) {
+              body = _renderTimelapses(context, state);
+            } else {
+              body = _renderEmpty(context, state);
+            }
           }
           return Scaffold(
               appBar: SGLAppBar(
-                'Timelapses',
+                'Live cam 🎥',
+                backgroundColor: Color(0xff063047),
+                titleColor: Colors.white,
+                iconColor: Colors.white,
               ),
               backgroundColor: Colors.white,
               body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
@@ -44,57 +51,94 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
           return _renderAdd(context, state);
         }
         return InkWell(
-          onTap: () {
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToFullscreenPicture(state.timelapses[index].id, state.images[index]));
-          },
-          onLongPress: () {
-            _deleteTimelapse(context, state.timelapses[index]);
-          },
-          child: SizedBox(
-              height: 300,
-              child: Stack(children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Center(
-                        child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: CircularProgressIndicator(
-                            strokeWidth: 4.0,
+            onTap: () {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToFullscreenPicture(state.timelapses[index].id, state.images[index]));
+            },
+            onLongPress: () {
+              _deleteTimelapse(context, state.timelapses[index]);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                height: 300,
+                child: Stack(children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Center(
+                          child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 4.0,
+                            ),
                           ),
-                        ),
-                        Text('Pictures are uploaded every 10min,\nPlease wait..',
-                            textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
-                      ],
-                    ))
-                  ],
-                ),
-                Center(
-                  child: Image.memory(
-                    state.images[index],
-                    fit: BoxFit.contain,
+                          Text('Pictures are uploaded every 10min,\nPlease wait..',
+                              textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+                        ],
+                      ))
+                    ],
                   ),
-                ),
-              ])),
-        );
+                  Center(
+                    child: Container(
+                        decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(7)),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.memory(
+                          state.images[index],
+                          fit: BoxFit.contain,
+                        )),
+                  ),
+                ]),
+              ),
+            ));
       },
     );
   }
 
   Widget _renderAdd(BuildContext context, TimelapseViewerBlocStateLoaded state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24),
+                    child: MarkdownBody(
+                        data: 'Want another one?',
+                        styleSheet: MarkdownStyleSheet(
+                            textAlign: WrapAlignment.center, p: TextStyle(fontSize: 22, color: Colors.black)))),
+                GreenButton(
+                  title: 'SHOP NOW',
+                  onPressed: () {
+                    launch('https://www.supergreenlab.com');
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderEmpty(BuildContext context, TimelapseViewerBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Center(
           child: Column(
             children: <Widget>[
+              Text("🎥", style: TextStyle(fontSize: 90)),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24),
                   child: MarkdownBody(
-                      data: 'Want another one?\n**Support us** by using this **link** ❤️',
+                      data:
+                          '**Keep an eye on your grow**, setup a **live cam**! The system will post **daily and weekly timelapses** of your plants in the feed. Timelapse videos are a **very efficient** way to **spot problems before they appear**.',
                       styleSheet: MarkdownStyleSheet(
                           textAlign: WrapAlignment.center, p: TextStyle(fontSize: 22, color: Colors.black)))),
               GreenButton(

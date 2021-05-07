@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
+import 'package:super_green_app/data/api/backend/plants/timelapse/dropbox.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -72,18 +73,24 @@ class TimelapseViewerBloc extends Bloc<TimelapseViewerBlocEvent, TimelapseViewer
     List<Timelapse> timelapses = await RelDB.get().plantsDAO.getTimelapses(args.plant.id);
     List<Uint8List> pictures = [];
     for (int i = 0; i < timelapses.length; ++i) {
-      if (timelapses[i].type == "dropbox") {
-        Response res = await post('https://content.dropboxapi.com/2/files/download', headers: {
-          'Authorization': 'Bearer ${timelapses[i].dropboxToken}',
-          'Dropbox-API-Arg': '{"path": "/${timelapses[i].uploadName}/latest.jpg"}',
-        });
-        pictures.add(res.bodyBytes);
-      } else if (timelapses[i].type == "sglstorage") {
-        Map<String, dynamic> frame = await BackendAPI().feedsAPI.fetchLatestTimelapseFrame(timelapses[i].serverID);
-        String url = '${BackendAPI().storageServerHost}${frame['filePath']}';
-        Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);
-        pictures
-            .add(await BackendAPI().feedsAPI.sglOverlay(box, args.plant, JsonDecoder().convert(frame['meta']), url));
+      try {
+        if (timelapses[i].type == "dropbox") {
+          DropboxSettings dbSettings = DropboxSettings.fromMap(JsonDecoder().convert(timelapses[i].settings));
+          Logger.log('${timelapses[i].settings} ${dbSettings.dropboxToken} ${dbSettings.uploadName}');
+          Response res = await post('https://content.dropboxapi.com/2/files/download', headers: {
+            'Authorization': 'Bearer ${dbSettings.dropboxToken}',
+            'Dropbox-API-Arg': '{"path": "/${dbSettings.uploadName}/latest.jpg"}',
+          });
+          pictures.add(res.bodyBytes);
+        } else if (timelapses[i].type == "sglstorage") {
+          Map<String, dynamic> frame = await BackendAPI().feedsAPI.fetchLatestTimelapseFrame(timelapses[i].serverID);
+          String url = '${BackendAPI().storageServerHost}${frame['filePath']}';
+          Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);
+          pictures
+              .add(await BackendAPI().feedsAPI.sglOverlay(box, args.plant, JsonDecoder().convert(frame['meta']), url));
+        }
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"timelapse": timelapses[i]});
       }
     }
     yield TimelapseViewerBlocStateLoaded(args.plant, timelapses, pictures);
