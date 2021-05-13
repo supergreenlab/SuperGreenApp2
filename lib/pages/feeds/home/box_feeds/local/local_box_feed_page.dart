@@ -224,6 +224,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
         key: Key('feed'),
         create: (context) => FeedBloc(LocalBoxFeedBlocDelegate(state.box.feed)),
         child: FeedPage(
+          automaticallyImplyLeading: true,
           color: Color(0xff063047),
           actions: actions,
           bottomPadding: true,

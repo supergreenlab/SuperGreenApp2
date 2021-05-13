@@ -134,13 +134,13 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     var ddb = RelDB.get().devicesDAO;
     Device device = await ddb.getDevice(args.device.id);
 
-    yield DeviceWifiBlocStateSearching(1, 5);
+    yield DeviceWifiBlocStateSearching(1, 10);
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
 
     String ip;
-    for (int i = 0; i < 5; ++i) {
-      yield DeviceWifiBlocStateSearching(i + 1, 5);
-      await new Future.delayed(const Duration(seconds: 3));
+    for (int i = 0; i < 10; ++i) {
+      yield DeviceWifiBlocStateSearching(i + 1, 10);
+      await new Future.delayed(const Duration(seconds: 5));
       ip = await DeviceAPI.resolveLocalName(device.mdns);
       if (ip == "" || ip == null) {
         continue;

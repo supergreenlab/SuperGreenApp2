@@ -153,7 +153,7 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
 
   void _handleInput(BuildContext context) {
     BlocProvider.of<SettingsLoginBloc>(context)
-        .add(SettingsLoginBlocEventCreateAccount(_nicknameController.value.text, _passwordController.value.text));
+        .add(SettingsLoginBlocEventLogin(_nicknameController.value.text, _passwordController.value.text));
   }
 
   @override

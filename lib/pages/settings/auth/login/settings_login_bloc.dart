@@ -12,11 +12,11 @@ class SettingsLoginBlocEventInit extends SettingsLoginBlocEvent {
   List<Object> get props => [];
 }
 
-class SettingsLoginBlocEventCreateAccount extends SettingsLoginBlocEvent {
+class SettingsLoginBlocEventLogin extends SettingsLoginBlocEvent {
   final String nickname;
   final String password;
 
-  SettingsLoginBlocEventCreateAccount(this.nickname, this.password);
+  SettingsLoginBlocEventLogin(this.nickname, this.password);
 
   @override
   List<Object> get props => [nickname, password];
@@ -68,7 +68,7 @@ class SettingsLoginBloc extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocSt
     if (event is SettingsLoginBlocEventInit) {
       yield SettingsLoginBlocStateLoading();
       yield SettingsLoginBlocStateLoaded(_isAuth);
-    } else if (event is SettingsLoginBlocEventCreateAccount) {
+    } else if (event is SettingsLoginBlocEventLogin) {
       yield SettingsLoginBlocStateLoading();
       try {
         await BackendAPI().usersAPI.login(event.nickname, event.password);
