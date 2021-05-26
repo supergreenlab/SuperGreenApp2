@@ -125,7 +125,7 @@ class _FeedCardDateState extends State<FeedCardDate> {
     } else if (minuteDiff < 60) {
       format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''}$suffix';
     } else if (hourDiff < 24) {
-      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''}$suffix';
+      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ${minuteDiff % 60}min$suffix';
     } else {
       format = '$dayDiff day${dayDiff > 1 ? 's' : ''}$suffix';
     }

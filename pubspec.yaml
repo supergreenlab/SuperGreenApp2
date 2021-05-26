@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
+  web_socket_channel:
   uuid:
   rive:
   animated_size_and_fade:

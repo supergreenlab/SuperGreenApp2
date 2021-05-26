@@ -38,6 +38,7 @@ class BackendAPI {
   TimeSeriesAPI timeSeriesAPI;
 
   String serverHost;
+  String websocketServerHost;
   String storageServerHost;
   String storageServerHostHeader;
 
@@ -53,6 +54,7 @@ class BackendAPI {
     timeSeriesAPI = TimeSeriesAPI();
     if (kReleaseMode || Platform.isIOS) {
       serverHost = 'https://api2.supergreenlab.com';
+      websocketServerHost = 'wss://api2.supergreenlab.com';
       storageServerHost = 'https://storage.supergreenlab.com';
       storageServerHostHeader = 'storage.supergreenlab.com';
       // serverHost = 'http://192.168.1.87:8080';
@@ -68,10 +70,12 @@ class BackendAPI {
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
       serverHost = local ? 'http://192.168.1.87:8080' : 'https://devapi2.supergreenlab.com';
+      websocketServerHost = local ? 'ws://192.168.1.87:8080' : 'wss://devapi2.supergreenlab.com';
       storageServerHost = local ? 'http://192.168.1.87:9000' : 'https://devstorage.supergreenlab.com';
       storageServerHostHeader = local ? 'minio:9000' : 'devstorage.supergreenlab.com';
     } else {
       serverHost = 'http://10.0.2.2:8080';
+      websocketServerHost = 'ws://10.0.2.2:8080';
       storageServerHost = 'http://10.0.2.2:9000';
       storageServerHostHeader = 'minio:9000';
     }

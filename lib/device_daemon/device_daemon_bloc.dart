@@ -5,6 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/devices/websocket.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/logger/logger.dart';
@@ -58,6 +59,8 @@ class DeviceDaemonBlocStateDeviceReachable extends DeviceDaemonBlocState {
 }
 
 class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
+  Map<String, DeviceWebsocket> websockets = {};
+
   StreamSubscription<ConnectivityResult> _connectivity;
 
   Timer _timer;
@@ -172,6 +175,13 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
 
   void _deviceListChanged(List<Device> devices) {
     _devices = devices;
+    _devices.forEach((d) {
+      if (websockets[d.identifier] == null) {
+        DeviceWebsocket socket = DeviceWebsocket(d);
+        websockets[d.identifier] = socket;
+        socket.connect();
+      }
+    });
   }
 
   Future<void> _updateDeviceTime(Device device) async {

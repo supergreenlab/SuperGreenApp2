@@ -40,7 +40,7 @@ class CommentParam extends Equatable {
     };
   }
 
-  static CommentParam fromMap(Map<String, dynamic> map) {
+  factory CommentParam.fromMap(Map<String, dynamic> map) {
     return CommentParam(recommend: (map['recommend'] ?? []).map<Product>((r) => Product.fromMap(r)).toList());
   }
 
