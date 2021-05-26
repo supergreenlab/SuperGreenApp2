@@ -75,6 +75,13 @@ class DeviceWebsocket {
         await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
       }
       Logger.log("Updated parameter ${cm.key} to value ${cm.value}");
+    }, onError: (e) async {
+      Logger.logError(e, null);
+      await Future.delayed(Duration(seconds: 3));
+      connect();
+    }, onDone: () async {
+      await Future.delayed(Duration(seconds: 3));
+      connect();
     });
   }
 
