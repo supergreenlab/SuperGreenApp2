@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -81,8 +99,7 @@ class SettingsDeviceBlocStateDone extends SettingsDeviceBlocState {
   List<Object> get props => [device];
 }
 
-class SettingsDeviceBloc
-    extends Bloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
+class SettingsDeviceBloc extends Bloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsDevice args;
   Device device;
@@ -92,8 +109,7 @@ class SettingsDeviceBloc
   }
 
   @override
-  Stream<SettingsDeviceBlocState> mapEventToState(
-      SettingsDeviceBlocEvent event) async* {
+  Stream<SettingsDeviceBlocState> mapEventToState(SettingsDeviceBlocEvent event) async* {
     if (event is SettingsDeviceBlocEventInit) {
       device = await RelDB.get().devicesDAO.getDevice(args.device.id);
       yield SettingsDeviceBlocStateLoaded(device);
@@ -116,15 +132,10 @@ class SettingsDeviceBloc
   }
 
   void refreshParams({bool delete = false}) async {
-    final deviceName =
-        await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME");
-    final mdnsDomain =
-        await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN");
-    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(
-        id: Value(device.id),
-        name: Value(deviceName),
-        mdns: Value(mdnsDomain),
-        synced: Value(false)));
+    final deviceName = await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME");
+    final mdnsDomain = await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN");
+    await RelDB.get().devicesDAO.updateDevice(
+        DevicesCompanion(id: Value(device.id), name: Value(deviceName), mdns: Value(mdnsDomain), synced: Value(false)));
     await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
       add(SettingsDeviceBlocEventRefreshing(adv));
     }, delete: delete);

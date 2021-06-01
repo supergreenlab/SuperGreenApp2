@@ -43,7 +43,7 @@ class Logger {
 
   static void logError(dynamic error, StackTrace stackTrace, {Map<String, dynamic> data, bool fwdThrow = false}) {
     String dataStr = (data ?? {}).keys.map<String>((String key) {
-      return "$key=$data[$key]";
+      return "$key=${data[key]}";
     }).join("\n");
     print(error);
     print(stackTrace);

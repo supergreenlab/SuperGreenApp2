@@ -128,6 +128,8 @@ import 'package:super_green_app/pages/settings/boxes/settings_boxes_bloc.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_page.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_page.dart';
+import 'package:super_green_app/pages/settings/devices/remote_control/settings_remote_control_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/remote_control/settings_remote_control_page.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_page.dart';
 import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_bloc.dart';
@@ -508,6 +510,12 @@ class _MainPageState extends State<MainPage> {
           create: (context) => SettingsDeviceBloc(settings.arguments),
           child: SettingsDevicePage(),
         );
+      case '/settings/device/remote':
+        return BlocProvider(
+          create: (context) => SettingsRemoteControlBloc(settings.arguments),
+          child: SettingsRemoteControlPage(),
+        );
+
       case '/settings/device/upgrade':
         return BlocProvider(
           create: (context) => SettingsUpgradeDeviceBloc(settings.arguments),

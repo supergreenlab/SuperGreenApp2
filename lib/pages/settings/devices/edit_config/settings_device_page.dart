@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -230,7 +248,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
             children: <Widget>[
               SectionTitle(
                 title: SettingsDevicePage.settingsDevicePageControllerNameSection,
-                icon: 'assets/box_setup/icon_controller.svg',
+                icon: 'assets/settings/icon_controller.svg',
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 elevation: 5,
@@ -246,13 +264,13 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
               ),
               SectionTitle(
                 title: SettingsDevicePage.settingsDevicePageControllerSettingsSection,
-                icon: 'assets/box_setup/icon_controller.svg',
+                icon: 'assets/settings/icon_controller.svg',
                 backgroundColor: Color(0xff0b6ab3),
                 titleColor: Colors.white,
                 elevation: 5,
               ),
               ListTile(
-                leading: SvgPicture.asset('assets/feed_form/icon_wifi.svg'),
+                leading: SvgPicture.asset('assets/settings/icon_wifi.svg'),
                 trailing: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: SvgPicture.asset('assets/settings/icon_go.svg'),
@@ -275,7 +293,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 },
               ),
               ListTile(
-                leading: SvgPicture.asset('assets/box_setup/icon_box.svg'),
+                leading: SvgPicture.asset('assets/settings/icon_boxslot.svg'),
                 trailing: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: SvgPicture.asset('assets/settings/icon_go.svg'),
@@ -289,7 +307,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
-                  leading: SvgPicture.asset('assets/box_setup/icon_controller.svg'),
+                  leading: SvgPicture.asset('assets/settings/icon_refresh.svg'),
                   trailing: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: SvgPicture.asset('assets/settings/icon_go.svg'),
@@ -303,7 +321,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
               ),
               SectionTitle(
                 title: 'Red zone',
-                icon: 'assets/box_setup/icon_controller.svg',
+                icon: 'assets/settings/icon_controller.svg',
                 backgroundColor: Colors.red,
                 titleColor: Colors.white,
                 elevation: 5,
@@ -311,16 +329,16 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
-                  leading: SvgPicture.asset('assets/settings/icon_warning.svg'),
+                  leading: SvgPicture.asset('assets/settings/icon_remotecontrol.svg'),
                   trailing: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: SvgPicture.asset('assets/settings/icon_go.svg'),
                   ),
-                  title: Text('Access admin'),
+                  title: Text('Remote control'),
                   subtitle: Text(
-                      'Open the controller\'s admin interface. Make sure you know what you\'re doing before going there.'),
+                      'Remote control allows you to change your controller parameters from anywhere on the planet.'),
                   onTap: () {
-                    launch('http://${state.device.ip}/fs/app.html');
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsRemoteControl(state.device));
                   },
                 ),
               ),
@@ -343,6 +361,22 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                         BlocProvider.of<SettingsDeviceBloc>(context).add(SettingsDeviceBlocEventRefresh(delete: true));
                       }
                     }));
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  leading: SvgPicture.asset('assets/settings/icon_warning.svg'),
+                  trailing: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                  ),
+                  title: Text('Access admin'),
+                  subtitle: Text(
+                      'Open the controller\'s admin interface. Make sure you know what you\'re doing before going there.'),
+                  onTap: () {
+                    launch('http://${state.device.ip}/fs/app.html');
                   },
                 ),
               ),
