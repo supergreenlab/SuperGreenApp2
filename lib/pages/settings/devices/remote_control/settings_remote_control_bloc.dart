@@ -23,6 +23,11 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class SettingsRemoteControlBlocEvent extends Equatable {}
 
+class SettingsRemoteControlBlocEventInit extends SettingsRemoteControlBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 abstract class SettingsRemoteControlBlocState extends Equatable {}
 
 class SettingsRemoteControlBlocStateInit extends SettingsRemoteControlBlocState {
@@ -31,8 +36,12 @@ class SettingsRemoteControlBlocStateInit extends SettingsRemoteControlBlocState 
 }
 
 class SettingsRemoteControlBlocStateLoaded extends SettingsRemoteControlBlocState {
+  final Device device;
+
+  SettingsRemoteControlBlocStateLoaded(this.device);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [device];
 }
 
 class SettingsRemoteControlBlocStateLoading extends SettingsRemoteControlBlocState {
@@ -52,8 +61,14 @@ class SettingsRemoteControlBlocStateDone extends SettingsRemoteControlBlocState 
 class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, SettingsRemoteControlBlocState> {
   final MainNavigateToSettingsRemoteControl args;
 
-  SettingsRemoteControlBloc(this.args) : super(SettingsRemoteControlBlocStateInit());
+  SettingsRemoteControlBloc(this.args) : super(SettingsRemoteControlBlocStateInit()) {
+    add(SettingsRemoteControlBlocEventInit());
+  }
 
   @override
-  Stream<SettingsRemoteControlBlocState> mapEventToState(SettingsRemoteControlBlocEvent event) async* {}
+  Stream<SettingsRemoteControlBlocState> mapEventToState(SettingsRemoteControlBlocEvent event) async* {
+    if (event is SettingsRemoteControlBlocEventInit) {
+      yield SettingsRemoteControlBlocStateLoaded(args.device);
+    }
+  }
 }

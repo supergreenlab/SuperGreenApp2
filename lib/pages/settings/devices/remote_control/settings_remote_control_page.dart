@@ -25,6 +25,7 @@ import 'package:super_green_app/pages/settings/devices/remote_control/settings_r
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/section_title.dart';
 
 class SettingsRemoteControlPage extends StatelessWidget {
   static String settingsRemoteControlPageControllerDone(String name) {
@@ -77,6 +78,14 @@ class SettingsRemoteControlPage extends StatelessWidget {
   }
 
   Widget _renderForm(BuildContext context, SettingsRemoteControlBlocStateLoaded state) {
-    return Column(children: <Widget>[]);
+    return Column(children: <Widget>[
+      SectionTitle(
+        title: "Remote control setup",
+        icon: 'assets/settings/icon_remotecontrol.svg',
+        backgroundColor: Color(0xff0b6ab3),
+        titleColor: Colors.white,
+        elevation: 5,
+      ),
+    ]);
   }
 }
