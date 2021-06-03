@@ -18,6 +18,8 @@
 
 import 'package:hive/hive.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
+import 'package:super_green_app/data/kv/models/device_data.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
 class AppDB {
   static final AppDB _instance = AppDB._newInstance();
@@ -39,6 +41,10 @@ class AppDB {
 
   AppData getAppData() {
     return _settingsDB.get('data', defaultValue: AppData());
+  }
+
+  DeviceData getDeviceData(String identifier) {
+    return _settingsDB.get('device$identifier', defaultValue: DeviceData());
   }
 
   Stream<BoxEvent> watchAppData() {
@@ -107,6 +113,10 @@ class AppDB {
 
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
+  }
+
+  void setDeviceData(String identifier, DeviceData deviceData) {
+    _settingsDB.put('device$identifier', deviceData);
   }
 
   void setTipDone(String tipID) {

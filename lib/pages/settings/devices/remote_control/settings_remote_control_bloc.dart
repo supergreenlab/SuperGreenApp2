@@ -18,6 +18,9 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/device/device_helper.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -26,6 +29,21 @@ abstract class SettingsRemoteControlBlocEvent extends Equatable {}
 class SettingsRemoteControlBlocEventInit extends SettingsRemoteControlBlocEvent {
   @override
   List<Object> get props => [];
+}
+
+class SettingsRemoteControlBlocEventPair extends SettingsRemoteControlBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class SettingsRemoteControlBlocEventSetAuth extends SettingsRemoteControlBlocEvent {
+  final String username;
+  final String password;
+
+  SettingsRemoteControlBlocEventSetAuth(this.username, this.password);
+
+  @override
+  List<Object> get props => [username, password];
 }
 
 abstract class SettingsRemoteControlBlocState extends Equatable {}
@@ -37,11 +55,13 @@ class SettingsRemoteControlBlocStateInit extends SettingsRemoteControlBlocState 
 
 class SettingsRemoteControlBlocStateLoaded extends SettingsRemoteControlBlocState {
   final Device device;
+  final bool authSetup;
+  final bool signingSetup;
 
-  SettingsRemoteControlBlocStateLoaded(this.device);
+  SettingsRemoteControlBlocStateLoaded(this.device, {this.authSetup, this.signingSetup});
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [device, authSetup, signingSetup];
 }
 
 class SettingsRemoteControlBlocStateLoading extends SettingsRemoteControlBlocState {
@@ -49,10 +69,19 @@ class SettingsRemoteControlBlocStateLoading extends SettingsRemoteControlBlocSta
   List<Object> get props => [];
 }
 
-class SettingsRemoteControlBlocStateDone extends SettingsRemoteControlBlocState {
+class SettingsRemoteControlBlocStateDonePairing extends SettingsRemoteControlBlocState {
   final Device device;
 
-  SettingsRemoteControlBlocStateDone(this.device);
+  SettingsRemoteControlBlocStateDonePairing(this.device);
+
+  @override
+  List<Object> get props => [device];
+}
+
+class SettingsRemoteControlBlocStateDoneAuth extends SettingsRemoteControlBlocState {
+  final Device device;
+
+  SettingsRemoteControlBlocStateDoneAuth(this.device);
 
   @override
   List<Object> get props => [device];
@@ -68,7 +97,18 @@ class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, Set
   @override
   Stream<SettingsRemoteControlBlocState> mapEventToState(SettingsRemoteControlBlocEvent event) async* {
     if (event is SettingsRemoteControlBlocEventInit) {
-      yield SettingsRemoteControlBlocStateLoaded(args.device);
+      DeviceData deviceData = AppDB().getDeviceData(args.device.identifier);
+      yield SettingsRemoteControlBlocStateLoaded(
+        args.device,
+        authSetup: deviceData.auth != null,
+        signingSetup: deviceData.signing != null,
+      );
+    } else if (event is SettingsRemoteControlBlocEventPair) {
+      await DeviceHelper.pairDevice(args.device);
+      yield SettingsRemoteControlBlocStateDonePairing(args.device);
+    } else if (event is SettingsRemoteControlBlocEventSetAuth) {
+      await DeviceHelper.updateAuth(args.device, event.username, event.password);
+      yield SettingsRemoteControlBlocStateDoneAuth(args.device);
     }
   }
 }

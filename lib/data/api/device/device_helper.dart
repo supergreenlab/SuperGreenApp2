@@ -16,44 +16,65 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:tuple/tuple.dart';
 
+String generateRandomString(int len) {
+  var r = Random();
+  return String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
+}
+
 class DeviceHelper {
+  static Future pairDevice(Device device) async {
+    String signing = generateRandomString(32);
+    await DeviceAPI.post('http://${device.ip}/signing?key=$signing');
+    DeviceData deviceData = AppDB().getDeviceData(device.identifier);
+    deviceData.signing = signing;
+    AppDB().setDeviceData(device.identifier, deviceData);
+  }
+
+  static Future updateAuth(Device device, String username, String password) async {
+    Param param = await RelDB.get().devicesDAO.getParam(device.id, 'HTTPD_AUTH');
+    String bearer = base64.encode(utf8.encode('$username:$password'));
+    updateStringParam(device, param, bearer);
+    DeviceData deviceData = AppDB().getDeviceData(device.identifier);
+    deviceData.auth = bearer;
+    AppDB().setDeviceData(device.identifier, deviceData);
+  }
+
   static Future updateDeviceName(Device device, String name) async {
     final mdnsDomain = DeviceAPI.mdnsDomain(name);
     final ddb = RelDB.get().devicesDAO;
     await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name);
     Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
     await DeviceHelper.updateStringParam(device, mdns, mdnsDomain);
-    await ddb.updateDevice(DevicesCompanion(
-        id: Value(device.id),
-        name: Value(name),
-        mdns: Value(mdnsDomain),
-        synced: Value(false)));
+    await ddb.updateDevice(
+        DevicesCompanion(id: Value(device.id), name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
   }
 
-  static Future<String> updateStringParam(
-      Device device, Param param, String value,
+  static Future<String> updateStringParam(Device device, Param param, String value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    value = await DeviceAPI.setStringParam(device.ip, param.key, value,
-        timeout: timeout, nRetries: nRetries, wait: wait);
+    value =
+        await DeviceAPI.setStringParam(device.ip, param.key, value, timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
     return value;
   }
 
   static Future<int> updateIntParam(Device device, Param param, int value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    value = await DeviceAPI.setIntParam(device.ip, param.key, value,
-        timeout: timeout, nRetries: nRetries, wait: wait);
+    value = await DeviceAPI.setIntParam(device.ip, param.key, value, timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
     return value;
   }
 
-  static Future<Tuple2<int, int>> updateHourMinParams(
-      Device device, Param hourParam, Param minParam, int hour, int min,
+  static Future<Tuple2<int, int>> updateHourMinParams(Device device, Param hourParam, Param minParam, int hour, int min,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     hour = hour - DateTime.now().timeZoneOffset.inHours;
     min = min - (DateTime.now().timeZoneOffset.inMinutes % 60);
@@ -75,15 +96,14 @@ class DeviceHelper {
 
   static Future refreshStringParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    String value = await DeviceAPI.fetchStringParam(device.ip, param.key,
-        timeout: timeout, nRetries: nRetries, wait: wait);
+    String value =
+        await DeviceAPI.fetchStringParam(device.ip, param.key, timeout: timeout, nRetries: nRetries, wait: wait);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
   }
 
   static Future<Param> refreshIntParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
-        timeout: timeout, nRetries: nRetries, wait: wait);
+    int value = await DeviceAPI.fetchIntParam(device.ip, param.key, timeout: timeout, nRetries: nRetries, wait: wait);
     Param newParam = param.copyWith(ivalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
@@ -93,8 +113,9 @@ class DeviceHelper {
     device = await RelDB.get().devicesDAO.getDevice(device.id);
     await RelDB.get().devicesDAO.deleteDevice(device);
     if (addDeleted && device.serverID != null) {
-      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(
-          serverID: Value(device.serverID), type: Value('devices')));
+      await RelDB.get()
+          .deletesDAO
+          .addDelete(DeletesCompanion(serverID: Value(device.serverID), type: Value('devices')));
     }
 
     await RelDB.get().devicesDAO.deleteParams(device.id);

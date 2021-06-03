@@ -143,36 +143,26 @@ class DeviceAPI {
 
   static Future<String> setStringParam(String controllerIP, String paramName, String value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    final client = new HttpClient();
-    if (timeout != null) {
-      client.connectionTimeout = Duration(seconds: timeout);
-    }
     try {
-      for (int i = 0; i < nRetries; ++i) {
-        if (i != 0 && wait > 0) {
-          await Future.delayed(Duration(seconds: wait));
-        }
-        try {
-          final req = await client.postUrl(
-              Uri.parse('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}'));
-          await req.close();
-          break;
-        } catch (e) {
-          if (i == nRetries - 1) {
-            throw e;
-          }
-        }
-      }
+      await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}');
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
-    } finally {
-      client.close(force: true);
     }
-    return await fetchStringParam(controllerIP, paramName);
+    return fetchStringParam(controllerIP, paramName);
   }
 
   static Future<int> setIntParam(String controllerIP, String paramName, int value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    try {
+      await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value',
+          timeout: timeout, nRetries: nRetries, wait: wait);
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
+    }
+    return fetchIntParam(controllerIP, paramName);
+  }
+
+  static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -183,7 +173,7 @@ class DeviceAPI {
           await Future.delayed(Duration(seconds: wait));
         }
         try {
-          final req = await client.postUrl(Uri.parse('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value'));
+          final req = await client.postUrl(Uri.parse(url));
           await req.close();
           break;
         } catch (e) {
@@ -192,12 +182,9 @@ class DeviceAPI {
           }
         }
       }
-    } catch (e, trace) {
-      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
     } finally {
       client.close(force: true);
     }
-    return fetchIntParam(controllerIP, paramName);
   }
 
   static Future uploadFile(String controllerIP, String fileName, ByteData data,
