@@ -19,7 +19,6 @@
 import 'package:hive/hive.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 
 class AppDB {
   static final AppDB _instance = AppDB._newInstance();

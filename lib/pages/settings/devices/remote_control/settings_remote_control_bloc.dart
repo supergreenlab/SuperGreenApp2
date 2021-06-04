@@ -55,13 +55,12 @@ class SettingsRemoteControlBlocStateInit extends SettingsRemoteControlBlocState 
 
 class SettingsRemoteControlBlocStateLoaded extends SettingsRemoteControlBlocState {
   final Device device;
-  final bool authSetup;
   final bool signingSetup;
 
-  SettingsRemoteControlBlocStateLoaded(this.device, {this.authSetup, this.signingSetup});
+  SettingsRemoteControlBlocStateLoaded(this.device, {this.signingSetup});
 
   @override
-  List<Object> get props => [device, authSetup, signingSetup];
+  List<Object> get props => [device, signingSetup];
 }
 
 class SettingsRemoteControlBlocStateLoading extends SettingsRemoteControlBlocState {
@@ -100,15 +99,14 @@ class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, Set
       DeviceData deviceData = AppDB().getDeviceData(args.device.identifier);
       yield SettingsRemoteControlBlocStateLoaded(
         args.device,
-        authSetup: deviceData.auth != null,
         signingSetup: deviceData.signing != null,
       );
     } else if (event is SettingsRemoteControlBlocEventPair) {
+      yield SettingsRemoteControlBlocStateLoading();
       await DeviceHelper.pairDevice(args.device);
+      await Future.delayed(Duration(seconds: 1));
       yield SettingsRemoteControlBlocStateDonePairing(args.device);
-    } else if (event is SettingsRemoteControlBlocEventSetAuth) {
-      await DeviceHelper.updateAuth(args.device, event.username, event.password);
-      yield SettingsRemoteControlBlocStateDoneAuth(args.device);
+      add(SettingsRemoteControlBlocEventInit());
     }
   }
 }

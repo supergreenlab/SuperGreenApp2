@@ -345,6 +345,21 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
+                  leading: SvgPicture.asset('assets/settings/icon_lock.svg'),
+                  trailing: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                  ),
+                  title: Text('Password lock'),
+                  subtitle: Text('Prevent unsollicited access from your roommate/siblings.'),
+                  onTap: () {
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsDeviceAuth(state.device));
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
                   leading: SvgPicture.asset('assets/settings/icon_upgrade.svg'),
                   trailing: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),

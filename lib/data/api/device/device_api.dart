@@ -65,17 +65,17 @@ class DeviceAPI {
     return foundIP;
   }
 
-  static Future<String> fetchConfig(String controllerIP) async {
+  static Future<String> fetchConfig(String controllerIP, {String auth}) async {
     Response r = await get('http://$controllerIP/fs/config.json');
     return r.body;
   }
 
   static Future<String> fetchStringParam(String controllerIP, String paramName,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}');
+      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+    return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}', auth: auth);
   }
 
-  static Future<String> fetchString(String url, {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+  static Future<String> fetchString(String url, {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -110,7 +110,7 @@ class DeviceAPI {
   }
 
   static Future<int> fetchIntParam(String controllerIP, String paramName,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -126,7 +126,12 @@ class DeviceAPI {
           final completer = Completer<int>();
           completer.future.whenComplete(() => client.close(force: true));
           resp.transform(utf8.decoder).listen((contents) {
-            completer.complete(int.parse(contents));
+            try {
+              completer.complete(int.parse(contents));
+            } catch (e, trace) {
+              Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName});
+              throw e;
+            }
           }, onError: completer.completeError);
           return completer.future;
         } catch (e) {
@@ -142,9 +147,10 @@ class DeviceAPI {
   }
 
   static Future<String> setStringParam(String controllerIP, String paramName, String value,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
     try {
-      await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}');
+      await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
+          auth: auth);
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
     }
@@ -152,17 +158,17 @@ class DeviceAPI {
   }
 
   static Future<int> setIntParam(String controllerIP, String paramName, int value,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
     try {
       await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value',
-          timeout: timeout, nRetries: nRetries, wait: wait);
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
     }
     return fetchIntParam(controllerIP, paramName);
   }
 
-  static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+  static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -188,7 +194,7 @@ class DeviceAPI {
   }
 
   static Future uploadFile(String controllerIP, String fileName, ByteData data,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -220,7 +226,8 @@ class DeviceAPI {
 
   static Map<int, bool> fetchingAllParams = {};
 
-  static Future fetchAllParams(String ip, int deviceID, Function(double) advancement, {bool delete = false}) async {
+  static Future fetchAllParams(String ip, int deviceID, Function(double) advancement,
+      {bool delete = false, String auth}) async {
     if (DeviceAPI.fetchingAllParams[deviceID] == true) {
       return;
     }
@@ -234,7 +241,7 @@ class DeviceAPI {
         await db.deleteModules(deviceID);
       }
 
-      final config = await DeviceAPI.fetchConfig(ip);
+      final config = await DeviceAPI.fetchConfig(ip, auth: auth);
       Map<String, dynamic> keys = json.decode(config);
 
       double total = keys['keys'].length.toDouble(), done = 0;
@@ -257,7 +264,7 @@ class DeviceAPI {
         Param exists = await db.getParam(deviceID, k['caps_name']);
         if (type == INTEGER_TYPE) {
           try {
-            final value = await DeviceAPI.fetchIntParam(ip, k['caps_name']);
+            final value = await DeviceAPI.fetchIntParam(ip, k['caps_name'], auth: auth);
             if (exists == null) {
               ParamsCompanion param = ParamsCompanion.insert(
                   device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, ivalue: Value(value));
@@ -271,7 +278,7 @@ class DeviceAPI {
           }
         } else {
           try {
-            final value = await DeviceAPI.fetchStringParam(ip, k['caps_name']);
+            final value = await DeviceAPI.fetchStringParam(ip, k['caps_name'], auth: auth);
             if (exists == null) {
               ParamsCompanion param = ParamsCompanion.insert(
                   device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, svalue: Value(value));

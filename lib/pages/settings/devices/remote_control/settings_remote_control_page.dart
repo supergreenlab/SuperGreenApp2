@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/pages/settings/devices/remote_control/settings_remote_control_bloc.dart';
@@ -28,12 +29,11 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
-import 'package:super_green_app/widgets/textfield.dart';
 
 class SettingsRemoteControlPage extends StatefulWidget {
   static String settingsRemoteControlPageControllerDone(String name) {
     return Intl.message(
-      'Controller $name setup!',
+      'Controller $name paired for remote control!',
       args: [name],
       name: 'settingsRemoteControlPageControllerDone',
       desc: 'Controller remote control setup confirmation text',
@@ -50,52 +50,41 @@ class SettingsRemoteControlPage extends StatefulWidget {
     );
   }
 
-  static String settingsRemoteControlPagePasswordInstructions() {
-    return Intl.message(
-      'You can now **setup a password** to prevent unauthorized parameter changes on your controller.\n\n*Please keep in mind that this is by no mean top-notch security. Mostly an anti-curious roommate/brother feature. Local network communication is not using https so subject to mitm.*',
-      name: 'settingsRemoteControlPageInstructions',
-      desc: 'Password protection instructions',
-      locale: SGLLocalizations.current.localeName,
-    );
-  }
-
-  static String settingsRemoteControlPagePasswordWarning() {
-    return Intl.message(
-      'Don\'t use your important password here.',
-      name: 'settingsRemoteControlPagePasswordWarning',
-      desc: 'Password warning',
-      locale: SGLLocalizations.current.localeName,
-    );
-  }
-
   @override
   _SettingsRemoteControlPageState createState() => _SettingsRemoteControlPageState();
 }
 
 class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
-  TextEditingController _usernameController;
-  TextEditingController _passwordController;
-
-  TextEditingController _oldusernameController;
-  TextEditingController _oldpasswordController;
+  Device device;
+  bool done = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
       cubit: BlocProvider.of<SettingsRemoteControlBloc>(context),
-      listener: (BuildContext context, SettingsRemoteControlBlocState state) async {},
+      listener: (BuildContext context, SettingsRemoteControlBlocState state) async {
+        if (state is SettingsRemoteControlBlocStateLoaded) {
+          this.device = state.device;
+        } else if (state is SettingsRemoteControlBlocStateDonePairing) {
+          setState(() {
+            this.done = true;
+          });
+          await Future.delayed(Duration(seconds: 2));
+          setState(() {
+            this.done = false;
+          });
+        }
+      },
       child: BlocBuilder<SettingsRemoteControlBloc, SettingsRemoteControlBlocState>(
           cubit: BlocProvider.of<SettingsRemoteControlBloc>(context),
           builder: (BuildContext context, SettingsRemoteControlBlocState state) {
             Widget body;
-            if (state is SettingsRemoteControlBlocStateLoading) {
+            if (this.done) {
+              body = _renderDonePairing();
+            } else if (state is SettingsRemoteControlBlocStateLoading) {
               body = FullscreenLoading(
                 title: CommonL10N.loading,
               );
-            } else if (state is SettingsRemoteControlBlocStateDonePairing) {
-              body = _renderDonePairing(state);
-            } else if (state is SettingsRemoteControlBlocStateDoneAuth) {
-              body = _renderDoneAuth(state);
             } else if (state is SettingsRemoteControlBlocStateLoaded) {
               body = _renderForm(context, state);
             }
@@ -115,14 +104,8 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
     );
   }
 
-  Widget _renderDonePairing(SettingsRemoteControlBlocStateDonePairing state) {
-    String subtitle = SettingsRemoteControlPage.settingsRemoteControlPageControllerDone(state.device.name);
-    return Fullscreen(
-        title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
-  }
-
-  Widget _renderDoneAuth(SettingsRemoteControlBlocStateDoneAuth state) {
-    String subtitle = SettingsRemoteControlPage.settingsRemoteControlPageControllerDone(state.device.name);
+  Widget _renderDonePairing() {
+    String subtitle = SettingsRemoteControlPage.settingsRemoteControlPageControllerDone(device.name);
     return Fullscreen(
         title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
@@ -159,76 +142,10 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
               onPressed: () {
                 BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
               },
-              title: 'PAIR CONTROLLER',
+              title: state.signingSetup ? 'RE-PAIR CONTROLLER' : 'PAIR CONTROLLER',
             ),
           ),
         ],
-      ),
-      SectionTitle(
-        title: 'Controller access control',
-        icon: 'assets/settings/icon_remotecontrol.svg',
-        backgroundColor: Color(0xff0b6ab3),
-        titleColor: Colors.white,
-        elevation: 5,
-      ),
-      Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: MarkdownBody(
-                fitContent: true,
-                data: SettingsRemoteControlPage.settingsRemoteControlPagePasswordInstructions(),
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
-              ),
-            ),
-          ),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Text('Username',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            )),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SGLTextField(
-            hintText: 'Ex: stant',
-            controller: _usernameController,
-            onChanged: (_) {
-              setState(() {});
-            }),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16),
-        child: Text('Password',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            )),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SGLTextField(
-            hintText: '***',
-            controller: _passwordController,
-            obscureText: true,
-            onChanged: (_) {
-              setState(() {});
-            }),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-        child: Text(SettingsRemoteControlPage.settingsRemoteControlPagePasswordWarning(),
-            style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontStyle: FontStyle.italic,
-              fontSize: 13,
-              color: Colors.red,
-            )),
       ),
     ]);
   }

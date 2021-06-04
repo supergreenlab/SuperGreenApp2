@@ -31,6 +31,7 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
+import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
@@ -96,6 +97,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
       final Directory tmpDocDir = await getTemporaryDirectory();
       Hive.init(appDocDir.path);
       Hive.registerAdapter(AppDataAdapter());
+      Hive.registerAdapter(DeviceDataAdapter());
       AppDB().documentPath = appDocDir.path;
       AppDB().tmpPath = tmpDocDir.path;
 

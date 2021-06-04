@@ -442,6 +442,15 @@ class MainNavigateToSettingsRemoteControl extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
+class MainNavigateToSettingsDeviceAuth extends MainNavigatorEvent {
+  final Device device;
+
+  MainNavigateToSettingsDeviceAuth(this.device);
+
+  @override
+  List<Object> get props => [device];
+}
+
 class MainNavigateToSettingsUpgradeDevice extends MainNavigatorEvent {
   final Device device;
 
@@ -680,6 +689,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState.pushNamed('/settings/device', arguments: event);
     } else if (event is MainNavigateToSettingsRemoteControl) {
       future = _navigatorKey.currentState.pushNamed('/settings/device/remote', arguments: event);
+    } else if (event is MainNavigateToSettingsDeviceAuth) {
+      future = _navigatorKey.currentState.pushNamed('/settings/device/auth', arguments: event);
     } else if (event is MainNavigateToSettingsUpgradeDevice) {
       future = _navigatorKey.currentState.pushNamed('/settings/device/upgrade', arguments: event);
     } else if (event is MainNavigateToPublicPlant) {

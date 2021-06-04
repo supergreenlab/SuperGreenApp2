@@ -18,6 +18,7 @@
 
 import 'dart:convert';
 import 'dart:math';
+import 'package:crypto/crypto.dart';
 
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
@@ -33,7 +34,7 @@ String generateRandomString(int len) {
 
 class DeviceHelper {
   static Future pairDevice(Device device) async {
-    String signing = generateRandomString(32);
+    String signing = md5.convert(utf8.encode(generateRandomString(32))).toString();
     await DeviceAPI.post('http://${device.ip}/signing?key=$signing');
     DeviceData deviceData = AppDB().getDeviceData(device.identifier);
     deviceData.signing = signing;
