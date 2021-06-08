@@ -23,7 +23,7 @@ import 'package:crypto/crypto.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/kv/models/device_data.dart';
+import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:tuple/tuple.dart';
 
@@ -36,18 +36,14 @@ class DeviceHelper {
   static Future pairDevice(Device device) async {
     String signing = md5.convert(utf8.encode(generateRandomString(32))).toString();
     await DeviceAPI.post('http://${device.ip}/signing?key=$signing');
-    DeviceData deviceData = AppDB().getDeviceData(device.identifier);
-    deviceData.signing = signing;
-    AppDB().setDeviceData(device.identifier, deviceData);
+    AppDB().setDeviceSigning(device.identifier, signing);
   }
 
   static Future updateAuth(Device device, String username, String password) async {
     Param param = await RelDB.get().devicesDAO.getParam(device.id, 'HTTPD_AUTH');
-    String bearer = base64.encode(utf8.encode('$username:$password'));
-    updateStringParam(device, param, bearer);
-    DeviceData deviceData = AppDB().getDeviceData(device.identifier);
-    deviceData.auth = bearer;
-    AppDB().setDeviceData(device.identifier, deviceData);
+    String auth = base64.encode(utf8.encode('$username:$password'));
+    updateStringParam(device, param, auth);
+    AppDB().setDeviceAuth(device.identifier, auth);
   }
 
   static Future updateDeviceName(Device device, String name) async {
@@ -121,5 +117,7 @@ class DeviceHelper {
 
     await RelDB.get().devicesDAO.deleteParams(device.id);
     await RelDB.get().devicesDAO.deleteModules(device.id);
+    AppDB().setDeviceAuth(device.identifier, null);
+    AppDB().setDeviceSigning(device.identifier, null);
   }
 }

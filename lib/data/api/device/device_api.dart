@@ -72,7 +72,8 @@ class DeviceAPI {
 
   static Future<String> fetchStringParam(String controllerIP, String paramName,
       {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
-    return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}', auth: auth);
+    return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}',
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
   }
 
   static Future<String> fetchString(String url, {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
@@ -87,6 +88,9 @@ class DeviceAPI {
         }
         try {
           final req = await client.getUrl(Uri.parse(url));
+          if (auth != null) {
+            req.headers.set('Authorization', 'Basic $auth');
+          }
           final HttpClientResponse resp = await req.close();
           if (resp.contentLength == 0) {
             return '';
@@ -122,6 +126,9 @@ class DeviceAPI {
         }
         try {
           final req = await client.getUrl(Uri.parse('http://$controllerIP/i?k=${paramName.toUpperCase()}'));
+          if (auth != null) {
+            req.headers.set('Authorization', 'Basic $auth');
+          }
           final resp = await req.close();
           final completer = Completer<int>();
           completer.future.whenComplete(() => client.close(force: true));
@@ -150,7 +157,7 @@ class DeviceAPI {
       {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
     try {
       await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
-          auth: auth);
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
     }
@@ -180,6 +187,9 @@ class DeviceAPI {
         }
         try {
           final req = await client.postUrl(Uri.parse(url));
+          if (auth != null) {
+            req.headers.set('Authorization', 'Basic $auth');
+          }
           await req.close();
           break;
         } catch (e) {
@@ -206,6 +216,9 @@ class DeviceAPI {
         }
         try {
           final req = await client.postUrl(Uri.parse('http://$controllerIP/fs/$fileName'));
+          if (auth != null) {
+            req.headers.set('Authorization', 'Basic $auth');
+          }
           req.contentLength = data.lengthInBytes;
           req.add(data.buffer.asInt8List());
           await req.flush();
