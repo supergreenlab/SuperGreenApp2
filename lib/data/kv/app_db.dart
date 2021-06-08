@@ -46,6 +46,11 @@ class AppDB {
     return _settingsDB.get('device$identifier', defaultValue: DeviceData());
   }
 
+  String getDeviceAuth(String identifier) {
+    DeviceData deviceData = getDeviceData(identifier);
+    return deviceData.auth;
+  }
+
   Stream<BoxEvent> watchAppData() {
     return _settingsDB.watch(key: 'data');
   }

@@ -23,7 +23,6 @@ import 'package:crypto/crypto.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:tuple/tuple.dart';
 
@@ -34,8 +33,9 @@ String generateRandomString(int len) {
 
 class DeviceHelper {
   static Future pairDevice(Device device) async {
+    String auth = AppDB().getDeviceAuth(device.identifier);
     String signing = md5.convert(utf8.encode(generateRandomString(32))).toString();
-    await DeviceAPI.post('http://${device.ip}/signing?key=$signing');
+    await DeviceAPI.post('http://${device.ip}/signing?key=$signing', auth: auth);
     AppDB().setDeviceSigning(device.identifier, signing);
   }
 
@@ -47,26 +47,30 @@ class DeviceHelper {
   }
 
   static Future updateDeviceName(Device device, String name) async {
+    String auth = AppDB().getDeviceAuth(device.identifier);
     final mdnsDomain = DeviceAPI.mdnsDomain(name);
     final ddb = RelDB.get().devicesDAO;
-    await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name);
+    await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name, auth: auth);
     Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
-    await DeviceHelper.updateStringParam(device, mdns, mdnsDomain);
+    await updateStringParam(device, mdns, mdnsDomain);
     await ddb.updateDevice(
         DevicesCompanion(id: Value(device.id), name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
   }
 
   static Future<String> updateStringParam(Device device, Param param, String value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    value =
-        await DeviceAPI.setStringParam(device.ip, param.key, value, timeout: timeout, nRetries: nRetries, wait: wait);
+    String auth = AppDB().getDeviceAuth(device.identifier);
+    value = await DeviceAPI.setStringParam(device.ip, param.key, value,
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
     return value;
   }
 
   static Future<int> updateIntParam(Device device, Param param, int value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    value = await DeviceAPI.setIntParam(device.ip, param.key, value, timeout: timeout, nRetries: nRetries, wait: wait);
+    String auth = AppDB().getDeviceAuth(device.identifier);
+    value = await DeviceAPI.setIntParam(device.ip, param.key, value,
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
     return value;
   }
@@ -93,14 +97,17 @@ class DeviceHelper {
 
   static Future refreshStringParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    String value =
-        await DeviceAPI.fetchStringParam(device.ip, param.key, timeout: timeout, nRetries: nRetries, wait: wait);
+    String auth = AppDB().getDeviceAuth(device.identifier);
+    String value = await DeviceAPI.fetchStringParam(device.ip, param.key,
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
   }
 
   static Future<Param> refreshIntParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
-    int value = await DeviceAPI.fetchIntParam(device.ip, param.key, timeout: timeout, nRetries: nRetries, wait: wait);
+    String auth = AppDB().getDeviceAuth(device.identifier);
+    int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     Param newParam = param.copyWith(ivalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;

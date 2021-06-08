@@ -8,6 +8,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/devices/websocket.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -109,12 +110,13 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
     }
     _deviceWorker[device.id] = true;
     try {
+      String auth = AppDB().getDeviceAuth(device.identifier);
       var ddb = RelDB.get().devicesDAO;
       try {
-        String identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1);
+        String identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
         if (identifier == device.identifier) {
           if (device.isSetup == false) {
-            await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null);
+            await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null, auth: auth);
           }
           await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
           add(DeviceDaemonBlocEventDeviceReachable(device, true));
@@ -135,10 +137,10 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
         ip = await DeviceAPI.resolveLocalName(device.mdns);
         if (ip != null && ip != "") {
           try {
-            String identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID');
+            String identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID', auth: auth);
             if (identifier == device.identifier) {
               if (device.isSetup == false) {
-                await DeviceAPI.fetchAllParams(ip, device.id, (_) => null);
+                await DeviceAPI.fetchAllParams(ip, device.id, (_) => null, auth: auth);
               }
               await ddb.updateDevice(DevicesCompanion(
                   id: Value(device.id),

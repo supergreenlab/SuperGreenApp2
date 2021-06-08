@@ -18,17 +18,39 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_setup/device_setup_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
+import 'package:super_green_app/widgets/textfield.dart';
 
-class DeviceSetupPage extends TraceableStatelessWidget {
+class DeviceSetupPage extends TraceableStatefulWidget {
+  static String settingsDeviceSetupPagePasswordInstructions() {
+    return Intl.message(
+      'This controller is password protected, please enter the login/password below.',
+      name: 'settingsDeviceSetupPagePasswordInstructions',
+      desc: 'Password protection instructions',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  @override
+  _DeviceSetupPageState createState() => _DeviceSetupPageState();
+}
+
+class _DeviceSetupPageState extends State<DeviceSetupPage> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocListener(
@@ -59,7 +81,11 @@ class DeviceSetupPage extends TraceableStatelessWidget {
             if (state is DeviceSetupBlocStateAlreadyExists) {
               body = _renderAlreadyAdded(context);
             } else if (state is DeviceSetupBlocStateLoadingError) {
-              body = _renderLoadingError(context);
+              if (state.requiresAuth) {
+                body = _renderAuthForm(context);
+              } else {
+                body = _renderLoadingError(context);
+              }
             } else {
               body = _renderLoading(context, state);
             }
@@ -91,6 +117,87 @@ class DeviceSetupPage extends TraceableStatelessWidget {
         title: 'This controller is already added!', child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
+  Widget _renderAuthForm(BuildContext context) {
+    return ListView(children: <Widget>[
+      SectionTitle(
+        title: 'Controller is password protected',
+        icon: 'assets/settings/icon_lock.svg',
+        backgroundColor: Color(0xff0b6ab3),
+        titleColor: Colors.white,
+        elevation: 5,
+      ),
+      Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: MarkdownBody(
+                fitContent: true,
+                data: DeviceSetupPage.settingsDeviceSetupPagePasswordInstructions(),
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
+          ),
+        ],
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Text('Username',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            )),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SGLTextField(
+            hintText: 'Ex: stant',
+            controller: _usernameController,
+            textCapitalization: TextCapitalization.none,
+            onChanged: (_) {
+              setState(() {});
+            }),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16),
+        child: Text('Password',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            )),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SGLTextField(
+            hintText: '***',
+            controller: _passwordController,
+            obscureText: true,
+            onChanged: (_) {
+              setState(() {});
+            }),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GreenButton(
+              onPressed: isValid()
+                  ? () {
+                      BlocProvider.of<DeviceSetupBloc>(context).add(DeviceSetupBlocEventStartSetup(
+                        username: _usernameController.text,
+                        password: _passwordController.text,
+                      ));
+                    }
+                  : null,
+              title: 'SET CREDENTIALS',
+            ),
+          ),
+        ],
+      ),
+    ]);
+  }
+
   Widget _renderLoading(BuildContext context, DeviceSetupBlocState state) {
     return Column(
       children: <Widget>[
@@ -110,5 +217,9 @@ class DeviceSetupPage extends TraceableStatelessWidget {
         Expanded(child: FullscreenLoading(title: 'Loading please wait..', percent: state.percent)),
       ],
     );
+  }
+
+  bool isValid() {
+    return _usernameController.text.length >= 4 && _passwordController.text.length >= 4;
   }
 }

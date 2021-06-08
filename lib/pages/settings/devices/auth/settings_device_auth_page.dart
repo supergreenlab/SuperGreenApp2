@@ -130,7 +130,7 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
     return ListView(children: <Widget>[
       SectionTitle(
         title: 'Controller access control',
-        icon: 'assets/settings/icon_remotecontrol.svg',
+        icon: 'assets/settings/icon_lock.svg',
         backgroundColor: Color(0xff0b6ab3),
         titleColor: Colors.white,
         elevation: 5,

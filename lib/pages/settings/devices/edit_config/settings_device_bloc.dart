@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -132,13 +133,14 @@ class SettingsDeviceBloc extends Bloc<SettingsDeviceBlocEvent, SettingsDeviceBlo
   }
 
   void refreshParams({bool delete = false}) async {
-    final deviceName = await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME");
-    final mdnsDomain = await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN");
+    String auth = AppDB().getDeviceAuth(device.identifier);
+    final deviceName = await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME", auth: auth);
+    final mdnsDomain = await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN", auth: auth);
     await RelDB.get().devicesDAO.updateDevice(
         DevicesCompanion(id: Value(device.id), name: Value(deviceName), mdns: Value(mdnsDomain), synced: Value(false)));
     await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
       add(SettingsDeviceBlocEventRefreshing(adv));
-    }, delete: delete);
+    }, delete: delete, auth: auth);
     add(SettingsDeviceBlocEventRefreshing(100));
   }
 }

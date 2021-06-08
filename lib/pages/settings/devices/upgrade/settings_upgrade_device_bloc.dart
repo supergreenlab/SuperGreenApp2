@@ -24,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -110,15 +111,16 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent, Set
       yield SettingsUpgradeDeviceBlocStateLoaded(int.parse(localOTATimestamp) > otaTimestamp.ivalue);
     } else if (event is SettingsUpgradeDeviceBlocEventUpgrade) {
       yield SettingsUpgradeDeviceBlocStateUpgrading('Setting parameters..');
+      String auth = AppDB().getDeviceAuth(args.device.identifier);
       Param otaServerIP = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_SERVER_IP');
       Param otaServerPort = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_SERVER_PORT');
-      String myip = await DeviceAPI.fetchString('http://${args.device.ip}/myip');
+      String myip = await DeviceAPI.fetchString('http://${args.device.ip}/myip', auth: auth);
 
       Param otaBaseDir = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
       ByteData config = await rootBundle.load('assets/firmware${otaBaseDir.svalue}/html_app/config.json');
-      await DeviceAPI.uploadFile(args.device.ip, 'config.json', config);
+      await DeviceAPI.uploadFile(args.device.ip, 'config.json', config, auth: auth);
       ByteData htmlApp = await rootBundle.load('assets/firmware${otaBaseDir.svalue}/html_app/app.html');
-      await DeviceAPI.uploadFile(args.device.ip, 'app.html', htmlApp);
+      await DeviceAPI.uploadFile(args.device.ip, 'app.html', htmlApp, auth: auth);
 
       server = await HttpServer.bind(InternetAddress.anyIPv6, 0);
       server.listen(listenRequest);

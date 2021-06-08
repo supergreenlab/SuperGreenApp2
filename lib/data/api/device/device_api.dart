@@ -66,7 +66,13 @@ class DeviceAPI {
   }
 
   static Future<String> fetchConfig(String controllerIP, {String auth}) async {
-    Response r = await get('http://$controllerIP/fs/config.json');
+    Map<String, String> headers = null;
+    if (auth != null) {
+      headers = {
+        'Authorization': 'Basic $auth',
+      };
+    }
+    Response r = await get('http://$controllerIP/fs/config.json', headers: headers);
     return r.body;
   }
 
@@ -95,6 +101,9 @@ class DeviceAPI {
           if (resp.contentLength == 0) {
             return '';
           }
+          if ((resp.statusCode / 100).floor() != 2) {
+            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+          }
           final completer = Completer<String>();
           completer.future.whenComplete(() => client.close(force: true));
           resp.transform(utf8.decoder).listen((contents) {
@@ -108,7 +117,7 @@ class DeviceAPI {
         }
       }
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"url": url});
+      Logger.logError(e, trace, data: {"url": url}, fwdThrow: true);
     }
     return null;
   }
@@ -130,14 +139,16 @@ class DeviceAPI {
             req.headers.set('Authorization', 'Basic $auth');
           }
           final resp = await req.close();
+          if ((resp.statusCode / 100).floor() != 2) {
+            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+          }
           final completer = Completer<int>();
           completer.future.whenComplete(() => client.close(force: true));
           resp.transform(utf8.decoder).listen((contents) {
             try {
               completer.complete(int.parse(contents));
             } catch (e, trace) {
-              Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName});
-              throw e;
+              Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName}, fwdThrow: true);
             }
           }, onError: completer.completeError);
           return completer.future;
@@ -148,7 +159,7 @@ class DeviceAPI {
         }
       }
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName});
+      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName}, fwdThrow: true);
     }
     return null;
   }
@@ -159,7 +170,8 @@ class DeviceAPI {
       await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
+      Logger.logError(e, trace,
+          data: {"controllerIP": controllerIP, "paramName": paramName, "value": value}, fwdThrow: true);
     }
     return fetchStringParam(controllerIP, paramName);
   }
@@ -170,9 +182,10 @@ class DeviceAPI {
       await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value',
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName, "value": value});
+      Logger.logError(e, trace,
+          data: {"controllerIP": controllerIP, "paramName": paramName, "value": value}, fwdThrow: true);
     }
-    return fetchIntParam(controllerIP, paramName);
+    return fetchIntParam(controllerIP, paramName, auth: auth);
   }
 
   static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
@@ -190,7 +203,10 @@ class DeviceAPI {
           if (auth != null) {
             req.headers.set('Authorization', 'Basic $auth');
           }
-          await req.close();
+          final resp = await req.close();
+          if ((resp.statusCode / 100).floor() != 2) {
+            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+          }
           break;
         } catch (e) {
           if (i == nRetries - 1) {
@@ -222,7 +238,10 @@ class DeviceAPI {
           req.contentLength = data.lengthInBytes;
           req.add(data.buffer.asInt8List());
           await req.flush();
-          await req.close();
+          final resp = await req.close();
+          if ((resp.statusCode / 100).floor() != 2) {
+            Logger.throwError('Device request error: ${resp.statusCode}', fwdThrow: true);
+          }
           break;
         } catch (e) {
           if (i == nRetries - 1) {
@@ -231,7 +250,7 @@ class DeviceAPI {
         }
       }
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "fileName": fileName});
+      Logger.logError(e, trace, data: {"controllerIP": controllerIP, "fileName": fileName}, fwdThrow: true);
     } finally {
       client.close(force: true);
     }
@@ -286,7 +305,7 @@ class DeviceAPI {
               await db.updateParam(exists.copyWith(ivalue: value));
             }
           } catch (e, trace) {
-            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']});
+            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']}, fwdThrow: true);
             throw e;
           }
         } else {
@@ -300,8 +319,7 @@ class DeviceAPI {
               await db.updateParam(exists.copyWith(svalue: value));
             }
           } catch (e, trace) {
-            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']});
-            throw e;
+            Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID, "param": k['caps_name']}, fwdThrow: true);
           }
         }
         ++done;
@@ -312,8 +330,7 @@ class DeviceAPI {
         isSetup: Value(true),
       ));
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID});
-      throw e;
+      Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID}, fwdThrow: true);
     } finally {
       DeviceAPI.fetchingAllParams[deviceID] = false;
     }

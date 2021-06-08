@@ -17,11 +17,13 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -29,8 +31,13 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 abstract class DeviceSetupBlocEvent extends Equatable {}
 
 class DeviceSetupBlocEventStartSetup extends DeviceSetupBlocEvent {
+  final String username;
+  final String password;
+
+  DeviceSetupBlocEventStartSetup({this.username, this.password});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [username, password];
 }
 
 class DeviceSetupBlocEventProgress extends DeviceSetupBlocEvent {
@@ -42,8 +49,12 @@ class DeviceSetupBlocEventProgress extends DeviceSetupBlocEvent {
 }
 
 class DeviceSetupBlocEventLoadingError extends DeviceSetupBlocEvent {
+  final bool requiresAuth;
+
+  DeviceSetupBlocEventLoadingError({this.requiresAuth});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [requiresAuth];
 }
 
 class DeviceSetupBlocEventAlreadyExists extends DeviceSetupBlocEvent {
@@ -80,7 +91,9 @@ class DeviceSetupBlocStateAlreadyExists extends DeviceSetupBlocState {
 }
 
 class DeviceSetupBlocStateLoadingError extends DeviceSetupBlocState {
-  DeviceSetupBlocStateLoadingError() : super(0);
+  final bool requiresAuth;
+
+  DeviceSetupBlocStateLoadingError({this.requiresAuth}) : super(0);
 }
 
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
@@ -108,7 +121,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     } else if (event is DeviceSetupBlocEventProgress) {
       yield DeviceSetupBlocState(event.percent);
     } else if (event is DeviceSetupBlocEventLoadingError) {
-      yield DeviceSetupBlocStateLoadingError();
+      yield DeviceSetupBlocStateLoadingError(requiresAuth: event.requiresAuth);
     } else if (event is DeviceSetupBlocEventAlreadyExists) {
       yield DeviceSetupBlocStateAlreadyExists();
     } else if (event is DeviceSetupBlocEventDone) {
@@ -120,11 +133,16 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     try {
       final db = RelDB.get().devicesDAO;
       String deviceIdentifier;
+      String auth;
+
+      if (event.username != null && event.password != null) {
+        auth = base64.encode(utf8.encode('${event.username}:${event.password}'));
+      }
 
       try {
-        deviceIdentifier = await DeviceAPI.fetchStringParam(args.ip, "BROKER_CLIENTID");
+        deviceIdentifier = await DeviceAPI.fetchStringParam(args.ip, "BROKER_CLIENTID", auth: auth);
       } catch (e) {
-        add(DeviceSetupBlocEventLoadingError());
+        add(DeviceSetupBlocEventLoadingError(requiresAuth: e.toString().endsWith('401')));
         return;
       }
 
@@ -138,11 +156,13 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         return;
       }
 
+      AppDB().setDeviceAuth(deviceIdentifier, auth);
+
       int deviceID;
 
       try {
-        final deviceName = await DeviceAPI.fetchStringParam(args.ip, "DEVICE_NAME");
-        final mdnsDomain = await DeviceAPI.fetchStringParam(args.ip, "MDNS_DOMAIN");
+        final deviceName = await DeviceAPI.fetchStringParam(args.ip, "DEVICE_NAME", auth: auth);
+        final mdnsDomain = await DeviceAPI.fetchStringParam(args.ip, "MDNS_DOMAIN", auth: auth);
 
         final device =
             DevicesCompanion.insert(identifier: deviceIdentifier, name: deviceName, ip: args.ip, mdns: mdnsDomain);
@@ -155,7 +175,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       try {
         await DeviceAPI.fetchAllParams(args.ip, deviceID, (adv) {
           add(DeviceSetupBlocEventProgress(adv));
-        });
+        }, auth: auth);
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"ip": args.ip, "deviceID": deviceID});
         add(DeviceSetupBlocEventLoadingError());
