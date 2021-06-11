@@ -23,7 +23,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
+import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
@@ -128,6 +130,8 @@ import 'package:super_green_app/pages/settings/boxes/settings_boxes_bloc.dart';
 import 'package:super_green_app/pages/settings/boxes/settings_boxes_page.dart';
 import 'package:super_green_app/pages/settings/devices/auth/settings_device_auth_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/auth/settings_device_auth_page.dart';
+import 'package:super_green_app/pages/settings/devices/auth_modal/auth_modal_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/auth_modal/auth_modal_page.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_page.dart';
 import 'package:super_green_app/pages/settings/devices/remote_control/settings_remote_control_bloc.dart';
@@ -254,7 +258,13 @@ class _MainPageState extends State<MainPage> {
                   BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
                 }
               },
-              child: body,
+              child: BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
+                  listener: (BuildContext context, DeviceDaemonBlocState state) {
+                    if (state is DeviceDaemonBlocStateRequiresLogin) {
+                      _promptDeviceAuth(lastRouteContext, state.device);
+                    }
+                  },
+                  child: body),
             )));
   }
 
@@ -611,6 +621,23 @@ class _MainPageState extends State<MainPage> {
             Navigator.pop(context);
           }),
           child: NotificationRequestPage(),
+        );
+      },
+    );
+  }
+
+  void _promptDeviceAuth(BuildContext context, Device device) {
+    showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext c) {
+        return BlocProvider<AuthModalBloc>(
+          create: (BuildContext context) => AuthModalBloc(
+              device: device,
+              onClose: () {
+                Navigator.pop(context);
+              }),
+          child: AuthModalPage(),
         );
       },
     );

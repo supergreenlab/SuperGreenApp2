@@ -40,6 +40,24 @@ class DeviceDaemonBlocEventDeviceReachable extends DeviceDaemonBlocEvent {
   List<Object> get props => [rand, device, reachable];
 }
 
+class DeviceDaemonBlocEventRequiresLogin extends DeviceDaemonBlocEvent {
+  final Device device;
+
+  DeviceDaemonBlocEventRequiresLogin(this.device);
+
+  @override
+  List<Object> get props => [device];
+}
+
+class DeviceDaemonBlocEventLoggedIn extends DeviceDaemonBlocEvent {
+  final Device device;
+
+  DeviceDaemonBlocEventLoggedIn(this.device);
+
+  @override
+  List<Object> get props => [device];
+}
+
 abstract class DeviceDaemonBlocState extends Equatable {}
 
 class DeviceDaemonBlocStateInit extends DeviceDaemonBlocState {
@@ -57,6 +75,15 @@ class DeviceDaemonBlocStateDeviceReachable extends DeviceDaemonBlocState {
 
   @override
   List<Object> get props => [rand, device, reachable, usingWifi];
+}
+
+class DeviceDaemonBlocStateRequiresLogin extends DeviceDaemonBlocState {
+  final Device device;
+
+  DeviceDaemonBlocStateRequiresLogin(this.device);
+
+  @override
+  List<Object> get props => [device];
 }
 
 class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
@@ -89,6 +116,10 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
       yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable, _usingWifi);
     } else if (event is DeviceDaemonBlocEventDeviceReachable) {
       yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable, _usingWifi);
+    } else if (event is DeviceDaemonBlocEventRequiresLogin) {
+      yield DeviceDaemonBlocStateRequiresLogin(event.device);
+    } else if (event is DeviceDaemonBlocEventLoggedIn) {
+      _deviceWorker[event.device.id] = false;
     }
   }
 
@@ -130,6 +161,11 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
           }
         }
       } catch (e) {
+        if (e.toString().endsWith('401')) {
+          add(DeviceDaemonBlocEventRequiresLogin(device));
+          return;
+        }
+
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
         add(DeviceDaemonBlocEventDeviceReachable(device, false));
         String ip;

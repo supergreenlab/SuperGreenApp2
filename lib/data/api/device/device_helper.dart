@@ -124,7 +124,6 @@ class DeviceHelper {
 
     await RelDB.get().devicesDAO.deleteParams(device.id);
     await RelDB.get().devicesDAO.deleteModules(device.id);
-    AppDB().setDeviceAuth(device.identifier, null);
-    AppDB().setDeviceSigning(device.identifier, null);
+    AppDB().deleteDeviceData(device.identifier);
   }
 }

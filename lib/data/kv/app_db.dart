@@ -135,6 +135,10 @@ class AppDB {
     _settingsDB.put('device$identifier', deviceData);
   }
 
+  void deleteDeviceData(String identifier) {
+    _settingsDB.delete('device$identifier');
+  }
+
   void setTipDone(String tipID) {
     _miscDB.put('$tipID.done', true);
   }
