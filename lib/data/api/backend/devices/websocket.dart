@@ -20,6 +20,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -27,6 +28,7 @@ import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:uuid/uuid.dart';
 
 class ControllerMetric extends Equatable {
   final String controllerID;
@@ -47,34 +49,65 @@ class ControllerMetric extends Equatable {
   }
 }
 
+class ControllerLog extends Equatable {
+  final String controllerID;
+  final String module;
+  final String msg;
+
+  ControllerLog({this.controllerID, this.module, this.msg});
+
+  @override
+  List<Object> get props => [controllerID, module, msg];
+
+  factory ControllerLog.fromMap(Map<String, dynamic> map) {
+    return ControllerLog(controllerID: map['controllerID'], module: map['module'], msg: map['msg']);
+  }
+
+  factory ControllerLog.fromJSON(String json) {
+    return ControllerLog.fromMap(JsonDecoder().convert(json));
+  }
+}
+
 class DeviceWebsocket {
   final Device device;
   WebSocketChannel channel;
   StreamSubscription sub;
 
+  Map<String, Completer> commandCompleters = {};
+
   DeviceWebsocket(this.device);
 
   void connect() async {
-    String url = '${BackendAPI().websocketServerHost}/device/${device.identifier}/stream';
+    String url = '${BackendAPI().websocketServerHost}/device/${device.serverID}/stream';
     channel = IOWebSocketChannel(await WebSocket.connect(url, headers: {
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     }));
+
+    Timer.periodic(Duration(seconds: 2), (Timer timer) async {
+      await sendRemoteCommand('gets -k DEVICE_NAME');
+    });
     sub = channel.stream.listen((message) async {
-      ControllerMetric cm = ControllerMetric.fromJSON(message);
-      Param param = await RelDB.get().devicesDAO.getParam(device.id, cm.key);
-      if (param == null) {
-        Logger.log("Unknown param ${cm.key}");
-        return;
+      Map<String, dynamic> messageMap = JsonDecoder().convert(message);
+      if (messageMap['type'] == 'log') {
+        ControllerLog log = ControllerLog.fromMap(messageMap);
+        Logger.log('Received log ${log.module} -> ${log.msg}');
+      } else {
+        ControllerMetric cm = ControllerMetric.fromMap(messageMap);
+        Param param = await RelDB.get().devicesDAO.getParam(device.id, cm.key);
+        if (param == null) {
+          Logger.log("Unknown param ${cm.key}");
+          return;
+        }
+        dynamic value = cm.value;
+        if (value is String) {
+          await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
+        } else if (value is double) {
+          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value.round()));
+        } else if (value is int) {
+          await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
+        }
+        Logger.log('Updated parameter ${cm.key} to value ${cm.value}');
       }
-      dynamic value = cm.value;
-      if (value is String) {
-        await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
-      } else if (value is double) {
-        await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value.round()));
-      } else if (value is int) {
-        await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
-      }
-      Logger.log("Updated parameter ${cm.key} to value ${cm.value}");
     }, onError: (e) async {
       Logger.logError(e, null);
       await Future.delayed(Duration(seconds: 3));
@@ -83,6 +116,22 @@ class DeviceWebsocket {
       await Future.delayed(Duration(seconds: 3));
       connect();
     });
+  }
+
+  Future sendRemoteCommand(String cmd) async {
+    String signing = AppDB().getDeviceSigning(device.identifier);
+    String uuid = Uuid().v4();
+    cmd = '$cmd -i $uuid';
+    String cmdWithSigning = '$signing:$cmd';
+    String signature = sha256.convert(utf8.encode(cmdWithSigning)).toString();
+    String signedCmd = '$signature:$cmd';
+    channel.sink.add(signedCmd);
+    Completer completer = Completer();
+    commandCompleters[uuid] = completer;
+    Timer(Duration(seconds: 5), () {
+      completer.completeError(Exception('Timeout for command $uuid'));
+    });
+    return completer;
   }
 
   void close() {

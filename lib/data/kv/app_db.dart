@@ -51,6 +51,11 @@ class AppDB {
     return deviceData.auth;
   }
 
+  String getDeviceSigning(String identifier) {
+    DeviceData deviceData = getDeviceData(identifier);
+    return deviceData.signing;
+  }
+
   Stream<BoxEvent> watchAppData() {
     return _settingsDB.watch(key: 'data');
   }
