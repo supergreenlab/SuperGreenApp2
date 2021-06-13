@@ -338,8 +338,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
 
   void _handleInput(BuildContext context) {
     BlocProvider.of<DeviceWifiBloc>(context).add(DeviceWifiBlocEventSetup(
-      _ssidController.text,
-      _passController.text,
+      _ssidController.text.trim(),
+      _passController.text.trim(),
     ));
   }
 
