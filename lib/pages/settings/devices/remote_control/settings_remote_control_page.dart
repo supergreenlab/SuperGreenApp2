@@ -23,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/remote_control/settings_remote_control_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -56,7 +57,6 @@ class SettingsRemoteControlPage extends StatefulWidget {
 
 class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
   Device device;
-  bool done = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,20 +66,15 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
         if (state is SettingsRemoteControlBlocStateLoaded) {
           this.device = state.device;
         } else if (state is SettingsRemoteControlBlocStateDonePairing) {
-          setState(() {
-            this.done = true;
-          });
           await Future.delayed(Duration(seconds: 2));
-          setState(() {
-            this.done = false;
-          });
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<SettingsRemoteControlBloc, SettingsRemoteControlBlocState>(
           cubit: BlocProvider.of<SettingsRemoteControlBloc>(context),
           builder: (BuildContext context, SettingsRemoteControlBlocState state) {
             Widget body;
-            if (this.done) {
+            if (state is SettingsRemoteControlBlocStateDonePairing) {
               body = _renderDonePairing();
             } else if (state is SettingsRemoteControlBlocStateLoading) {
               body = FullscreenLoading(
@@ -95,8 +90,7 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
-                  hideBackButton: state is SettingsRemoteControlBlocStateDonePairing ||
-                      state is SettingsRemoteControlBlocStateDoneAuth,
+                  hideBackButton: state is SettingsRemoteControlBlocStateDonePairing,
                 ),
                 backgroundColor: Colors.white,
                 body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));

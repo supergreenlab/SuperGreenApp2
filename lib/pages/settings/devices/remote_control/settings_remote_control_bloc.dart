@@ -36,16 +36,6 @@ class SettingsRemoteControlBlocEventPair extends SettingsRemoteControlBlocEvent 
   List<Object> get props => [];
 }
 
-class SettingsRemoteControlBlocEventSetAuth extends SettingsRemoteControlBlocEvent {
-  final String username;
-  final String password;
-
-  SettingsRemoteControlBlocEventSetAuth(this.username, this.password);
-
-  @override
-  List<Object> get props => [username, password];
-}
-
 abstract class SettingsRemoteControlBlocState extends Equatable {}
 
 class SettingsRemoteControlBlocStateInit extends SettingsRemoteControlBlocState {
@@ -77,15 +67,6 @@ class SettingsRemoteControlBlocStateDonePairing extends SettingsRemoteControlBlo
   List<Object> get props => [device];
 }
 
-class SettingsRemoteControlBlocStateDoneAuth extends SettingsRemoteControlBlocState {
-  final Device device;
-
-  SettingsRemoteControlBlocStateDoneAuth(this.device);
-
-  @override
-  List<Object> get props => [device];
-}
-
 class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, SettingsRemoteControlBlocState> {
   final MainNavigateToSettingsRemoteControl args;
 
@@ -106,7 +87,6 @@ class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, Set
       await DeviceHelper.pairDevice(args.device);
       await Future.delayed(Duration(seconds: 1));
       yield SettingsRemoteControlBlocStateDonePairing(args.device);
-      add(SettingsRemoteControlBlocEventInit());
     }
   }
 }
