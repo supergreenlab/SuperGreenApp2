@@ -79,18 +79,33 @@ class DeviceWebsocket {
 
   void connect() async {
     String url = '${BackendAPI().websocketServerHost}/device/${device.serverID}/stream';
-    channel = IOWebSocketChannel(await WebSocket.connect(url, headers: {
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    }));
+    try {
+      channel = IOWebSocketChannel(await WebSocket.connect(url, headers: {
+        'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      }));
+    } catch (e, trace) {
+      Logger.logError(e, trace);
+      await Future.delayed(Duration(seconds: 3));
+      connect();
+      return;
+    }
 
-    Timer.periodic(Duration(seconds: 2), (Timer timer) async {
-      await sendRemoteCommand('gets -k DEVICE_NAME');
-    });
+    // Timer timer = Timer.periodic(Duration(seconds: 10), (Timer timer) async {
+    //   await sendRemoteCommand('gets -k DEVICE_NAME');
+    // });
     sub = channel.stream.listen((message) async {
       Map<String, dynamic> messageMap = JsonDecoder().convert(message);
       if (messageMap['type'] == 'log') {
         ControllerLog log = ControllerLog.fromMap(messageMap);
         Logger.log('Received log ${log.module} -> ${log.msg}');
+        if (log.module == 'CMD') {
+          String cmdId = log.msg.split(')')[0].substring(1);
+          Logger.log('Command id: $cmdId');
+          if (commandCompleters.containsKey(cmdId)) {
+            commandCompleters[cmdId].complete();
+            commandCompleters.remove(cmdId);
+          }
+        }
       } else {
         ControllerMetric cm = ControllerMetric.fromMap(messageMap);
         Param param = await RelDB.get().devicesDAO.getParam(device.id, cm.key);
@@ -110,9 +125,11 @@ class DeviceWebsocket {
       }
     }, onError: (e) async {
       Logger.logError(e, null);
+      timer.cancel();
       await Future.delayed(Duration(seconds: 3));
       connect();
     }, onDone: () async {
+      timer.cancel();
       await Future.delayed(Duration(seconds: 3));
       connect();
     });
@@ -129,7 +146,10 @@ class DeviceWebsocket {
     Completer completer = Completer();
     commandCompleters[uuid] = completer;
     Timer(Duration(seconds: 5), () {
-      completer.completeError(Exception('Timeout for command $uuid'));
+      if (!completer.isCompleted) {
+        completer.completeError(Exception('Timeout for command $uuid'));
+      }
+      commandCompleters.remove(uuid);
     });
     return completer;
   }
