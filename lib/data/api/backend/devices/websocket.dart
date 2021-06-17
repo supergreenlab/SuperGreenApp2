@@ -125,11 +125,11 @@ class DeviceWebsocket {
       }
     }, onError: (e) async {
       Logger.logError(e, null);
-      timer.cancel();
+      // timer.cancel();
       await Future.delayed(Duration(seconds: 3));
       connect();
     }, onDone: () async {
-      timer.cancel();
+      // timer.cancel();
       await Future.delayed(Duration(seconds: 3));
       connect();
     });

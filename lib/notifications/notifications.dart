@@ -204,6 +204,18 @@ class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocSt
             replyTo: notificationData.replyTo,
           ));
         }
+      } else if (notificationData is NotificationDataFollowedPlantActivity) {
+        yield NotificationsBlocStateNotification(event.notificationData);
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+        if (plant == null) return;
+        AppDB().setLastPlant(plant.id);
+        yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+      } else if (notificationData is NotificationDataNewFollower) {
+        yield NotificationsBlocStateNotification(event.notificationData);
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+        if (plant == null) return;
+        AppDB().setLastPlant(plant.id);
+        yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
       }
     } else if (event is NotificationsBlocEventReminder) {
       await localNotifications.reminderNotification(

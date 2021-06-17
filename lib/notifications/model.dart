@@ -31,6 +31,8 @@ enum NotificationDataType {
   ALERT,
   LIKE_PLANT_COMMENT,
   LIKE_PLANT_FEEDENTRY,
+  FOLLOWED_PLANT_ACTIVITY,
+  NEW_FOLLOWER,
 }
 
 abstract class NotificationData extends Equatable {
@@ -62,6 +64,10 @@ abstract class NotificationData extends Equatable {
         return NotificationDataLikePlantComment.fromMap(data);
       case NotificationDataType.LIKE_PLANT_FEEDENTRY:
         return NotificationDataLikePlantFeedEntry.fromMap(data);
+      case NotificationDataType.FOLLOWED_PLANT_ACTIVITY:
+        return NotificationDataFollowedPlantActivity.fromMap(data);
+      case NotificationDataType.NEW_FOLLOWER:
+        return NotificationDataNewFollower.fromMap(data);
     }
     try {
       throw 'Unknown type ${data['type']}';
@@ -209,4 +215,34 @@ class NotificationDataLikePlantFeedEntry extends NotificationData {
 
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
+}
+
+class NotificationDataFollowedPlantActivity extends NotificationData {
+  NotificationDataFollowedPlantActivity({int id, String title, String body, @required String plantID})
+      : super(
+            id: id,
+            data: {
+              'plantID': plantID,
+            },
+            type: NotificationDataType.FOLLOWED_PLANT_ACTIVITY,
+            title: title,
+            body: body);
+  NotificationDataFollowedPlantActivity.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
+}
+
+class NotificationDataNewFollower extends NotificationData {
+  NotificationDataNewFollower({int id, String title, String body, @required String plantID})
+      : super(
+            id: id,
+            data: {
+              'plantID': plantID,
+            },
+            type: NotificationDataType.NEW_FOLLOWER,
+            title: title,
+            body: body);
+  NotificationDataNewFollower.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
 }
