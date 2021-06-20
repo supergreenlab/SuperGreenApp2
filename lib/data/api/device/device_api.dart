@@ -66,7 +66,7 @@ class DeviceAPI {
   }
 
   static Future<String> fetchConfig(String controllerIP, {String auth}) async {
-    Map<String, String> headers = null;
+    Map<String, String> headers;
     if (auth != null) {
       headers = {
         'Authorization': 'Basic $auth',
