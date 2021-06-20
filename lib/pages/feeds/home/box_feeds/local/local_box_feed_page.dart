@@ -26,6 +26,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
@@ -68,7 +69,8 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           if (state.box.device != null) {
             // TODO find something better than this
             Timer(Duration(milliseconds: 100), () {
-              BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+              BlocProvider.of<DeviceReachableListenerBloc>(context)
+                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
             });
           }
         }
@@ -92,10 +94,11 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
             );
           }
 
-          return BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-            listener: (BuildContext context, DeviceDaemonBlocState daemonState) {
+          return BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
+            listener: (BuildContext context, DeviceReachableListenerBlocState daemonState) {
               if (state is LocalBoxFeedBlocStateLoaded) {
-                if (daemonState is DeviceDaemonBlocStateDeviceReachable && daemonState.device.id == state.box.device) {
+                if (daemonState is DeviceReachableListenerBlocStateDeviceReachable &&
+                    daemonState.device.id == state.box.device) {
                   setState(() {
                     _reachable = daemonState.reachable;
                     _deviceIP = daemonState.device.ip;

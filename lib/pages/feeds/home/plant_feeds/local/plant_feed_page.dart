@@ -29,6 +29,7 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -325,7 +326,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             if (state.box.device != null) {
               // TODO find something better than this
               Timer(Duration(milliseconds: 100), () {
-                BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+                BlocProvider.of<DeviceReachableListenerBloc>(context)
+                    .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
               });
             }
           }
@@ -349,10 +351,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               );
             }
 
-            return BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-              listener: (BuildContext context, DeviceDaemonBlocState daemonState) {
+            return BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
+              listener: (BuildContext context, DeviceReachableListenerBlocState daemonState) {
                 if (state is PlantFeedBlocStateLoaded) {
-                  if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
+                  if (daemonState is DeviceReachableListenerBlocStateDeviceReachable &&
                       daemonState.device.id == state.box.device) {
                     setState(() {
                       _reachable = daemonState.reachable;

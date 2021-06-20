@@ -34,8 +34,7 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 const int TEMP_REF_OFFSET = 0x1;
 const int TIMER_REF_OFFSET = 0x8;
 
-bool isTempSource(int source) =>
-    source >= TEMP_REF_OFFSET && source < TIMER_REF_OFFSET;
+bool isTempSource(int source) => source >= TEMP_REF_OFFSET && source < TIMER_REF_OFFSET;
 bool isTimerSource(int source) => source >= TIMER_REF_OFFSET;
 
 class IntControllerParam extends Equatable {
@@ -48,33 +47,26 @@ class IntControllerParam extends Equatable {
   IntControllerParam(this._param, this.value, this.initialValue);
 
   IntControllerParam copyWith({Param param, int value, int initialValue}) =>
-      IntControllerParam(param ?? this._param, value ?? this.value,
-          initialValue ?? this.initialValue);
+      IntControllerParam(param ?? this._param, value ?? this.value, initialValue ?? this.initialValue);
 
   Future<IntControllerParam> _syncParam(Device device) async {
     if (value != _param.ivalue) {
-      int newValue = await DeviceHelper.updateIntParam(device, _param, value);
-      Param param = _param.copyWith(ivalue: newValue);
-      return this.copyWith(param: param, value: newValue);
+      Param param = await DeviceHelper.updateIntParam(device, _param, value);
+      return this.copyWith(param: param, value: param.ivalue);
     }
     return this;
   }
 
   Future<IntControllerParam> _cancelParam(Device device) async {
     if (initialValue != _param.ivalue) {
-      int newValue =
-          await DeviceHelper.updateIntParam(device, _param, initialValue);
-      Param param = _param.copyWith(ivalue: newValue);
+      Param param = await DeviceHelper.updateIntParam(device, _param, initialValue);
       return this.copyWith(param: param);
     }
     return this;
   }
 
-  static Future<IntControllerParam> loadFromDB(
-      Device device, Box box, String key) async {
-    Param param = await RelDB.get()
-        .devicesDAO
-        .getParam(device.id, "BOX_${box.deviceBox}_$key");
+  static Future<IntControllerParam> loadFromDB(Device device, Box box, String key) async {
+    Param param = await RelDB.get().devicesDAO.getParam(device.id, "BOX_${box.deviceBox}_$key");
     return IntControllerParam(param, param.ivalue, param.ivalue);
   }
 
@@ -98,8 +90,7 @@ class FeedVentilationFormBlocEventCreate extends FeedVentilationFormBlocEvent {
   List<Object> get props => [];
 }
 
-class FeedVentilationFormBlocParamsChangedEvent
-    extends FeedVentilationFormBlocEvent {
+class FeedVentilationFormBlocParamsChangedEvent extends FeedVentilationFormBlocEvent {
   final IntControllerParam blowerMin;
   final IntControllerParam blowerMax;
   final IntControllerParam blowerRefMin;
@@ -121,19 +112,10 @@ class FeedVentilationFormBlocParamsChangedEvent
   });
 
   @override
-  List<Object> get props => [
-        blowerMin,
-        blowerMax,
-        blowerRefMin,
-        blowerRefMax,
-        blowerRefSource,
-        blowerDay,
-        blowerNight
-      ];
+  List<Object> get props => [blowerMin, blowerMax, blowerRefMin, blowerRefMax, blowerRefSource, blowerDay, blowerNight];
 }
 
-class FeedVentilationFormBlocEventCancelEvent
-    extends FeedVentilationFormBlocEvent {
+class FeedVentilationFormBlocEventCancelEvent extends FeedVentilationFormBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -206,8 +188,7 @@ class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedVentilationFormBloc
-    extends Bloc<FeedVentilationFormBlocEvent, FeedVentilationFormBlocState> {
+class FeedVentilationFormBloc extends Bloc<FeedVentilationFormBlocEvent, FeedVentilationFormBlocState> {
   final MainNavigateToFeedVentilationFormEvent args;
 
   Device device;
@@ -226,14 +207,12 @@ class FeedVentilationFormBloc
   IntControllerParam blowerDay;
   IntControllerParam blowerNight;
 
-  FeedVentilationFormBloc(this.args)
-      : super(FeedVentilationFormBlocStateInit()) {
+  FeedVentilationFormBloc(this.args) : super(FeedVentilationFormBlocStateInit()) {
     add(FeedVentilationFormBlocEventInit());
   }
 
   @override
-  Stream<FeedVentilationFormBlocState> mapEventToState(
-      FeedVentilationFormBlocEvent event) async* {
+  Stream<FeedVentilationFormBlocState> mapEventToState(FeedVentilationFormBlocEvent event) async* {
     if (event is FeedVentilationFormBlocEventInit) {
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(args.box.id);
@@ -253,29 +232,20 @@ class FeedVentilationFormBloc
       device = await db.devicesDAO.getDevice(box.device);
 
       temperature = await IntControllerParam.loadFromDB(device, box, "TEMP");
-      temperature = temperature.copyWith(
-          param:
-              await DeviceHelper.refreshIntParam(device, temperature._param));
+      temperature = temperature.copyWith(param: await DeviceHelper.refreshIntParam(device, temperature._param));
 
       try {
         isLegacy = true;
-        blowerDay =
-            await IntControllerParam.loadFromDB(device, box, "BLOWER_DAY");
-        blowerNight =
-            await IntControllerParam.loadFromDB(device, box, "BLOWER_NIGHT");
+        blowerDay = await IntControllerParam.loadFromDB(device, box, "BLOWER_DAY");
+        blowerNight = await IntControllerParam.loadFromDB(device, box, "BLOWER_NIGHT");
         yield loadedState();
       } catch (e) {
         isLegacy = false;
-        blowerMin =
-            await IntControllerParam.loadFromDB(device, box, "BLOWER_MIN");
-        blowerMax =
-            await IntControllerParam.loadFromDB(device, box, "BLOWER_MAX");
-        blowerRefMin =
-            await IntControllerParam.loadFromDB(device, box, "BLOWER_REF_MIN");
-        blowerRefMax =
-            await IntControllerParam.loadFromDB(device, box, "BLOWER_REF_MAX");
-        blowerRefSource = await IntControllerParam.loadFromDB(
-            device, box, "BLOWER_REF_SOURCE");
+        blowerMin = await IntControllerParam.loadFromDB(device, box, "BLOWER_MIN");
+        blowerMax = await IntControllerParam.loadFromDB(device, box, "BLOWER_MAX");
+        blowerRefMin = await IntControllerParam.loadFromDB(device, box, "BLOWER_REF_MIN");
+        blowerRefMax = await IntControllerParam.loadFromDB(device, box, "BLOWER_REF_MAX");
+        blowerRefSource = await IntControllerParam.loadFromDB(device, box, "BLOWER_REF_SOURCE");
         yield loadedState();
       }
     } else if (event is FeedVentilationFormBlocParamsChangedEvent) {
@@ -302,10 +272,8 @@ class FeedVentilationFormBloc
       yield FeedVentilationFormBlocStateLoading('Saving..');
       List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
       for (int i = 0; i < plants.length; ++i) {
-        PlantSettings plantSettings =
-            PlantSettings.fromJSON(plants[i].settings);
-        if (plantSettings.dryingStart != null ||
-            plantSettings.curingStart != null) {
+        PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
+        if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
           continue;
         }
         await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
@@ -373,8 +341,7 @@ class FeedVentilationFormBloc
     }
   }
 
-  FeedVentilationFormBlocStateLoaded loadedState() =>
-      FeedVentilationFormBlocStateLoaded(
+  FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(
         box: box,
         temperature: temperature,
         isLegacy: isLegacy,

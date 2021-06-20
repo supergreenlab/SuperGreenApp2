@@ -23,6 +23,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class HomeNavigatorEvent extends Equatable {}
@@ -34,7 +35,7 @@ class HomeNavigateEventInit extends HomeNavigatorEvent {
   List<Object> get props => [];
 }
 
-class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent {
+class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent implements DeviceNavigationArgHolder {
   final Plant plant;
   final FeedEntry feedEntry;
   final String commentID;
@@ -44,6 +45,12 @@ class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent {
 
   @override
   List<Object> get props => [plant, commentID, replyTo];
+
+  @override
+  Future<Device> getDevice() async {
+    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
+    return RelDB.get().devicesDAO.getDevice(box.device);
+  }
 }
 
 class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {

@@ -16,11 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
 
 import 'package:moor/moor.dart';
+import 'package:super_green_app/data/api/backend/devices/websocket.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -50,29 +52,63 @@ class DeviceHelper {
     String auth = AppDB().getDeviceAuth(device.identifier);
     final mdnsDomain = DeviceAPI.mdnsDomain(name);
     final ddb = RelDB.get().devicesDAO;
-    await DeviceAPI.setStringParam(device.ip, 'DEVICE_NAME', name, auth: auth);
-    Param mdns = await ddb.getParam(device.id, 'MDNS_DOMAIN');
-    await updateStringParam(device, mdns, mdnsDomain);
+    Param nameParam = await ddb.getParam(device.id, 'DEVICE_NAME');
+    await updateStringParam(device, nameParam, name);
+    Param mdnsParam = await ddb.getParam(device.id, 'MDNS_DOMAIN');
+    await updateStringParam(device, mdnsParam, mdnsDomain);
     await ddb.updateDevice(
         DevicesCompanion(id: Value(device.id), name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
   }
 
-  static Future<String> updateStringParam(Device device, Param param, String value,
+  static Future<Param> watchParamChange(Param param, {int timeout = 5}) {
+    Completer completer = Completer();
+    Timer timeoutTimer;
+    StreamSubscription ss = RelDB.get().devicesDAO.watchParam(param.device, param.key).listen((Param newParam) {
+      completer.complete(newParam);
+      if (timeoutTimer != null) {
+        timeoutTimer.cancel();
+      }
+    });
+    timeoutTimer = Timer(Duration(seconds: timeout), () {
+      completer.completeError(Exception('Timeout reached for param ${param.key}'));
+      timeoutTimer = null;
+      ss.cancel();
+    });
+    return completer.future;
+  }
+
+  static Future<Param> updateStringParam(Device device, Param param, String value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    if (device.isRemote) {
+      Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
+      await DeviceWebsocket.getWebsocket(device)
+          .sendRemoteCommand('sets -k ${param.key} -v "${value.replaceAll("\"", "\\\"")}"');
+      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('gets -k ${param.key}');
+      return future;
+    }
     String auth = AppDB().getDeviceAuth(device.identifier);
     value = await DeviceAPI.setStringParam(device.ip, param.key, value,
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
-    await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
-    return value;
+    Param newParam = param.copyWith(svalue: value);
+    await RelDB.get().devicesDAO.updateParam(newParam);
+    return newParam;
   }
 
-  static Future<int> updateIntParam(Device device, Param param, int value,
+  static Future<Param> updateIntParam(Device device, Param param, int value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    if (device.isRemote) {
+      Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
+      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('seti -k ${param.key} -v $value');
+      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('geti -k ${param.key}');
+      return future;
+    }
+
     String auth = AppDB().getDeviceAuth(device.identifier);
     value = await DeviceAPI.setIntParam(device.ip, param.key, value,
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
-    await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
-    return value;
+    Param newParam = param.copyWith(ivalue: value);
+    await RelDB.get().devicesDAO.updateParam(newParam);
+    return newParam;
   }
 
   static Future<Tuple2<int, int>> updateHourMinParams(Device device, Param hourParam, Param minParam, int hour, int min,
@@ -90,21 +126,33 @@ class DeviceHelper {
       hour += 24;
     }
     hour = hour % 24;
-    hour = await DeviceHelper.updateIntParam(device, hourParam, hour);
-    min = await DeviceHelper.updateIntParam(device, minParam, min);
-    return Tuple2<int, int>(hour, min);
+    hourParam = await DeviceHelper.updateIntParam(device, hourParam, hour);
+    minParam = await DeviceHelper.updateIntParam(device, minParam, min);
+    return Tuple2<int, int>(hourParam.ivalue, minParam.ivalue);
   }
 
-  static Future refreshStringParam(Device device, Param param,
+  static Future<Param> refreshStringParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    if (device.isRemote) {
+      Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
+      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('gets -k ${param.key}');
+      return future;
+    }
     String auth = AppDB().getDeviceAuth(device.identifier);
     String value = await DeviceAPI.fetchStringParam(device.ip, param.key,
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
+    return param;
   }
 
   static Future<Param> refreshIntParam(Device device, Param param,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+    if (device.isRemote) {
+      Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
+      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('geti -k ${param.key}');
+      return future;
+    }
+
     String auth = AppDB().getDeviceAuth(device.identifier);
     int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);

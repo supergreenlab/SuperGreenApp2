@@ -79,7 +79,7 @@ class RelDB extends _$RelDB {
   RelDB() : super(_openConnection());
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
@@ -122,6 +122,8 @@ class RelDB extends _$RelDB {
     } else if (fromVersion == 11) {
       await m.addColumn(timelapses, timelapses.type);
       await m.addColumn(timelapses, timelapses.settings);
+    } else if (fromVersion == 12) {
+      await m.addColumn(devices, devices.isRemote);
     }
   }
 

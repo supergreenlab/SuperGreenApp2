@@ -68,8 +68,7 @@ class Product extends Equatable {
     }
     ProductCategoryID categoryID;
     if (categories.length > 0) {
-      categoryID =
-          EnumToString.fromString(ProductCategoryID.values, categories[0]);
+      categoryID = EnumToString.fromString(ProductCategoryID.values, categories[0]);
     }
     ProductSupplier productSupplier;
     if (map['supplier'] != null) {
@@ -107,12 +106,7 @@ class Product extends Equatable {
     };
   }
 
-  Product copyWith(
-      {String id,
-      String name,
-      ProductSpecs specs,
-      ProductCategoryID category,
-      ProductSupplier supplier}) {
+  Product copyWith({String id, String name, ProductSpecs specs, ProductCategoryID category, ProductSupplier supplier}) {
     return Product(
       id: id ?? this.id,
       name: name ?? this.name,

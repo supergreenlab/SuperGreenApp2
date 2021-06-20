@@ -24,6 +24,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_schedule/form/feed_schedule_form_bloc.dart';
@@ -84,7 +85,8 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
         if (state is FeedScheduleFormBlocStateLoaded) {
           if (state.box.device != null) {
             Timer(Duration(milliseconds: 100), () {
-              BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+              BlocProvider.of<DeviceReachableListenerBloc>(context)
+                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
             });
           }
         } else if (state is FeedScheduleFormBlocStateDone) {
@@ -139,9 +141,9 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                     ],
                   );
                 }
-                body = BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-                    listener: (BuildContext context, DeviceDaemonBlocState daemonState) {
-                      if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
+                body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
+                    listener: (BuildContext context, DeviceReachableListenerBlocState daemonState) {
+                      if (daemonState is DeviceReachableListenerBlocStateDeviceReachable &&
                           daemonState.device.id == state.box.device) {
                         if (_reachable == daemonState.reachable && _usingWifi == daemonState.usingWifi) return;
                         setState(() {

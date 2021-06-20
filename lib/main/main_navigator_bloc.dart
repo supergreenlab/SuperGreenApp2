@@ -25,6 +25,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
@@ -148,7 +149,7 @@ class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
   List<Object> get props => [pushAsReplacement];
 }
 
-class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
+class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent implements DeviceNavigationArgHolder {
   final Box box;
 
   MainNavigateToFeedLightFormEvent(this.box, {pushAsReplacement = false, futureFn})
@@ -156,6 +157,11 @@ class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent {
 
   @override
   List<Object> get props => [box];
+
+  @override
+  Future<Device> getDevice() {
+    return RelDB.get().devicesDAO.getDevice(box.device);
+  }
 }
 
 class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
@@ -168,7 +174,7 @@ class MainNavigateToFeedWaterFormEvent extends MainNavigateToFeedFormEvent {
   List<Object> get props => [plant];
 }
 
-class MainNavigateToFeedVentilationFormEvent extends MainNavigateToFeedFormEvent {
+class MainNavigateToFeedVentilationFormEvent extends MainNavigateToFeedFormEvent implements DeviceNavigationArgHolder {
   final Box box;
 
   MainNavigateToFeedVentilationFormEvent(this.box, {pushAsReplacement = false, futureFn})
@@ -176,6 +182,11 @@ class MainNavigateToFeedVentilationFormEvent extends MainNavigateToFeedFormEvent
 
   @override
   List<Object> get props => [box];
+
+  @override
+  Future<Device> getDevice() {
+    return RelDB.get().devicesDAO.getDevice(box.device);
+  }
 }
 
 class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
@@ -234,7 +245,7 @@ class MainNavigateToFeedTransplantFormEvent extends MainNavigateToFeedCareCommon
       : super(plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn);
 }
 
-class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
+class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent implements DeviceNavigationArgHolder {
   final Box box;
 
   MainNavigateToFeedScheduleFormEvent(this.box, {pushAsReplacement = false, futureFn})
@@ -242,6 +253,11 @@ class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent {
 
   @override
   List<Object> get props => [box];
+
+  @override
+  Future<Device> getDevice() {
+    return RelDB.get().devicesDAO.getDevice(box.device);
+  }
 }
 
 class MainNavigateToFeedLifeEventFormEvent extends MainNavigateToFeedFormEvent {

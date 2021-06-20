@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_light/form/feed_light_form_bloc.dart';
@@ -106,7 +107,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
           Timer(Duration(milliseconds: 100), () {
-            BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+            BlocProvider.of<DeviceReachableListenerBloc>(context)
+                .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
           });
           setState(() => values = List.from(state.values));
         } else if (state is FeedLightFormBlocStateDone) {
@@ -180,15 +182,15 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   ],
                 );
               }
-              body = BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-                  listener: (BuildContext context, DeviceDaemonBlocState daemonState) {
+              body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
+                  listener: (BuildContext context, DeviceReachableListenerBlocState listenerState) {
                     if (state is FeedLightFormBlocStateLightsLoaded) {
-                      if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
-                          daemonState.device.id == state.box.device) {
-                        if (_reachable == daemonState.reachable && _usingWifi == daemonState.usingWifi) return;
+                      if (listenerState is DeviceReachableListenerBlocStateDeviceReachable &&
+                          listenerState.device.id == state.box.device) {
+                        if (_reachable == listenerState.reachable && _usingWifi == listenerState.usingWifi) return;
                         setState(() {
-                          _reachable = daemonState.reachable;
-                          _usingWifi = daemonState.usingWifi;
+                          _reachable = listenerState.reachable;
+                          _usingWifi = listenerState.usingWifi;
                         });
                       }
                     }

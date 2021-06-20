@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'dart:async';
 import 'dart:math';
 
@@ -17,16 +35,6 @@ abstract class DeviceDaemonBlocEvent extends Equatable {}
 class DeviceDaemonBlocEventInit extends DeviceDaemonBlocEvent {
   @override
   List<Object> get props => [];
-}
-
-class DeviceDaemonBlocEventLoadDevice extends DeviceDaemonBlocEvent {
-  final int rand = Random().nextInt(1 << 32);
-  final int deviceID;
-
-  DeviceDaemonBlocEventLoadDevice(this.deviceID);
-
-  @override
-  List<Object> get props => [rand, deviceID];
 }
 
 class DeviceDaemonBlocEventDeviceReachable extends DeviceDaemonBlocEvent {
@@ -65,18 +73,6 @@ class DeviceDaemonBlocStateInit extends DeviceDaemonBlocState {
   List<Object> get props => [];
 }
 
-class DeviceDaemonBlocStateDeviceReachable extends DeviceDaemonBlocState {
-  final int rand = Random().nextInt(1 << 32);
-  final Device device;
-  final bool reachable;
-  final bool usingWifi;
-
-  DeviceDaemonBlocStateDeviceReachable(this.device, this.reachable, this.usingWifi);
-
-  @override
-  List<Object> get props => [rand, device, reachable, usingWifi];
-}
-
 class DeviceDaemonBlocStateRequiresLogin extends DeviceDaemonBlocState {
   final Device device;
 
@@ -87,8 +83,6 @@ class DeviceDaemonBlocStateRequiresLogin extends DeviceDaemonBlocState {
 }
 
 class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
-  Map<String, DeviceWebsocket> websockets = {};
-
   StreamSubscription<ConnectivityResult> _connectivity;
 
   Timer _timer;
@@ -108,14 +102,6 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
         _usingWifi = (result == ConnectivityResult.wifi);
       });
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
-    } else if (event is DeviceDaemonBlocEventLoadDevice) {
-      Device device = _devices.firstWhere((d) => d.id == event.deviceID, orElse: () => null);
-      if (device == null) {
-        return;
-      }
-      yield DeviceDaemonBlocStateDeviceReachable(device, device.isReachable, _usingWifi);
-    } else if (event is DeviceDaemonBlocEventDeviceReachable) {
-      yield DeviceDaemonBlocStateDeviceReachable(event.device, event.reachable, _usingWifi);
     } else if (event is DeviceDaemonBlocEventRequiresLogin) {
       yield DeviceDaemonBlocStateRequiresLogin(event.device);
     } else if (event is DeviceDaemonBlocEventLoggedIn) {
@@ -167,7 +153,6 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
         }
 
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
-        add(DeviceDaemonBlocEventDeviceReachable(device, false));
         String ip;
         await new Future.delayed(const Duration(seconds: 2));
         ip = await DeviceAPI.resolveLocalName(device.mdns);
@@ -183,7 +168,6 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
                   isReachable: Value(true),
                   ip: Value(ip),
                   synced: Value(device.synced ? ip == device.ip : false)));
-              add(DeviceDaemonBlocEventDeviceReachable(device, true));
             } else {
               if (identifier != null) {
                 Logger.throwError("Wrong identifier for device ${device.name}",
@@ -197,11 +181,9 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
             await RelDB.get()
                 .devicesDAO
                 .updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
-            add(DeviceDaemonBlocEventDeviceReachable(device, false));
           }
         } else {
           await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
-          add(DeviceDaemonBlocEventDeviceReachable(device, false));
         }
       }
     } catch (e, trace) {
@@ -214,10 +196,8 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
   void _deviceListChanged(List<Device> devices) {
     _devices = devices;
     _devices.forEach((d) {
-      if (websockets[d.identifier] == null) {
-        DeviceWebsocket socket = DeviceWebsocket(d);
-        websockets[d.identifier] = socket;
-        socket.connect();
+      if (d.serverID != null) {
+        DeviceWebsocket.createIfNotAlready(d);
       }
     });
   }

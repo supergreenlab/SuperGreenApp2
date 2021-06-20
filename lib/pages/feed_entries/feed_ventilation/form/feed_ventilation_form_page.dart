@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_manual_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
@@ -51,7 +52,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         if (state is FeedVentilationFormBlocStateLoaded) {
           if (state.box.device != null) {
             Timer(Duration(milliseconds: 100), () {
-              BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventLoadDevice(state.box.device));
+              BlocProvider.of<DeviceReachableListenerBloc>(context)
+                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
             });
           }
         } else if (state is FeedVentilationFormBlocStateDone) {
@@ -118,9 +120,9 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   ],
                 );
               }
-              body = BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
-                  listener: (BuildContext context, DeviceDaemonBlocState daemonState) {
-                    if (daemonState is DeviceDaemonBlocStateDeviceReachable &&
+              body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
+                  listener: (BuildContext context, DeviceReachableListenerBlocState daemonState) {
+                    if (daemonState is DeviceReachableListenerBlocStateDeviceReachable &&
                         daemonState.device.id == state.box.device) {
                       if (_reachable == daemonState.reachable && _usingWifi == daemonState.usingWifi) return;
                       setState(() {

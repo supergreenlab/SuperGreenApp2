@@ -26,6 +26,7 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
@@ -378,8 +379,11 @@ class _MainPageState extends State<MainPage> {
           child: DeviceWifiPage(),
         );
       case '/feed/form/light':
-        return BlocProvider(
-          create: (context) => FeedLightFormBloc(settings.arguments),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => DeviceReachableListenerBloc(settings.arguments)),
+            BlocProvider(create: (context) => FeedLightFormBloc(settings.arguments)),
+          ],
           child: FeedLightFormPage(),
         );
       case '/feed/form/media':
@@ -393,8 +397,11 @@ class _MainPageState extends State<MainPage> {
           child: FeedMeasureFormPage(),
         );
       case '/feed/form/schedule':
-        return BlocProvider(
-          create: (context) => FeedScheduleFormBloc(settings.arguments),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => DeviceReachableListenerBloc(settings.arguments)),
+            BlocProvider(create: (context) => FeedScheduleFormBloc(settings.arguments)),
+          ],
           child: FeedScheduleFormPage(),
         );
       case '/feed/form/defoliation':
@@ -423,8 +430,11 @@ class _MainPageState extends State<MainPage> {
           child: FeedTransplantFormPage(),
         );
       case '/feed/form/ventilation':
-        return BlocProvider(
-          create: (context) => FeedVentilationFormBloc(settings.arguments),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => DeviceReachableListenerBloc(settings.arguments)),
+            BlocProvider(create: (context) => FeedVentilationFormBloc(settings.arguments)),
+          ],
           child: FeedVentilationFormPage(),
         );
       case '/feed/form/water':

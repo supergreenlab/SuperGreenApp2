@@ -14,6 +14,7 @@ class Device extends DataClass implements Insertable<Device> {
   final String ip;
   final String mdns;
   final bool isReachable;
+  final bool isRemote;
   final bool isSetup;
   final String serverID;
   final bool synced;
@@ -24,6 +25,7 @@ class Device extends DataClass implements Insertable<Device> {
       @required this.ip,
       @required this.mdns,
       @required this.isReachable,
+      @required this.isRemote,
       @required this.isSetup,
       this.serverID,
       @required this.synced});
@@ -42,6 +44,8 @@ class Device extends DataClass implements Insertable<Device> {
       mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
       isReachable: boolType
           .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable']),
+      isRemote:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_remote']),
       isSetup:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_setup']),
       serverID: stringType
@@ -71,6 +75,9 @@ class Device extends DataClass implements Insertable<Device> {
     if (!nullToAbsent || isReachable != null) {
       map['is_reachable'] = Variable<bool>(isReachable);
     }
+    if (!nullToAbsent || isRemote != null) {
+      map['is_remote'] = Variable<bool>(isRemote);
+    }
     if (!nullToAbsent || isSetup != null) {
       map['is_setup'] = Variable<bool>(isSetup);
     }
@@ -95,6 +102,9 @@ class Device extends DataClass implements Insertable<Device> {
       isReachable: isReachable == null && nullToAbsent
           ? const Value.absent()
           : Value(isReachable),
+      isRemote: isRemote == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isRemote),
       isSetup: isSetup == null && nullToAbsent
           ? const Value.absent()
           : Value(isSetup),
@@ -116,6 +126,7 @@ class Device extends DataClass implements Insertable<Device> {
       ip: serializer.fromJson<String>(json['ip']),
       mdns: serializer.fromJson<String>(json['mdns']),
       isReachable: serializer.fromJson<bool>(json['isReachable']),
+      isRemote: serializer.fromJson<bool>(json['isRemote']),
       isSetup: serializer.fromJson<bool>(json['isSetup']),
       serverID: serializer.fromJson<String>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
@@ -131,6 +142,7 @@ class Device extends DataClass implements Insertable<Device> {
       'ip': serializer.toJson<String>(ip),
       'mdns': serializer.toJson<String>(mdns),
       'isReachable': serializer.toJson<bool>(isReachable),
+      'isRemote': serializer.toJson<bool>(isRemote),
       'isSetup': serializer.toJson<bool>(isSetup),
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
@@ -144,6 +156,7 @@ class Device extends DataClass implements Insertable<Device> {
           String ip,
           String mdns,
           bool isReachable,
+          bool isRemote,
           bool isSetup,
           String serverID,
           bool synced}) =>
@@ -154,6 +167,7 @@ class Device extends DataClass implements Insertable<Device> {
         ip: ip ?? this.ip,
         mdns: mdns ?? this.mdns,
         isReachable: isReachable ?? this.isReachable,
+        isRemote: isRemote ?? this.isRemote,
         isSetup: isSetup ?? this.isSetup,
         serverID: serverID ?? this.serverID,
         synced: synced ?? this.synced,
@@ -167,6 +181,7 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('ip: $ip, ')
           ..write('mdns: $mdns, ')
           ..write('isReachable: $isReachable, ')
+          ..write('isRemote: $isRemote, ')
           ..write('isSetup: $isSetup, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -187,8 +202,12 @@ class Device extends DataClass implements Insertable<Device> {
                       mdns.hashCode,
                       $mrjc(
                           isReachable.hashCode,
-                          $mrjc(isSetup.hashCode,
-                              $mrjc(serverID.hashCode, synced.hashCode)))))))));
+                          $mrjc(
+                              isRemote.hashCode,
+                              $mrjc(
+                                  isSetup.hashCode,
+                                  $mrjc(serverID.hashCode,
+                                      synced.hashCode))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -199,6 +218,7 @@ class Device extends DataClass implements Insertable<Device> {
           other.ip == this.ip &&
           other.mdns == this.mdns &&
           other.isReachable == this.isReachable &&
+          other.isRemote == this.isRemote &&
           other.isSetup == this.isSetup &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
@@ -211,6 +231,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<String> ip;
   final Value<String> mdns;
   final Value<bool> isReachable;
+  final Value<bool> isRemote;
   final Value<bool> isSetup;
   final Value<String> serverID;
   final Value<bool> synced;
@@ -221,6 +242,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.ip = const Value.absent(),
     this.mdns = const Value.absent(),
     this.isReachable = const Value.absent(),
+    this.isRemote = const Value.absent(),
     this.isSetup = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -232,6 +254,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     @required String ip,
     @required String mdns,
     this.isReachable = const Value.absent(),
+    this.isRemote = const Value.absent(),
     this.isSetup = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -246,6 +269,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     Expression<String> ip,
     Expression<String> mdns,
     Expression<bool> isReachable,
+    Expression<bool> isRemote,
     Expression<bool> isSetup,
     Expression<String> serverID,
     Expression<bool> synced,
@@ -257,6 +281,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       if (ip != null) 'ip': ip,
       if (mdns != null) 'mdns': mdns,
       if (isReachable != null) 'is_reachable': isReachable,
+      if (isRemote != null) 'is_remote': isRemote,
       if (isSetup != null) 'is_setup': isSetup,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
@@ -270,6 +295,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<String> ip,
       Value<String> mdns,
       Value<bool> isReachable,
+      Value<bool> isRemote,
       Value<bool> isSetup,
       Value<String> serverID,
       Value<bool> synced}) {
@@ -280,6 +306,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       ip: ip ?? this.ip,
       mdns: mdns ?? this.mdns,
       isReachable: isReachable ?? this.isReachable,
+      isRemote: isRemote ?? this.isRemote,
       isSetup: isSetup ?? this.isSetup,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
@@ -307,6 +334,9 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     if (isReachable.present) {
       map['is_reachable'] = Variable<bool>(isReachable.value);
     }
+    if (isRemote.present) {
+      map['is_remote'] = Variable<bool>(isRemote.value);
+    }
     if (isSetup.present) {
       map['is_setup'] = Variable<bool>(isSetup.value);
     }
@@ -328,6 +358,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
           ..write('ip: $ip, ')
           ..write('mdns: $mdns, ')
           ..write('isReachable: $isReachable, ')
+          ..write('isRemote: $isRemote, ')
           ..write('isSetup: $isSetup, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -396,6 +427,15 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         defaultValue: Constant(true));
   }
 
+  final VerificationMeta _isRemoteMeta = const VerificationMeta('isRemote');
+  GeneratedBoolColumn _isRemote;
+  @override
+  GeneratedBoolColumn get isRemote => _isRemote ??= _constructIsRemote();
+  GeneratedBoolColumn _constructIsRemote() {
+    return GeneratedBoolColumn('is_remote', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   final VerificationMeta _isSetupMeta = const VerificationMeta('isSetup');
   GeneratedBoolColumn _isSetup;
   @override
@@ -424,8 +464,18 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   }
 
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, identifier, name, ip, mdns, isReachable, isSetup, serverID, synced];
+  List<GeneratedColumn> get $columns => [
+        id,
+        identifier,
+        name,
+        ip,
+        mdns,
+        isReachable,
+        isRemote,
+        isSetup,
+        serverID,
+        synced
+      ];
   @override
   $DevicesTable get asDslTable => this;
   @override
@@ -470,6 +520,10 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
           _isReachableMeta,
           isReachable.isAcceptableOrUnknown(
               data['is_reachable'], _isReachableMeta));
+    }
+    if (data.containsKey('is_remote')) {
+      context.handle(_isRemoteMeta,
+          isRemote.isAcceptableOrUnknown(data['is_remote'], _isRemoteMeta));
     }
     if (data.containsKey('is_setup')) {
       context.handle(_isSetupMeta,

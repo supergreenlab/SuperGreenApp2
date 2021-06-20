@@ -22,6 +22,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
@@ -69,13 +70,32 @@ class ControllerLog extends Equatable {
 }
 
 class DeviceWebsocket {
+  static Map<String, DeviceWebsocket> websockets = {};
+
   final Device device;
   WebSocketChannel channel;
   StreamSubscription sub;
 
+  Timer timeout;
+
   Map<String, Completer> commandCompleters = {};
 
   DeviceWebsocket(this.device);
+
+  static DeviceWebsocket getWebsocket(Device device) {
+    return websockets[device.serverID];
+  }
+
+  static Future<DeviceWebsocket> createIfNotAlready(Device device) async {
+    DeviceWebsocket socket;
+    if ((socket = DeviceWebsocket.websockets[device.identifier]) == null) {
+      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
+      socket = DeviceWebsocket(device);
+      websockets[device.serverID] = socket;
+      socket.connect();
+    }
+    return socket;
+  }
 
   void connect() async {
     String url = '${BackendAPI().websocketServerHost}/device/${device.serverID}/stream';
@@ -90,10 +110,17 @@ class DeviceWebsocket {
       return;
     }
 
-    // Timer timer = Timer.periodic(Duration(seconds: 10), (Timer timer) async {
-    //   await sendRemoteCommand('gets -k DEVICE_NAME');
-    // });
     sub = channel.stream.listen((message) async {
+      if (device.isRemote == false) {
+        await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
+        if (timeout != null) {
+          timeout.cancel();
+        }
+        timeout = Timer(Duration(seconds: 5), () {
+          RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+          timeout = null;
+        });
+      }
       Map<String, dynamic> messageMap = JsonDecoder().convert(message);
       if (messageMap['type'] == 'log') {
         ControllerLog log = ControllerLog.fromMap(messageMap);
@@ -125,11 +152,9 @@ class DeviceWebsocket {
       }
     }, onError: (e) async {
       Logger.logError(e, null);
-      // timer.cancel();
       await Future.delayed(Duration(seconds: 3));
       connect();
     }, onDone: () async {
-      // timer.cancel();
       await Future.delayed(Duration(seconds: 3));
       connect();
     });

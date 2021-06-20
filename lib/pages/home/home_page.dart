@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
@@ -177,7 +178,11 @@ class HomePage extends TraceableStatelessWidget {
                   child: TowelieHelper.wrapWidget(settings, context, SGLFeedPage()),
                 ));
       case '/feed/plant':
-        return _plantFeedRoute(context, settings, settings.arguments);
+        return _plantFeedRoute(context, settings, settings.arguments, providers: [
+          BlocProvider<DeviceReachableListenerBloc>(
+            create: (context) => DeviceReachableListenerBloc(settings.arguments),
+          )
+        ]);
       case '/feed/box':
         return _boxFeedRoute(context, settings, settings.arguments);
       case '/explorer':
@@ -207,13 +212,15 @@ class HomePage extends TraceableStatelessWidget {
     }
   }
 
-  MaterialPageRoute _plantFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event) {
+  MaterialPageRoute _plantFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event,
+      {List<BlocProvider> providers}) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
               providers: [
                 BlocProvider<PlantDrawerBloc>(create: (context) => PlantDrawerBloc()),
                 BlocProvider<PlantFeedBloc>(create: (context) => PlantFeedBloc(event)),
+                ...providers,
               ],
               child: TowelieHelper.wrapWidget(settings, context, PlantFeedPage()),
             ));
