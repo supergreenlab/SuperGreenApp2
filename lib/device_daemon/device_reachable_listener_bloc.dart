@@ -89,6 +89,9 @@ class DeviceReachableListenerBloc extends Bloc<DeviceReachableListenerBlocEvent,
     if (event is DeviceReachableListenerBlocEventLoadDevice) {
       if (subscription == null) {
         device = await deviceArgHolder.getDevice();
+        if (device == null) {
+          return;
+        }
         _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
         _connectivity = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
           _usingWifi = (result == ConnectivityResult.wifi);

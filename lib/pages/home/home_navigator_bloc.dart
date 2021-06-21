@@ -25,6 +25,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bloc.dart';
 
 abstract class HomeNavigatorEvent extends Equatable {}
 
@@ -48,7 +49,14 @@ class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent implements DeviceN
 
   @override
   Future<Device> getDevice() async {
-    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
+    Plant p = await PlantFeedBloc.getDisplayPlant(plant);
+    if (p == null) {
+      return null;
+    }
+    Box box = await RelDB.get().plantsDAO.getBox(p.box);
+    if (box.device == null) {
+      return null;
+    }
     return RelDB.get().devicesDAO.getDevice(box.device);
   }
 }

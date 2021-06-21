@@ -28,7 +28,6 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
