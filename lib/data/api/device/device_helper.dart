@@ -87,7 +87,6 @@ class DeviceHelper {
       Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
       await DeviceWebsocket.getWebsocket(device)
           .sendRemoteCommand('sets -k ${param.key} -v "${value.replaceAll("\"", "\\\"")}"');
-      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('gets -k ${param.key}');
       return future;
     }
     String auth = AppDB().getDeviceAuth(device.identifier);
@@ -103,7 +102,6 @@ class DeviceHelper {
     if (AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
       Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
       await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('seti -k ${param.key} -v $value');
-      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('geti -k ${param.key}');
       return future;
     }
 
