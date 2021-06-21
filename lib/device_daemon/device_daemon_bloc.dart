@@ -106,6 +106,9 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
   void _scheduleUpdate() {
     _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
       for (int i = 0; i < _devices.length; ++i) {
+        if (_devices[i].isRemote) {
+          continue;
+        }
         try {
           _updateDeviceStatus(_devices[i]);
         } catch (e, trace) {
