@@ -89,18 +89,12 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
   List<Device> _devices = [];
   Map<int, bool> _deviceWorker = {};
 
-  bool _usingWifi = false;
-
   DeviceDaemonBloc() : super(DeviceDaemonBlocStateInit());
 
   @override
   Stream<DeviceDaemonBlocState> mapEventToState(DeviceDaemonBlocEvent event) async* {
     if (event is DeviceDaemonBlocEventInit) {
       _scheduleUpdate();
-      _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
-      _connectivity = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-        _usingWifi = (result == ConnectivityResult.wifi);
-      });
       RelDB.get().devicesDAO.watchDevices().listen(_deviceListChanged);
     } else if (event is DeviceDaemonBlocEventRequiresLogin) {
       yield DeviceDaemonBlocStateRequiresLogin(event.device);
@@ -200,6 +194,11 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
         DeviceWebsocket.createIfNotAlready(d);
       }
     });
+    for (String key in DeviceWebsocket.websockets.keys) {
+      if (devices.firstWhere((de) => de.serverID == key, orElse: () => null) == null) {
+        DeviceWebsocket.deleteIfExists(key);
+      }
+    }
   }
 
   Future<void> _updateDeviceTime(Device device) async {

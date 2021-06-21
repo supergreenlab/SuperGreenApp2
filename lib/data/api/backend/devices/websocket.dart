@@ -72,15 +72,20 @@ class ControllerLog extends Equatable {
 class DeviceWebsocket {
   static Map<String, DeviceWebsocket> websockets = {};
 
-  final Device device;
+  Device device;
   WebSocketChannel channel;
   StreamSubscription sub;
+  StreamSubscription deviceSub;
 
   Timer timeout;
 
   Map<String, Completer> commandCompleters = {};
 
-  DeviceWebsocket(this.device);
+  DeviceWebsocket(this.device) {
+    deviceSub = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device newDevice) {
+      this.device = newDevice;
+    });
+  }
 
   static DeviceWebsocket getWebsocket(Device device) {
     return websockets[device.serverID];
@@ -95,6 +100,12 @@ class DeviceWebsocket {
       socket.connect();
     }
     return socket;
+  }
+
+  static void deleteIfExists(String serverID) {
+    DeviceWebsocket dw = DeviceWebsocket.websockets[serverID];
+    dw.close();
+    websockets.remove(dw);
   }
 
   void connect() async {
@@ -180,6 +191,7 @@ class DeviceWebsocket {
   }
 
   void close() {
+    deviceSub.cancel();
     sub.cancel();
   }
 }

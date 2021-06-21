@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
@@ -81,7 +82,9 @@ class HomePage extends TraceableStatelessWidget {
                   ],
                 );
               }
-            } catch (e) {}
+            } catch (e, trace) {
+              Logger.logError(e, trace);
+            }
             Widget homeIcon = Icon(Icons.event_note);
             try {
               int nOthers = state.hasPending.where((e) => e.id != 1).map<int>((e) => e.nNew).reduce((a, e) => a + e);
@@ -93,7 +96,9 @@ class HomePage extends TraceableStatelessWidget {
                   ],
                 );
               }
-            } catch (e) {}
+            } catch (e, trace) {
+              Logger.logError(e, trace);
+            }
             navbar = BottomNavigationBar(
               unselectedItemColor: Colors.black38,
               selectedItemColor: Colors.green,

@@ -221,8 +221,8 @@ class RelDB extends _$RelDB {
               thumbnailPath: Value('${feedMedia.thumbnailPath}.jpg'),
             ));
           }
-        } catch (e) {
-          print(e);
+        } catch (e, trace) {
+          Logger.logError(e, trace);
         }
       }
     } else if (fromVersion == 11) {
