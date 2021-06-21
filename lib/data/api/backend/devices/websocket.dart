@@ -94,9 +94,8 @@ class DeviceWebsocket {
   static Future<DeviceWebsocket> createIfNotAlready(Device device) async {
     DeviceWebsocket socket;
     if ((socket = DeviceWebsocket.websockets[device.identifier]) == null) {
-      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
       socket = DeviceWebsocket(device);
-      websockets[device.serverID] = socket;
+      DeviceWebsocket.websockets[device.serverID] = socket;
       socket.connect();
     }
     return socket;
