@@ -66,7 +66,18 @@ class HomePage extends TraceableStatelessWidget {
           } else if (state is HomeBlocStateLoaded) {
             body = Navigator(
               //observers: [_analyticsObserver],
-              initialRoute: navigatorState.index == 0 ? "/" : "/feed/plant",
+              initialRoute: navigatorState.index == 0 ? '/' : '/feed/plant',
+              onGenerateInitialRoutes: (NavigatorState navigator, String initialRoute) {
+                if (initialRoute == '/feed/plant') {
+                  return [
+                    _onGenerateRoute(
+                        context, RouteSettings(name: initialRoute, arguments: HomeNavigateToPlantFeedEvent(null)))
+                  ];
+                }
+                return [
+                  _onGenerateRoute(context, RouteSettings(name: initialRoute)),
+                ];
+              },
               key: _navigatorKey,
               onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
             );
