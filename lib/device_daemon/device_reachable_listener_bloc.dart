@@ -46,11 +46,12 @@ class DeviceReachableListenerBlocEventDeviceReachable extends DeviceReachableLis
   final int rand = Random().nextInt(1 << 32);
   final Device device;
   final bool reachable;
+  final bool remote;
 
-  DeviceReachableListenerBlocEventDeviceReachable(this.device, this.reachable);
+  DeviceReachableListenerBlocEventDeviceReachable(this.device, this.reachable, this.remote);
 
   @override
-  List<Object> get props => [rand, device, reachable];
+  List<Object> get props => [rand, device, reachable, remote];
 }
 
 abstract class DeviceReachableListenerBlocState extends Equatable {}
@@ -64,9 +65,10 @@ class DeviceReachableListenerBlocStateDeviceReachable extends DeviceReachableLis
   final int rand = Random().nextInt(1 << 32);
   final Device device;
   final bool reachable;
+  final bool remote;
   final bool usingWifi;
 
-  DeviceReachableListenerBlocStateDeviceReachable(this.device, this.reachable, this.usingWifi);
+  DeviceReachableListenerBlocStateDeviceReachable(this.device, this.reachable, this.remote, this.usingWifi);
 
   @override
   List<Object> get props => [rand, device, reachable, usingWifi];
@@ -97,13 +99,15 @@ class DeviceReachableListenerBloc extends Bloc<DeviceReachableListenerBlocEvent,
           _usingWifi = (result == ConnectivityResult.wifi);
         });
         subscription = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device newDevice) {
-          add(DeviceReachableListenerBlocEventDeviceReachable(newDevice, newDevice.isReachable || newDevice.isRemote));
+          add(DeviceReachableListenerBlocEventDeviceReachable(
+              newDevice, newDevice.isReachable || newDevice.isRemote, newDevice.isRemote));
         });
       }
     } else if (event is DeviceReachableListenerBlocEventDeviceReachable) {
       yield DeviceReachableListenerBlocStateDeviceReachable(
         event.device,
         event.reachable,
+        event.remote,
         _usingWifi,
       );
     }

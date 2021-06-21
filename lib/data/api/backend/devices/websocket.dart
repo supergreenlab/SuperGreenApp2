@@ -25,6 +25,7 @@ import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:web_socket_channel/io.dart';
@@ -125,16 +126,19 @@ class DeviceWebsocket {
 
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
     sub = channel.stream.listen((message) async {
-      if (device.isRemote == false) {
+      bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
+      if (device.isRemote == false && remoteEnabled) {
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
       }
-      if (timeout != null) {
-        timeout.cancel();
+      if (remoteEnabled) {
+        if (timeout != null) {
+          timeout.cancel();
+        }
+        timeout = Timer(Duration(seconds: 5), () {
+          RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+          timeout = null;
+        });
       }
-      timeout = Timer(Duration(seconds: 5), () {
-        RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
-        timeout = null;
-      });
       Map<String, dynamic> messageMap = JsonDecoder().convert(message);
       if (messageMap['type'] == 'log') {
         ControllerLog log = ControllerLog.fromMap(messageMap);

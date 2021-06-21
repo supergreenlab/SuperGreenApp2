@@ -307,6 +307,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
+  bool _remote = false;
   String _deviceIP = '';
 
   @override
@@ -351,13 +352,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             }
 
             return BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-              listener: (BuildContext context, DeviceReachableListenerBlocState daemonState) {
+              listener: (BuildContext context, DeviceReachableListenerBlocState reachableState) {
                 if (state is PlantFeedBlocStateLoaded) {
-                  if (daemonState is DeviceReachableListenerBlocStateDeviceReachable &&
-                      daemonState.device.id == state.box.device) {
+                  if (reachableState is DeviceReachableListenerBlocStateDeviceReachable &&
+                      reachableState.device.id == state.box.device) {
                     setState(() {
-                      _reachable = daemonState.reachable;
-                      _deviceIP = daemonState.device.ip;
+                      _reachable = reachableState.reachable;
+                      _remote = reachableState.remote;
+                      _deviceIP = reachableState.device.ip;
                     });
                   }
                 }
@@ -776,7 +778,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             name,
             style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.normal),
           ),
-          Text(_deviceIP,
+          Text(_remote ? 'Remote controled' : _deviceIP,
               style: TextStyle(
                 fontSize: 10,
                 color: Colors.grey,
