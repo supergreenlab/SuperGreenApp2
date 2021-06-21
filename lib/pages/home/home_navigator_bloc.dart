@@ -61,13 +61,18 @@ class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent implements DeviceN
   }
 }
 
-class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent {
+class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent implements DeviceNavigationArgHolder {
   final Box box;
 
   HomeNavigateToBoxFeedEvent(this.box);
 
   @override
   List<Object> get props => [box];
+
+  @override
+  Future<Device> getDevice() async {
+    return RelDB.get().devicesDAO.getDevice(box.device);
+  }
 }
 
 class HomeNavigateToSGLFeedEvent extends HomeNavigatorEvent {

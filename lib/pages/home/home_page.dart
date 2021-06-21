@@ -200,7 +200,11 @@ class HomePage extends TraceableStatelessWidget {
           )
         ]);
       case '/feed/box':
-        return _boxFeedRoute(context, settings, settings.arguments);
+        return _boxFeedRoute(context, settings, settings.arguments, providers: [
+          BlocProvider<DeviceReachableListenerBloc>(
+            create: (context) => DeviceReachableListenerBloc(settings.arguments),
+          )
+        ]);
       case '/explorer':
         return MaterialPageRoute(
             settings: settings,
@@ -242,13 +246,15 @@ class HomePage extends TraceableStatelessWidget {
             ));
   }
 
-  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToBoxFeedEvent event) {
+  MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToBoxFeedEvent event,
+      {List<BlocProvider> providers}) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
               providers: [
                 BlocProvider<PlantDrawerBloc>(create: (context) => PlantDrawerBloc()),
                 BlocProvider<LocalBoxFeedBloc>(create: (context) => LocalBoxFeedBloc(event)),
+                ...providers,
               ],
               child: TowelieHelper.wrapWidget(settings, context, LocalBoxFeedPage()),
             ));
