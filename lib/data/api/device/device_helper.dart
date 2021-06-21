@@ -61,17 +61,21 @@ class DeviceHelper {
   }
 
   static Future<Param> watchParamChange(Param param, {int timeout = 5}) {
-    Completer completer = Completer();
+    Completer<Param> completer = Completer<Param>();
     Timer timeoutTimer;
-    StreamSubscription ss = RelDB.get().devicesDAO.watchParam(param.device, param.key).listen((Param newParam) {
-      completer.complete(newParam);
-      if (timeoutTimer != null) {
-        timeoutTimer.cancel();
+    bool skipFirst = true;
+    StreamSubscription ss;
+    ss = RelDB.get().devicesDAO.watchParam(param.device, param.key).listen((Param newParam) {
+      if (skipFirst) {
+        skipFirst = false;
+        return;
       }
+      completer.complete(newParam);
+      timeoutTimer.cancel();
+      ss.cancel();
     });
     timeoutTimer = Timer(Duration(seconds: timeout), () {
       completer.completeError(Exception('Timeout reached for param ${param.key}'));
-      timeoutTimer = null;
       ss.cancel();
     });
     return completer.future;

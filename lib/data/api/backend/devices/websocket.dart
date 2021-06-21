@@ -93,7 +93,7 @@ class DeviceWebsocket {
 
   static Future<DeviceWebsocket> createIfNotAlready(Device device) async {
     DeviceWebsocket socket;
-    if ((socket = DeviceWebsocket.websockets[device.identifier]) == null) {
+    if ((socket = DeviceWebsocket.websockets[device.serverID]) == null) {
       socket = DeviceWebsocket(device);
       DeviceWebsocket.websockets[device.serverID] = socket;
       socket.connect();
@@ -103,6 +103,9 @@ class DeviceWebsocket {
 
   static void deleteIfExists(String serverID) {
     DeviceWebsocket dw = DeviceWebsocket.websockets[serverID];
+    if (dw == null) {
+      return;
+    }
     dw.close();
     websockets.remove(dw);
   }
@@ -115,22 +118,23 @@ class DeviceWebsocket {
       }));
     } catch (e, trace) {
       Logger.logError(e, trace);
-      await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(Duration(seconds: 5));
       connect();
       return;
     }
 
+    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
     sub = channel.stream.listen((message) async {
       if (device.isRemote == false) {
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
-        if (timeout != null) {
-          timeout.cancel();
-        }
-        timeout = Timer(Duration(seconds: 5), () {
-          RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
-          timeout = null;
-        });
       }
+      if (timeout != null) {
+        timeout.cancel();
+      }
+      timeout = Timer(Duration(seconds: 5), () {
+        RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+        timeout = null;
+      });
       Map<String, dynamic> messageMap = JsonDecoder().convert(message);
       if (messageMap['type'] == 'log') {
         ControllerLog log = ControllerLog.fromMap(messageMap);
@@ -158,13 +162,14 @@ class DeviceWebsocket {
         } else if (value is int) {
           await RelDB.get().devicesDAO.updateParam(param.copyWith(ivalue: value));
         }
-        Logger.log('Updated parameter ${cm.key} to value ${cm.value}');
       }
     }, onError: (e) async {
+      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
       Logger.logError(e, null);
       await Future.delayed(Duration(seconds: 3));
       connect();
     }, onDone: () async {
+      await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
       await Future.delayed(Duration(seconds: 3));
       connect();
     });
@@ -186,7 +191,7 @@ class DeviceWebsocket {
       }
       commandCompleters.remove(uuid);
     });
-    return completer;
+    return completer.future;
   }
 
   void close() {
