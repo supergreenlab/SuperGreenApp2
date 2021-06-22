@@ -78,6 +78,7 @@ class DeviceWebsocket {
   StreamSubscription sub;
   StreamSubscription deviceSub;
 
+  Timer pingTimer;
   Timer timeout;
 
   Map<String, Completer> commandCompleters = {};
@@ -124,6 +125,12 @@ class DeviceWebsocket {
       return;
     }
 
+    if (pingTimer == null && AppDB().getDeviceSigning(device.identifier) != null) {
+      pingTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+        sendRemoteCommand('geti -k TIME');
+      });
+    }
+
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
     sub = channel.stream.listen((message) async {
       bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
@@ -134,7 +141,7 @@ class DeviceWebsocket {
         if (timeout != null) {
           timeout.cancel();
         }
-        timeout = Timer(Duration(seconds: 5), () {
+        timeout = Timer(Duration(seconds: 10), () {
           RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
           timeout = null;
         });
@@ -201,5 +208,6 @@ class DeviceWebsocket {
   void close() {
     deviceSub.cancel();
     sub.cancel();
+    pingTimer.cancel();
   }
 }

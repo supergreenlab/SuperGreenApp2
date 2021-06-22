@@ -778,10 +778,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             name,
             style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.normal),
           ),
-          Text(_remote ? 'Remote controled' : _deviceIP,
+          Text(_remote ? 'Remote controled!' : _deviceIP,
               style: TextStyle(
                 fontSize: 10,
-                color: Colors.grey,
+                color: _remote ? Color(0xff3bb30b) : Colors.grey,
               ))
         ],
       );
