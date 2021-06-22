@@ -49,7 +49,7 @@ class DeviceHelper {
   }
 
   static Future updateDeviceName(Device device, String name) async {
-    String auth = AppDB().getDeviceAuth(device.identifier);
+    //String auth = AppDB().getDeviceAuth(device.identifier);
     final mdnsDomain = DeviceAPI.mdnsDomain(name);
     final ddb = RelDB.get().devicesDAO;
     Param nameParam = await ddb.getParam(device.id, 'DEVICE_NAME');
@@ -84,14 +84,13 @@ class DeviceHelper {
   static Future<Param> updateStringParam(Device device, Param param, String value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     if (AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
-      Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
       await DeviceWebsocket.getWebsocket(device)
           .sendRemoteCommand('sets -k ${param.key} -v "${value.replaceAll("\"", "\\\"")}"');
-      return future;
+    } else {
+      String auth = AppDB().getDeviceAuth(device.identifier);
+      value = await DeviceAPI.setStringParam(device.ip, param.key, value,
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     }
-    String auth = AppDB().getDeviceAuth(device.identifier);
-    value = await DeviceAPI.setStringParam(device.ip, param.key, value,
-        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     Param newParam = param.copyWith(svalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
@@ -100,14 +99,12 @@ class DeviceHelper {
   static Future<Param> updateIntParam(Device device, Param param, int value,
       {int timeout = 5, int nRetries = 4, int wait = 0}) async {
     if (AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
-      Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
       await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('seti -k ${param.key} -v $value');
-      return future;
+    } else {
+      String auth = AppDB().getDeviceAuth(device.identifier);
+      value = await DeviceAPI.setIntParam(device.ip, param.key, value,
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     }
-
-    String auth = AppDB().getDeviceAuth(device.identifier);
-    value = await DeviceAPI.setIntParam(device.ip, param.key, value,
-        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     Param newParam = param.copyWith(ivalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
