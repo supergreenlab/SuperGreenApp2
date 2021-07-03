@@ -79,6 +79,15 @@ class FeedLightFormBlocStateLightsLoaded extends FeedLightFormBlocState {
   List<Object> get props => [values, box];
 }
 
+class FeedLightFormBlocStateLightsLoading extends FeedLightFormBlocState {
+  final int index;
+
+  FeedLightFormBlocStateLightsLoading(this.index);
+
+  @override
+  List<Object> get props => [index];
+}
+
 class FeedLightFormBlocStateNoDevice extends FeedLightFormBlocStateLightsLoaded {
   FeedLightFormBlocStateNoDevice(List<int> values, Box box) : super(values, box);
 }
@@ -140,11 +149,13 @@ class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocSt
       if (box.device == null) {
         return;
       }
+      yield FeedLightFormBlocStateLightsLoading(event.i);
       try {
         await DeviceHelper.updateIntParam(device, lightParams[event.i], (event.value).toInt());
       } catch (e, trace) {
         Logger.logError(e, trace);
       }
+      yield FeedLightFormBlocStateLightsLoading(-1);
     } else if (event is FeedLightFormBlocEventCreate) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(args.box.id);
@@ -178,14 +189,16 @@ class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocSt
         return;
       }
       yield FeedLightFormBlocStateCancelling();
+      List<Future> futures = [];
       for (int i = 0; i < lightParams.length; ++i) {
         try {
-          await DeviceHelper.updateIntParam(device, lightParams[i], initialValues[i]);
+          futures.add(DeviceHelper.updateIntParam(device, lightParams[i], initialValues[i]));
         } catch (e, trace) {
           Logger.logError(e, trace);
           return;
         }
       }
+      await Future.wait(futures);
       yield FeedLightFormBlocStateDone(null);
     }
   }

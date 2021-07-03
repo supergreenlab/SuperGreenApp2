@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
-import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -94,7 +93,8 @@ class FeedLightFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedLightFormPageState extends State<FeedLightFormPage> {
-  List<int> values = List();
+  List<int> values = [];
+  int loading = -1;
   bool _reachable = true;
   bool _usingWifi = false;
 
@@ -110,7 +110,13 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             BlocProvider.of<DeviceReachableListenerBloc>(context)
                 .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
           });
-          setState(() => values = List.from(state.values));
+          setState(() {
+            values = List.from(state.values);
+          });
+        } else if (state is FeedLightFormBlocStateLightsLoading) {
+          setState(() {
+            loading = state.index;
+          });
         } else if (state is FeedLightFormBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigatorActionPop(mustPop: true, param: state.feedEntry));
@@ -118,6 +124,9 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
           cubit: BlocProvider.of<FeedLightFormBloc>(context),
+          buildWhen: (FeedLightFormBlocState oldState, FeedLightFormBlocState newState) {
+            return !(newState is FeedLightFormBlocStateLightsLoading);
+          },
           builder: (context, state) {
             Widget body;
             if (state is FeedLightFormBlocStateLoading) {
@@ -236,6 +245,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
       icon: 'assets/feed_form/icon_${values[i] > 30 ? "sun" : "moon"}.svg',
       value: values[i].toDouble(),
       color: _color(values[i]),
+      loading: loading == i,
+      disable: loading != -1 && loading != i,
       onChanged: (double newValue) {
         setState(() {
           values[i] = newValue.round();

@@ -29,18 +29,22 @@ class SliderFormParam extends StatelessWidget {
   final Color color;
   final double min;
   final double max;
+  final bool loading;
+  final bool disable;
 
-  const SliderFormParam(
-      {Key key,
-      @required this.title,
-      @required this.icon,
-      @required this.value,
-      @required this.onChanged,
-      @required this.onChangeEnd,
-      @required this.color,
-      this.min = 0,
-      this.max = 100})
-      : super(key: key);
+  const SliderFormParam({
+    Key key,
+    @required this.title,
+    @required this.icon,
+    @required this.value,
+    @required this.onChanged,
+    @required this.onChangeEnd,
+    @required this.color,
+    this.min = 0,
+    this.max = 100,
+    this.loading,
+    this.disable,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,28 +58,36 @@ class SliderFormParam extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FlatButton(
-                onPressed: () {
-                  double newValue = math.max(min, value - 1);
-                  onChanged(newValue);
-                  onChangeEnd(newValue);
-                },
-                child: Text('-',
-                    style: TextStyle(fontSize: 50, color: Colors.grey)),
+                onPressed: disable
+                    ? null
+                    : () {
+                        double newValue = math.max(min, value - 1);
+                        onChanged(newValue);
+                        onChangeEnd(newValue);
+                      },
+                child: Text('-', style: TextStyle(fontSize: 50, color: Colors.grey)),
               ),
-              Text('$value%',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff3bb30b))),
+              Text('$value%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b))),
               FlatButton(
-                onPressed: () {
-                  double newValue = math.min(max, value + 1);
-                  onChanged(newValue);
-                  onChangeEnd(newValue);
-                },
-                child: Text('+',
-                    style: TextStyle(fontSize: 30, color: Colors.grey)),
+                onPressed: disable
+                    ? null
+                    : () {
+                        double newValue = math.min(max, value + 1);
+                        onChanged(newValue);
+                        onChangeEnd(newValue);
+                      },
+                child: Text('+', style: TextStyle(fontSize: 30, color: Colors.grey)),
               ),
+              loading
+                  ? SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3.0,
+                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xff3bb30b)),
+                      ),
+                    )
+                  : Container(),
             ],
           )),
           Padding(
@@ -87,10 +99,10 @@ class SliderFormParam extends StatelessWidget {
                   child: Slider(
                     min: min,
                     max: max,
-                    onChangeEnd: onChangeEnd,
+                    onChangeEnd: disable ? null : onChangeEnd,
                     value: value,
                     activeColor: color,
-                    onChanged: onChanged,
+                    onChanged: disable ? null : onChanged,
                   ),
                 ),
                 Text('100%'),
