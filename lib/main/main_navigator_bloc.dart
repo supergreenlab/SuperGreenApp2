@@ -132,6 +132,14 @@ class MainNavigateToDeviceNameEvent extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
+class MainNavigateToDevicePairingEvent extends MainNavigatorEvent {
+  final Device device;
+  MainNavigateToDevicePairingEvent(this.device, {futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [device];
+}
+
 class MainNavigateToDeviceTestEvent extends MainNavigatorEvent {
   final Device device;
   MainNavigateToDeviceTestEvent(this.device, {futureFn}) : super(futureFn: futureFn);
