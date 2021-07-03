@@ -194,9 +194,9 @@ class DeviceWebsocket {
     String cmdWithSigning = '$signing:$cmd';
     String signature = sha256.convert(utf8.encode(cmdWithSigning)).toString();
     String signedCmd = '$signature:$cmd';
-    channel.sink.add(signedCmd);
     Completer completer = Completer();
     commandCompleters[uuid] = completer;
+    channel.sink.add(signedCmd);
     Timer(Duration(seconds: 5), () {
       if (!completer.isCompleted) {
         completer.completeError(Exception('Timeout for command $uuid'));
