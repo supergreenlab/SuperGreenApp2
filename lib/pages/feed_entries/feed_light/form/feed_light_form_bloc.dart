@@ -191,14 +191,14 @@ class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocSt
       yield FeedLightFormBlocStateCancelling();
       List<Future> futures = [];
       for (int i = 0; i < lightParams.length; ++i) {
-        try {
-          futures.add(DeviceHelper.updateIntParam(device, lightParams[i], initialValues[i]));
-        } catch (e, trace) {
-          Logger.logError(e, trace);
-          return;
-        }
+        futures.add(DeviceHelper.updateIntParam(device, lightParams[i], initialValues[i]));
       }
-      await Future.wait(futures);
+      try {
+        await Future.wait(futures);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+        return;
+      }
       yield FeedLightFormBlocStateDone(null);
     }
   }

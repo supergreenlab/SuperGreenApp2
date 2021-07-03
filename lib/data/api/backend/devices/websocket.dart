@@ -152,10 +152,8 @@ class DeviceWebsocket {
       Map<String, dynamic> messageMap = JsonDecoder().convert(message);
       if (messageMap['type'] == 'log') {
         ControllerLog log = ControllerLog.fromMap(messageMap);
-        Logger.log('Received log ${log.module} -> ${log.msg}');
         if (log.module == 'CMD') {
           String cmdId = log.msg.split(')')[0].substring(1);
-          Logger.log('Command id: $cmdId');
           if (commandCompleters.containsKey(cmdId)) {
             commandCompleters[cmdId].complete();
             commandCompleters.remove(cmdId);
@@ -209,8 +207,14 @@ class DeviceWebsocket {
   }
 
   void close() {
-    deviceSub.cancel();
-    sub.cancel();
-    pingTimer.cancel();
+    if (deviceSub != null) {
+      deviceSub.cancel();
+    }
+    if (sub != null) {
+      sub.cancel();
+    }
+    if (pingTimer != null) {
+      pingTimer.cancel();
+    }
   }
 }

@@ -58,7 +58,7 @@ class SliderFormParam extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FlatButton(
-                onPressed: disable
+                onPressed: disable == true
                     ? null
                     : () {
                         double newValue = math.max(min, value - 1);
@@ -69,7 +69,7 @@ class SliderFormParam extends StatelessWidget {
               ),
               Text('$value%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b))),
               FlatButton(
-                onPressed: disable
+                onPressed: disable == true
                     ? null
                     : () {
                         double newValue = math.min(max, value + 1);
@@ -78,7 +78,7 @@ class SliderFormParam extends StatelessWidget {
                       },
                 child: Text('+', style: TextStyle(fontSize: 30, color: Colors.grey)),
               ),
-              loading
+              loading == true
                   ? SizedBox(
                       height: 20,
                       width: 20,
@@ -99,10 +99,10 @@ class SliderFormParam extends StatelessWidget {
                   child: Slider(
                     min: min,
                     max: max,
-                    onChangeEnd: disable ? null : onChangeEnd,
+                    onChangeEnd: disable == true ? null : onChangeEnd,
                     value: value,
                     activeColor: color,
-                    onChanged: disable ? null : onChanged,
+                    onChanged: disable == true ? null : onChanged,
                   ),
                 ),
                 Text('100%'),

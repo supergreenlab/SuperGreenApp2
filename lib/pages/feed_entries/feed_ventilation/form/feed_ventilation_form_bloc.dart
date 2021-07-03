@@ -316,29 +316,69 @@ class FeedVentilationFormBloc extends Bloc<FeedVentilationFormBlocEvent, FeedVen
   }
 
   Future<void> syncParams() async {
+    List<Future> futures = [];
     if (isLegacy) {
-      blowerDay = await blowerDay._syncParam(device);
-      blowerNight = await blowerNight._syncParam(device);
+      futures = [
+        (() async {
+          blowerDay = await blowerDay._syncParam(device);
+        }()),
+        (() async {
+          blowerNight = await blowerNight._syncParam(device);
+        }()),
+      ];
     } else {
-      blowerMin = await blowerMin._syncParam(device);
-      blowerMax = await blowerMax._syncParam(device);
-      blowerRefMin = await blowerRefMin._syncParam(device);
-      blowerRefMax = await blowerRefMax._syncParam(device);
-      blowerRefSource = await blowerRefSource._syncParam(device);
+      futures = [
+        (() async {
+          blowerMin = await blowerMin._syncParam(device);
+        }()),
+        (() async {
+          blowerMax = await blowerMax._syncParam(device);
+        }()),
+        (() async {
+          blowerRefMin = await blowerRefMin._syncParam(device);
+        }()),
+        (() async {
+          blowerRefMax = await blowerRefMax._syncParam(device);
+        }()),
+        (() async {
+          blowerRefSource = await blowerRefSource._syncParam(device);
+        }()),
+      ];
     }
+    await Future.wait(futures);
   }
 
   Future<void> cancelParams() async {
+    List<Future> futures = [];
     if (isLegacy) {
-      blowerDay = await blowerDay._cancelParam(device);
-      blowerNight = await blowerNight._cancelParam(device);
+      futures = [
+        (() async {
+          blowerDay = await blowerDay._cancelParam(device);
+        }()),
+        (() async {
+          blowerNight = await blowerNight._cancelParam(device);
+        }()),
+      ];
     } else {
-      blowerMin = await blowerMin._cancelParam(device);
-      blowerMax = await blowerMax._cancelParam(device);
-      blowerRefMin = await blowerRefMin._cancelParam(device);
-      blowerRefMax = await blowerRefMax._cancelParam(device);
-      blowerRefSource = await blowerRefSource._cancelParam(device);
+      futures = [
+        (() async {
+          blowerMin = await blowerMin._cancelParam(device);
+        }()),
+        (() async {
+          blowerMax = await blowerMax._cancelParam(device);
+        }()),
+        (() async {
+          blowerRefMin = await blowerRefMin._cancelParam(device);
+        }()),
+        (() async {
+          blowerRefMax = await blowerRefMax._cancelParam(device);
+        }()),
+        (() async {
+          blowerRefSource = await blowerRefSource._cancelParam(device);
+        }()),
+      ];
     }
+    await Future.wait(futures);
   }
 
   FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(
