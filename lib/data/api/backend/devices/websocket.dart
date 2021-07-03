@@ -187,19 +187,29 @@ class DeviceWebsocket {
     });
   }
 
-  Future sendRemoteCommand(String cmd) async {
+  Future sendRemoteCommand(String cmd, {int nRetries = 5, int tryN = 0, Completer completer, String uuid}) async {
     String signing = AppDB().getDeviceSigning(device.identifier);
-    String uuid = Uuid().v4();
-    cmd = '$cmd -i $uuid';
-    String cmdWithSigning = '$signing:$cmd';
+    if (uuid == null) {
+      uuid = Uuid().v4();
+    }
+    String cmdWithId = '$cmd -i $uuid';
+    String cmdWithSigning = '$signing:$cmdWithId';
     String signature = sha256.convert(utf8.encode(cmdWithSigning)).toString();
-    String signedCmd = '$signature:$cmd';
-    Completer completer = Completer();
-    commandCompleters[uuid] = completer;
+    String signedCmd = '$signature:$cmdWithId';
+    if (completer == null) {
+      completer = Completer();
+      commandCompleters[uuid] = completer;
+    }
     channel.sink.add(signedCmd);
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 2), () {
       if (!completer.isCompleted) {
-        completer.completeError(Exception('Timeout for command $uuid'));
+        if (tryN < nRetries) {
+          Logger.log("Retrying $cmd");
+          sendRemoteCommand(cmd, nRetries: nRetries, tryN: tryN + 1, completer: completer, uuid: uuid);
+          return;
+        } else {
+          completer.completeError(Exception('Timeout for command $uuid'));
+        }
       }
       commandCompleters.remove(uuid);
     });
