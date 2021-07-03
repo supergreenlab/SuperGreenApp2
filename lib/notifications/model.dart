@@ -33,6 +33,8 @@ enum NotificationDataType {
   LIKE_PLANT_FEEDENTRY,
   FOLLOWED_PLANT_ACTIVITY,
   NEW_FOLLOWER,
+  DEVICE_UNREACHABLE,
+  LIVECAM_UNREACHABLE,
 }
 
 abstract class NotificationData extends Equatable {
@@ -68,6 +70,10 @@ abstract class NotificationData extends Equatable {
         return NotificationDataFollowedPlantActivity.fromMap(data);
       case NotificationDataType.NEW_FOLLOWER:
         return NotificationDataNewFollower.fromMap(data);
+      case NotificationDataType.DEVICE_UNREACHABLE:
+        return NotificationDataDeviceUnreachable.fromMap(data);
+      case NotificationDataType.LIVECAM_UNREACHABLE:
+        return NotificationDataLivecamUnreachable.fromMap(data);
     }
     try {
       throw 'Unknown type ${data['type']}';
@@ -243,6 +249,36 @@ class NotificationDataNewFollower extends NotificationData {
             title: title,
             body: body);
   NotificationDataNewFollower.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
+}
+
+class NotificationDataDeviceUnreachable extends NotificationData {
+  NotificationDataDeviceUnreachable({int id, String title, String body, @required String deviceID})
+      : super(
+            id: id,
+            data: {
+              'deviceID': deviceID,
+            },
+            type: NotificationDataType.DEVICE_UNREACHABLE,
+            title: title,
+            body: body);
+  NotificationDataDeviceUnreachable.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get deviceID => data['deviceID'];
+}
+
+class NotificationDataLivecamUnreachable extends NotificationData {
+  NotificationDataLivecamUnreachable({int id, String title, String body, @required String plantID})
+      : super(
+            id: id,
+            data: {
+              'plantID': plantID,
+            },
+            type: NotificationDataType.LIVECAM_UNREACHABLE,
+            title: title,
+            body: body);
+  NotificationDataLivecamUnreachable.fromMap(Map<String, dynamic> data) : super(data: data);
 
   String get plantID => data['plantID'];
 }

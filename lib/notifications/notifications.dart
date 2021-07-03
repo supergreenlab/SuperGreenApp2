@@ -216,6 +216,17 @@ class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocSt
         if (plant == null) return;
         AppDB().setLastPlant(plant.id);
         yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+      } else if (notificationData is NotificationDataDeviceUnreachable) {
+        yield NotificationsBlocStateNotification(event.notificationData);
+        Device device = await RelDB.get().devicesDAO.getDeviceForServerID(notificationData.deviceID);
+        if (device == null) return;
+        yield NotificationsBlocStateMainNavigation(MainNavigateToSettingsDevice(device));
+      } else if (notificationData is NotificationDataLivecamUnreachable) {
+        yield NotificationsBlocStateNotification(event.notificationData);
+        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(notificationData.plantID);
+        if (plant == null) return;
+        AppDB().setLastPlant(plant.id);
+        yield NotificationsBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
       }
     } else if (event is NotificationsBlocEventReminder) {
       await localNotifications.reminderNotification(
