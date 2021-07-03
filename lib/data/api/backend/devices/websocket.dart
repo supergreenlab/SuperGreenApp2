@@ -125,12 +125,6 @@ class DeviceWebsocket {
       return;
     }
 
-    if (pingTimer == null && AppDB().getDeviceSigning(device.identifier) != null) {
-      pingTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
-        sendRemoteCommand('geti -k TIME');
-      });
-    }
-
     await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
     sub = channel.stream.listen((message) async {
       bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
@@ -138,12 +132,21 @@ class DeviceWebsocket {
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
       }
       if (remoteEnabled) {
+        if (pingTimer == null) {
+          pingTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+            sendRemoteCommand('geti -k TIME');
+          });
+        }
         if (timeout != null) {
           timeout.cancel();
         }
         timeout = Timer(Duration(seconds: 10), () {
           RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
           timeout = null;
+          if (pingTimer != null) {
+            pingTimer.cancel();
+            pingTimer = null;
+          }
         });
       }
       Map<String, dynamic> messageMap = JsonDecoder().convert(message);
