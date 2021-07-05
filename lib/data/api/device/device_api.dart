@@ -77,7 +77,7 @@ class DeviceAPI {
   }
 
   static Future<String> fetchStringParam(String controllerIP, String paramName,
-      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
     return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}',
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
   }
@@ -123,7 +123,7 @@ class DeviceAPI {
   }
 
   static Future<int> fetchIntParam(String controllerIP, String paramName,
-      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -165,7 +165,7 @@ class DeviceAPI {
   }
 
   static Future<String> setStringParam(String controllerIP, String paramName, String value,
-      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
     try {
       await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
@@ -177,7 +177,7 @@ class DeviceAPI {
   }
 
   static Future<int> setIntParam(String controllerIP, String paramName, int value,
-      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
     try {
       await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value',
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
@@ -188,7 +188,7 @@ class DeviceAPI {
     return fetchIntParam(controllerIP, paramName, auth: auth);
   }
 
-  static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+  static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -220,7 +220,7 @@ class DeviceAPI {
   }
 
   static Future uploadFile(String controllerIP, String fileName, ByteData data,
-      {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);

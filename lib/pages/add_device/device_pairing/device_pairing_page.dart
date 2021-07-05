@@ -18,20 +18,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
-import 'package:super_green_app/widgets/textfield.dart';
 
 class DevicePairingPage extends TraceableStatefulWidget {
   static String get devicePairingPageTitle {
@@ -45,27 +44,27 @@ class DevicePairingPage extends TraceableStatefulWidget {
 
   static String get devicePairingPageLoading {
     return Intl.message(
-      'Setting controller name..',
+      'Pairing controller..',
       name: 'devicePairingPageLoading',
       desc: 'Loading text when setting controller name',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  static String get devicePairingPageSetNameSectionTitle {
+  static String get devicePairingPagePairControllerSectionTitle {
     return Intl.message(
-      'Set controller\'s name',
-      name: 'devicePairingPageSetNameSectionTitle',
-      desc: 'Section title for the controller name input',
+      'Pair controller for remote control',
+      name: 'devicePairingPagePairControllerSectionTitle',
+      desc: 'Section title for the controller pairing setup',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  static String get devicePairingPageSetNameHint {
+  static String get devicePairingPageInstructions {
     return Intl.message(
-      'ex: controller',
-      name: 'devicePairingPageSetNameHint',
-      desc: 'Hint for the controller name input',
+      '**You can now enable remote control**\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.',
+      name: 'devicePairingPageInstructions',
+      desc: 'Explanation for remote control',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -75,47 +74,13 @@ class DevicePairingPage extends TraceableStatefulWidget {
 }
 
 class DevicePairingPageState extends State<DevicePairingPage> {
-  final _nameController = TextEditingController();
-
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  int _listener;
-  bool _keyboardVisible = false;
-
-  @protected
-  void initState() {
-    super.initState();
-    _listener = _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          _keyboardVisible = visible;
-        });
-        if (!_keyboardVisible) {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener(
       cubit: BlocProvider.of<DevicePairingBloc>(context),
       listener: (BuildContext context, DevicePairingBlocState state) async {
         if (state is DevicePairingBlocStateDone) {
-          await Future.delayed(Duration(seconds: 1));
-          FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceTestEvent(state.device, futureFn: ff.futureFn));
-          bool done = await ff.future;
-          if (done == true) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
-          } else {
-            BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventReset());
-          }
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
         }
       },
       child: BlocBuilder<DevicePairingBloc, DevicePairingBlocState>(
@@ -134,7 +99,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                 ),
               );
             } else {
-              body = _renderForm();
+              body = _renderForm(state);
             }
             return WillPopScope(
               onWillPop: () async => false,
@@ -156,17 +121,16 @@ class DevicePairingPageState extends State<DevicePairingPage> {
     return FullscreenLoading(title: DevicePairingPage.devicePairingPageLoading);
   }
 
-  Widget _renderForm() {
+  Widget _renderForm(DevicePairingBlocState state) {
     return Column(
       children: <Widget>[
-        AnimatedContainer(
-          duration: Duration(milliseconds: 100),
-          height: _keyboardVisible ? 0 : 100,
+        Container(
+          height: 100,
           color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: DevicePairingPage.devicePairingPageSetNameSectionTitle,
-          icon: 'assets/box_setup/icon_controller.svg',
+          title: DevicePairingPage.devicePairingPagePairControllerSectionTitle,
+          icon: 'assets/settings/icon_remotecontrol.svg',
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
           large: true,
@@ -174,44 +138,50 @@ class DevicePairingPageState extends State<DevicePairingPage> {
         ),
         Expanded(
           child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
-                child: SGLTextField(
-                  hintText: DevicePairingPage.devicePairingPageSetNameHint,
-                  controller: _nameController,
-                  onChanged: (_) {
-                    setState(() {});
-                  },
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: MarkdownBody(
+                    fitContent: true,
+                    data: DevicePairingPage.devicePairingPageInstructions,
+                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                  ),
                 ),
               ),
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GreenButton(
-              onPressed: () => _handleInput(context),
-              title: 'OK',
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16.0),
+              child: RedButton(
+                onPressed: () {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigatorActionPop(mustPop: true, param: state.device));
+                },
+                title: 'SKIP',
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: GreenButton(
+                onPressed: () {
+                  BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
+                },
+                title: 'PAIR CONTROLLER',
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  void _handleInput(BuildContext context) {
-    BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventSetName(
-      _nameController.text,
-    ));
-  }
-
   @override
   void dispose() {
-    _keyboardVisibility.removeListener(_listener);
-    _nameController.dispose();
     super.dispose();
   }
 }

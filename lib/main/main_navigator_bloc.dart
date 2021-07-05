@@ -649,6 +649,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState.pushNamed('/device/load', arguments: event);
     } else if (event is MainNavigateToDeviceNameEvent) {
       future = _navigatorKey.currentState.pushNamed('/device/name', arguments: event);
+    } else if (event is MainNavigateToDevicePairingEvent) {
+      future = _navigatorKey.currentState.pushNamed('/device/pairing', arguments: event);
     } else if (event is MainNavigateToDeviceTestEvent) {
       future = _navigatorKey.currentState.pushNamed('/device/test', arguments: event);
     } else if (event is MainNavigateToDeviceWifiEvent) {

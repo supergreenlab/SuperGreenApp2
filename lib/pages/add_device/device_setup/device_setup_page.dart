@@ -64,6 +64,12 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
                 .add(MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
             device = await ff1.future;
           }
+
+          FutureFn ff2 = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToDevicePairingEvent(device, futureFn: ff2.futureFn));
+          device = await ff2.future;
+
           if (state.requiresWifiSetup) {
             FutureFn ff2 = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
             BlocProvider.of<MainNavigatorBloc>(context)

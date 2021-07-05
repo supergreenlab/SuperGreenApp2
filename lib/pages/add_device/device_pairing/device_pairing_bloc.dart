@@ -41,6 +41,13 @@ class DevicePairingBlocEventSetName extends DevicePairingBlocEvent {
   List<Object> get props => [name];
 }
 
+class DevicePairingBlocEventPair extends DevicePairingBlocEvent {
+  DevicePairingBlocEventPair();
+
+  @override
+  List<Object> get props => [];
+}
+
 class DevicePairingBlocState extends Equatable {
   final Device device;
   DevicePairingBlocState(this.device);
@@ -54,9 +61,7 @@ class DevicePairingBlocStateLoading extends DevicePairingBlocState {
 }
 
 class DevicePairingBlocStateDone extends DevicePairingBlocState {
-  final bool requiresWifiSetup;
-
-  DevicePairingBlocStateDone(Device device, this.requiresWifiSetup) : super(device);
+  DevicePairingBlocStateDone(Device device) : super(device);
 }
 
 class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocState> {
@@ -68,8 +73,11 @@ class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocSt
   Stream<DevicePairingBlocState> mapEventToState(DevicePairingBlocEvent event) async* {
     if (event is DevicePairingBlocEventReset) {
       yield DevicePairingBlocState(args.device);
-    } else if (event is DevicePairingBlocEventSetName) {
+    } else if (event is DevicePairingBlocEventPair) {
       yield DevicePairingBlocStateLoading(args.device);
+      await DeviceHelper.pairDevice(args.device);
+      await Future.delayed(Duration(seconds: 1));
+      yield DevicePairingBlocStateDone(args.device);
     }
   }
 }

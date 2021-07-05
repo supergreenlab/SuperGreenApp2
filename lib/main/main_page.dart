@@ -30,6 +30,8 @@ import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dar
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
+import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_bloc.dart';
+import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_page.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_bloc.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_page.dart';
 import 'package:super_green_app/pages/add_plant/create_plant/create_plant_bloc.dart';
@@ -367,6 +369,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => DeviceNameBloc(settings.arguments),
           child: DeviceNamePage(),
+        );
+      case '/device/pairing':
+        return BlocProvider(
+          create: (context) => DevicePairingBloc(settings.arguments),
+          child: DevicePairingPage(),
         );
       case '/device/test':
         return BlocProvider(

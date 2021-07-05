@@ -140,7 +140,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       }
 
       try {
-        deviceIdentifier = await DeviceAPI.fetchStringParam(args.ip, "BROKER_CLIENTID", auth: auth);
+        deviceIdentifier = await DeviceAPI.fetchStringParam(args.ip, "BROKER_CLIENTID", auth: auth, nRetries: 10);
       } catch (e) {
         add(DeviceSetupBlocEventLoadingError(requiresAuth: e.toString().endsWith('401')));
         return;

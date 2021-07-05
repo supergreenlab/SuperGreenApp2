@@ -133,8 +133,8 @@ class DeviceWebsocket {
       }
       if (remoteEnabled) {
         if (pingTimer == null) {
-          pingTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
-            sendRemoteCommand('geti -k TIME');
+          pingTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) async {
+            await sendRemoteCommand('geti -k TIME');
           });
         }
         if (timeout != null) {

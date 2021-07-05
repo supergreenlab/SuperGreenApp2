@@ -82,7 +82,7 @@ class DeviceHelper {
   }
 
   static Future<Param> updateStringParam(Device device, Param param, String value,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1}) async {
     if (AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
       await DeviceWebsocket.getWebsocket(device)
           .sendRemoteCommand('sets -k ${param.key} -v "${value.replaceAll("\"", "\\\"")}"');
@@ -97,7 +97,7 @@ class DeviceHelper {
   }
 
   static Future<Param> updateIntParam(Device device, Param param, int value,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1}) async {
     if (AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
       await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('seti -k ${param.key} -v $value');
     } else {
@@ -111,7 +111,7 @@ class DeviceHelper {
   }
 
   static Future<Tuple2<int, int>> updateHourMinParams(Device device, Param hourParam, Param minParam, int hour, int min,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1}) async {
     hour = hour - DateTime.now().timeZoneOffset.inHours;
     min = min - (DateTime.now().timeZoneOffset.inMinutes % 60);
     if (min < 0) {
@@ -131,7 +131,7 @@ class DeviceHelper {
   }
 
   static Future<Param> refreshStringParam(Device device, Param param,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1}) async {
     if (AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
       Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
       await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('gets -k ${param.key}');
@@ -145,7 +145,7 @@ class DeviceHelper {
   }
 
   static Future<Param> refreshIntParam(Device device, Param param,
-      {int timeout = 5, int nRetries = 4, int wait = 0}) async {
+      {int timeout = 5, int nRetries = 4, int wait = 1}) async {
     if (AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
       Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
       await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('geti -k ${param.key}');
