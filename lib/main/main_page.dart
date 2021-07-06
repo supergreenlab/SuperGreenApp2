@@ -143,6 +143,8 @@ import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dar
 import 'package:super_green_app/pages/settings/devices/settings_devices_page.dart';
 import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/upgrade/settings_upgrade_device_page.dart';
+import 'package:super_green_app/pages/settings/plants/alerts/settings_plant_alerts_bloc.dart';
+import 'package:super_green_app/pages/settings/plants/alerts/settings_plant_alerts_page.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_bloc.dart';
 import 'package:super_green_app/pages/settings/plants/edit_config/settings_plant_page.dart';
 import 'package:super_green_app/pages/settings/plants/settings_plants_bloc.dart';
@@ -518,6 +520,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => SettingsPlantBloc(settings.arguments),
           child: SettingsPlantPage(),
+        );
+      case '/settings/plant/alerts':
+        return BlocProvider(
+          create: (context) => SettingsPlantAlertsBloc(settings.arguments),
+          child: SettingsPlantAlertsPage(),
         );
       case '/settings/boxes':
         return BlocProvider(

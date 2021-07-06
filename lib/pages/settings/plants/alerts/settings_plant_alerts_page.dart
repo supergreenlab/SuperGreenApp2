@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -159,7 +157,7 @@ class SettingsPlantAlertsPage extends TraceableStatelessWidget {
                 onPressed: () {
                   BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventUpdateParameters());
                 },
-                title: 'PAIR CONTROLLER',
+                title: 'SAVE',
               ),
             ),
           ],

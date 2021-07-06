@@ -172,20 +172,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                       _public = newValue;
                     });
                   }, _public)),
-              SectionTitle(
-                title: 'Plant alerts',
-                icon: 'assets/settings/icon_lab.svg',
-                backgroundColor: Colors.green,
-                titleColor: Colors.green,
-                elevation: 5,
-              ),
               ListTile(
-                leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
-                title: Text(_box.name),
-                subtitle: Text('Tap to change'),
+                leading: SvgPicture.asset('assets/settings/icon_alerts.svg'),
+                title: Text('Alert settings'),
+                subtitle: Text('Tap to enable and edit settings'),
                 trailing: Icon(Icons.edit),
                 onTap: () {
-                  _handleChangeBox(context);
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlantAlerts(state.plant));
                 },
               ),
               SectionTitle(

@@ -715,7 +715,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToSettingsPlant) {
       future = _navigatorKey.currentState.pushNamed('/settings/plant', arguments: event);
     } else if (event is MainNavigateToSettingsPlantAlerts) {
-      future = _navigatorKey.currentState.pushNamed('/settings/plant/alert', arguments: event);
+      future = _navigatorKey.currentState.pushNamed('/settings/plant/alerts', arguments: event);
     } else if (event is MainNavigateToSettingsBoxes) {
       future = _navigatorKey.currentState.pushNamed('/settings/boxes', arguments: event);
     } else if (event is MainNavigateToSettingsBox) {
