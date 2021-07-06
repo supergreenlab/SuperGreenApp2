@@ -173,6 +173,22 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                     });
                   }, _public)),
               SectionTitle(
+                title: 'Plant alerts',
+                icon: 'assets/settings/icon_lab.svg',
+                backgroundColor: Colors.green,
+                titleColor: Colors.green,
+                elevation: 5,
+              ),
+              ListTile(
+                leading: SvgPicture.asset('assets/settings/icon_lab.svg'),
+                title: Text(_box.name),
+                subtitle: Text('Tap to change'),
+                trailing: Icon(Icons.edit),
+                onTap: () {
+                  _handleChangeBox(context);
+                },
+              ),
+              SectionTitle(
                 title: 'Plant lab',
                 icon: 'assets/settings/icon_lab.svg',
                 backgroundColor: Colors.yellow,

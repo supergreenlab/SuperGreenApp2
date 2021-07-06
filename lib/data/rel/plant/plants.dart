@@ -34,6 +34,7 @@ class Plants extends Table {
   // TODO remove the single param, it's moved to the settings json string
   BoolColumn get single => boolean().withDefault(Constant(false))();
   BoolColumn get public => boolean().withDefault(Constant(false))();
+  BoolColumn get alerts => boolean().withDefault(Constant(false))();
 
   TextColumn get settings => text().withDefault(Constant('{}'))();
 
@@ -52,6 +53,7 @@ class Plants extends Table {
         name: Value(map['name'] as String),
         single: Value(map['single'] as bool),
         public: Value(map['public'] as bool),
+        alerts: Value(map['alertsEnabled'] as bool),
         settings: Value(map['settings'] as String),
         synced: Value(true),
         serverID: Value(map['id'] as String));
@@ -74,6 +76,7 @@ class Plants extends Table {
       'name': plant.name,
       'single': plant.single,
       'public': plant.public,
+      'alertsEnabled': plant.alerts,
       'settings': plant.settings,
     };
   }

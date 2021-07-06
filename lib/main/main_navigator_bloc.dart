@@ -425,6 +425,15 @@ class MainNavigateToSettingsPlant extends MainNavigatorEvent {
   List<Object> get props => [plant];
 }
 
+class MainNavigateToSettingsPlantAlerts extends MainNavigatorEvent {
+  final Plant plant;
+
+  MainNavigateToSettingsPlantAlerts(this.plant);
+
+  @override
+  List<Object> get props => [plant];
+}
+
 class MainNavigateToSettingsBoxes extends MainNavigatorEvent {
   MainNavigateToSettingsBoxes();
 
@@ -705,6 +714,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState.pushNamed('/settings/plants', arguments: event);
     } else if (event is MainNavigateToSettingsPlant) {
       future = _navigatorKey.currentState.pushNamed('/settings/plant', arguments: event);
+    } else if (event is MainNavigateToSettingsPlantAlerts) {
+      future = _navigatorKey.currentState.pushNamed('/settings/plant/alert', arguments: event);
     } else if (event is MainNavigateToSettingsBoxes) {
       future = _navigatorKey.currentState.pushNamed('/settings/boxes', arguments: event);
     } else if (event is MainNavigateToSettingsBox) {

@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
@@ -24,73 +27,67 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_bloc.dart';
+import 'package:super_green_app/pages/settings/plants/alerts/settings_plant_alerts_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
-import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
-class DevicePairingPage extends TraceableStatefulWidget {
-  static String get devicePairingPageTitle {
+class SettingsPlantAlertsPage extends TraceableStatelessWidget {
+  static String get settingsPlantAlertPageTitle {
     return Intl.message(
-      'Pair controller',
-      name: 'devicePairingPageTitle',
-      desc: 'Device pairing page title',
+      'Add controller',
+      name: 'settingsPlantAlertPageTitle',
+      desc: 'Device alerts page title',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  static String get devicePairingPageLoading {
+  static String get settingsPlantAlertPageLoading {
     return Intl.message(
-      'Pairing controller..',
-      name: 'devicePairingPageLoading',
-      desc: 'Loading text when setting controller name',
+      'Updating parameters..',
+      name: 'settingsPlantAlertPageLoading',
+      desc: 'Loading text when setting alert parameters',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  static String get devicePairingPagePairControllerSectionTitle {
+  static String get settingsPlantAlertPageSectionTitle {
     return Intl.message(
-      'Pair controller for remote control',
-      name: 'devicePairingPagePairControllerSectionTitle',
-      desc: 'Section title for the controller pairing setup',
+      'Metric monitoring',
+      name: 'settingsPlantAlertPagePairControllerSectionTitle',
+      desc: 'Section title for the alert parameters setup',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  static String get devicePairingPageInstructions {
+  static String get settingsPlantAlertPageInstructions {
     return Intl.message(
-      '**You can now enable remote control**\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.',
-      name: 'devicePairingPageInstructions',
-      desc: 'Explanation for remote control',
+      'No need to constantly check the plant monitoring, just setup some alerts, and the app will tell you when something\s wrong.',
+      name: 'settingsPlantAlertPageInstructions',
+      desc: 'Explanation for alerts',
       locale: SGLLocalizations.current.localeName,
     );
   }
 
-  @override
-  State<StatefulWidget> createState() => DevicePairingPageState();
-}
-
-class DevicePairingPageState extends State<DevicePairingPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DevicePairingBloc>(context),
-      listener: (BuildContext context, DevicePairingBlocState state) async {
-        if (state is DevicePairingBlocStateDone) {
+      cubit: BlocProvider.of<SettingsPlantAlertsBloc>(context),
+      listener: (BuildContext context, SettingsPlantAlertsBlocState state) async {
+        if (state is SettingsPlantAlertsBlocStateDone) {
           await Future.delayed(Duration(seconds: 2));
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
         }
       },
-      child: BlocBuilder<DevicePairingBloc, DevicePairingBlocState>(
-          cubit: BlocProvider.of<DevicePairingBloc>(context),
+      child: BlocBuilder<SettingsPlantAlertsBloc, SettingsPlantAlertsBlocState>(
+          cubit: BlocProvider.of<SettingsPlantAlertsBloc>(context),
           builder: (context, state) {
             Widget body;
-            if (state is DevicePairingBlocStateLoading) {
+            if (state is SettingsPlantAlertsBlocStateLoading) {
               body = _renderLoading();
-            } else if (state is DevicePairingBlocStateDone) {
+            } else if (state is SettingsPlantAlertsBlocStateDone) {
               body = Fullscreen(
                 title: CommonL10N.done,
                 child: Icon(
@@ -106,7 +103,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
               onWillPop: () async => false,
               child: Scaffold(
                   appBar: SGLAppBar(
-                    DevicePairingPage.devicePairingPageTitle,
+                    SettingsPlantAlertsPage.settingsPlantAlertPageTitle,
                     hideBackButton: true,
                     backgroundColor: Color(0xff0b6ab3),
                     titleColor: Colors.white,
@@ -119,10 +116,10 @@ class DevicePairingPageState extends State<DevicePairingPage> {
   }
 
   Widget _renderLoading() {
-    return FullscreenLoading(title: DevicePairingPage.devicePairingPageLoading);
+    return FullscreenLoading(title: SettingsPlantAlertsPage.settingsPlantAlertPageLoading);
   }
 
-  Widget _renderForm(BuildContext context, DevicePairingBlocState state) {
+  Widget _renderForm(BuildContext context, SettingsPlantAlertsBlocState state) {
     return Column(
       children: <Widget>[
         Container(
@@ -130,7 +127,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
           color: Color(0xff0b6ab3),
         ),
         SectionTitle(
-          title: DevicePairingPage.devicePairingPagePairControllerSectionTitle,
+          title: SettingsPlantAlertsPage.settingsPlantAlertPageSectionTitle,
           icon: 'assets/settings/icon_remotecontrol.svg',
           backgroundColor: Color(0xff0b6ab3),
           titleColor: Colors.white,
@@ -145,7 +142,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: MarkdownBody(
                     fitContent: true,
-                    data: DevicePairingPage.devicePairingPageInstructions,
+                    data: SettingsPlantAlertsPage.settingsPlantAlertPageInstructions,
                     styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
                 ),
@@ -157,20 +154,10 @@ class DevicePairingPageState extends State<DevicePairingPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16.0),
-              child: RedButton(
-                onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigatorActionPop(mustPop: true, param: state.device));
-                },
-                title: 'SKIP',
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 16.0),
+              padding: const EdgeInsets.all(16.0),
               child: GreenButton(
                 onPressed: () {
-                  BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
+                  BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventUpdateParameters());
                 },
                 title: 'PAIR CONTROLLER',
               ),
@@ -179,10 +166,5 @@ class DevicePairingPageState extends State<DevicePairingPage> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -65,8 +83,7 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
   }
 
   @override
-  Stream<SettingsBoxBlocState> mapEventToState(
-      SettingsBoxBlocEvent event) async* {
+  Stream<SettingsBoxBlocState> mapEventToState(SettingsBoxBlocEvent event) async* {
     if (event is SettingsBoxBlocEventInit) {
       box = await RelDB.get().plantsDAO.getBox(args.box.id);
       if (box.device != null) {
@@ -79,26 +96,17 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
       if ((event.device != null && event.device != device) ||
           (event.deviceBox != null && event.deviceBox != deviceBox)) {
         BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
-        Map<String, dynamic> schedule =
-            boxSettings.schedules[boxSettings.schedule];
+        Map<String, dynamic> schedule = boxSettings.schedules[boxSettings.schedule];
 
-        Param onHourParam = await RelDB.get()
-            .devicesDAO
-            .getParam(event.device.id, 'BOX_${event.deviceBox}_ON_HOUR');
-        Param onMinParam = await RelDB.get()
-            .devicesDAO
-            .getParam(event.device.id, 'BOX_${event.deviceBox}_ON_MIN');
-        await DeviceHelper.updateHourMinParams(event.device, onHourParam,
-            onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
+        Param onHourParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_ON_HOUR');
+        Param onMinParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_ON_MIN');
+        await DeviceHelper.updateHourMinParams(
+            event.device, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
 
-        Param offHourParam = await RelDB.get()
-            .devicesDAO
-            .getParam(event.device.id, 'BOX_${event.deviceBox}_OFF_HOUR');
-        Param offMinParam = await RelDB.get()
-            .devicesDAO
-            .getParam(event.device.id, 'BOX_${event.deviceBox}_OFF_MIN');
-        await DeviceHelper.updateHourMinParams(event.device, offHourParam,
-            offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
+        Param offHourParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_OFF_HOUR');
+        Param offMinParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_OFF_MIN');
+        await DeviceHelper.updateHourMinParams(
+            event.device, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
       }
       await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
           id: Value(box.id),
@@ -106,8 +114,7 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
           device: Value(event.device?.id),
           deviceBox: Value(event.deviceBox),
           synced: Value(false)));
-      yield SettingsBoxBlocStateDone(
-          box, event.device ?? device, event.deviceBox ?? deviceBox);
+      yield SettingsBoxBlocStateDone(box, event.device ?? device, event.deviceBox ?? deviceBox);
     }
   }
 }

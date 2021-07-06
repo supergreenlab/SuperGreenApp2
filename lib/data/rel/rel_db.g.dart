@@ -1300,6 +1300,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   final String name;
   final bool single;
   final bool public;
+  final bool alerts;
   final String settings;
   final String serverID;
   final bool synced;
@@ -1310,6 +1311,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       @required this.name,
       @required this.single,
       @required this.public,
+      @required this.alerts,
       @required this.settings,
       this.serverID,
       @required this.synced});
@@ -1328,6 +1330,8 @@ class Plant extends DataClass implements Insertable<Plant> {
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}single']),
       public:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}public']),
+      alerts:
+          boolType.mapFromDatabaseResponse(data['${effectivePrefix}alerts']),
       settings: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
       serverID: stringType
@@ -1357,6 +1361,9 @@ class Plant extends DataClass implements Insertable<Plant> {
     if (!nullToAbsent || public != null) {
       map['public'] = Variable<bool>(public);
     }
+    if (!nullToAbsent || alerts != null) {
+      map['alerts'] = Variable<bool>(alerts);
+    }
     if (!nullToAbsent || settings != null) {
       map['settings'] = Variable<String>(settings);
     }
@@ -1379,6 +1386,8 @@ class Plant extends DataClass implements Insertable<Plant> {
           single == null && nullToAbsent ? const Value.absent() : Value(single),
       public:
           public == null && nullToAbsent ? const Value.absent() : Value(public),
+      alerts:
+          alerts == null && nullToAbsent ? const Value.absent() : Value(alerts),
       settings: settings == null && nullToAbsent
           ? const Value.absent()
           : Value(settings),
@@ -1400,6 +1409,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       name: serializer.fromJson<String>(json['name']),
       single: serializer.fromJson<bool>(json['single']),
       public: serializer.fromJson<bool>(json['public']),
+      alerts: serializer.fromJson<bool>(json['alerts']),
       settings: serializer.fromJson<String>(json['settings']),
       serverID: serializer.fromJson<String>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
@@ -1415,6 +1425,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       'name': serializer.toJson<String>(name),
       'single': serializer.toJson<bool>(single),
       'public': serializer.toJson<bool>(public),
+      'alerts': serializer.toJson<bool>(alerts),
       'settings': serializer.toJson<String>(settings),
       'serverID': serializer.toJson<String>(serverID),
       'synced': serializer.toJson<bool>(synced),
@@ -1428,6 +1439,7 @@ class Plant extends DataClass implements Insertable<Plant> {
           String name,
           bool single,
           bool public,
+          bool alerts,
           String settings,
           String serverID,
           bool synced}) =>
@@ -1438,6 +1450,7 @@ class Plant extends DataClass implements Insertable<Plant> {
         name: name ?? this.name,
         single: single ?? this.single,
         public: public ?? this.public,
+        alerts: alerts ?? this.alerts,
         settings: settings ?? this.settings,
         serverID: serverID ?? this.serverID,
         synced: synced ?? this.synced,
@@ -1451,6 +1464,7 @@ class Plant extends DataClass implements Insertable<Plant> {
           ..write('name: $name, ')
           ..write('single: $single, ')
           ..write('public: $public, ')
+          ..write('alerts: $alerts, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -1471,8 +1485,12 @@ class Plant extends DataClass implements Insertable<Plant> {
                       single.hashCode,
                       $mrjc(
                           public.hashCode,
-                          $mrjc(settings.hashCode,
-                              $mrjc(serverID.hashCode, synced.hashCode)))))))));
+                          $mrjc(
+                              alerts.hashCode,
+                              $mrjc(
+                                  settings.hashCode,
+                                  $mrjc(serverID.hashCode,
+                                      synced.hashCode))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -1483,6 +1501,7 @@ class Plant extends DataClass implements Insertable<Plant> {
           other.name == this.name &&
           other.single == this.single &&
           other.public == this.public &&
+          other.alerts == this.alerts &&
           other.settings == this.settings &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
@@ -1495,6 +1514,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   final Value<String> name;
   final Value<bool> single;
   final Value<bool> public;
+  final Value<bool> alerts;
   final Value<String> settings;
   final Value<String> serverID;
   final Value<bool> synced;
@@ -1505,6 +1525,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     this.name = const Value.absent(),
     this.single = const Value.absent(),
     this.public = const Value.absent(),
+    this.alerts = const Value.absent(),
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -1516,6 +1537,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     @required String name,
     this.single = const Value.absent(),
     this.public = const Value.absent(),
+    this.alerts = const Value.absent(),
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -1528,6 +1550,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     Expression<String> name,
     Expression<bool> single,
     Expression<bool> public,
+    Expression<bool> alerts,
     Expression<String> settings,
     Expression<String> serverID,
     Expression<bool> synced,
@@ -1539,6 +1562,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       if (name != null) 'name': name,
       if (single != null) 'single': single,
       if (public != null) 'public': public,
+      if (alerts != null) 'alerts': alerts,
       if (settings != null) 'settings': settings,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
@@ -1552,6 +1576,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       Value<String> name,
       Value<bool> single,
       Value<bool> public,
+      Value<bool> alerts,
       Value<String> settings,
       Value<String> serverID,
       Value<bool> synced}) {
@@ -1562,6 +1587,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       name: name ?? this.name,
       single: single ?? this.single,
       public: public ?? this.public,
+      alerts: alerts ?? this.alerts,
       settings: settings ?? this.settings,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
@@ -1589,6 +1615,9 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     if (public.present) {
       map['public'] = Variable<bool>(public.value);
     }
+    if (alerts.present) {
+      map['alerts'] = Variable<bool>(alerts.value);
+    }
     if (settings.present) {
       map['settings'] = Variable<String>(settings.value);
     }
@@ -1610,6 +1639,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
           ..write('name: $name, ')
           ..write('single: $single, ')
           ..write('public: $public, ')
+          ..write('alerts: $alerts, ')
           ..write('settings: $settings, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
@@ -1682,6 +1712,15 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
         defaultValue: Constant(false));
   }
 
+  final VerificationMeta _alertsMeta = const VerificationMeta('alerts');
+  GeneratedBoolColumn _alerts;
+  @override
+  GeneratedBoolColumn get alerts => _alerts ??= _constructAlerts();
+  GeneratedBoolColumn _constructAlerts() {
+    return GeneratedBoolColumn('alerts', $tableName, false,
+        defaultValue: Constant(false));
+  }
+
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
   GeneratedTextColumn _settings;
   @override
@@ -1711,7 +1750,7 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, feed, box, name, single, public, settings, serverID, synced];
+      [id, feed, box, name, single, public, alerts, settings, serverID, synced];
   @override
   $PlantsTable get asDslTable => this;
   @override
@@ -1749,6 +1788,10 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
     if (data.containsKey('public')) {
       context.handle(_publicMeta,
           public.isAcceptableOrUnknown(data['public'], _publicMeta));
+    }
+    if (data.containsKey('alerts')) {
+      context.handle(_alertsMeta,
+          alerts.isAcceptableOrUnknown(data['alerts'], _alertsMeta));
     }
     if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
