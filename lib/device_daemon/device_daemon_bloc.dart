@@ -37,17 +37,6 @@ class DeviceDaemonBlocEventInit extends DeviceDaemonBlocEvent {
   List<Object> get props => [];
 }
 
-class DeviceDaemonBlocEventDeviceReachable extends DeviceDaemonBlocEvent {
-  final int rand = Random().nextInt(1 << 32);
-  final Device device;
-  final bool reachable;
-
-  DeviceDaemonBlocEventDeviceReachable(this.device, this.reachable);
-
-  @override
-  List<Object> get props => [rand, device, reachable];
-}
-
 class DeviceDaemonBlocEventRequiresLogin extends DeviceDaemonBlocEvent {
   final Device device;
 
@@ -133,10 +122,10 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
             await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null, auth: auth);
           }
           await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(true)));
-          add(DeviceDaemonBlocEventDeviceReachable(device, true));
           await _updateDeviceTime(device);
         } else {
           if (identifier != null) {
+            await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
             Logger.throwError("Wrong identifier for device ${device.name}",
                 data: {"device": device, "identifier": identifier});
           } else {
@@ -168,7 +157,7 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
             } else {
               if (identifier != null) {
                 Logger.throwError("Wrong identifier for device ${device.name}",
-                    data: {"device": device, "identifier": identifier});
+                    data: {"device": device, "identifier": identifier}, fwdThrow: true);
               } else {
                 throw 'Couldn\'t connect to device';
               }
