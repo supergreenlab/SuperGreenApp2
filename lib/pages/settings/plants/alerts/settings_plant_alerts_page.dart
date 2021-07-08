@@ -139,7 +139,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
         SectionTitle(
           title: SettingsPlantAlertsPage.settingsPlantAlertPageSectionTitle,
           icon: 'assets/settings/icon_remotecontrol.svg',
-          backgroundColor: Color(0xff0b6ab3),
+          backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
           large: true,
           elevation: 5,
@@ -202,7 +202,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
                     maxHumiDay: max,
                   );
                 },
-                displayFn: (int value) => '$value°',
+                displayFn: (int value) => '$value',
                 unit: '%',
                 step: 1,
               ),
@@ -219,7 +219,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
                     maxHumiNight: max,
                   );
                 },
-                displayFn: (int value) => '$value°',
+                displayFn: (int value) => '$value',
                 unit: '%',
                 step: 1,
               ),
@@ -256,23 +256,38 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
       String unit,
       int step}) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SectionTitle(
           title: title,
           icon: icon,
         ),
-        Text('Minimum'),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text('Minimum'),
+        ),
         renderNumberParam(
           value: min,
-          onChange: (int value) {},
+          onChange: (int value) {
+            setState(() {
+              onChange(value, max);
+            });
+          },
           displayFn: displayFn,
           unit: unit,
           step: step,
         ),
-        Text('Maximum'),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text('Maximum'),
+        ),
         renderNumberParam(
-          value: min,
-          onChange: (int value) {},
+          value: max,
+          onChange: (int value) {
+            setState(() {
+              onChange(min, value);
+            });
+          },
           displayFn: displayFn,
           unit: unit,
           step: step,
@@ -283,7 +298,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
 
   Widget renderNumberParam({int value, void onChange(int value), String displayFn(int value), String unit, int step}) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
