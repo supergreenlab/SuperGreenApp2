@@ -17,11 +17,14 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:device_info/device_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/api/backend/products/products_api.dart';
+import 'package:super_green_app/data/api/backend/services/services_api.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -34,6 +37,7 @@ class BackendAPI {
   FeedsAPI feedsAPI;
   ProductsAPI productsAPI;
   TimeSeriesAPI timeSeriesAPI;
+  ServicesAPI servicesAPI;
 
   String serverHost;
   String websocketServerHost;
@@ -50,17 +54,18 @@ class BackendAPI {
     feedsAPI = FeedsAPI();
     productsAPI = ProductsAPI();
     timeSeriesAPI = TimeSeriesAPI();
-    // if (kReleaseMode || Platform.isIOS) {
-    serverHost = 'https://api2.supergreenlab.com';
-    websocketServerHost = 'wss://api2.supergreenlab.com';
-    storageServerHost = 'https://storage.supergreenlab.com';
-    storageServerHostHeader = 'storage.supergreenlab.com';
-    // serverHost = 'http://192.168.1.87:8080';
-    // storageServerHost = 'http://192.168.1.87:9000';
-    // storageServerHostHeader = 'minio:9000';
-    // } else {
-    //   initAndroidDevUrls();
-    // }
+    servicesAPI = ServicesAPI();
+    if (kReleaseMode || Platform.isIOS) {
+      serverHost = 'https://api2.supergreenlab.com';
+      websocketServerHost = 'wss://api2.supergreenlab.com';
+      storageServerHost = 'https://storage.supergreenlab.com';
+      storageServerHostHeader = 'storage.supergreenlab.com';
+      // serverHost = 'http://192.168.1.87:8080';
+      // storageServerHost = 'http://192.168.1.87:9000';
+      // storageServerHostHeader = 'minio:9000';
+    } else {
+      initAndroidDevUrls();
+    }
   }
 
   void initAndroidDevUrls() async {
