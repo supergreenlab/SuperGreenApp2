@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/services/models/alerts.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -31,12 +32,13 @@ class SettingsPlantAlertsBlocEventInit extends SettingsPlantAlertsBlocEvent {
 }
 
 class SettingsPlantAlertsBlocEventUpdateParameters extends SettingsPlantAlertsBlocEvent {
+  final bool enabled;
   final AlertsSettings alertsSettings;
 
-  SettingsPlantAlertsBlocEventUpdateParameters(this.alertsSettings);
+  SettingsPlantAlertsBlocEventUpdateParameters(this.enabled, this.alertsSettings);
 
   @override
-  List<Object> get props => [alertsSettings];
+  List<Object> get props => [enabled, alertsSettings];
 }
 
 abstract class SettingsPlantAlertsBlocState extends Equatable {}
@@ -57,12 +59,13 @@ class SettingsPlantAlertsBlocStateNotLoaded extends SettingsPlantAlertsBlocState
 }
 
 class SettingsPlantAlertsBlocStateLoaded extends SettingsPlantAlertsBlocState {
+  final bool enabled;
   final AlertsSettings alertsSettings;
 
-  SettingsPlantAlertsBlocStateLoaded(this.alertsSettings);
+  SettingsPlantAlertsBlocStateLoaded(this.enabled, this.alertsSettings);
 
   @override
-  List<Object> get props => [alertsSettings];
+  List<Object> get props => [enabled, alertsSettings];
 }
 
 class SettingsPlantAlertsBlocStateDone extends SettingsPlantAlertsBlocState {
@@ -89,7 +92,8 @@ class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, Setting
   @override
   Stream<SettingsPlantAlertsBlocState> mapEventToState(SettingsPlantAlertsBlocEvent event) async* {
     if (event is SettingsPlantAlertsBlocEventInit) {
-      Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);
+      Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
+      Box box = await RelDB.get().plantsDAO.getBox(plant.box);
       if (box.device == null) {
         yield SettingsPlantAlertsBlocStateNotLoaded(hasController: false);
         return;
@@ -99,12 +103,17 @@ class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, Setting
         yield SettingsPlantAlertsBlocStateNotLoaded(isSync: false);
         return;
       }
-      AlertsSettings alertsSettings = await BackendAPI().servicesAPI.getPlantAlertSettings(args.plant.serverID);
-      yield SettingsPlantAlertsBlocStateLoaded(alertsSettings);
+      AlertsSettings alertsSettings = await BackendAPI().servicesAPI.getPlantAlertSettings(plant.serverID);
+      yield SettingsPlantAlertsBlocStateLoaded(plant.alerts, alertsSettings);
     } else if (event is SettingsPlantAlertsBlocEventUpdateParameters) {
       yield SettingsPlantAlertsBlocStateLoading();
-      await BackendAPI().servicesAPI.setPlantAlertSettings(args.plant.serverID, event.alertsSettings);
-      yield SettingsPlantAlertsBlocStateDone(args.plant);
+      Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
+      await BackendAPI().servicesAPI.setPlantAlertSettings(plant.serverID, event.alertsSettings);
+      await RelDB.get()
+          .plantsDAO
+          .updatePlant(PlantsCompanion(id: Value(plant.id), alerts: Value(event.enabled), synced: Value(false)));
+
+      yield SettingsPlantAlertsBlocStateDone(plant);
     }
   }
 }

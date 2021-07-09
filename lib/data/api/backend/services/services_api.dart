@@ -39,11 +39,13 @@ class ServicesAPI {
   }
 
   Future setPlantAlertSettings(String plantID, AlertsSettings alertsSettings) async {
-    Response resp =
-        await BackendAPI().apiClient.put('${BackendAPI().serverHost}/plant/$plantID/alerts/settings', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Map<String, dynamic> obj = alertsSettings.toMap();
+    Response resp = await BackendAPI().apiClient.put('${BackendAPI().serverHost}/plant/$plantID/alerts/settings',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        },
+        body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('setPlantAlertSettings failed: ${resp.body}', data: {'plantID': plantID});
     }

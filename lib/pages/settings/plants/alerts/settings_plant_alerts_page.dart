@@ -64,7 +64,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
 
   static String get settingsPlantAlertPageInstructions {
     return Intl.message(
-      'No need to constantly check the plant monitoring, just setup some alerts, and the app will tell you when something\s wrong.',
+      '**No need to constantly check the plant monitoring!** Just setup your alerts, and the app will tell you when something\s wrong.',
       name: 'settingsPlantAlertPageInstructions',
       desc: 'Explanation for alerts',
       locale: SGLLocalizations.current.localeName,
@@ -77,6 +77,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
 
 class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   AlertsSettings alertsSettings;
+  bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +86,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
       listener: (BuildContext context, SettingsPlantAlertsBlocState state) async {
         if (state is SettingsPlantAlertsBlocStateLoaded) {
           setState(() {
+            this.enabled = state.enabled;
             this.alertsSettings = state.alertsSettings;
           });
         } else if (state is SettingsPlantAlertsBlocStateDone) {
@@ -134,6 +136,96 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   }
 
   Widget _renderForm(BuildContext context, SettingsPlantAlertsBlocStateLoaded state) {
+    List<Widget> items = [
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: MarkdownBody(
+          fitContent: true,
+          data: SettingsPlantAlertsPage.settingsPlantAlertPageInstructions,
+          styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+        ),
+      ),
+      Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _renderOptionCheckbx(context, 'Enable notifications', (bool newValue) {
+            setState(() {
+              enabled = newValue;
+            });
+          }, enabled)),
+    ];
+
+    if (enabled) {
+      items.addAll([
+        renderParameters(
+          context,
+          title: 'Day temperature alerts',
+          icon: '',
+          color: Colors.yellowAccent,
+          min: alertsSettings.minTempDay,
+          max: alertsSettings.maxTempDay,
+          onChange: (int min, int max) {
+            alertsSettings = alertsSettings.copyWith(
+              minTempDay: min,
+              maxTempDay: max,
+            );
+          },
+          displayFn: (int value) => '$value',
+          unit: '°',
+          step: 1,
+        ),
+        renderParameters(
+          context,
+          title: 'Night temperature alerts',
+          icon: '',
+          color: Colors.blueAccent,
+          min: alertsSettings.minTempNight,
+          max: alertsSettings.maxTempNight,
+          onChange: (int min, int max) {
+            alertsSettings = alertsSettings.copyWith(
+              minTempNight: min,
+              maxTempNight: max,
+            );
+          },
+          displayFn: (int value) => '$value',
+          unit: '°',
+          step: 1,
+        ),
+        renderParameters(
+          context,
+          title: 'Day humi alerts',
+          icon: '',
+          color: Colors.yellowAccent,
+          min: alertsSettings.minHumiDay,
+          max: alertsSettings.maxHumiDay,
+          onChange: (int min, int max) {
+            alertsSettings = alertsSettings.copyWith(
+              minHumiDay: min,
+              maxHumiDay: max,
+            );
+          },
+          displayFn: (int value) => '$value',
+          unit: '%',
+          step: 1,
+        ),
+        renderParameters(
+          context,
+          title: 'Night humi alerts',
+          icon: '',
+          color: Colors.blueAccent,
+          min: alertsSettings.minHumiNight,
+          max: alertsSettings.maxHumiNight,
+          onChange: (int min, int max) {
+            alertsSettings = alertsSettings.copyWith(
+              minHumiNight: min,
+              maxHumiNight: max,
+            );
+          },
+          displayFn: (int value) => '$value',
+          unit: '%',
+          step: 1,
+        ),
+      ]);
+    }
     return Column(
       children: <Widget>[
         SectionTitle(
@@ -145,86 +237,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           elevation: 5,
         ),
         Expanded(
-          child: ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: MarkdownBody(
-                  fitContent: true,
-                  data: SettingsPlantAlertsPage.settingsPlantAlertPageInstructions,
-                  styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
-                ),
-              ),
-              renderParameters(
-                context,
-                title: 'Day temperature alerts',
-                icon: '',
-                color: Colors.yellowAccent,
-                min: alertsSettings.minTempDay,
-                max: alertsSettings.maxTempDay,
-                onChange: (int min, int max) {
-                  alertsSettings = alertsSettings.copyWith(
-                    minTempDay: min,
-                    maxTempDay: max,
-                  );
-                },
-                displayFn: (int value) => '$value',
-                unit: '°',
-                step: 1,
-              ),
-              renderParameters(
-                context,
-                title: 'Night temperature alerts',
-                icon: '',
-                color: Colors.blueAccent,
-                min: alertsSettings.minTempNight,
-                max: alertsSettings.maxTempNight,
-                onChange: (int min, int max) {
-                  alertsSettings = alertsSettings.copyWith(
-                    minTempNight: min,
-                    maxTempNight: max,
-                  );
-                },
-                displayFn: (int value) => '$value',
-                unit: '°',
-                step: 1,
-              ),
-              renderParameters(
-                context,
-                title: 'Day humi alerts',
-                icon: '',
-                color: Colors.yellowAccent,
-                min: alertsSettings.minHumiDay,
-                max: alertsSettings.maxHumiDay,
-                onChange: (int min, int max) {
-                  alertsSettings = alertsSettings.copyWith(
-                    minHumiDay: min,
-                    maxHumiDay: max,
-                  );
-                },
-                displayFn: (int value) => '$value',
-                unit: '%',
-                step: 1,
-              ),
-              renderParameters(
-                context,
-                title: 'Night humi alerts',
-                icon: '',
-                color: Colors.blueAccent,
-                min: alertsSettings.minHumiNight,
-                max: alertsSettings.maxHumiNight,
-                onChange: (int min, int max) {
-                  alertsSettings = alertsSettings.copyWith(
-                    minHumiNight: min,
-                    maxHumiNight: max,
-                  );
-                },
-                displayFn: (int value) => '$value',
-                unit: '%',
-                step: 1,
-              ),
-            ],
-          ),
+          child: ListView(children: items),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -234,7 +247,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               child: GreenButton(
                 onPressed: () {
                   BlocProvider.of<SettingsPlantAlertsBloc>(context)
-                      .add(SettingsPlantAlertsBlocEventUpdateParameters(alertsSettings));
+                      .add(SettingsPlantAlertsBlocEventUpdateParameters(enabled, alertsSettings));
                 },
                 title: 'SAVE',
               ),
@@ -330,6 +343,32 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
                 },
                 textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               )),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Checkbox(
+            onChanged: onChanged,
+            value: value,
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                onChanged(!value);
+              },
+              child: MarkdownBody(
+                fitContent: true,
+                data: text,
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+              ),
+            ),
+          ),
         ],
       ),
     );
