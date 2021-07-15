@@ -90,16 +90,15 @@ class AddDevicePage extends TraceableStatelessWidget {
                     'Already running',
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the controller is already running and connected to your home wifi.',
-                    'SEARCH CONTROLLER',
-                    () => _login(context, state, () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
-                            Device device = await future;
-                            if (device != null) {
-                              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
-                            }
-                          }));
-                        })),
+                    'SEARCH CONTROLLER', () {
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
+                    Device device = await future;
+                    if (device != null) {
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+                    }
+                  }));
+                }),
               ],
             )));
   }
