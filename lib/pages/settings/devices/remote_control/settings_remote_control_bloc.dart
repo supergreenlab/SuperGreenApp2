@@ -46,11 +46,12 @@ class SettingsRemoteControlBlocStateInit extends SettingsRemoteControlBlocState 
 class SettingsRemoteControlBlocStateLoaded extends SettingsRemoteControlBlocState {
   final Device device;
   final bool signingSetup;
+  final bool loggedIn;
 
-  SettingsRemoteControlBlocStateLoaded(this.device, {this.signingSetup});
+  SettingsRemoteControlBlocStateLoaded(this.device, {this.signingSetup, this.loggedIn});
 
   @override
-  List<Object> get props => [device, signingSetup];
+  List<Object> get props => [device, signingSetup, loggedIn];
 }
 
 class SettingsRemoteControlBlocStateLoading extends SettingsRemoteControlBlocState {
@@ -81,6 +82,7 @@ class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, Set
       yield SettingsRemoteControlBlocStateLoaded(
         args.device,
         signingSetup: deviceData.signing != null,
+        loggedIn: AppDB().getAppData().jwt != null,
       );
     } else if (event is SettingsRemoteControlBlocEventPair) {
       yield SettingsRemoteControlBlocStateLoading();

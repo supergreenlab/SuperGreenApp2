@@ -27,21 +27,6 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class DevicePairingBlocEvent extends Equatable {}
 
-class DevicePairingBlocEventReset extends DevicePairingBlocEvent {
-  DevicePairingBlocEventReset();
-
-  @override
-  List<Object> get props => [];
-}
-
-class DevicePairingBlocEventSetName extends DevicePairingBlocEvent {
-  final String name;
-  DevicePairingBlocEventSetName(this.name);
-
-  @override
-  List<Object> get props => [name];
-}
-
 class DevicePairingBlocEventPair extends DevicePairingBlocEvent {
   DevicePairingBlocEventPair();
 
@@ -51,11 +36,12 @@ class DevicePairingBlocEventPair extends DevicePairingBlocEvent {
 
 class DevicePairingBlocState extends Equatable {
   final Device device;
+  final bool loggedIn;
 
-  DevicePairingBlocState(this.device);
+  DevicePairingBlocState(this.device, {this.loggedIn});
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [device, loggedIn];
 }
 
 class DevicePairingBlocStateLoading extends DevicePairingBlocState {
@@ -69,13 +55,11 @@ class DevicePairingBlocStateDone extends DevicePairingBlocState {
 class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocState> {
   final MainNavigateToDevicePairingEvent args;
 
-  DevicePairingBloc(this.args) : super(DevicePairingBlocState(args.device));
+  DevicePairingBloc(this.args) : super(DevicePairingBlocState(args.device, loggedIn: AppDB().getAppData().jwt != null));
 
   @override
   Stream<DevicePairingBlocState> mapEventToState(DevicePairingBlocEvent event) async* {
-    if (event is DevicePairingBlocEventReset) {
-      yield DevicePairingBlocState(args.device);
-    } else if (event is DevicePairingBlocEventPair) {
+    if (event is DevicePairingBlocEventPair) {
       yield DevicePairingBlocStateLoading(args.device);
       await DeviceHelper.pairDevice(args.device);
       await Future.delayed(Duration(seconds: 1));

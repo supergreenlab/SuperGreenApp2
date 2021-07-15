@@ -42,11 +42,29 @@ class SettingsRemoteControlPage extends StatefulWidget {
     );
   }
 
-  static String settingsRemoteControlPageInstructions() {
+  static String get settingsRemoteControlPageInstructions {
     return Intl.message(
       '**Remote control requires to pair your mobile phone**. Please keep in mind: for now only **one** mobile phone can be paired at a time.',
       name: 'settingsRemoteControlPageInstructions',
       desc: 'Explanation for remote control',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get settingsRemoteControlPagePleaseLoginDialogTitle {
+    return Intl.message(
+      'Login required',
+      name: 'settingsRemoteControlPagePleaseLoginDialogTitle',
+      desc: 'Login/create account dialog title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get settingsRemoteControlPagePleaseLoginDialogBody {
+    return Intl.message(
+      'Login is required to enable remote control.',
+      name: 'settingsRemoteControlPagePleaseLoginDialogBody',
+      desc: 'Login/create account dialog body',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -120,7 +138,7 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
               padding: const EdgeInsets.all(16.0),
               child: MarkdownBody(
                 fitContent: true,
-                data: SettingsRemoteControlPage.settingsRemoteControlPageInstructions(),
+                data: SettingsRemoteControlPage.settingsRemoteControlPageInstructions,
                 styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
@@ -134,7 +152,11 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
             padding: const EdgeInsets.all(16.0),
             child: GreenButton(
               onPressed: () {
-                BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
+                if (state.loggedIn) {
+                  BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
+                } else {
+                  _login(context);
+                }
               },
               title: state.signingSetup ? 'RE-PAIR CONTROLLER' : 'PAIR CONTROLLER',
             ),
@@ -142,5 +164,39 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
         ],
       ),
     ]);
+  }
+
+  void _login(BuildContext context) async {
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(SettingsRemoteControlPage.settingsRemoteControlPagePleaseLoginDialogTitle),
+            content: Text(SettingsRemoteControlPage.settingsRemoteControlPagePleaseLoginDialogBody),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text(CommonL10N.cancel),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text(CommonL10N.loginCreateAccount),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+        bool done = await future;
+        if (done == true) {
+          BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
+        }
+      }));
+    }
   }
 }
