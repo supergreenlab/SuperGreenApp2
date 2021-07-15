@@ -428,7 +428,8 @@ class MainNavigateToSettingsPlant extends MainNavigatorEvent {
 class MainNavigateToSettingsPlantAlerts extends MainNavigatorEvent {
   final Plant plant;
 
-  MainNavigateToSettingsPlantAlerts(this.plant);
+  MainNavigateToSettingsPlantAlerts(this.plant, {void Function(Future<dynamic> future) futureFn})
+      : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [plant];

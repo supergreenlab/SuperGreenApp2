@@ -122,10 +122,20 @@ class EnvironmentsPage extends StatelessWidget {
     );
   }
 
+  static String get environmentsPageAlerts {
+    return Intl.message(
+      'Alerts',
+      name: 'environmentsPageAlerts',
+      desc: 'Label for the alert control page button',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   final Box box;
+  final Plant plant;
   final Function(Future<dynamic>) futureFn;
 
-  const EnvironmentsPage(this.box, {Key key, this.futureFn}) : super(key: key);
+  const EnvironmentsPage(this.box, {Key key, this.futureFn, this.plant}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -234,6 +244,14 @@ class EnvironmentsPage extends StatelessWidget {
                         pushAsReplacement: pushAsReplacement, futureFn: futureFn),
                     tipID: 'TIP_BLOOM',
                     tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'])),
+            this.plant != null
+                ? _renderEnvironmentControl(
+                    context,
+                    EnvironmentsPage.environmentsPageAlerts,
+                    'assets/home/icon_alerts.svg',
+                    () => BlocProvider.of<MainNavigatorBloc>(context)
+                        .add(MainNavigateToSettingsPlantAlerts(this.plant, futureFn: futureFn)))
+                : Container(),
           ],
         ),
       ],

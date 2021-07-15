@@ -804,7 +804,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     }
 
     List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
-      (c, s) => EnvironmentsPage(s.box, futureFn: futureFn(c, s)),
+      (c, s) => EnvironmentsPage(s.box, plant: s.plant, futureFn: futureFn(c, s)),
       _renderPlantInfos,
       _renderProducts,
     ];
