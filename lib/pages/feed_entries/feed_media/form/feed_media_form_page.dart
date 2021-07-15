@@ -356,7 +356,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
     return Expanded(
       key: Key('TEXTAREA'),
       child: FeedFormParamLayout(
-        title: FeedMediaFormPage.feedMediaFormPageAttachedMedia,
+        title: FeedMediaFormPage.feedMediaFormPageObservations,
         icon: 'assets/feed_form/icon_note.svg',
         child: Expanded(
           child: FeedFormTextarea(

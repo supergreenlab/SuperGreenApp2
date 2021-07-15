@@ -114,8 +114,12 @@ class DeviceReachableListenerBloc extends Bloc<DeviceReachableListenerBlocEvent,
   }
 
   Future<void> close() async {
-    subscription.cancel();
-    _connectivity.cancel();
+    if (subscription != null) {
+      subscription.cancel();
+    }
+    if (_connectivity != null) {
+      _connectivity.cancel();
+    }
     super.close();
   }
 }

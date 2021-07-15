@@ -89,7 +89,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
           cubit: BlocProvider.of<SettingsBoxBloc>(context),
           builder: (BuildContext context, SettingsBoxBlocState state) {
             Widget body;
-            if (state is SettingsDeviceBlocStateLoading) {
+            if (state is SettingsBoxBlocStateLoading) {
               body = FullscreenLoading(
                 title: 'Loading..',
               );
