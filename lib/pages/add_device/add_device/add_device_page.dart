@@ -18,8 +18,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/add_device/add_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -27,6 +30,33 @@ import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class AddDevicePage extends TraceableStatelessWidget {
+  static String get addDevicePagePleaseLoginDialogTitle {
+    return Intl.message(
+      'Optional Login',
+      name: 'addDevicePagePleaseLoginDialogTitle',
+      desc: 'Please login dialog title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get addDevicePagePleaseLoginDialogBody {
+    return Intl.message(
+      'Optionnal login or account creation is preferable at this step.\nIt will allow to enable the remote control of your box for easier setup.',
+      name: 'addDevicePagePleaseLoginDialogTitle',
+      desc: 'Please login dialog title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get addDevicePagePleaseLoginDialogSkip {
+    return Intl.message(
+      'Continue without',
+      name: 'addDevicePagePleaseLoginDialogSkip',
+      desc: 'Please login dialog title',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddDeviceBloc, AddDeviceBlocState>(
@@ -45,29 +75,31 @@ class AddDevicePage extends TraceableStatelessWidget {
                     'Brand new',
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the controller is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
-                    'CONNECT CONTROLLER', () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
-                    Device device = await future;
-                    if (device != null) {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
-                    }
-                  }));
-                }),
+                    'CONNECT CONTROLLER',
+                    () => _login(context, state, () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
+                            Device device = await future;
+                            if (device != null) {
+                              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+                            }
+                          }));
+                        })),
                 _renderChoice(
                     context,
                     'Already running',
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the controller is already running and connected to your home wifi.',
-                    'SEARCH CONTROLLER', () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
-                    Device device = await future;
-                    if (device != null) {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
-                    }
-                  }));
-                }),
+                    'SEARCH CONTROLLER',
+                    () => _login(context, state, () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
+                            Device device = await future;
+                            if (device != null) {
+                              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+                            }
+                          }));
+                        })),
               ],
             )));
   }
@@ -97,5 +129,43 @@ class AddDevicePage extends TraceableStatelessWidget {
         ),
       )
     ]);
+  }
+
+  void _login(BuildContext context, AddDeviceBlocState state, Function doneFn) async {
+    if (state.loggedIn) {
+      doneFn();
+      return;
+    }
+    bool confirm = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AddDevicePage.addDevicePagePleaseLoginDialogTitle),
+            content: Text(AddDevicePage.addDevicePagePleaseLoginDialogBody),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text(AddDevicePage.addDevicePagePleaseLoginDialogSkip),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text(CommonL10N.loginCreateAccount),
+              ),
+            ],
+          );
+        });
+    if (confirm) {
+      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+        bool done = await future;
+        if (done == true) {
+          doneFn();
+        }
+      }));
+    }
   }
 }

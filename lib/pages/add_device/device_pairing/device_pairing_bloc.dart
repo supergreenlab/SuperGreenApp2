@@ -51,36 +51,35 @@ class DevicePairingBlocEventPair extends DevicePairingBlocEvent {
 
 class DevicePairingBlocState extends Equatable {
   final Device device;
-  final bool loggedIn;
 
-  DevicePairingBlocState(this.device, this.loggedIn);
+  DevicePairingBlocState(this.device);
 
   @override
-  List<Object> get props => [device, loggedIn];
+  List<Object> get props => [device];
 }
 
 class DevicePairingBlocStateLoading extends DevicePairingBlocState {
-  DevicePairingBlocStateLoading(Device device, bool loggedIn) : super(device, loggedIn);
+  DevicePairingBlocStateLoading(Device device) : super(device);
 }
 
 class DevicePairingBlocStateDone extends DevicePairingBlocState {
-  DevicePairingBlocStateDone(Device device, bool loggedIn) : super(device, loggedIn);
+  DevicePairingBlocStateDone(Device device) : super(device);
 }
 
 class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocState> {
   final MainNavigateToDevicePairingEvent args;
 
-  DevicePairingBloc(this.args) : super(DevicePairingBlocState(args.device, AppDB().getAppData().jwt != null));
+  DevicePairingBloc(this.args) : super(DevicePairingBlocState(args.device));
 
   @override
   Stream<DevicePairingBlocState> mapEventToState(DevicePairingBlocEvent event) async* {
     if (event is DevicePairingBlocEventReset) {
-      yield DevicePairingBlocState(args.device, AppDB().getAppData().jwt != null);
+      yield DevicePairingBlocState(args.device);
     } else if (event is DevicePairingBlocEventPair) {
-      yield DevicePairingBlocStateLoading(args.device, AppDB().getAppData().jwt != null);
+      yield DevicePairingBlocStateLoading(args.device);
       await DeviceHelper.pairDevice(args.device);
       await Future.delayed(Duration(seconds: 1));
-      yield DevicePairingBlocStateDone(args.device, AppDB().getAppData().jwt != null);
+      yield DevicePairingBlocStateDone(args.device);
     }
   }
 }

@@ -188,11 +188,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
               padding: const EdgeInsets.only(right: 16.0),
               child: GreenButton(
                 onPressed: () {
-                  if (state.loggedIn == true) {
-                    BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
-                  } else {
-                    _login(context);
-                  }
+                  BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
                 },
                 title: 'PAIR CONTROLLER',
               ),
@@ -201,40 +197,6 @@ class DevicePairingPageState extends State<DevicePairingPage> {
         ),
       ],
     );
-  }
-
-  void _login(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(DevicePairingPage.devicePairingPagePleaseLoginDialogTitle),
-            content: Text(DevicePairingPage.devicePairingPagePleaseLoginDialogBody),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-                child: Text(CommonL10N.cancel),
-              ),
-              FlatButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                child: Text(CommonL10N.loginCreateAccount),
-              ),
-            ],
-          );
-        });
-    if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
-        bool done = await future;
-        if (done == true) {
-          BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
-        }
-      }));
-    }
   }
 
   @override

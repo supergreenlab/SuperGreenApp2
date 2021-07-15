@@ -18,20 +18,25 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class AddDeviceBlocEvent extends Equatable {}
 
 class AddDeviceBlocState extends Equatable {
+  final bool loggedIn;
+
+  AddDeviceBlocState(this.loggedIn);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [loggedIn];
 }
 
 class AddDeviceBloc extends Bloc<AddDeviceBlocEvent, AddDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToAddDeviceEvent args;
 
-  AddDeviceBloc(this.args) : super( AddDeviceBlocState());
+  AddDeviceBloc(this.args) : super(AddDeviceBlocState(AppDB().getAppData().jwt != null));
 
   @override
   Stream<AddDeviceBlocState> mapEventToState(AddDeviceBlocEvent event) async* {}
