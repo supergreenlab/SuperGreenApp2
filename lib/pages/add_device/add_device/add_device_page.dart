@@ -166,6 +166,8 @@ class AddDevicePage extends TraceableStatelessWidget {
           doneFn();
         }
       }));
+    } else {
+      doneFn();
     }
   }
 }
