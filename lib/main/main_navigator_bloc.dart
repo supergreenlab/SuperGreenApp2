@@ -389,7 +389,7 @@ class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
 }
 
 class MainNavigateToSettingsAuth extends MainNavigatorEvent {
-  MainNavigateToSettingsAuth();
+  MainNavigateToSettingsAuth({futureFn}) : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [];

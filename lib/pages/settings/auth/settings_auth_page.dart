@@ -200,7 +200,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                 BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsLogin(futureFn: (future) async {
                   dynamic res = await future;
                   if (res == true) {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: res));
                   }
                 }));
               },
@@ -216,7 +216,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                     .add(MainNavigateToSettingsCreateAccount(futureFn: (future) async {
                   dynamic res = await future;
                   if (res == true) {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: res));
                   }
                 }));
               },

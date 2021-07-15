@@ -21,6 +21,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -50,34 +51,36 @@ class DevicePairingBlocEventPair extends DevicePairingBlocEvent {
 
 class DevicePairingBlocState extends Equatable {
   final Device device;
-  DevicePairingBlocState(this.device);
+  final bool loggedIn;
+
+  DevicePairingBlocState(this.device, this.loggedIn);
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [device, loggedIn];
 }
 
 class DevicePairingBlocStateLoading extends DevicePairingBlocState {
-  DevicePairingBlocStateLoading(Device device) : super(device);
+  DevicePairingBlocStateLoading(Device device, bool loggedIn) : super(device, loggedIn);
 }
 
 class DevicePairingBlocStateDone extends DevicePairingBlocState {
-  DevicePairingBlocStateDone(Device device) : super(device);
+  DevicePairingBlocStateDone(Device device, bool loggedIn) : super(device, loggedIn);
 }
 
 class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocState> {
   final MainNavigateToDevicePairingEvent args;
 
-  DevicePairingBloc(this.args) : super(DevicePairingBlocState(args.device));
+  DevicePairingBloc(this.args) : super(DevicePairingBlocState(args.device, AppDB().getAppData().jwt != null));
 
   @override
   Stream<DevicePairingBlocState> mapEventToState(DevicePairingBlocEvent event) async* {
     if (event is DevicePairingBlocEventReset) {
-      yield DevicePairingBlocState(args.device);
+      yield DevicePairingBlocState(args.device, AppDB().getAppData().jwt != null);
     } else if (event is DevicePairingBlocEventPair) {
-      yield DevicePairingBlocStateLoading(args.device);
+      yield DevicePairingBlocStateLoading(args.device, AppDB().getAppData().jwt != null);
       await DeviceHelper.pairDevice(args.device);
       await Future.delayed(Duration(seconds: 1));
-      yield DevicePairingBlocStateDone(args.device);
+      yield DevicePairingBlocStateDone(args.device, AppDB().getAppData().jwt != null);
     }
   }
 }
