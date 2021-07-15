@@ -59,6 +59,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
   bool _speedDialOpen = false;
   bool _showIP = false;
   bool _reachable = false;
+  bool _remote = false;
   String _deviceIP = '';
 
   @override
@@ -95,13 +96,14 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           }
 
           return BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-            listener: (BuildContext context, DeviceReachableListenerBlocState daemonState) {
+            listener: (BuildContext context, DeviceReachableListenerBlocState reachableState) {
               if (state is LocalBoxFeedBlocStateLoaded) {
-                if (daemonState is DeviceReachableListenerBlocStateDeviceReachable &&
-                    daemonState.device.id == state.box.device) {
+                if (reachableState is DeviceReachableListenerBlocStateDeviceReachable &&
+                    reachableState.device.id == state.box.device) {
                   setState(() {
-                    _reachable = daemonState.reachable;
-                    _deviceIP = daemonState.device.ip;
+                    _reachable = reachableState.reachable;
+                    _remote = reachableState.remote;
+                    _deviceIP = reachableState.device.ip;
                   });
                 }
               }
@@ -305,10 +307,10 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
             name,
             style: TextStyle(color: Colors.white, fontSize: 15.0, fontWeight: FontWeight.normal),
           ),
-          Text(_deviceIP,
+          Text(_remote ? 'Remote controled!' : _deviceIP,
               style: TextStyle(
                 fontSize: 10,
-                color: Colors.grey,
+                color: _remote ? Color(0xff3bb30b) : Colors.grey,
               ))
         ],
       );
