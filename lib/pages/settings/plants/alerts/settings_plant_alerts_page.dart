@@ -56,7 +56,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
   static String get settingsPlantAlertPageSectionTitle {
     return Intl.message(
       'Metric monitoring',
-      name: 'settingsPlantAlertPagePairControllerSectionTitle',
+      name: 'settingsPlantAlertPageSectionTitle',
       desc: 'Section title for the alert parameters setup',
       locale: SGLLocalizations.current.localeName,
     );

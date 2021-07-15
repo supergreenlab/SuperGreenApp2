@@ -45,7 +45,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
   static String settingsDeviceAuthPagePasswordInstructions() {
     return Intl.message(
       'You can **setup a password** to prevent unauthorized parameter changes on your controller.\n\n*Please keep in mind that this is by no mean top-notch security. Mostly an anti-curious roommate/brother feature. Local network communication is not using https so subject to mitm.*',
-      name: 'settingsDeviceAuthPageInstructions',
+      name: 'settingsDeviceAuthPagePasswordInstructions',
       desc: 'Password protection instructions',
       locale: SGLLocalizations.current.localeName,
     );

@@ -41,8 +41,8 @@ class AddDevicePage extends TraceableStatelessWidget {
 
   static String get addDevicePagePleaseLoginDialogBody {
     return Intl.message(
-      'Optionnal login or account creation is preferable at this step.\nIt will allow to enable the remote control of your box for easier setup.',
-      name: 'addDevicePagePleaseLoginDialogTitle',
+      'Optionnal login or account creation is preferable at this step.\nIt will allow to enable the remote control of your box for easier setup.\n\nNo personal infos required, not even an email address.',
+      name: 'addDevicePagePleaseLoginDialogBody',
       desc: 'Please login dialog title',
       locale: SGLLocalizations.current.localeName,
     );
