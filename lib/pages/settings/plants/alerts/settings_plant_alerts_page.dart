@@ -137,7 +137,31 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               body = _renderLoading();
             }
             return WillPopScope(
-              onWillPop: () async => true,
+              onWillPop: () async {
+                return await showDialog<bool>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Unsaved changed'),
+                        content: Text('Changes will not be saved. Continue?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: Text('NO'),
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: Text('YES'),
+                          ),
+                        ],
+                      );
+                    });
+              },
               child: Scaffold(
                   appBar: SGLAppBar(
                     SettingsPlantAlertsPage.settingsPlantAlertPageTitle,
