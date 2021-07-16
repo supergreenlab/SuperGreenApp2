@@ -65,9 +65,27 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
 
   static String get settingsPlantAlertPageInstructions {
     return Intl.message(
-      '**No need to constantly check the plant monitoring!** Just setup your alerts, and the app will tell you when something\s wrong.',
+      '**No need to constantly check the plant monitoring!** Just setup your alerts, and the app will tell you when something\'s wrong.',
       name: 'settingsPlantAlertPageInstructions',
       desc: 'Explanation for alerts',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get settingsDayAlertPageInstructions {
+    return Intl.message(
+      'Day alert settings are used while the lights are on.',
+      name: 'settingsDayAlertPageInstructions',
+      desc: 'Explanation for day alerts',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get settingsNightAlertPageInstructions {
+    return Intl.message(
+      'Night alert settings are used while the lights are off.',
+      name: 'settingsNightAlertPageInstructions',
+      desc: 'Explanation for night alerts',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -158,11 +176,25 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
 
     if (enabled) {
       items.addAll([
+        SectionTitle(
+          title: 'Day alert settings',
+          icon: 'assets/settings/icon_day_alerts.svg',
+          backgroundColor: Color(0xffcf9148),
+          large: true,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: MarkdownBody(
+            fitContent: true,
+            data: SettingsPlantAlertsPage.settingsDayAlertPageInstructions,
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
+        ),
         renderParameters(
           context,
           title: 'Day temperature alerts',
-          icon: '',
-          color: Colors.yellowAccent,
+          icon: 'assets/settings/icon_day_temperature.svg',
+          color: Colors.white,
           min: alertsSettings.minTempDay,
           max: alertsSettings.maxTempDay,
           onChange: (int min, int max) {
@@ -177,9 +209,41 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
         ),
         renderParameters(
           context,
+          title: 'Day humi alerts',
+          icon: 'assets/settings/icon_day_humidity.svg',
+          color: Colors.white,
+          min: alertsSettings.minHumiDay,
+          max: alertsSettings.maxHumiDay,
+          onChange: (int min, int max) {
+            alertsSettings = alertsSettings.copyWith(
+              minHumiDay: min,
+              maxHumiDay: max,
+            );
+          },
+          displayFn: (int value) => '$value',
+          unit: '%',
+          step: 1,
+        ),
+        SectionTitle(
+          title: 'Night alert settings',
+          icon: 'assets/settings/icon_night_alerts.svg',
+          titleColor: Colors.white,
+          backgroundColor: Color(0xff36649a),
+          large: true,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: MarkdownBody(
+            fitContent: true,
+            data: SettingsPlantAlertsPage.settingsNightAlertPageInstructions,
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
+        ),
+        renderParameters(
+          context,
           title: 'Night temperature alerts',
-          icon: '',
-          color: Colors.blueAccent,
+          icon: 'assets/settings/icon_night_temperature.svg',
+          color: Colors.white,
           min: alertsSettings.minTempNight,
           max: alertsSettings.maxTempNight,
           onChange: (int min, int max) {
@@ -194,26 +258,9 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
         ),
         renderParameters(
           context,
-          title: 'Day humi alerts',
-          icon: '',
-          color: Colors.yellowAccent,
-          min: alertsSettings.minHumiDay,
-          max: alertsSettings.maxHumiDay,
-          onChange: (int min, int max) {
-            alertsSettings = alertsSettings.copyWith(
-              minHumiDay: min,
-              maxHumiDay: max,
-            );
-          },
-          displayFn: (int value) => '$value',
-          unit: '%',
-          step: 1,
-        ),
-        renderParameters(
-          context,
           title: 'Night humi alerts',
-          icon: '',
-          color: Colors.blueAccent,
+          icon: 'assets/settings/icon_night_humidity.svg',
+          color: Colors.white,
           min: alertsSettings.minHumiNight,
           max: alertsSettings.maxHumiNight,
           onChange: (int min, int max) {
@@ -270,44 +317,48 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
       String displayFn(int value),
       String unit,
       int step}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SectionTitle(
-          title: title,
-          icon: icon,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text('Minimum'),
-        ),
-        renderNumberParam(
-          value: min,
-          onChange: (int value) {
-            setState(() {
-              onChange(value, max);
-            });
-          },
-          displayFn: displayFn,
-          unit: unit,
-          step: step,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text('Maximum'),
-        ),
-        renderNumberParam(
-          value: max,
-          onChange: (int value) {
-            setState(() {
-              onChange(min, value);
-            });
-          },
-          displayFn: displayFn,
-          unit: unit,
-          step: step,
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SectionTitle(
+            title: title,
+            icon: icon,
+            backgroundColor: color,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Text('Minimum'),
+          ),
+          renderNumberParam(
+            value: min,
+            onChange: (int value) {
+              setState(() {
+                onChange(value, max);
+              });
+            },
+            displayFn: displayFn,
+            unit: unit,
+            step: step,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Text('Maximum'),
+          ),
+          renderNumberParam(
+            value: max,
+            onChange: (int value) {
+              setState(() {
+                onChange(min, value);
+              });
+            },
+            displayFn: displayFn,
+            unit: unit,
+            step: step,
+          ),
+        ],
+      ),
     );
   }
 
