@@ -23,6 +23,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/services/models/alerts.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -136,6 +137,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   }
 
   Widget _renderForm(BuildContext context, SettingsPlantAlertsBlocStateLoaded state) {
+    String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
     List<Widget> items = [
       Padding(
         padding: const EdgeInsets.all(16.0),
@@ -169,8 +171,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               maxTempDay: max,
             );
           },
-          displayFn: (int value) => '$value',
-          unit: '°',
+          displayFn: (int value) => '${_tempUnit(value.toDouble())}',
+          unit: unit,
           step: 1,
         ),
         renderParameters(
@@ -186,8 +188,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               maxTempNight: max,
             );
           },
-          displayFn: (int value) => '$value',
-          unit: '°',
+          displayFn: (int value) => '${_tempUnit(value.toDouble())}',
+          unit: unit,
           step: 1,
         ),
         renderParameters(
@@ -376,5 +378,12 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
 
   Widget _renderNotLoaded(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
     return Text('pouet');
+  }
+
+  double _tempUnit(double temp) {
+    if (AppDB().getAppData().freedomUnits == true) {
+      return temp * 9 / 5 + 32;
+    }
+    return temp;
   }
 }
