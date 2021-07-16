@@ -38,7 +38,7 @@ import 'package:super_green_app/widgets/section_title.dart';
 class SettingsPlantAlertsPage extends TraceableStatefulWidget {
   static String get settingsPlantAlertPageTitle {
     return Intl.message(
-      'Setup alerts',
+      'Alerts',
       name: 'settingsPlantAlertPageTitle',
       desc: 'Device alerts page title',
       locale: SGLLocalizations.current.localeName,
@@ -56,7 +56,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
 
   static String get settingsPlantAlertPageSectionTitle {
     return Intl.message(
-      'Metric monitoring',
+      'Alert settings',
       name: 'settingsPlantAlertPageSectionTitle',
       desc: 'Section title for the alert parameters setup',
       locale: SGLLocalizations.current.localeName,
@@ -179,7 +179,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
         SectionTitle(
           title: 'Day alert settings',
           icon: 'assets/settings/icon_day_alerts.svg',
-          backgroundColor: Color(0xffcf9148),
+          backgroundColor: Color(0xffd8d23f),
+          titleColor: Colors.white,
           large: true,
         ),
         Padding(
@@ -279,7 +280,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
       children: <Widget>[
         SectionTitle(
           title: SettingsPlantAlertsPage.settingsPlantAlertPageSectionTitle,
-          icon: 'assets/settings/icon_remotecontrol.svg',
+          icon: 'assets/settings/icon_alerts.svg',
           backgroundColor: Color(0xff0bb354),
           titleColor: Colors.white,
           large: true,
@@ -329,7 +330,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text('Minimum'),
+            child: Text('Minimum', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           renderNumberParam(
             value: min,
@@ -344,7 +345,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text('Maximum'),
+            child: Text('Maximum', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           renderNumberParam(
             value: max,
