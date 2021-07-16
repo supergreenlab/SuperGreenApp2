@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/services/models/alerts.dart';
@@ -432,6 +433,9 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     if (state.hasController == false) {
       return _renderNoDevice(context, state);
     } else if (state.isSync == false) {
+      if (state.isLoggedIn == false) {
+        return _renderNotLoggedIn(context, state);
+      }
       return _renderNotSynced(context, state);
     }
     return Fullscreen(
@@ -446,32 +450,54 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   Widget _renderNoDevice(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
     return Fullscreen(
       title: 'Alerts require a controller',
-      childFirst: false,
-      child: GreenButton(
-        title: 'Lab settings',
-        onPressed: () {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToSettingsBox(state.box, futureFn: (future) async {
-            await future;
-            BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
-          }));
-        },
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            'assets/settings/icon_nocontroller.svg',
+            width: 200,
+            height: 200,
+          ),
+          GreenButton(
+            title: 'Lab settings',
+            onPressed: () {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToSettingsBox(state.box, futureFn: (future) async {
+                await future;
+                BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
+              }));
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget _renderNotSynced(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
+    return FullscreenLoading(
+      title: 'Waiting for controller to sync with backend..',
+    );
+  }
+
+  Widget _renderNotLoggedIn(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
     return Fullscreen(
       title: 'Please login to set your alerts.',
-      childFirst: false,
-      child: GreenButton(
-        title: 'Login/create account',
-        onPressed: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
-            await future;
-            BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
-          }));
-        },
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            'assets/settings/icon_account.svg',
+            width: 200,
+            height: 200,
+          ),
+          GreenButton(
+            title: 'Login/create account',
+            onPressed: () {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+                await future;
+                BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
+              }));
+            },
+          ),
+        ],
       ),
     );
   }
