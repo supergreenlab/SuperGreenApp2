@@ -168,6 +168,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
                     backgroundColor: Color(0xff0bb354),
                     titleColor: Colors.white,
                     iconColor: Colors.white,
+                    hideBackButton: state is SettingsPlantAlertsBlocStateDone,
                   ),
                   body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
             );
