@@ -429,7 +429,51 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   }
 
   Widget _renderNotLoaded(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
-    return Text('pouet');
+    if (state.hasController == false) {
+      return _renderNoDevice(context, state);
+    } else if (state.isSync == false) {
+      return _renderNotSynced(context, state);
+    }
+    return Fullscreen(
+      title: 'Unknown error',
+      child: Icon(
+        Icons.error,
+        color: Colors.red,
+      ),
+    );
+  }
+
+  Widget _renderNoDevice(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
+    return Fullscreen(
+      title: 'Alerts require a controller',
+      childFirst: false,
+      child: GreenButton(
+        title: 'Lab settings',
+        onPressed: () {
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToSettingsBox(state.box, futureFn: (future) async {
+            await future;
+            BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
+          }));
+        },
+      ),
+    );
+  }
+
+  Widget _renderNotSynced(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
+    return Fullscreen(
+      title: 'Please login to set your alerts.',
+      childFirst: false,
+      child: GreenButton(
+        title: 'Login/create account',
+        onPressed: () {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+            await future;
+            BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
+          }));
+        },
+      ),
+    );
   }
 
   double _tempUnit(double temp) {

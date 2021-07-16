@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
@@ -27,8 +29,10 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 abstract class SettingsPlantAlertsBlocEvent extends Equatable {}
 
 class SettingsPlantAlertsBlocEventInit extends SettingsPlantAlertsBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [rand];
 }
 
 class SettingsPlantAlertsBlocEventUpdateParameters extends SettingsPlantAlertsBlocEvent {
@@ -52,7 +56,9 @@ class SettingsPlantAlertsBlocStateNotLoaded extends SettingsPlantAlertsBlocState
   final bool hasController;
   final bool isSync;
 
-  SettingsPlantAlertsBlocStateNotLoaded({this.hasController, this.isSync});
+  final Box box;
+
+  SettingsPlantAlertsBlocStateNotLoaded({this.hasController, this.isSync, this.box});
 
   @override
   List<Object> get props => [hasController, isSync];
@@ -95,12 +101,12 @@ class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, Setting
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       Box box = await RelDB.get().plantsDAO.getBox(plant.box);
       if (box.device == null) {
-        yield SettingsPlantAlertsBlocStateNotLoaded(hasController: false);
+        yield SettingsPlantAlertsBlocStateNotLoaded(hasController: false, box: box);
         return;
       }
       Device device = await RelDB.get().devicesDAO.getDevice(box.device);
       if (device.serverID == null) {
-        yield SettingsPlantAlertsBlocStateNotLoaded(isSync: false);
+        yield SettingsPlantAlertsBlocStateNotLoaded(isSync: false, box: box);
         return;
       }
       AlertsSettings alertsSettings = await BackendAPI().servicesAPI.getPlantAlertSettings(plant.serverID);

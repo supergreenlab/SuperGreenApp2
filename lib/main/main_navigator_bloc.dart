@@ -445,7 +445,7 @@ class MainNavigateToSettingsBoxes extends MainNavigatorEvent {
 class MainNavigateToSettingsBox extends MainNavigatorEvent {
   final Box box;
 
-  MainNavigateToSettingsBox(this.box);
+  MainNavigateToSettingsBox(this.box, {void Function(Future<dynamic> future) futureFn}) : super(futureFn: futureFn);
 
   @override
   List<Object> get props => [];
