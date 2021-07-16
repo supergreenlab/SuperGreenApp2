@@ -81,6 +81,33 @@ class FeedVentilationCardPage extends StatelessWidget {
     );
   }
 
+  static String get feedVentilationCardPageLowHumiSettings {
+    return Intl.message(
+      'Low humidity\nsettings',
+      name: 'feedVentilationCardPageLowHumiSettings',
+      desc: 'Feed ventilation card low humidity settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageHighHumiSettings {
+    return Intl.message(
+      'High humidity\nsettings',
+      name: 'feedVentilationCardPageHighHumiSettings',
+      desc: 'Feed ventilation card high humidity settings',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get feedVentilationCardPageHumidityMode {
+    return Intl.message(
+      'Humidity mode',
+      name: 'feedVentilationCardPageHumidityMode',
+      desc: 'Feed ventilation card humidity mode',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get feedVentilationCardPageNightSettings {
     return Intl.message(
       'Night settings',
@@ -227,6 +254,9 @@ class FeedVentilationCardPage extends StatelessWidget {
     FeedVentilationParams params = state.params;
     if (isTempSource(params.values.blowerRefSource)) {
       return _renderTemperatureMode();
+    }
+    if (isHumiSource(params.values.blowerRefSource)) {
+      return _renderHumidityMode();
     } else if (isTimerSource(params.values.blowerRefSource)) {
       return _renderTimerMode();
     } else if (params.values.blowerRefSource == 0) {
@@ -271,6 +301,56 @@ class FeedVentilationCardPage extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         child: Text(FeedVentilationCardPage.feedVentilationCardPageTemperatureMode,
+            style: TextStyle(fontWeight: FontWeight.w600)),
+      ),
+      Container(
+        height: 155,
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: cards,
+          ),
+        ),
+      )
+    ]);
+  }
+
+  Widget _renderHumidityMode() {
+    FeedVentilationParams params = state.params;
+    String unit = '%';
+
+    List<Widget> cards = [
+      renderCard(
+          'assets/feed_card/icon_blower.svg',
+          8,
+          FeedVentilationCardPage.feedVentilationCardPageLowHumiSettings,
+          Column(
+            children: [
+              Text('${params.values.blowerMin}%',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.lightBlue)),
+              Text('at ${params.values.blowerRefMin.toDouble()}$unit',
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
+            ],
+          )),
+      renderCard(
+          'assets/feed_card/icon_blower.svg',
+          8,
+          FeedVentilationCardPage.feedVentilationCardPageHighHumiSettings,
+          Column(
+            children: [
+              Text('${params.values.blowerMax}%',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.red)),
+              Text('at ${params.values.blowerRefMax.toDouble()}$unit',
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
+            ],
+          )),
+    ];
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Text(FeedVentilationCardPage.feedVentilationCardPageHumidityMode,
             style: TextStyle(fontWeight: FontWeight.w600)),
       ),
       Container(

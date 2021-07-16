@@ -21,9 +21,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
-import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_humidity_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_manual_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_legacy_form_page.dart';
@@ -121,13 +121,13 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 );
               }
               body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-                  listener: (BuildContext context, DeviceReachableListenerBlocState daemonState) {
-                    if (daemonState is DeviceReachableListenerBlocStateDeviceReachable &&
-                        daemonState.device.id == state.box.device) {
-                      if (_reachable == daemonState.reachable && _usingWifi == daemonState.usingWifi) return;
+                  listener: (BuildContext context, DeviceReachableListenerBlocState reachableState) {
+                    if (reachableState is DeviceReachableListenerBlocStateDeviceReachable &&
+                        reachableState.device.id == state.box.device) {
+                      if (_reachable == reachableState.reachable && _usingWifi == reachableState.usingWifi) return;
                       setState(() {
-                        _reachable = daemonState.reachable;
-                        _usingWifi = daemonState.usingWifi;
+                        _reachable = reachableState.reachable;
+                        _usingWifi = reachableState.usingWifi;
                       });
                     }
                   },
@@ -183,6 +183,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       body = FeedVentilationTimerFormPage(state);
     } else if (isTempSource(state.blowerRefSource.value)) {
       body = FeedVentilationTemperatureFormPage(state);
+    } else if (isHumiSource(state.blowerRefSource.value)) {
+      body = FeedVentilationHumidityFormPage(state);
     } else if (state.blowerRefSource.value == 0) {
       body = FeedVentilationManualFormPage(state);
     } else {
@@ -194,7 +196,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     List<bool> selection = [
       isTimerSource(state.blowerRefSource.value),
       state.blowerRefSource.value == 0,
-      isTempSource(state.blowerRefSource.value)
+      isTempSource(state.blowerRefSource.value),
+      isHumiSource(state.blowerRefSource.value),
     ];
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Center(
@@ -205,6 +208,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             Icon(Icons.timer),
             Icon(Icons.touch_app),
             Icon(Icons.device_thermostat),
+            Icon(Icons.cloud),
           ],
           onPressed: (int index) {
             _changeRefSource(context, state, index);
@@ -221,6 +225,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       'Timer mode',
       'Manual mode',
       'Temperature mode',
+      'Humidity mode',
     ];
     List<FeedVentilationFormBlocParamsChangedEvent Function()> eventFactory = [
       () => FeedVentilationFormBlocParamsChangedEvent(
@@ -237,6 +242,11 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             blowerRefMin: state.blowerRefMin.copyWith(value: 21),
             blowerRefMax: state.blowerRefMax.copyWith(value: 30),
             blowerRefSource: state.blowerRefSource.copyWith(value: TEMP_REF_OFFSET + state.box.deviceBox),
+          ),
+      () => FeedVentilationFormBlocParamsChangedEvent(
+            blowerRefMin: state.blowerRefMin.copyWith(value: 35),
+            blowerRefMax: state.blowerRefMax.copyWith(value: 70),
+            blowerRefSource: state.blowerRefSource.copyWith(value: HUMI_REF_OFFSET + state.box.deviceBox),
           ),
     ];
     bool confirm = await showDialog<bool>(

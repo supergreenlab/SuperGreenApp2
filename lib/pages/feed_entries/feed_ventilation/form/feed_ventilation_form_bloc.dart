@@ -33,9 +33,11 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 
 const int TEMP_REF_OFFSET = 0x1;
 const int TIMER_REF_OFFSET = 0x8;
+const int HUMI_REF_OFFSET = 0xf;
 
 bool isTempSource(int source) => source >= TEMP_REF_OFFSET && source < TIMER_REF_OFFSET;
-bool isTimerSource(int source) => source >= TIMER_REF_OFFSET;
+bool isTimerSource(int source) => source >= TIMER_REF_OFFSET && source < HUMI_REF_OFFSET;
+bool isHumiSource(int source) => source >= HUMI_REF_OFFSET;
 
 class IntControllerParam extends Equatable {
   final Param _param;
@@ -132,6 +134,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
   final Box box;
 
   final IntControllerParam temperature;
+  final IntControllerParam humidity;
 
   final bool isLegacy;
   final IntControllerParam blowerMin;
@@ -148,6 +151,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
     this.noDevice = false,
     this.box,
     this.temperature,
+    this.humidity,
     this.isLegacy,
     this.blowerMin,
     this.blowerMax,
@@ -163,6 +167,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
         noDevice,
         box,
         temperature,
+        humidity,
         isLegacy,
         blowerMin,
         blowerMax,
@@ -195,6 +200,7 @@ class FeedVentilationFormBloc extends Bloc<FeedVentilationFormBlocEvent, FeedVen
   Box box;
 
   IntControllerParam temperature;
+  IntControllerParam humidity;
 
   bool isLegacy;
   IntControllerParam blowerMin;
@@ -233,6 +239,9 @@ class FeedVentilationFormBloc extends Bloc<FeedVentilationFormBlocEvent, FeedVen
 
       temperature = await IntControllerParam.loadFromDB(device, box, "TEMP");
       temperature = temperature.copyWith(param: await DeviceHelper.refreshIntParam(device, temperature._param));
+
+      humidity = await IntControllerParam.loadFromDB(device, box, "HUMI");
+      humidity = humidity.copyWith(param: await DeviceHelper.refreshIntParam(device, humidity._param));
 
       try {
         isLegacy = true;
@@ -384,6 +393,7 @@ class FeedVentilationFormBloc extends Bloc<FeedVentilationFormBlocEvent, FeedVen
   FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(
         box: box,
         temperature: temperature,
+        humidity: humidity,
         isLegacy: isLegacy,
         blowerMin: blowerMin,
         blowerMax: blowerMax,
