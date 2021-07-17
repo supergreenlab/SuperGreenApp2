@@ -63,12 +63,13 @@ class DeviceDaemonBlocStateInit extends DeviceDaemonBlocState {
 }
 
 class DeviceDaemonBlocStateRequiresLogin extends DeviceDaemonBlocState {
+  final int rand = Random().nextInt(1 << 32);
   final Device device;
 
   DeviceDaemonBlocStateRequiresLogin(this.device);
 
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [device, rand];
 }
 
 class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
@@ -135,6 +136,7 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
       } catch (e) {
         if (e.toString().endsWith('401')) {
           add(DeviceDaemonBlocEventRequiresLogin(device));
+          _deviceWorker[device.id] = false;
           return;
         }
 

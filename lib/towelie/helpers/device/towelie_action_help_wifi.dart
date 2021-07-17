@@ -28,7 +28,7 @@ class TowelieActionHelpWifi extends TowelieActionHelp {
       '''**While not mandatory**, connecting your controller to your home wifi has a few benefits:
 - receive software **upgrade** and bug fixes
 - remote **monitoring**
-- remote **control** (coming soon)''',
+- remote **control**''',
       name: 'towelieHelperDeviceWifi',
       desc: 'Towelie Helper Device wifi',
       locale: SGLLocalizations.current.localeName,
@@ -43,8 +43,7 @@ class TowelieActionHelpWifi extends TowelieActionHelp {
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 1) {
-      yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpWifi.towelieHelperDeviceWifi);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpWifi.towelieHelperDeviceWifi);
     }
   }
 }

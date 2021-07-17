@@ -126,10 +126,10 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent, Set
       server.listen(listenRequest);
 
       await Future.delayed(Duration(seconds: 1));
-      yield SettingsUpgradeDeviceBlocStateUpgrading('Rebooting controller..');
       await DeviceHelper.updateStringParam(args.device, otaServerIP, myip);
       await DeviceHelper.updateIntParam(args.device, otaServerPort, server.port);
 
+      yield SettingsUpgradeDeviceBlocStateUpgrading('Rebooting controller..');
       Param reboot = await RelDB.get().devicesDAO.getParam(args.device.id, 'REBOOT');
       try {
         await DeviceHelper.updateIntParam(args.device, reboot, 1, nRetries: 1);

@@ -192,6 +192,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool _showingDeviceAuth = false;
   BuildContext lastRouteContext;
 
   @override
@@ -651,6 +652,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _promptDeviceAuth(BuildContext context, Device device) {
+    if (_showingDeviceAuth == true) return;
+    _showingDeviceAuth = true;
     showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -659,6 +662,7 @@ class _MainPageState extends State<MainPage> {
           create: (BuildContext context) => AuthModalBloc(
               device: device,
               onClose: () {
+                _showingDeviceAuth = false;
                 Navigator.pop(context);
               }),
           child: AuthModalPage(),
