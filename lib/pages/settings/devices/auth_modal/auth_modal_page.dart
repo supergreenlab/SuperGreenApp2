@@ -24,6 +24,7 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/settings/devices/auth_modal/auth_modal_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/textfield.dart';
@@ -67,7 +68,19 @@ class _AuthModalPageState extends State<AuthModalPage> {
       child: BlocBuilder<AuthModalBloc, AuthModalBlocState>(
         builder: (BuildContext context, AuthModalBlocState state) {
           if (state is AuthModalBlocStateInit) {
-            return FullscreenLoading();
+            return Container(height: 345, child: FullscreenLoading());
+          } else if (state is AuthModalBlocStateDone) {
+            return Container(
+              height: 345,
+              child: Fullscreen(
+                title: 'Done',
+                child: Icon(
+                  Icons.check,
+                  color: Colors.green,
+                  size: 100,
+                ),
+              ),
+            );
           }
           return renderForm(context, state);
         },
@@ -95,11 +108,11 @@ class _AuthModalPageState extends State<AuthModalPage> {
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                         child: SvgPicture.asset(
-                          'assets/settings/icon_remotecontrol.svg',
-                          width: 30,
-                          height: 30,
+                          'assets/settings/icon_password.svg',
+                          width: 40,
+                          height: 40,
                         ),
                       ),
                       Expanded(

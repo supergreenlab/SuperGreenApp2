@@ -192,6 +192,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool _showingNotificationRequest = false;
   bool _showingDeviceAuth = false;
   BuildContext lastRouteContext;
 
@@ -637,8 +638,10 @@ class _MainPageState extends State<MainPage> {
     return Text(MainPage.mainNavigatorUnknownRoute);
   }
 
-  void _requestNotificationPermissions(BuildContext context) {
-    showModalBottomSheet<bool>(
+  void _requestNotificationPermissions(BuildContext context) async {
+    if (_showingNotificationRequest == true) return;
+    _showingNotificationRequest = true;
+    await showModalBottomSheet<bool>(
       context: context,
       builder: (BuildContext c) {
         return BlocProvider<NotificationRequestBloc>(
@@ -649,12 +652,13 @@ class _MainPageState extends State<MainPage> {
         );
       },
     );
+    _showingNotificationRequest = false;
   }
 
-  void _promptDeviceAuth(BuildContext context, Device device) {
+  void _promptDeviceAuth(BuildContext context, Device device) async {
     if (_showingDeviceAuth == true) return;
     _showingDeviceAuth = true;
-    showModalBottomSheet<bool>(
+    await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext c) {
@@ -669,5 +673,6 @@ class _MainPageState extends State<MainPage> {
         );
       },
     );
+    _showingDeviceAuth = false;
   }
 }

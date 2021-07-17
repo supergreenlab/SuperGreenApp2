@@ -78,6 +78,7 @@ class AuthModalBloc extends Bloc<AuthModalBlocEvent, AuthModalBlocState> {
     } else if (event is AuthModalBlocEventAuth) {
       await DeviceHelper.updateAuth(device, event.username, event.password);
       yield AuthModalBlocStateDone(device: device);
+      await Future.delayed(Duration(seconds: 1));
       onClose();
     }
   }
