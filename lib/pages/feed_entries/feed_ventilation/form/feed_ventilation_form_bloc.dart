@@ -237,11 +237,25 @@ class FeedVentilationFormBloc extends Bloc<FeedVentilationFormBlocEvent, FeedVen
       }
       device = await db.devicesDAO.getDevice(box.device);
 
-      temperature = await IntControllerParam.loadFromDB(device, box, "TEMP");
-      temperature = temperature.copyWith(param: await DeviceHelper.refreshIntParam(device, temperature._param));
+      try {
+        temperature = await IntControllerParam.loadFromDB(device, box, "TEMP");
+        temperature = temperature.copyWith(param: await DeviceHelper.refreshIntParam(device, temperature._param));
 
-      humidity = await IntControllerParam.loadFromDB(device, box, "HUMI");
-      humidity = humidity.copyWith(param: await DeviceHelper.refreshIntParam(device, humidity._param));
+        humidity = await IntControllerParam.loadFromDB(device, box, "HUMI");
+        humidity = humidity.copyWith(param: await DeviceHelper.refreshIntParam(device, humidity._param));
+      } catch (e) {
+        yield FeedVentilationFormBlocStateLoaded(
+            noDevice: false,
+            isLegacy: false,
+            blowerMin: IntControllerParam(null, 5, 5),
+            blowerMax: IntControllerParam(null, 40, 40),
+            blowerRefMin: IntControllerParam(null, 20, 20),
+            blowerRefMax: IntControllerParam(null, 32, 32),
+            blowerRefSource: IntControllerParam(null, 1, 1),
+            temperature: IntControllerParam(null, 25, 25),
+            box: box);
+        return;
+      }
 
       try {
         isLegacy = true;
