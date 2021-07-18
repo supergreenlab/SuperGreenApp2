@@ -131,6 +131,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
 
   void _startSearch(DeviceSetupBlocEventStartSetup event) async {
     try {
+      add(DeviceSetupBlocEventProgress(0));
       final db = RelDB.get().devicesDAO;
       String deviceIdentifier;
       String auth;
