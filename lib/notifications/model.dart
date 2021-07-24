@@ -35,6 +35,7 @@ enum NotificationDataType {
   NEW_FOLLOWER,
   DEVICE_UNREACHABLE,
   LIVECAM_UNREACHABLE,
+  NEW_TIMELAPSE,
 }
 
 abstract class NotificationData extends Equatable {
@@ -74,6 +75,8 @@ abstract class NotificationData extends Equatable {
         return NotificationDataDeviceUnreachable.fromMap(data);
       case NotificationDataType.LIVECAM_UNREACHABLE:
         return NotificationDataLivecamUnreachable.fromMap(data);
+      case NotificationDataType.NEW_TIMELAPSE:
+        return NotificationDataNewTimelapse.fromMap(data);
     }
     try {
       throw 'Unknown type ${data['type']}';
@@ -279,6 +282,22 @@ class NotificationDataLivecamUnreachable extends NotificationData {
             title: title,
             body: body);
   NotificationDataLivecamUnreachable.fromMap(Map<String, dynamic> data) : super(data: data);
+
+  String get plantID => data['plantID'];
+}
+
+class NotificationDataNewTimelapse extends NotificationData {
+  NotificationDataNewTimelapse({int id, String title, String body, @required String plantID})
+      : super(
+          id: id,
+          title: title,
+          body: body,
+          data: {
+            'plantID': plantID,
+          },
+          type: NotificationDataType.NEW_TIMELAPSE,
+        );
+  NotificationDataNewTimelapse.fromMap(Map<String, dynamic> data) : super(data: data);
 
   String get plantID => data['plantID'];
 }
