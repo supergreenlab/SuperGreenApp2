@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -402,10 +403,10 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                         onPressed: () {
                           BlocProvider.of<FeedScheduleFormBloc>(context)
                               .add(FeedScheduleFormBlocEventUpdatePreset(scheduleChange, {
-                            "ON_HOUR": int.parse(onHourEditingController.value.text),
-                            "ON_MIN": int.parse(onMinEditingController.value.text),
-                            "OFF_HOUR": int.parse(offHourEditingController.value.text),
-                            "OFF_MIN": int.parse(offMinEditingController.value.text),
+                            "ON_HOUR": max(0, min(23, int.parse(onHourEditingController.value.text))),
+                            "ON_MIN": max(0, min(59, int.parse(onMinEditingController.value.text))),
+                            "OFF_HOUR": max(0, min(23, int.parse(offHourEditingController.value.text))),
+                            "OFF_MIN": max(0, min(59, int.parse(offMinEditingController.value.text))),
                           }));
                           setState(() {
                             scheduleChange = null;
