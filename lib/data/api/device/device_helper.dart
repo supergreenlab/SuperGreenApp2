@@ -44,12 +44,11 @@ class DeviceHelper {
   static Future updateAuth(Device device, String username, String password) async {
     Param param = await RelDB.get().devicesDAO.getParam(device.id, 'HTTPD_AUTH');
     String auth = base64.encode(utf8.encode('$username:$password'));
-    updateStringParam(device, param, auth);
+    updateStringParam(device, param, auth, forceLocal: true);
     AppDB().setDeviceAuth(device.identifier, auth);
   }
 
   static Future updateDeviceName(Device device, String name) async {
-    //String auth = AppDB().getDeviceAuth(device.identifier);
     final mdnsDomain = DeviceAPI.mdnsDomain(name);
     final ddb = RelDB.get().devicesDAO;
     Param nameParam = await ddb.getParam(device.id, 'DEVICE_NAME');

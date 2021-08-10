@@ -16,8 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
@@ -71,13 +74,9 @@ class SettingsDeviceAuthBlocStateLoading extends SettingsDeviceAuthBlocState {
   List<Object> get props => [];
 }
 
-class SettingsDeviceAuthBlocStateDonePairing extends SettingsDeviceAuthBlocState {
-  final Device device;
-
-  SettingsDeviceAuthBlocStateDonePairing(this.device);
-
+class SettingsDeviceAuthBlocStateAuthError extends SettingsDeviceAuthBlocState {
   @override
-  List<Object> get props => [device];
+  List<Object> get props => [];
 }
 
 class SettingsDeviceAuthBlocStateDoneAuth extends SettingsDeviceAuthBlocState {
@@ -99,17 +98,35 @@ class SettingsDeviceAuthBloc extends Bloc<SettingsDeviceAuthBlocEvent, SettingsD
   @override
   Stream<SettingsDeviceAuthBlocState> mapEventToState(SettingsDeviceAuthBlocEvent event) async* {
     if (event is SettingsDeviceAuthBlocEventInit) {
-      DeviceData deviceData = AppDB().getDeviceData(args.device.identifier);
+      String auth = AppDB().getDeviceAuth(args.device.identifier);
       yield SettingsDeviceAuthBlocStateLoaded(
         args.device,
-        authSetup: deviceData.auth != null,
+        authSetup: auth != null,
       );
     } else if (event is SettingsDeviceAuthBlocEventSetAuth) {
       yield SettingsDeviceAuthBlocStateLoading();
+      String auth = AppDB().getDeviceAuth(args.device.identifier);
+      if (auth != null) {
+        try {
+          String oldAuth = base64.encode(utf8.encode('${event.oldUsername}:${event.oldPassword}'));
+          String identifier =
+              await DeviceAPI.fetchStringParam(args.device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: oldAuth);
+          if (identifier != args.device.identifier) {
+            throw 'Wrong identifier';
+          }
+        } catch (e) {
+          yield SettingsDeviceAuthBlocStateAuthError();
+          yield SettingsDeviceAuthBlocStateLoaded(
+            args.device,
+            authSetup: auth != null,
+          );
+          return;
+        }
+      }
+
       await DeviceHelper.updateAuth(args.device, event.username, event.password);
       await Future.delayed(Duration(seconds: 1));
       yield SettingsDeviceAuthBlocStateDoneAuth(args.device);
-      add(SettingsDeviceAuthBlocEventInit());
     }
   }
 }

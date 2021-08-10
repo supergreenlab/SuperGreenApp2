@@ -23,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/auth/settings_device_auth_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -34,7 +35,7 @@ import 'package:super_green_app/widgets/textfield.dart';
 class SettingsDeviceAuthPage extends StatefulWidget {
   static String settingsDeviceAuthPageControllerDone(String name) {
     return Intl.message(
-      'Controller $name setup!',
+      'Controller $name password set!',
       args: [name],
       name: 'settingsDeviceAuthPageControllerDone',
       desc: 'Controller remote control setup confirmation text',
@@ -60,6 +61,15 @@ class SettingsDeviceAuthPage extends StatefulWidget {
     );
   }
 
+  static String settingsDeviceAuthPageAuthError() {
+    return Intl.message(
+      'Old login/password doesn\'t match. Make sure the controller is on the same wifi network.',
+      name: 'settingsDeviceAuthPageAuthError',
+      desc: 'Old credentials error',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   @override
   _SettingsDeviceAuthPageState createState() => _SettingsDeviceAuthPageState();
 }
@@ -67,6 +77,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
 class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
   Device device;
   bool done = false;
+  bool authError = false;
 
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -81,18 +92,23 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
       listener: (BuildContext context, SettingsDeviceAuthBlocState state) async {
         if (state is SettingsDeviceAuthBlocStateLoaded) {
           this.device = state.device;
-        } else if (state is SettingsDeviceAuthBlocStateDonePairing) {
+        } else if (state is SettingsDeviceAuthBlocStateDoneAuth) {
           setState(() {
             this.done = true;
           });
           await Future.delayed(Duration(seconds: 2));
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+        } else if (state is SettingsDeviceAuthBlocStateAuthError) {
           setState(() {
-            this.done = false;
+            this.authError = true;
           });
         }
       },
       child: BlocBuilder<SettingsDeviceAuthBloc, SettingsDeviceAuthBlocState>(
           cubit: BlocProvider.of<SettingsDeviceAuthBloc>(context),
+          buildWhen: (SettingsDeviceAuthBlocState s1, SettingsDeviceAuthBlocState s2) {
+            return !(s2 is SettingsDeviceAuthBlocStateAuthError);
+          },
           builder: (BuildContext context, SettingsDeviceAuthBlocState state) {
             Widget body;
             if (done) {
@@ -111,8 +127,7 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
-                  hideBackButton:
-                      state is SettingsDeviceAuthBlocStateDonePairing || state is SettingsDeviceAuthBlocStateDoneAuth,
+                  hideBackButton: state is SettingsDeviceAuthBlocStateDoneAuth,
                 ),
                 backgroundColor: Colors.white,
                 body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
@@ -127,28 +142,7 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
   }
 
   Widget _renderForm(BuildContext context, SettingsDeviceAuthBlocStateLoaded state) {
-    return ListView(children: <Widget>[
-      SectionTitle(
-        title: 'Controller access control',
-        icon: 'assets/settings/icon_lock.svg',
-        backgroundColor: Color(0xff0b6ab3),
-        titleColor: Colors.white,
-        elevation: 5,
-      ),
-      Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: MarkdownBody(
-                fitContent: true,
-                data: SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordInstructions(),
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
-              ),
-            ),
-          ),
-        ],
-      ),
+    List<Widget> fields = [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Text('Username',
@@ -185,6 +179,105 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
               setState(() {});
             }),
       ),
+    ];
+    if (state.authSetup) {
+      fields.insertAll(
+        0,
+        [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: SectionTitle(
+              title: 'Enter old password',
+              icon: 'assets/settings/icon_lock.svg',
+              backgroundColor: Color(0xff0b6ab3),
+              titleColor: Colors.white,
+              elevation: 5,
+            ),
+          ),
+          authError
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8),
+                  child: Text(SettingsDeviceAuthPage.settingsDeviceAuthPageAuthError(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 13,
+                        color: Colors.red,
+                      )),
+                )
+              : Container(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text('Username',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SGLTextField(
+                hintText: 'Ex: stant',
+                controller: _oldusernameController,
+                textCapitalization: TextCapitalization.none,
+                onChanged: (_) {
+                  setState(() {});
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16),
+            child: Text('Password',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SGLTextField(
+                hintText: '***',
+                controller: _oldpasswordController,
+                obscureText: true,
+                onChanged: (_) {
+                  setState(() {});
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: SectionTitle(
+              title: 'Enter new password',
+              icon: 'assets/settings/icon_lock.svg',
+              backgroundColor: Color(0xff0b6ab3),
+              titleColor: Colors.white,
+              elevation: 5,
+            ),
+          ),
+        ],
+      );
+    }
+    return ListView(children: <Widget>[
+      SectionTitle(
+        title: 'Controller access control',
+        icon: 'assets/settings/icon_lock.svg',
+        backgroundColor: Color(0xff0b6ab3),
+        titleColor: Colors.white,
+        elevation: 5,
+      ),
+      Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: MarkdownBody(
+                fitContent: true,
+                data: SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordInstructions(),
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
+          ),
+        ],
+      ),
+      ...fields,
       Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
         child: Text(SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordWarning(),
@@ -220,8 +313,8 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
   }
 
   bool isValid(SettingsDeviceAuthBlocStateLoaded state) {
-    if (state.authSetup) {
-      return _oldusernameController.text.length >= 4 && _oldpasswordController.text.length >= 4;
+    if (state.authSetup && !(_oldusernameController.text.length >= 4 && _oldpasswordController.text.length >= 4)) {
+      return false;
     }
     return _usernameController.text.length >= 4 && _passwordController.text.length >= 4;
   }
