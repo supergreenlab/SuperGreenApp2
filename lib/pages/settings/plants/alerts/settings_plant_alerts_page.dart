@@ -28,6 +28,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/settings/plants/alerts/settings_plant_alerts_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_button.dart';
@@ -322,6 +323,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               padding: const EdgeInsets.all(16.0),
               child: GreenButton(
                 onPressed: () {
+                  BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
                   BlocProvider.of<SettingsPlantAlertsBloc>(context)
                       .add(SettingsPlantAlertsBlocEventUpdateParameters(enabled, alertsSettings));
                 },
