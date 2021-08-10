@@ -173,7 +173,7 @@ class DeviceAPI {
       Logger.logError(e, trace,
           data: {"controllerIP": controllerIP, "paramName": paramName, "value": value}, fwdThrow: true);
     }
-    return fetchStringParam(controllerIP, paramName);
+    return fetchStringParam(controllerIP, paramName, timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
   }
 
   static Future<int> setIntParam(String controllerIP, String paramName, int value,
@@ -185,7 +185,7 @@ class DeviceAPI {
       Logger.logError(e, trace,
           data: {"controllerIP": controllerIP, "paramName": paramName, "value": value}, fwdThrow: true);
     }
-    return fetchIntParam(controllerIP, paramName, auth: auth);
+    return fetchIntParam(controllerIP, paramName, timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
   }
 
   static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
