@@ -29,6 +29,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 
 class SettingsRemoteControlPage extends StatefulWidget {
@@ -38,6 +39,15 @@ class SettingsRemoteControlPage extends StatefulWidget {
       args: [name],
       name: 'settingsRemoteControlPageControllerDone',
       desc: 'Controller remote control setup confirmation text',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String get settingsRemoteControlPageInstructionsNeedUpgrade {
+    return Intl.message(
+      '**Please upgrade your controller** to enable remote control.\n\n**Go back to the previous screen** and tap the **"Firmware upgrade"** button.',
+      name: 'settingsRemoteControlPageInstructionsNeedUpgrade',
+      desc: 'Explanation for remote control when needing to upgrade controller',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -131,35 +141,44 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
         titleColor: Colors.white,
         elevation: 5,
       ),
-      Row(
-        children: [
-          Expanded(
-            child: Padding(
+      Expanded(
+        child: Column(
+          children: [
+            Padding(
               padding: const EdgeInsets.all(16.0),
               child: MarkdownBody(
                 fitContent: true,
-                data: SettingsRemoteControlPage.settingsRemoteControlPageInstructions,
+                data: state.needsUpgrade
+                    ? SettingsRemoteControlPage.settingsRemoteControlPageInstructionsNeedUpgrade
+                    : SettingsRemoteControlPage.settingsRemoteControlPageInstructions,
                 styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: GreenButton(
-              onPressed: () {
-                if (state.loggedIn) {
-                  BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
-                } else {
-                  _login(context);
-                }
-              },
-              title: state.signingSetup ? 'RE-PAIR CONTROLLER' : 'PAIR CONTROLLER',
-            ),
+            child: state.needsUpgrade
+                ? RedButton(
+                    title: 'GO BACK',
+                    onPressed: () {
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+                    },
+                  )
+                : GreenButton(
+                    onPressed: () {
+                      if (state.loggedIn) {
+                        BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
+                      } else {
+                        _login(context);
+                      }
+                    },
+                    title: state.signingSetup ? 'RE-PAIR CONTROLLER' : 'PAIR CONTROLLER',
+                  ),
           ),
         ],
       ),

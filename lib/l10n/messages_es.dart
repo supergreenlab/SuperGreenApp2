@@ -73,7 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m26(name) => "Delete controller ${name}?";
 
-  static m27(name) => "Controller ${name} setup!";
+  static m27(name) => "Controller ${name} password set!";
 
   static m28(name) => "Controller ${name} updated!";
 
@@ -124,6 +124,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "deviceNamePageSetNameSectionTitle" : MessageLookupByLibrary.simpleMessage("Set controller\'s name"),
     "deviceNamePageTitle" : MessageLookupByLibrary.simpleMessage("Add controller"),
     "devicePairingPageInstructions" : MessageLookupByLibrary.simpleMessage("**You can now enable remote control**\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work."),
+    "devicePairingPageInstructionsNeedUpgrade" : MessageLookupByLibrary.simpleMessage("**Controller needs upgrade to enable remote control.** Once your controller is added to the app, head to the controllers settings to upgrade to the latest version.\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work."),
     "devicePairingPageLoading" : MessageLookupByLibrary.simpleMessage("Pairing controller.."),
     "devicePairingPagePairControllerSectionTitle" : MessageLookupByLibrary.simpleMessage("Pair controller for remote control"),
     "devicePairingPagePleaseLoginDialogBody" : MessageLookupByLibrary.simpleMessage("Remote control requires a sgl account, please create one or login."),
@@ -389,6 +390,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectDeviceSkipAddDevice" : MessageLookupByLibrary.simpleMessage("NO SGL DEVICE"),
     "settingParameters" : MessageLookupByLibrary.simpleMessage("Setting parameters.."),
     "settingsDayAlertPageInstructions" : MessageLookupByLibrary.simpleMessage("Day alert settings are used while the lights are on."),
+    "settingsDeviceAuthPageAuthError" : MessageLookupByLibrary.simpleMessage("Old login/password doesn\'t match. Make sure the controller is on the same wifi network."),
     "settingsDeviceAuthPageControllerDone" : m27,
     "settingsDeviceAuthPagePasswordInstructions" : MessageLookupByLibrary.simpleMessage("You can **setup a password** to prevent unauthorized parameter changes on your controller.\n\n*Please keep in mind that this is by no mean top-notch security. Mostly an anti-curious roommate/brother feature. Local network communication is not using https so subject to mitm.*"),
     "settingsDeviceAuthPagePasswordWarning" : MessageLookupByLibrary.simpleMessage("Don\'t use your important password here."),
@@ -409,6 +411,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "settingsPlantAlertPageTitle" : MessageLookupByLibrary.simpleMessage("Alerts"),
     "settingsRemoteControlPageControllerDone" : m30,
     "settingsRemoteControlPageInstructions" : MessageLookupByLibrary.simpleMessage("**Remote control requires to pair your mobile phone**. Please keep in mind: for now only **one** mobile phone can be paired at a time."),
+    "settingsRemoteControlPageInstructionsNeedUpgrade" : MessageLookupByLibrary.simpleMessage("**Please upgrade your controller** to enable remote control.\n\n**Go back to the previous screen** and tap the **\"Firmware upgrade\"** button."),
     "settingsRemoteControlPagePleaseLoginDialogBody" : MessageLookupByLibrary.simpleMessage("Login is required to enable remote control."),
     "settingsRemoteControlPagePleaseLoginDialogTitle" : MessageLookupByLibrary.simpleMessage("Login required"),
     "socialBarPagePageLikedBy" : m31,

@@ -31,6 +31,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 
 class BackendAPI {
+  static final int lastBeforeRemoteControlTimestamp = 1623494814;
   static final BackendAPI _instance = BackendAPI._newInstance();
 
   UsersAPI usersAPI;
