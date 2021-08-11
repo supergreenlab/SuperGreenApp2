@@ -20,6 +20,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -62,11 +63,12 @@ class SettingsDeviceAuthBlocStateInit extends SettingsDeviceAuthBlocState {
 class SettingsDeviceAuthBlocStateLoaded extends SettingsDeviceAuthBlocState {
   final Device device;
   final bool authSetup;
+  final bool needsUpgrade;
 
-  SettingsDeviceAuthBlocStateLoaded(this.device, {this.authSetup});
+  SettingsDeviceAuthBlocStateLoaded(this.device, {this.authSetup, this.needsUpgrade});
 
   @override
-  List<Object> get props => [device, authSetup];
+  List<Object> get props => [device, authSetup, needsUpgrade];
 }
 
 class SettingsDeviceAuthBlocStateLoading extends SettingsDeviceAuthBlocState {
@@ -98,10 +100,12 @@ class SettingsDeviceAuthBloc extends Bloc<SettingsDeviceAuthBlocEvent, SettingsD
   @override
   Stream<SettingsDeviceAuthBlocState> mapEventToState(SettingsDeviceAuthBlocEvent event) async* {
     if (event is SettingsDeviceAuthBlocEventInit) {
+      Param otaTimestamp = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_TIMESTAMP');
       String auth = AppDB().getDeviceAuth(args.device.identifier);
       yield SettingsDeviceAuthBlocStateLoaded(
         args.device,
         authSetup: auth != null,
+        needsUpgrade: otaTimestamp.ivalue <= BackendAPI.lastBeforeRemoteControlTimestamp,
       );
     } else if (event is SettingsDeviceAuthBlocEventSetAuth) {
       yield SettingsDeviceAuthBlocStateLoading();
