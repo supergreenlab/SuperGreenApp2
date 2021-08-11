@@ -196,6 +196,9 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           padding: const EdgeInsets.all(8.0),
           child: _renderOptionCheckbx(context, 'Enable notifications', (bool newValue) {
             setState(() {
+              if (enabled == false && newValue == true) {
+                BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+              }
               enabled = newValue;
             });
           }, enabled)),
@@ -323,7 +326,6 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               padding: const EdgeInsets.all(16.0),
               child: GreenButton(
                 onPressed: () {
-                  BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
                   BlocProvider.of<SettingsPlantAlertsBloc>(context)
                       .add(SettingsPlantAlertsBlocEventUpdateParameters(enabled, alertsSettings));
                 },

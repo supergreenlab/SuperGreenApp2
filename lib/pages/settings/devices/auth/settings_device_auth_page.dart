@@ -29,6 +29,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:super_green_app/widgets/textfield.dart';
 
@@ -39,6 +40,15 @@ class SettingsDeviceAuthPage extends StatefulWidget {
       args: [name],
       name: 'settingsDeviceAuthPageControllerDone',
       desc: 'Controller remote control setup confirmation text',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
+  static String settingsDeviceAuthPagePasswordInstructionsNeedsUpgrade() {
+    return Intl.message(
+      '**Please upgrade your controller** to enable password lock.**Go back to the previous screen** and tap the **"Firmware upgrade"** button.\n\nYou can **setup a password** to prevent unauthorized parameter changes on your controller.\n\n*Please keep in mind that this is by no mean top-notch security. Mostly an anti-curious roommate/brother feature. Local network communication is not using https so subject to mitm.*',
+      name: 'settingsDeviceAuthPagePasswordInstructionsNeedsUpgrade',
+      desc: 'Password protection instructions when controller needs upgrade.',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -118,7 +128,11 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
                 title: CommonL10N.loading,
               );
             } else if (state is SettingsDeviceAuthBlocStateLoaded) {
-              body = _renderForm(context, state);
+              if (state.needsUpgrade) {
+                body = _renderNeedsUpgrade(context, state);
+              } else {
+                body = _renderForm(context, state);
+              }
             }
             return Scaffold(
                 appBar: SGLAppBar(
@@ -139,6 +153,46 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
     String subtitle = SettingsDeviceAuthPage.settingsDeviceAuthPageControllerDone(state.device.name);
     return Fullscreen(
         title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+  }
+
+  Widget _renderNeedsUpgrade(BuildContext context, SettingsDeviceAuthBlocStateLoaded state) {
+    return Column(children: <Widget>[
+      SectionTitle(
+        title: 'Controller access control',
+        icon: 'assets/settings/icon_lock.svg',
+        backgroundColor: Color(0xff0b6ab3),
+        titleColor: Colors.white,
+        elevation: 5,
+      ),
+      Expanded(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: MarkdownBody(
+                fitContent: true,
+                data: SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordInstructionsNeedsUpgrade(),
+                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
+          ],
+        ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: RedButton(
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+              },
+              title: 'GO BACK',
+            ),
+          ),
+        ],
+      )
+    ]);
   }
 
   Widget _renderForm(BuildContext context, SettingsDeviceAuthBlocStateLoaded state) {
