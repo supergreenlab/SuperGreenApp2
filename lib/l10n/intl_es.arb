@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-08-09T15:58:53.840996",
+  "@@last_modified": "2021-08-10T17:24:47.336699",
   "title": "SuperGreenLab",
   "@title": {
     "description": "App title",
@@ -1606,6 +1606,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "devicePairingPageInstructionsNeedUpgrade": "**Controller needs upgrade to enable remote control.** Once your controller is added to the app, head to the controllers settings to upgrade to the latest version.\n\n**Keep control** of your box, even when you're away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.",
+  "@devicePairingPageInstructionsNeedUpgrade": {
+    "description": "Explanation for remote control",
+    "type": "text",
+    "placeholders": {}
+  },
   "devicePairingPagePleaseLoginDialogTitle": "Please login",
   "@devicePairingPagePleaseLoginDialogTitle": {
     "description": "Please login dialog title",
@@ -1743,6 +1749,12 @@
       "name": {}
     }
   },
+  "settingsRemoteControlPageInstructionsNeedUpgrade": "**Please upgrade your controller** to enable remote control.\n\n**Go back to the previous screen** and tap the **\"Firmware upgrade\"** button.",
+  "@settingsRemoteControlPageInstructionsNeedUpgrade": {
+    "description": "Explanation for remote control when needing to upgrade controller",
+    "type": "text",
+    "placeholders": {}
+  },
   "settingsRemoteControlPageInstructions": "**Remote control requires to pair your mobile phone**. Please keep in mind: for now only **one** mobile phone can be paired at a time.",
   "@settingsRemoteControlPageInstructions": {
     "description": "Explanation for remote control",
@@ -1833,7 +1845,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "settingsDeviceAuthPageControllerDone": "Controller {name} setup!",
+  "settingsDeviceAuthPageControllerDone": "Controller {name} password set!",
   "@settingsDeviceAuthPageControllerDone": {
     "description": "Controller remote control setup confirmation text",
     "type": "text",
@@ -1850,6 +1862,12 @@
   "settingsDeviceAuthPagePasswordWarning": "Don't use your important password here.",
   "@settingsDeviceAuthPagePasswordWarning": {
     "description": "Password warning",
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsDeviceAuthPageAuthError": "Old login/password doesn't match. Make sure the controller is on the same wifi network.",
+  "@settingsDeviceAuthPageAuthError": {
+    "description": "Old credentials error",
     "type": "text",
     "placeholders": {}
   },

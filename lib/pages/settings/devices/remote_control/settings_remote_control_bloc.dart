@@ -18,6 +18,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
@@ -47,11 +48,17 @@ class SettingsRemoteControlBlocStateLoaded extends SettingsRemoteControlBlocStat
   final Device device;
   final bool signingSetup;
   final bool loggedIn;
+  final bool needsUpgrade;
 
-  SettingsRemoteControlBlocStateLoaded(this.device, {this.signingSetup, this.loggedIn});
+  SettingsRemoteControlBlocStateLoaded(this.device, {this.signingSetup, this.loggedIn, this.needsUpgrade});
 
   @override
-  List<Object> get props => [device, signingSetup, loggedIn];
+  List<Object> get props => [
+        device,
+        signingSetup,
+        loggedIn,
+        needsUpgrade,
+      ];
 }
 
 class SettingsRemoteControlBlocStateLoading extends SettingsRemoteControlBlocState {
@@ -79,10 +86,12 @@ class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, Set
   Stream<SettingsRemoteControlBlocState> mapEventToState(SettingsRemoteControlBlocEvent event) async* {
     if (event is SettingsRemoteControlBlocEventInit) {
       DeviceData deviceData = AppDB().getDeviceData(args.device.identifier);
+      Param otaTimestamp = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_TIMESTAMP');
       yield SettingsRemoteControlBlocStateLoaded(
         args.device,
         signingSetup: deviceData.signing != null,
         loggedIn: AppDB().getAppData().jwt != null,
+        needsUpgrade: otaTimestamp.ivalue <= BackendAPI.lastBeforeRemoteControlTimestamp,
       );
     } else if (event is SettingsRemoteControlBlocEventPair) {
       yield SettingsRemoteControlBlocStateLoading();

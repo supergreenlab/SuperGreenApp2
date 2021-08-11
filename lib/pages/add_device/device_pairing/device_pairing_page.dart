@@ -69,6 +69,15 @@ class DevicePairingPage extends TraceableStatefulWidget {
     );
   }
 
+  static String get devicePairingPageInstructionsNeedUpgrade {
+    return Intl.message(
+      '**Controller needs upgrade to enable remote control.** Once your controller is added to the app, head to the controllers settings to upgrade to the latest version.\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.',
+      name: 'devicePairingPageInstructionsNeedUpgrade',
+      desc: 'Explanation for remote control',
+      locale: SGLLocalizations.current.localeName,
+    );
+  }
+
   static String get devicePairingPagePleaseLoginDialogTitle {
     return Intl.message(
       'Please login',
@@ -106,7 +115,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
           cubit: BlocProvider.of<DevicePairingBloc>(context),
           builder: (context, state) {
             Widget body;
-            if (state is DevicePairingBlocStateLoading) {
+            if (state is DevicePairingBlocStateLoading || state is DevicePairingBlocStateInit) {
               body = _renderLoading();
             } else if (state is DevicePairingBlocStateDone) {
               body = Fullscreen(
@@ -140,7 +149,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
     return FullscreenLoading(title: DevicePairingPage.devicePairingPageLoading);
   }
 
-  Widget _renderForm(BuildContext context, DevicePairingBlocState state) {
+  Widget _renderForm(BuildContext context, DevicePairingBlocStateLoaded state) {
     return Column(
       children: <Widget>[
         Container(
@@ -163,7 +172,9 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: MarkdownBody(
                     fitContent: true,
-                    data: DevicePairingPage.devicePairingPageInstructions,
+                    data: state.needsUpgrade
+                        ? DevicePairingPage.devicePairingPageInstructionsNeedUpgrade
+                        : DevicePairingPage.devicePairingPageInstructions,
                     styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
                 ),
@@ -181,22 +192,24 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                   BlocProvider.of<MainNavigatorBloc>(context)
                       .add(MainNavigatorActionPop(mustPop: true, param: state.device));
                 },
-                title: 'SKIP',
+                title: state.needsUpgrade ? 'I\'LL UPGRADE LATER' : 'SKIP',
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: GreenButton(
-                onPressed: () {
-                  if (state.loggedIn) {
-                    BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
-                  } else {
-                    _login(context);
-                  }
-                },
-                title: 'PAIR CONTROLLER',
-              ),
-            ),
+            state.needsUpgrade
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: GreenButton(
+                      onPressed: () {
+                        if (state.loggedIn) {
+                          BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
+                        } else {
+                          _login(context);
+                        }
+                      },
+                      title: 'PAIR CONTROLLER',
+                    ),
+                  ),
           ],
         ),
       ],

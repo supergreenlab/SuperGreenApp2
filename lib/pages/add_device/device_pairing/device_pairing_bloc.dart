@@ -20,6 +20,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -34,33 +35,67 @@ class DevicePairingBlocEventPair extends DevicePairingBlocEvent {
   List<Object> get props => [];
 }
 
-class DevicePairingBlocState extends Equatable {
-  final Device device;
-  final bool loggedIn;
-
-  DevicePairingBlocState(this.device, {this.loggedIn});
+class DevicePairingBlocEventInit extends DevicePairingBlocEvent {
+  DevicePairingBlocEventInit();
 
   @override
-  List<Object> get props => [device, loggedIn];
+  List<Object> get props => [];
+}
+
+abstract class DevicePairingBlocState extends Equatable {}
+
+class DevicePairingBlocStateLoaded extends DevicePairingBlocState {
+  final Device device;
+  final bool loggedIn;
+  final bool needsUpgrade;
+
+  DevicePairingBlocStateLoaded(this.device, {this.loggedIn, this.needsUpgrade});
+
+  @override
+  List<Object> get props => [device, loggedIn, needsUpgrade];
+}
+
+class DevicePairingBlocStateInit extends DevicePairingBlocState {
+  DevicePairingBlocStateInit();
+
+  @override
+  List<Object> get props => [];
 }
 
 class DevicePairingBlocStateLoading extends DevicePairingBlocState {
-  DevicePairingBlocStateLoading(Device device) : super(device);
+  DevicePairingBlocStateLoading();
+
+  @override
+  List<Object> get props => [];
 }
 
 class DevicePairingBlocStateDone extends DevicePairingBlocState {
-  DevicePairingBlocStateDone(Device device) : super(device);
+  final Device device;
+
+  DevicePairingBlocStateDone(this.device);
+
+  @override
+  List<Object> get props => [device];
 }
 
 class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocState> {
   final MainNavigateToDevicePairingEvent args;
 
-  DevicePairingBloc(this.args) : super(DevicePairingBlocState(args.device, loggedIn: AppDB().getAppData().jwt != null));
+  DevicePairingBloc(this.args) : super(DevicePairingBlocStateInit()) {
+    add(DevicePairingBlocEventInit());
+  }
 
   @override
   Stream<DevicePairingBlocState> mapEventToState(DevicePairingBlocEvent event) async* {
-    if (event is DevicePairingBlocEventPair) {
-      yield DevicePairingBlocStateLoading(args.device);
+    if (event is DevicePairingBlocEventInit) {
+      Param otaTimestamp = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_TIMESTAMP');
+      yield DevicePairingBlocStateLoaded(
+        args.device,
+        loggedIn: AppDB().getAppData().jwt != null,
+        needsUpgrade: otaTimestamp.ivalue <= BackendAPI.lastBeforeRemoteControlTimestamp,
+      );
+    } else if (event is DevicePairingBlocEventPair) {
+      yield DevicePairingBlocStateLoading();
       await DeviceHelper.pairDevice(args.device);
       await Future.delayed(Duration(seconds: 1));
       yield DevicePairingBlocStateDone(args.device);
