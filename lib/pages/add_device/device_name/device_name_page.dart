@@ -76,7 +76,8 @@ class DeviceNamePage extends TraceableStatefulWidget {
 class DeviceNamePageState extends State<DeviceNamePage> {
   final _nameController = TextEditingController();
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
   int _listener;
   bool _keyboardVisible = false;
 
@@ -102,23 +103,26 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DeviceNameBloc>(context),
+      bloc: BlocProvider.of<DeviceNameBloc>(context),
       listener: (BuildContext context, DeviceNameBlocState state) async {
         if (state is DeviceNameBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
           FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDeviceTestEvent(state.device, futureFn: ff.futureFn));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToDeviceTestEvent(state.device,
+                  futureFn: ff.futureFn));
           bool done = await ff.future;
           if (done == true) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigatorActionPop(mustPop: true, param: state.device));
           } else {
-            BlocProvider.of<DeviceNameBloc>(context).add(DeviceNameBlocEventReset());
+            BlocProvider.of<DeviceNameBloc>(context)
+                .add(DeviceNameBlocEventReset());
           }
         }
       },
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
-          cubit: BlocProvider.of<DeviceNameBloc>(context),
+          bloc: BlocProvider.of<DeviceNameBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is DeviceNameBlocStateLoading) {
@@ -145,7 +149,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
                     titleColor: Colors.white,
                     iconColor: Colors.white,
                   ),
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
@@ -175,7 +180,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
                 child: SGLTextField(
                   hintText: DeviceNamePage.deviceNamePageSetNameHint,
                   controller: _nameController,

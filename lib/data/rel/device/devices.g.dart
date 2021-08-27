@@ -13,6 +13,8 @@ mixin _$DevicesDAOMixin on DatabaseAccessor<RelDB> {
   Selectable<int> nDevices() {
     return customSelect('SELECT COUNT(*) FROM devices',
         variables: [],
-        readsFrom: {devices}).map((QueryRow row) => row.readInt('COUNT(*)'));
+        readsFrom: {
+          devices,
+        }).map((QueryRow row) => row.read<int>('COUNT(*)'));
   }
 }

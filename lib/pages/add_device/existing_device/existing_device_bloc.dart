@@ -87,7 +87,7 @@ class ExistingDeviceBloc
         }
       }
       try {
-        await get('http://$ip/s?k=BROKER_CLIENTID');
+        await get(Uri.parse('http://$ip/s?k=BROKER_CLIENTID'));
       } catch (e) {
         yield ExistingDeviceBlocStateNotFound();
         return;

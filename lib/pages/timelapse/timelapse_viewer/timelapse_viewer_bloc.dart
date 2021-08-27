@@ -68,7 +68,8 @@ class TimelapseViewerBlocStateLoaded extends TimelapseViewerBlocState {
   List<Object> get props => [plant, timelapses, images];
 }
 
-class TimelapseViewerBloc extends Bloc<TimelapseViewerBlocEvent, TimelapseViewerBlocState> {
+class TimelapseViewerBloc
+    extends Bloc<TimelapseViewerBlocEvent, TimelapseViewerBlocState> {
   final MainNavigateToTimelapseViewer args;
 
   TimelapseViewerBloc(this.args) : super(TimelapseViewerBlocStateInit()) {
@@ -76,7 +77,8 @@ class TimelapseViewerBloc extends Bloc<TimelapseViewerBlocEvent, TimelapseViewer
   }
 
   @override
-  Stream<TimelapseViewerBlocState> mapEventToState(TimelapseViewerBlocEvent event) async* {
+  Stream<TimelapseViewerBlocState> mapEventToState(
+      TimelapseViewerBlocEvent event) async* {
     if (event is TimelapseViewerBlocEventInit) {
       yield TimelapseViewerBlocStateLoading();
       yield* reloadTimelapses();
@@ -88,24 +90,32 @@ class TimelapseViewerBloc extends Bloc<TimelapseViewerBlocEvent, TimelapseViewer
   }
 
   Stream<TimelapseViewerBlocState> reloadTimelapses() async* {
-    List<Timelapse> timelapses = await RelDB.get().plantsDAO.getTimelapses(args.plant.id);
+    List<Timelapse> timelapses =
+        await RelDB.get().plantsDAO.getTimelapses(args.plant.id);
     List<Uint8List> pictures = [];
     for (int i = 0; i < timelapses.length; ++i) {
       try {
         if (timelapses[i].type == "dropbox") {
-          DropboxSettings dbSettings = DropboxSettings.fromMap(JsonDecoder().convert(timelapses[i].settings));
-          Logger.log('${timelapses[i].settings} ${dbSettings.dropboxToken} ${dbSettings.uploadName}');
-          Response res = await post('https://content.dropboxapi.com/2/files/download', headers: {
-            'Authorization': 'Bearer ${dbSettings.dropboxToken}',
-            'Dropbox-API-Arg': '{"path": "/${dbSettings.uploadName}/latest.jpg"}',
-          });
+          DropboxSettings dbSettings = DropboxSettings.fromMap(
+              JsonDecoder().convert(timelapses[i].settings));
+          Logger.log(
+              '${timelapses[i].settings} ${dbSettings.dropboxToken} ${dbSettings.uploadName}');
+          Response res = await post(
+              Uri.parse('https://content.dropboxapi.com/2/files/download'),
+              headers: {
+                'Authorization': 'Bearer ${dbSettings.dropboxToken}',
+                'Dropbox-API-Arg':
+                    '{"path": "/${dbSettings.uploadName}/latest.jpg"}',
+              });
           pictures.add(res.bodyBytes);
         } else if (timelapses[i].type == "sglstorage") {
-          Map<String, dynamic> frame = await BackendAPI().feedsAPI.fetchLatestTimelapseFrame(timelapses[i].serverID);
+          Map<String, dynamic> frame = await BackendAPI()
+              .feedsAPI
+              .fetchLatestTimelapseFrame(timelapses[i].serverID);
           String url = '${BackendAPI().storageServerHost}${frame['filePath']}';
           Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);
-          pictures
-              .add(await BackendAPI().feedsAPI.sglOverlay(box, args.plant, JsonDecoder().convert(frame['meta']), url));
+          pictures.add(await BackendAPI().feedsAPI.sglOverlay(
+              box, args.plant, JsonDecoder().convert(frame['meta']), url));
         }
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"timelapse": timelapses[i]});

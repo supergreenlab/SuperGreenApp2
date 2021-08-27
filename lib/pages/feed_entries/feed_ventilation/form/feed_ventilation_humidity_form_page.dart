@@ -38,13 +38,16 @@ class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
 
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationHumidityFormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationHumidityFormPage(this.state, {Key key})
+      : super(key: key);
 
   @override
-  _FeedVentilationHumidityFormPageState createState() => _FeedVentilationHumidityFormPageState();
+  _FeedVentilationHumidityFormPageState createState() =>
+      _FeedVentilationHumidityFormPageState();
 }
 
-class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidityFormPage> {
+class _FeedVentilationHumidityFormPageState
+    extends State<FeedVentilationHumidityFormPage> {
   int _blowerMin = 0;
   int _blowerMax = 0;
   int _blowerRefMin = 0;
@@ -63,7 +66,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
   Widget build(BuildContext context) {
     String unit = '%';
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
@@ -79,28 +82,38 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MarkdownBody(
-                data: FeedVentilationHumidityFormPage.instructionsBlowerHumidityModeDescription,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: FeedVentilationHumidityFormPage
+                    .instructionsBlowerHumidityModeDescription,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
             Column(
               children: [
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(children: [
                           Text(
                             'Low ',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blue),
                           ),
                           Text(
                             'humidity settings',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black87),
                           ),
                         ]),
-                        Text('Current box humidity: ${widget.state.humidity.value.toDouble()}$unit'),
+                        Text(
+                            'Current box humidity: ${widget.state.humidity.value.toDouble()}$unit'),
                       ],
                     )),
                 NumberFormParam(
@@ -114,8 +127,10 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                     setState(() {
                       _blowerRefMin = newValue.toInt();
                     });
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerRefMin: widget.state.blowerRefMin.copyWith(value: newValue.toInt())));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerRefMin: widget.state.blowerRefMin
+                                .copyWith(value: newValue.toInt())));
                   },
                 ),
                 SliderFormParam(
@@ -132,8 +147,10 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                     });
                   },
                   onChangeEnd: (double newValue) {
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMin: widget.state.blowerMin.copyWith(value: _blowerMin)));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerMin: widget.state.blowerMin
+                                .copyWith(value: _blowerMin)));
                   },
                 ),
               ],
@@ -141,21 +158,29 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
             Column(
               children: [
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(children: [
                           Text(
                             'High ',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.red),
                           ),
                           Text(
                             'humidity settings',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black87),
                           ),
                         ]),
-                        Text('Current box humidity: ${widget.state.humidity.value.toDouble()}$unit'),
+                        Text(
+                            'Current box humidity: ${widget.state.humidity.value.toDouble()}$unit'),
                       ],
                     )),
                 NumberFormParam(
@@ -169,8 +194,10 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                     setState(() {
                       _blowerRefMax = newValue.toInt();
                     });
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerRefMax: widget.state.blowerRefMax.copyWith(value: newValue.toInt())));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerRefMax: widget.state.blowerRefMax
+                                .copyWith(value: newValue.toInt())));
                   },
                 ),
                 SliderFormParam(
@@ -187,8 +214,10 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                     });
                   },
                   onChangeEnd: (double newValue) {
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMax: widget.state.blowerMax.copyWith(value: _blowerMax)));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerMax: widget.state.blowerMax
+                                .copyWith(value: _blowerMax)));
                   },
                 ),
               ],

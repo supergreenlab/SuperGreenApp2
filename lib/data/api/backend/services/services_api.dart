@@ -26,28 +26,33 @@ import 'package:super_green_app/data/logger/logger.dart';
 
 class ServicesAPI {
   Future<AlertsSettings> getPlantAlertSettings(String plantID) async {
-    Response resp =
-        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/plant/$plantID/alerts/settings', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse('${BackendAPI().serverHost}/plant/$plantID/alerts/settings'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('getPlantAlertSettings failed: ${resp.body}', data: {'plantID': plantID});
+      Logger.throwError('getPlantAlertSettings failed: ${resp.body}',
+          data: {'plantID': plantID});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return AlertsSettings.fromMap(data);
   }
 
-  Future setPlantAlertSettings(String plantID, AlertsSettings alertsSettings) async {
+  Future setPlantAlertSettings(
+      String plantID, AlertsSettings alertsSettings) async {
     Map<String, dynamic> obj = alertsSettings.toMap();
-    Response resp = await BackendAPI().apiClient.put('${BackendAPI().serverHost}/plant/$plantID/alerts/settings',
+    Response resp = await BackendAPI().apiClient.put(
+        Uri.parse('${BackendAPI().serverHost}/plant/$plantID/alerts/settings'),
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
         },
         body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('setPlantAlertSettings failed: ${resp.body}', data: {'plantID': plantID});
+      Logger.throwError('setPlantAlertSettings failed: ${resp.body}',
+          data: {'plantID': plantID});
     }
   }
 }

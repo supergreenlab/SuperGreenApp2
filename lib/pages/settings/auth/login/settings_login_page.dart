@@ -30,12 +30,13 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
       listener: (BuildContext context, SettingsLoginBlocState state) {
         if (state is SettingsLoginBlocStateDone) {
           Timer(Duration(seconds: 2), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: true));
           });
         }
       },
       child: BlocBuilder<SettingsLoginBloc, SettingsLoginBlocState>(
-        cubit: BlocProvider.of<SettingsLoginBloc>(context),
+        bloc: BlocProvider.of<SettingsLoginBloc>(context),
         builder: (BuildContext context, SettingsLoginBlocState state) {
           Widget body;
 
@@ -68,7 +69,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                 Container(
                   color: Colors.indigo,
                   child: Center(
-                    child: Text('Login', style: TextStyle(color: Colors.white, fontSize: 20)),
+                    child: Text('Login',
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
                   ),
                 ),
                 Expanded(
@@ -82,13 +84,15 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                         elevation: 5,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 24.0),
                         child: SGLTextField(
                             textCapitalization: TextCapitalization.none,
                             focusNode: _nicknameFocusNode,
                             onFieldSubmitted: (_) {
                               _nicknameFocusNode.unfocus();
-                              FocusScope.of(context).requestFocus(_passwordFocusNode);
+                              FocusScope.of(context)
+                                  .requestFocus(_passwordFocusNode);
                             },
                             hintText: 'Ex: Bob',
                             controller: _nicknameController,
@@ -104,7 +108,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                         elevation: 5,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 24.0),
                         child: SGLTextField(
                             textCapitalization: TextCapitalization.none,
                             focusNode: _passwordFocusNode,
@@ -127,7 +132,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                     alignment: Alignment.centerRight,
                     child: GreenButton(
                       title: 'LOGIN',
-                      onPressed: _nicknameController.value.text != '' && _passwordController.value.text != ''
+                      onPressed: _nicknameController.value.text != '' &&
+                              _passwordController.value.text != ''
                           ? () => _handleInput(context)
                           : null,
                     ),
@@ -145,15 +151,16 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsLoginBlocStateLoaded),
               ),
-              body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+              body: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200), child: body));
         },
       ),
     );
   }
 
   void _handleInput(BuildContext context) {
-    BlocProvider.of<SettingsLoginBloc>(context)
-        .add(SettingsLoginBlocEventLogin(_nicknameController.value.text, _passwordController.value.text));
+    BlocProvider.of<SettingsLoginBloc>(context).add(SettingsLoginBlocEventLogin(
+        _nicknameController.value.text, _passwordController.value.text));
   }
 
   @override

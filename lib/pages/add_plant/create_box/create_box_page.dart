@@ -48,7 +48,8 @@ class CreateBoxPage extends TraceableStatefulWidget {
 class _CreateBoxPageState extends State<CreateBoxPage> {
   final _nameController = TextEditingController();
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
 
   int _listener;
 
@@ -76,14 +77,15 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CreateBoxBloc, CreateBoxBlocState>(
-      cubit: BlocProvider.of<CreateBoxBloc>(context),
+      bloc: BlocProvider.of<CreateBoxBloc>(context),
       listener: (BuildContext context, CreateBoxBlocState state) async {
         if (state is CreateBoxBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.box));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.box));
         }
       },
       child: BlocBuilder<CreateBoxBloc, CreateBoxBlocState>(
-          cubit: BlocProvider.of<CreateBoxBloc>(context),
+          bloc: BlocProvider.of<CreateBoxBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is CreateBoxBlocStateDone) {
@@ -101,13 +103,16 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
                   iconColor: Colors.green,
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
   Widget _renderDone(CreateBoxBlocStateDone state) {
-    return Fullscreen(title: 'Done!', child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+    return Fullscreen(
+        title: 'Done!',
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm() {
@@ -130,7 +135,8 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
             child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
               child: SGLTextField(
                   hintText: CreateBoxPage.createBoxPageNewLabHint,
                   controller: _nameController,
@@ -146,7 +152,9 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
             alignment: Alignment.centerRight,
             child: GreenButton(
               title: CreateBoxPage.createBoxPageNewLabButton,
-              onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
+              onPressed: _nameController.value.text != ''
+                  ? () => _handleInput(context)
+                  : null,
             ),
           ),
         ),
@@ -155,13 +163,17 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToSelectDeviceEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is SelectBoxDeviceData) {
-        BlocProvider.of<CreateBoxBloc>(context)
-            .add(CreateBoxBlocEventCreate(_nameController.text, device: res.device, deviceBox: res.deviceBox));
+        BlocProvider.of<CreateBoxBloc>(context).add(CreateBoxBlocEventCreate(
+            _nameController.text,
+            device: res.device,
+            deviceBox: res.deviceBox));
       } else if (res == false) {
-        BlocProvider.of<CreateBoxBloc>(context).add(CreateBoxBlocEventCreate(_nameController.text));
+        BlocProvider.of<CreateBoxBloc>(context)
+            .add(CreateBoxBlocEventCreate(_nameController.text));
       }
     }));
   }

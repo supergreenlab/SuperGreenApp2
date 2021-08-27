@@ -128,22 +128,26 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-      cubit: BlocProvider.of<SelectDeviceBoxBloc>(context),
+      bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
       listener: (context, state) {
         if (state is SelectDeviceBoxBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.box));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.box));
         }
       },
       child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-          cubit: BlocProvider.of<SelectDeviceBoxBloc>(context),
+          bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is SelectDeviceBoxBlocStateInit) {
               body = FullscreenLoading(title: CommonL10N.loading);
             } else if (state is SelectDeviceBoxBlocStateLoading) {
-              body = FullscreenLoading(title: SelectDeviceBoxPage.selectDeviceBoxSettingUp);
+              body = FullscreenLoading(
+                  title: SelectDeviceBoxPage.selectDeviceBoxSettingUp);
             } else if (state is SelectDeviceBoxBlocStateDone) {
-              body = Fullscreen(title: CommonL10N.done, child: Icon(Icons.done, color: Color(0xff3bb30b), size: 100));
+              body = Fullscreen(
+                  title: CommonL10N.done,
+                  child: Icon(Icons.done, color: Color(0xff3bb30b), size: 100));
             } else {
               body = _renderBoxSelection(context, state);
             }
@@ -155,12 +159,14 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
-  Widget _renderBoxSelection(BuildContext context, SelectDeviceBoxBlocStateLoaded state) {
+  Widget _renderBoxSelection(
+      BuildContext context, SelectDeviceBoxBlocStateLoaded state) {
     return Column(
       children: <Widget>[
         AnimatedContainer(
@@ -182,7 +188,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   }
 
   Widget _renderBoxes(SelectDeviceBoxBlocStateLoaded state) {
-    int selectedLeds = state.boxes.map<int>((b) => b.leds.length).reduce((acc, b) => acc + b);
+    int selectedLeds =
+        state.boxes.map<int>((b) => b.leds.length).reduce((acc, b) => acc + b);
     bool hasAvailableLeds = selectedLeds < state.nLeds;
     return Expanded(
       child: Container(
@@ -195,27 +202,32 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             Widget title;
             if (state.boxes[index].enabled) {
               title = Text(SelectDeviceBoxPage.selectDeviceBoxAlreadyRunning,
-                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.w300));
+                  style: TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.w300));
             } else {
               title = Text(
                   hasAvailableLeds
                       ? SelectDeviceBoxPage.selectDeviceBoxAvailable
                       : SelectDeviceBoxPage.selectDeviceBoxNoMoreLED,
-                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.w300));
+                  style: TextStyle(
+                      color: Colors.green, fontWeight: FontWeight.w300));
             }
             return ListTile(
               onTap: () {
                 if (state.boxes[index].enabled == false) {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToSelectNewDeviceBoxEvent(state.device, index, futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToSelectNewDeviceBoxEvent(state.device, index,
+                          futureFn: (future) async {
                     dynamic done = await future;
                     if (done == true) {
-                      BlocProvider.of<SelectDeviceBoxBloc>(context).add(SelectDeviceBoxBlocEventSelectBox(index));
+                      BlocProvider.of<SelectDeviceBoxBloc>(context)
+                          .add(SelectDeviceBoxBlocEventSelectBox(index));
                     }
                   }));
                 } else {
-                  BlocProvider.of<SelectDeviceBoxBloc>(context)
-                      .add(SelectDeviceBoxBlocEventSelectBox(state.boxes[index].box));
+                  BlocProvider.of<SelectDeviceBoxBloc>(context).add(
+                      SelectDeviceBoxBlocEventSelectBox(
+                          state.boxes[index].box));
                 }
               },
               onLongPress: () {
@@ -226,7 +238,9 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SvgPicture.asset('assets/box_setup/icon_box.svg'),
-                  Text(SelectDeviceBoxPage.selectDeviceBoxNumber(state.boxes[index].box + 1),
+                  Text(
+                      SelectDeviceBoxPage.selectDeviceBoxNumber(
+                          state.boxes[index].box + 1),
                       style: TextStyle(fontWeight: FontWeight.w300)),
                 ],
               ),
@@ -247,7 +261,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(SelectDeviceBoxPage.selectDeviceBoxResetDialogTitle(index + 1, state.device.name)),
+            title: Text(SelectDeviceBoxPage.selectDeviceBoxResetDialogTitle(
+                index + 1, state.device.name)),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -265,7 +280,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<SelectDeviceBoxBloc>(context).add(SelectDeviceBoxBlocEventDelete(index));
+      BlocProvider.of<SelectDeviceBoxBloc>(context)
+          .add(SelectDeviceBoxBlocEventDelete(index));
     }
   }
 }

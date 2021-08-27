@@ -45,7 +45,8 @@ class DeviceWifiPage extends TraceableStatefulWidget {
     return Intl.message(
       'Couldn\'t find the controller\non your network.',
       name: 'deviceWifiPageNoControllerFound',
-      desc: 'Device wifi page controller not found on network after setting wifi credentials.',
+      desc:
+          'Device wifi page controller not found on network after setting wifi credentials.',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -54,7 +55,8 @@ class DeviceWifiPage extends TraceableStatefulWidget {
     return Intl.message(
       'Sometime it just takes a bit more time,\nretry search:',
       name: 'deviceWifiPageNotFoundRetry',
-      desc: 'Device wifi page controller not found on network after setting wifi credentials.',
+      desc:
+          'Device wifi page controller not found on network after setting wifi credentials.',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -117,7 +119,8 @@ class DeviceWifiPage extends TraceableStatefulWidget {
     return Intl.message(
       'Searching controller on network\nplease wait..',
       name: 'deviceWifiPageSearchingController',
-      desc: 'Loading message displayed when searching for controller on network',
+      desc:
+          'Loading message displayed when searching for controller on network',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -127,7 +130,8 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Try\n$tries/$totalTries',
       args: [tries, totalTries],
       name: 'deviceWifiPageSearchingControllerTries',
-      desc: 'Loading message displayed when searching for controller on network',
+      desc:
+          'Loading message displayed when searching for controller on network',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -142,7 +146,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   final FocusNode _ssidFocusNode = FocusNode();
   final FocusNode _passFocusNode = FocusNode();
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
   int _listener;
   bool _keyboardVisible = false;
 
@@ -168,14 +173,15 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DeviceWifiBloc>(context),
+      bloc: BlocProvider.of<DeviceWifiBloc>(context),
       listener: (BuildContext context, DeviceWifiBlocState state) {
         if (state is DeviceWifiBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.device));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: state.device));
         }
       },
       child: BlocBuilder<DeviceWifiBloc, DeviceWifiBlocState>(
-          cubit: BlocProvider.of<DeviceWifiBloc>(context),
+          bloc: BlocProvider.of<DeviceWifiBloc>(context),
           builder: (context, state) {
             bool canGoBack = !(state is DeviceWifiBlocStateSearching ||
                 state is DeviceWifiBlocStateLoading ||
@@ -198,7 +204,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                   iconColor: Colors.white,
                   hideBackButton: !canGoBack,
                 ),
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
@@ -228,7 +235,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             GreenButton(
               title: DeviceWifiPage.deviceWifiPageRetrySearch,
               onPressed: () {
-                BlocProvider.of<DeviceWifiBloc>(context).add(DeviceWifiBlocEventRetrySearch());
+                BlocProvider.of<DeviceWifiBloc>(context)
+                    .add(DeviceWifiBlocEventRetrySearch());
               },
             ),
             Padding(
@@ -242,10 +250,12 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
             GreenButton(
               title: DeviceWifiPage.deviceWifiPageRetryCredentials,
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToNewDeviceEvent(true, futureFn: (future) async {
+                BlocProvider.of<MainNavigatorBloc>(context).add(
+                    MainNavigateToNewDeviceEvent(true,
+                        futureFn: (future) async {
                   await future;
-                  BlocProvider.of<DeviceWifiBloc>(context).add(DeviceWifiBlocEventRetypeCredentials());
+                  BlocProvider.of<DeviceWifiBloc>(context)
+                      .add(DeviceWifiBlocEventRetypeCredentials());
                 }));
               },
             )
@@ -266,15 +276,20 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
                 height: _keyboardVisible ? 0 : 100,
                 color: Color(0xff0b6ab3),
               ),
-              _renderInput(context, DeviceWifiPage.deviceWifiPageWifiInputLabel, '...', _ssidController,
-                  onFieldSubmitted: (term) {
+              _renderInput(context, DeviceWifiPage.deviceWifiPageWifiInputLabel,
+                  '...', _ssidController, onFieldSubmitted: (term) {
                 _ssidFocusNode.unfocus();
                 FocusScope.of(context).requestFocus(_passFocusNode);
               },
                   focusNode: _ssidFocusNode,
-                  error: state.error == true ? DeviceWifiPage.deviceWifiPageErrorConnectionEmoji : ''),
-              _renderInput(context, DeviceWifiPage.deviceWifiPageWifiPasswordLabel, '...', _passController,
-                  onFieldSubmitted: (term) {
+                  error: state.error == true
+                      ? DeviceWifiPage.deviceWifiPageErrorConnectionEmoji
+                      : ''),
+              _renderInput(
+                  context,
+                  DeviceWifiPage.deviceWifiPageWifiPasswordLabel,
+                  '...',
+                  _passController, onFieldSubmitted: (term) {
                 _handleInput(context);
               }, focusNode: _passFocusNode),
             ],
@@ -285,7 +300,8 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GreenButton(
-              onPressed: _ssidController.text.length != 0 && _passController.text.length != 0
+              onPressed: _ssidController.text.length != 0 &&
+                      _passController.text.length != 0
                   ? () => _handleInput(context)
                   : null,
               title: 'OK',
@@ -300,11 +316,13 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
     return FullscreenLoading(
       title: DeviceWifiPage.deviceWifiPageSearchingController,
       percent: state.tries / state.totalTries,
-      circleText: DeviceWifiPage.deviceWifiPageSearchingControllerTries(state.tries, state.totalTries),
+      circleText: DeviceWifiPage.deviceWifiPageSearchingControllerTries(
+          state.tries, state.totalTries),
     );
   }
 
-  Widget _renderInput(BuildContext context, String title, String hint, TextEditingController controller,
+  Widget _renderInput(BuildContext context, String title, String hint,
+      TextEditingController controller,
       {Function(String) onFieldSubmitted, FocusNode focusNode, String error}) {
     return Column(children: [
       SectionTitle(

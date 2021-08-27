@@ -37,7 +37,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class FeedVentilationFormPage extends TraceableStatefulWidget {
   @override
-  _FeedVentilationFormPageState createState() => _FeedVentilationFormPageState();
+  _FeedVentilationFormPageState createState() =>
+      _FeedVentilationFormPageState();
 }
 
 class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
@@ -47,33 +48,37 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+      bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
         if (state is FeedVentilationFormBlocStateLoaded) {
           if (state.box.device != null) {
             Timer(Duration(milliseconds: 100), () {
-              BlocProvider.of<DeviceReachableListenerBloc>(context)
-                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
+              BlocProvider.of<DeviceReachableListenerBloc>(context).add(
+                  DeviceReachableListenerBlocEventLoadDevice(state.box.device));
             });
           }
         } else if (state is FeedVentilationFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
-          cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+          bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is FeedVentilationFormBlocStateInit) {
               body = FullscreenLoading(title: 'Loading..');
             } else if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: state.text);
-            } else if (state is FeedVentilationFormBlocStateLoaded && state.noDevice == true) {
+            } else if (state is FeedVentilationFormBlocStateLoaded &&
+                state.noDevice == true) {
               body = Stack(
                 children: <Widget>[
                   _renderParams(context, state),
                   Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white60),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white60),
                     child: Fullscreen(
                       title: 'Ventilation control\nrequires an SGL controller',
                       child: Column(
@@ -103,7 +108,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
               if (_reachable == false) {
                 String title = 'Looking for device..';
                 if (_usingWifi == false) {
-                  title = 'Device unreachable!\n(You\'re not connected to any wifi)';
+                  title =
+                      'Device unreachable!\n(You\'re not connected to any wifi)';
                 }
                 content = Stack(
                   children: <Widget>[
@@ -115,16 +121,23 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                             ? Icon(Icons.error, color: Colors.red, size: 100)
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Container(width: 50, height: 50, child: CircularProgressIndicator()),
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircularProgressIndicator()),
                               )),
                   ],
                 );
               }
-              body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-                  listener: (BuildContext context, DeviceReachableListenerBlocState reachableState) {
-                    if (reachableState is DeviceReachableListenerBlocStateDeviceReachable &&
+              body = BlocListener<DeviceReachableListenerBloc,
+                      DeviceReachableListenerBlocState>(
+                  listener: (BuildContext context,
+                      DeviceReachableListenerBlocState reachableState) {
+                    if (reachableState
+                            is DeviceReachableListenerBlocStateDeviceReachable &&
                         reachableState.device.id == state.box.device) {
-                      if (_reachable == reachableState.reachable && _usingWifi == reachableState.usingWifi) return;
+                      if (_reachable == reachableState.reachable &&
+                          _usingWifi == reachableState.usingWifi) return;
                       setState(() {
                         _reachable = reachableState.reachable;
                         _usingWifi = reachableState.usingWifi;
@@ -146,38 +159,45 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 fontSize: 35,
                 changed: changed,
                 valid: changed && _reachable,
-                hideBackButton: ((_reachable == false && changed) || state is FeedVentilationFormBlocStateLoading),
+                hideBackButton: ((_reachable == false && changed) ||
+                    state is FeedVentilationFormBlocStateLoading),
                 onOK: () {
-                  BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocEventCreate());
+                  BlocProvider.of<FeedVentilationFormBloc>(context)
+                      .add(FeedVentilationFormBlocEventCreate());
                 },
                 body: WillPopScope(
                   onWillPop: () async {
                     if (_reachable == false && changed) {
                       return false;
                     }
-                    if (state is FeedVentilationFormBlocStateLoaded && state.noDevice == true) {
+                    if (state is FeedVentilationFormBlocStateLoaded &&
+                        state.noDevice == true) {
                       return true;
                     }
                     if (changed) {
-                      BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocEventCancelEvent());
+                      BlocProvider.of<FeedVentilationFormBloc>(context)
+                          .add(FeedVentilationFormBlocEventCancelEvent());
                       return false;
                     }
                     return true;
                   },
-                  child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
+                  child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body),
                 ));
           }),
     );
   }
 
-  Widget _renderParams(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
+  Widget _renderParams(
+      BuildContext context, FeedVentilationFormBlocStateLoaded state) {
     if (state.isLegacy) {
       return FeedVentilationLegacyFormPage(state);
     }
     return _renderV3Params(context, state);
   }
 
-  Widget _renderV3Params(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
+  Widget _renderV3Params(
+      BuildContext context, FeedVentilationFormBlocStateLoaded state) {
     Widget body;
     if (isTimerSource(state.blowerRefSource.value)) {
       body = FeedVentilationTimerFormPage(state);
@@ -190,7 +210,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     } else {
       body = Fullscreen(
         child: Icon(Icons.upgrade),
-        title: 'Unknown blower reference source, you might need to upgrade the app.',
+        title:
+            'Unknown blower reference source, you might need to upgrade the app.',
       );
     }
     List<bool> selection = [
@@ -216,11 +237,14 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           isSelected: selection,
         ),
       )),
-      Expanded(child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body))
+      Expanded(
+          child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 200), child: body))
     ]);
   }
 
-  void _changeRefSource(BuildContext context, FeedVentilationFormBlocStateLoaded state, int index) async {
+  void _changeRefSource(BuildContext context,
+      FeedVentilationFormBlocStateLoaded state, int index) async {
     List<String> modeNames = [
       'Timer mode',
       'Manual mode',
@@ -231,7 +255,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerRefMin: state.blowerRefMin.copyWith(value: 0),
             blowerRefMax: state.blowerRefMax.copyWith(value: 100),
-            blowerRefSource: state.blowerRefSource.copyWith(value: TIMER_REF_OFFSET + state.box.deviceBox),
+            blowerRefSource: state.blowerRefSource
+                .copyWith(value: TIMER_REF_OFFSET + state.box.deviceBox),
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerRefMin: state.blowerRefMin.copyWith(value: 0),
@@ -241,12 +266,14 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerRefMin: state.blowerRefMin.copyWith(value: 21),
             blowerRefMax: state.blowerRefMax.copyWith(value: 30),
-            blowerRefSource: state.blowerRefSource.copyWith(value: TEMP_REF_OFFSET + state.box.deviceBox),
+            blowerRefSource: state.blowerRefSource
+                .copyWith(value: TEMP_REF_OFFSET + state.box.deviceBox),
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerRefMin: state.blowerRefMin.copyWith(value: 35),
             blowerRefMax: state.blowerRefMax.copyWith(value: 70),
-            blowerRefSource: state.blowerRefSource.copyWith(value: HUMI_REF_OFFSET + state.box.deviceBox),
+            blowerRefSource: state.blowerRefSource
+                .copyWith(value: HUMI_REF_OFFSET + state.box.deviceBox),
           ),
     ];
     bool confirm = await showDialog<bool>(
@@ -274,7 +301,8 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<FeedVentilationFormBloc>(context).add(eventFactory[index]());
+      BlocProvider.of<FeedVentilationFormBloc>(context)
+          .add(eventFactory[index]());
     }
   }
 }

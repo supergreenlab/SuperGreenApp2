@@ -40,10 +40,12 @@ class FeedVentilationManualFormPage extends TraceableStatefulWidget {
   const FeedVentilationManualFormPage(this.state, {Key key}) : super(key: key);
 
   @override
-  _FeedVentilationManualFormPageState createState() => _FeedVentilationManualFormPageState();
+  _FeedVentilationManualFormPageState createState() =>
+      _FeedVentilationManualFormPageState();
 }
 
-class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFormPage> {
+class _FeedVentilationManualFormPageState
+    extends State<FeedVentilationManualFormPage> {
   int _blowerValue = 0;
 
   @override
@@ -55,7 +57,7 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
@@ -68,8 +70,10 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MarkdownBody(
-                data: FeedVentilationManualFormPage.instructionsManualTimerModeDescription,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: FeedVentilationManualFormPage
+                    .instructionsManualTimerModeDescription,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
             SliderFormParam(
@@ -86,8 +90,10 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerMin: widget.state.blowerMin.copyWith(value: _blowerValue)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                    FeedVentilationFormBlocParamsChangedEvent(
+                        blowerMin: widget.state.blowerMin
+                            .copyWith(value: _blowerValue)));
               },
             ),
           ],

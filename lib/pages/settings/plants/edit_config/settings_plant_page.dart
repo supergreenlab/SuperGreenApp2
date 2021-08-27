@@ -27,7 +27,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   bool _public;
   Box _box;
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
 
   int _listener;
 
@@ -55,7 +56,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsPlantBloc>(context),
+      bloc: BlocProvider.of<SettingsPlantBloc>(context),
       listener: (BuildContext context, SettingsPlantBlocState state) async {
         if (state is SettingsPlantBlocStateLoaded) {
           _nameController = TextEditingController(text: state.plant.name);
@@ -64,20 +65,23 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
         } else if (state is SettingsPlantBlocStateDone) {
           if (_public) {
             Timer(const Duration(milliseconds: 1000), () {
-              BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+              BlocProvider.of<NotificationsBloc>(context)
+                  .add(NotificationsBlocEventRequestPermission());
             });
           }
           Timer(const Duration(milliseconds: 2000), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(mustPop: true));
           });
         } else if (state is SettingsPlantBlocStateError) {
           Timer(const Duration(milliseconds: 3000), () {
-            BlocProvider.of<SettingsPlantBloc>(context).add(SettingsPlantBlocEventInit());
+            BlocProvider.of<SettingsPlantBloc>(context)
+                .add(SettingsPlantBlocEventInit());
           });
         }
       },
       child: BlocBuilder<SettingsPlantBloc, SettingsPlantBlocState>(
-          cubit: BlocProvider.of<SettingsPlantBloc>(context),
+          bloc: BlocProvider.of<SettingsPlantBloc>(context),
           builder: (BuildContext context, SettingsPlantBlocState state) {
             Widget body;
             if (state is SettingsPlantBlocStateLoading) {
@@ -127,7 +131,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                     hideBackButton: state is SettingsPlantBlocStateDone,
                   ),
                   backgroundColor: Colors.white,
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
@@ -136,11 +141,16 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   Widget _renderDone(SettingsPlantBlocStateDone state) {
     String subtitle;
     if (state.archived ?? false) {
-      subtitle = 'Plant ${_nameController.value.text} on lab ${_box.name} archived:)';
+      subtitle =
+          'Plant ${_nameController.value.text} on lab ${_box.name} archived:)';
     } else {
-      subtitle = 'Plant ${_nameController.value.text} on lab ${_box.name} updated:)';
+      subtitle =
+          'Plant ${_nameController.value.text} on lab ${_box.name} updated:)';
     }
-    return Fullscreen(title: 'Done!', subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+    return Fullscreen(
+        title: 'Done!',
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderForm(BuildContext context, SettingsPlantBlocStateLoaded state) {
@@ -157,7 +167,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                 elevation: 5,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 24.0),
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 8.0, top: 24.0),
                 child: SGLTextField(
                     hintText: 'Ex: Gorilla Kush',
                     controller: _nameController,
@@ -167,7 +178,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               ),
               Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: _renderOptionCheckbx(context, 'Make this plant public', (bool newValue) {
+                  child: _renderOptionCheckbx(context, 'Make this plant public',
+                      (bool newValue) {
                     setState(() {
                       _public = newValue;
                     });
@@ -178,7 +190,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                 subtitle: Text('Tap to enable and edit settings'),
                 trailing: Icon(Icons.edit),
                 onTap: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlantAlerts(state.plant));
+                  BlocProvider.of<MainNavigatorBloc>(context)
+                      .add(MainNavigateToSettingsPlantAlerts(state.plant));
                 },
               ),
               SectionTitle(
@@ -230,7 +243,9 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             alignment: Alignment.centerRight,
             child: GreenButton(
               title: 'UPDATE PLANT',
-              onPressed: _nameController.value.text != '' ? () => _handleInput(context) : null,
+              onPressed: _nameController.value.text != ''
+                  ? () => _handleInput(context)
+                  : null,
             ),
           ),
         ),
@@ -239,7 +254,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   }
 
   void _handleChangeBox(BuildContext context) async {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectBoxEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToSelectBoxEvent(futureFn: (future) async {
       dynamic res = await future;
       if (res is Box) {
         setState(() {
@@ -250,14 +266,16 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   }
 
   void _handleInput(BuildContext context) async {
-    BlocProvider.of<SettingsPlantBloc>(context).add(SettingsPlantBlocEventUpdate(
+    BlocProvider.of<SettingsPlantBloc>(context)
+        .add(SettingsPlantBlocEventUpdate(
       _nameController.text,
       _public,
       _box,
     ));
   }
 
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -274,7 +292,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               child: MarkdownBody(
                 fitContent: true,
                 data: text,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 14)),
               ),
             ),
           ),
@@ -315,7 +334,8 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<SettingsPlantBloc>(context).add(SettingsPlantBlocEventArchive());
+      BlocProvider.of<SettingsPlantBloc>(context)
+          .add(SettingsPlantBlocEventArchive());
     }
   }
 
@@ -344,11 +364,14 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 
   Widget _renderError(BuildContext context, SettingsPlantBlocStateError state) {
-    return Fullscreen(title: state.message, child: Icon(Icons.error, color: Colors.red, size: 100));
+    return Fullscreen(
+        title: state.message,
+        child: Icon(Icons.error, color: Colors.red, size: 100));
   }
 }

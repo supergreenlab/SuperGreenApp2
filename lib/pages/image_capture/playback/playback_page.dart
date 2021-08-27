@@ -51,12 +51,12 @@ class _PlaybackPageState extends State<PlaybackPage> {
   Widget build(BuildContext context) {
     return Material(
       child: BlocListener(
-        cubit: BlocProvider.of<PlaybackBloc>(context),
+        bloc: BlocProvider.of<PlaybackBloc>(context),
         listener: (context, state) async {
           if (state is PlaybackBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
-              _videoPlayerController =
-                  VideoPlayerController.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)));
+              _videoPlayerController = VideoPlayerController.file(
+                  File(FeedMedias.makeAbsoluteFilePath(state.filePath)));
               await _videoPlayerController.initialize();
               _videoPlayerController.play();
               _videoPlayerController.setLooping(true);
@@ -65,7 +65,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
           }
         },
         child: BlocBuilder<PlaybackBloc, PlaybackBlocState>(
-            cubit: BlocProvider.of<PlaybackBloc>(context),
+            bloc: BlocProvider.of<PlaybackBloc>(context),
             builder: (context, state) {
               return _renderPlayer(context, state);
             }),
@@ -75,7 +75,8 @@ class _PlaybackPageState extends State<PlaybackPage> {
 
   Widget _renderPlayer(BuildContext context, PlaybackBlocState state) {
     if (state.isVideo) {
-      if (_videoPlayerController == null || !_videoPlayerController.value.initialized) {
+      if (_videoPlayerController == null ||
+          !_videoPlayerController.value.isInitialized) {
         return Container();
       }
     }
@@ -115,23 +116,31 @@ class _PlaybackPageState extends State<PlaybackPage> {
     );
   }
 
-  Widget _renderVideoPlayer(BuildContext context, PlaybackBlocState state, BoxConstraints constraints) {
-    double width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
+  Widget _renderVideoPlayer(BuildContext context, PlaybackBlocState state,
+      BoxConstraints constraints) {
+    double width =
+        constraints.maxHeight * _videoPlayerController.value.aspectRatio;
     double height = constraints.maxHeight;
     return Stack(children: [
       Positioned(
           left: (constraints.maxWidth - width) / 2,
           top: (constraints.maxHeight - height) / 2,
-          child: SizedBox(width: width, height: height, child: VideoPlayer(_videoPlayerController))),
+          child: SizedBox(
+              width: width,
+              height: height,
+              child: VideoPlayer(_videoPlayerController))),
     ]);
   }
 
-  Widget _renderPicturePlayer(BuildContext context, PlaybackBlocState state, BoxConstraints constraints) {
+  Widget _renderPicturePlayer(BuildContext context, PlaybackBlocState state,
+      BoxConstraints constraints) {
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child:
-            FittedBox(fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)))));
+        child: FittedBox(
+            fit: BoxFit.contain,
+            child: Image.file(
+                File(FeedMedias.makeAbsoluteFilePath(state.filePath)))));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
@@ -141,7 +150,9 @@ class _PlaybackPageState extends State<PlaybackPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: FittedBox(
-                    fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath)))))),
+                    fit: BoxFit.contain,
+                    child: Image.file(File(
+                        FeedMedias.makeAbsoluteFilePath(state.overlayPath)))))),
         Positioned(
           left: 30,
           right: 30,
@@ -163,7 +174,8 @@ class _PlaybackPageState extends State<PlaybackPage> {
   Widget _renderCloseButton(BuildContext context) {
     return RawMaterialButton(
       onPressed: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+        BlocProvider.of<MainNavigatorBloc>(context)
+            .add(MainNavigatorActionPop());
       },
       shape: new CircleBorder(),
       child: new Icon(
@@ -174,18 +186,23 @@ class _PlaybackPageState extends State<PlaybackPage> {
     );
   }
 
-  List<Widget> _renderPreviewMode(BuildContext context, PlaybackBlocState state) {
+  List<Widget> _renderPreviewMode(
+      BuildContext context, PlaybackBlocState state) {
     return [
       RawMaterialButton(
-        child: Text(state.cancelButton, style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(state.cancelButton,
+            style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: false));
         },
       ),
       RawMaterialButton(
-        child: Text(state.okButton, style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(state.okButton,
+            style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: true));
         },
       ),
     ];

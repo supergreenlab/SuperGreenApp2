@@ -40,7 +40,7 @@ class _TipPageState extends State<TipPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TipBloc, TipBlocState>(
-        cubit: BlocProvider.of<TipBloc>(context),
+        bloc: BlocProvider.of<TipBloc>(context),
         builder: (BuildContext context, TipBlocState state) {
           String title = 'Tips';
           Widget body;
@@ -55,7 +55,8 @@ class _TipPageState extends State<TipPage> {
                     itemCount: state.tips.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      return _renderArticle(context, state.tips[index], state.tips[index]['article']);
+                      return _renderArticle(context, state.tips[index],
+                          state.tips[index]['article']);
                     },
                     onIndexChanged: (index) {
                       setState(() {
@@ -65,7 +66,8 @@ class _TipPageState extends State<TipPage> {
                     pagination: state.tips.length > 1
                         ? SwiperPagination(
                             builder: new DotSwiperPaginationBuilder(
-                                color: Color(0xffdedede), activeColor: Color(0xff3bb30b)),
+                                color: Color(0xffdedede),
+                                activeColor: Color(0xff3bb30b)),
                           )
                         : null,
                     loop: false,
@@ -84,7 +86,8 @@ class _TipPageState extends State<TipPage> {
             body: Column(
               children: <Widget>[
                 Expanded(
-                  child: AnimatedSwitcher(duration: Duration(microseconds: 200), child: body),
+                  child: AnimatedSwitcher(
+                      duration: Duration(microseconds: 200), child: body),
                 ),
                 _renderBottomBar(context, state),
               ],
@@ -93,7 +96,8 @@ class _TipPageState extends State<TipPage> {
         });
   }
 
-  Widget _renderArticle(BuildContext context, Map<String, dynamic> tip, Map<String, dynamic> article) {
+  Widget _renderArticle(BuildContext context, Map<String, dynamic> tip,
+      Map<String, dynamic> article) {
     List<Widget> sections = [
       _renderSection(tip, article, article['intro']),
     ];
@@ -112,24 +116,30 @@ class _TipPageState extends State<TipPage> {
     ]);
   }
 
-  Widget _renderSection(Map<String, dynamic> tip, Map<String, dynamic> article, Map<String, dynamic> section) {
+  Widget _renderSection(Map<String, dynamic> tip, Map<String, dynamic> article,
+      Map<String, dynamic> section) {
     String slug = _slug(article);
     String mediaPath =
         'https://tipapi.supergreenlab.com/a/${tip['user']}/${tip['repo']}/${tip['branch']}/s/$slug/${section['image']['url']}';
     return Column(
       children: <Widget>[
         (section['title'] != null && section['title'].length > 0)
-            ? Text(section['title'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+            ? Text(section['title'],
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
             : Container(),
         LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) =>
-              SizedBox(width: constraints.maxWidth, height: 300, child: _renderMedia(mediaPath)),
+              SizedBox(
+                  width: constraints.maxWidth,
+                  height: 300,
+                  child: _renderMedia(mediaPath)),
         ),
         Padding(
           padding: const EdgeInsets.all(24.0),
           child: MarkdownBody(
             data: section['text'],
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
       ],
@@ -142,12 +152,14 @@ class _TipPageState extends State<TipPage> {
       return Image.network(
         path,
         fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent loadingProgress) {
           if (loadingProgress == null) return child;
           return FullscreenLoading(
               percent: loadingProgress.expectedTotalBytes == null
                   ? null
-                  : loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                  : loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes);
         },
       );
     }
@@ -188,7 +200,8 @@ class _TipPageState extends State<TipPage> {
                             });
                           }),
                     ),
-                    Text('Don’t show me this again', style: TextStyle(color: Colors.black)),
+                    Text('Don’t show me this again',
+                        style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ),
@@ -199,7 +212,8 @@ class _TipPageState extends State<TipPage> {
                 if (dontShow) {
                   BlocProvider.of<TipBloc>(context).add(TipBlocEventDone());
                 }
-                BlocProvider.of<MainNavigatorBloc>(context).add(state.nextRoute);
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(state.nextRoute);
               },
             ),
           ],

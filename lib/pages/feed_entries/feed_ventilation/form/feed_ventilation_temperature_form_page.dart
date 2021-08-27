@@ -39,13 +39,16 @@ class FeedVentilationTemperatureFormPage extends TraceableStatefulWidget {
 
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationTemperatureFormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationTemperatureFormPage(this.state, {Key key})
+      : super(key: key);
 
   @override
-  _FeedVentilationTemperatureFormPageState createState() => _FeedVentilationTemperatureFormPageState();
+  _FeedVentilationTemperatureFormPageState createState() =>
+      _FeedVentilationTemperatureFormPageState();
 }
 
-class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemperatureFormPage> {
+class _FeedVentilationTemperatureFormPageState
+    extends State<FeedVentilationTemperatureFormPage> {
   int _blowerMin = 0;
   int _blowerMax = 0;
   int _blowerRefMin = 0;
@@ -64,7 +67,7 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
   Widget build(BuildContext context) {
     String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
@@ -80,28 +83,38 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MarkdownBody(
-                data: FeedVentilationTemperatureFormPage.instructionsBlowerTemperatureModeDescription,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: FeedVentilationTemperatureFormPage
+                    .instructionsBlowerTemperatureModeDescription,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
             Column(
               children: [
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(children: [
                           Text(
                             'Low ',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blue),
                           ),
                           Text(
                             'temperature settings',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black87),
                           ),
                         ]),
-                        Text('Current box temperature: ${_tempUnit(widget.state.temperature.value.toDouble())}$unit'),
+                        Text(
+                            'Current box temperature: ${_tempUnit(widget.state.temperature.value.toDouble())}$unit'),
                       ],
                     )),
                 NumberFormParam(
@@ -115,13 +128,16 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                     setState(() {
                       _blowerRefMin = newValue.toInt();
                     });
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerRefMin: widget.state.blowerRefMin.copyWith(value: newValue.toInt())));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerRefMin: widget.state.blowerRefMin
+                                .copyWith(value: newValue.toInt())));
                   },
                 ),
                 SliderFormParam(
                   key: Key('blower_temp_min'),
-                  title: 'Blower power at ${_tempUnit(_blowerRefMin.toDouble())}$unit',
+                  title:
+                      'Blower power at ${_tempUnit(_blowerRefMin.toDouble())}$unit',
                   icon: 'assets/feed_form/icon_blower.svg',
                   value: _blowerMin.toDouble(),
                   min: 0,
@@ -133,8 +149,10 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                     });
                   },
                   onChangeEnd: (double newValue) {
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMin: widget.state.blowerMin.copyWith(value: _blowerMin)));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerMin: widget.state.blowerMin
+                                .copyWith(value: _blowerMin)));
                   },
                 ),
               ],
@@ -142,21 +160,29 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
             Column(
               children: [
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(children: [
                           Text(
                             'High ',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.red),
                           ),
                           Text(
                             'temperature settings',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black87),
                           ),
                         ]),
-                        Text('Current box temperature: ${_tempUnit(widget.state.temperature.value.toDouble())}$unit'),
+                        Text(
+                            'Current box temperature: ${_tempUnit(widget.state.temperature.value.toDouble())}$unit'),
                       ],
                     )),
                 NumberFormParam(
@@ -170,13 +196,16 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                     setState(() {
                       _blowerRefMax = newValue.toInt();
                     });
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerRefMax: widget.state.blowerRefMax.copyWith(value: newValue.toInt())));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerRefMax: widget.state.blowerRefMax
+                                .copyWith(value: newValue.toInt())));
                   },
                 ),
                 SliderFormParam(
                   key: Key('blower_temp_max'),
-                  title: 'Blower power at ${_tempUnit(_blowerRefMax.toDouble())}$unit',
+                  title:
+                      'Blower power at ${_tempUnit(_blowerRefMax.toDouble())}$unit',
                   icon: 'assets/feed_form/icon_blower.svg',
                   value: _blowerMax.toDouble(),
                   min: 0,
@@ -188,8 +217,10 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                     });
                   },
                   onChangeEnd: (double newValue) {
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMax: widget.state.blowerMax.copyWith(value: _blowerMax)));
+                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                        FeedVentilationFormBlocParamsChangedEvent(
+                            blowerMax: widget.state.blowerMax
+                                .copyWith(value: _blowerMax)));
                   },
                 ),
               ],

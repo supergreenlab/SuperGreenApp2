@@ -56,7 +56,8 @@ class FeedLightFormPage extends TraceableStatefulWidget {
     return Intl.message(
       'Dimming control\nrequires an SGL controller',
       name: 'feedLightFormPageControllerRequired',
-      desc: 'Fullscreen message displayed with no controller is available for light control',
+      desc:
+          'Fullscreen message displayed with no controller is available for light control',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -103,12 +104,12 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<FeedLightFormBloc>(context),
+      bloc: BlocProvider.of<FeedLightFormBloc>(context),
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
           Timer(Duration(milliseconds: 100), () {
-            BlocProvider.of<DeviceReachableListenerBloc>(context)
-                .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
+            BlocProvider.of<DeviceReachableListenerBloc>(context).add(
+                DeviceReachableListenerBlocEventLoadDevice(state.box.device));
           });
           setState(() {
             values = List.from(state.values);
@@ -118,21 +119,24 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             loading = state.index;
           });
         } else if (state is FeedLightFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(mustPop: true, param: state.feedEntry));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigatorActionPop(mustPop: true, param: state.feedEntry));
         }
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
-          cubit: BlocProvider.of<FeedLightFormBloc>(context),
-          buildWhen: (FeedLightFormBlocState oldState, FeedLightFormBlocState newState) {
+          bloc: BlocProvider.of<FeedLightFormBloc>(context),
+          buildWhen: (FeedLightFormBlocState oldState,
+              FeedLightFormBlocState newState) {
             return !(newState is FeedLightFormBlocStateLightsLoading);
           },
           builder: (context, state) {
             Widget body;
             if (state is FeedLightFormBlocStateLoading) {
-              body = FullscreenLoading(title: FeedLightFormPage.feedLightFormPageSaving);
+              body = FullscreenLoading(
+                  title: FeedLightFormPage.feedLightFormPageSaving);
             } else if (state is FeedLightFormBlocStateCancelling) {
-              body = FullscreenLoading(title: FeedLightFormPage.feedLightFormPageCancelling);
+              body = FullscreenLoading(
+                  title: FeedLightFormPage.feedLightFormPageCancelling);
             } else if (state is FeedLightFormBlocStateNoDevice) {
               body = Stack(
                 children: <Widget>[
@@ -141,9 +145,12 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                     itemBuilder: _renderLightParam,
                   ),
                   Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white60),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white60),
                     child: Fullscreen(
-                      title: FeedLightFormPage.feedLightFormPageControllerRequired,
+                      title:
+                          FeedLightFormPage.feedLightFormPageControllerRequired,
                       child: Column(
                         children: <Widget>[
                           GreenButton(
@@ -174,7 +181,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               if (_reachable == false) {
                 String title = 'Looking for device..';
                 if (_usingWifi == false) {
-                  title = 'Device unreachable!\n(You\'re not connected to any wifi)';
+                  title =
+                      'Device unreachable!\n(You\'re not connected to any wifi)';
                 }
                 content = Stack(
                   children: <Widget>[
@@ -186,17 +194,24 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                             ? Icon(Icons.error, color: Colors.red, size: 100)
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Container(width: 50, height: 50, child: CircularProgressIndicator()),
+                                child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: CircularProgressIndicator()),
                               )),
                   ],
                 );
               }
-              body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
-                  listener: (BuildContext context, DeviceReachableListenerBlocState listenerState) {
+              body = BlocListener<DeviceReachableListenerBloc,
+                      DeviceReachableListenerBlocState>(
+                  listener: (BuildContext context,
+                      DeviceReachableListenerBlocState listenerState) {
                     if (state is FeedLightFormBlocStateLightsLoaded) {
-                      if (listenerState is DeviceReachableListenerBlocStateDeviceReachable &&
+                      if (listenerState
+                              is DeviceReachableListenerBlocStateDeviceReachable &&
                           listenerState.device.id == state.box.device) {
-                        if (_reachable == listenerState.reachable && _usingWifi == listenerState.usingWifi) return;
+                        if (_reachable == listenerState.reachable &&
+                            _usingWifi == listenerState.usingWifi) return;
                         setState(() {
                           _reachable = listenerState.reachable;
                           _usingWifi = listenerState.usingWifi;
@@ -215,7 +230,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                   state is FeedLightFormBlocStateLoading ||
                   state is FeedLightFormBlocStateCancelling),
               onOK: () {
-                BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocEventCreate(values));
+                BlocProvider.of<FeedLightFormBloc>(context)
+                    .add(FeedLightFormBlocEventCreate(values));
               },
               body: WillPopScope(
                 onWillPop: () async {
@@ -226,12 +242,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                     return true;
                   }
                   if (changed) {
-                    BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocEventCancel());
+                    BlocProvider.of<FeedLightFormBloc>(context)
+                        .add(FeedLightFormBlocEventCancel());
                     return false;
                   }
                   return true;
                 },
-                child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
+                child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body),
               ),
             );
           }),
@@ -254,7 +272,8 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         });
       },
       onChangeEnd: (double value) {
-        BlocProvider.of<FeedLightFormBloc>(context).add(FeedLightFormBlocValueChangedEvent(i, value.round()));
+        BlocProvider.of<FeedLightFormBloc>(context)
+            .add(FeedLightFormBlocValueChangedEvent(i, value.round()));
       },
     );
   }

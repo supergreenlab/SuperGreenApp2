@@ -33,7 +33,8 @@ class User extends Equatable {
   User({this.id, this.nickname, this.pic});
 
   factory User.fromMap(Map<String, dynamic> userMap) {
-    return User(id: userMap['id'], nickname: userMap['nickname'], pic: userMap['pic']);
+    return User(
+        id: userMap['id'], nickname: userMap['nickname'], pic: userMap['pic']);
   }
 
   @override
@@ -44,12 +45,14 @@ class UsersAPI {
   bool get loggedIn => AppDB().getAppData().jwt != null;
 
   Future login(String nickname, String password) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/login',
-        headers: {'Content-Type': 'application/json'},
-        body: JsonEncoder().convert({
-          'handle': nickname,
-          'password': password,
-        }));
+    Response resp = await BackendAPI()
+        .apiClient
+        .post(Uri.parse('${BackendAPI().serverHost}/login'),
+            headers: {'Content-Type': 'application/json'},
+            body: JsonEncoder().convert({
+              'handle': nickname,
+              'password': password,
+            }));
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('Access denied: ${resp.body}');
     }
@@ -57,14 +60,16 @@ class UsersAPI {
   }
 
   Future createUser(String nickname, String password) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/user',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JsonEncoder().convert({
-          'nickname': nickname,
-          'password': password,
-        }));
+    Response resp = await BackendAPI()
+        .apiClient
+        .post(Uri.parse('${BackendAPI().serverHost}/user'),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JsonEncoder().convert({
+              'nickname': nickname,
+              'password': password,
+            }));
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('CreateUser failed with error: ${resp.body}');
     }
@@ -72,7 +77,7 @@ class UsersAPI {
 
   Future uploadProfilePic(File file) async {
     Response resp = await BackendAPI().apiClient.post(
-      '${BackendAPI().serverHost}/profilePicUploadURL',
+      Uri.parse('${BackendAPI().serverHost}/profilePicUploadURL'),
       headers: {
         'Content-Type': 'application/json',
         'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -84,27 +89,34 @@ class UsersAPI {
     Map<String, dynamic> uploadUrl = JsonDecoder().convert(resp.body);
 
     if (await file.exists()) {
-      Response resp = await BackendAPI().storageClient.put('${BackendAPI().storageServerHost}${uploadUrl['filePath']}',
-          body: file.readAsBytesSync(), headers: {'Host': BackendAPI().storageServerHostHeader});
+      Response resp = await BackendAPI().storageClient.put(
+          Uri.parse(
+              '${BackendAPI().storageServerHost}${uploadUrl['filePath']}'),
+          body: file.readAsBytesSync(),
+          headers: {'Host': BackendAPI().storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
         Logger.throwError('Upload failed with error: ${resp.body}',
             data: {"filePath": file.path, "fileSize": file.lengthSync()});
       }
     }
     try {
-      await BackendAPI().apiClient.put('${BackendAPI().serverHost}/user',
+      await BackendAPI().apiClient.put(
+          Uri.parse('${BackendAPI().serverHost}/user'),
           headers: {
             'Content-Type': 'application/json',
             'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
           },
-          body: JsonEncoder().convert({'pic': Uri.parse(uploadUrl['filePath']).path.split('/')[2]}));
+          body: JsonEncoder().convert(
+              {'pic': Uri.parse(uploadUrl['filePath']).path.split('/')[2]}));
     } catch (e, trace) {
       Logger.logError(e, trace, fwdThrow: true);
     }
   }
 
   Future<User> me() async {
-    Response resp = await BackendAPI().apiClient.get('${BackendAPI().serverHost}/users/me', headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .get(Uri.parse('${BackendAPI().serverHost}/users/me'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });

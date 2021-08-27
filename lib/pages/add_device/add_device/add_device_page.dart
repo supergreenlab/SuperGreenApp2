@@ -60,7 +60,7 @@ class AddDevicePage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddDeviceBloc, AddDeviceBlocState>(
-        cubit: BlocProvider.of<AddDeviceBloc>(context),
+        bloc: BlocProvider.of<AddDeviceBloc>(context),
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
               'Add new controller',
@@ -77,11 +77,13 @@ class AddDevicePage extends TraceableStatelessWidget {
                     'Choose this option if the controller is brand new or using it\'s own wifi (ie. if you can see a 🤖🍁 wifi).',
                     'CONNECT CONTROLLER',
                     () => _login(context, state, () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
+                          BlocProvider.of<MainNavigatorBloc>(context).add(
+                              MainNavigateToNewDeviceEvent(false,
+                                  futureFn: (future) async {
                             Device device = await future;
                             if (device != null) {
-                              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+                              BlocProvider.of<MainNavigatorBloc>(context)
+                                  .add(MainNavigatorActionPop(param: device));
                             }
                           }));
                         })),
@@ -91,11 +93,13 @@ class AddDevicePage extends TraceableStatelessWidget {
                     'assets/box_setup/icon_controller.svg',
                     'Choose this option if the controller is already running and connected to your home wifi.',
                     'SEARCH CONTROLLER', () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigateToExistingDeviceEvent(
+                          futureFn: (future) async {
                     Device device = await future;
                     if (device != null) {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorActionPop(param: device));
                     }
                   }));
                 }),
@@ -103,8 +107,8 @@ class AddDevicePage extends TraceableStatelessWidget {
             )));
   }
 
-  Widget _renderChoice(
-      BuildContext context, String title, String icon, String description, String buttonTitle, Function onPressed) {
+  Widget _renderChoice(BuildContext context, String title, String icon,
+      String description, String buttonTitle, Function onPressed) {
     return Column(children: [
       SectionTitle(
         title: title,
@@ -130,7 +134,8 @@ class AddDevicePage extends TraceableStatelessWidget {
     ]);
   }
 
-  void _login(BuildContext context, AddDeviceBlocState state, Function doneFn) async {
+  void _login(
+      BuildContext context, AddDeviceBlocState state, Function doneFn) async {
     if (state.loggedIn) {
       doneFn();
       return;
@@ -159,7 +164,8 @@ class AddDevicePage extends TraceableStatelessWidget {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {
           doneFn();

@@ -94,7 +94,8 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
 
   bool _showSelector = false;
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
+  KeyboardVisibilityNotification _keyboardVisibility =
+      KeyboardVisibilityNotification();
   int _listener;
   bool _keyboardVisible = false;
 
@@ -130,20 +131,24 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
         return true;
       },
       child: BlocListener(
-          cubit: BlocProvider.of<FeedMeasureFormBloc>(context),
+          bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
           listener: (BuildContext context, FeedMeasureFormBlocState state) {
             if (state is FeedMeasureFormBlocStateDone) {
-              BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+              BlocProvider.of<TowelieBloc>(context).add(
+                  TowelieBlocEventFeedEntryCreated(
+                      state.plant, state.feedEntry));
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigatorActionPop(mustPop: true));
             }
           },
           child: BlocBuilder<FeedMeasureFormBloc, FeedMeasureFormBlocState>(
-              cubit: BlocProvider.of<FeedMeasureFormBloc>(context),
+              bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
               builder: (context, state) {
                 String title = '🍌';
                 Widget body;
                 if (_showSelector && state is FeedMeasureFormBlocStateLoaded) {
-                  body = FeedMeasurePreviousSelector(state.measures, (FeedMedia fm) {
+                  body = FeedMeasurePreviousSelector(state.measures,
+                      (FeedMedia fm) {
                     setState(() {
                       _previous = fm;
                       _showSelector = false;
@@ -180,17 +185,22 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                       changed: _previous != null || _media != null,
                       valid: _media != null,
                       onOK: () => BlocProvider.of<FeedMeasureFormBloc>(context)
-                          .add(FeedMeasureFormBlocEventCreate(_textController.text, _previous, _media)),
+                          .add(FeedMeasureFormBlocEventCreate(
+                              _textController.text, _previous, _media)),
                       body: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: _keyboardVisible ? [_renderTextrea(context, state)] : _renderBody(context, state)));
+                          children: _keyboardVisible
+                              ? [_renderTextrea(context, state)]
+                              : _renderBody(context, state)));
                 }
-                return AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body);
+                return AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body);
               })),
     );
   }
 
-  List<Widget> _renderBody(BuildContext context, FeedMeasureFormBlocStateLoaded state) {
+  List<Widget> _renderBody(
+      BuildContext context, FeedMeasureFormBlocStateLoaded state) {
     List<Widget> content = [_renderCurrent(context)];
     if (state.measures.length > 0) {
       content.insert(
@@ -215,7 +225,8 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text(FeedMeasureFormPage.feedMeasureFormPageUnselectMeasureDialogTitle),
+                  title: Text(FeedMeasureFormPage
+                      .feedMeasureFormPageUnselectMeasureDialogTitle),
                   content: Text(''),
                   actions: <Widget>[
                     FlatButton(
@@ -245,12 +256,13 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
               _showSelector = true;
             });
           } else {
-            FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCapturePlaybackEvent(
-                media.filePath.value,
-                futureFn: ff.futureFn,
-                okButton: CommonL10N.ok,
-                cancelButton: CommonL10N.cancel));
+            FutureFn ff =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                    futureFn: ff.futureFn,
+                    okButton: CommonL10N.ok,
+                    cancelButton: CommonL10N.cancel));
             bool keep = await ff.future;
             if (keep == false) {
               setState(() {
@@ -265,8 +277,12 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
 
   Future<FeedMediasCompanion> _takePic(BuildContext context) async {
     FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(
-        futureFn: futureFn.futureFn, overlayPath: _previous?.filePath, videoEnabled: false, pickerEnabled: false));
+    BlocProvider.of<MainNavigatorBloc>(context).add(
+        MainNavigateToImageCaptureEvent(
+            futureFn: futureFn.futureFn,
+            overlayPath: _previous?.filePath,
+            videoEnabled: false,
+            pickerEnabled: false));
     List<FeedMediasCompanion> fm = await futureFn.future;
     if (fm == null || fm.length == 0) {
       return null;
@@ -287,7 +303,8 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text(FeedMeasureFormPage.feedMeasureFormPageDeletePicDialogTitle),
+                  title: Text(FeedMeasureFormPage
+                      .feedMeasureFormPageDeletePicDialogTitle),
                   content: Text(CommonL10N.confirmUnRevertableChange),
                   actions: <Widget>[
                     FlatButton(
@@ -320,12 +337,13 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
               });
             }
           } else {
-            FutureFn ff = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCapturePlaybackEvent(
-                media.filePath.value,
-                futureFn: ff.futureFn,
-                overlayPath: _previous?.filePath,
-                okButton: CommonL10N.ok));
+            FutureFn ff =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToImageCapturePlaybackEvent(media.filePath.value,
+                    futureFn: ff.futureFn,
+                    overlayPath: _previous?.filePath,
+                    okButton: CommonL10N.ok));
             bool keep = await ff.future;
             if (keep == true) {
             } else if (keep == false) {

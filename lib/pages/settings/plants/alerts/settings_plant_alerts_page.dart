@@ -93,7 +93,8 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
   }
 
   @override
-  _SettingsPlantAlertsPageState createState() => _SettingsPlantAlertsPageState();
+  _SettingsPlantAlertsPageState createState() =>
+      _SettingsPlantAlertsPageState();
 }
 
 class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
@@ -103,8 +104,9 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsPlantAlertsBloc>(context),
-      listener: (BuildContext context, SettingsPlantAlertsBlocState state) async {
+      bloc: BlocProvider.of<SettingsPlantAlertsBloc>(context),
+      listener:
+          (BuildContext context, SettingsPlantAlertsBlocState state) async {
         if (state is SettingsPlantAlertsBlocStateLoaded) {
           setState(() {
             this.enabled = state.enabled;
@@ -112,11 +114,12 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           });
         } else if (state is SettingsPlantAlertsBlocStateDone) {
           await Future.delayed(Duration(seconds: 2));
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<SettingsPlantAlertsBloc, SettingsPlantAlertsBlocState>(
-          cubit: BlocProvider.of<SettingsPlantAlertsBloc>(context),
+          bloc: BlocProvider.of<SettingsPlantAlertsBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is SettingsPlantAlertsBlocStateNotLoaded) {
@@ -171,17 +174,20 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
                     iconColor: Colors.white,
                     hideBackButton: state is SettingsPlantAlertsBlocStateDone,
                   ),
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
   }
 
   Widget _renderLoading() {
-    return FullscreenLoading(title: SettingsPlantAlertsPage.settingsPlantAlertPageLoading);
+    return FullscreenLoading(
+        title: SettingsPlantAlertsPage.settingsPlantAlertPageLoading);
   }
 
-  Widget _renderForm(BuildContext context, SettingsPlantAlertsBlocStateLoaded state) {
+  Widget _renderForm(
+      BuildContext context, SettingsPlantAlertsBlocStateLoaded state) {
     String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
     List<Widget> items = [
       Padding(
@@ -189,15 +195,18 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
         child: MarkdownBody(
           fitContent: true,
           data: SettingsPlantAlertsPage.settingsPlantAlertPageInstructions,
-          styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          styleSheet: MarkdownStyleSheet(
+              p: TextStyle(color: Colors.black, fontSize: 16)),
         ),
       ),
       Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _renderOptionCheckbx(context, 'Enable notifications', (bool newValue) {
+          child: _renderOptionCheckbx(context, 'Enable notifications',
+              (bool newValue) {
             setState(() {
               if (enabled == false && newValue == true) {
-                BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+                BlocProvider.of<NotificationsBloc>(context)
+                    .add(NotificationsBlocEventRequestPermission());
               }
               enabled = newValue;
             });
@@ -218,7 +227,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           child: MarkdownBody(
             fitContent: true,
             data: SettingsPlantAlertsPage.settingsDayAlertPageInstructions,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
         renderParameters(
@@ -267,7 +277,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           child: MarkdownBody(
             fitContent: true,
             data: SettingsPlantAlertsPage.settingsNightAlertPageInstructions,
-            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+            styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
         renderParameters(
@@ -326,8 +337,9 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               padding: const EdgeInsets.all(16.0),
               child: GreenButton(
                 onPressed: () {
-                  BlocProvider.of<SettingsPlantAlertsBloc>(context)
-                      .add(SettingsPlantAlertsBlocEventUpdateParameters(enabled, alertsSettings));
+                  BlocProvider.of<SettingsPlantAlertsBloc>(context).add(
+                      SettingsPlantAlertsBlocEventUpdateParameters(
+                          enabled, alertsSettings));
                 },
                 title: 'SAVE',
               ),
@@ -359,8 +371,10 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
             backgroundColor: color,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text('Minimum', style: TextStyle(fontWeight: FontWeight.bold)),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child:
+                Text('Minimum', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           renderNumberParam(
             value: min,
@@ -374,8 +388,10 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
             step: step,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Text('Maximum', style: TextStyle(fontWeight: FontWeight.bold)),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child:
+                Text('Maximum', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           renderNumberParam(
             value: max,
@@ -393,15 +409,23 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     );
   }
 
-  Widget renderNumberParam({int value, void onChange(int value), String displayFn(int value), String unit, int step}) {
+  Widget renderNumberParam(
+      {int value,
+      void onChange(int value),
+      String displayFn(int value),
+      String unit,
+      int step}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           ButtonTheme(
-              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+              padding: EdgeInsets.symmetric(
+                  vertical: 4.0,
+                  horizontal: 8.0), //adds padding inside the button
+              materialTapTargetSize: MaterialTapTargetSize
+                  .shrinkWrap, //limits the touch area to the button area
               height: 36,
               minWidth: 60, //wraps child's width
               child: FeedFormButton(
@@ -413,11 +437,15 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               )),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('${displayFn(value)}$unit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            child: Text('${displayFn(value)}$unit',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ),
           ButtonTheme(
-              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), //adds padding inside the button
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
+              padding: EdgeInsets.symmetric(
+                  vertical: 4.0,
+                  horizontal: 8.0), //adds padding inside the button
+              materialTapTargetSize: MaterialTapTargetSize
+                  .shrinkWrap, //limits the touch area to the button area
               height: 36,
               minWidth: 60, //wraps child's width
               child: FeedFormButton(
@@ -432,7 +460,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     );
   }
 
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget _renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -449,7 +478,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
               child: MarkdownBody(
                 fitContent: true,
                 data: text,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 14)),
               ),
             ),
           ),
@@ -458,7 +488,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     );
   }
 
-  Widget _renderNotLoaded(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
+  Widget _renderNotLoaded(
+      BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
     if (state.hasController == false) {
       return _renderNoDevice(context, state);
     } else if (state.isSync == false) {
@@ -476,7 +507,8 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     );
   }
 
-  Widget _renderNoDevice(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
+  Widget _renderNoDevice(
+      BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
     return Fullscreen(
       title: 'Alerts require a controller',
       child: Column(
@@ -489,10 +521,12 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           GreenButton(
             title: 'Lab settings',
             onPressed: () {
-              BlocProvider.of<MainNavigatorBloc>(context)
-                  .add(MainNavigateToSettingsBox(state.box, futureFn: (future) async {
+              BlocProvider.of<MainNavigatorBloc>(context).add(
+                  MainNavigateToSettingsBox(state.box,
+                      futureFn: (future) async {
                 await future;
-                BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
+                BlocProvider.of<SettingsPlantAlertsBloc>(context)
+                    .add(SettingsPlantAlertsBlocEventInit());
               }));
             },
           ),
@@ -501,13 +535,15 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     );
   }
 
-  Widget _renderNotSynced(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
+  Widget _renderNotSynced(
+      BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
     return FullscreenLoading(
       title: 'Waiting for controller to sync with backend..',
     );
   }
 
-  Widget _renderNotLoggedIn(BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
+  Widget _renderNotLoggedIn(
+      BuildContext context, SettingsPlantAlertsBlocStateNotLoaded state) {
     return Fullscreen(
       title: 'Please login to set your alerts.',
       child: Column(
@@ -520,9 +556,11 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
           GreenButton(
             title: 'Login/create account',
             onPressed: () {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToSettingsAuth(futureFn: (future) async {
                 await future;
-                BlocProvider.of<SettingsPlantAlertsBloc>(context).add(SettingsPlantAlertsBlocEventInit());
+                BlocProvider.of<SettingsPlantAlertsBloc>(context)
+                    .add(SettingsPlantAlertsBlocEventInit());
               }));
             },
           ),

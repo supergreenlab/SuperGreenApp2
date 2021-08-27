@@ -30,7 +30,7 @@ class SGLFeedPage extends TraceableStatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<SGLFeedBloc, SGLFeedBlocState>(
-        cubit: BlocProvider.of<SGLFeedBloc>(context),
+        bloc: BlocProvider.of<SGLFeedBloc>(context),
         builder: (BuildContext context, SGLFeedBlocState state) {
           return _renderFeed(context, state);
         },

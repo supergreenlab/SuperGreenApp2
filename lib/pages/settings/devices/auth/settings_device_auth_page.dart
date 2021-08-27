@@ -98,8 +98,9 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsDeviceAuthBloc>(context),
-      listener: (BuildContext context, SettingsDeviceAuthBlocState state) async {
+      bloc: BlocProvider.of<SettingsDeviceAuthBloc>(context),
+      listener:
+          (BuildContext context, SettingsDeviceAuthBlocState state) async {
         if (state is SettingsDeviceAuthBlocStateLoaded) {
           this.device = state.device;
         } else if (state is SettingsDeviceAuthBlocStateDoneAuth) {
@@ -107,7 +108,8 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
             this.done = true;
           });
           await Future.delayed(Duration(seconds: 2));
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
         } else if (state is SettingsDeviceAuthBlocStateAuthError) {
           setState(() {
             this.authError = true;
@@ -115,8 +117,9 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
         }
       },
       child: BlocBuilder<SettingsDeviceAuthBloc, SettingsDeviceAuthBlocState>(
-          cubit: BlocProvider.of<SettingsDeviceAuthBloc>(context),
-          buildWhen: (SettingsDeviceAuthBlocState s1, SettingsDeviceAuthBlocState s2) {
+          bloc: BlocProvider.of<SettingsDeviceAuthBloc>(context),
+          buildWhen:
+              (SettingsDeviceAuthBlocState s1, SettingsDeviceAuthBlocState s2) {
             return !(s2 is SettingsDeviceAuthBlocStateAuthError);
           },
           builder: (BuildContext context, SettingsDeviceAuthBlocState state) {
@@ -144,18 +147,24 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
                   hideBackButton: state is SettingsDeviceAuthBlocStateDoneAuth,
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
   Widget _renderDoneAuth(SettingsDeviceAuthBlocStateDoneAuth state) {
-    String subtitle = SettingsDeviceAuthPage.settingsDeviceAuthPageControllerDone(state.device.name);
+    String subtitle =
+        SettingsDeviceAuthPage.settingsDeviceAuthPageControllerDone(
+            state.device.name);
     return Fullscreen(
-        title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+        title: CommonL10N.done,
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
-  Widget _renderNeedsUpgrade(BuildContext context, SettingsDeviceAuthBlocStateLoaded state) {
+  Widget _renderNeedsUpgrade(
+      BuildContext context, SettingsDeviceAuthBlocStateLoaded state) {
     return Column(children: <Widget>[
       SectionTitle(
         title: 'Controller access control',
@@ -171,8 +180,10 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
               padding: const EdgeInsets.all(16.0),
               child: MarkdownBody(
                 fitContent: true,
-                data: SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordInstructionsNeedsUpgrade(),
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: SettingsDeviceAuthPage
+                    .settingsDeviceAuthPagePasswordInstructionsNeedsUpgrade(),
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
           ],
@@ -185,7 +196,8 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
             padding: const EdgeInsets.all(16.0),
             child: RedButton(
               onPressed: () {
-                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+                BlocProvider.of<MainNavigatorBloc>(context)
+                    .add(MainNavigatorActionPop());
               },
               title: 'GO BACK',
             ),
@@ -195,7 +207,8 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
     ]);
   }
 
-  Widget _renderForm(BuildContext context, SettingsDeviceAuthBlocStateLoaded state) {
+  Widget _renderForm(
+      BuildContext context, SettingsDeviceAuthBlocStateLoaded state) {
     List<Widget> fields = [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -250,8 +263,10 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
           ),
           authError
               ? Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8),
-                  child: Text(SettingsDeviceAuthPage.settingsDeviceAuthPageAuthError(),
+                  padding:
+                      const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8),
+                  child: Text(
+                      SettingsDeviceAuthPage.settingsDeviceAuthPageAuthError(),
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontStyle: FontStyle.italic,
@@ -324,8 +339,10 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
               padding: const EdgeInsets.all(16.0),
               child: MarkdownBody(
                 fitContent: true,
-                data: SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordInstructions(),
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: SettingsDeviceAuthPage
+                    .settingsDeviceAuthPagePasswordInstructions(),
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
           ),
@@ -334,13 +351,14 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
       ...fields,
       Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-        child: Text(SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordWarning(),
-            style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontStyle: FontStyle.italic,
-              fontSize: 13,
-              color: Colors.red,
-            )),
+        child:
+            Text(SettingsDeviceAuthPage.settingsDeviceAuthPagePasswordWarning(),
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 13,
+                  color: Colors.red,
+                )),
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -350,7 +368,8 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
             child: GreenButton(
               onPressed: isValid(state)
                   ? () {
-                      BlocProvider.of<SettingsDeviceAuthBloc>(context).add(SettingsDeviceAuthBlocEventSetAuth(
+                      BlocProvider.of<SettingsDeviceAuthBloc>(context)
+                          .add(SettingsDeviceAuthBlocEventSetAuth(
                         username: _usernameController.text,
                         password: _passwordController.text,
                         oldUsername: _oldusernameController.text,
@@ -367,9 +386,12 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
   }
 
   bool isValid(SettingsDeviceAuthBlocStateLoaded state) {
-    if (state.authSetup && !(_oldusernameController.text.length >= 4 && _oldpasswordController.text.length >= 4)) {
+    if (state.authSetup &&
+        !(_oldusernameController.text.length >= 4 &&
+            _oldpasswordController.text.length >= 4)) {
       return false;
     }
-    return _usernameController.text.length >= 4 && _passwordController.text.length >= 4;
+    return _usernameController.text.length >= 4 &&
+        _passwordController.text.length >= 4;
   }
 }

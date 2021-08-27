@@ -175,12 +175,13 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
     return BlocListener<SelectDeviceBloc, SelectDeviceBlocState>(
       listener: (BuildContext context, state) {
         if (state is SelectDeviceBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigatorActionPop(param: SelectBoxDeviceData(state.device, state.deviceBox)));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigatorActionPop(
+                  param: SelectBoxDeviceData(state.device, state.deviceBox)));
         }
       },
       child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
-          cubit: BlocProvider.of<SelectDeviceBloc>(context),
+          bloc: BlocProvider.of<SelectDeviceBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is SelectDeviceBlocStateDeviceListUpdated) {
@@ -201,32 +202,37 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       elevation: 5,
                     ),
                     Expanded(child: _deviceList(context, state)),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-                      FlatButton(
-                        textColor: Colors.red,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.close),
-                            Text(SelectDevicePage.selectDeviceSkipAddDevice),
-                          ],
-                        ),
-                        onPressed: () {
-                          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
-                        },
-                      ),
-                      FlatButton(
-                        textColor: Colors.blue,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.add),
-                            Text(SelectDevicePage.selectDeviceNewController),
-                          ],
-                        ),
-                        onPressed: () {
-                          _addNewDevice(context);
-                        },
-                      ),
-                    ])
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          FlatButton(
+                            textColor: Colors.red,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.close),
+                                Text(
+                                    SelectDevicePage.selectDeviceSkipAddDevice),
+                              ],
+                            ),
+                            onPressed: () {
+                              BlocProvider.of<MainNavigatorBloc>(context)
+                                  .add(MainNavigatorActionPop(param: false));
+                            },
+                          ),
+                          FlatButton(
+                            textColor: Colors.blue,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.add),
+                                Text(
+                                    SelectDevicePage.selectDeviceNewController),
+                              ],
+                            ),
+                            onPressed: () {
+                              _addNewDevice(context);
+                            },
+                          ),
+                        ])
                   ],
                 );
               } else {
@@ -246,7 +252,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
     );
   }
 
-  Widget _deviceList(BuildContext context, SelectDeviceBlocStateDeviceListUpdated state) {
+  Widget _deviceList(
+      BuildContext context, SelectDeviceBlocStateDeviceListUpdated state) {
     int i = 1;
     return ListView(
       children: state.devices
@@ -261,7 +268,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                   '${i++} - ${d.name}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                 ),
-                subtitle: Text(SelectDevicePage.selectDeviceListItemInstruction),
+                subtitle:
+                    Text(SelectDevicePage.selectDeviceListItemInstruction),
               ))
           .toList(),
     );
@@ -278,24 +286,30 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                   child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32.0, vertical: 24),
                     child: Column(
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(bottom: 24.0),
                           child: Text(
                             SelectDevicePage.selectDeviceNoController,
-                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200),
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.w200),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         Text(
                           SelectDevicePage.selectDeviceAddFirst,
-                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w300),
                           textAlign: TextAlign.center,
                         ),
                         Text(SelectDevicePage.selectDeviceAddFirstController,
-                            style: TextStyle(fontSize: 45, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
+                            style: TextStyle(
+                                fontSize: 45,
+                                fontWeight: FontWeight.w200,
+                                color: Color(0xff3bb30b))),
                       ],
                     ),
                   ),
@@ -309,7 +323,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       SelectDevicePage.selectDeviceOr,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
                     ),
                   ),
                   Row(
@@ -341,10 +356,14 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         Center(
           child: FlatButton(
             onPressed: () {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigatorActionPop(param: false));
             },
             child: Text(SelectDevicePage.selectDeviceContinueWithoutController,
-                style: TextStyle(decoration: TextDecoration.underline, fontSize: 15, color: Colors.grey)),
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 15,
+                    color: Colors.grey)),
           ),
         ),
       ],
@@ -352,7 +371,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
   }
 
   void _addNewDevice(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToAddDeviceEvent(futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToAddDeviceEvent(futureFn: (future) async {
       Device device = await future;
       if (device != null) {
         _selectDevice(context, device);
@@ -361,11 +381,12 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
   }
 
   void _selectDevice(BuildContext context, Device device) {
-    BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToSelectDeviceBoxEvent(device, futureFn: (future) async {
+    BlocProvider.of<MainNavigatorBloc>(context).add(
+        MainNavigateToSelectDeviceBoxEvent(device, futureFn: (future) async {
       dynamic deviceBox = await future;
       if (deviceBox is int) {
-        BlocProvider.of<SelectDeviceBloc>(context).add(SelectDeviceBlocEventSelect(device, deviceBox));
+        BlocProvider.of<SelectDeviceBloc>(context)
+            .add(SelectDeviceBlocEventSelect(device, deviceBox));
       }
     }));
   }
@@ -376,8 +397,11 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(SelectDevicePage.selectDeviceDeleteControllerDialogTitle(device.name)),
-            content: Text(SelectDevicePage.selectDeviceDeleteControllerDialogBody),
+            title: Text(
+                SelectDevicePage.selectDeviceDeleteControllerDialogTitle(
+                    device.name)),
+            content:
+                Text(SelectDevicePage.selectDeviceDeleteControllerDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -395,7 +419,8 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<SelectDeviceBloc>(context).add(SelectDeviceBlocEventDelete(device));
+      BlocProvider.of<SelectDeviceBloc>(context)
+          .add(SelectDeviceBlocEventDelete(device));
     }
   }
 }

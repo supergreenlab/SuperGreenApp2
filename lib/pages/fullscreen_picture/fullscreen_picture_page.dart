@@ -47,18 +47,20 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
   Widget build(BuildContext context) {
     return Material(
       child: BlocBuilder<FullscreenPictureBloc, FullscreenPictureBlocState>(
-          cubit: BlocProvider.of<FullscreenPictureBloc>(context),
+          bloc: BlocProvider.of<FullscreenPictureBloc>(context),
           builder: (context, state) {
             return LayoutBuilder(
               builder: (context, constraint) {
                 return Hero(
                     tag: 'Timelapse:${state.id}',
                     child: GestureDetector(onTap: () {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorActionPop());
                     }, child: LayoutBuilder(
                       builder: (context, constraints) {
                         Widget body;
-                        body = _renderPicturePlayer(context, state, constraints);
+                        body =
+                            _renderPicturePlayer(context, state, constraints);
                         return body;
                       },
                     )));
@@ -68,7 +70,8 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
     );
   }
 
-  Widget _renderPicturePlayer(BuildContext context, FullscreenPictureBlocState state, BoxConstraints constraints) {
+  Widget _renderPicturePlayer(BuildContext context,
+      FullscreenPictureBlocState state, BoxConstraints constraints) {
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
@@ -87,7 +90,9 @@ class _FullscreenPicturePageState extends State<FullscreenPicturePage> {
             _matrix = Matrix4.identity();
           });
         },
-        child: Transform(transform: _matrix, child: Container(color: Colors.black, child: picture)));
+        child: Transform(
+            transform: _matrix,
+            child: Container(color: Colors.black, child: picture)));
   }
 
   @override

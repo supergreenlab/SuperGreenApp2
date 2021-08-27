@@ -104,18 +104,20 @@ class DevicePairingPageState extends State<DevicePairingPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DevicePairingBloc>(context),
+      bloc: BlocProvider.of<DevicePairingBloc>(context),
       listener: (BuildContext context, DevicePairingBlocState state) async {
         if (state is DevicePairingBlocStateDone) {
           await Future.delayed(Duration(seconds: 2));
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true, param: state.device));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true, param: state.device));
         }
       },
       child: BlocBuilder<DevicePairingBloc, DevicePairingBlocState>(
-          cubit: BlocProvider.of<DevicePairingBloc>(context),
+          bloc: BlocProvider.of<DevicePairingBloc>(context),
           builder: (context, state) {
             Widget body;
-            if (state is DevicePairingBlocStateLoading || state is DevicePairingBlocStateInit) {
+            if (state is DevicePairingBlocStateLoading ||
+                state is DevicePairingBlocStateInit) {
               body = _renderLoading();
             } else if (state is DevicePairingBlocStateDone) {
               body = Fullscreen(
@@ -139,7 +141,8 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                     titleColor: Colors.white,
                     iconColor: Colors.white,
                   ),
-                  body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body)),
+                  body: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200), child: body)),
             );
           }),
     );
@@ -173,9 +176,11 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                   child: MarkdownBody(
                     fitContent: true,
                     data: state.needsUpgrade
-                        ? DevicePairingPage.devicePairingPageInstructionsNeedUpgrade
+                        ? DevicePairingPage
+                            .devicePairingPageInstructionsNeedUpgrade
                         : DevicePairingPage.devicePairingPageInstructions,
-                    styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Colors.black, fontSize: 16)),
                   ),
                 ),
               ),
@@ -186,11 +191,13 @@ class DevicePairingPageState extends State<DevicePairingPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 4, vertical: 16.0),
               child: RedButton(
                 onPressed: () {
-                  BlocProvider.of<MainNavigatorBloc>(context)
-                      .add(MainNavigatorActionPop(mustPop: true, param: state.device));
+                  BlocProvider.of<MainNavigatorBloc>(context).add(
+                      MainNavigatorActionPop(
+                          mustPop: true, param: state.device));
                 },
                 title: state.needsUpgrade ? 'I\'LL UPGRADE LATER' : 'SKIP',
               ),
@@ -202,7 +209,8 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                     child: GreenButton(
                       onPressed: () {
                         if (state.loggedIn) {
-                          BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
+                          BlocProvider.of<DevicePairingBloc>(context)
+                              .add(DevicePairingBlocEventPair());
                         } else {
                           _login(context);
                         }
@@ -222,8 +230,10 @@ class DevicePairingPageState extends State<DevicePairingPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(DevicePairingPage.devicePairingPagePleaseLoginDialogTitle),
-            content: Text(DevicePairingPage.devicePairingPagePleaseLoginDialogBody),
+            title:
+                Text(DevicePairingPage.devicePairingPagePleaseLoginDialogTitle),
+            content:
+                Text(DevicePairingPage.devicePairingPagePleaseLoginDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -241,10 +251,12 @@ class DevicePairingPageState extends State<DevicePairingPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {
-          BlocProvider.of<DevicePairingBloc>(context).add(DevicePairingBlocEventPair());
+          BlocProvider.of<DevicePairingBloc>(context)
+              .add(DevicePairingBlocEventPair());
         }
       }));
     }

@@ -80,7 +80,8 @@ class SettingsRemoteControlPage extends StatefulWidget {
   }
 
   @override
-  _SettingsRemoteControlPageState createState() => _SettingsRemoteControlPageState();
+  _SettingsRemoteControlPageState createState() =>
+      _SettingsRemoteControlPageState();
 }
 
 class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
@@ -89,18 +90,22 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsRemoteControlBloc>(context),
-      listener: (BuildContext context, SettingsRemoteControlBlocState state) async {
+      bloc: BlocProvider.of<SettingsRemoteControlBloc>(context),
+      listener:
+          (BuildContext context, SettingsRemoteControlBlocState state) async {
         if (state is SettingsRemoteControlBlocStateLoaded) {
           this.device = state.device;
         } else if (state is SettingsRemoteControlBlocStateDonePairing) {
           await Future.delayed(Duration(seconds: 2));
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
-      child: BlocBuilder<SettingsRemoteControlBloc, SettingsRemoteControlBlocState>(
-          cubit: BlocProvider.of<SettingsRemoteControlBloc>(context),
-          builder: (BuildContext context, SettingsRemoteControlBlocState state) {
+      child: BlocBuilder<SettingsRemoteControlBloc,
+              SettingsRemoteControlBlocState>(
+          bloc: BlocProvider.of<SettingsRemoteControlBloc>(context),
+          builder:
+              (BuildContext context, SettingsRemoteControlBlocState state) {
             Widget body;
             if (state is SettingsRemoteControlBlocStateDonePairing) {
               body = _renderDonePairing();
@@ -118,71 +123,87 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
-                  hideBackButton: state is SettingsRemoteControlBlocStateDonePairing,
+                  hideBackButton:
+                      state is SettingsRemoteControlBlocStateDonePairing,
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
 
   Widget _renderDonePairing() {
-    String subtitle = SettingsRemoteControlPage.settingsRemoteControlPageControllerDone(device.name);
+    String subtitle =
+        SettingsRemoteControlPage.settingsRemoteControlPageControllerDone(
+            device.name);
     return Fullscreen(
-        title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
+        title: CommonL10N.done,
+        subtitle: subtitle,
+        child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
-  Widget _renderForm(BuildContext context, SettingsRemoteControlBlocStateLoaded state) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-      SectionTitle(
-        title: "Remote control setup",
-        icon: 'assets/settings/icon_remotecontrol.svg',
-        backgroundColor: Color(0xff0b6ab3),
-        titleColor: Colors.white,
-        elevation: 5,
-      ),
-      Expanded(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: MarkdownBody(
-                fitContent: true,
-                data: state.needsUpgrade
-                    ? SettingsRemoteControlPage.settingsRemoteControlPageInstructionsNeedUpgrade
-                    : SettingsRemoteControlPage.settingsRemoteControlPageInstructions,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
-              ),
-            ),
-          ],
-        ),
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: state.needsUpgrade
-                ? RedButton(
-                    title: 'GO BACK',
-                    onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
-                    },
-                  )
-                : GreenButton(
-                    onPressed: () {
-                      if (state.loggedIn) {
-                        BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
-                      } else {
-                        _login(context);
-                      }
-                    },
-                    title: state.signingSetup ? 'RE-PAIR CONTROLLER' : 'PAIR CONTROLLER',
-                  ),
+  Widget _renderForm(
+      BuildContext context, SettingsRemoteControlBlocStateLoaded state) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SectionTitle(
+            title: "Remote control setup",
+            icon: 'assets/settings/icon_remotecontrol.svg',
+            backgroundColor: Color(0xff0b6ab3),
+            titleColor: Colors.white,
+            elevation: 5,
           ),
-        ],
-      ),
-    ]);
+          Expanded(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: MarkdownBody(
+                    fitContent: true,
+                    data: state.needsUpgrade
+                        ? SettingsRemoteControlPage
+                            .settingsRemoteControlPageInstructionsNeedUpgrade
+                        : SettingsRemoteControlPage
+                            .settingsRemoteControlPageInstructions,
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(color: Colors.black, fontSize: 16)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: state.needsUpgrade
+                    ? RedButton(
+                        title: 'GO BACK',
+                        onPressed: () {
+                          BlocProvider.of<MainNavigatorBloc>(context)
+                              .add(MainNavigatorActionPop(mustPop: true));
+                        },
+                      )
+                    : GreenButton(
+                        onPressed: () {
+                          if (state.loggedIn) {
+                            BlocProvider.of<SettingsRemoteControlBloc>(context)
+                                .add(SettingsRemoteControlBlocEventPair());
+                          } else {
+                            _login(context);
+                          }
+                        },
+                        title: state.signingSetup
+                            ? 'RE-PAIR CONTROLLER'
+                            : 'PAIR CONTROLLER',
+                      ),
+              ),
+            ],
+          ),
+        ]);
   }
 
   void _login(BuildContext context) async {
@@ -191,8 +212,10 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(SettingsRemoteControlPage.settingsRemoteControlPagePleaseLoginDialogTitle),
-            content: Text(SettingsRemoteControlPage.settingsRemoteControlPagePleaseLoginDialogBody),
+            title: Text(SettingsRemoteControlPage
+                .settingsRemoteControlPagePleaseLoginDialogTitle),
+            content: Text(SettingsRemoteControlPage
+                .settingsRemoteControlPagePleaseLoginDialogBody),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -210,10 +233,12 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {
-          BlocProvider.of<SettingsRemoteControlBloc>(context).add(SettingsRemoteControlBlocEventPair());
+          BlocProvider.of<SettingsRemoteControlBloc>(context)
+              .add(SettingsRemoteControlBlocEventPair());
         }
       }));
     }

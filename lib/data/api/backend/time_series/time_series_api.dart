@@ -74,8 +74,8 @@ class TimeSeriesAPI {
       if (cache != null) {
         await RelDB.get().plantsDAO.deleteChartCacheForBox(cache.box);
       }
-      Response resp = await get(
-          '${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50');
+      Response resp = await get(Uri.parse(
+          '${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50'));
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
       await RelDB.get().plantsDAO.addChartCache(ChartCachesCompanion.insert(

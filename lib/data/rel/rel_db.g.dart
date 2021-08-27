@@ -32,26 +32,26 @@ class Device extends DataClass implements Insertable<Device> {
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Device(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      identifier: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      identifier: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}identifier']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      ip: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ip']),
-      mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
-      isReachable: boolType
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      ip: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}ip']),
+      mdns: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
+      isReachable: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable']),
-      isRemote:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_remote']),
-      isSetup:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_setup']),
-      serverID: stringType
+      isRemote: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_remote']),
+      isSetup: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_setup']),
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   @override
@@ -209,7 +209,7 @@ class Device extends DataClass implements Insertable<Device> {
                                   $mrjc(serverID.hashCode,
                                       synced.hashCode))))))))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Device &&
           other.id == this.id &&
@@ -372,97 +372,95 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   final String _alias;
   $DevicesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _identifierMeta = const VerificationMeta('identifier');
-  GeneratedTextColumn _identifier;
+  GeneratedColumn<String> _identifier;
   @override
-  GeneratedTextColumn get identifier => _identifier ??= _constructIdentifier();
-  GeneratedTextColumn _constructIdentifier() {
-    return GeneratedTextColumn('identifier', $tableName, false,
-        minTextLength: 1, maxTextLength: 16);
-  }
-
+  GeneratedColumn<String> get identifier =>
+      _identifier ??= GeneratedColumn<String>('identifier', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 1, maxTextLength: 16),
+          typeName: 'TEXT',
+          requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _ipMeta = const VerificationMeta('ip');
-  GeneratedTextColumn _ip;
+  GeneratedColumn<String> _ip;
   @override
-  GeneratedTextColumn get ip => _ip ??= _constructIp();
-  GeneratedTextColumn _constructIp() {
-    return GeneratedTextColumn('ip', $tableName, false,
-        minTextLength: 7, maxTextLength: 15);
-  }
-
+  GeneratedColumn<String> get ip => _ip ??= GeneratedColumn<String>(
+      'ip', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 7, maxTextLength: 15),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _mdnsMeta = const VerificationMeta('mdns');
-  GeneratedTextColumn _mdns;
+  GeneratedColumn<String> _mdns;
   @override
-  GeneratedTextColumn get mdns => _mdns ??= _constructMdns();
-  GeneratedTextColumn _constructMdns() {
-    return GeneratedTextColumn('mdns', $tableName, false,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get mdns => _mdns ??= GeneratedColumn<String>(
+      'mdns', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isReachableMeta =
       const VerificationMeta('isReachable');
-  GeneratedBoolColumn _isReachable;
+  GeneratedColumn<bool> _isReachable;
   @override
-  GeneratedBoolColumn get isReachable =>
-      _isReachable ??= _constructIsReachable();
-  GeneratedBoolColumn _constructIsReachable() {
-    return GeneratedBoolColumn('is_reachable', $tableName, false,
-        defaultValue: Constant(true));
-  }
-
+  GeneratedColumn<bool> get isReachable =>
+      _isReachable ??= GeneratedColumn<bool>('is_reachable', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (is_reachable IN (0, 1))',
+          defaultValue: Constant(true));
   final VerificationMeta _isRemoteMeta = const VerificationMeta('isRemote');
-  GeneratedBoolColumn _isRemote;
+  GeneratedColumn<bool> _isRemote;
   @override
-  GeneratedBoolColumn get isRemote => _isRemote ??= _constructIsRemote();
-  GeneratedBoolColumn _constructIsRemote() {
-    return GeneratedBoolColumn('is_remote', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get isRemote =>
+      _isRemote ??= GeneratedColumn<bool>('is_remote', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (is_remote IN (0, 1))',
+          defaultValue: Constant(false));
   final VerificationMeta _isSetupMeta = const VerificationMeta('isSetup');
-  GeneratedBoolColumn _isSetup;
+  GeneratedColumn<bool> _isSetup;
   @override
-  GeneratedBoolColumn get isSetup => _isSetup ??= _constructIsSetup();
-  GeneratedBoolColumn _constructIsSetup() {
-    return GeneratedBoolColumn('is_setup', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get isSetup =>
+      _isSetup ??= GeneratedColumn<bool>('is_setup', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (is_setup IN (0, 1))',
+          defaultValue: Constant(false));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
+  GeneratedColumn<bool> _synced;
   @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get synced =>
+      _synced ??= GeneratedColumn<bool>('synced', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (synced IN (0, 1))',
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -477,11 +475,9 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         synced
       ];
   @override
-  $DevicesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'devices';
   @override
-  String get $tableName => _alias ?? 'devices';
-  @override
-  final String actualTableName = 'devices';
+  String get actualTableName => 'devices';
   @override
   VerificationContext validateIntegrity(Insertable<Device> instance,
       {bool isInserting = false}) {
@@ -544,8 +540,8 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Device map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Device.fromData(data, _db, prefix: effectivePrefix);
+    return Device.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -569,17 +565,16 @@ class Module extends DataClass implements Insertable<Module> {
   factory Module.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Module(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      isArray:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_array']),
-      arrayLen:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}array_len']),
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      device: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      isArray: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_array']),
+      arrayLen: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}array_len']),
     );
   }
   @override
@@ -668,7 +663,7 @@ class Module extends DataClass implements Insertable<Module> {
       $mrjc(device.hashCode,
           $mrjc(name.hashCode, $mrjc(isArray.hashCode, arrayLen.hashCode)))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Module &&
           other.id == this.id &&
@@ -771,67 +766,48 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   final String _alias;
   $ModulesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _deviceMeta = const VerificationMeta('device');
-  GeneratedIntColumn _device;
+  GeneratedColumn<int> _device;
   @override
-  GeneratedIntColumn get device => _device ??= _constructDevice();
-  GeneratedIntColumn _constructDevice() {
-    return GeneratedIntColumn(
-      'device',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get device =>
+      _device ??= GeneratedColumn<int>('device', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isArrayMeta = const VerificationMeta('isArray');
-  GeneratedBoolColumn _isArray;
+  GeneratedColumn<bool> _isArray;
   @override
-  GeneratedBoolColumn get isArray => _isArray ??= _constructIsArray();
-  GeneratedBoolColumn _constructIsArray() {
-    return GeneratedBoolColumn(
-      'is_array',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<bool> get isArray =>
+      _isArray ??= GeneratedColumn<bool>('is_array', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: true,
+          defaultConstraints: 'CHECK (is_array IN (0, 1))');
   final VerificationMeta _arrayLenMeta = const VerificationMeta('arrayLen');
-  GeneratedIntColumn _arrayLen;
+  GeneratedColumn<int> _arrayLen;
   @override
-  GeneratedIntColumn get arrayLen => _arrayLen ??= _constructArrayLen();
-  GeneratedIntColumn _constructArrayLen() {
-    return GeneratedIntColumn(
-      'array_len',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get arrayLen =>
+      _arrayLen ??= GeneratedColumn<int>('array_len', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, device, name, isArray, arrayLen];
   @override
-  $ModulesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'modules';
   @override
-  String get $tableName => _alias ?? 'modules';
-  @override
-  final String actualTableName = 'modules';
+  String get actualTableName => 'modules';
   @override
   VerificationContext validateIntegrity(Insertable<Module> instance,
       {bool isInserting = false}) {
@@ -871,8 +847,8 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Module map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Module.fromData(data, _db, prefix: effectivePrefix);
+    return Module.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -900,17 +876,20 @@ class Param extends DataClass implements Insertable<Param> {
   factory Param.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return Param(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      module: intType.mapFromDatabaseResponse(data['${effectivePrefix}module']),
-      key: stringType.mapFromDatabaseResponse(data['${effectivePrefix}key']),
-      type: intType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      svalue:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}svalue']),
-      ivalue: intType.mapFromDatabaseResponse(data['${effectivePrefix}ivalue']),
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      device: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device']),
+      module: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}module']),
+      key: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}key']),
+      type: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      svalue: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}svalue']),
+      ivalue: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}ivalue']),
     );
   }
   @override
@@ -1026,7 +1005,7 @@ class Param extends DataClass implements Insertable<Param> {
                   $mrjc(type.hashCode,
                       $mrjc(svalue.hashCode, ivalue.hashCode)))))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Param &&
           other.id == this.id &&
@@ -1153,89 +1132,62 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   final String _alias;
   $ParamsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _deviceMeta = const VerificationMeta('device');
-  GeneratedIntColumn _device;
+  GeneratedColumn<int> _device;
   @override
-  GeneratedIntColumn get device => _device ??= _constructDevice();
-  GeneratedIntColumn _constructDevice() {
-    return GeneratedIntColumn(
-      'device',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get device =>
+      _device ??= GeneratedColumn<int>('device', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _moduleMeta = const VerificationMeta('module');
-  GeneratedIntColumn _module;
+  GeneratedColumn<int> _module;
   @override
-  GeneratedIntColumn get module => _module ??= _constructModule();
-  GeneratedIntColumn _constructModule() {
-    return GeneratedIntColumn(
-      'module',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get module =>
+      _module ??= GeneratedColumn<int>('module', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _keyMeta = const VerificationMeta('key');
-  GeneratedTextColumn _key;
+  GeneratedColumn<String> _key;
   @override
-  GeneratedTextColumn get key => _key ??= _constructKey();
-  GeneratedTextColumn _constructKey() {
-    return GeneratedTextColumn('key', $tableName, false,
-        minTextLength: 1, maxTextLength: 30);
-  }
-
+  GeneratedColumn<String> get key => _key ??= GeneratedColumn<String>(
+      'key', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 30),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedIntColumn _type;
+  GeneratedColumn<int> _type;
   @override
-  GeneratedIntColumn get type => _type ??= _constructType();
-  GeneratedIntColumn _constructType() {
-    return GeneratedIntColumn(
-      'type',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get type =>
+      _type ??= GeneratedColumn<int>('type', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _svalueMeta = const VerificationMeta('svalue');
-  GeneratedTextColumn _svalue;
+  GeneratedColumn<String> _svalue;
   @override
-  GeneratedTextColumn get svalue => _svalue ??= _constructSvalue();
-  GeneratedTextColumn _constructSvalue() {
-    return GeneratedTextColumn('svalue', $tableName, true,
-        minTextLength: 0, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get svalue => _svalue ??= GeneratedColumn<String>(
+      'svalue', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _ivalueMeta = const VerificationMeta('ivalue');
-  GeneratedIntColumn _ivalue;
+  GeneratedColumn<int> _ivalue;
   @override
-  GeneratedIntColumn get ivalue => _ivalue ??= _constructIvalue();
-  GeneratedIntColumn _constructIvalue() {
-    return GeneratedIntColumn(
-      'ivalue',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get ivalue =>
+      _ivalue ??= GeneratedColumn<int>('ivalue', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
       [id, device, module, key, type, svalue, ivalue];
   @override
-  $ParamsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'params';
   @override
-  String get $tableName => _alias ?? 'params';
-  @override
-  final String actualTableName = 'params';
+  String get actualTableName => 'params';
   @override
   VerificationContext validateIntegrity(Insertable<Param> instance,
       {bool isInserting = false}) {
@@ -1283,8 +1235,8 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Param map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Param.fromData(data, _db, prefix: effectivePrefix);
+    return Param.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -1318,26 +1270,26 @@ class Plant extends DataClass implements Insertable<Plant> {
   factory Plant.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Plant(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      single:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}single']),
-      public:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}public']),
-      alerts:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}alerts']),
-      settings: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      box: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      single: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}single']),
+      public: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}public']),
+      alerts: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}alerts']),
+      settings: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
-      serverID: stringType
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   @override
@@ -1492,7 +1444,7 @@ class Plant extends DataClass implements Insertable<Plant> {
                                   $mrjc(serverID.hashCode,
                                       synced.hashCode))))))))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Plant &&
           other.id == this.id &&
@@ -1653,110 +1605,94 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   final String _alias;
   $PlantsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
+  GeneratedColumn<int> _feed;
   @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get feed =>
+      _feed ??= GeneratedColumn<int>('feed', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _boxMeta = const VerificationMeta('box');
-  GeneratedIntColumn _box;
+  GeneratedColumn<int> _box;
   @override
-  GeneratedIntColumn get box => _box ??= _constructBox();
-  GeneratedIntColumn _constructBox() {
-    return GeneratedIntColumn(
-      'box',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get box =>
+      _box ??= GeneratedColumn<int>('box', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
-  }
-
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _singleMeta = const VerificationMeta('single');
-  GeneratedBoolColumn _single;
+  GeneratedColumn<bool> _single;
   @override
-  GeneratedBoolColumn get single => _single ??= _constructSingle();
-  GeneratedBoolColumn _constructSingle() {
-    return GeneratedBoolColumn('single', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get single =>
+      _single ??= GeneratedColumn<bool>('single', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (single IN (0, 1))',
+          defaultValue: Constant(false));
   final VerificationMeta _publicMeta = const VerificationMeta('public');
-  GeneratedBoolColumn _public;
+  GeneratedColumn<bool> _public;
   @override
-  GeneratedBoolColumn get public => _public ??= _constructPublic();
-  GeneratedBoolColumn _constructPublic() {
-    return GeneratedBoolColumn('public', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get public =>
+      _public ??= GeneratedColumn<bool>('public', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (public IN (0, 1))',
+          defaultValue: Constant(false));
   final VerificationMeta _alertsMeta = const VerificationMeta('alerts');
-  GeneratedBoolColumn _alerts;
+  GeneratedColumn<bool> _alerts;
   @override
-  GeneratedBoolColumn get alerts => _alerts ??= _constructAlerts();
-  GeneratedBoolColumn _constructAlerts() {
-    return GeneratedBoolColumn('alerts', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get alerts =>
+      _alerts ??= GeneratedColumn<bool>('alerts', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (alerts IN (0, 1))',
+          defaultValue: Constant(false));
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
-  GeneratedTextColumn _settings;
+  GeneratedColumn<String> _settings;
   @override
-  GeneratedTextColumn get settings => _settings ??= _constructSettings();
-  GeneratedTextColumn _constructSettings() {
-    return GeneratedTextColumn('settings', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  GeneratedColumn<String> get settings =>
+      _settings ??= GeneratedColumn<String>('settings', aliasedName, false,
+          typeName: 'TEXT',
+          requiredDuringInsert: false,
+          defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
+  GeneratedColumn<bool> _synced;
   @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get synced =>
+      _synced ??= GeneratedColumn<bool>('synced', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (synced IN (0, 1))',
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, box, name, single, public, alerts, settings, serverID, synced];
   @override
-  $PlantsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'plants';
   @override
-  String get $tableName => _alias ?? 'plants';
-  @override
-  final String actualTableName = 'plants';
+  String get actualTableName => 'plants';
   @override
   VerificationContext validateIntegrity(Insertable<Plant> instance,
       {bool isInserting = false}) {
@@ -1812,8 +1748,8 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Plant map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Plant.fromData(data, _db, prefix: effectivePrefix);
+    return Plant.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -1843,22 +1779,22 @@ class Box extends DataClass implements Insertable<Box> {
   factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Box(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      deviceBox:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      settings: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      device: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device']),
+      deviceBox: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      settings: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
-      serverID: stringType
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   @override
@@ -1989,7 +1925,7 @@ class Box extends DataClass implements Insertable<Box> {
                       $mrjc(settings.hashCode,
                           $mrjc(serverID.hashCode, synced.hashCode))))))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Box &&
           other.id == this.id &&
@@ -2125,95 +2061,73 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   final String _alias;
   $BoxesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
+  GeneratedColumn<int> _feed;
   @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get feed =>
+      _feed ??= GeneratedColumn<int>('feed', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _deviceMeta = const VerificationMeta('device');
-  GeneratedIntColumn _device;
+  GeneratedColumn<int> _device;
   @override
-  GeneratedIntColumn get device => _device ??= _constructDevice();
-  GeneratedIntColumn _constructDevice() {
-    return GeneratedIntColumn(
-      'device',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get device =>
+      _device ??= GeneratedColumn<int>('device', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _deviceBoxMeta = const VerificationMeta('deviceBox');
-  GeneratedIntColumn _deviceBox;
+  GeneratedColumn<int> _deviceBox;
   @override
-  GeneratedIntColumn get deviceBox => _deviceBox ??= _constructDeviceBox();
-  GeneratedIntColumn _constructDeviceBox() {
-    return GeneratedIntColumn(
-      'device_box',
-      $tableName,
-      true,
-    );
-  }
-
+  GeneratedColumn<int> get deviceBox =>
+      _deviceBox ??= GeneratedColumn<int>('device_box', aliasedName, true,
+          typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
-  }
-
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
-  GeneratedTextColumn _settings;
+  GeneratedColumn<String> _settings;
   @override
-  GeneratedTextColumn get settings => _settings ??= _constructSettings();
-  GeneratedTextColumn _constructSettings() {
-    return GeneratedTextColumn('settings', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  GeneratedColumn<String> get settings =>
+      _settings ??= GeneratedColumn<String>('settings', aliasedName, false,
+          typeName: 'TEXT',
+          requiredDuringInsert: false,
+          defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
+  GeneratedColumn<bool> _synced;
   @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get synced =>
+      _synced ??= GeneratedColumn<bool>('synced', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (synced IN (0, 1))',
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, device, deviceBox, name, settings, serverID, synced];
   @override
-  $BoxesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'boxes';
   @override
-  String get $tableName => _alias ?? 'boxes';
-  @override
-  final String actualTableName = 'boxes';
+  String get actualTableName => 'boxes';
   @override
   VerificationContext validateIntegrity(Insertable<Box> instance,
       {bool isInserting = false}) {
@@ -2259,8 +2173,8 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Box map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Box.fromData(data, _db, prefix: effectivePrefix);
+    return Box.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -2284,17 +2198,16 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   factory ChartCache.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return ChartCache(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      date:
-          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      values:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}values']),
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      box: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      values: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}values']),
     );
   }
   @override
@@ -2379,7 +2292,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
       $mrjc(box.hashCode,
           $mrjc(name.hashCode, $mrjc(date.hashCode, values.hashCode)))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChartCache &&
           other.id == this.id &&
@@ -2482,64 +2395,48 @@ class $ChartCachesTable extends ChartCaches
   final String _alias;
   $ChartCachesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _boxMeta = const VerificationMeta('box');
-  GeneratedIntColumn _box;
+  GeneratedColumn<int> _box;
   @override
-  GeneratedIntColumn get box => _box ??= _constructBox();
-  GeneratedIntColumn _constructBox() {
-    return GeneratedIntColumn(
-      'box',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get box =>
+      _box ??= GeneratedColumn<int>('box', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
-  }
-
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _dateMeta = const VerificationMeta('date');
-  GeneratedDateTimeColumn _date;
+  GeneratedColumn<DateTime> _date;
   @override
-  GeneratedDateTimeColumn get date => _date ??= _constructDate();
-  GeneratedDateTimeColumn _constructDate() {
-    return GeneratedDateTimeColumn(
-      'date',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<DateTime> get date =>
+      _date ??= GeneratedColumn<DateTime>('date', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _valuesMeta = const VerificationMeta('values');
-  GeneratedTextColumn _values;
+  GeneratedColumn<String> _values;
   @override
-  GeneratedTextColumn get values => _values ??= _constructValues();
-  GeneratedTextColumn _constructValues() {
-    return GeneratedTextColumn('values', $tableName, false,
-        defaultValue: Constant('[]'));
-  }
-
+  GeneratedColumn<String> get values =>
+      _values ??= GeneratedColumn<String>('values', aliasedName, false,
+          typeName: 'TEXT',
+          requiredDuringInsert: false,
+          defaultValue: Constant('[]'));
   @override
   List<GeneratedColumn> get $columns => [id, box, name, date, values];
   @override
-  $ChartCachesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'chart_caches';
   @override
-  String get $tableName => _alias ?? 'chart_caches';
-  @override
-  final String actualTableName = 'chart_caches';
+  String get actualTableName => 'chart_caches';
   @override
   VerificationContext validateIntegrity(Insertable<ChartCache> instance,
       {bool isInserting = false}) {
@@ -2577,8 +2474,8 @@ class $ChartCachesTable extends ChartCaches
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ChartCache map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return ChartCache.fromData(data, _db, prefix: effectivePrefix);
+    return ChartCache.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -2620,33 +2517,34 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   factory Timelapse.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Timelapse(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      plant: intType.mapFromDatabaseResponse(data['${effectivePrefix}plant']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      settings: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      plant: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}plant']),
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      settings: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
-      ssid: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
-      password: stringType
+      ssid: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
+      password: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}password']),
-      controllerID: stringType
+      controllerID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}controller_i_d']),
-      rotate:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}rotate']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      strain:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}strain']),
-      dropboxToken: stringType
+      rotate: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}rotate']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      strain: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}strain']),
+      dropboxToken: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}dropbox_token']),
-      uploadName: stringType
+      uploadName: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}upload_name']),
-      serverID: stringType
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   @override
@@ -2855,7 +2753,7 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
                                                       synced
                                                           .hashCode))))))))))))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Timelapse &&
           other.id == this.id &&
@@ -3064,138 +2962,129 @@ class $TimelapsesTable extends Timelapses
   final String _alias;
   $TimelapsesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _plantMeta = const VerificationMeta('plant');
-  GeneratedIntColumn _plant;
+  GeneratedColumn<int> _plant;
   @override
-  GeneratedIntColumn get plant => _plant ??= _constructPlant();
-  GeneratedIntColumn _constructPlant() {
-    return GeneratedIntColumn(
-      'plant',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get plant =>
+      _plant ??= GeneratedColumn<int>('plant', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
+  GeneratedColumn<String> _type;
   @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 32, defaultValue: Constant('dropbox'));
-  }
-
+  GeneratedColumn<String> get type => _type ??= GeneratedColumn<String>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('dropbox'));
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
-  GeneratedTextColumn _settings;
+  GeneratedColumn<String> _settings;
   @override
-  GeneratedTextColumn get settings => _settings ??= _constructSettings();
-  GeneratedTextColumn _constructSettings() {
-    return GeneratedTextColumn('settings', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  GeneratedColumn<String> get settings =>
+      _settings ??= GeneratedColumn<String>('settings', aliasedName, false,
+          typeName: 'TEXT',
+          requiredDuringInsert: false,
+          defaultValue: Constant('{}'));
   final VerificationMeta _ssidMeta = const VerificationMeta('ssid');
-  GeneratedTextColumn _ssid;
+  GeneratedColumn<String> _ssid;
   @override
-  GeneratedTextColumn get ssid => _ssid ??= _constructSsid();
-  GeneratedTextColumn _constructSsid() {
-    return GeneratedTextColumn('ssid', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get ssid => _ssid ??= GeneratedColumn<String>(
+      'ssid', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _passwordMeta = const VerificationMeta('password');
-  GeneratedTextColumn _password;
+  GeneratedColumn<String> _password;
   @override
-  GeneratedTextColumn get password => _password ??= _constructPassword();
-  GeneratedTextColumn _constructPassword() {
-    return GeneratedTextColumn('password', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get password => _password ??= GeneratedColumn<String>(
+      'password', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _controllerIDMeta =
       const VerificationMeta('controllerID');
-  GeneratedTextColumn _controllerID;
+  GeneratedColumn<String> _controllerID;
   @override
-  GeneratedTextColumn get controllerID =>
-      _controllerID ??= _constructControllerID();
-  GeneratedTextColumn _constructControllerID() {
-    return GeneratedTextColumn('controller_i_d', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get controllerID => _controllerID ??=
+      GeneratedColumn<String>('controller_i_d', aliasedName, true,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 1, maxTextLength: 64),
+          typeName: 'TEXT',
+          requiredDuringInsert: false);
   final VerificationMeta _rotateMeta = const VerificationMeta('rotate');
-  GeneratedTextColumn _rotate;
+  GeneratedColumn<String> _rotate;
   @override
-  GeneratedTextColumn get rotate => _rotate ??= _constructRotate();
-  GeneratedTextColumn _constructRotate() {
-    return GeneratedTextColumn('rotate', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get rotate => _rotate ??= GeneratedColumn<String>(
+      'rotate', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _strainMeta = const VerificationMeta('strain');
-  GeneratedTextColumn _strain;
+  GeneratedColumn<String> _strain;
   @override
-  GeneratedTextColumn get strain => _strain ??= _constructStrain();
-  GeneratedTextColumn _constructStrain() {
-    return GeneratedTextColumn('strain', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get strain => _strain ??= GeneratedColumn<String>(
+      'strain', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _dropboxTokenMeta =
       const VerificationMeta('dropboxToken');
-  GeneratedTextColumn _dropboxToken;
+  GeneratedColumn<String> _dropboxToken;
   @override
-  GeneratedTextColumn get dropboxToken =>
-      _dropboxToken ??= _constructDropboxToken();
-  GeneratedTextColumn _constructDropboxToken() {
-    return GeneratedTextColumn('dropbox_token', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get dropboxToken => _dropboxToken ??=
+      GeneratedColumn<String>('dropbox_token', aliasedName, true,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 1, maxTextLength: 64),
+          typeName: 'TEXT',
+          requiredDuringInsert: false);
   final VerificationMeta _uploadNameMeta = const VerificationMeta('uploadName');
-  GeneratedTextColumn _uploadName;
+  GeneratedColumn<String> _uploadName;
   @override
-  GeneratedTextColumn get uploadName => _uploadName ??= _constructUploadName();
-  GeneratedTextColumn _constructUploadName() {
-    return GeneratedTextColumn('upload_name', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  GeneratedColumn<String> get uploadName =>
+      _uploadName ??= GeneratedColumn<String>('upload_name', aliasedName, true,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 1, maxTextLength: 64),
+          typeName: 'TEXT',
+          requiredDuringInsert: false);
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
+  GeneratedColumn<bool> _synced;
   @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get synced =>
+      _synced ??= GeneratedColumn<bool>('synced', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (synced IN (0, 1))',
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -3214,11 +3103,9 @@ class $TimelapsesTable extends Timelapses
         synced
       ];
   @override
-  $TimelapsesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'timelapses';
   @override
-  String get $tableName => _alias ?? 'timelapses';
-  @override
-  final String actualTableName = 'timelapses';
+  String get actualTableName => 'timelapses';
   @override
   VerificationContext validateIntegrity(Insertable<Timelapse> instance,
       {bool isInserting = false}) {
@@ -3294,8 +3181,8 @@ class $TimelapsesTable extends Timelapses
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Timelapse map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Timelapse.fromData(data, _db, prefix: effectivePrefix);
+    return Timelapse.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -3319,18 +3206,16 @@ class Feed extends DataClass implements Insertable<Feed> {
   factory Feed.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Feed(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      isNewsFeed: boolType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      isNewsFeed: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_news_feed']),
-      serverID: stringType
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   @override
@@ -3425,7 +3310,7 @@ class Feed extends DataClass implements Insertable<Feed> {
           $mrjc(isNewsFeed.hashCode,
               $mrjc(serverID.hashCode, synced.hashCode)))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Feed &&
           other.id == this.id &&
@@ -3525,59 +3410,56 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   final String _alias;
   $FeedsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
+  GeneratedColumn<String> _name;
   @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  GeneratedColumn<String> get name => _name ??= GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isNewsFeedMeta = const VerificationMeta('isNewsFeed');
-  GeneratedBoolColumn _isNewsFeed;
+  GeneratedColumn<bool> _isNewsFeed;
   @override
-  GeneratedBoolColumn get isNewsFeed => _isNewsFeed ??= _constructIsNewsFeed();
-  GeneratedBoolColumn _constructIsNewsFeed() {
-    return GeneratedBoolColumn('is_news_feed', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get isNewsFeed =>
+      _isNewsFeed ??= GeneratedColumn<bool>('is_news_feed', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (is_news_feed IN (0, 1))',
+          defaultValue: Constant(false));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
+  GeneratedColumn<bool> _synced;
   @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get synced =>
+      _synced ??= GeneratedColumn<bool>('synced', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (synced IN (0, 1))',
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, name, isNewsFeed, serverID, synced];
   @override
-  $FeedsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feeds';
   @override
-  String get $tableName => _alias ?? 'feeds';
-  @override
-  final String actualTableName = 'feeds';
+  String get actualTableName => 'feeds';
   @override
   VerificationContext validateIntegrity(Insertable<Feed> instance,
       {bool isInserting = false}) {
@@ -3613,8 +3495,8 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Feed map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Feed.fromData(data, _db, prefix: effectivePrefix);
+    return Feed.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -3644,23 +3526,22 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   factory FeedEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final dateTimeType = db.typeSystem.forDartType<DateTime>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return FeedEntry(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      date:
-          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      isNew: boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_new']),
-      params:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
-      serverID: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date']),
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      isNew: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_new']),
+      params: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}params']),
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   @override
@@ -3788,7 +3669,7 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
                       $mrjc(params.hashCode,
                           $mrjc(serverID.hashCode, synced.hashCode))))))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FeedEntry &&
           other.id == this.id &&
@@ -3927,92 +3808,76 @@ class $FeedEntriesTable extends FeedEntries
   final String _alias;
   $FeedEntriesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
+  GeneratedColumn<int> _feed;
   @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get feed =>
+      _feed ??= GeneratedColumn<int>('feed', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _dateMeta = const VerificationMeta('date');
-  GeneratedDateTimeColumn _date;
+  GeneratedColumn<DateTime> _date;
   @override
-  GeneratedDateTimeColumn get date => _date ??= _constructDate();
-  GeneratedDateTimeColumn _constructDate() {
-    return GeneratedDateTimeColumn(
-      'date',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<DateTime> get date =>
+      _date ??= GeneratedColumn<DateTime>('date', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
+  GeneratedColumn<String> _type;
   @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  GeneratedColumn<String> get type => _type ??= GeneratedColumn<String>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isNewMeta = const VerificationMeta('isNew');
-  GeneratedBoolColumn _isNew;
+  GeneratedColumn<bool> _isNew;
   @override
-  GeneratedBoolColumn get isNew => _isNew ??= _constructIsNew();
-  GeneratedBoolColumn _constructIsNew() {
-    return GeneratedBoolColumn('is_new', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get isNew =>
+      _isNew ??= GeneratedColumn<bool>('is_new', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (is_new IN (0, 1))',
+          defaultValue: Constant(false));
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  GeneratedTextColumn _params;
+  GeneratedColumn<String> _params;
   @override
-  GeneratedTextColumn get params => _params ??= _constructParams();
-  GeneratedTextColumn _constructParams() {
-    return GeneratedTextColumn('params', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  GeneratedColumn<String> get params =>
+      _params ??= GeneratedColumn<String>('params', aliasedName, false,
+          typeName: 'TEXT',
+          requiredDuringInsert: false,
+          defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
+  GeneratedColumn<bool> _synced;
   @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get synced =>
+      _synced ??= GeneratedColumn<bool>('synced', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (synced IN (0, 1))',
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, date, type, isNew, params, serverID, synced];
   @override
-  $FeedEntriesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feed_entries';
   @override
-  String get $tableName => _alias ?? 'feed_entries';
-  @override
-  final String actualTableName = 'feed_entries';
+  String get actualTableName => 'feed_entries';
   @override
   VerificationContext validateIntegrity(Insertable<FeedEntry> instance,
       {bool isInserting = false}) {
@@ -4062,8 +3927,8 @@ class $FeedEntriesTable extends FeedEntries
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FeedEntry map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FeedEntry.fromData(data, _db, prefix: effectivePrefix);
+    return FeedEntry.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -4086,14 +3951,14 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return FeedEntryDraft(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      params:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      params: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}params']),
     );
   }
   @override
@@ -4167,7 +4032,7 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
   int get hashCode => $mrjf($mrjc(id.hashCode,
       $mrjc(feed.hashCode, $mrjc(type.hashCode, params.hashCode))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FeedEntryDraft &&
           other.id == this.id &&
@@ -4257,52 +4122,42 @@ class $FeedEntryDraftsTable extends FeedEntryDrafts
   final String _alias;
   $FeedEntryDraftsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
+  GeneratedColumn<int> _feed;
   @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get feed =>
+      _feed ??= GeneratedColumn<int>('feed', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
+  GeneratedColumn<String> _type;
   @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  GeneratedColumn<String> get type => _type ??= GeneratedColumn<String>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  GeneratedTextColumn _params;
+  GeneratedColumn<String> _params;
   @override
-  GeneratedTextColumn get params => _params ??= _constructParams();
-  GeneratedTextColumn _constructParams() {
-    return GeneratedTextColumn('params', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  GeneratedColumn<String> get params =>
+      _params ??= GeneratedColumn<String>('params', aliasedName, false,
+          typeName: 'TEXT',
+          requiredDuringInsert: false,
+          defaultValue: Constant('{}'));
   @override
   List<GeneratedColumn> get $columns => [id, feed, type, params];
   @override
-  $FeedEntryDraftsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feed_entry_drafts';
   @override
-  String get $tableName => _alias ?? 'feed_entry_drafts';
-  @override
-  final String actualTableName = 'feed_entry_drafts';
+  String get actualTableName => 'feed_entry_drafts';
   @override
   VerificationContext validateIntegrity(Insertable<FeedEntryDraft> instance,
       {bool isInserting = false}) {
@@ -4334,8 +4189,8 @@ class $FeedEntryDraftsTable extends FeedEntryDrafts
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FeedEntryDraft map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FeedEntryDraft.fromData(data, _db, prefix: effectivePrefix);
+    return FeedEntryDraft.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -4365,24 +4220,22 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   factory FeedMedia.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return FeedMedia(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      feedEntry:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}feed_entry']),
-      filePath: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      feedEntry: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed_entry']),
+      filePath: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}file_path']),
-      thumbnailPath: stringType
+      thumbnailPath: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_path']),
-      params:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
-      serverID: stringType
+      params: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}params']),
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced']),
     );
   }
   @override
@@ -4515,7 +4368,7 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
                       $mrjc(params.hashCode,
                           $mrjc(serverID.hashCode, synced.hashCode))))))));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FeedMedia &&
           other.id == this.id &&
@@ -4655,100 +4508,71 @@ class $FeedMediasTable extends FeedMedias
   final String _alias;
   $FeedMediasTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
+  GeneratedColumn<int> _feed;
   @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get feed =>
+      _feed ??= GeneratedColumn<int>('feed', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _feedEntryMeta = const VerificationMeta('feedEntry');
-  GeneratedIntColumn _feedEntry;
+  GeneratedColumn<int> _feedEntry;
   @override
-  GeneratedIntColumn get feedEntry => _feedEntry ??= _constructFeedEntry();
-  GeneratedIntColumn _constructFeedEntry() {
-    return GeneratedIntColumn(
-      'feed_entry',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<int> get feedEntry =>
+      _feedEntry ??= GeneratedColumn<int>('feed_entry', aliasedName, false,
+          typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _filePathMeta = const VerificationMeta('filePath');
-  GeneratedTextColumn _filePath;
+  GeneratedColumn<String> _filePath;
   @override
-  GeneratedTextColumn get filePath => _filePath ??= _constructFilePath();
-  GeneratedTextColumn _constructFilePath() {
-    return GeneratedTextColumn(
-      'file_path',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get filePath =>
+      _filePath ??= GeneratedColumn<String>('file_path', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _thumbnailPathMeta =
       const VerificationMeta('thumbnailPath');
-  GeneratedTextColumn _thumbnailPath;
+  GeneratedColumn<String> _thumbnailPath;
   @override
-  GeneratedTextColumn get thumbnailPath =>
-      _thumbnailPath ??= _constructThumbnailPath();
-  GeneratedTextColumn _constructThumbnailPath() {
-    return GeneratedTextColumn(
-      'thumbnail_path',
-      $tableName,
-      false,
-    );
-  }
-
+  GeneratedColumn<String> get thumbnailPath => _thumbnailPath ??=
+      GeneratedColumn<String>('thumbnail_path', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  GeneratedTextColumn _params;
+  GeneratedColumn<String> _params;
   @override
-  GeneratedTextColumn get params => _params ??= _constructParams();
-  GeneratedTextColumn _constructParams() {
-    return GeneratedTextColumn('params', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  GeneratedColumn<String> get params =>
+      _params ??= GeneratedColumn<String>('params', aliasedName, false,
+          typeName: 'TEXT',
+          requiredDuringInsert: false,
+          defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
+  GeneratedColumn<bool> _synced;
   @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  GeneratedColumn<bool> get synced =>
+      _synced ??= GeneratedColumn<bool>('synced', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'CHECK (synced IN (0, 1))',
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, feedEntry, filePath, thumbnailPath, params, serverID, synced];
   @override
-  $FeedMediasTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feed_medias';
   @override
-  String get $tableName => _alias ?? 'feed_medias';
-  @override
-  final String actualTableName = 'feed_medias';
+  String get actualTableName => 'feed_medias';
   @override
   VerificationContext validateIntegrity(Insertable<FeedMedia> instance,
       {bool isInserting = false}) {
@@ -4802,8 +4626,8 @@ class $FeedMediasTable extends FeedMedias
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FeedMedia map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FeedMedia.fromData(data, _db, prefix: effectivePrefix);
+    return FeedMedia.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -4820,13 +4644,12 @@ class Delete extends DataClass implements Insertable<Delete> {
   factory Delete.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return Delete(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      serverID: stringType
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type']),
     );
   }
   @override
@@ -4892,7 +4715,7 @@ class Delete extends DataClass implements Insertable<Delete> {
   int get hashCode =>
       $mrjf($mrjc(id.hashCode, $mrjc(serverID.hashCode, type.hashCode)));
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Delete &&
           other.id == this.id &&
@@ -4967,40 +4790,37 @@ class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
   final String _alias;
   $DeletesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
+  GeneratedColumn<int> _id;
   @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  GeneratedColumn<int> get id =>
+      _id ??= GeneratedColumn<int>('id', aliasedName, false,
+          typeName: 'INTEGER',
+          requiredDuringInsert: false,
+          defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
+  GeneratedColumn<String> _serverID;
   @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, false,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  GeneratedColumn<String> get serverID => _serverID ??= GeneratedColumn<String>(
+      'server_i_d', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
+  GeneratedColumn<String> _type;
   @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 16);
-  }
-
+  GeneratedColumn<String> get type => _type ??= GeneratedColumn<String>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, serverID, type];
   @override
-  $DeletesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'deletes';
   @override
-  String get $tableName => _alias ?? 'deletes';
-  @override
-  final String actualTableName = 'deletes';
+  String get actualTableName => 'deletes';
   @override
   VerificationContext validateIntegrity(Insertable<Delete> instance,
       {bool isInserting = false}) {
@@ -5028,8 +4848,8 @@ class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Delete map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Delete.fromData(data, _db, prefix: effectivePrefix);
+    return Delete.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override

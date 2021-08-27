@@ -39,9 +39,11 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 class FeedsAPI {
   Future createUserEnd({String notificationToken}) async {
     try {
-      await BackendAPI().postPut('/userend', {'notificationToken': notificationToken});
+      await BackendAPI()
+          .postPut('/userend', {'notificationToken': notificationToken});
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"notificationToken": notificationToken}, fwdThrow: true);
+      Logger.logError(e, trace,
+          data: {"notificationToken": notificationToken}, fwdThrow: true);
     }
   }
 
@@ -59,30 +61,41 @@ class FeedsAPI {
   }
 
   Future sendDeletes(List<Delete> deletes) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/deletes',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-        },
-        body: JsonEncoder().convert({
-          "deletes": deletes.map<Map<String, dynamic>>((d) => Deletes.toMap(d)).toList(),
-        }));
+    Response resp = await BackendAPI()
+        .apiClient
+        .post(Uri.parse('${BackendAPI().serverHost}/deletes'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+            },
+            body: JsonEncoder().convert({
+              "deletes": deletes
+                  .map<Map<String, dynamic>>((d) => Deletes.toMap(d))
+                  .toList(),
+            }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('SendDeletes failed with error: ${resp.body}', data: {"deletes": deletes});
+      Logger.throwError('SendDeletes failed with error: ${resp.body}',
+          data: {"deletes": deletes});
     }
   }
 
   Future<List<Comment>> fetchCommentsForFeedEntry(String feedEntryID,
       {int offset = 0, int limit = 10, rootCommentsOnly = false}) async {
     Response resp = await BackendAPI().apiClient.get(
-        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$limit&rootCommentsOnly=$rootCommentsOnly',
+        Uri.parse(
+            '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$limit&rootCommentsOnly=$rootCommentsOnly'),
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
         });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
-          data: {"feedEntryID": feedEntryID, "offset": offset, "limit": limit, "rootCommentsOnly": rootCommentsOnly});
+          data: {
+            "feedEntryID": feedEntryID,
+            "offset": offset,
+            "limit": limit,
+            "rootCommentsOnly": rootCommentsOnly
+          });
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     List<Comment> comments = [];
@@ -93,12 +106,15 @@ class FeedsAPI {
   }
 
   Future<List<Comment>> fetchComment(String commentID) async {
-    Response resp = await BackendAPI().apiClient.get('${BackendAPI().serverHost}/comment/$commentID', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse('${BackendAPI().serverHost}/comment/$commentID'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}', data: {"commentID": commentID});
+      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
+          data: {"commentID": commentID});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     List<Comment> comments = [];
@@ -108,12 +124,14 @@ class FeedsAPI {
     return comments;
   }
 
-  Future<Map<String, dynamic>> fetchSocialForFeedEntry(String feedEntryID, {int offset = 0, int n = 10}) async {
-    Response resp =
-        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/feedEntry/$feedEntryID/social', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+  Future<Map<String, dynamic>> fetchSocialForFeedEntry(String feedEntryID,
+      {int offset = 0, int n = 10}) async {
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse('${BackendAPI().serverHost}/feedEntry/$feedEntryID/social'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
           data: {"commentID": feedEntryID, "offset": offset, "n": n});
@@ -122,20 +140,24 @@ class FeedsAPI {
     return data;
   }
 
-  Future<Map<String, dynamic>> fetchLatestTimelapseFrame(String timelapseID) async {
-    Response resp =
-        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/timelapse/$timelapseID/latest', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+  Future<Map<String, dynamic>> fetchLatestTimelapseFrame(
+      String timelapseID) async {
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse('${BackendAPI().serverHost}/timelapse/$timelapseID/latest'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('fetchLatestTimelapseFrame failed: ${resp.body}', data: {"timelapseID": timelapseID});
+      Logger.throwError('fetchLatestTimelapseFrame failed: ${resp.body}',
+          data: {"timelapseID": timelapseID});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data;
   }
 
-  Future<Uint8List> sglOverlay(Box box, Plant plant, Map<String, dynamic> meta, String url) async {
+  Future<Uint8List> sglOverlay(
+      Box box, Plant plant, Map<String, dynamic> meta, String url) async {
     Map<String, dynamic> params = {
       "box": await Boxes.toMap(box),
       "plant": await Plants.toMap(plant),
@@ -144,7 +166,7 @@ class FeedsAPI {
       "host": BackendAPI().storageServerHostHeader,
     };
     Response resp = await BackendAPI().apiClient.post(
-          '${BackendAPI().serverHost}/sgloverlay',
+          Uri.parse('${BackendAPI().serverHost}/sgloverlay'),
           headers: {
             'Content-Type': 'application/json',
             'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -158,27 +180,32 @@ class FeedsAPI {
   }
 
   Future<int> fetchCommentCountForFeedEntry(String feedEntryID) async {
-    Response resp = await BackendAPI()
-        .apiClient
-        .get('${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments/count?allComments=true', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse(
+            '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments/count?allComments=true'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}', data: {"feedEntryID": feedEntryID});
+      Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
+          data: {"feedEntryID": feedEntryID});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data['n'];
   }
 
   Future<List<dynamic>> fetchBookmarks({int offset = 0, int limit = 10}) async {
-    Response resp =
-        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/bookmarks?offset=$offset&limit=$limit', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().apiClient.get(
+        Uri.parse(
+            '${BackendAPI().serverHost}/bookmarks?offset=$offset&limit=$limit'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('fetchBookmarks failed: ${resp.body}', data: {"offset": offset, "limit": limit});
+      Logger.throwError('fetchBookmarks failed: ${resp.body}',
+          data: {"offset": offset, "limit": limit});
     }
     Map<String, dynamic> data = JsonDecoder().convert(resp.body);
     return data['bookmarks'];
@@ -188,7 +215,8 @@ class FeedsAPI {
     Map<String, dynamic> obj = await Plants.toMap(plant);
     String serverID = await BackendAPI().postPut('/plant', obj);
 
-    PlantsCompanion plantsCompanion = PlantsCompanion(id: Value(plant.id), synced: Value(true));
+    PlantsCompanion plantsCompanion =
+        PlantsCompanion(id: Value(plant.id), synced: Value(true));
     if (serverID != null) {
       plantsCompanion = plantsCompanion.copyWith(serverID: Value(serverID));
     }
@@ -199,7 +227,8 @@ class FeedsAPI {
     Map<String, dynamic> obj = await Boxes.toMap(box);
     String serverID = await BackendAPI().postPut('/box', obj);
 
-    BoxesCompanion boxesCompanion = BoxesCompanion(id: Value(box.id), synced: Value(true));
+    BoxesCompanion boxesCompanion =
+        BoxesCompanion(id: Value(box.id), synced: Value(true));
     if (serverID != null) {
       boxesCompanion = boxesCompanion.copyWith(serverID: Value(serverID));
     }
@@ -210,9 +239,11 @@ class FeedsAPI {
     Map<String, dynamic> obj = await Timelapses.toMap(timelapse);
     String serverID = await BackendAPI().postPut('/timelapse', obj);
 
-    TimelapsesCompanion timelapsesCompanion = TimelapsesCompanion(id: Value(timelapse.id), synced: Value(true));
+    TimelapsesCompanion timelapsesCompanion =
+        TimelapsesCompanion(id: Value(timelapse.id), synced: Value(true));
     if (serverID != null) {
-      timelapsesCompanion = timelapsesCompanion.copyWith(serverID: Value(serverID));
+      timelapsesCompanion =
+          timelapsesCompanion.copyWith(serverID: Value(serverID));
     }
     await RelDB.get().plantsDAO.updateTimelapse(timelapsesCompanion);
   }
@@ -221,7 +252,8 @@ class FeedsAPI {
     Map<String, dynamic> obj = await Devices.toMap(device);
     String serverID = await BackendAPI().postPut('/device', obj);
 
-    DevicesCompanion devicesCompanion = DevicesCompanion(id: Value(device.id), synced: Value(true));
+    DevicesCompanion devicesCompanion =
+        DevicesCompanion(id: Value(device.id), synced: Value(true));
     if (serverID != null) {
       devicesCompanion = devicesCompanion.copyWith(serverID: Value(serverID));
     }
@@ -232,7 +264,8 @@ class FeedsAPI {
     Map<String, dynamic> obj = await Feeds.toMap(feed);
     String serverID = await BackendAPI().postPut('/feed', obj);
 
-    FeedsCompanion feedsCompanion = FeedsCompanion(id: Value(feed.id), synced: Value(true));
+    FeedsCompanion feedsCompanion =
+        FeedsCompanion(id: Value(feed.id), synced: Value(true));
     if (serverID != null) {
       feedsCompanion = feedsCompanion.copyWith(serverID: Value(serverID));
     }
@@ -243,9 +276,11 @@ class FeedsAPI {
     Map<String, dynamic> obj = await FeedEntries.toMap(feedEntry);
     String serverID = await BackendAPI().postPut('/feedEntry', obj);
 
-    FeedEntriesCompanion feedEntriesCompanion = FeedEntriesCompanion(id: Value(feedEntry.id), synced: Value(true));
+    FeedEntriesCompanion feedEntriesCompanion =
+        FeedEntriesCompanion(id: Value(feedEntry.id), synced: Value(true));
     if (serverID != null) {
-      feedEntriesCompanion = feedEntriesCompanion.copyWith(serverID: Value(serverID));
+      feedEntriesCompanion =
+          feedEntriesCompanion.copyWith(serverID: Value(serverID));
     }
     await FeedEntryHelper.updateFeedEntry(feedEntriesCompanion);
   }
@@ -253,16 +288,19 @@ class FeedsAPI {
   Future syncFeedMedia(FeedMedia feedMedia) async {
     Map<String, dynamic> obj = await FeedMedias.toMap(feedMedia);
 
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/feedMediaUploadURL',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-        },
-        body: JsonEncoder().convert({
-          'fileName': feedMedia.filePath,
-        }));
+    Response resp = await BackendAPI()
+        .apiClient
+        .post(Uri.parse('${BackendAPI().serverHost}/feedMediaUploadURL'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+            },
+            body: JsonEncoder().convert({
+              'fileName': feedMedia.filePath,
+            }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('feedMediaUploadURL failed with error: ${resp.body}', data: {"feedMedia": feedMedia});
+      Logger.throwError('feedMediaUploadURL failed with error: ${resp.body}',
+          data: {"feedMedia": feedMedia});
     }
     Map<String, dynamic> uploadUrls = JsonDecoder().convert(resp.body);
 
@@ -270,44 +308,57 @@ class FeedsAPI {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath));
       // TODO check video files length in capture page (max 200mB, cloudflare limit)
       if (file.lengthSync() >= 199 * 1024 * 1024) {
-        Logger.log('Ignoring feed medias sync: file too large (${file.lengthSync() / (1024 * 1024)} MB)');
+        Logger.log(
+            'Ignoring feed medias sync: file too large (${file.lengthSync() / (1024 * 1024)} MB)');
         return; // TODO continue with thumbnail upload
       }
       if (await file.exists()) {
         Response resp = await BackendAPI().storageClient.put(
-            '${BackendAPI().storageServerHost}${uploadUrls['filePath']}',
+            Uri.parse(
+                '${BackendAPI().storageServerHost}${uploadUrls['filePath']}'),
             body: file.readAsBytesSync(),
             headers: {'Host': BackendAPI().storageServerHostHeader});
         if (resp.statusCode ~/ 100 != 2) {
-          Logger.throwError('Upload failed with error: ${resp.body}',
-              data: {"feedMedia": feedMedia, "filePath": feedMedia.filePath, "fileSize": file.lengthSync()});
+          Logger.throwError('Upload failed with error: ${resp.body}', data: {
+            "feedMedia": feedMedia,
+            "filePath": feedMedia.filePath,
+            "fileSize": file.lengthSync()
+          });
         }
       }
     }
 
     {
-      File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
+      File file =
+          File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
       if (await file.exists()) {
         Response resp = await BackendAPI().storageClient.put(
-            '${BackendAPI().storageServerHost}${uploadUrls['thumbnailPath']}',
+            Uri.parse(
+                '${BackendAPI().storageServerHost}${uploadUrls['thumbnailPath']}'),
             body: file.readAsBytesSync(),
             headers: {'Host': BackendAPI().storageServerHostHeader});
         if (resp.statusCode ~/ 100 != 2) {
-          Logger.throwError('Upload failed with error: ${resp.body}',
-              data: {"feedMedia": feedMedia, "thumbnailPath": feedMedia.thumbnailPath, "fileSize": file.lengthSync()});
+          Logger.throwError('Upload failed with error: ${resp.body}', data: {
+            "feedMedia": feedMedia,
+            "thumbnailPath": feedMedia.thumbnailPath,
+            "fileSize": file.lengthSync()
+          });
         }
       }
     }
 
     obj['filePath'] = Uri.parse(uploadUrls['filePath']).path.split('/')[2];
-    obj['thumbnailPath'] = Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2];
+    obj['thumbnailPath'] =
+        Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2];
 
     String serverID = await BackendAPI().postPut('/feedMedia', obj);
 
     try {
-      FeedMediasCompanion feedMediasCompanion = FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
+      FeedMediasCompanion feedMediasCompanion =
+          FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
       if (serverID != null) {
-        feedMediasCompanion = feedMediasCompanion.copyWith(serverID: Value(serverID));
+        feedMediasCompanion =
+            feedMediasCompanion.copyWith(serverID: Value(serverID));
       }
       await RelDB.get().feedsDAO.updateFeedMedia(feedMediasCompanion);
     } catch (e, trace) {
@@ -406,18 +457,22 @@ class FeedsAPI {
   }
 
   Future archivePlant(String id) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/plant/$id/archive', headers: {
-      'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
-    });
+    Response resp = await BackendAPI().apiClient.post(
+        Uri.parse('${BackendAPI().serverHost}/plant/$id/archive'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('archivePlant failed with error: ${resp.body}', data: {"id": id});
+      Logger.throwError('archivePlant failed with error: ${resp.body}',
+          data: {"id": id});
     }
   }
 
   Future<List<dynamic>> publicPlants(int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/plants?limit=$n&offset=$offset');
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/plants?limit=$n&offset=$offset');
       return results['plants'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
@@ -427,8 +482,8 @@ class FeedsAPI {
 
   Future<List<dynamic>> searchPlants(String q, int n, int offset) async {
     try {
-      Map<String, dynamic> results =
-          await BackendAPI().get('/public/plants/search?q=${Uri.encodeComponent(q)}&limit=$n&offset=$offset');
+      Map<String, dynamic> results = await BackendAPI().get(
+          '/public/plants/search?q=${Uri.encodeComponent(q)}&limit=$n&offset=$offset');
       return results['plants'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
@@ -438,7 +493,8 @@ class FeedsAPI {
 
   Future<Map<String, dynamic>> publicPlant(String id) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/plant/$id');
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/plant/$id');
       return results;
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"id": id});
@@ -448,7 +504,8 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicFeedEntries(int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntries?limit=$n&offset=$offset');
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/feedEntries?limit=$n&offset=$offset');
       return results['entries'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
@@ -458,7 +515,8 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicFollowedFeedEntries(int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntries/followed?limit=$n&offset=$offset');
+      Map<String, dynamic> results = await BackendAPI()
+          .get('/public/feedEntries/followed?limit=$n&offset=$offset');
       return results['entries'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
@@ -468,7 +526,8 @@ class FeedsAPI {
 
   Future<List<dynamic>> followedPlants(int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/plants/followed?limit=$n&offset=$offset');
+      Map<String, dynamic> results = await BackendAPI()
+          .get('/public/plants/followed?limit=$n&offset=$offset');
       return results['plants'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
@@ -478,7 +537,8 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicCommentedFeedEntries(int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntries/commented?limit=$n&offset=$offset');
+      Map<String, dynamic> results = await BackendAPI()
+          .get('/public/feedEntries/commented?limit=$n&offset=$offset');
       return results['entries'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
@@ -488,7 +548,8 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicLiked(int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/liked?limit=$n&offset=$offset');
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/liked?limit=$n&offset=$offset');
       return results['entries'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"n": n, "offset": offset});
@@ -496,9 +557,11 @@ class FeedsAPI {
     }
   }
 
-  Future<List<dynamic>> publicPlantFeedEntries(String id, int n, int offset) async {
+  Future<List<dynamic>> publicPlantFeedEntries(
+      String id, int n, int offset) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/plant/$id/feedEntries?limit=$n&offset=$offset');
+      Map<String, dynamic> results = await BackendAPI()
+          .get('/public/plant/$id/feedEntries?limit=$n&offset=$offset');
       return results['entries'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"id": id, "n": n, "offset": offset});
@@ -508,7 +571,8 @@ class FeedsAPI {
 
   Future<Map<String, dynamic>> publicFeedEntry(String id) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntry/$id');
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/feedEntry/$id');
       return results['entry'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"id": id});
@@ -518,7 +582,8 @@ class FeedsAPI {
 
   Future<List<dynamic>> publicFeedMediasForFeedEntry(String id) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/feedEntry/$id/feedMedias');
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/feedEntry/$id/feedMedias');
       return results['medias'];
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"id": id});
@@ -528,7 +593,8 @@ class FeedsAPI {
 
   Future<Map<String, dynamic>> publicFeedMedia(String id) async {
     try {
-      Map<String, dynamic> results = await BackendAPI().get('/public/feedMedia/$id');
+      Map<String, dynamic> results =
+          await BackendAPI().get('/public/feedMedia/$id');
       return results;
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"id": id});
@@ -579,9 +645,9 @@ class FeedsAPI {
 
   Future download(String from, String to) async {
     try {
-      Response fileResp = await BackendAPI()
-          .storageClient
-          .get('${BackendAPI().storageServerHost}$from', headers: {'Host': BackendAPI().storageServerHostHeader});
+      Response fileResp = await BackendAPI().storageClient.get(
+          Uri.parse('${BackendAPI().storageServerHost}$from'),
+          headers: {'Host': BackendAPI().storageServerHostHeader});
       await File(to).writeAsBytes(fileResp.bodyBytes);
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"from": from, "to": to}, fwdThrow: true);
@@ -593,17 +659,22 @@ class FeedsAPI {
   }
 
   Future setSynced(String type, String id) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/$type/$id/sync', headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .post(Uri.parse('${BackendAPI().serverHost}/$type/$id/sync'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('setSynced failed: ${resp.body}', data: {"type": type, "id": id});
+      Logger.throwError('setSynced failed: ${resp.body}',
+          data: {"type": type, "id": id});
     }
   }
 
   Future<Map<String, dynamic>> _unsynced(String type) async {
-    Response resp = await BackendAPI().apiClient.get('${BackendAPI().serverHost}/sync$type', headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });

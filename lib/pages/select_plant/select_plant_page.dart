@@ -33,7 +33,7 @@ class SelectPlantPage extends StatelessWidget {
     return BlocListener<SelectPlantBloc, SelectPlantBlocState>(
       listener: (BuildContext context, SelectPlantBlocState state) {},
       child: BlocBuilder<SelectPlantBloc, SelectPlantBlocState>(
-        cubit: BlocProvider.of<SelectPlantBloc>(context),
+        bloc: BlocProvider.of<SelectPlantBloc>(context),
         builder: (BuildContext context, SelectPlantBlocState state) {
           Widget body;
           int i = 0;

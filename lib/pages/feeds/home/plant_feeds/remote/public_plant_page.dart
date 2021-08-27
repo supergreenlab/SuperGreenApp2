@@ -43,7 +43,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
     return Intl.message(
       'Viewing single log entry',
       name: 'publicPlantPageSingleEntry',
-      desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Label for the button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -52,7 +53,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
     return Intl.message(
       'View complete diary',
       name: 'publicPlantPageSingleEntryButton',
-      desc: 'Button that shows the complete diary when looking at a single feed entry',
+      desc:
+          'Button that shows the complete diary when looking at a single feed entry',
       locale: SGLLocalizations.current.localeName,
     );
   }
@@ -60,7 +62,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PublicPlantBloc, PublicPlantBlocState>(
-      cubit: BlocProvider.of<PublicPlantBloc>(context),
+      bloc: BlocProvider.of<PublicPlantBloc>(context),
       builder: (BuildContext context, PublicPlantBlocState state) {
         return Scaffold(body: _renderFeed(context, state));
       },
@@ -78,7 +80,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
         title: PublicPlantPage.publicPlantPageSingleEntry,
         button: PublicPlantPage.publicPlantPageSingleEntryButton,
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToPublicPlant(
             state.plantID,
           ));
         },
@@ -91,7 +94,9 @@ class PublicPlantPage extends TraceableStatelessWidget {
           color: Colors.white,
         ),
         onPressed: () async {
-          await ShareExtend.share("https://supergreenlab.com/public/plant?id=${state.plantID}", 'text');
+          await ShareExtend.share(
+              "https://supergreenlab.com/public/plant?id=${state.plantID}",
+              'text');
         },
       ),
     ];
@@ -102,7 +107,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
             highlightColor: Colors.transparent,
             onTap: () {
               if (BackendAPI().usersAPI.loggedIn) {
-                BlocProvider.of<PublicPlantBloc>(context).add(PublicPlantBlocEventFollowPlant());
+                BlocProvider.of<PublicPlantBloc>(context)
+                    .add(PublicPlantBlocEventFollowPlant());
               } else {
                 _login(context);
               }
@@ -116,8 +122,11 @@ class PublicPlantPage extends TraceableStatelessWidget {
                     color: Color(0xff3bb30b),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                    child: Text(state.follows ? 'Following (${state.nFollows})' : 'Follow'),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 10.0),
+                    child: Text(state.follows
+                        ? 'Following (${state.nFollows})'
+                        : 'Follow'),
                   ),
                 ),
               ],
@@ -125,8 +134,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
           ));
     }
     return BlocProvider(
-      create: (context) =>
-          FeedBloc(RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID, state.commentID, state.replyTo)),
+      create: (context) => FeedBloc(RemotePlantFeedBlocDelegate(
+          state.plantID, state.feedEntryID, state.commentID, state.replyTo)),
       child: FeedPage(
           automaticallyImplyLeading: true,
           title: state.plantName ?? '',
@@ -144,7 +153,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
                   return tabs[index](context, state);
                 },
                 pagination: SwiperPagination(
-                  builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
+                  builder: new DotSwiperPaginationBuilder(
+                      color: Colors.white, activeColor: Color(0xff3bb30b)),
                 ),
                 loop: false,
               ),
@@ -156,12 +166,15 @@ class PublicPlantPage extends TraceableStatelessWidget {
 
   Widget _renderPlantInfos(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-        create: (context) => PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)), child: PlantInfosPage());
+        create: (context) =>
+            PlantInfosBloc(RemotePlantInfosBlocDelegate(state.plantID)),
+        child: PlantInfosPage());
   }
 
   Widget _renderProducts(BuildContext context, PublicPlantBlocState state) {
     return BlocProvider(
-      create: (context) => ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
+      create: (context) =>
+          ProductsBloc(RemoteProductsBlocDelegate(state.plantID)),
       child: ProductsPage(
         editable: false,
       ),
@@ -193,7 +206,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 }

@@ -40,10 +40,12 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
   const FeedVentilationTimerFormPage(this.state, {Key key}) : super(key: key);
 
   @override
-  _FeedVentilationTimerFormPageState createState() => _FeedVentilationTimerFormPageState();
+  _FeedVentilationTimerFormPageState createState() =>
+      _FeedVentilationTimerFormPageState();
 }
 
-class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormPage> {
+class _FeedVentilationTimerFormPageState
+    extends State<FeedVentilationTimerFormPage> {
   int _blowerDay = 0;
   int _blowerNight = 0;
 
@@ -57,7 +59,7 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
@@ -71,8 +73,10 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MarkdownBody(
-                data: FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: FeedVentilationTimerFormPage
+                    .instructionsBlowerTimerModeDescription,
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
             SliderFormParam(
@@ -89,8 +93,10 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerMin: widget.state.blowerMin.copyWith(value: _blowerNight)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                    FeedVentilationFormBlocParamsChangedEvent(
+                        blowerMin: widget.state.blowerMin
+                            .copyWith(value: _blowerNight)));
               },
             ),
             SliderFormParam(
@@ -107,8 +113,10 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
                 });
               },
               onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerMax: widget.state.blowerMax.copyWith(value: _blowerDay)));
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                    FeedVentilationFormBlocParamsChangedEvent(
+                        blowerMax: widget.state.blowerMax
+                            .copyWith(value: _blowerDay)));
               },
             ),
           ],

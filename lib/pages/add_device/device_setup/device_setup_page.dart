@@ -54,35 +54,39 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DeviceSetupBloc>(context),
+      bloc: BlocProvider.of<DeviceSetupBloc>(context),
       listener: (BuildContext context, DeviceSetupBlocState state) async {
         if (state is DeviceSetupBlocStateDone) {
           Device device = state.device;
           if (state.requiresInititalSetup) {
-            FutureFn ff1 = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
+            FutureFn ff1 =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToDeviceNameEvent(device, futureFn: ff1.futureFn));
             device = await ff1.future;
           }
 
           FutureFn ff2 = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-          BlocProvider.of<MainNavigatorBloc>(context)
-              .add(MainNavigateToDevicePairingEvent(device, futureFn: ff2.futureFn));
+          BlocProvider.of<MainNavigatorBloc>(context).add(
+              MainNavigateToDevicePairingEvent(device, futureFn: ff2.futureFn));
           device = await ff2.future;
 
           if (state.requiresWifiSetup) {
-            FutureFn ff2 = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
-            BlocProvider.of<MainNavigatorBloc>(context)
-                .add(MainNavigateToDeviceWifiEvent(device, futureFn: ff2.futureFn));
+            FutureFn ff2 =
+                BlocProvider.of<MainNavigatorBloc>(context).futureFn();
+            BlocProvider.of<MainNavigatorBloc>(context).add(
+                MainNavigateToDeviceWifiEvent(device, futureFn: ff2.futureFn));
             device = await ff2.future;
           }
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device, mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(param: device, mustPop: true));
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
-          cubit: Provider.of<DeviceSetupBloc>(context),
+          bloc: Provider.of<DeviceSetupBloc>(context),
           builder: (context, state) {
-            bool canGoBack = state is DeviceSetupBlocStateAlreadyExists || state is DeviceSetupBlocStateLoadingError;
+            bool canGoBack = state is DeviceSetupBlocStateAlreadyExists ||
+                state is DeviceSetupBlocStateLoadingError;
             Widget body;
             if (state is DeviceSetupBlocStateAlreadyExists) {
               body = _renderAlreadyAdded(context);
@@ -105,7 +109,8 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body),
               ),
             );
           }),
@@ -120,7 +125,8 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
 
   Widget _renderAlreadyAdded(BuildContext context) {
     return Fullscreen(
-        title: 'This controller is already added!', child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
+        title: 'This controller is already added!',
+        child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
   }
 
   Widget _renderAuthForm(BuildContext context) {
@@ -139,8 +145,10 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
               padding: const EdgeInsets.all(16.0),
               child: MarkdownBody(
                 fitContent: true,
-                data: DeviceSetupPage.settingsDeviceSetupPagePasswordInstructions(),
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+                data: DeviceSetupPage
+                    .settingsDeviceSetupPagePasswordInstructions(),
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
           ),
@@ -190,7 +198,8 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
             child: GreenButton(
               onPressed: isValid()
                   ? () {
-                      BlocProvider.of<DeviceSetupBloc>(context).add(DeviceSetupBlocEventStartSetup(
+                      BlocProvider.of<DeviceSetupBloc>(context)
+                          .add(DeviceSetupBlocEventStartSetup(
                         username: _usernameController.text,
                         password: _passwordController.text,
                       ));
@@ -220,12 +229,15 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
           large: true,
           elevation: 5,
         ),
-        Expanded(child: FullscreenLoading(title: 'Loading please wait..', percent: state.percent)),
+        Expanded(
+            child: FullscreenLoading(
+                title: 'Loading please wait..', percent: state.percent)),
       ],
     );
   }
 
   bool isValid() {
-    return _usernameController.text.length >= 4 && _passwordController.text.length >= 4;
+    return _usernameController.text.length >= 4 &&
+        _passwordController.text.length >= 4;
   }
 }

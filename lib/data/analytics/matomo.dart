@@ -19,7 +19,8 @@ abstract class TraceableStatelessWidget extends StatelessWidget {
 
   @override
   StatelessElement createElement() {
-    MatomoTracker.trackScreenWithName(this.name.isEmpty ? this.runtimeType.toString() : this.name);
+    MatomoTracker.trackScreenWithName(
+        this.name.isEmpty ? this.runtimeType.toString() : this.name);
     return StatelessElement(this);
   }
 }
@@ -31,7 +32,8 @@ abstract class TraceableStatefulWidget extends StatefulWidget {
 
   @override
   StatefulElement createElement() {
-    MatomoTracker.trackScreenWithName(this.name.isEmpty ? this.runtimeType.toString() : this.name);
+    MatomoTracker.trackScreenWithName(
+        this.name.isEmpty ? this.runtimeType.toString() : this.name);
     return StatefulElement(this);
   }
 }
@@ -39,11 +41,13 @@ abstract class TraceableStatefulWidget extends StatefulWidget {
 abstract class TraceableInheritedWidget extends InheritedWidget {
   final String name;
 
-  const TraceableInheritedWidget({this.name = '', Key key, Widget child}) : super(key: key, child: child);
+  const TraceableInheritedWidget({this.name = '', Key key, Widget child})
+      : super(key: key, child: child);
 
   @override
   InheritedElement createElement() {
-    MatomoTracker.trackScreenWithName(this.name.isEmpty ? this.runtimeType.toString() : this.name);
+    MatomoTracker.trackScreenWithName(
+        this.name.isEmpty ? this.runtimeType.toString() : this.name);
     return InheritedElement(this);
   }
 }
@@ -78,7 +82,8 @@ class MatomoTracker {
   Queue<_Event> _queue = Queue();
   Timer _timer;
 
-  initialize({@required int siteId, @required String url, String visitorId}) async {
+  initialize(
+      {@required int siteId, @required String url, String visitorId}) async {
     this.siteId = siteId;
     this.url = url;
 
@@ -100,13 +105,15 @@ class MatomoTracker {
     _prefs = await SharedPreferences.getInstance();
 
     if (_prefs.containsKey(kFirstVisit)) {
-      firstVisit = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kFirstVisit));
+      firstVisit =
+          DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kFirstVisit));
     } else {
       _prefs.setInt(kFirstVisit, firstVisit.millisecondsSinceEpoch);
     }
 
     if (_prefs.containsKey(kLastVisit)) {
-      lastVisit = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kLastVisit));
+      lastVisit =
+          DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kLastVisit));
     }
     // Now is the last visit.
     _prefs.setInt(kLastVisit, lastVisit.millisecondsSinceEpoch);
@@ -116,7 +123,8 @@ class MatomoTracker {
     }
     _prefs.setInt(kVisitCount, visitCount);
 
-    session = _Session(firstVisit: firstVisit, lastVisit: lastVisit, visitCount: visitCount);
+    session = _Session(
+        firstVisit: firstVisit, lastVisit: lastVisit, visitCount: visitCount);
 
     // Initialize Visitor
     if (visitorId == null) {
@@ -194,7 +202,8 @@ class MatomoTracker {
     ));
   }
 
-  static void trackEvent(String eventCategory, String eventName, String eventAction) {
+  static void trackEvent(
+      String eventCategory, String eventName, String eventAction) {
     var tracker = MatomoTracker();
     tracker._track(_Event(
       tracker: tracker,
@@ -278,8 +287,10 @@ class _Event {
 
     // Session
     map['_idvc'] = this.tracker.session.visitCount.toString();
-    map['_viewts'] = this.tracker.session.lastVisit.millisecondsSinceEpoch ~/ 1000;
-    map['_idts'] = this.tracker.session.firstVisit.millisecondsSinceEpoch ~/ 1000;
+    map['_viewts'] =
+        this.tracker.session.lastVisit.millisecondsSinceEpoch ~/ 1000;
+    map['_idts'] =
+        this.tracker.session.firstVisit.millisecondsSinceEpoch ~/ 1000;
 
     map['url'] = '${this.tracker.contentBase}/$action';
     map['action_name'] = action;
@@ -334,7 +345,7 @@ class _MatomoDispatcher {
       url = '$url$key=$value&';
     }
     //Logger.log(' -> $url');
-    http.post(url, headers: headers).then((http.Response response) {
+    http.post(Uri.parse(url), headers: headers).then((http.Response response) {
       final int statusCode = response.statusCode;
       //Logger.log(' <- $statusCode');
       if (statusCode != 200) {}

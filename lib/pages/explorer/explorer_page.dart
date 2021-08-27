@@ -125,7 +125,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
         if (state is ExplorerBlocStateLoaded) {}
       },
       child: BlocBuilder<ExplorerBloc, ExplorerBlocState>(
-          cubit: BlocProvider.of<ExplorerBloc>(context),
+          bloc: BlocProvider.of<ExplorerBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is ExplorerBlocStateInit) {
@@ -142,8 +142,11 @@ class _ExplorerPageState extends State<ExplorerPage> {
                 hideBackButton: true,
                 leading: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child:
-                      SizedBox(width: 100, height: 100, child: SvgPicture.asset('assets/explorer/logo_sgl_white.svg')),
+                  child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: SvgPicture.asset(
+                          'assets/explorer/logo_sgl_white.svg')),
                 ),
                 actions: [
                   IconButton(
@@ -152,7 +155,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToBookmarks());
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigateToBookmarks());
                     },
                   ),
                   IconButton(
@@ -171,7 +175,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
   }
 
   Widget _renderFeed(BuildContext context, ExplorerBlocStateLoaded state) {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return Stack(
         clipBehavior: Clip.hardEdge,
         fit: StackFit.expand,
@@ -200,7 +205,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
                           highlightColor: Colors.transparent,
                           onTap: () {
                             if (BackendAPI().usersAPI.loggedIn) {
-                              BlocProvider.of<FeedBloc>(context).add(ExplorerFeedBlocDelegateFollowEvent(state));
+                              BlocProvider.of<FeedBloc>(context).add(
+                                  ExplorerFeedBlocDelegateFollowEvent(state));
                             } else {
                               _login(context);
                             }
@@ -214,23 +220,30 @@ class _ExplorerPageState extends State<ExplorerPage> {
                                   color: Color(0xff3bb30b),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                  child: Text('Follow', style: TextStyle(color: Colors.white)),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 2.0, horizontal: 10.0),
+                                  child: Text('Follow',
+                                      style: TextStyle(color: Colors.white)),
                                 ),
                               ),
                             ],
                           ),
                         )
-                      : Text('Followed', style: TextStyle(color: Color(0xff3bb30b))),
+                      : Text('Followed',
+                          style: TextStyle(color: Color(0xff3bb30b))),
                   IconButton(
                     icon: Text(
                       'Open plant',
-                      style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Color(0xff3bb30b),
+                          fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+                      BlocProvider.of<MainNavigatorBloc>(context).add(
+                          MainNavigateToPublicPlant(state.plantID,
+                              feedEntryID: state.feedEntryID));
                     },
                   )
                 ];
@@ -295,7 +308,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
     });
   }
 
-  Widget _renderSearchField(BuildContext context, ExplorerBlocStateLoaded state) {
+  Widget _renderSearchField(
+      BuildContext context, ExplorerBlocStateLoaded state) {
     return Container(
       height: 40,
       decoration: BoxDecoration(
@@ -350,7 +364,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
                       autocompleteTimer.cancel();
                     }
                     autocompleteTimer = Timer(Duration(milliseconds: 500), () {
-                      BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(value, 0));
+                      BlocProvider.of<SearchBloc>(context)
+                          .add(SearchBlocEventSearch(value, 0));
                       autocompleteTimer = null;
                     });
                   },
@@ -367,16 +382,22 @@ class _ExplorerPageState extends State<ExplorerPage> {
   void onMakePublic(ExplorerBlocState state) {
     if (state is ExplorerBlocStateLoaded && state.loggedIn) {
       BlocProvider.of<MainNavigatorBloc>(context).add(
-          MainNavigateToSelectPlantEvent(ExplorerPage.explorerPageSelectPlantTitle, futureFn: (Future future) async {
+          MainNavigateToSelectPlantEvent(
+              ExplorerPage.explorerPageSelectPlantTitle,
+              futureFn: (Future future) async {
         dynamic plant = await future;
         if (plant == null) {
           return;
         }
         if (plant is Plant) {
-          BlocProvider.of<ExplorerBloc>(context).add(ExplorerBlocEventMakePublic(plant));
-          Fluttertoast.showToast(msg: ExplorerPage.explorerPagePublicPlantConfirmation(plant.name));
+          BlocProvider.of<ExplorerBloc>(context)
+              .add(ExplorerBlocEventMakePublic(plant));
+          Fluttertoast.showToast(
+              msg:
+                  ExplorerPage.explorerPagePublicPlantConfirmation(plant.name));
           Timer(Duration(milliseconds: 1000), () {
-            BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+            BlocProvider.of<NotificationsBloc>(context)
+                .add(NotificationsBlocEventRequestPermission());
           });
         }
       }));
@@ -410,7 +431,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
           );
         });
     if (confirm) {
-      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
+      BlocProvider.of<MainNavigatorBloc>(context)
+          .add(MainNavigateToSettingsAuth());
     }
   }
 

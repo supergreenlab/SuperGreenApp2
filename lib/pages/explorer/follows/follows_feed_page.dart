@@ -43,7 +43,7 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
         if (state is FollowsFeedBlocStateLoaded) {}
       },
       child: BlocBuilder<FollowsFeedBloc, FollowsFeedBlocState>(
-          cubit: BlocProvider.of<FollowsFeedBloc>(context),
+          bloc: BlocProvider.of<FollowsFeedBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is FollowsFeedBlocStateInit) {
@@ -88,11 +88,15 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
             IconButton(
               icon: Text(
                 'Open plant',
-                style: TextStyle(fontSize: 12.0, color: Color(0xff3bb30b), fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 12.0,
+                    color: Color(0xff3bb30b),
+                    fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToPublicPlant(state.plantID, name: state.plantName, feedEntryID: state.feedEntryID));
+                    MainNavigateToPublicPlant(state.plantID,
+                        name: state.plantName, feedEntryID: state.feedEntryID));
               },
             )
           ];
@@ -104,7 +108,8 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
   Widget renderNoCard(BuildContext context) {
     return Fullscreen(
       title: 'Not following any plants yet',
-      subtitle: 'You can follow plant diaries, only their cards will show up here.',
+      subtitle:
+          'You can follow plant diaries, only their cards will show up here.',
       child: Icon(
         Icons.follow_the_signs,
         color: Color(0xff3bb30b),

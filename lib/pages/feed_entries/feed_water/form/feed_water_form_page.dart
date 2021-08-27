@@ -59,15 +59,17 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        cubit: BlocProvider.of<FeedWaterFormBloc>(context),
+        bloc: BlocProvider.of<FeedWaterFormBloc>(context),
         listener: (BuildContext context, FeedWaterFormBlocState state) {
           if (state is FeedWaterFormBlocStateDone) {
-            BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+            BlocProvider.of<TowelieBloc>(context).add(
+                TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(mustPop: true));
           }
         },
         child: BlocBuilder<FeedWaterFormBloc, FeedWaterFormBlocState>(
-            cubit: BlocProvider.of<FeedWaterFormBloc>(context),
+            bloc: BlocProvider.of<FeedWaterFormBloc>(context),
             builder: (context, state) {
               return FeedFormLayout(
                 title: '💧',
@@ -83,11 +85,18 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                       volume,
                       nutrient,
                       wateringLab,
-                      phController.value.text == '' ? null : double.parse(phController.value.text.replaceAll(',', '.')),
-                      ecController.value.text == '' ? null : double.parse(ecController.value.text.replaceAll(',', '.')),
+                      phController.value.text == ''
+                          ? null
+                          : double.parse(
+                              phController.value.text.replaceAll(',', '.')),
+                      ecController.value.text == ''
+                          ? null
+                          : double.parse(
+                              ecController.value.text.replaceAll(',', '.')),
                       tdsController.value.text == ''
                           ? null
-                          : double.parse(tdsController.value.text.replaceAll(',', '.')),
+                          : double.parse(
+                              tdsController.value.text.replaceAll(',', '.')),
                       messageController.text),
                 ),
               );
@@ -120,8 +129,9 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child:
-                renderOptionCheckbx(context, 'Watering all plants in the lab with the **same quantity**.', (newValue) {
+            child: renderOptionCheckbx(context,
+                'Watering all plants in the lab with the **same quantity**.',
+                (newValue) {
               setState(() {
                 wateringLab = newValue;
               });
@@ -174,14 +184,22 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                           child: Column(
                             children: <Widget>[
                               Text('PH:',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green)),
                               Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24.0),
                                   child: TextField(
-                                    decoration: InputDecoration(hintText: 'ex: 6.5'),
-                                    textCapitalization: TextCapitalization.words,
-                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                    decoration:
+                                        InputDecoration(hintText: 'ex: 6.5'),
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
                                     controller: phController,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 20),
@@ -203,12 +221,18 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                         child: Column(
                           children: [
                             Text('EC (μS/cm):',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: TextField(
-                                decoration: InputDecoration(hintText: 'ex: 1800'),
-                                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                decoration:
+                                    InputDecoration(hintText: 'ex: 1800'),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
                                 controller: ecController,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20),
@@ -217,17 +241,25 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
                           ],
                         ),
                       ),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('OR', style: TextStyle(fontSize: 20))),
+                      Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('OR', style: TextStyle(fontSize: 20))),
                       Expanded(
                         child: Column(
                           children: [
                             Text('TDS (ppm):',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green)),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: TextField(
-                                decoration: InputDecoration(hintText: 'ex: 1200'),
-                                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                decoration:
+                                    InputDecoration(hintText: 'ex: 1200'),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
                                 controller: tdsController,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20),
@@ -249,7 +281,8 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
     return Text('');
   }
 
-  Widget renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget renderOptionCheckbx(
+      BuildContext context, String text, Function(bool) onChanged, bool value) {
     return Container(
       child: Row(
         children: <Widget>[
@@ -265,7 +298,8 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
               child: MarkdownBody(
                 fitContent: true,
                 data: text,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
+                styleSheet: MarkdownStyleSheet(
+                    p: TextStyle(color: Colors.black, fontSize: 14)),
               ),
             ),
           ),

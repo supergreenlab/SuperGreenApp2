@@ -31,12 +31,16 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:tuple/tuple.dart';
 
 List<Tuple2<String, String>> phasesTitles = [
-  Tuple2(
-      FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelGermination, 'assets/plant_infos/icon_germination_date.svg'),
-  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelVegging, 'assets/plant_infos/icon_vegging_since.svg'),
-  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelBlooming, 'assets/plant_infos/icon_blooming_since.svg'),
-  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelDrying, 'assets/plant_infos/icon_drying_since.svg'),
-  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelCuring, 'assets/plant_infos/icon_curing_since.svg'),
+  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelGermination,
+      'assets/plant_infos/icon_germination_date.svg'),
+  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelVegging,
+      'assets/plant_infos/icon_vegging_since.svg'),
+  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelBlooming,
+      'assets/plant_infos/icon_blooming_since.svg'),
+  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelDrying,
+      'assets/plant_infos/icon_drying_since.svg'),
+  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelCuring,
+      'assets/plant_infos/icon_curing_since.svg'),
 ];
 
 class FeedLifeEventFormPage extends TraceableStatefulWidget {
@@ -137,16 +141,19 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             date = state.date ?? DateTime.now();
           });
         } else if (state is FeedLifeEventFormBlocStateDone) {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<FeedLifeEventFormBloc, FeedLifeEventFormBlocState>(
-          cubit: BlocProvider.of<FeedLifeEventFormBloc>(context),
+          bloc: BlocProvider.of<FeedLifeEventFormBloc>(context),
           builder: (context, state) {
             Widget body;
             Tuple2<String, String> phaseTitle = Tuple2(
-                FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabel, 'assets/plant_infos/icon_germination_date.svg');
-            if (state is FeedLifeEventFormBlocStateInit || state is FeedLifeEventFormBlocStateDone) {
+                FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabel,
+                'assets/plant_infos/icon_germination_date.svg');
+            if (state is FeedLifeEventFormBlocStateInit ||
+                state is FeedLifeEventFormBlocStateDone) {
               body = Expanded(child: FullscreenLoading());
             } else if (state is FeedLifeEventFormBlocStateLoaded) {
               body = renderForm(context, state);
@@ -157,11 +164,15 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
               fontSize: 35,
               topBarPadding: 0,
               onOK: () {
-                BlocProvider.of<FeedLifeEventFormBloc>(context).add(FeedLifeEventFormBlocEventSetDate(date));
+                BlocProvider.of<FeedLifeEventFormBloc>(context)
+                    .add(FeedLifeEventFormBlocEventSetDate(date));
               },
               body: Column(
                 children: [
-                  FeedFormParamLayout(title: phaseTitle.item1, icon: phaseTitle.item2, child: body),
+                  FeedFormParamLayout(
+                      title: phaseTitle.item1,
+                      icon: phaseTitle.item2,
+                      child: body),
                 ],
               ),
             );
@@ -169,11 +180,13 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
     );
   }
 
-  Widget renderForm(BuildContext context, FeedLifeEventFormBlocStateLoaded state) {
+  Widget renderForm(
+      BuildContext context, FeedLifeEventFormBlocStateLoaded state) {
     String text;
     String buttonText;
     if (date != null) {
-      String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+      String format =
+          AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
       DateFormat f = DateFormat(format);
       text = f.format(date);
       buttonText = FeedLifeEventFormPage.feedLifeEventFormPageChangeButton;
@@ -186,7 +199,8 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SvgPicture.asset('assets/feed_form/icon_calendar.svg', width: 50, height: 50),
+          SvgPicture.asset('assets/feed_form/icon_calendar.svg',
+              width: 50, height: 50),
           Text(
             text,
             style: TextStyle(fontSize: 20, color: Colors.grey.shade700),

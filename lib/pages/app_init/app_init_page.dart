@@ -31,22 +31,28 @@ class AppInitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AppInitBloc, AppInitBlocState>(
-      cubit: BlocProvider.of<AppInitBloc>(context),
+      bloc: BlocProvider.of<AppInitBloc>(context),
       listener: (BuildContext context, AppInitBlocState state) {
         if (state is AppInitBlocStateReady) {
-          BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventInit());
-          BlocProvider.of<DeviceDaemonBloc>(context).add(DeviceDaemonBlocEventInit());
-          BlocProvider.of<SyncerBloc>(context).add(SyncerBlocEventInit()); // force-instanciate SyncerBloc
-          BlocProvider.of<DeepLinkBloc>(context).add(DeepLinkBlocEventInit()); // force-instanciate DeepLinkBloc
+          BlocProvider.of<NotificationsBloc>(context)
+              .add(NotificationsBlocEventInit());
+          BlocProvider.of<DeviceDaemonBloc>(context)
+              .add(DeviceDaemonBlocEventInit());
+          BlocProvider.of<SyncerBloc>(context)
+              .add(SyncerBlocEventInit()); // force-instanciate SyncerBloc
+          BlocProvider.of<DeepLinkBloc>(context)
+              .add(DeepLinkBlocEventInit()); // force-instanciate DeepLinkBloc
           if (state.firstStart == false) {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigateToHomeEvent());
           } else {
-            BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventAppInit());
+            BlocProvider.of<TowelieBloc>(context)
+                .add(TowelieBlocEventAppInit());
           }
         }
       },
       child: BlocBuilder<AppInitBloc, AppInitBlocState>(
-        cubit: BlocProvider.of<AppInitBloc>(context),
+        bloc: BlocProvider.of<AppInitBloc>(context),
         builder: (BuildContext context, AppInitBlocState state) {
           if (state is AppInitBlocStateReady) {
             return WelcomePage(!state.firstStart);

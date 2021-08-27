@@ -40,12 +40,10 @@ class _PlantDialButtonState extends State<PlantDialButton> {
     super.initState();
 
     rootBundle.load('assets/home/dial_button.riv').then((data) {
-      final file = RiveFile();
-      if (file.import(data)) {
-        final artboard = file.mainArtboard;
-        artboard.addController(_controller = SimpleAnimation('idle'));
-        setState(() => _riveArtboard = artboard);
-      }
+      final file = RiveFile.import(data);
+      final artboard = file.mainArtboard;
+      artboard.addController(_controller = SimpleAnimation('idle'));
+      setState(() => _riveArtboard = artboard);
     });
   }
 

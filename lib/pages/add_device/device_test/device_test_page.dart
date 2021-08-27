@@ -40,7 +40,8 @@ class DeviceTestPage extends TraceableStatefulWidget {
       '(100% power for $time s)',
       args: [time],
       name: 'testLEDTiming',
-      desc: 'Wait message when setting a led to 100% for a few seconds when setting up a new controller.',
+      desc:
+          'Wait message when setting a led to 100% for a few seconds when setting up a new controller.',
       locale: SGLLocalizations.current.localeName,
       examples: const {'time': 0.34},
     );
@@ -111,11 +112,12 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DeviceTestBloc>(context),
+      bloc: BlocProvider.of<DeviceTestBloc>(context),
       listener: (BuildContext context, DeviceTestBlocState state) async {
         if (state is DeviceTestBlocStateDone) {
           Timer(const Duration(milliseconds: 1500), () {
-            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
+            BlocProvider.of<MainNavigatorBloc>(context)
+                .add(MainNavigatorActionPop(param: true));
           });
         } else if (state is DeviceTestBlocStateTestingLed) {
           millis = 2000;
@@ -130,7 +132,7 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
         }
       },
       child: BlocBuilder<DeviceTestBloc, DeviceTestBlocState>(
-          cubit: BlocProvider.of<DeviceTestBloc>(context),
+          bloc: BlocProvider.of<DeviceTestBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is DeviceTestBlocStateLoading) {
@@ -141,9 +143,13 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
               body = Fullscreen(
                 childFirst: false,
                 title: DeviceTestPage.testingLEDTitle,
-                subtitle: DeviceTestPage.testLEDTiming(max(0, (millis / 1000)).toStringAsFixed(1)),
+                subtitle: DeviceTestPage.testLEDTiming(
+                    max(0, (millis / 1000)).toStringAsFixed(1)),
                 child: Text('${state.ledID + 1}',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: Color(0xff3bb30b))),
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xff3bb30b))),
               );
             } else if (state is DeviceTestBlocStateDone) {
               body = Fullscreen(
@@ -167,7 +173,10 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
                         elevation: 5,
                       ),
                       Expanded(
-                        child: _renderChannels(context, state.nLedChannels, DeviceTestPage.ledTestingChannelTitle,
+                        child: _renderChannels(
+                            context,
+                            state.nLedChannels,
+                            DeviceTestPage.ledTestingChannelTitle,
                             'assets/feed_card/icon_light.svg'),
                       ),
                       Padding(
@@ -177,7 +186,8 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
                           child: GreenButton(
                             title: DeviceTestPage.ledTestingValidate,
                             onPressed: () {
-                              BlocProvider.of<DeviceTestBloc>(context).add(DeviceTestBlocEventDone());
+                              BlocProvider.of<DeviceTestBloc>(context)
+                                  .add(DeviceTestBlocEventDone());
                             },
                           ),
                         ),
@@ -190,13 +200,15 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
             return Scaffold(
                 appBar: SGLAppBar(
                   DeviceTestPage.ledTestingPageTitle,
-                  hideBackButton: state is DeviceTestBlocStateDone || state is DeviceTestBlocStateTestingLed,
+                  hideBackButton: state is DeviceTestBlocStateDone ||
+                      state is DeviceTestBlocStateTestingLed,
                   backgroundColor: Color(0xff0b6ab3),
                   titleColor: Colors.white,
                   iconColor: Colors.white,
                 ),
                 backgroundColor: Colors.white,
-                body: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body));
+                body: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 200), child: body));
           }),
     );
   }
@@ -211,13 +223,15 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
               '$prefix ${++i}',
               icon,
               ((int i) => () {
-                    BlocProvider.of<DeviceTestBloc>(context).add(DeviceTestBlocEventTestLed(i));
+                    BlocProvider.of<DeviceTestBloc>(context)
+                        .add(DeviceTestBlocEventTestLed(i));
                   })(i - 1)))
           .toList(),
     );
   }
 
-  Widget _renderChannel(BuildContext context, String text, String icon, Function onPressed) {
+  Widget _renderChannel(
+      BuildContext context, String text, String icon, Function onPressed) {
     return MaterialButton(
       onPressed: onPressed,
       child: Column(
