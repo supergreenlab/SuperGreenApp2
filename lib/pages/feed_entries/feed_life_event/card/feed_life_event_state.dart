@@ -24,7 +24,7 @@ class FeedLifeEventState extends FeedEntryStateLoaded {
     FeedEntryState from, {
     FeedEntrySocialState socialState,
     bool showPlantInfos,
-    bool isRemoteState = false,
+    bool isRemoteState,
     bool followed,
     String shareLink,
   }) : super.copy(
