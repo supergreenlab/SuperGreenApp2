@@ -129,12 +129,19 @@ class DeviceWebsocket {
     sub = channel.stream.listen((message) async {
       bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
       if (device.isRemote == false && remoteEnabled) {
+        // This could be a problem, why set isRemote to true? only pingTimer should be able to do that
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
       }
       if (remoteEnabled) {
         if (pingTimer == null) {
           pingTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) async {
-            await sendRemoteCommand('geti -k TIME');
+            // This needs testing, added the line below instead of the line 133
+            try {
+              await sendRemoteCommand('geti -k TIME', nRetries: 0);
+              await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
+            } catch (e) {
+              await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
+            }
           });
         }
         if (timeout != null) {

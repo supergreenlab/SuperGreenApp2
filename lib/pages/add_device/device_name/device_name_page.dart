@@ -192,7 +192,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GreenButton(
-              onPressed: () => _handleInput(context),
+              onPressed: _nameController.text.length > 0 ? () => _handleInput(context) : null,
               title: 'OK',
             ),
           ),
