@@ -61,6 +61,10 @@ class DeletedFeedEntriesCompanion extends FeedEntriesCompanion {
   DeletedFeedEntriesCompanion(serverID) : super(serverID: serverID);
 }
 
+class SkipFeedEntriesCompanion extends FeedEntriesCompanion {
+  SkipFeedEntriesCompanion(serverID) : super(serverID: serverID);
+}
+
 @DataClassName("FeedEntry")
 class FeedEntries extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -79,6 +83,9 @@ class FeedEntries extends Table {
       return DeletedFeedEntriesCompanion(Value(map['id'] as String));
     }
     Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
+    if (feed == null) {
+      return SkipFeedEntriesCompanion(Value(map['id'] as String));
+    }
     return FeedEntriesCompanion(
         feed: Value(feed.id),
         date: Value(DateTime.parse(map['date'] as String).toLocal()),
@@ -125,6 +132,10 @@ class DeletedFeedMediasCompanion extends FeedMediasCompanion {
   DeletedFeedMediasCompanion(serverID) : super(serverID: serverID);
 }
 
+class SkipFeedMediasCompanion extends FeedMediasCompanion {
+  SkipFeedMediasCompanion(serverID) : super(serverID: serverID);
+}
+
 class FeedMedias extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
@@ -143,6 +154,9 @@ class FeedMedias extends Table {
     }
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
     Feed feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
+    if (feed == null) {
+      return SkipFeedMediasCompanion(Value(map['id'] as String));
+    }
     return FeedMediasCompanion(
         feed: Value(feed.id),
         feedEntry: Value(feedEntry.id),

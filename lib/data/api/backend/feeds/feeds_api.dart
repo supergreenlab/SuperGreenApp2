@@ -383,7 +383,11 @@ class FeedsAPI {
     List<FeedEntriesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
       try {
-        results.add(await FeedEntries.fromMap(maps[i]));
+        FeedEntriesCompanion fe = await FeedEntries.fromMap(maps[i]);
+        if (fe is SkipFeedEntriesCompanion) {
+          continue;
+        }
+        results.add(fe);
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
       }
@@ -397,7 +401,11 @@ class FeedsAPI {
     List<FeedMediasCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
       try {
-        results.add(await FeedMedias.fromMap(maps[i]));
+        FeedMediasCompanion fm = await FeedMedias.fromMap(maps[i]);
+        if (fm is SkipFeedMediasCompanion) {
+          continue;
+        }
+        results.add(fm);
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
       }
