@@ -56,7 +56,8 @@ class BackendAPI {
     productsAPI = ProductsAPI();
     timeSeriesAPI = TimeSeriesAPI();
     servicesAPI = ServicesAPI();
-    if (kReleaseMode || Platform.isIOS) {
+    bool forceProduction = false;
+    if (forceProduction || kReleaseMode || Platform.isIOS) {
       serverHost = 'https://api2.supergreenlab.com';
       websocketServerHost = 'wss://api2.supergreenlab.com';
       storageServerHost = 'https://storage.supergreenlab.com';

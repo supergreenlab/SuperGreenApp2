@@ -14,7 +14,7 @@ description: SuperGreenLab&#x27;s mobile app
 version: 1.2.19+60
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   web_socket_channel:
@@ -37,7 +37,7 @@ dependencies:
   rxdart:
   flutter_svg:
   permission_handler: 4.4.0+hotfix.2
-  moor: 3.3.1
+  moor:
   sqlite3_flutter_libs:
   path_provider:
   path:
@@ -57,13 +57,12 @@ dependencies:
   video_thumbnail:
   flutter_localizations:
     sdk: flutter
-  flutter_cupertino_localizations: ^1.0.1
+  flutter_cupertino_localizations:
   intl:
-  intl_translation:
+  intl_generator:
   flutter_swiper:
   charts_flutter:
   flutter_markdown:
-  flutter_ble_lib:
   youtube_player_flutter:
   matrix_gesture_detector:
     path: ./vendor/matrix_gesture_detector
