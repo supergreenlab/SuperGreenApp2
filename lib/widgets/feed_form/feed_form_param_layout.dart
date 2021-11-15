@@ -23,14 +23,14 @@ class FeedFormParamLayout extends StatelessWidget {
   final Widget child;
   final String title;
   final String icon;
-  final Color titleBackgroundColor;
-  final Color titleColor;
+  final Color? titleBackgroundColor;
+  final Color? titleColor;
   final bool largeTitle;
 
   FeedFormParamLayout(
-      {@required this.child,
-      @required this.icon,
-      @required this.title,
+      {required this.child,
+      required this.icon,
+      required this.title,
       this.titleBackgroundColor,
       this.titleColor,
       this.largeTitle = false});

@@ -28,7 +28,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 class MediaList extends StatelessWidget {
   final List<MediaState> _medias;
   final String prefix;
-  final Function(MediaState media) onMediaTapped;
+  final Function(MediaState media)? onMediaTapped;
   final Function(int i) onMediaShown;
   final bool showSyncStatus;
   final bool showTapIcon;
@@ -38,7 +38,7 @@ class MediaList extends StatelessWidget {
       this.onMediaTapped,
       this.showSyncStatus = true,
       this.showTapIcon = false,
-      this.onMediaShown});
+      required this.onMediaShown});
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +51,11 @@ class MediaList extends StatelessWidget {
             itemCount: _medias.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
-              return _renderImage(
-                  context, constraints, _medias[index], '$prefix#${index + 1}');
+              return _renderImage(context, constraints, _medias[index], '$prefix#${index + 1}');
             },
             pagination: _medias.length > 1
                 ? SwiperPagination(
-                    builder: new DotSwiperPaginationBuilder(
-                        color: Colors.white, activeColor: Color(0xff3bb30b)),
+                    builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
                   )
                 : null,
             loop: false,
@@ -67,12 +65,11 @@ class MediaList extends StatelessWidget {
     );
   }
 
-  Widget _renderImage(BuildContext context, BoxConstraints constraints,
-      MediaState media, String label) {
+  Widget _renderImage(BuildContext context, BoxConstraints constraints, MediaState media, String label) {
     return InkWell(
       onTap: onMediaTapped != null
           ? () {
-              onMediaTapped(media);
+              onMediaTapped!(media);
             }
           : null,
       child: Stack(children: [
@@ -85,14 +82,12 @@ class MediaList extends StatelessWidget {
                   ? Image.network(
                       media.thumbnailPath,
                       fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent loadingProgress) {
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) {
                           return child;
                         }
                         return FullscreenLoading(
-                            percent: loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes);
+                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
                       },
                     )
                   : Image.file(File(media.thumbnailPath), fit: BoxFit.cover)),
@@ -103,10 +98,7 @@ class MediaList extends StatelessWidget {
               strokeColor: Colors.black,
               child: Text(
                 label,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
             right: 8.0,
@@ -126,9 +118,7 @@ class MediaList extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(media.synced ? 'Synced' : 'Not synced',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: media.synced ? Colors.green : Colors.red)),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: media.synced ? Colors.green : Colors.red)),
                   ),
                 ),
               )
@@ -140,8 +130,7 @@ class MediaList extends StatelessWidget {
                 child: Container(
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: SvgPicture.asset(
-                        'assets/feed_card/icon_tap_measure.svg'),
+                    child: SvgPicture.asset('assets/feed_card/icon_tap_measure.svg'),
                   ),
                 ),
               )

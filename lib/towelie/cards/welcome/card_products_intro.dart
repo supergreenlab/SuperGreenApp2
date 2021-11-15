@@ -42,7 +42,7 @@ The topics covered are:
 ''',
       name: 'towelieProductsIntro',
       desc: 'Towelie Products Intro',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

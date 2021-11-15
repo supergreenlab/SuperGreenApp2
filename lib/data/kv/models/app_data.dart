@@ -25,21 +25,21 @@ class AppData {
   @HiveField(0)
   bool firstStart = true;
   @HiveField(1)
-  int lastPlantID;
+  int? lastPlantID;
   @HiveField(2)
   bool allowAnalytics = false;
   @HiveField(3)
   bool freedomUnits = true;
   @HiveField(4)
-  String jwt;
+  String? jwt;
   @HiveField(5)
-  String storeGeo;
+  String? storeGeo;
   @HiveField(6)
   bool syncOverGSM = false;
   @HiveField(7)
-  String notificationToken;
+  String? notificationToken;
   @HiveField(8)
-  bool notificationTokenSent;
+  bool notificationTokenSent = false;
   @HiveField(9)
   bool notificationOnStartAsked = false;
 }

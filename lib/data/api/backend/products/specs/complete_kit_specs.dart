@@ -23,7 +23,7 @@ import 'package:super_green_app/data/api/backend/products/product_specs.dart';
 class CompleteKitSpecs extends ProductSpecs {
   final String brand;
 
-  CompleteKitSpecs({this.brand});
+  CompleteKitSpecs({required this.brand});
 
   @override
   List<Object> get props => [brand];

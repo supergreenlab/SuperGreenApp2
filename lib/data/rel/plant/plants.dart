@@ -29,7 +29,7 @@ class DeletedPlantsCompanion extends PlantsCompanion {
 class Plants extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get feed => integer()();
-  IntColumn get box => integer().nullable()(); // TODO remove nullable() for the next version
+  IntColumn get box => integer()();
   TextColumn get name => text().withLength(min: 1, max: 32)();
   // TODO remove the single param, it's moved to the settings json string
   BoolColumn get single => boolean().withDefault(Constant(false))();
@@ -64,7 +64,7 @@ class Plants extends Table {
     if (feed.serverID == null) {
       Logger.throwError('Missing serverID for feed relation', data: {"plant": plant});
     }
-    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
+    Box box = await RelDB.get().plantsDAO.getBox(plant.box!);
     if (box.serverID == null) {
       Logger.throwError('Missing serverID for box relation', data: {"box": box});
     }
@@ -103,20 +103,16 @@ class Boxes extends Table {
     if (map['deleted'] == true) {
       return DeletedBoxesCompanion(Value(map['id'] as String));
     }
-    int deviceID;
+    int? deviceID;
     if (map['deviceID'] != null) {
       Device device = await RelDB.get().devicesDAO.getDeviceForServerID(map['deviceID']);
-      if (device != null) {
-        deviceID = device.id;
-      }
+      deviceID = device.id;
     }
 
-    int feedID;
+    int? feedID;
     if (map['feedID'] != null) {
       Feed feed = await RelDB.get().feedsDAO.getFeedForServerID(map['feedID']);
-      if (feed != null) {
-        feedID = feed.id;
-      }
+      feedID = feed.id;
     }
     return BoxesCompanion(
         feed: Value(feedID),
@@ -137,15 +133,17 @@ class Boxes extends Table {
       'deviceID': null,
     };
     if (box.device != null) {
-      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
-      if (device.serverID == null) {
-        Logger.throwError('Missing serverID for device relation', data: {"box": box, "device": device});
+      late Device device;
+      try {
+        device = await RelDB.get().devicesDAO.getDevice(box.device!);
+      } catch (e) {
+        Logger.throwError('Missing serverID for device relation', data: {"box": box, "device": box.device});
       }
       obj['deviceID'] = device.serverID;
       obj['deviceBox'] = box.deviceBox;
     }
     if (box.feed != null) {
-      Feed feed = await RelDB.get().feedsDAO.getFeed(box.feed);
+      Feed feed = await RelDB.get().feedsDAO.getFeed(box.feed!);
       if (feed.serverID == null) {
         Logger.throwError('Missing serverID for feed relation', data: {"box": box, "feed": feed});
       }
@@ -323,7 +321,7 @@ class PlantsDAO extends DatabaseAccessor<RelDB> with _$PlantsDAOMixin {
     return into(chartCaches).insert(chartCache);
   }
 
-  Future<ChartCache> getChartCache(int boxID, String name) async {
+  Future<ChartCache?> getChartCache(int boxID, String name) async {
     List<ChartCache> cs = await (select(chartCaches)..where((c) => c.box.equals(boxID) & c.name.equals(name))).get();
     if (cs.length == 0) {
       return null;

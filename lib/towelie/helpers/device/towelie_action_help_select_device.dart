@@ -31,7 +31,7 @@ Because it\'s all brand new, let\'s first **setup a new controller**.
 If you don\'t own a bundle, you can skip this by pressing "NO SGL DEVICE".''',
       name: 'towelieHelperSelectDevice',
       desc: 'Towelie Helper Select plant device',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -43,8 +43,7 @@ If you don\'t own a bundle, you can skip this by pressing "NO SGL DEVICE".''',
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 0) {
-      yield TowelieBlocStateHelper(event.settings,
-          TowelieActionHelpSelectDevice.towelieHelperSelectDevice);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpSelectDevice.towelieHelperSelectDevice);
     }
   }
 }

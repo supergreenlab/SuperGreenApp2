@@ -25,65 +25,52 @@ import 'package:tuple/tuple.dart';
 enum PlantPhases { GERMINATING, VEGGING, BLOOMING, DRYING, CURING }
 
 class PlantSettings extends Equatable {
-  final String plantType;
+  final String? plantType;
   final bool isSingle;
 
-  final String strain;
-  final String seedbank;
+  final String? strain;
+  final String? seedbank;
 
-  final DateTime germinationDate;
-  final DateTime veggingStart;
-  final DateTime bloomingStart;
-  final DateTime dryingStart;
-  final DateTime curingStart;
-  final String medium;
+  final DateTime? germinationDate;
+  final DateTime? veggingStart;
+  final DateTime? bloomingStart;
+  final DateTime? dryingStart;
+  final DateTime? curingStart;
+  final String? medium;
 
-  final List<Product> products;
+  final List<Product>? products;
 
-  PlantSettings(
-      this.plantType,
-      this.isSingle,
-      this.strain,
-      this.seedbank,
-      this.germinationDate,
-      this.veggingStart,
-      this.bloomingStart,
-      this.dryingStart,
-      this.curingStart,
-      this.medium,
-      this.products);
+  PlantSettings(this.plantType, this.isSingle, this.strain, this.seedbank, this.germinationDate, this.veggingStart,
+      this.bloomingStart, this.dryingStart, this.curingStart, this.medium, this.products);
 
-  Tuple3<PlantPhases, DateTime, Duration> phaseAt(DateTime date) {
-    if (curingStart != null && curingStart.isBefore(date)) {
+  Tuple3<PlantPhases, DateTime, Duration>? phaseAt(DateTime date) {
+    if (curingStart != null && curingStart!.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.CURING, curingStart, date.difference(curingStart!));
+    } else if (dryingStart != null && dryingStart!.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.DRYING, dryingStart, date.difference(dryingStart!));
+    } else if (bloomingStart != null && bloomingStart!.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.CURING, curingStart, date.difference(curingStart));
-    } else if (dryingStart != null && dryingStart.isBefore(date)) {
+          PlantPhases.BLOOMING, bloomingStart, date.difference(bloomingStart!));
+    } else if (veggingStart != null && veggingStart!.isBefore(date)) {
+      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.VEGGING, veggingStart, date.difference(veggingStart!));
+    } else if (germinationDate != null && germinationDate!.isBefore(date)) {
       return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.DRYING, dryingStart, date.difference(dryingStart));
-    } else if (bloomingStart != null && bloomingStart.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.BLOOMING, bloomingStart, date.difference(bloomingStart));
-    } else if (veggingStart != null && veggingStart.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(
-          PlantPhases.VEGGING, veggingStart, date.difference(veggingStart));
-    } else if (germinationDate != null && germinationDate.isBefore(date)) {
-      return Tuple3<PlantPhases, DateTime, Duration>(PlantPhases.GERMINATING,
-          germinationDate, date.difference(germinationDate));
+          PlantPhases.GERMINATING, germinationDate, date.difference(germinationDate!));
     }
     return null;
   }
 
-  DateTime dateForPhase(PlantPhases phase) {
+  DateTime? dateForPhase(PlantPhases phase) {
     if (phase == PlantPhases.GERMINATING) {
-      return germinationDate;
+      return germinationDate!;
     } else if (phase == PlantPhases.VEGGING) {
-      return veggingStart;
+      return veggingStart!;
     } else if (phase == PlantPhases.BLOOMING) {
-      return bloomingStart;
+      return bloomingStart!;
     } else if (phase == PlantPhases.DRYING) {
-      return dryingStart;
+      return dryingStart!;
     } else if (phase == PlantPhases.CURING) {
-      return curingStart;
+      return curingStart!;
     }
     return null;
   }
@@ -126,21 +113,11 @@ class PlantSettings extends Equatable {
       map['isSingle'],
       map['strain'],
       map['seedBank'],
-      map['germinationDate'] == null
-          ? null
-          : DateTime.parse(map['germinationDate'] as String).toLocal(),
-      map['veggingStart'] == null
-          ? null
-          : DateTime.parse(map['veggingStart'] as String).toLocal(),
-      map['bloomingStart'] == null
-          ? null
-          : DateTime.parse(map['bloomingStart'] as String).toLocal(),
-      map['dryingStart'] == null
-          ? null
-          : DateTime.parse(map['dryingStart'] as String).toLocal(),
-      map['curingStart'] == null
-          ? null
-          : DateTime.parse(map['curingStart'] as String).toLocal(),
+      map['germinationDate'] == null ? null : DateTime.parse(map['germinationDate'] as String).toLocal(),
+      map['veggingStart'] == null ? null : DateTime.parse(map['veggingStart'] as String).toLocal(),
+      map['bloomingStart'] == null ? null : DateTime.parse(map['bloomingStart'] as String).toLocal(),
+      map['dryingStart'] == null ? null : DateTime.parse(map['dryingStart'] as String).toLocal(),
+      map['curingStart'] == null ? null : DateTime.parse(map['curingStart'] as String).toLocal(),
       map['medium'],
       (products).map<Product>((p) => Product.fromMap(p)).toList(),
     );
@@ -152,18 +129,11 @@ class PlantSettings extends Equatable {
       'isSingle': isSingle,
       'strain': strain,
       'seedBank': seedbank,
-      'germinationDate': germinationDate == null
-          ? null
-          : germinationDate.toUtc().toIso8601String(),
-      'veggingStart':
-          veggingStart == null ? null : veggingStart.toUtc().toIso8601String(),
-      'bloomingStart': bloomingStart == null
-          ? null
-          : bloomingStart.toUtc().toIso8601String(),
-      'dryingStart':
-          dryingStart == null ? null : dryingStart.toUtc().toIso8601String(),
-      'curingStart':
-          curingStart == null ? null : curingStart.toUtc().toIso8601String(),
+      'germinationDate': germinationDate?.toUtc().toIso8601String(),
+      'veggingStart': veggingStart?.toUtc().toIso8601String(),
+      'bloomingStart': bloomingStart?.toUtc().toIso8601String(),
+      'dryingStart': dryingStart?.toUtc().toIso8601String(),
+      'curingStart': curingStart?.toUtc().toIso8601String(),
       'medium': medium,
       'products': (products ?? []).map((p) => p.toMap()).toList(),
     };
@@ -179,7 +149,7 @@ class PlantSettings extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         plantType,
         isSingle,
         strain,
@@ -194,17 +164,17 @@ class PlantSettings extends Equatable {
       ];
 
   PlantSettings copyWith(
-          {String plantType,
-          bool isSingle,
-          String strain,
-          String seedbank,
-          DateTime germinationDate,
-          DateTime veggingStart,
-          DateTime bloomingStart,
-          DateTime dryingStart,
-          DateTime curingStart,
-          String medium,
-          List<Product> products}) =>
+          {String? plantType,
+          bool? isSingle,
+          String? strain,
+          String? seedbank,
+          DateTime? germinationDate,
+          DateTime? veggingStart,
+          DateTime? bloomingStart,
+          DateTime? dryingStart,
+          DateTime? curingStart,
+          String? medium,
+          List<Product>? products}) =>
       PlantSettings(
         plantType ?? this.plantType,
         isSingle ?? this.isSingle,

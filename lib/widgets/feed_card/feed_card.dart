@@ -20,9 +20,9 @@ import 'package:flutter/material.dart';
 
 class FeedCard extends StatefulWidget {
   final Widget child;
-  final Animation animation;
+  final Animation<double> animation;
 
-  const FeedCard({Key key, @required this.child, @required this.animation}) : super(key: key);
+  const FeedCard({Key? key, required this.child, required this.animation}) : super(key: key);
 
   @override
   _FeedCardState createState() => _FeedCardState();

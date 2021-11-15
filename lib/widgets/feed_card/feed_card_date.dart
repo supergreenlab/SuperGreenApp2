@@ -41,7 +41,7 @@ class FeedCardDate extends StatefulWidget {
   // TODO there is a problem with accessing plantSettings on multi-plant feeds, will be worst with box cards
   PlantSettings get plantSettings {
     if (feedState is PlantFeedState) {
-      PlantFeedState plantFeedState = feedState;
+      PlantFeedState plantFeedState = feedState as PlantFeedState;
       return plantFeedState.plantSettings;
     } else {
       return feedEntryState.plantSettings;
@@ -93,7 +93,7 @@ class _FeedCardDateState extends State<FeedCardDate> {
   String renderSincePhase() {
     PlantSettings plantSettings = widget.plantSettings;
 
-    Tuple3<PlantPhases, DateTime, Duration> phaseData = plantSettings.phaseAt(widget.feedEntryState.date);
+    Tuple3<PlantPhases, DateTime, Duration>? phaseData = plantSettings.phaseAt(widget.feedEntryState.date);
     if (phaseData == null) {
       return 'Life events not set.';
     }
@@ -111,7 +111,7 @@ class _FeedCardDateState extends State<FeedCardDate> {
     if (widget.plantSettings.germinationDate == null) {
       return 'Germination date not set.';
     }
-    Duration diff = widget.feedEntryState.date.difference(widget.plantSettings.germinationDate);
+    Duration diff = widget.feedEntryState.date.difference(widget.plantSettings.germinationDate!);
     return 'Germinated ${renderDuration(diff)}';
   }
 

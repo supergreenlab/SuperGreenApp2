@@ -25,14 +25,14 @@ class FeedCardText extends StatefulWidget {
   final Function(String) onEdited;
   final bool edit;
 
-  const FeedCardText(this.text, {this.edit = false, this.onEdited});
+  const FeedCardText(this.text, {this.edit = false, required this.onEdited});
 
   @override
   _FeedCardTextState createState() => _FeedCardTextState();
 }
 
 class _FeedCardTextState extends State<FeedCardText> {
-  TextEditingController _textEditingController;
+  TextEditingController? _textEditingController;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class _FeedCardTextState extends State<FeedCardText> {
                 title: 'OK',
                 onPressed: () {
                   setState(() {
-                    widget.onEdited(_textEditingController.value.text);
+                    widget.onEdited(_textEditingController!.value.text);
                   });
                 },
               ),

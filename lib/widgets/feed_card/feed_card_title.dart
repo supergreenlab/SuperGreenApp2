@@ -22,14 +22,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class FeedCardTitle extends StatelessWidget {
   final String icon;
   final String title;
-  final String title2;
+  final String? title2;
   final bool synced;
-  final Function onEdit;
-  final Function onDelete;
-  final Function onShare;
+  final Function()? onEdit;
+  final Function()? onDelete;
+  final Function()? onShare;
   final bool showSyncStatus;
   final bool showControls;
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   const FeedCardTitle(this.icon, this.title, this.synced,
       {this.onEdit,
@@ -57,7 +57,7 @@ class FeedCardTitle extends StatelessWidget {
                 style:
                     TextStyle(fontSize: title2 != null ? 17 : 20, fontWeight: FontWeight.w300, color: Colors.black87)),
             title2 != null
-                ? Text(title2, style: TextStyle(color: Color(0xff2c820a), fontSize: 19, fontWeight: FontWeight.bold))
+                ? Text(title2!, style: TextStyle(color: Color(0xff2c820a), fontSize: 19, fontWeight: FontWeight.bold))
                 : Container(),
             showSyncStatus
                 ? Text(synced ? 'Synced' : 'Not synced', style: TextStyle(color: synced ? Colors.green : Colors.red))
@@ -114,7 +114,7 @@ class FeedCardTitle extends StatelessWidget {
   }
 
   Future _deleteFeedEntry(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -137,8 +137,8 @@ class FeedCardTitle extends StatelessWidget {
             ],
           );
         });
-    if (confirm) {
-      onDelete();
+    if (confirm ?? false) {
+      onDelete!();
     }
   }
 }

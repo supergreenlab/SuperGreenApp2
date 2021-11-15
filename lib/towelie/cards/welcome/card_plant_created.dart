@@ -34,7 +34,7 @@ You can access your newly plant feed either by **pressing the home button below*
 ''',
       name: 'toweliePlantCreated',
       desc: 'Towelie Plant Created',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

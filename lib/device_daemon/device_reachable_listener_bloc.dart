@@ -27,7 +27,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 // This classe mostly exist as a shitty retro-compatibility layer.
 
 abstract class DeviceNavigationArgHolder {
-  Future<Device> getDevice();
+  Future<Device?> getDevice();
 }
 
 abstract class DeviceReachableListenerBlocEvent extends Equatable {}
@@ -77,12 +77,12 @@ class DeviceReachableListenerBlocStateDeviceReachable extends DeviceReachableLis
 class DeviceReachableListenerBloc extends Bloc<DeviceReachableListenerBlocEvent, DeviceReachableListenerBlocState> {
   final DeviceNavigationArgHolder deviceArgHolder;
 
-  Device device;
+  late Device device;
 
-  StreamSubscription<ConnectivityResult> _connectivity;
+  StreamSubscription<ConnectivityResult>? _connectivity;
   bool _usingWifi = false;
 
-  StreamSubscription subscription;
+  StreamSubscription? subscription;
 
   DeviceReachableListenerBloc(this.deviceArgHolder) : super(DeviceReachableListenerBlocStateInit());
 
@@ -90,17 +90,14 @@ class DeviceReachableListenerBloc extends Bloc<DeviceReachableListenerBlocEvent,
   Stream<DeviceReachableListenerBlocState> mapEventToState(DeviceReachableListenerBlocEvent event) async* {
     if (event is DeviceReachableListenerBlocEventLoadDevice) {
       if (subscription == null) {
-        device = await deviceArgHolder.getDevice();
-        if (device == null) {
-          return;
-        }
+        device = await deviceArgHolder.getDevice() as Device;
         _usingWifi = await Connectivity().checkConnectivity() == ConnectivityResult.wifi;
         _connectivity = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
           _usingWifi = (result == ConnectivityResult.wifi);
         });
-        subscription = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device newDevice) {
+        subscription = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device? newDevice) {
           add(DeviceReachableListenerBlocEventDeviceReachable(
-              newDevice, newDevice.isReachable || newDevice.isRemote, newDevice.isRemote));
+              newDevice!, newDevice.isReachable || newDevice.isRemote, newDevice.isRemote));
         });
       }
     } else if (event is DeviceReachableListenerBlocEventDeviceReachable) {
@@ -114,12 +111,8 @@ class DeviceReachableListenerBloc extends Bloc<DeviceReachableListenerBlocEvent,
   }
 
   Future<void> close() async {
-    if (subscription != null) {
-      subscription.cancel();
-    }
-    if (_connectivity != null) {
-      _connectivity.cancel();
-    }
+    subscription?.cancel();
+    _connectivity?.cancel();
     super.close();
   }
 }

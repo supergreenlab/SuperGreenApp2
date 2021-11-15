@@ -46,12 +46,12 @@ class BoxSettings extends Equatable {
   final String schedule;
   final Map<String, dynamic> schedules;
 
-  final int width;
-  final int height;
-  final int depth;
-  final String unit;
+  final int? width;
+  final int? height;
+  final int? depth;
+  final String? unit;
 
-  final List<Product> products;
+  final List<Product>? products;
 
   BoxSettings(
       {this.width,
@@ -71,7 +71,7 @@ class BoxSettings extends Equatable {
       unit: map['unit'],
       schedule: map['schedule'] ?? 'VEG',
       schedules: map['schedules'] ?? DEFAULT_SCHEDULES,
-      products: products.map<Product>((p) => Product.fromMap(p)).toList() ?? [],
+      products: products.map<Product>((p) => Product.fromMap(p)).toList(),
     );
   }
 
@@ -97,17 +97,16 @@ class BoxSettings extends Equatable {
   }
 
   @override
-  List<Object> get props =>
-      [schedule, schedules, width, height, depth, unit, products];
+  List<Object?> get props => [schedule, schedules, width, height, depth, unit, products];
 
   BoxSettings copyWith({
-    String schedule,
-    Map<String, dynamic> schedules,
-    int width,
-    int height,
-    int depth,
-    String unit,
-    List<Product> products,
+    String? schedule,
+    Map<String, dynamic>? schedules,
+    int? width,
+    int? height,
+    int? depth,
+    String? unit,
+    List<Product>? products,
   }) =>
       BoxSettings(
         width: width ?? this.width,

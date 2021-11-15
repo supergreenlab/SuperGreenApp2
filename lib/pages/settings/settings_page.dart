@@ -36,8 +36,8 @@ class SettingsPage extends TraceableStatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String version;
-  String buildNumber;
+  String version = '';
+  String buildNumber = '';
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsBlocState>(
-        cubit: BlocProvider.of<SettingsBloc>(context),
+        bloc: BlocProvider.of<SettingsBloc>(context),
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
               'Settings',

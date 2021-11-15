@@ -23,7 +23,7 @@ import 'package:super_green_app/data/api/backend/products/product_specs.dart';
 class FertilizerSpecs extends ProductSpecs {
   final String brand;
 
-  FertilizerSpecs({this.brand});
+  FertilizerSpecs({required this.brand});
 
   @override
   List<Object> get props => [brand];

@@ -35,7 +35,7 @@ String generateRandomString(int len) {
 
 class DeviceHelper {
   static Future pairDevice(Device device) async {
-    String auth = AppDB().getDeviceAuth(device.identifier);
+    String? auth = AppDB().getDeviceAuth(device.identifier);
     String signing = md5.convert(utf8.encode(generateRandomString(32))).toString();
     await DeviceAPI.post('http://${device.ip}/signing?key=$signing', auth: auth);
     AppDB().setDeviceSigning(device.identifier, signing);
@@ -61,10 +61,10 @@ class DeviceHelper {
 
   static Future<Param> watchParamChange(Param param, {int timeout = 5}) {
     Completer<Param> completer = Completer<Param>();
-    Timer timeoutTimer;
+    late Timer timeoutTimer;
     bool skipFirst = true;
-    StreamSubscription ss;
-    ss = RelDB.get().devicesDAO.watchParam(param.device, param.key).listen((Param newParam) {
+    late StreamSubscription ss;
+    ss = RelDB.get().devicesDAO.watchParam(param.device, param.key).listen((Param? newParam) {
       if (skipFirst) {
         skipFirst = false;
         return;
@@ -83,12 +83,12 @@ class DeviceHelper {
   static Future<Param> updateStringParam(Device device, Param param, String value,
       {int timeout = 5, int nRetries = 4, int wait = 1, bool forceLocal = false}) async {
     if (!forceLocal && AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
-      await DeviceWebsocket.getWebsocket(device)
+      await DeviceWebsocket.getWebsocket(device)!
           .sendRemoteCommand('sets -k ${param.key} -v "${value.replaceAll("\"", "\\\"")}"');
     } else {
-      String auth = AppDB().getDeviceAuth(device.identifier);
+      String? auth = AppDB().getDeviceAuth(device.identifier);
       value = await DeviceAPI.setStringParam(device.ip, param.key, value,
-          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as String;
     }
     Param newParam = param.copyWith(svalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
@@ -98,11 +98,11 @@ class DeviceHelper {
   static Future<Param> updateIntParam(Device device, Param param, int value,
       {int timeout = 5, int nRetries = 4, int wait = 1, bool forceLocal = false}) async {
     if (!forceLocal && AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
-      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('seti -k ${param.key} -v $value');
+      await DeviceWebsocket.getWebsocket(device)!.sendRemoteCommand('seti -k ${param.key} -v $value');
     } else {
-      String auth = AppDB().getDeviceAuth(device.identifier);
+      String? auth = AppDB().getDeviceAuth(device.identifier);
       value = await DeviceAPI.setIntParam(device.ip, param.key, value,
-          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as int;
     }
     Param newParam = param.copyWith(ivalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
@@ -133,12 +133,12 @@ class DeviceHelper {
       {int timeout = 5, int nRetries = 4, int wait = 1, bool forceLocal = false}) async {
     if (!forceLocal && AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
       Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
-      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('gets -k ${param.key}');
+      await DeviceWebsocket.getWebsocket(device)!.sendRemoteCommand('gets -k ${param.key}');
       return future;
     }
-    String auth = AppDB().getDeviceAuth(device.identifier);
+    String? auth = AppDB().getDeviceAuth(device.identifier);
     String value = await DeviceAPI.fetchStringParam(device.ip, param.key,
-        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as String;
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
     return param;
   }
@@ -147,25 +147,25 @@ class DeviceHelper {
       {int timeout = 5, int nRetries = 4, int wait = 1, bool forceLocal = false}) async {
     if (!forceLocal && AppDB().getDeviceSigning(device.identifier) != null && device.isRemote) {
       Future<Param> future = DeviceHelper.watchParamChange(param, timeout: timeout);
-      await DeviceWebsocket.getWebsocket(device).sendRemoteCommand('geti -k ${param.key}');
+      await DeviceWebsocket.getWebsocket(device)!.sendRemoteCommand('geti -k ${param.key}');
       return future;
     }
 
-    String auth = AppDB().getDeviceAuth(device.identifier);
+    String? auth = AppDB().getDeviceAuth(device.identifier);
     int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
-        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as int;
     Param newParam = param.copyWith(ivalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
   }
 
   static Future deleteDevice(Device device, {addDeleted: true}) async {
-    device = await RelDB.get().devicesDAO.getDevice(device.id);
+    device = await RelDB.get().devicesDAO.getDevice(device.id) as Device;
     await RelDB.get().devicesDAO.deleteDevice(device);
     if (addDeleted && device.serverID != null) {
       await RelDB.get()
           .deletesDAO
-          .addDelete(DeletesCompanion(serverID: Value(device.serverID), type: Value('devices')));
+          .addDelete(DeletesCompanion(serverID: Value(device.serverID!), type: Value('devices')));
     }
 
     await RelDB.get().devicesDAO.deleteParams(device.id);

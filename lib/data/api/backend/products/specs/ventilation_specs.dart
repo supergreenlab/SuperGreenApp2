@@ -23,7 +23,7 @@ import 'package:super_green_app/data/api/backend/products/product_specs.dart';
 class VentilationSpecs extends ProductSpecs {
   final String brand;
 
-  VentilationSpecs({this.brand});
+  VentilationSpecs({required this.brand});
 
   @override
   List<Object> get props => [brand];

@@ -67,12 +67,9 @@ LazyDatabase _openConnection() {
   DeletesDAO,
 ])
 class RelDB extends _$RelDB {
-  static RelDB _instance;
+  static RelDB _instance = RelDB();
 
   factory RelDB.get() {
-    if (_instance == null) {
-      _instance = RelDB();
-    }
     return _instance;
   }
 

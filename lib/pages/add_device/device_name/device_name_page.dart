@@ -38,7 +38,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'Add controller',
       name: 'deviceNamePageTitle',
       desc: 'Device name page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -47,7 +47,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'Setting controller name..',
       name: 'deviceNamePageLoading',
       desc: 'Loading text when setting controller name',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -56,7 +56,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'Set controller\'s name',
       name: 'deviceNamePageSetNameSectionTitle',
       desc: 'Section title for the controller name input',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -65,7 +65,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'ex: controller',
       name: 'deviceNamePageSetNameHint',
       desc: 'Hint for the controller name input',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -77,7 +77,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
   final _nameController = TextEditingController();
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  int _listener;
+  late int _listener;
   bool _keyboardVisible = false;
 
   @protected
@@ -101,8 +101,8 @@ class DeviceNamePageState extends State<DeviceNamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      cubit: BlocProvider.of<DeviceNameBloc>(context),
+    return BlocListener<DeviceNameBloc, DeviceNameBlocState>(
+      bloc: BlocProvider.of<DeviceNameBloc>(context),
       listener: (BuildContext context, DeviceNameBlocState state) async {
         if (state is DeviceNameBlocStateDone) {
           await Future.delayed(Duration(seconds: 1));
@@ -118,7 +118,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
         }
       },
       child: BlocBuilder<DeviceNameBloc, DeviceNameBlocState>(
-          cubit: BlocProvider.of<DeviceNameBloc>(context),
+          bloc: BlocProvider.of<DeviceNameBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is DeviceNameBlocStateLoading) {

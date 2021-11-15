@@ -31,7 +31,7 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
       'Do you want me to **set a reminder** so you don\'t forget to water again soon?',
       name: 'towelieHelperWaterReminder',
       desc: 'Towelie Helper water reminder',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

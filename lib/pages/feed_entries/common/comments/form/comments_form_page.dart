@@ -69,7 +69,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Comments',
       name: 'commentsFormPageTitle',
       desc: 'Comments page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -78,7 +78,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Please login to add a comment',
       name: 'commentsFormPagePleaseLogin',
       desc: 'Used in "please login" dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -87,7 +87,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Replying to ',
       name: 'commentsFormPageReplyingTo',
       desc: 'Followed by a username when replying to a comment (trailing space is important)',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -96,7 +96,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Viewing single comment',
       name: 'commentsFormPageViewingSingleComment',
       desc: 'Button displayed when viewing a single comment',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -105,7 +105,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'View all comments',
       name: 'commentsFormPageViewAllComments',
       desc: 'Button displayed when viewing a single comment',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -114,7 +114,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'What kind of post do you want to do?',
       name: 'commentsFormPageCommentTypeTitle',
       desc: 'Title displayed above the comment types',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -123,7 +123,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Loading more comments..',
       name: 'commentsFormPageLoadingMoreComments',
       desc: 'Comments page auto-loading message at end of scroll',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -133,7 +133,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       args: [n],
       name: 'commentsFormPageNOtherRecommendations',
       desc: 'Comments page auto-loading message at end of scroll',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -143,7 +143,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       args: [nickname],
       name: 'commentsFormPageInputHintText',
       desc: 'Comments page input hint text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -152,7 +152,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Post',
       name: 'commentsFormPageSubmitComment',
       desc: 'Comments page input submit button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -162,12 +162,12 @@ class CommentsFormPage extends TraceableStatefulWidget {
 
 class _CommentsFormPageState extends State<CommentsFormPage> with TickerProviderStateMixin {
   final List<Comment> comments = [];
-  FeedEntryStateLoaded feedEntry;
-  User user;
-  bool autoFocus;
-  Comment replyTo;
-  Comment replyToDisplay;
-  List<Product> recommended;
+  late FeedEntryStateLoaded feedEntry;
+  late User? user;
+  late bool autoFocus;
+  late Comment? replyTo;
+  late Comment? replyToDisplay;
+  late List<Product> recommended;
 
   bool eof = false;
   bool single = false;
@@ -229,7 +229,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
             !(s2 is CommentsFormBlocStateAddComment) &&
             !(s2 is CommentsFormBlocStateUser);
       }, builder: (BuildContext context, CommentsFormBlocState state) {
-        List<Widget> body;
+        late List<Widget> body;
         if (state is CommentsFormBlocStateInit) {
           body = [FullscreenLoading()];
         } else if (state is CommentsFormBlocStateLoaded) {
@@ -297,12 +297,12 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                           setState(() {
                             replyTo = comments[index];
                             replyToDisplay = replyTo;
-                            if (replyTo.replyTo != null) {
-                              replyTo = comments.firstWhere((c) => c.id == replyTo.replyTo);
+                            if (replyTo!.replyTo != null) {
+                              replyTo = comments.firstWhere((c) => c.id == replyTo!.replyTo);
                             }
                             inputFocus.requestFocus();
                             type = CommentType.COMMENT;
-                            textEditingController.text = '@${replyToDisplay.from} ';
+                            textEditingController.text = '@${replyToDisplay!.from} ';
                           });
                         },
                       ),
@@ -344,7 +344,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               UserAvatar(
-                icon: (replyToDisplay ?? replyTo).pic,
+                icon: (replyToDisplay ?? replyTo)!.pic!,
                 size: 25,
               ),
               Text(
@@ -355,7 +355,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                 ),
               ),
               Text(
-                (replyToDisplay ?? replyTo).from,
+                (replyToDisplay ?? replyTo)!.from,
                 style: TextStyle(
                   color: Color(0xff474747),
                   fontSize: 16,
@@ -378,7 +378,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Text(
-              (replyToDisplay ?? replyTo).text,
+              (replyToDisplay ?? replyTo)!.text,
               overflow: TextOverflow.fade,
               maxLines: 3,
               style: TextStyle(
@@ -406,7 +406,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         renderType(context, CommentType.RECOMMEND, onTap: () {
           BlocProvider.of<MainNavigatorBloc>(context)
               .add(MainNavigateToSelectNewProductEvent([], futureFn: (future) async {
-            List<Product> products = await future;
+            List<Product>? products = await future;
             if (products == null || products.length == 0) {
               return;
             }
@@ -444,9 +444,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         typesContainer,
       ]);
     } else {
-      Map<String, String> commentType = commentTypes[type];
+      Map<String, String>? commentType = commentTypes[type];
       Widget name = Text(
-        commentType['prompt'],
+        commentType!['prompt']!,
         style: TextStyle(
           color: Color(0xff474747),
           fontSize: 16,
@@ -464,7 +464,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: Text(
-                          recommended[0].supplier.url,
+                          recommended[0].supplier!.url,
                           overflow: TextOverflow.fade,
                           softWrap: false,
                         ),

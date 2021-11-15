@@ -83,7 +83,7 @@ class RemoteNotifications {
 
   Future sendToken() async {
     if (BackendAPI().usersAPI.loggedIn && AppDB().getAppData().notificationTokenSent == false) {
-      await BackendAPI().feedsAPI.updateNotificationToken(AppDB().getAppData().notificationToken);
+      await BackendAPI().feedsAPI.updateNotificationToken(AppDB().getAppData().notificationToken!);
       AppDB().setNotificationTokenSent(true);
     }
   }
@@ -118,7 +118,7 @@ class RemoteNotifications {
 
   void androidForegroundNotification(RemoteMessage message) {
     RemoteNotification notification = message.notification;
-    AndroidNotification android = message.notification?.android;
+    AndroidNotification android = notification.android;
 
     if (notification != null && android != null) {
       flutterLocalNotificationsPlugin.show(
@@ -130,7 +130,7 @@ class RemoteNotifications {
               channel.id,
               channel.name,
               channel.description,
-              icon: android?.smallIcon,
+              icon: android.smallIcon,
             ),
           ),
           payload: JsonEncoder().convert(message.data));

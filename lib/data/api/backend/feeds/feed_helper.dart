@@ -63,7 +63,7 @@ class FeedEntryHelper {
     if (addDeleted && feedEntry.serverID != null) {
       await RelDB.get()
           .deletesDAO
-          .addDelete(DeletesCompanion(serverID: Value(feedEntry.serverID), type: Value('feedentries')));
+          .addDelete(DeletesCompanion(serverID: Value(feedEntry.serverID!), type: Value('feedentries')));
     }
 
     List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getFeedMedias(feedEntry.id);
@@ -88,7 +88,7 @@ class FeedEntryHelper {
     if (addDeleted && feedMedia.serverID != null) {
       await RelDB.get()
           .deletesDAO
-          .addDelete(DeletesCompanion(serverID: Value(feedMedia.serverID), type: Value('feedmedias')));
+          .addDelete(DeletesCompanion(serverID: Value(feedMedia.serverID!), type: Value('feedmedias')));
     }
   }
 
@@ -100,7 +100,7 @@ class FeedEntryHelper {
     }
     await RelDB.get().feedsDAO.deleteFeed(feed);
     if (addDeleted && feed.serverID != null) {
-      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(serverID: Value(feed.serverID), type: Value('feeds')));
+      await RelDB.get().deletesDAO.addDelete(DeletesCompanion(serverID: Value(feed.serverID!), type: Value('feeds')));
     }
   }
 }

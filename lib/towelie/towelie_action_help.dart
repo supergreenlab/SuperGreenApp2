@@ -20,9 +20,9 @@ import 'package:super_green_app/towelie/towelie_action.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 abstract class TowelieActionHelp extends TowelieAction {
-  String get route => null;
-  String get feedEntryType => null;
-  String get triggerID => null;
+  String? get route => null;
+  String? get feedEntryType => null;
+  String? get triggerID => null;
 
   Stream<TowelieBlocState> idTrigger(TowelieBlocEventTrigger event) async* {}
   Stream<TowelieBlocState> routeTrigger(TowelieBlocEventRoute event) async* {}
@@ -31,17 +31,15 @@ abstract class TowelieActionHelp extends TowelieAction {
 
   @override
   Stream<TowelieBlocState> eventReceived(TowelieBlocEvent event) async* {
-    if (event is TowelieBlocEventHelperNext &&
-        event.settings.name == route) {
+    if (event is TowelieBlocEventHelperNext && event.settings.name == route) {
       yield* getNext(event);
     } else if (event is TowelieBlocEventRoute && event.settings.name == route) {
       yield* routeTrigger(event);
     } else if (event is TowelieBlocEventFeedEntryCreated && event.feedEntry.type == feedEntryType) {
       yield* feedEntryTrigger(event);
     } else if (event is TowelieBlocEventTrigger) {
-      yield *idTrigger(event);
-    } else if (event is TowelieBlocEventRoutePop &&
-        event.settings.name == route) {
+      yield* idTrigger(event);
+    } else if (event is TowelieBlocEventRoutePop && event.settings.name == route) {
       yield TowelieBlocStateHelperPop(event.settings);
     }
   }

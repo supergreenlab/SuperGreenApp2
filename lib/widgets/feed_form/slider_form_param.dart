@@ -33,17 +33,17 @@ class SliderFormParam extends StatelessWidget {
   final bool disable;
 
   const SliderFormParam({
-    Key key,
-    @required this.title,
-    @required this.icon,
-    @required this.value,
-    @required this.onChanged,
-    @required this.onChangeEnd,
-    @required this.color,
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.value,
+    required this.onChanged,
+    required this.onChangeEnd,
+    required this.color,
     this.min = 0,
     this.max = 100,
-    this.loading,
-    this.disable,
+    required this.loading,
+    required this.disable,
   }) : super(key: key);
 
   @override
@@ -57,7 +57,7 @@ class SliderFormParam extends StatelessWidget {
               child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: disable == true
                     ? null
                     : () {
@@ -68,7 +68,7 @@ class SliderFormParam extends StatelessWidget {
                 child: Text('-', style: TextStyle(fontSize: 50, color: Colors.grey)),
               ),
               Text('$value%', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff3bb30b))),
-              FlatButton(
+              TextButton(
                 onPressed: disable == true
                     ? null
                     : () {

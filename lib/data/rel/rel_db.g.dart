@@ -16,108 +16,82 @@ class Device extends DataClass implements Insertable<Device> {
   final bool isReachable;
   final bool isRemote;
   final bool isSetup;
-  final String serverID;
+  final String? serverID;
   final bool synced;
   Device(
-      {@required this.id,
-      @required this.identifier,
-      @required this.name,
-      @required this.ip,
-      @required this.mdns,
-      @required this.isReachable,
-      @required this.isRemote,
-      @required this.isSetup,
+      {required this.id,
+      required this.identifier,
+      required this.name,
+      required this.ip,
+      required this.mdns,
+      required this.isReachable,
+      required this.isRemote,
+      required this.isSetup,
       this.serverID,
-      @required this.synced});
+      required this.synced});
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Device(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      identifier: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}identifier']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      ip: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ip']),
-      mdns: stringType.mapFromDatabaseResponse(data['${effectivePrefix}mdns']),
-      isReachable: boolType
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable']),
-      isRemote:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_remote']),
-      isSetup:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_setup']),
-      serverID: stringType
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      identifier: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}identifier'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      ip: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}ip'])!,
+      mdns: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}mdns'])!,
+      isReachable: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_reachable'])!,
+      isRemote: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_remote'])!,
+      isSetup: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_setup'])!,
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || identifier != null) {
-      map['identifier'] = Variable<String>(identifier);
-    }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || ip != null) {
-      map['ip'] = Variable<String>(ip);
-    }
-    if (!nullToAbsent || mdns != null) {
-      map['mdns'] = Variable<String>(mdns);
-    }
-    if (!nullToAbsent || isReachable != null) {
-      map['is_reachable'] = Variable<bool>(isReachable);
-    }
-    if (!nullToAbsent || isRemote != null) {
-      map['is_remote'] = Variable<bool>(isRemote);
-    }
-    if (!nullToAbsent || isSetup != null) {
-      map['is_setup'] = Variable<bool>(isSetup);
-    }
+    map['id'] = Variable<int>(id);
+    map['identifier'] = Variable<String>(identifier);
+    map['name'] = Variable<String>(name);
+    map['ip'] = Variable<String>(ip);
+    map['mdns'] = Variable<String>(mdns);
+    map['is_reachable'] = Variable<bool>(isReachable);
+    map['is_remote'] = Variable<bool>(isRemote);
+    map['is_setup'] = Variable<bool>(isSetup);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
+      map['server_i_d'] = Variable<String?>(serverID);
     }
-    if (!nullToAbsent || synced != null) {
-      map['synced'] = Variable<bool>(synced);
-    }
+    map['synced'] = Variable<bool>(synced);
     return map;
   }
 
   DevicesCompanion toCompanion(bool nullToAbsent) {
     return DevicesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      identifier: identifier == null && nullToAbsent
-          ? const Value.absent()
-          : Value(identifier),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      ip: ip == null && nullToAbsent ? const Value.absent() : Value(ip),
-      mdns: mdns == null && nullToAbsent ? const Value.absent() : Value(mdns),
-      isReachable: isReachable == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isReachable),
-      isRemote: isRemote == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isRemote),
-      isSetup: isSetup == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isSetup),
+      id: Value(id),
+      identifier: Value(identifier),
+      name: Value(name),
+      ip: Value(ip),
+      mdns: Value(mdns),
+      isReachable: Value(isReachable),
+      isRemote: Value(isRemote),
+      isSetup: Value(isSetup),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+      synced: Value(synced),
     );
   }
 
   factory Device.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Device(
       id: serializer.fromJson<int>(json['id']),
@@ -128,12 +102,12 @@ class Device extends DataClass implements Insertable<Device> {
       isReachable: serializer.fromJson<bool>(json['isReachable']),
       isRemote: serializer.fromJson<bool>(json['isRemote']),
       isSetup: serializer.fromJson<bool>(json['isSetup']),
-      serverID: serializer.fromJson<String>(json['serverID']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -144,22 +118,22 @@ class Device extends DataClass implements Insertable<Device> {
       'isReachable': serializer.toJson<bool>(isReachable),
       'isRemote': serializer.toJson<bool>(isRemote),
       'isSetup': serializer.toJson<bool>(isSetup),
-      'serverID': serializer.toJson<String>(serverID),
+      'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
   }
 
   Device copyWith(
-          {int id,
-          String identifier,
-          String name,
-          String ip,
-          String mdns,
-          bool isReachable,
-          bool isRemote,
-          bool isSetup,
-          String serverID,
-          bool synced}) =>
+          {int? id,
+          String? identifier,
+          String? name,
+          String? ip,
+          String? mdns,
+          bool? isReachable,
+          bool? isRemote,
+          bool? isSetup,
+          String? serverID,
+          bool? synced}) =>
       Device(
         id: id ?? this.id,
         identifier: identifier ?? this.identifier,
@@ -190,26 +164,10 @@ class Device extends DataClass implements Insertable<Device> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          identifier.hashCode,
-          $mrjc(
-              name.hashCode,
-              $mrjc(
-                  ip.hashCode,
-                  $mrjc(
-                      mdns.hashCode,
-                      $mrjc(
-                          isReachable.hashCode,
-                          $mrjc(
-                              isRemote.hashCode,
-                              $mrjc(
-                                  isSetup.hashCode,
-                                  $mrjc(serverID.hashCode,
-                                      synced.hashCode))))))))));
+  int get hashCode => Object.hash(id, identifier, name, ip, mdns, isReachable,
+      isRemote, isSetup, serverID, synced);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Device &&
           other.id == this.id &&
@@ -233,7 +191,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<bool> isReachable;
   final Value<bool> isRemote;
   final Value<bool> isSetup;
-  final Value<String> serverID;
+  final Value<String?> serverID;
   final Value<bool> synced;
   const DevicesCompanion({
     this.id = const Value.absent(),
@@ -249,10 +207,10 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   });
   DevicesCompanion.insert({
     this.id = const Value.absent(),
-    @required String identifier,
-    @required String name,
-    @required String ip,
-    @required String mdns,
+    required String identifier,
+    required String name,
+    required String ip,
+    required String mdns,
     this.isReachable = const Value.absent(),
     this.isRemote = const Value.absent(),
     this.isSetup = const Value.absent(),
@@ -263,16 +221,16 @@ class DevicesCompanion extends UpdateCompanion<Device> {
         ip = Value(ip),
         mdns = Value(mdns);
   static Insertable<Device> custom({
-    Expression<int> id,
-    Expression<String> identifier,
-    Expression<String> name,
-    Expression<String> ip,
-    Expression<String> mdns,
-    Expression<bool> isReachable,
-    Expression<bool> isRemote,
-    Expression<bool> isSetup,
-    Expression<String> serverID,
-    Expression<bool> synced,
+    Expression<int>? id,
+    Expression<String>? identifier,
+    Expression<String>? name,
+    Expression<String>? ip,
+    Expression<String>? mdns,
+    Expression<bool>? isReachable,
+    Expression<bool>? isRemote,
+    Expression<bool>? isSetup,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -289,16 +247,16 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   }
 
   DevicesCompanion copyWith(
-      {Value<int> id,
-      Value<String> identifier,
-      Value<String> name,
-      Value<String> ip,
-      Value<String> mdns,
-      Value<bool> isReachable,
-      Value<bool> isRemote,
-      Value<bool> isSetup,
-      Value<String> serverID,
-      Value<bool> synced}) {
+      {Value<int>? id,
+      Value<String>? identifier,
+      Value<String>? name,
+      Value<String>? ip,
+      Value<String>? mdns,
+      Value<bool>? isReachable,
+      Value<bool>? isRemote,
+      Value<bool>? isSetup,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
     return DevicesCompanion(
       id: id ?? this.id,
       identifier: identifier ?? this.identifier,
@@ -341,7 +299,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       map['is_setup'] = Variable<bool>(isSetup.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String>(serverID.value);
+      map['server_i_d'] = Variable<String?>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -369,100 +327,78 @@ class DevicesCompanion extends UpdateCompanion<Device> {
 
 class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $DevicesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _identifierMeta = const VerificationMeta('identifier');
-  GeneratedTextColumn _identifier;
-  @override
-  GeneratedTextColumn get identifier => _identifier ??= _constructIdentifier();
-  GeneratedTextColumn _constructIdentifier() {
-    return GeneratedTextColumn('identifier', $tableName, false,
-        minTextLength: 1, maxTextLength: 16);
-  }
-
+  late final GeneratedColumn<String?> identifier = GeneratedColumn<String?>(
+      'identifier', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _ipMeta = const VerificationMeta('ip');
-  GeneratedTextColumn _ip;
-  @override
-  GeneratedTextColumn get ip => _ip ??= _constructIp();
-  GeneratedTextColumn _constructIp() {
-    return GeneratedTextColumn('ip', $tableName, false,
-        minTextLength: 7, maxTextLength: 15);
-  }
-
+  late final GeneratedColumn<String?> ip = GeneratedColumn<String?>(
+      'ip', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 7, maxTextLength: 15),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _mdnsMeta = const VerificationMeta('mdns');
-  GeneratedTextColumn _mdns;
-  @override
-  GeneratedTextColumn get mdns => _mdns ??= _constructMdns();
-  GeneratedTextColumn _constructMdns() {
-    return GeneratedTextColumn('mdns', $tableName, false,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> mdns = GeneratedColumn<String?>(
+      'mdns', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isReachableMeta =
       const VerificationMeta('isReachable');
-  GeneratedBoolColumn _isReachable;
-  @override
-  GeneratedBoolColumn get isReachable =>
-      _isReachable ??= _constructIsReachable();
-  GeneratedBoolColumn _constructIsReachable() {
-    return GeneratedBoolColumn('is_reachable', $tableName, false,
-        defaultValue: Constant(true));
-  }
-
+  late final GeneratedColumn<bool?> isReachable = GeneratedColumn<bool?>(
+      'is_reachable', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (is_reachable IN (0, 1))',
+      defaultValue: Constant(true));
   final VerificationMeta _isRemoteMeta = const VerificationMeta('isRemote');
-  GeneratedBoolColumn _isRemote;
-  @override
-  GeneratedBoolColumn get isRemote => _isRemote ??= _constructIsRemote();
-  GeneratedBoolColumn _constructIsRemote() {
-    return GeneratedBoolColumn('is_remote', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> isRemote = GeneratedColumn<bool?>(
+      'is_remote', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (is_remote IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _isSetupMeta = const VerificationMeta('isSetup');
-  GeneratedBoolColumn _isSetup;
-  @override
-  GeneratedBoolColumn get isSetup => _isSetup ??= _constructIsSetup();
-  GeneratedBoolColumn _constructIsSetup() {
-    return GeneratedBoolColumn('is_setup', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> isSetup = GeneratedColumn<bool?>(
+      'is_setup', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (is_setup IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
-  @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -477,41 +413,39 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         synced
       ];
   @override
-  $DevicesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'devices';
   @override
-  String get $tableName => _alias ?? 'devices';
-  @override
-  final String actualTableName = 'devices';
+  String get actualTableName => 'devices';
   @override
   VerificationContext validateIntegrity(Insertable<Device> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('identifier')) {
       context.handle(
           _identifierMeta,
           identifier.isAcceptableOrUnknown(
-              data['identifier'], _identifierMeta));
+              data['identifier']!, _identifierMeta));
     } else if (isInserting) {
       context.missing(_identifierMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('ip')) {
-      context.handle(_ipMeta, ip.isAcceptableOrUnknown(data['ip'], _ipMeta));
+      context.handle(_ipMeta, ip.isAcceptableOrUnknown(data['ip']!, _ipMeta));
     } else if (isInserting) {
       context.missing(_ipMeta);
     }
     if (data.containsKey('mdns')) {
       context.handle(
-          _mdnsMeta, mdns.isAcceptableOrUnknown(data['mdns'], _mdnsMeta));
+          _mdnsMeta, mdns.isAcceptableOrUnknown(data['mdns']!, _mdnsMeta));
     } else if (isInserting) {
       context.missing(_mdnsMeta);
     }
@@ -519,23 +453,23 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
       context.handle(
           _isReachableMeta,
           isReachable.isAcceptableOrUnknown(
-              data['is_reachable'], _isReachableMeta));
+              data['is_reachable']!, _isReachableMeta));
     }
     if (data.containsKey('is_remote')) {
       context.handle(_isRemoteMeta,
-          isRemote.isAcceptableOrUnknown(data['is_remote'], _isRemoteMeta));
+          isRemote.isAcceptableOrUnknown(data['is_remote']!, _isRemoteMeta));
     }
     if (data.containsKey('is_setup')) {
       context.handle(_isSetupMeta,
-          isSetup.isAcceptableOrUnknown(data['is_setup'], _isSetupMeta));
+          isSetup.isAcceptableOrUnknown(data['is_setup']!, _isSetupMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
     if (data.containsKey('synced')) {
       context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -543,9 +477,9 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Device map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Device.fromData(data, _db, prefix: effectivePrefix);
+  Device map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Device.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -561,65 +495,50 @@ class Module extends DataClass implements Insertable<Module> {
   final bool isArray;
   final int arrayLen;
   Module(
-      {@required this.id,
-      @required this.device,
-      @required this.name,
-      @required this.isArray,
-      @required this.arrayLen});
+      {required this.id,
+      required this.device,
+      required this.name,
+      required this.isArray,
+      required this.arrayLen});
   factory Module.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Module(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      isArray:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_array']),
-      arrayLen:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}array_len']),
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      device: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      isArray: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_array'])!,
+      arrayLen: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}array_len'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || device != null) {
-      map['device'] = Variable<int>(device);
-    }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || isArray != null) {
-      map['is_array'] = Variable<bool>(isArray);
-    }
-    if (!nullToAbsent || arrayLen != null) {
-      map['array_len'] = Variable<int>(arrayLen);
-    }
+    map['id'] = Variable<int>(id);
+    map['device'] = Variable<int>(device);
+    map['name'] = Variable<String>(name);
+    map['is_array'] = Variable<bool>(isArray);
+    map['array_len'] = Variable<int>(arrayLen);
     return map;
   }
 
   ModulesCompanion toCompanion(bool nullToAbsent) {
     return ModulesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      device:
-          device == null && nullToAbsent ? const Value.absent() : Value(device),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      isArray: isArray == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isArray),
-      arrayLen: arrayLen == null && nullToAbsent
-          ? const Value.absent()
-          : Value(arrayLen),
+      id: Value(id),
+      device: Value(device),
+      name: Value(name),
+      isArray: Value(isArray),
+      arrayLen: Value(arrayLen),
     );
   }
 
   factory Module.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Module(
       id: serializer.fromJson<int>(json['id']),
@@ -630,7 +549,7 @@ class Module extends DataClass implements Insertable<Module> {
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -642,7 +561,7 @@ class Module extends DataClass implements Insertable<Module> {
   }
 
   Module copyWith(
-          {int id, int device, String name, bool isArray, int arrayLen}) =>
+          {int? id, int? device, String? name, bool? isArray, int? arrayLen}) =>
       Module(
         id: id ?? this.id,
         device: device ?? this.device,
@@ -663,12 +582,9 @@ class Module extends DataClass implements Insertable<Module> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(device.hashCode,
-          $mrjc(name.hashCode, $mrjc(isArray.hashCode, arrayLen.hashCode)))));
+  int get hashCode => Object.hash(id, device, name, isArray, arrayLen);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Module &&
           other.id == this.id &&
@@ -693,20 +609,20 @@ class ModulesCompanion extends UpdateCompanion<Module> {
   });
   ModulesCompanion.insert({
     this.id = const Value.absent(),
-    @required int device,
-    @required String name,
-    @required bool isArray,
-    @required int arrayLen,
+    required int device,
+    required String name,
+    required bool isArray,
+    required int arrayLen,
   })  : device = Value(device),
         name = Value(name),
         isArray = Value(isArray),
         arrayLen = Value(arrayLen);
   static Insertable<Module> custom({
-    Expression<int> id,
-    Expression<int> device,
-    Expression<String> name,
-    Expression<bool> isArray,
-    Expression<int> arrayLen,
+    Expression<int>? id,
+    Expression<int>? device,
+    Expression<String>? name,
+    Expression<bool>? isArray,
+    Expression<int>? arrayLen,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -718,11 +634,11 @@ class ModulesCompanion extends UpdateCompanion<Module> {
   }
 
   ModulesCompanion copyWith(
-      {Value<int> id,
-      Value<int> device,
-      Value<String> name,
-      Value<bool> isArray,
-      Value<int> arrayLen}) {
+      {Value<int>? id,
+      Value<int>? device,
+      Value<String>? name,
+      Value<bool>? isArray,
+      Value<int>? arrayLen}) {
     return ModulesCompanion(
       id: id ?? this.id,
       device: device ?? this.device,
@@ -768,99 +684,70 @@ class ModulesCompanion extends UpdateCompanion<Module> {
 
 class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $ModulesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _deviceMeta = const VerificationMeta('device');
-  GeneratedIntColumn _device;
-  @override
-  GeneratedIntColumn get device => _device ??= _constructDevice();
-  GeneratedIntColumn _constructDevice() {
-    return GeneratedIntColumn(
-      'device',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> device = GeneratedColumn<int?>(
+      'device', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isArrayMeta = const VerificationMeta('isArray');
-  GeneratedBoolColumn _isArray;
-  @override
-  GeneratedBoolColumn get isArray => _isArray ??= _constructIsArray();
-  GeneratedBoolColumn _constructIsArray() {
-    return GeneratedBoolColumn(
-      'is_array',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<bool?> isArray = GeneratedColumn<bool?>(
+      'is_array', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: true,
+      defaultConstraints: 'CHECK (is_array IN (0, 1))');
   final VerificationMeta _arrayLenMeta = const VerificationMeta('arrayLen');
-  GeneratedIntColumn _arrayLen;
-  @override
-  GeneratedIntColumn get arrayLen => _arrayLen ??= _constructArrayLen();
-  GeneratedIntColumn _constructArrayLen() {
-    return GeneratedIntColumn(
-      'array_len',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> arrayLen = GeneratedColumn<int?>(
+      'array_len', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, device, name, isArray, arrayLen];
   @override
-  $ModulesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'modules';
   @override
-  String get $tableName => _alias ?? 'modules';
-  @override
-  final String actualTableName = 'modules';
+  String get actualTableName => 'modules';
   @override
   VerificationContext validateIntegrity(Insertable<Module> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('device')) {
       context.handle(_deviceMeta,
-          device.isAcceptableOrUnknown(data['device'], _deviceMeta));
+          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
     } else if (isInserting) {
       context.missing(_deviceMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('is_array')) {
       context.handle(_isArrayMeta,
-          isArray.isAcceptableOrUnknown(data['is_array'], _isArrayMeta));
+          isArray.isAcceptableOrUnknown(data['is_array']!, _isArrayMeta));
     } else if (isInserting) {
       context.missing(_isArrayMeta);
     }
     if (data.containsKey('array_len')) {
       context.handle(_arrayLenMeta,
-          arrayLen.isAcceptableOrUnknown(data['array_len'], _arrayLenMeta));
+          arrayLen.isAcceptableOrUnknown(data['array_len']!, _arrayLenMeta));
     } else if (isInserting) {
       context.missing(_arrayLenMeta);
     }
@@ -870,9 +757,9 @@ class $ModulesTable extends Modules with TableInfo<$ModulesTable, Module> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Module map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Module.fromData(data, _db, prefix: effectivePrefix);
+  Module map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Module.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -887,68 +774,60 @@ class Param extends DataClass implements Insertable<Param> {
   final int module;
   final String key;
   final int type;
-  final String svalue;
-  final int ivalue;
+  final String? svalue;
+  final int? ivalue;
   Param(
-      {@required this.id,
-      @required this.device,
-      @required this.module,
-      @required this.key,
-      @required this.type,
+      {required this.id,
+      required this.device,
+      required this.module,
+      required this.key,
+      required this.type,
       this.svalue,
       this.ivalue});
   factory Param.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return Param(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      module: intType.mapFromDatabaseResponse(data['${effectivePrefix}module']),
-      key: stringType.mapFromDatabaseResponse(data['${effectivePrefix}key']),
-      type: intType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      svalue:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}svalue']),
-      ivalue: intType.mapFromDatabaseResponse(data['${effectivePrefix}ivalue']),
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      device: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device'])!,
+      module: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}module'])!,
+      key: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}key'])!,
+      type: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      svalue: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}svalue']),
+      ivalue: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}ivalue']),
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || device != null) {
-      map['device'] = Variable<int>(device);
-    }
-    if (!nullToAbsent || module != null) {
-      map['module'] = Variable<int>(module);
-    }
-    if (!nullToAbsent || key != null) {
-      map['key'] = Variable<String>(key);
-    }
-    if (!nullToAbsent || type != null) {
-      map['type'] = Variable<int>(type);
-    }
+    map['id'] = Variable<int>(id);
+    map['device'] = Variable<int>(device);
+    map['module'] = Variable<int>(module);
+    map['key'] = Variable<String>(key);
+    map['type'] = Variable<int>(type);
     if (!nullToAbsent || svalue != null) {
-      map['svalue'] = Variable<String>(svalue);
+      map['svalue'] = Variable<String?>(svalue);
     }
     if (!nullToAbsent || ivalue != null) {
-      map['ivalue'] = Variable<int>(ivalue);
+      map['ivalue'] = Variable<int?>(ivalue);
     }
     return map;
   }
 
   ParamsCompanion toCompanion(bool nullToAbsent) {
     return ParamsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      device:
-          device == null && nullToAbsent ? const Value.absent() : Value(device),
-      module:
-          module == null && nullToAbsent ? const Value.absent() : Value(module),
-      key: key == null && nullToAbsent ? const Value.absent() : Value(key),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      id: Value(id),
+      device: Value(device),
+      module: Value(module),
+      key: Value(key),
+      type: Value(type),
       svalue:
           svalue == null && nullToAbsent ? const Value.absent() : Value(svalue),
       ivalue:
@@ -957,7 +836,7 @@ class Param extends DataClass implements Insertable<Param> {
   }
 
   factory Param.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Param(
       id: serializer.fromJson<int>(json['id']),
@@ -965,12 +844,12 @@ class Param extends DataClass implements Insertable<Param> {
       module: serializer.fromJson<int>(json['module']),
       key: serializer.fromJson<String>(json['key']),
       type: serializer.fromJson<int>(json['type']),
-      svalue: serializer.fromJson<String>(json['svalue']),
-      ivalue: serializer.fromJson<int>(json['ivalue']),
+      svalue: serializer.fromJson<String?>(json['svalue']),
+      ivalue: serializer.fromJson<int?>(json['ivalue']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -978,19 +857,19 @@ class Param extends DataClass implements Insertable<Param> {
       'module': serializer.toJson<int>(module),
       'key': serializer.toJson<String>(key),
       'type': serializer.toJson<int>(type),
-      'svalue': serializer.toJson<String>(svalue),
-      'ivalue': serializer.toJson<int>(ivalue),
+      'svalue': serializer.toJson<String?>(svalue),
+      'ivalue': serializer.toJson<int?>(ivalue),
     };
   }
 
   Param copyWith(
-          {int id,
-          int device,
-          int module,
-          String key,
-          int type,
-          String svalue,
-          int ivalue}) =>
+          {int? id,
+          int? device,
+          int? module,
+          String? key,
+          int? type,
+          String? svalue,
+          int? ivalue}) =>
       Param(
         id: id ?? this.id,
         device: device ?? this.device,
@@ -1015,18 +894,10 @@ class Param extends DataClass implements Insertable<Param> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          device.hashCode,
-          $mrjc(
-              module.hashCode,
-              $mrjc(
-                  key.hashCode,
-                  $mrjc(type.hashCode,
-                      $mrjc(svalue.hashCode, ivalue.hashCode)))))));
+  int get hashCode =>
+      Object.hash(id, device, module, key, type, svalue, ivalue);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Param &&
           other.id == this.id &&
@@ -1044,8 +915,8 @@ class ParamsCompanion extends UpdateCompanion<Param> {
   final Value<int> module;
   final Value<String> key;
   final Value<int> type;
-  final Value<String> svalue;
-  final Value<int> ivalue;
+  final Value<String?> svalue;
+  final Value<int?> ivalue;
   const ParamsCompanion({
     this.id = const Value.absent(),
     this.device = const Value.absent(),
@@ -1057,10 +928,10 @@ class ParamsCompanion extends UpdateCompanion<Param> {
   });
   ParamsCompanion.insert({
     this.id = const Value.absent(),
-    @required int device,
-    @required int module,
-    @required String key,
-    @required int type,
+    required int device,
+    required int module,
+    required String key,
+    required int type,
     this.svalue = const Value.absent(),
     this.ivalue = const Value.absent(),
   })  : device = Value(device),
@@ -1068,13 +939,13 @@ class ParamsCompanion extends UpdateCompanion<Param> {
         key = Value(key),
         type = Value(type);
   static Insertable<Param> custom({
-    Expression<int> id,
-    Expression<int> device,
-    Expression<int> module,
-    Expression<String> key,
-    Expression<int> type,
-    Expression<String> svalue,
-    Expression<int> ivalue,
+    Expression<int>? id,
+    Expression<int>? device,
+    Expression<int>? module,
+    Expression<String>? key,
+    Expression<int>? type,
+    Expression<String?>? svalue,
+    Expression<int?>? ivalue,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1088,13 +959,13 @@ class ParamsCompanion extends UpdateCompanion<Param> {
   }
 
   ParamsCompanion copyWith(
-      {Value<int> id,
-      Value<int> device,
-      Value<int> module,
-      Value<String> key,
-      Value<int> type,
-      Value<String> svalue,
-      Value<int> ivalue}) {
+      {Value<int>? id,
+      Value<int>? device,
+      Value<int>? module,
+      Value<String>? key,
+      Value<int>? type,
+      Value<String?>? svalue,
+      Value<int?>? ivalue}) {
     return ParamsCompanion(
       id: id ?? this.id,
       device: device ?? this.device,
@@ -1125,10 +996,10 @@ class ParamsCompanion extends UpdateCompanion<Param> {
       map['type'] = Variable<int>(type.value);
     }
     if (svalue.present) {
-      map['svalue'] = Variable<String>(svalue.value);
+      map['svalue'] = Variable<String?>(svalue.value);
     }
     if (ivalue.present) {
-      map['ivalue'] = Variable<int>(ivalue.value);
+      map['ivalue'] = Variable<int?>(ivalue.value);
     }
     return map;
   }
@@ -1150,131 +1021,90 @@ class ParamsCompanion extends UpdateCompanion<Param> {
 
 class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $ParamsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _deviceMeta = const VerificationMeta('device');
-  GeneratedIntColumn _device;
-  @override
-  GeneratedIntColumn get device => _device ??= _constructDevice();
-  GeneratedIntColumn _constructDevice() {
-    return GeneratedIntColumn(
-      'device',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> device = GeneratedColumn<int?>(
+      'device', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _moduleMeta = const VerificationMeta('module');
-  GeneratedIntColumn _module;
-  @override
-  GeneratedIntColumn get module => _module ??= _constructModule();
-  GeneratedIntColumn _constructModule() {
-    return GeneratedIntColumn(
-      'module',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> module = GeneratedColumn<int?>(
+      'module', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _keyMeta = const VerificationMeta('key');
-  GeneratedTextColumn _key;
-  @override
-  GeneratedTextColumn get key => _key ??= _constructKey();
-  GeneratedTextColumn _constructKey() {
-    return GeneratedTextColumn('key', $tableName, false,
-        minTextLength: 1, maxTextLength: 30);
-  }
-
+  late final GeneratedColumn<String?> key = GeneratedColumn<String?>(
+      'key', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 30),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedIntColumn _type;
-  @override
-  GeneratedIntColumn get type => _type ??= _constructType();
-  GeneratedIntColumn _constructType() {
-    return GeneratedIntColumn(
-      'type',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> type = GeneratedColumn<int?>(
+      'type', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _svalueMeta = const VerificationMeta('svalue');
-  GeneratedTextColumn _svalue;
-  @override
-  GeneratedTextColumn get svalue => _svalue ??= _constructSvalue();
-  GeneratedTextColumn _constructSvalue() {
-    return GeneratedTextColumn('svalue', $tableName, true,
-        minTextLength: 0, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> svalue = GeneratedColumn<String?>(
+      'svalue', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _ivalueMeta = const VerificationMeta('ivalue');
-  GeneratedIntColumn _ivalue;
-  @override
-  GeneratedIntColumn get ivalue => _ivalue ??= _constructIvalue();
-  GeneratedIntColumn _constructIvalue() {
-    return GeneratedIntColumn(
-      'ivalue',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> ivalue = GeneratedColumn<int?>(
+      'ivalue', aliasedName, true,
+      typeName: 'INTEGER', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
       [id, device, module, key, type, svalue, ivalue];
   @override
-  $ParamsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'params';
   @override
-  String get $tableName => _alias ?? 'params';
-  @override
-  final String actualTableName = 'params';
+  String get actualTableName => 'params';
   @override
   VerificationContext validateIntegrity(Insertable<Param> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('device')) {
       context.handle(_deviceMeta,
-          device.isAcceptableOrUnknown(data['device'], _deviceMeta));
+          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
     } else if (isInserting) {
       context.missing(_deviceMeta);
     }
     if (data.containsKey('module')) {
       context.handle(_moduleMeta,
-          module.isAcceptableOrUnknown(data['module'], _moduleMeta));
+          module.isAcceptableOrUnknown(data['module']!, _moduleMeta));
     } else if (isInserting) {
       context.missing(_moduleMeta);
     }
     if (data.containsKey('key')) {
       context.handle(
-          _keyMeta, key.isAcceptableOrUnknown(data['key'], _keyMeta));
+          _keyMeta, key.isAcceptableOrUnknown(data['key']!, _keyMeta));
     } else if (isInserting) {
       context.missing(_keyMeta);
     }
     if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
     if (data.containsKey('svalue')) {
       context.handle(_svalueMeta,
-          svalue.isAcceptableOrUnknown(data['svalue'], _svalueMeta));
+          svalue.isAcceptableOrUnknown(data['svalue']!, _svalueMeta));
     }
     if (data.containsKey('ivalue')) {
       context.handle(_ivalueMeta,
-          ivalue.isAcceptableOrUnknown(data['ivalue'], _ivalueMeta));
+          ivalue.isAcceptableOrUnknown(data['ivalue']!, _ivalueMeta));
     }
     return context;
   }
@@ -1282,9 +1112,9 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Param map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Param.fromData(data, _db, prefix: effectivePrefix);
+  Param map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Param.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -1296,153 +1126,132 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
 class Plant extends DataClass implements Insertable<Plant> {
   final int id;
   final int feed;
-  final int box;
+  final int? box;
   final String name;
   final bool single;
   final bool public;
   final bool alerts;
   final String settings;
-  final String serverID;
+  final String? serverID;
   final bool synced;
   Plant(
-      {@required this.id,
-      @required this.feed,
+      {required this.id,
+      required this.feed,
       this.box,
-      @required this.name,
-      @required this.single,
-      @required this.public,
-      @required this.alerts,
-      @required this.settings,
+      required this.name,
+      required this.single,
+      required this.public,
+      required this.alerts,
+      required this.settings,
       this.serverID,
-      @required this.synced});
+      required this.synced});
   factory Plant.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Plant(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      single:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}single']),
-      public:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}public']),
-      alerts:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}alerts']),
-      settings: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
-      serverID: stringType
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
+      box: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}box']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      single: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}single'])!,
+      public: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}public'])!,
+      alerts: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}alerts'])!,
+      settings: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings'])!,
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || feed != null) {
-      map['feed'] = Variable<int>(feed);
-    }
+    map['id'] = Variable<int>(id);
+    map['feed'] = Variable<int>(feed);
     if (!nullToAbsent || box != null) {
-      map['box'] = Variable<int>(box);
+      map['box'] = Variable<int?>(box);
     }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || single != null) {
-      map['single'] = Variable<bool>(single);
-    }
-    if (!nullToAbsent || public != null) {
-      map['public'] = Variable<bool>(public);
-    }
-    if (!nullToAbsent || alerts != null) {
-      map['alerts'] = Variable<bool>(alerts);
-    }
-    if (!nullToAbsent || settings != null) {
-      map['settings'] = Variable<String>(settings);
-    }
+    map['name'] = Variable<String>(name);
+    map['single'] = Variable<bool>(single);
+    map['public'] = Variable<bool>(public);
+    map['alerts'] = Variable<bool>(alerts);
+    map['settings'] = Variable<String>(settings);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
+      map['server_i_d'] = Variable<String?>(serverID);
     }
-    if (!nullToAbsent || synced != null) {
-      map['synced'] = Variable<bool>(synced);
-    }
+    map['synced'] = Variable<bool>(synced);
     return map;
   }
 
   PlantsCompanion toCompanion(bool nullToAbsent) {
     return PlantsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
+      id: Value(id),
+      feed: Value(feed),
       box: box == null && nullToAbsent ? const Value.absent() : Value(box),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      single:
-          single == null && nullToAbsent ? const Value.absent() : Value(single),
-      public:
-          public == null && nullToAbsent ? const Value.absent() : Value(public),
-      alerts:
-          alerts == null && nullToAbsent ? const Value.absent() : Value(alerts),
-      settings: settings == null && nullToAbsent
-          ? const Value.absent()
-          : Value(settings),
+      name: Value(name),
+      single: Value(single),
+      public: Value(public),
+      alerts: Value(alerts),
+      settings: Value(settings),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+      synced: Value(synced),
     );
   }
 
   factory Plant.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Plant(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
-      box: serializer.fromJson<int>(json['box']),
+      box: serializer.fromJson<int?>(json['box']),
       name: serializer.fromJson<String>(json['name']),
       single: serializer.fromJson<bool>(json['single']),
       public: serializer.fromJson<bool>(json['public']),
       alerts: serializer.fromJson<bool>(json['alerts']),
       settings: serializer.fromJson<String>(json['settings']),
-      serverID: serializer.fromJson<String>(json['serverID']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
-      'box': serializer.toJson<int>(box),
+      'box': serializer.toJson<int?>(box),
       'name': serializer.toJson<String>(name),
       'single': serializer.toJson<bool>(single),
       'public': serializer.toJson<bool>(public),
       'alerts': serializer.toJson<bool>(alerts),
       'settings': serializer.toJson<String>(settings),
-      'serverID': serializer.toJson<String>(serverID),
+      'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
   }
 
   Plant copyWith(
-          {int id,
-          int feed,
-          int box,
-          String name,
-          bool single,
-          bool public,
-          bool alerts,
-          String settings,
-          String serverID,
-          bool synced}) =>
+          {int? id,
+          int? feed,
+          int? box,
+          String? name,
+          bool? single,
+          bool? public,
+          bool? alerts,
+          String? settings,
+          String? serverID,
+          bool? synced}) =>
       Plant(
         id: id ?? this.id,
         feed: feed ?? this.feed,
@@ -1473,26 +1282,10 @@ class Plant extends DataClass implements Insertable<Plant> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          feed.hashCode,
-          $mrjc(
-              box.hashCode,
-              $mrjc(
-                  name.hashCode,
-                  $mrjc(
-                      single.hashCode,
-                      $mrjc(
-                          public.hashCode,
-                          $mrjc(
-                              alerts.hashCode,
-                              $mrjc(
-                                  settings.hashCode,
-                                  $mrjc(serverID.hashCode,
-                                      synced.hashCode))))))))));
+  int get hashCode => Object.hash(
+      id, feed, box, name, single, public, alerts, settings, serverID, synced);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Plant &&
           other.id == this.id &&
@@ -1510,13 +1303,13 @@ class Plant extends DataClass implements Insertable<Plant> {
 class PlantsCompanion extends UpdateCompanion<Plant> {
   final Value<int> id;
   final Value<int> feed;
-  final Value<int> box;
+  final Value<int?> box;
   final Value<String> name;
   final Value<bool> single;
   final Value<bool> public;
   final Value<bool> alerts;
   final Value<String> settings;
-  final Value<String> serverID;
+  final Value<String?> serverID;
   final Value<bool> synced;
   const PlantsCompanion({
     this.id = const Value.absent(),
@@ -1532,9 +1325,9 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   });
   PlantsCompanion.insert({
     this.id = const Value.absent(),
-    @required int feed,
+    required int feed,
     this.box = const Value.absent(),
-    @required String name,
+    required String name,
     this.single = const Value.absent(),
     this.public = const Value.absent(),
     this.alerts = const Value.absent(),
@@ -1544,16 +1337,16 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   })  : feed = Value(feed),
         name = Value(name);
   static Insertable<Plant> custom({
-    Expression<int> id,
-    Expression<int> feed,
-    Expression<int> box,
-    Expression<String> name,
-    Expression<bool> single,
-    Expression<bool> public,
-    Expression<bool> alerts,
-    Expression<String> settings,
-    Expression<String> serverID,
-    Expression<bool> synced,
+    Expression<int>? id,
+    Expression<int>? feed,
+    Expression<int?>? box,
+    Expression<String>? name,
+    Expression<bool>? single,
+    Expression<bool>? public,
+    Expression<bool>? alerts,
+    Expression<String>? settings,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1570,16 +1363,16 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   }
 
   PlantsCompanion copyWith(
-      {Value<int> id,
-      Value<int> feed,
-      Value<int> box,
-      Value<String> name,
-      Value<bool> single,
-      Value<bool> public,
-      Value<bool> alerts,
-      Value<String> settings,
-      Value<String> serverID,
-      Value<bool> synced}) {
+      {Value<int>? id,
+      Value<int>? feed,
+      Value<int?>? box,
+      Value<String>? name,
+      Value<bool>? single,
+      Value<bool>? public,
+      Value<bool>? alerts,
+      Value<String>? settings,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
     return PlantsCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
@@ -1604,7 +1397,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       map['feed'] = Variable<int>(feed.value);
     }
     if (box.present) {
-      map['box'] = Variable<int>(box.value);
+      map['box'] = Variable<int?>(box.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1622,7 +1415,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       map['settings'] = Variable<String>(settings.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String>(serverID.value);
+      map['server_i_d'] = Variable<String?>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -1650,160 +1443,124 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
 
 class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $PlantsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
-  @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
+      'feed', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _boxMeta = const VerificationMeta('box');
-  GeneratedIntColumn _box;
-  @override
-  GeneratedIntColumn get box => _box ??= _constructBox();
-  GeneratedIntColumn _constructBox() {
-    return GeneratedIntColumn(
-      'box',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> box = GeneratedColumn<int?>(
+      'box', aliasedName, true,
+      typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _singleMeta = const VerificationMeta('single');
-  GeneratedBoolColumn _single;
-  @override
-  GeneratedBoolColumn get single => _single ??= _constructSingle();
-  GeneratedBoolColumn _constructSingle() {
-    return GeneratedBoolColumn('single', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> single = GeneratedColumn<bool?>(
+      'single', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (single IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _publicMeta = const VerificationMeta('public');
-  GeneratedBoolColumn _public;
-  @override
-  GeneratedBoolColumn get public => _public ??= _constructPublic();
-  GeneratedBoolColumn _constructPublic() {
-    return GeneratedBoolColumn('public', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> public = GeneratedColumn<bool?>(
+      'public', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (public IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _alertsMeta = const VerificationMeta('alerts');
-  GeneratedBoolColumn _alerts;
-  @override
-  GeneratedBoolColumn get alerts => _alerts ??= _constructAlerts();
-  GeneratedBoolColumn _constructAlerts() {
-    return GeneratedBoolColumn('alerts', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> alerts = GeneratedColumn<bool?>(
+      'alerts', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (alerts IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
-  GeneratedTextColumn _settings;
-  @override
-  GeneratedTextColumn get settings => _settings ??= _constructSettings();
-  GeneratedTextColumn _constructSettings() {
-    return GeneratedTextColumn('settings', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  late final GeneratedColumn<String?> settings = GeneratedColumn<String?>(
+      'settings', aliasedName, false,
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
-  @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, box, name, single, public, alerts, settings, serverID, synced];
   @override
-  $PlantsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'plants';
   @override
-  String get $tableName => _alias ?? 'plants';
-  @override
-  final String actualTableName = 'plants';
+  String get actualTableName => 'plants';
   @override
   VerificationContext validateIntegrity(Insertable<Plant> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
     if (data.containsKey('box')) {
       context.handle(
-          _boxMeta, box.isAcceptableOrUnknown(data['box'], _boxMeta));
+          _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('single')) {
       context.handle(_singleMeta,
-          single.isAcceptableOrUnknown(data['single'], _singleMeta));
+          single.isAcceptableOrUnknown(data['single']!, _singleMeta));
     }
     if (data.containsKey('public')) {
       context.handle(_publicMeta,
-          public.isAcceptableOrUnknown(data['public'], _publicMeta));
+          public.isAcceptableOrUnknown(data['public']!, _publicMeta));
     }
     if (data.containsKey('alerts')) {
       context.handle(_alertsMeta,
-          alerts.isAcceptableOrUnknown(data['alerts'], _alertsMeta));
+          alerts.isAcceptableOrUnknown(data['alerts']!, _alertsMeta));
     }
     if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
-          settings.isAcceptableOrUnknown(data['settings'], _settingsMeta));
+          settings.isAcceptableOrUnknown(data['settings']!, _settingsMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
     if (data.containsKey('synced')) {
       context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -1811,9 +1568,9 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Plant map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Plant.fromData(data, _db, prefix: effectivePrefix);
+  Plant map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Plant.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -1824,132 +1581,122 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
 
 class Box extends DataClass implements Insertable<Box> {
   final int id;
-  final int feed;
-  final int device;
-  final int deviceBox;
+  final int? feed;
+  final int? device;
+  final int? deviceBox;
   final String name;
   final String settings;
-  final String serverID;
+  final String? serverID;
   final bool synced;
   Box(
-      {@required this.id,
+      {required this.id,
       this.feed,
       this.device,
       this.deviceBox,
-      @required this.name,
-      @required this.settings,
+      required this.name,
+      required this.settings,
       this.serverID,
-      @required this.synced});
+      required this.synced});
   factory Box.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Box(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      device: intType.mapFromDatabaseResponse(data['${effectivePrefix}device']),
-      deviceBox:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      settings: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
-      serverID: stringType
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed']),
+      device: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device']),
+      deviceBox: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}device_box']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      settings: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings'])!,
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
+    map['id'] = Variable<int>(id);
     if (!nullToAbsent || feed != null) {
-      map['feed'] = Variable<int>(feed);
+      map['feed'] = Variable<int?>(feed);
     }
     if (!nullToAbsent || device != null) {
-      map['device'] = Variable<int>(device);
+      map['device'] = Variable<int?>(device);
     }
     if (!nullToAbsent || deviceBox != null) {
-      map['device_box'] = Variable<int>(deviceBox);
+      map['device_box'] = Variable<int?>(deviceBox);
     }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || settings != null) {
-      map['settings'] = Variable<String>(settings);
-    }
+    map['name'] = Variable<String>(name);
+    map['settings'] = Variable<String>(settings);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
+      map['server_i_d'] = Variable<String?>(serverID);
     }
-    if (!nullToAbsent || synced != null) {
-      map['synced'] = Variable<bool>(synced);
-    }
+    map['synced'] = Variable<bool>(synced);
     return map;
   }
 
   BoxesCompanion toCompanion(bool nullToAbsent) {
     return BoxesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      id: Value(id),
       feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
       device:
           device == null && nullToAbsent ? const Value.absent() : Value(device),
       deviceBox: deviceBox == null && nullToAbsent
           ? const Value.absent()
           : Value(deviceBox),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      settings: settings == null && nullToAbsent
-          ? const Value.absent()
-          : Value(settings),
+      name: Value(name),
+      settings: Value(settings),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+      synced: Value(synced),
     );
   }
 
   factory Box.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Box(
       id: serializer.fromJson<int>(json['id']),
-      feed: serializer.fromJson<int>(json['feed']),
-      device: serializer.fromJson<int>(json['device']),
-      deviceBox: serializer.fromJson<int>(json['deviceBox']),
+      feed: serializer.fromJson<int?>(json['feed']),
+      device: serializer.fromJson<int?>(json['device']),
+      deviceBox: serializer.fromJson<int?>(json['deviceBox']),
       name: serializer.fromJson<String>(json['name']),
       settings: serializer.fromJson<String>(json['settings']),
-      serverID: serializer.fromJson<String>(json['serverID']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'feed': serializer.toJson<int>(feed),
-      'device': serializer.toJson<int>(device),
-      'deviceBox': serializer.toJson<int>(deviceBox),
+      'feed': serializer.toJson<int?>(feed),
+      'device': serializer.toJson<int?>(device),
+      'deviceBox': serializer.toJson<int?>(deviceBox),
       'name': serializer.toJson<String>(name),
       'settings': serializer.toJson<String>(settings),
-      'serverID': serializer.toJson<String>(serverID),
+      'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
   }
 
   Box copyWith(
-          {int id,
-          int feed,
-          int device,
-          int deviceBox,
-          String name,
-          String settings,
-          String serverID,
-          bool synced}) =>
+          {int? id,
+          int? feed,
+          int? device,
+          int? deviceBox,
+          String? name,
+          String? settings,
+          String? serverID,
+          bool? synced}) =>
       Box(
         id: id ?? this.id,
         feed: feed ?? this.feed,
@@ -1976,20 +1723,10 @@ class Box extends DataClass implements Insertable<Box> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          feed.hashCode,
-          $mrjc(
-              device.hashCode,
-              $mrjc(
-                  deviceBox.hashCode,
-                  $mrjc(
-                      name.hashCode,
-                      $mrjc(settings.hashCode,
-                          $mrjc(serverID.hashCode, synced.hashCode))))))));
+  int get hashCode => Object.hash(
+      id, feed, device, deviceBox, name, settings, serverID, synced);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Box &&
           other.id == this.id &&
@@ -2004,12 +1741,12 @@ class Box extends DataClass implements Insertable<Box> {
 
 class BoxesCompanion extends UpdateCompanion<Box> {
   final Value<int> id;
-  final Value<int> feed;
-  final Value<int> device;
-  final Value<int> deviceBox;
+  final Value<int?> feed;
+  final Value<int?> device;
+  final Value<int?> deviceBox;
   final Value<String> name;
   final Value<String> settings;
-  final Value<String> serverID;
+  final Value<String?> serverID;
   final Value<bool> synced;
   const BoxesCompanion({
     this.id = const Value.absent(),
@@ -2026,20 +1763,20 @@ class BoxesCompanion extends UpdateCompanion<Box> {
     this.feed = const Value.absent(),
     this.device = const Value.absent(),
     this.deviceBox = const Value.absent(),
-    @required String name,
+    required String name,
     this.settings = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Box> custom({
-    Expression<int> id,
-    Expression<int> feed,
-    Expression<int> device,
-    Expression<int> deviceBox,
-    Expression<String> name,
-    Expression<String> settings,
-    Expression<String> serverID,
-    Expression<bool> synced,
+    Expression<int>? id,
+    Expression<int?>? feed,
+    Expression<int?>? device,
+    Expression<int?>? deviceBox,
+    Expression<String>? name,
+    Expression<String>? settings,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2054,14 +1791,14 @@ class BoxesCompanion extends UpdateCompanion<Box> {
   }
 
   BoxesCompanion copyWith(
-      {Value<int> id,
-      Value<int> feed,
-      Value<int> device,
-      Value<int> deviceBox,
-      Value<String> name,
-      Value<String> settings,
-      Value<String> serverID,
-      Value<bool> synced}) {
+      {Value<int>? id,
+      Value<int?>? feed,
+      Value<int?>? device,
+      Value<int?>? deviceBox,
+      Value<String>? name,
+      Value<String>? settings,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
     return BoxesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
@@ -2081,13 +1818,13 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       map['id'] = Variable<int>(id.value);
     }
     if (feed.present) {
-      map['feed'] = Variable<int>(feed.value);
+      map['feed'] = Variable<int?>(feed.value);
     }
     if (device.present) {
-      map['device'] = Variable<int>(device.value);
+      map['device'] = Variable<int?>(device.value);
     }
     if (deviceBox.present) {
-      map['device_box'] = Variable<int>(deviceBox.value);
+      map['device_box'] = Variable<int?>(deviceBox.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -2096,7 +1833,7 @@ class BoxesCompanion extends UpdateCompanion<Box> {
       map['settings'] = Variable<String>(settings.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String>(serverID.value);
+      map['server_i_d'] = Variable<String?>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -2122,135 +1859,97 @@ class BoxesCompanion extends UpdateCompanion<Box> {
 
 class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $BoxesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
-  @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
+      'feed', aliasedName, true,
+      typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _deviceMeta = const VerificationMeta('device');
-  GeneratedIntColumn _device;
-  @override
-  GeneratedIntColumn get device => _device ??= _constructDevice();
-  GeneratedIntColumn _constructDevice() {
-    return GeneratedIntColumn(
-      'device',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> device = GeneratedColumn<int?>(
+      'device', aliasedName, true,
+      typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _deviceBoxMeta = const VerificationMeta('deviceBox');
-  GeneratedIntColumn _deviceBox;
-  @override
-  GeneratedIntColumn get deviceBox => _deviceBox ??= _constructDeviceBox();
-  GeneratedIntColumn _constructDeviceBox() {
-    return GeneratedIntColumn(
-      'device_box',
-      $tableName,
-      true,
-    );
-  }
-
+  late final GeneratedColumn<int?> deviceBox = GeneratedColumn<int?>(
+      'device_box', aliasedName, true,
+      typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
-  GeneratedTextColumn _settings;
-  @override
-  GeneratedTextColumn get settings => _settings ??= _constructSettings();
-  GeneratedTextColumn _constructSettings() {
-    return GeneratedTextColumn('settings', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  late final GeneratedColumn<String?> settings = GeneratedColumn<String?>(
+      'settings', aliasedName, false,
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
-  @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, device, deviceBox, name, settings, serverID, synced];
   @override
-  $BoxesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'boxes';
   @override
-  String get $tableName => _alias ?? 'boxes';
-  @override
-  final String actualTableName = 'boxes';
+  String get actualTableName => 'boxes';
   @override
   VerificationContext validateIntegrity(Insertable<Box> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
     }
     if (data.containsKey('device')) {
       context.handle(_deviceMeta,
-          device.isAcceptableOrUnknown(data['device'], _deviceMeta));
+          device.isAcceptableOrUnknown(data['device']!, _deviceMeta));
     }
     if (data.containsKey('device_box')) {
       context.handle(_deviceBoxMeta,
-          deviceBox.isAcceptableOrUnknown(data['device_box'], _deviceBoxMeta));
+          deviceBox.isAcceptableOrUnknown(data['device_box']!, _deviceBoxMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
-          settings.isAcceptableOrUnknown(data['settings'], _settingsMeta));
+          settings.isAcceptableOrUnknown(data['settings']!, _settingsMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
     if (data.containsKey('synced')) {
       context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -2258,9 +1957,9 @@ class $BoxesTable extends Boxes with TableInfo<$BoxesTable, Box> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Box map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Box.fromData(data, _db, prefix: effectivePrefix);
+  Box map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Box.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -2276,61 +1975,50 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   final DateTime date;
   final String values;
   ChartCache(
-      {@required this.id,
-      @required this.box,
-      @required this.name,
-      @required this.date,
-      @required this.values});
+      {required this.id,
+      required this.box,
+      required this.name,
+      required this.date,
+      required this.values});
   factory ChartCache.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return ChartCache(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      box: intType.mapFromDatabaseResponse(data['${effectivePrefix}box']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      date:
-          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      values:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}values']),
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      box: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}box'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
+      values: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}values'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || box != null) {
-      map['box'] = Variable<int>(box);
-    }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || date != null) {
-      map['date'] = Variable<DateTime>(date);
-    }
-    if (!nullToAbsent || values != null) {
-      map['values'] = Variable<String>(values);
-    }
+    map['id'] = Variable<int>(id);
+    map['box'] = Variable<int>(box);
+    map['name'] = Variable<String>(name);
+    map['date'] = Variable<DateTime>(date);
+    map['values'] = Variable<String>(values);
     return map;
   }
 
   ChartCachesCompanion toCompanion(bool nullToAbsent) {
     return ChartCachesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
-      values:
-          values == null && nullToAbsent ? const Value.absent() : Value(values),
+      id: Value(id),
+      box: Value(box),
+      name: Value(name),
+      date: Value(date),
+      values: Value(values),
     );
   }
 
   factory ChartCache.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return ChartCache(
       id: serializer.fromJson<int>(json['id']),
@@ -2341,7 +2029,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -2353,7 +2041,7 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   }
 
   ChartCache copyWith(
-          {int id, int box, String name, DateTime date, String values}) =>
+          {int? id, int? box, String? name, DateTime? date, String? values}) =>
       ChartCache(
         id: id ?? this.id,
         box: box ?? this.box,
@@ -2374,12 +2062,9 @@ class ChartCache extends DataClass implements Insertable<ChartCache> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(box.hashCode,
-          $mrjc(name.hashCode, $mrjc(date.hashCode, values.hashCode)))));
+  int get hashCode => Object.hash(id, box, name, date, values);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ChartCache &&
           other.id == this.id &&
@@ -2404,19 +2089,19 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   });
   ChartCachesCompanion.insert({
     this.id = const Value.absent(),
-    @required int box,
-    @required String name,
-    @required DateTime date,
+    required int box,
+    required String name,
+    required DateTime date,
     this.values = const Value.absent(),
   })  : box = Value(box),
         name = Value(name),
         date = Value(date);
   static Insertable<ChartCache> custom({
-    Expression<int> id,
-    Expression<int> box,
-    Expression<String> name,
-    Expression<DateTime> date,
-    Expression<String> values,
+    Expression<int>? id,
+    Expression<int>? box,
+    Expression<String>? name,
+    Expression<DateTime>? date,
+    Expression<String>? values,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2428,11 +2113,11 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
   }
 
   ChartCachesCompanion copyWith(
-      {Value<int> id,
-      Value<int> box,
-      Value<String> name,
-      Value<DateTime> date,
-      Value<String> values}) {
+      {Value<int>? id,
+      Value<int>? box,
+      Value<String>? name,
+      Value<DateTime>? date,
+      Value<String>? values}) {
     return ChartCachesCompanion(
       id: id ?? this.id,
       box: box ?? this.box,
@@ -2479,96 +2164,70 @@ class ChartCachesCompanion extends UpdateCompanion<ChartCache> {
 class $ChartCachesTable extends ChartCaches
     with TableInfo<$ChartCachesTable, ChartCache> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $ChartCachesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _boxMeta = const VerificationMeta('box');
-  GeneratedIntColumn _box;
-  @override
-  GeneratedIntColumn get box => _box ??= _constructBox();
-  GeneratedIntColumn _constructBox() {
-    return GeneratedIntColumn(
-      'box',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> box = GeneratedColumn<int?>(
+      'box', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 32);
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _dateMeta = const VerificationMeta('date');
-  GeneratedDateTimeColumn _date;
-  @override
-  GeneratedDateTimeColumn get date => _date ??= _constructDate();
-  GeneratedDateTimeColumn _constructDate() {
-    return GeneratedDateTimeColumn(
-      'date',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
+      'date', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _valuesMeta = const VerificationMeta('values');
-  GeneratedTextColumn _values;
-  @override
-  GeneratedTextColumn get values => _values ??= _constructValues();
-  GeneratedTextColumn _constructValues() {
-    return GeneratedTextColumn('values', $tableName, false,
-        defaultValue: Constant('[]'));
-  }
-
+  late final GeneratedColumn<String?> values = GeneratedColumn<String?>(
+      'values', aliasedName, false,
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('[]'));
   @override
   List<GeneratedColumn> get $columns => [id, box, name, date, values];
   @override
-  $ChartCachesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'chart_caches';
   @override
-  String get $tableName => _alias ?? 'chart_caches';
-  @override
-  final String actualTableName = 'chart_caches';
+  String get actualTableName => 'chart_caches';
   @override
   VerificationContext validateIntegrity(Insertable<ChartCache> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('box')) {
       context.handle(
-          _boxMeta, box.isAcceptableOrUnknown(data['box'], _boxMeta));
+          _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
     } else if (isInserting) {
       context.missing(_boxMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('date')) {
       context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
     if (data.containsKey('values')) {
       context.handle(_valuesMeta,
-          values.isAcceptableOrUnknown(data['values'], _valuesMeta));
+          values.isAcceptableOrUnknown(data['values']!, _valuesMeta));
     }
     return context;
   }
@@ -2576,9 +2235,9 @@ class $ChartCachesTable extends ChartCaches
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ChartCache map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return ChartCache.fromData(data, _db, prefix: effectivePrefix);
+  ChartCache map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ChartCache.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -2592,21 +2251,21 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   final int plant;
   final String type;
   final String settings;
-  final String ssid;
-  final String password;
-  final String controllerID;
-  final String rotate;
-  final String name;
-  final String strain;
-  final String dropboxToken;
-  final String uploadName;
-  final String serverID;
+  final String? ssid;
+  final String? password;
+  final String? controllerID;
+  final String? rotate;
+  final String? name;
+  final String? strain;
+  final String? dropboxToken;
+  final String? uploadName;
+  final String? serverID;
   final bool synced;
   Timelapse(
-      {@required this.id,
-      @required this.plant,
-      @required this.type,
-      @required this.settings,
+      {required this.id,
+      required this.plant,
+      required this.type,
+      required this.settings,
       this.ssid,
       this.password,
       this.controllerID,
@@ -2616,96 +2275,85 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       this.dropboxToken,
       this.uploadName,
       this.serverID,
-      @required this.synced});
+      required this.synced});
   factory Timelapse.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Timelapse(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      plant: intType.mapFromDatabaseResponse(data['${effectivePrefix}plant']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      settings: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}settings']),
-      ssid: stringType.mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
-      password: stringType
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      plant: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}plant'])!,
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      settings: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}settings'])!,
+      ssid: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}ssid']),
+      password: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}password']),
-      controllerID: stringType
+      controllerID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}controller_i_d']),
-      rotate:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}rotate']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      strain:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}strain']),
-      dropboxToken: stringType
+      rotate: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}rotate']),
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      strain: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}strain']),
+      dropboxToken: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}dropbox_token']),
-      uploadName: stringType
+      uploadName: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}upload_name']),
-      serverID: stringType
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || plant != null) {
-      map['plant'] = Variable<int>(plant);
-    }
-    if (!nullToAbsent || type != null) {
-      map['type'] = Variable<String>(type);
-    }
-    if (!nullToAbsent || settings != null) {
-      map['settings'] = Variable<String>(settings);
-    }
+    map['id'] = Variable<int>(id);
+    map['plant'] = Variable<int>(plant);
+    map['type'] = Variable<String>(type);
+    map['settings'] = Variable<String>(settings);
     if (!nullToAbsent || ssid != null) {
-      map['ssid'] = Variable<String>(ssid);
+      map['ssid'] = Variable<String?>(ssid);
     }
     if (!nullToAbsent || password != null) {
-      map['password'] = Variable<String>(password);
+      map['password'] = Variable<String?>(password);
     }
     if (!nullToAbsent || controllerID != null) {
-      map['controller_i_d'] = Variable<String>(controllerID);
+      map['controller_i_d'] = Variable<String?>(controllerID);
     }
     if (!nullToAbsent || rotate != null) {
-      map['rotate'] = Variable<String>(rotate);
+      map['rotate'] = Variable<String?>(rotate);
     }
     if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
+      map['name'] = Variable<String?>(name);
     }
     if (!nullToAbsent || strain != null) {
-      map['strain'] = Variable<String>(strain);
+      map['strain'] = Variable<String?>(strain);
     }
     if (!nullToAbsent || dropboxToken != null) {
-      map['dropbox_token'] = Variable<String>(dropboxToken);
+      map['dropbox_token'] = Variable<String?>(dropboxToken);
     }
     if (!nullToAbsent || uploadName != null) {
-      map['upload_name'] = Variable<String>(uploadName);
+      map['upload_name'] = Variable<String?>(uploadName);
     }
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
+      map['server_i_d'] = Variable<String?>(serverID);
     }
-    if (!nullToAbsent || synced != null) {
-      map['synced'] = Variable<bool>(synced);
-    }
+    map['synced'] = Variable<bool>(synced);
     return map;
   }
 
   TimelapsesCompanion toCompanion(bool nullToAbsent) {
     return TimelapsesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      plant:
-          plant == null && nullToAbsent ? const Value.absent() : Value(plant),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
-      settings: settings == null && nullToAbsent
-          ? const Value.absent()
-          : Value(settings),
+      id: Value(id),
+      plant: Value(plant),
+      type: Value(type),
+      settings: Value(settings),
       ssid: ssid == null && nullToAbsent ? const Value.absent() : Value(ssid),
       password: password == null && nullToAbsent
           ? const Value.absent()
@@ -2727,67 +2375,66 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+      synced: Value(synced),
     );
   }
 
   factory Timelapse.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Timelapse(
       id: serializer.fromJson<int>(json['id']),
       plant: serializer.fromJson<int>(json['plant']),
       type: serializer.fromJson<String>(json['type']),
       settings: serializer.fromJson<String>(json['settings']),
-      ssid: serializer.fromJson<String>(json['ssid']),
-      password: serializer.fromJson<String>(json['password']),
-      controllerID: serializer.fromJson<String>(json['controllerID']),
-      rotate: serializer.fromJson<String>(json['rotate']),
-      name: serializer.fromJson<String>(json['name']),
-      strain: serializer.fromJson<String>(json['strain']),
-      dropboxToken: serializer.fromJson<String>(json['dropboxToken']),
-      uploadName: serializer.fromJson<String>(json['uploadName']),
-      serverID: serializer.fromJson<String>(json['serverID']),
+      ssid: serializer.fromJson<String?>(json['ssid']),
+      password: serializer.fromJson<String?>(json['password']),
+      controllerID: serializer.fromJson<String?>(json['controllerID']),
+      rotate: serializer.fromJson<String?>(json['rotate']),
+      name: serializer.fromJson<String?>(json['name']),
+      strain: serializer.fromJson<String?>(json['strain']),
+      dropboxToken: serializer.fromJson<String?>(json['dropboxToken']),
+      uploadName: serializer.fromJson<String?>(json['uploadName']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'plant': serializer.toJson<int>(plant),
       'type': serializer.toJson<String>(type),
       'settings': serializer.toJson<String>(settings),
-      'ssid': serializer.toJson<String>(ssid),
-      'password': serializer.toJson<String>(password),
-      'controllerID': serializer.toJson<String>(controllerID),
-      'rotate': serializer.toJson<String>(rotate),
-      'name': serializer.toJson<String>(name),
-      'strain': serializer.toJson<String>(strain),
-      'dropboxToken': serializer.toJson<String>(dropboxToken),
-      'uploadName': serializer.toJson<String>(uploadName),
-      'serverID': serializer.toJson<String>(serverID),
+      'ssid': serializer.toJson<String?>(ssid),
+      'password': serializer.toJson<String?>(password),
+      'controllerID': serializer.toJson<String?>(controllerID),
+      'rotate': serializer.toJson<String?>(rotate),
+      'name': serializer.toJson<String?>(name),
+      'strain': serializer.toJson<String?>(strain),
+      'dropboxToken': serializer.toJson<String?>(dropboxToken),
+      'uploadName': serializer.toJson<String?>(uploadName),
+      'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
   }
 
   Timelapse copyWith(
-          {int id,
-          int plant,
-          String type,
-          String settings,
-          String ssid,
-          String password,
-          String controllerID,
-          String rotate,
-          String name,
-          String strain,
-          String dropboxToken,
-          String uploadName,
-          String serverID,
-          bool synced}) =>
+          {int? id,
+          int? plant,
+          String? type,
+          String? settings,
+          String? ssid,
+          String? password,
+          String? controllerID,
+          String? rotate,
+          String? name,
+          String? strain,
+          String? dropboxToken,
+          String? uploadName,
+          String? serverID,
+          bool? synced}) =>
       Timelapse(
         id: id ?? this.id,
         plant: plant ?? this.plant,
@@ -2826,36 +2473,23 @@ class Timelapse extends DataClass implements Insertable<Timelapse> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          plant.hashCode,
-          $mrjc(
-              type.hashCode,
-              $mrjc(
-                  settings.hashCode,
-                  $mrjc(
-                      ssid.hashCode,
-                      $mrjc(
-                          password.hashCode,
-                          $mrjc(
-                              controllerID.hashCode,
-                              $mrjc(
-                                  rotate.hashCode,
-                                  $mrjc(
-                                      name.hashCode,
-                                      $mrjc(
-                                          strain.hashCode,
-                                          $mrjc(
-                                              dropboxToken.hashCode,
-                                              $mrjc(
-                                                  uploadName.hashCode,
-                                                  $mrjc(
-                                                      serverID.hashCode,
-                                                      synced
-                                                          .hashCode))))))))))))));
+  int get hashCode => Object.hash(
+      id,
+      plant,
+      type,
+      settings,
+      ssid,
+      password,
+      controllerID,
+      rotate,
+      name,
+      strain,
+      dropboxToken,
+      uploadName,
+      serverID,
+      synced);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Timelapse &&
           other.id == this.id &&
@@ -2879,15 +2513,15 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   final Value<int> plant;
   final Value<String> type;
   final Value<String> settings;
-  final Value<String> ssid;
-  final Value<String> password;
-  final Value<String> controllerID;
-  final Value<String> rotate;
-  final Value<String> name;
-  final Value<String> strain;
-  final Value<String> dropboxToken;
-  final Value<String> uploadName;
-  final Value<String> serverID;
+  final Value<String?> ssid;
+  final Value<String?> password;
+  final Value<String?> controllerID;
+  final Value<String?> rotate;
+  final Value<String?> name;
+  final Value<String?> strain;
+  final Value<String?> dropboxToken;
+  final Value<String?> uploadName;
+  final Value<String?> serverID;
   final Value<bool> synced;
   const TimelapsesCompanion({
     this.id = const Value.absent(),
@@ -2907,7 +2541,7 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   });
   TimelapsesCompanion.insert({
     this.id = const Value.absent(),
-    @required int plant,
+    required int plant,
     this.type = const Value.absent(),
     this.settings = const Value.absent(),
     this.ssid = const Value.absent(),
@@ -2922,20 +2556,20 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
     this.synced = const Value.absent(),
   }) : plant = Value(plant);
   static Insertable<Timelapse> custom({
-    Expression<int> id,
-    Expression<int> plant,
-    Expression<String> type,
-    Expression<String> settings,
-    Expression<String> ssid,
-    Expression<String> password,
-    Expression<String> controllerID,
-    Expression<String> rotate,
-    Expression<String> name,
-    Expression<String> strain,
-    Expression<String> dropboxToken,
-    Expression<String> uploadName,
-    Expression<String> serverID,
-    Expression<bool> synced,
+    Expression<int>? id,
+    Expression<int>? plant,
+    Expression<String>? type,
+    Expression<String>? settings,
+    Expression<String?>? ssid,
+    Expression<String?>? password,
+    Expression<String?>? controllerID,
+    Expression<String?>? rotate,
+    Expression<String?>? name,
+    Expression<String?>? strain,
+    Expression<String?>? dropboxToken,
+    Expression<String?>? uploadName,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2956,20 +2590,20 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
   }
 
   TimelapsesCompanion copyWith(
-      {Value<int> id,
-      Value<int> plant,
-      Value<String> type,
-      Value<String> settings,
-      Value<String> ssid,
-      Value<String> password,
-      Value<String> controllerID,
-      Value<String> rotate,
-      Value<String> name,
-      Value<String> strain,
-      Value<String> dropboxToken,
-      Value<String> uploadName,
-      Value<String> serverID,
-      Value<bool> synced}) {
+      {Value<int>? id,
+      Value<int>? plant,
+      Value<String>? type,
+      Value<String>? settings,
+      Value<String?>? ssid,
+      Value<String?>? password,
+      Value<String?>? controllerID,
+      Value<String?>? rotate,
+      Value<String?>? name,
+      Value<String?>? strain,
+      Value<String?>? dropboxToken,
+      Value<String?>? uploadName,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
     return TimelapsesCompanion(
       id: id ?? this.id,
       plant: plant ?? this.plant,
@@ -3004,31 +2638,31 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
       map['settings'] = Variable<String>(settings.value);
     }
     if (ssid.present) {
-      map['ssid'] = Variable<String>(ssid.value);
+      map['ssid'] = Variable<String?>(ssid.value);
     }
     if (password.present) {
-      map['password'] = Variable<String>(password.value);
+      map['password'] = Variable<String?>(password.value);
     }
     if (controllerID.present) {
-      map['controller_i_d'] = Variable<String>(controllerID.value);
+      map['controller_i_d'] = Variable<String?>(controllerID.value);
     }
     if (rotate.present) {
-      map['rotate'] = Variable<String>(rotate.value);
+      map['rotate'] = Variable<String?>(rotate.value);
     }
     if (name.present) {
-      map['name'] = Variable<String>(name.value);
+      map['name'] = Variable<String?>(name.value);
     }
     if (strain.present) {
-      map['strain'] = Variable<String>(strain.value);
+      map['strain'] = Variable<String?>(strain.value);
     }
     if (dropboxToken.present) {
-      map['dropbox_token'] = Variable<String>(dropboxToken.value);
+      map['dropbox_token'] = Variable<String?>(dropboxToken.value);
     }
     if (uploadName.present) {
-      map['upload_name'] = Variable<String>(uploadName.value);
+      map['upload_name'] = Variable<String?>(uploadName.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String>(serverID.value);
+      map['server_i_d'] = Variable<String?>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -3061,141 +2695,104 @@ class TimelapsesCompanion extends UpdateCompanion<Timelapse> {
 class $TimelapsesTable extends Timelapses
     with TableInfo<$TimelapsesTable, Timelapse> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $TimelapsesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _plantMeta = const VerificationMeta('plant');
-  GeneratedIntColumn _plant;
-  @override
-  GeneratedIntColumn get plant => _plant ??= _constructPlant();
-  GeneratedIntColumn _constructPlant() {
-    return GeneratedIntColumn(
-      'plant',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> plant = GeneratedColumn<int?>(
+      'plant', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
-  @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 32, defaultValue: Constant('dropbox'));
-  }
-
+  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 32),
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('dropbox'));
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
-  GeneratedTextColumn _settings;
-  @override
-  GeneratedTextColumn get settings => _settings ??= _constructSettings();
-  GeneratedTextColumn _constructSettings() {
-    return GeneratedTextColumn('settings', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  late final GeneratedColumn<String?> settings = GeneratedColumn<String?>(
+      'settings', aliasedName, false,
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
   final VerificationMeta _ssidMeta = const VerificationMeta('ssid');
-  GeneratedTextColumn _ssid;
-  @override
-  GeneratedTextColumn get ssid => _ssid ??= _constructSsid();
-  GeneratedTextColumn _constructSsid() {
-    return GeneratedTextColumn('ssid', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> ssid = GeneratedColumn<String?>(
+      'ssid', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _passwordMeta = const VerificationMeta('password');
-  GeneratedTextColumn _password;
-  @override
-  GeneratedTextColumn get password => _password ??= _constructPassword();
-  GeneratedTextColumn _constructPassword() {
-    return GeneratedTextColumn('password', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> password = GeneratedColumn<String?>(
+      'password', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _controllerIDMeta =
       const VerificationMeta('controllerID');
-  GeneratedTextColumn _controllerID;
-  @override
-  GeneratedTextColumn get controllerID =>
-      _controllerID ??= _constructControllerID();
-  GeneratedTextColumn _constructControllerID() {
-    return GeneratedTextColumn('controller_i_d', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> controllerID = GeneratedColumn<String?>(
+      'controller_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _rotateMeta = const VerificationMeta('rotate');
-  GeneratedTextColumn _rotate;
-  @override
-  GeneratedTextColumn get rotate => _rotate ??= _constructRotate();
-  GeneratedTextColumn _constructRotate() {
-    return GeneratedTextColumn('rotate', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> rotate = GeneratedColumn<String?>(
+      'rotate', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _strainMeta = const VerificationMeta('strain');
-  GeneratedTextColumn _strain;
-  @override
-  GeneratedTextColumn get strain => _strain ??= _constructStrain();
-  GeneratedTextColumn _constructStrain() {
-    return GeneratedTextColumn('strain', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> strain = GeneratedColumn<String?>(
+      'strain', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _dropboxTokenMeta =
       const VerificationMeta('dropboxToken');
-  GeneratedTextColumn _dropboxToken;
-  @override
-  GeneratedTextColumn get dropboxToken =>
-      _dropboxToken ??= _constructDropboxToken();
-  GeneratedTextColumn _constructDropboxToken() {
-    return GeneratedTextColumn('dropbox_token', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> dropboxToken = GeneratedColumn<String?>(
+      'dropbox_token', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _uploadNameMeta = const VerificationMeta('uploadName');
-  GeneratedTextColumn _uploadName;
-  @override
-  GeneratedTextColumn get uploadName => _uploadName ??= _constructUploadName();
-  GeneratedTextColumn _constructUploadName() {
-    return GeneratedTextColumn('upload_name', $tableName, true,
-        minTextLength: 1, maxTextLength: 64);
-  }
-
+  late final GeneratedColumn<String?> uploadName = GeneratedColumn<String?>(
+      'upload_name', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 64),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
-  @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -3214,78 +2811,76 @@ class $TimelapsesTable extends Timelapses
         synced
       ];
   @override
-  $TimelapsesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'timelapses';
   @override
-  String get $tableName => _alias ?? 'timelapses';
-  @override
-  final String actualTableName = 'timelapses';
+  String get actualTableName => 'timelapses';
   @override
   VerificationContext validateIntegrity(Insertable<Timelapse> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('plant')) {
       context.handle(
-          _plantMeta, plant.isAcceptableOrUnknown(data['plant'], _plantMeta));
+          _plantMeta, plant.isAcceptableOrUnknown(data['plant']!, _plantMeta));
     } else if (isInserting) {
       context.missing(_plantMeta);
     }
     if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     }
     if (data.containsKey('settings')) {
       context.handle(_settingsMeta,
-          settings.isAcceptableOrUnknown(data['settings'], _settingsMeta));
+          settings.isAcceptableOrUnknown(data['settings']!, _settingsMeta));
     }
     if (data.containsKey('ssid')) {
       context.handle(
-          _ssidMeta, ssid.isAcceptableOrUnknown(data['ssid'], _ssidMeta));
+          _ssidMeta, ssid.isAcceptableOrUnknown(data['ssid']!, _ssidMeta));
     }
     if (data.containsKey('password')) {
       context.handle(_passwordMeta,
-          password.isAcceptableOrUnknown(data['password'], _passwordMeta));
+          password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
     }
     if (data.containsKey('controller_i_d')) {
       context.handle(
           _controllerIDMeta,
           controllerID.isAcceptableOrUnknown(
-              data['controller_i_d'], _controllerIDMeta));
+              data['controller_i_d']!, _controllerIDMeta));
     }
     if (data.containsKey('rotate')) {
       context.handle(_rotateMeta,
-          rotate.isAcceptableOrUnknown(data['rotate'], _rotateMeta));
+          rotate.isAcceptableOrUnknown(data['rotate']!, _rotateMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     }
     if (data.containsKey('strain')) {
       context.handle(_strainMeta,
-          strain.isAcceptableOrUnknown(data['strain'], _strainMeta));
+          strain.isAcceptableOrUnknown(data['strain']!, _strainMeta));
     }
     if (data.containsKey('dropbox_token')) {
       context.handle(
           _dropboxTokenMeta,
           dropboxToken.isAcceptableOrUnknown(
-              data['dropbox_token'], _dropboxTokenMeta));
+              data['dropbox_token']!, _dropboxTokenMeta));
     }
     if (data.containsKey('upload_name')) {
       context.handle(
           _uploadNameMeta,
           uploadName.isAcceptableOrUnknown(
-              data['upload_name'], _uploadNameMeta));
+              data['upload_name']!, _uploadNameMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
     if (data.containsKey('synced')) {
       context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -3293,9 +2888,9 @@ class $TimelapsesTable extends Timelapses
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Timelapse map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Timelapse.fromData(data, _db, prefix: effectivePrefix);
+  Timelapse map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Timelapse.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -3308,96 +2903,84 @@ class Feed extends DataClass implements Insertable<Feed> {
   final int id;
   final String name;
   final bool isNewsFeed;
-  final String serverID;
+  final String? serverID;
   final bool synced;
   Feed(
-      {@required this.id,
-      @required this.name,
-      @required this.isNewsFeed,
+      {required this.id,
+      required this.name,
+      required this.isNewsFeed,
       this.serverID,
-      @required this.synced});
+      required this.synced});
   factory Feed.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return Feed(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
-      isNewsFeed: boolType
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_news_feed']),
-      serverID: stringType
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      name: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      isNewsFeed: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_news_feed'])!,
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || isNewsFeed != null) {
-      map['is_news_feed'] = Variable<bool>(isNewsFeed);
-    }
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['is_news_feed'] = Variable<bool>(isNewsFeed);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
+      map['server_i_d'] = Variable<String?>(serverID);
     }
-    if (!nullToAbsent || synced != null) {
-      map['synced'] = Variable<bool>(synced);
-    }
+    map['synced'] = Variable<bool>(synced);
     return map;
   }
 
   FeedsCompanion toCompanion(bool nullToAbsent) {
     return FeedsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      isNewsFeed: isNewsFeed == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isNewsFeed),
+      id: Value(id),
+      name: Value(name),
+      isNewsFeed: Value(isNewsFeed),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+      synced: Value(synced),
     );
   }
 
   factory Feed.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Feed(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       isNewsFeed: serializer.fromJson<bool>(json['isNewsFeed']),
-      serverID: serializer.fromJson<String>(json['serverID']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'isNewsFeed': serializer.toJson<bool>(isNewsFeed),
-      'serverID': serializer.toJson<String>(serverID),
+      'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
   }
 
   Feed copyWith(
-          {int id,
-          String name,
-          bool isNewsFeed,
-          String serverID,
-          bool synced}) =>
+          {int? id,
+          String? name,
+          bool? isNewsFeed,
+          String? serverID,
+          bool? synced}) =>
       Feed(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -3418,14 +3001,9 @@ class Feed extends DataClass implements Insertable<Feed> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          name.hashCode,
-          $mrjc(isNewsFeed.hashCode,
-              $mrjc(serverID.hashCode, synced.hashCode)))));
+  int get hashCode => Object.hash(id, name, isNewsFeed, serverID, synced);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Feed &&
           other.id == this.id &&
@@ -3439,7 +3017,7 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
   final Value<int> id;
   final Value<String> name;
   final Value<bool> isNewsFeed;
-  final Value<String> serverID;
+  final Value<String?> serverID;
   final Value<bool> synced;
   const FeedsCompanion({
     this.id = const Value.absent(),
@@ -3450,17 +3028,17 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
   });
   FeedsCompanion.insert({
     this.id = const Value.absent(),
-    @required String name,
+    required String name,
     this.isNewsFeed = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Feed> custom({
-    Expression<int> id,
-    Expression<String> name,
-    Expression<bool> isNewsFeed,
-    Expression<String> serverID,
-    Expression<bool> synced,
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<bool>? isNewsFeed,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3472,11 +3050,11 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
   }
 
   FeedsCompanion copyWith(
-      {Value<int> id,
-      Value<String> name,
-      Value<bool> isNewsFeed,
-      Value<String> serverID,
-      Value<bool> synced}) {
+      {Value<int>? id,
+      Value<String>? name,
+      Value<bool>? isNewsFeed,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
     return FeedsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -3499,7 +3077,7 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
       map['is_news_feed'] = Variable<bool>(isNewsFeed.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String>(serverID.value);
+      map['server_i_d'] = Variable<String?>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -3522,73 +3100,60 @@ class FeedsCompanion extends UpdateCompanion<Feed> {
 
 class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $FeedsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _nameMeta = const VerificationMeta('name');
-  GeneratedTextColumn _name;
-  @override
-  GeneratedTextColumn get name => _name ??= _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isNewsFeedMeta = const VerificationMeta('isNewsFeed');
-  GeneratedBoolColumn _isNewsFeed;
-  @override
-  GeneratedBoolColumn get isNewsFeed => _isNewsFeed ??= _constructIsNewsFeed();
-  GeneratedBoolColumn _constructIsNewsFeed() {
-    return GeneratedBoolColumn('is_news_feed', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> isNewsFeed = GeneratedColumn<bool?>(
+      'is_news_feed', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (is_news_feed IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
-  @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, name, isNewsFeed, serverID, synced];
   @override
-  $FeedsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feeds';
   @override
-  String get $tableName => _alias ?? 'feeds';
-  @override
-  final String actualTableName = 'feeds';
+  String get actualTableName => 'feeds';
   @override
   VerificationContext validateIntegrity(Insertable<Feed> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
@@ -3596,15 +3161,15 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
       context.handle(
           _isNewsFeedMeta,
           isNewsFeed.isAcceptableOrUnknown(
-              data['is_news_feed'], _isNewsFeedMeta));
+              data['is_news_feed']!, _isNewsFeedMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
     if (data.containsKey('synced')) {
       context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -3612,9 +3177,9 @@ class $FeedsTable extends Feeds with TableInfo<$FeedsTable, Feed> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Feed map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Feed.fromData(data, _db, prefix: effectivePrefix);
+  Feed map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Feed.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -3630,89 +3195,72 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   final String type;
   final bool isNew;
   final String params;
-  final String serverID;
+  final String? serverID;
   final bool synced;
   FeedEntry(
-      {@required this.id,
-      @required this.feed,
-      @required this.date,
-      @required this.type,
-      @required this.isNew,
-      @required this.params,
+      {required this.id,
+      required this.feed,
+      required this.date,
+      required this.type,
+      required this.isNew,
+      required this.params,
       this.serverID,
-      @required this.synced});
+      required this.synced});
   factory FeedEntry.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final dateTimeType = db.typeSystem.forDartType<DateTime>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return FeedEntry(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      date:
-          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      isNew: boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_new']),
-      params:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
-      serverID: stringType
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      isNew: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_new'])!,
+      params: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}params'])!,
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || feed != null) {
-      map['feed'] = Variable<int>(feed);
-    }
-    if (!nullToAbsent || date != null) {
-      map['date'] = Variable<DateTime>(date);
-    }
-    if (!nullToAbsent || type != null) {
-      map['type'] = Variable<String>(type);
-    }
-    if (!nullToAbsent || isNew != null) {
-      map['is_new'] = Variable<bool>(isNew);
-    }
-    if (!nullToAbsent || params != null) {
-      map['params'] = Variable<String>(params);
-    }
+    map['id'] = Variable<int>(id);
+    map['feed'] = Variable<int>(feed);
+    map['date'] = Variable<DateTime>(date);
+    map['type'] = Variable<String>(type);
+    map['is_new'] = Variable<bool>(isNew);
+    map['params'] = Variable<String>(params);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
+      map['server_i_d'] = Variable<String?>(serverID);
     }
-    if (!nullToAbsent || synced != null) {
-      map['synced'] = Variable<bool>(synced);
-    }
+    map['synced'] = Variable<bool>(synced);
     return map;
   }
 
   FeedEntriesCompanion toCompanion(bool nullToAbsent) {
     return FeedEntriesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
-      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
-      isNew:
-          isNew == null && nullToAbsent ? const Value.absent() : Value(isNew),
-      params:
-          params == null && nullToAbsent ? const Value.absent() : Value(params),
+      id: Value(id),
+      feed: Value(feed),
+      date: Value(date),
+      type: Value(type),
+      isNew: Value(isNew),
+      params: Value(params),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+      synced: Value(synced),
     );
   }
 
   factory FeedEntry.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return FeedEntry(
       id: serializer.fromJson<int>(json['id']),
@@ -3721,12 +3269,12 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       type: serializer.fromJson<String>(json['type']),
       isNew: serializer.fromJson<bool>(json['isNew']),
       params: serializer.fromJson<String>(json['params']),
-      serverID: serializer.fromJson<String>(json['serverID']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -3735,20 +3283,20 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
       'type': serializer.toJson<String>(type),
       'isNew': serializer.toJson<bool>(isNew),
       'params': serializer.toJson<String>(params),
-      'serverID': serializer.toJson<String>(serverID),
+      'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
   }
 
   FeedEntry copyWith(
-          {int id,
-          int feed,
-          DateTime date,
-          String type,
-          bool isNew,
-          String params,
-          String serverID,
-          bool synced}) =>
+          {int? id,
+          int? feed,
+          DateTime? date,
+          String? type,
+          bool? isNew,
+          String? params,
+          String? serverID,
+          bool? synced}) =>
       FeedEntry(
         id: id ?? this.id,
         feed: feed ?? this.feed,
@@ -3775,20 +3323,10 @@ class FeedEntry extends DataClass implements Insertable<FeedEntry> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          feed.hashCode,
-          $mrjc(
-              date.hashCode,
-              $mrjc(
-                  type.hashCode,
-                  $mrjc(
-                      isNew.hashCode,
-                      $mrjc(params.hashCode,
-                          $mrjc(serverID.hashCode, synced.hashCode))))))));
+  int get hashCode =>
+      Object.hash(id, feed, date, type, isNew, params, serverID, synced);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FeedEntry &&
           other.id == this.id &&
@@ -3808,7 +3346,7 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   final Value<String> type;
   final Value<bool> isNew;
   final Value<String> params;
-  final Value<String> serverID;
+  final Value<String?> serverID;
   final Value<bool> synced;
   const FeedEntriesCompanion({
     this.id = const Value.absent(),
@@ -3822,9 +3360,9 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   });
   FeedEntriesCompanion.insert({
     this.id = const Value.absent(),
-    @required int feed,
-    @required DateTime date,
-    @required String type,
+    required int feed,
+    required DateTime date,
+    required String type,
     this.isNew = const Value.absent(),
     this.params = const Value.absent(),
     this.serverID = const Value.absent(),
@@ -3833,14 +3371,14 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
         date = Value(date),
         type = Value(type);
   static Insertable<FeedEntry> custom({
-    Expression<int> id,
-    Expression<int> feed,
-    Expression<DateTime> date,
-    Expression<String> type,
-    Expression<bool> isNew,
-    Expression<String> params,
-    Expression<String> serverID,
-    Expression<bool> synced,
+    Expression<int>? id,
+    Expression<int>? feed,
+    Expression<DateTime>? date,
+    Expression<String>? type,
+    Expression<bool>? isNew,
+    Expression<String>? params,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3855,14 +3393,14 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
   }
 
   FeedEntriesCompanion copyWith(
-      {Value<int> id,
-      Value<int> feed,
-      Value<DateTime> date,
-      Value<String> type,
-      Value<bool> isNew,
-      Value<String> params,
-      Value<String> serverID,
-      Value<bool> synced}) {
+      {Value<int>? id,
+      Value<int>? feed,
+      Value<DateTime>? date,
+      Value<String>? type,
+      Value<bool>? isNew,
+      Value<String>? params,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
     return FeedEntriesCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
@@ -3897,7 +3435,7 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
       map['params'] = Variable<String>(params.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String>(serverID.value);
+      map['server_i_d'] = Variable<String?>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -3924,136 +3462,104 @@ class FeedEntriesCompanion extends UpdateCompanion<FeedEntry> {
 class $FeedEntriesTable extends FeedEntries
     with TableInfo<$FeedEntriesTable, FeedEntry> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $FeedEntriesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
-  @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
+      'feed', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _dateMeta = const VerificationMeta('date');
-  GeneratedDateTimeColumn _date;
-  @override
-  GeneratedDateTimeColumn get date => _date ??= _constructDate();
-  GeneratedDateTimeColumn _constructDate() {
-    return GeneratedDateTimeColumn(
-      'date',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
+      'date', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
-  @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _isNewMeta = const VerificationMeta('isNew');
-  GeneratedBoolColumn _isNew;
-  @override
-  GeneratedBoolColumn get isNew => _isNew ??= _constructIsNew();
-  GeneratedBoolColumn _constructIsNew() {
-    return GeneratedBoolColumn('is_new', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> isNew = GeneratedColumn<bool?>(
+      'is_new', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (is_new IN (0, 1))',
+      defaultValue: Constant(false));
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  GeneratedTextColumn _params;
-  @override
-  GeneratedTextColumn get params => _params ??= _constructParams();
-  GeneratedTextColumn _constructParams() {
-    return GeneratedTextColumn('params', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  late final GeneratedColumn<String?> params = GeneratedColumn<String?>(
+      'params', aliasedName, false,
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
-  @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, date, type, isNew, params, serverID, synced];
   @override
-  $FeedEntriesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feed_entries';
   @override
-  String get $tableName => _alias ?? 'feed_entries';
-  @override
-  final String actualTableName = 'feed_entries';
+  String get actualTableName => 'feed_entries';
   @override
   VerificationContext validateIntegrity(Insertable<FeedEntry> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
     if (data.containsKey('date')) {
       context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
     if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
     if (data.containsKey('is_new')) {
       context.handle(
-          _isNewMeta, isNew.isAcceptableOrUnknown(data['is_new'], _isNewMeta));
+          _isNewMeta, isNew.isAcceptableOrUnknown(data['is_new']!, _isNewMeta));
     }
     if (data.containsKey('params')) {
       context.handle(_paramsMeta,
-          params.isAcceptableOrUnknown(data['params'], _paramsMeta));
+          params.isAcceptableOrUnknown(data['params']!, _paramsMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
     if (data.containsKey('synced')) {
       context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -4061,9 +3567,9 @@ class $FeedEntriesTable extends FeedEntries
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FeedEntry map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FeedEntry.fromData(data, _db, prefix: effectivePrefix);
+  FeedEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return FeedEntry.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -4078,54 +3584,46 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
   final String type;
   final String params;
   FeedEntryDraft(
-      {@required this.id,
-      @required this.feed,
-      @required this.type,
-      @required this.params});
+      {required this.id,
+      required this.feed,
+      required this.type,
+      required this.params});
   factory FeedEntryDraft.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return FeedEntryDraft(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
-      params:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
+      params: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}params'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || feed != null) {
-      map['feed'] = Variable<int>(feed);
-    }
-    if (!nullToAbsent || type != null) {
-      map['type'] = Variable<String>(type);
-    }
-    if (!nullToAbsent || params != null) {
-      map['params'] = Variable<String>(params);
-    }
+    map['id'] = Variable<int>(id);
+    map['feed'] = Variable<int>(feed);
+    map['type'] = Variable<String>(type);
+    map['params'] = Variable<String>(params);
     return map;
   }
 
   FeedEntryDraftsCompanion toCompanion(bool nullToAbsent) {
     return FeedEntryDraftsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
-      params:
-          params == null && nullToAbsent ? const Value.absent() : Value(params),
+      id: Value(id),
+      feed: Value(feed),
+      type: Value(type),
+      params: Value(params),
     );
   }
 
   factory FeedEntryDraft.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return FeedEntryDraft(
       id: serializer.fromJson<int>(json['id']),
@@ -4135,7 +3633,7 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -4145,7 +3643,7 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
     };
   }
 
-  FeedEntryDraft copyWith({int id, int feed, String type, String params}) =>
+  FeedEntryDraft copyWith({int? id, int? feed, String? type, String? params}) =>
       FeedEntryDraft(
         id: id ?? this.id,
         feed: feed ?? this.feed,
@@ -4164,10 +3662,9 @@ class FeedEntryDraft extends DataClass implements Insertable<FeedEntryDraft> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(feed.hashCode, $mrjc(type.hashCode, params.hashCode))));
+  int get hashCode => Object.hash(id, feed, type, params);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FeedEntryDraft &&
           other.id == this.id &&
@@ -4189,16 +3686,16 @@ class FeedEntryDraftsCompanion extends UpdateCompanion<FeedEntryDraft> {
   });
   FeedEntryDraftsCompanion.insert({
     this.id = const Value.absent(),
-    @required int feed,
-    @required String type,
+    required int feed,
+    required String type,
     this.params = const Value.absent(),
   })  : feed = Value(feed),
         type = Value(type);
   static Insertable<FeedEntryDraft> custom({
-    Expression<int> id,
-    Expression<int> feed,
-    Expression<String> type,
-    Expression<String> params,
+    Expression<int>? id,
+    Expression<int>? feed,
+    Expression<String>? type,
+    Expression<String>? params,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -4209,10 +3706,10 @@ class FeedEntryDraftsCompanion extends UpdateCompanion<FeedEntryDraft> {
   }
 
   FeedEntryDraftsCompanion copyWith(
-      {Value<int> id,
-      Value<int> feed,
-      Value<String> type,
-      Value<String> params}) {
+      {Value<int>? id,
+      Value<int>? feed,
+      Value<String>? type,
+      Value<String>? params}) {
     return FeedEntryDraftsCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
@@ -4254,78 +3751,60 @@ class FeedEntryDraftsCompanion extends UpdateCompanion<FeedEntryDraft> {
 class $FeedEntryDraftsTable extends FeedEntryDrafts
     with TableInfo<$FeedEntryDraftsTable, FeedEntryDraft> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $FeedEntryDraftsTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
-  @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
+      'feed', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
-  @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 24);
-  }
-
+  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 24),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  GeneratedTextColumn _params;
-  @override
-  GeneratedTextColumn get params => _params ??= _constructParams();
-  GeneratedTextColumn _constructParams() {
-    return GeneratedTextColumn('params', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  late final GeneratedColumn<String?> params = GeneratedColumn<String?>(
+      'params', aliasedName, false,
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
   @override
   List<GeneratedColumn> get $columns => [id, feed, type, params];
   @override
-  $FeedEntryDraftsTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feed_entry_drafts';
   @override
-  String get $tableName => _alias ?? 'feed_entry_drafts';
-  @override
-  final String actualTableName = 'feed_entry_drafts';
+  String get actualTableName => 'feed_entry_drafts';
   @override
   VerificationContext validateIntegrity(Insertable<FeedEntryDraft> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
     if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
     if (data.containsKey('params')) {
       context.handle(_paramsMeta,
-          params.isAcceptableOrUnknown(data['params'], _paramsMeta));
+          params.isAcceptableOrUnknown(data['params']!, _paramsMeta));
     }
     return context;
   }
@@ -4333,9 +3812,9 @@ class $FeedEntryDraftsTable extends FeedEntryDrafts
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FeedEntryDraft map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FeedEntryDraft.fromData(data, _db, prefix: effectivePrefix);
+  FeedEntryDraft map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return FeedEntryDraft.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -4351,95 +3830,72 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   final String filePath;
   final String thumbnailPath;
   final String params;
-  final String serverID;
+  final String? serverID;
   final bool synced;
   FeedMedia(
-      {@required this.id,
-      @required this.feed,
-      @required this.feedEntry,
-      @required this.filePath,
-      @required this.thumbnailPath,
-      @required this.params,
+      {required this.id,
+      required this.feed,
+      required this.feedEntry,
+      required this.filePath,
+      required this.thumbnailPath,
+      required this.params,
       this.serverID,
-      @required this.synced});
+      required this.synced});
   factory FeedMedia.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final boolType = db.typeSystem.forDartType<bool>();
     return FeedMedia(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      feed: intType.mapFromDatabaseResponse(data['${effectivePrefix}feed']),
-      feedEntry:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}feed_entry']),
-      filePath: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}file_path']),
-      thumbnailPath: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_path']),
-      params:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}params']),
-      serverID: stringType
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      feed: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
+      feedEntry: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}feed_entry'])!,
+      filePath: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}file_path'])!,
+      thumbnailPath: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_path'])!,
+      params: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}params'])!,
+      serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      synced:
-          boolType.mapFromDatabaseResponse(data['${effectivePrefix}synced']),
+      synced: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}synced'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || feed != null) {
-      map['feed'] = Variable<int>(feed);
-    }
-    if (!nullToAbsent || feedEntry != null) {
-      map['feed_entry'] = Variable<int>(feedEntry);
-    }
-    if (!nullToAbsent || filePath != null) {
-      map['file_path'] = Variable<String>(filePath);
-    }
-    if (!nullToAbsent || thumbnailPath != null) {
-      map['thumbnail_path'] = Variable<String>(thumbnailPath);
-    }
-    if (!nullToAbsent || params != null) {
-      map['params'] = Variable<String>(params);
-    }
+    map['id'] = Variable<int>(id);
+    map['feed'] = Variable<int>(feed);
+    map['feed_entry'] = Variable<int>(feedEntry);
+    map['file_path'] = Variable<String>(filePath);
+    map['thumbnail_path'] = Variable<String>(thumbnailPath);
+    map['params'] = Variable<String>(params);
     if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
+      map['server_i_d'] = Variable<String?>(serverID);
     }
-    if (!nullToAbsent || synced != null) {
-      map['synced'] = Variable<bool>(synced);
-    }
+    map['synced'] = Variable<bool>(synced);
     return map;
   }
 
   FeedMediasCompanion toCompanion(bool nullToAbsent) {
     return FeedMediasCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      feed: feed == null && nullToAbsent ? const Value.absent() : Value(feed),
-      feedEntry: feedEntry == null && nullToAbsent
-          ? const Value.absent()
-          : Value(feedEntry),
-      filePath: filePath == null && nullToAbsent
-          ? const Value.absent()
-          : Value(filePath),
-      thumbnailPath: thumbnailPath == null && nullToAbsent
-          ? const Value.absent()
-          : Value(thumbnailPath),
-      params:
-          params == null && nullToAbsent ? const Value.absent() : Value(params),
+      id: Value(id),
+      feed: Value(feed),
+      feedEntry: Value(feedEntry),
+      filePath: Value(filePath),
+      thumbnailPath: Value(thumbnailPath),
+      params: Value(params),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
-      synced:
-          synced == null && nullToAbsent ? const Value.absent() : Value(synced),
+      synced: Value(synced),
     );
   }
 
   factory FeedMedia.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return FeedMedia(
       id: serializer.fromJson<int>(json['id']),
@@ -4448,12 +3904,12 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       filePath: serializer.fromJson<String>(json['filePath']),
       thumbnailPath: serializer.fromJson<String>(json['thumbnailPath']),
       params: serializer.fromJson<String>(json['params']),
-      serverID: serializer.fromJson<String>(json['serverID']),
+      serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -4462,20 +3918,20 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
       'filePath': serializer.toJson<String>(filePath),
       'thumbnailPath': serializer.toJson<String>(thumbnailPath),
       'params': serializer.toJson<String>(params),
-      'serverID': serializer.toJson<String>(serverID),
+      'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
   }
 
   FeedMedia copyWith(
-          {int id,
-          int feed,
-          int feedEntry,
-          String filePath,
-          String thumbnailPath,
-          String params,
-          String serverID,
-          bool synced}) =>
+          {int? id,
+          int? feed,
+          int? feedEntry,
+          String? filePath,
+          String? thumbnailPath,
+          String? params,
+          String? serverID,
+          bool? synced}) =>
       FeedMedia(
         id: id ?? this.id,
         feed: feed ?? this.feed,
@@ -4502,20 +3958,10 @@ class FeedMedia extends DataClass implements Insertable<FeedMedia> {
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(
-      id.hashCode,
-      $mrjc(
-          feed.hashCode,
-          $mrjc(
-              feedEntry.hashCode,
-              $mrjc(
-                  filePath.hashCode,
-                  $mrjc(
-                      thumbnailPath.hashCode,
-                      $mrjc(params.hashCode,
-                          $mrjc(serverID.hashCode, synced.hashCode))))))));
+  int get hashCode => Object.hash(
+      id, feed, feedEntry, filePath, thumbnailPath, params, serverID, synced);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FeedMedia &&
           other.id == this.id &&
@@ -4535,7 +3981,7 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   final Value<String> filePath;
   final Value<String> thumbnailPath;
   final Value<String> params;
-  final Value<String> serverID;
+  final Value<String?> serverID;
   final Value<bool> synced;
   const FeedMediasCompanion({
     this.id = const Value.absent(),
@@ -4549,10 +3995,10 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   });
   FeedMediasCompanion.insert({
     this.id = const Value.absent(),
-    @required int feed,
-    @required int feedEntry,
-    @required String filePath,
-    @required String thumbnailPath,
+    required int feed,
+    required int feedEntry,
+    required String filePath,
+    required String thumbnailPath,
     this.params = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
@@ -4561,14 +4007,14 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
         filePath = Value(filePath),
         thumbnailPath = Value(thumbnailPath);
   static Insertable<FeedMedia> custom({
-    Expression<int> id,
-    Expression<int> feed,
-    Expression<int> feedEntry,
-    Expression<String> filePath,
-    Expression<String> thumbnailPath,
-    Expression<String> params,
-    Expression<String> serverID,
-    Expression<bool> synced,
+    Expression<int>? id,
+    Expression<int>? feed,
+    Expression<int>? feedEntry,
+    Expression<String>? filePath,
+    Expression<String>? thumbnailPath,
+    Expression<String>? params,
+    Expression<String?>? serverID,
+    Expression<bool>? synced,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -4583,14 +4029,14 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
   }
 
   FeedMediasCompanion copyWith(
-      {Value<int> id,
-      Value<int> feed,
-      Value<int> feedEntry,
-      Value<String> filePath,
-      Value<String> thumbnailPath,
-      Value<String> params,
-      Value<String> serverID,
-      Value<bool> synced}) {
+      {Value<int>? id,
+      Value<int>? feed,
+      Value<int>? feedEntry,
+      Value<String>? filePath,
+      Value<String>? thumbnailPath,
+      Value<String>? params,
+      Value<String?>? serverID,
+      Value<bool>? synced}) {
     return FeedMediasCompanion(
       id: id ?? this.id,
       feed: feed ?? this.feed,
@@ -4625,7 +4071,7 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
       map['params'] = Variable<String>(params.value);
     }
     if (serverID.present) {
-      map['server_i_d'] = Variable<String>(serverID.value);
+      map['server_i_d'] = Variable<String?>(serverID.value);
     }
     if (synced.present) {
       map['synced'] = Variable<bool>(synced.value);
@@ -4652,126 +4098,81 @@ class FeedMediasCompanion extends UpdateCompanion<FeedMedia> {
 class $FeedMediasTable extends FeedMedias
     with TableInfo<$FeedMediasTable, FeedMedia> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $FeedMediasTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _feedMeta = const VerificationMeta('feed');
-  GeneratedIntColumn _feed;
-  @override
-  GeneratedIntColumn get feed => _feed ??= _constructFeed();
-  GeneratedIntColumn _constructFeed() {
-    return GeneratedIntColumn(
-      'feed',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> feed = GeneratedColumn<int?>(
+      'feed', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _feedEntryMeta = const VerificationMeta('feedEntry');
-  GeneratedIntColumn _feedEntry;
-  @override
-  GeneratedIntColumn get feedEntry => _feedEntry ??= _constructFeedEntry();
-  GeneratedIntColumn _constructFeedEntry() {
-    return GeneratedIntColumn(
-      'feed_entry',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<int?> feedEntry = GeneratedColumn<int?>(
+      'feed_entry', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _filePathMeta = const VerificationMeta('filePath');
-  GeneratedTextColumn _filePath;
-  @override
-  GeneratedTextColumn get filePath => _filePath ??= _constructFilePath();
-  GeneratedTextColumn _constructFilePath() {
-    return GeneratedTextColumn(
-      'file_path',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> filePath = GeneratedColumn<String?>(
+      'file_path', aliasedName, false,
+      typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _thumbnailPathMeta =
       const VerificationMeta('thumbnailPath');
-  GeneratedTextColumn _thumbnailPath;
-  @override
-  GeneratedTextColumn get thumbnailPath =>
-      _thumbnailPath ??= _constructThumbnailPath();
-  GeneratedTextColumn _constructThumbnailPath() {
-    return GeneratedTextColumn(
-      'thumbnail_path',
-      $tableName,
-      false,
-    );
-  }
-
+  late final GeneratedColumn<String?> thumbnailPath = GeneratedColumn<String?>(
+      'thumbnail_path', aliasedName, false,
+      typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _paramsMeta = const VerificationMeta('params');
-  GeneratedTextColumn _params;
-  @override
-  GeneratedTextColumn get params => _params ??= _constructParams();
-  GeneratedTextColumn _constructParams() {
-    return GeneratedTextColumn('params', $tableName, false,
-        defaultValue: Constant('{}'));
-  }
-
+  late final GeneratedColumn<String?> params = GeneratedColumn<String?>(
+      'params', aliasedName, false,
+      typeName: 'TEXT',
+      requiredDuringInsert: false,
+      defaultValue: Constant('{}'));
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, true,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: false);
   final VerificationMeta _syncedMeta = const VerificationMeta('synced');
-  GeneratedBoolColumn _synced;
-  @override
-  GeneratedBoolColumn get synced => _synced ??= _constructSynced();
-  GeneratedBoolColumn _constructSynced() {
-    return GeneratedBoolColumn('synced', $tableName, false,
-        defaultValue: Constant(false));
-  }
-
+  late final GeneratedColumn<bool?> synced = GeneratedColumn<bool?>(
+      'synced', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (synced IN (0, 1))',
+      defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
       [id, feed, feedEntry, filePath, thumbnailPath, params, serverID, synced];
   @override
-  $FeedMediasTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'feed_medias';
   @override
-  String get $tableName => _alias ?? 'feed_medias';
-  @override
-  final String actualTableName = 'feed_medias';
+  String get actualTableName => 'feed_medias';
   @override
   VerificationContext validateIntegrity(Insertable<FeedMedia> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('feed')) {
       context.handle(
-          _feedMeta, feed.isAcceptableOrUnknown(data['feed'], _feedMeta));
+          _feedMeta, feed.isAcceptableOrUnknown(data['feed']!, _feedMeta));
     } else if (isInserting) {
       context.missing(_feedMeta);
     }
     if (data.containsKey('feed_entry')) {
       context.handle(_feedEntryMeta,
-          feedEntry.isAcceptableOrUnknown(data['feed_entry'], _feedEntryMeta));
+          feedEntry.isAcceptableOrUnknown(data['feed_entry']!, _feedEntryMeta));
     } else if (isInserting) {
       context.missing(_feedEntryMeta);
     }
     if (data.containsKey('file_path')) {
       context.handle(_filePathMeta,
-          filePath.isAcceptableOrUnknown(data['file_path'], _filePathMeta));
+          filePath.isAcceptableOrUnknown(data['file_path']!, _filePathMeta));
     } else if (isInserting) {
       context.missing(_filePathMeta);
     }
@@ -4779,21 +4180,21 @@ class $FeedMediasTable extends FeedMedias
       context.handle(
           _thumbnailPathMeta,
           thumbnailPath.isAcceptableOrUnknown(
-              data['thumbnail_path'], _thumbnailPathMeta));
+              data['thumbnail_path']!, _thumbnailPathMeta));
     } else if (isInserting) {
       context.missing(_thumbnailPathMeta);
     }
     if (data.containsKey('params')) {
       context.handle(_paramsMeta,
-          params.isAcceptableOrUnknown(data['params'], _paramsMeta));
+          params.isAcceptableOrUnknown(data['params']!, _paramsMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     }
     if (data.containsKey('synced')) {
       context.handle(_syncedMeta,
-          synced.isAcceptableOrUnknown(data['synced'], _syncedMeta));
+          synced.isAcceptableOrUnknown(data['synced']!, _syncedMeta));
     }
     return context;
   }
@@ -4801,9 +4202,9 @@ class $FeedMediasTable extends FeedMedias
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FeedMedia map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return FeedMedia.fromData(data, _db, prefix: effectivePrefix);
+  FeedMedia map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return FeedMedia.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -4816,46 +4217,38 @@ class Delete extends DataClass implements Insertable<Delete> {
   final int id;
   final String serverID;
   final String type;
-  Delete({@required this.id, @required this.serverID, @required this.type});
+  Delete({required this.id, required this.serverID, required this.type});
   factory Delete.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
+      {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
     return Delete(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      serverID: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
-      type: stringType.mapFromDatabaseResponse(data['${effectivePrefix}type']),
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      serverID: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d'])!,
+      type: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}type'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || serverID != null) {
-      map['server_i_d'] = Variable<String>(serverID);
-    }
-    if (!nullToAbsent || type != null) {
-      map['type'] = Variable<String>(type);
-    }
+    map['id'] = Variable<int>(id);
+    map['server_i_d'] = Variable<String>(serverID);
+    map['type'] = Variable<String>(type);
     return map;
   }
 
   DeletesCompanion toCompanion(bool nullToAbsent) {
     return DeletesCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      serverID: serverID == null && nullToAbsent
-          ? const Value.absent()
-          : Value(serverID),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      id: Value(id),
+      serverID: Value(serverID),
+      type: Value(type),
     );
   }
 
   factory Delete.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
+      {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Delete(
       id: serializer.fromJson<int>(json['id']),
@@ -4864,7 +4257,7 @@ class Delete extends DataClass implements Insertable<Delete> {
     );
   }
   @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
@@ -4873,7 +4266,7 @@ class Delete extends DataClass implements Insertable<Delete> {
     };
   }
 
-  Delete copyWith({int id, String serverID, String type}) => Delete(
+  Delete copyWith({int? id, String? serverID, String? type}) => Delete(
         id: id ?? this.id,
         serverID: serverID ?? this.serverID,
         type: type ?? this.type,
@@ -4889,10 +4282,9 @@ class Delete extends DataClass implements Insertable<Delete> {
   }
 
   @override
-  int get hashCode =>
-      $mrjf($mrjc(id.hashCode, $mrjc(serverID.hashCode, type.hashCode)));
+  int get hashCode => Object.hash(id, serverID, type);
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Delete &&
           other.id == this.id &&
@@ -4911,14 +4303,14 @@ class DeletesCompanion extends UpdateCompanion<Delete> {
   });
   DeletesCompanion.insert({
     this.id = const Value.absent(),
-    @required String serverID,
-    @required String type,
+    required String serverID,
+    required String type,
   })  : serverID = Value(serverID),
         type = Value(type);
   static Insertable<Delete> custom({
-    Expression<int> id,
-    Expression<String> serverID,
-    Expression<String> type,
+    Expression<int>? id,
+    Expression<String>? serverID,
+    Expression<String>? type,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -4928,7 +4320,7 @@ class DeletesCompanion extends UpdateCompanion<Delete> {
   }
 
   DeletesCompanion copyWith(
-      {Value<int> id, Value<String> serverID, Value<String> type}) {
+      {Value<int>? id, Value<String>? serverID, Value<String>? type}) {
     return DeletesCompanion(
       id: id ?? this.id,
       serverID: serverID ?? this.serverID,
@@ -4964,60 +4356,51 @@ class DeletesCompanion extends UpdateCompanion<Delete> {
 
 class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
   final GeneratedDatabase _db;
-  final String _alias;
+  final String? _alias;
   $DeletesTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
-  GeneratedTextColumn _serverID;
-  @override
-  GeneratedTextColumn get serverID => _serverID ??= _constructServerID();
-  GeneratedTextColumn _constructServerID() {
-    return GeneratedTextColumn('server_i_d', $tableName, false,
-        minTextLength: 36, maxTextLength: 36);
-  }
-
+  late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
+      'server_i_d', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 36, maxTextLength: 36),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
-  GeneratedTextColumn _type;
-  @override
-  GeneratedTextColumn get type => _type ??= _constructType();
-  GeneratedTextColumn _constructType() {
-    return GeneratedTextColumn('type', $tableName, false,
-        minTextLength: 1, maxTextLength: 16);
-  }
-
+  late final GeneratedColumn<String?> type = GeneratedColumn<String?>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 16),
+      typeName: 'TEXT',
+      requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, serverID, type];
   @override
-  $DeletesTable get asDslTable => this;
+  String get aliasedName => _alias ?? 'deletes';
   @override
-  String get $tableName => _alias ?? 'deletes';
-  @override
-  final String actualTableName = 'deletes';
+  String get actualTableName => 'deletes';
   @override
   VerificationContext validateIntegrity(Insertable<Delete> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
-          serverID.isAcceptableOrUnknown(data['server_i_d'], _serverIDMeta));
+          serverID.isAcceptableOrUnknown(data['server_i_d']!, _serverIDMeta));
     } else if (isInserting) {
       context.missing(_serverIDMeta);
     }
     if (data.containsKey('type')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type'], _typeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
       context.missing(_typeMeta);
     }
@@ -5027,9 +4410,9 @@ class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Delete map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return Delete.fromData(data, _db, prefix: effectivePrefix);
+  Delete map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Delete.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -5040,39 +4423,23 @@ class $DeletesTable extends Deletes with TableInfo<$DeletesTable, Delete> {
 
 abstract class _$RelDB extends GeneratedDatabase {
   _$RelDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  $DevicesTable _devices;
-  $DevicesTable get devices => _devices ??= $DevicesTable(this);
-  $ModulesTable _modules;
-  $ModulesTable get modules => _modules ??= $ModulesTable(this);
-  $ParamsTable _params;
-  $ParamsTable get params => _params ??= $ParamsTable(this);
-  $PlantsTable _plants;
-  $PlantsTable get plants => _plants ??= $PlantsTable(this);
-  $BoxesTable _boxes;
-  $BoxesTable get boxes => _boxes ??= $BoxesTable(this);
-  $ChartCachesTable _chartCaches;
-  $ChartCachesTable get chartCaches => _chartCaches ??= $ChartCachesTable(this);
-  $TimelapsesTable _timelapses;
-  $TimelapsesTable get timelapses => _timelapses ??= $TimelapsesTable(this);
-  $FeedsTable _feeds;
-  $FeedsTable get feeds => _feeds ??= $FeedsTable(this);
-  $FeedEntriesTable _feedEntries;
-  $FeedEntriesTable get feedEntries => _feedEntries ??= $FeedEntriesTable(this);
-  $FeedEntryDraftsTable _feedEntryDrafts;
-  $FeedEntryDraftsTable get feedEntryDrafts =>
-      _feedEntryDrafts ??= $FeedEntryDraftsTable(this);
-  $FeedMediasTable _feedMedias;
-  $FeedMediasTable get feedMedias => _feedMedias ??= $FeedMediasTable(this);
-  $DeletesTable _deletes;
-  $DeletesTable get deletes => _deletes ??= $DeletesTable(this);
-  DevicesDAO _devicesDAO;
-  DevicesDAO get devicesDAO => _devicesDAO ??= DevicesDAO(this as RelDB);
-  PlantsDAO _plantsDAO;
-  PlantsDAO get plantsDAO => _plantsDAO ??= PlantsDAO(this as RelDB);
-  FeedsDAO _feedsDAO;
-  FeedsDAO get feedsDAO => _feedsDAO ??= FeedsDAO(this as RelDB);
-  DeletesDAO _deletesDAO;
-  DeletesDAO get deletesDAO => _deletesDAO ??= DeletesDAO(this as RelDB);
+  late final $DevicesTable devices = $DevicesTable(this);
+  late final $ModulesTable modules = $ModulesTable(this);
+  late final $ParamsTable params = $ParamsTable(this);
+  late final $PlantsTable plants = $PlantsTable(this);
+  late final $BoxesTable boxes = $BoxesTable(this);
+  late final $ChartCachesTable chartCaches = $ChartCachesTable(this);
+  late final $TimelapsesTable timelapses = $TimelapsesTable(this);
+  late final $FeedsTable feeds = $FeedsTable(this);
+  late final $FeedEntriesTable feedEntries = $FeedEntriesTable(this);
+  late final $FeedEntryDraftsTable feedEntryDrafts =
+      $FeedEntryDraftsTable(this);
+  late final $FeedMediasTable feedMedias = $FeedMediasTable(this);
+  late final $DeletesTable deletes = $DeletesTable(this);
+  late final DevicesDAO devicesDAO = DevicesDAO(this as RelDB);
+  late final PlantsDAO plantsDAO = PlantsDAO(this as RelDB);
+  late final FeedsDAO feedsDAO = FeedsDAO(this as RelDB);
+  late final DeletesDAO deletesDAO = DeletesDAO(this as RelDB);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

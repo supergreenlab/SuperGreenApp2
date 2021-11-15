@@ -24,11 +24,11 @@ class Follow extends Equatable {
   final String plantID;
 
   Follow({
-    this.plantID,
+    required this.plantID,
   });
 
   Follow copyWith({
-    String plantID,
+    String? plantID,
   }) {
     return Follow(
       plantID: plantID ?? this.plantID,

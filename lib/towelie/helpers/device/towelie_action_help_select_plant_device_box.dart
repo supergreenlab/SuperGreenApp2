@@ -28,7 +28,7 @@ class TowelieActionHelpSelectPlantDeviceBox extends TowelieActionHelp {
       'Your controller can **manage up to 3 boxes**, select an **already configured** box above, or create a **new one**.',
       name: 'towelieHelperSelectPlantDeviceBox',
       desc: 'Towelie Helper plant Device box',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

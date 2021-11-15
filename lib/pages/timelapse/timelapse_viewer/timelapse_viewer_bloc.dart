@@ -95,15 +95,15 @@ class TimelapseViewerBloc extends Bloc<TimelapseViewerBlocEvent, TimelapseViewer
         if (timelapses[i].type == "dropbox") {
           DropboxSettings dbSettings = DropboxSettings.fromMap(JsonDecoder().convert(timelapses[i].settings));
           Logger.log('${timelapses[i].settings} ${dbSettings.dropboxToken} ${dbSettings.uploadName}');
-          Response res = await post('https://content.dropboxapi.com/2/files/download', headers: {
+          Response res = await post(Uri.parse('https://content.dropboxapi.com/2/files/download'), headers: {
             'Authorization': 'Bearer ${dbSettings.dropboxToken}',
             'Dropbox-API-Arg': '{"path": "/${dbSettings.uploadName}/latest.jpg"}',
           });
           pictures.add(res.bodyBytes);
         } else if (timelapses[i].type == "sglstorage") {
-          Map<String, dynamic> frame = await BackendAPI().feedsAPI.fetchLatestTimelapseFrame(timelapses[i].serverID);
+          Map<String, dynamic> frame = await BackendAPI().feedsAPI.fetchLatestTimelapseFrame(timelapses[i].serverID!);
           String url = '${BackendAPI().storageServerHost}${frame['filePath']}';
-          Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);
+          Box box = await RelDB.get().plantsDAO.getBox(args.plant.box!);
           pictures
               .add(await BackendAPI().feedsAPI.sglOverlay(box, args.plant, JsonDecoder().convert(frame['meta']), url));
         }

@@ -23,14 +23,13 @@ import 'package:super_green_app/towelie/towelie_action_help.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieActionHelpCreatePlant extends TowelieActionHelp {
-  
   static String get towelieHelperCreatePlant {
     return Intl.message(
       '''Hey man, **welcome to the plant creation process**, I\'ll be there to guide you through it.
 First step is to **give your new plant a name**.''',
       name: 'towelieHelperCreatePlant',
       desc: 'Towelie Helper Create Plant',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -42,8 +41,7 @@ First step is to **give your new plant a name**.''',
     final bdb = RelDB.get().plantsDAO;
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpCreatePlant.towelieHelperCreatePlant);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpCreatePlant.towelieHelperCreatePlant);
     }
   }
 }

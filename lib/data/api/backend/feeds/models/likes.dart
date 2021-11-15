@@ -21,8 +21,8 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Like extends Equatable {
-  final String feedEntryID;
-  final String commentID;
+  final String? feedEntryID;
+  final String? commentID;
 
   Like({
     this.feedEntryID,
@@ -30,8 +30,8 @@ class Like extends Equatable {
   });
 
   Like copyWith({
-    String feedEntryID,
-    String commentID,
+    String? feedEntryID,
+    String? commentID,
   }) {
     return Like(
       feedEntryID: feedEntryID ?? this.feedEntryID,
@@ -40,7 +40,7 @@ class Like extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         feedEntryID,
         commentID,
       ];

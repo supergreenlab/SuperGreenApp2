@@ -31,7 +31,7 @@ class TowelieActionHelpMeasureReminder extends TowelieActionHelp {
       'Do you want me to **set a reminder** so you don\'t forget to take a measure again soon?',
       name: 'towelieHelperMeasureReminder',
       desc: 'Towelie Helper measure reminder',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

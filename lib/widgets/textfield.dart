@@ -27,17 +27,17 @@ class SGLTextField extends StatelessWidget {
   final Function(String) onFieldSubmitted;
   final FocusNode focusNode;
   final bool obscureText;
-  final String error;
+  final String? error;
   final TextCapitalization textCapitalization;
 
   SGLTextField(
-      {this.hintText,
-      this.controller,
-      this.onChanged,
-      this.enabled,
+      {required this.hintText,
+      required this.controller,
+      required this.onChanged,
+      required this.enabled,
       this.textInputAction = TextInputAction.next,
-      this.onFieldSubmitted,
-      this.focusNode,
+      required this.onFieldSubmitted,
+      required this.focusNode,
       this.obscureText = false,
       this.error,
       this.textCapitalization = TextCapitalization.sentences});
@@ -45,9 +45,8 @@ class SGLTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget field = Container(
-      decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.black26),
-          borderRadius: BorderRadius.circular(3)),
+      decoration:
+          BoxDecoration(border: Border.all(width: 1, color: Colors.black26), borderRadius: BorderRadius.circular(3)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
         child: TextField(
@@ -74,7 +73,7 @@ class SGLTextField extends StatelessWidget {
           field,
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Text(error, style: TextStyle(color: Colors.red)),
+            child: Text(error!, style: TextStyle(color: Colors.red)),
           ),
         ],
       );

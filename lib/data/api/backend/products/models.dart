@@ -48,16 +48,16 @@ List<ProductCategoryID> plantProductCategories = [
 ];
 
 class Product extends Equatable {
-  final String id;
+  final String? id;
   final String name;
-  final ProductSpecs specs;
-  final ProductCategoryID category;
-  final ProductSupplier supplier;
+  final ProductSpecs? specs;
+  final ProductCategoryID? category;
+  final ProductSupplier? supplier;
 
-  Product({this.id, this.name, this.specs, this.category, this.supplier});
+  Product({this.id, required this.name, this.specs, this.category, this.supplier});
 
   @override
-  List<Object> get props => [id, name, specs, category, supplier];
+  List<Object?> get props => [id, name, specs, category, supplier];
 
   static Product fromMap(Map<String, dynamic> map, {bool json = false}) {
     List<dynamic> categories;
@@ -66,21 +66,21 @@ class Product extends Equatable {
     } else {
       categories = map['categories'] ?? [];
     }
-    ProductCategoryID categoryID;
+    ProductCategoryID? categoryID;
     if (categories.length > 0) {
       categoryID = EnumToString.fromString(ProductCategoryID.values, categories[0]);
     }
-    ProductSupplier productSupplier;
+    ProductSupplier? productSupplier;
     if (map['supplier'] != null) {
       productSupplier = ProductSupplier.fromMap(map['supplier']);
     }
 
-    ProductSpecs specs;
+    ProductSpecs? specs;
     if (categoryID != null && map['specs'] != null) {
       if (json) {
-        specs = productSpecsBuilders[categoryID].fromJSON(map['specs']);
+        specs = productSpecsBuilders[categoryID]!.fromJSON(map['specs']);
       } else {
-        specs = productSpecsBuilders[categoryID].fromMap(map['specs']);
+        specs = productSpecsBuilders[categoryID]!.fromMap(map['specs']);
       }
     }
     return Product(
@@ -95,18 +95,19 @@ class Product extends Equatable {
   Map<String, dynamic> toMap({bool json = false}) {
     List<String> categories = [];
     if (category != null) {
-      categories = [describeEnum(category)];
+      categories = [EnumToString.convertToString(category)];
     }
     return {
       'id': id,
       'name': name,
-      'specs': specs == null ? null : (json ? specs.toJSON() : specs.toMap()),
+      'specs': specs == null ? null : (json ? specs!.toJSON() : specs!.toMap()),
       'categories': json ? JsonEncoder().convert(categories) : categories,
-      'supplier': supplier != null ? supplier.toMap() : null,
+      'supplier': supplier != null ? supplier!.toMap() : null,
     };
   }
 
-  Product copyWith({String id, String name, ProductSpecs specs, ProductCategoryID category, ProductSupplier supplier}) {
+  Product copyWith(
+      {String? id, String? name, ProductSpecs? specs, ProductCategoryID? category, ProductSupplier? supplier}) {
     return Product(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -122,7 +123,7 @@ class ProductSupplier extends Equatable {
   final String productID;
   final String url;
 
-  ProductSupplier({this.id, this.productID, this.url});
+  ProductSupplier({required this.id, required this.productID, required this.url});
 
   @override
   List<Object> get props => [id, productID, url];
@@ -143,7 +144,7 @@ class ProductSupplier extends Equatable {
     };
   }
 
-  ProductSupplier copyWith({String id, String productID, String url}) {
+  ProductSupplier copyWith({String? id, String? productID, String? url}) {
     return ProductSupplier(
       id: id ?? this.id,
       productID: productID ?? this.productID,

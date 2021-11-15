@@ -14,24 +14,36 @@ mixin _$PlantsDAOMixin on DatabaseAccessor<RelDB> {
   Selectable<int> nPlants() {
     return customSelect('SELECT COUNT(*) FROM plants',
         variables: [],
-        readsFrom: {plants}).map((QueryRow row) => row.readInt('COUNT(*)'));
+        readsFrom: {
+          plants,
+        }).map((QueryRow row) => row.read<int>('COUNT(*)'));
   }
 
   Selectable<int> nBoxes() {
     return customSelect('SELECT COUNT(*) FROM boxes',
         variables: [],
-        readsFrom: {boxes}).map((QueryRow row) => row.readInt('COUNT(*)'));
+        readsFrom: {
+          boxes,
+        }).map((QueryRow row) => row.read<int>('COUNT(*)'));
   }
 
   Selectable<int> nTimelapses(int var1) {
     return customSelect('SELECT COUNT(*) FROM timelapses WHERE plant = ?',
-        variables: [Variable.withInt(var1)],
-        readsFrom: {timelapses}).map((QueryRow row) => row.readInt('COUNT(*)'));
+        variables: [
+          Variable<int>(var1)
+        ],
+        readsFrom: {
+          timelapses,
+        }).map((QueryRow row) => row.read<int>('COUNT(*)'));
   }
 
-  Selectable<int> nPlantsInBox(int var1) {
+  Selectable<int> nPlantsInBox(int? var1) {
     return customSelect('SELECT COUNT(*) FROM plants WHERE box = ?',
-        variables: [Variable.withInt(var1)],
-        readsFrom: {plants}).map((QueryRow row) => row.readInt('COUNT(*)'));
+        variables: [
+          Variable<int?>(var1)
+        ],
+        readsFrom: {
+          plants,
+        }).map((QueryRow row) => row.read<int>('COUNT(*)'));
   }
 }

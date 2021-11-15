@@ -21,7 +21,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class Logger {
-  static File logFile;
+  static late File logFile;
 
   static Future init() async {
     String logFilePath = await Logger.logFilePath();
@@ -41,10 +41,10 @@ class Logger {
     }
   }
 
-  static void logError(dynamic error, StackTrace stackTrace, {Map<String, dynamic> data, bool fwdThrow = false}) {
+  static void logError(dynamic error, StackTrace stackTrace, {Map<String, dynamic>? data, bool fwdThrow = false}) {
     data = data ?? {};
     String dataStr = data.keys.map<String>((String key) {
-      return "$key=${data[key]}";
+      return "$key=${data![key]}";
     }).join("\n");
     print(error);
     print(stackTrace);
@@ -63,7 +63,7 @@ class Logger {
     }
   }
 
-  static void throwError(String error, {Map<String, dynamic> data, bool fwdThrow = false}) {
+  static void throwError(String error, {Map<String, dynamic>? data, bool fwdThrow = false}) {
     try {
       throw error;
     } catch (e, trace) {

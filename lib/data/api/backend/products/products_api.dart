@@ -24,26 +24,23 @@ class ProductsAPI {
   Future<String> createProduct(Product product) async {
     Map<String, dynamic> obj = product.toMap(json: true);
     obj.remove('supplier');
-    String serverID = await BackendAPI().postPut('/product', obj);
-    return serverID;
+    String? serverID = await BackendAPI().postPut('/product', obj);
+    return serverID!;
   }
 
   Future<String> createProductSupplier(ProductSupplier productSupplier) async {
     Map<String, dynamic> obj = productSupplier.toMap();
-    String serverID = await BackendAPI().postPut('/productsupplier', obj);
-    return serverID;
+    String? serverID = await BackendAPI().postPut('/productsupplier', obj);
+    return serverID!;
   }
 
-  Future<List<Product>> searchProducts(String terms,
-      {ProductCategoryID categoryID}) async {
+  Future<List<Product>> searchProducts(String terms, {ProductCategoryID? categoryID}) async {
     String url = '/products/search?terms=${Uri.encodeQueryComponent(terms)}';
     if (categoryID != null) {
       url += '&category=${describeEnum(categoryID)}';
     }
     Map<String, dynamic> productResults = await BackendAPI().get(url);
     List<dynamic> products = productResults['products'];
-    return products
-        .map<Product>((p) => Product.fromMap(p, json: true))
-        .toList();
+    return products.map<Product>((p) => Product.fromMap(p, json: true)).toList();
   }
 }

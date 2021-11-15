@@ -41,7 +41,7 @@ class CaptureBlocEventInit extends CaptureBlocEvent {
 class CaptureBlocEventCreate extends CaptureBlocEvent {
   final List<File> files;
 
-  CaptureBlocEventCreate({this.files});
+  CaptureBlocEventCreate({required this.files});
 
   @override
   List<Object> get props => [files];
@@ -128,19 +128,19 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
             await optimizePicture(thumbnailPath, thumbnailPath);
           } else if (ext == 'heic') {
             yield loadingEvent('Converting heic to jpg ${i + 1}/${files.length}', (i + 0.5) / (files.length));
-            String jpegPath = await HeicToJpg.convert(file.path);
+            String? jpegPath = await HeicToJpg.convert(file.path);
             yield loadingEvent('Optimizing pic ${i + 1}/${files.length}', (i + 0.75) / (files.length));
             filePath = '$fileName.jpg';
-            await File(jpegPath).copy(FeedMedias.makeAbsoluteFilePath(filePath));
+            await File(jpegPath!).copy(FeedMedias.makeAbsoluteFilePath(filePath));
             thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
             await optimizePicture(filePath, thumbnailPath);
           } else if (ext == 'png' || ext == 'jpg' || ext == 'jpeg') {
-            Image image = decodeImage(await file.readAsBytes());
+            Image? image = decodeImage(await file.readAsBytes());
             if (ext == 'png') {
               yield loadingEvent('Converting png to jpg ${i + 1}/${files.length}', (i + 0.25) / (files.length));
               filePath = '$fileName.jpg';
             }
-            await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image), flush: true);
+            await File(FeedMedias.makeAbsoluteFilePath(filePath)).writeAsBytes(encodeJpg(image!), flush: true);
             yield loadingEvent('Optimizing pic ${i + 1}/${files.length}', (i + 0.75) / (files.length));
             thumbnailPath = filePath.replaceFirst(fileBaseName, 'thumbnail_$fileBaseName');
             await optimizePictureFromImage(image, thumbnailPath);
@@ -160,8 +160,8 @@ class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
   }
 
   Future optimizePicture(String from, String to) async {
-    Image image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(from)).readAsBytes());
-    await optimizePictureFromImage(image, to);
+    Image? image = decodeImage(await File(FeedMedias.makeAbsoluteFilePath(from)).readAsBytes());
+    await optimizePictureFromImage(image!, to);
   }
 
   Future optimizePictureFromImage(Image image, String to) async {

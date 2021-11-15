@@ -34,16 +34,16 @@ class BackendAPI {
   static final int lastBeforeRemoteControlTimestamp = 1623494814;
   static final BackendAPI _instance = BackendAPI._newInstance();
 
-  UsersAPI usersAPI;
-  FeedsAPI feedsAPI;
-  ProductsAPI productsAPI;
-  TimeSeriesAPI timeSeriesAPI;
-  ServicesAPI servicesAPI;
+  UsersAPI usersAPI = UsersAPI();
+  FeedsAPI feedsAPI = FeedsAPI();
+  ProductsAPI productsAPI = ProductsAPI();
+  TimeSeriesAPI timeSeriesAPI = TimeSeriesAPI();
+  ServicesAPI servicesAPI = ServicesAPI();
 
-  String serverHost;
-  String websocketServerHost;
-  String storageServerHost;
-  String storageServerHostHeader;
+  late String serverHost;
+  late String websocketServerHost;
+  late String storageServerHost;
+  late String storageServerHostHeader;
 
   final Client apiClient = Client();
   final Client storageClient = Client();
@@ -51,11 +51,6 @@ class BackendAPI {
   factory BackendAPI() => _instance;
 
   BackendAPI._newInstance() {
-    usersAPI = UsersAPI();
-    feedsAPI = FeedsAPI();
-    productsAPI = ProductsAPI();
-    timeSeriesAPI = TimeSeriesAPI();
-    servicesAPI = ServicesAPI();
     bool forceProduction = false;
     if (forceProduction || kReleaseMode || Platform.isIOS) {
       serverHost = 'https://api2.supergreenlab.com';
@@ -86,7 +81,7 @@ class BackendAPI {
     }
   }
 
-  Future<String> postPut(String path, Map<String, dynamic> obj, {bool forcePut = false}) async {
+  Future<String?> postPut(String path, Map<String, dynamic> obj, {bool forcePut = false}) async {
     Function postPut = obj['id'] != null || forcePut ? apiClient.put : apiClient.post;
     Response resp = await postPut('${BackendAPI().serverHost}$path',
         headers: {
@@ -98,7 +93,7 @@ class BackendAPI {
       Logger.throwError('_postPut failed: ${resp.body}');
     }
     if (resp.headers['x-sgl-token'] != null) {
-      AppDB().setJWT(resp.headers['x-sgl-token']);
+      AppDB().setJWT(resp.headers['x-sgl-token']!);
     }
     if (obj['id'] == null) {
       Map<String, dynamic> data = JsonDecoder().convert(resp.body);
@@ -108,7 +103,7 @@ class BackendAPI {
   }
 
   Future<dynamic> get(String path) async {
-    Response resp = await apiClient.get('${BackendAPI().serverHost}$path', headers: {
+    Response resp = await apiClient.get(Uri.parse('${BackendAPI().serverHost}$path'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });

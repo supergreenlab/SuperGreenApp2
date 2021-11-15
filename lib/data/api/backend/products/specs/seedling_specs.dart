@@ -23,7 +23,7 @@ import 'package:super_green_app/data/api/backend/products/product_specs.dart';
 class SeedlingSpecs extends ProductSpecs {
   final String brand;
 
-  SeedlingSpecs({this.brand});
+  SeedlingSpecs({required this.brand});
 
   @override
   List<Object> get props => [brand];

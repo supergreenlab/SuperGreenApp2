@@ -38,7 +38,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Pair controller',
       name: 'devicePairingPageTitle',
       desc: 'Device pairing page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -47,7 +47,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Pairing controller..',
       name: 'devicePairingPageLoading',
       desc: 'Loading text when setting controller name',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -56,7 +56,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Pair controller for remote control',
       name: 'devicePairingPagePairControllerSectionTitle',
       desc: 'Section title for the controller pairing setup',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -65,7 +65,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       '**You can now enable remote control**\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.',
       name: 'devicePairingPageInstructions',
       desc: 'Explanation for remote control',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -74,7 +74,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       '**Controller needs upgrade to enable remote control.** Once your controller is added to the app, head to the controllers settings to upgrade to the latest version.\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.',
       name: 'devicePairingPageInstructionsNeedUpgrade',
       desc: 'Explanation for remote control',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -83,7 +83,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Please login',
       name: 'devicePairingPagePleaseLoginDialogTitle',
       desc: 'Please login dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -92,7 +92,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Remote control requires a sgl account, please create one or login.',
       name: 'devicePairingPagePleaseLoginDialogBody',
       desc: 'Please login dialog body',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -103,8 +103,8 @@ class DevicePairingPage extends TraceableStatefulWidget {
 class DevicePairingPageState extends State<DevicePairingPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-      cubit: BlocProvider.of<DevicePairingBloc>(context),
+    return BlocListener<DevicePairingBloc, DevicePairingBlocState>(
+      bloc: BlocProvider.of<DevicePairingBloc>(context),
       listener: (BuildContext context, DevicePairingBlocState state) async {
         if (state is DevicePairingBlocStateDone) {
           await Future.delayed(Duration(seconds: 2));
@@ -112,7 +112,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
         }
       },
       child: BlocBuilder<DevicePairingBloc, DevicePairingBlocState>(
-          cubit: BlocProvider.of<DevicePairingBloc>(context),
+          bloc: BlocProvider.of<DevicePairingBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is DevicePairingBlocStateLoading || state is DevicePairingBlocStateInit) {
@@ -127,7 +127,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
                 ),
               );
             } else {
-              body = _renderForm(context, state);
+              body = _renderForm(context, state as DevicePairingBlocStateLoaded);
             }
             return WillPopScope(
               onWillPop: () async => false,
@@ -217,7 +217,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
   }
 
   void _login(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -225,13 +225,13 @@ class DevicePairingPageState extends State<DevicePairingPage> {
             title: Text(DevicePairingPage.devicePairingPagePleaseLoginDialogTitle),
             content: Text(DevicePairingPage.devicePairingPagePleaseLoginDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -240,7 +240,7 @@ class DevicePairingPageState extends State<DevicePairingPage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {

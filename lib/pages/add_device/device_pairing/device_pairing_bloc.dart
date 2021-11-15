@@ -49,7 +49,7 @@ class DevicePairingBlocStateLoaded extends DevicePairingBlocState {
   final bool loggedIn;
   final bool needsUpgrade;
 
-  DevicePairingBlocStateLoaded(this.device, {this.loggedIn, this.needsUpgrade});
+  DevicePairingBlocStateLoaded(this.device, {required this.loggedIn, required this.needsUpgrade});
 
   @override
   List<Object> get props => [device, loggedIn, needsUpgrade];
@@ -92,7 +92,7 @@ class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocSt
       yield DevicePairingBlocStateLoaded(
         args.device,
         loggedIn: AppDB().getAppData().jwt != null,
-        needsUpgrade: otaTimestamp.ivalue <= BackendAPI.lastBeforeRemoteControlTimestamp,
+        needsUpgrade: otaTimestamp.ivalue! <= BackendAPI.lastBeforeRemoteControlTimestamp,
       );
     } else if (event is DevicePairingBlocEventPair) {
       yield DevicePairingBlocStateLoading();

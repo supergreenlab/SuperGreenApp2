@@ -23,22 +23,22 @@ class FeedFormLayout extends StatelessWidget {
   final Widget body;
   final bool valid;
   final bool changed;
-  final void Function() onOK;
-  final void Function() onCancel;
+  final void Function()? onOK;
+  final void Function()? onCancel;
   final String title;
   final bool hideBackButton;
   final double fontSize;
   final double topBarPadding;
 
   const FeedFormLayout(
-      {@required this.body,
-      @required this.onOK,
-      @required this.title,
+      {required this.body,
+      required this.onOK,
+      required this.title,
       this.onCancel,
       this.valid = true,
       this.changed = false,
       this.hideBackButton = false,
-      this.fontSize,
+      required this.fontSize,
       this.topBarPadding = 8.0});
 
   @override
@@ -46,40 +46,40 @@ class FeedFormLayout extends StatelessWidget {
     List<Widget> actions = [];
     if (this.onOK != null) {
       actions.add(IconButton(
-        icon: Icon(Icons.check,
-            color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
+        icon: Icon(Icons.check, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
         onPressed: this.valid ? onOK : null,
       ));
     }
     return WillPopScope(
       onWillPop: () async {
         if (this.changed) {
-          return await showDialog<bool>(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Unsaved changed'),
-                  content: Text('Changes will not be saved. Continue?'),
-                  actions: <Widget>[
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context, false);
-                      },
-                      child: Text('NO'),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                        if (onCancel != null) {
-                          onCancel();
-                        }
-                      },
-                      child: Text('YES'),
-                    ),
-                  ],
-                );
-              });
+          return (await showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Unsaved changed'),
+                      content: Text('Changes will not be saved. Continue?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: Text('NO'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                            if (onCancel != null) {
+                              onCancel!();
+                            }
+                          },
+                          child: Text('YES'),
+                        ),
+                      ],
+                    );
+                  })) ??
+              false;
         }
         return true;
       },

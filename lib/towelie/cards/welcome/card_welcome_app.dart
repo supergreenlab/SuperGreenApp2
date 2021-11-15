@@ -38,7 +38,7 @@ Do you need a hand to start growing?
 ''',
       name: 'towelieWelcomeApp',
       desc: 'Towelie Welcome App',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

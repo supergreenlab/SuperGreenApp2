@@ -38,6 +38,7 @@ import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:collection/collection.dart';
 
 Map<NutrientMixPhase, String> nutrientMixPhasesUI = {
   NutrientMixPhase.EARLY_VEG: FeedNutrientMixFormPage.feedNutrientMixFormPagePhaseEarlyVeg,
@@ -338,8 +339,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             quantityControllers = [];
             lastNutrientMixParams = state.lastNutrientMixParams;
             for (Product product in state.products) {
-              NutrientProduct nutrientProduct =
-                  nutrientProducts.singleWhere((pi) => pi.product.id == product.id, orElse: () => null);
+              NutrientProduct? nutrientProduct =
+                  nutrientProducts.singleWhereOrNull((pi) => pi.product.id == product.id);
               if (nutrientProduct == null) {
                 nutrientProducts.add(NutrientProduct(product: product, quantity: 0, unit: 'g'));
                 quantityControllers.add(TextEditingController(text: null));
@@ -383,8 +384,8 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                   if (tdsController.text != '') {
                     tds = double.parse(tdsController.text.replaceAll(',', '.'));
                   }
-                  FeedNutrientMixParams nutrientProduct =
-                      lastNutrientMixParams.firstWhere((np) => np.name == nameController.text, orElse: () => null);
+                  FeedNutrientMixParams nutrientProduct = lastNutrientMixParams
+                      .firstWhereOrNull((np) => np.name == nameController.text, orElse: () => null);
                   if (nutrientProduct != null && await confirmUpdate(context, nutrientProduct) == false) {
                     scrollController.animateTo(1000, duration: Duration(milliseconds: 300), curve: Curves.linear);
                     nameFocusNode.requestFocus();

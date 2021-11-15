@@ -30,7 +30,7 @@ A lab is where you **simulate a tiny ecosystem**
 with artificial **lights and ventilation**.''',
       name: 'towelieHelperCreateLab',
       desc: 'Towelie Helper create lab',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -42,8 +42,7 @@ with artificial **lights and ventilation**.''',
     final bdb = RelDB.get().plantsDAO;
     int nBoxes = await bdb.nBoxes().getSingle();
     if (nBoxes == 0) {
-      yield TowelieBlocStateHelper(
-          event.settings, TowelieActionHelpCreateLab.towelieHelperCreateLab);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpCreateLab.towelieHelperCreateLab);
     }
   }
 }

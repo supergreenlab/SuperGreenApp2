@@ -25,12 +25,12 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedFormMediaList extends StatelessWidget {
   final List<FeedMediasCompanion> medias;
-  final void Function(FeedMediasCompanion) onPressed;
+  final void Function(FeedMediasCompanion?) onPressed;
   final void Function(FeedMediasCompanion) onLongPressed;
   final int maxMedias;
 
   const FeedFormMediaList(
-      {this.medias, this.onPressed, this.onLongPressed, this.maxMedias = -1});
+      {required this.medias, required this.onPressed, required this.onLongPressed, this.maxMedias = -1});
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +56,7 @@ class FeedFormMediaList extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image:
-                              Image.file(File(FeedMedias.makeAbsoluteFilePath(m.thumbnailPath.value))).image))),
+                          image: Image.file(File(FeedMedias.makeAbsoluteFilePath(m.thumbnailPath.value))).image))),
             ))
         .toList();
     if (maxMedias == -1 || maxMedias > this.medias.length) {
@@ -80,8 +79,7 @@ class FeedFormMediaList extends StatelessWidget {
     );
   }
 
-  Widget _renderMedia(BuildContext context, Function onPressed,
-      Function onLongPressed, Widget content) {
+  Widget _renderMedia(BuildContext context, Function() onPressed, Function()? onLongPressed, Widget content) {
     return SizedBox(
         width: 70,
         height: 80,
@@ -90,10 +88,7 @@ class FeedFormMediaList extends StatelessWidget {
           child: RawMaterialButton(
             onPressed: onPressed,
             onLongPress: onLongPressed,
-            child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                child: content),
+            child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)), child: content),
           ),
         ));
   }

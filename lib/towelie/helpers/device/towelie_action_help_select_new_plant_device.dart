@@ -29,7 +29,7 @@ class TowelieActionHelpSelectNewPlantDevice extends TowelieActionHelp {
 To **better understand** you should have your LED panels **connected to the controller**.''',
       name: 'towelieHelperSelectNewPlantDeviceBox',
       desc: 'Towelie Helper new plant Device box',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -42,9 +42,7 @@ To **better understand** you should have your LED panels **connected to the cont
     int nPlants = await bdb.nPlants().getSingle();
     if (nPlants == 0) {
       yield TowelieBlocStateHelper(
-          event.settings,
-          TowelieActionHelpSelectNewPlantDevice
-              .towelieHelperSelectNewPlantDeviceBox);
+          event.settings, TowelieActionHelpSelectNewPlantDevice.towelieHelperSelectNewPlantDeviceBox);
     }
   }
 }

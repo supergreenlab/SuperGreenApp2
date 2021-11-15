@@ -23,7 +23,7 @@ part 'device_data.g.dart';
 @HiveType(typeId: 36)
 class DeviceData {
   @HiveField(0)
-  String auth;
+  late String auth;
   @HiveField(1)
-  String signing;
+  late String signing;
 }

@@ -41,8 +41,8 @@ class BorderedText extends StatelessWidget {
     this.strokeJoin = StrokeJoin.round,
     this.strokeWidth = 6.0,
     this.strokeColor = const Color.fromRGBO(53, 0, 71, 1),
-    @required this.child,
-  }) : assert(child != null);
+    required this.child,
+  });
 
   /// the stroke cap style
   final StrokeCap strokeCap;
@@ -63,7 +63,7 @@ class BorderedText extends StatelessWidget {
   Widget build(BuildContext context) {
     TextStyle style;
     if (child.style != null) {
-      style = child.style.copyWith(
+      style = child.style!.copyWith(
         foreground: Paint()
           ..style = PaintingStyle.stroke
           ..strokeCap = strokeCap
@@ -87,7 +87,7 @@ class BorderedText extends StatelessWidget {
       textDirection: TextDirection.ltr,
       children: [
         Text(
-          child.data,
+          child.data!,
           style: style,
           maxLines: child.maxLines,
           overflow: child.overflow,

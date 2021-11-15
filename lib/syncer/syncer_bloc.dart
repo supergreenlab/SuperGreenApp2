@@ -70,13 +70,13 @@ class SyncerBlocStateSyncing extends SyncerBlocState {
 }
 
 class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
-  StreamSubscription<ConnectivityResult> _connectivity;
+  late StreamSubscription<ConnectivityResult> _connectivity;
 
-  Timer _timerOut;
-  bool _workingOut;
+  Timer? _timerOut;
+  bool _workingOut = false;
 
-  Timer _timerIn;
-  bool _workingIn;
+  Timer? _timerIn;
+  bool _workingIn = false;
 
   bool _usingWifi = false;
 
@@ -149,7 +149,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'feed: ${i + 1}/${feeds.length}'));
       FeedsCompanion feedsCompanion = feeds[i];
-      Feed exists = await RelDB.get().feedsDAO.getFeedForServerID(feedsCompanion.serverID.value);
+      Feed? exists = await RelDB.get().feedsDAO.getFeedForServerID(feedsCompanion.serverID.value!);
       if (feedsCompanion is DeletedFeedsCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeed(exists, addDeleted: false);
@@ -161,7 +161,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().feedsDAO.addFeed(feedsCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("feed", feedsCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("feed", feedsCompanion.serverID.value!);
     }
   }
 
@@ -173,7 +173,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'entry: ${i + 1}/${feedEntries.length}'));
       FeedEntriesCompanion feedEntriesCompanion = feedEntries[i];
-      FeedEntry exists = await RelDB.get().feedsDAO.getFeedEntryForServerID(feedEntriesCompanion.serverID.value);
+      FeedEntry? exists = await RelDB.get().feedsDAO.getFeedEntryForServerID(feedEntriesCompanion.serverID.value!);
       if (feedEntriesCompanion is DeletedFeedEntriesCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeedEntry(exists, addDeleted: false);
@@ -185,7 +185,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("feedEntry", feedEntriesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("feedEntry", feedEntriesCompanion.serverID.value!);
     }
   }
 
@@ -198,7 +198,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
       add(SyncerBlocEventSyncing(true, 'media: ${i + 1}/${feedMedias.length}'));
       FeedMediasCompanion feedMediasCompanion = feedMedias[i];
-      FeedMedia exists = await RelDB.get().feedsDAO.getFeedMediaForServerID(feedMediasCompanion.serverID.value);
+      FeedMedia? exists;
+      try {
+        exists = await RelDB.get().feedsDAO.getFeedMediaForServerID(feedMediasCompanion.serverID.value!);
+      } catch (e) {}
       if (feedMediasCompanion is DeletedFeedMediasCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeedMedia(exists, addDeleted: false);
@@ -224,7 +227,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
               feedMediasCompanion.copyWith(filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
         }
       }
-      await BackendAPI().feedsAPI.setSynced("feedMedia", feedMediasCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("feedMedia", feedMediasCompanion.serverID.value!);
     }
   }
 
@@ -236,7 +239,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'device: ${i + 1}/${devices.length}'));
       DevicesCompanion devicesCompanion = devices[i];
-      Device exists = await RelDB.get().devicesDAO.getDeviceForServerID(devicesCompanion.serverID.value);
+      Device? exists;
+      try {
+        exists = await RelDB.get().devicesDAO.getDeviceForServerID(devicesCompanion.serverID.value!);
+      } catch (e) {}
       if (devicesCompanion is DeletedDevicesCompanion) {
         if (exists != null) {
           await DeviceHelper.deleteDevice(exists, addDeleted: false);
@@ -246,12 +252,12 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().devicesDAO.updateDevice(devicesCompanion.copyWith(id: Value(exists.id)));
         } else {
           int deviceID = await RelDB.get().devicesDAO.addDevice(devicesCompanion);
-          String auth = AppDB().getDeviceAuth(devices[i].identifier.value);
+          String? auth = AppDB().getDeviceAuth(devices[i].identifier.value);
           // No await, that's intentional
           DeviceAPI.fetchAllParams(devicesCompanion.ip.value, deviceID, (adv) {}, auth: auth);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("device", devicesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("device", devicesCompanion.serverID.value!);
     }
   }
 
@@ -263,7 +269,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'box: ${i + 1}/${boxes.length}'));
       BoxesCompanion boxesCompanion = boxes[i];
-      Box exists = await RelDB.get().plantsDAO.getBoxForServerID(boxesCompanion.serverID.value);
+      Box? exists;
+      try {
+        exists = await RelDB.get().plantsDAO.getBoxForServerID(boxesCompanion.serverID.value!);
+      } catch (e) {}
       if (boxesCompanion is DeletedBoxesCompanion) {
         if (exists != null) {
           await PlantHelper.deleteBox(exists, addDeleted: false);
@@ -275,7 +284,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addBox(boxesCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("box", boxesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("box", boxesCompanion.serverID.value!);
     }
   }
 
@@ -287,7 +296,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'plant: ${i + 1}/${plants.length}'));
       PlantsCompanion plantsCompanion = plants[i];
-      Plant exists = await RelDB.get().plantsDAO.getPlantForServerID(plantsCompanion.serverID.value);
+      Plant? exists;
+      try {
+        exists = await RelDB.get().plantsDAO.getPlantForServerID(plantsCompanion.serverID.value!);
+      } catch (e) {}
       if (plantsCompanion is DeletedPlantsCompanion) {
         if (exists != null) {
           await PlantHelper.deletePlant(exists, addDeleted: false);
@@ -299,7 +311,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addPlant(plantsCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("plant", plantsCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("plant", plantsCompanion.serverID.value!);
     }
   }
 
@@ -311,7 +323,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'timelapse: ${i + 1}/${timelapses.length}'));
       TimelapsesCompanion timelapsesCompanion = timelapses[i];
-      Timelapse exists = await RelDB.get().plantsDAO.getTimelapseForServerID(timelapsesCompanion.serverID.value);
+      Timelapse? exists;
+      try {
+        exists = await RelDB.get().plantsDAO.getTimelapseForServerID(timelapsesCompanion.serverID.value!);
+      } catch (e) {}
       if (timelapsesCompanion is DeletedTimelapsesCompanion) {
         if (exists != null) {
           await PlantHelper.deleteTimelapse(exists, addDeleted: false);
@@ -323,7 +338,7 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("timelapse", timelapsesCompanion.serverID.value);
+      await BackendAPI().feedsAPI.setSynced("timelapse", timelapsesCompanion.serverID.value!);
     }
   }
 
@@ -450,15 +465,9 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
 
   @override
   Future<void> close() async {
-    if (_connectivity != null) {
-      _connectivity.cancel();
-    }
-    if (_timerOut != null) {
-      _timerOut.cancel();
-    }
-    if (_timerIn != null) {
-      _timerIn.cancel();
-    }
+    _connectivity.cancel();
+    _timerOut?.cancel();
+    _timerIn?.cancel();
     return super.close();
   }
 }

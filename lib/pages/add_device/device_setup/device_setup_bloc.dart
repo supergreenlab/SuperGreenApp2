@@ -133,8 +133,8 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     try {
       add(DeviceSetupBlocEventProgress(0));
       final db = RelDB.get().devicesDAO;
-      String deviceIdentifier;
-      String auth;
+      String? deviceIdentifier;
+      String? auth;
 
       if (event.username != null && event.password != null) {
         auth = base64.encode(utf8.encode('${event.username}:${event.password}'));

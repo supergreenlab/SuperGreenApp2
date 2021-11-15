@@ -39,7 +39,7 @@ class DeviceSetupPage extends TraceableStatefulWidget {
       'This controller is password protected, please enter the login/password below.',
       name: 'settingsDeviceSetupPagePasswordInstructions',
       desc: 'Password protection instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current!.localeName,
     );
   }
 
@@ -54,7 +54,7 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DeviceSetupBloc>(context),
+      bloc: BlocProvider.of<DeviceSetupBloc>(context),
       listener: (BuildContext context, DeviceSetupBlocState state) async {
         if (state is DeviceSetupBlocStateDone) {
           Device device = state.device;
@@ -80,7 +80,7 @@ class _DeviceSetupPageState extends State<DeviceSetupPage> {
         }
       },
       child: BlocBuilder<DeviceSetupBloc, DeviceSetupBlocState>(
-          cubit: Provider.of<DeviceSetupBloc>(context),
+          bloc: Provider.of<DeviceSetupBloc>(context),
           builder: (context, state) {
             bool canGoBack = state is DeviceSetupBlocStateAlreadyExists || state is DeviceSetupBlocStateLoadingError;
             Widget body;

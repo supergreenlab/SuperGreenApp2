@@ -38,13 +38,12 @@ and the pot feels light. Simple as that.
 ''',
       name: 'towelieProductsGrowingMedium',
       desc: 'Towelie seeds products',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
   static Future createProductsGrowingMedium(Feed feed) async {
-    YamlMap yml = loadYaml(await rootBundle
-        .loadString('assets/products/initial_checklist_growing_medium.yml'));
+    YamlMap yml = loadYaml(await rootBundle.loadString('assets/products/initial_checklist_growing_medium.yml'));
     await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_PRODUCTS',
       feed: feed.id,

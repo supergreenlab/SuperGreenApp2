@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 class ItemLoading extends StatelessWidget {
   final double size;
 
-  const ItemLoading({Key key, this.size = 40}) : super(key: key);
+  const ItemLoading({Key? key, this.size = 40}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -20,17 +20,17 @@ import 'package:flutter/material.dart';
 
 class Fullscreen extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final Widget child;
   final bool childFirst;
   final double fontSize;
   final FontWeight fontWeight;
-  final Color textColor;
-  final Color backgroundColor;
+  final Color? textColor;
+  final Color? backgroundColor;
 
   const Fullscreen({
-    @required this.title,
-    @required this.child,
+    required this.title,
+    required this.child,
     this.subtitle,
     this.childFirst = true,
     this.fontSize = 22,
@@ -44,20 +44,14 @@ class Fullscreen extends StatelessWidget {
     List<Widget> titles = [
       Text(
         title,
-        style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            color: textColor ?? Color(0xff565656)),
+        style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor ?? Color(0xff565656)),
         textAlign: TextAlign.center,
       )
     ];
     if (subtitle != null) {
       titles.add(Text(
-        subtitle,
-        style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            color: textColor ?? Colors.grey),
+        subtitle!,
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: textColor ?? Colors.grey),
         textAlign: TextAlign.center,
       ));
     }

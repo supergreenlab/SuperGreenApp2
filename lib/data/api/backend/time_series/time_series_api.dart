@@ -29,13 +29,7 @@ class TimeSeriesAPI {
   static List<dynamic> multiplyMetric(List<dynamic> metric, List<int> values) {
     int i = 0;
     return metric
-        .map<dynamic>((d) => [
-              d[0],
-              d[1] *
-                  values[i >= values.length ? values.length - 1 : i++]
-                      .toDouble() /
-                  100.0
-            ])
+        .map<dynamic>((d) => [d[0], d[1] * values[i >= values.length ? values.length - 1 : i++].toDouble() / 100.0])
         .toList();
   }
 
@@ -49,7 +43,7 @@ class TimeSeriesAPI {
       int n = 0;
       metrics.forEach((m) {
         if (index < m.length) {
-          value += m[index][1];
+          value += m[index][1] as int;
           n += 1;
         }
       });
@@ -58,40 +52,33 @@ class TimeSeriesAPI {
     return result;
   }
 
-  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(Box box,
-      String controllerID, String graphID, String name, charts.Color color,
-      {Function(double) transform}) async {
+  static Future<charts.Series<Metric, DateTime>> fetchTimeSeries(
+      Box box, String controllerID, String graphID, String name, charts.Color color,
+      {Function(double)? transform}) async {
     List<dynamic> values = await fetchMetric(box, controllerID, name);
     return toTimeSeries(values, graphID, color, transform: transform);
   }
 
-  static Future<List<dynamic>> fetchMetric(
-      Box box, String controllerID, String name) async {
+  static Future<List<dynamic>> fetchMetric(Box box, String controllerID, String name) async {
     List<dynamic> data;
-    ChartCache cache = await RelDB.get().plantsDAO.getChartCache(box.id, name);
-    Duration diff = cache?.date?.difference(DateTime.now());
-    if (cache == null || -diff.inSeconds >= 30) {
+    ChartCache? cache = await RelDB.get().plantsDAO.getChartCache(box.id, name);
+    if (cache == null || -(cache.date.difference(DateTime.now()).inSeconds) >= 30) {
       if (cache != null) {
         await RelDB.get().plantsDAO.deleteChartCacheForBox(cache.box);
       }
-      Response resp = await get(
-          '${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50');
+      Response resp = await get(Uri.parse('${BackendAPI().serverHost}/metrics?cid=$controllerID&q=$name&t=72&n=50'));
       Map<String, dynamic> res = JsonDecoder().convert(resp.body);
       data = res['metrics'];
       await RelDB.get().plantsDAO.addChartCache(ChartCachesCompanion.insert(
-          box: box.id,
-          name: name,
-          date: DateTime.now(),
-          values: Value(JsonEncoder().convert(data))));
+          box: box.id, name: name, date: DateTime.now(), values: Value(JsonEncoder().convert(data))));
     } else {
       data = JsonDecoder().convert(cache.values);
     }
     return data;
   }
 
-  static charts.Series<Metric, DateTime> toTimeSeries(
-      List<dynamic> values, String graphID, charts.Color color,
-      {Function(double) transform}) {
+  static charts.Series<Metric, DateTime> toTimeSeries(List<dynamic> values, String graphID, charts.Color color,
+      {Function(double)? transform}) {
     return charts.Series<Metric, DateTime>(
       id: graphID,
       strokeWidthPxFn: (_, __) => 3,
@@ -103,8 +90,7 @@ class TimeSeriesAPI {
         if (transform != null) {
           value = transform(value);
         }
-        return Metric(
-            DateTime.fromMillisecondsSinceEpoch(v[0] * 1000), value.toDouble());
+        return Metric(DateTime.fromMillisecondsSinceEpoch(v[0] * 1000), value.toDouble());
       }).toList(),
     );
   }

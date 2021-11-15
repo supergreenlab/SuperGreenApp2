@@ -23,7 +23,7 @@ import 'package:super_green_app/data/api/backend/products/product_specs.dart';
 class PHECSpecs extends ProductSpecs {
   final String brand;
 
-  PHECSpecs({this.brand});
+  PHECSpecs({required this.brand});
 
   @override
   List<Object> get props => [brand];

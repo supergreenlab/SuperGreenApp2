@@ -25,15 +25,15 @@ class YesNoFormParam extends StatelessWidget {
   final String icon;
   final bool yes;
   final Color titleBackgroundColor;
-  final void Function(bool) onPressed;
-  final Widget child;
+  final void Function(bool?) onPressed;
+  final Widget? child;
 
   const YesNoFormParam(
-      {this.icon,
-      this.title,
-      this.yes,
-      this.onPressed,
-      this.titleBackgroundColor,
+      {required this.icon,
+      required this.title,
+      required this.yes,
+      required this.onPressed,
+      required this.titleBackgroundColor,
       this.child});
 
   @override
@@ -52,24 +52,20 @@ class YesNoFormParam extends StatelessWidget {
               children: <Widget>[
                 FeedFormButton(
                     title: 'YES',
-                    icon: Icon(Icons.check,
-                        color: yes == true ? Color(0xff3bb30b) : Colors.white),
+                    icon: Icon(Icons.check, color: yes == true ? Color(0xff3bb30b) : Colors.white),
                     border: yes == true,
                     onPressed: () {
                       this.onPressed(yes == true ? null : true);
                     },
-                    textStyle:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 FeedFormButton(
                     title: 'NO',
-                    icon: Icon(Icons.close,
-                        color: yes == false ? Colors.red : Colors.white),
+                    icon: Icon(Icons.close, color: yes == false ? Colors.red : Colors.white),
                     border: yes == false,
                     onPressed: () {
                       this.onPressed(yes == false ? null : false);
                     },
-                    textStyle:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
               ],
             ),
             this.child ?? Container(),

@@ -37,9 +37,9 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TimelapseViewerBloc, TimelapseViewerBlocState>(
-        cubit: BlocProvider.of<TimelapseViewerBloc>(context),
+        bloc: BlocProvider.of<TimelapseViewerBloc>(context),
         builder: (BuildContext context, TimelapseViewerBlocState state) {
-          Widget body;
+          late Widget body;
           if (state is TimelapseViewerBlocStateLoading) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TimelapseViewerBlocStateLoaded) {
@@ -173,7 +173,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
   }
 
   void _deleteTimelapse(BuildContext context, Timelapse timelapse) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -181,13 +181,13 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
             title: Text('Delete timelapse ${timelapse.uploadName}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -196,7 +196,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<TimelapseViewerBloc>(context).add(TimelapseViewerBlocEventDelete(timelapse));
     }
   }

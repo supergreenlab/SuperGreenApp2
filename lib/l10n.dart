@@ -24,12 +24,11 @@ import 'l10n/messages_all.dart';
 class SGLLocalizations {
   SGLLocalizations(this.localeName);
 
-  static SGLLocalizations current;
+  static SGLLocalizations? current;
 
-  static Future<SGLLocalizations> load(Locale locale) {
-    final String name = locale.countryCode == null || locale.countryCode.isEmpty
-        ? locale.languageCode
-        : locale.toString();
+  static Future<SGLLocalizations?> load(Locale locale) {
+    final String name =
+        locale.countryCode == null || locale.countryCode!.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
 
     return initializeMessages(localeName).then((_) {
@@ -38,7 +37,7 @@ class SGLLocalizations {
     });
   }
 
-  static SGLLocalizations of(BuildContext context) {
+  static SGLLocalizations? of(BuildContext context) {
     return Localizations.of<SGLLocalizations>(context, SGLLocalizations);
   }
 
@@ -52,34 +51,16 @@ class SGLLocalizations {
       locale: localeName,
     );
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 class SGLLocalizationsDelegate extends LocalizationsDelegate<SGLLocalizations> {
   const SGLLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      ['en', 'es', 'fr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
-  Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale);
+  Future<SGLLocalizations> load(Locale locale) => SGLLocalizations.load(locale) as Future<SGLLocalizations>;
 
   @override
   bool shouldReload(SGLLocalizationsDelegate old) => false;

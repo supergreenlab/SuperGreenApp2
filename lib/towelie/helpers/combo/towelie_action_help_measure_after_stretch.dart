@@ -29,7 +29,7 @@ class TowelieActionHelpMeasureAfterStretch extends TowelieActionHelp {
       '**Hey**! it might be a good idea to **take a measure** of your plant to **monitor the stretch**.',
       name: 'towelieHelperMeasureAfterStretch',
       desc: 'Towelie Helper measure after stretch',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

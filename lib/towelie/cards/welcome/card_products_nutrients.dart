@@ -37,13 +37,12 @@ and enjoy **lush plant** that yield **top quality** nugs every single time!
 ''',
       name: 'towelieProductsNutrients',
       desc: 'Towelie nutrients products',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
   static Future createProductsNutrients(Feed feed) async {
-    YamlMap yml = loadYaml(await rootBundle
-        .loadString('assets/products/initial_checklist_nutrients.yml'));
+    YamlMap yml = loadYaml(await rootBundle.loadString('assets/products/initial_checklist_nutrients.yml'));
     await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_PRODUCTS',
       feed: feed.id,

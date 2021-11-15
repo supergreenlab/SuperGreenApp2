@@ -32,14 +32,14 @@ class AlertsSettings extends Equatable {
   final int maxHumiNight;
 
   AlertsSettings(
-      {this.minTempDay,
-      this.maxTempDay,
-      this.minTempNight,
-      this.maxTempNight,
-      this.minHumiDay,
-      this.maxHumiDay,
-      this.minHumiNight,
-      this.maxHumiNight});
+      {required this.minTempDay,
+      required this.maxTempDay,
+      required this.minTempNight,
+      required this.maxTempNight,
+      required this.minHumiDay,
+      required this.maxHumiDay,
+      required this.minHumiNight,
+      required this.maxHumiNight});
 
   Map<String, dynamic> toMap() {
     return {

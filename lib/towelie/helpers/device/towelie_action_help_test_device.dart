@@ -28,7 +28,7 @@ class TowelieActionHelpTestDevice extends TowelieActionHelp {
       'This test is to make sure everything is working, **connect** your **LED** panels **to the controller** if not already.',
       name: 'towelieHelperTestDevice',
       desc: 'Towelie Helper test device',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -74,12 +74,12 @@ class DeviceWebsocket {
   static Map<String, DeviceWebsocket> websockets = {};
 
   Device device;
-  WebSocketChannel channel;
-  StreamSubscription sub;
-  StreamSubscription deviceSub;
+  late WebSocketChannel channel;
+  StreamSubscription? sub;
+  StreamSubscription? deviceSub;
 
-  Timer pingTimer;
-  Timer timeout;
+  Timer? pingTimer;
+  Timer? timeout;
 
   Map<String, Completer> commandCompleters = {};
 
@@ -89,22 +89,22 @@ class DeviceWebsocket {
     });
   }
 
-  static DeviceWebsocket getWebsocket(Device device) {
+  static DeviceWebsocket? getWebsocket(Device device) {
     return websockets[device.serverID];
   }
 
   static Future<DeviceWebsocket> createIfNotAlready(Device device) async {
-    DeviceWebsocket socket;
+    DeviceWebsocket? socket;
     if ((socket = DeviceWebsocket.websockets[device.serverID]) == null) {
       socket = DeviceWebsocket(device);
-      DeviceWebsocket.websockets[device.serverID] = socket;
+      DeviceWebsocket.websockets[device.serverID!] = socket;
       socket.connect();
     }
-    return socket;
+    return socket!;
   }
 
   static void deleteIfExists(String serverID) {
-    DeviceWebsocket dw = DeviceWebsocket.websockets[serverID];
+    DeviceWebsocket? dw = DeviceWebsocket.websockets[serverID];
     if (dw == null) {
       return;
     }
@@ -224,14 +224,8 @@ class DeviceWebsocket {
   }
 
   void close() {
-    if (deviceSub != null) {
-      deviceSub.cancel();
-    }
-    if (sub != null) {
-      sub.cancel();
-    }
-    if (pingTimer != null) {
-      pingTimer.cancel();
-    }
+    deviceSub?.cancel();
+    sub?.cancel();
+    pingTimer?.cancel();
   }
 }

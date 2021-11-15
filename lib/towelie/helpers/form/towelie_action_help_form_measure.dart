@@ -28,7 +28,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
       'This is the **measuring tool**, while not perfectly accurate, it will still give you a **good hint for your next grow**. And as a **bonus feature**, it does **timelapses** of all the measures you\'ve taken!',
       name: 'towelieHelperFormMeasure',
       desc: 'Towelie Helper measure form 2',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -37,7 +37,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
       'It\'s the **first time** you\'re using it, so there is no "before" picture **to compare to**. Take a pic of what you **want to measure**, and take a measure again in **a few days** to have a **difference**.',
       name: 'towelieHelperFormMeasure2',
       desc: 'Towelie Helper measure form 2',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -46,7 +46,7 @@ class TowelieActionHelpFormMeasure extends TowelieActionHelp {
       'Looks like you **already took a measure**, you can select it in the **"Previous measures"** section, then press the **"Today\'s measure"** button to add a new measure. The previous one will be **displayed as a transparent overlay** for more accuracy.',
       name: 'towelieHelperFormMeasure3',
       desc: 'Towelie Helper measure form 3',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

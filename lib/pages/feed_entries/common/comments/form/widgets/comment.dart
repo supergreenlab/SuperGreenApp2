@@ -38,7 +38,7 @@ class CommentView extends StatelessWidget {
       'Sending comment..',
       name: 'commentsFormPageSendingCommentLoading',
       desc: 'Comments page auto-loading message at end of scroll',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -50,7 +50,7 @@ class CommentView extends StatelessWidget {
       args: [count],
       name: 'commentsFormPageCommentLikeCount',
       desc: 'Number of likes on a comment',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -59,7 +59,7 @@ class CommentView extends StatelessWidget {
       'Reply',
       name: 'commentsFormPageReplyButton',
       desc: 'Comments page reply button for comments',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -68,7 +68,7 @@ class CommentView extends StatelessWidget {
       'Report',
       name: 'commentsFormPageReportButton',
       desc: 'Comments page report button for comments',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -78,7 +78,7 @@ class CommentView extends StatelessWidget {
       args: [comment],
       name: 'commentsFormPageReportDialogBody',
       desc: 'Comments page report dialog body',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -87,7 +87,7 @@ class CommentView extends StatelessWidget {
       'Report this comment?',
       name: 'commentsFormPageReportDialogTitle',
       desc: 'Comments page report dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -97,21 +97,21 @@ class CommentView extends StatelessWidget {
   final bool loggedIn;
 
   const CommentView({
-    Key key,
-    this.comment,
+    Key? key,
+    required this.comment,
     this.first = false,
-    this.replyTo,
-    this.loggedIn,
+    required this.replyTo,
+    required this.loggedIn,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String pic = comment.pic;
+    String? pic = comment.pic;
     if (pic != null) {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
     Duration diff = DateTime.now().difference(comment.createdAt);
-    Widget avatar = UserAvatar(icon: pic);
+    Widget avatar = UserAvatar(icon: pic!);
     if (comment.type != CommentType.COMMENT) {
       avatar = Stack(
         children: [
@@ -124,7 +124,7 @@ class CommentView extends StatelessWidget {
                     color: Colors.white,
                     border: Border.all(color: Color(0xffcdcdcd), width: 1),
                     borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(commentTypes[comment.type]['pic'], width: 30, height: 30),
+                child: Image.asset(commentTypes[comment.type]!['pic']!, width: 30, height: 30),
               )),
         ],
       );
@@ -135,7 +135,7 @@ class CommentView extends StatelessWidget {
       recommendations = Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          ...params.recommend.map((p) {
+          ...params.recommend!.map((p) {
             return Row(
               children: [
                 Text(p.name, style: TextStyle(fontWeight: FontWeight.bold)),
@@ -143,12 +143,12 @@ class CommentView extends StatelessWidget {
                     ? Expanded(
                         child: InkWell(
                         onTap: () {
-                          launch(p.supplier.url);
+                          launch(p.supplier!.url);
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
-                            p.supplier.url,
+                            p.supplier!.url,
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontStyle: FontStyle.italic,
@@ -282,7 +282,7 @@ class CommentView extends StatelessWidget {
   }
 
   void createAccountOrLogin(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -305,7 +305,7 @@ class CommentView extends StatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }
@@ -315,7 +315,7 @@ class CommentView extends StatelessWidget {
     if (c.length > 40) {
       c = '${c.substring(0, 40)}...';
     }
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -338,7 +338,7 @@ class CommentView extends StatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<CommentsFormBloc>(context).add(CommentsFormBlocEventReport(comment));
     }
   }

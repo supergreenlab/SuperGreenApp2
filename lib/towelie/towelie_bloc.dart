@@ -147,7 +147,7 @@ class TowelieBlocEventButtonPressed extends TowelieBlocEvent {
 
 class TowelieBlocState extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class TowelieBlocStateMainNavigation extends TowelieBlocState {
@@ -185,13 +185,12 @@ class TowelieBlocStateHelper extends TowelieBlocState {
   final RouteSettings settings;
   final String text;
   final bool hasNext;
-  final List<Map<String, dynamic>> buttons;
+  final List<Map<String, dynamic>>? buttons;
 
-  TowelieBlocStateHelper(this.settings, this.text,
-      {this.hasNext = false, this.buttons});
+  TowelieBlocStateHelper(this.settings, this.text, {this.hasNext = false, this.buttons});
 
   @override
-  List<Object> get props => [rand, settings, text, hasNext, buttons];
+  List<Object?> get props => [rand, settings, text, hasNext, buttons];
 }
 
 class TowelieBlocStateHelperPop extends TowelieBlocState {

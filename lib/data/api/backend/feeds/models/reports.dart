@@ -21,9 +21,9 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Report extends Equatable {
-  final String feedEntryID;
-  final String commentID;
-  final String plantID;
+  final String? feedEntryID;
+  final String? commentID;
+  final String? plantID;
 
   Report({
     this.feedEntryID,
@@ -32,9 +32,9 @@ class Report extends Equatable {
   });
 
   Report copyWith({
-    String feedEntryID,
-    String commentID,
-    String plantID,
+    String? feedEntryID,
+    String? commentID,
+    String? plantID,
   }) {
     return Report(
       feedEntryID: feedEntryID ?? this.feedEntryID,
@@ -44,7 +44,7 @@ class Report extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         feedEntryID,
         commentID,
         plantID,

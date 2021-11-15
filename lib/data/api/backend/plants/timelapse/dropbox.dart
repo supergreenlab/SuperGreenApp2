@@ -19,14 +19,14 @@
 import 'package:super_green_app/data/api/backend/plants/timelapse/timelapse_settings.dart';
 
 class DropboxSettings extends TimelapseSettings {
-  final String ssid;
-  final String password;
-  final String controllerID;
-  final String rotate;
-  final String name;
-  final String strain;
-  final String dropboxToken;
-  final String uploadName;
+  final String? ssid;
+  final String? password;
+  final String? controllerID;
+  final String? rotate;
+  final String? name;
+  final String? strain;
+  final String? dropboxToken;
+  final String? uploadName;
 
   DropboxSettings(
       {this.ssid,
@@ -39,7 +39,7 @@ class DropboxSettings extends TimelapseSettings {
       this.uploadName});
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         ssid,
         password,
         controllerID,

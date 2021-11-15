@@ -30,24 +30,24 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class MainNavigatorEvent extends Equatable {
-  final void Function(Future<dynamic> future) futureFn;
+  final void Function(Future<dynamic>? future)? futureFn;
 
   MainNavigatorEvent({this.futureFn});
 
   @override
-  List<Object> get props => [futureFn];
+  List<Object?> get props => [futureFn];
 }
 
 class MainNavigateToHomeEvent extends MainNavigatorEvent {
-  final Plant plant;
-  final FeedEntry feedEntry;
-  final String commentID;
-  final String replyTo;
+  final Plant? plant;
+  final FeedEntry? feedEntry;
+  final String? commentID;
+  final String? replyTo;
 
   MainNavigateToHomeEvent({this.plant, this.feedEntry, this.commentID, this.replyTo});
 
   @override
-  List<Object> get props => [plant, feedEntry, commentID, replyTo];
+  List<Object?> get props => [plant, feedEntry, commentID, replyTo];
 }
 
 class MainNavigateToCreatePlantEvent extends MainNavigatorEvent {
@@ -154,7 +154,7 @@ class MainNavigateToFeedFormEvent extends MainNavigatorEvent {
   MainNavigateToFeedFormEvent(this.pushAsReplacement, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [pushAsReplacement];
+  List<Object?> get props => [pushAsReplacement];
 }
 
 class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent implements DeviceNavigationArgHolder {
@@ -168,7 +168,7 @@ class MainNavigateToFeedLightFormEvent extends MainNavigateToFeedFormEvent imple
 
   @override
   Future<Device> getDevice() {
-    return RelDB.get().devicesDAO.getDevice(box.device);
+    return RelDB.get().devicesDAO.getDevice(box.device!);
   }
 }
 
@@ -193,19 +193,19 @@ class MainNavigateToFeedVentilationFormEvent extends MainNavigateToFeedFormEvent
 
   @override
   Future<Device> getDevice() {
-    return RelDB.get().devicesDAO.getDevice(box.device);
+    return RelDB.get().devicesDAO.getDevice(box.device!);
   }
 }
 
 class MainNavigateToFeedMediaFormEvent extends MainNavigateToFeedFormEvent {
-  final Plant plant;
-  final Box box;
+  final Plant? plant;
+  final Box? box;
 
   MainNavigateToFeedMediaFormEvent({this.plant, this.box, pushAsReplacement = false, futureFn})
       : super(pushAsReplacement, futureFn: futureFn);
 
   @override
-  List<Object> get props => [plant, box];
+  List<Object?> get props => [plant, box];
 }
 
 class MainNavigateToFeedMeasureFormEvent extends MainNavigateToFeedFormEvent {
@@ -264,7 +264,7 @@ class MainNavigateToFeedScheduleFormEvent extends MainNavigateToFeedFormEvent im
 
   @override
   Future<Device> getDevice() {
-    return RelDB.get().devicesDAO.getDevice(box.device);
+    return RelDB.get().devicesDAO.getDevice(box.device!);
   }
 }
 
@@ -292,15 +292,15 @@ class MainNavigateToFeedNutrientMixFormEvent extends MainNavigateToFeedFormEvent
 class MainNavigateToCommentFormEvent extends MainNavigateToFeedFormEvent {
   final bool autoFocus;
   final FeedEntryStateLoaded feedEntry;
-  final String commentID;
-  final String replyTo;
+  final String? commentID;
+  final String? replyTo;
 
   MainNavigateToCommentFormEvent(this.autoFocus, this.feedEntry,
       {pushAsReplacement = false, futureFn, this.commentID, this.replyTo})
       : super(pushAsReplacement, futureFn: futureFn);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         feedEntry,
         commentID,
         replyTo,
@@ -321,14 +321,14 @@ class MainNavigateToTipEvent extends MainNavigatorEvent {
 class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {
   final bool videoEnabled;
   final bool pickerEnabled;
-  final String overlayPath;
+  final String? overlayPath;
 
   MainNavigateToImageCaptureEvent(
-      {Function(Future<Object> f) futureFn, this.videoEnabled = true, this.pickerEnabled = true, this.overlayPath})
+      {Function(Future<dynamic>? f)? futureFn, this.videoEnabled = true, this.pickerEnabled = true, this.overlayPath})
       : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [videoEnabled, overlayPath, futureFn];
+  List<Object?> get props => [videoEnabled, overlayPath, futureFn];
 }
 
 class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
@@ -337,14 +337,14 @@ class MainNavigateToImageCapturePlaybackEvent extends MainNavigatorEvent {
 
   final int rand = Random().nextInt(1 << 32);
   final String filePath;
-  final String overlayPath;
+  final String? overlayPath;
 
   MainNavigateToImageCapturePlaybackEvent(this.filePath,
-      {Function(Future<Object> f) futureFn, this.cancelButton = 'RETAKE', this.okButton = 'NEXT', this.overlayPath})
+      {Function(Future<dynamic>? f)? futureFn, this.cancelButton = 'RETAKE', this.okButton = 'NEXT', this.overlayPath})
       : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [rand, futureFn, filePath];
+  List<Object?> get props => [rand, futureFn, filePath];
 }
 
 class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
@@ -353,20 +353,20 @@ class MainNavigateToDeviceWifiEvent extends MainNavigatorEvent {
   MainNavigateToDeviceWifiEvent(this.device, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [futureFn, device];
+  List<Object?> get props => [futureFn, device];
 }
 
 class MainNavigateToFullscreenMedia extends MainNavigatorEvent {
-  final String overlayPath;
+  final String? overlayPath;
   final String thumbnailPath;
   final String filePath;
-  final String heroPath;
-  final String sliderTitle;
+  final String? heroPath;
+  final String? sliderTitle;
 
   MainNavigateToFullscreenMedia(this.thumbnailPath, this.filePath, {this.overlayPath, this.heroPath, this.sliderTitle});
 
   @override
-  List<Object> get props => [thumbnailPath, filePath, overlayPath, heroPath];
+  List<Object?> get props => [thumbnailPath, filePath, overlayPath, heroPath];
 }
 
 class MainNavigateToFullscreenPicture extends MainNavigatorEvent {
@@ -428,7 +428,7 @@ class MainNavigateToSettingsPlant extends MainNavigatorEvent {
 class MainNavigateToSettingsPlantAlerts extends MainNavigatorEvent {
   final Plant plant;
 
-  MainNavigateToSettingsPlantAlerts(this.plant, {void Function(Future<dynamic> future) futureFn})
+  MainNavigateToSettingsPlantAlerts(this.plant, {void Function(Future<dynamic>? future)? futureFn})
       : super(futureFn: futureFn);
 
   @override
@@ -445,10 +445,10 @@ class MainNavigateToSettingsBoxes extends MainNavigatorEvent {
 class MainNavigateToSettingsBox extends MainNavigatorEvent {
   final Box box;
 
-  MainNavigateToSettingsBox(this.box, {void Function(Future<dynamic> future) futureFn}) : super(futureFn: futureFn);
+  MainNavigateToSettingsBox(this.box, {void Function(Future<dynamic>? future)? futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [box];
 }
 
 class MainNavigateToSettingsDevices extends MainNavigatorEvent {
@@ -488,7 +488,7 @@ class MainNavigateToSettingsDeviceAuth extends MainNavigatorEvent {
 class MainNavigateToSettingsUpgradeDevice extends MainNavigatorEvent {
   final Device device;
 
-  MainNavigateToSettingsUpgradeDevice(this.device, {void Function(Future<dynamic> future) futureFn})
+  MainNavigateToSettingsUpgradeDevice(this.device, {void Function(Future<dynamic>? future)? futureFn})
       : super(futureFn: futureFn);
 
   @override
@@ -497,15 +497,15 @@ class MainNavigateToSettingsUpgradeDevice extends MainNavigatorEvent {
 
 class MainNavigateToPublicPlant extends MainNavigatorEvent {
   final String id;
-  final String name;
-  final String feedEntryID;
-  final String commentID;
-  final String replyTo;
+  final String? name;
+  final String? feedEntryID;
+  final String? commentID;
+  final String? replyTo;
 
   MainNavigateToPublicPlant(this.id, {this.name, this.feedEntryID, this.commentID, this.replyTo});
 
   @override
-  List<Object> get props => [id, name, feedEntryID, commentID, replyTo];
+  List<Object?> get props => [id, name, feedEntryID, commentID, replyTo];
 }
 
 class MainNavigateToBookmarks extends MainNavigatorEvent {
@@ -517,12 +517,12 @@ class MainNavigateToBookmarks extends MainNavigatorEvent {
 
 class MainNavigateToSelectNewProductEvent extends MainNavigatorEvent {
   final List<Product> selectedProducts;
-  final ProductCategoryID categoryID;
+  final ProductCategoryID? categoryID;
 
   MainNavigateToSelectNewProductEvent(this.selectedProducts, {this.categoryID, futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [...super.props, selectedProducts];
+  List<Object?> get props => [...super.props, selectedProducts];
 }
 
 class MainNavigateToProductInfosEvent extends MainNavigatorEvent {
@@ -531,7 +531,7 @@ class MainNavigateToProductInfosEvent extends MainNavigatorEvent {
   MainNavigateToProductInfosEvent(this.productCategoryID, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [...super.props, productCategoryID];
+  List<Object?> get props => [...super.props, productCategoryID];
 }
 
 class MainNavigateToProductSupplierEvent extends MainNavigatorEvent {
@@ -540,14 +540,14 @@ class MainNavigateToProductSupplierEvent extends MainNavigatorEvent {
   MainNavigateToProductSupplierEvent(this.products, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [...super.props, products];
+  List<Object?> get props => [...super.props, products];
 }
 
 class MainNavigateToProductTypeEvent extends MainNavigatorEvent {
   MainNavigateToProductTypeEvent({futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => super.props;
+  List<Object?> get props => super.props;
 }
 
 class MainNavigateToPlantPickerEvent extends MainNavigatorEvent {
@@ -557,7 +557,7 @@ class MainNavigateToPlantPickerEvent extends MainNavigatorEvent {
   MainNavigateToPlantPickerEvent(this.preselectedPlants, this.title, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [...super.props, preselectedPlants, title];
+  List<Object?> get props => [...super.props, preselectedPlants, title];
 }
 
 class MainNavigateToSelectPlantEvent extends MainNavigatorEvent {
@@ -566,7 +566,7 @@ class MainNavigateToSelectPlantEvent extends MainNavigatorEvent {
   MainNavigateToSelectPlantEvent(this.title, {futureFn}) : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [...super.props, title];
+  List<Object?> get props => [...super.props, title];
 }
 
 class MainNavigateToRemoteBoxEvent extends MainNavigatorEvent {
@@ -619,52 +619,52 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
 
   @override
   Stream<dynamic> mapEventToState(MainNavigatorEvent event) async* {
-    Future future;
+    Future? future;
     if (event is MainNavigatorActionPop) {
       if (event.mustPop) {
-        _navigatorKey.currentState.pop(event.param);
+        _navigatorKey.currentState!.pop(event.param);
       } else {
-        _navigatorKey.currentState.maybePop(event.param);
+        _navigatorKey.currentState!.maybePop(event.param);
       }
     } else if (event is MainNavigatorActionPopToRoute) {
-      _navigatorKey.currentState.popUntil((r) {
+      _navigatorKey.currentState!.popUntil((r) {
         if (r.settings.name == event.route) {
           return true;
         }
         return false;
       });
     } else if (event is MainNavigatorActionPopToRoot) {
-      _navigatorKey.currentState.popUntil((route) => route.isFirst);
+      _navigatorKey.currentState!.popUntil((route) => route.isFirst);
     } else if (event is MainNavigateToHomeEvent) {
-      future = _navigatorKey.currentState.pushReplacementNamed('/home', arguments: event);
+      future = _navigatorKey.currentState!.pushReplacementNamed('/home', arguments: event);
     } else if (event is MainNavigateToCreatePlantEvent) {
-      future = _navigatorKey.currentState.pushNamed('/plant/new', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/plant/new', arguments: event);
     } else if (event is MainNavigateToSelectBoxEvent) {
-      future = _navigatorKey.currentState.pushNamed('/plant/box', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/plant/box', arguments: event);
     } else if (event is MainNavigateToCreateBoxEvent) {
-      future = _navigatorKey.currentState.pushNamed('/plant/box/new', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/plant/box/new', arguments: event);
     } else if (event is MainNavigateToSelectDeviceEvent) {
-      future = _navigatorKey.currentState.pushNamed('/box/device', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/box/device', arguments: event);
     } else if (event is MainNavigateToSelectDeviceBoxEvent) {
-      future = _navigatorKey.currentState.pushNamed('/box/device/box', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/box/device/box', arguments: event);
     } else if (event is MainNavigateToSelectNewDeviceBoxEvent) {
-      future = _navigatorKey.currentState.pushNamed('/box/device/box/new', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/box/device/box/new', arguments: event);
     } else if (event is MainNavigateToAddDeviceEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/add', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/add', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/new', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/new', arguments: event);
     } else if (event is MainNavigateToExistingDeviceEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/existing', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/existing', arguments: event);
     } else if (event is MainNavigateToDeviceSetupEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/load', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/load', arguments: event);
     } else if (event is MainNavigateToDeviceNameEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/name', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/name', arguments: event);
     } else if (event is MainNavigateToDevicePairingEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/pairing', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/pairing', arguments: event);
     } else if (event is MainNavigateToDeviceTestEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/test', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/test', arguments: event);
     } else if (event is MainNavigateToDeviceWifiEvent) {
-      future = _navigatorKey.currentState.pushNamed('/device/wifi', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/device/wifi', arguments: event);
     } else if (event is MainNavigateToFeedLightFormEvent) {
       future = _pushOrReplace('/feed/form/light', event);
     } else if (event is MainNavigateToFeedMediaFormEvent) {
@@ -694,74 +694,74 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
     } else if (event is MainNavigateToCommentFormEvent) {
       future = _pushOrReplace('/feed/form/comment', event);
     } else if (event is MainNavigateToTipEvent) {
-      future = _navigatorKey.currentState.pushNamed('/tip', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/tip', arguments: event);
     } else if (event is MainNavigateToImageCaptureEvent) {
-      future = _navigatorKey.currentState.pushNamed('/capture', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/capture', arguments: event);
     } else if (event is MainNavigateToImageCapturePlaybackEvent) {
-      future = _navigatorKey.currentState.pushNamed('/capture/playback', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/capture/playback', arguments: event);
     } else if (event is MainNavigateToFullscreenMedia) {
-      future = _navigatorKey.currentState.pushNamed('/media', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/media', arguments: event);
     } else if (event is MainNavigateToFullscreenPicture) {
-      future = _navigatorKey.currentState.pushNamed('/picture', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/picture', arguments: event);
     } else if (event is MainNavigateToTimelapseViewer) {
       future = _pushOrReplace('/timelapse/viewer', event);
     } else if (event is MainNavigateToSettingsAuth) {
-      future = _navigatorKey.currentState.pushNamed('/settings/auth', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/auth', arguments: event);
     } else if (event is MainNavigateToSettingsLogin) {
-      future = _navigatorKey.currentState.pushNamed('/settings/login', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/login', arguments: event);
     } else if (event is MainNavigateToSettingsCreateAccount) {
-      future = _navigatorKey.currentState.pushNamed('/settings/createaccount', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/createaccount', arguments: event);
     } else if (event is MainNavigateToSettingsPlants) {
-      future = _navigatorKey.currentState.pushNamed('/settings/plants', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/plants', arguments: event);
     } else if (event is MainNavigateToSettingsPlant) {
-      future = _navigatorKey.currentState.pushNamed('/settings/plant', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/plant', arguments: event);
     } else if (event is MainNavigateToSettingsPlantAlerts) {
-      future = _navigatorKey.currentState.pushNamed('/settings/plant/alerts', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/plant/alerts', arguments: event);
     } else if (event is MainNavigateToSettingsBoxes) {
-      future = _navigatorKey.currentState.pushNamed('/settings/boxes', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/boxes', arguments: event);
     } else if (event is MainNavigateToSettingsBox) {
-      future = _navigatorKey.currentState.pushNamed('/settings/box', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/box', arguments: event);
     } else if (event is MainNavigateToSettingsDevices) {
-      future = _navigatorKey.currentState.pushNamed('/settings/devices', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/devices', arguments: event);
     } else if (event is MainNavigateToSettingsDevice) {
-      future = _navigatorKey.currentState.pushNamed('/settings/device', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/device', arguments: event);
     } else if (event is MainNavigateToSettingsRemoteControl) {
-      future = _navigatorKey.currentState.pushNamed('/settings/device/remote', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/device/remote', arguments: event);
     } else if (event is MainNavigateToSettingsDeviceAuth) {
-      future = _navigatorKey.currentState.pushNamed('/settings/device/auth', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/device/auth', arguments: event);
     } else if (event is MainNavigateToSettingsUpgradeDevice) {
-      future = _navigatorKey.currentState.pushNamed('/settings/device/upgrade', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/settings/device/upgrade', arguments: event);
     } else if (event is MainNavigateToPublicPlant) {
-      future = _navigatorKey.currentState.pushNamed('/public/plant', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/public/plant', arguments: event);
     } else if (event is MainNavigateToBookmarks) {
-      future = _navigatorKey.currentState.pushNamed('/bookmarks', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/bookmarks', arguments: event);
     } else if (event is MainNavigateToSelectNewProductEvent) {
-      future = _navigatorKey.currentState.pushNamed('/product/select', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/product/select', arguments: event);
     } else if (event is MainNavigateToProductInfosEvent) {
-      future = _navigatorKey.currentState.pushNamed('/product/new/infos', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/product/new/infos', arguments: event);
     } else if (event is MainNavigateToProductTypeEvent) {
-      future = _navigatorKey.currentState.pushNamed('/product/new/type', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/product/new/type', arguments: event);
     } else if (event is MainNavigateToProductSupplierEvent) {
-      future = _navigatorKey.currentState.pushNamed('/product/new/supplier', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/product/new/supplier', arguments: event);
     } else if (event is MainNavigateToPlantPickerEvent) {
-      future = _navigatorKey.currentState.pushNamed('/plantpicker', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/plantpicker', arguments: event);
     } else if (event is MainNavigateToSelectPlantEvent) {
-      future = _navigatorKey.currentState.pushNamed('/selectplant', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/selectplant', arguments: event);
     } else if (event is MainNavigateToRemoteBoxEvent) {
-      future = _navigatorKey.currentState.pushNamed('/public/box', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/public/box', arguments: event);
     } else if (event is MainNavigateToFollowsFeedEvent) {
-      future = _navigatorKey.currentState.pushNamed('/public/follows', arguments: event);
+      future = _navigatorKey.currentState!.pushNamed('/public/follows', arguments: event);
     }
     if (event.futureFn != null) {
-      event.futureFn(future);
+      event.futureFn!(future);
     }
   }
 
   Future _pushOrReplace(String url, MainNavigateToFeedFormEvent event) {
     if (event.pushAsReplacement) {
-      return _navigatorKey.currentState.pushReplacementNamed(url, arguments: event);
+      return _navigatorKey.currentState!.pushReplacementNamed(url, arguments: event);
     }
-    return _navigatorKey.currentState.pushNamed(url, arguments: event);
+    return _navigatorKey.currentState!.pushNamed(url, arguments: event);
   }
 
   FutureFn futureFn() {

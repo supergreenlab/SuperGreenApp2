@@ -21,19 +21,14 @@ import 'package:super_green_app/widgets/fullscreen.dart';
 
 class FullscreenLoading extends StatelessWidget {
   final String title;
-  final double percent;
-  final Color textColor;
-  final String circleText;
+  final double? percent;
+  final Color? textColor;
+  final String? circleText;
   final double fontSize;
   final double size;
 
   const FullscreenLoading(
-      {this.title = 'Loading..',
-      this.percent,
-      this.textColor,
-      this.circleText,
-      this.fontSize = 18,
-      this.size = 60});
+      {this.title = 'Loading..', this.percent, this.textColor, this.circleText, this.fontSize = 18, this.size = 60});
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +50,9 @@ class FullscreenLoading extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    circleText ?? '${(percent * 100).toInt()}%',
+                    circleText ?? '${(percent! * 100).toInt()}%',
                     style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: fontSize,
-                        color: textColor ?? Color(0xffababab)),
+                        fontWeight: FontWeight.w900, fontSize: fontSize, color: textColor ?? Color(0xffababab)),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -71,7 +64,6 @@ class FullscreenLoading extends StatelessWidget {
         width: size,
         height: size,
         child: CircularProgressIndicator(
-          value: percent,
           strokeWidth: 4.0,
         ),
       );

@@ -15,9 +15,9 @@ class SettingsPlantsPage extends TraceableStatelessWidget {
     return BlocListener<SettingsPlantsBloc, SettingsPlantsBlocState>(
       listener: (BuildContext context, SettingsPlantsBlocState state) {},
       child: BlocBuilder<SettingsPlantsBloc, SettingsPlantsBlocState>(
-        cubit: BlocProvider.of<SettingsPlantsBloc>(context),
+        bloc: BlocProvider.of<SettingsPlantsBloc>(context),
         builder: (BuildContext context, SettingsPlantsBlocState state) {
-          Widget body;
+          late Widget body;
           int i = 0;
 
           if (state is SettingsPlantsBlocStateLoading) {
@@ -132,7 +132,7 @@ class SettingsPlantsPage extends TraceableStatelessWidget {
   }
 
   void _deletePlant(BuildContext context, Plant plant) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -155,7 +155,7 @@ class SettingsPlantsPage extends TraceableStatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<SettingsPlantsBloc>(context).add(SettingsPlantsBlocEventDeletePlant(plant));
     }
   }

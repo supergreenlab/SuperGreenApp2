@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:collection/collection.dart';
 
 abstract class SelectDeviceBoxBlocEvent extends Equatable {}
 
@@ -60,8 +61,7 @@ class SelectDeviceBoxBlocStateLoaded extends SelectDeviceBoxBlocState {
   final int nBoxes;
   final Device device;
 
-  SelectDeviceBoxBlocStateLoaded(
-      this.boxes, this.nLeds, this.nBoxes, this.device);
+  SelectDeviceBoxBlocStateLoaded(this.boxes, this.nLeds, this.nBoxes, this.device);
 
   @override
   List<Object> get props => [boxes, nLeds, nBoxes, device];
@@ -83,8 +83,7 @@ class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
   List<Object> get props => [box];
 }
 
-class SelectDeviceBoxBloc
-    extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
+class SelectDeviceBoxBloc extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
   final MainNavigateToSelectDeviceBoxEvent args;
 
   SelectDeviceBoxBloc(this.args) : super(SelectDeviceBoxBlocStateInit()) {
@@ -92,8 +91,7 @@ class SelectDeviceBoxBloc
   }
 
   @override
-  Stream<SelectDeviceBoxBlocState> mapEventToState(
-      SelectDeviceBoxBlocEvent event) async* {
+  Stream<SelectDeviceBoxBlocState> mapEventToState(SelectDeviceBoxBlocEvent event) async* {
     if (event is SelectDeviceBoxBlocEventInitialize) {
       yield* _loadAll();
     } else if (event is SelectDeviceBoxBlocEventDelete) {
@@ -101,8 +99,7 @@ class SelectDeviceBoxBloc
       yield SelectDeviceBoxBlocStateInit();
       final ddb = RelDB.get().devicesDAO;
       final Device device = await ddb.getDevice(args.device.id);
-      final boxEnabledParam =
-          await ddb.getParam(device.id, 'BOX_${event.box}_ENABLED');
+      final boxEnabledParam = await ddb.getParam(device.id, 'BOX_${event.box}_ENABLED');
       await DeviceHelper.updateIntParam(args.device, boxEnabledParam, 0);
       final ledModule = await ddb.getModule(device.id, 'led');
       for (int i = 0; i < ledModule.arrayLen; ++i) {
@@ -115,8 +112,7 @@ class SelectDeviceBoxBloc
     } else if (event is SelectDeviceBoxBlocEventSelectBox) {
       final ddb = RelDB.get().devicesDAO;
       final Device device = await ddb.getDevice(args.device.id);
-      final timerTypeParam =
-          await ddb.getParam(device.id, 'BOX_${event.box}_TIMER_TYPE');
+      final timerTypeParam = await ddb.getParam(device.id, 'BOX_${event.box}_TIMER_TYPE');
       // TODO declare Param enums when possible
       if (timerTypeParam.ivalue != 1) {
         await DeviceHelper.updateIntParam(args.device, timerTypeParam, 1);
@@ -139,16 +135,14 @@ class SelectDeviceBoxBloc
     final ledModule = await ddb.getModule(device.id, 'led');
     for (int i = 0; i < ledModule.arrayLen; ++i) {
       final ledBox = await ddb.getParam(device.id, 'LED_${i}_BOX');
-      if (ledBox.ivalue >= 0) {
-        SelectData selectData =
-            boxes.firstWhere((b) => b.box == ledBox.ivalue, orElse: () => null);
+      if (ledBox.ivalue! >= 0) {
+        SelectData? selectData = boxes.firstWhereOrNull((b) => b.box == ledBox.ivalue);
         if (selectData != null) {
           selectData.leds.add(i);
         }
       }
     }
-    yield SelectDeviceBoxBlocStateLoaded(
-        boxes, ledModule.arrayLen, boxModule.arrayLen, device);
+    yield SelectDeviceBoxBlocStateLoaded(boxes, ledModule.arrayLen, boxModule.arrayLen, device);
   }
 }
 

@@ -30,7 +30,7 @@ Now this is when you should **plug the controller to its power supply** if not a
 Then you will choose one of the options above to **connect to the controller**.''',
       name: 'towelieHelperAddDevice',
       desc: 'Towelie Helper Add device',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -33,13 +33,13 @@ class DeviceAPI {
     return name.toLowerCase().replaceAllMapped(RegExp(r'[\W_]+'), (match) => "");
   }
 
-  static Future<String> resolveLocalName(String name) async {
+  static Future<String?> resolveLocalName(String name) async {
     if (name.endsWith('.local')) {
       name.replaceAll('.local', '');
     }
     name = '${DeviceAPI.mdnsDomain(name)}.local';
     // Temporary workaround, mdns discovery fails on the current version of the lib
-    String ip;
+    String? ip;
     if (Platform.isAndroid) {
       ip = await DeviceAPI.resolveLocalNameMDNS(name);
     } else if (Platform.isIOS) {
@@ -48,14 +48,14 @@ class DeviceAPI {
     return ip;
   }
 
-  static Future<String> resolveLocalNameMDNS(String name) async {
+  static Future<String?> resolveLocalNameMDNS(String name) async {
     final MDnsClient client =
-        MDnsClient(rawDatagramSocketFactory: (dynamic host, int port, {bool reuseAddress, bool reusePort, int ttl}) {
-      return RawDatagramSocket.bind(host, port, reuseAddress: true, reusePort: false, ttl: ttl);
+        MDnsClient(rawDatagramSocketFactory: (dynamic host, int port, {bool? reuseAddress, bool? reusePort, int? ttl}) {
+      return RawDatagramSocket.bind(host, port, reuseAddress: true, reusePort: false, ttl: ttl!);
     });
     await client.start();
 
-    String foundIP;
+    String? foundIP;
     await for (IPAddressResourceRecord record
         in client.lookup<IPAddressResourceRecord>(ResourceRecordQuery.addressIPv4(name))) {
       foundIP = record.address.address;
@@ -65,24 +65,25 @@ class DeviceAPI {
     return foundIP;
   }
 
-  static Future<String> fetchConfig(String controllerIP, {String auth}) async {
-    Map<String, String> headers;
+  static Future<String> fetchConfig(String controllerIP, {String? auth}) async {
+    Map<String, String>? headers;
     if (auth != null) {
       headers = {
         'Authorization': 'Basic $auth',
       };
     }
-    Response r = await get('http://$controllerIP/fs/config.json', headers: headers);
+    Response r = await get(Uri.parse('http://$controllerIP/fs/config.json'), headers: headers);
     return r.body;
   }
 
-  static Future<String> fetchStringParam(String controllerIP, String paramName,
-      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
+  static Future<String?> fetchStringParam(String controllerIP, String paramName,
+      {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}',
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
   }
 
-  static Future<String> fetchString(String url, {int timeout = 5, int nRetries = 4, int wait = 0, String auth}) async {
+  static Future<String> fetchString(String url,
+      {int? timeout = 5, int nRetries = 4, int wait = 0, String? auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -119,11 +120,11 @@ class DeviceAPI {
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"url": url}, fwdThrow: true);
     }
-    return null;
+    throw Error();
   }
 
-  static Future<int> fetchIntParam(String controllerIP, String paramName,
-      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
+  static Future<int?> fetchIntParam(String controllerIP, String paramName,
+      {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -164,8 +165,8 @@ class DeviceAPI {
     return null;
   }
 
-  static Future<String> setStringParam(String controllerIP, String paramName, String value,
-      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
+  static Future<String?> setStringParam(String controllerIP, String paramName, String value,
+      {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     try {
       await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
@@ -176,8 +177,8 @@ class DeviceAPI {
     return fetchStringParam(controllerIP, paramName, auth: auth);
   }
 
-  static Future<int> setIntParam(String controllerIP, String paramName, int value,
-      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
+  static Future<int?> setIntParam(String controllerIP, String paramName, int value,
+      {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     try {
       await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value',
           timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
@@ -188,7 +189,7 @@ class DeviceAPI {
     return fetchIntParam(controllerIP, paramName, auth: auth);
   }
 
-  static Future post(String url, {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
+  static Future post(String url, {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -220,7 +221,7 @@ class DeviceAPI {
   }
 
   static Future uploadFile(String controllerIP, String fileName, ByteData data,
-      {int timeout = 5, int nRetries = 4, int wait = 1, String auth}) async {
+      {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
       client.connectionTimeout = Duration(seconds: timeout);
@@ -259,7 +260,7 @@ class DeviceAPI {
   static Map<int, bool> fetchingAllParams = {};
 
   static Future fetchAllParams(String ip, int deviceID, Function(double) advancement,
-      {bool delete = false, String auth}) async {
+      {bool delete = false, String? auth}) async {
     if (DeviceAPI.fetchingAllParams[deviceID] == true) {
       return;
     }
@@ -282,7 +283,7 @@ class DeviceAPI {
         int moduleID;
         if (modules.containsKey(moduleName) == false) {
           bool isArray = k.containsKey('array');
-          Module exists = await db.getModule(deviceID, moduleName);
+          Module? exists = await db.getModule(deviceID, moduleName);
           if (exists == null) {
             ModulesCompanion module = ModulesCompanion.insert(
                 device: deviceID, name: moduleName, isArray: isArray, arrayLen: isArray ? k['array']['len'] : 0);
@@ -293,13 +294,17 @@ class DeviceAPI {
           modules[moduleName] = moduleID;
         }
         int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
-        Param exists = await db.getParam(deviceID, k['caps_name']);
+        Param? exists = await db.getParam(deviceID, k['caps_name']);
         if (type == INTEGER_TYPE) {
           try {
             final value = await DeviceAPI.fetchIntParam(ip, k['caps_name'], auth: auth);
             if (exists == null) {
               ParamsCompanion param = ParamsCompanion.insert(
-                  device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, ivalue: Value(value));
+                  device: deviceID,
+                  module: modules[moduleName]!,
+                  key: k['caps_name'],
+                  type: type,
+                  ivalue: Value(value));
               await db.addParam(param);
             } else {
               await db.updateParam(exists.copyWith(ivalue: value));
@@ -312,7 +317,11 @@ class DeviceAPI {
             final value = await DeviceAPI.fetchStringParam(ip, k['caps_name'], auth: auth);
             if (exists == null) {
               ParamsCompanion param = ParamsCompanion.insert(
-                  device: deviceID, module: modules[moduleName], key: k['caps_name'], type: type, svalue: Value(value));
+                  device: deviceID,
+                  module: modules[moduleName]!,
+                  key: k['caps_name'],
+                  type: type,
+                  svalue: Value(value));
               await db.addParam(param);
             } else {
               await db.updateParam(exists.copyWith(svalue: value));

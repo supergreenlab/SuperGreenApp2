@@ -38,13 +38,12 @@ This **complete grow box bundle** lets you build a grow box out of almost anythi
 ''',
       name: 'towelieProductsBundle',
       desc: 'Towelie products bundle',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
   static Future createProductsBundle(Feed feed) async {
-    YamlMap yml = loadYaml(await rootBundle
-        .loadString('assets/products/initial_checklist_bundle.yml'));
+    YamlMap yml = loadYaml(await rootBundle.loadString('assets/products/initial_checklist_bundle.yml'));
     await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_PRODUCTS',
       feed: feed.id,

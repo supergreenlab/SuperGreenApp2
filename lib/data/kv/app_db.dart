@@ -23,11 +23,11 @@ import 'package:super_green_app/data/kv/models/device_data.dart';
 class AppDB {
   static final AppDB _instance = AppDB._newInstance();
 
-  Box _settingsDB;
-  Box _miscDB;
+  late Box _settingsDB;
+  late Box _miscDB;
 
-  String documentPath;
-  String tmpPath;
+  late String documentPath;
+  late String tmpPath;
 
   factory AppDB() => _instance;
 
@@ -46,12 +46,12 @@ class AppDB {
     return _settingsDB.get('device$identifier', defaultValue: DeviceData());
   }
 
-  String getDeviceAuth(String identifier) {
+  String? getDeviceAuth(String identifier) {
     DeviceData deviceData = getDeviceData(identifier);
     return deviceData.auth;
   }
 
-  String getDeviceSigning(String identifier) {
+  String? getDeviceSigning(String identifier) {
     DeviceData deviceData = getDeviceData(identifier);
     return deviceData.signing;
   }

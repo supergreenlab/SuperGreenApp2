@@ -39,7 +39,7 @@ abstract class ProductSpecs extends Equatable {
   ProductSpecs();
 
   factory ProductSpecs.fromMap(ProductCategoryID categoryID, Map<String, dynamic> map) {
-    return productSpecsBuilders[categoryID].fromMap(map);
+    return productSpecsBuilders[categoryID]!.fromMap(map);
   }
 
   factory ProductSpecs.fromJSON(ProductCategoryID categoryID, String json) {
@@ -56,7 +56,7 @@ class ProductSpecsBuilder {
   final ProductSpecs Function(String json) fromJSON;
   final ProductSpecs Function(Map<String, dynamic> map) fromMap;
 
-  ProductSpecsBuilder({this.fromJSON, this.fromMap});
+  ProductSpecsBuilder({required this.fromJSON, required this.fromMap});
 }
 
 Map<ProductCategoryID, ProductSpecsBuilder> productSpecsBuilders = {

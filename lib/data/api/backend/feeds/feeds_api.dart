@@ -37,7 +37,7 @@ import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedsAPI {
-  Future createUserEnd({String notificationToken}) async {
+  Future createUserEnd({required String notificationToken}) async {
     try {
       await BackendAPI().postPut('/userend', {'notificationToken': notificationToken});
     } catch (e, trace) {
@@ -59,7 +59,7 @@ class FeedsAPI {
   }
 
   Future sendDeletes(List<Delete> deletes) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/deletes',
+    Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/deletes'),
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -75,7 +75,8 @@ class FeedsAPI {
   Future<List<Comment>> fetchCommentsForFeedEntry(String feedEntryID,
       {int offset = 0, int limit = 10, rootCommentsOnly = false}) async {
     Response resp = await BackendAPI().apiClient.get(
-        '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$limit&rootCommentsOnly=$rootCommentsOnly',
+        Uri.parse(
+            '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$limit&rootCommentsOnly=$rootCommentsOnly'),
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -93,7 +94,8 @@ class FeedsAPI {
   }
 
   Future<List<Comment>> fetchComment(String commentID) async {
-    Response resp = await BackendAPI().apiClient.get('${BackendAPI().serverHost}/comment/$commentID', headers: {
+    Response resp =
+        await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/comment/$commentID'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -109,8 +111,9 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> fetchSocialForFeedEntry(String feedEntryID, {int offset = 0, int n = 10}) async {
-    Response resp =
-        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/feedEntry/$feedEntryID/social', headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .get(Uri.parse('${BackendAPI().serverHost}/feedEntry/$feedEntryID/social'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -123,8 +126,9 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> fetchLatestTimelapseFrame(String timelapseID) async {
-    Response resp =
-        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/timelapse/$timelapseID/latest', headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .get(Uri.parse('${BackendAPI().serverHost}/timelapse/$timelapseID/latest'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -144,7 +148,7 @@ class FeedsAPI {
       "host": BackendAPI().storageServerHostHeader,
     };
     Response resp = await BackendAPI().apiClient.post(
-          '${BackendAPI().serverHost}/sgloverlay',
+          Uri.parse('${BackendAPI().serverHost}/sgloverlay'),
           headers: {
             'Content-Type': 'application/json',
             'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -160,7 +164,7 @@ class FeedsAPI {
   Future<int> fetchCommentCountForFeedEntry(String feedEntryID) async {
     Response resp = await BackendAPI()
         .apiClient
-        .get('${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments/count?allComments=true', headers: {
+        .get(Uri.parse('${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments/count?allComments=true'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -172,8 +176,9 @@ class FeedsAPI {
   }
 
   Future<List<dynamic>> fetchBookmarks({int offset = 0, int limit = 10}) async {
-    Response resp =
-        await BackendAPI().apiClient.get('${BackendAPI().serverHost}/bookmarks?offset=$offset&limit=$limit', headers: {
+    Response resp = await BackendAPI()
+        .apiClient
+        .get(Uri.parse('${BackendAPI().serverHost}/bookmarks?offset=$offset&limit=$limit'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -186,7 +191,7 @@ class FeedsAPI {
 
   Future syncPlant(Plant plant) async {
     Map<String, dynamic> obj = await Plants.toMap(plant);
-    String serverID = await BackendAPI().postPut('/plant', obj);
+    String? serverID = await BackendAPI().postPut('/plant', obj);
 
     PlantsCompanion plantsCompanion = PlantsCompanion(id: Value(plant.id), synced: Value(true));
     if (serverID != null) {
@@ -197,7 +202,7 @@ class FeedsAPI {
 
   Future syncBox(Box box) async {
     Map<String, dynamic> obj = await Boxes.toMap(box);
-    String serverID = await BackendAPI().postPut('/box', obj);
+    String? serverID = await BackendAPI().postPut('/box', obj);
 
     BoxesCompanion boxesCompanion = BoxesCompanion(id: Value(box.id), synced: Value(true));
     if (serverID != null) {
@@ -208,7 +213,7 @@ class FeedsAPI {
 
   Future syncTimelapse(Timelapse timelapse) async {
     Map<String, dynamic> obj = await Timelapses.toMap(timelapse);
-    String serverID = await BackendAPI().postPut('/timelapse', obj);
+    String? serverID = await BackendAPI().postPut('/timelapse', obj);
 
     TimelapsesCompanion timelapsesCompanion = TimelapsesCompanion(id: Value(timelapse.id), synced: Value(true));
     if (serverID != null) {
@@ -219,7 +224,7 @@ class FeedsAPI {
 
   Future syncDevice(Device device) async {
     Map<String, dynamic> obj = await Devices.toMap(device);
-    String serverID = await BackendAPI().postPut('/device', obj);
+    String? serverID = await BackendAPI().postPut('/device', obj);
 
     DevicesCompanion devicesCompanion = DevicesCompanion(id: Value(device.id), synced: Value(true));
     if (serverID != null) {
@@ -230,7 +235,7 @@ class FeedsAPI {
 
   Future syncFeed(Feed feed) async {
     Map<String, dynamic> obj = await Feeds.toMap(feed);
-    String serverID = await BackendAPI().postPut('/feed', obj);
+    String? serverID = await BackendAPI().postPut('/feed', obj);
 
     FeedsCompanion feedsCompanion = FeedsCompanion(id: Value(feed.id), synced: Value(true));
     if (serverID != null) {
@@ -241,7 +246,7 @@ class FeedsAPI {
 
   Future syncFeedEntry(FeedEntry feedEntry) async {
     Map<String, dynamic> obj = await FeedEntries.toMap(feedEntry);
-    String serverID = await BackendAPI().postPut('/feedEntry', obj);
+    String? serverID = await BackendAPI().postPut('/feedEntry', obj);
 
     FeedEntriesCompanion feedEntriesCompanion = FeedEntriesCompanion(id: Value(feedEntry.id), synced: Value(true));
     if (serverID != null) {
@@ -253,7 +258,7 @@ class FeedsAPI {
   Future syncFeedMedia(FeedMedia feedMedia) async {
     Map<String, dynamic> obj = await FeedMedias.toMap(feedMedia);
 
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/feedMediaUploadURL',
+    Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/feedMediaUploadURL'),
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
@@ -275,7 +280,7 @@ class FeedsAPI {
       }
       if (await file.exists()) {
         Response resp = await BackendAPI().storageClient.put(
-            '${BackendAPI().storageServerHost}${uploadUrls['filePath']}',
+            Uri.parse('${BackendAPI().storageServerHost}${uploadUrls['filePath']}'),
             body: file.readAsBytesSync(),
             headers: {'Host': BackendAPI().storageServerHostHeader});
         if (resp.statusCode ~/ 100 != 2) {
@@ -289,7 +294,7 @@ class FeedsAPI {
       File file = File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath));
       if (await file.exists()) {
         Response resp = await BackendAPI().storageClient.put(
-            '${BackendAPI().storageServerHost}${uploadUrls['thumbnailPath']}',
+            Uri.parse('${BackendAPI().storageServerHost}${uploadUrls['thumbnailPath']}'),
             body: file.readAsBytesSync(),
             headers: {'Host': BackendAPI().storageServerHostHeader});
         if (resp.statusCode ~/ 100 != 2) {
@@ -302,7 +307,7 @@ class FeedsAPI {
     obj['filePath'] = Uri.parse(uploadUrls['filePath']).path.split('/')[2];
     obj['thumbnailPath'] = Uri.parse(uploadUrls['thumbnailPath']).path.split('/')[2];
 
-    String serverID = await BackendAPI().postPut('/feedMedia', obj);
+    String? serverID = await BackendAPI().postPut('/feedMedia', obj);
 
     try {
       FeedMediasCompanion feedMediasCompanion = FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(true));
@@ -414,7 +419,8 @@ class FeedsAPI {
   }
 
   Future archivePlant(String id) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/plant/$id/archive', headers: {
+    Response resp =
+        await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/plant/$id/archive'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -546,8 +552,8 @@ class FeedsAPI {
 
   Future<Comment> postComment(Comment comment) async {
     Map<String, dynamic> obj = comment.toMap();
-    String id = await BackendAPI().postPut('/comment', obj);
-    return comment.copyWith(id: id);
+    String? id = await BackendAPI().postPut('/comment', obj);
+    return comment.copyWith(id: id!);
   }
 
   Future bookmarkFeedEntry(String feedEntryID) async {
@@ -587,9 +593,8 @@ class FeedsAPI {
 
   Future download(String from, String to) async {
     try {
-      Response fileResp = await BackendAPI()
-          .storageClient
-          .get('${BackendAPI().storageServerHost}$from', headers: {'Host': BackendAPI().storageServerHostHeader});
+      Response fileResp = await BackendAPI().storageClient.get(Uri.parse('${BackendAPI().storageServerHost}$from'),
+          headers: {'Host': BackendAPI().storageServerHostHeader});
       await File(to).writeAsBytes(fileResp.bodyBytes);
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"from": from, "to": to}, fwdThrow: true);
@@ -601,7 +606,7 @@ class FeedsAPI {
   }
 
   Future setSynced(String type, String id) async {
-    Response resp = await BackendAPI().apiClient.post('${BackendAPI().serverHost}/$type/$id/sync', headers: {
+    Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/$type/$id/sync'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });
@@ -611,7 +616,7 @@ class FeedsAPI {
   }
 
   Future<Map<String, dynamic>> _unsynced(String type) async {
-    Response resp = await BackendAPI().apiClient.get('${BackendAPI().serverHost}/sync$type', headers: {
+    Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
       'Content-Type': 'application/json',
       'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
     });

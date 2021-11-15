@@ -30,7 +30,7 @@ enum CommentType {
 }
 
 class CommentParam extends Equatable {
-  final List<Product> recommend;
+  final List<Product>? recommend;
 
   CommentParam({this.recommend});
 
@@ -45,7 +45,7 @@ class CommentParam extends Equatable {
   }
 
   @override
-  List<Object> get props => [recommend];
+  List<Object?> get props => [recommend];
 }
 
 class Comment extends Equatable {
@@ -54,11 +54,11 @@ class Comment extends Equatable {
   final String userID;
 
   final String from;
-  final String pic;
+  final String? pic;
   final bool liked;
   final int nLikes;
 
-  final String replyTo;
+  final String? replyTo;
   final String text;
   final CommentType type;
 
@@ -66,38 +66,38 @@ class Comment extends Equatable {
 
   final DateTime createdAt;
 
-  final bool isNew;
+  final bool? isNew;
 
   Comment({
-    this.id,
-    this.feedEntryID,
-    this.userID,
-    this.from,
-    this.pic,
-    this.liked,
-    this.nLikes,
+    required this.id,
+    required this.feedEntryID,
+    required this.userID,
+    required this.from,
+    required this.pic,
+    required this.liked,
+    required this.nLikes,
     this.replyTo,
-    this.text,
-    this.type,
-    this.params,
-    this.createdAt,
+    required this.text,
+    required this.type,
+    required this.params,
+    required this.createdAt,
     this.isNew,
   });
 
   Comment copyWith({
-    String id,
-    String feedEntryID,
-    String userID,
-    String from,
-    String pic,
-    bool liked,
-    int nLikes,
-    String replyTo,
-    String text,
-    CommentType type,
-    String params,
-    DateTime createdAt,
-    bool isNew,
+    String? id,
+    String? feedEntryID,
+    String? userID,
+    String? from,
+    String? pic,
+    bool? liked,
+    int? nLikes,
+    String? replyTo,
+    String? text,
+    CommentType? type,
+    String? params,
+    DateTime? createdAt,
+    bool? isNew,
   }) {
     return Comment(
       id: id ?? this.id,
@@ -117,7 +117,7 @@ class Comment extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         feedEntryID,
         userID,
@@ -153,7 +153,7 @@ class Comment extends Equatable {
       nLikes: map['nLikes'],
       replyTo: map['replyTo'],
       text: map['text'],
-      type: EnumToString.fromString(CommentType.values, map['type'] as String),
+      type: EnumToString.fromString(CommentType.values, map['type'] as String) as CommentType,
       params: map['params'],
       createdAt: DateTime.parse(map['cat'] as String).toLocal(),
     );

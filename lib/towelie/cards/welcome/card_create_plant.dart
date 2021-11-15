@@ -43,7 +43,7 @@ Press the **Create plant** button below.
 ''',
       name: 'towelieCreatePlant',
       desc: 'Towelie Create Plant',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -21,24 +21,24 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Bookmark extends Equatable {
-  final String id;
+  final String? id;
   final String feedEntryID;
-  final String userID;
+  final String? userID;
 
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   Bookmark({
     this.id,
-    this.feedEntryID,
+    required this.feedEntryID,
     this.userID,
     this.createdAt,
   });
 
   Bookmark copyWith({
-    String id,
-    String feedEntryID,
-    String userID,
-    DateTime createdAt,
+    String? id,
+    String? feedEntryID,
+    String? userID,
+    DateTime? createdAt,
   }) {
     return Bookmark(
       id: id ?? this.id,
@@ -49,7 +49,7 @@ class Bookmark extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         feedEntryID,
         userID,

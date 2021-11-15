@@ -43,13 +43,13 @@ class CommentsFormBlocEventInit extends CommentsFormBlocEvent {
 class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final String text;
   final CommentType type;
-  final Comment replyTo;
+  final Comment? replyTo;
   final List<Product> recommend;
 
   CommentsFormBlocEventPostComment(this.text, this.type, this.replyTo, this.recommend);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         text,
         type,
         replyTo,
@@ -112,8 +112,8 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   final int n;
   final User user;
   final bool eof;
-  final String commentID;
-  final String replyTo;
+  final String? commentID;
+  final String? replyTo;
 
   CommentsFormBlocStateLoaded(
     this.autoFocus,
@@ -127,7 +127,7 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         autoFocus,
         feedEntry,
         comments,
@@ -140,7 +140,7 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
 }
 
 class CommentsFormBlocStateUpdateComment extends CommentsFormBlocState {
-  final String oldID;
+  final String? oldID;
   final Comment comment;
 
   String get commentID => oldID ?? comment.id;
@@ -148,7 +148,7 @@ class CommentsFormBlocStateUpdateComment extends CommentsFormBlocState {
   CommentsFormBlocStateUpdateComment(this.comment, {this.oldID});
 
   @override
-  List<Object> get props => [comment, oldID];
+  List<Object?> get props => [comment, oldID];
 }
 
 class CommentsFormBlocStateAddComment extends CommentsFormBlocState {
@@ -172,9 +172,9 @@ class CommentsFormBlocStateUser extends CommentsFormBlocState {
 class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
 
-  StreamSubscription<hive.BoxEvent> appDataStream;
-  User user;
-  String feedEntryID;
+  StreamSubscription<hive.BoxEvent>? appDataStream;
+  late User user;
+  late String feedEntryID;
 
   CommentsFormBloc(this.args) : super(CommentsFormBlocStateInit()) {
     add(CommentsFormBlocEventInit());
@@ -192,7 +192,7 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
         feedEntryID = args.feedEntry.feedEntryID;
       } else {
         FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(args.feedEntry.feedEntryID);
-        feedEntryID = feedEntry.serverID;
+        feedEntryID = feedEntry.serverID!;
       }
       yield* fetchComments();
     } else if (event is CommentsFormBlocEventLike) {
@@ -233,7 +233,7 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
     List<Comment> comments;
     int n;
     if (args.commentID != null) {
-      comments = await BackendAPI().feedsAPI.fetchComment(args.replyTo ?? args.commentID);
+      comments = await BackendAPI().feedsAPI.fetchComment(args.replyTo ?? args.commentID!);
       n = 1;
     } else {
       comments = await BackendAPI().feedsAPI.fetchCommentsForFeedEntry(feedEntryID, limit: limit, offset: offset);
@@ -253,9 +253,7 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
 
   @override
   Future<void> close() async {
-    if (appDataStream != null) {
-      await appDataStream.cancel();
-    }
+    await appDataStream?.cancel();
     await super.close();
   }
 }

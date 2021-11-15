@@ -31,6 +31,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:collection/collection.dart';
 
 class SelectNewProductPage extends TraceableStatefulWidget {
   @override
@@ -45,7 +46,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
   bool userLoggedIn = false;
 
   final TextEditingController controller = TextEditingController();
-  Timer autocompleteTimer;
+  Timer? autocompleteTimer;
 
   @override
   Widget build(BuildContext context) {
@@ -244,9 +245,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
               setState(() {
                 preLoading = true;
               });
-              if (autocompleteTimer != null) {
-                autocompleteTimer.cancel();
-              }
+              autocompleteTimer?.cancel();
               autocompleteTimer = Timer(Duration(milliseconds: 500), () {
                 BlocProvider.of<SelectNewProductBloc>(context).add(SelectNewProductBlocEventSearchTerms(value));
                 autocompleteTimer = null;
@@ -300,7 +299,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     List<Product> added = difference(selectedProducts, initialProducts);
     List<Product> removed = difference(initialProducts, selectedProducts);
     List<Widget> children = products.map<Widget>((p) {
-      final ProductCategoryUI categoryUI = productCategories[p.category];
+      final ProductCategoryUI categoryUI = productCategories[p.category]!;
       List<Widget> subtitle = [Text(p.name, style: TextStyle(fontSize: 20))];
       if (p.specs != null && p.specs.by != null) {
         subtitle.addAll([
@@ -352,8 +351,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
       subtitle: Text('Create new toolbox item', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
       onTap: () async {
         if (!BackendAPI().usersAPI.loggedIn) {
-          int choice = await showAccountCreationPopup();
-          if (choice == 0) {
+          int? choice = await showAccountCreationPopup();
+          if ((choice ?? 0) == 0) {
             return;
           }
           Completer accountFuture = Completer();
@@ -377,7 +376,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
           });
         }
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToProductTypeEvent(futureFn: (future) async {
-          Product product = await future;
+          Product? product = await future;
           if (product != null) {
             BlocProvider.of<SelectNewProductBloc>(context).add(SelectNewProductBlocEventCreateProduct(product));
           }
@@ -414,8 +413,8 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     );
   }
 
-  Future<int> showAccountCreationPopup() async {
-    int choice = await showDialog<int>(
+  Future<int?> showAccountCreationPopup() async {
+    int? choice = await showDialog<int>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -424,19 +423,19 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
             content: Text(
                 'Hey thanks for taking the time to add a missing product, it requires a sgl account tho, please create one or login first.\n\nThanks:)'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, 0);
                 },
                 child: Text('CANCEL'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, 1);
                 },
                 child: Text('LOGIN'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, 2);
                 },
@@ -448,7 +447,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     return choice;
   }
 
-  bool contains(List<Product> l, Product p) => l.firstWhere((a) => a.id == p.id, orElse: () => null) != null;
+  bool contains(List<Product> l, Product p) => l.firstWhereOrNull((a) => a.id == p.id) != null;
 
   List<Product> difference(List<Product> l1, List<Product> l2) {
     List<Product> diff = [];
@@ -462,9 +461,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
 
   @override
   void dispose() {
-    if (autocompleteTimer != null) {
-      autocompleteTimer.cancel();
-    }
+    autocompleteTimer?.cancel();
     super.dispose();
   }
 }

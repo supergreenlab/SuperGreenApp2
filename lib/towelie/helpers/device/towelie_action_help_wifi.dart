@@ -31,7 +31,7 @@ class TowelieActionHelpWifi extends TowelieActionHelp {
 - remote **control**''',
       name: 'towelieHelperDeviceWifi',
       desc: 'Towelie Helper Device wifi',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

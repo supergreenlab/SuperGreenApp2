@@ -28,6 +28,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/red_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
+import 'package:collection/collection.dart';
 
 class ProductSupplierPage extends TraceableStatefulWidget {
   @override
@@ -106,7 +107,7 @@ class _ProductSupplierPageState extends State<ProductSupplierPage> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: GreenButton(
                       title: 'Ok',
-                      onPressed: urlControllers.firstWhere((c) => c.text != '', orElse: () => null) != null
+                      onPressed: urlControllers.firstWhereOrNull((c) => c.text != '') != null
                           ? () {
                               List<Product> products = [];
                               for (int i = 0; i < this.products.length; ++i) {

@@ -22,15 +22,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SectionTitle extends StatelessWidget {
   final String title;
   final String icon;
-  final Color backgroundColor;
-  final Color titleColor;
+  final Color? backgroundColor;
+  final Color? titleColor;
   final bool large;
-  final double elevation;
+  final double? elevation;
   final double iconPadding;
 
   const SectionTitle(
-      {@required this.title,
-      @required this.icon,
+      {required this.title,
+      required this.icon,
       this.large = false,
       this.backgroundColor,
       this.titleColor = Colors.black,
@@ -42,26 +42,17 @@ class SectionTitle extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         boxShadow: elevation != null
-            ? [
-                BoxShadow(
-                    offset: Offset(0, elevation),
-                    color: Colors.black12,
-                    blurRadius: elevation)
-              ]
+            ? [BoxShadow(offset: Offset(0, elevation!), color: Colors.black12, blurRadius: elevation!)]
             : null,
         color: backgroundColor ?? Color(0xFFECECEC),
       ),
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: 3.0, vertical: large ? 16.0 : 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: large ? 16.0 : 8.0),
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           _renderIcon(),
           Text(
             this.title,
-            style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: large ? 20 : 16,
-                color: this.titleColor),
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: large ? 20 : 16, color: this.titleColor),
           ),
         ]),
       ),
@@ -74,12 +65,9 @@ class SectionTitle extends StatelessWidget {
       child: Container(
         width: large ? 50 : 40,
         height: large ? 50 : 40,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(25))),
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(25))),
         child: Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: iconPadding, horizontal: iconPadding),
+          padding: EdgeInsets.symmetric(vertical: iconPadding, horizontal: iconPadding),
           child: SvgPicture.asset(this.icon),
         ),
       ),

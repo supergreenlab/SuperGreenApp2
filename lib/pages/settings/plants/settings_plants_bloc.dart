@@ -54,12 +54,11 @@ class SettingsPlantsBlocStateLoaded extends SettingsPlantsBlocState {
   List<Object> get props => [plants, boxes];
 }
 
-class SettingsPlantsBloc
-    extends Bloc<SettingsPlantsBlocEvent, SettingsPlantsBlocState> {
+class SettingsPlantsBloc extends Bloc<SettingsPlantsBlocEvent, SettingsPlantsBlocState> {
   List<Plant> plants = [];
   List<Box> boxes = [];
-  StreamSubscription<List<Plant>> _plantsStream;
-  StreamSubscription<List<Box>> _boxesStream;
+  StreamSubscription<List<Plant>>? _plantsStream;
+  StreamSubscription<List<Box>>? _boxesStream;
 
   //ignore: unused_field
   final MainNavigateToSettingsPlants args;
@@ -72,10 +71,8 @@ class SettingsPlantsBloc
   Stream<SettingsPlantsBlocState> mapEventToState(event) async* {
     if (event is SettingsPlantsBlocEventInit) {
       yield SettingsPlantsBlocStateLoading();
-      _plantsStream =
-          RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
-      _boxesStream =
-          RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
+      _plantsStream = RelDB.get().plantsDAO.watchPlants().listen(_onPlantListChange);
+      _boxesStream = RelDB.get().plantsDAO.watchBoxes().listen(_onBoxListChange);
     } else if (event is SettingsPlantsblocEventPlantListChanged) {
       yield SettingsPlantsBlocStateLoaded(event.plants, event.boxes);
     } else if (event is SettingsPlantsBlocEventDeletePlant) {
@@ -95,12 +92,8 @@ class SettingsPlantsBloc
 
   @override
   Future<void> close() async {
-    if (_plantsStream != null) {
-      await _plantsStream.cancel();
-    }
-    if (_boxesStream != null) {
-      await _boxesStream.cancel();
-    }
+    await _plantsStream?.cancel();
+    await _boxesStream?.cancel();
     return super.close();
   }
 }

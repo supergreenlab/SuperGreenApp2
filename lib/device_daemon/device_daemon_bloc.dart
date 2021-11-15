@@ -29,6 +29,7 @@ import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:collection/collection.dart';
 
 abstract class DeviceDaemonBlocEvent extends Equatable {}
 
@@ -73,9 +74,9 @@ class DeviceDaemonBlocStateRequiresLogin extends DeviceDaemonBlocState {
 }
 
 class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
-  StreamSubscription<ConnectivityResult> _connectivity;
+  StreamSubscription<ConnectivityResult>? _connectivity;
 
-  Timer _timer;
+  Timer? _timer;
   List<Device> _devices = [];
   Map<int, bool> _deviceWorker = {};
 
@@ -114,10 +115,10 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
     }
     _deviceWorker[device.id] = true;
     try {
-      String auth = AppDB().getDeviceAuth(device.identifier);
+      String? auth = AppDB().getDeviceAuth(device.identifier);
       var ddb = RelDB.get().devicesDAO;
       try {
-        String identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
+        String? identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
         if (identifier == device.identifier) {
           if (device.isSetup == false) {
             await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null, auth: auth);
@@ -141,12 +142,11 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
         }
 
         await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
-        String ip;
         await new Future.delayed(const Duration(seconds: 2));
-        ip = await DeviceAPI.resolveLocalName(device.mdns);
+        String? ip = await DeviceAPI.resolveLocalName(device.mdns);
         if (ip != null && ip != "") {
           try {
-            String identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID', auth: auth);
+            String? identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID', auth: auth);
             if (identifier == device.identifier) {
               if (device.isSetup == false) {
                 await DeviceAPI.fetchAllParams(ip, device.id, (_) => null, auth: auth);
@@ -189,25 +189,21 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
       }
     });
     for (String key in DeviceWebsocket.websockets.keys) {
-      if (devices.firstWhere((de) => de.serverID == key, orElse: () => null) == null) {
+      if (devices.firstWhereOrNull((de) => de.serverID == key) == null) {
         DeviceWebsocket.deleteIfExists(key);
       }
     }
   }
 
   Future<void> _updateDeviceTime(Device device) async {
-    final Param time = await RelDB.get().devicesDAO.getParam(device.id, 'TIME');
-    await DeviceHelper.updateIntParam(device, time, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
+    final Param? time = await RelDB.get().devicesDAO.getParam(device.id, 'TIME');
+    await DeviceHelper.updateIntParam(device, time!, DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000);
   }
 
   @override
   Future<void> close() async {
-    if (_timer != null) {
-      _timer.cancel();
-    }
-    if (_connectivity != null) {
-      _connectivity.cancel();
-    }
+    _timer?.cancel();
+    _connectivity?.cancel();
     return super.close();
   }
 }

@@ -39,13 +39,12 @@ We curated a list of the **community's growboxes** for you to choose from and be
 ''',
       name: 'towelieGrowboxProducts',
       desc: 'Towelie Growbox Products',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
   static Future createProductsGrowbox(Feed feed) async {
-    YamlMap yml = loadYaml(await rootBundle
-        .loadString('assets/products/initial_checklist_growbox.yml'));
+    YamlMap yml = loadYaml(await rootBundle.loadString('assets/products/initial_checklist_growbox.yml'));
     await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
       type: 'FE_PRODUCTS',
       feed: feed.id,

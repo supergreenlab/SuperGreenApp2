@@ -31,7 +31,7 @@ The **IP address** can be easily found on your **router\'s home page**.
 To **access your router's homepage**: take the **IP** address of your **mobile phone** or **laptop**, replace the last digit by **1** and **type that** in a browser.''',
       name: 'towelieHelperAddExistingDevice',
       desc: 'Towelie Helper Add existing device',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -43,8 +43,7 @@ To **access your router's homepage**: take the **IP** address of your **mobile p
     final ddb = RelDB.get().devicesDAO;
     int nDevices = await ddb.nDevices().getSingle();
     if (nDevices == 0) {
-      yield TowelieBlocStateHelper(event.settings,
-          TowelieActionHelpAddExistingDevice.towelieHelperAddExistingDevice);
+      yield TowelieBlocStateHelper(event.settings, TowelieActionHelpAddExistingDevice.towelieHelperAddExistingDevice);
     }
   }
 }
