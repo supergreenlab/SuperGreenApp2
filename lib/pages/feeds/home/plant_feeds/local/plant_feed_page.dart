@@ -65,7 +65,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Plant feed',
       name: 'plantFeedPageTitle',
       desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -74,7 +74,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Viewing single log entry',
       name: 'plantFeedPageSingleEntry',
       desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -83,7 +83,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'View complete diary',
       name: 'plantFeedPageSingleEntryButton',
       desc: 'Button that shows the complete diary when looking at a single feed entry',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -92,7 +92,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Defoliation',
       name: 'plantFeedPageMenuDefoliation',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -101,7 +101,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Topping',
       name: 'plantFeedPageMenuTopping',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -110,7 +110,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Fimming',
       name: 'plantFeedPageMenuFimming',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -119,7 +119,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Bending',
       name: 'plantFeedPageMenuBending',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -128,7 +128,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Transplant',
       name: 'plantFeedPageMenuTransplant',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -137,7 +137,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Germinating',
       name: 'plantFeedPageMenuGerminating',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -146,7 +146,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Vegging',
       name: 'plantFeedPageMenuVegging',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -155,7 +155,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Blooming',
       name: 'plantFeedPageMenuBlooming',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -164,7 +164,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Drying',
       name: 'plantFeedPageMenuDrying',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -173,7 +173,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Curing',
       name: 'plantFeedPageMenuCuring',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -182,7 +182,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Grow log',
       name: 'plantFeedPageMenuGrowlog',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -191,7 +191,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Measure',
       name: 'plantFeedPageMenuMeasure',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -200,7 +200,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Nutrient mix',
       name: 'plantFeedPageMenuNutrientMix',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -209,7 +209,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Watering',
       name: 'plantFeedPageMenuWatering',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -218,7 +218,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Plant training',
       name: 'plantFeedPageMenuPlantTraining',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -227,7 +227,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Life events',
       name: 'plantFeedPageMenuLifeEvents',
       desc: 'Speed dial (lower right menu) button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -236,7 +236,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Loading plant..',
       name: 'plantFeedPageLoading',
       desc: 'Loading message while fetching plant from db',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -245,7 +245,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Plant was removed or archived.',
       name: 'plantFeedPageArchived',
       desc: 'Message displayed when the plant that was displayed has be removed or archived',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -254,7 +254,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'OPEN PLANT LIST',
       name: 'plantFeedPageOpenPlantMenu',
       desc: 'Button displayed under plantFeedPageArchived, opens the plant menu',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -263,7 +263,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'You have no plant yet.',
       name: 'plantFeedPageNoPlantYet',
       desc: 'Displayed when no plant has been added to the app yet',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -272,7 +272,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'Add your first',
       name: 'plantFeedPageAddFirstPlantPart1',
       desc: 'First part of the "Add your first PLANT" text when no plant yet',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -281,7 +281,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'PLANT',
       name: 'plantFeedPageAddFirstPlantPart2',
       desc: 'Second part of the "Add your first PLANT" text when no plant yet',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -290,7 +290,7 @@ class PlantFeedPage extends TraceableStatefulWidget {
       'START',
       name: 'plantFeedPageStart',
       desc: 'Button displayed under plantFeedPageAddFirstPlantPart2, opens the plant creation user flow',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

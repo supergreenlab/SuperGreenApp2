@@ -31,22 +31,20 @@ class TowelieButtonViewPlant extends TowelieButton {
       '''View plant''',
       name: 'towelieButtonViewPlant',
       desc: 'Towelie Button view plant',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton(Plant plant) =>
-      TowelieButton.createButton(_id, {
+  static Map<String, dynamic> createButton(Plant plant) => TowelieButton.createButton(_id, {
         'title': TowelieButtonViewPlant.towelieButtonViewPlant,
         'plantID': plant.id,
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     final bdb = RelDB.get().plantsDAO;
     Plant plant = await bdb.getPlant(event.params['plantID']);
     yield TowelieBlocStateHomeNavigation(HomeNavigateToPlantFeedEvent(plant));

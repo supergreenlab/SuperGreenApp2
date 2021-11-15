@@ -37,7 +37,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Controller Wifi setup',
       name: 'deviceWifiPageTitle',
       desc: 'Device wifi configuration page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -46,7 +46,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Couldn\'t find the controller\non your network.',
       name: 'deviceWifiPageNoControllerFound',
       desc: 'Device wifi page controller not found on network after setting wifi credentials.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -55,7 +55,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Sometime it just takes a bit more time,\nretry search:',
       name: 'deviceWifiPageNotFoundRetry',
       desc: 'Device wifi page controller not found on network after setting wifi credentials.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -64,7 +64,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'RETRY SEARCH',
       name: 'deviceWifiPageRetrySearch',
       desc: 'Retry search button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -73,7 +73,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Is the emoji wifi back?\nThen the entered credentials were wrong.\nConnect to it, then tap this button:',
       name: 'deviceWifiPageNotFoundInstructions',
       desc: 'Instruction message to check wether connection failed or not',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -82,7 +82,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'RETRY CREDENTIALS',
       name: 'deviceWifiPageRetryCredentials',
       desc: 'Retry credentials button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -91,7 +91,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Enter your home wifi SSID',
       name: 'deviceWifiPageWifiInputLabel',
       desc: 'Label for the wifi ssid input field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -100,7 +100,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Enter your home wifi password',
       name: 'deviceWifiPageWifiPasswordLabel',
       desc: 'Label for the wifi password input field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -109,7 +109,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Make sure you are connected to the emoji wifi!',
       name: 'deviceWifiPageErrorConnectionEmoji',
       desc: 'Error message when the controller is unreachable',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -118,7 +118,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       'Searching controller on network\nplease wait..',
       name: 'deviceWifiPageSearchingController',
       desc: 'Loading message displayed when searching for controller on network',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -128,7 +128,7 @@ class DeviceWifiPage extends TraceableStatefulWidget {
       args: [tries, totalTries],
       name: 'deviceWifiPageSearchingControllerTries',
       desc: 'Loading message displayed when searching for controller on network',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

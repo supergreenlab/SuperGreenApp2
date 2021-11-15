@@ -31,7 +31,7 @@ class TowelieButtonShowProductsBundle extends TowelieButton {
       'Next',
       name: 'towelieButtonShowProductsBundle',
       desc: 'Towelie button show products bundle',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

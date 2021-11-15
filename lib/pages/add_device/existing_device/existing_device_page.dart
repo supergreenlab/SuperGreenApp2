@@ -37,7 +37,7 @@ class ExistingDevicePage extends TraceableStatefulWidget {
       'Add controller',
       name: 'existingDevicePageTitle',
       desc: 'Existing device page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -46,7 +46,7 @@ class ExistingDevicePage extends TraceableStatefulWidget {
       'Searching controller..',
       name: 'existingDeviceSearching',
       desc: 'Searching controller loading text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -55,7 +55,7 @@ class ExistingDevicePage extends TraceableStatefulWidget {
       'Enter controller name or IP',
       name: 'instructionsExistingDeviceTitle',
       desc: 'Instructions existing device title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -65,7 +65,7 @@ class ExistingDevicePage extends TraceableStatefulWidget {
 Then we\'ll search for it **by name** or **by IP**, please **fill** the following text field.''',
       name: 'instructionsExistingDevice',
       desc: 'Instructions existing device',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -74,7 +74,7 @@ Then we\'ll search for it **by name** or **by IP**, please **fill** the followin
       'Ex: supergreencontroller or IP address',
       name: 'existingDeviceNameHint',
       desc: 'Hint text for the device name field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -84,7 +84,7 @@ Then we\'ll search for it **by name** or **by IP**, please **fill** the followin
       args: [controller],
       name: 'existingDeviceNotFound',
       desc: 'Hint text for the device name field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -93,7 +93,7 @@ Then we\'ll search for it **by name** or **by IP**, please **fill** the followin
       'SEARCH CONTROLLER',
       name: 'existingDeviceSearchButton',
       desc: 'Label for the search controller button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

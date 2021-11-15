@@ -40,7 +40,7 @@ class FeedWaterCardPage extends StatefulWidget {
       'Watering',
       name: 'feedWateringCardPageTitle',
       desc: 'Feed watering card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -49,7 +49,7 @@ class FeedWaterCardPage extends StatefulWidget {
       'Water quantity',
       name: 'feedWateringCardPageVolume',
       desc: 'Feed watering card volume',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -59,7 +59,7 @@ class FeedWaterCardPage extends StatefulWidget {
       args: [yesNo],
       name: 'feedWateringCardPageWasDry',
       desc: 'Feed watering card was dry',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -69,7 +69,7 @@ class FeedWaterCardPage extends StatefulWidget {
       args: [yesNo],
       name: 'feedWateringCardPageWithNutes',
       desc: 'Feed watering card with nutes',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -78,7 +78,7 @@ class FeedWaterCardPage extends StatefulWidget {
       'Observations',
       name: 'feedWateringCardPageObservations',
       desc: 'Feed watering observations label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

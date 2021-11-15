@@ -43,7 +43,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
       'Alerts',
       name: 'settingsPlantAlertPageTitle',
       desc: 'Device alerts page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -52,7 +52,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
       'Loading',
       name: 'settingsPlantAlertPageLoading',
       desc: 'Loading text when setting alert parameters',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -61,7 +61,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
       'Alert settings',
       name: 'settingsPlantAlertPageSectionTitle',
       desc: 'Section title for the alert parameters setup',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -70,7 +70,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
       '**No need to constantly check the plant monitoring!** Just setup your alerts, and the app will tell you when something\'s wrong.',
       name: 'settingsPlantAlertPageInstructions',
       desc: 'Explanation for alerts',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -79,7 +79,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
       'Day alert settings are used while the lights are on.',
       name: 'settingsDayAlertPageInstructions',
       desc: 'Explanation for day alerts',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -88,7 +88,7 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
       'Night alert settings are used while the lights are off.',
       name: 'settingsNightAlertPageInstructions',
       desc: 'Explanation for night alerts',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

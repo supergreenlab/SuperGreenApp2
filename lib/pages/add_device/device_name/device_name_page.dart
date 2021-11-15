@@ -38,7 +38,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'Add controller',
       name: 'deviceNamePageTitle',
       desc: 'Device name page title',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -47,7 +47,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'Setting controller name..',
       name: 'deviceNamePageLoading',
       desc: 'Loading text when setting controller name',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -56,7 +56,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'Set controller\'s name',
       name: 'deviceNamePageSetNameSectionTitle',
       desc: 'Section title for the controller name input',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -65,7 +65,7 @@ class DeviceNamePage extends TraceableStatefulWidget {
       'ex: controller',
       name: 'deviceNamePageSetNameHint',
       desc: 'Hint for the controller name input',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

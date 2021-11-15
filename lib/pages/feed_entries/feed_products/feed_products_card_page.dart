@@ -48,7 +48,7 @@ class FeedProductsCardPage extends StatelessWidget {
       'Towelie\'s selection',
       name: 'feedProductsCardPageTitle',
       desc: 'Title for the product cards, they display a list of products.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -57,7 +57,7 @@ class FeedProductsCardPage extends StatelessWidget {
       'View',
       name: 'feedProductsCardPageViewButton',
       desc: 'Opens the product web page',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

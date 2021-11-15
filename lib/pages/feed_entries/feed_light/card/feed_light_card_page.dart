@@ -37,7 +37,7 @@ class FeedLightCardPage extends StatelessWidget {
       'Stretch control',
       name: 'feedLightCardPageTitle',
       desc: 'Feed Light dimming control card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -46,7 +46,7 @@ class FeedLightCardPage extends StatelessWidget {
       'channel',
       name: 'feedLightCardPageChannel',
       desc: 'LED power widget label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -31,7 +31,7 @@ class FeedVentilationManualFormPage extends TraceableStatefulWidget {
       'This is the **manual blower control** mode, just set a value and the blower will stay at this power.',
       name: 'instructionsManualTimerModeDescription',
       desc: 'Instructions for blower manual mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

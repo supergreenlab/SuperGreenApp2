@@ -33,7 +33,7 @@ class FeedUnknownCardPage extends StatelessWidget {
       'Unknown card',
       name: 'feedUnknownCardPageTitle',
       desc: 'Feed unknown card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -42,7 +42,7 @@ class FeedUnknownCardPage extends StatelessWidget {
       'Upgrade your app',
       name: 'feedUnknownCardPageUpgradeApp',
       desc: 'Feed unknown card upgrade app',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -36,7 +36,7 @@ class EnvironmentsPage extends StatelessWidget {
       'Monitoring feature\nrequires an SGL controller',
       name: 'environmentsPageControllerRequired',
       desc: 'Message over the graphs when controller is missing',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -45,7 +45,7 @@ class EnvironmentsPage extends StatelessWidget {
       'SHOP NOW',
       name: 'environmentsPageShopNow',
       desc: 'SHOW NOW button displayed when controller is missing',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -54,7 +54,7 @@ class EnvironmentsPage extends StatelessWidget {
       'or',
       name: 'environmentsPageOr',
       desc: 'SHOW NOW *or* DIY NOW displayed when controller is missing',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -63,7 +63,7 @@ class EnvironmentsPage extends StatelessWidget {
       'DIY NOW',
       name: 'environmentsPageDIYNow',
       desc: 'DIY NOW button displayed when controller is missing',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -73,7 +73,7 @@ class EnvironmentsPage extends StatelessWidget {
       name: 'environmentsPageAlreadyGotOne',
       desc:
           'label for the SETUP CONTROLLER button displayed when controller is missing, opens the select controller dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -82,7 +82,7 @@ class EnvironmentsPage extends StatelessWidget {
       'SETUP CONTROLLER',
       name: 'environmentsPageSetupController',
       desc: 'SETUP CONTROLLER displayed when controller is missing, opens the select controller dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -91,7 +91,7 @@ class EnvironmentsPage extends StatelessWidget {
       'Environment control',
       name: 'environmentsPageControlTitle',
       desc: 'Title displayed above the environment control buttons',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -100,7 +100,7 @@ class EnvironmentsPage extends StatelessWidget {
       'Light',
       name: 'environmentsPageLight',
       desc: 'Label for the light dimming control page button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -109,7 +109,7 @@ class EnvironmentsPage extends StatelessWidget {
       'Ventil',
       name: 'environmentsPageVentilation',
       desc: 'Label for the ventilation control page button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -118,7 +118,7 @@ class EnvironmentsPage extends StatelessWidget {
       'Schedule',
       name: 'environmentsPageSchedule',
       desc: 'Label for the schedule control page button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -127,7 +127,7 @@ class EnvironmentsPage extends StatelessWidget {
       'Alerts',
       name: 'environmentsPageAlerts',
       desc: 'Label for the alert control page button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

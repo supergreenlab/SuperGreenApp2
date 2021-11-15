@@ -43,7 +43,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'NO SGL DEVICE',
       name: 'selectDeviceSkipAddDevice',
       desc: 'Button to skip the sgl device config',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -52,7 +52,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'NEW CONTROLLER',
       name: 'selectDeviceNewController',
       desc: 'Add new controller button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -61,7 +61,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'Select a controller below',
       name: 'selectDeviceListTitle',
       desc: 'Instruction title above the controller list.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -70,7 +70,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'Tap to select',
       name: 'selectDeviceListItemInstruction',
       desc: 'Instruction for controller list items.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -79,7 +79,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'You have no controller\nfor your new lab.',
       name: 'selectDeviceNoController',
       desc: 'Message on the select device screen when no controller added yet',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -88,7 +88,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'Add a first',
       name: 'selectDeviceAddFirst',
       desc: 'First half of the "Add a first controller" instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -97,7 +97,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'CONTROLLER',
       name: 'selectDeviceAddFirstController',
       desc: 'Second half of the "Add a first controller" instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -106,7 +106,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'ADD',
       name: 'selectDeviceAdd',
       desc: 'First part of the "Add or Shop now" instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -115,7 +115,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'OR',
       name: 'selectDeviceOr',
       desc: 'Second part of the "Add or Shop now" instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -124,7 +124,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'SHOP NOW',
       name: 'selectDeviceShopNow',
       desc: 'Last part of the "Add or Shop now" instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -133,7 +133,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'DIY NOW',
       name: 'selectDeviceDIYNow',
       desc: 'After the "Add or Shop now" instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -142,7 +142,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'Continue without controller',
       name: 'selectDeviceContinueWithoutController',
       desc: 'Skip select controller',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -152,7 +152,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       args: [name],
       name: 'selectDeviceDeleteControllerDialogTitle',
       desc: 'Title for the delete controller dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -161,7 +161,7 @@ class SelectDevicePage extends TraceableStatefulWidget {
       'This can\'t be reverted. Continue?',
       name: 'selectDeviceDeleteControllerDialogBody',
       desc: 'Confirm controller deletion',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -85,7 +85,7 @@ class FeedMediaFormPage extends TraceableStatefulWidget {
       'Attached media',
       name: 'feedMediaFormPageAttachedMedia',
       desc: 'Title for the image upload section',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -94,7 +94,7 @@ class FeedMediaFormPage extends TraceableStatefulWidget {
       'Delete this pic?',
       name: 'feedMediaFormPageDeletePicDialogTitle',
       desc: 'Title for the delete dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -103,7 +103,7 @@ class FeedMediaFormPage extends TraceableStatefulWidget {
       'Observations',
       name: 'feedMediaFormPageObservations',
       desc: 'Observation field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -112,7 +112,7 @@ class FeedMediaFormPage extends TraceableStatefulWidget {
       'Help request?',
       name: 'feedMediaFormPageHelpRequest',
       desc: 'Help request checkbox label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -121,7 +121,7 @@ class FeedMediaFormPage extends TraceableStatefulWidget {
       'Draft recovery',
       name: 'feedMediaFormPageDraftRecoveryDialogTitle',
       desc: 'Help request checkbox label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -130,7 +130,7 @@ class FeedMediaFormPage extends TraceableStatefulWidget {
       'Resume previous grow log?',
       name: 'feedMediaFormPageDraftRecoveryDialogBody',
       desc: 'Help request checkbox label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

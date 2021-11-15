@@ -31,7 +31,7 @@ class TowelieButtonEndChecklist extends TowelieButton {
       'Create plant',
       name: 'towelieButtonEndChecklist',
       desc: 'Towelie button end checklist',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

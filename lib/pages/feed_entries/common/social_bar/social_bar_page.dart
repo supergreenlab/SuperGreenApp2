@@ -40,7 +40,7 @@ class SocialBarPage extends StatelessWidget {
       args: [count],
       name: 'socialBarPagePageLikedBy',
       desc: 'Number of likes on a post',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

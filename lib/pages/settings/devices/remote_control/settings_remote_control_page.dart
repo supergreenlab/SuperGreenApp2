@@ -39,7 +39,7 @@ class SettingsRemoteControlPage extends StatefulWidget {
       args: [name],
       name: 'settingsRemoteControlPageControllerDone',
       desc: 'Controller remote control setup confirmation text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -48,7 +48,7 @@ class SettingsRemoteControlPage extends StatefulWidget {
       '**Please upgrade your controller** to enable remote control.\n\n**Go back to the previous screen** and tap the **"Firmware upgrade"** button.',
       name: 'settingsRemoteControlPageInstructionsNeedUpgrade',
       desc: 'Explanation for remote control when needing to upgrade controller',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -57,7 +57,7 @@ class SettingsRemoteControlPage extends StatefulWidget {
       '**Remote control requires to pair your mobile phone**. Please keep in mind: for now only **one** mobile phone can be paired at a time.',
       name: 'settingsRemoteControlPageInstructions',
       desc: 'Explanation for remote control',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -66,7 +66,7 @@ class SettingsRemoteControlPage extends StatefulWidget {
       'Login required',
       name: 'settingsRemoteControlPagePleaseLoginDialogTitle',
       desc: 'Login/create account dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -75,7 +75,7 @@ class SettingsRemoteControlPage extends StatefulWidget {
       'Login is required to enable remote control.',
       name: 'settingsRemoteControlPagePleaseLoginDialogBody',
       desc: 'Login/create account dialog body',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

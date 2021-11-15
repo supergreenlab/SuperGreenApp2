@@ -43,7 +43,7 @@ class FeedMeasureFormPage extends TraceableStatefulWidget {
       'Previous measures',
       name: 'feedMeasureFormPagePreviousMeasure',
       desc: 'Title for the previous measure selection',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -52,7 +52,7 @@ class FeedMeasureFormPage extends TraceableStatefulWidget {
       'Unselect this measure?',
       name: 'feedMeasureFormPageUnselectMeasureDialogTitle',
       desc: 'Title for the cancel previous measure dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -61,7 +61,7 @@ class FeedMeasureFormPage extends TraceableStatefulWidget {
       'Today\'s measure',
       name: 'feedMeasureFormPageTodayMeasure',
       desc: 'Title for the today measure selection',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -70,7 +70,7 @@ class FeedMeasureFormPage extends TraceableStatefulWidget {
       'Delete this pic?',
       name: 'feedMeasureFormPageDeletePicDialogTitle',
       desc: 'Title for the delete measure dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -79,7 +79,7 @@ class FeedMeasureFormPage extends TraceableStatefulWidget {
       'Observations',
       name: 'feedMeasureFormPageObservations',
       desc: 'Observation field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -35,7 +35,7 @@ class AddDevicePage extends TraceableStatelessWidget {
       'Optional Login',
       name: 'addDevicePagePleaseLoginDialogTitle',
       desc: 'Please login dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -44,7 +44,7 @@ class AddDevicePage extends TraceableStatelessWidget {
       'Optionnal login or account creation is preferable at this step.\nIt will allow to enable the remote control of your box for easier setup.\n\nNo personal infos required, not even an email address.',
       name: 'addDevicePagePleaseLoginDialogBody',
       desc: 'Please login dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -53,7 +53,7 @@ class AddDevicePage extends TraceableStatelessWidget {
       'Continue without',
       name: 'addDevicePagePleaseLoginDialogSkip',
       desc: 'Please login dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

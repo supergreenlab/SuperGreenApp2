@@ -45,7 +45,7 @@ class FeedMediaCardPage extends StatefulWidget {
       'Grow log',
       name: 'feedMediaCardPageTitle',
       desc: 'Feed media card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -54,7 +54,7 @@ class FeedMediaCardPage extends StatefulWidget {
       'Build log',
       name: 'feedMediaCardPageBoxTitle',
       desc: 'Feed media card title, different name when used in a box feed',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

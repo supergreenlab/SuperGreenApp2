@@ -29,7 +29,7 @@ class FeedDefoliationCardPage extends FeedCareCommonCardPage {
       'Defoliation',
       name: 'feedDefoliationCardPageTitle',
       desc: 'Defoliation card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

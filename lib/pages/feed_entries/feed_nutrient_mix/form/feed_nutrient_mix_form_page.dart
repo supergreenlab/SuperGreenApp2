@@ -55,7 +55,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Early veg',
       name: 'feedNutrientMixFormPagePhaseEarlyVeg',
       desc: 'Nutrient mix phase name "Early veg"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -64,7 +64,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Mid veg',
       name: 'feedNutrientMixFormPagePhaseMidVeg',
       desc: 'Nutrient mix phase name "Mid veg"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -73,7 +73,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Late veg',
       name: 'feedNutrientMixFormPagePhaseLateVeg',
       desc: 'Nutrient mix phase name "Late veg"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -82,7 +82,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Early bloom',
       name: 'feedNutrientMixFormPagePhaseEarlyBloom',
       desc: 'Nutrient mix phase name "Early bloom"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -91,7 +91,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Mid bloom',
       name: 'feedNutrientMixFormPagePhaseMidBloom',
       desc: 'Nutrient mix phase name "Mid bloom"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -100,7 +100,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Late bloom',
       name: 'feedNutrientMixFormPagePhaseLateBloom',
       desc: 'Nutrient mix phase name "Late bloom"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -109,7 +109,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Which plant(s) will receive this mix?',
       name: 'feedNutrientMixFormPageSelectPlant',
       desc: 'Plant picker title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -118,7 +118,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Nutrients in your ',
       name: 'feedNutrientMixFormPageNutrientInYourMixPart1',
       desc: 'First part of the "Nutrient in you mix" sentence, trailing space is important',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -127,7 +127,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'mix',
       name: 'feedNutrientMixFormPageNutrientInYourMixPart2',
       desc: 'Second part of the "Nutrient in you mix" sentence',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -136,7 +136,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Metrics & Observations',
       name: 'feedNutrientMixFormPageMetricsObservations',
       desc: 'Label for the metrics & observations field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -145,7 +145,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Save this nutrient mix',
       name: 'feedNutrientMixFormPageSaveMix',
       desc: 'Label for the mix name field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -154,7 +154,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'You can give this nutrient mix a name, for future reuse. (optional)',
       name: 'feedNutrientMixFormPageSaveMixInstructions',
       desc: 'Instructions for the mix name field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -163,7 +163,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Save for future re-use?',
       name: 'feedNutrientMixFormPageSaveMixSectionTitle',
       desc: 'Label for the mix name field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -172,7 +172,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Ex: Veg-1',
       name: 'feedNutrientMixFormPageNameHint',
       desc: 'Hint text for the mix name field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -181,7 +181,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Mix name',
       name: 'feedNutrientMixFormPageNameLabel',
       desc: 'Label for the mix name field',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -190,7 +190,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Water quantity',
       name: 'feedNutrientMixFormPageVolume',
       desc: 'Volume field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -199,7 +199,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'No nutrients in your toolbox yet.\nPress the + button up here.',
       name: 'feedNutrientMixFormPageNoToolsYet',
       desc: 'Text displayed when no nutrient in the toolbox yet',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -208,7 +208,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'End mix metrics',
       name: 'feedNutrientMixFormPageEndMixMetricsSectionTitle',
       desc: 'End mix metrics section title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -217,7 +217,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Solid',
       name: 'feedNutrientMixFormPageSolid',
       desc: 'Nutrient type toggle button "Solid" or "Liquid"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -226,7 +226,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Liquid',
       name: 'feedNutrientMixFormPageLiquid',
       desc: 'Nutrient type toggle button "Solid" or "Liquid"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -235,7 +235,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Reuse previous mix values?',
       name: 'feedNutrientMixFormPageReuseValuesSectionTitle',
       desc: 'Reuse previous values section title, followed by a list of saved mixes',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -244,7 +244,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Observations',
       name: 'feedNutrientMixFormPageObservations',
       desc: 'Observations field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -253,7 +253,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Mix phase',
       name: 'feedNutrientMixFormPageMixPhaseSectionTitle',
       desc: 'Mix phase section title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -262,7 +262,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'Set the right phase for this nutrient mix for better categorization.',
       name: 'feedNutrientMixFormPageMixPhaseInstruction',
       desc: 'Mix phase instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -272,7 +272,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       args: [name],
       name: 'feedNutrientMixFormPageUpdateExistingDialogTitle',
       desc: 'Title for the dialog displayed when updating an existing mix',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -281,7 +281,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'A nutrient mix with that name already exists, overwrite?',
       name: 'feedNutrientMixFormPageUpdateExistingDialogBody',
       desc: 'Body for the dialog displayed when updating an existing mix',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -290,7 +290,7 @@ class FeedNutrientMixFormPage extends TraceableStatefulWidget {
       'NO, CHANGE NAME',
       name: 'feedNutrientMixFormPageUpdateExistingDialogNo',
       desc: '"No" button for the dialog displayed when updating an existing mix',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

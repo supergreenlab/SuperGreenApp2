@@ -19,7 +19,7 @@ class PlantDrawerPage extends TraceableStatefulWidget {
       'Plant list',
       name: 'plantDrawerPagePlantList',
       desc: 'Plant list title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -28,7 +28,7 @@ class PlantDrawerPage extends TraceableStatefulWidget {
       'Add new plant',
       name: 'plantDrawerPageAddPlantLabel',
       desc: 'Add plant button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

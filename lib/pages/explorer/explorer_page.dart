@@ -55,7 +55,7 @@ class ExplorerPage extends TraceableStatefulWidget {
       'Explorer',
       name: 'explorerPageTitle',
       desc: 'Explorer page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -64,7 +64,7 @@ class ExplorerPage extends TraceableStatefulWidget {
       'Select which plant you want to make public',
       name: 'explorerPageSelectPlantTitle',
       desc: 'Title of the select page when selecting a plant to make public',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -74,7 +74,7 @@ class ExplorerPage extends TraceableStatefulWidget {
       args: [name],
       name: 'explorerPagePublicPlantConfirmation',
       desc: 'Confirmation text when a plant is now public',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -83,7 +83,7 @@ class ExplorerPage extends TraceableStatefulWidget {
       'Make a plant public',
       name: 'explorerPagePleaseLoginDialogTitle',
       desc: 'Title for the dialog when the user is not connected',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -92,7 +92,7 @@ class ExplorerPage extends TraceableStatefulWidget {
       'You need to be logged in to make a plant public.',
       name: 'explorerPagePleaseLoginDialogBody',
       desc: 'Content for the dialog when the user is not connected',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

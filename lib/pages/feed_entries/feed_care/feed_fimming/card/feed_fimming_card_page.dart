@@ -29,7 +29,7 @@ class FeedFimmingCardPage extends FeedCareCommonCardPage {
       'Fimming',
       name: 'feedFimmingCardPageTitle',
       desc: 'Fimming card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

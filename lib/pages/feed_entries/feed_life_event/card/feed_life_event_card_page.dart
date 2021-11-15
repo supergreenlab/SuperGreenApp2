@@ -38,7 +38,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
       'Life event',
       name: 'feedLifeEventCardPageTitle',
       desc: 'Life event card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -47,7 +47,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
       'Germination!',
       name: 'feedLifeEventCardPageGermination',
       desc: 'Germination life event',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -56,7 +56,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
       'Vegging Started!',
       name: 'feedLifeEventCardPageVeggingStarted',
       desc: 'Vegging started life event',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -65,7 +65,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
       'Blooming Started!',
       name: 'feedLifeEventCardPageBloomingStarted',
       desc: 'Blooming started life event',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -74,7 +74,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
       'Drying Started!',
       name: 'feedLifeEventCardPageDryingStarted',
       desc: 'Drying started life event',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -83,7 +83,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
       'Curing Started!',
       name: 'feedLifeEventCardPageCuringStarted',
       desc: 'Curing started life event',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -31,7 +31,7 @@ class TowelieButtonShowProductsGrowbox extends TowelieButton {
       'Go to checklist',
       name: 'towelieButtonGoToChecklist',
       desc: 'Towelie Button go to checklist',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

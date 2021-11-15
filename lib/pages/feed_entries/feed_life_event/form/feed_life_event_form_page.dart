@@ -45,7 +45,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'Germination date',
       name: 'feedLifeEventFormPagePhaseLabelGermination',
       desc: 'Life event germination label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -54,7 +54,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'Vegging since',
       name: 'feedLifeEventFormPagePhaseLabelVegging',
       desc: 'Life event vegging label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -63,7 +63,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'Blooming since',
       name: 'feedLifeEventFormPagePhaseLabelBlooming',
       desc: 'Life event blooming label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -72,7 +72,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'Drying since',
       name: 'feedLifeEventFormPagePhaseLabelDrying',
       desc: 'Life event drying label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -81,7 +81,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'Curing since',
       name: 'feedLifeEventFormPagePhaseLabelCuring',
       desc: 'Life event curing label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -90,7 +90,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'Phase',
       name: 'feedLifeEventFormPagePhaseLabel',
       desc: 'Label for phase',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -99,7 +99,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'change',
       name: 'feedLifeEventFormPageChangeButton',
       desc: '"Change" button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -108,7 +108,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'Not set',
       name: 'feedLifeEventFormPageNotSet',
       desc: 'Displayed when date is not set yet',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -117,7 +117,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
       'set',
       name: 'feedLifeEventFormPageSetButton',
       desc: '"Set" button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -29,7 +29,7 @@ class FeedToppingCardPage extends FeedCareCommonCardPage {
       'Topping',
       name: 'feedToppingCardPageTitle',
       desc: 'Topping card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

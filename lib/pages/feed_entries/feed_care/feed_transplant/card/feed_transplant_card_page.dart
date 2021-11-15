@@ -29,7 +29,7 @@ class FeedTransplantCardPage extends FeedCareCommonCardPage {
       'Transplant',
       name: 'feedTransplantCardPageTitle',
       desc: 'Transplant card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -38,7 +38,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Pair controller',
       name: 'devicePairingPageTitle',
       desc: 'Device pairing page title',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -47,7 +47,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Pairing controller..',
       name: 'devicePairingPageLoading',
       desc: 'Loading text when setting controller name',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -56,7 +56,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Pair controller for remote control',
       name: 'devicePairingPagePairControllerSectionTitle',
       desc: 'Section title for the controller pairing setup',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -65,7 +65,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       '**You can now enable remote control**\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.',
       name: 'devicePairingPageInstructions',
       desc: 'Explanation for remote control',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -74,7 +74,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       '**Controller needs upgrade to enable remote control.** Once your controller is added to the app, head to the controllers settings to upgrade to the latest version.\n\n**Keep control** of your box, even when you\'re away! If you skip this step, you will still be able to monitor your box sensors remotely.\n\n**Pairing also allows to remotely change your controller parameters**, like adjusting blower settings from work.',
       name: 'devicePairingPageInstructionsNeedUpgrade',
       desc: 'Explanation for remote control',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -83,7 +83,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Please login',
       name: 'devicePairingPagePleaseLoginDialogTitle',
       desc: 'Please login dialog title',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -92,7 +92,7 @@ class DevicePairingPage extends TraceableStatefulWidget {
       'Remote control requires a sgl account, please create one or login.',
       name: 'devicePairingPagePleaseLoginDialogBody',
       desc: 'Please login dialog body',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

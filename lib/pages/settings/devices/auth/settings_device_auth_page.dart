@@ -40,7 +40,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
       args: [name],
       name: 'settingsDeviceAuthPageControllerDone',
       desc: 'Controller remote control setup confirmation text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -49,7 +49,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
       '**Please upgrade your controller** to enable password lock.**Go back to the previous screen** and tap the **"Firmware upgrade"** button.\n\nYou can **setup a password** to prevent unauthorized parameter changes on your controller.\n\n*Please keep in mind that this is by no mean top-notch security. Mostly an anti-curious roommate/brother feature. Local network communication is not using https so subject to mitm.*',
       name: 'settingsDeviceAuthPagePasswordInstructionsNeedsUpgrade',
       desc: 'Password protection instructions when controller needs upgrade.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -58,7 +58,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
       'You can **setup a password** to prevent unauthorized parameter changes on your controller.\n\n*Please keep in mind that this is by no mean top-notch security. Mostly an anti-curious roommate/brother feature. Local network communication is not using https so subject to mitm.*',
       name: 'settingsDeviceAuthPagePasswordInstructions',
       desc: 'Password protection instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -67,7 +67,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
       'Don\'t use your important password here.',
       name: 'settingsDeviceAuthPagePasswordWarning',
       desc: 'Password warning',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -76,7 +76,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
       'Old login/password doesn\'t match. Make sure the controller is on the same wifi network.',
       name: 'settingsDeviceAuthPageAuthError',
       desc: 'Old credentials error',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -32,7 +32,7 @@ class TowelieButtonINeedHelp extends TowelieButton {
       'Yes I want help!',
       name: 'towelieButtonINeedHelp',
       desc: 'Towelie Button I need help',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -60,7 +60,7 @@ class TowelieButtonIDontNeedHelp extends TowelieButton {
       'Nope already got it all.',
       name: 'towelieButtonIDontNeedHelp',
       desc: 'Towelie Button I dont need help',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

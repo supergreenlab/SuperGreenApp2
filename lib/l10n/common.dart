@@ -25,7 +25,7 @@ class CommonL10N {
       'Loading...',
       name: 'loading',
       desc: 'Loading message usually displayed on the fullscreen overlay',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -34,7 +34,7 @@ class CommonL10N {
       'Saving...',
       name: 'saving',
       desc: 'Saving message usually displayed on the fullscreen overlay',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -43,7 +43,7 @@ class CommonL10N {
       'Setting parameters..',
       name: 'settingParameters',
       desc: 'Setting parameter message usually displayed on the fullscreen overlay',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -52,7 +52,7 @@ class CommonL10N {
       'Done!',
       name: 'done',
       desc: 'Success message usually displayed on the fullscreen overlay',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -61,7 +61,7 @@ class CommonL10N {
       'DONE',
       name: 'doneButton',
       desc: '"Done" label for confirmation buttons',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -70,7 +70,7 @@ class CommonL10N {
       'NO',
       name: 'no',
       desc: 'Used in confirmation dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -79,7 +79,7 @@ class CommonL10N {
       'YES',
       name: 'yes',
       desc: 'Used in confirmation dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -88,7 +88,7 @@ class CommonL10N {
       'OK',
       name: 'ok',
       desc: 'Used in confirmation dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -97,7 +97,7 @@ class CommonL10N {
       'OR',
       name: 'or',
       desc: 'Used in confirmation dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -106,7 +106,7 @@ class CommonL10N {
       'CANCEL',
       name: 'cancel',
       desc: 'Used in confirmation dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -115,7 +115,7 @@ class CommonL10N {
       'LOGIN / CREATE ACCOUNT',
       name: 'loginCreateAccount',
       desc: 'Used in "please login" dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -124,7 +124,7 @@ class CommonL10N {
       'Login required',
       name: 'loginRequiredDialogTitle',
       desc: 'Used in "please login" dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -133,7 +133,7 @@ class CommonL10N {
       'Please log in or create an account.',
       name: 'loginRequiredDialogBody',
       desc: 'Used in "please login" dialogs',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -142,7 +142,7 @@ class CommonL10N {
       'Unsaved changes',
       name: 'unsavedChangeDialogTitle',
       desc: 'Title for the "unsaved changes" dialog when pressing back',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -151,7 +151,7 @@ class CommonL10N {
       'Changes will not be saved. Continue?',
       name: 'unsavedChangeDialogBody',
       desc: 'Body for the "unsaved changes" dialog when pressing back',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -160,7 +160,7 @@ class CommonL10N {
       'This can\'t be reverted. Continue?',
       name: 'confirmUnRevertableChange',
       desc: 'Body for the delete dialog confirmation',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 }

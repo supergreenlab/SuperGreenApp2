@@ -37,7 +37,7 @@ class SelectBoxPage extends TraceableStatelessWidget {
       'You have no lab yet',
       name: 'selectBoxPageNoLab',
       desc: 'Message displayed when the app has no lab created yet.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -46,7 +46,7 @@ class SelectBoxPage extends TraceableStatelessWidget {
       'Create your first',
       name: 'selectBoxPageCreateFirst',
       desc: 'First part of the "Create your first GREEN LAB" text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -55,7 +55,7 @@ class SelectBoxPage extends TraceableStatelessWidget {
       'GREEN LAB',
       name: 'selectBoxPageCreateFirstLab',
       desc: 'Displayed under the selectBoxPageCreateFirstLab text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -64,7 +64,7 @@ class SelectBoxPage extends TraceableStatelessWidget {
       'CREATE',
       name: 'selectBoxPageCreateLabButton',
       desc: 'Lab creation button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -73,7 +73,7 @@ class SelectBoxPage extends TraceableStatelessWidget {
       'Add new green lab',
       name: 'selectBoxPageAddNewGreenLab',
       desc: 'Last item of the Lab list is a button to create a new one',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -82,7 +82,7 @@ class SelectBoxPage extends TraceableStatelessWidget {
       'Tap to select',
       name: 'selectBoxPageTapSelect',
       desc: 'Label for the Labs list items',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -43,7 +43,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       'Refreshing..',
       name: 'settingsDevicePageLoading',
       desc: 'Loading screen while refreshing parameters',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -53,7 +53,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       args: [name],
       name: 'settingsDevicePageControllerRefreshed',
       desc: 'Controller params refreshed confirmation text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -63,7 +63,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       args: [name],
       name: 'settingsDevicePageControllerDone',
       desc: 'Controller updated confirmation text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -72,7 +72,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       'Controller name',
       name: 'settingsDevicePageControllerNameSection',
       desc: 'Controller name input section',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -81,7 +81,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       'Settings',
       name: 'settingsDevicePageControllerSettingsSection',
       desc: 'Controller name input section',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -90,7 +90,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       'Wifi config',
       name: 'settingsDevicePageWifiSettingsSection',
       desc: 'Wifi settings button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -99,7 +99,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       'Change your controller\'s wifi config',
       name: 'settingsDevicePageWifiSettingsLabel',
       desc: 'Wifi settings button label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -108,7 +108,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       'Wifi config changed successfully',
       name: 'settingsDevicePageWifiConfigSuccess',
       desc: 'Wifi config successful message',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -117,7 +117,7 @@ class SettingsDevicePage extends TraceableStatefulWidget {
       'Wifi config change failed',
       name: 'settingsDevicePageWifiConfigFailed',
       desc: 'Wifi config failed message',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

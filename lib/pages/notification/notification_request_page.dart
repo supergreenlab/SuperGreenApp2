@@ -33,7 +33,7 @@ class NotificationRequestPage extends TraceableStatelessWidget {
       'NOTIFY ME',
       name: 'notificationRequestButton',
       desc: 'Notification request button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -42,7 +42,7 @@ class NotificationRequestPage extends TraceableStatelessWidget {
       'NO THANKS',
       name: 'notificationRequestButtonCancel',
       desc: 'Notification request button cancel',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -51,7 +51,7 @@ class NotificationRequestPage extends TraceableStatelessWidget {
       'Would you like to activate notifications?',
       name: 'notificationRequestTitle',
       desc: 'Notification request purpose',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -65,7 +65,7 @@ class NotificationRequestPage extends TraceableStatelessWidget {
 - **Temperature** and **humidity** alerts''',
       name: 'notificationPurposes',
       desc: 'Notification purpose',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

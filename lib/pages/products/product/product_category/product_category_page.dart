@@ -36,7 +36,7 @@ class ProductTypePage extends TraceableStatefulWidget {
       'Please choose the new product\'s\ncategory.',
       name: 'productTypePageSelectCategorySectionTitle',
       desc: 'Section title for the product category list',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -45,7 +45,7 @@ class ProductTypePage extends TraceableStatefulWidget {
       'NEXT',
       name: 'productTypePageSelectCategoryNextButton',
       desc: 'Validation button for the select category page',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

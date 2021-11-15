@@ -31,7 +31,7 @@ class TowelieButtonShowProductsGrowingMedium extends TowelieButton {
       'Next',
       name: 'towelieButtonShowGrowingMedium',
       desc: 'Towelie button go to products growing medium',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

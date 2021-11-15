@@ -37,7 +37,7 @@ class NewDevicePage extends TraceableStatelessWidget {
       'Add controller',
       name: 'newDevicePageTitle',
       desc: 'New device page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -46,7 +46,7 @@ class NewDevicePage extends TraceableStatelessWidget {
       'Connecting to controller\'s wifi',
       name: 'newDevicePageEmojiWifiSectionTitle',
       desc: 'New device page emoji wifi section title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -55,7 +55,7 @@ class NewDevicePage extends TraceableStatelessWidget {
       '**Couldn\'t connect** to the 🤖🍁 wifi! Please go to your **mobile phone settings** to connect manually with the **following credentials**:',
       name: 'instructionsNewDeviceWifiFailed',
       desc: 'Instructions new device wifi failed',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -64,7 +64,7 @@ class NewDevicePage extends TraceableStatelessWidget {
       'SSID: 🤖🍁\nPassword: multipass',
       name: 'instructionsNewDeviceWifiFailed2',
       desc: 'Instructions new device wifi failed2',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -73,7 +73,7 @@ class NewDevicePage extends TraceableStatelessWidget {
       'Then press the **DONE** button below',
       name: 'instructionsNewDeviceWifiFailed3',
       desc: 'Instructions new device wifi failed3',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -82,7 +82,7 @@ class NewDevicePage extends TraceableStatelessWidget {
       'Trying to connect\nautomatically',
       name: 'newDeviceAutoConnect',
       desc: 'Waiting wifi connection loading',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

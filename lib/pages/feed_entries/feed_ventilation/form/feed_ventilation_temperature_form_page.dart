@@ -33,7 +33,7 @@ class FeedVentilationTemperatureFormPage extends TraceableStatefulWidget {
       '''This is the **Temperature based blower control**, in this mode the blower is **in sync with the box temperature sensor**.''',
       name: 'instructionsBlowerTemperatureModeDescription',
       desc: 'Instructions for blower temperature mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

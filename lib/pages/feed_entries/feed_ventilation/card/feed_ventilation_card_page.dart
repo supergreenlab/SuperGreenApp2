@@ -41,7 +41,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Ventilation change',
       name: 'feedVentilationCardPageTitle',
       desc: 'Feed ventilation card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -50,7 +50,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Unknown blower reference source, you might need to upgrade the app.',
       name: 'feedVentilationCardPageUpgrade',
       desc: 'Feed ventilation card upgrade',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -59,7 +59,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Low temperature\nsettings',
       name: 'feedVentilationCardPageLowTempSettings',
       desc: 'Feed ventilation card low temperature settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -68,7 +68,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'High temperature\nsettings',
       name: 'feedVentilationCardPageHighTempSettings',
       desc: 'Feed ventilation card high temperature settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -77,7 +77,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Temperature mode',
       name: 'feedVentilationCardPageTemperatureMode',
       desc: 'Feed ventilation card temperature mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -86,7 +86,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Low humidity\nsettings',
       name: 'feedVentilationCardPageLowHumiSettings',
       desc: 'Feed ventilation card low humidity settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -95,7 +95,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'High humidity\nsettings',
       name: 'feedVentilationCardPageHighHumiSettings',
       desc: 'Feed ventilation card high humidity settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -104,7 +104,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Humidity mode',
       name: 'feedVentilationCardPageHumidityMode',
       desc: 'Feed ventilation card humidity mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -113,7 +113,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Night settings',
       name: 'feedVentilationCardPageNightSettings',
       desc: 'Feed ventilation card night settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -122,7 +122,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Day settings',
       name: 'feedVentilationCardPageDaySettings',
       desc: 'Feed ventilation card day settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -131,7 +131,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Timer mode',
       name: 'feedVentilationCardPageTimerMode',
       desc: 'Feed ventilation card timer mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -140,7 +140,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Blower power',
       name: 'feedVentilationCardPageBlowerPower',
       desc: 'Feed ventilation card blower power',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -149,7 +149,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Manual mode',
       name: 'feedVentilationCardPageManualMode',
       desc: 'Feed ventilation card manual mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -158,7 +158,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Day',
       name: 'feedVentilationCardPageDay',
       desc: 'Label for the "Day" blower settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -167,7 +167,7 @@ class FeedVentilationCardPage extends StatelessWidget {
       'Night',
       name: 'feedVentilationCardPageNight',
       desc: 'Label for the "Night" blower settings',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

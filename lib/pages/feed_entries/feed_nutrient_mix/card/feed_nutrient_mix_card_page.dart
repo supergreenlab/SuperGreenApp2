@@ -40,7 +40,7 @@ class FeedNutrientMixCardPage extends StatefulWidget {
       'Observations',
       name: 'feedNutrientMixCardObservations',
       desc: 'Observation field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -49,7 +49,7 @@ class FeedNutrientMixCardPage extends StatefulWidget {
       'Nutrient mix',
       name: 'feedNutrientMixCardTitle',
       desc: 'Nutrient mix card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -58,7 +58,7 @@ class FeedNutrientMixCardPage extends StatefulWidget {
       'Water quantity',
       name: 'feedNutrientMixCardWaterQuantity',
       desc: 'Volume field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -68,7 +68,7 @@ class FeedNutrientMixCardPage extends StatefulWidget {
       args: [basedOn],
       name: 'feedNutrientMixCardFrom',
       desc: '"Based on" field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -78,7 +78,7 @@ class FeedNutrientMixCardPage extends StatefulWidget {
       args: [phase],
       name: 'feedNutrientMixCardPhase',
       desc: '"Phase" field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

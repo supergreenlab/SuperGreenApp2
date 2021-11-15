@@ -43,7 +43,7 @@ class FeedMeasureCardPage extends StatefulWidget {
       'Measure',
       name: 'feedMeasureCardPageTitle',
       desc: 'Feed measure card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -53,7 +53,7 @@ class FeedMeasureCardPage extends StatefulWidget {
       args: [days],
       name: 'feedMeasureCardPageDays',
       desc: 'Feed measure card duration in days',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -63,7 +63,7 @@ class FeedMeasureCardPage extends StatefulWidget {
       args: [seconds],
       name: 'feedMeasureCardPageSeconds',
       desc: 'Feed measure card duration in seconds',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -73,7 +73,7 @@ class FeedMeasureCardPage extends StatefulWidget {
       args: [seconds],
       name: 'feedMeasureCardPageMinutes',
       desc: 'Feed measure card duration in minutes',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -83,7 +83,7 @@ class FeedMeasureCardPage extends StatefulWidget {
       args: [hours],
       name: 'feedMeasureCardPageHours',
       desc: 'Feed measure card duration in hours',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -93,7 +93,7 @@ class FeedMeasureCardPage extends StatefulWidget {
       args: [days, hours],
       name: 'feedMeasureCardPageDaysAndHours',
       desc: 'Feed measure card duration in days and hours',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -30,7 +30,7 @@ class TowelieButtonStartChecklist extends TowelieButton {
       'Start',
       name: 'towelieButtonStartChecklist',
       desc: 'Towelie Button start checklist',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -29,7 +29,7 @@ class FeedBendingCardPage extends FeedCareCommonCardPage {
       'Bending',
       name: 'feedBendingCardPageTitle',
       desc: 'Bending card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

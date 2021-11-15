@@ -37,7 +37,7 @@ class PlantPickerPage extends TraceableStatefulWidget {
       args: [count],
       name: 'plantPickerPageSelectButton',
       desc: 'Confirmation button for the plant picker page',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

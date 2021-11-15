@@ -43,7 +43,7 @@ class CreatePlantPage extends TraceableStatefulWidget {
       args: [name, boxName],
       name: 'createPlantPageDoneMessage',
       desc: 'Message displayed when the plant has been created',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -52,7 +52,7 @@ class CreatePlantPage extends TraceableStatefulWidget {
       'Let\'s name your new plant:',
       name: 'createPlantPageNameLabel',
       desc: 'New plant name label text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -61,7 +61,7 @@ class CreatePlantPage extends TraceableStatefulWidget {
       'Ex: Gorilla Kush',
       name: 'createPlantPageNameHint',
       desc: 'New plant name hint text',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -70,7 +70,7 @@ class CreatePlantPage extends TraceableStatefulWidget {
       'Is this a single or multiple plant\ngrow diary?',
       name: 'createPlantPageSinglePlantDiarySectionTitle',
       desc: 'Section title for the "single plant" checkbox',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -79,7 +79,7 @@ class CreatePlantPage extends TraceableStatefulWidget {
       'Single plant grow diary',
       name: 'createPlantPageSinglePlantDiaryLabel',
       desc: 'Label for the "single plant" checkbox',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -88,7 +88,7 @@ class CreatePlantPage extends TraceableStatefulWidget {
       'CREATE PLANT',
       name: 'createPlantPageCreatePlantButton',
       desc: 'Button to validate the plant creation',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

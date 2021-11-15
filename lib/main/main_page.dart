@@ -170,7 +170,7 @@ class MainPage extends StatefulWidget {
       args: [progress],
       name: 'redBarSyncingProgress',
       desc: 'Syncing progress indicator in top red bar, when fetching all new diary cards',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
       examples: const {'progress': 'medias 12/17'},
     );
   }
@@ -180,7 +180,7 @@ class MainPage extends StatefulWidget {
       'Unknown route',
       name: 'mainNavigatorUnknownRoute',
       desc: 'Unknown route message (shouldnt appear)',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -31,7 +31,7 @@ class TowelieButtonShowProductsSeeds extends TowelieButton {
       'Next',
       name: 'towelieButtonShowProductsSeeds',
       desc: 'Towelie button go to products seeds',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

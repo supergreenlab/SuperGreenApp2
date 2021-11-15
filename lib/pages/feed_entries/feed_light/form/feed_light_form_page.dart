@@ -39,7 +39,7 @@ class FeedLightFormPage extends TraceableStatefulWidget {
       'Saving..',
       name: 'feedLightFormPageSaving',
       desc: 'Fullscreen loading',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -48,7 +48,7 @@ class FeedLightFormPage extends TraceableStatefulWidget {
       'Cancelling..',
       name: 'feedLightFormPageCancelling',
       desc: 'Fullscreen message when resetting all parameters',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -57,7 +57,7 @@ class FeedLightFormPage extends TraceableStatefulWidget {
       'Dimming control\nrequires an SGL controller',
       name: 'feedLightFormPageControllerRequired',
       desc: 'Fullscreen message displayed with no controller is available for light control',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -66,7 +66,7 @@ class FeedLightFormPage extends TraceableStatefulWidget {
       'SHOP NOW',
       name: 'feedLightFormPageShopNow',
       desc: 'Shop now button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -75,7 +75,7 @@ class FeedLightFormPage extends TraceableStatefulWidget {
       'DIY NOW',
       name: 'feedLightFormPageDIYNow',
       desc: 'DIY now button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -84,7 +84,7 @@ class FeedLightFormPage extends TraceableStatefulWidget {
       'or',
       name: 'feedLightFormPageOr',
       desc: 'The "or" in "Shop now or diy"',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

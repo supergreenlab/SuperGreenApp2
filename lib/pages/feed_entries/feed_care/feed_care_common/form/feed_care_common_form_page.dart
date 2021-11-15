@@ -86,7 +86,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       'Saving..',
       name: 'feedCareCommonFormSaving',
       desc: 'Displayd as a fullscreen loading',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -95,7 +95,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       'Before pics',
       name: 'feedCareCommonBeforePics',
       desc: 'Title for the "before pics" list',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -104,7 +104,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       'After pics',
       name: 'feedCareCommonAfterPics',
       desc: 'Title for the "after pics" list',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -113,7 +113,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       'Delete this pic?',
       name: 'feedCareCommonDeletePicDialogTitle',
       desc: 'Title for the pic deletion confirmation dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -122,7 +122,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       'This can\'t be reverted. Continue?',
       name: 'feedCareCommonDeletePicDialogBody',
       desc: 'Body for the pic deletion confirmation dialog',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -131,7 +131,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       'Observations',
       name: 'feedCareCommonObservations',
       desc: 'Observations field label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -140,7 +140,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       'Draft recovery',
       name: 'feedCareCommonDraftRecoveryDialogTitle',
       desc: 'Draft recovery dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -150,7 +150,7 @@ abstract class FeedCareCommonFormPage<FormBloc extends FeedCareCommonFormBloc> e
       args: [title],
       name: 'feedCareCommonDraftRecoveryDialogBody',
       desc: 'Draft recovery dialog body',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

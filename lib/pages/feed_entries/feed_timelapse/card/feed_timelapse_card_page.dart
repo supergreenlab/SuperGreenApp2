@@ -44,7 +44,7 @@ class FeedTimelapseCardPage extends StatefulWidget {
       'Timelapse!',
       name: 'feedTimelapseCardPageTitle',
       desc: 'Feed timelapse card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

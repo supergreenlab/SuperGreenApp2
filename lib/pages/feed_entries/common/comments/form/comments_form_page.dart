@@ -69,7 +69,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Comments',
       name: 'commentsFormPageTitle',
       desc: 'Comments page title',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -78,7 +78,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Please login to add a comment',
       name: 'commentsFormPagePleaseLogin',
       desc: 'Used in "please login" dialogs',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -87,7 +87,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Replying to ',
       name: 'commentsFormPageReplyingTo',
       desc: 'Followed by a username when replying to a comment (trailing space is important)',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -96,7 +96,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Viewing single comment',
       name: 'commentsFormPageViewingSingleComment',
       desc: 'Button displayed when viewing a single comment',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -105,7 +105,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'View all comments',
       name: 'commentsFormPageViewAllComments',
       desc: 'Button displayed when viewing a single comment',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -114,7 +114,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'What kind of post do you want to do?',
       name: 'commentsFormPageCommentTypeTitle',
       desc: 'Title displayed above the comment types',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -123,7 +123,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Loading more comments..',
       name: 'commentsFormPageLoadingMoreComments',
       desc: 'Comments page auto-loading message at end of scroll',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -133,7 +133,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       args: [n],
       name: 'commentsFormPageNOtherRecommendations',
       desc: 'Comments page auto-loading message at end of scroll',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -143,7 +143,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       args: [nickname],
       name: 'commentsFormPageInputHintText',
       desc: 'Comments page input hint text',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -152,7 +152,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
       'Post',
       name: 'commentsFormPageSubmitComment',
       desc: 'Comments page input submit button',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

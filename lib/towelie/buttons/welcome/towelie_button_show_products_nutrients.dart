@@ -31,7 +31,7 @@ class TowelieButtonShowProductsNutrients extends TowelieButton {
       'Next',
       name: 'towelieButtonShowNutrients',
       desc: 'Towelie button show nutrients',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

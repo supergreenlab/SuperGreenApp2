@@ -31,7 +31,7 @@ class TowelieButtonSkipChecklist extends TowelieButton {
       'Skip checklist',
       name: 'towelieButtonSkipChecklist',
       desc: 'Towelie button skip checklist',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

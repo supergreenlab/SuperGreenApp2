@@ -39,7 +39,7 @@ class DeviceSetupPage extends TraceableStatefulWidget {
       'This controller is password protected, please enter the login/password below.',
       name: 'settingsDeviceSetupPagePasswordInstructions',
       desc: 'Password protection instructions',
-      locale: SGLLocalizations.current!.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

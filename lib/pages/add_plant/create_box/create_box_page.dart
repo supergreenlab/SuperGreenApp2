@@ -19,7 +19,7 @@ class CreateBoxPage extends TraceableStatefulWidget {
       'New green lab\'s name:',
       name: 'createBoxPageNewLabLabel',
       desc: 'New lab label for the name input',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -28,7 +28,7 @@ class CreateBoxPage extends TraceableStatefulWidget {
       'Ex: IkeHigh',
       name: 'createBoxPageNewLabHint',
       desc: 'New lab hint for the name input',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -37,7 +37,7 @@ class CreateBoxPage extends TraceableStatefulWidget {
       'CREATE LAB',
       name: 'createBoxPageNewLabButton',
       desc: 'New lab button for the name input',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

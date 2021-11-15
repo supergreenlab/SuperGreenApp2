@@ -41,7 +41,7 @@ class FeedScheduleFormPage extends TraceableStatefulWidget {
       '**Vegetative stage** is the phase between germination and blooming, the plant **grows and develops** it’s branches. It requires **at least 13h lights per days**, usual setting is **18h** per day.',
       name: 'instructionsVegScheduleHelper',
       desc: 'Veg schedule helper',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -50,7 +50,7 @@ class FeedScheduleFormPage extends TraceableStatefulWidget {
       '**Bloom stage** is the phase where the plant develops its flowers. It requires **at most 12h lights per days**, usual setting is **12h** per day.',
       name: 'instructionsBloomScheduleHelper',
       desc: 'Bloom schedule helper',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -59,7 +59,7 @@ class FeedScheduleFormPage extends TraceableStatefulWidget {
       'Auto flower plants are a special type of strain that **won’t require light schedule change** in order to start flowering. Their vegetative stage duration **can’t be controlled**, and varies from one plant to another.',
       name: 'instructionsAutoScheduleHelper',
       desc: 'Auto schedule helper',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

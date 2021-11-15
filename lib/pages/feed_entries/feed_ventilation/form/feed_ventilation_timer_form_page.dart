@@ -31,7 +31,7 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
       '''This is the **timer based blower control**, in this mode the blower is **in sync with the light timer**. Perfect if the box doesn't have a temperature sensor.\n\nEx: when the timer says 100% (which means all lights are on), it will set the blower power at the **blower day** value below.''',
       name: 'instructionsBlowerTimerModeDescription',
       desc: 'Instructions for blower timer mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

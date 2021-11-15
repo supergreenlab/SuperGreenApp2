@@ -35,7 +35,7 @@ class ProductsPage extends TraceableStatefulWidget {
       'Loading plant data',
       name: 'productsPageLoadingPlantData',
       desc: 'Products page loading plant data',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -44,7 +44,7 @@ class ProductsPage extends TraceableStatefulWidget {
       'Toolbox',
       name: 'productsPageTitle',
       desc: 'Products page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -53,7 +53,7 @@ class ProductsPage extends TraceableStatefulWidget {
       'Toolbox is empty\nuse the “+” above to add your first item.',
       name: 'productsPageToolboxEmptyOwnPlant',
       desc: 'Products page empty toolbox message when looking at own plant',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -62,7 +62,7 @@ class ProductsPage extends TraceableStatefulWidget {
       'Toolbox is empty',
       name: 'productsPageToolboxEmpty',
       desc: 'Products page empty toolbox message when looking at another plant',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -71,7 +71,7 @@ class ProductsPage extends TraceableStatefulWidget {
       'List the items you used for this grow for future reference and/or kowledge sharing.',
       name: 'productsPageToolboxInstructions',
       desc: 'Products toolbox instructions',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -80,7 +80,7 @@ class ProductsPage extends TraceableStatefulWidget {
       'by ',
       name: 'productsPageToolboxBy',
       desc: 'Products toolbox "by " prefix for brand name',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

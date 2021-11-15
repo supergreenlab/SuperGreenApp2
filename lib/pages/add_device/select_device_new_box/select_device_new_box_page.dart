@@ -36,7 +36,7 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
       'Setting up..',
       name: 'selectDeviceNewBoxSettingUp',
       desc: 'Message displayed while setting the controller\'s parameters',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -45,7 +45,7 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
       'Device can\'t handle\nmore box!',
       name: 'selectDeviceNewBoxNoMoreBox',
       desc: 'Message displayed when all box slots are already taken',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -54,7 +54,7 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
       'Available LED channels',
       name: 'selectDeviceNewBoxAvailableLEDChannels',
       desc: 'Available LED channels list title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -63,7 +63,7 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
       'Selected LED channels',
       name: 'selectDeviceNewBoxSelectedLEDChannels',
       desc: 'Available LED channels list title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -72,7 +72,7 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
       'SETUP BOX',
       name: 'selectDeviceNewBoxSetupBox',
       desc: 'Confirmation button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -81,7 +81,7 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
       'LED chan',
       name: 'selectDeviceNewBoxLEDChannel',
       desc: 'LED channels list items label',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

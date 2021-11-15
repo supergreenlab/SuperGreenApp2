@@ -44,7 +44,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
       'Viewing single log entry',
       name: 'publicPlantPageSingleEntry',
       desc: 'Label for the button that shows the complete diary when looking at a single feed entry',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -53,7 +53,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
       'View complete diary',
       name: 'publicPlantPageSingleEntryButton',
       desc: 'Button that shows the complete diary when looking at a single feed entry',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

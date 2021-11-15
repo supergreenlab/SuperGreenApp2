@@ -37,7 +37,7 @@ class FeedScheduleCardPage extends StatelessWidget {
       'Schedule change',
       name: 'feedScheduleCardPageTitle',
       desc: 'Feed schedule card title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -47,7 +47,7 @@ class FeedScheduleCardPage extends StatelessWidget {
       args: [phase],
       name: 'feedScheduleCardPagePhase',
       desc: 'Feed schedule card phase',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

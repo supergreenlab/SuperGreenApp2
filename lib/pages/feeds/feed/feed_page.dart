@@ -36,7 +36,7 @@ class FeedPage extends StatefulWidget {
       'loading more cards...',
       name: 'feedPageLoading',
       desc: 'Loading message usually displayed on the fullscreen overlay',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

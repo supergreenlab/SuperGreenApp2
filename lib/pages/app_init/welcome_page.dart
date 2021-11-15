@@ -34,7 +34,7 @@ class WelcomePage extends StatefulWidget {
 *Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*''',
       name: 'formAllowAnalytics',
       desc: 'Form allow analytics',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -44,7 +44,7 @@ class WelcomePage extends StatefulWidget {
 consequences surrounding the legality of how the app, lights or grow bundle are used. ''',
       name: 'formCGU',
       desc: 'Form CGU',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -30,7 +30,7 @@ class TowelieButtonCreatePlant extends TowelieButton {
       'GO!',
       name: 'towelieButtonCreatePlant',
       desc: 'Towelie button create plant',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

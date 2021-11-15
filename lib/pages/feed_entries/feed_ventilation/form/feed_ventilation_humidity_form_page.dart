@@ -32,7 +32,7 @@ class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
       '''This is the **Humidity based blower control**, in this mode the blower is **in sync with the box humidity sensor**.''',
       name: 'instructionsBlowerHumidityModeDescription',
       desc: 'Instructions for blower humidity mode',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

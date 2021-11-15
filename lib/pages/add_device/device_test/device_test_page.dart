@@ -41,7 +41,7 @@ class DeviceTestPage extends TraceableStatefulWidget {
       args: [time],
       name: 'testLEDTiming',
       desc: 'Wait message when setting a led to 100% for a few seconds when setting up a new controller.',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
       examples: const {'time': 0.34},
     );
   }
@@ -51,7 +51,7 @@ class DeviceTestPage extends TraceableStatefulWidget {
       'Testing LED',
       name: 'testingLEDTitle',
       desc: 'Title for the led testing page',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -60,7 +60,7 @@ class DeviceTestPage extends TraceableStatefulWidget {
       'Testing done',
       name: 'testingLEDDone',
       desc: 'Title for the led testing page',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -69,7 +69,7 @@ class DeviceTestPage extends TraceableStatefulWidget {
       'Press a led channel\nto switch it on/off:',
       name: 'ledTestingInstructions',
       desc: 'Intructions for the LED test page during new controller setup',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -78,7 +78,7 @@ class DeviceTestPage extends TraceableStatefulWidget {
       'Light',
       name: 'ledTestingChannelTitle',
       desc: 'The word displayed on each led channel widget',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -87,7 +87,7 @@ class DeviceTestPage extends TraceableStatefulWidget {
       'OK, ALL GOOD',
       name: 'ledTestingValidate',
       desc: 'Confirmation button for the LED testing page',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -96,7 +96,7 @@ class DeviceTestPage extends TraceableStatefulWidget {
       'NEW BOX SETUP',
       name: 'ledTestingPageTitle',
       desc: 'Led testing page title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

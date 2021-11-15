@@ -35,7 +35,7 @@ class AuthModalPage extends TraceableStatefulWidget {
       'NOTIFY ME',
       name: 'authModalButton',
       desc: 'Notification request button',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -45,7 +45,7 @@ class AuthModalPage extends TraceableStatefulWidget {
       args: [name],
       name: 'authModalTitle',
       desc: 'Device auth modal form title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -36,7 +36,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       'Setting up..',
       name: 'selectDeviceBoxSettingUp',
       desc: 'Message while app is configuring new box',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -45,7 +45,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       'Select controller\'s box slot',
       name: 'selectDeviceBoxSlot',
       desc: 'Select device box slot',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -54,7 +54,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       'Already running',
       name: 'selectDeviceBoxAlreadyRunning',
       desc: 'Select device box slot',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -63,7 +63,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       'Available',
       name: 'selectDeviceBoxAvailable',
       desc: 'Select device box slot available',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -72,7 +72,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       'No more free led channels',
       name: 'selectDeviceBoxNoMoreLED',
       desc: 'Select device box slot no more channels',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -82,7 +82,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       args: [number],
       name: 'selectDeviceBoxNumber',
       desc: 'Box slot number',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -92,7 +92,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       args: [leds],
       name: 'selectDeviceBoxLedChannelDescription',
       desc: 'Box slot channel description',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -101,7 +101,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       'No led channels assigned',
       name: 'selectDeviceBoxNoLedChannelAssigned',
       desc: 'Box slot no led channel assigned yet',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -111,7 +111,7 @@ class SelectDeviceBoxPage extends TraceableStatefulWidget {
       args: [index, name],
       name: 'selectDeviceBoxResetDialogTitle',
       desc: 'Box slot reset dialog title',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
