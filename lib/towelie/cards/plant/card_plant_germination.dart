@@ -32,7 +32,7 @@ class CardPlantGermination {
       '''Ok, place your seed in water, follow the guide, and press the "germinated" button below\nwhen you're ready to place the seed in its growing medium.''',
       name: 'toweliePlantGermination',
       desc: 'Towelie plant germination',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 
@@ -46,8 +46,8 @@ class CardPlantGermination {
         'text': CardPlantGermination.toweliePlantGermination,
         'buttons': [
           TowelieButtonPlantGerminate.createButton(),
-          TowelieButtonShowTip.createButton('Germination guide',
-              't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'),
+          TowelieButtonShowTip.createButton(
+              'Germination guide', 't/supergreenlab/SuperGreenTips/master/s/how_to_germinate_your_seed/l/en'),
         ]
       })),
     ));

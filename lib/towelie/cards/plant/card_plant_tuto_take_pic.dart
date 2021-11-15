@@ -32,7 +32,7 @@ class CardPlantTutoTakePic {
 One first thing you can do to **start** this journey is to **take a picture** of your **plant**.''',
       name: 'toweliePlantTutoTakePic',
       desc: 'Towelie Plant tuto take pic',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

@@ -40,7 +40,7 @@ class DeepLinkBlocStateMainNavigation extends DeepLinkBlocState {
 }
 
 class DeepLinkBloc extends Bloc<DeepLinkBlocEvent, DeepLinkBlocState> {
-  StreamSubscription _sub;
+  late StreamSubscription _sub;
 
   DeepLinkBloc() : super(DeepLinkBlocStateInit());
 
@@ -59,8 +59,8 @@ class DeepLinkBloc extends Bloc<DeepLinkBlocEvent, DeepLinkBlocState> {
       });
     } else if (event is DeepLinkBlocEventUri) {
       if (event.uri.path == '/public/plant') {
-        yield DeepLinkBlocStateMainNavigation(
-            MainNavigateToPublicPlant(event.uri.queryParameters['id'], feedEntryID: event.uri.queryParameters['feid']));
+        yield DeepLinkBlocStateMainNavigation(MainNavigateToPublicPlant(event.uri.queryParameters['id']!,
+            feedEntryID: event.uri.queryParameters['feid']));
       }
     }
   }

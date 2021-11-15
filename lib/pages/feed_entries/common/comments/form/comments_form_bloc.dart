@@ -44,7 +44,7 @@ class CommentsFormBlocEventPostComment extends CommentsFormBlocEvent {
   final String text;
   final CommentType type;
   final Comment? replyTo;
-  final List<Product> recommend;
+  final List<Product>? recommend;
 
   CommentsFormBlocEventPostComment(this.text, this.type, this.replyTo, this.recommend);
 
@@ -206,7 +206,7 @@ class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState
       Comment comment = Comment(
         id: tempID,
         feedEntryID: feedEntryID,
-        userID: this.user.id,
+        userID: this.user.id!,
         from: this.user.nickname,
         pic: this.user.pic,
         replyTo: event.replyTo?.id,

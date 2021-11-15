@@ -32,7 +32,7 @@ class CardPlantPhase {
 Is it already **vegging** or still **just a seed**?''',
       name: 'toweliePlantPhase',
       desc: 'Towelie plant phase',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

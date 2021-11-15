@@ -32,7 +32,7 @@ class CardPlantType {
 Is this plant an **auto** or **photo** strain?''',
       name: 'toweliePlantType',
       desc: 'Towelie Plant auto or photo',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

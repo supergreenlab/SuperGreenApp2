@@ -160,14 +160,14 @@ class CommentsFormPage extends TraceableStatefulWidget {
   _CommentsFormPageState createState() => _CommentsFormPageState();
 }
 
-class _CommentsFormPageState extends State<CommentsFormPage> with TickerProviderStateMixin {
+class _CommentsFormPageState extends State<CommentsFormPage> {
   final List<Comment> comments = [];
   late FeedEntryStateLoaded feedEntry;
   late User? user;
   late bool autoFocus;
   late Comment? replyTo;
   late Comment? replyToDisplay;
-  late List<Product> recommended;
+  late List<Product>? recommended;
 
   bool eof = false;
   bool single = false;
@@ -269,9 +269,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
           controller: scrollController,
           itemBuilder: (BuildContext context, int index, Animation<double> animation) {
             if (index >= comments.length) {
-              if (eof) {
-                return null;
-              }
+              // if (eof) {
+              //   return null;
+              // }
               BlocProvider.of<CommentsFormBloc>(context)
                   .add(CommentsFormBlocEventLoadComments(comments.where((c) => c.replyTo == null).length));
               return Container(
@@ -452,28 +452,28 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
           fontSize: 16,
         ),
       );
-      if (type == CommentType.RECOMMEND && recommended.length > 0) {
+      if (type == CommentType.RECOMMEND && recommended!.length > 0) {
         name = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             name,
             Row(children: [
-              Text(recommended[0].name, style: TextStyle(fontWeight: FontWeight.bold)),
-              recommended[0].supplier != null
+              Text(recommended![0].name, style: TextStyle(fontWeight: FontWeight.bold)),
+              recommended![0].supplier != null
                   ? Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: Text(
-                          recommended[0].supplier!.url,
+                          recommended![0].supplier!.url,
                           overflow: TextOverflow.fade,
                           softWrap: false,
                         ),
                       ),
                     )
                   : Container(),
-              recommended.length > 1
+              recommended!.length > 1
                   ? Text(
-                      CommentsFormPage.commentsFormPageNOtherRecommendations(recommended.length - 1),
+                      CommentsFormPage.commentsFormPageNOtherRecommendations(recommended!.length - 1),
                       style: TextStyle(color: Color(0xff919191)),
                     )
                   : Container(),
@@ -487,7 +487,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Padding(
             padding: const EdgeInsets.only(right: 24, top: 8.0, bottom: 8.0),
-            child: Image.asset(commentType['pic'], width: 25, height: 25),
+            child: Image.asset(commentType['pic']!, width: 25, height: 25),
           ),
           Expanded(child: name),
           IconButton(
@@ -512,16 +512,13 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
         margin: EdgeInsets.only(bottom: 6.0),
       ),
       AnimatedSizeAndFade(
-          vsync: this,
-          fadeDuration: Duration(milliseconds: 200),
-          sizeDuration: Duration(milliseconds: 200),
-          child: content),
+          fadeDuration: Duration(milliseconds: 200), sizeDuration: Duration(milliseconds: 200), child: content),
       !single || replyTo != null ? renderInput(context) : Container(),
     ]);
   }
 
   Widget renderInput(BuildContext context) {
-    String pic = user.pic;
+    String? pic = user!.pic;
     if (pic != null) {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
@@ -530,7 +527,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
       child: Row(
         children: [
           UserAvatar(
-            icon: pic,
+            icon: pic!,
           ),
           Expanded(
             child: Container(
@@ -547,7 +544,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                         focusNode: inputFocus,
                         decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: CommentsFormPage.commentsFormPageInputHintText(user.nickname)),
+                            hintText: CommentsFormPage.commentsFormPageInputHintText(user!.nickname)),
                         textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(fontSize: 17),
                         minLines: 1,
@@ -584,8 +581,8 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
     );
   }
 
-  Widget renderType(BuildContext context, CommentType type, {Function onTap}) {
-    Map<String, String> commentType = commentTypes[type];
+  Widget renderType(BuildContext context, CommentType type, {Function()? onTap}) {
+    Map<String, String> commentType = commentTypes[type]!;
     return InkWell(
         onTap: onTap ??
             () {
@@ -606,7 +603,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                commentType['name'],
+                commentType['name']!,
                 style: TextStyle(
                     color: Color(0xff474747),
                     fontSize: 16,
@@ -620,7 +617,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
                         width: this.type == type ? 2 : 1,
                         color: this.type == type ? Color(0xff3bb30b) : Color(0xffbdbdbd)),
                     borderRadius: BorderRadius.all(Radius.circular(25))),
-                child: Image.asset(commentType['pic'], width: 25, height: 25),
+                child: Image.asset(commentType['pic']!, width: 25, height: 25),
               ),
             ],
           ),
@@ -639,7 +636,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> with TickerProvider
       index = index < 0 ? comments.length : index;
     }
     if (listKey.currentState != null) {
-      listKey.currentState.insertItem(index, duration: Duration(milliseconds: 200));
+      listKey.currentState!.insertItem(index, duration: Duration(milliseconds: 200));
     }
     comments.insert(index, comment);
   }

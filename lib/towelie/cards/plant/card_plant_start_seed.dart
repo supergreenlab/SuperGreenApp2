@@ -33,7 +33,7 @@ class CardPlantStartSeedling {
 In the meantime you can also **create an account**:P that will enable backups, remote control, sharing, etc...''',
       name: 'toweliePlantStartSeedling',
       desc: 'Towelie plant start seedling',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

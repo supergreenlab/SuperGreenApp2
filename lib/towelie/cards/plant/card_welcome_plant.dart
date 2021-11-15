@@ -36,7 +36,7 @@ you can **add an item** to the feed.
 So you can see the **evolution** of your plant, **repeat it** later, or **share it!**''',
       name: 'towelieWelcomePlant',
       desc: 'Towelie Welcome Plant',
-      locale: SGLLocalizations.current.localeName,
+      locale: SGLLocalizations.current?.localeName,
     );
   }
 

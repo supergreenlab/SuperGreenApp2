@@ -89,7 +89,7 @@ class RelDB extends _$RelDB {
         if (!details.hadUpgrade) {
           return;
         }
-        for (int i = details.versionBefore; i < details.versionNow; ++i) {
+        for (int i = details.versionBefore!; i < details.versionNow; ++i) {
           await runDataChange(i);
         }
       });
