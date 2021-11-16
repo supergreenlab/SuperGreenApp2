@@ -19,19 +19,14 @@
 import 'package:flutter/material.dart';
 
 class SpecTextField extends StatelessWidget {
-  final String labelText;
-  final String hintText;
-  final TextEditingController controller;
-  final Function(String) onChanged;
+  final String? labelText;
+  final String? hintText;
+  final TextEditingController? controller;
+  final Function(String)? onChanged;
   final bool autofocus;
 
   const SpecTextField(
-      {Key key,
-      this.labelText,
-      this.hintText,
-      this.controller,
-      this.onChanged,
-      this.autofocus = false})
+      {Key? key, this.labelText, this.hintText, this.controller, this.onChanged, this.autofocus = false})
       : super(key: key);
 
   @override
@@ -41,16 +36,14 @@ class SpecTextField extends StatelessWidget {
       child: TextFormField(
         autofocus: autofocus,
         decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+          contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.black38),
           labelText: labelText,
           labelStyle: TextStyle(
             color: Colors.black,
           ),
-          enabledBorder:
-              UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
         ),
         style: TextStyle(color: Colors.black, decoration: TextDecoration.none),
         controller: controller,

@@ -56,7 +56,7 @@ class SettingsLoginBlocStateError extends SettingsLoginBlocState {
 class SettingsLoginBloc extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsLogin args;
-  bool _isAuth;
+  late bool _isAuth;
 
   SettingsLoginBloc(this.args) : super(SettingsLoginBlocStateInit()) {
     _isAuth = BackendAPI().usersAPI.loggedIn;
@@ -72,10 +72,8 @@ class SettingsLoginBloc extends Bloc<SettingsLoginBlocEvent, SettingsLoginBlocSt
       yield SettingsLoginBlocStateLoading();
       try {
         await BackendAPI().usersAPI.login(event.nickname, event.password);
-        String notificationToken = AppDB().getAppData().notificationToken ?? "";
-        await BackendAPI()
-            .feedsAPI
-            .createUserEnd(notificationToken: notificationToken == "" ? null : notificationToken);
+        String? notificationToken = AppDB().getAppData().notificationToken;
+        await BackendAPI().feedsAPI.createUserEnd(notificationToken: notificationToken);
       } catch (e, trace) {
         Logger.logError(e, trace);
         yield SettingsLoginBlocStateError();

@@ -54,7 +54,7 @@ class ProductTypePage extends TraceableStatefulWidget {
 }
 
 class _ProductTypePageState extends State<ProductTypePage> {
-  ProductCategoryID selectedCategory;
+  ProductCategoryID? selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                 child: GridView.count(
                   crossAxisCount: 4,
                   children: productCategories.keys.map<Widget>((ProductCategoryID name) {
-                    final ProductCategoryUI categoryUI = productCategories[name];
+                    final ProductCategoryUI categoryUI = productCategories[name]!;
                     return InkWell(
                       onTap: () {
                         setState(() {
@@ -115,7 +115,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                         ? null
                         : () {
                             BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToProductInfosEvent(selectedCategory, futureFn: (future) async {
+                                .add(MainNavigateToProductInfosEvent(selectedCategory!, futureFn: (future) async {
                               Product product = await future;
                               if (product != null) {
                                 BlocProvider.of<MainNavigatorBloc>(context)

@@ -65,7 +65,7 @@ class _ProductSupplierPageState extends State<ProductSupplierPage> {
               child: ListView(
                 children: this.products.map<Widget>((product) {
                   int i = this.products.indexOf(product);
-                  final ProductCategoryUI categoryUI = productCategories[product.category];
+                  final ProductCategoryUI categoryUI = productCategories[product.category]!;
                   return Row(
                     children: [
                       Padding(
@@ -113,7 +113,7 @@ class _ProductSupplierPageState extends State<ProductSupplierPage> {
                               for (int i = 0; i < this.products.length; ++i) {
                                 products.add(this.products[i].copyWith(
                                     supplier: urlControllers[i].text != ''
-                                        ? ProductSupplier(productID: this.products[i].id, url: urlControllers[i].text)
+                                        ? ProductSupplier(productID: this.products[i].id!, url: urlControllers[i].text)
                                         : null));
                               }
                               BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: products));

@@ -34,9 +34,9 @@ class SettingsBoxesPage extends TraceableStatelessWidget {
     return BlocListener<SettingsBoxesBloc, SettingsBoxesBlocState>(
       listener: (BuildContext context, SettingsBoxesBlocState state) {},
       child: BlocBuilder<SettingsBoxesBloc, SettingsBoxesBlocState>(
-        cubit: BlocProvider.of<SettingsBoxesBloc>(context),
+        bloc: BlocProvider.of<SettingsBoxesBloc>(context),
         builder: (BuildContext context, SettingsBoxesBlocState state) {
-          Widget body;
+          late Widget body;
 
           if (state is SettingsBoxesBlocStateLoading) {
             body = FullscreenLoading(
@@ -84,7 +84,7 @@ class SettingsBoxesPage extends TraceableStatelessWidget {
                 iconColor: Colors.green,
                 hideBackButton: !(state is SettingsBoxesBlocStateLoaded),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateBoxEvent());
                     },
@@ -137,7 +137,7 @@ class SettingsBoxesPage extends TraceableStatelessWidget {
   }
 
   void _deleteBox(BuildContext context, Box box) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -145,13 +145,13 @@ class SettingsBoxesPage extends TraceableStatelessWidget {
             title: Text('Delete lab ${box.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -160,7 +160,7 @@ class SettingsBoxesPage extends TraceableStatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<SettingsBoxesBloc>(context).add(SettingsBoxesBlocEventDeleteBox(box));
     }
   }

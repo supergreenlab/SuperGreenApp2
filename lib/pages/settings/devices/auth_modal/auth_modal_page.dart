@@ -82,7 +82,7 @@ class _AuthModalPageState extends State<AuthModalPage> {
               ),
             );
           }
-          return renderForm(context, state);
+          return renderForm(context, state as AuthModalBlocStateLoaded);
         },
       ),
     );

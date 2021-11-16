@@ -146,7 +146,7 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
                                 }
                                 BlocProvider.of<MainNavigatorBloc>(context)
                                     .add(MainNavigateToProductSupplierEvent(added.toList(), futureFn: (future) async {
-                                  List<Product> products = await future;
+                                  List<Product>? products = await future;
                                   if (products == null) {
                                     return;
                                   }
@@ -301,11 +301,11 @@ class _SelectNewProductPageState extends State<SelectNewProductPage> {
     List<Widget> children = products.map<Widget>((p) {
       final ProductCategoryUI categoryUI = productCategories[p.category]!;
       List<Widget> subtitle = [Text(p.name, style: TextStyle(fontSize: 20))];
-      if (p.specs != null && p.specs.by != null) {
+      if (p.specs != null && p.specs!.by != null) {
         subtitle.addAll([
           Row(children: [
             Text('by '),
-            Text(p.specs.by, style: TextStyle(color: Color(0xff3bb30b))),
+            Text(p.specs!.by!, style: TextStyle(color: Color(0xff3bb30b))),
           ]),
         ]);
       }

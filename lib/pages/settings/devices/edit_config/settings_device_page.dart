@@ -126,11 +126,11 @@ class SettingsDevicePage extends TraceableStatefulWidget {
 }
 
 class _SettingsDevicePageState extends State<SettingsDevicePage> {
-  TextEditingController _nameController;
+  late TextEditingController _nameController;
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
 
-  int _listener;
+  late int _listener;
 
   bool _keyboardVisible = false;
 
@@ -156,7 +156,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsDeviceBloc>(context),
+      bloc: BlocProvider.of<SettingsDeviceBloc>(context),
       listener: (BuildContext context, SettingsDeviceBlocState state) async {
         if (state is SettingsDeviceBlocStateLoaded) {
           _nameController = TextEditingController(text: state.device.name);
@@ -167,9 +167,9 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
         }
       },
       child: BlocBuilder<SettingsDeviceBloc, SettingsDeviceBlocState>(
-          cubit: BlocProvider.of<SettingsDeviceBloc>(context),
+          bloc: BlocProvider.of<SettingsDeviceBloc>(context),
           builder: (BuildContext context, SettingsDeviceBlocState state) {
-            Widget body;
+            late Widget body;
             if (state is SettingsDeviceBlocStateLoading) {
               body = FullscreenLoading(
                 title: CommonL10N.loading,
@@ -188,29 +188,30 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
             }
             return WillPopScope(
               onWillPop: () async {
-                return await showDialog<bool>(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(CommonL10N.unsavedChangeDialogTitle),
-                        content: Text(CommonL10N.unsavedChangeDialogBody),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, false);
-                            },
-                            child: Text(CommonL10N.no),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, true);
-                            },
-                            child: Text(CommonL10N.yes),
-                          ),
-                        ],
-                      );
-                    });
+                return (await showDialog<bool>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(CommonL10N.unsavedChangeDialogTitle),
+                            content: Text(CommonL10N.unsavedChangeDialogBody),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                },
+                                child: Text(CommonL10N.no),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text(CommonL10N.yes),
+                              ),
+                            ],
+                          );
+                        })) ??
+                    false;
               },
               child: Scaffold(
                   appBar: SGLAppBar(

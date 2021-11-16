@@ -35,7 +35,7 @@ class _ProductInfosPageState extends State<ProductInfosPage> {
       listener: (BuildContext context, ProductInfosBlocState state) {},
       child: BlocBuilder<ProductInfosBloc, ProductInfosBlocState>(
         builder: (BuildContext context, ProductInfosBlocState state) {
-          Widget body = productSpecsForms[state.productCategoryID]();
+          Widget body = productSpecsForms[state.productCategoryID]!();
           return Scaffold(
               appBar: SGLAppBar(
                 '🛠',

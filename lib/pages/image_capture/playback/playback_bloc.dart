@@ -30,20 +30,18 @@ class CaptureBlocEventInit extends PlaybackBlocEvent {
 class PlaybackBlocState extends Equatable {
   final bool isVideo;
   final String filePath;
-  final String overlayPath;
+  final String? overlayPath;
 
   final String cancelButton;
   final String okButton;
 
-  PlaybackBlocState(this.filePath, this.isVideo, this.cancelButton,
-      this.okButton, this.overlayPath);
+  PlaybackBlocState(this.filePath, this.isVideo, this.cancelButton, this.okButton, this.overlayPath);
   @override
-  List<Object> get props => [filePath, isVideo];
+  List<Object?> get props => [filePath, overlayPath, isVideo];
 }
 
 class PlaybackBlocStateInit extends PlaybackBlocState {
-  PlaybackBlocStateInit(String filePath, bool isVideo, String cancelButton,
-      String okButton, String overlayPath)
+  PlaybackBlocStateInit(String filePath, bool isVideo, String cancelButton, String okButton, String? overlayPath)
       : super(filePath, isVideo, cancelButton, okButton, overlayPath);
 }
 
@@ -61,8 +59,8 @@ class PlaybackBloc extends Bloc<PlaybackBlocEvent, PlaybackBlocState> {
   @override
   Stream<PlaybackBlocState> mapEventToState(PlaybackBlocEvent event) async* {
     if (event is CaptureBlocEventInit) {
-      yield PlaybackBlocStateInit(_args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton,
-          _args.okButton, _args.overlayPath);
+      yield PlaybackBlocStateInit(
+          _args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton, _args.okButton, _args.overlayPath);
     }
   }
 }

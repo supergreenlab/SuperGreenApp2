@@ -57,8 +57,8 @@ class HomePage extends TraceableStatelessWidget {
       },
       child: BlocBuilder<HomeNavigatorBloc, HomeNavigatorState>(
         builder: (context, navigatorState) => BlocBuilder<HomeBloc, HomeBlocState>(builder: (context, state) {
-          Widget body;
-          Widget navbar;
+          late Widget body;
+          late Widget navbar;
           if (state is HomeBlocStateInit) {
             body = FullscreenLoading(
               title: CommonL10N.loading,
@@ -85,7 +85,7 @@ class HomePage extends TraceableStatelessWidget {
             Widget sglIcon = Icon(Icons.feedback);
             try {
               int nSgl = state.hasPending.where((e) => e.id == 1).map<int>((e) => e.nNew).reduce((a, e) => a + e);
-              if (nSgl != null && nSgl > 0) {
+              if (nSgl > 0) {
                 sglIcon = Stack(
                   children: [
                     sglIcon,
@@ -99,7 +99,7 @@ class HomePage extends TraceableStatelessWidget {
             Widget homeIcon = Icon(Icons.event_note);
             try {
               int nOthers = state.hasPending.where((e) => e.id != 1).map<int>((e) => e.nNew).reduce((a, e) => a + e);
-              if (nOthers != null && nOthers > 0) {
+              if (nOthers > 0) {
                 homeIcon = Stack(
                   children: [
                     homeIcon,

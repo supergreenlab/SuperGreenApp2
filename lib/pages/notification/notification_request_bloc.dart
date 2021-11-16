@@ -46,7 +46,7 @@ class NotificationRequestBlocStateLoaded extends NotificationRequestBlocState {
 class NotificationRequestBloc extends Bloc<NotificationRequestBlocEvent, NotificationRequestBlocState> {
   final Function onClose;
 
-  NotificationRequestBloc({this.onClose}) : super(NotificationRequestBlocStateInit()) {
+  NotificationRequestBloc({required this.onClose}) : super(NotificationRequestBlocStateInit()) {
     add(NotificationRequestBlocEventInit());
   }
 

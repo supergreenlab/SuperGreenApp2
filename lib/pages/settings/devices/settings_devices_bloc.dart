@@ -76,8 +76,8 @@ class SettingsDevicesBlocStateLoaded extends SettingsDevicesBlocState {
 }
 
 class SettingsDevicesBloc extends Bloc<SettingsDevicesBlocEvent, SettingsDevicesBlocState> {
-  List<Device> devices;
-  StreamSubscription<List<Device>> _devicesStream;
+  late List<Device> devices;
+  StreamSubscription<List<Device>>? _devicesStream;
 
   //ignore: unused_field
   final MainNavigateToSettingsDevices args;
@@ -106,9 +106,7 @@ class SettingsDevicesBloc extends Bloc<SettingsDevicesBlocEvent, SettingsDevices
 
   @override
   Future<void> close() async {
-    if (_devicesStream != null) {
-      await _devicesStream.cancel();
-    }
+    await _devicesStream?.cancel();
     return super.close();
   }
 }

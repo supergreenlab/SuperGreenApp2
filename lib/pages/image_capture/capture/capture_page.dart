@@ -38,9 +38,9 @@ class CapturePage extends TraceableStatefulWidget {
 
 class _CapturePageState extends State<CapturePage> {
   bool _enableAudio = false;
-  String _filePath;
-  List<CameraDescription> _cameras;
-  CameraController _cameraController;
+  String? _filePath;
+  late List<CameraDescription> _cameras;
+  CameraController? _cameraController;
 
   bool _videoMode = false;
   bool _popDone = true;
@@ -48,7 +48,7 @@ class _CapturePageState extends State<CapturePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<CaptureBloc>(context),
+      bloc: BlocProvider.of<CaptureBloc>(context),
       listener: (BuildContext context, CaptureBlocState state) async {
         if (state is CaptureBlocStateInit) {
           if (_cameraController == null) {
@@ -61,9 +61,9 @@ class _CapturePageState extends State<CapturePage> {
         }
       },
       child: BlocBuilder<CaptureBloc, CaptureBlocState>(
-          cubit: BlocProvider.of<CaptureBloc>(context),
+          bloc: BlocProvider.of<CaptureBloc>(context),
           builder: (context, state) {
-            if (_cameraController != null && _cameraController.value.isInitialized == true) {
+            if (_cameraController != null && _cameraController!.value.isInitialized == true) {
               if (state is CaptureBlocStateLoading) {
                 return Scaffold(
                     body: FullscreenLoading(
@@ -71,7 +71,7 @@ class _CapturePageState extends State<CapturePage> {
                   percent: state.progress,
                 ));
               }
-              if (_cameraController.value.isRecordingVideo == true) {
+              if (_cameraController!.value.isRecordingVideo == true) {
                 return _renderCameraRecording(context, state);
               } else {
                 return _renderCamera(context, state);
@@ -92,7 +92,7 @@ class _CapturePageState extends State<CapturePage> {
       child: WillPopScope(
         onWillPop: () async {
           if (_filePath != null) {
-            await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
+            await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
           }
           return true;
         },
@@ -100,7 +100,7 @@ class _CapturePageState extends State<CapturePage> {
           children: [
             LayoutBuilder(builder: (context, constraints) {
               double width = constraints.maxWidth;
-              double height = constraints.maxWidth * _cameraController.value.aspectRatio;
+              double height = constraints.maxWidth * _cameraController!.value.aspectRatio;
               Widget cameraPreview = Positioned(
                   left: constraints.maxWidth / 2 - width / 2,
                   top: constraints.maxHeight / 2 - height / 2,
@@ -121,7 +121,7 @@ class _CapturePageState extends State<CapturePage> {
                             fit: BoxFit.contain,
                             child: Opacity(
                                 opacity: 0.6,
-                                child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath)))))));
+                                child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath!)))))));
                 cameraPreview = Stack(children: [
                   cameraPreview,
                   overlay,
@@ -170,8 +170,8 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderCameraRecording(BuildContext context, CaptureBlocState state) {
     return WillPopScope(
       onWillPop: () async {
-        if (_cameraController.value.isRecordingVideo) {
-          await _cameraController.stopVideoRecording();
+        if (_cameraController!.value.isRecordingVideo) {
+          await _cameraController!.stopVideoRecording();
           setState(() {});
         }
         return _popDone;
@@ -180,7 +180,7 @@ class _CapturePageState extends State<CapturePage> {
         children: [
           LayoutBuilder(builder: (context, constraints) {
             double width = constraints.maxWidth;
-            double height = constraints.maxWidth * _cameraController.value.aspectRatio;
+            double height = constraints.maxWidth * _cameraController!.value.aspectRatio;
             return Stack(children: [
               Positioned(
                   left: (constraints.maxWidth - width) / 2,
@@ -222,7 +222,7 @@ class _CapturePageState extends State<CapturePage> {
     return RawMaterialButton(
       onPressed: () async {
         if (_filePath != null) {
-          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
+          await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
         }
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
       },
@@ -286,8 +286,10 @@ class _CapturePageState extends State<CapturePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                FlatButton(
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                TextButton(
+                  style: ButtonStyle(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                   child: Icon(Icons.library_books, color: Colors.white54),
                   onPressed: () async {
                     _checkPermission().then((granted) {
@@ -316,11 +318,11 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderPictureButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.photo_camera, Colors.blue, () async {
       if (_filePath != null) {
-        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
       }
       _filePath = '${FeedMedias.makeFilePath()}.jpg';
-      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
-      XFile xfile = await _cameraController.takePicture();
+      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath!);
+      XFile xfile = await _cameraController!.takePicture();
       xfile.saveTo(absolutePath);
       _endCapture(state);
     });
@@ -329,9 +331,9 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderCameraButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.videocam, Colors.blue, () async {
       if (_filePath != null) {
-        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
       }
-      await _cameraController.startVideoRecording();
+      await _cameraController!.startVideoRecording();
       setState(() {});
     });
   }
@@ -339,7 +341,7 @@ class _CapturePageState extends State<CapturePage> {
   Widget _renderStopButton(BuildContext context, CaptureBlocState state) {
     return _renderBottomButton(context, Icons.stop, Colors.red, () async {
       _filePath = '${FeedMedias.makeFilePath()}.mp4';
-      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath);
+      String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath!);
       await _deleteFileIfExists(absolutePath);
       XFile xfile = await _cameraController.stopVideoRecording();
       // ignore: await_only_futures
@@ -349,7 +351,7 @@ class _CapturePageState extends State<CapturePage> {
     });
   }
 
-  Widget _renderBottomButton(BuildContext context, IconData icon, Color color, Function onPressed) {
+  Widget _renderBottomButton(BuildContext context, IconData icon, Color color, Function() onPressed) {
     return RawMaterialButton(
       onPressed: onPressed,
       child: new Icon(
@@ -366,26 +368,26 @@ class _CapturePageState extends State<CapturePage> {
 
   void _endCapture(CaptureBlocState state) async {
     BlocProvider.of<MainNavigatorBloc>(context)
-        .add(MainNavigateToImageCapturePlaybackEvent(_filePath, overlayPath: state.overlayPath, futureFn: (f) async {
+        .add(MainNavigateToImageCapturePlaybackEvent(_filePath!, overlayPath: state.overlayPath, futureFn: (f) async {
       final ret = await f;
       if (ret == null || ret == false) {
-        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath));
+        await _deleteFileIfExists(FeedMedias.makeAbsoluteFilePath(_filePath!));
         return;
       }
       BlocProvider.of<CaptureBloc>(context)
-          .add(CaptureBlocEventCreate(files: [File(FeedMedias.makeAbsoluteFilePath(_filePath))]));
+          .add(CaptureBlocEventCreate(files: [File(FeedMedias.makeAbsoluteFilePath(_filePath!))]));
     }));
   }
 
   void _setupCamera() async {
-    CameraController old = _cameraController;
+    CameraController? old = _cameraController;
     FocusMode focusMode = old?.value?.focusMode ?? FocusMode.auto;
     if (old != null) {
       await old.dispose();
     }
     _cameraController = CameraController(_cameras[0], ResolutionPreset.veryHigh, enableAudio: _enableAudio);
-    await _cameraController.initialize();
-    _cameraController.setFocusMode(focusMode);
+    await _cameraController!.initialize();
+    _cameraController!.setFocusMode(focusMode);
     setState(() {});
   }
 
@@ -412,10 +414,10 @@ class _CapturePageState extends State<CapturePage> {
         return PickerWidget(
           withImages: true,
           withVideos: true,
-          onDone: (Set<MediaFile> selectedFiles) {
+          onDone: (Set<MediaFile?> selectedFiles) {
             Timer(Duration(milliseconds: 500), () {
               List<File> files = selectedFiles.where((mf) => mf != null).map((f) {
-                return File(f.path);
+                return File(f!.path);
               }).toList();
               BlocProvider.of<CaptureBloc>(context).add(CaptureBlocEventCreate(files: files));
             });
@@ -439,9 +441,7 @@ class _CapturePageState extends State<CapturePage> {
 
   @override
   void dispose() {
-    if (_cameraController != null) {
-      _cameraController.dispose();
-    }
+    _cameraController?.dispose();
     super.dispose();
   }
 }

@@ -33,7 +33,7 @@ class PlaybackPage extends TraceableStatefulWidget {
 }
 
 class _PlaybackPageState extends State<PlaybackPage> {
-  VideoPlayerController _videoPlayerController;
+  VideoPlayerController? _videoPlayerController;
   double _opacity = 0.5;
 
   @override
@@ -51,21 +51,21 @@ class _PlaybackPageState extends State<PlaybackPage> {
   Widget build(BuildContext context) {
     return Material(
       child: BlocListener(
-        cubit: BlocProvider.of<PlaybackBloc>(context),
+        bloc: BlocProvider.of<PlaybackBloc>(context),
         listener: (context, state) async {
           if (state is PlaybackBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
               _videoPlayerController =
                   VideoPlayerController.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)));
-              await _videoPlayerController.initialize();
-              _videoPlayerController.play();
-              _videoPlayerController.setLooping(true);
+              await _videoPlayerController!.initialize();
+              _videoPlayerController!.play();
+              _videoPlayerController!.setLooping(true);
               setState(() {});
             }
           }
         },
         child: BlocBuilder<PlaybackBloc, PlaybackBlocState>(
-            cubit: BlocProvider.of<PlaybackBloc>(context),
+            bloc: BlocProvider.of<PlaybackBloc>(context),
             builder: (context, state) {
               return _renderPlayer(context, state);
             }),
@@ -75,7 +75,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
 
   Widget _renderPlayer(BuildContext context, PlaybackBlocState state) {
     if (state.isVideo) {
-      if (_videoPlayerController == null || !_videoPlayerController.value.initialized) {
+      if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) {
         return Container();
       }
     }
@@ -116,13 +116,13 @@ class _PlaybackPageState extends State<PlaybackPage> {
   }
 
   Widget _renderVideoPlayer(BuildContext context, PlaybackBlocState state, BoxConstraints constraints) {
-    double width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
+    double width = constraints.maxHeight * _videoPlayerController!.value.aspectRatio;
     double height = constraints.maxHeight;
     return Stack(children: [
       Positioned(
           left: (constraints.maxWidth - width) / 2,
           top: (constraints.maxHeight - height) / 2,
-          child: SizedBox(width: width, height: height, child: VideoPlayer(_videoPlayerController))),
+          child: SizedBox(width: width, height: height, child: VideoPlayer(_videoPlayerController!))),
     ]);
   }
 
@@ -141,7 +141,8 @@ class _PlaybackPageState extends State<PlaybackPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 child: FittedBox(
-                    fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath)))))),
+                    fit: BoxFit.contain,
+                    child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath!)))))),
         Positioned(
           left: 30,
           right: 30,
@@ -193,9 +194,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
 
   @override
   void dispose() {
-    if (_videoPlayerController != null) {
-      _videoPlayerController.dispose();
-    }
+    _videoPlayerController?.dispose();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

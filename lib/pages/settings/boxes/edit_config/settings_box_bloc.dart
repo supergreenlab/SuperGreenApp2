@@ -33,13 +33,13 @@ class SettingsBoxBlocEventInit extends SettingsBoxBlocEvent {
 
 class SettingsBoxBlocEventUpdate extends SettingsBoxBlocEvent {
   final String name;
-  final Device device;
-  final int deviceBox;
+  final Device? device;
+  final int? deviceBox;
 
   SettingsBoxBlocEventUpdate(this.name, this.device, this.deviceBox);
 
   @override
-  List<Object> get props => [name, device];
+  List<Object?> get props => [name, device];
 }
 
 abstract class SettingsBoxBlocState extends Equatable {}
@@ -51,32 +51,32 @@ class SettingsBoxBlocStateLoading extends SettingsBoxBlocState {
 
 class SettingsBoxBlocStateLoaded extends SettingsBoxBlocState {
   final Box box;
-  final Device device;
-  final int deviceBox;
+  final Device? device;
+  final int? deviceBox;
 
   SettingsBoxBlocStateLoaded(this.box, this.device, this.deviceBox);
 
   @override
-  List<Object> get props => [box, device, deviceBox];
+  List<Object?> get props => [box, device, deviceBox];
 }
 
 class SettingsBoxBlocStateDone extends SettingsBoxBlocState {
   final Box box;
-  final Device device;
-  final int deviceBox;
+  final Device? device;
+  final int? deviceBox;
 
   SettingsBoxBlocStateDone(this.box, this.device, this.deviceBox);
 
   @override
-  List<Object> get props => [box, device, deviceBox];
+  List<Object?> get props => [box, device, deviceBox];
 }
 
 class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsBox args;
-  Box box;
-  Device device;
-  int deviceBox;
+  late Box box;
+  late Device? device;
+  late int? deviceBox;
 
   SettingsBoxBloc(this.args) : super(SettingsBoxBlocStateLoading()) {
     add(SettingsBoxBlocEventInit());
@@ -87,7 +87,7 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
     if (event is SettingsBoxBlocEventInit) {
       box = await RelDB.get().plantsDAO.getBox(args.box.id);
       if (box.device != null) {
-        device = await RelDB.get().devicesDAO.getDevice(box.device);
+        device = await RelDB.get().devicesDAO.getDevice(box.device!);
         deviceBox = box.deviceBox;
       }
       yield SettingsBoxBlocStateLoaded(box, device, deviceBox);
@@ -98,15 +98,15 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
         BoxSettings boxSettings = BoxSettings.fromJSON(box.settings);
         Map<String, dynamic> schedule = boxSettings.schedules[boxSettings.schedule];
 
-        Param onHourParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_ON_HOUR');
-        Param onMinParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_ON_MIN');
+        Param onHourParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_HOUR');
+        Param onMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_ON_MIN');
         await DeviceHelper.updateHourMinParams(
-            event.device, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
+            event.device!, onHourParam, onMinParam, schedule['ON_HOUR'], schedule['ON_MIN']);
 
-        Param offHourParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_OFF_HOUR');
-        Param offMinParam = await RelDB.get().devicesDAO.getParam(event.device.id, 'BOX_${event.deviceBox}_OFF_MIN');
+        Param offHourParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_HOUR');
+        Param offMinParam = await RelDB.get().devicesDAO.getParam(event.device!.id, 'BOX_${event.deviceBox}_OFF_MIN');
         await DeviceHelper.updateHourMinParams(
-            event.device, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
+            event.device!, offHourParam, offMinParam, schedule['OFF_HOUR'], schedule['OFF_MIN']);
       }
       await RelDB.get().plantsDAO.updateBox(BoxesCompanion(
           id: Value(box.id),

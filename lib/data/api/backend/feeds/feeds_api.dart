@@ -37,7 +37,7 @@ import 'package:super_green_app/data/rel/plant/plants.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class FeedsAPI {
-  Future createUserEnd({required String notificationToken}) async {
+  Future createUserEnd({String? notificationToken}) async {
     try {
       await BackendAPI().postPut('/userend', {'notificationToken': notificationToken});
     } catch (e, trace) {

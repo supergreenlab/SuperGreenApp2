@@ -10,7 +10,7 @@ import 'multi_selector_model.dart';
 class GalleryWidgetItem extends StatefulWidget {
   final MediaFile mediaFile;
 
-  GalleryWidgetItem({this.mediaFile});
+  GalleryWidgetItem({required this.mediaFile});
 
   @override
   State<StatefulWidget> createState() => GalleryWidgetItemState();
@@ -76,7 +76,7 @@ class GalleryWidgetItemState extends State<GalleryWidgetItem> {
                   ),
                   builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (snapshot.hasData) {
-                      var thumbnail = snapshot.data;
+                      String thumbnail = snapshot.data!;
                       widget.mediaFile.thumbnailPath = thumbnail;
                       return RotatedBox(
                         quarterTurns: 0,

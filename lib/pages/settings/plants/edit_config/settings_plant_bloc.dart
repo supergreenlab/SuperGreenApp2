@@ -50,12 +50,12 @@ class SettingsPlantBlocStateLoaded extends SettingsPlantBlocState {
 class SettingsPlantBlocStateDone extends SettingsPlantBlocState {
   final Plant plant;
   final Box box;
-  final bool archived;
+  final bool? archived;
 
   SettingsPlantBlocStateDone(this.plant, this.box, {this.archived});
 
   @override
-  List<Object> get props => [plant, box, archived];
+  List<Object?> get props => [plant, box, archived];
 }
 
 class SettingsPlantBlocStateError extends SettingsPlantBlocState {
@@ -67,25 +67,22 @@ class SettingsPlantBlocStateError extends SettingsPlantBlocState {
   List<Object> get props => [message];
 }
 
-class SettingsPlantBloc
-    extends Bloc<SettingsPlantBlocEvent, SettingsPlantBlocState> {
+class SettingsPlantBloc extends Bloc<SettingsPlantBlocEvent, SettingsPlantBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsPlant args;
-  Plant plant;
-  Box box;
+  late Plant plant;
+  late Box box;
 
   SettingsPlantBloc(this.args) : super(SettingsPlantBlocStateLoading()) {
     add(SettingsPlantBlocEventInit());
   }
 
   @override
-  Stream<SettingsPlantBlocState> mapEventToState(
-      SettingsPlantBlocEvent event) async* {
+  Stream<SettingsPlantBlocState> mapEventToState(SettingsPlantBlocEvent event) async* {
     if (event is SettingsPlantBlocEventInit) {
       plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
-      box = await RelDB.get().plantsDAO.getBox(plant.box);
-      yield SettingsPlantBlocStateLoaded(
-          plant, box, BackendAPI().usersAPI.loggedIn);
+      box = await RelDB.get().plantsDAO.getBox(plant.box!);
+      yield SettingsPlantBlocStateLoaded(plant, box, BackendAPI().usersAPI.loggedIn);
     } else if (event is SettingsPlantBlocEventUpdate) {
       yield SettingsPlantBlocStateLoading();
       await RelDB.get().plantsDAO.updatePlant(PlantsCompanion(
@@ -102,7 +99,7 @@ class SettingsPlantBloc
         return;
       }
       try {
-        await BackendAPI().feedsAPI.archivePlant(plant.serverID);
+        await BackendAPI().feedsAPI.archivePlant(plant.serverID!);
       } catch (e) {
         yield SettingsPlantBlocStateError(e.toString());
         return;

@@ -309,13 +309,14 @@ class MainNavigateToCommentFormEvent extends MainNavigateToFeedFormEvent {
 
 class MainNavigateToTipEvent extends MainNavigatorEvent {
   final List<String> paths;
-  final String tipID;
-  final MainNavigateToFeedFormEvent nextRoute;
+  final String? tipID;
+  final MainNavigateToFeedFormEvent? nextRoute;
 
-  MainNavigateToTipEvent(this.tipID, this.paths, this.nextRoute, {futureFn}) : super(futureFn: futureFn);
+  MainNavigateToTipEvent(this.tipID, this.paths, this.nextRoute, {Function(Future<dynamic>? f)? futureFn})
+      : super(futureFn: futureFn);
 
   @override
-  List<Object> get props => [nextRoute];
+  List<Object?> get props => [this.tipID, this.paths, nextRoute];
 }
 
 class MainNavigateToImageCaptureEvent extends MainNavigatorEvent {

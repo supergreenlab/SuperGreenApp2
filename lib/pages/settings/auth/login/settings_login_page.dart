@@ -35,9 +35,9 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
         }
       },
       child: BlocBuilder<SettingsLoginBloc, SettingsLoginBlocState>(
-        cubit: BlocProvider.of<SettingsLoginBloc>(context),
+        bloc: BlocProvider.of<SettingsLoginBloc>(context),
         builder: (BuildContext context, SettingsLoginBlocState state) {
-          Widget body;
+          late Widget body;
 
           if (state is SettingsLoginBlocStateLoading) {
             body = FullscreenLoading(

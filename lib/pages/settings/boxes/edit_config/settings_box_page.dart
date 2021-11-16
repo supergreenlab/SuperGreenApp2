@@ -41,13 +41,13 @@ class SettingsBoxPage extends TraceableStatefulWidget {
 }
 
 class _SettingsBoxPageState extends State<SettingsBoxPage> {
-  TextEditingController _nameController;
-  Device _device;
-  int _deviceBox;
+  late TextEditingController _nameController;
+  late Device? _device;
+  late int? _deviceBox;
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
 
-  int _listener;
+  late int _listener;
 
   bool _keyboardVisible = false;
 
@@ -73,7 +73,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsBoxBloc>(context),
+      bloc: BlocProvider.of<SettingsBoxBloc>(context),
       listener: (BuildContext context, SettingsBoxBlocState state) async {
         if (state is SettingsBoxBlocStateLoaded) {
           _nameController = TextEditingController(text: state.box.name);
@@ -86,9 +86,9 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
         }
       },
       child: BlocBuilder<SettingsBoxBloc, SettingsBoxBlocState>(
-          cubit: BlocProvider.of<SettingsBoxBloc>(context),
+          bloc: BlocProvider.of<SettingsBoxBloc>(context),
           builder: (BuildContext context, SettingsBoxBlocState state) {
-            Widget body;
+            late Widget body;
             if (state is SettingsBoxBlocStateLoading) {
               body = FullscreenLoading(
                 title: 'Loading..',
@@ -100,29 +100,30 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
             }
             return WillPopScope(
               onWillPop: () async {
-                return await showDialog<bool>(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Unsaved changed'),
-                        content: Text('Changes will not be saved. Continue?'),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, false);
-                            },
-                            child: Text('NO'),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, true);
-                            },
-                            child: Text('YES'),
-                          ),
-                        ],
-                      );
-                    });
+                return (await showDialog<bool>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Unsaved changed'),
+                            content: Text('Changes will not be saved. Continue?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                },
+                                child: Text('NO'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text('YES'),
+                              ),
+                            ],
+                          );
+                        })) ??
+                    false;
               },
               child: Scaffold(
                   appBar: SGLAppBar(
@@ -142,7 +143,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
 
   Widget _renderDone(SettingsBoxBlocStateDone state) {
     String subtitle = _device != null
-        ? 'Lab ${_nameController.value.text} on controller ${_device.name} updated:)'
+        ? 'Lab ${_nameController.value.text} on controller ${_device!.name} updated:)'
         : 'Lab ${_nameController.value.text}';
     return Fullscreen(title: 'Done!', subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
@@ -179,7 +180,7 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
               _device != null
                   ? ListTile(
                       leading: SvgPicture.asset('assets/box_setup/icon_controller.svg'),
-                      title: Text('${_device.name} box #${_deviceBox + 1}'),
+                      title: Text('${_device!.name} box #${_deviceBox! + 1}'),
                       subtitle: Text('Tap to change'),
                       trailing: Icon(Icons.edit),
                       onTap: () {

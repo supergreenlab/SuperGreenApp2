@@ -76,8 +76,8 @@ class SettingsBoxesBlocStateLoaded extends SettingsBoxesBlocState {
 }
 
 class SettingsBoxesBloc extends Bloc<SettingsBoxesBlocEvent, SettingsBoxesBlocState> {
-  List<Box> _boxes;
-  StreamSubscription<List<Box>> _boxesStream;
+  late List<Box> _boxes;
+  StreamSubscription<List<Box>>? _boxesStream;
 
   //ignore: unused_field
   final MainNavigateToSettingsBoxes args;
@@ -112,9 +112,7 @@ class SettingsBoxesBloc extends Bloc<SettingsBoxesBlocEvent, SettingsBoxesBlocSt
 
   @override
   Future<void> close() async {
-    if (_boxesStream != null) {
-      await _boxesStream.cancel();
-    }
+    await _boxesStream?.cancel();
     return super.close();
   }
 }

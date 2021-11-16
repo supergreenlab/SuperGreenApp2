@@ -22,10 +22,10 @@ class SGLTextField extends StatelessWidget {
   final String hintText;
   final Function(String) onChanged;
   final TextEditingController controller;
-  final bool enabled;
+  final bool? enabled;
   final TextInputAction textInputAction;
-  final Function(String) onFieldSubmitted;
-  final FocusNode focusNode;
+  final Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
   final bool obscureText;
   final String? error;
   final TextCapitalization textCapitalization;
@@ -34,10 +34,10 @@ class SGLTextField extends StatelessWidget {
       {required this.hintText,
       required this.controller,
       required this.onChanged,
-      required this.enabled,
+      this.enabled,
       this.textInputAction = TextInputAction.next,
-      required this.onFieldSubmitted,
-      required this.focusNode,
+      this.onFieldSubmitted,
+      this.focusNode,
       this.obscureText = false,
       this.error,
       this.textCapitalization = TextCapitalization.sentences});

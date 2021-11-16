@@ -84,12 +84,12 @@ class SettingsRemoteControlPage extends StatefulWidget {
 }
 
 class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
-  Device device;
+  late Device device;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsRemoteControlBloc>(context),
+      bloc: BlocProvider.of<SettingsRemoteControlBloc>(context),
       listener: (BuildContext context, SettingsRemoteControlBlocState state) async {
         if (state is SettingsRemoteControlBlocStateLoaded) {
           this.device = state.device;
@@ -99,9 +99,9 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
         }
       },
       child: BlocBuilder<SettingsRemoteControlBloc, SettingsRemoteControlBlocState>(
-          cubit: BlocProvider.of<SettingsRemoteControlBloc>(context),
+          bloc: BlocProvider.of<SettingsRemoteControlBloc>(context),
           builder: (BuildContext context, SettingsRemoteControlBlocState state) {
-            Widget body;
+            late Widget body;
             if (state is SettingsRemoteControlBlocStateDonePairing) {
               body = _renderDonePairing();
             } else if (state is SettingsRemoteControlBlocStateLoading) {
@@ -186,7 +186,7 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
   }
 
   void _login(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -194,13 +194,13 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
             title: Text(SettingsRemoteControlPage.settingsRemoteControlPagePleaseLoginDialogTitle),
             content: Text(SettingsRemoteControlPage.settingsRemoteControlPagePleaseLoginDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -209,7 +209,7 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {

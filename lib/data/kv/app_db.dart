@@ -66,7 +66,7 @@ class AppDB {
     setAppData(appData);
   }
 
-  void setLastPlant(int plantID) {
+  void setLastPlant(int? plantID) {
     AppData appData = getAppData();
     appData.lastPlantID = plantID;
     setAppData(appData);
@@ -84,7 +84,7 @@ class AppDB {
     setAppData(appData);
   }
 
-  void setJWT(String jwt) {
+  void setJWT(String? jwt) {
     AppData appData = getAppData();
     appData.jwt = jwt;
     setAppData(appData);

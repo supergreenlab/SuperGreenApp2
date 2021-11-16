@@ -59,9 +59,9 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
         }
       },
       child: BlocBuilder<SettingsAuthBloc, SettingsAuthBlocState>(
-        cubit: BlocProvider.of<SettingsAuthBloc>(context),
+        bloc: BlocProvider.of<SettingsAuthBloc>(context),
         builder: (BuildContext context, SettingsAuthBlocState state) {
-          Widget body;
+          late Widget body;
 
           if (state is SettingsAuthBlocStateLoading) {
             body = FullscreenLoading(
@@ -108,7 +108,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
   }
 
   Widget _renderAuthBody(BuildContext context, SettingsAuthBlocStateLoaded state) {
-    String pic = state.user.pic;
+    String? pic = state.user?.pic;
     if (pic != null) {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
@@ -149,7 +149,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Connected as '),
-                  Text(state.user.nickname, style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(state.user!.nickname, style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               )
             : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -159,9 +159,9 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                 ),
                 Text('Loading user data..')
               ]),
-        _renderOptionCheckbx(context, 'Sync over mobile data too', (bool newValue) {
+        _renderOptionCheckbx(context, 'Sync over mobile data too', (bool? newValue) {
           setState(() {
-            _syncOverGSM = newValue;
+            _syncOverGSM = newValue ?? false;
             BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlocEventSetSyncedOverGSM(_syncOverGSM));
           });
         }, _syncOverGSM == true),
@@ -227,7 +227,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
     );
   }
 
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -257,10 +257,10 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
           withImages: true,
           withVideos: true,
           multiple: false,
-          onDone: (Set<MediaFile> selectedFiles) {
+          onDone: (Set<MediaFile?> selectedFiles) {
             Timer(Duration(milliseconds: 500), () {
               BlocProvider.of<SettingsAuthBloc>(context)
-                  .add(SettingsAuthBlocEventUpdatePic(File(selectedFiles.toList()[0].path)));
+                  .add(SettingsAuthBlocEventUpdatePic(File(selectedFiles.toList()[0]!.path)));
             });
             Navigator.pop(c);
           },

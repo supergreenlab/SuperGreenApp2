@@ -97,13 +97,13 @@ class SettingsPlantAlertsPage extends TraceableStatefulWidget {
 }
 
 class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
-  AlertsSettings alertsSettings;
-  bool enabled;
+  late AlertsSettings alertsSettings;
+  late bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsPlantAlertsBloc>(context),
+      bloc: BlocProvider.of<SettingsPlantAlertsBloc>(context),
       listener: (BuildContext context, SettingsPlantAlertsBlocState state) async {
         if (state is SettingsPlantAlertsBlocStateLoaded) {
           setState(() {
@@ -116,7 +116,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
         }
       },
       child: BlocBuilder<SettingsPlantAlertsBloc, SettingsPlantAlertsBlocState>(
-          cubit: BlocProvider.of<SettingsPlantAlertsBloc>(context),
+          bloc: BlocProvider.of<SettingsPlantAlertsBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is SettingsPlantAlertsBlocStateNotLoaded) {
@@ -139,29 +139,30 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
             }
             return WillPopScope(
               onWillPop: () async {
-                return await showDialog<bool>(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Unsaved changed'),
-                        content: Text('Changes will not be saved. Continue?'),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, false);
-                            },
-                            child: Text('NO'),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, true);
-                            },
-                            child: Text('YES'),
-                          ),
-                        ],
-                      );
-                    });
+                return (await showDialog<bool>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Unsaved changed'),
+                            content: Text('Changes will not be saved. Continue?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                },
+                                child: Text('NO'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text('YES'),
+                              ),
+                            ],
+                          );
+                        })) ??
+                    false;
               },
               child: Scaffold(
                   appBar: SGLAppBar(
@@ -194,12 +195,12 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
       ),
       Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _renderOptionCheckbx(context, 'Enable notifications', (bool newValue) {
+          child: _renderOptionCheckbx(context, 'Enable notifications', (bool? newValue) {
             setState(() {
               if (enabled == false && newValue == true) {
                 BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
               }
-              enabled = newValue;
+              enabled = newValue ?? false;
             });
           }, enabled)),
     ];
@@ -339,15 +340,15 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
   }
 
   Widget renderParameters(BuildContext context,
-      {String icon,
-      String title,
-      Color color,
-      int min,
-      int max,
-      void onChange(int min, int max),
-      String displayFn(int value),
-      String unit,
-      int step}) {
+      {required String icon,
+      required String title,
+      required Color color,
+      required int min,
+      required int max,
+      required void onChange(int min, int max),
+      required String displayFn(int value),
+      required String unit,
+      required int step}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 8),
       child: Column(
@@ -393,7 +394,12 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     );
   }
 
-  Widget renderNumberParam({int value, void onChange(int value), String displayFn(int value), String unit, int step}) {
+  Widget renderNumberParam(
+      {required int value,
+      required void onChange(int value),
+      required String displayFn(int value),
+      required String unit,
+      required int step}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
@@ -432,7 +438,7 @@ class _SettingsPlantAlertsPageState extends State<SettingsPlantAlertsPage> {
     );
   }
 
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

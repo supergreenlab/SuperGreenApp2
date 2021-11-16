@@ -56,7 +56,7 @@ class SettingsCreateAccountBlocStateError extends SettingsCreateAccountBlocState
 class SettingsCreateAccountBloc extends Bloc<SettingsCreateAccountBlocEvent, SettingsCreateAccountBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsCreateAccount args;
-  bool _isAuth;
+  late bool _isAuth;
 
   SettingsCreateAccountBloc(this.args) : super(SettingsCreateAccountBlocStateInit()) {
     _isAuth = BackendAPI().usersAPI.loggedIn;

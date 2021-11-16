@@ -119,14 +119,14 @@ class Product extends Equatable {
 }
 
 class ProductSupplier extends Equatable {
-  final String id;
+  final String? id;
   final String productID;
   final String url;
 
-  ProductSupplier({required this.id, required this.productID, required this.url});
+  ProductSupplier({this.id, required this.productID, required this.url});
 
   @override
-  List<Object> get props => [id, productID, url];
+  List<Object?> get props => [id, productID, url];
 
   static ProductSupplier fromMap(Map<String, dynamic> map) {
     return ProductSupplier(

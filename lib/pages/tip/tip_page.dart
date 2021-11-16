@@ -40,10 +40,10 @@ class _TipPageState extends State<TipPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TipBloc, TipBlocState>(
-        cubit: BlocProvider.of<TipBloc>(context),
+        bloc: BlocProvider.of<TipBloc>(context),
         builder: (BuildContext context, TipBlocState state) {
           String title = 'Tips';
-          Widget body;
+          late Widget body;
           if (state is TipBlocStateInit) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TipBlocStateLoaded) {
@@ -142,12 +142,12 @@ class _TipPageState extends State<TipPage> {
       return Image.network(
         path,
         fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
           if (loadingProgress == null) return child;
           return FullscreenLoading(
               percent: loadingProgress.expectedTotalBytes == null
                   ? null
-                  : loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                  : loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
         },
       );
     }
@@ -182,9 +182,9 @@ class _TipPageState extends State<TipPage> {
                           activeColor: Colors.black,
                           checkColor: Colors.black,
                           value: dontShow,
-                          onChanged: (bool value) {
+                          onChanged: (bool? value) {
                             setState(() {
-                              dontShow = value;
+                              dontShow = value ?? false;
                             });
                           }),
                     ),
@@ -199,7 +199,7 @@ class _TipPageState extends State<TipPage> {
                 if (dontShow) {
                   BlocProvider.of<TipBloc>(context).add(TipBlocEventDone());
                 }
-                BlocProvider.of<MainNavigatorBloc>(context).add(state.nextRoute);
+                BlocProvider.of<MainNavigatorBloc>(context).add(state.nextRoute!);
               },
             ),
           ],

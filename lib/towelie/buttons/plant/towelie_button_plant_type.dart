@@ -30,8 +30,7 @@ class TowelieButtonPlantAuto extends TowelieButtonPlantType {
   @override
   String get id => _autoID;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_autoID, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_autoID, {
         'title': 'Auto',
       });
 
@@ -44,8 +43,7 @@ class TowelieButtonPlantPhoto extends TowelieButtonPlantType {
   @override
   String get id => _photoID;
 
-  static Map<String, dynamic> createButton() =>
-      TowelieButton.createButton(_photoID, {
+  static Map<String, dynamic> createButton() => TowelieButton.createButton(_photoID, {
         'title': 'Photo',
       });
 
@@ -59,28 +57,20 @@ abstract class TowelieButtonPlantType extends TowelieButton {
   TowelieButtonPlantType(this.plantType, this.schedule);
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
     final db = RelDB.get();
     Plant plant = await db.plantsDAO.getPlantWithFeed(event.feed);
-    PlantSettings plantSettings =
-        PlantSettings.fromJSON(plant.settings).copyWith(plantType: plantType);
-    await db.plantsDAO.updatePlant(PlantsCompanion(
-        id: Value(plant.id),
-        settings: Value(plantSettings.toJSON()),
-        synced: Value(false)));
+    PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings).copyWith(plantType: plantType);
+    await db.plantsDAO.updatePlant(
+        PlantsCompanion(id: Value(plant.id), settings: Value(plantSettings.toJSON()), synced: Value(false)));
 
-    Box box = await db.plantsDAO.getBox(plant.box);
-    BoxSettings boxSettings =
-        BoxSettings.fromJSON(box.settings).copyWith(schedule: schedule);
-    await db.plantsDAO.updateBox(BoxesCompanion(
-        id: Value(box.id),
-        settings: Value(boxSettings.toJSON()),
-        synced: Value(false)));
+    Box box = await db.plantsDAO.getBox(plant.box!);
+    BoxSettings boxSettings = BoxSettings.fromJSON(box.settings).copyWith(schedule: schedule);
+    await db.plantsDAO
+        .updateBox(BoxesCompanion(id: Value(box.id), settings: Value(boxSettings.toJSON()), synced: Value(false)));
 
     Feed feed = await RelDB.get().feedsDAO.getFeed(event.feed);
-    FeedEntry feedEntry =
-        await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
+    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(event.feedEntry);
     await CardPlantPhase.createPlantPhase(feed);
     await selectButtons(feedEntry, selectedButtonID: id);
   }

@@ -37,26 +37,25 @@ class TipBlocEventDone extends TipBlocEvent {
 }
 
 class TipBlocState extends Equatable {
-  final MainNavigateToFeedFormEvent nextRoute;
+  final MainNavigateToFeedFormEvent? nextRoute;
 
   TipBlocState(this.nextRoute);
 
   @override
-  List<Object> get props => [nextRoute];
+  List<Object?> get props => [nextRoute];
 }
 
 class TipBlocStateInit extends TipBlocState {
-  TipBlocStateInit(MainNavigateToFeedFormEvent nextRoute) : super(nextRoute);
+  TipBlocStateInit(MainNavigateToFeedFormEvent? nextRoute) : super(nextRoute);
 }
 
 class TipBlocStateLoaded extends TipBlocState {
   final List<Map<String, dynamic>> tips;
 
-  TipBlocStateLoaded(MainNavigateToFeedFormEvent nextRoute, this.tips)
-      : super(nextRoute);
+  TipBlocStateLoaded(MainNavigateToFeedFormEvent? nextRoute, this.tips) : super(nextRoute);
 
   @override
-  List<Object> get props => [nextRoute];
+  List<Object?> get props => [nextRoute, tips];
 }
 
 class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
@@ -71,16 +70,15 @@ class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
     if (event is TipBlocEventInit) {
       List<Map<String, dynamic>> tips = [];
       for (int i = 0; i < args.paths.length; i += 1) {
-        Response resp =
-            await get('https://tipapi.supergreenlab.com/${args.paths[i]}');
-        Map<String, dynamic> body = JsonDecoder().convert(resp.body);
+        Response resp = await get(Uri.parse('https://tipapi.supergreenlab.com/${args.paths[i]}'));
+        Map<String, dynamic>? body = JsonDecoder().convert(resp.body);
         if (body != null && body.length > 0) {
           tips.add(body);
         }
       }
       yield TipBlocStateLoaded(args.nextRoute, tips);
     } else if (event is TipBlocEventDone) {
-      AppDB().setTipDone(args.tipID);
+      AppDB().setTipDone(args.tipID!);
     }
   }
 }

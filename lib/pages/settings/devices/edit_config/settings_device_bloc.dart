@@ -103,7 +103,7 @@ class SettingsDeviceBlocStateDone extends SettingsDeviceBlocState {
 class SettingsDeviceBloc extends Bloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsDevice args;
-  Device device;
+  late Device device;
 
   SettingsDeviceBloc(this.args) : super(SettingsDeviceBlocStateLoading()) {
     add(SettingsDeviceBlocEventInit());
@@ -133,7 +133,7 @@ class SettingsDeviceBloc extends Bloc<SettingsDeviceBlocEvent, SettingsDeviceBlo
   }
 
   void refreshParams({bool delete = false}) async {
-    String auth = AppDB().getDeviceAuth(device.identifier);
+    String? auth = AppDB().getDeviceAuth(device.identifier);
     final deviceName = await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME", auth: auth);
     final mdnsDomain = await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN", auth: auth);
     await RelDB.get().devicesDAO.updateDevice(

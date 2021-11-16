@@ -32,7 +32,7 @@ class AuthModalBlocEventAuth extends AuthModalBlocEvent {
   final String username;
   final String password;
 
-  AuthModalBlocEventAuth({this.username, this.password});
+  AuthModalBlocEventAuth({required this.username, required this.password});
 
   @override
   List<Object> get props => [username, password];
@@ -48,7 +48,7 @@ class AuthModalBlocStateInit extends AuthModalBlocState {
 class AuthModalBlocStateLoaded extends AuthModalBlocState {
   final Device device;
 
-  AuthModalBlocStateLoaded({this.device});
+  AuthModalBlocStateLoaded({required this.device});
 
   @override
   List<Object> get props => [device];
@@ -57,7 +57,7 @@ class AuthModalBlocStateLoaded extends AuthModalBlocState {
 class AuthModalBlocStateDone extends AuthModalBlocState {
   final Device device;
 
-  AuthModalBlocStateDone({this.device});
+  AuthModalBlocStateDone({required this.device});
 
   @override
   List<Object> get props => [device];
@@ -67,7 +67,7 @@ class AuthModalBloc extends Bloc<AuthModalBlocEvent, AuthModalBlocState> {
   final Device device;
   final Function onClose;
 
-  AuthModalBloc({this.device, this.onClose}) : super(AuthModalBlocStateInit()) {
+  AuthModalBloc({required this.device, required this.onClose}) : super(AuthModalBlocStateInit()) {
     add(AuthModalBlocEventInit());
   }
 

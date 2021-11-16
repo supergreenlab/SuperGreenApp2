@@ -85,7 +85,7 @@ class SettingsDeviceAuthPage extends StatefulWidget {
 }
 
 class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
-  Device device;
+  late Device device;
   bool done = false;
   bool authError = false;
 
@@ -98,7 +98,7 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsDeviceAuthBloc>(context),
+      bloc: BlocProvider.of<SettingsDeviceAuthBloc>(context),
       listener: (BuildContext context, SettingsDeviceAuthBlocState state) async {
         if (state is SettingsDeviceAuthBlocStateLoaded) {
           this.device = state.device;
@@ -115,20 +115,20 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
         }
       },
       child: BlocBuilder<SettingsDeviceAuthBloc, SettingsDeviceAuthBlocState>(
-          cubit: BlocProvider.of<SettingsDeviceAuthBloc>(context),
+          bloc: BlocProvider.of<SettingsDeviceAuthBloc>(context),
           buildWhen: (SettingsDeviceAuthBlocState s1, SettingsDeviceAuthBlocState s2) {
             return !(s2 is SettingsDeviceAuthBlocStateAuthError);
           },
           builder: (BuildContext context, SettingsDeviceAuthBlocState state) {
-            Widget body;
+            late Widget body;
             if (done) {
-              body = _renderDoneAuth(state);
+              body = _renderDoneAuth(state as SettingsDeviceAuthBlocStateDoneAuth);
             } else if (state is SettingsDeviceAuthBlocStateLoading) {
               body = FullscreenLoading(
                 title: CommonL10N.loading,
               );
             } else if (state is SettingsDeviceAuthBlocStateLoaded) {
-              if (state.needsUpgrade) {
+              if (state.needsUpgrade == true) {
                 body = _renderNeedsUpgrade(context, state);
               } else {
                 body = _renderForm(context, state);

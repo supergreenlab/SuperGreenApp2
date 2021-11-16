@@ -44,10 +44,11 @@ class SettingsDeviceAuthBlocEventSetAuth extends SettingsDeviceAuthBlocEvent {
   final String username;
   final String password;
 
-  final String oldUsername;
-  final String oldPassword;
+  final String? oldUsername;
+  final String? oldPassword;
 
-  SettingsDeviceAuthBlocEventSetAuth({this.username, this.password, this.oldUsername, this.oldPassword});
+  SettingsDeviceAuthBlocEventSetAuth(
+      {required this.username, required this.password, this.oldUsername, this.oldPassword});
 
   @override
   List<Object> get props => [username, password];
@@ -63,12 +64,12 @@ class SettingsDeviceAuthBlocStateInit extends SettingsDeviceAuthBlocState {
 class SettingsDeviceAuthBlocStateLoaded extends SettingsDeviceAuthBlocState {
   final Device device;
   final bool authSetup;
-  final bool needsUpgrade;
+  final bool? needsUpgrade;
 
-  SettingsDeviceAuthBlocStateLoaded(this.device, {this.authSetup, this.needsUpgrade});
+  SettingsDeviceAuthBlocStateLoaded(this.device, {required this.authSetup, this.needsUpgrade});
 
   @override
-  List<Object> get props => [device, authSetup, needsUpgrade];
+  List<Object?> get props => [device, authSetup, needsUpgrade];
 }
 
 class SettingsDeviceAuthBlocStateLoading extends SettingsDeviceAuthBlocState {
@@ -101,15 +102,15 @@ class SettingsDeviceAuthBloc extends Bloc<SettingsDeviceAuthBlocEvent, SettingsD
   Stream<SettingsDeviceAuthBlocState> mapEventToState(SettingsDeviceAuthBlocEvent event) async* {
     if (event is SettingsDeviceAuthBlocEventInit) {
       Param otaTimestamp = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_TIMESTAMP');
-      String auth = AppDB().getDeviceAuth(args.device.identifier);
+      String? auth = AppDB().getDeviceAuth(args.device.identifier);
       yield SettingsDeviceAuthBlocStateLoaded(
         args.device,
         authSetup: auth != null,
-        needsUpgrade: otaTimestamp.ivalue <= BackendAPI.lastBeforeRemoteControlTimestamp,
+        needsUpgrade: otaTimestamp.ivalue! <= BackendAPI.lastBeforeRemoteControlTimestamp,
       );
     } else if (event is SettingsDeviceAuthBlocEventSetAuth) {
       yield SettingsDeviceAuthBlocStateLoading();
-      String auth = AppDB().getDeviceAuth(args.device.identifier);
+      String? auth = AppDB().getDeviceAuth(args.device.identifier);
       if (auth != null) {
         try {
           String oldAuth = base64.encode(utf8.encode('${event.oldUsername}:${event.oldPassword}'));
@@ -122,7 +123,7 @@ class SettingsDeviceAuthBloc extends Bloc<SettingsDeviceAuthBlocEvent, SettingsD
           yield SettingsDeviceAuthBlocStateAuthError();
           yield SettingsDeviceAuthBlocStateLoaded(
             args.device,
-            authSetup: auth != null,
+            authSetup: true,
           );
           return;
         }

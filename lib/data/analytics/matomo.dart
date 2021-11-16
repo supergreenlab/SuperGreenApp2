@@ -15,7 +15,7 @@ import 'package:uuid/uuid.dart';
 abstract class TraceableStatelessWidget extends StatelessWidget {
   final String name;
 
-  const TraceableStatelessWidget({this.name = '', Key key}) : super(key: key);
+  const TraceableStatelessWidget({this.name = '', Key? key}) : super(key: key);
 
   @override
   StatelessElement createElement() {
@@ -27,7 +27,7 @@ abstract class TraceableStatelessWidget extends StatelessWidget {
 abstract class TraceableStatefulWidget extends StatefulWidget {
   final String name;
 
-  const TraceableStatefulWidget({this.name = '', Key key}) : super(key: key);
+  const TraceableStatefulWidget({this.name = '', Key? key}) : super(key: key);
 
   @override
   StatefulElement createElement() {
@@ -39,7 +39,7 @@ abstract class TraceableStatefulWidget extends StatefulWidget {
 abstract class TraceableInheritedWidget extends InheritedWidget {
   final String name;
 
-  const TraceableInheritedWidget({this.name = '', Key key, Widget child}) : super(key: key, child: child);
+  const TraceableInheritedWidget({this.name = '', Key? key, required Widget child}) : super(key: key, child: child);
 
   @override
   InheritedElement createElement() {
@@ -55,30 +55,30 @@ class MatomoTracker {
   static const String kVisitorId = 'matomo_visitor_id';
   static const String kOptOut = 'matomo_opt_out';
 
-  _MatomoDispatcher _dispatcher;
+  late _MatomoDispatcher _dispatcher;
 
   static MatomoTracker _instance = MatomoTracker.internal();
   MatomoTracker.internal();
   factory MatomoTracker() => _instance;
 
-  int siteId;
-  String url;
-  _Session session;
-  _Visitor visitor;
-  String userAgent;
-  String contentBase;
-  int width;
-  int height;
+  late int siteId;
+  late String url;
+  late _Session session;
+  late _Visitor visitor;
+  late String userAgent;
+  late String contentBase;
+  late int width;
+  late int height;
 
   bool initialized = false;
   bool _optout = false;
 
-  SharedPreferences _prefs;
+  late SharedPreferences _prefs;
 
   Queue<_Event> _queue = Queue();
-  Timer _timer;
+  late Timer _timer;
 
-  initialize({@required int siteId, @required String url, String visitorId}) async {
+  initialize({required int siteId, required String url, String? visitorId}) async {
     this.siteId = siteId;
     this.url = url;
 
@@ -100,19 +100,19 @@ class MatomoTracker {
     _prefs = await SharedPreferences.getInstance();
 
     if (_prefs.containsKey(kFirstVisit)) {
-      firstVisit = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kFirstVisit));
+      firstVisit = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kFirstVisit)!);
     } else {
       _prefs.setInt(kFirstVisit, firstVisit.millisecondsSinceEpoch);
     }
 
     if (_prefs.containsKey(kLastVisit)) {
-      lastVisit = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kLastVisit));
+      lastVisit = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt(kLastVisit)!);
     }
     // Now is the last visit.
     _prefs.setInt(kLastVisit, lastVisit.millisecondsSinceEpoch);
 
     if (_prefs.containsKey(kVisitCount)) {
-      visitCount += _prefs.getInt(kVisitCount);
+      visitCount += _prefs.getInt(kVisitCount)!;
     }
     _prefs.setInt(kVisitCount, visitCount);
 
@@ -130,10 +130,10 @@ class MatomoTracker {
     visitor = _Visitor(id: visitorId, forcedId: null, userId: visitorId);
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    contentBase = 'https://${packageInfo?.packageName}';
+    contentBase = 'https://${packageInfo.packageName}';
 
     if (_prefs.containsKey(kOptOut)) {
-      _optout = _prefs.getBool(kOptOut);
+      _optout = _prefs.getBool(kOptOut)!;
     } else {
       _prefs.setBool(kOptOut, _optout);
     }
@@ -185,7 +185,7 @@ class MatomoTracker {
     ));
   }
 
-  static void trackGoal(int goalId, {double revenue}) {
+  static void trackGoal(int goalId, {double? revenue}) {
     var tracker = MatomoTracker();
     tracker._track(_Event(
       tracker: tracker,
@@ -225,30 +225,30 @@ class _Session {
   final DateTime lastVisit;
   final int visitCount;
 
-  _Session({this.firstVisit, this.lastVisit, this.visitCount});
+  _Session({required this.firstVisit, required this.lastVisit, required this.visitCount});
 }
 
 class _Visitor {
-  final String id;
-  final String forcedId;
-  final String userId;
+  final String? id;
+  final String? forcedId;
+  final String? userId;
 
   _Visitor({this.id, this.forcedId, this.userId});
 }
 
 class _Event {
   final MatomoTracker tracker;
-  final String action;
-  final String eventCategory;
-  final String eventAction;
-  final String eventName;
-  final int goalId;
-  final double revenue;
+  final String? action;
+  final String? eventCategory;
+  final String? eventAction;
+  final String? eventName;
+  final int? goalId;
+  final double? revenue;
 
-  DateTime _date;
+  late DateTime _date;
 
   _Event(
-      {@required this.tracker,
+      {required this.tracker,
       this.action,
       this.eventCategory,
       this.eventAction,
@@ -296,10 +296,10 @@ class _Event {
     map['res'] = '${this.tracker.width}x${this.tracker.height}';
 
     // Goal
-    if (goalId != null && goalId > 0) {
+    if (goalId != null && goalId! > 0) {
       map['idgoal'] = goalId;
     }
-    if (revenue != null && revenue > 0) {
+    if (revenue != null && revenue! > 0) {
       map['revenue'] = revenue;
     }
 
@@ -334,7 +334,7 @@ class _MatomoDispatcher {
       url = '$url$key=$value&';
     }
     //Logger.log(' -> $url');
-    http.post(url, headers: headers).then((http.Response response) {
+    http.post(Uri.parse(url), headers: headers).then((http.Response response) {
       final int statusCode = response.statusCode;
       //Logger.log(' <- $statusCode');
       if (statusCode != 200) {}

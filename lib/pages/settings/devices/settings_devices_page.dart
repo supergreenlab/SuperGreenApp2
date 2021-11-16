@@ -35,9 +35,9 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
     return BlocListener<SettingsDevicesBloc, SettingsDevicesBlocState>(
       listener: (BuildContext context, SettingsDevicesBlocState state) {},
       child: BlocBuilder<SettingsDevicesBloc, SettingsDevicesBlocState>(
-        cubit: BlocProvider.of<SettingsDevicesBloc>(context),
+        bloc: BlocProvider.of<SettingsDevicesBloc>(context),
         builder: (BuildContext context, SettingsDevicesBlocState state) {
-          Widget body;
+          late Widget body;
 
           if (state is SettingsDevicesBlocStateLoading) {
             body = FullscreenLoading(
@@ -88,7 +88,7 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsDevicesBlocStateLoaded),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToAddDeviceEvent());
                     },
@@ -182,7 +182,7 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
   }
 
   void _deleteBox(BuildContext context, Device device) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -190,13 +190,13 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
             title: Text('Delete device ${device.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -205,7 +205,7 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<SettingsDevicesBloc>(context).add(SettingsDevicesBlocEventDeleteDevice(device));
     }
   }

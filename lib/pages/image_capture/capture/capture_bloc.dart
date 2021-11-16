@@ -50,16 +50,16 @@ class CaptureBlocEventCreate extends CaptureBlocEvent {
 class CaptureBlocState extends Equatable {
   final bool videoEnabled;
   final bool pickerEnabled;
-  final String overlayPath;
+  final String? overlayPath;
 
   CaptureBlocState(this.videoEnabled, this.pickerEnabled, this.overlayPath);
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [videoEnabled, pickerEnabled, overlayPath];
 }
 
 class CaptureBlocStateInit extends CaptureBlocState {
-  CaptureBlocStateInit(bool videoEnabled, bool pickerEnabled, String overlayPath)
+  CaptureBlocStateInit(bool videoEnabled, bool pickerEnabled, String? overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 }
 
@@ -67,21 +67,21 @@ class CaptureBlocStateLoading extends CaptureBlocState {
   final String title;
   final double progress;
 
-  CaptureBlocStateLoading(this.title, this.progress, bool videoEnabled, bool pickerEnabled, String overlayPath)
+  CaptureBlocStateLoading(this.title, this.progress, bool videoEnabled, bool pickerEnabled, String? overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
-  List<Object> get props => [...super.props, title, progress];
+  List<Object?> get props => [...super.props, title, progress];
 }
 
 class CaptureBlocStateDone extends CaptureBlocState {
   final List<FeedMediasCompanion> feedMedias;
 
-  CaptureBlocStateDone(this.feedMedias, bool videoEnabled, bool pickerEnabled, String overlayPath)
+  CaptureBlocStateDone(this.feedMedias, bool videoEnabled, bool pickerEnabled, String? overlayPath)
       : super(videoEnabled, pickerEnabled, overlayPath);
 
   @override
-  List<Object> get props => [...super.props, feedMedias];
+  List<Object?> get props => [...super.props, feedMedias];
 }
 
 class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {

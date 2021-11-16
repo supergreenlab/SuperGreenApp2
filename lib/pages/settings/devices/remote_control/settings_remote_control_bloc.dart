@@ -50,10 +50,11 @@ class SettingsRemoteControlBlocStateLoaded extends SettingsRemoteControlBlocStat
   final bool loggedIn;
   final bool needsUpgrade;
 
-  SettingsRemoteControlBlocStateLoaded(this.device, {this.signingSetup, this.loggedIn, this.needsUpgrade});
+  SettingsRemoteControlBlocStateLoaded(this.device,
+      {required this.signingSetup, required this.loggedIn, required this.needsUpgrade});
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         device,
         signingSetup,
         loggedIn,
@@ -91,7 +92,7 @@ class SettingsRemoteControlBloc extends Bloc<SettingsRemoteControlBlocEvent, Set
         args.device,
         signingSetup: deviceData.signing != null,
         loggedIn: AppDB().getAppData().jwt != null,
-        needsUpgrade: otaTimestamp.ivalue <= BackendAPI.lastBeforeRemoteControlTimestamp,
+        needsUpgrade: otaTimestamp.ivalue! <= BackendAPI.lastBeforeRemoteControlTimestamp,
       );
     } else if (event is SettingsRemoteControlBlocEventPair) {
       yield SettingsRemoteControlBlocStateLoading();

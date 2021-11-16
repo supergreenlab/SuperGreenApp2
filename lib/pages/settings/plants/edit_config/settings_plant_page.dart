@@ -23,13 +23,13 @@ class SettingsPlantPage extends TraceableStatefulWidget {
 }
 
 class _SettingsPlantPageState extends State<SettingsPlantPage> {
-  TextEditingController _nameController;
-  bool _public;
-  Box _box;
+  late TextEditingController _nameController;
+  late bool _public;
+  late Box _box;
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
 
-  int _listener;
+  late int _listener;
 
   bool _keyboardVisible = false;
 
@@ -55,7 +55,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<SettingsPlantBloc>(context),
+      bloc: BlocProvider.of<SettingsPlantBloc>(context),
       listener: (BuildContext context, SettingsPlantBlocState state) async {
         if (state is SettingsPlantBlocStateLoaded) {
           _nameController = TextEditingController(text: state.plant.name);
@@ -77,9 +77,9 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
         }
       },
       child: BlocBuilder<SettingsPlantBloc, SettingsPlantBlocState>(
-          cubit: BlocProvider.of<SettingsPlantBloc>(context),
+          bloc: BlocProvider.of<SettingsPlantBloc>(context),
           builder: (BuildContext context, SettingsPlantBlocState state) {
-            Widget body;
+            late Widget body;
             if (state is SettingsPlantBlocStateLoading) {
               body = FullscreenLoading(
                 title: 'Loading..',
@@ -93,29 +93,30 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             }
             return WillPopScope(
               onWillPop: () async {
-                return await showDialog<bool>(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Unsaved changed'),
-                        content: Text('Changes will not be saved. Continue?'),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, false);
-                            },
-                            child: Text('NO'),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context, true);
-                            },
-                            child: Text('YES'),
-                          ),
-                        ],
-                      );
-                    });
+                return (await showDialog<bool>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Unsaved changed'),
+                            content: Text('Changes will not be saved. Continue?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                },
+                                child: Text('NO'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text('YES'),
+                              ),
+                            ],
+                          );
+                        })) ??
+                    false;
               },
               child: Scaffold(
                   appBar: SGLAppBar(
@@ -167,9 +168,9 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
               ),
               Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: _renderOptionCheckbx(context, 'Make this plant public', (bool newValue) {
+                  child: _renderOptionCheckbx(context, 'Make this plant public', (bool? newValue) {
                     setState(() {
-                      _public = newValue;
+                      _public = newValue ?? false;
                     });
                   }, _public)),
               ListTile(
@@ -257,7 +258,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
     ));
   }
 
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -291,7 +292,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
   }
 
   void handlerArchivePlant(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -299,13 +300,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             title: Text('Archive plant?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -314,13 +315,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<SettingsPlantBloc>(context).add(SettingsPlantBlocEventArchive());
     }
   }
 
   void _login(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -328,13 +329,13 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             title: Text('Archive plant'),
             content: Text('Plant archiving requires a sgl account.'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('CANCEL'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -343,7 +344,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }

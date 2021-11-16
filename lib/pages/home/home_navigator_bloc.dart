@@ -37,27 +37,27 @@ class HomeNavigateEventInit extends HomeNavigatorEvent {
 }
 
 class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent implements DeviceNavigationArgHolder {
-  final Plant plant;
-  final FeedEntry feedEntry;
-  final String commentID;
-  final String replyTo;
+  final Plant? plant;
+  final FeedEntry? feedEntry;
+  final String? commentID;
+  final String? replyTo;
 
   HomeNavigateToPlantFeedEvent(this.plant, {this.feedEntry, this.commentID, this.replyTo});
 
   @override
-  List<Object> get props => [plant, commentID, replyTo];
+  List<Object?> get props => [plant, commentID, replyTo];
 
   @override
-  Future<Device> getDevice() async {
-    Plant p = await PlantFeedBloc.getDisplayPlant(plant);
+  Future<Device?> getDevice() async {
+    Plant? p = await PlantFeedBloc.getDisplayPlant(plant);
     if (p == null) {
       return null;
     }
-    Box box = await RelDB.get().plantsDAO.getBox(p.box);
+    Box box = await RelDB.get().plantsDAO.getBox(p.box!);
     if (box.device == null) {
       return null;
     }
-    return RelDB.get().devicesDAO.getDevice(box.device);
+    return RelDB.get().devicesDAO.getDevice(box.device!);
   }
 }
 
@@ -71,7 +71,7 @@ class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent implements DeviceNav
 
   @override
   Future<Device> getDevice() async {
-    return RelDB.get().devicesDAO.getDevice(box.device);
+    return RelDB.get().devicesDAO.getDevice(box.device!);
   }
 }
 
@@ -128,19 +128,19 @@ class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
   @override
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
     if (event is HomeNavigateToSGLFeedEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/feed/sgl', arguments: event);
+      _navigatorKey.currentState!.pushReplacementNamed('/feed/sgl', arguments: event);
       yield HomeNavigatorState(0);
     } else if (event is HomeNavigateToPlantFeedEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/feed/plant', arguments: event);
+      _navigatorKey.currentState!.pushReplacementNamed('/feed/plant', arguments: event);
       yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToBoxFeedEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/feed/box', arguments: event);
+      _navigatorKey.currentState!.pushReplacementNamed('/feed/box', arguments: event);
       yield HomeNavigatorState(1);
     } else if (event is HomeNavigateToExplorerEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/explorer', arguments: event);
+      _navigatorKey.currentState!.pushReplacementNamed('/explorer', arguments: event);
       yield HomeNavigatorState(2);
     } else if (event is HomeNavigateToSettingsEvent) {
-      _navigatorKey.currentState.pushReplacementNamed('/settings', arguments: event);
+      _navigatorKey.currentState!.pushReplacementNamed('/settings', arguments: event);
       yield HomeNavigatorState(3);
     } else {
       yield HomeNavigatorState(0);

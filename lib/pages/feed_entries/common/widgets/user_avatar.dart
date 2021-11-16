@@ -24,10 +24,10 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class UserAvatar extends TraceableStatelessWidget {
-  final String icon;
+  final String? icon;
   final double size;
 
-  const UserAvatar({Key key, this.icon, this.size = 40}) : super(key: key);
+  const UserAvatar({Key? key, this.icon, this.size = 40}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,12 @@ class UserAvatar extends TraceableStatelessWidget {
         width: size,
         height: size,
         fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
           if (loadingProgress == null) {
             return child;
           }
-          return FullscreenLoading(percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+          return FullscreenLoading(
+              percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
         },
       );
     } else if (icon.startsWith('assets/')) {

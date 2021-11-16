@@ -84,8 +84,8 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
 
   Box box;
   Plant plant;
-  StreamSubscription<Plant> plantStream;
-  StreamSubscription<Box> boxStream;
+  StreamSubscription<Plant>? plantStream;
+  StreamSubscription<Box>? boxStream;
 
   PlantFeedBloc(this.args) : super(PlantFeedBlocStateInit()) {
     this.add(PlantFeedBlocEventLoad());
@@ -127,23 +127,21 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
 
   @override
   Future<void> close() async {
-    if (plantStream != null) {
-      await plantStream.cancel();
-    }
-    if (boxStream != null) {
-      await boxStream.cancel();
-    }
+    await plantStream?.cancel();
+    await boxStream?.cancel();
     return super.close();
   }
 
-  static Future<Plant> getDisplayPlant(Plant plant) async {
+  static Future<Plant?> getDisplayPlant(Plant? plant) async {
     AppDB _db = AppDB();
     if (plant == null) {
       AppData appData = _db.getAppData();
       if (appData.lastPlantID == null) {
         return null;
       }
-      plant = await RelDB.get().plantsDAO.getPlant(appData.lastPlantID);
+      try {
+        plant = await RelDB.get().plantsDAO.getPlant(appData.lastPlantID!);
+      } catch (e) {}
       if (plant == null) {
         List<Plant> plants = await RelDB.get().plantsDAO.getPlants();
         if (plants.length == 0) {

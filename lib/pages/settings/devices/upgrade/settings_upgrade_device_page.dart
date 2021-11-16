@@ -43,7 +43,7 @@ class SettingsUpgradeDevicePage extends TraceableStatelessWidget {
       },
       child: BlocBuilder<SettingsUpgradeDeviceBloc, SettingsUpgradeDeviceBlocState>(
         builder: (BuildContext context, SettingsUpgradeDeviceBlocState state) {
-          Widget body;
+          late Widget body;
           if (state is SettingsUpgradeDeviceBlocStateInit) {
             body = FullscreenLoading();
           } else if (state is SettingsUpgradeDeviceBlocStateLoaded) {

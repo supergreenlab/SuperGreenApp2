@@ -55,16 +55,16 @@ class SettingsPlantAlertsBlocStateInit extends SettingsPlantAlertsBlocState {
 }
 
 class SettingsPlantAlertsBlocStateNotLoaded extends SettingsPlantAlertsBlocState {
-  final bool hasController;
-  final bool isSync;
-  final bool isLoggedIn;
+  final bool? hasController;
+  final bool? isSync;
+  final bool? isLoggedIn;
 
   final Box box;
 
-  SettingsPlantAlertsBlocStateNotLoaded({this.hasController, this.isSync, this.box, this.isLoggedIn});
+  SettingsPlantAlertsBlocStateNotLoaded({this.hasController, this.isSync, required this.box, this.isLoggedIn});
 
   @override
-  List<Object> get props => [hasController, isSync, box, isLoggedIn];
+  List<Object?> get props => [hasController, isSync, box, isLoggedIn];
 }
 
 class SettingsPlantAlertsBlocStateLoaded extends SettingsPlantAlertsBlocState {
@@ -94,7 +94,7 @@ class SettingsPlantAlertsBlocStateLoading extends SettingsPlantAlertsBlocState {
 class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, SettingsPlantAlertsBlocState> {
   final MainNavigateToSettingsPlantAlerts args;
 
-  StreamSubscription<Device> deviceSubscription;
+  StreamSubscription<Device>? deviceSubscription;
 
   SettingsPlantAlertsBloc(this.args) : super(SettingsPlantAlertsBlocStateInit()) {
     add(SettingsPlantAlertsBlocEventInit());
@@ -104,34 +104,32 @@ class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, Setting
   Stream<SettingsPlantAlertsBlocState> mapEventToState(SettingsPlantAlertsBlocEvent event) async* {
     if (event is SettingsPlantAlertsBlocEventInit) {
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
-      Box box = await RelDB.get().plantsDAO.getBox(plant.box);
+      Box box = await RelDB.get().plantsDAO.getBox(plant.box!);
       if (box.device == null) {
         yield SettingsPlantAlertsBlocStateNotLoaded(hasController: false, box: box);
         return;
       }
-      Device device = await RelDB.get().devicesDAO.getDevice(box.device);
+      Device device = await RelDB.get().devicesDAO.getDevice(box.device!);
       if (device.serverID == null) {
         bool isLoggedIn = AppDB().getAppData().jwt != null;
         if (isLoggedIn) {
-          if (deviceSubscription != null) {
-            deviceSubscription.cancel();
-          }
+          deviceSubscription?.cancel();
           deviceSubscription = RelDB.get().devicesDAO.watchDevice(device.id).listen((Device device) {
             if (device.serverID != null) {
               add(SettingsPlantAlertsBlocEventInit());
-              deviceSubscription.cancel();
+              deviceSubscription?.cancel();
             }
           });
         }
         yield SettingsPlantAlertsBlocStateNotLoaded(isSync: false, box: box, isLoggedIn: isLoggedIn);
         return;
       }
-      AlertsSettings alertsSettings = await BackendAPI().servicesAPI.getPlantAlertSettings(plant.serverID);
+      AlertsSettings alertsSettings = await BackendAPI().servicesAPI.getPlantAlertSettings(plant.serverID!);
       yield SettingsPlantAlertsBlocStateLoaded(plant.alerts, alertsSettings);
     } else if (event is SettingsPlantAlertsBlocEventUpdateParameters) {
       yield SettingsPlantAlertsBlocStateLoading();
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
-      await BackendAPI().servicesAPI.setPlantAlertSettings(plant.serverID, event.alertsSettings);
+      await BackendAPI().servicesAPI.setPlantAlertSettings(plant.serverID!, event.alertsSettings);
       await RelDB.get()
           .plantsDAO
           .updatePlant(PlantsCompanion(id: Value(plant.id), alerts: Value(event.enabled), synced: Value(false)));
@@ -142,9 +140,7 @@ class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, Setting
 
   @override
   Future<void> close() async {
-    if (deviceSubscription != null) {
-      deviceSubscription.cancel();
-    }
+    deviceSubscription?.cancel();
     await super.close();
   }
 }

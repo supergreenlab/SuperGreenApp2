@@ -196,7 +196,7 @@ class _MainPageState extends State<MainPage> {
   bool _showingNotificationRequest = false;
   bool _showingDeviceAuth = false;
   Queue<BuildContext> lastRouteContextsStack = Queue<BuildContext>();
-  BuildContext lastRouteContext;
+  BuildContext? lastRouteContext;
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +205,7 @@ class _MainPageState extends State<MainPage> {
           FocusScopeNode currentFocus = FocusScope.of(context);
 
           if (!currentFocus.hasPrimaryFocus) {
-            FocusManager.instance.primaryFocus.unfocus();
+            FocusManager.instance.primaryFocus!.unfocus();
           }
         },
         child: wrapListeners(
@@ -222,12 +222,12 @@ class _MainPageState extends State<MainPage> {
               const Locale('fr'),
             ],
             navigatorKey: widget._navigatorKey,
-            onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context).title,
+            onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context)!.title,
             onGenerateRoute: (settings) => CupertinoPageRoute(
                 settings: settings,
                 builder: (context) {
                   if (lastRouteContext != null) {
-                    lastRouteContextsStack.addLast(lastRouteContext);
+                    lastRouteContextsStack.addLast(lastRouteContext!);
                   }
                   lastRouteContext = context;
                   return wrapSyncIndicator(TowelieHelper.wrapWidget(
@@ -254,10 +254,10 @@ class _MainPageState extends State<MainPage> {
           if (state is NotificationsBlocStateMainNavigation) {
             BlocProvider.of<MainNavigatorBloc>(context).add(state.mainNavigatorEvent);
           } else if (state is NotificationsBlocStateRequestPermission) {
-            _requestNotificationPermissions(lastRouteContext);
+            _requestNotificationPermissions(lastRouteContext!);
           } else if (state is NotificationsBlocStateNotification) {
-            BlocProvider.of<TowelieBloc>(context).add(
-                TowelieBlocEventTrigger(TowelieActionHelpNotification.id, state, ModalRoute.of(context).settings.name));
+            BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventTrigger(
+                TowelieActionHelpNotification.id, state, ModalRoute.of(context)!.settings.name!));
           }
         },
         child: BlocListener<TowelieBloc, TowelieBlocState>(
@@ -277,7 +277,7 @@ class _MainPageState extends State<MainPage> {
               child: BlocListener<DeviceDaemonBloc, DeviceDaemonBlocState>(
                   listener: (BuildContext context, DeviceDaemonBlocState state) {
                     if (state is DeviceDaemonBlocStateRequiresLogin) {
-                      _promptDeviceAuth(lastRouteContext, state.device);
+                      _promptDeviceAuth(lastRouteContext!, state.device);
                     }
                   },
                   child: body),
@@ -312,7 +312,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _onGenerateRoute(BuildContext context, RouteSettings settings, {Function onPop}) {
+  Widget _onGenerateRoute(BuildContext context, RouteSettings settings, {required Function() onPop}) {
     Timer(Duration(milliseconds: 100), () {
       BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventRoute(settings));
     });
@@ -321,7 +321,8 @@ class _MainPageState extends State<MainPage> {
         return MultiBlocProvider(
           providers: [
             BlocProvider<HomeNavigatorBloc>(
-                create: (context) => HomeNavigatorBloc(settings.arguments, _homeNavigatorKey)),
+                create: (context) =>
+                    HomeNavigatorBloc(settings.arguments as MainNavigateToHomeEvent, _homeNavigatorKey)),
             BlocProvider<HomeBloc>(
               create: (context) => HomeBloc(),
             )
@@ -335,311 +336,320 @@ class _MainPageState extends State<MainPage> {
         );
       case '/plant/box':
         return BlocProvider(
-          create: (context) => SelectBoxBloc(settings.arguments),
+          create: (context) => SelectBoxBloc(settings.arguments as MainNavigateToSelectBoxEvent),
           child: addOnPopCallBack(SelectBoxPage(), onPop),
         );
       case '/plant/box/new':
         return BlocProvider(
-          create: (context) => CreateBoxBloc(settings.arguments),
+          create: (context) => CreateBoxBloc(settings.arguments as MainNavigateToCreateBoxEvent),
           child: addOnPopCallBack(CreateBoxPage(), onPop),
         );
       case '/box/device':
         return BlocProvider(
-          create: (context) => SelectDeviceBloc(settings.arguments),
+          create: (context) => SelectDeviceBloc(settings.arguments as MainNavigateToSelectDeviceEvent),
           child: addOnPopCallBack(SelectDevicePage(), onPop),
         );
       case '/box/device/box':
         return BlocProvider(
-          create: (context) => SelectDeviceBoxBloc(settings.arguments),
+          create: (context) => SelectDeviceBoxBloc(settings.arguments as MainNavigateToSelectDeviceBoxEvent),
           child: addOnPopCallBack(SelectDeviceBoxPage(), onPop),
         );
       case '/box/device/box/new':
         return BlocProvider(
-          create: (context) => SelectDeviceNewBoxBloc(settings.arguments),
+          create: (context) => SelectDeviceNewBoxBloc(settings.arguments as MainNavigateToSelectNewDeviceBoxEvent),
           child: addOnPopCallBack(SelectDeviceNewBoxPage(), onPop),
         );
       case '/device/add':
         return BlocProvider(
-          create: (context) => AddDeviceBloc(settings.arguments),
+          create: (context) => AddDeviceBloc(settings.arguments as MainNavigateToAddDeviceEvent),
           child: addOnPopCallBack(AddDevicePage(), onPop),
         );
       case '/device/new':
         return BlocProvider(
-          create: (context) => NewDeviceBloc(settings.arguments),
+          create: (context) => NewDeviceBloc(settings.arguments as MainNavigateToNewDeviceEvent),
           child: addOnPopCallBack(NewDevicePage(), onPop),
         );
       case '/device/existing':
         return BlocProvider(
-          create: (context) => ExistingDeviceBloc(settings.arguments),
+          create: (context) => ExistingDeviceBloc(settings.arguments as MainNavigateToExistingDeviceEvent),
           child: addOnPopCallBack(ExistingDevicePage(), onPop),
         );
       case '/device/load':
         return BlocProvider(
-          create: (context) => DeviceSetupBloc(settings.arguments),
+          create: (context) => DeviceSetupBloc(settings.arguments as MainNavigateToDeviceSetupEvent),
           child: addOnPopCallBack(DeviceSetupPage(), onPop),
         );
       case '/device/name':
         return BlocProvider(
-          create: (context) => DeviceNameBloc(settings.arguments),
+          create: (context) => DeviceNameBloc(settings.arguments as MainNavigateToDeviceNameEvent),
           child: addOnPopCallBack(DeviceNamePage(), onPop),
         );
       case '/device/pairing':
         return BlocProvider(
-          create: (context) => DevicePairingBloc(settings.arguments),
+          create: (context) => DevicePairingBloc(settings.arguments as MainNavigateToDevicePairingEvent),
           child: addOnPopCallBack(DevicePairingPage(), onPop),
         );
       case '/device/test':
         return BlocProvider(
-          create: (context) => DeviceTestBloc(settings.arguments),
+          create: (context) => DeviceTestBloc(settings.arguments as MainNavigateToDeviceTestEvent),
           child: addOnPopCallBack(DeviceTestPage(), onPop),
         );
       case '/device/wifi':
         return BlocProvider(
-          create: (context) => DeviceWifiBloc(settings.arguments),
+          create: (context) => DeviceWifiBloc(settings.arguments as MainNavigateToDeviceWifiEvent),
           child: addOnPopCallBack(DeviceWifiPage(), onPop),
         );
       case '/feed/form/light':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => DeviceReachableListenerBloc(settings.arguments)),
-            BlocProvider(create: (context) => FeedLightFormBloc(settings.arguments)),
+            BlocProvider(
+                create: (context) => DeviceReachableListenerBloc(settings.arguments as DeviceNavigationArgHolder)),
+            BlocProvider(
+                create: (context) => FeedLightFormBloc(settings.arguments as MainNavigateToFeedLightFormEvent)),
           ],
           child: addOnPopCallBack(FeedLightFormPage(), onPop),
         );
       case '/feed/form/media':
         return BlocProvider(
-          create: (context) => FeedMediaFormBloc(settings.arguments),
+          create: (context) => FeedMediaFormBloc(settings.arguments as MainNavigateToFeedMediaFormEvent),
           child: addOnPopCallBack(FeedMediaFormPage(), onPop),
         );
       case '/feed/form/measure':
         return BlocProvider(
-          create: (context) => FeedMeasureFormBloc(settings.arguments),
+          create: (context) => FeedMeasureFormBloc(settings.arguments as MainNavigateToFeedMeasureFormEvent),
           child: addOnPopCallBack(FeedMeasureFormPage(), onPop),
         );
       case '/feed/form/schedule':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => DeviceReachableListenerBloc(settings.arguments)),
-            BlocProvider(create: (context) => FeedScheduleFormBloc(settings.arguments)),
+            BlocProvider(
+                create: (context) => DeviceReachableListenerBloc(settings.arguments as DeviceNavigationArgHolder)),
+            BlocProvider(
+                create: (context) => FeedScheduleFormBloc(settings.arguments as MainNavigateToFeedScheduleFormEvent)),
           ],
           child: addOnPopCallBack(FeedScheduleFormPage(), onPop),
         );
       case '/feed/form/defoliation':
         return BlocProvider(
-          create: (context) => FeedDefoliationFormBloc(settings.arguments),
+          create: (context) => FeedDefoliationFormBloc(settings.arguments as MainNavigateToFeedCareCommonFormEvent),
           child: addOnPopCallBack(FeedDefoliationFormPage(), onPop),
         );
       case '/feed/form/topping':
         return BlocProvider(
-          create: (context) => FeedToppingFormBloc(settings.arguments),
+          create: (context) => FeedToppingFormBloc(settings.arguments as MainNavigateToFeedCareCommonFormEvent),
           child: addOnPopCallBack(FeedToppingFormPage(), onPop),
         );
       case '/feed/form/fimming':
         return BlocProvider(
-          create: (context) => FeedFimmingFormBloc(settings.arguments),
+          create: (context) => FeedFimmingFormBloc(settings.arguments as MainNavigateToFeedCareCommonFormEvent),
           child: addOnPopCallBack(FeedFimmingFormPage(), onPop),
         );
       case '/feed/form/bending':
         return BlocProvider(
-          create: (context) => FeedBendingFormBloc(settings.arguments),
+          create: (context) => FeedBendingFormBloc(settings.arguments as MainNavigateToFeedCareCommonFormEvent),
           child: addOnPopCallBack(FeedBendingFormPage(), onPop),
         );
       case '/feed/form/transplant':
         return BlocProvider(
-          create: (context) => FeedTransplantFormBloc(settings.arguments),
+          create: (context) => FeedTransplantFormBloc(settings.arguments as MainNavigateToFeedCareCommonFormEvent),
           child: addOnPopCallBack(FeedTransplantFormPage(), onPop),
         );
       case '/feed/form/ventilation':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => DeviceReachableListenerBloc(settings.arguments)),
-            BlocProvider(create: (context) => FeedVentilationFormBloc(settings.arguments)),
+            BlocProvider(
+                create: (context) => DeviceReachableListenerBloc(settings.arguments as DeviceNavigationArgHolder)),
+            BlocProvider(
+                create: (context) =>
+                    FeedVentilationFormBloc(settings.arguments as MainNavigateToFeedVentilationFormEvent)),
           ],
           child: addOnPopCallBack(FeedVentilationFormPage(), onPop),
         );
       case '/feed/form/water':
         return BlocProvider(
-          create: (context) => FeedWaterFormBloc(settings.arguments),
+          create: (context) => FeedWaterFormBloc(settings.arguments as MainNavigateToFeedWaterFormEvent),
           child: addOnPopCallBack(FeedWaterFormPage(), onPop),
         );
       case '/feed/form/lifeevents':
         return BlocProvider(
-          create: (context) => FeedLifeEventFormBloc(settings.arguments),
+          create: (context) => FeedLifeEventFormBloc(settings.arguments as MainNavigateToFeedLifeEventFormEvent),
           child: addOnPopCallBack(FeedLifeEventFormPage(), onPop),
         );
       case '/feed/form/nutrient':
         return BlocProvider(
-          create: (context) => FeedNutrientMixFormBloc(settings.arguments),
+          create: (context) => FeedNutrientMixFormBloc(settings.arguments as MainNavigateToFeedNutrientMixFormEvent),
           child: addOnPopCallBack(FeedNutrientMixFormPage(), onPop),
         );
       case '/feed/form/comment':
         return BlocProvider(
-          create: (context) => CommentsFormBloc(settings.arguments),
+          create: (context) => CommentsFormBloc(settings.arguments as MainNavigateToCommentFormEvent),
           child: addOnPopCallBack(CommentsFormPage(), onPop),
         );
       case '/tip':
         return BlocProvider(
-          create: (context) => TipBloc(settings.arguments),
+          create: (context) => TipBloc(settings.arguments as MainNavigateToTipEvent),
           child: addOnPopCallBack(TipPage(), onPop),
         );
       case '/capture':
         return BlocProvider(
-          create: (context) => CaptureBloc(settings.arguments),
+          create: (context) => CaptureBloc(settings.arguments as MainNavigateToImageCaptureEvent),
           child: addOnPopCallBack(CapturePage(), onPop),
         );
       case '/capture/playback':
         return BlocProvider(
-          create: (context) => PlaybackBloc(settings.arguments),
+          create: (context) => PlaybackBloc(settings.arguments as MainNavigateToImageCapturePlaybackEvent),
           child: addOnPopCallBack(PlaybackPage(), onPop),
         );
       case '/media':
         return BlocProvider(
-          create: (context) => FullscreenMediaBloc(settings.arguments),
+          create: (context) => FullscreenMediaBloc(settings.arguments as MainNavigateToFullscreenMedia),
           child: addOnPopCallBack(FullscreenMediaPage(), onPop),
         );
       case '/picture':
         return BlocProvider(
-          create: (context) => FullscreenPictureBloc(settings.arguments),
+          create: (context) => FullscreenPictureBloc(settings.arguments as MainNavigateToFullscreenPicture),
           child: addOnPopCallBack(FullscreenPicturePage(), onPop),
         );
       case '/timelapse/viewer':
         return BlocProvider(
-          create: (context) => TimelapseViewerBloc(settings.arguments),
+          create: (context) => TimelapseViewerBloc(settings.arguments as MainNavigateToTimelapseViewer),
           child: addOnPopCallBack(TimelapseViewerPage(), onPop),
         );
       case '/settings/auth':
         return BlocProvider(
-          create: (context) => SettingsAuthBloc(settings.arguments),
+          create: (context) => SettingsAuthBloc(settings.arguments as MainNavigateToSettingsAuth),
           child: addOnPopCallBack(SettingsAuthPage(), onPop),
         );
       case '/settings/login':
         return BlocProvider(
-          create: (context) => SettingsLoginBloc(settings.arguments),
+          create: (context) => SettingsLoginBloc(settings.arguments as MainNavigateToSettingsLogin),
           child: addOnPopCallBack(SettingsLoginPage(), onPop),
         );
       case '/settings/createaccount':
         return BlocProvider(
-          create: (context) => SettingsCreateAccountBloc(settings.arguments),
+          create: (context) => SettingsCreateAccountBloc(settings.arguments as MainNavigateToSettingsCreateAccount),
           child: addOnPopCallBack(SettingsCreateAccountPage(), onPop),
         );
       case '/settings/plants':
         return BlocProvider(
-          create: (context) => SettingsPlantsBloc(settings.arguments),
+          create: (context) => SettingsPlantsBloc(settings.arguments as MainNavigateToSettingsPlants),
           child: addOnPopCallBack(SettingsPlantsPage(), onPop),
         );
       case '/settings/plant':
         return BlocProvider(
-          create: (context) => SettingsPlantBloc(settings.arguments),
+          create: (context) => SettingsPlantBloc(settings.arguments as MainNavigateToSettingsPlant),
           child: addOnPopCallBack(SettingsPlantPage(), onPop),
         );
       case '/settings/plant/alerts':
         return BlocProvider(
-          create: (context) => SettingsPlantAlertsBloc(settings.arguments),
+          create: (context) => SettingsPlantAlertsBloc(settings.arguments as MainNavigateToSettingsPlantAlerts),
           child: addOnPopCallBack(SettingsPlantAlertsPage(), onPop),
         );
       case '/settings/boxes':
         return BlocProvider(
-          create: (context) => SettingsBoxesBloc(settings.arguments),
+          create: (context) => SettingsBoxesBloc(settings.arguments as MainNavigateToSettingsBoxes),
           child: addOnPopCallBack(SettingsBoxesPage(), onPop),
         );
       case '/settings/box':
         return BlocProvider(
-          create: (context) => SettingsBoxBloc(settings.arguments),
+          create: (context) => SettingsBoxBloc(settings.arguments as MainNavigateToSettingsBox),
           child: addOnPopCallBack(SettingsBoxPage(), onPop),
         );
       case '/settings/devices':
         return BlocProvider(
-          create: (context) => SettingsDevicesBloc(settings.arguments),
+          create: (context) => SettingsDevicesBloc(settings.arguments as MainNavigateToSettingsDevices),
           child: addOnPopCallBack(SettingsDevicesPage(), onPop),
         );
       case '/settings/device':
         return BlocProvider(
-          create: (context) => SettingsDeviceBloc(settings.arguments),
+          create: (context) => SettingsDeviceBloc(settings.arguments as MainNavigateToSettingsDevice),
           child: addOnPopCallBack(SettingsDevicePage(), onPop),
         );
       case '/settings/device/remote':
         return BlocProvider(
-          create: (context) => SettingsRemoteControlBloc(settings.arguments),
+          create: (context) => SettingsRemoteControlBloc(settings.arguments as MainNavigateToSettingsRemoteControl),
           child: addOnPopCallBack(SettingsRemoteControlPage(), onPop),
         );
       case '/settings/device/auth':
         return BlocProvider(
-          create: (context) => SettingsDeviceAuthBloc(settings.arguments),
+          create: (context) => SettingsDeviceAuthBloc(settings.arguments as MainNavigateToSettingsDeviceAuth),
           child: addOnPopCallBack(SettingsDeviceAuthPage(), onPop),
         );
       case '/settings/device/upgrade':
         return BlocProvider(
-          create: (context) => SettingsUpgradeDeviceBloc(settings.arguments),
+          create: (context) => SettingsUpgradeDeviceBloc(settings.arguments as MainNavigateToSettingsUpgradeDevice),
           child: addOnPopCallBack(SettingsUpgradeDevicePage(), onPop),
         );
 
       case '/public/plant':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => PublicPlantBloc(settings.arguments)),
+            BlocProvider(create: (context) => PublicPlantBloc(settings.arguments as MainNavigateToPublicPlant)),
           ],
           child: addOnPopCallBack(PublicPlantPage(), onPop),
         );
       case '/bookmarks':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => BookmarksBloc(settings.arguments)),
+            BlocProvider(create: (context) => BookmarksBloc(settings.arguments as MainNavigateToBookmarks)),
           ],
           child: addOnPopCallBack(BookmarksPage(), onPop),
         );
       case '/product/select':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => SelectNewProductBloc(settings.arguments)),
+            BlocProvider(
+                create: (context) => SelectNewProductBloc(settings.arguments as MainNavigateToSelectNewProductEvent)),
           ],
           child: addOnPopCallBack(SelectNewProductPage(), onPop),
         );
       case '/product/new/infos':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => ProductInfosBloc(settings.arguments)),
+            BlocProvider(create: (context) => ProductInfosBloc(settings.arguments as MainNavigateToProductInfosEvent)),
           ],
           child: addOnPopCallBack(ProductInfosPage(), onPop),
         );
       case '/product/new/type':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => ProductTypeBloc(settings.arguments)),
+            BlocProvider(create: (context) => ProductTypeBloc(settings.arguments as MainNavigateToProductTypeEvent)),
           ],
           child: addOnPopCallBack(ProductTypePage(), onPop),
         );
       case '/plantpicker':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => PlantPickerBloc(settings.arguments)),
+            BlocProvider(create: (context) => PlantPickerBloc(settings.arguments as MainNavigateToPlantPickerEvent)),
           ],
           child: addOnPopCallBack(PlantPickerPage(), onPop),
         );
       case '/selectplant':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => SelectPlantBloc(settings.arguments)),
+            BlocProvider(create: (context) => SelectPlantBloc(settings.arguments as MainNavigateToSelectPlantEvent)),
           ],
           child: addOnPopCallBack(SelectPlantPage(), onPop),
         );
       case '/product/new/supplier':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => ProductSupplierBloc(settings.arguments)),
+            BlocProvider(
+                create: (context) => ProductSupplierBloc(settings.arguments as MainNavigateToProductSupplierEvent)),
           ],
           child: addOnPopCallBack(ProductSupplierPage(), onPop),
         );
       case '/public/box':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => RemoteBoxFeedBloc(settings.arguments)),
+            BlocProvider(create: (context) => RemoteBoxFeedBloc(settings.arguments as MainNavigateToRemoteBoxEvent)),
           ],
           child: addOnPopCallBack(RemoteBoxFeedPage(), onPop),
         );
       case '/public/follows':
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => FollowsFeedBloc(settings.arguments)),
+            BlocProvider(create: (context) => FollowsFeedBloc(settings.arguments as MainNavigateToFollowsFeedEvent)),
           ],
           child: addOnPopCallBack(FollowsFeedPage(), onPop),
         );

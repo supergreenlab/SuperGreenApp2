@@ -93,9 +93,9 @@ class SettingsUpgradeDeviceBlocStateUpgradeDone extends SettingsUpgradeDeviceBlo
 class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent, SettingsUpgradeDeviceBlocState> {
   final MainNavigateToSettingsUpgradeDevice args;
 
-  HttpServer server;
+  HttpServer? server;
 
-  Param otaTimestamp;
+  late Param otaTimestamp;
 
   SettingsUpgradeDeviceBloc(this.args) : super(SettingsUpgradeDeviceBlocStateInit()) {
     add(SettingsUpgradeDeviceBlocEventInit());
@@ -108,10 +108,10 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent, Set
       Param otaBaseDir = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_BASEDIR');
 
       String localOTATimestamp = await rootBundle.loadString('assets/firmware${otaBaseDir.svalue}/timestamp');
-      yield SettingsUpgradeDeviceBlocStateLoaded(int.parse(localOTATimestamp) > otaTimestamp.ivalue);
+      yield SettingsUpgradeDeviceBlocStateLoaded(int.parse(localOTATimestamp) > otaTimestamp.ivalue!);
     } else if (event is SettingsUpgradeDeviceBlocEventUpgrade) {
       yield SettingsUpgradeDeviceBlocStateUpgrading('Setting parameters..');
-      String auth = AppDB().getDeviceAuth(args.device.identifier);
+      String? auth = AppDB().getDeviceAuth(args.device.identifier);
       Param otaServerIP = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_SERVER_IP');
       Param otaServerPort = await RelDB.get().devicesDAO.getParam(args.device.id, 'OTA_SERVER_PORT');
       String myip = await DeviceAPI.fetchString('http://${args.device.ip}/myip', auth: auth);
@@ -123,11 +123,11 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent, Set
       await DeviceAPI.uploadFile(args.device.ip, 'app.html', htmlApp, auth: auth);
 
       server = await HttpServer.bind(InternetAddress.anyIPv6, 0);
-      server.listen(listenRequest);
+      server!.listen(listenRequest);
 
       await Future.delayed(Duration(seconds: 1));
       await DeviceHelper.updateStringParam(args.device, otaServerIP, myip, forceLocal: true);
-      await DeviceHelper.updateIntParam(args.device, otaServerPort, server.port, forceLocal: true);
+      await DeviceHelper.updateIntParam(args.device, otaServerPort, server!.port, forceLocal: true);
 
       yield SettingsUpgradeDeviceBlocStateUpgrading('Rebooting controller..');
       Param reboot = await RelDB.get().devicesDAO.getParam(args.device.id, 'REBOOT');
@@ -183,9 +183,7 @@ class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent, Set
 
   @override
   Future<void> close() async {
-    if (server != null) {
-      await server.close(force: true);
-    }
+    await server?.close(force: true);
     return super.close();
   }
 }

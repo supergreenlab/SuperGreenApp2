@@ -13,6 +13,8 @@ description: SuperGreenLab&#x27;s mobile app
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.2.19+60
 
+publish_to: none
+
 environment:
   sdk: ">=2.12.0 <3.0.0"
 

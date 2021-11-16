@@ -76,7 +76,7 @@ class DeviceAPI {
     return r.body;
   }
 
-  static Future<String?> fetchStringParam(String controllerIP, String paramName,
+  static Future<String> fetchStringParam(String controllerIP, String paramName,
       {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     return fetchString('http://$controllerIP/s?k=${paramName.toUpperCase()}',
         timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
@@ -123,7 +123,7 @@ class DeviceAPI {
     throw Error();
   }
 
-  static Future<int?> fetchIntParam(String controllerIP, String paramName,
+  static Future<int> fetchIntParam(String controllerIP, String paramName,
       {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     final client = new HttpClient();
     if (timeout != null) {
@@ -162,10 +162,10 @@ class DeviceAPI {
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"controllerIP": controllerIP, "paramName": paramName}, fwdThrow: true);
     }
-    return null;
+    throw Error();
   }
 
-  static Future<String?> setStringParam(String controllerIP, String paramName, String value,
+  static Future<String> setStringParam(String controllerIP, String paramName, String value,
       {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     try {
       await post('http://$controllerIP/s?k=${paramName.toUpperCase()}&v=${Uri.encodeQueryComponent(value)}',
@@ -177,7 +177,7 @@ class DeviceAPI {
     return fetchStringParam(controllerIP, paramName, auth: auth);
   }
 
-  static Future<int?> setIntParam(String controllerIP, String paramName, int value,
+  static Future<int> setIntParam(String controllerIP, String paramName, int value,
       {int? timeout = 5, int nRetries = 4, int wait = 1, String? auth}) async {
     try {
       await post('http://$controllerIP/i?k=${paramName.toUpperCase()}&v=$value',
@@ -283,7 +283,10 @@ class DeviceAPI {
         int moduleID;
         if (modules.containsKey(moduleName) == false) {
           bool isArray = k.containsKey('array');
-          Module? exists = await db.getModule(deviceID, moduleName);
+          Module? exists;
+          try {
+            exists = await db.getModule(deviceID, moduleName);
+          } catch (e) {}
           if (exists == null) {
             ModulesCompanion module = ModulesCompanion.insert(
                 device: deviceID, name: moduleName, isArray: isArray, arrayLen: isArray ? k['array']['len'] : 0);
@@ -294,7 +297,10 @@ class DeviceAPI {
           modules[moduleName] = moduleID;
         }
         int type = k['type'] == 'integer' ? INTEGER_TYPE : STRING_TYPE;
-        Param? exists = await db.getParam(deviceID, k['caps_name']);
+        Param? exists;
+        try {
+          exists = await db.getParam(deviceID, k['caps_name']);
+        } catch (e) {}
         if (type == INTEGER_TYPE) {
           try {
             final value = await DeviceAPI.fetchIntParam(ip, k['caps_name'], auth: auth);

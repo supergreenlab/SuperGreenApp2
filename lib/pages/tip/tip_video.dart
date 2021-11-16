@@ -22,14 +22,14 @@ import 'package:video_player/video_player.dart';
 class TipVideo extends StatefulWidget {
   final String path;
 
-  const TipVideo({Key key, this.path}) : super(key: key);
+  const TipVideo({Key? key, required this.path}) : super(key: key);
 
   @override
   _TipVideoState createState() => _TipVideoState();
 }
 
 class _TipVideoState extends State<TipVideo> {
-  VideoPlayerController _videoPlayerController;
+  late final VideoPlayerController _videoPlayerController;
 
   @override
   void initState() {
@@ -48,8 +48,6 @@ class _TipVideoState extends State<TipVideo> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (context, constraints) => SizedBox(
-            width: constraints.maxWidth,
-            height: constraints.maxHeight,
-            child: VideoPlayer(_videoPlayerController)));
+            width: constraints.maxWidth, height: constraints.maxHeight, child: VideoPlayer(_videoPlayerController)));
   }
 }
