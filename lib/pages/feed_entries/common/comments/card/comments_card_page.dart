@@ -30,7 +30,7 @@ class CommentsCardPage extends StatefulWidget {
   final FeedEntryState state;
   final FeedState feedState;
 
-  const CommentsCardPage({Key key, this.state, this.feedState}) : super(key: key);
+  const CommentsCardPage({Key? key, required this.state, required this.feedState}) : super(key: key);
 
   @override
   _CommentsCardPageState createState() => _CommentsCardPageState();
@@ -43,18 +43,17 @@ class _CommentsCardPageState extends State<CommentsCardPage> with TickerProvider
       return Container();
     }
     return AnimatedSizeAndFade(
-        vsync: this,
         fadeDuration: Duration(milliseconds: 200),
         sizeDuration: Duration(milliseconds: 200),
-        child: renderLoaded(context, widget.state.socialState));
+        child: renderLoaded(context, widget.state.socialState as FeedEntrySocialStateLoaded));
   }
 
   Widget renderLoaded(BuildContext context, FeedEntrySocialStateLoaded socialState) {
     List<Widget> content = [];
-    if ((socialState.comments?.length ?? 0) == 2) {
+    if (socialState.comments?.length == 2) {
       content.add(SmallCommentView(
-        feedEntry: widget.state,
-        comment: socialState.comments[0],
+        feedEntry: widget.state as FeedEntryStateLoaded,
+        comment: socialState.comments![0],
         loggedIn: widget.feedState.loggedIn,
       ));
       content.add(Padding(
@@ -65,14 +64,19 @@ class _CommentsCardPageState extends State<CommentsCardPage> with TickerProvider
         ),
       ));
       content.add(SmallCommentView(
-          feedEntry: widget.state, comment: socialState.comments[1], loggedIn: widget.feedState.loggedIn));
-    } else if ((socialState.comments?.length ?? 0) == 1) {
+          feedEntry: widget.state as FeedEntryStateLoaded,
+          comment: socialState.comments![1],
+          loggedIn: widget.feedState.loggedIn));
+    } else if (socialState.comments?.length == 1) {
       content.add(SmallCommentView(
-          feedEntry: widget.state, comment: socialState.comments[0], loggedIn: widget.feedState.loggedIn));
+          feedEntry: widget.state as FeedEntryStateLoaded,
+          comment: socialState.comments![0],
+          loggedIn: widget.feedState.loggedIn));
     }
     return InkWell(
         onTap: () {
-          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(false, widget.state));
+          BlocProvider.of<MainNavigatorBloc>(context)
+              .add(MainNavigateToCommentFormEvent(false, widget.state as FeedEntryStateLoaded));
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),

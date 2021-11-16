@@ -29,8 +29,8 @@ class SliderFormParam extends StatelessWidget {
   final Color color;
   final double min;
   final double max;
-  final bool loading;
-  final bool disable;
+  final bool? loading;
+  final bool? disable;
 
   const SliderFormParam({
     Key? key,
@@ -42,8 +42,8 @@ class SliderFormParam extends StatelessWidget {
     required this.color,
     this.min = 0,
     this.max = 100,
-    required this.loading,
-    required this.disable,
+    this.loading,
+    this.disable,
   }) : super(key: key);
 
   @override

@@ -4,16 +4,15 @@ import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.da
 class BoxFeedState extends FeedState {
   final BoxSettings boxSettings;
 
-  BoxFeedState(bool loggedIn, String storeGeo, this.boxSettings)
-      : super(loggedIn, storeGeo);
+  BoxFeedState(bool loggedIn, String? storeGeo, this.boxSettings) : super(loggedIn, storeGeo);
 
   @override
-  List<Object> get props => [...super.props, boxSettings];
+  List<Object?> get props => [...super.props, boxSettings];
 
-  FeedState copyWith({
-    bool loggedIn,
-    String storeGeo,
-    BoxSettings boxSettings,
+  BoxFeedState copyWith({
+    bool? loggedIn,
+    String? storeGeo,
+    BoxSettings? boxSettings,
   }) {
     return BoxFeedState(
       loggedIn ?? this.loggedIn,

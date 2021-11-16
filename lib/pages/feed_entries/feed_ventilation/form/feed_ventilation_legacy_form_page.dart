@@ -25,7 +25,7 @@ import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 class FeedVentilationLegacyFormPage extends TraceableStatefulWidget {
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationLegacyFormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationLegacyFormPage(this.state, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationLegacyFormPageState createState() => _FeedVentilationLegacyFormPageState();
@@ -45,7 +45,7 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {

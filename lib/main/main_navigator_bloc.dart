@@ -767,7 +767,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
 
   FutureFn futureFn() {
     Completer f = Completer();
-    Function(Future) futureFn = (Future<dynamic> fu) async {
+    Function(Future?) futureFn = (Future<dynamic>? fu) async {
       var o = await fu;
       f.complete(o);
     };
@@ -777,7 +777,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
 }
 
 class FutureFn {
-  final Function(Future) futureFn;
+  final Function(Future?) futureFn;
   final Future<dynamic> future;
 
   FutureFn(this.futureFn, this.future);

@@ -48,12 +48,12 @@ class FeedTimelapseCardPage extends StatefulWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedTimelapseCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
+  const FeedTimelapseCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -66,7 +66,7 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, widget.state);
+      return _renderLoaded(context, widget.state as FeedTimelapseState);
     }
     return _renderLoading(context, widget.state);
   }
@@ -111,7 +111,7 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedTimelapseState state) {
-    FeedTimelapseParams params = state.params;
+    FeedTimelapseParams params = state.params as FeedTimelapseParams;
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -133,7 +133,7 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
               onDelete: () {
                 BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
               },
-              actions: widget.cardActions != null ? widget.cardActions(context, state) : []),
+              actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
           state.showPlantInfos
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),

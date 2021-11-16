@@ -32,17 +32,17 @@ class PlantDrawerPage extends TraceableStatefulWidget {
     );
   }
 
-  final Plant selectedPlant;
-  final Box selectedBox;
+  final Plant? selectedPlant;
+  final Box? selectedBox;
 
-  const PlantDrawerPage({Key key, this.selectedPlant, this.selectedBox}) : super(key: key);
+  const PlantDrawerPage({Key? key, this.selectedPlant, this.selectedBox}) : super(key: key);
 
   @override
   _PlantDrawerPageState createState() => _PlantDrawerPageState();
 }
 
 class _PlantDrawerPageState extends State<PlantDrawerPage> {
-  ScrollController drawerScrollController;
+  late ScrollController drawerScrollController;
 
   @override
   void initState() {
@@ -101,7 +101,7 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
       buildWhen: (previousState, state) =>
           state is PlantDrawerBlocStateLoadingPlantList || state is PlantDrawerBlocStatePlantListUpdated,
       builder: (BuildContext context, PlantDrawerBlocState state) {
-        Widget content;
+        late Widget content;
         if (state is PlantDrawerBlocStateLoadingPlantList) {
           content = FullscreenLoading(title: CommonL10N.loading);
         } else if (state is PlantDrawerBlocStatePlantListUpdated) {
@@ -126,7 +126,7 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                         height: 30,
                         child: Row(
                           children: [
-                            (widget.selectedBox != null && widget.selectedBox.id == b.id)
+                            (widget.selectedBox?.id == b.id)
                                 ? Icon(
                                     Icons.check_box,
                                     color: Colors.green,
@@ -146,7 +146,7 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                   ),
                 ];
                 content.addAll(plants.where((p) => p.box == b.id).map((p) {
-                  int nUnseen = 0;
+                  int? nUnseen = 0;
                   try {
                     nUnseen =
                         state.hasPending.where((e) => e.id == p.feed).map<int>((e) => e.nNew).reduce((a, e) => a + e);
@@ -154,7 +154,7 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                   Widget item = Padding(
                       padding: EdgeInsets.only(left: 16),
                       child: ListTile(
-                        leading: (widget.selectedPlant != null && widget.selectedPlant.id == p.id)
+                        leading: (widget.selectedPlant?.id == p.id)
                             ? Icon(
                                 Icons.check_box,
                                 color: Colors.green,

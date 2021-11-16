@@ -106,7 +106,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
   bool showSearchResults = false;
   bool showSearchField = true;
 
-  Timer autocompleteTimer;
+  Timer? autocompleteTimer;
 
   @override
   void initState() {
@@ -125,9 +125,9 @@ class _ExplorerPageState extends State<ExplorerPage> {
         if (state is ExplorerBlocStateLoaded) {}
       },
       child: BlocBuilder<ExplorerBloc, ExplorerBlocState>(
-          cubit: BlocProvider.of<ExplorerBloc>(context),
+          bloc: BlocProvider.of<ExplorerBloc>(context),
           builder: (context, state) {
-            Widget body;
+            late Widget body;
             if (state is ExplorerBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is ExplorerBlocStateLoaded) {
@@ -346,9 +346,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                     disabledBorder: InputBorder.none,
                   ),
                   onChanged: (value) {
-                    if (autocompleteTimer != null) {
-                      autocompleteTimer.cancel();
-                    }
+                    autocompleteTimer?.cancel();
                     autocompleteTimer = Timer(Duration(milliseconds: 500), () {
                       BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(value, 0));
                       autocompleteTimer = null;
@@ -386,7 +384,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
   }
 
   void _login(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -394,13 +392,13 @@ class _ExplorerPageState extends State<ExplorerPage> {
             title: Text(ExplorerPage.explorerPagePleaseLoginDialogTitle),
             content: Text(ExplorerPage.explorerPagePleaseLoginDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -409,16 +407,14 @@ class _ExplorerPageState extends State<ExplorerPage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }
 
   @override
   void dispose() {
-    if (autocompleteTimer != null) {
-      autocompleteTimer.cancel();
-    }
+    autocompleteTimer?.cancel();
     super.dispose();
   }
 }

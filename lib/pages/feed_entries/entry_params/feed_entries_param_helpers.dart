@@ -51,7 +51,7 @@ abstract class FeedEntriesParamHelpers {
   };
 
   static dynamic paramForFeedEntryType(String type, String json) {
-    Function builder = _params[type];
+    Function? builder = _params[type];
     if (builder == null) {
       return FeedUnknownParams();
     }

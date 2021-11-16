@@ -39,16 +39,15 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    FeedMeasureParams params = state.params;
-    MediaState previous;
+    FeedMeasureParams params = state.params as FeedMeasureParams;
+    MediaState? previous;
     RelDB db = RelDB.get();
     if (params.previous != null) {
-      FeedMedia previousMedia;
+      late FeedMedia previousMedia;
       if (params.previous is int) {
         previousMedia = await db.feedsDAO.getFeedMedia(params.previous);
       } else if (params.previous is String) {
-        previousMedia =
-            await db.feedsDAO.getFeedMediaForServerID(params.previous);
+        previousMedia = await db.feedsDAO.getFeedMediaForServerID(params.previous);
       }
       previous = MediaState(
           previousMedia.id,
@@ -58,8 +57,7 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
           previousMedia.synced);
     }
 
-    List<FeedMedia> currentMedia =
-        await db.feedsDAO.getFeedMedias(state.feedEntryID);
+    List<FeedMedia> currentMedia = await db.feedsDAO.getFeedMedias(state.feedEntryID);
     MediaState current = MediaState(
         currentMedia[0].id,
         FeedMedias.makeAbsoluteFilePath(currentMedia[0].filePath),
@@ -74,54 +72,45 @@ class FeedMeasureLoader extends LocalFeedEntryLoader {
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {
-    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
-        id: Value(entry.feedEntryID),
-        params: Value(params.toJSON()),
-        synced: Value(false)));
+    await FeedEntryHelper.updateFeedEntry(
+        FeedEntriesCompanion(id: Value(entry.feedEntryID), params: Value(params.toJSON()), synced: Value(false)));
   }
 
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
     super.startListenEntryChanges(entry);
-    FeedMeasureParams params = entry.params;
+    FeedMeasureParams params = entry.params as FeedMeasureParams;
     RelDB db = RelDB.get();
     if (params.previous is int) {
-      _previousStreams[entry.feedEntryID] =
-          db.feedsDAO.watchFeedMedia(params.previous).listen((_) async {
-        FeedEntry feedEntry =
-            await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-        if (feedEntry != null) {
+      _previousStreams[entry.feedEntryID] = db.feedsDAO.watchFeedMedia(params.previous).listen((_) async {
+        try {
+          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
           await updateFeedEntryState(feedEntry);
-        }
+        } catch (e) {}
       });
     } else if (params.previous is String) {
-      _previousStreams[entry.feedEntryID] = db.feedsDAO
-          .watchFeedMediaForServerID(params.previous)
-          .listen((_) async {
-        FeedEntry feedEntry =
-            await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-        if (feedEntry != null) {
+      _previousStreams[entry.feedEntryID] = db.feedsDAO.watchFeedMediaForServerID(params.previous).listen((_) async {
+        try {
+          FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
           await updateFeedEntryState(feedEntry);
-        }
+        } catch (e) {}
       });
     }
-    _currentStreams[entry.feedEntryID] =
-        db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
-      FeedEntry feedEntry =
-          await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-      if (feedEntry != null) {
+    _currentStreams[entry.feedEntryID] = db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
+      try {
+        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
         await updateFeedEntryState(feedEntry);
-      }
+      } catch (e) {}
     });
   }
 
   Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry) async {
     super.cancelListenEntryChanges(entry);
     if (_previousStreams[entry.feedEntryID] != null) {
-      await _previousStreams[entry.feedEntryID].cancel();
+      await _previousStreams[entry.feedEntryID]!.cancel();
       _previousStreams.remove(entry.feedEntryID);
     }
     if (_currentStreams[entry.feedEntryID] != null) {
-      await _currentStreams[entry.feedEntryID].cancel();
+      await _currentStreams[entry.feedEntryID]!.cancel();
       _currentStreams.remove(entry.feedEntryID);
     }
   }

@@ -21,22 +21,19 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
 
 class PlantInfosPlantType extends StatefulWidget {
-  final String plantType;
+  final String? plantType;
 
   final Function onCancel;
-  final Function(String plantType) onSubmit;
+  final Function(String? plantType) onSubmit;
 
-  PlantInfosPlantType(
-      {@required this.plantType,
-      @required this.onCancel,
-      @required this.onSubmit});
+  PlantInfosPlantType({required this.plantType, required this.onCancel, required this.onSubmit});
 
   @override
   _PlantInfosPlantTypeState createState() => _PlantInfosPlantTypeState();
 }
 
 class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
-  String plantType;
+  late String? plantType;
 
   @override
   void initState() {
@@ -63,7 +60,7 @@ class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
               ['AUTO', 'Auto'],
             ],
             value: plantType,
-            onChanged: (String newValue) {
+            onChanged: (String? newValue) {
               setState(() {
                 plantType = newValue;
               });

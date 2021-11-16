@@ -73,8 +73,7 @@ class FeedProductsItemParams extends Equatable {
   final String geo;
   final FeedProductsLinkParams link;
 
-  FeedProductsItemParams(this.title, this.description, this.picture, this.price,
-      this.geo, this.link);
+  FeedProductsItemParams(this.title, this.description, this.picture, this.price, this.geo, this.link);
 
   factory FeedProductsItemParams.fromMap(Map<String, dynamic> map) {
     return FeedProductsItemParams(
@@ -103,14 +102,13 @@ class FeedProductsItemParams extends Equatable {
 }
 
 class FeedProductsParams extends FeedEntryParams {
-  final String topPic;
+  final String? topPic;
   final String text;
   final List<FeedProductsItemParams> products;
-  final List<FeedProductsButtonParams> buttons;
-  final FeedProductsButtonParams selectedButton;
+  final List<FeedProductsButtonParams>? buttons;
+  final FeedProductsButtonParams? selectedButton;
 
-  FeedProductsParams(
-      this.topPic, this.text, this.products, this.buttons, this.selectedButton);
+  FeedProductsParams(this.topPic, this.text, this.products, this.buttons, this.selectedButton);
 
   factory FeedProductsParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -118,9 +116,8 @@ class FeedProductsParams extends FeedEntryParams {
         map['products'].map<FeedProductsItemParams>((p) => FeedProductsItemParams.fromMap(p)).toList();
     List<FeedProductsButtonParams> buttons =
         (map['buttons'] ?? []).map<FeedProductsButtonParams>((b) => FeedProductsButtonParams.fromMap(b)).toList();
-    FeedProductsButtonParams selectedButton = map['selectedButton'] == null
-        ? null
-        : FeedProductsButtonParams.fromMap(map['selectedButton']);
+    FeedProductsButtonParams? selectedButton =
+        map['selectedButton'] == null ? null : FeedProductsButtonParams.fromMap(map['selectedButton']);
     return FeedProductsParams(
       map['top_pic'],
       map['text'],
@@ -136,11 +133,11 @@ class FeedProductsParams extends FeedEntryParams {
       'top_pic': topPic,
       'text': text,
       'products': products.map<Map<String, dynamic>>((p) => p.toMap()).toList(),
-      'buttons': buttons.map<Map<String, dynamic>>((b) => b.toMap()).toList(),
-      'selectedButton': selectedButton.toMap(),
+      'buttons': buttons?.map<Map<String, dynamic>>((b) => b.toMap()).toList(),
+      'selectedButton': selectedButton?.toMap(),
     });
   }
 
   @override
-  List<Object> get props => [topPic, text, products, buttons, selectedButton];
+  List<Object?> get props => [topPic, text, products, buttons, selectedButton];
 }

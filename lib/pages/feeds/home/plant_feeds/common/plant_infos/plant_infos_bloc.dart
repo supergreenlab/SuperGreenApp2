@@ -23,26 +23,24 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 
 class PlantInfos extends Equatable {
   final String name;
-  final String filePath;
-  final String thumbnailPath;
-  final BoxSettings boxSettings;
-  final PlantSettings plantSettings;
+  final String? filePath;
+  final String? thumbnailPath;
+  final BoxSettings? boxSettings;
+  final PlantSettings? plantSettings;
   final bool editable;
 
-  PlantInfos(this.name, this.filePath, this.thumbnailPath, this.boxSettings,
-      this.plantSettings, this.editable);
+  PlantInfos(this.name, this.filePath, this.thumbnailPath, this.boxSettings, this.plantSettings, this.editable);
 
   @override
-  List<Object> get props =>
-      [name, filePath, thumbnailPath, boxSettings, plantSettings, editable];
+  List<Object?> get props => [name, filePath, thumbnailPath, boxSettings, plantSettings, editable];
 
   PlantInfos copyWith({
-    String name,
-    String filePath,
-    String thumbnailPath,
-    BoxSettings boxSettings,
-    PlantSettings plantSettings,
-    bool editable,
+    String? name,
+    String? filePath,
+    String? thumbnailPath,
+    BoxSettings? boxSettings,
+    PlantSettings? plantSettings,
+    bool? editable,
   }) =>
       PlantInfos(
         name ?? this.name,
@@ -114,8 +112,7 @@ class PlantInfosBloc extends Bloc<PlantInfosBlocEvent, PlantInfosBlocState> {
   }
 
   @override
-  Stream<PlantInfosBlocState> mapEventToState(
-      PlantInfosBlocEvent event) async* {
+  Stream<PlantInfosBlocState> mapEventToState(PlantInfosBlocEvent event) async* {
     if (event is PlantInfosEventLoad) {
       delegate.loadPlant();
     } else if (event is PlantInfosEventLoaded) {
@@ -135,8 +132,8 @@ class PlantInfosBloc extends Bloc<PlantInfosBlocEvent, PlantInfosBlocState> {
 }
 
 abstract class PlantInfosBlocDelegate {
-  PlantInfos plantInfos;
-  Function(PlantInfosBlocEvent) add;
+  PlantInfos? plantInfos;
+  late Function(PlantInfosBlocEvent) add;
 
   void init(Function(PlantInfosBlocEvent) add) {
     this.add = add;
@@ -149,6 +146,6 @@ abstract class PlantInfosBlocDelegate {
 
   void plantInfosLoaded(PlantInfos plantInfos) {
     this.plantInfos = plantInfos;
-    add(PlantInfosEventLoaded(this.plantInfos));
+    add(PlantInfosEventLoaded(this.plantInfos!));
   }
 }

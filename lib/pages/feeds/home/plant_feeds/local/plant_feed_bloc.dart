@@ -64,14 +64,14 @@ class PlantFeedBlocStateNoPlant extends PlantFeedBlocState {
 class PlantFeedBlocStateLoaded extends PlantFeedBlocState {
   final Box box;
   final Plant plant;
-  final FeedEntry feedEntry;
-  final String commentID;
-  final String replyTo;
+  final FeedEntry? feedEntry;
+  final String? commentID;
+  final String? replyTo;
 
   PlantFeedBlocStateLoaded(this.box, this.plant, {this.feedEntry, this.commentID, this.replyTo});
 
   @override
-  List<Object> get props => [box, plant, feedEntry, commentID, replyTo];
+  List<Object?> get props => [box, plant, feedEntry, commentID, replyTo];
 }
 
 class PlantFeedBlocStatePlantRemoved extends PlantFeedBlocState {
@@ -82,8 +82,8 @@ class PlantFeedBlocStatePlantRemoved extends PlantFeedBlocState {
 class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   final HomeNavigateToPlantFeedEvent args;
 
-  Box box;
-  Plant plant;
+  late Box? box;
+  late Plant? plant;
   StreamSubscription<Plant>? plantStream;
   StreamSubscription<Box>? boxStream;
 
@@ -94,24 +94,24 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   @override
   Stream<PlantFeedBlocState> mapEventToState(PlantFeedBlocEvent event) async* {
     if (event is PlantFeedBlocEventLoad) {
-      plant = await PlantFeedBloc.getDisplayPlant(args?.plant);
+      plant = await PlantFeedBloc.getDisplayPlant(args.plant);
       if (plant == null) {
         yield PlantFeedBlocStateNoPlant();
         return;
       }
       final db = RelDB.get();
-      box = await db.plantsDAO.getBox(plant.box);
-      plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(_onPlantUpdated);
-      boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(_onBoxUpdated);
-      yield PlantFeedBlocStateLoaded(box, plant,
-          feedEntry: args?.feedEntry, commentID: args?.commentID, replyTo: args?.replyTo);
+      box = await db.plantsDAO.getBox(plant!.box!);
+      plantStream = RelDB.get().plantsDAO.watchPlant(plant!.id).listen(_onPlantUpdated);
+      boxStream = RelDB.get().plantsDAO.watchBox(plant!.box!).listen(_onBoxUpdated);
+      yield PlantFeedBlocStateLoaded(box!, plant!,
+          feedEntry: args.feedEntry, commentID: args.commentID, replyTo: args.replyTo);
     } else if (event is PlantFeedBlocEventUpdated) {
       if (plant == null) {
         yield PlantFeedBlocStatePlantRemoved();
         return;
       }
-      yield PlantFeedBlocStateLoaded(box, plant,
-          feedEntry: args?.feedEntry, commentID: args?.commentID, replyTo: args?.replyTo);
+      yield PlantFeedBlocStateLoaded(box!, plant!,
+          feedEntry: args.feedEntry, commentID: args.commentID, replyTo: args.replyTo);
     }
   }
 

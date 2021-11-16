@@ -36,9 +36,9 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
   @override
   Future<void> loadSocialState(FeedEntryState state) async {
     FeedEntry feedEntry = state.data as FeedEntry;
-    FeedEntryState cached = cache[feedEntry.id];
+    FeedEntryState? cached = cache[feedEntry.id];
     if (feedEntry.serverID != null) {
-      Map<String, dynamic> socialMap = await BackendAPI().feedsAPI.fetchSocialForFeedEntry(feedEntry.serverID);
+      Map<String, dynamic> socialMap = await BackendAPI().feedsAPI.fetchSocialForFeedEntry(feedEntry.serverID!);
       FeedEntrySocialStateLoaded socialState = FeedEntrySocialStateLoaded.fromMap(socialMap);
       if (cached != null && cached.socialState is FeedEntrySocialStateLoaded) {
         socialState = socialState.copyWith(comments: (cached.socialState as FeedEntrySocialStateLoaded).comments);
@@ -50,7 +50,7 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
       if (socialState.nComments > 0) {
         comments = await BackendAPI()
             .feedsAPI
-            .fetchCommentsForFeedEntry(feedEntry.serverID, offset: 0, limit: 2, rootCommentsOnly: true);
+            .fetchCommentsForFeedEntry(feedEntry.serverID!, offset: 0, limit: 2, rootCommentsOnly: true);
       }
       onFeedEntryStateUpdated(state.copyWith(socialState: socialState.copyWith(comments: comments)));
     }
@@ -59,11 +59,11 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
   @mustCallSuper
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
     if (subscriptions[entry.feedEntryID] != null) {
-      subscriptions[entry.feedEntryID].cancel();
+      subscriptions[entry.feedEntryID]!.cancel();
     }
     subscriptions[entry.feedEntryID] =
         FeedEntryHelper.eventBus.on<FeedEntryUpdateEvent>().listen((FeedEntryUpdateEvent event) async {
-      FeedEntry feedEntry = event.feedEntry;
+      FeedEntry? feedEntry = event.feedEntry;
       if (feedEntry == null) {
         return;
       }
@@ -89,7 +89,7 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
     if (subscriptions[entry.feedEntryID] == null) {
       return;
     }
-    await subscriptions[entry.feedEntryID].cancel();
+    await subscriptions[entry.feedEntryID]!.cancel();
     subscriptions.remove(entry.feedEntryID);
   }
 
@@ -106,10 +106,10 @@ abstract class LocalFeedEntryLoader extends FeedEntryLoader {
   FeedEntryState stateForFeedEntry(FeedEntry feedEntry, {bool forceNew = false}) {
     FeedEntrySocialState socialState = FeedEntrySocialStateNotLoaded();
     if (cache[feedEntry.id] != null) {
-      if (!forceNew && cache[feedEntry.id].data == feedEntry) {
-        return cache[feedEntry.id];
+      if (!forceNew && cache[feedEntry.id]!.data == feedEntry) {
+        return cache[feedEntry.id]!;
       }
-      socialState = cache[feedEntry.id].socialState;
+      socialState = cache[feedEntry.id]!.socialState;
     }
     return FeedEntryStateNotLoaded(
         feedEntryID: feedEntry.id,

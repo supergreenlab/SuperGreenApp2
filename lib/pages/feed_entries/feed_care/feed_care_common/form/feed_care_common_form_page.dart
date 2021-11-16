@@ -48,7 +48,7 @@ class FeedCareCommonDraft extends FeedEntryDraftState {
   final List<MediaDraftState> afterMedias;
   final String message;
 
-  FeedCareCommonDraft(int draftID, this.time, this.beforeMedias, this.afterMedias, this.message) : super(draftID);
+  FeedCareCommonDraft(int? draftID, this.time, this.beforeMedias, this.afterMedias, this.message) : super(draftID);
 
   factory FeedCareCommonDraft.fromJSON(int draftID, String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
@@ -168,14 +168,14 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
   final List<FeedMediasCompanion> _afterMedias = [];
   final TextEditingController _textController = TextEditingController();
 
-  Timer _saveDraftTimer;
+  Timer? _saveDraftTimer;
 
-  FeedCareCommonDraft draft;
+  FeedCareCommonDraft? draft;
 
   bool _helpRequest = false;
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  int _listener;
+  late int _listener;
   bool _keyboardVisible = false;
 
   _FeedCareCommonFormPageState(this.title);
@@ -200,9 +200,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
     );
 
     _textController.addListener(() {
-      if (_saveDraftTimer != null) {
-        _saveDraftTimer.cancel();
-      }
+      _saveDraftTimer?.cancel();
       _saveDraftTimer = Timer(Duration(seconds: 1), () {
         _saveDraft();
         _saveDraftTimer = null;
@@ -213,7 +211,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        cubit: BlocProvider.of<FormBloc>(context),
+        bloc: BlocProvider.of<FormBloc>(context),
         listener: (BuildContext context, FeedCareCommonFormBlocState state) {
           if (state is FeedCareCommonFormBlocStateDraft) {
             _resumeDraft(context, state.draft);
@@ -225,7 +223,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
           }
         },
         child: BlocBuilder<FeedCareCommonFormBloc, FeedCareCommonFormBlocState>(
-            cubit: BlocProvider.of<FormBloc>(context),
+            bloc: BlocProvider.of<FormBloc>(context),
             buildWhen: (FeedCareCommonFormBlocState beforeState, FeedCareCommonFormBlocState afterState) {
               return afterState is FeedCareCommonFormBlocStateLoading ||
                   afterState is FeedCareCommonFormBlocStateDone ||
@@ -268,7 +266,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                       await _deleteFileIfExists(media.thumbnailPath.value);
                     }
                     if (draft != null) {
-                      BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventDeleteDraft(draft));
+                      BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventDeleteDraft(draft!));
                     }
                   },
                   body: Column(
@@ -284,9 +282,9 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
     return [
       FeedFormDatePicker(
         date,
-        onChange: (DateTime newDate) {
+        onChange: (DateTime? newDate) {
           setState(() {
-            date = newDate;
+            date = newDate!;
             _saveDraft();
           });
         },
@@ -297,7 +295,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
         child: FeedFormMediaList(
           medias: _beforeMedias,
           onLongPressed: (FeedMediasCompanion media) async {
-            bool confirm = await showDialog<bool>(
+            bool? confirm = await showDialog<bool>(
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
@@ -305,13 +303,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                     title: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogTitle),
                     content: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogBody),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, false);
                         },
                         child: Text(CommonL10N.no),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
@@ -320,7 +318,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                     ],
                   );
                 });
-            if (confirm) {
+            if (confirm ?? false) {
               setState(() {
                 _deleteFileIfExists(media.filePath.value);
                 _deleteFileIfExists(media.thumbnailPath.value);
@@ -329,10 +327,10 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
               });
             }
           },
-          onPressed: (FeedMediasCompanion media) async {
+          onPressed: (FeedMediasCompanion? media) async {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-                List<FeedMediasCompanion> feedMedias = await f;
+                List<FeedMediasCompanion>? feedMedias = await f;
                 if (feedMedias != null) {
                   setState(() {
                     _beforeMedias.addAll(feedMedias);
@@ -347,7 +345,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
-                List<FeedMediasCompanion> feedMedias = await _takePic(context);
+                List<FeedMediasCompanion>? feedMedias = await _takePic(context);
                 if (feedMedias != null) {
                   setState(() {
                     int i = _beforeMedias.indexOf(media);
@@ -366,7 +364,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
         child: FeedFormMediaList(
           medias: _afterMedias,
           onLongPressed: (FeedMediasCompanion media) async {
-            bool confirm = await showDialog<bool>(
+            bool? confirm = await showDialog<bool>(
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
@@ -374,13 +372,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                     title: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogTitle),
                     content: Text(FeedCareCommonFormPage.feedCareCommonDeletePicDialogBody),
                     actions: <Widget>[
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, false);
                         },
                         child: Text(CommonL10N.no),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
@@ -389,7 +387,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
                     ],
                   );
                 });
-            if (confirm) {
+            if (confirm ?? false) {
               setState(() {
                 _deleteFileIfExists(media.filePath.value);
                 _deleteFileIfExists(media.thumbnailPath.value);
@@ -398,10 +396,10 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
               });
             }
           },
-          onPressed: (FeedMediasCompanion media) async {
+          onPressed: (FeedMediasCompanion? media) async {
             if (media == null) {
               BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(futureFn: (f) async {
-                List<FeedMediasCompanion> feedMedias = await f;
+                List<FeedMediasCompanion>? feedMedias = await f;
                 if (feedMedias != null) {
                   setState(() {
                     _afterMedias.addAll(feedMedias);
@@ -416,7 +414,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
               bool keep = await ff.future;
               if (keep == true) {
               } else if (keep == false) {
-                List<FeedMediasCompanion> feedMedias = await _takePic(context);
+                List<FeedMediasCompanion>? feedMedias = await _takePic(context);
                 if (feedMedias != null) {
                   setState(() {
                     int i = _afterMedias.indexOf(media);
@@ -434,10 +432,10 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
     ];
   }
 
-  Future<List<FeedMediasCompanion>> _takePic(BuildContext context) async {
+  Future<List<FeedMediasCompanion>?> _takePic(BuildContext context) async {
     FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(futureFn: futureFn.futureFn));
-    List<FeedMediasCompanion> feedMedias = await futureFn.future;
+    List<FeedMediasCompanion>? feedMedias = await futureFn.future;
     return feedMedias;
   }
 
@@ -463,7 +461,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
   }
 
   void _resumeDraft(BuildContext context, FeedCareCommonDraft newDraft) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -471,13 +469,13 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
             title: Text(FeedCareCommonFormPage.feedCareCommonDraftRecoveryDialogTitle),
             content: Text(FeedCareCommonFormPage.feedCareCommonDraftRecoveryDialogBody(widget.title())),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.no),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -486,7 +484,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
             ],
           );
         });
-    if (confirm == false) {
+    if (confirm ?? false == false) {
       for (MediaDraftState media in newDraft.beforeMedias) {
         await _deleteFileIfExists(media.filePath);
         await _deleteFileIfExists(media.thumbnailPath);
@@ -499,10 +497,10 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
     } else {
       draft = newDraft;
       setState(() {
-        date = DateTime.fromMillisecondsSinceEpoch(draft.time * 1000);
-        _beforeMedias.addAll(draft.beforeMedias.map((e) => e.toFeedMediaCompanion()).toList());
-        _afterMedias.addAll(draft.afterMedias.map((e) => e.toFeedMediaCompanion()).toList());
-        _textController.text = draft.message;
+        date = DateTime.fromMillisecondsSinceEpoch(draft!.time * 1000);
+        _beforeMedias.addAll(draft!.beforeMedias.map((e) => e.toFeedMediaCompanion()).toList());
+        _afterMedias.addAll(draft!.afterMedias.map((e) => e.toFeedMediaCompanion()).toList());
+        _textController.text = draft!.message;
       });
     }
   }
@@ -514,7 +512,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
         _beforeMedias.map<MediaDraftState>((e) => MediaDraftState.fromFeedMediaCompanion(e)).toList(),
         _afterMedias.map<MediaDraftState>((e) => MediaDraftState.fromFeedMediaCompanion(e)).toList(),
         _textController.text);
-    BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventSaveDraft(draft));
+    BlocProvider.of<FormBloc>(context).add(FeedCareCommonFormBlocEventSaveDraft(draft!));
   }
 
   Future _deleteFileIfExists(String filePath) async {
@@ -526,9 +524,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
 
   @override
   void dispose() {
-    if (_saveDraftTimer != null) {
-      _saveDraftTimer.cancel();
-    }
+    _saveDraftTimer?.cancel();
     _keyboardVisibility.removeListener(_listener);
     _textController.dispose();
     super.dispose();

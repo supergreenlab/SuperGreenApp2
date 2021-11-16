@@ -37,15 +37,10 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
 
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
-    List<FeedMedia> feedMedias =
-        await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
+    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getFeedMedias(state.feedEntryID);
     List<MediaState> medias = feedMedias
-        .map((m) => MediaState(
-            m.id,
-            FeedMedias.makeAbsoluteFilePath(m.filePath),
-            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath),
-            JsonDecoder().convert(m.params),
-            m.synced))
+        .map((m) => MediaState(m.id, FeedMedias.makeAbsoluteFilePath(m.filePath),
+            FeedMedias.makeAbsoluteFilePath(m.thumbnailPath), JsonDecoder().convert(m.params), m.synced))
         .toList();
 
     state = FeedMediaState(state, medias: medias);
@@ -55,19 +50,15 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {
-    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
-        id: Value(entry.feedEntryID),
-        params: Value(params.toJSON()),
-        synced: Value(false)));
+    await FeedEntryHelper.updateFeedEntry(
+        FeedEntriesCompanion(id: Value(entry.feedEntryID), params: Value(params.toJSON()), synced: Value(false)));
   }
 
   void startListenEntryChanges(FeedEntryStateLoaded entry) {
     super.startListenEntryChanges(entry);
     RelDB db = RelDB.get();
-    _streams[entry.feedEntryID] =
-        db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
-      FeedEntry feedEntry =
-          await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
+    _streams[entry.feedEntryID] = db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
+      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
       if (feedEntry != null) {
         await updateFeedEntryState(feedEntry, forceNew: true);
       }
@@ -77,7 +68,7 @@ class FeedMediaLoader extends LocalFeedEntryLoader {
   Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry) async {
     super.cancelListenEntryChanges(entry);
     if (_streams[entry.feedEntryID] != null) {
-      await _streams[entry.feedEntryID].cancel();
+      await _streams[entry.feedEntryID]!.cancel();
       _streams.remove(entry.feedEntryID);
     }
   }

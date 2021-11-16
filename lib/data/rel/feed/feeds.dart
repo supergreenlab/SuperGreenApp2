@@ -343,7 +343,7 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (delete(feedEntries)..where((fe) => fe.feed.equals(feedID))).go();
   }
 
-  Future<FeedEntryDraft?> getEntryDraft(int feedID, String type) {
+  Future<FeedEntryDraft> getEntryDraft(int feedID, String type) {
     return (select(feedEntryDrafts)..where((fe) => fe.type.equals(type) & fe.feed.equals(feedID))).getSingle();
   }
 

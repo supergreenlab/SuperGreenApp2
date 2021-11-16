@@ -23,25 +23,21 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/
 class PlantInfosPhaseSince extends StatefulWidget {
   final String title;
   final String icon;
-  final DateTime date;
+  final DateTime? date;
 
   final Function onCancel;
   final Function(DateTime date) onSubmit;
 
   PlantInfosPhaseSince(
-      {@required this.title,
-      @required this.icon,
-      @required this.date,
-      @required this.onCancel,
-      @required this.onSubmit});
+      {required this.title, required this.icon, required this.date, required this.onCancel, required this.onSubmit});
 
   @override
   _PlantInfosPhaseSinceState createState() => _PlantInfosPhaseSinceState();
 }
 
 class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
-  String title;
-  DateTime date;
+  late String title;
+  late DateTime date;
 
   @override
   void initState() {
@@ -65,7 +61,7 @@ class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
             hintText: 'Since: ',
             labelText: 'Pick a date',
             date: date,
-            onChange: (DateTime date) {
+            onChange: (DateTime? date) {
               if (date == null) return;
               setState(() {
                 this.date = date;

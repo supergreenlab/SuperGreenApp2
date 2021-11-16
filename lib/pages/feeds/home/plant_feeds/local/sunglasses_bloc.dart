@@ -66,7 +66,7 @@ class SunglassesBloc extends Bloc<SunglassesBlocEvent, SunglassesBlocState> {
 
   Future<bool> _isON() async {
     Param dimParam = await RelDB.get().devicesDAO.getParam(_deviceID, 'BOX_${_deviceBox}_LED_DIM');
-    int time = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 - dimParam.ivalue;
+    int time = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000 - dimParam.ivalue!;
     return time < 1200;
   }
 }

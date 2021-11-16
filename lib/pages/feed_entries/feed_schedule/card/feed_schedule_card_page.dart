@@ -51,17 +51,18 @@ class FeedScheduleCardPage extends StatelessWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedScheduleCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
+  const FeedScheduleCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, state);
+      return _renderLoaded(context, state as FeedEntryStateLoaded);
     }
     return _renderLoading(context);
   }
@@ -94,7 +95,7 @@ class FeedScheduleCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
-    FeedScheduleParams params = state.params;
+    FeedScheduleParams params = state.params as FeedScheduleParams;
     return FeedCard(
       animation: animation,
       child: Column(
@@ -104,7 +105,7 @@ class FeedScheduleCardPage extends StatelessWidget {
               'assets/feed_card/icon_schedule.svg', FeedScheduleCardPage.feedScheduleCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: cardActions != null ? cardActions(context, state) : []),
+          }, actions: cardActions != null ? cardActions!(context, state) : []),
           Container(
             height: 100,
             alignment: Alignment.center,

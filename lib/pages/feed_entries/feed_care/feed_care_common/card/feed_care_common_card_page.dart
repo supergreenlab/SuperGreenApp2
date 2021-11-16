@@ -36,12 +36,12 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/media_list.dart';
 
 abstract class FeedCareCommonCardPage extends StatefulWidget {
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedCareCommonCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
+  const FeedCareCommonCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -53,12 +53,12 @@ abstract class FeedCareCommonCardPage extends StatefulWidget {
 }
 
 class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
-  bool editText;
+  bool editText = false;
 
   @override
   Widget build(BuildContext context) {
     if (widget.state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, widget.state);
+      return _renderLoaded(context, widget.state as FeedCareCommonState);
     }
     return _renderLoading(context, widget.state);
   }
@@ -82,8 +82,8 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
                     ],
                   ),
                 )
@@ -103,7 +103,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedCareCommonState state) {
-    FeedCareParams params = state.params;
+    FeedCareParams params = state.params as FeedCareParams;
     List<Widget> body = [
       FeedCardTitle(widget.iconPath(), widget.title(), widget.state.synced,
           onEdit: () {
@@ -117,7 +117,7 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
           onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
           },
-          actions: widget.cardActions != null ? widget.cardActions(context, state) : []),
+          actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
       SocialBarPage(
         state: state,
         feedState: widget.feedState,
@@ -183,8 +183,8 @@ class _FeedCareCommonCardPageState extends State<FeedCareCommonCardPage> {
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Row(
             children: [
-              Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-              Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+              Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+              Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
             ],
           ),
         ),

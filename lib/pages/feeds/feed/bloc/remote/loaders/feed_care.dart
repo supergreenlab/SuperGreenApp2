@@ -37,11 +37,11 @@ class FeedCareLoader extends RemoteFeedEntryLoader {
       medias.add(stateForFeedMediaMap(feedMediaMap));
     }
     state = FeedCareCommonState(state,
-        beforeMedias: medias.where((m) => m.params['before'] == true).toList() ?? [],
-        afterMedias: medias.where((m) => m.params['before'] != true).toList() ?? [],
+        beforeMedias: medias.where((m) => m.params['before'] == true).toList(),
+        afterMedias: medias.where((m) => m.params['before'] != true).toList(),
         isRemoteState: true,
         socialState: (state.socialState as FeedEntrySocialStateLoaded));
-    loadComments(state.socialState, state);
+    loadComments(state.socialState as FeedEntrySocialStateLoaded, state);
     return super.load(state);
   }
 }

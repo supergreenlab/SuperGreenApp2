@@ -171,18 +171,18 @@ class FeedVentilationCardPage extends StatelessWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedVentilationCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
+  const FeedVentilationCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, state);
+      return _renderLoaded(context, state as FeedEntryStateLoaded);
     }
     return _renderLoading(context);
   }
@@ -215,7 +215,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
-    FeedVentilationParams params = state.params;
+    FeedVentilationParams params = state.params as FeedVentilationParams;
     Widget body;
     if (params.values.blowerRefSource == null) {
       body = _renderLegacy();
@@ -231,7 +231,7 @@ class FeedVentilationCardPage extends StatelessWidget {
               'assets/feed_card/icon_blower.svg', FeedVentilationCardPage.feedVentilationCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: cardActions != null ? cardActions(context, state) : []),
+          }, actions: cardActions != null ? cardActions!(context, state) : []),
           body,
           SocialBarPage(
             state: state,
@@ -251,7 +251,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   }
 
   Widget _renderV3() {
-    FeedVentilationParams params = state.params;
+    FeedVentilationParams params = state.params as FeedVentilationParams;
     if (isTempSource(params.values.blowerRefSource)) {
       return _renderTemperatureMode();
     }
@@ -269,7 +269,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   }
 
   Widget _renderTemperatureMode() {
-    FeedVentilationParams params = state.params;
+    FeedVentilationParams params = state.params as FeedVentilationParams;
     String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
     List<Widget> cards = [
       renderCard(
@@ -318,7 +318,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   }
 
   Widget _renderHumidityMode() {
-    FeedVentilationParams params = state.params;
+    FeedVentilationParams params = state.params as FeedVentilationParams;
     String unit = '%';
 
     List<Widget> cards = [
@@ -368,7 +368,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   }
 
   Widget _renderTimerMode() {
-    FeedVentilationParams params = state.params;
+    FeedVentilationParams params = state.params as FeedVentilationParams;
     List<Widget> cards = [
       renderCard(
           'assets/feed_card/icon_blower.svg',
@@ -412,7 +412,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   }
 
   Widget _renderManualMode() {
-    FeedVentilationParams params = state.params;
+    FeedVentilationParams params = state.params as FeedVentilationParams;
     List<Widget> cards = [
       renderCard(
           'assets/feed_card/icon_blower.svg',
@@ -446,7 +446,7 @@ class FeedVentilationCardPage extends StatelessWidget {
   }
 
   Widget _renderLegacy() {
-    FeedVentilationParams params = state.params;
+    FeedVentilationParams params = state.params as FeedVentilationParams;
     return Container(
       height: 120,
       alignment: Alignment.center,

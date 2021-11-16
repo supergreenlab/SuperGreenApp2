@@ -37,10 +37,8 @@ class MediaDraftState extends Equatable {
     };
   }
 
-  factory MediaDraftState.fromFeedMediaCompanion(
-      FeedMediasCompanion feedMediasCompanion) {
-    return MediaDraftState(feedMediasCompanion.filePath.value,
-        feedMediasCompanion.thumbnailPath.value);
+  factory MediaDraftState.fromFeedMediaCompanion(FeedMediasCompanion feedMediasCompanion) {
+    return MediaDraftState(feedMediasCompanion.filePath.value, feedMediasCompanion.thumbnailPath.value);
   }
 
   FeedMediasCompanion toFeedMediaCompanion() {
@@ -55,7 +53,7 @@ class MediaDraftState extends Equatable {
 }
 
 abstract class FeedEntryDraftState extends Equatable {
-  final int draftID;
+  final int? draftID;
 
   FeedEntryDraftState(this.draftID);
 

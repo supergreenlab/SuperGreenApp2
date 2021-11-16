@@ -27,8 +27,8 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
-  FeedState feedState;
-  StreamSubscription<hive.BoxEvent> appDataStream;
+  late FeedState feedState;
+  StreamSubscription<hive.BoxEvent>? appDataStream;
 
   SGLFeedBlocDelegate(int feedID) : super(feedID);
 
@@ -43,8 +43,7 @@ class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
     feedState = FeedState(appData.jwt != null, appData.storeGeo);
     add(FeedBlocEventFeedLoaded(feedState));
 
-    appDataStream =
-        AppDB().watchAppData().listen(appDataUpdated, onError: (err) {
+    appDataStream = AppDB().watchAppData().listen(appDataUpdated, onError: (err) {
       print('error $err');
     });
   }
@@ -58,7 +57,7 @@ class SGLFeedBlocDelegate extends LocalFeedBlocDelegate {
 
   @override
   Future<void> close() async {
-    await appDataStream.cancel();
+    await appDataStream?.cancel();
     await super.close();
   }
 

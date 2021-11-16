@@ -35,7 +35,7 @@ class FullscreenMediaPage extends TraceableStatefulWidget {
 }
 
 class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
-  VideoPlayerController _videoPlayerController;
+  VideoPlayerController? _videoPlayerController;
   double _opacity = 0.5;
   Matrix4 _matrix = Matrix4.identity();
 
@@ -54,7 +54,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
   Widget build(BuildContext context) {
     return Material(
       child: BlocListener(
-        cubit: BlocProvider.of<FullscreenMediaBloc>(context),
+        bloc: BlocProvider.of<FullscreenMediaBloc>(context),
         listener: (context, state) async {
           if (state is FullscreenMediaBlocStateInit) {
             if (state.isVideo && _videoPlayerController == null) {
@@ -63,15 +63,15 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
               } else {
                 _videoPlayerController = VideoPlayerController.file(File(state.filePath));
               }
-              await _videoPlayerController.initialize();
-              _videoPlayerController.play();
-              _videoPlayerController.setLooping(true);
+              await _videoPlayerController!.initialize();
+              _videoPlayerController!.play();
+              _videoPlayerController!.setLooping(true);
               setState(() {});
             }
           }
         },
         child: BlocBuilder<FullscreenMediaBloc, FullscreenMediaBlocState>(
-            cubit: BlocProvider.of<FullscreenMediaBloc>(context),
+            bloc: BlocProvider.of<FullscreenMediaBloc>(context),
             builder: (context, state) {
               return LayoutBuilder(
                 builder: (context, constraint) {
@@ -83,7 +83,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
                         builder: (context, constraints) {
                           Widget body;
                           if (state.isVideo) {
-                            if (_videoPlayerController != null && _videoPlayerController.value.isPlaying) {
+                            if (_videoPlayerController != null && _videoPlayerController!.value.isPlaying) {
                               body = Stack(
                                 children: <Widget>[
                                   _renderPicturePlayer(context, state, constraints),
@@ -121,17 +121,17 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
 
   Widget _renderVideoPlayer(BuildContext context, FullscreenMediaBlocState state, BoxConstraints constraints) {
     double width = constraints.maxWidth;
-    double height = constraints.maxWidth / _videoPlayerController.value.aspectRatio;
+    double height = constraints.maxWidth / _videoPlayerController!.value.aspectRatio;
     double ratio = constraints.maxWidth / constraints.maxHeight;
-    if (_videoPlayerController.value.aspectRatio < ratio) {
-      width = constraints.maxHeight * _videoPlayerController.value.aspectRatio;
+    if (_videoPlayerController!.value.aspectRatio < ratio) {
+      width = constraints.maxHeight * _videoPlayerController!.value.aspectRatio;
       height = constraints.maxHeight;
     }
     return Stack(children: [
       Positioned(
           left: (constraints.maxWidth - width) / 2,
           top: (constraints.maxHeight - height) / 2,
-          child: SizedBox(width: width, height: height, child: VideoPlayer(_videoPlayerController))),
+          child: SizedBox(width: width, height: height, child: VideoPlayer(_videoPlayerController!))),
     ]);
   }
 
@@ -142,12 +142,12 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
         height: constraints.maxHeight,
         child: filePath.startsWith('http')
             ? Image.network(filePath, fit: BoxFit.contain, headers: {'Host': BackendAPI().storageServerHostHeader},
-                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
                   return child;
                 }
                 return FullscreenLoading(
-                    percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                    percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
               })
             : Image.file(
                 File(filePath),
@@ -161,17 +161,17 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
             child: SizedBox(
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
-                child: state.overlayPath.startsWith('http')
-                    ? Image.network(state.overlayPath,
+                child: state.overlayPath!.startsWith('http')
+                    ? Image.network(state.overlayPath!,
                         fit: BoxFit.contain, headers: {'Host': BackendAPI().storageServerHostHeader},
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) {
                           return child;
                         }
                         return FullscreenLoading(
-                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                            percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
                       })
-                    : Image.file(File(state.overlayPath), fit: BoxFit.contain))),
+                    : Image.file(File(state.overlayPath!), fit: BoxFit.contain))),
         Positioned(
           left: 30,
           right: 30,
@@ -210,9 +210,7 @@ class _FullscreenMediaPageState extends State<FullscreenMediaPage> {
 
   @override
   void dispose() {
-    if (_videoPlayerController != null) {
-      _videoPlayerController.dispose();
-    }
+    _videoPlayerController?.dispose();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

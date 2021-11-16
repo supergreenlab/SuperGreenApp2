@@ -19,19 +19,19 @@
 import 'package:flutter/material.dart';
 
 class PlantInfosDropdownInput extends StatelessWidget {
-  final String value;
+  final String? value;
   final String labelText;
   final String hintText;
   final List<List<String>> items;
-  final Function(String value) onChanged;
+  final Function(String? value) onChanged;
 
   const PlantInfosDropdownInput(
-      {Key key,
-      @required this.value,
-      @required this.labelText,
-      @required this.hintText,
-      @required this.items,
-      @required this.onChanged})
+      {Key? key,
+      required this.value,
+      required this.labelText,
+      required this.hintText,
+      required this.items,
+      required this.onChanged})
       : super(key: key);
 
   @override
@@ -39,13 +39,12 @@ class PlantInfosDropdownInput extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Theme(
-              data: ThemeData(
-                canvasColor: Colors.black87,
-              ),
-              child: DropdownButtonFormField(
+        data: ThemeData(
+          canvasColor: Colors.black87,
+        ),
+        child: DropdownButtonFormField(
             decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+              contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
               filled: true,
               fillColor: Colors.white10,
               hintText: hintText,
@@ -54,8 +53,7 @@ class PlantInfosDropdownInput extends StatelessWidget {
               labelStyle: TextStyle(
                 color: Colors.white,
               ),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white)),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
             ),
             selectedItemBuilder: (BuildContext context) {
               return items.map((i) => Text(i[1], style: TextStyle(color: Colors.white))).toList();

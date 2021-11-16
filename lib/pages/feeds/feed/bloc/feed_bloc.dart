@@ -226,12 +226,12 @@ class FeedBlocStateRemoveEntry extends FeedBlocState {
 class FeedBlocStateOpenComment extends FeedBlocState {
   final FeedEntryStateLoaded entry;
   final String commentID;
-  final String replyTo;
+  final String? replyTo;
 
   FeedBlocStateOpenComment(this.entry, this.commentID, this.replyTo);
 
   @override
-  List<Object> get props => [entry, commentID, replyTo];
+  List<Object?> get props => [entry, commentID, replyTo];
 }
 
 class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
@@ -267,11 +267,11 @@ class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
         entries[event.index] = delegate.postProcess(e);
         yield FeedBlocStateUpdateEntry(event.index, e);
       }
-      loader.startListenEntryChanges(e);
+      loader.startListenEntryChanges(e as FeedEntryStateLoaded);
     } else if (event is FeedBlocEventEntryHidden) {
       FeedEntryState e = entries[event.index];
       FeedEntryLoader loader = delegate.loaderForType(e.type);
-      loader.cancelListenEntryChanges(entries[event.index]);
+      loader.cancelListenEntryChanges(entries[event.index] as FeedEntryStateLoaded);
     } else if (event is FeedBlocEventAddedEntry) {
       int index = _insertIndex(event.entry);
       yield* _insertEntryAt(index, event.entry);
@@ -350,7 +350,7 @@ abstract class FeedEntryLoader {
   @mustCallSuper
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     cache[state.feedEntryID] = state;
-    return state;
+    return state as FeedEntryStateLoaded;
   }
 
   Future update(FeedEntryState entry, FeedEntryParams params) async {}

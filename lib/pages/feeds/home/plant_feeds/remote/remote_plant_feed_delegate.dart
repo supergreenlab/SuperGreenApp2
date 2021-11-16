@@ -31,11 +31,11 @@ import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.da
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
-  FeedState feedState;
-  StreamSubscription<hive.BoxEvent> appDataStream;
+  late FeedState feedState;
+  StreamSubscription<hive.BoxEvent>? appDataStream;
 
   final String plantID;
-  RemotePlantFeedBlocDelegate(this.plantID, String feedEntryID, String commentID, String replyTo)
+  RemotePlantFeedBlocDelegate(this.plantID, String? feedEntryID, String? commentID, String? replyTo)
       : super(feedEntryID: feedEntryID, commentID: commentID, replyTo: replyTo);
 
   @override
@@ -46,7 +46,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
     if (feedEntryID != null) {
-      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
+      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID!);
       return [loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap)];
     }
     List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicPlantFeedEntries(plantID, n, offset);
@@ -80,7 +80,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   Future<void> close() async {
-    await appDataStream.cancel();
+    await appDataStream?.cancel();
     await super.close();
   }
 }

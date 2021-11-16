@@ -33,7 +33,8 @@ class FeedDefoliationCardPage extends FeedCareCommonCardPage {
     );
   }
 
-  FeedDefoliationCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key, cardActions})
+  FeedDefoliationCardPage(Animation<double> animation, FeedState feedState, FeedEntryState state,
+      {Key? key, List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions})
       : super(animation, feedState, state, key: key, cardActions: cardActions);
 
   String iconPath() {

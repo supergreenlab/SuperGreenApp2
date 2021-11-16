@@ -60,7 +60,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PublicPlantBloc, PublicPlantBlocState>(
-      cubit: BlocProvider.of<PublicPlantBloc>(context),
+      bloc: BlocProvider.of<PublicPlantBloc>(context),
       builder: (BuildContext context, PublicPlantBlocState state) {
         return Scaffold(body: _renderFeed(context, state));
       },
@@ -72,7 +72,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
       _renderPlantInfos,
       _renderProducts,
     ];
-    Widget bottom;
+    Widget? bottom;
     if (state.feedEntryID != null) {
       bottom = SingleFeedEntry(
         title: PublicPlantPage.publicPlantPageSingleEntry,
@@ -117,7 +117,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                    child: Text(state.follows ? 'Following (${state.nFollows})' : 'Follow'),
+                    child: Text(state.follows! ? 'Following (${state.nFollows})' : 'Follow'),
                   ),
                 ),
               ],
@@ -169,7 +169,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
   }
 
   void _login(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -177,13 +177,13 @@ class PublicPlantPage extends TraceableStatelessWidget {
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -192,7 +192,7 @@ class PublicPlantPage extends TraceableStatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }

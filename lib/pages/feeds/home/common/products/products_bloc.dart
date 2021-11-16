@@ -77,7 +77,7 @@ class ProductsBloc extends Bloc<ProductsBlocEvent, ProductsBlocState> {
       delegate.loadProducts();
     } else if (event is ProductsBlocEventLoaded) {
       List<Product> products = event.products;
-      products.sort((p1, p2) => p1.category.index - p2.category.index);
+      products.sort((p1, p2) => p1.category!.index - p2.category!.index);
       yield ProductsBlocStateLoaded(products);
     } else if (event is ProductsBlocEventUpdate) {
       yield* delegate.updateProducts(event.products);
@@ -92,8 +92,8 @@ class ProductsBloc extends Bloc<ProductsBlocEvent, ProductsBlocState> {
 }
 
 abstract class ProductsBlocDelegate {
-  List<Product> products;
-  Function(ProductsBlocEvent) add;
+  late List<Product> products;
+  late Function(ProductsBlocEvent) add;
 
   void init(Function(ProductsBlocEvent) add) {
     this.add = add;
@@ -101,8 +101,8 @@ abstract class ProductsBlocDelegate {
 
   void productsLoaded(PlantSettings plantSettings, BoxSettings boxSettings) {
     List<Product> products = [];
-    products.addAll(plantSettings.products);
-    products.addAll(boxSettings.products);
+    products.addAll(plantSettings.products!);
+    products.addAll(boxSettings.products!);
     add(ProductsBlocEventLoaded(products));
   }
 

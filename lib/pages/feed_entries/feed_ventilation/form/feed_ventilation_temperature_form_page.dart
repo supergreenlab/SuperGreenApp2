@@ -39,7 +39,7 @@ class FeedVentilationTemperatureFormPage extends TraceableStatefulWidget {
 
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationTemperatureFormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationTemperatureFormPage(this.state, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationTemperatureFormPageState createState() => _FeedVentilationTemperatureFormPageState();
@@ -64,7 +64,7 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
   Widget build(BuildContext context) {
     String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {

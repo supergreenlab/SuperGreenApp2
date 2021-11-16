@@ -67,17 +67,17 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
     return BlocListener<LocalBoxFeedBloc, LocalBoxFeedBlocState>(
       listener: (BuildContext context, LocalBoxFeedBlocState state) {
         if (state is LocalBoxFeedBlocStateLoaded) {
-          if (state.box.device != null) {
+          if (state.box?.device != null) {
             // TODO find something better than this
             Timer(Duration(milliseconds: 100), () {
               BlocProvider.of<DeviceReachableListenerBloc>(context)
-                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
+                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box!.device!));
             });
           }
         }
       },
       child: BlocBuilder<LocalBoxFeedBloc, LocalBoxFeedBlocState>(
-        cubit: BlocProvider.of<LocalBoxFeedBloc>(context),
+        bloc: BlocProvider.of<LocalBoxFeedBloc>(context),
         builder: (BuildContext context, LocalBoxFeedBlocState state) {
           Widget body;
           if (_speedDialOpen) {
@@ -99,7 +99,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
             listener: (BuildContext context, DeviceReachableListenerBlocState reachableState) {
               if (state is LocalBoxFeedBlocStateLoaded) {
                 if (reachableState is DeviceReachableListenerBlocStateDeviceReachable &&
-                    reachableState.device.id == state.box.device) {
+                    reachableState.device.id == state.box!.device) {
                   setState(() {
                     _reachable = reachableState.reachable;
                     _remote = reachableState.remote;
@@ -183,12 +183,12 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
 
   void Function() _onSpeedDialSelected(
       BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
-      {String tipID, List<String> tipPaths}) {
+      {String? tipID, List<String>? tipPaths}) {
     return () {
       _openCloseDial.value = Random().nextInt(1 << 32);
-      if (tipPaths != null && !AppDB().isTipDone(tipID)) {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigateToTipEvent(tipID, tipPaths, navigatorEvent(pushAsReplacement: true)));
+      if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
+            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
       } else {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }
@@ -197,15 +197,15 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
 
   Widget _renderFeed(BuildContext context, LocalBoxFeedBlocState state) {
     if (state is LocalBoxFeedBlocStateLoaded) {
-      if (state.box.feed == null) {
+      if (state.box!.feed == null) {
         return _renderBoxNotCreated(context);
       }
       List<Widget> actions = [];
-      if (state.box.device != null && _reachable) {
+      if (state.box!.device != null && _reachable) {
         actions.insert(
             0,
             BlocProvider<SunglassesBloc>(
-              create: (BuildContext context) => SunglassesBloc(state.box.device, state.box.deviceBox),
+              create: (BuildContext context) => SunglassesBloc(state.box!.device!, state.box!.deviceBox!),
               child: BlocBuilder<SunglassesBloc, SunglassesBlocState>(
                 builder: (BuildContext context, SunglassesBlocState state) {
                   if (state is SunglassesBlocStateLoaded) {
@@ -227,7 +227,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
       }
       return BlocProvider(
         key: Key('feed'),
-        create: (context) => FeedBloc(LocalBoxFeedBlocDelegate(state.box.feed)),
+        create: (context) => FeedBloc(LocalBoxFeedBlocDelegate(state.box!.feed!)),
         child: FeedPage(
           automaticallyImplyLeading: true,
           color: Color(0xff063047),
@@ -289,7 +289,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
         GreenButton(
           title: 'OPEN PLANT LIST',
           onPressed: () {
-            _scaffoldKey.currentState.openDrawer();
+            _scaffoldKey.currentState!.openDrawer();
           },
         ),
       ]))
@@ -297,7 +297,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
   }
 
   Widget _renderAppBar(BuildContext context, LocalBoxFeedBlocStateLoaded state) {
-    String name = state.box.name;
+    String name = state.box!.name;
 
     Widget nameText;
     if (_showIP) {
@@ -320,7 +320,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
         style: TextStyle(color: Colors.white, fontSize: 24.0, fontWeight: FontWeight.w200),
       );
     }
-    if (state.box.device != null) {
+    if (state.box?.device != null) {
       nameText = Row(
         children: <Widget>[
           nameText,
@@ -333,7 +333,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
     }
 
     List<Widget Function()> tabs = [
-      () => EnvironmentsPage(state.box),
+      () => EnvironmentsPage(state.box!),
     ];
     return SafeArea(
       child: Column(
@@ -343,7 +343,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
             padding: const EdgeInsets.only(left: 64.0, top: 12.0),
             child: InkWell(
               onTap: () {
-                if (state.box.device == null) {
+                if (state.box?.device == null) {
                   return;
                 }
                 setState(() {

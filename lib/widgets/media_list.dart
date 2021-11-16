@@ -29,16 +29,12 @@ class MediaList extends StatelessWidget {
   final List<MediaState> _medias;
   final String prefix;
   final Function(MediaState media)? onMediaTapped;
-  final Function(int i) onMediaShown;
+  final Function(int i)? onMediaShown;
   final bool showSyncStatus;
   final bool showTapIcon;
 
   const MediaList(this._medias,
-      {this.prefix = '',
-      this.onMediaTapped,
-      this.showSyncStatus = true,
-      this.showTapIcon = false,
-      required this.onMediaShown});
+      {this.prefix = '', this.onMediaTapped, this.showSyncStatus = true, this.showTapIcon = false, this.onMediaShown});
 
   @override
   Widget build(BuildContext context) {

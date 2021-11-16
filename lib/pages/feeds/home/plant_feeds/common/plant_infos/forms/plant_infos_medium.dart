@@ -21,22 +21,19 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
 
 class PlantInfosMedium extends StatefulWidget {
-  final String medium;
+  final String? medium;
 
   final Function onCancel;
-  final Function(String medium) onSubmit;
+  final Function(String? medium) onSubmit;
 
-  PlantInfosMedium(
-      {@required this.medium,
-      @required this.onCancel,
-      @required this.onSubmit});
+  PlantInfosMedium({required this.medium, required this.onCancel, required this.onSubmit});
 
   @override
   _PlantInfosMediumState createState() => _PlantInfosMediumState();
 }
 
 class _PlantInfosMediumState extends State<PlantInfosMedium> {
-  String medium;
+  String? medium;
 
   @override
   void initState() {
@@ -65,7 +62,7 @@ class _PlantInfosMediumState extends State<PlantInfosMedium> {
               ['HYDRO', 'Hydro'],
             ],
             value: medium,
-            onChanged: (String newValue) {
+            onChanged: (String? newValue) {
               setState(() {
                 medium = newValue;
               });

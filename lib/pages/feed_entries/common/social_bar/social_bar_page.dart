@@ -47,7 +47,7 @@ class SocialBarPage extends StatelessWidget {
   final FeedEntryState state;
   final FeedState feedState;
 
-  const SocialBarPage({Key key, this.state, this.feedState}) : super(key: key);
+  const SocialBarPage({Key? key, required this.state, required this.feedState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class SocialBarPage extends StatelessWidget {
     );
   }
 
-  Widget renderButton(BuildContext context, String icon, Function onClick, {bool last = false}) {
+  Widget renderButton(BuildContext context, String icon, Function()? onClick, {bool last = false}) {
     if (!feedState.loggedIn) {
       onClick = () => createAccountOrLogin(context);
     } else {
@@ -119,11 +119,12 @@ class SocialBarPage extends StatelessWidget {
   }
 
   void onComment(BuildContext context) {
-    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCommentFormEvent(true, state));
+    BlocProvider.of<MainNavigatorBloc>(context)
+        .add(MainNavigateToCommentFormEvent(true, state as FeedEntryStateLoaded));
   }
 
   void onShare(BuildContext context) async {
-    await ShareExtend.share(state.shareLink, 'text');
+    await ShareExtend.share(state.shareLink!, 'text');
   }
 
   void onBookmark(BuildContext context) {
@@ -131,7 +132,7 @@ class SocialBarPage extends StatelessWidget {
   }
 
   void createAccountOrLogin(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -139,13 +140,13 @@ class SocialBarPage extends StatelessWidget {
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -154,7 +155,7 @@ class SocialBarPage extends StatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }

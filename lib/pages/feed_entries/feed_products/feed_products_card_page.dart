@@ -61,17 +61,18 @@ class FeedProductsCardPage extends StatelessWidget {
     );
   }
 
-  final Animation animation;
-  final FeedState feedState;
+  final Animation<double> animation;
+  final FeedState? feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedProductsCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
+  const FeedProductsCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (state is FeedEntryStateLoaded && feedState != null) {
-      return _renderLoaded(context, state);
+      return _renderLoaded(context, state as FeedProductsState);
     }
     return _renderLoading(context);
   }
@@ -95,7 +96,7 @@ class FeedProductsCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedProductsState state) {
-    FeedProductsParams params = state.params;
+    FeedProductsParams params = state.params as FeedProductsParams;
     List<Widget> content = [
       FeedCardTitle(
         'assets/feed_card/icon_towelie.png',
@@ -108,9 +109,9 @@ class FeedProductsCardPage extends StatelessWidget {
       ),
     ];
     if (params.selectedButton != null) {
-      content.add(_renderSelectedButton(context, params.selectedButton));
-    } else if (params.buttons != null && params.buttons.length > 0) {
-      content.add(_renderButtonBar(context, params.buttons));
+      content.add(_renderSelectedButton(context, params.selectedButton!));
+    } else if (params.buttons != null && params.buttons!.length > 0) {
+      content.add(_renderButtonBar(context, params.buttons!));
     }
     return FeedCard(
         animation: animation,
@@ -121,7 +122,7 @@ class FeedProductsCardPage extends StatelessWidget {
   }
 
   Widget _renderBody(BuildContext context, FeedProductsState cardState) {
-    FeedProductsParams params = state.params;
+    FeedProductsParams params = state.params as FeedProductsParams;
     final body = <Widget>[
       FeedCardText(params.text),
     ];
@@ -130,11 +131,12 @@ class FeedProductsCardPage extends StatelessWidget {
           0,
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: SvgPicture.asset(params.topPic),
+            child: SvgPicture.asset(params.topPic!),
           ));
     }
     body.add(_renderStoreGeos(context, cardState));
-    body.addAll(params.products.where((p) => p.geo == feedState.storeGeo).map<Widget>((FeedProductsItemParams product) {
+    body.addAll(
+        params.products.where((p) => p.geo == feedState!.storeGeo).map<Widget>((FeedProductsItemParams product) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -165,7 +167,7 @@ class FeedProductsCardPage extends StatelessWidget {
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, //limits the touch area to the button area
             minWidth: 0, //wraps child's width
             height: 0,
-            child: FlatButton(
+            child: TextButton(
               child: Column(
                 children: <Widget>[
                   Text(
@@ -195,7 +197,7 @@ class FeedProductsCardPage extends StatelessWidget {
   }
 
   Widget _renderStoreGeos(BuildContext context, FeedProductsState state) {
-    FeedProductsParams params = state.params;
+    FeedProductsParams params = state.params as FeedProductsParams;
     List<String> storeGeos = params.products
         .map<String>((FeedProductsItemParams p) {
           return p.geo;
@@ -207,10 +209,10 @@ class FeedProductsCardPage extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: storeGeos.map<Widget>((sg) {
-          bool selected = sg == feedState.storeGeo;
-          return FlatButton(
-            child: Text(_storeGeoNames[sg],
-                style: TextStyle(color: sg == feedState.storeGeo ? Colors.black : Colors.blue)),
+          bool selected = sg == feedState!.storeGeo;
+          return TextButton(
+            child: Text(_storeGeoNames[sg]!,
+                style: TextStyle(color: sg == feedState!.storeGeo ? Colors.black : Colors.blue)),
             onPressed: selected
                 ? null
                 : () async {
@@ -232,7 +234,7 @@ class FeedProductsCardPage extends StatelessWidget {
   }
 
   Widget _renderButton(BuildContext context, FeedProductsButtonParams button) {
-    return FlatButton(
+    return TextButton(
       child: Text(button.title.toUpperCase(), style: TextStyle(color: Colors.blue, fontSize: 12)),
       onPressed: () {
         BlocProvider.of<TowelieBloc>(context)

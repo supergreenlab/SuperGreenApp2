@@ -39,15 +39,15 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantInfosPage<PlantInfosBloc> extends TraceableStatefulWidget {
-  PlantInfosPage({Key key}) : super(key: key);
+  PlantInfosPage({Key? key}) : super(key: key);
 
   @override
   _PlantInfosPageState createState() => _PlantInfosPageState();
 }
 
 class _PlantInfosPageState extends State<PlantInfosPage> {
-  String form;
-  ScrollController infosScrollController;
+  String? form;
+  late ScrollController infosScrollController;
 
   @override
   void initState() {
@@ -58,17 +58,17 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlantInfosBloc, PlantInfosBlocState>(
-        cubit: BlocProvider.of<PlantInfosBloc>(context),
+        bloc: BlocProvider.of<PlantInfosBloc>(context),
         builder: (BuildContext context, PlantInfosBlocState state) {
           if (state is PlantInfosBlocStateLoading) {
             return _renderLoading(context, state);
           }
           if (form == null) {
-            return _renderLoaded(context, state);
+            return _renderLoaded(context, state as PlantInfosBlocStateLoaded);
           } else {
             return Stack(
               children: <Widget>[
-                _renderLoaded(context, state),
+                _renderLoaded(context, state as PlantInfosBlocStateLoaded),
                 _renderForm(context, state),
               ],
             );
@@ -83,22 +83,23 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
   }
 
   Widget _renderLoaded(BuildContext context, PlantInfosBlocStateLoaded state) {
-    String strain;
+    String? strain;
 
-    if (state.plantInfos.plantSettings.strain != null && state.plantInfos.plantSettings.seedbank != null) {
-      strain = '# ${state.plantInfos.plantSettings.strain}\nfrom **${state.plantInfos.plantSettings.seedbank.trim()}**';
-    } else if (state.plantInfos.plantSettings.strain != null) {
-      strain = '# ${state.plantInfos.plantSettings.strain}';
+    if (state.plantInfos.plantSettings?.strain != null && state.plantInfos.plantSettings?.seedbank != null) {
+      strain =
+          '# ${state.plantInfos.plantSettings!.strain}\nfrom **${state.plantInfos.plantSettings!.seedbank!.trim()}**';
+    } else if (state.plantInfos.plantSettings?.strain != null) {
+      strain = '# ${state.plantInfos.plantSettings!.strain}';
     }
 
     String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
 
-    String dimensions;
-    if (state.plantInfos.boxSettings.width != null &&
-        state.plantInfos.boxSettings.height != null &&
-        state.plantInfos.boxSettings.depth != null) {
+    String? dimensions;
+    if (state.plantInfos.boxSettings?.width != null &&
+        state.plantInfos.boxSettings?.height != null &&
+        state.plantInfos.boxSettings?.depth != null) {
       dimensions =
-          '${state.plantInfos.boxSettings.width}x${state.plantInfos.boxSettings.height}x${state.plantInfos.boxSettings.depth} ${state.plantInfos.boxSettings.unit}';
+          '${state.plantInfos.boxSettings!.width}x${state.plantInfos.boxSettings!.height}x${state.plantInfos.boxSettings!.depth} ${state.plantInfos.boxSettings!.unit}';
     }
 
     return Container(
@@ -118,16 +119,16 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                         : () {
                             BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectNewProductEvent([],
                                 categoryID: ProductCategoryID.SEED, futureFn: (future) async {
-                              List<Product> products = await future;
+                              List<Product>? products = await future;
                               if (products == null || products.length == 0) {
                                 return;
                               }
-                              SeedSpecs specs = products[0].specs;
+                              SeedSpecs specs = products[0].specs as SeedSpecs;
                               updatePlantSettings(
                                   context,
                                   state,
-                                  state.plantInfos.plantSettings.copyWith(
-                                      products: state.plantInfos.plantSettings.products..add(products[0]),
+                                  state.plantInfos.plantSettings!.copyWith(
+                                      products: state.plantInfos.plantSettings!.products!..add(products[0]),
                                       strain: products[0].name,
                                       seedbank: specs.bank));
                             }));
@@ -135,12 +136,12 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                 PlantInfosWidget(
                     icon: 'icon_plant_type.svg',
                     title: 'Plant type',
-                    value: state.plantInfos.plantSettings.plantType,
+                    value: state.plantInfos.plantSettings!.plantType,
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('PLANT_TYPE')),
                 PlantInfosWidget(
                     icon: 'icon_medium.svg',
                     title: 'Medium',
-                    value: state.plantInfos.plantSettings.medium,
+                    value: state.plantInfos.plantSettings!.medium,
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('MEDIUM')),
                 PlantInfosWidget(
                     icon: 'icon_dimension.svg',
@@ -154,36 +155,36 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                 PlantInfosWidget(
                     icon: 'icon_germination_date.svg',
                     title: 'Germination',
-                    value: state.plantInfos.plantSettings.germinationDate != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings.germinationDate)
+                    value: state.plantInfos.plantSettings!.germinationDate != null
+                        ? DateFormat(format).format(state.plantInfos.plantSettings!.germinationDate!)
                         : null,
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('GERMINATION_DATE')),
                 PlantInfosWidget(
                     icon: 'icon_vegging_since.svg',
                     title: 'Vegging',
-                    value: state.plantInfos.plantSettings.veggingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings.veggingStart)
+                    value: state.plantInfos.plantSettings!.veggingStart != null
+                        ? DateFormat(format).format(state.plantInfos.plantSettings!.veggingStart!)
                         : null,
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('VEGGING_START')),
                 PlantInfosWidget(
                     icon: 'icon_blooming_since.svg',
                     title: 'Blooming',
-                    value: state.plantInfos.plantSettings.bloomingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings.bloomingStart)
+                    value: state.plantInfos.plantSettings!.bloomingStart != null
+                        ? DateFormat(format).format(state.plantInfos.plantSettings!.bloomingStart!)
                         : null,
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('BLOOMING_START')),
                 PlantInfosWidget(
                     icon: 'icon_drying_since.svg',
                     title: 'Drying',
-                    value: state.plantInfos.plantSettings.dryingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings.dryingStart)
+                    value: state.plantInfos.plantSettings!.dryingStart != null
+                        ? DateFormat(format).format(state.plantInfos.plantSettings!.dryingStart!)
                         : null,
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('DRYING_START')),
                 PlantInfosWidget(
                     icon: 'icon_curing_since.svg',
                     title: 'Curing',
-                    value: state.plantInfos.plantSettings.curingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings.curingStart)
+                    value: state.plantInfos.plantSettings!.curingStart != null
+                        ? DateFormat(format).format(state.plantInfos.plantSettings!.curingStart!)
                         : null,
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('CURING_START')),
               ]),
@@ -217,42 +218,42 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
       return SizedBox(
           width: constraints.maxWidth,
           height: constraints.maxHeight - 100,
-          child: state.plantInfos.thumbnailPath.startsWith("http")
+          child: state.plantInfos.thumbnailPath!.startsWith("http")
               ? Image.network(
-                  state.plantInfos.thumbnailPath,
+                  state.plantInfos.thumbnailPath!,
                   headers: {'Host': BackendAPI().storageServerHostHeader},
                   fit: BoxFit.contain,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                     if (loadingProgress == null) {
                       return child;
                     }
                     return FullscreenLoading(
-                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
                   },
                 )
-              : Image.file(File(state.plantInfos.thumbnailPath), fit: BoxFit.contain));
+              : Image.file(File(state.plantInfos.thumbnailPath!), fit: BoxFit.contain));
     });
   }
 
   Widget _renderForm(BuildContext context, PlantInfosBlocStateLoaded state) {
     final forms = {
       'STRAIN': () => PlantInfosStrain(
-            strain: state.plantInfos.plantSettings.strain,
-            seedbank: state.plantInfos.plantSettings.seedbank,
+            strain: state.plantInfos.plantSettings!.strain,
+            seedbank: state.plantInfos.plantSettings!.seedbank,
             onCancel: () => _openForm(null),
-            onSubmit: (String strain, String seedbank) => updatePlantSettings(
-                context, state, state.plantInfos.plantSettings.copyWith(strain: strain, seedbank: seedbank)),
+            onSubmit: (String? strain, String? seedbank) => updatePlantSettings(
+                context, state, state.plantInfos.plantSettings!.copyWith(strain: strain, seedbank: seedbank)),
           ),
       'PLANT_TYPE': () => PlantInfosPlantType(
-            plantType: state.plantInfos.plantSettings.plantType,
+            plantType: state.plantInfos.plantSettings!.plantType,
             onCancel: () => _openForm(null),
-            onSubmit: (String plantType) =>
-                updatePlantSettings(context, state, state.plantInfos.plantSettings.copyWith(plantType: plantType)),
+            onSubmit: (String? plantType) =>
+                updatePlantSettings(context, state, state.plantInfos.plantSettings!.copyWith(plantType: plantType)),
           ),
       'GERMINATION_DATE': () => PlantInfosPhaseSince(
           title: 'Germination date',
           icon: 'icon_germination_date.svg',
-          date: state.plantInfos.plantSettings.germinationDate,
+          date: state.plantInfos.plantSettings!.germinationDate,
           onCancel: () => _openForm(null),
           onSubmit: (DateTime date) {
             updatePhase(context, PlantPhases.GERMINATING, date);
@@ -260,7 +261,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
       'VEGGING_START': () => PlantInfosPhaseSince(
           title: 'Vegging started at',
           icon: 'icon_vegging_since.svg',
-          date: state.plantInfos.plantSettings.veggingStart,
+          date: state.plantInfos.plantSettings!.veggingStart,
           onCancel: () => _openForm(null),
           onSubmit: (DateTime date) {
             updatePhase(context, PlantPhases.VEGGING, date);
@@ -268,7 +269,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
       'BLOOMING_START': () => PlantInfosPhaseSince(
           title: 'Blooming started at',
           icon: 'icon_blooming_since.svg',
-          date: state.plantInfos.plantSettings.bloomingStart,
+          date: state.plantInfos.plantSettings!.bloomingStart,
           onCancel: () => _openForm(null),
           onSubmit: (DateTime date) {
             updatePhase(context, PlantPhases.BLOOMING, date);
@@ -276,7 +277,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
       'DRYING_START': () => PlantInfosPhaseSince(
           title: 'Drying started at',
           icon: 'icon_drying_since.svg',
-          date: state.plantInfos.plantSettings.dryingStart,
+          date: state.plantInfos.plantSettings!.dryingStart,
           onCancel: () => _openForm(null),
           onSubmit: (DateTime date) {
             updatePhase(context, PlantPhases.DRYING, date);
@@ -284,25 +285,25 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
       'CURING_START': () => PlantInfosPhaseSince(
           title: 'Curing started at',
           icon: 'icon_curing_since.svg',
-          date: state.plantInfos.plantSettings.curingStart,
+          date: state.plantInfos.plantSettings!.curingStart,
           onCancel: () => _openForm(null),
           onSubmit: (DateTime date) {
             updatePhase(context, PlantPhases.CURING, date);
-            updatePlantSettings(context, state, state.plantInfos.plantSettings.copyWith(curingStart: date));
+            updatePlantSettings(context, state, state.plantInfos.plantSettings!.copyWith(curingStart: date));
           }),
       'MEDIUM': () => PlantInfosMedium(
-            medium: state.plantInfos.plantSettings.medium,
+            medium: state.plantInfos.plantSettings!.medium,
             onCancel: () => _openForm(null),
-            onSubmit: (String medium) =>
-                updatePlantSettings(context, state, state.plantInfos.plantSettings.copyWith(medium: medium)),
+            onSubmit: (String? medium) =>
+                updatePlantSettings(context, state, state.plantInfos.plantSettings!.copyWith(medium: medium)),
           ),
       'DIMENSIONS': () => PlantInfosDimensions(
-            width: state.plantInfos.boxSettings.width,
-            height: state.plantInfos.boxSettings.height,
-            depth: state.plantInfos.boxSettings.depth,
+            width: state.plantInfos.boxSettings!.width,
+            height: state.plantInfos.boxSettings!.height,
+            depth: state.plantInfos.boxSettings!.depth,
             onCancel: () => _openForm(null),
             onSubmit: (int width, int height, int depth, String unit) => updateBoxSettings(context, state,
-                state.plantInfos.boxSettings.copyWith(width: width, height: height, depth: depth, unit: unit)),
+                state.plantInfos.boxSettings!.copyWith(width: width, height: height, depth: depth, unit: unit)),
           ),
     };
     return Container(
@@ -319,7 +320,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                     border: Border.all(color: Colors.white)),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: forms[form](),
+                  child: forms[form]!(),
                 )),
           )),
         ],
@@ -327,7 +328,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
     );
   }
 
-  void _openForm(String form) {
+  void _openForm(String? form) {
     setState(() {
       this.form = form;
     });

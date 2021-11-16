@@ -43,26 +43,26 @@ class FeedPage extends StatefulWidget {
   final Color color;
   final String title;
   final bool pinned;
-  final Widget appBar;
-  final double appBarHeight;
+  final Widget? appBar;
+  final double? appBarHeight;
   final bool appBarEnabled;
   final bool bottomPadding;
-  final List<Widget> actions;
-  final Widget bottom;
-  final bool single;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
-  final Function(bool hasCards) onLoaded;
+  final List<Widget>? actions;
+  final Widget? bottom;
+  final bool? single;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
+  final Function(bool hasCards)? onLoaded;
   final bool elevate;
-  final Color feedColor;
-  final Widget leading;
-  final Widget firstItem;
+  final Color? feedColor;
+  final Widget? leading;
+  final Widget? firstItem;
   final bool automaticallyImplyLeading;
-  final Function(ScrollController) onScroll;
+  final Function(ScrollController)? onScroll;
 
   const FeedPage({
-    @required this.title,
+    required this.title,
     this.pinned = false,
-    @required this.color,
+    required this.color,
     this.appBar,
     this.appBarHeight,
     this.appBarEnabled = true,
@@ -85,7 +85,7 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  FeedState feedState;
+  late FeedState feedState;
   bool eof = false;
   bool loaded = false;
   final List<FeedEntryState> entries = [];
@@ -98,7 +98,7 @@ class _FeedPageState extends State<FeedPage> {
   void initState() {
     scrollController.addListener(() {
       if (widget.onScroll != null) {
-        widget.onScroll(scrollController);
+        widget.onScroll!(scrollController);
       }
     });
     super.initState();
@@ -120,7 +120,7 @@ class _FeedPageState extends State<FeedPage> {
           entries.addAll(state.entries);
           if (state.initialLoad == false) {
             for (int i = 0; i < state.entries.length; ++i) {
-              listKey.currentState.insertItem(nEntries + i, duration: Duration(milliseconds: 500));
+              listKey.currentState!.insertItem(nEntries + i, duration: Duration(milliseconds: 500));
             }
           }
           setState(() {
@@ -131,7 +131,7 @@ class _FeedPageState extends State<FeedPage> {
             scrollToTop(height: 0);
           }
           if (widget.onLoaded != null) {
-            widget.onLoaded(state.entries.length != 0);
+            widget.onLoaded!(state.entries.length != 0);
           }
         } else if (state is FeedBlocStateAddEntry) {
           entries.insert(state.index, state.entry);
@@ -139,7 +139,7 @@ class _FeedPageState extends State<FeedPage> {
           if (widget.firstItem != null) {
             insertItemIndex++;
           }
-          listKey.currentState.insertItem(insertItemIndex, duration: Duration(milliseconds: 500));
+          listKey.currentState!.insertItem(insertItemIndex, duration: Duration(milliseconds: 500));
           if (state.index == 0) {
             scrollToTop();
           }
@@ -154,7 +154,7 @@ class _FeedPageState extends State<FeedPage> {
           if (widget.firstItem != null) {
             removeItemIndex++;
           }
-          listKey.currentState.removeItem(removeItemIndex,
+          listKey.currentState!.removeItem(removeItemIndex,
               (context, animation) => FeedEntriesCardHelpers.cardForFeedEntry(animation, feedState, entry),
               duration: Duration(milliseconds: 500));
         } else if (state is FeedBlocStateOpenComment) {
@@ -163,7 +163,7 @@ class _FeedPageState extends State<FeedPage> {
         }
       },
       child: BlocBuilder<FeedBloc, FeedBlocState>(
-        cubit: BlocProvider.of<FeedBloc>(context),
+        bloc: BlocProvider.of<FeedBloc>(context),
         builder: (BuildContext context, FeedBlocState state) {
           if (widget.bottom == null) {
             return _renderCards(context);
@@ -171,7 +171,7 @@ class _FeedPageState extends State<FeedPage> {
           return Column(
             children: [
               Expanded(child: _renderCards(context)),
-              widget.bottom,
+              widget.bottom!,
             ],
           );
         },
@@ -211,14 +211,14 @@ class _FeedPageState extends State<FeedPage> {
         key: listKey,
         itemBuilder: (BuildContext context, int index, Animation<double> animation) {
           if (widget.firstItem != null && index == 0) {
-            return widget.firstItem;
+            return widget.firstItem!;
           }
           if (widget.firstItem != null) {
             index--;
           }
           if (index == entries.length) {
             if (eof) {
-              return null;
+              return Container();
             }
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventLoadEntries(10, entries.length));
             return Container(
@@ -226,7 +226,7 @@ class _FeedPageState extends State<FeedPage> {
               child: FullscreenLoading(title: FeedPage.feedPageLoading),
             );
           } else if (index > entries.length) {
-            return null;
+            return Container();
           }
           FeedEntryState feedEntry = entries[index];
           Widget card =
@@ -242,7 +242,7 @@ class _FeedPageState extends State<FeedPage> {
                 if (!(visibleEntries[feedEntry.feedEntryID] ?? false) && info.visibleFraction > 0) {
                   visibleEntries[feedEntry.feedEntryID] = true;
                   BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEntryVisible(index));
-                  if (feedEntry.isNew && ModalRoute.of(context).isCurrent) {
+                  if (feedEntry.isNew && ModalRoute.of(context)!.isCurrent) {
                     BlocProvider.of<FeedBloc>(context).add(FeedBlocEventMarkAsRead(index));
                   }
                 }
@@ -275,7 +275,7 @@ class _FeedPageState extends State<FeedPage> {
     }
     Timer(
         Duration(milliseconds: 100),
-        () => scrollController.animateTo(widget.appBarHeight - height,
+        () => scrollController.animateTo(widget.appBarHeight! - height,
             duration: Duration(milliseconds: 500), curve: Curves.linear));
   }
 }

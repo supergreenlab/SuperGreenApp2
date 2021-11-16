@@ -63,13 +63,13 @@ class NutrientProduct extends Equatable {
 class FeedNutrientMixParams extends FeedEntryParams {
   final String name;
   final double volume;
-  final double ph;
-  final double ec;
-  final double tds;
+  final double? ph;
+  final double? ec;
+  final double? tds;
   final List<NutrientProduct> nutrientProducts;
-  final String message;
+  final String? message;
   final NutrientMixPhase? phase;
-  final String basedOn;
+  final String? basedOn;
 
   FeedNutrientMixParams({
     required this.name,
@@ -126,5 +126,5 @@ class FeedNutrientMixParams extends FeedEntryParams {
   }
 
   @override
-  List<Object> get props => [name, volume, ph, ec, tds, nutrientProducts, message];
+  List<Object?> get props => [name, volume, ph, ec, tds, nutrientProducts, message];
 }

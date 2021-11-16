@@ -22,24 +22,24 @@ import 'package:equatable/equatable.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedVentilationParamsValues extends Equatable {
-  final int blowerRefSource;
-  final int blowerRefMin;
-  final int blowerRefMax;
-  final int blowerMin;
-  final int blowerMax;
+  final int? blowerRefSource;
+  final int? blowerRefMin;
+  final int? blowerRefMax;
+  final int? blowerMin;
+  final int? blowerMax;
 
   // legacy params
-  final int blowerDay;
-  final int blowerNight;
+  final int? blowerDay;
+  final int? blowerNight;
 
   FeedVentilationParamsValues({
-    this.blowerRefSource,
-    this.blowerRefMin,
-    this.blowerRefMax,
-    this.blowerMin,
-    this.blowerMax,
-    this.blowerDay,
-    this.blowerNight,
+    required this.blowerRefSource,
+    required this.blowerRefMin,
+    required this.blowerRefMax,
+    required this.blowerMin,
+    required this.blowerMax,
+    required this.blowerDay,
+    required this.blowerNight,
   });
 
   factory FeedVentilationParamsValues.fromMap(Map<String, dynamic> map) {
@@ -66,15 +66,8 @@ class FeedVentilationParamsValues extends Equatable {
   }
 
   @override
-  List<Object> get props => [
-        blowerRefSource,
-        blowerRefMin,
-        blowerRefMax,
-        blowerMin,
-        blowerMax,
-        blowerDay,
-        blowerNight
-      ];
+  List<Object?> get props =>
+      [blowerRefSource, blowerRefMin, blowerRefMax, blowerMin, blowerMax, blowerDay, blowerNight];
 }
 
 class FeedVentilationParams extends FeedEntryParams {
@@ -86,14 +79,12 @@ class FeedVentilationParams extends FeedEntryParams {
   factory FeedVentilationParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
     return FeedVentilationParams(
-        FeedVentilationParamsValues.fromMap(map['values']),
-        FeedVentilationParamsValues.fromMap(map['initialValues']));
+        FeedVentilationParamsValues.fromMap(map['values']), FeedVentilationParamsValues.fromMap(map['initialValues']));
   }
 
   @override
   String toJSON() {
-    return JsonEncoder().convert(
-        {'values': values.toMap(), 'initialValues': initialValues.toMap()});
+    return JsonEncoder().convert({'values': values.toMap(), 'initialValues': initialValues.toMap()});
   }
 
   @override

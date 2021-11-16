@@ -31,7 +31,7 @@ class FeedEntryInsertEvent {
 }
 
 class FeedEntryUpdateEvent {
-  final FeedEntry feedEntry;
+  final FeedEntry? feedEntry;
 
   FeedEntryUpdateEvent(this.feedEntry);
 }

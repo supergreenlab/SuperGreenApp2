@@ -37,10 +37,10 @@ class FeedWaterFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
-  bool tooDry;
+  bool? tooDry;
   double volume = 1;
-  bool nutrient;
-  bool freedomUnits;
+  bool? nutrient;
+  late bool freedomUnits;
   bool wateringLab = false;
   DateTime date = DateTime.now();
   TextEditingController phController = TextEditingController();
@@ -59,7 +59,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        cubit: BlocProvider.of<FeedWaterFormBloc>(context),
+        bloc: BlocProvider.of<FeedWaterFormBloc>(context),
         listener: (BuildContext context, FeedWaterFormBlocState state) {
           if (state is FeedWaterFormBlocStateDone) {
             BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
@@ -67,7 +67,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
           }
         },
         child: BlocBuilder<FeedWaterFormBloc, FeedWaterFormBlocState>(
-            cubit: BlocProvider.of<FeedWaterFormBloc>(context),
+            bloc: BlocProvider.of<FeedWaterFormBloc>(context),
             builder: (context, state) {
               return FeedFormLayout(
                 title: '💧',
@@ -98,9 +98,9 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
     return [
       FeedFormDatePicker(
         date,
-        onChange: (DateTime newDate) {
+        onChange: (DateTime? newDate) {
           setState(() {
-            date = newDate;
+            date = newDate!;
           });
         },
       ),
@@ -123,7 +123,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
             child:
                 renderOptionCheckbx(context, 'Watering all plants in the lab with the **same quantity**.', (newValue) {
               setState(() {
-                wateringLab = newValue;
+                wateringLab = newValue!;
               });
             }, wateringLab),
           )),
@@ -249,7 +249,7 @@ class _FeedWaterFormPageState extends State<FeedWaterFormPage> {
     return Text('');
   }
 
-  Widget renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
     return Container(
       child: Row(
         children: <Widget>[

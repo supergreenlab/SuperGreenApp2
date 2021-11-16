@@ -35,11 +35,11 @@ class PublicPlantBlocEventFollowPlant extends PublicPlantBlocEvent {
 
 class PublicPlantBlocState extends Equatable {
   final String plantID;
-  final String feedEntryID;
-  final String plantName;
-  final String commentID;
-  final String replyTo;
-  final bool follows;
+  final String? feedEntryID;
+  final String? plantName;
+  final String? commentID;
+  final String? replyTo;
+  final bool? follows;
   final int nFollows;
 
   PublicPlantBlocState(
@@ -47,12 +47,12 @@ class PublicPlantBlocState extends Equatable {
       : super();
 
   @override
-  List<Object> get props => [plantID, feedEntryID, commentID, replyTo, follows, nFollows];
+  List<Object?> get props => [plantID, feedEntryID, commentID, replyTo, follows, nFollows];
 }
 
 class PublicPlantBlocStateInit extends PublicPlantBlocState {
   PublicPlantBlocStateInit(
-      String id, String feedEntryID, String name, String commentID, String replyTo, bool follows, int nFollows)
+      String id, String? feedEntryID, String? name, String? commentID, String? replyTo, bool? follows, int nFollows)
       : super(id, feedEntryID, name, commentID, replyTo, follows, nFollows);
 }
 

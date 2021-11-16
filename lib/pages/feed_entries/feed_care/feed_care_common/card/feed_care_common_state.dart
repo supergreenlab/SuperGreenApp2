@@ -26,13 +26,13 @@ class FeedCareCommonState extends FeedEntryStateLoaded {
 
   FeedCareCommonState(
     FeedEntryState from, {
-    this.beforeMedias,
-    this.afterMedias,
-    FeedEntrySocialState socialState,
-    bool showPlantInfos,
-    bool isRemoteState,
-    bool followed,
-    String shareLink,
+    required this.beforeMedias,
+    required this.afterMedias,
+    FeedEntrySocialState? socialState,
+    bool? showPlantInfos,
+    bool? isRemoteState,
+    bool? followed,
+    String? shareLink,
   }) : super.copy(from,
             socialState: socialState ?? from.socialState,
             showPlantInfos: showPlantInfos ?? from.showPlantInfos,
@@ -41,13 +41,13 @@ class FeedCareCommonState extends FeedEntryStateLoaded {
             shareLink: shareLink ?? from.shareLink);
 
   @override
-  List<Object> get props => [...super.props, beforeMedias, afterMedias];
+  List<Object?> get props => [...super.props, beforeMedias, afterMedias];
 
   FeedEntryState copyWith({
-    FeedEntrySocialState socialState,
-    String shareLink,
-    bool showPlantInfos,
-    bool followed,
+    FeedEntrySocialState? socialState,
+    String? shareLink,
+    bool? showPlantInfos,
+    bool? followed,
   }) {
     return FeedCareCommonState(
       this,

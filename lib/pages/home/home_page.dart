@@ -194,15 +194,15 @@ class HomePage extends TraceableStatelessWidget {
                   child: TowelieHelper.wrapWidget(settings, context, SGLFeedPage()),
                 ));
       case '/feed/plant':
-        return _plantFeedRoute(context, settings, settings.arguments, providers: [
+        return _plantFeedRoute(context, settings, settings.arguments as HomeNavigateToPlantFeedEvent, providers: [
           BlocProvider<DeviceReachableListenerBloc>(
-            create: (context) => DeviceReachableListenerBloc(settings.arguments),
+            create: (context) => DeviceReachableListenerBloc(settings.arguments as DeviceNavigationArgHolder),
           )
         ]);
       case '/feed/box':
-        return _boxFeedRoute(context, settings, settings.arguments, providers: [
+        return _boxFeedRoute(context, settings, settings.arguments as HomeNavigateToBoxFeedEvent, providers: [
           BlocProvider<DeviceReachableListenerBloc>(
-            create: (context) => DeviceReachableListenerBloc(settings.arguments),
+            create: (context) => DeviceReachableListenerBloc(settings.arguments as DeviceNavigationArgHolder),
           )
         ]);
       case '/explorer':
@@ -233,7 +233,7 @@ class HomePage extends TraceableStatelessWidget {
   }
 
   MaterialPageRoute _plantFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToPlantFeedEvent event,
-      {List<BlocProvider> providers}) {
+      {required List<BlocProvider> providers}) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(
@@ -247,7 +247,7 @@ class HomePage extends TraceableStatelessWidget {
   }
 
   MaterialPageRoute _boxFeedRoute(BuildContext context, RouteSettings settings, HomeNavigateToBoxFeedEvent event,
-      {List<BlocProvider> providers}) {
+      {required List<BlocProvider> providers}) {
     return MaterialPageRoute(
         settings: settings,
         builder: (context) => MultiBlocProvider(

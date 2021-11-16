@@ -33,7 +33,8 @@ class FeedToppingCardPage extends FeedCareCommonCardPage {
     );
   }
 
-  FeedToppingCardPage(Animation animation, FeedState feedState, FeedEntryState state, {Key key, cardActions})
+  FeedToppingCardPage(Animation<double> animation, FeedState feedState, FeedEntryState state,
+      {Key? key, final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions})
       : super(animation, feedState, state, key: key, cardActions: cardActions);
 
   String iconPath() {

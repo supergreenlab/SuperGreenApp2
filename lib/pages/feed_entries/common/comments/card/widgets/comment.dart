@@ -31,7 +31,7 @@ class SmallCommentView extends StatelessWidget {
   final Comment comment;
   final bool loggedIn;
 
-  const SmallCommentView({Key key, @required this.feedEntry, @required this.comment, @required this.loggedIn})
+  const SmallCommentView({Key? key, required this.feedEntry, required this.comment, required this.loggedIn})
       : super(key: key);
 
   @override
@@ -62,7 +62,7 @@ class SmallCommentView extends StatelessWidget {
   }
 
   void createAccountOrLogin(BuildContext context) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -70,13 +70,13 @@ class SmallCommentView extends StatelessWidget {
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -85,7 +85,7 @@ class SmallCommentView extends StatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth());
     }
   }

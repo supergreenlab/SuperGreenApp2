@@ -21,25 +21,21 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
 
 class PlantInfosStrain extends StatefulWidget {
-  final String strain;
-  final String seedbank;
+  final String? strain;
+  final String? seedbank;
 
   final Function onCancel;
-  final Function(String strain, String seedbank) onSubmit;
+  final Function(String? strain, String? seedbank) onSubmit;
 
-  PlantInfosStrain(
-      {@required this.strain,
-      @required this.seedbank,
-      @required this.onCancel,
-      @required this.onSubmit});
+  PlantInfosStrain({required this.strain, required this.seedbank, required this.onCancel, required this.onSubmit});
 
   @override
   _PlantInfosStrainState createState() => _PlantInfosStrainState();
 }
 
 class _PlantInfosStrainState extends State<PlantInfosStrain> {
-  TextEditingController strainController;
-  TextEditingController seedbankController;
+  late TextEditingController strainController;
+  late TextEditingController seedbankController;
 
   @override
   void initState() {
@@ -59,14 +55,8 @@ class _PlantInfosStrainState extends State<PlantInfosStrain> {
       },
       child: Column(
         children: <Widget>[
-          PlantInfosTextInput(
-              controller: strainController,
-              labelText: 'Strain',
-              hintText: 'Ex: White widow'),
-          PlantInfosTextInput(
-              controller: seedbankController,
-              labelText: 'Seedbank',
-              hintText: 'Ex: Paradise Seeds'),
+          PlantInfosTextInput(controller: strainController, labelText: 'Strain', hintText: 'Ex: White widow'),
+          PlantInfosTextInput(controller: seedbankController, labelText: 'Seedbank', hintText: 'Ex: Paradise Seeds'),
         ],
       ),
     );

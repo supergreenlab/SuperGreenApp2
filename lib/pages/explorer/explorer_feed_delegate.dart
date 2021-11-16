@@ -37,8 +37,8 @@ class ExplorerFeedBlocDelegateFollowEvent extends FeedBlocEvent {
 }
 
 class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
-  FeedState feedState;
-  StreamSubscription<hive.BoxEvent> appDataStream;
+  late FeedState feedState;
+  StreamSubscription<hive.BoxEvent>? appDataStream;
 
   ExplorerFeedBlocDelegate() : super();
 
@@ -89,7 +89,7 @@ class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   Future<void> close() async {
-    await appDataStream.cancel();
+    await appDataStream?.cancel();
     await super.close();
   }
 }

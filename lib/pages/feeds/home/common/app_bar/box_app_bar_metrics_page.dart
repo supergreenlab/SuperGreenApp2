@@ -19,7 +19,7 @@ class BoxAppBarMetricsPage extends StatefulWidget {
 }
 
 class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
-  int selectedGraphIndex;
+  int? selectedGraphIndex;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -38,7 +38,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
       },
       child: BlocBuilder<BoxAppBarMetricsBloc, PlantFeedAppBarBlocState>(
         builder: (BuildContext context, PlantFeedAppBarBlocState state) {
-          Widget body;
+          late Widget body;
           if (state is PlantFeedAppBarBlocStateInit) {
             body = FullscreenLoading(
               title: 'Loading..',
@@ -80,7 +80,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
     String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
     Widget dateText = Text('${DateFormat(format).format(metricDate)}',
         style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold));
-    List<charts.LineAnnotationSegment> annotations;
+    List<charts.LineAnnotationSegment<Object>>? annotations;
     if (selectedGraphIndex != null) {
       annotations = [
         charts.LineAnnotationSegment(metricDate, charts.RangeAnnotationAxisType.domain,
@@ -117,7 +117,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
             animate: false,
             behaviors: selectedGraphIndex != null
                 ? [
-                    charts.RangeAnnotation(annotations),
+                    charts.RangeAnnotation(annotations!),
                   ]
                 : null,
             customSeriesRenderers: [charts.PointRendererConfig(customRendererId: 'customPoint')],

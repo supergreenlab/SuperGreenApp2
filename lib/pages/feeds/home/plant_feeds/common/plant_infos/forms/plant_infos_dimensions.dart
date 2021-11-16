@@ -23,19 +23,15 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
 
 class PlantInfosDimensions extends StatefulWidget {
-  final int width;
-  final int height;
-  final int depth;
+  final int? width;
+  final int? height;
+  final int? depth;
 
   final Function onCancel;
   final Function(int width, int height, int depth, String unit) onSubmit;
 
   PlantInfosDimensions(
-      {@required this.onCancel,
-      @required this.onSubmit,
-      @required this.width,
-      @required this.height,
-      @required this.depth});
+      {required this.onCancel, required this.onSubmit, required this.width, required this.height, required this.depth});
 
   @override
   _PlantInfosDimensionsState createState() => _PlantInfosDimensionsState();
@@ -44,18 +40,15 @@ class PlantInfosDimensions extends StatefulWidget {
 class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
   String imperialUnit = 'Inch';
 
-  TextEditingController widthController;
-  TextEditingController heightController;
-  TextEditingController depthController;
+  late TextEditingController widthController;
+  late TextEditingController heightController;
+  late TextEditingController depthController;
 
   @override
   void initState() {
-    widthController = TextEditingController(
-        text: widget.width == null ? '' : widget.width.toString());
-    heightController = TextEditingController(
-        text: widget.height == null ? '' : widget.height.toString() ?? '');
-    depthController = TextEditingController(
-        text: widget.depth == null ? '' : widget.depth.toString() ?? '');
+    widthController = TextEditingController(text: widget.width?.toString());
+    heightController = TextEditingController(text: widget.height?.toString() ?? '');
+    depthController = TextEditingController(text: widget.depth?.toString() ?? '');
     widthController.addListener(() {
       setState(() {});
     });
@@ -76,17 +69,13 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
       title: 'Lab dimensions',
       icon: 'icon_dimension.svg',
       onCancel: widget.onCancel,
-      onSubmit: widthController.value.text != '' &&
-              heightController.value.text != '' &&
-              depthController.value.text != ''
-          ? () {
-              widget.onSubmit(
-                  int.parse(widthController.text),
-                  int.parse(heightController.text),
-                  int.parse(depthController.text),
-                  unit);
-            }
-          : null,
+      onSubmit:
+          widthController.value.text != '' && heightController.value.text != '' && depthController.value.text != ''
+              ? () {
+                  widget.onSubmit(int.parse(widthController.text), int.parse(heightController.text),
+                      int.parse(depthController.text), unit);
+                }
+              : null,
       child: Container(
         height: 150,
         child: ListView(
@@ -100,9 +89,9 @@ class _PlantInfosDimensionsState extends State<PlantInfosDimensions> {
                       ['Inch', "Inch"],
                       ['Feet', "Feet"]
                     ],
-                    onChanged: (String newUnit) {
+                    onChanged: (String? newUnit) {
                       setState(() {
-                        imperialUnit = newUnit;
+                        imperialUnit = newUnit!;
                       });
                     },
                   )

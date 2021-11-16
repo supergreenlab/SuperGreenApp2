@@ -24,20 +24,15 @@ class PlantInfosDateInput extends StatelessWidget {
   final String hintText;
   final String labelText;
   final DateTime date;
-  final Function(DateTime) onChange;
+  final Function(DateTime?) onChange;
 
   const PlantInfosDateInput(
-      {Key key,
-      @required this.hintText,
-      @required this.labelText,
-      @required this.date,
-      @required this.onChange})
+      {Key? key, required this.hintText, required this.labelText, required this.date, required this.onChange})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String format =
-        AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
+    String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
@@ -48,9 +43,9 @@ class PlantInfosDateInput extends StatelessWidget {
               'Since: ${DateFormat(format).format(date)}',
               style: TextStyle(color: Colors.white),
             )),
-            FlatButton(
+            TextButton(
                 onPressed: () async {
-                  DateTime newDate = await showDatePicker(
+                  DateTime? newDate = await showDatePicker(
                       context: context,
                       initialDate: date,
                       firstDate: DateTime.fromMillisecondsSinceEpoch(0),

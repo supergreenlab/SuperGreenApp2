@@ -32,15 +32,15 @@ import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.da
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
-  Plant plant;
-  Box box;
+  late Plant plant;
+  late Box box;
 
-  PlantFeedState feedState;
-  StreamSubscription<Box> boxStream;
-  StreamSubscription<Plant> plantStream;
-  StreamSubscription<hive.BoxEvent> appDataStream;
+  late PlantFeedState feedState;
+  StreamSubscription<Box>? boxStream;
+  StreamSubscription<Plant>? plantStream;
+  StreamSubscription<hive.BoxEvent>? appDataStream;
 
-  LocalPlantFeedBlocDelegate(int feedID, {int feedEntryID, String commentID, String replyTo})
+  LocalPlantFeedBlocDelegate(int feedID, {int? feedEntryID, String? commentID, String? replyTo})
       : super(feedID, feedEntryID: feedEntryID, commentID: commentID, replyTo: replyTo);
 
   @override
@@ -61,14 +61,14 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   @override
   void loadFeed() async {
     plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
-    box = await RelDB.get().plantsDAO.getBox(plant.box);
+    box = await RelDB.get().plantsDAO.getBox(plant.box!);
     AppData appData = AppDB().getAppData();
     feedState = PlantFeedState(appData.jwt != null, appData.storeGeo, PlantSettings.fromJSON(plant.settings),
         BoxSettings.fromJSON(box.settings));
     add(FeedBlocEventFeedLoaded(feedState));
 
     plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
-    boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
+    boxStream = RelDB.get().plantsDAO.watchBox(plant.box!).listen(boxUpdated);
     appDataStream = AppDB().watchAppData().listen(appDataUpdated);
   }
 
@@ -116,9 +116,9 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
 
   @override
   Future<void> close() async {
-    await boxStream.cancel();
-    await plantStream.cancel();
-    await appDataStream.cancel();
+    await boxStream?.cancel();
+    await plantStream?.cancel();
+    await appDataStream?.cancel();
     await super.close();
   }
 }

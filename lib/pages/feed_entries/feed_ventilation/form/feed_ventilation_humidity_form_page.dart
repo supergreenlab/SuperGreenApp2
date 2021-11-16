@@ -38,7 +38,7 @@ class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
 
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationHumidityFormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationHumidityFormPage(this.state, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationHumidityFormPageState createState() => _FeedVentilationHumidityFormPageState();
@@ -63,7 +63,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
   Widget build(BuildContext context) {
     String unit = '%';
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {

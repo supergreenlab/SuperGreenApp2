@@ -58,17 +58,17 @@ class FeedTimelapseLoader extends LocalFeedEntryLoader {
     super.startListenEntryChanges(entry);
     RelDB db = RelDB.get();
     _streams[entry.feedEntryID] = db.feedsDAO.watchFeedMedias(entry.feedEntryID).listen((_) async {
-      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
-      if (feedEntry != null) {
+      try {
+        FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
         await updateFeedEntryState(feedEntry, forceNew: true);
-      }
+      } catch (e) {}
     });
   }
 
   Future<void> cancelListenEntryChanges(FeedEntryStateLoaded entry) async {
     super.cancelListenEntryChanges(entry);
     if (_streams[entry.feedEntryID] != null) {
-      await _streams[entry.feedEntryID].cancel();
+      await _streams[entry.feedEntryID]!.cancel();
       _streams.remove(entry.feedEntryID);
     }
   }

@@ -22,23 +22,22 @@ import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_param
 
 class FeedWaterParams extends FeedEntryParams {
   final double volume;
-  final bool tooDry;
-  final bool nutrient;
-  final double ph;
-  final double ec;
-  final double tds;
-  final String message;
+  final bool? tooDry;
+  final bool? nutrient;
+  final double? ph;
+  final double? ec;
+  final double? tds;
+  final String? message;
 
-  FeedWaterParams(this.volume, this.tooDry, this.nutrient, this.ph, this.ec,
-      this.tds, this.message);
+  FeedWaterParams(this.volume, this.tooDry, this.nutrient, this.ph, this.ec, this.tds, this.message);
 
-  FeedWaterParams copyWith(String message) => FeedWaterParams(this.volume,
-      this.tooDry, this.nutrient, this.ph, this.ec, this.tds, message);
+  FeedWaterParams copyWith(String message) =>
+      FeedWaterParams(this.volume, this.tooDry, this.nutrient, this.ph, this.ec, this.tds, message);
 
   factory FeedWaterParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedWaterParams(map['volume'], map['tooDry'], map['nutrient'],
-        map['ph'], map['ec'], map['tds'], map['message']);
+    return FeedWaterParams(
+        map['volume'], map['tooDry'], map['nutrient'], map['ph'], map['ec'], map['tds'], map['message']);
   }
 
   @override
@@ -55,5 +54,5 @@ class FeedWaterParams extends FeedEntryParams {
   }
 
   @override
-  List<Object> get props => [volume, tooDry, nutrient, ph, ec, tds, message];
+  List<Object?> get props => [volume, tooDry, nutrient, ph, ec, tds, message];
 }

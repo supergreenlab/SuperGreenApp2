@@ -53,8 +53,7 @@ class PlantDrawerBlocStatePlantListUpdated extends PlantDrawerBlocState {
   final List<Box> boxes;
   final List<GetPendingFeedsResult> hasPending;
 
-  PlantDrawerBlocStatePlantListUpdated(
-      this.plants, this.boxes, this.hasPending);
+  PlantDrawerBlocStatePlantListUpdated(this.plants, this.boxes, this.hasPending);
 
   @override
   List<Object> get props => [plants, boxes, hasPending];
@@ -64,17 +63,16 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   List<Plant> _plants = [];
   List<Box> _boxes = [];
   List<GetPendingFeedsResult> _hasPending = [];
-  StreamSubscription<List<Plant>> _plantStream;
-  StreamSubscription<List<Box>> _boxesStream;
-  StreamSubscription<List<GetPendingFeedsResult>> _pendingStream;
+  StreamSubscription<List<Plant>>? _plantStream;
+  StreamSubscription<List<Box>>? _boxesStream;
+  StreamSubscription<List<GetPendingFeedsResult>>? _pendingStream;
 
   PlantDrawerBloc() : super(PlantDrawerBlocStateLoadingPlantList()) {
     add(PlantDrawerBlocEventLoadPlants());
   }
 
   @override
-  Stream<PlantDrawerBlocState> mapEventToState(
-      PlantDrawerBlocEvent event) async* {
+  Stream<PlantDrawerBlocState> mapEventToState(PlantDrawerBlocEvent event) async* {
     if (event is PlantDrawerBlocEventLoadPlants) {
       final db = RelDB.get().plantsDAO;
       _plantStream = db.watchPlants().listen(_onPlantListChange);
@@ -103,15 +101,9 @@ class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
 
   @override
   Future<void> close() async {
-    if (_plantStream != null) {
-      await _plantStream.cancel();
-    }
-    if (_boxesStream != null) {
-      await _boxesStream.cancel();
-    }
-    if (_pendingStream != null) {
-      await _pendingStream.cancel();
-    }
+    await _plantStream?.cancel();
+    await _boxesStream?.cancel();
+    await _pendingStream?.cancel();
     return super.close();
   }
 }

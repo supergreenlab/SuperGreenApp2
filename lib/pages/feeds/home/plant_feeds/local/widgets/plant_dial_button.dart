@@ -23,15 +23,15 @@ import 'package:rive/rive.dart';
 class PlantDialButton extends StatefulWidget {
   final bool openned;
 
-  const PlantDialButton({Key key, this.openned}) : super(key: key);
+  const PlantDialButton({Key? key, required this.openned}) : super(key: key);
 
   @override
   _PlantDialButtonState createState() => _PlantDialButtonState();
 }
 
 class _PlantDialButtonState extends State<PlantDialButton> {
-  Artboard _riveArtboard;
-  RiveAnimationController _controller;
+  Artboard? _riveArtboard;
+  late RiveAnimationController _controller;
 
   bool openned = false;
 
@@ -40,12 +40,11 @@ class _PlantDialButtonState extends State<PlantDialButton> {
     super.initState();
 
     rootBundle.load('assets/home/dial_button.riv').then((data) {
-      final file = RiveFile();
-      if (file.import(data)) {
-        final artboard = file.mainArtboard;
-        artboard.addController(_controller = SimpleAnimation('idle'));
-        setState(() => _riveArtboard = artboard);
-      }
+      final file = RiveFile.import(data);
+      final artboard = file.mainArtboard;
+      _controller = SimpleAnimation('idle');
+      artboard.addController(_controller);
+      setState(() => _riveArtboard = artboard);
     });
   }
 
@@ -53,11 +52,11 @@ class _PlantDialButtonState extends State<PlantDialButton> {
   Widget build(BuildContext context) {
     if (_riveArtboard != null && openned != widget.openned) {
       if (widget.openned == true) {
-        _riveArtboard.removeController(_controller);
-        _riveArtboard.addController(_controller = SimpleAnimation('open'));
+        _riveArtboard!.removeController(_controller);
+        _riveArtboard!.addController(_controller = SimpleAnimation('open'));
       } else {
-        _riveArtboard.removeController(_controller);
-        _riveArtboard.addController(_controller = SimpleAnimation('close'));
+        _riveArtboard!.removeController(_controller);
+        _riveArtboard!.addController(_controller = SimpleAnimation('close'));
       }
       openned = widget.openned;
     }
@@ -65,7 +64,7 @@ class _PlantDialButtonState extends State<PlantDialButton> {
         ? const SizedBox()
         : Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Rive(artboard: _riveArtboard),
+            child: Rive(artboard: _riveArtboard!),
           );
   }
 }

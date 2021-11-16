@@ -82,12 +82,12 @@ class FeedWaterCardPage extends StatefulWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedWaterCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
+  const FeedWaterCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions}) : super(key: key);
 
   @override
   _FeedWaterCardPageState createState() => _FeedWaterCardPageState();
@@ -99,7 +99,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, widget.state);
+      return _renderLoaded(context, widget.state as FeedWaterState);
     }
     return _renderLoading(context, widget.state);
   }
@@ -127,7 +127,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedWaterState state) {
-    FeedWaterParams params = state.params;
+    FeedWaterParams params = state.params as FeedWaterParams;
     List<Widget> cards = [
       renderCard('assets/feed_form/icon_volume.svg', 8, FeedWaterCardPage.feedWateringCardPageVolume,
           Text('${params.volume} L', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
@@ -157,7 +157,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
             });
           }, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: widget.cardActions != null ? widget.cardActions(context, state) : []),
+          }, actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(

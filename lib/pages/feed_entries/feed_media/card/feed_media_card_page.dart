@@ -61,9 +61,9 @@ class FeedMediaCardPage extends StatefulWidget {
   final Animation animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedMediaCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
+  const FeedMediaCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions}) : super(key: key);
 
   @override
   _FeedMediaCardPageState createState() => _FeedMediaCardPageState();
@@ -76,7 +76,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, widget.state);
+      return _renderLoaded(context, widget.state as FeedEntryStateLoaded);
     }
     return _renderLoading(context, widget.state);
   }

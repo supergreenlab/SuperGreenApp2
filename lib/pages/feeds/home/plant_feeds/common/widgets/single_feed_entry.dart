@@ -21,9 +21,9 @@ import 'package:flutter/material.dart';
 class SingleFeedEntry extends StatelessWidget {
   final String title;
   final String button;
-  final Function onTap;
+  final Function() onTap;
 
-  const SingleFeedEntry({Key key, this.title, this.button, @required this.onTap}) : super(key: key);
+  const SingleFeedEntry({Key? key, required this.title, required this.button, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

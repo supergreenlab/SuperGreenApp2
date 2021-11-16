@@ -56,12 +56,12 @@ class LocalBoxFeedBlocStateInit extends LocalBoxFeedBlocState {
 }
 
 class LocalBoxFeedBlocStateLoaded extends LocalBoxFeedBlocState {
-  final Box box;
+  final Box? box;
 
   LocalBoxFeedBlocStateLoaded(this.box);
 
   @override
-  List<Object> get props => [box];
+  List<Object?> get props => [box];
 }
 
 class LocalBoxFeedBlocStateBoxRemoved extends LocalBoxFeedBlocState {
@@ -71,25 +71,24 @@ class LocalBoxFeedBlocStateBoxRemoved extends LocalBoxFeedBlocState {
   List<Object> get props => [];
 }
 
-class LocalBoxFeedBloc
-    extends Bloc<LocalBoxFeedBlocEvent, LocalBoxFeedBlocState> {
+class LocalBoxFeedBloc extends Bloc<LocalBoxFeedBlocEvent, LocalBoxFeedBlocState> {
   final HomeNavigateToBoxFeedEvent args;
 
-  StreamSubscription<Box> boxStream;
-  Box box;
+  StreamSubscription<Box>? boxStream;
+  Box? box;
 
   LocalBoxFeedBloc(this.args) : super(LocalBoxFeedBlocStateInit()) {
     add(LocalBoxFeedBlocEventInit());
   }
 
   @override
-  Stream<LocalBoxFeedBlocState> mapEventToState(
-      LocalBoxFeedBlocEvent event) async* {
+  Stream<LocalBoxFeedBlocState> mapEventToState(LocalBoxFeedBlocEvent event) async* {
     if (event is LocalBoxFeedBlocEventInit) {
-      box = await RelDB.get().plantsDAO.getBox(args.box.id);
-      boxStream =
-          RelDB.get().plantsDAO.watchBox(args.box.id).listen(_onBoxUpdated);
-      yield LocalBoxFeedBlocStateLoaded(box);
+      try {
+        box = await RelDB.get().plantsDAO.getBox(args.box.id);
+      } catch (e) {}
+      boxStream = RelDB.get().plantsDAO.watchBox(args.box.id).listen(_onBoxUpdated);
+      yield LocalBoxFeedBlocStateLoaded(box!);
     } else if (event is LocalBoxFeedBlocEventUpdated) {
       if (box == null) {
         yield LocalBoxFeedBlocStateBoxRemoved();
@@ -97,10 +96,10 @@ class LocalBoxFeedBloc
       }
       yield LocalBoxFeedBlocStateLoaded(box);
     } else if (event is LocalBoxFeedBlocEventCreateFeed) {
-      FeedsCompanion feedsCompanion = FeedsCompanion.insert(name: box.name);
+      FeedsCompanion feedsCompanion = FeedsCompanion.insert(name: box!.name);
       int feedID = await RelDB.get().feedsDAO.addFeed(feedsCompanion);
       BoxesCompanion boxesCompanion = BoxesCompanion(
-        id: Value(box.id),
+        id: Value(box!.id),
         feed: Value(feedID),
       );
       await RelDB.get().plantsDAO.updateBox(boxesCompanion);
@@ -114,9 +113,7 @@ class LocalBoxFeedBloc
 
   @override
   Future<void> close() async {
-    if (boxStream != null) {
-      await boxStream.cancel();
-    }
+    await boxStream?.cancel();
     return super.close();
   }
 }

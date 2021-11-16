@@ -38,7 +38,7 @@ class FeedTimelapseLoader extends RemoteFeedEntryLoader {
     }
     state = FeedTimelapseState(state,
         medias: medias, isRemoteState: true, socialState: (state.socialState as FeedEntrySocialStateLoaded));
-    loadComments(state.socialState, state);
+    loadComments(state.socialState as FeedEntrySocialStateLoaded, state);
     return super.load(state);
   }
 }

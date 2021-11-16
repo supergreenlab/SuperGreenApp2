@@ -87,18 +87,18 @@ class FeedLifeEventCardPage extends StatelessWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedLifeEventCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
+  const FeedLifeEventCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (state is FeedEntryStateLoaded && feedState is PlantFeedState) {
-      return _renderLoaded(context, state, feedState);
+      return _renderLoaded(context, state as FeedEntryStateLoaded, feedState as PlantFeedState);
     }
     return _renderLoading(context, state);
   }
@@ -127,7 +127,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state, PlantFeedState feedState) {
-    FeedLifeEventParams params = state.params;
+    FeedLifeEventParams params = state.params as FeedLifeEventParams;
     List<String> phases = [
       FeedLifeEventCardPage.feedLifeEventCardPageGermination,
       FeedLifeEventCardPage.feedLifeEventCardPageVeggingStarted,
@@ -144,7 +144,7 @@ class FeedLifeEventCardPage extends StatelessWidget {
               'assets/feed_card/icon_life_events.svg', FeedLifeEventCardPage.feedLifeEventCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: cardActions != null ? cardActions(context, state) : []),
+          }, actions: cardActions != null ? cardActions!(context, state) : []),
           Container(
             height: 130,
             alignment: Alignment.center,

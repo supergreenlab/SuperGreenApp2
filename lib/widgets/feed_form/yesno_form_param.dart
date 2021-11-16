@@ -23,8 +23,8 @@ import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 class YesNoFormParam extends StatelessWidget {
   final String title;
   final String icon;
-  final bool yes;
-  final Color titleBackgroundColor;
+  final bool? yes;
+  final Color? titleBackgroundColor;
   final void Function(bool?) onPressed;
   final Widget? child;
 
@@ -33,7 +33,7 @@ class YesNoFormParam extends StatelessWidget {
       required this.title,
       required this.yes,
       required this.onPressed,
-      required this.titleBackgroundColor,
+      this.titleBackgroundColor,
       this.child});
 
   @override

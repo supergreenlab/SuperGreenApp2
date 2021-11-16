@@ -56,7 +56,7 @@ class HomeBlocStateLoaded extends HomeBlocState {
 }
 
 class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
-  StreamSubscription<List<GetPendingFeedsResult>> _pendingStream;
+  StreamSubscription<List<GetPendingFeedsResult>>? _pendingStream;
 
   HomeBloc() : super(HomeBlocStateInit()) {
     add(HomeBlocEventLoad());
@@ -78,9 +78,7 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
 
   @override
   Future<void> close() async {
-    if (_pendingStream != null) {
-      await _pendingStream.cancel();
-    }
+    await _pendingStream?.cancel();
     return super.close();
   }
 }

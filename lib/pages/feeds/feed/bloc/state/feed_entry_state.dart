@@ -34,42 +34,42 @@ abstract class FeedEntryState extends Equatable {
   final DateTime date;
   final FeedEntryParams params;
 
-  final String plantID;
-  final String plantName;
-  final PlantSettings plantSettings;
-  final BoxSettings boxSettings;
-  final bool followed;
+  final String? plantID;
+  final String? plantName;
+  final PlantSettings? plantSettings;
+  final BoxSettings? boxSettings;
+  final bool? followed;
 
   final FeedEntrySocialState socialState;
 
   final bool showPlantInfos;
   final bool isRemoteState;
   final bool isBackedUp;
-  final String shareLink;
+  final String? shareLink;
 
   FeedEntryState({
     this.feedEntryID,
     this.feedID,
-    this.type,
-    this.isNew,
-    this.synced,
-    this.date,
-    this.params,
-    this.plantID,
-    this.plantName,
+    required this.type,
+    required this.isNew,
+    required this.synced,
+    required this.date,
+    required this.params,
+    required this.plantID,
+    required this.plantName,
     this.plantSettings,
     this.boxSettings,
     this.followed,
     this.data,
-    this.socialState,
-    this.showPlantInfos,
-    this.isRemoteState,
-    this.isBackedUp,
+    required this.socialState,
+    required this.showPlantInfos,
+    required this.isRemoteState,
+    required this.isBackedUp,
     this.shareLink,
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         feedEntryID,
         feedID,
         type,
@@ -101,22 +101,22 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
   FeedEntryStateNotLoaded({
     dynamic feedEntryID,
     dynamic feedID,
-    String type,
-    bool isNew,
-    bool synced,
-    DateTime date,
-    dynamic params,
-    String plantID,
-    String plantName,
-    PlantSettings plantSettings,
-    BoxSettings boxSettings,
-    bool followed,
-    bool showPlantInfos,
-    bool isRemoteState,
-    bool isBackedUp,
+    required String type,
+    required bool isNew,
+    required bool synced,
+    required DateTime date,
+    required dynamic params,
+    String? plantID,
+    String? plantName,
+    PlantSettings? plantSettings,
+    BoxSettings? boxSettings,
+    bool? followed,
+    required bool showPlantInfos,
+    required bool isRemoteState,
+    required bool isBackedUp,
     dynamic data,
-    FeedEntrySocialState socialState,
-    String shareLink,
+    required FeedEntrySocialState socialState,
+    String? shareLink,
   }) : super(
           feedEntryID: feedEntryID,
           feedID: feedID,
@@ -139,10 +139,10 @@ class FeedEntryStateNotLoaded extends FeedEntryState {
         );
 
   FeedEntryState copyWith({
-    FeedEntrySocialState socialState,
-    String shareLink,
-    bool showPlantInfos,
-    bool followed,
+    FeedEntrySocialState? socialState,
+    String? shareLink,
+    bool? showPlantInfos,
+    bool? followed,
   }) {
     return FeedEntryStateNotLoaded(
       feedEntryID: this.feedEntryID,
@@ -172,22 +172,22 @@ abstract class FeedEntryStateLoaded extends FeedEntryState {
     FeedEntryState from, {
     dynamic feedEntryID,
     dynamic feedID,
-    String type,
-    bool isNew,
-    bool synced,
-    DateTime date,
+    String? type,
+    bool? isNew,
+    bool? synced,
+    DateTime? date,
     dynamic params,
-    String plantID,
-    String plantName,
-    PlantSettings plantSettings,
-    BoxSettings boxSettings,
-    bool followed,
-    bool showPlantInfos,
-    bool isRemoteState,
-    bool isBackedUp,
+    String? plantID,
+    String? plantName,
+    PlantSettings? plantSettings,
+    BoxSettings? boxSettings,
+    bool? followed,
+    bool? showPlantInfos,
+    bool? isRemoteState,
+    bool? isBackedUp,
     dynamic data,
-    FeedEntrySocialState socialState,
-    String shareLink,
+    FeedEntrySocialState? socialState,
+    String? shareLink,
   }) : super(
           feedEntryID: feedEntryID ?? from.feedEntryID,
           feedID: feedID ?? from.feedID,

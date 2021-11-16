@@ -269,9 +269,9 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
           controller: scrollController,
           itemBuilder: (BuildContext context, int index, Animation<double> animation) {
             if (index >= comments.length) {
-              // if (eof) {
-              //   return null;
-              // }
+              if (eof) {
+                return Container();
+              }
               BlocProvider.of<CommentsFormBloc>(context)
                   .add(CommentsFormBlocEventLoadComments(comments.where((c) => c.replyTo == null).length));
               return Container(

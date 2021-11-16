@@ -28,7 +28,7 @@ class FeedLightLoader extends RemoteFeedEntryLoader {
   @override
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     state = FeedLightState(state, isRemoteState: true, socialState: (state.socialState as FeedEntrySocialStateLoaded));
-    loadComments(state.socialState, state);
+    loadComments(state.socialState as FeedEntrySocialStateLoaded, state);
     return super.load(state);
   }
 

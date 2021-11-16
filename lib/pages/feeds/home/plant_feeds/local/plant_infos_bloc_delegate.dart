@@ -27,79 +27,68 @@ import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.da
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
-  Box box;
-  Plant plant;
+  late Box box;
+  late Plant plant;
 
-  StreamSubscription<Box> boxStream;
-  StreamSubscription<Plant> plantStream;
-  StreamSubscription<FeedMedia> feedMediaStream;
+  StreamSubscription<Box>? boxStream;
+  StreamSubscription<Plant>? plantStream;
+  StreamSubscription<FeedMedia>? feedMediaStream;
 
   LocalPlantInfosBlocDelegate(this.plant);
 
   @override
   void loadPlant() async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
-    box = await RelDB.get().plantsDAO.getBox(plant.box);
+    box = await RelDB.get().plantsDAO.getBox(plant.box!);
     this.plantInfos = PlantInfos(plant.name, null, null, null, null, true);
-    plantStream =
-        RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
-    boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
-    feedMediaStream = RelDB.get()
-        .feedsDAO
-        .watchLastFeedMedia(plant.feed)
-        .listen(feedMediaUpdated);
+    plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
+    boxStream = RelDB.get().plantsDAO.watchBox(plant.box!).listen(boxUpdated);
+    feedMediaStream = RelDB.get().feedsDAO.watchLastFeedMedia(plant.feed).listen(feedMediaUpdated);
   }
 
   @override
   Stream<PlantInfosBlocState> updateSettings(PlantInfos plantInfos) async* {
-    String plantSettingsJSON = plantInfos.plantSettings.toJSON();
+    String plantSettingsJSON = plantInfos.plantSettings!.toJSON();
     if (plant.settings != plantSettingsJSON) {
-      PlantsCompanion plant = PlantsCompanion(
-          id: Value(this.plant.id),
-          settings: Value(plantSettingsJSON),
-          synced: Value(false));
+      PlantsCompanion plant =
+          PlantsCompanion(id: Value(this.plant.id), settings: Value(plantSettingsJSON), synced: Value(false));
       await RelDB.get().plantsDAO.updatePlant(plant);
     }
-    String boxSettingsJSON = plantInfos.boxSettings.toJSON();
+    String boxSettingsJSON = plantInfos.boxSettings!.toJSON();
     if (box.settings != boxSettingsJSON) {
-      BoxesCompanion box = BoxesCompanion(
-          id: Value(this.box.id),
-          settings: Value(boxSettingsJSON),
-          synced: Value(false));
+      BoxesCompanion box =
+          BoxesCompanion(id: Value(this.box.id), settings: Value(boxSettingsJSON), synced: Value(false));
       await RelDB.get().plantsDAO.updateBox(box);
     }
   }
 
   @override
-  Stream<PlantInfosBlocState> updatePhase(
-      PlantPhases phase, DateTime date) async* {
+  Stream<PlantInfosBlocState> updatePhase(PlantPhases phase, DateTime date) async* {
     await PlantHelper.updatePlantPhase(plant, phase, date);
   }
 
   void plantUpdated(Plant plant) {
     this.plant = plant;
     PlantSettings settings = PlantSettings.fromJSON(plant.settings);
-    plantInfosLoaded(
-        plantInfos.copyWith(name: plant.name, plantSettings: settings));
+    plantInfosLoaded(plantInfos!.copyWith(name: plant.name, plantSettings: settings));
   }
 
   void boxUpdated(Box box) {
     this.box = box;
     BoxSettings settings = BoxSettings.fromJSON(box.settings);
-    plantInfosLoaded(plantInfos.copyWith(boxSettings: settings));
+    plantInfosLoaded(plantInfos!.copyWith(boxSettings: settings));
   }
 
   void feedMediaUpdated(FeedMedia feedMedia) {
-    plantInfosLoaded(plantInfos.copyWith(
+    plantInfosLoaded(plantInfos!.copyWith(
         filePath: FeedMedias.makeAbsoluteFilePath(feedMedia.filePath),
-        thumbnailPath:
-            FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath)));
+        thumbnailPath: FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath)));
   }
 
   @override
   Future<void> close() async {
-    await boxStream.cancel();
-    await plantStream.cancel();
-    await feedMediaStream.cancel();
+    await boxStream?.cancel();
+    await plantStream?.cancel();
+    await feedMediaStream?.cancel();
   }
 }

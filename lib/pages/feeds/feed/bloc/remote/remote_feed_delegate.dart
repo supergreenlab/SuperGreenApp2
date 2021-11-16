@@ -35,24 +35,24 @@ import 'package:super_green_app/pages/feeds/feed/bloc/remote/loaders/remote_feed
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 
 abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
-  Function(FeedBlocEvent) add;
+  late Function(FeedBlocEvent) add;
   Map<String, RemoteFeedEntryLoader> loaders = {};
-  FeedUnknownLoader unknownLoader;
+  late FeedUnknownLoader unknownLoader;
 
   // TODO this shouldn't be there
-  final String feedEntryID;
-  final String commentID;
-  final String replyTo;
+  final String? feedEntryID;
+  final String? commentID;
+  final String? replyTo;
 
   RemoteFeedBlocDelegate({this.feedEntryID, this.commentID, this.replyTo});
 
   Stream<FeedBlocState> onInitialLoad() async* {
     // TODO this shouldn't be there
     if (commentID != null) {
-      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID);
+      Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID!);
       RemoteFeedEntryLoader feedEntryLoader = loaderForType(entryMap['type']);
       FeedEntryStateLoaded feedEntry = await feedEntryLoader.load(feedEntryLoader.stateForFeedEntryMap(entryMap));
-      yield FeedBlocStateOpenComment(feedEntry, this.commentID, this.replyTo);
+      yield FeedBlocStateOpenComment(feedEntry, this.commentID!, this.replyTo);
     }
   }
 
@@ -80,11 +80,11 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   RemoteFeedEntryLoader loaderForType(String type) {
-    FeedEntryLoader loader = loaders[type];
+    FeedEntryLoader? loader = loaders[type];
     if (loader == null) {
       return unknownLoader;
     }
-    return loader;
+    return loader as RemoteFeedEntryLoader;
   }
 
   @override

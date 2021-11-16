@@ -97,12 +97,12 @@ class FeedMeasureCardPage extends StatefulWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedMeasureCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions}) : super(key: key);
+  const FeedMeasureCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions}) : super(key: key);
 
   @override
   _FeedMeasureCardPageState createState() => _FeedMeasureCardPageState();
@@ -114,7 +114,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, widget.state);
+      return _renderLoaded(context, widget.state as FeedMeasureState);
     }
     return _renderLoading(context, widget.state);
   }
@@ -159,20 +159,20 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedMeasureState state) {
-    FeedMeasureParams params = state.params;
-    String sliderTitle;
+    FeedMeasureParams params = state.params as FeedMeasureParams;
+    String? sliderTitle;
     if (params.time != null) {
-      Duration time = Duration(seconds: params.time);
-      sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDays(Duration(seconds: params.time).inDays);
+      Duration time = Duration(seconds: params.time!);
+      sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDays(Duration(seconds: params.time!).inDays);
       if (time.inMinutes == 0) {
-        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageSeconds(Duration(seconds: params.time).inSeconds);
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageSeconds(Duration(seconds: params.time!).inSeconds);
       } else if (time.inHours == 0) {
-        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageMinutes(Duration(seconds: params.time).inMinutes);
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageMinutes(Duration(seconds: params.time!).inMinutes);
       } else if (time.inDays == 0) {
-        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageHours(Duration(seconds: params.time).inHours);
+        sliderTitle = FeedMeasureCardPage.feedMeasureCardPageHours(Duration(seconds: params.time!).inHours);
       } else if (time.inDays < 4) {
         sliderTitle = FeedMeasureCardPage.feedMeasureCardPageDaysAndHours(
-            Duration(seconds: params.time).inDays, Duration(seconds: params.time).inHours % 24);
+            Duration(seconds: params.time!).inDays, Duration(seconds: params.time!).inHours % 24);
       }
     }
     return FeedCard(
@@ -189,7 +189,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
             });
           }, onDelete: () {
             BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
-          }, actions: widget.cardActions != null ? widget.cardActions(context, state) : []),
+          }, actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
           state.showPlantInfos
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -208,7 +208,7 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
             onMediaTapped: (media) {
               if (state.previous != null) {
                 BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToFullscreenMedia(
-                    state.previous.thumbnailPath, state.previous.filePath,
+                    state.previous!.thumbnailPath, state.previous!.filePath,
                     overlayPath: state.current.filePath, heroPath: state.current.filePath, sliderTitle: sliderTitle));
               } else {
                 BlocProvider.of<MainNavigatorBloc>(context)

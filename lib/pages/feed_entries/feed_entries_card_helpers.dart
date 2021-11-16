@@ -41,8 +41,8 @@ import 'feed_timelapse/card/feed_timelapse_card_page.dart';
 class FeedEntriesCardHelpers {
   static Map<
       String,
-      Widget Function(Animation animation, FeedState feedState, FeedEntryState state,
-          {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions})> _cards = {
+      Widget Function(Animation<double> animation, FeedState feedState, FeedEntryState state,
+          {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions})> _cards = {
     'FE_LIGHT': (animation, feedState, state, {cardActions}) =>
         FeedLightCardPage(animation, feedState, state, cardActions: cardActions),
     'FE_MEDIA': (animation, feedState, state, {cardActions}) =>
@@ -77,10 +77,10 @@ class FeedEntriesCardHelpers {
         FeedTimelapseCardPage(animation, feedState, state, cardActions: cardActions),
   };
 
-  static Widget cardForFeedEntry(Animation animation, FeedState feedState, FeedEntryState state,
-      {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions}) {
-    Widget Function(Animation, FeedState, FeedEntryState,
-            {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions}) builder =
+  static Widget cardForFeedEntry(Animation<double> animation, FeedState feedState, FeedEntryState state,
+      {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions}) {
+    Widget Function(Animation<double>, FeedState, FeedEntryState,
+            {List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions})? builder =
         _cards[state.type];
     if (builder == null) {
       return FeedUnknownCardPage(animation, feedState, state);

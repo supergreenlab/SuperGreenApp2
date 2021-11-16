@@ -29,7 +29,7 @@ class FeedLifeEventLoader extends RemoteFeedEntryLoader {
   Future<FeedEntryStateLoaded> load(FeedEntryState state) async {
     state =
         FeedLifeEventState(state, isRemoteState: true, socialState: (state.socialState as FeedEntrySocialStateLoaded));
-    loadComments(state.socialState, state);
+    loadComments(state.socialState as FeedEntrySocialStateLoaded, state);
     return super.load(state);
   }
 

@@ -132,10 +132,10 @@ class EnvironmentsPage extends StatelessWidget {
   }
 
   final Box box;
-  final Plant plant;
-  final Function(Future<dynamic>) futureFn;
+  final Plant? plant;
+  final void Function(Future<dynamic>?)? futureFn;
 
-  const EnvironmentsPage(this.box, {Key key, this.futureFn, this.plant}) : super(key: key);
+  const EnvironmentsPage(this.box, {Key? key, this.futureFn, this.plant}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +250,7 @@ class EnvironmentsPage extends StatelessWidget {
                     EnvironmentsPage.environmentsPageAlerts,
                     'assets/home/icon_alerts.svg',
                     () => BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsPlantAlerts(this.plant, futureFn: futureFn)))
+                        .add(MainNavigateToSettingsPlantAlerts(this.plant!, futureFn: futureFn)))
                 : Container(),
           ],
         ),
@@ -284,11 +284,11 @@ class EnvironmentsPage extends StatelessWidget {
 
   void Function() _onEnvironmentControlTapped(
       BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
-      {String tipID, List<String> tipPaths}) {
+      {String? tipID, List<String>? tipPaths}) {
     return () {
-      if (tipPaths != null && !AppDB().isTipDone(tipID)) {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigateToTipEvent(tipID, tipPaths, navigatorEvent(pushAsReplacement: true)));
+      if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
+            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
       } else {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }

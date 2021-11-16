@@ -42,25 +42,25 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
-  Function(FeedBlocEvent) add;
+  late Function(FeedBlocEvent) add;
   final int feedID;
-  final int feedEntryID;
+  final int? feedEntryID;
   Map<String, LocalFeedEntryLoader> loaders = {};
-  FeedUnknownLoader unknownLoader;
-  StreamSubscription<FeedEntryInsertEvent> insertSubscription;
-  StreamSubscription<FeedEntryDeleteEvent> deleteSubscription;
+  late FeedUnknownLoader unknownLoader;
+  StreamSubscription<FeedEntryInsertEvent>? insertSubscription;
+  StreamSubscription<FeedEntryDeleteEvent>? deleteSubscription;
 
-  final String commentID;
-  final String replyTo;
+  final String? commentID;
+  final String? replyTo;
 
   LocalFeedBlocDelegate(this.feedID, {this.feedEntryID, this.commentID, this.replyTo});
 
   Stream<FeedBlocState> onInitialLoad() async* {
     if (commentID != null) {
-      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
+      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID!);
       LocalFeedEntryLoader loader = loaderForType(feedEntry.type);
       FeedEntryStateLoaded feedEntryStateLoaded = await loader.load(loader.stateForFeedEntry(feedEntry));
-      yield FeedBlocStateOpenComment(feedEntryStateLoaded, this.commentID, this.replyTo);
+      yield FeedBlocStateOpenComment(feedEntryStateLoaded, this.commentID!, this.replyTo);
     }
   }
 
@@ -101,11 +101,11 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   LocalFeedEntryLoader loaderForType(String type) {
-    FeedEntryLoader loader = loaders[type];
+    FeedEntryLoader? loader = loaders[type];
     if (loader == null) {
       return unknownLoader;
     }
-    return loader;
+    return loader as LocalFeedEntryLoader;
   }
 
   @override
@@ -116,7 +116,7 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   @override
   Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
     if (feedEntryID != null) {
-      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID);
+      FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(feedEntryID!);
       LocalFeedEntryLoader loader = loaderForType(feedEntry.type);
       return [await loader.load(loader.stateForFeedEntry(feedEntry))];
     }
@@ -134,7 +134,7 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   Future likeFeedEntry(FeedEntryState entry) async {
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
 
-    await BackendAPI().feedsAPI.likeFeedEntry(feedEntry.serverID);
+    await BackendAPI().feedsAPI.likeFeedEntry(feedEntry.serverID!);
     FeedEntryLoader loader = this.loaderForType(entry.type);
     loader.loadSocialState(entry);
   }
@@ -143,7 +143,7 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   Future bookmarkFeedEntry(FeedEntryState entry) async {
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
 
-    await BackendAPI().feedsAPI.bookmarkFeedEntry(feedEntry.serverID);
+    await BackendAPI().feedsAPI.bookmarkFeedEntry(feedEntry.serverID!);
     FeedEntryLoader loader = this.loaderForType(entry.type);
     loader.loadSocialState(entry);
   }
@@ -163,7 +163,7 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
       closePromises.add(loader.close());
     }
     Future.wait(closePromises);
-    await insertSubscription.cancel();
-    await deleteSubscription.cancel();
+    await insertSubscription?.cancel();
+    await deleteSubscription?.cancel();
   }
 }

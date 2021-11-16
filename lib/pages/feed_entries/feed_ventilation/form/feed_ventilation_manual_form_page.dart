@@ -37,7 +37,7 @@ class FeedVentilationManualFormPage extends TraceableStatefulWidget {
 
   final FeedVentilationFormBlocStateLoaded state;
 
-  const FeedVentilationManualFormPage(this.state, {Key key}) : super(key: key);
+  const FeedVentilationManualFormPage(this.state, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationManualFormPageState createState() => _FeedVentilationManualFormPageState();
@@ -55,7 +55,7 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-        cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {

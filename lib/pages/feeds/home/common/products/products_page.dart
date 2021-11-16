@@ -86,14 +86,14 @@ class ProductsPage extends TraceableStatefulWidget {
 
   final bool editable;
 
-  const ProductsPage({Key key, this.editable = true}) : super(key: key);
+  const ProductsPage({Key? key, this.editable = true}) : super(key: key);
 
   @override
   _ProductsPageState createState() => _ProductsPageState();
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  List<Product> products;
+  late List<Product> products;
 
   @override
   Widget build(BuildContext context) {
@@ -106,12 +106,12 @@ class _ProductsPageState extends State<ProductsPage> {
         }
       },
       child: BlocBuilder<ProductsBloc, ProductsBlocState>(
-          cubit: BlocProvider.of<ProductsBloc>(context),
+          bloc: BlocProvider.of<ProductsBloc>(context),
           builder: (BuildContext context, ProductsBlocState state) {
             if (state is ProductsBlocStateLoading) {
               return _renderLoading(context, state);
             }
-            return _renderLoaded(context, state);
+            return _renderLoaded(context, state as ProductsBlocStateLoaded);
           }),
     );
   }
@@ -143,7 +143,7 @@ class _ProductsPageState extends State<ProductsPage> {
           onPressed: () {
             BlocProvider.of<MainNavigatorBloc>(context)
                 .add(MainNavigateToSelectNewProductEvent(products, futureFn: (future) async {
-              List<Product> products = await future;
+              List<Product>? products = await future;
               if (products == null) {
                 return;
               }
@@ -206,13 +206,13 @@ class _ProductsPageState extends State<ProductsPage> {
     return Expanded(
       child: ListView(
         children: state.products.map<Widget>((p) {
-          final ProductCategoryUI categoryUI = productCategories[p.category];
+          final ProductCategoryUI categoryUI = productCategories[p.category]!;
           List<Widget> subtitle = [Text(p.name, style: TextStyle(fontSize: 20, color: Colors.white))];
-          if (p.specs != null && p.specs.by != null) {
+          if (p.specs?.by != null) {
             subtitle.addAll([
               Row(children: [
                 Text(ProductsPage.productsPageToolboxBy, style: TextStyle(color: Colors.white)),
-                Text(p.specs.by, style: TextStyle(color: Color(0xff3bb30b))),
+                Text(p.specs!.by!, style: TextStyle(color: Color(0xff3bb30b))),
               ])
             ]);
           }
@@ -220,7 +220,7 @@ class _ProductsPageState extends State<ProductsPage> {
             leading: SvgPicture.asset(categoryUI.icon),
             title: Text(categoryUI.name, style: TextStyle(color: Colors.white)),
             subtitle: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: subtitle),
-            trailing: p.supplier != null && p.supplier.url != null
+            trailing: p.supplier?.url != null
                 ? InkWell(
                     child: Icon(
                       Icons.open_in_browser,
@@ -228,7 +228,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       size: 30,
                     ),
                     onTap: () {
-                      launch(p.supplier.url);
+                      launch(p.supplier!.url);
                     },
                   )
                 : null,

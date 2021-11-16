@@ -327,13 +327,13 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               // TODO find something better than this
               Timer(Duration(milliseconds: 100), () {
                 BlocProvider.of<DeviceReachableListenerBloc>(context)
-                    .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
+                    .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
               });
             }
           }
         },
         child: BlocBuilder<PlantFeedBloc, PlantFeedBlocState>(
-          cubit: BlocProvider.of<PlantFeedBloc>(context),
+          bloc: BlocProvider.of<PlantFeedBloc>(context),
           builder: (BuildContext context, PlantFeedBlocState state) {
             Widget body;
             if (_speedDialOpen) {
@@ -618,12 +618,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   void Function() _onSpeedDialSelected(
       BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
-      {String tipID, List<String> tipPaths}) {
+      {String? tipID, List<String>? tipPaths}) {
     return () {
       _openCloseDial.value = Random().nextInt(1 << 32);
-      if (tipPaths != null && !AppDB().isTipDone(tipID)) {
-        BlocProvider.of<MainNavigatorBloc>(context)
-            .add(MainNavigateToTipEvent(tipID, tipPaths, navigatorEvent(pushAsReplacement: true)));
+      if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
+            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
       } else {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }
@@ -645,7 +645,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         actions.insert(
             0,
             BlocProvider<SunglassesBloc>(
-              create: (BuildContext context) => SunglassesBloc(state.box.device, state.box.deviceBox),
+              create: (BuildContext context) => SunglassesBloc(state.box.device!, state.box.deviceBox!),
               child: BlocBuilder<SunglassesBloc, SunglassesBlocState>(
                 builder: (BuildContext context, SunglassesBlocState state) {
                   if (state is SunglassesBlocStateLoaded) {
@@ -665,7 +665,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ),
             ));
       }
-      Widget bottom;
+      Widget? bottom;
       if (state.feedEntry != null) {
         bottom = SingleFeedEntry(
           title: PlantFeedPage.plantFeedPageSingleEntry,
@@ -712,7 +712,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
         GreenButton(
           title: PlantFeedPage.plantFeedPageOpenPlantMenu,
           onPressed: () {
-            _scaffoldKey.currentState.openDrawer();
+            _scaffoldKey.currentState!.openDrawer();
           },
         ),
       ]))
@@ -858,8 +858,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  void Function(Future<dynamic>) futureFn(BuildContext context, PlantFeedBlocStateLoaded state) {
-    return (Future<dynamic> future) async {
+  void Function(Future<dynamic>?) futureFn(BuildContext context, PlantFeedBlocStateLoaded state) {
+    return (Future<dynamic>? future) async {
       dynamic feedEntry = await future;
       if (feedEntry != null && feedEntry is FeedEntry) {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, feedEntry));

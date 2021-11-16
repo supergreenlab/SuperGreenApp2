@@ -21,13 +21,13 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 
 class PlantInfosWidget extends StatelessWidget {
-  final String icon;
-  final String title;
-  final String value;
-  final Function onEdit;
+  final String? icon;
+  final String? title;
+  final String? value;
+  final Function()? onEdit;
   final Color color;
 
-  const PlantInfosWidget({Key key, this.icon, this.title, @required this.value, this.onEdit, this.color = Colors.white})
+  const PlantInfosWidget({Key? key, this.icon, this.title, this.value, this.onEdit, this.color = Colors.white})
       : super(key: key);
 
   @override
@@ -51,7 +51,7 @@ class PlantInfosWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  title != null ? Text(title, style: TextStyle(color: this.color)) : Container(),
+                  title != null ? Text(title!, style: TextStyle(color: this.color)) : Container(),
                   valueWidget,
                 ],
               ),
@@ -94,7 +94,7 @@ class PlantInfosWidget extends StatelessWidget {
             children: <Widget>[
               Expanded(
                   child: MarkdownBody(
-                data: value,
+                data: value ?? '',
                 styleSheet: MarkdownStyleSheet(
                     p: TextStyle(color: this.color, fontSize: 16),
                     h1: TextStyle(color: this.color, fontSize: 20, fontWeight: FontWeight.bold),

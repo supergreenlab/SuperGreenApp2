@@ -22,7 +22,7 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 
 class FeedMeasureState extends FeedEntryStateLoaded {
   final MediaState current;
-  final MediaState previous;
+  final MediaState? previous;
 
   FeedMeasureState(
     FeedEntryState from, {

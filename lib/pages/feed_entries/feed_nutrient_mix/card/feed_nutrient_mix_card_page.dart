@@ -82,12 +82,12 @@ class FeedNutrientMixCardPage extends StatefulWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
-  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState) cardActions;
+  final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
 
-  const FeedNutrientMixCardPage(this.animation, this.feedState, this.state, {Key key, this.cardActions})
+  const FeedNutrientMixCardPage(this.animation, this.feedState, this.state, {Key? key, this.cardActions})
       : super(key: key);
 
   @override
@@ -100,7 +100,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, widget.state);
+      return _renderLoaded(context, widget.state as FeedEntryStateLoaded);
     }
     return _renderLoading(context);
   }
@@ -115,7 +115,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               widget.state.synced,
               showSyncStatus: !widget.state.isRemoteState,
               showControls: !widget.state.isRemoteState,
-              actions: widget.cardActions != null ? widget.cardActions(context, widget.state) : []),
+              actions: widget.cardActions != null ? widget.cardActions!(context, widget.state) : []),
           Container(
             height: 140,
             alignment: Alignment.center,
@@ -131,7 +131,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedEntryStateLoaded state) {
-    FeedNutrientMixParams params = state.params;
+    FeedNutrientMixParams params = state.params as FeedNutrientMixParams;
     List<Widget> cards = [
       renderCard('assets/feed_form/icon_volume.svg', 8, FeedNutrientMixCardPage.feedNutrientMixCardWaterQuantity,
           Text('${params.volume} L', style: TextStyle(fontWeight: FontWeight.w300, fontSize: 25))),
@@ -175,11 +175,11 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 (params.basedOn ?? '') != ''
-                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardFrom(params.basedOn),
+                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardFrom(params.basedOn!),
                         style: TextStyle(color: Color(0xffababab)))
                     : Container(),
                 (params.phase ?? '') != ''
-                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardPhase(nutrientMixPhasesUI[params.phase]),
+                    ? Text(FeedNutrientMixCardPage.feedNutrientMixCardPhase(nutrientMixPhasesUI[params.phase!]!),
                         style: TextStyle(color: Color(0xffababab)))
                     : Container(),
               ],

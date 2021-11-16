@@ -46,21 +46,19 @@ class FeedTowelieParamsButton extends Equatable {
 }
 
 class FeedTowelieInfoParams extends FeedEntryParams {
-  final String topPic;
+  final String? topPic;
   final String text;
-  final List<FeedTowelieParamsButton> buttons;
-  final FeedTowelieParamsButton selectedButton;
+  final List<FeedTowelieParamsButton>? buttons;
+  final FeedTowelieParamsButton? selectedButton;
 
   FeedTowelieInfoParams(this.topPic, this.text, this.buttons, this.selectedButton);
 
   factory FeedTowelieInfoParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    List<FeedTowelieParamsButton> buttons = (map['buttons'] ?? [])
-        .map<FeedTowelieParamsButton>(
-            (b) => FeedTowelieParamsButton.fromMap(b)).toList();
-    FeedTowelieParamsButton selectedButton = map['selectedButton'] == null
-        ? null
-        : FeedTowelieParamsButton.fromMap(map['selectedButton']);
+    List<FeedTowelieParamsButton> buttons =
+        (map['buttons'] ?? []).map<FeedTowelieParamsButton>((b) => FeedTowelieParamsButton.fromMap(b)).toList();
+    FeedTowelieParamsButton? selectedButton =
+        map['selectedButton'] == null ? null : FeedTowelieParamsButton.fromMap(map['selectedButton']);
     return FeedTowelieInfoParams(
       map['top_pic'],
       map['text'],
@@ -74,12 +72,11 @@ class FeedTowelieInfoParams extends FeedEntryParams {
     return JsonEncoder().convert({
       'top_pic': topPic,
       'text': text,
-      'buttons': buttons
-          .map<Map<String, dynamic>>((b) => b.toMap()),
-      'selectedButton': selectedButton.toMap(),
+      'buttons': buttons?.map<Map<String, dynamic>>((b) => b.toMap()),
+      'selectedButton': selectedButton?.toMap(),
     });
   }
 
   @override
-  List<Object> get props => [topPic, text, buttons, selectedButton];
+  List<Object?> get props => [topPic, text, buttons, selectedButton];
 }

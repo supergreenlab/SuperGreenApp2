@@ -47,13 +47,13 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+      bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
       listener: (BuildContext context, FeedVentilationFormBlocState state) {
         if (state is FeedVentilationFormBlocStateLoaded) {
           if (state.box.device != null) {
             Timer(Duration(milliseconds: 100), () {
               BlocProvider.of<DeviceReachableListenerBloc>(context)
-                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
+                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
             });
           }
         } else if (state is FeedVentilationFormBlocStateDone) {
@@ -61,9 +61,9 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
         }
       },
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
-          cubit: BlocProvider.of<FeedVentilationFormBloc>(context),
+          bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) {
-            Widget body;
+            late Widget body;
             if (state is FeedVentilationFormBlocStateInit) {
               body = FullscreenLoading(title: 'Loading..');
             } else if (state is FeedVentilationFormBlocStateLoading) {
