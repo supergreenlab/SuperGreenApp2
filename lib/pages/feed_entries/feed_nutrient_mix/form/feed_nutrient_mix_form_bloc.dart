@@ -27,6 +27,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
+import 'package:collection/collection.dart';
 
 abstract class FeedNutrientMixFormBlocEvent extends Equatable {}
 
@@ -58,20 +59,20 @@ class FeedNutrientMixFormBlocEventCreate extends FeedNutrientMixFormBlocEvent {
   final DateTime date;
   final String name;
   final double volume;
-  final double ph;
-  final double ec;
-  final double tds;
+  final double? ph;
+  final double? ec;
+  final double? tds;
   final List<NutrientProduct> nutrientProducts;
   final String message;
   final List<Plant> plants;
-  final NutrientMixPhase phase;
-  final FeedNutrientMixParams baseNutrientMixParams;
+  final NutrientMixPhase? phase;
+  final FeedNutrientMixParams? baseNutrientMixParams;
 
   FeedNutrientMixFormBlocEventCreate(this.date, this.name, this.volume, this.ph, this.ec, this.tds,
       this.nutrientProducts, this.message, this.plants, this.phase, this.baseNutrientMixParams);
 
   @override
-  List<Object> get props =>
+  List<Object?> get props =>
       [date, name, volume, ph, ec, nutrientProducts, message, plants, phase, baseNutrientMixParams];
 }
 
@@ -114,7 +115,7 @@ class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNut
   final MainNavigateToFeedNutrientMixFormEvent args;
 
   List<FeedNutrientMixParams> lastNutrientMixParams = [];
-  StreamSubscription<Plant> plantStream;
+  StreamSubscription<Plant>? plantStream;
 
   FeedNutrientMixFormBloc(this.args) : super(FeedNutrientMixFormBlocStateInit()) {
     add(FeedNutrientMixFormBlocEventInit());
@@ -129,9 +130,9 @@ class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNut
         FeedNutrientMixParams params = FeedNutrientMixParams.fromJSON(nutrientMix.params);
         if (params.name != null && params.name != '') {
           if (lastNutrientMixParamsMap[params.name] == null) {
-            lastNutrientMixParamsMap[params.name] = nutrientMix;
-          } else if (lastNutrientMixParamsMap[params.name].date.isBefore(nutrientMix.date)) {
-            lastNutrientMixParamsMap[params.name] = nutrientMix;
+            lastNutrientMixParamsMap[params.name!] = nutrientMix;
+          } else if (lastNutrientMixParamsMap[params.name]!.date.isBefore(nutrientMix.date)) {
+            lastNutrientMixParamsMap[params.name!] = nutrientMix;
           }
         }
       }
@@ -145,7 +146,7 @@ class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNut
         } else if (np2.phase == null) {
           return -1;
         }
-        return np1.phase.index - np2.phase.index;
+        return np1.phase!.index - np2.phase!.index;
       });
       plantStream = RelDB.get().plantsDAO.watchPlant(args.plant.id).listen(plantUpdated);
       int nPlants = await RelDB.get().plantsDAO.nPlants().getSingle();
@@ -154,7 +155,7 @@ class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNut
       yield FeedNutrientMixFormBlocStateLoaded(
           nPlants,
           plant,
-          plantSettings.products.where((p) => p.category == ProductCategoryID.FERTILIZER).toList(),
+          plantSettings.products!.where((p) => p.category == ProductCategoryID.FERTILIZER).toList(),
           lastNutrientMixParams);
       // } else if (event is FeedNutrientMixFormBlocEventAddNutrients) {
       //   Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
@@ -178,7 +179,7 @@ class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNut
                   ec: event.ec,
                   tds: event.tds,
                   nutrientProducts:
-                      event.nutrientProducts.where((np) => np.quantity != null && np.quantity > 0).toList(),
+                      event.nutrientProducts.where((np) => np.quantity != null && np.quantity! > 0).toList(),
                   message: event.message,
                   phase: event.phase,
                   basedOn: event.baseNutrientMixParams?.name)
@@ -196,8 +197,8 @@ class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNut
       if (nutrientProduct.quantity != null && nutrientProduct.quantity == 0) {
         continue;
       }
-      if (plantSettings.products.firstWhere((p) => p.id == nutrientProduct.product.id, orElse: () => null) == null) {
-        plantSettings.products.add(nutrientProduct.product);
+      if (plantSettings.products!.firstWhereOrNull((p) => p.id == nutrientProduct.product.id) == null) {
+        plantSettings.products!.add(nutrientProduct.product);
         updatePlant = true;
       }
     }
@@ -210,12 +211,12 @@ class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNut
   void plantUpdated(Plant plant) {
     PlantSettings plantSettings = PlantSettings.fromJSON(plant.settings);
     add(FeedNutrientMixFormBlocEventLoaded(
-        plantSettings.products.where((p) => p.category == ProductCategoryID.FERTILIZER).toList()));
+        plantSettings.products!.where((p) => p.category == ProductCategoryID.FERTILIZER).toList()));
   }
 
   @override
   Future<void> close() async {
-    await plantStream.cancel();
+    await plantStream?.cancel();
     await super.close();
   }
 }

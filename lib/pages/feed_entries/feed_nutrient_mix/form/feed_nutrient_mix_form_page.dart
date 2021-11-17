@@ -305,8 +305,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   DateTime date = DateTime.now();
 
   bool hideRestore = false;
-  bool restore;
-  bool loadingRestore;
+  bool loadingRestore = false;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phController = TextEditingController();
@@ -319,18 +318,18 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   List<NutrientProduct> nutrientProducts = [];
   List<TextEditingController> quantityControllers = [];
 
-  Plant plant;
-  List<FeedNutrientMixParams> lastNutrientMixParams;
-  FeedNutrientMixParams baseNutrientMixParams;
+  late Plant plant;
+  late List<FeedNutrientMixParams> lastNutrientMixParams;
+  FeedNutrientMixParams? baseNutrientMixParams;
 
-  NutrientMixPhase phase;
+  NutrientMixPhase? phase;
 
   FocusNode nameFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<FeedNutrientMixFormBloc>(context),
+      bloc: BlocProvider.of<FeedNutrientMixFormBloc>(context),
       listener: (BuildContext context, FeedNutrientMixFormBlocState state) {
         if (state is FeedNutrientMixFormBlocStateLoaded) {
           setState(() {
@@ -355,9 +354,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
         }
       },
       child: BlocBuilder<FeedNutrientMixFormBloc, FeedNutrientMixFormBlocState>(
-          cubit: BlocProvider.of<FeedNutrientMixFormBloc>(context),
+          bloc: BlocProvider.of<FeedNutrientMixFormBloc>(context),
           builder: (BuildContext context, FeedNutrientMixFormBlocState state) {
-            Widget body;
+            late Widget body;
             if (state is FeedNutrientMixFormBlocStateLoading) {
               body = FullscreenLoading(
                 title: CommonL10N.saving,
@@ -374,7 +373,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                 changed: true,
                 valid: true,
                 onOK: () async {
-                  double ph, ec, tds;
+                  double? ph, ec, tds;
                   if (phController.text != '') {
                     ph = double.parse(phController.text.replaceAll(',', '.'));
                   }
@@ -384,16 +383,16 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                   if (tdsController.text != '') {
                     tds = double.parse(tdsController.text.replaceAll(',', '.'));
                   }
-                  FeedNutrientMixParams nutrientProduct = lastNutrientMixParams
-                      .firstWhereOrNull((np) => np.name == nameController.text, orElse: () => null);
+                  FeedNutrientMixParams? nutrientProduct =
+                      lastNutrientMixParams.firstWhereOrNull((np) => np.name == nameController.text);
                   if (nutrientProduct != null && await confirmUpdate(context, nutrientProduct) == false) {
                     scrollController.animateTo(1000, duration: Duration(milliseconds: 300), curve: Curves.linear);
                     nameFocusNode.requestFocus();
                     return;
                   }
-                  List<Plant> plants = [plant];
+                  List<Plant>? plants = [plant];
                   if ((state as FeedNutrientMixFormBlocStateLoaded).nPlants > 1) {
-                    Completer<List<Plant>> plantsFuture = Completer();
+                    Completer<List<Plant>?> plantsFuture = Completer();
                     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPlantPickerEvent(
                         plants, FeedNutrientMixFormPage.feedNutrientMixFormPageSelectPlant, futureFn: (future) async {
                       plantsFuture.complete(await future);
@@ -432,9 +431,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     children.addAll([
       FeedFormDatePicker(
         date,
-        onChange: (DateTime newDate) {
+        onChange: (DateTime? newDate) {
           setState(() {
-            date = newDate;
+            date = newDate!;
           });
         },
       ),
@@ -456,7 +455,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                 onTap: () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectNewProductEvent([],
                       categoryID: ProductCategoryID.FERTILIZER, futureFn: (future) async {
-                    List<Product> products = await future;
+                    List<Product>? products = await future;
                     if (products == null || products.length == 0) {
                       return;
                     }
@@ -741,7 +740,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
   }
 
   Widget renderRestoreLastNutrientMix(List<FeedNutrientMixParams> lastNutrientMixParams,
-      {Animation<double> animation}) {
+      {Animation<double>? animation}) {
     Widget body = FeedFormParamLayout(
       icon: 'assets/feed_form/icon_restore_nutrient_mix.svg',
       title: FeedNutrientMixFormPage.feedNutrientMixFormPageEndMixMetricsSectionTitle,
@@ -751,7 +750,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
             scrollDirection: Axis.horizontal,
             children: lastNutrientMixParams.map<Widget>((p) {
               int i = lastNutrientMixParams.indexOf(p);
-              String title = p.name;
+              String title = p.name!;
               if (p.phase != null) {
                 title = '${p.name}\n${nutrientMixPhasesUI[p.phase]}';
               }
@@ -768,7 +767,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                         });
 
                         Timer(Duration(milliseconds: 500), () {
-                          listKey.currentState.removeItem(
+                          listKey.currentState!.removeItem(
                               0,
                               (context, animation) =>
                                   renderRestoreLastNutrientMix(lastNutrientMixParams, animation: animation),
@@ -835,7 +834,7 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
                                 width: 120,
                                 child: FeedFormButton(
                                     border: phase == p,
-                                    title: nutrientMixPhasesUI[p],
+                                    title: nutrientMixPhasesUI[p]!,
                                     textStyle: TextStyle(color: Colors.black),
                                     onPressed: () {
                                       setState(() {
@@ -881,22 +880,22 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
     });
   }
 
-  Future<bool> confirmUpdate(BuildContext context, FeedNutrientMixParams lastNutrientMixParams) => showDialog<bool>(
+  Future<bool?> confirmUpdate(BuildContext context, FeedNutrientMixParams lastNutrientMixParams) => showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-              FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogTitle(lastNutrientMixParams.name)),
+              FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogTitle(lastNutrientMixParams.name!)),
           content: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogBody),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context, false);
               },
               child: Text(FeedNutrientMixFormPage.feedNutrientMixFormPageUpdateExistingDialogNo),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },

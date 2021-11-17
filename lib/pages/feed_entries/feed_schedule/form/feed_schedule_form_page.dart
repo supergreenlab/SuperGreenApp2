@@ -68,11 +68,11 @@ class FeedScheduleFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
-  TextEditingController onHourEditingController;
-  TextEditingController onMinEditingController;
-  TextEditingController offHourEditingController;
-  TextEditingController offMinEditingController;
-  String scheduleChange;
+  late TextEditingController onHourEditingController;
+  late TextEditingController onMinEditingController;
+  late TextEditingController offHourEditingController;
+  late TextEditingController offMinEditingController;
+  String? scheduleChange;
   bool editedSchedule = false;
 
   bool _reachable = true;
@@ -81,13 +81,13 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<FeedScheduleFormBloc>(context),
+      bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
       listener: (BuildContext context, FeedScheduleFormBlocState state) {
         if (state is FeedScheduleFormBlocStateLoaded) {
           if (state.box.device != null) {
             Timer(Duration(milliseconds: 100), () {
               BlocProvider.of<DeviceReachableListenerBloc>(context)
-                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
+                  .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
             });
           }
         } else if (state is FeedScheduleFormBlocStateDone) {
@@ -95,9 +95,9 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
         }
       },
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
-          cubit: BlocProvider.of<FeedScheduleFormBloc>(context),
+          bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
           builder: (BuildContext context, FeedScheduleFormBlocState state) {
-            Widget body;
+            late Widget body;
             bool changed = false;
             bool valid = false;
             if (state is FeedScheduleFormBlocStateLoading) {
@@ -223,7 +223,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
   }
 
   Widget _renderSchedule(BuildContext context, Map<String, dynamic> schedule, String title, String icon, String helper,
-      bool selected, Function onPressed, Function onEdit) {
+      bool selected, Function onPressed, Function() onEdit) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: FeedFormParamLayout(
@@ -249,9 +249,11 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                           padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                           minWidth: 0,
                           height: 0,
-                          child: RaisedButton(
-                            elevation: 0,
-                            color: Colors.transparent,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              elevation: MaterialStateProperty.resolveWith((state) => 0),
+                              backgroundColor: MaterialStateProperty.resolveWith((state) => Colors.transparent),
+                            ),
                             child: Icon(Icons.settings),
                             onPressed: onEdit,
                           )),
@@ -402,7 +404,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                         title: 'SET',
                         onPressed: () {
                           BlocProvider.of<FeedScheduleFormBloc>(context)
-                              .add(FeedScheduleFormBlocEventUpdatePreset(scheduleChange, {
+                              .add(FeedScheduleFormBlocEventUpdatePreset(scheduleChange!, {
                             "ON_HOUR": max(0, min(23, int.parse(onHourEditingController.value.text))),
                             "ON_MIN": max(0, min(59, int.parse(onMinEditingController.value.text))),
                             "OFF_HOUR": max(0, min(23, int.parse(offHourEditingController.value.text))),

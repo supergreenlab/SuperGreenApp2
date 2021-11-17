@@ -88,14 +88,14 @@ class FeedMeasureFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
-  FeedMedia _previous;
-  FeedMediasCompanion _media;
+  FeedMedia? _previous;
+  FeedMediasCompanion? _media;
   final TextEditingController _textController = TextEditingController();
 
   bool _showSelector = false;
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  int _listener;
+  late int _listener;
   bool _keyboardVisible = false;
 
   @protected
@@ -130,7 +130,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
         return true;
       },
       child: BlocListener(
-          cubit: BlocProvider.of<FeedMeasureFormBloc>(context),
+          bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
           listener: (BuildContext context, FeedMeasureFormBlocState state) {
             if (state is FeedMeasureFormBlocStateDone) {
               BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, state.feedEntry));
@@ -138,7 +138,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
             }
           },
           child: BlocBuilder<FeedMeasureFormBloc, FeedMeasureFormBlocState>(
-              cubit: BlocProvider.of<FeedMeasureFormBloc>(context),
+              bloc: BlocProvider.of<FeedMeasureFormBloc>(context),
               builder: (context, state) {
                 String title = '🍌';
                 Widget body;
@@ -183,7 +183,9 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                           .add(FeedMeasureFormBlocEventCreate(_textController.text, _previous, _media)),
                       body: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: _keyboardVisible ? [_renderTextrea(context, state)] : _renderBody(context, state)));
+                          children: _keyboardVisible
+                              ? [_renderTextrea(context, state)]
+                              : _renderBody(context, state as FeedMeasureFormBlocStateLoaded)));
                 }
                 return AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body);
               })),
@@ -208,9 +210,9 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
       icon: 'assets/feed_form/icon_after_pic.svg',
       child: FeedFormMediaList(
         maxMedias: 1,
-        medias: _previous != null ? [FeedMedias.toCompanion(_previous)] : [],
+        medias: _previous != null ? [FeedMedias.toCompanion(_previous!)] : [],
         onLongPressed: (FeedMediasCompanion media) async {
-          bool confirm = await showDialog<bool>(
+          bool? confirm = await showDialog<bool>(
               context: context,
               barrierDismissible: false,
               builder: (BuildContext context) {
@@ -218,13 +220,13 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                   title: Text(FeedMeasureFormPage.feedMeasureFormPageUnselectMeasureDialogTitle),
                   content: Text(''),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, false);
                       },
                       child: Text(CommonL10N.no),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, true);
                       },
@@ -233,13 +235,13 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                   ],
                 );
               });
-          if (confirm) {
+          if (confirm ?? false) {
             setState(() {
               _previous = null;
             });
           }
         },
-        onPressed: (FeedMediasCompanion media) async {
+        onPressed: (FeedMediasCompanion? media) async {
           if (media == null) {
             setState(() {
               _showSelector = true;
@@ -263,11 +265,11 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
     );
   }
 
-  Future<FeedMediasCompanion> _takePic(BuildContext context) async {
+  Future<FeedMediasCompanion?> _takePic(BuildContext context) async {
     FutureFn futureFn = BlocProvider.of<MainNavigatorBloc>(context).futureFn();
     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToImageCaptureEvent(
         futureFn: futureFn.futureFn, overlayPath: _previous?.filePath, videoEnabled: false, pickerEnabled: false));
-    List<FeedMediasCompanion> fm = await futureFn.future;
+    List<FeedMediasCompanion>? fm = await futureFn.future;
     if (fm == null || fm.length == 0) {
       return null;
     }
@@ -280,9 +282,9 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
       icon: 'assets/feed_form/icon_after_pic.svg',
       child: FeedFormMediaList(
         maxMedias: 1,
-        medias: _media != null ? [_media] : [],
+        medias: _media != null ? [_media!] : [],
         onLongPressed: (FeedMediasCompanion media) async {
-          bool confirm = await showDialog<bool>(
+          bool? confirm = await showDialog<bool>(
               context: context,
               barrierDismissible: false,
               builder: (BuildContext context) {
@@ -290,13 +292,13 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                   title: Text(FeedMeasureFormPage.feedMeasureFormPageDeletePicDialogTitle),
                   content: Text(CommonL10N.confirmUnRevertableChange),
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, false);
                       },
                       child: Text(CommonL10N.no),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context, true);
                       },
@@ -305,15 +307,15 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
                   ],
                 );
               });
-          if (confirm) {
+          if (confirm ?? false) {
             setState(() {
               _media = null;
             });
           }
         },
-        onPressed: (FeedMediasCompanion media) async {
+        onPressed: (FeedMediasCompanion? media) async {
           if (media == null) {
-            FeedMediasCompanion fm = await _takePic(context);
+            FeedMediasCompanion? fm = await _takePic(context);
             if (fm != null) {
               setState(() {
                 _media = fm;
@@ -329,7 +331,7 @@ class _FeedMeasureFormPageState extends State<FeedMeasureFormPage> {
             bool keep = await ff.future;
             if (keep == true) {
             } else if (keep == false) {
-              FeedMediasCompanion fm = await _takePic(context);
+              FeedMediasCompanion? fm = await _takePic(context);
               if (fm != null) {
                 setState(() {
                   _media = fm;

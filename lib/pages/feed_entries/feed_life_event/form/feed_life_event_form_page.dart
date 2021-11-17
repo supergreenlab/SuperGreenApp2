@@ -126,7 +126,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
-  DateTime date;
+  late DateTime date;
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +141,9 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
         }
       },
       child: BlocBuilder<FeedLifeEventFormBloc, FeedLifeEventFormBlocState>(
-          cubit: BlocProvider.of<FeedLifeEventFormBloc>(context),
+          bloc: BlocProvider.of<FeedLifeEventFormBloc>(context),
           builder: (context, state) {
-            Widget body;
+            late Widget body;
             Tuple2<String, String> phaseTitle = Tuple2(
                 FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabel, 'assets/plant_infos/icon_germination_date.svg');
             if (state is FeedLifeEventFormBlocStateInit || state is FeedLifeEventFormBlocStateDone) {
@@ -191,9 +191,9 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             text,
             style: TextStyle(fontSize: 20, color: Colors.grey.shade700),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () async {
-              DateTime newDate = await showDatePicker(
+              DateTime? newDate = await showDatePicker(
                   context: context,
                   initialDate: date,
                   firstDate: DateTime.fromMillisecondsSinceEpoch(0),

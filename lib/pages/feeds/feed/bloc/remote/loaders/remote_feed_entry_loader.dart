@@ -35,7 +35,7 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
 
   @override
   Future<void> loadSocialState(FeedEntryState state) async {
-    FeedEntryState cached = cache[state.feedEntryID];
+    FeedEntryState? cached = cache[state.feedEntryID];
     Map<String, dynamic> socialMap = await BackendAPI().feedsAPI.fetchSocialForFeedEntry(state.feedEntryID);
     FeedEntrySocialStateLoaded socialState = FeedEntrySocialStateLoaded.fromMap(socialMap);
     if (cached != null && cached.socialState is FeedEntrySocialStateLoaded) {
@@ -82,10 +82,10 @@ abstract class RemoteFeedEntryLoader extends FeedEntryLoader {
   FeedEntryState stateForFeedEntryMap(Map<String, dynamic> feedEntryMap) {
     FeedEntrySocialState socialState;
     if (cache[feedEntryMap['id']] != null) {
-      if (mapEquals(cache[feedEntryMap['id']].data, feedEntryMap)) {
-        return cache[feedEntryMap['id']];
+      if (mapEquals(cache[feedEntryMap['id']]!.data, feedEntryMap)) {
+        return cache[feedEntryMap['id']]!;
       }
-      socialState = cache[feedEntryMap['id']].socialState;
+      socialState = cache[feedEntryMap['id']]!.socialState;
     } else {
       socialState = FeedEntrySocialStateLoaded.fromMap(feedEntryMap).copyWith(comments: []);
     }

@@ -49,8 +49,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
 
   @override
   void initState() {
-    _blowerDay = widget.state.blowerMax.value;
-    _blowerNight = widget.state.blowerMin.value;
+    _blowerDay = widget.state.blowerMax!.value;
+    _blowerNight = widget.state.blowerMin!.value;
     super.initState();
   }
 
@@ -61,8 +61,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerDay = state.blowerMax.value;
-              _blowerNight = state.blowerMin.value;
+              _blowerDay = state.blowerMax!.value;
+              _blowerNight = state.blowerMin!.value;
             });
           }
         },
@@ -90,7 +90,7 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerMin: widget.state.blowerMin.copyWith(value: _blowerNight)));
+                    blowerMin: widget.state.blowerMin!.copyWith(value: _blowerNight)));
               },
             ),
             SliderFormParam(
@@ -108,7 +108,7 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerMax: widget.state.blowerMax.copyWith(value: _blowerDay)));
+                    blowerMax: widget.state.blowerMax!.copyWith(value: _blowerDay)));
               },
             ),
           ],

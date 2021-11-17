@@ -103,12 +103,12 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<FeedLightFormBloc>(context),
+      bloc: BlocProvider.of<FeedLightFormBloc>(context),
       listener: (BuildContext context, FeedLightFormBlocState state) {
         if (state is FeedLightFormBlocStateLightsLoaded) {
           Timer(Duration(milliseconds: 100), () {
             BlocProvider.of<DeviceReachableListenerBloc>(context)
-                .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device));
+                .add(DeviceReachableListenerBlocEventLoadDevice(state.box.device!));
           });
           setState(() {
             values = List.from(state.values);
@@ -123,12 +123,12 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
         }
       },
       child: BlocBuilder<FeedLightFormBloc, FeedLightFormBlocState>(
-          cubit: BlocProvider.of<FeedLightFormBloc>(context),
+          bloc: BlocProvider.of<FeedLightFormBloc>(context),
           buildWhen: (FeedLightFormBlocState oldState, FeedLightFormBlocState newState) {
             return !(newState is FeedLightFormBlocStateLightsLoading);
           },
           builder: (context, state) {
-            Widget body;
+            late Widget body;
             if (state is FeedLightFormBlocStateLoading) {
               body = FullscreenLoading(title: FeedLightFormPage.feedLightFormPageSaving);
             } else if (state is FeedLightFormBlocStateCancelling) {

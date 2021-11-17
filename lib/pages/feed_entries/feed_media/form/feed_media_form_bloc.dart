@@ -59,12 +59,12 @@ class FeedMediaFormBlocEventCreate extends FeedMediaFormBlocEvent {
   final String message;
   final bool helpRequest;
 
-  final FeedMediaDraft draft;
+  final FeedMediaDraft? draft;
 
   FeedMediaFormBlocEventCreate(this.date, this.medias, this.message, this.helpRequest, this.draft);
 
   @override
-  List<Object> get props => [date, medias, message, helpRequest, draft];
+  List<Object?> get props => [date, medias, message, helpRequest, draft];
 }
 
 class FeedMediaFormBlocState extends Equatable {
@@ -123,7 +123,7 @@ class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
 class FeedMediaFormBloc extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent args;
 
-  int get feedID => args.plant?.feed ?? args.box.feed;
+  int get feedID => args.plant?.feed ?? args.box!.feed!;
 
   FeedMediaFormBloc(this.args) : super(FeedMediaFormBlocStateLoadingDraft()) {
     add(FeedMediaFormBlocEventLoadDraft());
@@ -133,7 +133,10 @@ class FeedMediaFormBloc extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocSt
   Stream<FeedMediaFormBlocState> mapEventToState(FeedMediaFormBlocEvent event) async* {
     if (event is FeedMediaFormBlocEventLoadDraft) {
       try {
-        FeedEntryDraft draft = await RelDB.get().feedsDAO.getEntryDraft(feedID, 'FE_MEDIA');
+        FeedEntryDraft? draft;
+        try {
+          await RelDB.get().feedsDAO.getEntryDraft(feedID, 'FE_MEDIA');
+        } catch (e) {}
         if (draft != null) {
           yield FeedMediaFormBlocStateDraft(FeedMediaDraft.fromJSON(draft.id, draft.params));
         } else {
@@ -144,11 +147,11 @@ class FeedMediaFormBloc extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocSt
         Logger.logError(e, trace);
       }
     } else if (event is FeedMediaFormBlocEventDeleteDraft) {
-      await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);
+      await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID!);
     } else if (event is FeedMediaFormBlocEventSaveDraft) {
       if (event.draft.draftID != null) {
         await RelDB.get().feedsDAO.updateFeedEntryDraft(
-            FeedEntryDraftsCompanion(id: Value(event.draft.draftID), params: Value(event.draft.toJSON())));
+            FeedEntryDraftsCompanion(id: Value(event.draft.draftID!), params: Value(event.draft.toJSON())));
       } else {
         int draftID = await RelDB.get().feedsDAO.addFeedEntryDraft(FeedEntryDraftsCompanion(
             feed: Value(feedID), type: Value('FE_MEDIA'), params: Value(event.draft.toJSON())));
@@ -168,7 +171,7 @@ class FeedMediaFormBloc extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocSt
       }
 
       if (event.draft != null) {
-        await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft.draftID);
+        await RelDB.get().feedsDAO.deleteFeedEntryDraft(event.draft!.draftID!);
       }
 
       yield FeedMediaFormBlocStateDone();

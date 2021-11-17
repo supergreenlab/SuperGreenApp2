@@ -26,13 +26,13 @@ class FeedMeasureState extends FeedEntryStateLoaded {
 
   FeedMeasureState(
     FeedEntryState from, {
-    this.current,
+    required this.current,
     this.previous,
-    FeedEntrySocialState socialState,
-    bool showPlantInfos,
-    bool isRemoteState,
-    bool followed,
-    String shareLink,
+    FeedEntrySocialState? socialState,
+    bool? showPlantInfos,
+    bool? isRemoteState,
+    bool? followed,
+    String? shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
@@ -43,13 +43,13 @@ class FeedMeasureState extends FeedEntryStateLoaded {
         );
 
   @override
-  List<Object> get props => [...super.props, current, previous];
+  List<Object?> get props => [...super.props, current, previous];
 
   FeedEntryState copyWith({
-    FeedEntrySocialState socialState,
-    bool showPlantInfos,
-    bool followed,
-    String shareLink,
+    FeedEntrySocialState? socialState,
+    bool? showPlantInfos,
+    bool? followed,
+    String? shareLink,
   }) {
     return FeedMeasureState(
       this,

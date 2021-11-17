@@ -21,7 +21,7 @@ import 'dart:convert';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedMediaParams extends FeedEntryParams {
-  final String message;
+  final String? message;
   final bool helpRequest;
   final bool boxFeed;
 
@@ -40,5 +40,5 @@ class FeedMediaParams extends FeedEntryParams {
   }
 
   @override
-  List<Object> get props => [message, helpRequest, boxFeed];
+  List<Object?> get props => [message, helpRequest, boxFeed];
 }

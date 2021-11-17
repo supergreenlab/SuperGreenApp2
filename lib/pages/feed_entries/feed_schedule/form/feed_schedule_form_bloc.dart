@@ -104,10 +104,10 @@ class FeedScheduleFormBloc extends Bloc<FeedScheduleFormBlocEvent, FeedScheduleF
   String schedule = '';
   Map<String, dynamic> schedules = {};
 
-  String initialSchedule;
+  late String initialSchedule;
   Map<String, dynamic> initialSchedules = {};
 
-  Box box;
+  late Box box;
 
   final MainNavigateToFeedScheduleFormEvent args;
 

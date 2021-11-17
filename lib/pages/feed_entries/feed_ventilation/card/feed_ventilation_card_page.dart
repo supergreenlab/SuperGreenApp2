@@ -252,12 +252,12 @@ class FeedVentilationCardPage extends StatelessWidget {
 
   Widget _renderV3() {
     FeedVentilationParams params = state.params as FeedVentilationParams;
-    if (isTempSource(params.values.blowerRefSource)) {
+    if (isTempSource(params.values.blowerRefSource!)) {
       return _renderTemperatureMode();
     }
-    if (isHumiSource(params.values.blowerRefSource)) {
+    if (isHumiSource(params.values.blowerRefSource!)) {
       return _renderHumidityMode();
-    } else if (isTimerSource(params.values.blowerRefSource)) {
+    } else if (isTimerSource(params.values.blowerRefSource!)) {
       return _renderTimerMode();
     } else if (params.values.blowerRefSource == 0) {
       return _renderManualMode();
@@ -280,7 +280,7 @@ class FeedVentilationCardPage extends StatelessWidget {
             children: [
               Text('${params.values.blowerMin}%',
                   style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.lightBlue)),
-              Text('at ${_tempUnit(params.values.blowerRefMin.toDouble())}$unit',
+              Text('at ${_tempUnit(params.values.blowerRefMin!.toDouble())}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
           )),
@@ -292,7 +292,7 @@ class FeedVentilationCardPage extends StatelessWidget {
             children: [
               Text('${params.values.blowerMax}%',
                   style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.red)),
-              Text('at ${_tempUnit(params.values.blowerRefMax.toDouble())}$unit',
+              Text('at ${_tempUnit(params.values.blowerRefMax!.toDouble())}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
           )),
@@ -330,7 +330,7 @@ class FeedVentilationCardPage extends StatelessWidget {
             children: [
               Text('${params.values.blowerMin}%',
                   style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.lightBlue)),
-              Text('at ${params.values.blowerRefMin.toDouble()}$unit',
+              Text('at ${params.values.blowerRefMin!.toDouble()}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
           )),
@@ -342,7 +342,7 @@ class FeedVentilationCardPage extends StatelessWidget {
             children: [
               Text('${params.values.blowerMax}%',
                   style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30, color: Colors.red)),
-              Text('at ${params.values.blowerRefMax.toDouble()}$unit',
+              Text('at ${params.values.blowerRefMax!.toDouble()}$unit',
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
             ],
           )),

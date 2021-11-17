@@ -66,7 +66,7 @@ class FeedLightFormBlocValueChangedEvent extends FeedLightFormBlocEvent {
 
 class FeedLightFormBlocState extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FeedLightFormBlocStateLightsLoaded extends FeedLightFormBlocState {
@@ -103,20 +103,20 @@ class FeedLightFormBlocStateCancelling extends FeedLightFormBlocState {
 }
 
 class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
-  final FeedEntry feedEntry;
+  final FeedEntry? feedEntry;
 
   FeedLightFormBlocStateDone(this.feedEntry);
 
   @override
-  List<Object> get props => [feedEntry];
+  List<Object?> get props => [feedEntry];
 }
 
 class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
   final MainNavigateToFeedLightFormEvent args;
 
-  Device device;
-  List<Param> lightParams;
-  List<int> initialValues;
+  late Device device;
+  late List<Param> lightParams;
+  late List<int> initialValues;
 
   FeedLightFormBloc(this.args) : super(FeedLightFormBlocState()) {
     add(FeedLightFormBlocEventLoadLights());
@@ -131,7 +131,7 @@ class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocSt
         yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65], box);
         return;
       }
-      device = await db.devicesDAO.getDevice(box.device);
+      device = await db.devicesDAO.getDevice(box.device!);
       Module lightModule = await db.devicesDAO.getModule(device.id, "led");
       lightParams = [];
       for (int i = 0; i < lightModule.arrayLen; ++i) {
@@ -140,7 +140,7 @@ class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocSt
           lightParams.add(await db.devicesDAO.getParam(device.id, "LED_${i}_DIM"));
         }
       }
-      List<int> values = lightParams.map((l) => l.ivalue).toList();
+      List<int> values = lightParams.map((l) => l.ivalue!).toList();
       initialValues = values;
       yield FeedLightFormBlocStateLightsLoaded(values, box);
     } else if (event is FeedLightFormBlocValueChangedEvent) {
@@ -164,7 +164,7 @@ class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocSt
       }
       yield FeedLightFormBlocStateLoading();
       List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
-      FeedEntry feedEntry;
+      late FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {
         PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
         if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {

@@ -22,21 +22,21 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 import 'package:tuple/tuple.dart';
 
 class PlantPhase extends StatelessWidget {
-  final DateTime time;
+  final DateTime? time;
   final PlantSettings plantSettings;
 
-  const PlantPhase({Key key, this.plantSettings, this.time}) : super(key: key);
+  const PlantPhase({Key? key, required this.plantSettings, required this.time}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String germinationText = 'Date not set';
     if (plantSettings.germinationDate != null) {
-      Duration diff = (this.time ?? DateTime.now()).difference(plantSettings.germinationDate);
+      Duration diff = (this.time ?? DateTime.now()).difference(plantSettings.germinationDate!);
       germinationText = renderDuration(diff, suffix: '');
     }
-    String phaseTitle;
+    String? phaseTitle;
     String bloomingText = 'Not set.';
-    Tuple3<PlantPhases, DateTime, Duration> phaseData = plantSettings.phaseAt(DateTime.now());
+    Tuple3<PlantPhases, DateTime, Duration>? phaseData = plantSettings.phaseAt(DateTime.now());
     if (phaseData != null && phaseData.item1 != PlantPhases.GERMINATING) {
       List<String> phases = [
         'Germinated: ',

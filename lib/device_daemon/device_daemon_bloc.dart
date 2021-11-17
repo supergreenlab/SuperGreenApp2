@@ -118,7 +118,10 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
       String? auth = AppDB().getDeviceAuth(device.identifier);
       var ddb = RelDB.get().devicesDAO;
       try {
-        String? identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
+        String? identifier;
+        try {
+          await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
+        } catch (e) {}
         if (identifier == device.identifier) {
           if (device.isSetup == false) {
             await DeviceAPI.fetchAllParams(device.ip, device.id, (_) => null, auth: auth);
@@ -146,7 +149,10 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
         String? ip = await DeviceAPI.resolveLocalName(device.mdns);
         if (ip != null && ip != "") {
           try {
-            String? identifier = await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID', auth: auth);
+            String? identifier;
+            try {
+              await DeviceAPI.fetchStringParam(ip, 'BROKER_CLIENTID', auth: auth);
+            } catch (e) {}
             if (identifier == device.identifier) {
               if (device.isSetup == false) {
                 await DeviceAPI.fetchAllParams(ip, device.id, (_) => null, auth: auth);

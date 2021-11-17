@@ -10,15 +10,13 @@ class FeedMeasurePreviousSelector extends StatefulWidget {
   final List<FeedMedia> _measures;
   final Function(FeedMedia) _onSelect;
 
-  const FeedMeasurePreviousSelector(this._measures, this._onSelect, {Key key})
-      : super(key: key);
+  const FeedMeasurePreviousSelector(this._measures, this._onSelect, {Key? key}) : super(key: key);
 
   @override
   _FeedMeasurePreviousSelectorState createState() => _FeedMeasurePreviousSelectorState();
 }
 
 class _FeedMeasurePreviousSelectorState extends State<FeedMeasurePreviousSelector> {
-
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -29,7 +27,7 @@ class _FeedMeasurePreviousSelectorState extends State<FeedMeasurePreviousSelecto
     ]);
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -47,14 +45,15 @@ class _FeedMeasurePreviousSelectorState extends State<FeedMeasurePreviousSelecto
                   return SizedBox(
                     width: constraints.maxWidth,
                     height: constraints.maxHeight,
-                    child: FittedBox(fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(widget._measures[index].thumbnailPath)))),
+                    child: FittedBox(
+                        fit: BoxFit.contain,
+                        child:
+                            Image.file(File(FeedMedias.makeAbsoluteFilePath(widget._measures[index].thumbnailPath)))),
                   );
                 },
                 pagination: widget._measures.length > 1
                     ? SwiperPagination(
-                        builder: new DotSwiperPaginationBuilder(
-                            color: Colors.white,
-                            activeColor: Color(0xff3bb30b)),
+                        builder: new DotSwiperPaginationBuilder(color: Colors.white, activeColor: Color(0xff3bb30b)),
                       )
                     : null,
                 loop: false,
@@ -64,7 +63,7 @@ class _FeedMeasurePreviousSelectorState extends State<FeedMeasurePreviousSelecto
         ));
   }
 
-    @override
+  @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

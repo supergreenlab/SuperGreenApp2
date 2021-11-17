@@ -90,8 +90,8 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
                     ],
                   ),
                 )
@@ -111,7 +111,6 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedTimelapseState state) {
-    FeedTimelapseParams params = state.params as FeedTimelapseParams;
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -139,8 +138,8 @@ class _FeedTimelapseCardPageState extends State<FeedTimelapseCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
                     ],
                   ),
                 )

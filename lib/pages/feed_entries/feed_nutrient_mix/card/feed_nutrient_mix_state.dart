@@ -22,11 +22,11 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 class FeedNutrientMixState extends FeedEntryStateLoaded {
   FeedNutrientMixState(
     FeedEntryState from, {
-    FeedEntrySocialState socialState,
-    bool showPlantInfos,
-    bool isRemoteState,
-    bool followed,
-    String shareLink,
+    FeedEntrySocialState? socialState,
+    bool? showPlantInfos,
+    bool? isRemoteState,
+    bool? followed,
+    String? shareLink,
   }) : super.copy(from,
             socialState: socialState ?? from.socialState,
             showPlantInfos: showPlantInfos ?? from.showPlantInfos,
@@ -35,10 +35,10 @@ class FeedNutrientMixState extends FeedEntryStateLoaded {
             shareLink: shareLink ?? from.shareLink);
 
   FeedEntryState copyWith({
-    bool showPlantInfos,
-    FeedEntrySocialState socialState,
-    bool followed,
-    String shareLink,
+    bool? showPlantInfos,
+    FeedEntrySocialState? socialState,
+    bool? followed,
+    String? shareLink,
   }) {
     return FeedNutrientMixState(
       this,

@@ -33,11 +33,11 @@ enum NutrientMixPhase {
 }
 
 class NutrientProduct extends Equatable {
-  final double quantity;
+  final double? quantity;
   final String unit;
   final Product product;
 
-  NutrientProduct({required this.product, required this.quantity, required this.unit});
+  NutrientProduct({required this.product, this.quantity, required this.unit});
 
   factory NutrientProduct.fromMap(Map<String, dynamic> map) {
     return NutrientProduct(
@@ -52,7 +52,7 @@ class NutrientProduct extends Equatable {
   }
 
   @override
-  List<Object> get props => [product, quantity, unit];
+  List<Object?> get props => [product, quantity, unit];
 
   NutrientProduct copyWith({Product? product, double? quantity, String? unit}) {
     return NutrientProduct(
@@ -61,7 +61,7 @@ class NutrientProduct extends Equatable {
 }
 
 class FeedNutrientMixParams extends FeedEntryParams {
-  final String name;
+  final String? name;
   final double volume;
   final double? ph;
   final double? ec;

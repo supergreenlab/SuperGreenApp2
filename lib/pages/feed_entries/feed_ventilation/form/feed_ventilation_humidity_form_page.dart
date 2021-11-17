@@ -52,10 +52,10 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
 
   @override
   void initState() {
-    _blowerMin = widget.state.blowerMin.value;
-    _blowerMax = widget.state.blowerMax.value;
-    _blowerRefMin = widget.state.blowerRefMin.value;
-    _blowerRefMax = widget.state.blowerRefMax.value;
+    _blowerMin = widget.state.blowerMin!.value;
+    _blowerMax = widget.state.blowerMax!.value;
+    _blowerRefMin = widget.state.blowerRefMin!.value;
+    _blowerRefMax = widget.state.blowerRefMax!.value;
     super.initState();
   }
 
@@ -67,10 +67,10 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerMin = state.blowerMin.value;
-              _blowerMax = state.blowerMax.value;
-              _blowerRefMin = state.blowerRefMin.value;
-              _blowerRefMax = state.blowerRefMax.value;
+              _blowerMin = state.blowerMin!.value;
+              _blowerMax = state.blowerMax!.value;
+              _blowerRefMin = state.blowerRefMin!.value;
+              _blowerRefMax = state.blowerRefMax!.value;
             });
           }
         },
@@ -115,7 +115,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                       _blowerRefMin = newValue.toInt();
                     });
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerRefMin: widget.state.blowerRefMin.copyWith(value: newValue.toInt())));
+                        blowerRefMin: widget.state.blowerRefMin!.copyWith(value: newValue.toInt())));
                   },
                 ),
                 SliderFormParam(
@@ -133,7 +133,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                   },
                   onChangeEnd: (double newValue) {
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMin: widget.state.blowerMin.copyWith(value: _blowerMin)));
+                        blowerMin: widget.state.blowerMin!.copyWith(value: _blowerMin)));
                   },
                 ),
               ],
@@ -170,7 +170,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                       _blowerRefMax = newValue.toInt();
                     });
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerRefMax: widget.state.blowerRefMax.copyWith(value: newValue.toInt())));
+                        blowerRefMax: widget.state.blowerRefMax!.copyWith(value: newValue.toInt())));
                   },
                 ),
                 SliderFormParam(
@@ -188,7 +188,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                   },
                   onChangeEnd: (double newValue) {
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerMax: widget.state.blowerMax.copyWith(value: _blowerMax)));
+                        blowerMax: widget.state.blowerMax!.copyWith(value: _blowerMax)));
                   },
                 ),
               ],

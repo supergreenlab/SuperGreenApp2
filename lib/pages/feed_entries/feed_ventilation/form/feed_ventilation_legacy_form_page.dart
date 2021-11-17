@@ -37,8 +37,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
 
   @override
   void initState() {
-    _blowerDay = widget.state.blowerDay.value;
-    _blowerNight = widget.state.blowerNight.value;
+    _blowerDay = widget.state.blowerDay!.value;
+    _blowerNight = widget.state.blowerNight!.value;
     super.initState();
   }
 
@@ -49,8 +49,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerDay = state.blowerDay.value;
-              _blowerNight = state.blowerNight.value;
+              _blowerDay = state.blowerDay!.value;
+              _blowerNight = state.blowerNight!.value;
             });
           }
         },
@@ -71,7 +71,7 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerDay: widget.state.blowerDay.copyWith(value: _blowerDay)));
+                    blowerDay: widget.state.blowerDay!.copyWith(value: _blowerDay)));
               },
             ),
             SliderFormParam(
@@ -89,7 +89,7 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerNight: widget.state.blowerNight.copyWith(value: _blowerNight)));
+                    blowerNight: widget.state.blowerNight!.copyWith(value: _blowerNight)));
               },
             ),
           ],

@@ -230,7 +230,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
                     ),
                     onPressed: () {
                       BlocProvider.of<MainNavigatorBloc>(context)
-                          .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+                          .add(MainNavigateToPublicPlant(state.plantID!, feedEntryID: state.feedEntryID));
                     },
                   )
                 ];

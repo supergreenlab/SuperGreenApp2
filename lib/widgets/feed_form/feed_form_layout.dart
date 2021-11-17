@@ -38,7 +38,7 @@ class FeedFormLayout extends StatelessWidget {
       this.valid = true,
       this.changed = false,
       this.hideBackButton = false,
-      required this.fontSize,
+      this.fontSize = 23,
       this.topBarPadding = 8.0});
 
   @override

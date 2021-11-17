@@ -25,12 +25,12 @@ class FeedMediaState extends FeedEntryStateLoaded {
 
   FeedMediaState(
     FeedEntryState from, {
-    this.medias,
-    FeedEntrySocialState socialState,
-    bool showPlantInfos,
-    bool isRemoteState,
-    bool followed,
-    String shareLink,
+    required this.medias,
+    FeedEntrySocialState? socialState,
+    bool? showPlantInfos,
+    bool? isRemoteState,
+    bool? followed,
+    String? shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
@@ -41,13 +41,13 @@ class FeedMediaState extends FeedEntryStateLoaded {
         );
 
   @override
-  List<Object> get props => [...super.props, medias];
+  List<Object?> get props => [...super.props, medias];
 
   FeedEntryState copyWith({
-    bool showPlantInfos,
-    FeedEntrySocialState socialState,
-    bool followed,
-    String shareLink,
+    bool? showPlantInfos,
+    FeedEntrySocialState? socialState,
+    bool? followed,
+    String? shareLink,
   }) {
     return FeedMediaState(
       this,

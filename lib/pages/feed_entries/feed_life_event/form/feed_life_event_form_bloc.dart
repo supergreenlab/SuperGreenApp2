@@ -45,7 +45,7 @@ class FeedLifeEventFormBlocState extends Equatable {
   FeedLifeEventFormBlocState(this.phase);
 
   @override
-  List<Object> get props => [phase];
+  List<Object?> get props => [phase];
 }
 
 class FeedLifeEventFormBlocStateInit extends FeedLifeEventFormBlocState {
@@ -53,12 +53,12 @@ class FeedLifeEventFormBlocStateInit extends FeedLifeEventFormBlocState {
 }
 
 class FeedLifeEventFormBlocStateLoaded extends FeedLifeEventFormBlocState {
-  final DateTime date;
+  final DateTime? date;
 
   FeedLifeEventFormBlocStateLoaded(PlantPhases phase, this.date) : super(phase);
 
   @override
-  List<Object> get props => [...super.props, date];
+  List<Object?> get props => [...super.props, date];
 }
 
 class FeedLifeEventFormBlocStateDone extends FeedLifeEventFormBlocState {

@@ -58,7 +58,7 @@ class FeedMediaCardPage extends StatefulWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
   final List<Widget> Function(BuildContext context, FeedEntryState feedEntryState)? cardActions;
@@ -76,7 +76,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.state is FeedEntryStateLoaded) {
-      return _renderLoaded(context, widget.state as FeedEntryStateLoaded);
+      return _renderLoaded(context, widget.state as FeedMediaState);
     }
     return _renderLoading(context, widget.state);
   }
@@ -100,8 +100,8 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
                     ],
                   ),
                 )
@@ -121,7 +121,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, FeedMediaState state) {
-    FeedMediaParams params = state.params;
+    FeedMediaParams params = state.params as FeedMediaParams;
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -152,14 +152,14 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               onDelete: () {
                 BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
               },
-              actions: widget.cardActions != null ? widget.cardActions(context, state) : []),
+              actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
           state.showPlantInfos
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
                     ],
                   ),
                 )

@@ -46,11 +46,11 @@ class FeedUnknownCardPage extends StatelessWidget {
     );
   }
 
-  final Animation animation;
+  final Animation<double> animation;
   final FeedState feedState;
   final FeedEntryState state;
 
-  const FeedUnknownCardPage(this.animation, this.feedState, this.state, {Key key}) : super(key: key);
+  const FeedUnknownCardPage(this.animation, this.feedState, this.state, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

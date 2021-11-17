@@ -138,8 +138,8 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
                     ],
                   ),
                 )
@@ -195,8 +195,8 @@ class _FeedMeasureCardPageState extends State<FeedMeasureCardPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
                     children: [
-                      Expanded(child: PlantStrain(plantSettings: state.plantSettings)),
-                      Expanded(child: PlantPhase(plantSettings: state.plantSettings, time: state.date)),
+                      Expanded(child: PlantStrain(plantSettings: state.plantSettings!)),
+                      Expanded(child: PlantPhase(plantSettings: state.plantSettings!, time: state.date)),
                     ],
                   ),
                 )

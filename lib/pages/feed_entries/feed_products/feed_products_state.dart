@@ -22,11 +22,11 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 class FeedProductsState extends FeedEntryStateLoaded {
   FeedProductsState(
     FeedEntryState from, {
-    FeedEntrySocialState socialState,
-    bool showPlantInfos,
-    bool isRemoteState,
-    bool followed,
-    String shareLink,
+    FeedEntrySocialState? socialState,
+    bool? showPlantInfos,
+    bool? isRemoteState,
+    bool? followed,
+    String? shareLink,
   }) : super.copy(
           from,
           socialState: socialState ?? from.socialState,
@@ -37,10 +37,10 @@ class FeedProductsState extends FeedEntryStateLoaded {
         );
 
   FeedEntryState copyWith({
-    bool showPlantInfos,
-    FeedEntrySocialState socialState,
-    bool followed,
-    String shareLink,
+    bool? showPlantInfos,
+    FeedEntrySocialState? socialState,
+    bool? followed,
+    String? shareLink,
   }) {
     return FeedProductsState(
       this,
