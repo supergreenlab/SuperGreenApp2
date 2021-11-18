@@ -273,10 +273,10 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
   }
 
   Future<bool> _checkPermission() async {
-    final permissionStorageGroup = Platform.isIOS ? PermissionGroup.photos : PermissionGroup.storage;
-    Map<PermissionGroup, PermissionStatus> res = await PermissionHandler().requestPermissions([
+    final permissionStorageGroup = Platform.isIOS ? Permission.photos : Permission.storage;
+    Map<Permission, PermissionStatus> res = await [
       permissionStorageGroup,
-    ]);
+    ].request();
     return res[permissionStorageGroup] == PermissionStatus.granted;
   }
 }

@@ -71,11 +71,9 @@ class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
 class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   //ignore: unused_field
   MainNavigateToNewDeviceEvent args;
-  final PermissionHandler permissionHandler = PermissionHandler();
 
   NewDeviceBloc(this.args) : super(NewDeviceBlocState()) {
-    Future.delayed(const Duration(seconds: 1),
-        () => this.add(NewDeviceBlocEventStartSearch()));
+    Future.delayed(const Duration(seconds: 1), () => this.add(NewDeviceBlocEventStartSearch()));
   }
 
   @override
@@ -85,16 +83,10 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
     }
   }
 
-  Stream<NewDeviceBlocState> _startSearch(
-      NewDeviceBlocEventStartSearch event) async* {
-    if (Platform.isIOS &&
-        await permissionHandler
-                .checkPermissionStatus(PermissionGroup.locationWhenInUse) !=
-            PermissionStatus.granted) {
-      final result = await permissionHandler
-          .requestPermissions([PermissionGroup.locationWhenInUse]);
-      if (result[PermissionGroup.locationWhenInUse] !=
-          PermissionStatus.granted) {
+  Stream<NewDeviceBlocState> _startSearch(NewDeviceBlocEventStartSearch event) async* {
+    if (Platform.isIOS && await Permission.locationWhenInUse.isGranted) {
+      final result = await [Permission.locationWhenInUse].request();
+      if (result[Permission.locationWhenInUse] != PermissionStatus.granted) {
         yield NewDeviceBlocStateMissingPermission();
         return;
       }
@@ -103,9 +95,7 @@ class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
     if (currentSSID != DefaultSSID) {
       yield NewDeviceBlocStateConnectingToSSID();
       if (await WiFiForIoTPlugin.connect(DefaultSSID,
-              password: DefaultPass,
-              security: NetworkSecurity.WPA,
-              joinOnce: false) ==
+              password: DefaultPass, security: NetworkSecurity.WPA, joinOnce: false) ==
           false) {
         yield NewDeviceBlocStateConnectionToSSIDFailed(args.popOnComplete);
         return;

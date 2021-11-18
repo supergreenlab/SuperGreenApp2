@@ -47,15 +47,15 @@ class DeepLinkBloc extends Bloc<DeepLinkBlocEvent, DeepLinkBlocState> {
   @override
   Stream<DeepLinkBlocState> mapEventToState(DeepLinkBlocEvent event) async* {
     if (event is DeepLinkBlocEventInit) {
-      Uri? initialUri = (await getInitialUri()) as Uri?;
+      Uri? initialUri = await getInitialUri();
       if (initialUri != null) {
         // TODO find something better
         Timer(Duration(seconds: 2), () {
           add(DeepLinkBlocEventUri(initialUri));
         });
       }
-      _sub = getUriLinksStream().listen((Uri uri) {
-        add(DeepLinkBlocEventUri(uri));
+      _sub = uriLinkStream.listen((Uri? uri) {
+        add(DeepLinkBlocEventUri(uri!));
       });
     } else if (event is DeepLinkBlocEventUri) {
       if (event.uri.path == '/public/plant') {

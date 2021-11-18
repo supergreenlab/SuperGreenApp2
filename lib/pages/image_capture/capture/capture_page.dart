@@ -109,7 +109,7 @@ class _CapturePageState extends State<CapturePage> {
                       height: height,
                       child: GestureDetector(
                           onTapUp: (TapUpDetails details) => onFocusTap(details, width, height),
-                          child: CameraPreview(_cameraController))));
+                          child: CameraPreview(_cameraController!))));
               if (state.overlayPath != null) {
                 Widget overlay = Positioned(
                     left: constraints.maxWidth / 2 - width / 2,
@@ -190,7 +190,7 @@ class _CapturePageState extends State<CapturePage> {
                       height: height,
                       child: GestureDetector(
                           onTapUp: (TapUpDetails details) => onFocusTap(details, width, height),
-                          child: CameraPreview(_cameraController)))),
+                          child: CameraPreview(_cameraController!)))),
             ]);
           }),
           Positioned(
@@ -343,7 +343,7 @@ class _CapturePageState extends State<CapturePage> {
       _filePath = '${FeedMedias.makeFilePath()}.mp4';
       String absolutePath = FeedMedias.makeAbsoluteFilePath(_filePath!);
       await _deleteFileIfExists(absolutePath);
-      XFile xfile = await _cameraController.stopVideoRecording();
+      XFile xfile = await _cameraController!.stopVideoRecording();
       // ignore: await_only_futures
       await xfile.saveTo(absolutePath);
       _endCapture(state);
@@ -381,7 +381,7 @@ class _CapturePageState extends State<CapturePage> {
 
   void _setupCamera() async {
     CameraController? old = _cameraController;
-    FocusMode focusMode = old?.value?.focusMode ?? FocusMode.auto;
+    FocusMode focusMode = old?.value.focusMode ?? FocusMode.auto;
     if (old != null) {
       await old.dispose();
     }
@@ -399,12 +399,12 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   void onFocusTap(TapUpDetails details, double width, double height) {
-    _cameraController.setFocusMode(FocusMode.locked);
+    _cameraController!.setFocusMode(FocusMode.locked);
     double yFocus = details.localPosition.dy / height;
     if (Platform.isAndroid) {
       yFocus = (height - details.localPosition.dy) / height;
     }
-    _cameraController.setFocusPoint(Offset(details.localPosition.dx / width, yFocus));
+    _cameraController!.setFocusPoint(Offset(details.localPosition.dx / width, yFocus));
   }
 
   void _buildPicker(BuildContext context) {
@@ -432,10 +432,10 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   Future<bool> _checkPermission() async {
-    final permissionStorageGroup = Platform.isIOS ? PermissionGroup.photos : PermissionGroup.storage;
-    Map<PermissionGroup, PermissionStatus> res = await PermissionHandler().requestPermissions([
+    final permissionStorageGroup = Platform.isIOS ? Permission.photos : Permission.storage;
+    Map<Permission, PermissionStatus> res = await [
       permissionStorageGroup,
-    ]);
+    ].request();
     return res[permissionStorageGroup] == PermissionStatus.granted;
   }
 

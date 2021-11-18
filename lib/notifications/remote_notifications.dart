@@ -38,7 +38,7 @@ class RemoteNotifications {
     NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
-      String token = await FirebaseMessaging.instance.getToken();
+      String token = (await FirebaseMessaging.instance.getToken())!;
       await saveToken(token);
       try {
         await sendToken();
@@ -52,7 +52,7 @@ class RemoteNotifications {
         AppDB().setNotificationOnStartAsked(true);
       });
     }
-    RemoteMessage? initialMessage = (await FirebaseMessaging.instance.getInitialMessage()) as RemoteMessage?;
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       Timer(Duration(milliseconds: 300), () {
         notificationSelected(initialMessage);
@@ -102,7 +102,7 @@ class RemoteNotifications {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
-      String token = await FirebaseMessaging.instance.getToken();
+      String token = (await FirebaseMessaging.instance.getToken())!;
       FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
       saveToken(token);
       return true;
@@ -117,7 +117,7 @@ class RemoteNotifications {
   }
 
   void androidForegroundNotification(RemoteMessage message) {
-    RemoteNotification? notification = message.notification as RemoteNotification?;
+    RemoteNotification? notification = message.notification;
     AndroidNotification? android = notification?.android;
 
     if (notification != null && android != null) {
@@ -129,7 +129,7 @@ class RemoteNotifications {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              channel.description,
+              channelDescription: channel.description,
               icon: android.smallIcon,
             ),
           ),

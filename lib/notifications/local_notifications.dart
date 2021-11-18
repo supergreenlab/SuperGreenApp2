@@ -40,13 +40,13 @@ class LocalNotifications {
         onSelectNotification: _onSelectNotification);
   }
 
-  Future _onDidReceiveLocalNotification(int id, String title, String body, String payload) async {
-    NotificationData notificationData = NotificationData.fromJSON(payload);
+  Future _onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) async {
+    NotificationData notificationData = NotificationData.fromJSON(payload ?? '{}');
     onNotificationData(notificationData);
   }
 
-  Future _onSelectNotification(String payload) async {
-    NotificationData notificationData = NotificationData.fromJSON(payload);
+  Future _onSelectNotification(String? payload) async {
+    NotificationData notificationData = NotificationData.fromJSON(payload ?? '{}');
     onNotificationData(notificationData);
   }
 
@@ -67,8 +67,8 @@ class LocalNotifications {
     }
 
     var scheduledNotificationDateTime = DateTime.now().add(Duration(minutes: afterMinutes));
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'REMINDERS', 'Towelie\'s reminders', 'Towelie can help you not forget anything about your grow.');
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails('REMINDERS', 'Towelie\'s reminders',
+        channelDescription: 'Towelie can help you not forget anything about your grow.');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);

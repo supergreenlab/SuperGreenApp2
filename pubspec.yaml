@@ -38,7 +38,7 @@ dependencies:
   http:
   rxdart:
   flutter_svg:
-  permission_handler: 4.4.0+hotfix.2
+  permission_handler:
   moor:
   sqlite3_flutter_libs:
   path_provider:
@@ -69,8 +69,8 @@ dependencies:
   matrix_gesture_detector:
     path: ./vendor/matrix_gesture_detector
   connectivity:
-  firebase_messaging: ^8.0.0-dev.14
-  firebase_core: ^0.7.0
+  firebase_messaging: ^11.1.0
+  firebase_core: ^1.10.0
   flutter_local_notifications:
   exif:
   media_picker_builder:

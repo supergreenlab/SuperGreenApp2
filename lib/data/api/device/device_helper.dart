@@ -126,7 +126,7 @@ class DeviceHelper {
     hour = hour % 24;
     hourParam = await DeviceHelper.updateIntParam(device, hourParam, hour);
     minParam = await DeviceHelper.updateIntParam(device, minParam, min);
-    return Tuple2<int, int>(hourParam.ivalue, minParam.ivalue);
+    return Tuple2<int, int>(hourParam.ivalue!, minParam.ivalue!);
   }
 
   static Future<Param> refreshStringParam(Device device, Param param,
