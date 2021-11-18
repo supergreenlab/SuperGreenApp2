@@ -37,7 +37,7 @@ class ControllerMetric extends Equatable {
   final String key;
   final dynamic value;
 
-  ControllerMetric({this.controllerID, this.key, this.value});
+  ControllerMetric({required this.controllerID, required this.key, required this.value});
 
   @override
   List<Object> get props => [controllerID, key, value];
@@ -56,7 +56,7 @@ class ControllerLog extends Equatable {
   final String module;
   final String msg;
 
-  ControllerLog({this.controllerID, this.module, this.msg});
+  ControllerLog({required this.controllerID, required this.module, required this.msg});
 
   @override
   List<Object> get props => [controllerID, module, msg];
@@ -144,16 +144,12 @@ class DeviceWebsocket {
             }
           });
         }
-        if (timeout != null) {
-          timeout.cancel();
-        }
+        timeout?.cancel();
         timeout = Timer(Duration(seconds: 10), () {
           RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
           timeout = null;
-          if (pingTimer != null) {
-            pingTimer.cancel();
-            pingTimer = null;
-          }
+          pingTimer?.cancel();
+          pingTimer = null;
         });
       }
       Map<String, dynamic> messageMap = JsonDecoder().convert(message);
@@ -162,14 +158,16 @@ class DeviceWebsocket {
         if (log.module == 'CMD') {
           String cmdId = log.msg.split(')')[0].substring(1);
           if (commandCompleters.containsKey(cmdId)) {
-            commandCompleters[cmdId].complete();
+            commandCompleters[cmdId]!.complete();
             commandCompleters.remove(cmdId);
           }
         }
       } else {
         ControllerMetric cm = ControllerMetric.fromMap(messageMap);
-        Param param = await RelDB.get().devicesDAO.getParam(device.id, cm.key);
-        if (param == null) {
+        late Param param;
+        try {
+          param = await RelDB.get().devicesDAO.getParam(device.id, cm.key);
+        } catch (e) {
           Logger.log("Unknown param ${cm.key}");
           return;
         }
@@ -194,8 +192,8 @@ class DeviceWebsocket {
     });
   }
 
-  Future sendRemoteCommand(String cmd, {int nRetries = 5, int tryN = 0, Completer completer, String uuid}) async {
-    String signing = AppDB().getDeviceSigning(device.identifier);
+  Future sendRemoteCommand(String cmd, {int nRetries = 5, int tryN = 0, Completer? completer, String? uuid}) async {
+    String signing = AppDB().getDeviceSigning(device.identifier)!;
     if (uuid == null) {
       uuid = Uuid().v4();
     }
@@ -209,7 +207,7 @@ class DeviceWebsocket {
     }
     channel.sink.add(signedCmd);
     Timer(Duration(seconds: 2), () {
-      if (!completer.isCompleted) {
+      if (!completer!.isCompleted) {
         if (tryN < nRetries) {
           Logger.log("Retrying $cmd");
           sendRemoteCommand(cmd, nRetries: nRetries, tryN: tryN + 1, completer: completer, uuid: uuid);

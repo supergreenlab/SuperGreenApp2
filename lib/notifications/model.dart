@@ -41,14 +41,14 @@ enum NotificationDataType {
 abstract class NotificationData extends Equatable {
   final Map<String, dynamic> data;
 
-  NotificationData({this.data, NotificationDataType type, String title, String body, int id}) {
+  NotificationData({required this.data, NotificationDataType? type, String? title, String? body, int? id}) {
     data['type'] = (type != null ? EnumToString.convertToString(type) : null) ?? data['type'];
     data['id'] = id ?? data['id'];
     data['title'] = title ?? data['title'];
     data['body'] = body ?? data['body'];
   }
 
-  NotificationDataType get type => EnumToString.fromString(NotificationDataType.values, data['type']);
+  NotificationDataType get type => EnumToString.fromString(NotificationDataType.values, data['type'])!;
   int get id => data['id'];
   String get title => data['title'];
   String get body => data['body'];
@@ -77,12 +77,13 @@ abstract class NotificationData extends Equatable {
         return NotificationDataLivecamUnreachable.fromMap(data);
       case NotificationDataType.NEW_TIMELAPSE:
         return NotificationDataNewTimelapse.fromMap(data);
-    }
-    try {
-      throw 'Unknown type ${data['type']}';
-    } catch (e, trace) {
-      Logger.logError(e, trace, data: data);
-      throw e;
+      default:
+        try {
+          throw 'Unknown type ${data['type']}';
+        } catch (e, trace) {
+          Logger.logError(e, trace, data: data);
+          throw e;
+        }
     }
   }
 
@@ -103,12 +104,12 @@ abstract class NotificationData extends Equatable {
 
 class NotificationDataPlantComment extends NotificationData {
   NotificationDataPlantComment(
-      {int id,
-      String title,
-      String body,
-      @required String plantID,
-      @required String feedEntryID,
-      @required CommentType commentType})
+      {int? id,
+      String? title,
+      String? body,
+      required String plantID,
+      required String feedEntryID,
+      required CommentType commentType})
       : super(
           id: id,
           data: {
@@ -124,18 +125,18 @@ class NotificationDataPlantComment extends NotificationData {
 
   String get plantID => data['plantID'];
   String get feedEntryID => data['feedEntryID'];
-  CommentType get commentType => EnumToString.fromString(CommentType.values, data['commentType']);
+  CommentType get commentType => EnumToString.fromString(CommentType.values, data['commentType'])!;
 }
 
 class NotificationDataPlantCommentReply extends NotificationData {
   NotificationDataPlantCommentReply({
-    int id,
-    String title,
-    String body,
-    @required String plantID,
-    @required String feedEntryID,
-    @required String commentID,
-    String replyTo,
+    int? id,
+    String? title,
+    String? body,
+    required String plantID,
+    required String feedEntryID,
+    required String commentID,
+    String? replyTo,
   }) : super(
           id: id,
           data: {
@@ -157,7 +158,7 @@ class NotificationDataPlantCommentReply extends NotificationData {
 }
 
 class NotificationDataReminder extends NotificationData {
-  NotificationDataReminder({int id, String title, String body, @required int plantID})
+  NotificationDataReminder({int? id, String? title, String? body, required int plantID})
       : super(
             id: id,
             data: {
@@ -172,7 +173,7 @@ class NotificationDataReminder extends NotificationData {
 }
 
 class NotificationDataAlert extends NotificationData {
-  NotificationDataAlert({int id, String title, String body, @required String plantID})
+  NotificationDataAlert({int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -188,13 +189,13 @@ class NotificationDataAlert extends NotificationData {
 
 class NotificationDataLikePlantComment extends NotificationData {
   NotificationDataLikePlantComment(
-      {int id,
-      String title,
-      String body,
-      @required String plantID,
-      @required String feedEntryID,
-      @required String commentID,
-      String replyTo})
+      {int? id,
+      String? title,
+      String? body,
+      required String plantID,
+      required String feedEntryID,
+      required String commentID,
+      String? replyTo})
       : super(
           id: id,
           data: {'plantID': plantID, 'feedEntryID': feedEntryID, 'commentID': commentID, 'replyTo': replyTo},
@@ -212,7 +213,7 @@ class NotificationDataLikePlantComment extends NotificationData {
 
 class NotificationDataLikePlantFeedEntry extends NotificationData {
   NotificationDataLikePlantFeedEntry(
-      {int id, String title, String body, @required String plantID, @required String feedEntryID})
+      {int? id, String? title, String? body, required String plantID, required String feedEntryID})
       : super(
           id: id,
           data: {'plantID': plantID, 'feedEntryID': feedEntryID},
@@ -227,7 +228,7 @@ class NotificationDataLikePlantFeedEntry extends NotificationData {
 }
 
 class NotificationDataFollowedPlantActivity extends NotificationData {
-  NotificationDataFollowedPlantActivity({int id, String title, String body, @required String plantID})
+  NotificationDataFollowedPlantActivity({int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -242,7 +243,7 @@ class NotificationDataFollowedPlantActivity extends NotificationData {
 }
 
 class NotificationDataNewFollower extends NotificationData {
-  NotificationDataNewFollower({int id, String title, String body, @required String plantID})
+  NotificationDataNewFollower({int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -257,7 +258,7 @@ class NotificationDataNewFollower extends NotificationData {
 }
 
 class NotificationDataDeviceUnreachable extends NotificationData {
-  NotificationDataDeviceUnreachable({int id, String title, String body, @required String deviceID})
+  NotificationDataDeviceUnreachable({int? id, String? title, String? body, required String deviceID})
       : super(
             id: id,
             data: {
@@ -272,7 +273,7 @@ class NotificationDataDeviceUnreachable extends NotificationData {
 }
 
 class NotificationDataLivecamUnreachable extends NotificationData {
-  NotificationDataLivecamUnreachable({int id, String title, String body, @required String plantID})
+  NotificationDataLivecamUnreachable({int? id, String? title, String? body, required String plantID})
       : super(
             id: id,
             data: {
@@ -287,7 +288,7 @@ class NotificationDataLivecamUnreachable extends NotificationData {
 }
 
 class NotificationDataNewTimelapse extends NotificationData {
-  NotificationDataNewTimelapse({int id, String title, String body, @required String plantID})
+  NotificationDataNewTimelapse({int? id, String? title, String? body, required String plantID})
       : super(
           id: id,
           title: title,

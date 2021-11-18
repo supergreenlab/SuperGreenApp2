@@ -51,7 +51,7 @@ class LocalNotifications {
   }
 
   Future<bool> checkPermissions() async {
-    return flutterLocalNotificationsPlugin
+    return await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
             ?.requestPermissions(
               alert: true,
