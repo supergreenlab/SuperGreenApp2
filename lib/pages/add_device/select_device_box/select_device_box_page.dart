@@ -128,16 +128,16 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-      cubit: BlocProvider.of<SelectDeviceBoxBloc>(context),
+      bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
       listener: (context, state) {
         if (state is SelectDeviceBoxBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.box));
         }
       },
       child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
-          cubit: BlocProvider.of<SelectDeviceBoxBloc>(context),
+          bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) {
-            Widget body;
+            late Widget body;
             if (state is SelectDeviceBoxBlocStateInit) {
               body = FullscreenLoading(title: CommonL10N.loading);
             } else if (state is SelectDeviceBoxBlocStateLoading) {
@@ -145,7 +145,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             } else if (state is SelectDeviceBoxBlocStateDone) {
               body = Fullscreen(title: CommonL10N.done, child: Icon(Icons.done, color: Color(0xff3bb30b), size: 100));
             } else {
-              body = _renderBoxSelection(context, state);
+              body = _renderBoxSelection(context, state as SelectDeviceBoxBlocStateLoaded);
             }
             return Scaffold(
                 appBar: SGLAppBar(
@@ -190,7 +190,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
         child: ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             if (index == state.boxes.length) {
-              return null;
+              return Container();
             }
             Widget title;
             if (state.boxes[index].enabled) {
@@ -242,7 +242,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
   }
 
   void _deleteBox(SelectDeviceBoxBlocStateLoaded state, int index) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -264,7 +264,7 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<SelectDeviceBoxBloc>(context).add(SelectDeviceBoxBlocEventDelete(index));
     }
   }

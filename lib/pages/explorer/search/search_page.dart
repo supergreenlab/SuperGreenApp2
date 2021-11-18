@@ -29,7 +29,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 class SearchPage extends StatefulWidget {
   final Function requestUnfocus;
 
-  const SearchPage({Key key, this.requestUnfocus}) : super(key: key);
+  const SearchPage({Key? key, required this.requestUnfocus}) : super(key: key);
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -74,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
         if (state is SearchBlocStateInit) {
           return FullscreenLoading();
         }
-        return renderLoaded(context, state);
+        return renderLoaded(context, state as SearchBlocStateLoaded);
       }),
     );
   }
@@ -87,7 +87,7 @@ class _SearchPageState extends State<SearchPage> {
           itemCount: plants.length + (state.eof ? 0 : 1),
           itemBuilder: (BuildContext context, int index) {
             if (index >= plants.length && !state.eof) {
-              BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(state.search, plants.length));
+              BlocProvider.of<SearchBloc>(context).add(SearchBlocEventSearch(state.search!, plants.length));
               return Container(
                 height: 120,
                 child: FullscreenLoading(),
@@ -105,17 +105,17 @@ class _SearchPageState extends State<SearchPage> {
                 height: 120,
                 child: Row(
                   children: [
-                    Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath),
+                    Image.network(BackendAPI().feedsAPI.absoluteFileURL(plant.thumbnailPath!),
                         width: 120,
                         height: 120,
                         fit: BoxFit.cover,
                         headers: {'Host': BackendAPI().storageServerHostHeader},
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) {
                         return child;
                       }
                       return FullscreenLoading(
-                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes);
+                          percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
                     }),
                     Expanded(
                       child: Padding(

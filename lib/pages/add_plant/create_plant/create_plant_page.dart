@@ -101,7 +101,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
   bool _isSingle = true;
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  int _listener;
+  late int _listener;
   bool _keyboardVisible = false;
 
   @protected
@@ -126,7 +126,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<CreatePlantBloc>(context),
+      bloc: BlocProvider.of<CreatePlantBloc>(context),
       listener: (BuildContext context, CreatePlantBlocState state) async {
         if (state is CreatePlantBlocStateDone) {
           BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventPlantCreated(state.plant));
@@ -136,7 +136,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
         }
       },
       child: BlocBuilder<CreatePlantBloc, CreatePlantBlocState>(
-          cubit: BlocProvider.of<CreatePlantBloc>(context),
+          bloc: BlocProvider.of<CreatePlantBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is CreatePlantBlocStateDone) {
@@ -199,9 +199,9 @@ class CreatePlantPageState extends State<CreatePlantPage> {
               titleColor: Colors.white,
               elevation: 5,
             ),
-            _renderOptionCheckbx(context, CreatePlantPage.createPlantPageSinglePlantDiaryLabel, (newValue) {
+            _renderOptionCheckbx(context, CreatePlantPage.createPlantPageSinglePlantDiaryLabel, (bool? newValue) {
               setState(() {
-                _isSingle = newValue;
+                _isSingle = newValue!;
               });
             }, _isSingle),
           ]),
@@ -220,7 +220,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
     );
   }
 
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool) onChanged, bool value) {
+  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
     return Row(
       children: <Widget>[
         Checkbox(

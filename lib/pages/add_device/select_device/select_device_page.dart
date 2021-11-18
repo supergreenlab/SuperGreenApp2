@@ -180,9 +180,9 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
         }
       },
       child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
-          cubit: BlocProvider.of<SelectDeviceBloc>(context),
+          bloc: BlocProvider.of<SelectDeviceBloc>(context),
           builder: (context, state) {
-            Widget body;
+            late Widget body;
             if (state is SelectDeviceBlocStateDeviceListUpdated) {
               if (state.devices.length > 0) {
                 body = Column(
@@ -202,8 +202,12 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                     ),
                     Expanded(child: _deviceList(context, state)),
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-                      FlatButton(
-                        textColor: Colors.red,
+                      TextButton(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.resolveWith((state) => TextStyle(
+                                color: Colors.red,
+                              )),
+                        ),
                         child: Row(
                           children: <Widget>[
                             Icon(Icons.close),
@@ -214,8 +218,12 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
                         },
                       ),
-                      FlatButton(
-                        textColor: Colors.blue,
+                      TextButton(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.resolveWith((state) => TextStyle(
+                                color: Colors.blue,
+                              )),
+                        ),
                         child: Row(
                           children: <Widget>[
                             Icon(Icons.add),
@@ -339,7 +347,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
           ),
         ),
         Center(
-          child: FlatButton(
+          child: TextButton(
             onPressed: () {
               BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
             },
@@ -371,7 +379,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
   }
 
   void _deleteDevice(BuildContext context, Device device) async {
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -379,13 +387,13 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
             title: Text(SelectDevicePage.selectDeviceDeleteControllerDialogTitle(device.name)),
             content: Text(SelectDevicePage.selectDeviceDeleteControllerDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.no),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -394,7 +402,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<SelectDeviceBloc>(context).add(SelectDeviceBlocEventDelete(device));
     }
   }

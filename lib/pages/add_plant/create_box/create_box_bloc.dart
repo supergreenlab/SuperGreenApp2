@@ -9,8 +9,9 @@ abstract class CreateBoxBlocEvent extends Equatable {}
 
 class CreateBoxBlocEventCreate extends CreateBoxBlocEvent {
   final String name;
-  final Device device;
-  final int deviceBox;
+  final Device? device;
+  final int? deviceBox;
+
   CreateBoxBlocEventCreate(
     this.name, {
     this.device,
@@ -18,7 +19,7 @@ class CreateBoxBlocEventCreate extends CreateBoxBlocEvent {
   });
 
   @override
-  List<Object> get props => [name, device, deviceBox];
+  List<Object?> get props => [name, device, deviceBox];
 }
 
 class CreateBoxBlocState extends Equatable {
@@ -49,15 +50,12 @@ class CreateBoxBloc extends Bloc<CreateBoxBlocEvent, CreateBoxBlocState> {
       final feedID = await fdb.addFeed(feed);
       BoxesCompanion box;
       if (event.device == null && event.deviceBox == null) {
-        box = BoxesCompanion.insert(
-            feed: Value(feedID),
-            name: event.name,
-            settings: Value(BoxSettings().toJSON()));
+        box = BoxesCompanion.insert(feed: Value(feedID), name: event.name, settings: Value(BoxSettings().toJSON()));
       } else {
         box = BoxesCompanion.insert(
             feed: Value(feedID),
             name: event.name,
-            device: Value(event.device.id),
+            device: Value(event.device!.id),
             deviceBox: Value(event.deviceBox),
             settings: Value(BoxSettings().toJSON()));
       }

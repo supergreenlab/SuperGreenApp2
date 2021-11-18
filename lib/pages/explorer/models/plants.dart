@@ -24,21 +24,21 @@ class PublicPlant extends Equatable {
   final String id;
   final String name;
   final DateTime lastUpdate;
-  final String thumbnailPath;
+  final String? thumbnailPath;
   final bool followed;
   final int nFollows;
   final PlantSettings settings;
   final BoxSettings boxSettings;
 
   PublicPlant(
-      {this.id,
-      this.name,
-      this.lastUpdate,
+      {required this.id,
+      required this.name,
       this.thumbnailPath,
-      this.followed,
-      this.nFollows,
-      this.settings,
-      this.boxSettings});
+      required this.lastUpdate,
+      required this.followed,
+      required this.nFollows,
+      required this.settings,
+      required this.boxSettings});
 
   static PublicPlant fromMap(Map<String, dynamic> map) => PublicPlant(
       id: map['id'],
@@ -51,5 +51,5 @@ class PublicPlant extends Equatable {
       boxSettings: BoxSettings.fromJSON(map['boxSettings'] ?? '{}'));
 
   @override
-  List<Object> get props => [id, name, lastUpdate, thumbnailPath, followed, nFollows, settings, boxSettings];
+  List<Object?> get props => [id, name, lastUpdate, thumbnailPath, followed, nFollows, settings, boxSettings];
 }

@@ -73,7 +73,7 @@ class SectionBlocStateNotLogged extends SectionBlocState {
 }
 
 abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocState> {
-  StreamSubscription<hive.BoxEvent> appDataStream;
+  StreamSubscription<hive.BoxEvent>? appDataStream;
 
   SectionBloc() : super(SectionBlocStateInit()) {
     add(SectionBlocEventInit());
@@ -124,9 +124,7 @@ abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocS
 
   @override
   Future<void> close() async {
-    if (appDataStream != null) {
-      await appDataStream.cancel();
-    }
+    await appDataStream?.cancel();
     await super.close();
   }
 }

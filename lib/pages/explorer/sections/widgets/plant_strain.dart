@@ -23,7 +23,7 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 class PlantStrain extends StatelessWidget {
   final PlantSettings plantSettings;
 
-  const PlantStrain({Key key, this.plantSettings}) : super(key: key);
+  const PlantStrain({Key? key, required this.plantSettings}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class PlantStrain extends StatelessWidget {
       ];
     } else {
       body = [
-        Text(plantSettings.strain,
+        Text(plantSettings.strain!,
             style: TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 16,
@@ -45,7 +45,7 @@ class PlantStrain extends StatelessWidget {
         Row(
           children: [
             Text('from ', style: TextStyle(fontWeight: FontWeight.w300)),
-            Text(plantSettings.seedbank,
+            Text(plantSettings.seedbank!,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color(0xff3bb30b),

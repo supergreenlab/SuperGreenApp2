@@ -50,7 +50,7 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
 
-  int _listener;
+  late int _listener;
 
   bool _keyboardVisible = false;
 
@@ -76,14 +76,14 @@ class _CreateBoxPageState extends State<CreateBoxPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CreateBoxBloc, CreateBoxBlocState>(
-      cubit: BlocProvider.of<CreateBoxBloc>(context),
+      bloc: BlocProvider.of<CreateBoxBloc>(context),
       listener: (BuildContext context, CreateBoxBlocState state) async {
         if (state is CreateBoxBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.box));
         }
       },
       child: BlocBuilder<CreateBoxBloc, CreateBoxBlocState>(
-          cubit: BlocProvider.of<CreateBoxBloc>(context),
+          bloc: BlocProvider.of<CreateBoxBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is CreateBoxBlocStateDone) {

@@ -89,7 +89,7 @@ class NewDevicePage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<NewDeviceBloc>(context),
+      bloc: BlocProvider.of<NewDeviceBloc>(context),
       listener: (BuildContext context, NewDeviceBlocState state) {
         if (state is NewDeviceBlocStateConnectionToSSIDSuccess) {
           if (state.popOnComplete) {
@@ -100,7 +100,7 @@ class NewDevicePage extends TraceableStatelessWidget {
         }
       },
       child: BlocBuilder<NewDeviceBloc, NewDeviceBlocState>(
-          cubit: BlocProvider.of<NewDeviceBloc>(context),
+          bloc: BlocProvider.of<NewDeviceBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is NewDeviceBlocStateConnectingToSSID) {

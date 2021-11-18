@@ -31,7 +31,7 @@ class AppInitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AppInitBloc, AppInitBlocState>(
-      cubit: BlocProvider.of<AppInitBloc>(context),
+      bloc: BlocProvider.of<AppInitBloc>(context),
       listener: (BuildContext context, AppInitBlocState state) {
         if (state is AppInitBlocStateReady) {
           BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventInit());
@@ -46,7 +46,7 @@ class AppInitPage extends StatelessWidget {
         }
       },
       child: BlocBuilder<AppInitBloc, AppInitBlocState>(
-        cubit: BlocProvider.of<AppInitBloc>(context),
+        bloc: BlocProvider.of<AppInitBloc>(context),
         builder: (BuildContext context, AppInitBlocState state) {
           if (state is AppInitBlocStateReady) {
             return WelcomePage(!state.firstStart);

@@ -60,7 +60,7 @@ class AddDevicePage extends TraceableStatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddDeviceBloc, AddDeviceBlocState>(
-        cubit: BlocProvider.of<AddDeviceBloc>(context),
+        bloc: BlocProvider.of<AddDeviceBloc>(context),
         builder: (context, state) => Scaffold(
             appBar: SGLAppBar(
               'Add new controller',
@@ -79,7 +79,7 @@ class AddDevicePage extends TraceableStatelessWidget {
                     () => _login(context, state, () {
                           BlocProvider.of<MainNavigatorBloc>(context)
                               .add(MainNavigateToNewDeviceEvent(false, futureFn: (future) async {
-                            Device device = await future;
+                            Device? device = await future;
                             if (device != null) {
                               BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
                             }
@@ -93,7 +93,7 @@ class AddDevicePage extends TraceableStatelessWidget {
                     'SEARCH CONTROLLER', () {
                   BlocProvider.of<MainNavigatorBloc>(context)
                       .add(MainNavigateToExistingDeviceEvent(futureFn: (future) async {
-                    Device device = await future;
+                    Device? device = await future;
                     if (device != null) {
                       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: device));
                     }
@@ -135,7 +135,7 @@ class AddDevicePage extends TraceableStatelessWidget {
       doneFn();
       return;
     }
-    bool confirm = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -158,7 +158,7 @@ class AddDevicePage extends TraceableStatelessWidget {
             ],
           );
         });
-    if (confirm) {
+    if (confirm ?? false) {
       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsAuth(futureFn: (future) async {
         bool done = await future;
         if (done == true) {

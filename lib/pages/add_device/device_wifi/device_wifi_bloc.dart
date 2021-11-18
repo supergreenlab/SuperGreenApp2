@@ -137,7 +137,7 @@ class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
     yield DeviceWifiBlocStateSearching(1, 10);
     await ddb.updateDevice(DevicesCompanion(id: Value(device.id), isReachable: Value(false)));
 
-    String ip;
+    String? ip;
     Param ipParam = await ddb.getParam(device.id, 'WIFI_IP');
     for (int i = 0; i < 10; ++i) {
       yield DeviceWifiBlocStateSearching(i + 1, 10);

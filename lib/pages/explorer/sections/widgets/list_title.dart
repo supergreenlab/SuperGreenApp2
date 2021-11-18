@@ -20,10 +20,10 @@ import 'package:flutter/material.dart';
 
 class ListTitle extends StatelessWidget {
   final String title;
-  final String actionText;
-  final Function actionFn;
+  final String? actionText;
+  final Function()? actionFn;
 
-  const ListTitle({Key key, this.title, this.actionText, this.actionFn}) : super(key: key);
+  const ListTitle({Key? key, required this.title, this.actionText, this.actionFn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +38,9 @@ class ListTitle extends StatelessWidget {
           ),
           this.actionText != null && this.actionFn != null
               ? InkWell(
-                  onTap: this.actionFn,
+                  onTap: this.actionFn!,
                   child: Text(
-                    this.actionText,
+                    this.actionText!,
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.normal,

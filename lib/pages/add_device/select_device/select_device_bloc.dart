@@ -78,17 +78,15 @@ class SelectDeviceBlocStateDone extends SelectDeviceBlocState {
   final Device device;
   final int deviceBox;
 
-  SelectDeviceBlocStateDone(List<Device> devices, this.device, this.deviceBox)
-      : super(devices);
+  SelectDeviceBlocStateDone(List<Device> devices, this.device, this.deviceBox) : super(devices);
 
   @override
   List<Object> get props => [devices, device];
 }
 
-class SelectDeviceBloc
-    extends Bloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
+class SelectDeviceBloc extends Bloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
   List<Device> _devices = [];
-  StreamSubscription<List<Device>> _stream;
+  StreamSubscription<List<Device>>? _stream;
 
   //ignore: unused_field
   final MainNavigateToSelectDeviceEvent args;
@@ -98,8 +96,7 @@ class SelectDeviceBloc
   }
 
   @override
-  Stream<SelectDeviceBlocState> mapEventToState(
-      SelectDeviceBlocEvent event) async* {
+  Stream<SelectDeviceBlocState> mapEventToState(SelectDeviceBlocEvent event) async* {
     if (event is SelectDeviceBlocEventLoadDevices) {
       final ddb = RelDB.get().devicesDAO;
       final watcher = ddb.watchDevices();
@@ -128,9 +125,7 @@ class SelectDeviceBloc
 
   @override
   Future<void> close() async {
-    if (_stream != null) {
-      await _stream.cancel();
-    }
+    await _stream?.cancel();
     return super.close();
   }
 }

@@ -51,7 +51,7 @@ class ExplorerFeedBlocDelegate extends RemoteFeedBlocDelegate {
   @override
   Stream<FeedBlocState> mapEventToState(FeedBlocEvent event) async* {
     if (event is ExplorerFeedBlocDelegateFollowEvent) {
-      await BackendAPI().feedsAPI.followPlant(event.entry.plantID);
+      await BackendAPI().feedsAPI.followPlant(event.entry.plantID!);
       FeedEntryLoader loader = this.loaderForType(event.entry.type);
       loader.onFeedEntryStateUpdated(event.entry.copyWith(followed: true));
     } else {

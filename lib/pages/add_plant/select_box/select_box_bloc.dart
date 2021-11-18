@@ -30,13 +30,13 @@ class SelectBoxBlocEventInit extends SelectBoxBlocEvent {
 
 class SelectBoxBlocEventCreate extends SelectBoxBlocEvent {
   final String name;
-  final Device device;
-  final int deviceBox;
+  final Device? device;
+  final int? deviceBox;
 
   SelectBoxBlocEventCreate(this.name, {this.device, this.deviceBox});
 
   @override
-  List<Object> get props => [name, device, deviceBox];
+  List<Object?> get props => [name, device, deviceBox];
 }
 
 abstract class SelectBoxBlocState extends Equatable {}

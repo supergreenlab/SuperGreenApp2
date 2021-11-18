@@ -40,9 +40,9 @@ class _BookmarksPageState extends State<BookmarksPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BookmarksBloc, BookmarksBlocState>(
-        cubit: BlocProvider.of<BookmarksBloc>(context),
+        bloc: BlocProvider.of<BookmarksBloc>(context),
         builder: (context, state) {
-          Widget body;
+          late Widget body;
           if (state is BookmarksBlocStateInit) {
             body = FullscreenLoading();
           } else if (state is BookmarksBlocStateLoaded) {
@@ -90,7 +90,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
               ),
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context)
-                    .add(MainNavigateToPublicPlant(state.plantID, feedEntryID: state.feedEntryID));
+                    .add(MainNavigateToPublicPlant(state.plantID!, feedEntryID: state.feedEntryID));
               },
             )
           ];

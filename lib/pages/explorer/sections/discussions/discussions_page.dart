@@ -44,11 +44,10 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
   }
 
   Widget itemBuilder(BuildContext context, PublicFeedEntry feedEntry) {
-    String pic = feedEntry.pic;
+    String? pic = feedEntry.pic;
     if (pic != null) {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
-    Duration diff = DateTime.now().difference(feedEntry.commentDate);
     Widget avatar = UserAvatar(
       icon: pic,
       size: 40,
@@ -65,7 +64,7 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                     color: Colors.white,
                     border: Border.all(color: Color(0xffcdcdcd), width: 1),
                     borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 25, height: 25),
+                child: Image.asset(commentTypes[feedEntry.commentType]!['pic']!, width: 25, height: 25),
               )),
         ],
       );
@@ -73,7 +72,7 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
     return InkWell(
       onTap: () {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
-          feedEntry.plantID,
+          feedEntry.plantID!,
           name: feedEntry.plantName,
           feedEntryID: feedEntry.id,
           commentID: feedEntry.commentID,
@@ -94,9 +93,9 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 4.0),
-                      child: Image.asset(commentTypes[feedEntry.commentType]['pic'], width: 20, height: 20),
+                      child: Image.asset(commentTypes[feedEntry.commentType]!['pic']!, width: 20, height: 20),
                     ),
-                    Text(feedEntry.plantName,
+                    Text(feedEntry.plantName!,
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
@@ -115,10 +114,10 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                           Image.network(
                               BackendAPI()
                                   .feedsAPI
-                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath!),
                               fit: BoxFit.cover,
                               headers: {'Host': BackendAPI().storageServerHostHeader},
-                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                             if (loadingProgress == null) {
                               return child;
                             }

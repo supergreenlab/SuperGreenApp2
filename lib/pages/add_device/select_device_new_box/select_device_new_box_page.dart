@@ -90,25 +90,19 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
 }
 
 class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
-  List<int> _selectedLeds;
-
-  @override
-  void initState() {
-    _selectedLeds = [];
-    super.initState();
-  }
+  List<int> _selectedLeds = [];
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SelectDeviceNewBoxBloc, SelectDeviceNewBoxBlocState>(
-      cubit: BlocProvider.of<SelectDeviceNewBoxBloc>(context),
+      bloc: BlocProvider.of<SelectDeviceNewBoxBloc>(context),
       listener: (context, state) {
         if (state is SelectDeviceNewBoxBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: true));
         }
       },
       child: BlocBuilder<SelectDeviceNewBoxBloc, SelectDeviceNewBoxBlocState>(
-          cubit: BlocProvider.of<SelectDeviceNewBoxBloc>(context),
+          bloc: BlocProvider.of<SelectDeviceNewBoxBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is SelectDeviceNewBoxBlocStateLoading) {
@@ -223,7 +217,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
     BlocProvider.of<SelectDeviceNewBoxBloc>(context).add(SelectDeviceNewBoxBlocEventSelectLeds(_selectedLeds));
   }
 
-  Widget _renderBox(Key key, BuildContext context, Function onPressed, Widget content) {
+  Widget _renderBox(Key key, BuildContext context, Function() onPressed, Widget content) {
     return SizedBox(
         key: key,
         width: 100,

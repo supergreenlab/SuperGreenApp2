@@ -57,21 +57,18 @@ class ExistingDeviceBlocStateNotFound extends ExistingDeviceBlocState {
   ExistingDeviceBlocStateNotFound();
 }
 
-class ExistingDeviceBloc
-    extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
+class ExistingDeviceBloc extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToExistingDeviceEvent args;
 
   ExistingDeviceBloc(this.args) : super(ExistingDeviceBlocState());
 
   @override
-  Stream<ExistingDeviceBlocState> mapEventToState(
-      ExistingDeviceBlocEvent event) async* {
+  Stream<ExistingDeviceBlocState> mapEventToState(ExistingDeviceBlocEvent event) async* {
     if (event is ExistingDeviceBlocEventStartSearch) {
       yield ExistingDeviceBlocStateResolving();
-      bool isIP = RegExp(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b')
-          .hasMatch(event.query);
-      String ip;
+      bool isIP = RegExp(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b').hasMatch(event.query);
+      String? ip;
       if (isIP) {
         ip = event.query;
       } else {
@@ -87,7 +84,7 @@ class ExistingDeviceBloc
         }
       }
       try {
-        await get('http://$ip/s?k=BROKER_CLIENTID');
+        await get(Uri.parse('http://$ip/s?k=BROKER_CLIENTID'));
       } catch (e) {
         yield ExistingDeviceBlocStateNotFound();
         return;

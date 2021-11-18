@@ -43,9 +43,9 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
         if (state is FollowsFeedBlocStateLoaded) {}
       },
       child: BlocBuilder<FollowsFeedBloc, FollowsFeedBlocState>(
-          cubit: BlocProvider.of<FollowsFeedBloc>(context),
+          bloc: BlocProvider.of<FollowsFeedBloc>(context),
           builder: (context, state) {
-            Widget body;
+            late Widget body;
             if (state is FollowsFeedBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is FollowsFeedBlocStateLoaded) {
@@ -92,7 +92,7 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
               ),
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context).add(
-                    MainNavigateToPublicPlant(state.plantID, name: state.plantName, feedEntryID: state.feedEntryID));
+                    MainNavigateToPublicPlant(state.plantID!, name: state.plantName, feedEntryID: state.feedEntryID));
               },
             )
           ];

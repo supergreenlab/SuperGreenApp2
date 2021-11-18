@@ -25,7 +25,7 @@ class PlantPhase extends StatelessWidget {
   final DateTime? time;
   final PlantSettings plantSettings;
 
-  const PlantPhase({Key? key, required this.plantSettings, required this.time}) : super(key: key);
+  const PlantPhase({Key? key, required this.plantSettings, this.time}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

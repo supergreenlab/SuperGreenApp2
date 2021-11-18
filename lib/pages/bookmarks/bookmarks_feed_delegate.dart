@@ -28,8 +28,8 @@ import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dar
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_state.dart';
 
 class BookmarksFeedBlocDelegate extends RemoteFeedBlocDelegate {
-  FeedState feedState;
-  StreamSubscription<hive.BoxEvent> appDataStream;
+  late FeedState feedState;
+  StreamSubscription<hive.BoxEvent>? appDataStream;
 
   BookmarksFeedBlocDelegate();
 
@@ -69,7 +69,7 @@ class BookmarksFeedBlocDelegate extends RemoteFeedBlocDelegate {
 
   @override
   Future<void> close() async {
-    await appDataStream.cancel();
+    await appDataStream?.cancel();
     await super.close();
   }
 }

@@ -114,7 +114,7 @@ class AppInitBloc extends Bloc<AppInitBlocEvent, AppInitBlocState> {
           'de_DE': 'eu_de',
           'fr_FR': 'eu_fr',
         };
-        final String locale = await Devicelocale.currentLocale;
+        final String? locale = await Devicelocale.currentLocale;
         AppDB().setStoreGeo(localeToStoreGeo[locale] ?? 'us_us');
       }
 

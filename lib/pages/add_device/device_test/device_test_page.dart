@@ -105,13 +105,13 @@ class DeviceTestPage extends TraceableStatefulWidget {
 }
 
 class _DeviceTestPageState extends State<DeviceTestPage> {
-  Timer timer;
-  int millis;
+  Timer? timer;
+  late int millis;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DeviceTestBloc>(context),
+      bloc: BlocProvider.of<DeviceTestBloc>(context),
       listener: (BuildContext context, DeviceTestBlocState state) async {
         if (state is DeviceTestBlocStateDone) {
           Timer(const Duration(milliseconds: 1500), () {
@@ -125,12 +125,12 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
             });
           });
         } else if (state is DeviceTestBlocState && timer != null) {
-          timer.cancel();
+          timer?.cancel();
           timer = null;
         }
       },
       child: BlocBuilder<DeviceTestBloc, DeviceTestBlocState>(
-          cubit: BlocProvider.of<DeviceTestBloc>(context),
+          bloc: BlocProvider.of<DeviceTestBloc>(context),
           builder: (context, state) {
             Widget body;
             if (state is DeviceTestBlocStateLoading) {
@@ -217,7 +217,7 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
     );
   }
 
-  Widget _renderChannel(BuildContext context, String text, String icon, Function onPressed) {
+  Widget _renderChannel(BuildContext context, String text, String icon, Function() onPressed) {
     return MaterialButton(
       onPressed: onPressed,
       child: Column(

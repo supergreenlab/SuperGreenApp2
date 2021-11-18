@@ -54,12 +54,12 @@ class SearchBlocStateLoaded extends SearchBlocState {
   final List<PublicPlant> plants;
   final bool eof;
   final int offset;
-  final String search;
+  final String? search;
 
   SearchBlocStateLoaded(this.plants, this.eof, this.offset, this.search);
 
   @override
-  List<Object> get props => [plants, eof, offset, search];
+  List<Object?> get props => [plants, eof, offset, search];
 }
 
 class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {

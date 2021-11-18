@@ -107,7 +107,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<ExistingDeviceBloc>(context),
+      bloc: BlocProvider.of<ExistingDeviceBloc>(context),
       listener: (BuildContext context, ExistingDeviceBlocState state) {
         if (state is ExistingDeviceBlocStateFound) {
           BlocProvider.of<MainNavigatorBloc>(context)
@@ -118,7 +118,7 @@ class _ExistingDevicePageState extends State<ExistingDevicePage> {
         }
       },
       child: BlocBuilder<ExistingDeviceBloc, ExistingDeviceBlocState>(
-          cubit: BlocProvider.of<ExistingDeviceBloc>(context),
+          bloc: BlocProvider.of<ExistingDeviceBloc>(context),
           builder: (context, state) {
             Widget body;
 

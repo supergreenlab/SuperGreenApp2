@@ -143,7 +143,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   final FocusNode _passFocusNode = FocusNode();
 
   KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  int _listener;
+  late int _listener;
   bool _keyboardVisible = false;
 
   @protected
@@ -168,14 +168,14 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener(
-      cubit: BlocProvider.of<DeviceWifiBloc>(context),
+      bloc: BlocProvider.of<DeviceWifiBloc>(context),
       listener: (BuildContext context, DeviceWifiBlocState state) {
         if (state is DeviceWifiBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: state.device));
         }
       },
       child: BlocBuilder<DeviceWifiBloc, DeviceWifiBlocState>(
-          cubit: BlocProvider.of<DeviceWifiBloc>(context),
+          bloc: BlocProvider.of<DeviceWifiBloc>(context),
           builder: (context, state) {
             bool canGoBack = !(state is DeviceWifiBlocStateSearching ||
                 state is DeviceWifiBlocStateLoading ||
@@ -305,7 +305,7 @@ class _DeviceWifiPageState extends State<DeviceWifiPage> {
   }
 
   Widget _renderInput(BuildContext context, String title, String hint, TextEditingController controller,
-      {Function(String) onFieldSubmitted, FocusNode focusNode, String error}) {
+      {required Function(String) onFieldSubmitted, required FocusNode focusNode, String? error}) {
     return Column(children: [
       SectionTitle(
         title: title,

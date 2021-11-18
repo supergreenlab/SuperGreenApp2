@@ -39,36 +39,36 @@ class PublicFeedEntry extends Equatable {
   final FeedEntryParams params;
   final Map<String, dynamic> meta;
 
-  final bool liked;
-  final bool bookmarked;
-  final int nComments;
-  final int nLikes;
+  final bool? liked;
+  final bool? bookmarked;
+  final int? nComments;
+  final int? nLikes;
 
-  final String plantID;
-  final String plantName;
-  final String plantThumbnailPath;
+  final String? plantID;
+  final String? plantName;
+  final String? plantThumbnailPath;
 
-  final String nickname;
-  final String pic;
-  final String commentID;
-  final String comment;
-  final String replyTo;
-  final CommentType commentType;
-  final DateTime commentDate;
+  final String? nickname;
+  final String? pic;
+  final String? commentID;
+  final String? comment;
+  final String? replyTo;
+  final CommentType? commentType;
+  final DateTime? commentDate;
 
-  final DateTime likeDate;
-  final String thumbnailPath;
+  final DateTime? likeDate;
+  final String? thumbnailPath;
 
   PublicFeedEntry(
-      {this.id,
-      this.userID,
-      this.feedID,
-      this.date,
-      this.type,
-      this.plantSettings,
-      this.boxSettings,
-      this.params,
-      this.meta,
+      {required this.id,
+      required this.userID,
+      required this.feedID,
+      required this.date,
+      required this.type,
+      required this.plantSettings,
+      required this.boxSettings,
+      required this.params,
+      required this.meta,
       this.liked,
       this.bookmarked,
       this.nComments,
@@ -114,7 +114,7 @@ class PublicFeedEntry extends Equatable {
       thumbnailPath: map['thumbnailPath']);
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         userID,
         feedID,

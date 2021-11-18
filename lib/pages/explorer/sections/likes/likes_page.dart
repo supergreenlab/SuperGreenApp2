@@ -45,11 +45,10 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
   }
 
   Widget itemBuilder(BuildContext context, PublicFeedEntry feedEntry) {
-    String pic = feedEntry.pic;
+    String? pic = feedEntry.pic;
     if (pic != null) {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
-    Duration diff = DateTime.now().difference(feedEntry.likeDate);
     Widget avatar = UserAvatar(
       icon: pic,
       size: 20,
@@ -57,7 +56,7 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
     return InkWell(
       onTap: () {
         BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToPublicPlant(
-          feedEntry.plantID,
+          feedEntry.plantID!,
           name: feedEntry.plantName,
           feedEntryID: feedEntry.id,
           commentID: feedEntry.commentID,
@@ -76,9 +75,9 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                   fit: StackFit.expand,
                   children: [
                     Image.network(
-                        BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath),
+                        BackendAPI().feedsAPI.absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath!),
                         fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                       if (loadingProgress == null) {
                         return child;
                       }
@@ -106,7 +105,7 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                   children: [
                     Row(
                       children: [
-                        Text(feedEntry.nickname,
+                        Text(feedEntry.nickname!,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             )),
@@ -115,7 +114,7 @@ class LikesPage extends SectionPage<LikesBloc, PublicFeedEntry> {
                             : ' liked a diary entry'),
                       ],
                     ),
-                    Text(feedEntry.plantName,
+                    Text(feedEntry.plantName!,
                         style: TextStyle(
                           fontSize: 16,
                           color: Color(0xff464646),

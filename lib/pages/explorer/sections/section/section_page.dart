@@ -177,7 +177,7 @@ class _SectionPageState<BlocType extends SectionBloc> extends State<SectionPage>
             } else if (items.length == 0) {
               body = Container(height: widget.listHeight, child: ItemLoading());
             } else {
-              body = widget.renderBody(context, state, items);
+              body = widget.renderBody(context, state as SectionBlocStateLoaded, items);
             }
           }
           return Column(

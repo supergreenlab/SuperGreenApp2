@@ -31,13 +31,13 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 abstract class DeviceSetupBlocEvent extends Equatable {}
 
 class DeviceSetupBlocEventStartSetup extends DeviceSetupBlocEvent {
-  final String username;
-  final String password;
+  final String? username;
+  final String? password;
 
   DeviceSetupBlocEventStartSetup({this.username, this.password});
 
   @override
-  List<Object> get props => [username, password];
+  List<Object?> get props => [username, password];
 }
 
 class DeviceSetupBlocEventProgress extends DeviceSetupBlocEvent {
@@ -51,10 +51,10 @@ class DeviceSetupBlocEventProgress extends DeviceSetupBlocEvent {
 class DeviceSetupBlocEventLoadingError extends DeviceSetupBlocEvent {
   final bool requiresAuth;
 
-  DeviceSetupBlocEventLoadingError({this.requiresAuth});
+  DeviceSetupBlocEventLoadingError({this.requiresAuth = false});
 
   @override
-  List<Object> get props => [requiresAuth];
+  List<Object?> get props => [requiresAuth];
 }
 
 class DeviceSetupBlocEventAlreadyExists extends DeviceSetupBlocEvent {
@@ -93,7 +93,7 @@ class DeviceSetupBlocStateAlreadyExists extends DeviceSetupBlocState {
 class DeviceSetupBlocStateLoadingError extends DeviceSetupBlocState {
   final bool requiresAuth;
 
-  DeviceSetupBlocStateLoadingError({this.requiresAuth}) : super(0);
+  DeviceSetupBlocStateLoadingError({this.requiresAuth = false}) : super(0);
 }
 
 class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
@@ -133,7 +133,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
     try {
       add(DeviceSetupBlocEventProgress(0));
       final db = RelDB.get().devicesDAO;
-      String? deviceIdentifier;
+      String deviceIdentifier;
       String? auth;
 
       if (event.username != null && event.password != null) {
@@ -148,16 +148,12 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
       }
 
       try {
-        if (await db.getDeviceByIdentifier(deviceIdentifier) != null) {
-          add(DeviceSetupBlocEventAlreadyExists());
-          return;
-        }
-      } catch (e) {
+        await db.getDeviceByIdentifier(deviceIdentifier);
         add(DeviceSetupBlocEventAlreadyExists());
         return;
-      }
+      } catch (e) {}
 
-      AppDB().setDeviceAuth(deviceIdentifier, auth);
+      AppDB().setDeviceAuth(deviceIdentifier, auth!);
 
       int deviceID;
 
@@ -195,11 +191,11 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         for (int i = 0; i < boxes.arrayLen; ++i) {
           final Param onHour = await db.getParam(deviceID, 'BOX_${i}_ON_HOUR');
           final Param onMin = await db.getParam(deviceID, 'BOX_${i}_ON_MIN');
-          await DeviceHelper.updateHourMinParams(d, onHour, onMin, onHour.ivalue, onMin.ivalue);
+          await DeviceHelper.updateHourMinParams(d, onHour, onMin, onHour.ivalue!, onMin.ivalue!);
 
           final Param offHour = await db.getParam(deviceID, 'BOX_${i}_OFF_HOUR');
           final Param offMin = await db.getParam(deviceID, 'BOX_${i}_OFF_MIN');
-          await DeviceHelper.updateHourMinParams(d, offHour, offMin, offHour.ivalue, offMin.ivalue);
+          await DeviceHelper.updateHourMinParams(d, offHour, offMin, offHour.ivalue!, offMin.ivalue!);
         }
       }
 
