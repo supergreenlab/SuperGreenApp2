@@ -22,9 +22,7 @@ class GreenButton extends ElevatedButton {
   GreenButton({title, onPressed, color = 0xff3bb30b})
       : super(
           style: ButtonStyle(
-            textStyle: MaterialStateProperty.resolveWith((state) => TextStyle(
-                  color: Color(color),
-                )),
+            backgroundColor: MaterialStateProperty.resolveWith((state) => Color(color)),
           ),
           child: Text(title, style: TextStyle(color: Colors.white)),
           onPressed: onPressed,
