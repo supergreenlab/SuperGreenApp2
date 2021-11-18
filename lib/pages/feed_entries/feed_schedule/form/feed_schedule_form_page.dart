@@ -96,7 +96,9 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
       child: BlocBuilder<FeedScheduleFormBloc, FeedScheduleFormBlocState>(
           bloc: BlocProvider.of<FeedScheduleFormBloc>(context),
           builder: (BuildContext context, FeedScheduleFormBlocState state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             bool changed = false;
             bool valid = false;
             if (state is FeedScheduleFormBlocStateLoading) {

@@ -169,7 +169,9 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
       child: BlocBuilder<SettingsDeviceBloc, SettingsDeviceBlocState>(
           bloc: BlocProvider.of<SettingsDeviceBloc>(context),
           builder: (BuildContext context, SettingsDeviceBlocState state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is SettingsDeviceBlocStateLoading) {
               body = FullscreenLoading(
                 title: CommonL10N.loading,

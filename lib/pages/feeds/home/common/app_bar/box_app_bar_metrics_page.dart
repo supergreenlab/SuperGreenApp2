@@ -38,7 +38,9 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
       },
       child: BlocBuilder<BoxAppBarMetricsBloc, PlantFeedAppBarBlocState>(
         builder: (BuildContext context, PlantFeedAppBarBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
           if (state is PlantFeedAppBarBlocStateInit) {
             body = FullscreenLoading(
               title: 'Loading..',

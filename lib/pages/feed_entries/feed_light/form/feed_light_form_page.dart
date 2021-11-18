@@ -128,7 +128,9 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
             return !(newState is FeedLightFormBlocStateLightsLoading);
           },
           builder: (context, state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is FeedLightFormBlocStateLoading) {
               body = FullscreenLoading(title: FeedLightFormPage.feedLightFormPageSaving);
             } else if (state is FeedLightFormBlocStateCancelling) {

@@ -79,7 +79,9 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
       child: BlocBuilder<SettingsPlantBloc, SettingsPlantBlocState>(
           bloc: BlocProvider.of<SettingsPlantBloc>(context),
           builder: (BuildContext context, SettingsPlantBlocState state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is SettingsPlantBlocStateLoading) {
               body = FullscreenLoading(
                 title: 'Loading..',

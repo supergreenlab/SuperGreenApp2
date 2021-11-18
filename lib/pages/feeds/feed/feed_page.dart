@@ -248,7 +248,9 @@ class _FeedPageState extends State<FeedPage> {
                 }
                 if (visibleEntries[feedEntry.feedEntryID] == true && info.visibleFraction == 0) {
                   visibleEntries.remove(feedEntry.feedEntryID);
-                  BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEntryHidden(index));
+                  try {
+                    BlocProvider.of<FeedBloc>(context).add(FeedBlocEventEntryHidden(index));
+                  } catch (e) {}
                 }
               },
               child: SlideTransition(

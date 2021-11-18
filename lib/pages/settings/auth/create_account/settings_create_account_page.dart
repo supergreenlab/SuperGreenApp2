@@ -37,7 +37,9 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
       child: BlocBuilder<SettingsCreateAccountBloc, SettingsCreateAccountBlocState>(
         bloc: BlocProvider.of<SettingsCreateAccountBloc>(context),
         builder: (BuildContext context, SettingsCreateAccountBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
 
           if (state is SettingsCreateAccountBlocStateLoading) {
             body = FullscreenLoading(

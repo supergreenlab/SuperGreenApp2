@@ -39,7 +39,9 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
     return BlocBuilder<TimelapseViewerBloc, TimelapseViewerBlocState>(
         bloc: BlocProvider.of<TimelapseViewerBloc>(context),
         builder: (BuildContext context, TimelapseViewerBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
           if (state is TimelapseViewerBlocStateLoading) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TimelapseViewerBlocStateLoaded) {

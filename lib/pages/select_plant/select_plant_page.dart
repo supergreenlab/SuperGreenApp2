@@ -35,7 +35,9 @@ class SelectPlantPage extends StatelessWidget {
       child: BlocBuilder<SelectPlantBloc, SelectPlantBlocState>(
         bloc: BlocProvider.of<SelectPlantBloc>(context),
         builder: (BuildContext context, SelectPlantBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
           int i = 0;
 
           if (state is SelectPlantBlocStateInit) {

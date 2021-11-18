@@ -43,7 +43,9 @@ class _TipPageState extends State<TipPage> {
         bloc: BlocProvider.of<TipBloc>(context),
         builder: (BuildContext context, TipBlocState state) {
           String title = 'Tips';
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
           if (state is TipBlocStateInit) {
             body = FullscreenLoading(title: 'Loading..');
           } else if (state is TipBlocStateLoaded) {

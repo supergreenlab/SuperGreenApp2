@@ -87,7 +87,9 @@ class _SettingsBoxPageState extends State<SettingsBoxPage> {
       child: BlocBuilder<SettingsBoxBloc, SettingsBoxBlocState>(
           bloc: BlocProvider.of<SettingsBoxBloc>(context),
           builder: (BuildContext context, SettingsBoxBlocState state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is SettingsBoxBlocStateLoading) {
               body = FullscreenLoading(
                 title: 'Loading..',

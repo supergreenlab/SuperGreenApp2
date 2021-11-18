@@ -143,7 +143,9 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
       child: BlocBuilder<FeedLifeEventFormBloc, FeedLifeEventFormBlocState>(
           bloc: BlocProvider.of<FeedLifeEventFormBloc>(context),
           builder: (context, state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             Tuple2<String, String> phaseTitle = Tuple2(
                 FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabel, 'assets/plant_infos/icon_germination_date.svg');
             if (state is FeedLifeEventFormBlocStateInit || state is FeedLifeEventFormBlocStateDone) {

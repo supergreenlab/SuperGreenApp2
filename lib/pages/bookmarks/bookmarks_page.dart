@@ -42,7 +42,9 @@ class _BookmarksPageState extends State<BookmarksPage> {
     return BlocBuilder<BookmarksBloc, BookmarksBlocState>(
         bloc: BlocProvider.of<BookmarksBloc>(context),
         builder: (context, state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
           if (state is BookmarksBlocStateInit) {
             body = FullscreenLoading();
           } else if (state is BookmarksBlocStateLoaded) {

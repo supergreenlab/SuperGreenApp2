@@ -101,7 +101,9 @@ class _SettingsRemoteControlPageState extends State<SettingsRemoteControlPage> {
       child: BlocBuilder<SettingsRemoteControlBloc, SettingsRemoteControlBlocState>(
           bloc: BlocProvider.of<SettingsRemoteControlBloc>(context),
           builder: (BuildContext context, SettingsRemoteControlBlocState state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is SettingsRemoteControlBlocStateDonePairing) {
               body = _renderDonePairing();
             } else if (state is SettingsRemoteControlBlocStateLoading) {

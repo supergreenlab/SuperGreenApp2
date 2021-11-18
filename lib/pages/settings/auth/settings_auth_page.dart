@@ -61,7 +61,9 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
       child: BlocBuilder<SettingsAuthBloc, SettingsAuthBlocState>(
         bloc: BlocProvider.of<SettingsAuthBloc>(context),
         builder: (BuildContext context, SettingsAuthBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
 
           if (state is SettingsAuthBlocStateLoading) {
             body = FullscreenLoading(

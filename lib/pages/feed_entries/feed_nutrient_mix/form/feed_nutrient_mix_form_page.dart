@@ -356,7 +356,9 @@ class _FeedNutrientMixFormPageState extends State<FeedNutrientMixFormPage> {
       child: BlocBuilder<FeedNutrientMixFormBloc, FeedNutrientMixFormBlocState>(
           bloc: BlocProvider.of<FeedNutrientMixFormBloc>(context),
           builder: (BuildContext context, FeedNutrientMixFormBlocState state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is FeedNutrientMixFormBlocStateLoading) {
               body = FullscreenLoading(
                 title: CommonL10N.saving,

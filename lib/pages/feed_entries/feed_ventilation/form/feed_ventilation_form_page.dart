@@ -63,7 +63,9 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       child: BlocBuilder<FeedVentilationFormBloc, FeedVentilationFormBlocState>(
           bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
           builder: (context, state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is FeedVentilationFormBlocStateInit) {
               body = FullscreenLoading(title: 'Loading..');
             } else if (state is FeedVentilationFormBlocStateLoading) {

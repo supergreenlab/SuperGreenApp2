@@ -45,7 +45,9 @@ class _FollowsFeedPageState extends State<FollowsFeedPage> {
       child: BlocBuilder<FollowsFeedBloc, FollowsFeedBlocState>(
           bloc: BlocProvider.of<FollowsFeedBloc>(context),
           builder: (context, state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is FollowsFeedBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is FollowsFeedBlocStateLoaded) {

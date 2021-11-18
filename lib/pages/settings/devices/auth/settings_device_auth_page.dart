@@ -120,7 +120,9 @@ class _SettingsDeviceAuthPageState extends State<SettingsDeviceAuthPage> {
             return !(s2 is SettingsDeviceAuthBlocStateAuthError);
           },
           builder: (BuildContext context, SettingsDeviceAuthBlocState state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (done) {
               body = _renderDoneAuth(state as SettingsDeviceAuthBlocStateDoneAuth);
             } else if (state is SettingsDeviceAuthBlocStateLoading) {

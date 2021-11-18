@@ -26,6 +26,7 @@ import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/select_device/select_device_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/section_title.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -182,7 +183,9 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
       child: BlocBuilder<SelectDeviceBloc, SelectDeviceBlocState>(
           bloc: BlocProvider.of<SelectDeviceBloc>(context),
           builder: (context, state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is SelectDeviceBlocStateDeviceListUpdated) {
               if (state.devices.length > 0) {
                 body = Column(

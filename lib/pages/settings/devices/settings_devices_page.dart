@@ -37,7 +37,9 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
       child: BlocBuilder<SettingsDevicesBloc, SettingsDevicesBlocState>(
         bloc: BlocProvider.of<SettingsDevicesBloc>(context),
         builder: (BuildContext context, SettingsDevicesBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
 
           if (state is SettingsDevicesBlocStateLoading) {
             body = FullscreenLoading(

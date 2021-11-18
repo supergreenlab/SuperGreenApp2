@@ -127,7 +127,9 @@ class _ExplorerPageState extends State<ExplorerPage> {
       child: BlocBuilder<ExplorerBloc, ExplorerBlocState>(
           bloc: BlocProvider.of<ExplorerBloc>(context),
           builder: (context, state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is ExplorerBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is ExplorerBlocStateLoaded) {

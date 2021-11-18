@@ -17,7 +17,9 @@ class SettingsPlantsPage extends TraceableStatelessWidget {
       child: BlocBuilder<SettingsPlantsBloc, SettingsPlantsBlocState>(
         bloc: BlocProvider.of<SettingsPlantsBloc>(context),
         builder: (BuildContext context, SettingsPlantsBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
           int i = 0;
 
           if (state is SettingsPlantsBlocStateLoading) {

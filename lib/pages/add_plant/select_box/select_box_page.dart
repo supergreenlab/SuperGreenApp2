@@ -91,7 +91,9 @@ class SelectBoxPage extends TraceableStatelessWidget {
     return BlocBuilder<SelectBoxBloc, SelectBoxBlocState>(
         bloc: BlocProvider.of<SelectBoxBloc>(context),
         builder: (BuildContext context, SelectBoxBlocState state) {
-          late Widget body;
+          Widget body = FullscreenLoading(
+            title: 'Loading..',
+          );
           if (state is SelectBoxBlocStateLoading) {
             body = FullscreenLoading(
               title: CommonL10N.done,

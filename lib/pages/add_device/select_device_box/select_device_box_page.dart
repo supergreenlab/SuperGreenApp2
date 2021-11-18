@@ -137,7 +137,9 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
       child: BlocBuilder<SelectDeviceBoxBloc, SelectDeviceBoxBlocState>(
           bloc: BlocProvider.of<SelectDeviceBoxBloc>(context),
           builder: (context, state) {
-            late Widget body;
+            Widget body = FullscreenLoading(
+              title: 'Loading..',
+            );
             if (state is SelectDeviceBoxBlocStateInit) {
               body = FullscreenLoading(title: CommonL10N.loading);
             } else if (state is SelectDeviceBoxBlocStateLoading) {
