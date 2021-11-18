@@ -149,7 +149,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'feed: ${i + 1}/${feeds.length}'));
       FeedsCompanion feedsCompanion = feeds[i];
-      Feed? exists = await RelDB.get().feedsDAO.getFeedForServerID(feedsCompanion.serverID.value!);
+      Feed? exists;
+      try {
+        exists = await RelDB.get().feedsDAO.getFeedForServerID(feedsCompanion.serverID.value!);
+      } catch (e) {}
       if (feedsCompanion is DeletedFeedsCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeed(exists, addDeleted: false);
@@ -173,7 +176,10 @@ class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
       }
       add(SyncerBlocEventSyncing(true, 'entry: ${i + 1}/${feedEntries.length}'));
       FeedEntriesCompanion feedEntriesCompanion = feedEntries[i];
-      FeedEntry? exists = await RelDB.get().feedsDAO.getFeedEntryForServerID(feedEntriesCompanion.serverID.value!);
+      FeedEntry? exists;
+      try {
+        exists = await RelDB.get().feedsDAO.getFeedEntryForServerID(feedEntriesCompanion.serverID.value!);
+      } catch (e) {}
       if (feedEntriesCompanion is DeletedFeedEntriesCompanion) {
         if (exists != null) {
           await FeedEntryHelper.deleteFeedEntry(exists, addDeleted: false);

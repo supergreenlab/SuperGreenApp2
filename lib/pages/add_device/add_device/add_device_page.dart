@@ -143,13 +143,13 @@ class AddDevicePage extends TraceableStatelessWidget {
             title: Text(AddDevicePage.addDevicePagePleaseLoginDialogTitle),
             content: Text(AddDevicePage.addDevicePagePleaseLoginDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(AddDevicePage.addDevicePagePleaseLoginDialogSkip),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

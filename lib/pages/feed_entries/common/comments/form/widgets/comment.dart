@@ -290,13 +290,13 @@ class CommentView extends StatelessWidget {
             title: Text(CommonL10N.loginRequiredDialogTitle),
             content: Text(CommonL10N.loginRequiredDialogBody),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -323,13 +323,13 @@ class CommentView extends StatelessWidget {
             title: Text(CommentView.commentsFormPageReportDialogTitle),
             content: Text(CommentView.commentsFormPageReportDialogBody(c)),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.cancel),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

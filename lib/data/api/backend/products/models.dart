@@ -20,7 +20,6 @@ import 'dart:convert';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/api/backend/products/product_specs.dart';
 
 enum ProductCategoryID {

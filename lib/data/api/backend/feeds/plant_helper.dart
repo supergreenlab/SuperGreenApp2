@@ -47,7 +47,7 @@ class PlantHelper {
   }
 
   static Future deleteTimelapse(Timelapse timelapse, {addDeleted: true}) async {
-    timelapse = await RelDB.get().plantsDAO.getTimelapse(timelapse.id) as Timelapse;
+    timelapse = await RelDB.get().plantsDAO.getTimelapse(timelapse.id);
     await RelDB.get().plantsDAO.deleteTimelapse(timelapse);
     if (addDeleted && timelapse.serverID != null) {
       await RelDB.get()

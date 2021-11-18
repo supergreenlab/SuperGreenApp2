@@ -18,10 +18,14 @@
 
 import 'package:flutter/material.dart';
 
-class GreenButton extends RaisedButton {
-  GreenButton({title, onPressed, color=0xff3bb30b})
+class GreenButton extends ElevatedButton {
+  GreenButton({title, onPressed, color = 0xff3bb30b})
       : super(
-          color: Color(color),
+          style: ButtonStyle(
+            textStyle: MaterialStateProperty.resolveWith((state) => TextStyle(
+                  color: Color(color),
+                )),
+          ),
           child: Text(title, style: TextStyle(color: Colors.white)),
           onPressed: onPressed,
         );

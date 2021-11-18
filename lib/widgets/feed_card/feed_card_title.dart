@@ -122,13 +122,13 @@ class FeedCardTitle extends StatelessWidget {
             title: Text('Delete this card?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

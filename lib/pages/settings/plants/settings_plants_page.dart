@@ -81,7 +81,7 @@ class SettingsPlantsPage extends TraceableStatelessWidget {
                 iconColor: Colors.white,
                 hideBackButton: !(state is SettingsPlantsBlocStateLoaded),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
                     },
@@ -140,13 +140,13 @@ class SettingsPlantsPage extends TraceableStatelessWidget {
             title: Text('Delete plant ${plant.name}?'),
             content: Text('This can\'t be reverted. Continue?'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('NO'),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

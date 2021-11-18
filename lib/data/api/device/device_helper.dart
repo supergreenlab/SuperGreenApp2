@@ -88,7 +88,7 @@ class DeviceHelper {
     } else {
       String? auth = AppDB().getDeviceAuth(device.identifier);
       value = await DeviceAPI.setStringParam(device.ip, param.key, value,
-          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as String;
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     }
     Param newParam = param.copyWith(svalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
@@ -102,7 +102,7 @@ class DeviceHelper {
     } else {
       String? auth = AppDB().getDeviceAuth(device.identifier);
       value = await DeviceAPI.setIntParam(device.ip, param.key, value,
-          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as int;
+          timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     }
     Param newParam = param.copyWith(ivalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
@@ -138,7 +138,7 @@ class DeviceHelper {
     }
     String? auth = AppDB().getDeviceAuth(device.identifier);
     String value = await DeviceAPI.fetchStringParam(device.ip, param.key,
-        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as String;
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     await RelDB.get().devicesDAO.updateParam(param.copyWith(svalue: value));
     return param;
   }
@@ -153,14 +153,14 @@ class DeviceHelper {
 
     String? auth = AppDB().getDeviceAuth(device.identifier);
     int value = await DeviceAPI.fetchIntParam(device.ip, param.key,
-        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth) as int;
+        timeout: timeout, nRetries: nRetries, wait: wait, auth: auth);
     Param newParam = param.copyWith(ivalue: value);
     await RelDB.get().devicesDAO.updateParam(newParam);
     return newParam;
   }
 
   static Future deleteDevice(Device device, {addDeleted: true}) async {
-    device = await RelDB.get().devicesDAO.getDevice(device.id) as Device;
+    device = await RelDB.get().devicesDAO.getDevice(device.id);
     await RelDB.get().devicesDAO.deleteDevice(device);
     if (addDeleted && device.serverID != null) {
       await RelDB.get()

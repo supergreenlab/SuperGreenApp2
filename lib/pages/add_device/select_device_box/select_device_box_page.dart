@@ -249,13 +249,13 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
           return AlertDialog(
             title: Text(SelectDeviceBoxPage.selectDeviceBoxResetDialogTitle(index + 1, state.device.name)),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text(CommonL10N.no),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

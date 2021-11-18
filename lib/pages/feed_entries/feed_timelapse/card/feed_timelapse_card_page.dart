@@ -27,7 +27,6 @@ import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dar
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
-import 'package:super_green_app/pages/feed_entries/entry_params/feed_timelapse.dart';
 import 'package:super_green_app/pages/feed_entries/feed_timelapse/card/feed_timelapse_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';

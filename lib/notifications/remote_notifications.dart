@@ -52,7 +52,7 @@ class RemoteNotifications {
         AppDB().setNotificationOnStartAsked(true);
       });
     }
-    RemoteMessage initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage = (await FirebaseMessaging.instance.getInitialMessage()) as RemoteMessage?;
     if (initialMessage != null) {
       Timer(Duration(milliseconds: 300), () {
         notificationSelected(initialMessage);
@@ -117,8 +117,8 @@ class RemoteNotifications {
   }
 
   void androidForegroundNotification(RemoteMessage message) {
-    RemoteNotification notification = message.notification;
-    AndroidNotification android = notification.android;
+    RemoteNotification? notification = message.notification as RemoteNotification?;
+    AndroidNotification? android = notification?.android;
 
     if (notification != null && android != null) {
       flutterLocalNotificationsPlugin.show(

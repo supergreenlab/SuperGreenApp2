@@ -24,7 +24,6 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 

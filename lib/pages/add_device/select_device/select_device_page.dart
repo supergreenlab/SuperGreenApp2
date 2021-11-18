@@ -361,7 +361,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
 
   void _addNewDevice(BuildContext context) {
     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToAddDeviceEvent(futureFn: (future) async {
-      Device device = await future;
+      Device? device = await future;
       if (device != null) {
         _selectDevice(context, device);
       }

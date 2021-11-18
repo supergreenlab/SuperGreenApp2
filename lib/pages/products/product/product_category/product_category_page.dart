@@ -116,7 +116,7 @@ class _ProductTypePageState extends State<ProductTypePage> {
                         : () {
                             BlocProvider.of<MainNavigatorBloc>(context)
                                 .add(MainNavigateToProductInfosEvent(selectedCategory!, futureFn: (future) async {
-                              Product product = await future;
+                              Product? product = await future;
                               if (product != null) {
                                 BlocProvider.of<MainNavigatorBloc>(context)
                                     .add(MainNavigatorActionPop(param: product.copyWith(category: selectedCategory)));

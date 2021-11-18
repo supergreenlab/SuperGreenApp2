@@ -97,7 +97,7 @@ class _TipPageState extends State<TipPage> {
     List<Widget> sections = [
       _renderSection(tip, article, article['intro']),
     ];
-    List<dynamic> ss = article['sections'];
+    List<dynamic>? ss = article['sections'];
     if (ss != null) {
       sections.addAll(ss.map((e) => _renderSection(tip, article, e)));
     }

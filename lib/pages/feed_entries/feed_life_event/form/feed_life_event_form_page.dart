@@ -126,7 +126,7 @@ class FeedLifeEventFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
-  late DateTime date;
+  late DateTime? date;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +157,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
               fontSize: 35,
               topBarPadding: 0,
               onOK: () {
-                BlocProvider.of<FeedLifeEventFormBloc>(context).add(FeedLifeEventFormBlocEventSetDate(date));
+                BlocProvider.of<FeedLifeEventFormBloc>(context).add(FeedLifeEventFormBlocEventSetDate(date!));
               },
               body: Column(
                 children: [
@@ -175,7 +175,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
     if (date != null) {
       String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
       DateFormat f = DateFormat(format);
-      text = f.format(date);
+      text = f.format(date!);
       buttonText = FeedLifeEventFormPage.feedLifeEventFormPageChangeButton;
     } else {
       text = FeedLifeEventFormPage.feedLifeEventFormPageNotSet;
@@ -195,7 +195,7 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             onPressed: () async {
               DateTime? newDate = await showDatePicker(
                   context: context,
-                  initialDate: date,
+                  initialDate: date ?? DateTime.now(),
                   firstDate: DateTime.fromMillisecondsSinceEpoch(0),
                   lastDate: DateTime.now());
               if (newDate == null) {
