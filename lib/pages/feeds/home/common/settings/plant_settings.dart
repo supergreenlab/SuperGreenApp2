@@ -63,15 +63,15 @@ class PlantSettings extends Equatable {
 
   DateTime? dateForPhase(PlantPhases phase) {
     if (phase == PlantPhases.GERMINATING) {
-      return germinationDate!;
+      return germinationDate;
     } else if (phase == PlantPhases.VEGGING) {
-      return veggingStart!;
+      return veggingStart;
     } else if (phase == PlantPhases.BLOOMING) {
-      return bloomingStart!;
+      return bloomingStart;
     } else if (phase == PlantPhases.DRYING) {
-      return dryingStart!;
+      return dryingStart;
     } else if (phase == PlantPhases.CURING) {
-      return curingStart!;
+      return curingStart;
     }
     return null;
   }

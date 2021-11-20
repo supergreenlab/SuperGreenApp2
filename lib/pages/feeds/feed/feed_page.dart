@@ -87,7 +87,7 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
   late FeedState feedState;
   bool eof = false;
-  bool loaded = false;
+  bool loaded = false, feedStateLoaded = false;
   final List<FeedEntryState> entries = [];
   final Map<dynamic, bool> visibleEntries = {};
 
@@ -111,6 +111,7 @@ class _FeedPageState extends State<FeedPage> {
         if (state is FeedBlocStateFeedLoaded) {
           setState(() {
             feedState = state.feed;
+            feedStateLoaded = true;
           });
         } else if (state is FeedBlocStateEntriesLoaded) {
           int nEntries = entries.length;
@@ -203,7 +204,7 @@ class _FeedPageState extends State<FeedPage> {
         ),
       );
     }
-    if (!loaded) {
+    if (!loaded || !feedStateLoaded) {
       content.add(SliverFillRemaining(
           hasScrollBody: false, fillOverscroll: false, child: FullscreenLoading(title: 'Loading feed...')));
     } else {

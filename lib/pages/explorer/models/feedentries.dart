@@ -108,7 +108,7 @@ class PublicFeedEntry extends Equatable {
       commentID: map['commentID'],
       comment: map['comment'],
       replyTo: map['commentReplyTo'],
-      commentType: EnumToString.fromString(CommentType.values, map['commentType']),
+      commentType: map['commentType'] == null ? null : EnumToString.fromString(CommentType.values, map['commentType']),
       commentDate: map['commentDate'] == null ? null : DateTime.parse(map['commentDate'] as String),
       likeDate: map['likeDate'] == null ? null : DateTime.parse(map['likeDate'] as String),
       thumbnailPath: map['thumbnailPath']);
