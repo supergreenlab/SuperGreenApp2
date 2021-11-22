@@ -1126,7 +1126,7 @@ class $ParamsTable extends Params with TableInfo<$ParamsTable, Param> {
 class Plant extends DataClass implements Insertable<Plant> {
   final int id;
   final int feed;
-  final int? box;
+  final int box;
   final String name;
   final bool single;
   final bool public;
@@ -1137,7 +1137,7 @@ class Plant extends DataClass implements Insertable<Plant> {
   Plant(
       {required this.id,
       required this.feed,
-      this.box,
+      required this.box,
       required this.name,
       required this.single,
       required this.public,
@@ -1154,7 +1154,7 @@ class Plant extends DataClass implements Insertable<Plant> {
       feed: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}feed'])!,
       box: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}box']),
+          .mapFromDatabaseResponse(data['${effectivePrefix}box'])!,
       name: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
       single: const BoolType()
@@ -1176,9 +1176,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['feed'] = Variable<int>(feed);
-    if (!nullToAbsent || box != null) {
-      map['box'] = Variable<int?>(box);
-    }
+    map['box'] = Variable<int>(box);
     map['name'] = Variable<String>(name);
     map['single'] = Variable<bool>(single);
     map['public'] = Variable<bool>(public);
@@ -1195,7 +1193,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return PlantsCompanion(
       id: Value(id),
       feed: Value(feed),
-      box: box == null && nullToAbsent ? const Value.absent() : Value(box),
+      box: Value(box),
       name: Value(name),
       single: Value(single),
       public: Value(public),
@@ -1214,7 +1212,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return Plant(
       id: serializer.fromJson<int>(json['id']),
       feed: serializer.fromJson<int>(json['feed']),
-      box: serializer.fromJson<int?>(json['box']),
+      box: serializer.fromJson<int>(json['box']),
       name: serializer.fromJson<String>(json['name']),
       single: serializer.fromJson<bool>(json['single']),
       public: serializer.fromJson<bool>(json['public']),
@@ -1230,7 +1228,7 @@ class Plant extends DataClass implements Insertable<Plant> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'feed': serializer.toJson<int>(feed),
-      'box': serializer.toJson<int?>(box),
+      'box': serializer.toJson<int>(box),
       'name': serializer.toJson<String>(name),
       'single': serializer.toJson<bool>(single),
       'public': serializer.toJson<bool>(public),
@@ -1303,7 +1301,7 @@ class Plant extends DataClass implements Insertable<Plant> {
 class PlantsCompanion extends UpdateCompanion<Plant> {
   final Value<int> id;
   final Value<int> feed;
-  final Value<int?> box;
+  final Value<int> box;
   final Value<String> name;
   final Value<bool> single;
   final Value<bool> public;
@@ -1326,7 +1324,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   PlantsCompanion.insert({
     this.id = const Value.absent(),
     required int feed,
-    this.box = const Value.absent(),
+    required int box,
     required String name,
     this.single = const Value.absent(),
     this.public = const Value.absent(),
@@ -1335,11 +1333,12 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   })  : feed = Value(feed),
+        box = Value(box),
         name = Value(name);
   static Insertable<Plant> custom({
     Expression<int>? id,
     Expression<int>? feed,
-    Expression<int?>? box,
+    Expression<int>? box,
     Expression<String>? name,
     Expression<bool>? single,
     Expression<bool>? public,
@@ -1365,7 +1364,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
   PlantsCompanion copyWith(
       {Value<int>? id,
       Value<int>? feed,
-      Value<int?>? box,
+      Value<int>? box,
       Value<String>? name,
       Value<bool>? single,
       Value<bool>? public,
@@ -1397,7 +1396,7 @@ class PlantsCompanion extends UpdateCompanion<Plant> {
       map['feed'] = Variable<int>(feed.value);
     }
     if (box.present) {
-      map['box'] = Variable<int?>(box.value);
+      map['box'] = Variable<int>(box.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1457,8 +1456,8 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
       typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _boxMeta = const VerificationMeta('box');
   late final GeneratedColumn<int?> box = GeneratedColumn<int?>(
-      'box', aliasedName, true,
-      typeName: 'INTEGER', requiredDuringInsert: false);
+      'box', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   late final GeneratedColumn<String?> name = GeneratedColumn<String?>(
       'name', aliasedName, false,
@@ -1531,6 +1530,8 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
     if (data.containsKey('box')) {
       context.handle(
           _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
+    } else if (isInserting) {
+      context.missing(_boxMeta);
     }
     if (data.containsKey('name')) {
       context.handle(

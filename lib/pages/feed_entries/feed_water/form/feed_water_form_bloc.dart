@@ -72,7 +72,7 @@ class FeedWaterFormBloc extends Bloc<FeedWaterFormBlocEvent, FeedWaterFormBlocSt
       final db = RelDB.get();
       List<Plant> plants = [args.plant];
       if (event.wateringLab) {
-        plants = await db.plantsDAO.getPlantsInBox(args.plant.box!);
+        plants = await db.plantsDAO.getPlantsInBox(args.plant.box);
       }
       late FeedEntry feedEntry;
       for (int i = 0; i < plants.length; ++i) {

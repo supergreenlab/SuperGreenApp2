@@ -37,10 +37,10 @@ mixin _$PlantsDAOMixin on DatabaseAccessor<RelDB> {
         }).map((QueryRow row) => row.read<int>('COUNT(*)'));
   }
 
-  Selectable<int> nPlantsInBox(int? var1) {
+  Selectable<int> nPlantsInBox(int var1) {
     return customSelect('SELECT COUNT(*) FROM plants WHERE box = ?',
         variables: [
-          Variable<int?>(var1)
+          Variable<int>(var1)
         ],
         readsFrom: {
           plants,

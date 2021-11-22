@@ -61,14 +61,14 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   @override
   void loadFeed() async {
     plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
-    box = await RelDB.get().plantsDAO.getBox(plant.box!);
+    box = await RelDB.get().plantsDAO.getBox(plant.box);
     AppData appData = AppDB().getAppData();
     feedState = PlantFeedState(appData.jwt != null, appData.storeGeo, PlantSettings.fromJSON(plant.settings),
         BoxSettings.fromJSON(box.settings));
     add(FeedBlocEventFeedLoaded(feedState));
 
     plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
-    boxStream = RelDB.get().plantsDAO.watchBox(plant.box!).listen(boxUpdated);
+    boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
     appDataStream = AppDB().watchAppData().listen(appDataUpdated);
   }
 

@@ -75,8 +75,8 @@ class SettingsBoxBloc extends Bloc<SettingsBoxBlocEvent, SettingsBoxBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsBox args;
   late Box box;
-  late Device? device;
-  late int? deviceBox;
+  Device? device;
+  int? deviceBox;
 
   SettingsBoxBloc(this.args) : super(SettingsBoxBlocStateLoading()) {
     add(SettingsBoxBlocEventInit());

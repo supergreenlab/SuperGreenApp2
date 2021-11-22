@@ -153,7 +153,7 @@ class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
         return;
       } catch (e) {}
 
-      AppDB().setDeviceAuth(deviceIdentifier, auth!);
+      AppDB().setDeviceAuth(deviceIdentifier, auth);
 
       int deviceID;
 

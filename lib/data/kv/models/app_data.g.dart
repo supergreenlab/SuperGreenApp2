@@ -18,13 +18,13 @@ class AppDataAdapter extends TypeAdapter<AppData> {
     };
     return AppData()
       ..firstStart = fields[0] as bool
-      ..lastPlantID = fields[1] as int
+      ..lastPlantID = fields[1] as int?
       ..allowAnalytics = fields[2] as bool
       ..freedomUnits = fields[3] as bool
-      ..jwt = fields[4] as String
-      ..storeGeo = fields[5] as String
+      ..jwt = fields[4] as String?
+      ..storeGeo = fields[5] as String?
       ..syncOverGSM = fields[6] as bool
-      ..notificationToken = fields[7] as String
+      ..notificationToken = fields[7] as String?
       ..notificationTokenSent = fields[8] as bool
       ..notificationOnStartAsked = fields[9] as bool;
   }

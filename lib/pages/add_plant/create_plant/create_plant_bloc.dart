@@ -53,8 +53,7 @@ class CreatePlantBloc extends Bloc<CreatePlantBlocEvent, CreatePlantBlocState> {
   CreatePlantBloc() : super(CreatePlantBlocState());
 
   @override
-  Stream<CreatePlantBlocState> mapEventToState(
-      CreatePlantBlocEvent event) async* {
+  Stream<CreatePlantBlocState> mapEventToState(CreatePlantBlocEvent event) async* {
     if (event is CreatePlantBlocEventCreate) {
       final bdb = RelDB.get().plantsDAO;
       final fdb = RelDB.get().feedsDAO;
@@ -62,10 +61,7 @@ class CreatePlantBloc extends Bloc<CreatePlantBlocEvent, CreatePlantBlocState> {
       final feedID = await fdb.addFeed(feed);
       PlantsCompanion plant;
       plant = PlantsCompanion.insert(
-          feed: feedID,
-          name: event.name,
-          box: Value(event.box),
-          settings: Value(jsonEncode({'isSingle': event.isSingle})));
+          feed: feedID, name: event.name, box: event.box, settings: Value(jsonEncode({'isSingle': event.isSingle})));
       final plantID = await bdb.addPlant(plant);
       final p = await bdb.getPlant(plantID);
       final b = await bdb.getBox(event.box);

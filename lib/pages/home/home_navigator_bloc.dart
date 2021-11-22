@@ -53,7 +53,7 @@ class HomeNavigateToPlantFeedEvent extends HomeNavigatorEvent implements DeviceN
     if (p == null) {
       return null;
     }
-    Box box = await RelDB.get().plantsDAO.getBox(p.box!);
+    Box box = await RelDB.get().plantsDAO.getBox(p.box);
     if (box.device == null) {
       return null;
     }

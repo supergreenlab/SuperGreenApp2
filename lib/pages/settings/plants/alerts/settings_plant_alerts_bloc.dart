@@ -104,7 +104,7 @@ class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, Setting
   Stream<SettingsPlantAlertsBlocState> mapEventToState(SettingsPlantAlertsBlocEvent event) async* {
     if (event is SettingsPlantAlertsBlocEventInit) {
       Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
-      Box box = await RelDB.get().plantsDAO.getBox(plant.box!);
+      Box box = await RelDB.get().plantsDAO.getBox(plant.box);
       if (box.device == null) {
         yield SettingsPlantAlertsBlocStateNotLoaded(hasController: false, box: box);
         return;

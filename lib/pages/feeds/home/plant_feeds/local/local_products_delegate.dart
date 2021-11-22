@@ -20,9 +20,9 @@ class LocalProductsBlocDelegate extends ProductsBlocDelegate {
   @override
   void loadProducts() async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
-    box = await RelDB.get().plantsDAO.getBox(plant.box!);
+    box = await RelDB.get().plantsDAO.getBox(plant.box);
     plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
-    boxStream = RelDB.get().plantsDAO.watchBox(plant.box!).listen(boxUpdated);
+    boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
     productsLoaded(PlantSettings.fromJSON(plant.settings), BoxSettings.fromJSON(box.settings));
   }
 

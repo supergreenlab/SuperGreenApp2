@@ -81,7 +81,7 @@ class SettingsPlantBloc extends Bloc<SettingsPlantBlocEvent, SettingsPlantBlocSt
   Stream<SettingsPlantBlocState> mapEventToState(SettingsPlantBlocEvent event) async* {
     if (event is SettingsPlantBlocEventInit) {
       plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
-      box = await RelDB.get().plantsDAO.getBox(plant.box!);
+      box = await RelDB.get().plantsDAO.getBox(plant.box);
       yield SettingsPlantBlocStateLoaded(plant, box, BackendAPI().usersAPI.loggedIn);
     } else if (event is SettingsPlantBlocEventUpdate) {
       yield SettingsPlantBlocStateLoading();

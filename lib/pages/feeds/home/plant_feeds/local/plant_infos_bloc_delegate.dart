@@ -39,10 +39,10 @@ class LocalPlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   @override
   void loadPlant() async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
-    box = await RelDB.get().plantsDAO.getBox(plant.box!);
+    box = await RelDB.get().plantsDAO.getBox(plant.box);
     this.plantInfos = PlantInfos(plant.name, null, null, null, null, true);
     plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);
-    boxStream = RelDB.get().plantsDAO.watchBox(plant.box!).listen(boxUpdated);
+    boxStream = RelDB.get().plantsDAO.watchBox(plant.box).listen(boxUpdated);
     feedMediaStream = RelDB.get().feedsDAO.watchLastFeedMedia(plant.feed).listen(feedMediaUpdated);
   }
 

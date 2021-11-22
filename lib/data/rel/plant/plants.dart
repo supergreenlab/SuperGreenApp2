@@ -64,7 +64,7 @@ class Plants extends Table {
     if (feed.serverID == null) {
       Logger.throwError('Missing serverID for feed relation', data: {"plant": plant});
     }
-    Box box = await RelDB.get().plantsDAO.getBox(plant.box!);
+    Box box = await RelDB.get().plantsDAO.getBox(plant.box);
     if (box.serverID == null) {
       Logger.throwError('Missing serverID for box relation', data: {"box": box});
     }

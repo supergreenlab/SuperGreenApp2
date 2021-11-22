@@ -103,7 +103,7 @@ class TimelapseViewerBloc extends Bloc<TimelapseViewerBlocEvent, TimelapseViewer
         } else if (timelapses[i].type == "sglstorage") {
           Map<String, dynamic> frame = await BackendAPI().feedsAPI.fetchLatestTimelapseFrame(timelapses[i].serverID!);
           String url = '${BackendAPI().storageServerHost}${frame['filePath']}';
-          Box box = await RelDB.get().plantsDAO.getBox(args.plant.box!);
+          Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);
           pictures
               .add(await BackendAPI().feedsAPI.sglOverlay(box, args.plant, JsonDecoder().convert(frame['meta']), url));
         }

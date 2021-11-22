@@ -190,10 +190,8 @@ class SelectDeviceBoxPageState extends State<SelectDeviceBoxPage> {
       child: Container(
         color: Colors.white,
         child: ListView.builder(
+          itemCount: state.boxes.length,
           itemBuilder: (BuildContext context, int index) {
-            if (index == state.boxes.length) {
-              return Container();
-            }
             Widget title;
             if (state.boxes[index].enabled) {
               title = Text(SelectDeviceBoxPage.selectDeviceBoxAlreadyRunning,

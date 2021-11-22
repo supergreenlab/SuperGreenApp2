@@ -76,7 +76,7 @@ class BoxAppBarMetricsBloc extends Bloc<PlantFeedAppBarBlocEvent, PlantFeedAppBa
       try {
         if (box == null) {
           final db = RelDB.get();
-          box = await db.plantsDAO.getBox(plant!.box!);
+          box = await db.plantsDAO.getBox(plant!.box);
         }
         List<charts.Series<Metric, DateTime>> graphData = await updateChart();
         yield PlantFeedAppBarBlocStateLoaded(graphData, plant, box!);

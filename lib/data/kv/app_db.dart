@@ -120,13 +120,13 @@ class AppDB {
     setAppData(appData);
   }
 
-  void setDeviceSigning(String identifier, String signing) {
+  void setDeviceSigning(String identifier, String? signing) {
     DeviceData deviceData = getDeviceData(identifier);
     deviceData.signing = signing;
     setDeviceData(identifier, deviceData);
   }
 
-  void setDeviceAuth(String identifier, String auth) {
+  void setDeviceAuth(String identifier, String? auth) {
     DeviceData deviceData = getDeviceData(identifier);
     deviceData.auth = auth;
     setDeviceData(identifier, deviceData);

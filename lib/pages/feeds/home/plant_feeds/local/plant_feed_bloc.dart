@@ -100,9 +100,9 @@ class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
         return;
       }
       final db = RelDB.get();
-      box = await db.plantsDAO.getBox(plant!.box!);
+      box = await db.plantsDAO.getBox(plant!.box);
       plantStream = RelDB.get().plantsDAO.watchPlant(plant!.id).listen(_onPlantUpdated);
-      boxStream = RelDB.get().plantsDAO.watchBox(plant!.box!).listen(_onBoxUpdated);
+      boxStream = RelDB.get().plantsDAO.watchBox(plant!.box).listen(_onBoxUpdated);
       yield PlantFeedBlocStateLoaded(box!, plant!,
           feedEntry: args.feedEntry, commentID: args.commentID, replyTo: args.replyTo);
     } else if (event is PlantFeedBlocEventUpdated) {

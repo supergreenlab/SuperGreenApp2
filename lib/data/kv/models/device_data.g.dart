@@ -17,8 +17,8 @@ class DeviceDataAdapter extends TypeAdapter<DeviceData> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DeviceData()
-      ..auth = fields[0] as String
-      ..signing = fields[1] as String;
+      ..auth = fields[0] as String?
+      ..signing = fields[1] as String?;
   }
 
   @override
