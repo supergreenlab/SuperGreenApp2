@@ -53,10 +53,10 @@ class BackendAPI {
   BackendAPI._newInstance() {
     bool forceProduction = true;
     if (forceProduction || kReleaseMode || Platform.isIOS) {
-      serverHost = 'https://api2.supergreenlab.com';
-      websocketServerHost = 'wss://api2.supergreenlab.com';
-      storageServerHost = 'https://storage.supergreenlab.com';
-      storageServerHostHeader = 'storage.supergreenlab.com';
+      serverHost = 'https://awsapi2.supergreenlab.com';
+      websocketServerHost = 'wss://awsapi2.supergreenlab.com';
+      storageServerHost = 'https://awsstorage.supergreenlab.com';
+      storageServerHostHeader = 'awsstorage.supergreenlab.com';
       // serverHost = 'http://192.168.1.87:8080';
       // storageServerHost = 'http://192.168.1.87:9000';
       // storageServerHostHeader = 'minio:9000';
@@ -82,8 +82,9 @@ class BackendAPI {
   }
 
   Future<String?> postPut(String path, Map<String, dynamic> obj, {bool forcePut = false}) async {
-    Function postPut = obj['id'] != null || forcePut ? apiClient.put : apiClient.post;
-    Response resp = await postPut('${BackendAPI().serverHost}$path',
+    Function(Uri uri, {Map<String, String>? headers, Object? body}) postPut =
+        obj['id'] != null || forcePut ? apiClient.put : apiClient.post;
+    Response resp = await postPut(Uri.parse('${BackendAPI().serverHost}$path'),
         headers: {
           'Content-Type': 'application/json',
           'Authentication': 'Bearer ${AppDB().getAppData().jwt}',

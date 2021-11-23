@@ -120,7 +120,7 @@ class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState
       try {
         String? identifier;
         try {
-          await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
+          identifier = await DeviceAPI.fetchStringParam(device.ip, 'BROKER_CLIENTID', nRetries: 1, auth: auth);
         } catch (e) {}
         if (identifier == device.identifier) {
           if (device.isSetup == false) {

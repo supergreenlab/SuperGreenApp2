@@ -135,7 +135,7 @@ class FeedMediaFormBloc extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocSt
       try {
         FeedEntryDraft? draft;
         try {
-          await RelDB.get().feedsDAO.getEntryDraft(feedID, 'FE_MEDIA');
+          draft = await RelDB.get().feedsDAO.getEntryDraft(feedID, 'FE_MEDIA');
         } catch (e) {}
         if (draft != null) {
           yield FeedMediaFormBlocStateDraft(FeedMediaDraft.fromJSON(draft.id, draft.params));
