@@ -112,6 +112,7 @@ class DeviceWebsocket {
   }
 
   void connect() async {
+    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
     String url = '${BackendAPI().websocketServerHost}/device/${device.serverID}/stream';
     try {
       channel = IOWebSocketChannel(await WebSocket.connect(url, headers: {
@@ -124,7 +125,6 @@ class DeviceWebsocket {
       return;
     }
 
-    await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
     sub = channel.stream.listen((message) async {
       bool remoteEnabled = AppDB().getDeviceSigning(device.identifier) != null;
       //if (device.isRemote == false && remoteEnabled) {
