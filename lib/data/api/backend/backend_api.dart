@@ -53,10 +53,10 @@ class BackendAPI {
   BackendAPI._newInstance() {
     bool forceProduction = true;
     if (forceProduction || kReleaseMode || Platform.isIOS) {
-      serverHost = 'https://awsapi2.supergreenlab.com';
-      websocketServerHost = 'wss://awsapi2.supergreenlab.com';
-      storageServerHost = 'https://awsstorage.supergreenlab.com';
-      storageServerHostHeader = 'awsstorage.supergreenlab.com';
+      serverHost = 'https://api2.supergreenlab.com';
+      websocketServerHost = 'wss://api2.supergreenlab.com';
+      storageServerHost = 'https://storage.supergreenlab.com';
+      storageServerHostHeader = 'storage.supergreenlab.com';
       // serverHost = 'http://192.168.1.87:8080';
       // storageServerHost = 'http://192.168.1.87:9000';
       // storageServerHostHeader = 'minio:9000';

@@ -70,7 +70,7 @@ class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
     if (event is TipBlocEventInit) {
       List<Map<String, dynamic>> tips = [];
       for (int i = 0; i < args.paths.length; i += 1) {
-        Response resp = await get(Uri.parse('https://awstipapi.supergreenlab.com/${args.paths[i]}'));
+        Response resp = await get(Uri.parse('https://tipapi.supergreenlab.com/${args.paths[i]}'));
         Map<String, dynamic>? body = JsonDecoder().convert(resp.body);
         if (body != null && body.length > 0) {
           tips.add(body);
