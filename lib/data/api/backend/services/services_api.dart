@@ -30,7 +30,7 @@ class ServicesAPI {
         .apiClient
         .get(Uri.parse('${BackendAPI().serverHost}/plant/$plantID/alerts/settings'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('getPlantAlertSettings failed: ${resp.body}', data: {'plantID': plantID});
@@ -45,7 +45,7 @@ class ServicesAPI {
         await BackendAPI().apiClient.put(Uri.parse('${BackendAPI().serverHost}/plant/$plantID/alerts/settings'),
             headers: {
               'Content-Type': 'application/json',
-              'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+              'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
             },
             body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {

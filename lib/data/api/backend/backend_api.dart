@@ -51,7 +51,7 @@ class BackendAPI {
   factory BackendAPI() => _instance;
 
   BackendAPI._newInstance() {
-    bool forceProduction = true;
+    bool forceProduction = false;
     if (forceProduction || kReleaseMode || Platform.isIOS) {
       serverHost = 'https://api2.supergreenlab.com';
       websocketServerHost = 'wss://api2.supergreenlab.com';
@@ -69,9 +69,9 @@ class BackendAPI {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if ((await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
-      serverHost = local ? 'http://192.168.1.49:8080' : 'https://devapi2.supergreenlab.com';
-      websocketServerHost = local ? 'ws://192.168.1.49:8080' : 'wss://devapi2.supergreenlab.com';
-      storageServerHost = local ? 'http://192.168.1.49:9000' : 'https://devstorage.supergreenlab.com';
+      serverHost = local ? 'http://172.20.10.14:8080' : 'https://devapi2.supergreenlab.com';
+      websocketServerHost = local ? 'ws://172.20.10.14:8080' : 'wss://devapi2.supergreenlab.com';
+      storageServerHost = local ? 'http://172.20.10.14:9000' : 'https://devstorage.supergreenlab.com';
       storageServerHostHeader = local ? 'minio:9000' : 'devstorage.supergreenlab.com';
     } else {
       serverHost = 'http://10.0.2.2:8080';
@@ -87,7 +87,7 @@ class BackendAPI {
     Response resp = await postPut(Uri.parse('${BackendAPI().serverHost}$path'),
         headers: {
           'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
         },
         body: JsonEncoder().convert(obj));
     if (resp.statusCode ~/ 100 != 2) {
@@ -106,7 +106,7 @@ class BackendAPI {
   Future<dynamic> get(String path) async {
     Response resp = await apiClient.get(Uri.parse('${BackendAPI().serverHost}$path'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('get failed: ${resp.body}');

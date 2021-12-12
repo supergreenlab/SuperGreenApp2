@@ -75,7 +75,7 @@ class UsersAPI {
       Uri.parse('${BackendAPI().serverHost}/profilePicUploadURL'),
       headers: {
         'Content-Type': 'application/json',
-        'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
       },
     );
     if (resp.statusCode ~/ 100 != 2) {
@@ -97,7 +97,7 @@ class UsersAPI {
       await BackendAPI().apiClient.put(Uri.parse('${BackendAPI().serverHost}/user'),
           headers: {
             'Content-Type': 'application/json',
-            'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+            'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
           },
           body: JsonEncoder().convert({'pic': Uri.parse(uploadUrl['filePath']).path.split('/')[2]}));
     } catch (e, trace) {
@@ -108,7 +108,7 @@ class UsersAPI {
   Future<User> me() async {
     Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/users/me'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('/me failed with error: ${resp.body}');

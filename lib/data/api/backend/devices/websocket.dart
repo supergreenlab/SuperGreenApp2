@@ -116,7 +116,7 @@ class DeviceWebsocket {
     String url = '${BackendAPI().websocketServerHost}/device/${device.serverID}/stream';
     try {
       channel = IOWebSocketChannel(await WebSocket.connect(url, headers: {
-        'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+        'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
       }));
     } catch (e, trace) {
       Logger.logError(e, trace);

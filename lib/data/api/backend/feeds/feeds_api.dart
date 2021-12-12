@@ -62,7 +62,7 @@ class FeedsAPI {
     Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/deletes'),
         headers: {
           'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
         },
         body: JsonEncoder().convert({
           "deletes": deletes.map<Map<String, dynamic>>((d) => Deletes.toMap(d)).toList(),
@@ -79,7 +79,7 @@ class FeedsAPI {
             '${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments?offset=$offset&limit=$limit&rootCommentsOnly=$rootCommentsOnly'),
         headers: {
           'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
         });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
@@ -97,7 +97,7 @@ class FeedsAPI {
     Response resp =
         await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/comment/$commentID'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}', data: {"commentID": commentID});
@@ -115,7 +115,7 @@ class FeedsAPI {
         .apiClient
         .get(Uri.parse('${BackendAPI().serverHost}/feedEntry/$feedEntryID/social'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}',
@@ -130,7 +130,7 @@ class FeedsAPI {
         .apiClient
         .get(Uri.parse('${BackendAPI().serverHost}/timelapse/$timelapseID/latest'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchLatestTimelapseFrame failed: ${resp.body}', data: {"timelapseID": timelapseID});
@@ -151,7 +151,7 @@ class FeedsAPI {
           Uri.parse('${BackendAPI().serverHost}/sgloverlay'),
           headers: {
             'Content-Type': 'application/json',
-            'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+            'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
           },
           body: JsonEncoder().convert(params),
         );
@@ -166,7 +166,7 @@ class FeedsAPI {
         .apiClient
         .get(Uri.parse('${BackendAPI().serverHost}/feedEntry/$feedEntryID/comments/count?allComments=true'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchCommentsForFeedEntry failed: ${resp.body}', data: {"feedEntryID": feedEntryID});
@@ -180,7 +180,7 @@ class FeedsAPI {
         .apiClient
         .get(Uri.parse('${BackendAPI().serverHost}/bookmarks?offset=$offset&limit=$limit'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('fetchBookmarks failed: ${resp.body}', data: {"offset": offset, "limit": limit});
@@ -261,7 +261,7 @@ class FeedsAPI {
     Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/feedMediaUploadURL'),
         headers: {
           'Content-Type': 'application/json',
-          'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
         },
         body: JsonEncoder().convert({
           'fileName': feedMedia.filePath,
@@ -422,7 +422,7 @@ class FeedsAPI {
     Response resp =
         await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/plant/$id/archive'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('archivePlant failed with error: ${resp.body}', data: {"id": id});
@@ -608,7 +608,7 @@ class FeedsAPI {
   Future setSynced(String type, String id) async {
     Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/$type/$id/sync'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('setSynced failed: ${resp.body}', data: {"type": type, "id": id});
@@ -618,7 +618,7 @@ class FeedsAPI {
   Future<Map<String, dynamic>> _unsynced(String type) async {
     Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
       'Content-Type': 'application/json',
-      'Authentication': 'Bearer ${AppDB().getAppData().jwt}',
+      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('_unsynced failed: ${resp.body}', data: {"type": type});
