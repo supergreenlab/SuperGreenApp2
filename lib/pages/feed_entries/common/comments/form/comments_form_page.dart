@@ -165,9 +165,10 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
   late FeedEntryStateLoaded feedEntry;
   late User? user;
   late bool autoFocus;
-  late Comment? replyTo;
-  late Comment? replyToDisplay;
-  late List<Product>? recommended;
+
+  List<Product>? recommended;
+  Comment? replyTo;
+  Comment? replyToDisplay;
 
   bool eof = false;
   bool single = false;
@@ -527,7 +528,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
       child: Row(
         children: [
           UserAvatar(
-            icon: pic!,
+            icon: pic,
           ),
           Expanded(
             child: Container(
