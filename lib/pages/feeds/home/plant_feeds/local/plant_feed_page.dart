@@ -392,7 +392,6 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     return SpeedDial(
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
-        marginBottom: 10,
         animationSpeed: 50,
         curve: Curves.bounceIn,
         backgroundColor: Color(0xff3bb30b),

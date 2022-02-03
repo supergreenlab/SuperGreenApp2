@@ -34,6 +34,7 @@ import 'package:super_green_app/pages/feeds/home/box_feeds/local/local_box_feed_
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/environment/environments_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/sunglasses_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/widgets/plant_dial_button.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -134,12 +135,12 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
     return SpeedDial(
         tooltip: 'Speed Dial',
         heroTag: 'speed-dial-hero-tag',
-        marginBottom: 10,
         animationSpeed: 50,
         curve: Curves.bounceIn,
         backgroundColor: Color(0xff3bb30b),
-        animatedIcon: AnimatedIcons.menu_close,
-        animatedIconTheme: IconThemeData(size: 22.0),
+        child: PlantDialButton(
+          openned: _speedDialOpen,
+        ),
         overlayOpacity: 0.8,
         openCloseDial: _openCloseDial,
         closeManually: true,
