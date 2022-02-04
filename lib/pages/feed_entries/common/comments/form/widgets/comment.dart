@@ -111,7 +111,7 @@ class CommentView extends StatelessWidget {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
     Duration diff = DateTime.now().difference(comment.createdAt);
-    Widget avatar = UserAvatar(icon: pic!);
+    Widget avatar = UserAvatar(icon: pic);
     if (comment.type != CommentType.COMMENT) {
       avatar = Stack(
         children: [

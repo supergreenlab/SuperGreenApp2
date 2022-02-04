@@ -345,7 +345,7 @@ class _CommentsFormPageState extends State<CommentsFormPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               UserAvatar(
-                icon: (replyToDisplay ?? replyTo)!.pic!,
+                icon: (replyToDisplay ?? replyTo)!.pic,
                 size: 25,
               ),
               Text(
