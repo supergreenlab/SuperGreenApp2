@@ -17,8 +17,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_text_input.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_form.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_text_input.dart';
 
 class PlantInfosStrain extends StatefulWidget {
   final String? strain;

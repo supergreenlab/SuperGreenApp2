@@ -17,7 +17,7 @@
  */
 
 import 'package:super_green_app/data/api/backend/backend_api.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/plant_infos_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/plant_infos_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
@@ -28,8 +28,7 @@ class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
 
   @override
   void loadPlant() async {
-    Map<String, dynamic> plant =
-        await BackendAPI().feedsAPI.publicPlant(plantID);
+    Map<String, dynamic> plant = await BackendAPI().feedsAPI.publicPlant(plantID);
     plantInfosLoaded(PlantInfos(
         plant['name'],
         BackendAPI().feedsAPI.absoluteFileURL(plant['filePath']),
@@ -43,8 +42,7 @@ class RemotePlantInfosBlocDelegate extends PlantInfosBlocDelegate {
   Stream<PlantInfosBlocState> updateSettings(PlantInfos plantInfos) async* {}
 
   @override
-  Stream<PlantInfosBlocState> updatePhase(
-      PlantPhases phase, DateTime date) async* {}
+  Stream<PlantInfosBlocState> updatePhase(PlantPhases phase, DateTime date) async* {}
 
   @override
   Future<void> close() async {}

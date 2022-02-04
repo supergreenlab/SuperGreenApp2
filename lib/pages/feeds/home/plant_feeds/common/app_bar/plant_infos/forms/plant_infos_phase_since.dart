@@ -17,52 +17,54 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_dropdown_input.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_date_input.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_form.dart';
 
-class PlantInfosPlantType extends StatefulWidget {
-  final String? plantType;
+class PlantInfosPhaseSince extends StatefulWidget {
+  final String title;
+  final String icon;
+  final DateTime? date;
 
   final Function onCancel;
-  final Function(String? plantType) onSubmit;
+  final Function(DateTime date) onSubmit;
 
-  PlantInfosPlantType({required this.plantType, required this.onCancel, required this.onSubmit});
+  PlantInfosPhaseSince(
+      {required this.title, required this.icon, required this.date, required this.onCancel, required this.onSubmit});
 
   @override
-  _PlantInfosPlantTypeState createState() => _PlantInfosPlantTypeState();
+  _PlantInfosPhaseSinceState createState() => _PlantInfosPhaseSinceState();
 }
 
-class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
-  late String? plantType;
+class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
+  late String title;
+  late DateTime date;
 
   @override
   void initState() {
-    plantType = widget.plantType;
+    title = widget.title;
+    date = widget.date ?? DateTime.now();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return PlantInfosForm(
-      title: 'Plant type',
-      icon: 'icon_plant_type.svg',
+      title: widget.title,
+      icon: widget.icon,
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(plantType);
+        widget.onSubmit(date);
       },
       child: Column(
         children: <Widget>[
-          PlantInfosDropdownInput(
-            labelText: 'Plant type',
-            hintText: 'Choose a type',
-            items: [
-              ['PHOTO', 'Photoperiod'],
-              ['AUTO', 'Auto'],
-            ],
-            value: plantType,
-            onChanged: (String? newValue) {
+          PlantInfosDateInput(
+            hintText: 'Since: ',
+            labelText: 'Pick a date',
+            date: date,
+            onChange: (DateTime? date) {
+              if (date == null) return;
               setState(() {
-                plantType = newValue;
+                this.date = date;
               });
             },
           ),

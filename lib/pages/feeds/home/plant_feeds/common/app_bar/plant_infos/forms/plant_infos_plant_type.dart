@@ -17,54 +17,52 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_dropdown_input.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_dropdown_input.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_form.dart';
 
-class PlantInfosMedium extends StatefulWidget {
-  final String? medium;
+class PlantInfosPlantType extends StatefulWidget {
+  final String? plantType;
 
   final Function onCancel;
-  final Function(String? medium) onSubmit;
+  final Function(String? plantType) onSubmit;
 
-  PlantInfosMedium({required this.medium, required this.onCancel, required this.onSubmit});
+  PlantInfosPlantType({required this.plantType, required this.onCancel, required this.onSubmit});
 
   @override
-  _PlantInfosMediumState createState() => _PlantInfosMediumState();
+  _PlantInfosPlantTypeState createState() => _PlantInfosPlantTypeState();
 }
 
-class _PlantInfosMediumState extends State<PlantInfosMedium> {
-  String? medium;
+class _PlantInfosPlantTypeState extends State<PlantInfosPlantType> {
+  late String? plantType;
 
   @override
   void initState() {
-    medium = widget.medium;
+    plantType = widget.plantType;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return PlantInfosForm(
-      title: 'Medium',
-      icon: 'icon_medium.svg',
+      title: 'Plant type',
+      icon: 'icon_plant_type.svg',
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(medium);
+        widget.onSubmit(plantType);
       },
       child: Column(
         children: <Widget>[
           PlantInfosDropdownInput(
-            labelText: 'Select medium',
-            hintText: 'Choose a medium',
+            labelText: 'Plant type',
+            hintText: 'Choose a type',
             items: [
-              ['SOIL', 'Soil'],
-              ['COCO', 'Coco'],
-              ['DWC', 'DWC'],
-              ['HYDRO', 'Hydro'],
+              ['PHOTO', 'Photoperiod'],
+              ['AUTO', 'Auto'],
             ],
-            value: medium,
+            value: plantType,
             onChanged: (String? newValue) {
               setState(() {
-                medium = newValue;
+                plantType = newValue;
               });
             },
           ),

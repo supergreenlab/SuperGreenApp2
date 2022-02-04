@@ -32,7 +32,7 @@ import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/box_feeds/local/local_box_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/box_feeds/local/local_box_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_page.dart';
-import 'package:super_green_app/pages/feeds/home/common/environment/environments_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/environments_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/sunglasses_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/widgets/plant_dial_button.dart';
 import 'package:super_green_app/widgets/appbar.dart';

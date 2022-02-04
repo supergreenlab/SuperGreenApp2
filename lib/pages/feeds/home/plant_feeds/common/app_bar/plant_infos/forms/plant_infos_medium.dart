@@ -17,54 +17,54 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_date_input.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_infos/widgets/plant_infos_form.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_dropdown_input.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/widgets/plant_infos_form.dart';
 
-class PlantInfosPhaseSince extends StatefulWidget {
-  final String title;
-  final String icon;
-  final DateTime? date;
+class PlantInfosMedium extends StatefulWidget {
+  final String? medium;
 
   final Function onCancel;
-  final Function(DateTime date) onSubmit;
+  final Function(String? medium) onSubmit;
 
-  PlantInfosPhaseSince(
-      {required this.title, required this.icon, required this.date, required this.onCancel, required this.onSubmit});
+  PlantInfosMedium({required this.medium, required this.onCancel, required this.onSubmit});
 
   @override
-  _PlantInfosPhaseSinceState createState() => _PlantInfosPhaseSinceState();
+  _PlantInfosMediumState createState() => _PlantInfosMediumState();
 }
 
-class _PlantInfosPhaseSinceState extends State<PlantInfosPhaseSince> {
-  late String title;
-  late DateTime date;
+class _PlantInfosMediumState extends State<PlantInfosMedium> {
+  String? medium;
 
   @override
   void initState() {
-    title = widget.title;
-    date = widget.date ?? DateTime.now();
+    medium = widget.medium;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return PlantInfosForm(
-      title: widget.title,
-      icon: widget.icon,
+      title: 'Medium',
+      icon: 'icon_medium.svg',
       onCancel: widget.onCancel,
       onSubmit: () {
-        widget.onSubmit(date);
+        widget.onSubmit(medium);
       },
       child: Column(
         children: <Widget>[
-          PlantInfosDateInput(
-            hintText: 'Since: ',
-            labelText: 'Pick a date',
-            date: date,
-            onChange: (DateTime? date) {
-              if (date == null) return;
+          PlantInfosDropdownInput(
+            labelText: 'Select medium',
+            hintText: 'Choose a medium',
+            items: [
+              ['SOIL', 'Soil'],
+              ['COCO', 'Coco'],
+              ['DWC', 'DWC'],
+              ['HYDRO', 'Hydro'],
+            ],
+            value: medium,
+            onChanged: (String? newValue) {
               setState(() {
-                this.date = date;
+                medium = newValue;
               });
             },
           ),
