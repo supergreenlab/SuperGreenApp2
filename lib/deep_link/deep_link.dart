@@ -45,13 +45,7 @@ class DeepLinkBlocStateMainNavigation extends DeepLinkBlocState {
 class DeepLinkBloc extends LegacyBloc<DeepLinkBlocEvent, DeepLinkBlocState> {
   late StreamSubscription _sub;
 
-  DeepLinkBloc() : super(DeepLinkBlocStateInit()) {
-    on<DeepLinkBlocEvent>((event, emit) async {
-      await emit.onEach(mapEventToState(event), onData: (DeepLinkBlocState state) {
-        emit(state);
-      });
-    }, transformer: sequential());
-  }
+  DeepLinkBloc() : super(DeepLinkBlocStateInit());
 
   Stream<DeepLinkBlocState> mapEventToState(DeepLinkBlocEvent event) async* {
     if (event is DeepLinkBlocEventInit) {

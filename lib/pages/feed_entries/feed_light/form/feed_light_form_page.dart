@@ -195,15 +195,13 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
               }
               body = BlocListener<DeviceReachableListenerBloc, DeviceReachableListenerBlocState>(
                   listener: (BuildContext context, DeviceReachableListenerBlocState listenerState) {
-                    if (state is FeedLightFormBlocStateLightsLoaded) {
-                      if (listenerState is DeviceReachableListenerBlocStateDeviceReachable &&
-                          listenerState.device.id == state.box.device) {
-                        if (_reachable == listenerState.reachable && _usingWifi == listenerState.usingWifi) return;
-                        setState(() {
-                          _reachable = listenerState.reachable;
-                          _usingWifi = listenerState.usingWifi;
-                        });
-                      }
+                    if (listenerState is DeviceReachableListenerBlocStateDeviceReachable &&
+                        listenerState.device.id == state.box.device) {
+                      if (_reachable == listenerState.reachable && _usingWifi == listenerState.usingWifi) return;
+                      setState(() {
+                        _reachable = listenerState.reachable;
+                        _usingWifi = listenerState.usingWifi;
+                      });
                     }
                   },
                   child: content);

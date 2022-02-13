@@ -204,9 +204,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
         child: BlocBuilder<FeedMediaFormBloc, FeedMediaFormBlocState>(
             bloc: BlocProvider.of<FeedMediaFormBloc>(context),
             buildWhen: (FeedMediaFormBlocState beforeState, FeedMediaFormBlocState afterState) {
-              return afterState is FeedMediaFormBlocStateLoading ||
-                  afterState is FeedMediaFormBlocStateDone ||
-                  afterState is FeedMediaFormBlocState;
+              return afterState is FeedMediaFormBlocStateLoading || afterState is FeedMediaFormBlocStateDone;
             },
             builder: (context, state) {
               String title = '🧐';

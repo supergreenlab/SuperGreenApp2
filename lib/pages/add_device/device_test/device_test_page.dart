@@ -124,7 +124,7 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
               millis -= 100;
             });
           });
-        } else if (state is DeviceTestBlocState && timer != null) {
+        } else if (timer != null) {
           timer?.cancel();
           timer = null;
         }

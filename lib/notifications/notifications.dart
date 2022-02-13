@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/notifications/local_notifications.dart';
 import 'package:super_green_app/notifications/model.dart';
 import 'package:super_green_app/notifications/remote_notifications.dart';
@@ -116,7 +117,7 @@ class NotificationsBlocStateRequestPermission extends NotificationsBlocState {
   List<Object> get props => [rand];
 }
 
-class NotificationsBloc extends Bloc<NotificationsBlocEvent, NotificationsBlocState> {
+class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, NotificationsBlocState> {
   static late RemoteNotifications remoteNotifications;
   static late LocalNotifications localNotifications;
 

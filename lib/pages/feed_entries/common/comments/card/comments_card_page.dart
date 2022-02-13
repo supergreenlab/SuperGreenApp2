@@ -17,7 +17,6 @@
  */
 
 import 'package:animated_size_and_fade/animated_size_and_fade.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';

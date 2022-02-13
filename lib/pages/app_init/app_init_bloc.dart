@@ -23,7 +23,6 @@ import 'package:super_green_app/misc/bloc.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,7 +32,6 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
-import 'package:super_green_app/misc/bloc.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 
