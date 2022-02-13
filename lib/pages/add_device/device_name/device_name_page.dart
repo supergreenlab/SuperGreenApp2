@@ -16,12 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_name/device_name_bloc.dart';
@@ -76,15 +78,15 @@ class DeviceNamePage extends TraceableStatefulWidget {
 class DeviceNamePageState extends State<DeviceNamePage> {
   final _nameController = TextEditingController();
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  late int _listener;
+  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
   @protected
   void initState() {
     super.initState();
-    _listener = _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
+    _listener = _keyboardVisibility.onChange.listen(
+      (bool visible) {
         setState(() {
           _keyboardVisible = visible;
         });
@@ -209,7 +211,7 @@ class DeviceNamePageState extends State<DeviceNamePage> {
 
   @override
   void dispose() {
-    _keyboardVisibility.removeListener(_listener);
+    _listener.cancel();
     _nameController.dispose();
     super.dispose();
   }

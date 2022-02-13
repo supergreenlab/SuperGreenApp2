@@ -56,7 +56,7 @@ dependencies:
     path: ./vendor/flutter_speed_dial
   event_bus:
   video_player:
-  keyboard_visibility:
+  flutter_keyboard_visibility:
   video_thumbnail:
   flutter_localizations:
     sdk: flutter

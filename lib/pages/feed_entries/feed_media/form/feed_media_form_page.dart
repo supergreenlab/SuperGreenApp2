@@ -22,10 +22,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n/common.dart';
@@ -149,15 +149,15 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
 
   FeedMediaDraft? draft;
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  late int _listener;
+  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
   @protected
   void initState() {
     super.initState();
-    _listener = _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
+    _listener = _keyboardVisibility.onChange.listen(
+      (bool visible) {
         setState(() {
           _keyboardVisible = visible;
         });
@@ -448,7 +448,7 @@ class _FeedMediaFormPageState extends State<FeedMediaFormPage> {
 
   @override
   void dispose() {
-    _keyboardVisibility.removeListener(_listener);
+    _listener.cancel();
     _textController.dispose();
     super.dispose();
   }

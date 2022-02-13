@@ -20,9 +20,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
@@ -100,15 +100,15 @@ class CreatePlantPageState extends State<CreatePlantPage> {
   final _nameController = TextEditingController();
   bool _isSingle = true;
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  late int _listener;
+  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
   @protected
   void initState() {
     super.initState();
-    _listener = _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
+    _listener = _keyboardVisibility.onChange.listen(
+      (bool visible) {
         setState(() {
           _keyboardVisible = visible;
         });
@@ -256,7 +256,7 @@ class CreatePlantPageState extends State<CreatePlantPage> {
 
   @override
   void dispose() {
-    _keyboardVisibility.removeListener(_listener);
+    _listener.cancel();
     _nameController.dispose();
     super.dispose();
   }
