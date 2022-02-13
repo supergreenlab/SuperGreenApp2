@@ -20,7 +20,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
@@ -203,7 +203,7 @@ class TowelieBlocStateHelperPop extends TowelieBlocState {
   List<Object> get props => [rand, settings];
 }
 
-class TowelieBloc extends Bloc<TowelieBlocEvent, TowelieBlocState> {
+class TowelieBloc extends LegacyBloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
     TowelieActionAppInit(),
     TowelieActionPlantCreated(),

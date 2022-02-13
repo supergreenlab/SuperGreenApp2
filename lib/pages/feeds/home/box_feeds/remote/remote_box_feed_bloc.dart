@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class RemoteBoxFeedBlocEvent extends Equatable {}
@@ -30,7 +30,7 @@ class RemoteBoxFeedBlocStateInit extends RemoteBoxFeedBlocState {
 }
 
 class RemoteBoxFeedBloc
-    extends Bloc<RemoteBoxFeedBlocEvent, RemoteBoxFeedBlocState> {
+    extends LegacyBloc<RemoteBoxFeedBlocEvent, RemoteBoxFeedBlocState> {
   MainNavigateToRemoteBoxEvent args;
 
   RemoteBoxFeedBloc(this.args) : super(RemoteBoxFeedBlocStateInit());

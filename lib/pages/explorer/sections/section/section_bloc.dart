@@ -20,7 +20,7 @@ import 'dart:async';
 
 import 'package:hive/hive.dart' as hive;
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 
@@ -72,7 +72,7 @@ class SectionBlocStateNotLogged extends SectionBlocState {
   List<Object> get props => [];
 }
 
-abstract class SectionBloc<ItemType> extends Bloc<SectionBlocEvent, SectionBlocState> {
+abstract class SectionBloc<ItemType> extends LegacyBloc<SectionBlocEvent, SectionBlocState> {
   StreamSubscription<hive.BoxEvent>? appDataStream;
 
   SectionBloc() : super(SectionBlocStateInit()) {

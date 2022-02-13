@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class ProductTypeBlocEvent extends Equatable {}
@@ -29,7 +29,7 @@ class ProductTypeBlocStateInit extends ProductTypeBlocState {
   List<Object> get props => [];
 }
 
-class ProductTypeBloc extends Bloc<ProductTypeBlocEvent, ProductTypeBlocState> {
+class ProductTypeBloc extends LegacyBloc<ProductTypeBlocEvent, ProductTypeBlocState> {
   final MainNavigateToProductTypeEvent args;
 
   ProductTypeBloc(this.args) : super(ProductTypeBlocStateInit());

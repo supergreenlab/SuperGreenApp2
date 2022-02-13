@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
@@ -67,7 +67,7 @@ class SettingsPlantBlocStateError extends SettingsPlantBlocState {
   List<Object> get props => [message];
 }
 
-class SettingsPlantBloc extends Bloc<SettingsPlantBlocEvent, SettingsPlantBlocState> {
+class SettingsPlantBloc extends LegacyBloc<SettingsPlantBlocEvent, SettingsPlantBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsPlant args;
   late Plant plant;

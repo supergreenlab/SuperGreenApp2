@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -75,7 +75,7 @@ class SettingsDevicesBlocStateLoaded extends SettingsDevicesBlocState {
   List<Object> get props => [devices];
 }
 
-class SettingsDevicesBloc extends Bloc<SettingsDevicesBlocEvent, SettingsDevicesBlocState> {
+class SettingsDevicesBloc extends LegacyBloc<SettingsDevicesBlocEvent, SettingsDevicesBlocState> {
   late List<Device> devices;
   StreamSubscription<List<Device>>? _devicesStream;
 

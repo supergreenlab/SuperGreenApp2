@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -109,7 +109,7 @@ class HomeNavigatorState extends Equatable {
   List<Object> get props => [index];
 }
 
-class HomeNavigatorBloc extends Bloc<HomeNavigatorEvent, HomeNavigatorState> {
+class HomeNavigatorBloc extends LegacyBloc<HomeNavigatorEvent, HomeNavigatorState> {
   //ignore: unused_field
   final MainNavigateToHomeEvent args;
   final GlobalKey<NavigatorState> _navigatorKey;

@@ -20,7 +20,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/services/models/alerts.dart';
@@ -91,7 +91,7 @@ class SettingsPlantAlertsBlocStateLoading extends SettingsPlantAlertsBlocState {
   List<Object> get props => [];
 }
 
-class SettingsPlantAlertsBloc extends Bloc<SettingsPlantAlertsBlocEvent, SettingsPlantAlertsBlocState> {
+class SettingsPlantAlertsBloc extends LegacyBloc<SettingsPlantAlertsBlocEvent, SettingsPlantAlertsBlocState> {
   final MainNavigateToSettingsPlantAlerts args;
 
   StreamSubscription<Device>? deviceSubscription;

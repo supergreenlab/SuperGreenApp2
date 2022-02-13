@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -75,7 +75,7 @@ class SettingsBoxesBlocStateLoaded extends SettingsBoxesBlocState {
   List<Object> get props => [boxes];
 }
 
-class SettingsBoxesBloc extends Bloc<SettingsBoxesBlocEvent, SettingsBoxesBlocState> {
+class SettingsBoxesBloc extends LegacyBloc<SettingsBoxesBlocEvent, SettingsBoxesBlocState> {
   late List<Box> _boxes;
   StreamSubscription<List<Box>>? _boxesStream;
 

@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 
 abstract class PlantStatusBlocEvent extends Equatable {}
 
@@ -58,7 +58,7 @@ class PlantStatusBlocStateLoaded extends PlantStatusBlocState {
   List<Object?> get props => throw [temp, humidity, lastWatering, ventilation, light, onDuration, alerts];
 }
 
-class PlantStatusBloc extends Bloc<PlantStatusBlocEvent, PlantStatusBlocState> {
+class PlantStatusBloc extends LegacyBloc<PlantStatusBlocEvent, PlantStatusBlocState> {
   PlantStatusBloc() : super(PlantStatusBlocStateInit());
 
   @override

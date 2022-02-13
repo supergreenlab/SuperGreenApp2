@@ -19,7 +19,7 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -98,7 +98,7 @@ class DeviceWifiBlocStateDone extends DeviceWifiBlocState {
   List<Object> get props => [];
 }
 
-class DeviceWifiBloc extends Bloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
+class DeviceWifiBloc extends LegacyBloc<DeviceWifiBlocEvent, DeviceWifiBlocState> {
   final MainNavigateToDeviceWifiEvent args;
 
   DeviceWifiBloc(this.args) : super(DeviceWifiBlocState());

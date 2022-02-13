@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
@@ -111,7 +111,7 @@ class FeedNutrientMixFormBlocStateDone extends FeedNutrientMixFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedNutrientMixFormBloc extends Bloc<FeedNutrientMixFormBlocEvent, FeedNutrientMixFormBlocState> {
+class FeedNutrientMixFormBloc extends LegacyBloc<FeedNutrientMixFormBlocEvent, FeedNutrientMixFormBlocState> {
   final MainNavigateToFeedNutrientMixFormEvent args;
 
   List<FeedNutrientMixParams> lastNutrientMixParams = [];

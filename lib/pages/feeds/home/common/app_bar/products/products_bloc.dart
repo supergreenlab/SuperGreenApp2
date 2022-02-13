@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
@@ -63,7 +63,7 @@ class ProductsBlocStateLoaded extends ProductsBlocState {
   List<Object> get props => [products];
 }
 
-class ProductsBloc extends Bloc<ProductsBlocEvent, ProductsBlocState> {
+class ProductsBloc extends LegacyBloc<ProductsBlocEvent, ProductsBlocState> {
   final ProductsBlocDelegate delegate;
 
   ProductsBloc(this.delegate) : super(ProductsBlocStateLoading()) {

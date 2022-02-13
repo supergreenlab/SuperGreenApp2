@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -60,7 +60,7 @@ class DeviceNameBlocStateDone extends DeviceNameBlocState {
       : super(device);
 }
 
-class DeviceNameBloc extends Bloc<DeviceNameBlocEvent, DeviceNameBlocState> {
+class DeviceNameBloc extends LegacyBloc<DeviceNameBlocEvent, DeviceNameBlocState> {
   final MainNavigateToDeviceNameEvent args;
 
   DeviceNameBloc(this.args) : super(DeviceNameBlocState(args.device));

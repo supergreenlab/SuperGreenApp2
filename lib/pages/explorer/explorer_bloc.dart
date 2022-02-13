@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -75,7 +75,7 @@ class ExplorerBlocStateLoaded extends ExplorerBlocState {
   List<Object> get props => [loggedIn];
 }
 
-class ExplorerBloc extends Bloc<ExplorerBlocEvent, ExplorerBlocState> {
+class ExplorerBloc extends LegacyBloc<ExplorerBlocEvent, ExplorerBlocState> {
   ExplorerBloc() : super(ExplorerBlocStateInit()) {
     add(ExplorerBlocEventInit());
   }

@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -55,7 +55,7 @@ class HomeBlocStateLoaded extends HomeBlocState {
   List<Object> get props => [hasPending];
 }
 
-class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
+class HomeBloc extends LegacyBloc<HomeBlocEvent, HomeBlocState> {
   StreamSubscription<List<GetPendingFeedsResult>>? _pendingStream;
 
   HomeBloc() : super(HomeBlocStateInit()) {

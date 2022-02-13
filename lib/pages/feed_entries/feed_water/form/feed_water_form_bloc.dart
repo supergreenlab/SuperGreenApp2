@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
@@ -61,7 +61,7 @@ class FeedWaterFormBlocStateDone extends FeedWaterFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedWaterFormBloc extends Bloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
+class FeedWaterFormBloc extends LegacyBloc<FeedWaterFormBlocEvent, FeedWaterFormBlocState> {
   final MainNavigateToFeedWaterFormEvent args;
 
   FeedWaterFormBloc(this.args) : super(FeedWaterFormBlocState());

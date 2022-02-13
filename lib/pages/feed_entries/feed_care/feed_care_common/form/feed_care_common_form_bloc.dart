@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
@@ -106,7 +106,7 @@ class FeedCareCommonFormBlocStateDone extends FeedCareCommonFormBlocState {
   FeedCareCommonFormBlocStateDone(this.plant, this.feedEntry);
 }
 
-abstract class FeedCareCommonFormBloc extends Bloc<FeedCareCommonFormBlocEvent, FeedCareCommonFormBlocState> {
+abstract class FeedCareCommonFormBloc extends LegacyBloc<FeedCareCommonFormBlocEvent, FeedCareCommonFormBlocState> {
   final MainNavigateToFeedCareCommonFormEvent args;
 
   FeedCareCommonFormBloc(this.args) : super(FeedCareCommonFormBlocState()) {

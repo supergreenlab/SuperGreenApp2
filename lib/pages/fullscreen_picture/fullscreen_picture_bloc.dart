@@ -20,7 +20,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class FullscreenPictureBlocEvent extends Equatable {}
@@ -36,7 +36,7 @@ class FullscreenPictureBlocState extends Equatable {
 }
 
 class FullscreenPictureBloc
-    extends Bloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
+    extends LegacyBloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
   final MainNavigateToFullscreenPicture args;
 
   FullscreenPictureBloc(this.args) : super(FullscreenPictureBlocState(args.id, args.image));

@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:image/image.dart';
@@ -84,7 +84,7 @@ class CaptureBlocStateDone extends CaptureBlocState {
   List<Object?> get props => [...super.props, feedMedias];
 }
 
-class CaptureBloc extends Bloc<CaptureBlocEvent, CaptureBlocState> {
+class CaptureBloc extends LegacyBloc<CaptureBlocEvent, CaptureBlocState> {
   final MainNavigateToImageCaptureEvent args;
 
   CaptureBloc(this.args) : super(CaptureBlocState(args.videoEnabled, args.pickerEnabled, args.overlayPath)) {

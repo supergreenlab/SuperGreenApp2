@@ -19,7 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -58,7 +58,7 @@ class TipBlocStateLoaded extends TipBlocState {
   List<Object?> get props => [nextRoute, tips];
 }
 
-class TipBloc extends Bloc<TipBlocEvent, TipBlocState> {
+class TipBloc extends LegacyBloc<TipBlocEvent, TipBlocState> {
   final MainNavigateToTipEvent args;
 
   TipBloc(this.args) : super(TipBlocStateInit(args.nextRoute)) {

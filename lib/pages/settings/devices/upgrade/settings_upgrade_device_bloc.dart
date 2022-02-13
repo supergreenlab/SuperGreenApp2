@@ -21,7 +21,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
@@ -90,7 +90,7 @@ class SettingsUpgradeDeviceBlocStateUpgradeDone extends SettingsUpgradeDeviceBlo
   List<Object> get props => [];
 }
 
-class SettingsUpgradeDeviceBloc extends Bloc<SettingsUpgradeDeviceBlocEvent, SettingsUpgradeDeviceBlocState> {
+class SettingsUpgradeDeviceBloc extends LegacyBloc<SettingsUpgradeDeviceBlocEvent, SettingsUpgradeDeviceBlocState> {
   final MainNavigateToSettingsUpgradeDevice args;
 
   HttpServer? server;

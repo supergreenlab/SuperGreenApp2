@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -83,7 +83,7 @@ class SelectDeviceBoxBlocStateDone extends SelectDeviceBoxBlocState {
   List<Object> get props => [box];
 }
 
-class SelectDeviceBoxBloc extends Bloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
+class SelectDeviceBoxBloc extends LegacyBloc<SelectDeviceBoxBlocEvent, SelectDeviceBoxBlocState> {
   final MainNavigateToSelectDeviceBoxEvent args;
 
   SelectDeviceBoxBloc(this.args) : super(SelectDeviceBoxBlocStateInit()) {

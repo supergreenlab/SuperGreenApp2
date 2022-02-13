@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -84,7 +84,7 @@ class SelectDeviceBlocStateDone extends SelectDeviceBlocState {
   List<Object> get props => [devices, device];
 }
 
-class SelectDeviceBloc extends Bloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
+class SelectDeviceBloc extends LegacyBloc<SelectDeviceBlocEvent, SelectDeviceBlocState> {
   List<Device> _devices = [];
   StreamSubscription<List<Device>>? _stream;
 

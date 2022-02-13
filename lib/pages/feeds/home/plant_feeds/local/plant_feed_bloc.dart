@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
@@ -79,7 +79,7 @@ class PlantFeedBlocStatePlantRemoved extends PlantFeedBlocState {
   List<Object> get props => [];
 }
 
-class PlantFeedBloc extends Bloc<PlantFeedBlocEvent, PlantFeedBlocState> {
+class PlantFeedBloc extends LegacyBloc<PlantFeedBlocEvent, PlantFeedBlocState> {
   final HomeNavigateToPlantFeedEvent args;
 
   late Box? box;

@@ -19,7 +19,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -90,7 +90,7 @@ class SettingsDeviceAuthBlocStateDoneAuth extends SettingsDeviceAuthBlocState {
   List<Object> get props => [device];
 }
 
-class SettingsDeviceAuthBloc extends Bloc<SettingsDeviceAuthBlocEvent, SettingsDeviceAuthBlocState> {
+class SettingsDeviceAuthBloc extends LegacyBloc<SettingsDeviceAuthBlocEvent, SettingsDeviceAuthBlocState> {
   final MainNavigateToSettingsDeviceAuth args;
 
   SettingsDeviceAuthBloc(this.args) : super(SettingsDeviceAuthBlocStateInit()) {

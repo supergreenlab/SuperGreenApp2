@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
@@ -120,7 +120,7 @@ class FeedMediaFormBlocStateDone extends FeedMediaFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedMediaFormBloc extends Bloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
+class FeedMediaFormBloc extends LegacyBloc<FeedMediaFormBlocEvent, FeedMediaFormBlocState> {
   final MainNavigateToFeedMediaFormEvent args;
 
   int get feedID => args.plant?.feed ?? args.box!.feed!;

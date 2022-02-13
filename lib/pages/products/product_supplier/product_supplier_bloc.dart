@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -49,7 +49,7 @@ class ProductSupplierBlocStateLoaded extends ProductSupplierBlocState {
 }
 
 class ProductSupplierBloc
-    extends Bloc<ProductSupplierBlocEvent, ProductSupplierBlocState> {
+    extends LegacyBloc<ProductSupplierBlocEvent, ProductSupplierBlocState> {
   final MainNavigateToProductSupplierEvent args;
 
   ProductSupplierBloc(this.args) : super(ProductSupplierBlocStateInit()) {

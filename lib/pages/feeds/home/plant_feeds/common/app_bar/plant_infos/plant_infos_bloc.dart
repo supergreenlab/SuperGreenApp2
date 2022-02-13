@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
@@ -103,7 +103,7 @@ class PlantInfosBlocStateLoaded extends PlantInfosBlocState {
   List<Object> get props => [plantInfos];
 }
 
-class PlantInfosBloc extends Bloc<PlantInfosBlocEvent, PlantInfosBlocState> {
+class PlantInfosBloc extends LegacyBloc<PlantInfosBlocEvent, PlantInfosBlocState> {
   final PlantInfosBlocDelegate delegate;
 
   PlantInfosBloc(this.delegate) : super(PlantInfosBlocStateLoading()) {

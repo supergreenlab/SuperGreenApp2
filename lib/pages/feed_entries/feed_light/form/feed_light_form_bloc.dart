@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
@@ -111,7 +111,7 @@ class FeedLightFormBlocStateDone extends FeedLightFormBlocState {
   List<Object?> get props => [feedEntry];
 }
 
-class FeedLightFormBloc extends Bloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
+class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightFormBlocState> {
   final MainNavigateToFeedLightFormEvent args;
 
   late Device device;

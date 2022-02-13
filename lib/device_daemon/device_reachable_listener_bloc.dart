@@ -21,7 +21,7 @@ import 'dart:math';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 // This classe mostly exist as a shitty retro-compatibility layer.
@@ -74,7 +74,7 @@ class DeviceReachableListenerBlocStateDeviceReachable extends DeviceReachableLis
   List<Object> get props => [rand, device, reachable, usingWifi];
 }
 
-class DeviceReachableListenerBloc extends Bloc<DeviceReachableListenerBlocEvent, DeviceReachableListenerBlocState> {
+class DeviceReachableListenerBloc extends LegacyBloc<DeviceReachableListenerBlocEvent, DeviceReachableListenerBlocState> {
   final DeviceNavigationArgHolder deviceArgHolder;
 
   late Device device;

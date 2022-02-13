@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -32,7 +32,7 @@ class AddDeviceBlocState extends Equatable {
   List<Object> get props => [loggedIn];
 }
 
-class AddDeviceBloc extends Bloc<AddDeviceBlocEvent, AddDeviceBlocState> {
+class AddDeviceBloc extends LegacyBloc<AddDeviceBlocEvent, AddDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToAddDeviceEvent args;
 

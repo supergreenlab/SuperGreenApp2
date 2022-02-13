@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class SGLFeedBlocEvent extends Equatable {}
@@ -31,7 +31,7 @@ class SGLFeedBlocStateInit extends SGLFeedBlocState {
 }
 
 class SGLFeedBloc
-    extends Bloc<SGLFeedBlocEvent, SGLFeedBlocState> {
+    extends LegacyBloc<SGLFeedBlocEvent, SGLFeedBlocState> {
 
   SGLFeedBloc() : super(SGLFeedBlocStateInit());
 

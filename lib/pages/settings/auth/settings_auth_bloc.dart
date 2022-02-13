@@ -19,7 +19,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:image/image.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
@@ -95,7 +95,7 @@ class SettingsAuthBlocStateError extends SettingsAuthBlocState {
   List<Object> get props => [message];
 }
 
-class SettingsAuthBloc extends Bloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
+class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsAuth args;
   late bool _isAuth;

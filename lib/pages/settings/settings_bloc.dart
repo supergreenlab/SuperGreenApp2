@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 
 abstract class SettingsBlocEvent extends Equatable {}
@@ -40,7 +40,7 @@ class SettingsBlocState extends Equatable {
   List<Object> get props => [freedomUnits];
 }
 
-class SettingsBloc extends Bloc<SettingsBlocEvent, SettingsBlocState> {
+class SettingsBloc extends LegacyBloc<SettingsBlocEvent, SettingsBlocState> {
   
   SettingsBloc() : super(SettingsBlocState(AppDB().getAppData().freedomUnits));
 

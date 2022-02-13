@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -35,7 +35,7 @@ class CreateBoxBlocStateDone extends CreateBoxBlocState {
   List<Object> get props => [box];
 }
 
-class CreateBoxBloc extends Bloc<CreateBoxBlocEvent, CreateBoxBlocState> {
+class CreateBoxBloc extends LegacyBloc<CreateBoxBlocEvent, CreateBoxBlocState> {
   //ignore: unused_field
   final MainNavigateToCreateBoxEvent args;
 

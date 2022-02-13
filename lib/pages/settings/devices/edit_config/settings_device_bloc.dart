@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -100,7 +100,7 @@ class SettingsDeviceBlocStateDone extends SettingsDeviceBlocState {
   List<Object> get props => [device];
 }
 
-class SettingsDeviceBloc extends Bloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
+class SettingsDeviceBloc extends LegacyBloc<SettingsDeviceBlocEvent, SettingsDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsDevice args;
   late Device device;

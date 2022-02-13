@@ -21,7 +21,7 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
@@ -69,7 +69,7 @@ class SyncerBlocStateSyncing extends SyncerBlocState {
   List<Object> get props => [syncing, text];
 }
 
-class SyncerBloc extends Bloc<SyncerBlocEvent, SyncerBlocState> {
+class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   late StreamSubscription<ConnectivityResult> _connectivity;
 
   Timer? _timerOut;

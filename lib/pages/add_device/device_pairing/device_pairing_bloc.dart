@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -78,7 +78,7 @@ class DevicePairingBlocStateDone extends DevicePairingBlocState {
   List<Object> get props => [device];
 }
 
-class DevicePairingBloc extends Bloc<DevicePairingBlocEvent, DevicePairingBlocState> {
+class DevicePairingBloc extends LegacyBloc<DevicePairingBlocEvent, DevicePairingBlocState> {
   final MainNavigateToDevicePairingEvent args;
 
   DevicePairingBloc(this.args) : super(DevicePairingBlocStateInit()) {

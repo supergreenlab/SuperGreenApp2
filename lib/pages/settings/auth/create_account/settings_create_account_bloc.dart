@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
@@ -53,7 +53,7 @@ class SettingsCreateAccountBlocStateError extends SettingsCreateAccountBlocState
   List<Object> get props => [];
 }
 
-class SettingsCreateAccountBloc extends Bloc<SettingsCreateAccountBlocEvent, SettingsCreateAccountBlocState> {
+class SettingsCreateAccountBloc extends LegacyBloc<SettingsCreateAccountBlocEvent, SettingsCreateAccountBlocState> {
   //ignore: unused_field
   final MainNavigateToSettingsCreateAccount args;
   late bool _isAuth;

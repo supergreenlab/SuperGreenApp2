@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 
 abstract class NotificationRequestBlocEvent extends Equatable {}
 
@@ -43,7 +43,7 @@ class NotificationRequestBlocStateLoaded extends NotificationRequestBlocState {
   List<Object> get props => [];
 }
 
-class NotificationRequestBloc extends Bloc<NotificationRequestBlocEvent, NotificationRequestBlocState> {
+class NotificationRequestBloc extends LegacyBloc<NotificationRequestBlocEvent, NotificationRequestBlocState> {
   final Function onClose;
 
   NotificationRequestBloc({required this.onClose}) : super(NotificationRequestBlocStateInit()) {

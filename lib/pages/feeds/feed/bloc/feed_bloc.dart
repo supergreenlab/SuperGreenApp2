@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -234,7 +234,7 @@ class FeedBlocStateOpenComment extends FeedBlocState {
   List<Object?> get props => [entry, commentID, replyTo];
 }
 
-class FeedBloc extends Bloc<FeedBlocEvent, FeedBlocState> {
+class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
   FeedBlocDelegate delegate;
   bool initialLoad = true;
   List<FeedEntryState> entries = [];

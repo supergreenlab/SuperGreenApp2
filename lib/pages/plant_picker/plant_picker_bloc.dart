@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
@@ -52,7 +52,7 @@ class PlantPickerBlocStateLoaded extends PlantPickerBlocState {
   List<Object?> get props => [title, boxes, plants, selectedPlants];
 }
 
-class PlantPickerBloc extends Bloc<PlantPickerBlocEvent, PlantPickerBlocState> {
+class PlantPickerBloc extends LegacyBloc<PlantPickerBlocEvent, PlantPickerBlocState> {
   final MainNavigateToPlantPickerEvent args;
 
   PlantPickerBloc(this.args) : super(PlantPickerBlocStateInit()) {

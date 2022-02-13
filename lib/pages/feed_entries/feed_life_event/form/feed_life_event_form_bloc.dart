@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/feeds/plant_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -65,7 +65,7 @@ class FeedLifeEventFormBlocStateDone extends FeedLifeEventFormBlocState {
   FeedLifeEventFormBlocStateDone(PlantPhases phase) : super(phase);
 }
 
-class FeedLifeEventFormBloc extends Bloc<FeedLifeEventFormBlocEvent, FeedLifeEventFormBlocState> {
+class FeedLifeEventFormBloc extends LegacyBloc<FeedLifeEventFormBlocEvent, FeedLifeEventFormBlocState> {
   final MainNavigateToFeedLifeEventFormEvent _args;
 
   FeedLifeEventFormBloc(this._args) : super(FeedLifeEventFormBlocStateInit(_args.phase)) {

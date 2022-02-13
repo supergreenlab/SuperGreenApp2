@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -68,7 +68,7 @@ class NewDeviceBlocStateConnectionToSSIDSuccess extends NewDeviceBlocState {
   List<Object> get props => [popOnComplete];
 }
 
-class NewDeviceBloc extends Bloc<NewDeviceBlocEvent, NewDeviceBlocState> {
+class NewDeviceBloc extends LegacyBloc<NewDeviceBlocEvent, NewDeviceBlocState> {
   //ignore: unused_field
   MainNavigateToNewDeviceEvent args;
 

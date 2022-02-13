@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -56,7 +56,7 @@ class PublicPlantBlocStateInit extends PublicPlantBlocState {
       : super(id, feedEntryID, name, commentID, replyTo, follows, nFollows);
 }
 
-class PublicPlantBloc extends Bloc<PublicPlantBlocEvent, PublicPlantBlocState> {
+class PublicPlantBloc extends LegacyBloc<PublicPlantBlocEvent, PublicPlantBlocState> {
   final MainNavigateToPublicPlant args;
 
   PublicPlantBloc(this.args)

@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/feeds/feed_helper.dart';
@@ -98,7 +98,7 @@ class FeedScheduleFormBlocStateDone extends FeedScheduleFormBlocState {
   List<Object> get props => [];
 }
 
-class FeedScheduleFormBloc extends Bloc<FeedScheduleFormBlocEvent, FeedScheduleFormBlocState> {
+class FeedScheduleFormBloc extends LegacyBloc<FeedScheduleFormBlocEvent, FeedScheduleFormBlocState> {
   Device? device;
 
   String schedule = '';

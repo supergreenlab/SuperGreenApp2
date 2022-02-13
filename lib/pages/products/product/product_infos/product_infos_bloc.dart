@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -33,7 +33,7 @@ class ProductInfosBlocState extends Equatable {
 }
 
 class ProductInfosBloc
-    extends Bloc<ProductInfosBlocEvent, ProductInfosBlocState> {
+    extends LegacyBloc<ProductInfosBlocEvent, ProductInfosBlocState> {
   final MainNavigateToProductInfosEvent args;
 
   ProductInfosBloc(this.args)

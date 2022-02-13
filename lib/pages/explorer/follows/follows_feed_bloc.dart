@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class FollowsFeedBlocEvent extends Equatable {}
@@ -39,7 +39,7 @@ class FollowsFeedBlocStateLoaded extends FollowsFeedBlocState {
   List<Object> get props => [];
 }
 
-class FollowsFeedBloc extends Bloc<FollowsFeedBlocEvent, FollowsFeedBlocState> {
+class FollowsFeedBloc extends LegacyBloc<FollowsFeedBlocEvent, FollowsFeedBlocState> {
   final MainNavigateToFollowsFeedEvent args;
 
   FollowsFeedBloc(this.args) : super(FollowsFeedBlocStateInit()) {

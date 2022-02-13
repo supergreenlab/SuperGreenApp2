@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -63,7 +63,7 @@ class AuthModalBlocStateDone extends AuthModalBlocState {
   List<Object> get props => [device];
 }
 
-class AuthModalBloc extends Bloc<AuthModalBlocEvent, AuthModalBlocState> {
+class AuthModalBloc extends LegacyBloc<AuthModalBlocEvent, AuthModalBlocState> {
   final Device device;
   final Function onClose;
 

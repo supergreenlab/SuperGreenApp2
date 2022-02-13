@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class PlaybackBlocEvent extends Equatable {}
@@ -45,7 +45,7 @@ class PlaybackBlocStateInit extends PlaybackBlocState {
       : super(filePath, isVideo, cancelButton, okButton, overlayPath);
 }
 
-class PlaybackBloc extends Bloc<PlaybackBlocEvent, PlaybackBlocState> {
+class PlaybackBloc extends LegacyBloc<PlaybackBlocEvent, PlaybackBlocState> {
   final MainNavigateToImageCapturePlaybackEvent _args;
 
   static bool _isVideo(String filePath) => filePath.endsWith('mp4');

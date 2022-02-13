@@ -18,7 +18,7 @@
 
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -59,7 +59,7 @@ class PlantDrawerBlocStatePlantListUpdated extends PlantDrawerBlocState {
   List<Object> get props => [plants, boxes, hasPending];
 }
 
-class PlantDrawerBloc extends Bloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
+class PlantDrawerBloc extends LegacyBloc<PlantDrawerBlocEvent, PlantDrawerBlocState> {
   List<Plant> _plants = [];
   List<Box> _boxes = [];
   List<GetPendingFeedsResult> _hasPending = [];

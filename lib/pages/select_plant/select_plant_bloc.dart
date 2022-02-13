@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -46,7 +46,7 @@ class SelectPlantBlocStateLoaded extends SelectPlantBlocState {
   List<Object> get props => [title, plants, boxes];
 }
 
-class SelectPlantBloc extends Bloc<SelectPlantBlocEvent, SelectPlantBlocState> {
+class SelectPlantBloc extends LegacyBloc<SelectPlantBlocEvent, SelectPlantBlocState> {
   final MainNavigateToSelectPlantEvent args;
 
   SelectPlantBloc(this.args) : super(SelectPlantBlocStateInit()) {

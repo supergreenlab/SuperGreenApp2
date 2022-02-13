@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/pages/explorer/models/plants.dart';
 
@@ -62,7 +62,7 @@ class SearchBlocStateLoaded extends SearchBlocState {
   List<Object?> get props => [plants, eof, offset, search];
 }
 
-class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
+class SearchBloc extends LegacyBloc<SearchBlocEvent, SearchBlocState> {
   SearchBloc() : super(SearchBlocStateInit()) {
     add(SearchBlocEventInit());
   }

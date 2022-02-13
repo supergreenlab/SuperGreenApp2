@@ -20,12 +20,13 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
@@ -614,7 +615,7 @@ class MainNavigatorActionPopToRoot extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
-class MainNavigatorBloc extends Bloc<MainNavigatorEvent, dynamic> {
+class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
   final GlobalKey<NavigatorState> _navigatorKey;
   MainNavigatorBloc(this._navigatorKey) : super(0);
 

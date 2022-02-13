@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
@@ -55,7 +55,7 @@ class SelectBoxBlocStateLoaded extends SelectBoxBlocState {
   List<Object> get props => [boxes];
 }
 
-class SelectBoxBloc extends Bloc<SelectBoxBlocEvent, SelectBoxBlocState> {
+class SelectBoxBloc extends LegacyBloc<SelectBoxBlocEvent, SelectBoxBlocState> {
   //ignore: unused_field
   MainNavigateToSelectBoxEvent args;
 

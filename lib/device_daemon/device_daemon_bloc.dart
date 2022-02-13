@@ -21,7 +21,7 @@ import 'dart:math';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/devices/websocket.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
@@ -73,7 +73,7 @@ class DeviceDaemonBlocStateRequiresLogin extends DeviceDaemonBlocState {
   List<Object> get props => [device, rand];
 }
 
-class DeviceDaemonBloc extends Bloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
+class DeviceDaemonBloc extends LegacyBloc<DeviceDaemonBlocEvent, DeviceDaemonBlocState> {
   StreamSubscription<ConnectivityResult>? _connectivity;
 
   Timer? _timer;

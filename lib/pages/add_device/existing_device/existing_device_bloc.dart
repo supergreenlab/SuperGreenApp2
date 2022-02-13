@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
@@ -57,7 +57,7 @@ class ExistingDeviceBlocStateNotFound extends ExistingDeviceBlocState {
   ExistingDeviceBlocStateNotFound();
 }
 
-class ExistingDeviceBloc extends Bloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
+class ExistingDeviceBloc extends LegacyBloc<ExistingDeviceBlocEvent, ExistingDeviceBlocState> {
   //ignore: unused_field
   final MainNavigateToExistingDeviceEvent args;
 

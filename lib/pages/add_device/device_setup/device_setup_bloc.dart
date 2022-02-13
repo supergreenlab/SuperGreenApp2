@@ -19,7 +19,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -107,7 +107,7 @@ class DeviceSetupBlocStateDone extends DeviceSetupBlocState {
   List<Object> get props => [device];
 }
 
-class DeviceSetupBloc extends Bloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
+class DeviceSetupBloc extends LegacyBloc<DeviceSetupBlocEvent, DeviceSetupBlocState> {
   final MainNavigateToDeviceSetupEvent args;
 
   DeviceSetupBloc(this.args) : super(DeviceSetupBlocState(0)) {

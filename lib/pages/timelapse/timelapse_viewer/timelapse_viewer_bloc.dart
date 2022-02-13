@@ -18,7 +18,7 @@
 
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:moor/moor.dart';
@@ -68,7 +68,7 @@ class TimelapseViewerBlocStateLoaded extends TimelapseViewerBlocState {
   List<Object> get props => [plant, timelapses, images];
 }
 
-class TimelapseViewerBloc extends Bloc<TimelapseViewerBlocEvent, TimelapseViewerBlocState> {
+class TimelapseViewerBloc extends LegacyBloc<TimelapseViewerBlocEvent, TimelapseViewerBlocState> {
   final MainNavigateToTimelapseViewer args;
 
   TimelapseViewerBloc(this.args) : super(TimelapseViewerBlocStateInit()) {

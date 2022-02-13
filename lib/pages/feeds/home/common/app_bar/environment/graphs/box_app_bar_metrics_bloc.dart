@@ -20,7 +20,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/time_series/time_series_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -58,7 +58,7 @@ class PlantFeedAppBarBlocStateLoaded extends PlantFeedAppBarBlocState {
   List<Object?> get props => [graphData, plant, box];
 }
 
-class BoxAppBarMetricsBloc extends Bloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
+class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFeedAppBarBlocState> {
   Timer? _timer;
   final Plant? plant;
   Box? box;

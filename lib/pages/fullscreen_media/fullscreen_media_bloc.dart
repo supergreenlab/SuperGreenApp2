@@ -19,7 +19,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class FullscreenMediaBlocEvent extends Equatable {}
@@ -50,7 +50,7 @@ class FullscreenMediaBlocStateInit extends FullscreenMediaBlocState {
       : super(thumbnailPath, filePath, isVideo, overlayPath, heroPath, sliderTitle);
 }
 
-class FullscreenMediaBloc extends Bloc<FullscreenMediaBlocEvent, FullscreenMediaBlocState> {
+class FullscreenMediaBloc extends LegacyBloc<FullscreenMediaBlocEvent, FullscreenMediaBlocState> {
   final MainNavigateToFullscreenMedia args;
 
   static bool _isVideo(String filePath) {

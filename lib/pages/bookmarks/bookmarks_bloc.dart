@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class BookmarksBlocEvent extends Equatable {}
@@ -39,7 +39,7 @@ class BookmarksBlocStateLoaded extends BookmarksBlocState {
   List<Object> get props => [];
 }
 
-class BookmarksBloc extends Bloc<BookmarksBlocEvent, BookmarksBlocState> {
+class BookmarksBloc extends LegacyBloc<BookmarksBlocEvent, BookmarksBlocState> {
   final MainNavigateToBookmarks args;
 
   BookmarksBloc(this.args) : super(BookmarksBlocStateInit()) {

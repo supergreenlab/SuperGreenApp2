@@ -24,7 +24,7 @@ import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
@@ -169,7 +169,7 @@ class CommentsFormBlocStateUser extends CommentsFormBlocState {
   List<Object> get props => [user];
 }
 
-class CommentsFormBloc extends Bloc<CommentsFormBlocEvent, CommentsFormBlocState> {
+class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
 
   StreamSubscription<hive.BoxEvent>? appDataStream;

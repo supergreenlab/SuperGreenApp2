@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -116,7 +116,7 @@ class SelectNewProductBlocStateDone extends SelectNewProductBlocState {
   List<Object> get props => [products];
 }
 
-class SelectNewProductBloc extends Bloc<SelectNewProductBlocEvent, SelectNewProductBlocState> {
+class SelectNewProductBloc extends LegacyBloc<SelectNewProductBlocEvent, SelectNewProductBlocState> {
   final MainNavigateToSelectNewProductEvent args;
 
   SelectNewProductBloc(this.args) : super(SelectNewProductBlocStateInit()) {
