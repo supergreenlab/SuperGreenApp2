@@ -224,9 +224,6 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
         },
         child: BlocBuilder<FeedCareCommonFormBloc, FeedCareCommonFormBlocState>(
             bloc: BlocProvider.of<FormBloc>(context),
-            buildWhen: (FeedCareCommonFormBlocState beforeState, FeedCareCommonFormBlocState afterState) {
-              return afterState is FeedCareCommonFormBlocStateLoading || afterState is FeedCareCommonFormBlocStateDone;
-            },
             builder: (context, state) {
               Widget body;
               if (state is FeedCareCommonFormBlocStateLoading) {
