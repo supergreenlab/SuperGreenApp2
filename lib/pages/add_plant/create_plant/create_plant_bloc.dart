@@ -22,6 +22,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/misc/bloc.dart';
 
 abstract class CreatePlantBlocEvent extends Equatable {}
 
@@ -49,7 +50,7 @@ class CreatePlantBlocStateDone extends CreatePlantBlocState {
   List<Object> get props => [plant, box];
 }
 
-class CreatePlantBloc extends Bloc<CreatePlantBlocEvent, CreatePlantBlocState> {
+class CreatePlantBloc extends LegacyBloc<CreatePlantBlocEvent, CreatePlantBlocState> {
   CreatePlantBloc() : super(CreatePlantBlocState());
 
   @override

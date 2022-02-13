@@ -5,7 +5,6 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,8 +84,7 @@ class MatomoTracker {
     _dispatcher = _MatomoDispatcher(url);
 
     // User agent
-    await FlutterUserAgent.init();
-    userAgent = FlutterUserAgent.webViewUserAgent;
+    userAgent = "SGL/4.2.0";
 
     // Screen Resolution
     width = window.physicalSize.width.toInt();

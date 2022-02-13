@@ -65,7 +65,7 @@ class GalleryWidgetItemState extends State<GalleryWidgetItem> {
                   // quarterTurns:
                   //     Platform.isIOS ? 0 : MediaPickerBuilder.orientationToQuarterTurns(widget.mediaFile.orientation),
                   child: Image.file(
-                    File(widget.mediaFile.thumbnailPath),
+                    File(widget.mediaFile.thumbnailPath!),
                     fit: BoxFit.cover,
                   ),
                 )

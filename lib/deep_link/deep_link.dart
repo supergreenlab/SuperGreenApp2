@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/misc/bloc.dart';
 import 'package:uni_links/uni_links.dart';
 
 abstract class DeepLinkBlocEvent extends Equatable {}
@@ -40,12 +42,17 @@ class DeepLinkBlocStateMainNavigation extends DeepLinkBlocState {
   List<Object> get props => [mainNavigatorEvent, rand];
 }
 
-class DeepLinkBloc extends Bloc<DeepLinkBlocEvent, DeepLinkBlocState> {
+class DeepLinkBloc extends LegacyBloc<DeepLinkBlocEvent, DeepLinkBlocState> {
   late StreamSubscription _sub;
 
-  DeepLinkBloc() : super(DeepLinkBlocStateInit());
+  DeepLinkBloc() : super(DeepLinkBlocStateInit()) {
+    on<DeepLinkBlocEvent>((event, emit) async {
+      await emit.onEach(mapEventToState(event), onData: (DeepLinkBlocState state) {
+        emit(state);
+      });
+    }, transformer: sequential());
+  }
 
-  @override
   Stream<DeepLinkBlocState> mapEventToState(DeepLinkBlocEvent event) async* {
     if (event is DeepLinkBlocEventInit) {
       Uri? initialUri = await getInitialUri();

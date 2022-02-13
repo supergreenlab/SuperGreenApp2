@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:super_green_app/data/logger/logger.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MapUtils {
-  static dynamic valuePath(Map<String, dynamic>? map, String path) {
-    List<String> pathElem = path.split('.');
-    dynamic value;
-    for (int i = 0; i < pathElem.length; ++i) {
-      try {
-        map = map?[pathElem[i]];
-        if (map == null) return null;
-      } catch (e, trace) {
-        Logger.logError(e, trace);
-      }
-      value = map?[pathElem[i]];
-    }
-    return value;
+abstract class LegacyBloc<Event, State> extends Bloc<Event, State> {
+  LegacyBloc(State initialState) : super(initialState) {
+    on<Event>((event, emit) async {
+      await emit.onEach(mapEventToState(event), onData: (State state) {
+        emit(state);
+      });
+    }, transformer: sequential());
   }
+
+  Stream<State> mapEventToState(Event event);
 }
