@@ -18,12 +18,15 @@
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 
 abstract class LegacyBloc<Event, State> extends Bloc<Event, State> {
   LegacyBloc(State initialState) : super(initialState) {
     on<Event>((event, emit) async {
       await emit.onEach(mapEventToState(event), onData: (State state) {
         emit(state);
+      }, onError: (e, trace) {
+        Logger.logError(e, trace);
       });
     }, transformer: sequential());
   }
