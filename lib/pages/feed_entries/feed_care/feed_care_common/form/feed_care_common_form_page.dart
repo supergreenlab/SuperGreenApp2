@@ -22,8 +22,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -174,8 +174,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
 
   bool _helpRequest = false;
 
-  KeyboardVisibilityNotification _keyboardVisibility = KeyboardVisibilityNotification();
-  late int _listener;
+  final KeyboardVisibilityController _keyboardVisibility = KeyboardVisibilityController();
+  late StreamSubscription<bool> _listener;
   bool _keyboardVisible = false;
 
   _FeedCareCommonFormPageState(this.title);
@@ -184,8 +184,8 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
   void initState() {
     super.initState();
 
-    _listener = _keyboardVisibility.addNewListener(
-      onChange: (bool visible) {
+    _listener = _keyboardVisibility.onChange.listen(
+      (bool visible) {
         setState(() {
           _keyboardVisible = visible;
         });
@@ -523,7 +523,7 @@ class _FeedCareCommonFormPageState<FormBloc extends FeedCareCommonFormBloc> exte
   @override
   void dispose() {
     _saveDraftTimer?.cancel();
-    _keyboardVisibility.removeListener(_listener);
+    _listener.cancel();
     _textController.dispose();
     super.dispose();
   }
