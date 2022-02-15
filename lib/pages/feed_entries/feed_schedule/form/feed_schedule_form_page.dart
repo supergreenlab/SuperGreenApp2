@@ -252,6 +252,7 @@ class _FeedScheduleFormPageState extends State<FeedScheduleFormPage> {
                           height: 0,
                           child: ElevatedButton(
                             style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.resolveWith((state) => Colors.grey),
                               elevation: MaterialStateProperty.resolveWith((state) => 0),
                               backgroundColor: MaterialStateProperty.resolveWith((state) => Colors.transparent),
                             ),
