@@ -164,7 +164,7 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
       }
       yield FeedLightFormBlocStateLoading();
       List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
-      late FeedEntry feedEntry;
+      FeedEntry? feedEntry;
       for (int i = 0; i < plants.length; ++i) {
         PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
         if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
