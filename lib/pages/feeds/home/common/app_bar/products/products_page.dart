@@ -25,6 +25,7 @@ import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
 import 'package:super_green_app/pages/products/product/product_category/product_categories.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -109,9 +110,9 @@ class _ProductsPageState extends State<ProductsPage> {
           bloc: BlocProvider.of<ProductsBloc>(context),
           builder: (BuildContext context, ProductsBlocState state) {
             if (state is ProductsBlocStateLoading) {
-              return _renderLoading(context, state);
+              return AppBarTab(child: _renderLoading(context, state));
             }
-            return _renderLoaded(context, state as ProductsBlocStateLoaded);
+            return AppBarTab(child: _renderLoaded(context, state as ProductsBlocStateLoaded));
           }),
     );
   }

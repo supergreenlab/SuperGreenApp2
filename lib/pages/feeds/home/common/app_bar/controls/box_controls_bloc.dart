@@ -17,32 +17,33 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
-abstract class PlantStatusBlocEvent extends Equatable {}
+abstract class BoxControlsBlocEvent extends Equatable {}
 
-class PlantStatusBlocEventInit extends PlantStatusBlocEvent {
+class BoxControlsBlocEventInit extends BoxControlsBlocEvent {
   @override
   List<Object?> get props => throw [];
 }
 
-class PlantStatusBlocEventLoaded extends PlantStatusBlocEvent {
-  final PlantStatusBlocStateLoaded state;
+class BoxControlsBlocEventLoaded extends BoxControlsBlocEvent {
+  final BoxControlsBlocStateLoaded state;
 
-  PlantStatusBlocEventLoaded(this.state);
+  BoxControlsBlocEventLoaded(this.state);
 
   @override
   List<Object?> get props => throw [state];
 }
 
-abstract class PlantStatusBlocState extends Equatable {}
+abstract class BoxControlsBlocState extends Equatable {}
 
-class PlantStatusBlocStateInit extends PlantStatusBlocState {
+class BoxControlsBlocStateInit extends BoxControlsBlocState {
   @override
   List<Object?> get props => throw [];
 }
 
-class PlantStatusBlocStateLoaded extends PlantStatusBlocState {
+class BoxControlsBlocStateLoaded extends BoxControlsBlocState {
   final int temp;
   final int humidity;
   final DateTime lastWatering;
@@ -51,20 +52,22 @@ class PlantStatusBlocStateLoaded extends PlantStatusBlocState {
   final int onDuration;
   final bool alerts;
 
-  PlantStatusBlocStateLoaded(
+  BoxControlsBlocStateLoaded(
       this.temp, this.humidity, this.lastWatering, this.ventilation, this.light, this.onDuration, this.alerts);
 
   @override
   List<Object?> get props => throw [temp, humidity, lastWatering, ventilation, light, onDuration, alerts];
 }
 
-class PlantStatusBloc extends LegacyBloc<PlantStatusBlocEvent, PlantStatusBlocState> {
-  PlantStatusBloc() : super(PlantStatusBlocStateInit());
+class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocState> {
+  final Box box;
+
+  BoxControlsBloc(this.box) : super(BoxControlsBlocStateInit());
 
   @override
-  Stream<PlantStatusBlocState> mapEventToState(PlantStatusBlocEvent event) async* {
-    if (event is PlantStatusBlocEventInit) {
-    } else if (event is PlantStatusBlocEventLoaded) {
+  Stream<BoxControlsBlocState> mapEventToState(BoxControlsBlocEvent event) async* {
+    if (event is BoxControlsBlocEventInit) {
+    } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;
     }
   }

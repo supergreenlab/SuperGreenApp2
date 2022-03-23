@@ -50,20 +50,13 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                 state.graphData[1].data.length == 0 &&
                 state.graphData[2].data.length == 0 &&
                 state.graphData[3].data.length == 0) {
-              body = Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.white60,
-                  border: Border.all(color: Color(0xffdedede), width: 1),
-                ),
-                child: Fullscreen(
-                  title: 'Not enough data to display metrics yet',
-                  subtitle: 'try again in a few minutes',
-                  fontSize: 20,
-                  fontWeight: FontWeight.normal,
-                  child: Container(),
-                  childFirst: false,
-                ),
+              body = Fullscreen(
+                title: 'Not enough data to display metrics yet',
+                subtitle: 'try again in a few minutes',
+                fontSize: 20,
+                fontWeight: FontWeight.normal,
+                child: Container(),
+                childFirst: false,
               );
             } else {
               body = _renderGraphs(context, state);

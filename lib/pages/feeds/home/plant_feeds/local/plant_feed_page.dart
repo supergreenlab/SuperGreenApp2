@@ -33,6 +33,8 @@ import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/environments_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/plant_infos_bloc.dart';
@@ -41,7 +43,8 @@ import 'package:super_green_app/pages/feeds/home/common/app_bar/products/product
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/single_feed_entry.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_status_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/local_plant_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/local_products_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bloc.dart';
@@ -804,8 +807,9 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     }
 
     List<Widget Function(BuildContext, PlantFeedBlocStateLoaded)> tabs = [
+      _renderQuickView,
+      _renderControls,
       (c, s) => EnvironmentsPage(s.box, plant: s.plant, futureFn: futureFn(c, s)),
-      _renderPlantStatus,
       _renderPlantInfos,
       _renderProducts,
     ];
@@ -845,10 +849,17 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
-  Widget _renderPlantStatus(BuildContext context, PlantFeedBlocStateLoaded state) {
-    return BlocProvider<PlantStatusBloc>(
-      create: (context) => PlantStatusBloc(),
-      child: PlantInfosPage(),
+  Widget _renderQuickView(BuildContext context, PlantFeedBlocStateLoaded state) {
+    return BlocProvider<PlantQuickViewBloc>(
+      create: (context) => PlantQuickViewBloc(state.plant),
+      child: PlantQuickViewPage(),
+    );
+  }
+
+  Widget _renderControls(BuildContext context, PlantFeedBlocStateLoaded state) {
+    return BlocProvider<BoxControlsBloc>(
+      create: (context) => BoxControlsBloc(state.box),
+      child: BoxControlsPage(),
     );
   }
 

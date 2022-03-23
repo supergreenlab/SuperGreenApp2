@@ -20,10 +20,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_status_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class PlantStatusPage extends StatelessWidget {
+class PlantQuickViewPage extends StatelessWidget {
   static String get plantStatusPageLoadingPlantData {
     return Intl.message(
       'Loading plant data',
@@ -35,28 +36,28 @@ class PlantStatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PlantStatusBloc, PlantStatusBlocState>(
-      listener: (BuildContext context, PlantStatusBlocState state) {
-        if (state is PlantStatusBlocStateLoaded) {}
+    return BlocListener<PlantQuickViewBloc, PlantQuickViewBlocState>(
+      listener: (BuildContext context, PlantQuickViewBlocState state) {
+        if (state is PlantQuickViewBlocStateLoaded) {}
       },
-      child: BlocBuilder<PlantStatusBloc, PlantStatusBlocState>(
-          bloc: BlocProvider.of<PlantStatusBloc>(context),
-          builder: (BuildContext context, PlantStatusBlocState state) {
-            if (state is PlantStatusBlocStateInit) {
-              return _renderLoading(context, state);
+      child: BlocBuilder<PlantQuickViewBloc, PlantQuickViewBlocState>(
+          bloc: BlocProvider.of<PlantQuickViewBloc>(context),
+          builder: (BuildContext context, PlantQuickViewBlocState state) {
+            if (state is PlantQuickViewBlocStateInit) {
+              return AppBarTab(child: _renderLoading(context, state));
             }
-            return _renderLoaded(context, state as PlantStatusBlocStateLoaded);
+            return AppBarTab(child: _renderLoaded(context, state as PlantQuickViewBlocStateLoaded));
           }),
     );
   }
 
-  Widget _renderLoading(BuildContext context, PlantStatusBlocStateInit state) {
+  Widget _renderLoading(BuildContext context, PlantQuickViewBlocStateInit state) {
     return FullscreenLoading(
-      title: PlantStatusPage.plantStatusPageLoadingPlantData,
+      title: PlantQuickViewPage.plantStatusPageLoadingPlantData,
     );
   }
 
-  Widget _renderLoaded(BuildContext context, PlantStatusBlocStateLoaded state) {
+  Widget _renderLoaded(BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return Text('loaded');
   }
 }

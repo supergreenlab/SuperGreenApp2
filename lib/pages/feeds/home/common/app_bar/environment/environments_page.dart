@@ -26,6 +26,7 @@ import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/graphs/box_app_bar_metrics_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/graphs/box_app_bar_metrics_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -189,18 +190,7 @@ class EnvironmentsPage extends StatelessWidget {
       ]);
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: graphBody),
-          ),
-        ),
-        Container(height: 115, child: _renderEnvironmentControls(context)),
-      ],
-    );
+    return AppBarTab(child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: graphBody));
   }
 
   Widget _renderEnvironmentControls(BuildContext context) {
