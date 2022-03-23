@@ -36,7 +36,7 @@ class AppBarTab extends StatelessWidget {
                 color: Colors.black.withAlpha(50),
               ),
               const BoxShadow(
-                color: Colors.white,
+                color: Color(0xFFEFEFEF),
                 spreadRadius: -3.0,
                 blurRadius: 3.0,
               ),

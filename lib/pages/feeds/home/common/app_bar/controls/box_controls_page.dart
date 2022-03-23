@@ -20,8 +20,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
-import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class BoxControlsPage extends StatelessWidget {
@@ -36,28 +36,28 @@ class BoxControlsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PlantQuickViewBloc, PlantQuickViewBlocState>(
-      listener: (BuildContext context, PlantQuickViewBlocState state) {
-        if (state is PlantQuickViewBlocStateLoaded) {}
+    return BlocListener<BoxControlsBloc, BoxControlsBlocState>(
+      listener: (BuildContext context, BoxControlsBlocState state) {
+        if (state is BoxControlsBlocStateLoaded) {}
       },
-      child: BlocBuilder<PlantQuickViewBloc, PlantQuickViewBlocState>(
-          bloc: BlocProvider.of<PlantQuickViewBloc>(context),
-          builder: (BuildContext context, PlantQuickViewBlocState state) {
-            if (state is PlantQuickViewBlocStateInit) {
+      child: BlocBuilder<BoxControlsBloc, BoxControlsBlocState>(
+          bloc: BlocProvider.of<BoxControlsBloc>(context),
+          builder: (BuildContext context, BoxControlsBlocState state) {
+            if (state is BoxControlsBlocStateInit) {
               return AppBarTab(child: _renderLoading(context, state));
             }
-            return AppBarTab(child: _renderLoaded(context, state as PlantQuickViewBlocStateLoaded));
+            return AppBarTab(child: _renderLoaded(context, state as BoxControlsBlocStateLoaded));
           }),
     );
   }
 
-  Widget _renderLoading(BuildContext context, PlantQuickViewBlocStateInit state) {
+  Widget _renderLoading(BuildContext context, BoxControlsBlocStateInit state) {
     return FullscreenLoading(
       title: BoxControlsPage.plantStatusPageLoadingPlantData,
     );
   }
 
-  Widget _renderLoaded(BuildContext context, PlantQuickViewBlocStateLoaded state) {
+  Widget _renderLoaded(BuildContext context, BoxControlsBlocStateLoaded state) {
     return Text('loaded');
   }
 }
