@@ -17,15 +17,18 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
+import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class PlantQuickViewPage extends StatelessWidget {
@@ -103,7 +106,15 @@ class PlantQuickViewPage extends StatelessWidget {
               titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
               body: Text(state.watering != null ? state.watering!.date.toString() : 'No watering yet'),
               action: InkWell(
-                onTap: () {},
+                onTap: _onAction(
+                    context,
+                    ({pushAsReplacement = false}) => MainNavigateToFeedNutrientMixFormEvent(state.plant,
+                        pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+                    tipID: 'TIP_WATERING',
+                    tipPaths: [
+                      't/supergreenlab/SuperGreenTips/master/s/when_to_start_adding_nutrients/l/en',
+                      't/supergreenlab/SuperGreenTips/master/s/how_to_prepare_nutrients/l/en'
+                    ]),
                 child: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
               )),
         ),
@@ -113,10 +124,35 @@ class PlantQuickViewPage extends StatelessWidget {
             title: 'LAST GROWLOG',
             body: Text(state.media != null ? state.media!.date.toString() : 'No grow log yet'),
             action: InkWell(
-              onTap: () {},
+              onTap: _onAction(
+                  context,
+                  ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                      plant: state.plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state))),
               child: SvgPicture.asset('assets/app_bar/icon_growlog.svg'),
             )),
       ],
     );
+  }
+
+  // TODO DRY this with plant_feed_page
+  void Function() _onAction(BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
+      {String? tipID, List<String>? tipPaths}) {
+    return () {
+      if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
+            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
+      } else {
+        BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
+      }
+    };
+  }
+
+  void Function(Future<dynamic>?) futureFn(BuildContext context, PlantQuickViewBlocStateLoaded state) {
+    return (Future<dynamic>? future) async {
+      dynamic feedEntry = await future;
+      if (feedEntry != null && feedEntry is FeedEntry) {
+        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, feedEntry));
+      }
+    };
   }
 }

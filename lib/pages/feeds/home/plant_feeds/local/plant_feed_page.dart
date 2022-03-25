@@ -881,6 +881,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     );
   }
 
+// TODO DRY this somewhere
   void Function(Future<dynamic>?) futureFn(BuildContext context, PlantFeedBlocStateLoaded state) {
     return (Future<dynamic>? future) async {
       dynamic feedEntry = await future;
