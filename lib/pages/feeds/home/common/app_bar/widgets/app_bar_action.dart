@@ -102,7 +102,7 @@ class AppBarAction extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: 8.0),
+          padding: const EdgeInsets.only(right: 16.0),
           child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),

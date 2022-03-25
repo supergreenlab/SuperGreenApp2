@@ -52,10 +52,13 @@ class PlantQuickViewBlocStateInit extends PlantQuickViewBlocState {
 class PlantQuickViewBlocStateLoaded extends PlantQuickViewBlocState {
   final Plant plant;
 
-  PlantQuickViewBlocStateLoaded(this.plant);
+  final FeedEntry? watering;
+  final FeedEntry? media;
+
+  PlantQuickViewBlocStateLoaded(this.plant, this.watering, this.media);
 
   @override
-  List<Object?> get props => [this.plant];
+  List<Object?> get props => [this.plant, this.watering, this.media];
 }
 
 class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickViewBlocState> {
@@ -70,7 +73,10 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
   @override
   Stream<PlantQuickViewBlocState> mapEventToState(PlantQuickViewBlocEvent event) async* {
     if (event is PlantQuickViewBlocEventInit) {
-      yield PlantQuickViewBlocStateLoaded(plant);
+      final db = RelDB.get();
+      FeedEntry? watering = await db.feedsDAO.getLastFeedEntryForFeedWithType(plant.feed, 'FE_WATERING');
+      FeedEntry? media = await db.feedsDAO.getLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA');
+      yield PlantQuickViewBlocStateLoaded(plant, watering, media);
     } else if (event is PlantQuickViewBlocEventLoaded) {
       yield event.state;
     }

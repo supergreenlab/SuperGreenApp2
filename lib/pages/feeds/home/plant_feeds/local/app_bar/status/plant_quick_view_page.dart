@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_action.dart';
@@ -100,16 +101,21 @@ class PlantQuickViewPage extends StatelessWidget {
               color: Color(0xFF506EBA),
               title: 'LAST WATERING',
               titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
-              body: Text('pouet'),
-              action: Text('action')),
+              body: Text(state.watering != null ? state.watering!.date.toString() : 'No watering yet'),
+              action: InkWell(
+                onTap: () {},
+                child: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
+              )),
         ),
         AppBarAction(
             icon: 'assets/feed_card/icon_media.svg',
             color: Color(0xFF617682),
             title: 'LAST GROWLOG',
-            titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
-            body: Text('pouet'),
-            action: Text('action')),
+            body: Text(state.media != null ? state.media!.date.toString() : 'No grow log yet'),
+            action: InkWell(
+              onTap: () {},
+              child: SvgPicture.asset('assets/app_bar/icon_growlog.svg'),
+            )),
       ],
     );
   }
