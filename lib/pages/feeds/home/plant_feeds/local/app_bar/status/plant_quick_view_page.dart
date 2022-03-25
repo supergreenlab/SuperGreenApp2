@@ -96,6 +96,7 @@ class PlantQuickViewPage extends StatelessWidget {
 
   Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 12.0),
@@ -104,7 +105,12 @@ class PlantQuickViewPage extends StatelessWidget {
               color: Color(0xFF506EBA),
               title: 'LAST WATERING',
               titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
-              body: Text(state.watering != null ? state.watering!.date.toString() : 'No watering yet'),
+              content: Text(
+                state.watering != null
+                    ? _renderDuration(DateTime.now().difference(state.watering!.date))
+                    : 'No watering yet',
+                style: TextStyle(fontSize: 18),
+              ),
               action: InkWell(
                 onTap: _onAction(
                     context,
@@ -122,7 +128,10 @@ class PlantQuickViewPage extends StatelessWidget {
             icon: 'assets/feed_card/icon_media.svg',
             color: Color(0xFF617682),
             title: 'LAST GROWLOG',
-            body: Text(state.media != null ? state.media!.date.toString() : 'No grow log yet'),
+            content: Text(
+              state.media != null ? _renderDuration(DateTime.now().difference(state.media!.date)) : 'No grow log yet',
+              style: TextStyle(fontSize: 18),
+            ),
             action: InkWell(
               onTap: _onAction(
                   context,
@@ -154,5 +163,22 @@ class PlantQuickViewPage extends StatelessWidget {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, feedEntry));
       }
     };
+  }
+
+  String _renderDuration(Duration diff, {suffix = ' ago'}) {
+    int minuteDiff = diff.inMinutes;
+    int hourDiff = diff.inHours;
+    int dayDiff = diff.inDays;
+    String format;
+    if (minuteDiff < 1) {
+      format = 'few seconds$suffix';
+    } else if (minuteDiff < 60) {
+      format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''}$suffix';
+    } else if (hourDiff < 24) {
+      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ${minuteDiff % 60}min$suffix';
+    } else {
+      format = '$dayDiff day${dayDiff > 1 ? 's' : ''}$suffix';
+    }
+    return format;
   }
 }

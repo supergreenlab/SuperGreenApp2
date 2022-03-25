@@ -24,7 +24,7 @@ class AppBarAction extends StatelessWidget {
   final Color color;
   final String title;
   final Widget? titleIcon;
-  final Widget body;
+  final Widget? content;
   final Widget? action;
 
   const AppBarAction(
@@ -33,7 +33,7 @@ class AppBarAction extends StatelessWidget {
       required this.color,
       required this.title,
       this.titleIcon,
-      required this.body,
+      this.content,
       this.action})
       : super(key: key);
 
@@ -93,7 +93,13 @@ class AppBarAction extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [top, body],
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4.0),
+            child: top,
+          ),
+          renderContent(context)
+        ],
       ),
     );
   }
@@ -112,5 +118,9 @@ class AppBarAction extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget renderContent(BuildContext context) {
+    return content ?? Container();
   }
 }

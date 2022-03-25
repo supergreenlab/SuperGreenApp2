@@ -115,6 +115,7 @@ class _FeedCardDateState extends State<FeedCardDate> {
     return 'Germinated ${renderDuration(diff)}';
   }
 
+  // TODO DRY this
   String renderDuration(Duration diff, {suffix = ' ago'}) {
     int minuteDiff = diff.inMinutes;
     int hourDiff = diff.inHours;
