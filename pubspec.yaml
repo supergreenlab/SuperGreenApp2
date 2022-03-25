@@ -120,6 +120,7 @@ flutter:
     - assets/products/seeds/
     - assets/products/toolbox/
     - assets/explorer/
+    - assets/app_bar/
     - assets/firmware/ControllerV2.1/
     - assets/firmware/ControllerV3/
     - assets/firmware/SoloV2.1/

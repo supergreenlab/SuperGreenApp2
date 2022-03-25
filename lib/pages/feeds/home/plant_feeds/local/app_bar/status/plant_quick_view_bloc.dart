@@ -22,6 +22,7 @@ import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_metric.dart';
 
 abstract class PlantQuickViewBlocEvent extends Equatable {}
 
@@ -42,39 +43,22 @@ class PlantQuickViewBlocEventLoaded extends PlantQuickViewBlocEvent {
 abstract class PlantQuickViewBlocState extends Equatable {}
 
 class PlantQuickViewBlocStateInit extends PlantQuickViewBlocState {
-  @override
-  List<Object?> get props => [];
-}
-
-class PlantQuickViewMetrics extends Equatable {
   final Plant plant;
-  final Param? temp;
-  final Param? humidity;
-  final Param? vpd;
-  final DateTime? lastWatering;
 
-  PlantQuickViewMetrics({required this.plant, this.temp, this.humidity, this.vpd, this.lastWatering});
+  PlantQuickViewBlocStateInit(this.plant);
 
   @override
-  List<Object?> get props => [plant, temp, humidity, this.vpd, lastWatering];
-
-  PlantQuickViewMetrics copyWith({Param? temp, Param? humidity, Param? vpd, DateTime? lastWatering}) {
-    return PlantQuickViewMetrics(
-      plant: plant,
-      temp: temp ?? this.temp,
-      humidity: humidity ?? this.humidity,
-      vpd: vpd ?? this.vpd,
-    );
-  }
+  List<Object?> get props => [plant];
 }
 
 class PlantQuickViewBlocStateLoaded extends PlantQuickViewBlocState {
-  final PlantQuickViewMetrics metrics;
+  final Plant plant;
+  final BoxMetrics metrics;
 
-  PlantQuickViewBlocStateLoaded(this.metrics);
+  PlantQuickViewBlocStateLoaded(this.plant, this.metrics);
 
   @override
-  List<Object?> get props => [this.metrics];
+  List<Object?> get props => [this.plant, this.metrics];
 }
 
 class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickViewBlocState> {
@@ -82,20 +66,22 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
   Device? device;
   late Box box;
 
-  late PlantQuickViewMetrics metrics;
+  late BoxMetrics metrics;
 
   late StreamSubscription<Param> tempListener;
   late StreamSubscription<Param> humidityListener;
   late StreamSubscription<Param> vpdListener;
+  late StreamSubscription<Param> co2Listener;
+  late StreamSubscription<Param> weightListener;
 
-  PlantQuickViewBloc(this.plant) : super(PlantQuickViewBlocStateInit()) {
+  PlantQuickViewBloc(this.plant) : super(PlantQuickViewBlocStateInit(plant)) {
     add(PlantQuickViewBlocEventInit());
   }
 
   @override
   Stream<PlantQuickViewBlocState> mapEventToState(PlantQuickViewBlocEvent event) async* {
     if (event is PlantQuickViewBlocEventInit) {
-      metrics = PlantQuickViewMetrics(plant: this.plant);
+      metrics = BoxMetrics();
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(this.plant.box);
       device = await db.devicesDAO.getDevice(box.device!);
@@ -120,22 +106,45 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
       } catch (e, trace) {
         Logger.logError(e, trace, data: {"device": device});
       }
-      yield PlantQuickViewBlocStateLoaded(metrics);
+      try {
+        metrics = metrics.copyWith(co2: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_CO2"));
+        co2Listener = RelDB.get().devicesDAO.watchParam(device!.id, "BOX_${box.deviceBox}_CO2").listen(onCO2Change);
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"device": device});
+      }
+      try {
+        metrics =
+            metrics.copyWith(weight: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_WEIGHT"));
+        weightListener =
+            RelDB.get().devicesDAO.watchParam(device!.id, "BOX_${box.deviceBox}_WEIGHT").listen(onWeightChange);
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"device": device});
+      }
+
+      yield PlantQuickViewBlocStateLoaded(plant, metrics);
     } else if (event is PlantQuickViewBlocEventLoaded) {
       yield event.state;
     }
   }
 
   void onTempChange(Param value) {
-    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(metrics.copyWith(temp: value))));
+    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, metrics.copyWith(temp: value))));
   }
 
   void onHumidityChange(Param value) {
-    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(metrics.copyWith(humidity: value))));
+    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, metrics.copyWith(humidity: value))));
   }
 
   void onVPDChange(Param value) {
-    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(metrics.copyWith(vpd: value))));
+    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, metrics.copyWith(vpd: value))));
+  }
+
+  void onCO2Change(Param value) {
+    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, metrics.copyWith(co2: value))));
+  }
+
+  void onWeightChange(Param value) {
+    add(PlantQuickViewBlocEventLoaded(PlantQuickViewBlocStateLoaded(plant, metrics.copyWith(weight: value))));
   }
 
   @override
@@ -143,6 +152,8 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
     tempListener.cancel();
     humidityListener.cancel();
     vpdListener.cancel();
+    co2Listener.cancel();
+    weightListener.cancel();
     return super.close();
   }
 }

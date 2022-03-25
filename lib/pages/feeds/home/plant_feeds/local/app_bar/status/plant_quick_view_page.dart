@@ -22,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_action.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_metric.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -61,6 +62,7 @@ class PlantQuickViewPage extends StatelessWidget {
 
   Widget _renderLoaded(BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _renderStatus(context, state),
         _renderActions(context, state),
@@ -83,9 +85,7 @@ class PlantQuickViewPage extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          children: [],
-        ),
+        AppBarBoxMetrics(metrics: state.metrics),
       ],
     );
   }
