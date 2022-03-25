@@ -22,7 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_action.dart';
-import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_metric.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -80,12 +80,12 @@ class PlantQuickViewPage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('01/02/2022'),
-              Text('Blooming - 3rd week'),
+              Text('01/02/2022', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              Text('Blooming - 3rd week', style: TextStyle(fontSize: 16)),
             ],
           ),
         ),
-        AppBarBoxMetrics(metrics: state.metrics),
+        AppBarBoxMetricsPage(),
       ],
     );
   }

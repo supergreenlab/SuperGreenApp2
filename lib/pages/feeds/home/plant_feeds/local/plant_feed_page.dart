@@ -33,6 +33,7 @@ import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_page.dart';
@@ -850,8 +851,11 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   }
 
   Widget _renderQuickView(BuildContext context, PlantFeedBlocStateLoaded state) {
-    return BlocProvider<PlantQuickViewBloc>(
-      create: (context) => PlantQuickViewBloc(state.plant),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PlantQuickViewBloc>(create: (context) => PlantQuickViewBloc(state.plant)),
+        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.plant)),
+      ],
       child: PlantQuickViewPage(),
     );
   }

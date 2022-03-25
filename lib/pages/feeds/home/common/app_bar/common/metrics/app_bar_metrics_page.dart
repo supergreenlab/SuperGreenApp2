@@ -16,34 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
-
-class BoxMetrics extends Equatable {
-  final Param? temp;
-  final Param? humidity;
-  final Param? vpd;
-  final Param? co2;
-  final Param? weight;
-  final DateTime? lastWatering;
-
-  BoxMetrics({this.temp, this.humidity, this.vpd, this.co2, this.weight, this.lastWatering});
-
-  @override
-  List<Object?> get props => [temp, humidity, vpd, co2, weight, lastWatering];
-
-  BoxMetrics copyWith({Param? temp, Param? humidity, Param? vpd, Param? co2, Param? weight, DateTime? lastWatering}) {
-    return BoxMetrics(
-      temp: temp ?? this.temp,
-      humidity: humidity ?? this.humidity,
-      vpd: vpd ?? this.vpd,
-      co2: co2 ?? this.co2,
-      weight: weight ?? this.weight,
-    );
-  }
-}
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class AppBarMetric extends StatelessWidget {
   final Widget icon;
@@ -87,13 +64,31 @@ class AppBarMetric extends StatelessWidget {
   }
 }
 
-class AppBarBoxMetrics extends StatelessWidget {
-  final BoxMetrics metrics;
-
-  const AppBarBoxMetrics({Key? key, required this.metrics}) : super(key: key);
+class AppBarBoxMetricsPage extends StatelessWidget {
+  const AppBarBoxMetricsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return BlocListener<AppBarMetricsBloc, AppBarMetricsBlocState>(
+        listener: (BuildContext context, AppBarMetricsBlocState state) {
+          if (state is AppBarMetricsBlocStateLoaded) {}
+        },
+        child: BlocBuilder<AppBarMetricsBloc, AppBarMetricsBlocState>(
+            bloc: BlocProvider.of<AppBarMetricsBloc>(context),
+            builder: (BuildContext context, AppBarMetricsBlocState state) {
+              if (state is AppBarMetricsBlocStateInit) {
+                return _renderLoading(context, state);
+              }
+              return _renderLoaded(context, state as AppBarMetricsBlocStateLoaded);
+            }));
+  }
+
+  Widget _renderLoading(BuildContext context, AppBarMetricsBlocStateInit state) {
+    return FullscreenLoading();
+  }
+
+  Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
+    BoxMetrics metrics = state.metrics;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -122,7 +117,7 @@ class AppBarBoxMetrics extends StatelessWidget {
             icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
             value: metrics.weight == null ? 'n/a' : '${metrics.weight!.ivalue}',
             unit: 'kg',
-            color: Color(0xFF3BB30B)),
+            color: Color(0xFF483581)),
       ],
     );
   }
