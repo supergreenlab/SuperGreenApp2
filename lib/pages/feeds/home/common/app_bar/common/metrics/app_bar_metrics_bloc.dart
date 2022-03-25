@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/device/device_helper.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -90,6 +91,8 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
   Device? device;
   late Box box;
 
+  late Timer timer;
+
   late BoxMetrics metrics;
 
   late StreamSubscription<Param> tempListener;
@@ -105,10 +108,19 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
   @override
   Stream<AppBarMetricsBlocState> mapEventToState(AppBarMetricsBlocEvent event) async* {
     if (event is AppBarMetricsBlocEventInit) {
-      metrics = BoxMetrics();
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(this.plant.box);
       device = await db.devicesDAO.getDevice(box.device!);
+
+      /*if (!device) {
+        yield AppBarMetricsBlocStateNoDevice(plant);
+      }*/
+
+      timer = Timer.periodic(Duration(seconds: 10), (timer) {
+        forceRefresh();
+      });
+      metrics = BoxMetrics();
+
       try {
         metrics =
             metrics.copyWith(temp: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_TEMP"));
@@ -171,13 +183,32 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
     add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics.copyWith(weight: value))));
   }
 
+  void forceRefresh() {
+    if (metrics.temp != null) {
+      DeviceHelper.refreshIntParam(device!, metrics.temp!);
+    }
+    if (metrics.humidity != null) {
+      DeviceHelper.refreshIntParam(device!, metrics.humidity!);
+    }
+    if (metrics.vpd != null) {
+      DeviceHelper.refreshIntParam(device!, metrics.vpd!);
+    }
+    if (metrics.co2 != null) {
+      DeviceHelper.refreshIntParam(device!, metrics.co2!);
+    }
+    if (metrics.weight != null) {
+      DeviceHelper.refreshIntParam(device!, metrics.weight!);
+    }
+  }
+
   @override
-  Future<void> close() {
-    tempListener.cancel();
-    humidityListener.cancel();
-    vpdListener.cancel();
-    co2Listener.cancel();
-    weightListener.cancel();
+  Future<void> close() async {
+    timer.cancel();
+    await tempListener.cancel();
+    await humidityListener.cancel();
+    await vpdListener.cancel();
+    await co2Listener.cancel();
+    await weightListener.cancel();
     return super.close();
   }
 }
