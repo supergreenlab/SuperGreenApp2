@@ -114,12 +114,12 @@ class PlantQuickViewPage extends StatelessWidget {
               action: InkWell(
                 onTap: _onAction(
                     context,
-                    ({pushAsReplacement = false}) => MainNavigateToFeedNutrientMixFormEvent(state.plant,
+                    ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(state.plant,
                         pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
                     tipID: 'TIP_WATERING',
                     tipPaths: [
-                      't/supergreenlab/SuperGreenTips/master/s/when_to_start_adding_nutrients/l/en',
-                      't/supergreenlab/SuperGreenTips/master/s/how_to_prepare_nutrients/l/en'
+                      't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+                      't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
                     ]),
                 child: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
               )),
