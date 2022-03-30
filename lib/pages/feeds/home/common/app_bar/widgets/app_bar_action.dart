@@ -27,20 +27,24 @@ class AppBarAction extends StatelessWidget {
   final Widget? content;
   final Widget? action;
 
-  const AppBarAction(
-      {Key? key,
-      required this.icon,
-      required this.color,
-      required this.title,
-      this.titleIcon,
-      this.content,
-      this.action})
-      : super(key: key);
+  final double height;
+
+  const AppBarAction({
+    Key? key,
+    required this.icon,
+    required this.color,
+    required this.title,
+    this.titleIcon,
+    this.content,
+    this.action,
+    this.height = 65,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       clipBehavior: Clip.hardEdge,
+      height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
         color: Colors.white,
@@ -68,6 +72,8 @@ class AppBarAction extends StatelessWidget {
     return Container(
       color: color,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -92,13 +98,18 @@ class AppBarAction extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            child: top,
-          ),
-          renderContent(context)
+          top,
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                renderContent(context),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -106,9 +117,11 @@ class AppBarAction extends StatelessWidget {
 
   Widget renderButton(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: 16.0),
+          padding: const EdgeInsets.only(right: 8.0),
           child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),

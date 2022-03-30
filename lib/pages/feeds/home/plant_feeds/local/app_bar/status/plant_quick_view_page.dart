@@ -69,7 +69,7 @@ class PlantQuickViewPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _renderStatus(context, state),
-        _renderActions(context, state),
+        Expanded(child: _renderActions(context, state)),
       ],
     );
   }
@@ -97,6 +97,7 @@ class PlantQuickViewPage extends StatelessWidget {
   Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 12.0),
@@ -109,7 +110,7 @@ class PlantQuickViewPage extends StatelessWidget {
                 state.watering != null
                     ? _renderDuration(DateTime.now().difference(state.watering!.date))
                     : 'No watering yet',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300, color: Colors.orange),
               ),
               action: InkWell(
                 onTap: _onAction(
@@ -130,7 +131,7 @@ class PlantQuickViewPage extends StatelessWidget {
             title: 'LAST GROWLOG',
             content: Text(
               state.media != null ? _renderDuration(DateTime.now().difference(state.media!.date)) : 'No grow log yet',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
             ),
             action: InkWell(
               onTap: _onAction(
@@ -177,7 +178,7 @@ class PlantQuickViewPage extends StatelessWidget {
     } else if (hourDiff < 24) {
       format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ${minuteDiff % 60}min$suffix';
     } else {
-      format = '$dayDiff day${dayDiff > 1 ? 's' : ''}$suffix';
+      format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ${hourDiff % 24}h$suffix';
     }
     return format;
   }

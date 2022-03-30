@@ -861,9 +861,14 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   }
 
   Widget _renderControls(BuildContext context, PlantFeedBlocStateLoaded state) {
-    return BlocProvider<BoxControlsBloc>(
-      create: (context) => BoxControlsBloc(state.box),
-      child: BoxControlsPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<BoxControlsBloc>(create: (context) => BoxControlsBloc(state.plant, state.box)),
+        BlocProvider<AppBarMetricsBloc>(create: (context) => AppBarMetricsBloc(state.plant)),
+      ],
+      child: BoxControlsPage(
+        futureFn: futureFn(context, state),
+      ),
     );
   }
 

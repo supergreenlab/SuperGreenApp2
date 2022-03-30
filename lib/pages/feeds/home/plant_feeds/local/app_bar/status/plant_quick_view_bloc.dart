@@ -82,8 +82,8 @@ class PlantQuickViewBloc extends LegacyBloc<PlantQuickViewBlocEvent, PlantQuickV
       final db = RelDB.get();
       watering = await db.feedsDAO.getLastFeedEntryForFeedWithType(plant.feed, 'FE_WATER');
       media = await db.feedsDAO.getLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA');
-      db.feedsDAO.watchLastFeedEntryForFeedWithType(plant.feed, 'FE_WATER').listen(onWateringChange);
-      db.feedsDAO.watchLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA').listen(onMediaChange);
+      wateringSub = db.feedsDAO.watchLastFeedEntryForFeedWithType(plant.feed, 'FE_WATER').listen(onWateringChange);
+      mediaSub = db.feedsDAO.watchLastFeedEntryForFeedWithType(plant.feed, 'FE_MEDIA').listen(onMediaChange);
       yield PlantQuickViewBlocStateLoaded(plant, watering, media);
     } else if (event is PlantQuickViewBlocEventLoaded) {
       yield event.state;
