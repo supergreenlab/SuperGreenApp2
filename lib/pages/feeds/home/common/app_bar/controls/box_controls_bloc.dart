@@ -22,6 +22,32 @@ import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
+class BoxControlMetrics extends Equatable {
+  final Param? blower;
+  final Param? light;
+  final Param? onHour;
+  final Param? onMin;
+  final Param? offHour;
+  final Param? offMin;
+
+  BoxControlMetrics({this.blower, this.light, this.onHour, this.onMin, this.offHour, this.offMin});
+
+  @override
+  List<Object?> get props => [this.blower, this.light, this.onHour, this.onMin, this.offHour, this.offMin];
+
+  BoxControlMetrics copyWith(
+      {Param? blower, Param? light, Param? onHour, Param? onMin, Param? offHour, Param? offMin}) {
+    return BoxControlMetrics(
+      blower: blower ?? this.blower,
+      light: light ?? this.light,
+      onHour: onHour ?? this.onHour,
+      onMin: onMin ?? this.onMin,
+      offHour: offHour ?? this.offHour,
+      offMin: offMin ?? this.offMin,
+    );
+  }
+}
+
 abstract class BoxControlsBlocEvent extends Equatable {}
 
 class BoxControlsBlocEventInit extends BoxControlsBlocEvent {

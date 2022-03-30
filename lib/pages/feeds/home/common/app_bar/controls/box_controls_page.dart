@@ -105,6 +105,7 @@ class BoxControlsPage extends StatelessWidget {
         children: [
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -115,7 +116,7 @@ class BoxControlsPage extends StatelessWidget {
                       titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
                       content: Text(
                         '${state.blower}%',
-                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                       ),
                       action: InkWell(
                         onTap: _onEnvironmentControlTapped(
@@ -128,12 +129,38 @@ class BoxControlsPage extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppBarAction(
+                        icon: 'assets/app_bar/icon_schedule.svg',
+                        color: Color(0xFF61A649),
+                        title: 'SCHEDULE',
+                        content: Text(
+                          '${state.scheduleOn}/${state.scheduleOff}',
+                          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                        ),
+                        action: InkWell(
+                          onTap: _onEnvironmentControlTapped(
+                              context,
+                              ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(state.box,
+                                  pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                              tipID: 'TIP_BLOOM',
+                              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
+                          child: SvgPicture.asset('assets/app_bar/icon_settings.svg'),
+                        ))),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: AppBarAction(
                         icon: 'assets/app_bar/icon_light.svg',
                         color: Color(0xFFDABA48),
                         title: 'LIGHT',
                         content: Text(
                           '${state.light}%',
-                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: InkWell(
                           onTap: _onEnvironmentControlTapped(
@@ -147,31 +174,6 @@ class BoxControlsPage extends StatelessWidget {
                               ]),
                           child: SvgPicture.asset('assets/app_bar/icon_settings.svg'),
                         ))),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: AppBarAction(
-                        icon: 'assets/app_bar/icon_schedule.svg',
-                        color: Color(0xFF61A649),
-                        title: 'SCHEDULE',
-                        content: Text(
-                          '${state.scheduleOn}/${state.scheduleOff}',
-                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
-                        ),
-                        action: InkWell(
-                          onTap: _onEnvironmentControlTapped(
-                              context,
-                              ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(state.box,
-                                  pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                              tipID: 'TIP_BLOOM',
-                              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
-                          child: SvgPicture.asset('assets/app_bar/icon_settings.svg'),
-                        ))),
                 state.plant != null
                     ? Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -182,9 +184,9 @@ class BoxControlsPage extends StatelessWidget {
                             content: Text(
                               '${state.alerts ? "ON" : "OFF"}',
                               style: TextStyle(
-                                  fontSize: 30,
+                                  fontSize: 28,
                                   fontWeight: FontWeight.bold,
-                                  color: state.alerts ? Color(0xFF3BB30B) : Color(0xFFD7352B)),
+                                  color: state.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
                             ),
                             action: InkWell(
                               onTap: () => BlocProvider.of<MainNavigatorBloc>(context).add(
