@@ -21,14 +21,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
-import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/misc/date_renderer.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
-import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_action.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_page.dart';
-import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
-import 'package:super_green_app/towelie/towelie_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_tab.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
 class BoxControlsPage extends StatelessWidget {
@@ -79,22 +79,9 @@ class BoxControlsPage extends StatelessWidget {
   }
 
   Widget _renderStatus(BuildContext context, BoxControlsBlocStateLoaded state) {
-    return Column(
-      children: [
-        Text('Quick view', style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold, fontSize: 25)),
-        Container(height: 2, color: Color(0xFF777777)),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('01/02/2022', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              Text('Blooming - 3rd week', style: TextStyle(fontSize: 16)),
-            ],
-          ),
-        ),
-        AppBarBoxMetricsPage(),
-      ],
+    return AppBarTitle(
+      title: 'Controls',
+      body: AppBarBoxMetricsPage(),
     );
   }
 
@@ -115,7 +102,7 @@ class BoxControlsPage extends StatelessWidget {
                       title: 'VENTILATION',
                       titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
                       content: Text(
-                        '${state.blower}%',
+                        '${state.metrics.blower.ivalue}%',
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                       ),
                       action: InkWell(
@@ -133,7 +120,8 @@ class BoxControlsPage extends StatelessWidget {
                         color: Color(0xFF61A649),
                         title: 'SCHEDULE',
                         content: Text(
-                          '${state.scheduleOn}/${state.scheduleOff}',
+                          DateRenderer.renderSchedule(
+                              state.metrics.onHour, state.metrics.onMin, state.metrics.offHour, state.metrics.offMin),
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: InkWell(
@@ -159,7 +147,7 @@ class BoxControlsPage extends StatelessWidget {
                         color: Color(0xFFDABA48),
                         title: 'LIGHT',
                         content: Text(
-                          '${state.light}%',
+                          '${state.metrics.light.ivalue}%',
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: InkWell(
@@ -182,11 +170,11 @@ class BoxControlsPage extends StatelessWidget {
                             color: Color(0xFF8848DA),
                             title: 'ALERTS',
                             content: Text(
-                              '${state.alerts ? "ON" : "OFF"}',
+                              '${state.plant!.alerts ? "ON" : "OFF"}',
                               style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
-                                  color: state.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
+                                  color: state.plant!.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
                             ),
                             action: InkWell(
                               onTap: () => BlocProvider.of<MainNavigatorBloc>(context).add(

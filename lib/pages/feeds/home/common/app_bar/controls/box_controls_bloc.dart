@@ -23,14 +23,20 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
 class BoxControlMetrics extends Equatable {
-  final Param? blower;
-  final Param? light;
-  final Param? onHour;
-  final Param? onMin;
-  final Param? offHour;
-  final Param? offMin;
+  final Param blower;
+  final Param light;
+  final Param onHour;
+  final Param onMin;
+  final Param offHour;
+  final Param offMin;
 
-  BoxControlMetrics({this.blower, this.light, this.onHour, this.onMin, this.offHour, this.offMin});
+  BoxControlMetrics(
+      {required this.blower,
+      required this.light,
+      required this.onHour,
+      required this.onMin,
+      required this.offHour,
+      required this.offMin});
 
   @override
   List<Object?> get props => [this.blower, this.light, this.onHour, this.onMin, this.offHour, this.offMin];
@@ -67,37 +73,34 @@ class BoxControlsBlocEventLoaded extends BoxControlsBlocEvent {
 abstract class BoxControlsBlocState extends Equatable {}
 
 class BoxControlsBlocStateInit extends BoxControlsBlocState {
-  final Box box;
-
-  BoxControlsBlocStateInit(this.box);
+  BoxControlsBlocStateInit();
 
   @override
-  List<Object?> get props => [box];
+  List<Object?> get props => [];
 }
 
 class BoxControlsBlocStateLoaded extends BoxControlsBlocState {
   final Plant? plant;
   final Box box;
-  final int blower;
-  final int light;
-  final int scheduleOn;
-  final int scheduleOff;
-  final bool alerts;
+  final BoxControlMetrics metrics;
 
-  BoxControlsBlocStateLoaded(
-      this.plant, this.box, this.blower, this.light, this.scheduleOn, this.scheduleOff, this.alerts);
+  BoxControlsBlocStateLoaded(this.plant, this.box, this.metrics);
 
   @override
-  List<Object?> get props =>
-      [this.plant, this.box, this.blower, this.light, this.scheduleOn, this.scheduleOff, this.alerts];
+  List<Object?> get props => [
+        this.plant,
+        this.box,
+        metrics,
+      ];
 }
 
 class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocState> {
   final Plant? plant;
   final Box box;
   Device? device;
+  late BoxControlMetrics metrics;
 
-  BoxControlsBloc(this.plant, this.box) : super(BoxControlsBlocStateInit(box)) {
+  BoxControlsBloc(this.plant, this.box) : super(BoxControlsBlocStateInit()) {
     add(BoxControlsBlocEventInit());
   }
 
@@ -105,7 +108,9 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
   Stream<BoxControlsBlocState> mapEventToState(BoxControlsBlocEvent event) async* {
     if (event is BoxControlsBlocEventInit) {
       final db = RelDB.get();
-      yield BoxControlsBlocStateLoaded(plant, box, 12, 60, 12, 12, true);
+      metrics = BoxControlMetrics(
+          blower: blower, light: light, onHour: onHour, onMin: onMin, offHour: offHour, offMin: offMin);
+      yield BoxControlsBlocStateLoaded(plant, box, metrics);
     } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;
     }

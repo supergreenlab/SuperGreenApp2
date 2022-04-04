@@ -24,9 +24,11 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_action.dart';
+import 'package:super_green_app/misc/date_renderer.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_page.dart';
-import 'package:super_green_app/pages/feeds/home/common/app_bar/widgets/app_bar_tab.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_tab.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -75,23 +77,7 @@ class PlantQuickViewPage extends StatelessWidget {
   }
 
   Widget _renderStatus(BuildContext context, PlantQuickViewBlocStateLoaded state) {
-    return Column(
-      children: [
-        Text('Quick view', style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold, fontSize: 25)),
-        Container(height: 2, color: Color(0xFF777777)),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('01/02/2022', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              Text('Blooming - 3rd week', style: TextStyle(fontSize: 16)),
-            ],
-          ),
-        ),
-        AppBarBoxMetricsPage(),
-      ],
-    );
+    return AppBarTitle(title: 'Quick view', plant: state.plant, body: AppBarBoxMetricsPage());
   }
 
   Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {
@@ -108,7 +94,7 @@ class PlantQuickViewPage extends StatelessWidget {
               titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
               content: Text(
                 state.watering != null
-                    ? _renderDuration(DateTime.now().difference(state.watering!.date))
+                    ? DateRenderer.renderDuration(DateTime.now().difference(state.watering!.date))
                     : 'No watering yet',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300, color: Colors.orange),
               ),
@@ -130,7 +116,9 @@ class PlantQuickViewPage extends StatelessWidget {
             color: Color(0xFF617682),
             title: 'LAST GROWLOG',
             content: Text(
-              state.media != null ? _renderDuration(DateTime.now().difference(state.media!.date)) : 'No grow log yet',
+              state.media != null
+                  ? DateRenderer.renderDuration(DateTime.now().difference(state.media!.date))
+                  : 'No grow log yet',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
             ),
             action: InkWell(
@@ -164,22 +152,5 @@ class PlantQuickViewPage extends StatelessWidget {
         BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, feedEntry));
       }
     };
-  }
-
-  String _renderDuration(Duration diff, {suffix = ' ago'}) {
-    int minuteDiff = diff.inMinutes;
-    int hourDiff = diff.inHours;
-    int dayDiff = diff.inDays;
-    String format;
-    if (minuteDiff < 1) {
-      format = 'few seconds$suffix';
-    } else if (minuteDiff < 60) {
-      format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''}$suffix';
-    } else if (hourDiff < 24) {
-      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''} ${minuteDiff % 60}min$suffix';
-    } else {
-      format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ${hourDiff % 24}h$suffix';
-    }
-    return format;
   }
 }

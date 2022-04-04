@@ -27,6 +27,8 @@ import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/misc/date_renderer.dart';
+import 'package:super_green_app/misc/date_renderer.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
@@ -191,7 +193,7 @@ class CommentView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Text(
-                          renderDuration(diff),
+                          DateRenderer.renderDuration(diff),
                           style: TextStyle(color: Color(0xffababab)),
                         ),
                       ),
@@ -262,23 +264,6 @@ class CommentView extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String renderDuration(Duration diff, {suffix = ''}) {
-    int minuteDiff = diff.inMinutes;
-    int hourDiff = diff.inHours;
-    int dayDiff = diff.inDays;
-    String format;
-    if (minuteDiff < 1) {
-      format = 'few seconds$suffix';
-    } else if (minuteDiff < 60) {
-      format = '$minuteDiff min';
-    } else if (hourDiff < 24) {
-      format = '${hourDiff}h';
-    } else {
-      format = '$dayDiff day${dayDiff > 1 ? 's' : ''}';
-    }
-    return format;
   }
 
   void createAccountOrLogin(BuildContext context) async {

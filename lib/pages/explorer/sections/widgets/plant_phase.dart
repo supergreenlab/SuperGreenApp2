@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/misc/date_renderer.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 import 'package:tuple/tuple.dart';
 
@@ -32,7 +33,7 @@ class PlantPhase extends StatelessWidget {
     String germinationText = 'Date not set';
     if (plantSettings.germinationDate != null) {
       Duration diff = (this.time ?? DateTime.now()).difference(plantSettings.germinationDate!);
-      germinationText = renderDuration(diff, suffix: '');
+      germinationText = DateRenderer.renderDuration(diff, suffix: '');
     }
     String? phaseTitle;
     String bloomingText = 'Not set.';
@@ -46,7 +47,7 @@ class PlantPhase extends StatelessWidget {
         'Curing for: ',
       ];
       phaseTitle = phases[phaseData.item1.index];
-      bloomingText = renderDuration(phaseData.item3, suffix: '');
+      bloomingText = DateRenderer.renderDuration(phaseData.item3, suffix: '');
     }
     return Container(
       child: Row(
@@ -89,24 +90,5 @@ class PlantPhase extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  // TODO DRY with feed_card_date.dart
-
-  String renderDuration(Duration diff, {suffix = ' ago'}) {
-    int minuteDiff = diff.inMinutes;
-    int hourDiff = diff.inHours;
-    int dayDiff = diff.inDays;
-    String format;
-    if (minuteDiff < 1) {
-      format = 'few seconds$suffix';
-    } else if (minuteDiff < 60) {
-      format = '$minuteDiff minute${minuteDiff > 1 ? 's' : ''}$suffix';
-    } else if (hourDiff < 24) {
-      format = '$hourDiff hour${hourDiff > 1 ? 's' : ''}$suffix';
-    } else {
-      format = '$dayDiff day${dayDiff > 1 ? 's' : ''}$suffix';
-    }
-    return format;
   }
 }
