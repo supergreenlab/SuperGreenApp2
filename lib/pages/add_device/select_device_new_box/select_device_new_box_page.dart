@@ -76,6 +76,15 @@ class SelectDeviceNewBoxPage extends TraceableStatefulWidget {
     );
   }
 
+  static String get selectDeviceNewBoxSetupEmptyBox {
+    return Intl.message(
+      'SETUP EMPTY BOX',
+      name: 'selectDeviceNewBoxSetupEmptyBox',
+      desc: 'Confirmation button for empty box',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
   static String get selectDeviceNewBoxLEDChannel {
     return Intl.message(
       'LED chan',
@@ -130,7 +139,21 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
   Widget _renderNoLedsAvailable(context, state) {
     return Fullscreen(
         title: SelectDeviceNewBoxPage.selectDeviceNewBoxNoMoreBox,
-        child: Icon(Icons.warning, color: Color(0xff3bb30b), size: 100));
+        child: Column(
+          children: [
+            Icon(Icons.warning, color: Color(0xff3bb30b), size: 100),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: GreenButton(
+                  title: SelectDeviceNewBoxPage.selectDeviceNewBoxSetupEmptyBox,
+                  onPressed: () => _handleInput(context),
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget _renderLedSelection(context, state) {
@@ -179,7 +202,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
             alignment: Alignment.centerRight,
             child: GreenButton(
               title: SelectDeviceNewBoxPage.selectDeviceNewBoxSetupBox,
-              onPressed: _selectedLeds.length == 0 ? null : () => _handleInput(context),
+              onPressed: () => _handleInput(context),
             ),
           ),
         ),

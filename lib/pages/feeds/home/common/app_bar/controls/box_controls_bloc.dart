@@ -19,38 +19,27 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
-class BoxControlMetrics extends Equatable {
-  final Param blower;
-  final Param light;
-  final Param onHour;
-  final Param onMin;
-  final Param offHour;
-  final Param offMin;
+class BoxControlParamsController extends ParamsController {
+  ParamController get blower => params['blower']!;
+  ParamController get light => params['light']!;
+  ParamController get onHour => params['onHour']!;
+  ParamController get onMin => params['onMin']!;
+  ParamController get offHour => params['offHour']!;
+  ParamController get offMin => params['offMin']!;
 
-  BoxControlMetrics(
-      {required this.blower,
-      required this.light,
-      required this.onHour,
-      required this.onMin,
-      required this.offHour,
-      required this.offMin});
-
-  @override
-  List<Object?> get props => [this.blower, this.light, this.onHour, this.onMin, this.offHour, this.offMin];
-
-  BoxControlMetrics copyWith(
-      {Param? blower, Param? light, Param? onHour, Param? onMin, Param? offHour, Param? offMin}) {
-    return BoxControlMetrics(
-      blower: blower ?? this.blower,
-      light: light ?? this.light,
-      onHour: onHour ?? this.onHour,
-      onMin: onMin ?? this.onMin,
-      offHour: offHour ?? this.offHour,
-      offMin: offMin ?? this.offMin,
-    );
+  static Future<BoxControlParamsController> load(Device device, Box box) async {
+    BoxControlParamsController c = BoxControlParamsController();
+    await c.loadBoxParam(device, box, 'BLOWER_DUTY', 'blower');
+    await c.loadBoxParam(device, box, 'TIMER_OUTPUT', 'light');
+    await c.loadBoxParam(device, box, 'ON_HOUR', 'onHour');
+    await c.loadBoxParam(device, box, 'ON_MIN', 'onMin');
+    await c.loadBoxParam(device, box, 'OFF_HOUR', 'offHour');
+    await c.loadBoxParam(device, box, 'OFF_MIN', 'offMin');
+    return c;
   }
 }
 
@@ -82,7 +71,7 @@ class BoxControlsBlocStateInit extends BoxControlsBlocState {
 class BoxControlsBlocStateLoaded extends BoxControlsBlocState {
   final Plant? plant;
   final Box box;
-  final BoxControlMetrics metrics;
+  final BoxControlParamsController metrics;
 
   BoxControlsBlocStateLoaded(this.plant, this.box, this.metrics);
 
@@ -98,7 +87,7 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
   final Plant? plant;
   final Box box;
   Device? device;
-  late BoxControlMetrics metrics;
+  late BoxControlParamsController metrics;
 
   BoxControlsBloc(this.plant, this.box) : super(BoxControlsBlocStateInit()) {
     add(BoxControlsBlocEventInit());
@@ -108,8 +97,8 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
   Stream<BoxControlsBlocState> mapEventToState(BoxControlsBlocEvent event) async* {
     if (event is BoxControlsBlocEventInit) {
       final db = RelDB.get();
-      metrics = BoxControlMetrics(
-          blower: blower, light: light, onHour: onHour, onMin: onMin, offHour: offHour, offMin: offMin);
+      device = await db.devicesDAO.getDevice(box.device!);
+      metrics = await BoxControlParamsController.load(device!, box);
       yield BoxControlsBlocStateLoaded(plant, box, metrics);
     } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;

@@ -54,7 +54,7 @@ class ParamController extends Equatable {
     return this;
   }
 
-  StreamSubscription<Param> listenParam(Device device, Param Function(Param?) fn) {
+  StreamSubscription<Param> listenParam(Device device, void Function(Param?) fn) {
     return RelDB.get().devicesDAO.watchParam(device.id, param.key).listen(fn);
   }
 
@@ -74,6 +74,42 @@ class ParamsController extends Equatable {
     ParamController pc = await ParamController.loadFromDB(device, "BOX_${box.deviceBox}_$key");
     params[name] = pc;
     return pc;
+  }
+
+  List<StreamSubscription<Param>> listenParams(Device device, void Function(ParamsController) fn) {
+    return params.keys.map<StreamSubscription<Param>>((String key) {
+      ParamController p = params[key]!;
+      return p.listenParam(device, (p0) {
+        p = p.copyWith(param: p0);
+        params[key] = p;
+        fn(this);
+      });
+    }).toList();
+  }
+
+  Future<ParamsController> syncParams(Device device) async {
+    await Future.wait(params.keys.map<Future>((String key) async {
+      params[key] = await params[key]!.syncParam(device);
+    }).toList());
+    return this;
+  }
+
+  Future<ParamsController> cancelParams(Device device) async {
+    await Future.wait(params.keys.map<Future>((String key) async {
+      params[key] = await params[key]!.cancelParam(device);
+    }).toList());
+    return this;
+  }
+
+  Future closeSubscriptions(List<StreamSubscription<Param>> subscriptions) async {
+    await Future.wait(subscriptions.map<Future>((s) => s.cancel()));
+  }
+
+  ParamsController copyWithValues(Map<String, int> values) {
+    values.forEach((key, value) {
+      params[key] = params[key]!.copyWith(value: value);
+    });
+    return this;
   }
 
   @override

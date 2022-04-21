@@ -49,8 +49,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
 
   @override
   void initState() {
-    _blowerDay = widget.state.blowerMax!.value;
-    _blowerNight = widget.state.blowerMin!.value;
+    _blowerDay = widget.state.minMaxParams!.blowerMax.value;
+    _blowerNight = widget.state.minMaxParams!.blowerMin.value;
     super.initState();
   }
 
@@ -61,8 +61,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerDay = state.blowerMax!.value;
-              _blowerNight = state.blowerMin!.value;
+              _blowerDay = state.minMaxParams!.blowerMax.value;
+              _blowerNight = state.minMaxParams!.blowerMin.value;
             });
           }
         },
@@ -90,7 +90,10 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerMin: widget.state.blowerMin!.copyWith(value: _blowerNight)));
+                  legacyController: widget.state.legacyParams!.copyWithValues({
+                    "blowerMin": _blowerNight,
+                  }) as LegacyParamsController,
+                ));
               },
             ),
             SliderFormParam(
@@ -108,7 +111,10 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerMax: widget.state.blowerMax!.copyWith(value: _blowerDay)));
+                  legacyController: widget.state.legacyParams!.copyWithValues({
+                    "blowerMax": _blowerDay,
+                  }) as LegacyParamsController,
+                ));
               },
             ),
           ],

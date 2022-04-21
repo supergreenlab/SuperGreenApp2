@@ -102,7 +102,7 @@ class BoxControlsPage extends StatelessWidget {
                       title: 'VENTILATION',
                       titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
                       content: Text(
-                        '${state.metrics.blower.ivalue}%',
+                        '${state.metrics.blower.param.ivalue}%',
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                       ),
                       action: InkWell(
@@ -120,8 +120,8 @@ class BoxControlsPage extends StatelessWidget {
                         color: Color(0xFF61A649),
                         title: 'SCHEDULE',
                         content: Text(
-                          DateRenderer.renderSchedule(
-                              state.metrics.onHour, state.metrics.onMin, state.metrics.offHour, state.metrics.offMin),
+                          DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param,
+                              state.metrics.offHour.param, state.metrics.offMin.param),
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: InkWell(
@@ -147,7 +147,7 @@ class BoxControlsPage extends StatelessWidget {
                         color: Color(0xFFDABA48),
                         title: 'LIGHT',
                         content: Text(
-                          '${state.metrics.light.ivalue}%',
+                          '${state.metrics.light.param.ivalue}%',
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: InkWell(

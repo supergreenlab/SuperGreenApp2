@@ -37,8 +37,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
 
   @override
   void initState() {
-    _blowerDay = widget.state.blowerDay!.value;
-    _blowerNight = widget.state.blowerNight!.value;
+    _blowerDay = widget.state.legacyParams!.blowerDay.value;
+    _blowerNight = widget.state.legacyParams!.blowerNight.value;
     super.initState();
   }
 
@@ -49,8 +49,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerDay = state.blowerDay!.value;
-              _blowerNight = state.blowerNight!.value;
+              _blowerDay = state.legacyParams!.blowerDay.value;
+              _blowerNight = state.legacyParams!.blowerNight.value;
             });
           }
         },
@@ -71,7 +71,10 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerDay: widget.state.blowerDay!.copyWith(value: _blowerDay)));
+                  legacyController: widget.state.legacyParams!.copyWithValues({
+                    "blowerDay": _blowerDay,
+                  }) as LegacyParamsController,
+                ));
               },
             ),
             SliderFormParam(
@@ -89,7 +92,10 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerNight: widget.state.blowerNight!.copyWith(value: _blowerNight)));
+                  legacyController: widget.state.legacyParams!.copyWithValues({
+                    "blowerNight": _blowerNight,
+                  }) as LegacyParamsController,
+                ));
               },
             ),
           ],

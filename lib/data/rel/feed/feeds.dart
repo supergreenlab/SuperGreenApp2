@@ -154,9 +154,10 @@ class FeedMedias extends Table {
     if (map['deleted'] == true) {
       return DeletedFeedMediasCompanion(Value(map['id'] as String));
     }
-    FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
+    FeedEntry feedEntry;
     Feed feed;
     try {
+      feedEntry = await RelDB.get().feedsDAO.getFeedEntryForServerID(map['feedEntryID']);
       feed = await RelDB.get().feedsDAO.getFeed(feedEntry.feed);
     } catch (e) {
       return SkipFeedMediasCompanion(Value(map['id'] as String));

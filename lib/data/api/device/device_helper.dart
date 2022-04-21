@@ -24,6 +24,7 @@ import 'package:crypto/crypto.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/devices/websocket.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
+import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:tuple/tuple.dart';
@@ -57,6 +58,11 @@ class DeviceHelper {
     await updateStringParam(device, mdnsParam, mdnsDomain);
     await ddb.updateDevice(
         DevicesCompanion(id: Value(device.id), name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
+  }
+
+  static Future<Param> loadBoxParam(Device device, Box box, String key) async {
+    Param p = await RelDB.get().devicesDAO.getParam(device.id, key);
+    return await DeviceHelper.refreshIntParam(device, p);
   }
 
   static Future<Param> watchParamChange(Param param, {int timeout = 5}) {

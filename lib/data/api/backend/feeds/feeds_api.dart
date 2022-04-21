@@ -408,6 +408,7 @@ class FeedsAPI {
       try {
         FeedMediasCompanion fm = await FeedMedias.fromMap(maps[i]);
         if (fm is SkipFeedMediasCompanion) {
+          // TODO move this to syncer block, so they can be marked as synced
           continue;
         }
         results.add(fm);
