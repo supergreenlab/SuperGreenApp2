@@ -436,7 +436,7 @@ class _CapturePageState extends State<CapturePage> {
     Map<Permission, PermissionStatus> res = await [
       permissionStorageGroup,
     ].request();
-    return res[permissionStorageGroup] == PermissionStatus.granted;
+    return res[permissionStorageGroup] == PermissionStatus.granted || res[permissionStorageGroup] == PermissionStatus.limited;
   }
 
   @override
