@@ -27,6 +27,8 @@ import 'package:super_green_app/data/api/backend/products/models.dart';
 import 'package:super_green_app/data/api/backend/products/specs/seed_specs.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_tab.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/forms/plant_infos_dimensions.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/forms/plant_infos_medium.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/forms/plant_infos_phase_since.dart';
@@ -60,19 +62,29 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
     return BlocBuilder<PlantInfosBloc, PlantInfosBlocState>(
         bloc: BlocProvider.of<PlantInfosBloc>(context),
         builder: (BuildContext context, PlantInfosBlocState state) {
+          Widget body = Container();
           if (state is PlantInfosBlocStateLoading) {
-            return _renderLoading(context, state);
+            body = _renderLoading(context, state);
           }
           if (form == null) {
-            return _renderLoaded(context, state as PlantInfosBlocStateLoaded);
+            body = _renderLoaded(context, state as PlantInfosBlocStateLoaded);
           } else {
-            return Stack(
+            body = Stack(
               children: <Widget>[
                 _renderLoaded(context, state as PlantInfosBlocStateLoaded),
                 _renderForm(context, state),
               ],
             );
           }
+          return AppBarTab(
+              child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 200),
+                  child: Column(
+                    children: [
+                      AppBarTitle(title: 'Infos', showDate: false),
+                      Expanded(child: body),
+                    ],
+                  )));
         });
   }
 
@@ -150,7 +162,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
                     onEdit: state.plantInfos.editable == false ? null : () => _openForm('DIMENSIONS')),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
-                  child: Text('Life event dates', style: TextStyle(color: Colors.white)),
+                  child: Text('Life event dates', style: TextStyle(color: Color(0xFF494949))),
                 ),
                 PlantInfosWidget(
                     icon: 'icon_germination_date.svg',
@@ -207,7 +219,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Center(
-          child: Text('No picture yet', style: TextStyle(color: Colors.white)),
+          child: Text('No picture yet', style: TextStyle(color: Color(0xFF494949))),
         ),
       ],
     );
@@ -307,7 +319,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
           ),
     };
     return Container(
-      color: Color(0xff063047).withAlpha(127),
+      color: Colors.white.withAlpha(127),
       child: Column(
         children: <Widget>[
           Center(

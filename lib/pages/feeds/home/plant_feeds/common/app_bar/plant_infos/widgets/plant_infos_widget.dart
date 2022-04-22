@@ -25,10 +25,9 @@ class PlantInfosWidget extends StatelessWidget {
   final String? title;
   final String? value;
   final Function()? onEdit;
-  final Color color;
+  final Color? color;
 
-  const PlantInfosWidget({Key? key, this.icon, this.title, this.value, this.onEdit, this.color = Colors.white})
-      : super(key: key);
+  const PlantInfosWidget({Key? key, this.icon, this.title, this.value, this.onEdit, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,10 @@ class PlantInfosWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  title != null ? Text(title!, style: TextStyle(color: this.color)) : Container(),
+                  title != null
+                      ? Text(title!,
+                          style: TextStyle(fontWeight: FontWeight.w600, color: this.color ?? Color(0xFF494949)))
+                      : Container(),
                   valueWidget,
                 ],
               ),
@@ -64,7 +66,7 @@ class PlantInfosWidget extends StatelessWidget {
 
   Widget _renderNoValue() {
     if (onEdit == null) {
-      return Text("Not set", style: TextStyle(color: this.color, fontWeight: FontWeight.w300));
+      return Text("Not set", style: TextStyle(color: this.color ?? Color(0xFF494949), fontWeight: FontWeight.w300));
     }
     return Container(
         decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
@@ -75,7 +77,7 @@ class PlantInfosWidget extends StatelessWidget {
               Expanded(
                   child: Text(
                 "Tap to set",
-                style: TextStyle(color: this.color, fontWeight: FontWeight.w300),
+                style: TextStyle(color: this.color ?? Color(0xFF494949), fontWeight: FontWeight.w300),
                 textAlign: TextAlign.center,
               )),
               SvgPicture.asset("assets/plant_infos/edit.svg"),
@@ -96,8 +98,8 @@ class PlantInfosWidget extends StatelessWidget {
                   child: MarkdownBody(
                 data: value ?? '',
                 styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: this.color, fontSize: 16),
-                    h1: TextStyle(color: this.color, fontSize: 20, fontWeight: FontWeight.bold),
+                    p: TextStyle(color: this.color ?? Color(0xFF494949), fontSize: 16),
+                    h1: TextStyle(color: this.color ?? Color(0xFF494949), fontSize: 20, fontWeight: FontWeight.bold),
                     strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16, fontWeight: FontWeight.bold)),
               )),
               onEdit == null ? Container() : SvgPicture.asset("assets/plant_infos/edit.svg"),

@@ -24,6 +24,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/graphs/box_app_bar_metrics_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/graphs/box_app_bar_metrics_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_tab.dart';
@@ -190,7 +191,15 @@ class EnvironmentsPage extends StatelessWidget {
       ]);
     }
 
-    return AppBarTab(child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: graphBody));
+    return AppBarTab(
+        child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 200),
+            child: Column(
+              children: [
+                AppBarTitle(title: 'Graphs', showDate: false),
+                Expanded(child: graphBody),
+              ],
+            )));
   }
 
   Widget _renderEnvironmentControls(BuildContext context) {
@@ -199,7 +208,7 @@ class EnvironmentsPage extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 8.0, top: 4, bottom: 8),
-          child: Text(EnvironmentsPage.environmentsPageControlTitle, style: TextStyle(color: Colors.white)),
+          child: Text(EnvironmentsPage.environmentsPageControlTitle, style: TextStyle(color: Color(0xFF494949))),
         ),
         Row(
           children: <Widget>[
@@ -264,7 +273,7 @@ class EnvironmentsPage extends StatelessWidget {
           ),
           Text(
             name,
-            style: TextStyle(color: Colors.white, fontSize: 12),
+            style: TextStyle(color: Color(0xFF494949), fontSize: 12),
             textAlign: TextAlign.center,
           ),
         ],

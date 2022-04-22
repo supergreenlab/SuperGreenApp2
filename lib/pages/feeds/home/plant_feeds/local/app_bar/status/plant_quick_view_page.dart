@@ -70,14 +70,10 @@ class PlantQuickViewPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _renderStatus(context, state),
+        AppBarTitle(title: 'Quick view', plant: state.plant, body: AppBarBoxMetricsPage()),
         Expanded(child: _renderActions(context, state)),
       ],
     );
-  }
-
-  Widget _renderStatus(BuildContext context, PlantQuickViewBlocStateLoaded state) {
-    return AppBarTitle(title: 'Quick view', plant: state.plant, body: AppBarBoxMetricsPage());
   }
 
   Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {

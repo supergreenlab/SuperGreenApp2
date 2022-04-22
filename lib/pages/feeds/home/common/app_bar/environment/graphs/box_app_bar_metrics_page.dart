@@ -43,7 +43,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           if (state is PlantFeedAppBarBlocStateInit) {
             body = FullscreenLoading(
               title: 'Loading..',
-              textColor: Colors.white,
+              textColor: Color(0xFF494949),
             );
           } else if (state is PlantFeedAppBarBlocStateLoaded) {
             if (state.graphData[0].data.length == 0 &&
@@ -73,7 +73,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
     DateTime metricDate = state.graphData[0].data[selectedGraphIndex ?? state.graphData[0].data.length - 1].time;
     String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
     Widget dateText = Text('${DateFormat(format).format(metricDate)}',
-        style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold));
+        style: TextStyle(color: Color(0xFF494949), fontSize: 15, fontWeight: FontWeight.bold));
     List<charts.LineAnnotationSegment<Object>>? annotations;
     if (selectedGraphIndex != null) {
       annotations = [
@@ -87,7 +87,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
           Expanded(
             child: Text(
               'tap to reset',
-              style: TextStyle(color: Colors.white, decoration: TextDecoration.underline),
+              style: TextStyle(color: Color(0xFF494949), decoration: TextDecoration.underline),
               textAlign: TextAlign.right,
             ),
           ),
@@ -216,7 +216,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                         '${TimeSeriesAPI.min(state.graphData[4].data).metric.toInt()}%',
                         '${TimeSeriesAPI.max(state.graphData[4].data).metric.toInt()}%'),
                     _renderMetric(
-                        Colors.yellow,
+                        Color(0xffB3B634),
                         'Light',
                         '${state.graphData[3].data[selectedGraphIndex ?? state.graphData[3].data.length - 1].metric.toInt()}%',
                         '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
@@ -231,7 +231,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
             child: graphs,
           ),
           Text("*VPD chart is experimental, please report any inconsistencies",
-              style: TextStyle(fontSize: 9, color: Colors.white)),
+              style: TextStyle(fontSize: 9, color: Color(0xFF494949))),
         ],
       ),
     );
@@ -242,19 +242,19 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: <Widget>[
-          Text(name, style: TextStyle(color: Colors.white)),
+          Text(name, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold)),
           Row(
             children: <Widget>[
               Text(value,
                   style: TextStyle(
                     color: color,
                     fontSize: 30,
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.bold,
                   )),
               Column(
                 children: <Widget>[
-                  Text(max, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
-                  Text(min, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300)),
+                  Text(max, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300)),
+                  Text(min, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300)),
                 ],
               )
             ],

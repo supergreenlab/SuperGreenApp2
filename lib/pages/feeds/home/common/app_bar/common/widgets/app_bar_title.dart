@@ -26,7 +26,9 @@ class AppBarTitle extends StatelessWidget {
   final String title;
   final Widget? body;
 
-  const AppBarTitle({Key? key, required this.title, this.plant, this.body}) : super(key: key);
+  final bool showDate;
+
+  const AppBarTitle({Key? key, required this.title, this.plant, this.body, this.showDate = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +36,24 @@ class AppBarTitle extends StatelessWidget {
       children: [
         Text(title, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold, fontSize: 25)),
         Container(height: 2, color: Color(0xFF777777)),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(DateRenderer.renderAbsoluteDate(DateTime.now()),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              plant != null
-                  ? Text(DateRenderer.renderSincePhase(PlantSettings.fromJSON(plant!.settings), DateTime.now()),
-                      style: TextStyle(fontSize: 16))
-                  : Container(),
-            ],
-          ),
-        ),
+        showDate || plant != null
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    showDate
+                        ? Text(DateRenderer.renderAbsoluteDate(DateTime.now()),
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))
+                        : Container(),
+                    plant != null
+                        ? Text(DateRenderer.renderSincePhase(PlantSettings.fromJSON(plant!.settings), DateTime.now()),
+                            style: TextStyle(fontSize: 16))
+                        : Container(),
+                  ],
+                ),
+              )
+            : Container(),
         body ?? Container(),
       ],
     );
