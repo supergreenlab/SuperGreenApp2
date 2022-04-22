@@ -34,12 +34,7 @@ class PlantInfosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget valueWidget;
-    if (onEdit != null) {
-      valueWidget = InkWell(onTap: onEdit, child: value == null ? _renderNoValue() : _renderValue());
-    } else {
-      valueWidget = value == null ? _renderNoValue() : _renderValue();
-    }
+    Widget valueWidget = value == null ? _renderNoValue() : _renderValue();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: AppBarAction(
