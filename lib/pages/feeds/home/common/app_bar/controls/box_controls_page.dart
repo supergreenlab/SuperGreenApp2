@@ -81,6 +81,7 @@ class BoxControlsPage extends StatelessWidget {
   Widget _renderStatus(BuildContext context, BoxControlsBlocStateLoaded state) {
     return AppBarTitle(
       title: 'Controls',
+      plant: state.plant,
       body: AppBarBoxMetricsPage(),
     );
   }
