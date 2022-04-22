@@ -65,16 +65,17 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
           Widget body = Container();
           if (state is PlantInfosBlocStateLoading) {
             body = _renderLoading(context, state);
-          }
-          if (form == null) {
-            body = _renderLoaded(context, state as PlantInfosBlocStateLoaded);
           } else {
-            body = Stack(
-              children: <Widget>[
-                _renderLoaded(context, state as PlantInfosBlocStateLoaded),
-                _renderForm(context, state),
-              ],
-            );
+            if (form == null) {
+              body = _renderLoaded(context, state as PlantInfosBlocStateLoaded);
+            } else {
+              body = Stack(
+                children: <Widget>[
+                  _renderLoaded(context, state as PlantInfosBlocStateLoaded),
+                  _renderForm(context, state),
+                ],
+              );
+            }
           }
           return AppBarTab(
               child: AnimatedSwitcher(
