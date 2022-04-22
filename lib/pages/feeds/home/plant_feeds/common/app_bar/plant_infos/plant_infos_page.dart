@@ -115,137 +115,114 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
           '${state.plantInfos.boxSettings!.width}x${state.plantInfos.boxSettings!.height}x${state.plantInfos.boxSettings!.depth} ${state.plantInfos.boxSettings!.unit}';
     }
 
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 30.0),
-              child: ListView(controller: infosScrollController, key: const PageStorageKey<String>('infos'), children: [
-                PlantInfosWidget(
-                    title: 'Strain name',
-                    value: strain,
-                    onEdit: state.plantInfos.editable == false
-                        ? null
-                        : () {
-                            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectNewProductEvent([],
-                                categoryID: ProductCategoryID.SEED, futureFn: (future) async {
-                              List<Product>? products = await future;
-                              if (products == null || products.length == 0) {
-                                return;
-                              }
-                              SeedSpecs specs = products[0].specs as SeedSpecs;
-                              updatePlantSettings(
-                                  context,
-                                  state,
-                                  state.plantInfos.plantSettings!.copyWith(
-                                      products: state.plantInfos.plantSettings!.products!..add(products[0]),
-                                      strain: products[0].name,
-                                      seedbank: specs.bank));
-                            }));
-                          }),
-                PlantInfosWidget(
-                    icon: 'icon_plant_type.svg',
-                    title: 'Plant type',
-                    value: state.plantInfos.plantSettings!.plantType,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('PLANT_TYPE')),
-                PlantInfosWidget(
-                    icon: 'icon_medium.svg',
-                    title: 'Medium',
-                    value: state.plantInfos.plantSettings!.medium,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('MEDIUM')),
-                PlantInfosWidget(
-                    icon: 'icon_dimension.svg',
-                    title: 'Lab dimensions',
-                    value: dimensions,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('DIMENSIONS')),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
-                  child: Text('Life event dates', style: TextStyle(color: Color(0xFF494949))),
-                ),
-                PlantInfosWidget(
-                    icon: 'icon_germination_date.svg',
-                    title: 'Germination',
-                    value: state.plantInfos.plantSettings!.germinationDate != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings!.germinationDate!)
-                        : null,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('GERMINATION_DATE')),
-                PlantInfosWidget(
-                    icon: 'icon_vegging_since.svg',
-                    title: 'Vegging',
-                    value: state.plantInfos.plantSettings!.veggingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings!.veggingStart!)
-                        : null,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('VEGGING_START')),
-                PlantInfosWidget(
-                    icon: 'icon_blooming_since.svg',
-                    title: 'Blooming',
-                    value: state.plantInfos.plantSettings!.bloomingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings!.bloomingStart!)
-                        : null,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('BLOOMING_START')),
-                PlantInfosWidget(
-                    icon: 'icon_drying_since.svg',
-                    title: 'Drying',
-                    value: state.plantInfos.plantSettings!.dryingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings!.dryingStart!)
-                        : null,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('DRYING_START')),
-                PlantInfosWidget(
-                    icon: 'icon_curing_since.svg',
-                    title: 'Curing',
-                    value: state.plantInfos.plantSettings!.curingStart != null
-                        ? DateFormat(format).format(state.plantInfos.plantSettings!.curingStart!)
-                        : null,
-                    onEdit: state.plantInfos.editable == false ? null : () => _openForm('CURING_START')),
-              ]),
-            ),
-          ),
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 30.0),
-            child: state.plantInfos.thumbnailPath == null
-                ? _renderNoPicture(context, state)
-                : _renderPicture(context, state),
-          )),
-        ],
+    return ListView(controller: infosScrollController, key: const PageStorageKey<String>('infos'), children: [
+      PlantInfosWidget(
+          color: Color(0xFFBA9650),
+          icon: 'assets/plant_infos/icon_seed.svg',
+          title: 'Strain name',
+          value: strain,
+          onEdit: state.plantInfos.editable == false
+              ? null
+              : () {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectNewProductEvent([],
+                      categoryID: ProductCategoryID.SEED, futureFn: (future) async {
+                    List<Product>? products = await future;
+                    if (products == null || products.length == 0) {
+                      return;
+                    }
+                    SeedSpecs specs = products[0].specs as SeedSpecs;
+                    updatePlantSettings(
+                        context,
+                        state,
+                        state.plantInfos.plantSettings!.copyWith(
+                            products: state.plantInfos.plantSettings!.products!..add(products[0]),
+                            strain: products[0].name,
+                            seedbank: specs.bank));
+                  }));
+                }),
+      PlantInfosWidget(
+          color: Color(0xFF5F5F5F),
+          icon: 'assets/plant_infos/icon_plant_type.svg',
+          title: 'Plant type',
+          value: state.plantInfos.plantSettings!.plantType,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('PLANT_TYPE')),
+      PlantInfosWidget(
+          color: Color(0xFF51220E),
+          icon: 'assets/plant_infos/icon_medium.svg',
+          title: 'Medium',
+          value: state.plantInfos.plantSettings!.medium,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('MEDIUM')),
+      PlantInfosWidget(
+          color: Color(0xFF20BBDD),
+          icon: 'assets/plant_infos/icon_dimension.svg',
+          title: 'Lab dimensions',
+          value: dimensions,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('DIMENSIONS')),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
+        child: Text('Life event dates',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xFF494949))),
       ),
-    );
-  }
-
-  Widget _renderNoPicture(BuildContext context, PlantInfosBlocStateLoaded state) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Center(
-          child: Text('No picture yet', style: TextStyle(color: Color(0xFF494949))),
-        ),
-      ],
-    );
+      PlantInfosWidget(
+          color: Color(0xFF3BB30B),
+          icon: 'assets/plant_infos/icon_germination_date.svg',
+          title: 'Germination',
+          value: state.plantInfos.plantSettings!.germinationDate != null
+              ? DateFormat(format).format(state.plantInfos.plantSettings!.germinationDate!)
+              : null,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('GERMINATION_DATE')),
+      PlantInfosWidget(
+          color: Color(0xFFFAC13C),
+          icon: 'assets/plant_infos/icon_vegging_since.svg',
+          title: 'Vegging',
+          value: state.plantInfos.plantSettings!.veggingStart != null
+              ? DateFormat(format).format(state.plantInfos.plantSettings!.veggingStart!)
+              : null,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('VEGGING_START')),
+      PlantInfosWidget(
+          color: Color(0xFFE859DA),
+          icon: 'assets/plant_infos/icon_blooming_since.svg',
+          title: 'Blooming',
+          value: state.plantInfos.plantSettings!.bloomingStart != null
+              ? DateFormat(format).format(state.plantInfos.plantSettings!.bloomingStart!)
+              : null,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('BLOOMING_START')),
+      PlantInfosWidget(
+          color: Color(0xFF7E7CE3),
+          icon: 'assets/plant_infos/icon_drying_since.svg',
+          title: 'Drying',
+          value: state.plantInfos.plantSettings!.dryingStart != null
+              ? DateFormat(format).format(state.plantInfos.plantSettings!.dryingStart!)
+              : null,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('DRYING_START')),
+      PlantInfosWidget(
+          color: Color(0xFFD93483),
+          icon: 'assets/plant_infos/icon_curing_since.svg',
+          title: 'Curing',
+          value: state.plantInfos.plantSettings!.curingStart != null
+              ? DateFormat(format).format(state.plantInfos.plantSettings!.curingStart!)
+              : null,
+          onEdit: state.plantInfos.editable == false ? null : () => _openForm('CURING_START')),
+    ]);
   }
 
   Widget _renderPicture(BuildContext context, PlantInfosBlocStateLoaded state) {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-      return SizedBox(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight - 100,
-          child: state.plantInfos.thumbnailPath!.startsWith("http")
-              ? Image.network(
-                  state.plantInfos.thumbnailPath!,
-                  headers: {'Host': BackendAPI().storageServerHostHeader},
-                  fit: BoxFit.contain,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    return FullscreenLoading(
-                        percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
-                  },
-                )
-              : Image.file(File(state.plantInfos.thumbnailPath!), fit: BoxFit.contain));
-    });
+    return SizedBox(
+        height: 100,
+        child: state.plantInfos.thumbnailPath!.startsWith("http")
+            ? Image.network(
+                state.plantInfos.thumbnailPath!,
+                headers: {'Host': BackendAPI().storageServerHostHeader},
+                fit: BoxFit.fill,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return FullscreenLoading(
+                      percent: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!);
+                },
+              )
+            : Image.file(File(state.plantInfos.thumbnailPath!), fit: BoxFit.fill));
   }
 
   Widget _renderForm(BuildContext context, PlantInfosBlocStateLoaded state) {

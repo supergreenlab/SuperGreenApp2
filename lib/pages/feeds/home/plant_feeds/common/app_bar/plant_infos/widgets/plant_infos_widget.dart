@@ -19,15 +19,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 
 class PlantInfosWidget extends StatelessWidget {
-  final String? icon;
-  final String? title;
+  final String icon;
+  final String title;
   final String? value;
   final Function()? onEdit;
-  final Color? color;
+  final Color color;
 
-  const PlantInfosWidget({Key? key, this.icon, this.title, this.value, this.onEdit, this.color}) : super(key: key);
+  const PlantInfosWidget(
+      {Key? key, required this.icon, required this.title, this.value, this.onEdit, required this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,73 +41,35 @@ class PlantInfosWidget extends StatelessWidget {
       valueWidget = value == null ? _renderNoValue() : _renderValue();
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, right: 8.0),
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: icon != null ? SvgPicture.asset("assets/plant_infos/$icon") : Container(),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  title != null
-                      ? Text(title!,
-                          style: TextStyle(fontWeight: FontWeight.w600, color: this.color ?? Color(0xFF494949)))
-                      : Container(),
-                  valueWidget,
-                ],
-              ),
-            ),
-          ],
-        ),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: AppBarAction(
+        icon: icon,
+        color: color,
+        title: title,
+        content: valueWidget,
+        action: onEdit != null ? InkWell(onTap: onEdit, child: SvgPicture.asset("assets/plant_infos/edit.svg")) : null,
       ),
     );
   }
 
   Widget _renderNoValue() {
     if (onEdit == null) {
-      return Text("Not set", style: TextStyle(color: this.color ?? Color(0xFF494949), fontWeight: FontWeight.w300));
+      return Text("Not set", style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300));
     }
-    return Container(
-        decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                  child: Text(
-                "Tap to set",
-                style: TextStyle(color: this.color ?? Color(0xFF494949), fontWeight: FontWeight.w300),
-                textAlign: TextAlign.center,
-              )),
-              SvgPicture.asset("assets/plant_infos/edit.svg"),
-            ],
-          ),
-        ));
+    return Text(
+      "Tap to set",
+      style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.w300),
+      textAlign: TextAlign.center,
+    );
   }
 
   Widget _renderValue() {
-    return Container(
-        decoration: BoxDecoration(
-            color: value == null ? Colors.white24 : Colors.transparent, borderRadius: BorderRadius.circular(2)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                  child: MarkdownBody(
-                data: value ?? '',
-                styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(color: this.color ?? Color(0xFF494949), fontSize: 16),
-                    h1: TextStyle(color: this.color ?? Color(0xFF494949), fontSize: 20, fontWeight: FontWeight.bold),
-                    strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16, fontWeight: FontWeight.bold)),
-              )),
-              onEdit == null ? Container() : SvgPicture.asset("assets/plant_infos/edit.svg"),
-            ],
-          ),
-        ));
+    return MarkdownBody(
+      data: value ?? '',
+      styleSheet: MarkdownStyleSheet(
+          p: TextStyle(color: Color(0xFF494949), fontSize: 16),
+          h1: TextStyle(color: Color(0xFF494949), fontSize: 20, fontWeight: FontWeight.bold),
+          strong: TextStyle(color: Color(0xff3bb30b), fontSize: 16, fontWeight: FontWeight.bold)),
+    );
   }
 }
