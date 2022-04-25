@@ -99,42 +99,39 @@ class BoxControlsPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: AppBarAction(
-                      icon: 'assets/app_bar/icon_ventilation.svg',
-                      color: Color(0xFF8EB5FF),
-                      title: 'VENTILATION',
-                      titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
-                      content: Text(
-                        '${state.metrics.blower.param.ivalue}%',
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
-                      ),
-                      action: InkWell(
-                        onTap: _onEnvironmentControlTapped(
-                            context,
-                            ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(state.box,
-                                pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
-                        child: SvgPicture.asset('assets/app_bar/icon_settings.svg'),
-                      )),
+                    center: true,
+                    icon: 'assets/app_bar/icon_ventilation.svg',
+                    color: Color(0xFF8EB5FF),
+                    title: 'VENTILATION',
+                    content: Text(
+                      '${state.metrics.blower.param.ivalue}%',
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                    ),
+                    action: _onEnvironmentControlTapped(
+                        context,
+                        ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(state.box,
+                            pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
+                  ),
                 ),
                 Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppBarAction(
-                        icon: 'assets/app_bar/icon_schedule.svg',
-                        color: Color(0xFF61A649),
-                        title: 'SCHEDULE',
-                        content: Text(
-                          DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param,
-                              state.metrics.offHour.param, state.metrics.offMin.param),
-                          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
-                        ),
-                        action: InkWell(
-                          onTap: _onEnvironmentControlTapped(
-                              context,
-                              ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(state.box,
-                                  pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                              tipID: 'TIP_BLOOM',
-                              tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
-                          child: SvgPicture.asset('assets/app_bar/icon_settings.svg'),
-                        ))),
+                      center: true,
+                      icon: 'assets/app_bar/icon_schedule.svg',
+                      color: Color(0xFF61A649),
+                      title: 'SCHEDULE',
+                      content: Text(
+                        DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param,
+                            state.metrics.offHour.param, state.metrics.offMin.param),
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                      ),
+                      action: _onEnvironmentControlTapped(
+                          context,
+                          ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(state.box,
+                              pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                          tipID: 'TIP_BLOOM',
+                          tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
+                    )),
               ],
             ),
           ),
@@ -145,6 +142,7 @@ class BoxControlsPage extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppBarAction(
+                        center: true,
                         icon: 'assets/app_bar/icon_light.svg',
                         color: Color(0xFFDABA48),
                         title: 'LIGHT',
@@ -152,38 +150,34 @@ class BoxControlsPage extends StatelessWidget {
                           '${state.metrics.light.param.ivalue}%',
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
-                        action: InkWell(
-                          onTap: _onEnvironmentControlTapped(
-                              context,
-                              ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(state.box,
-                                  pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                              tipID: 'TIP_STRETCH',
-                              tipPaths: [
-                                't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
-                                't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
-                              ]),
-                          child: SvgPicture.asset('assets/app_bar/icon_settings.svg'),
-                        ))),
+                        action: _onEnvironmentControlTapped(
+                            context,
+                            ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(state.box,
+                                pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                            tipID: 'TIP_STRETCH',
+                            tipPaths: [
+                              't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
+                              't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
+                            ]))),
                 state.plant != null
                     ? Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: AppBarAction(
-                            icon: 'assets/app_bar/icon_alerts.svg',
-                            color: Color(0xFF8848DA),
-                            title: 'ALERTS',
-                            content: AutoSizeText(
-                              '${state.plant!.alerts ? "ON" : "OFF"}',
-                              style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: state.plant!.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
-                            ),
-                            action: InkWell(
-                              onTap: () => BlocProvider.of<MainNavigatorBloc>(context).add(
-                                MainNavigateToSettingsPlantAlerts(state.plant!, futureFn: futureFn),
-                              ),
-                              child: SvgPicture.asset('assets/app_bar/icon_settings.svg'),
-                            )))
+                          center: true,
+                          icon: 'assets/app_bar/icon_alerts.svg',
+                          color: Color(0xFF8848DA),
+                          title: 'ALERTS',
+                          content: AutoSizeText(
+                            '${state.plant!.alerts ? "ON" : "OFF"}',
+                            style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: state.plant!.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
+                          ),
+                          action: () => BlocProvider.of<MainNavigatorBloc>(context).add(
+                            MainNavigateToSettingsPlantAlerts(state.plant!, futureFn: futureFn),
+                          ),
+                        ))
                     : Container(),
               ],
             ),

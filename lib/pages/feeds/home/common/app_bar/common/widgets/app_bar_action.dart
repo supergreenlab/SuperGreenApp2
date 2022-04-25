@@ -26,7 +26,9 @@ class AppBarAction extends StatelessWidget {
   final String title;
   final Widget? titleIcon;
   final Widget? content;
-  final Widget? action;
+  final Function? action;
+  final Widget? actionIcon;
+  final bool center;
 
   final double height;
 
@@ -38,31 +40,41 @@ class AppBarAction extends StatelessWidget {
     this.titleIcon,
     this.content,
     this.action,
+    this.actionIcon,
     this.height = 65,
+    this.center = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(50),
-            spreadRadius: 1.0,
-            blurRadius: 2.0,
-            offset: Offset(2, 3),
-          )
-        ],
-      ),
-      child: Row(
-        children: [
-          renderIcon(context),
-          Expanded(child: renderBody(context)),
-        ],
+    return InkWell(
+      onTap: () {
+        if (action != null) {
+          action!();
+        }
+      },
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(50),
+              spreadRadius: 1.0,
+              blurRadius: 2.0,
+              offset: Offset(2, 3),
+            )
+          ],
+        ),
+        child: Row(
+          children: [
+            renderIcon(context),
+            Expanded(child: renderBody(context)),
+            actionIcon != null ? renderButton(context) : Container(),
+          ],
+        ),
       ),
     );
   }
@@ -104,7 +116,7 @@ class AppBarAction extends StatelessWidget {
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
               children: [
                 renderContent(context),
               ],
@@ -127,7 +139,7 @@ class AppBarAction extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
               ),
-              child: action),
+              child: actionIcon),
         ),
       ],
     );

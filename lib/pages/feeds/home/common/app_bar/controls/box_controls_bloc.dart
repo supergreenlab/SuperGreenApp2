@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -89,6 +90,8 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
   Device? device;
   late BoxControlParamsController metrics;
 
+  late List<StreamSubscription<Param>> subscriptions;
+
   BoxControlsBloc(this.plant, this.box) : super(BoxControlsBlocStateInit()) {
     add(BoxControlsBlocEventInit());
   }
@@ -99,14 +102,21 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
       final db = RelDB.get();
       device = await db.devicesDAO.getDevice(box.device!);
       metrics = await BoxControlParamsController.load(device!, box);
+      subscriptions = metrics.listenParams(device!, onParamUpdate);
       yield BoxControlsBlocStateLoaded(plant, box, metrics);
     } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;
     }
   }
 
+  void onParamUpdate(ParamsController newValue) {
+    metrics = newValue as BoxControlParamsController;
+    add(BoxControlsBlocEventLoaded(BoxControlsBlocStateLoaded(plant, box, metrics)));
+  }
+
   @override
   Future<void> close() async {
+    await metrics.closeSubscriptions(subscriptions);
     return super.close();
   }
 }

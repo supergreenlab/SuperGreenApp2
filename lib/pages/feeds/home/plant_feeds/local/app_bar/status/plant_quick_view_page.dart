@@ -84,46 +84,44 @@ class PlantQuickViewPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 12.0),
           child: AppBarAction(
-              icon: 'assets/feed_card/icon_watering.svg',
-              color: Color(0xFF506EBA),
-              title: 'LAST WATERING',
-              titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
-              content: Text(
-                state.watering != null
-                    ? DateRenderer.renderDuration(DateTime.now().difference(state.watering!.date))
-                    : 'No watering yet',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300, color: Colors.orange),
-              ),
-              action: InkWell(
-                onTap: _onAction(
-                    context,
-                    ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(state.plant,
-                        pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
-                    tipID: 'TIP_WATERING',
-                    tipPaths: [
-                      't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
-                      't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
-                    ]),
-                child: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
-              )),
+            icon: 'assets/feed_card/icon_watering.svg',
+            color: Color(0xFF506EBA),
+            title: 'LAST WATERING',
+            titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
+            content: Text(
+              state.watering != null
+                  ? DateRenderer.renderDuration(DateTime.now().difference(state.watering!.date))
+                  : 'No watering yet',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300, color: Colors.orange),
+            ),
+            action: _onAction(
+                context,
+                ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(state.plant,
+                    pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)),
+                tipID: 'TIP_WATERING',
+                tipPaths: [
+                  't/supergreenlab/SuperGreenTips/master/s/when_to_water_seedling/l/en',
+                  't/supergreenlab/SuperGreenTips/master/s/how_to_water/l/en'
+                ]),
+            actionIcon: SvgPicture.asset('assets/app_bar/icon_watering.svg'),
+          ),
         ),
         AppBarAction(
-            icon: 'assets/feed_card/icon_media.svg',
-            color: Color(0xFF617682),
-            title: 'LAST GROWLOG',
-            content: Text(
-              state.media != null
-                  ? DateRenderer.renderDuration(DateTime.now().difference(state.media!.date))
-                  : 'No grow log yet',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
-            ),
-            action: InkWell(
-              onTap: _onAction(
-                  context,
-                  ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
-                      plant: state.plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state))),
-              child: SvgPicture.asset('assets/app_bar/icon_growlog.svg'),
-            )),
+          icon: 'assets/feed_card/icon_media.svg',
+          color: Color(0xFF617682),
+          title: 'LAST GROWLOG',
+          content: Text(
+            state.media != null
+                ? DateRenderer.renderDuration(DateTime.now().difference(state.media!.date))
+                : 'No grow log yet',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+          ),
+          action: _onAction(
+              context,
+              ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
+                  plant: state.plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state))),
+          actionIcon: SvgPicture.asset('assets/app_bar/icon_growlog.svg'),
+        ),
       ],
     );
   }

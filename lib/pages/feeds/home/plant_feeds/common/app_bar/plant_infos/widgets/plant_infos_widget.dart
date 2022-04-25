@@ -42,7 +42,8 @@ class PlantInfosWidget extends StatelessWidget {
         color: color,
         title: title,
         content: valueWidget,
-        action: onEdit != null ? InkWell(onTap: onEdit, child: SvgPicture.asset("assets/plant_infos/edit.svg")) : null,
+        action: onEdit,
+        actionIcon: onEdit != null ? SvgPicture.asset("assets/plant_infos/edit.svg") : null,
       ),
     );
   }

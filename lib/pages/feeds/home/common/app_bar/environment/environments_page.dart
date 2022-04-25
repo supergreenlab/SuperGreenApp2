@@ -18,9 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -200,98 +198,6 @@ class EnvironmentsPage extends StatelessWidget {
                 Expanded(child: graphBody),
               ],
             )));
-  }
-
-  Widget _renderEnvironmentControls(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 4, bottom: 8),
-          child: Text(EnvironmentsPage.environmentsPageControlTitle, style: TextStyle(color: Color(0xFF494949))),
-        ),
-        Row(
-          children: <Widget>[
-            _renderEnvironmentControl(
-                context,
-                EnvironmentsPage.environmentsPageLight,
-                'assets/feed_card/icon_dimming.svg',
-                _onEnvironmentControlTapped(
-                    context,
-                    ({pushAsReplacement = false}) =>
-                        MainNavigateToFeedLightFormEvent(box, pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                    tipID: 'TIP_STRETCH',
-                    tipPaths: [
-                      't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
-                      't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
-                    ])),
-            _renderEnvironmentControl(
-                context,
-                EnvironmentsPage.environmentsPageVentilation,
-                'assets/feed_card/icon_blower.svg',
-                _onEnvironmentControlTapped(
-                    context,
-                    ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
-                        pushAsReplacement: pushAsReplacement, futureFn: futureFn))),
-            _renderEnvironmentControl(
-                context,
-                EnvironmentsPage.environmentsPageSchedule,
-                'assets/feed_card/icon_schedule.svg',
-                _onEnvironmentControlTapped(
-                    context,
-                    ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
-                        pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                    tipID: 'TIP_BLOOM',
-                    tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en'])),
-            this.plant != null
-                ? _renderEnvironmentControl(
-                    context,
-                    EnvironmentsPage.environmentsPageAlerts,
-                    'assets/home/icon_alerts.svg',
-                    () => BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigateToSettingsPlantAlerts(this.plant!, futureFn: futureFn)))
-                : Container(),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _renderEnvironmentControl(BuildContext context, String name, String icon, void Function() navigateTo) {
-    return InkWell(
-      onTap: navigateTo,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 3.0),
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                ),
-                child: SvgPicture.asset(icon, width: 40, height: 40, fit: BoxFit.contain)),
-          ),
-          Text(
-            name,
-            style: TextStyle(color: Color(0xFF494949), fontSize: 12),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  void Function() _onEnvironmentControlTapped(
-      BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
-      {String? tipID, List<String>? tipPaths}) {
-    return () {
-      if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
-            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
-      } else {
-        BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
-      }
-    };
   }
 
   Widget _renderGraphs(BuildContext context) {

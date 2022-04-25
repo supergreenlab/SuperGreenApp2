@@ -88,36 +88,39 @@ class AppBarBoxMetricsPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
-    BoxMetrics metrics = state.metrics;
+    AppBarMetricsParamsController metrics = state.metrics;
     List<Widget> widgets = [
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_temperature.svg', height: 35),
-          value: metrics.temp == null ? 'n/a' : '${metrics.temp!.ivalue}',
+          value: '${metrics.temp.value}',
           unit: '°',
           unitSize: 30,
           color: Color(0xFF3BB30B)),
       AppBarMetric(
-          icon: SvgPicture.asset('assets/app_bar/icon_humidity.svg'),
-          value: metrics.humidity == null ? 'n/a' : '${metrics.humidity!.ivalue}',
+          icon: SvgPicture.asset(
+            'assets/app_bar/icon_humidity.svg',
+            height: 30,
+          ),
+          value: '${metrics.humidity.value}',
           unit: '%',
           color: Color(0xFFD7352B)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
-          value: metrics.vpd == null ? 'n/a' : '${metrics.vpd!.ivalue}',
+          value: metrics.vpd == null ? 'n/a' : '${metrics.vpd!.value}',
           color: Color(0xFF115D87)),
     ];
-    if (metrics.co2 != null && metrics.co2!.ivalue != 0) {
+    if (metrics.co2 != null && metrics.co2!.value != 0) {
       widgets.add(AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
-          value: metrics.co2 == null ? 'n/a' : '${metrics.co2!.ivalue}',
+          value: metrics.co2 == null ? 'n/a' : '${metrics.co2!.value}',
           unit: 'ppm',
           unitSize: 14,
           color: Color(0xFF595959)));
     }
-    if (metrics.weight != null && metrics.weight!.ivalue != 0) {
+    if (metrics.weight != null && metrics.weight!.value != 0) {
       widgets.add(AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
-          value: metrics.weight == null ? 'n/a' : '${metrics.weight!.ivalue}',
+          value: metrics.weight == null ? 'n/a' : '${metrics.weight!.value}',
           unit: 'kg',
           color: Color(0xFF483581)));
     }

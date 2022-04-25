@@ -87,6 +87,13 @@ class ParamsController extends Equatable {
     }).toList();
   }
 
+  Future<ParamsController> refreshParams(Device device) async {
+    await Future.wait(params.keys.map<Future>((String key) async {
+      params[key] = await params[key]!.refreshParam(device);
+    }).toList());
+    return this;
+  }
+
   Future<ParamsController> syncParams(Device device) async {
     await Future.wait(params.keys.map<Future>((String key) async {
       params[key] = await params[key]!.syncParam(device);

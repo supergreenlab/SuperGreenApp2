@@ -19,32 +19,25 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/api/device/device_helper.dart';
-import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
-class BoxMetrics extends Equatable {
-  final Param? temp;
-  final Param? humidity;
-  final Param? vpd;
-  final Param? co2;
-  final Param? weight;
-  final DateTime? lastWatering;
+class AppBarMetricsParamsController extends ParamsController {
+  ParamController get temp => this.params['temp']!;
+  ParamController get humidity => this.params['humidity']!;
+  ParamController? get vpd => this.params['vpd'];
+  ParamController? get co2 => this.params['co2'];
+  ParamController? get weight => this.params['weight'];
 
-  BoxMetrics({this.temp, this.humidity, this.vpd, this.co2, this.weight, this.lastWatering});
-
-  @override
-  List<Object?> get props => [temp, humidity, vpd, co2, weight, lastWatering];
-
-  BoxMetrics copyWith({Param? temp, Param? humidity, Param? vpd, Param? co2, Param? weight, DateTime? lastWatering}) {
-    return BoxMetrics(
-      temp: temp ?? this.temp,
-      humidity: humidity ?? this.humidity,
-      vpd: vpd ?? this.vpd,
-      co2: co2 ?? this.co2,
-      weight: weight ?? this.weight,
-    );
+  static Future<AppBarMetricsParamsController> load(Device device, Box box) async {
+    AppBarMetricsParamsController c = AppBarMetricsParamsController();
+    await c.loadBoxParam(device, box, 'TEMP', 'temp');
+    await c.loadBoxParam(device, box, 'HUMI', 'humidity');
+    await c.loadBoxParam(device, box, 'VPD', 'vpd');
+    await c.loadBoxParam(device, box, 'CO2', 'co2');
+    await c.loadBoxParam(device, box, 'WEIGHT', 'weight');
+    return c;
   }
 }
 
@@ -77,7 +70,7 @@ class AppBarMetricsBlocStateInit extends AppBarMetricsBlocState {
 
 class AppBarMetricsBlocStateLoaded extends AppBarMetricsBlocState {
   final Plant plant;
-  final BoxMetrics metrics;
+  final AppBarMetricsParamsController metrics;
 
   AppBarMetricsBlocStateLoaded(this.plant, this.metrics);
 
@@ -92,13 +85,9 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
 
   late Timer timer;
 
-  late BoxMetrics metrics;
+  late AppBarMetricsParamsController metrics;
 
-  late StreamSubscription<Param> tempListener;
-  late StreamSubscription<Param> humidityListener;
-  late StreamSubscription<Param> vpdListener;
-  late StreamSubscription<Param> co2Listener;
-  late StreamSubscription<Param> weightListener;
+  late List<StreamSubscription<Param>> subscriptions;
 
   AppBarMetricsBloc(this.plant) : super(AppBarMetricsBlocStateInit(plant)) {
     add(AppBarMetricsBlocEventInit());
@@ -118,96 +107,27 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
       timer = Timer.periodic(Duration(seconds: 10), (timer) {
         forceRefresh();
       });
-      metrics = BoxMetrics();
-
-      try {
-        metrics =
-            metrics.copyWith(temp: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_TEMP"));
-        tempListener = RelDB.get().devicesDAO.watchParam(device!.id, "BOX_${box.deviceBox}_TEMP").listen(onTempChange);
-      } catch (e, trace) {
-        Logger.logError(e, trace, data: {"device": device});
-      }
-      try {
-        metrics =
-            metrics.copyWith(humidity: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_HUMI"));
-        humidityListener =
-            RelDB.get().devicesDAO.watchParam(device!.id, "BOX_${box.deviceBox}_HUMI").listen(onHumidityChange);
-      } catch (e, trace) {
-        Logger.logError(e, trace, data: {"device": device});
-      }
-      try {
-        metrics = metrics.copyWith(vpd: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_VPD"));
-        vpdListener = RelDB.get().devicesDAO.watchParam(device!.id, "BOX_${box.deviceBox}_VPD").listen(onVPDChange);
-      } catch (e, trace) {
-        Logger.logError(e, trace, data: {"device": device});
-      }
-      try {
-        metrics = metrics.copyWith(co2: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_CO2"));
-        co2Listener = RelDB.get().devicesDAO.watchParam(device!.id, "BOX_${box.deviceBox}_CO2").listen(onCO2Change);
-      } catch (e, trace) {
-        Logger.logError(e, trace, data: {"device": device});
-      }
-      try {
-        metrics =
-            metrics.copyWith(weight: await RelDB.get().devicesDAO.getParam(device!.id, "BOX_${box.deviceBox}_WEIGHT"));
-        weightListener =
-            RelDB.get().devicesDAO.watchParam(device!.id, "BOX_${box.deviceBox}_WEIGHT").listen(onWeightChange);
-      } catch (e, trace) {
-        Logger.logError(e, trace, data: {"device": device});
-      }
-
+      metrics = await AppBarMetricsParamsController.load(device!, box);
+      subscriptions = metrics.listenParams(device!, onParamsUpdate);
       yield AppBarMetricsBlocStateLoaded(plant, metrics);
     } else if (event is AppBarMetricsBlocEventLoaded) {
       yield event.state;
     }
   }
 
-  void onTempChange(Param value) {
-    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics.copyWith(temp: value))));
+  void onParamsUpdate(ParamsController value) {
+    this.metrics = value as AppBarMetricsParamsController;
+    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics)));
   }
 
-  void onHumidityChange(Param value) {
-    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics.copyWith(humidity: value))));
-  }
-
-  void onVPDChange(Param value) {
-    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics.copyWith(vpd: value))));
-  }
-
-  void onCO2Change(Param value) {
-    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics.copyWith(co2: value))));
-  }
-
-  void onWeightChange(Param value) {
-    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics.copyWith(weight: value))));
-  }
-
-  void forceRefresh() {
-    if (metrics.temp != null) {
-      DeviceHelper.refreshIntParam(device!, metrics.temp!);
-    }
-    if (metrics.humidity != null) {
-      DeviceHelper.refreshIntParam(device!, metrics.humidity!);
-    }
-    if (metrics.vpd != null) {
-      DeviceHelper.refreshIntParam(device!, metrics.vpd!);
-    }
-    if (metrics.co2 != null) {
-      DeviceHelper.refreshIntParam(device!, metrics.co2!);
-    }
-    if (metrics.weight != null) {
-      DeviceHelper.refreshIntParam(device!, metrics.weight!);
-    }
+  void forceRefresh() async {
+    await metrics.refreshParams(device!);
   }
 
   @override
   Future<void> close() async {
     timer.cancel();
-    await tempListener.cancel();
-    await humidityListener.cancel();
-    await vpdListener.cancel();
-    await co2Listener.cancel();
-    await weightListener.cancel();
+    await metrics.closeSubscriptions(subscriptions);
     return super.close();
   }
 }
