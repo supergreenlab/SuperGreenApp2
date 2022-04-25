@@ -74,6 +74,7 @@ dependencies:
   firebase_core:
   flutter_local_notifications:
   exif:
+  auto_size_text:
   media_picker_builder:
     # path: ../media_picker_builder/ 
     # git: https://github.com/VidCamera/media_picker_builder.git

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -61,7 +62,6 @@ class AppBarAction extends StatelessWidget {
         children: [
           renderIcon(context),
           Expanded(child: renderBody(context)),
-          action != null ? renderButton(context) : Container(),
         ],
       ),
     );
@@ -90,7 +90,7 @@ class AppBarAction extends StatelessWidget {
   }
 
   Widget renderBody(BuildContext context) {
-    Widget top = Text(title, style: TextStyle(color: color, fontWeight: FontWeight.bold));
+    Widget top = AutoSizeText(title, style: TextStyle(color: color, fontWeight: FontWeight.bold));
     if (titleIcon != null) {
       top = Row(children: [top, titleIcon!]);
     }

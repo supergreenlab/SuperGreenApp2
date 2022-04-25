@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -147,7 +148,7 @@ class BoxControlsPage extends StatelessWidget {
                         icon: 'assets/app_bar/icon_light.svg',
                         color: Color(0xFFDABA48),
                         title: 'LIGHT',
-                        content: Text(
+                        content: AutoSizeText(
                           '${state.metrics.light.param.ivalue}%',
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
@@ -170,7 +171,7 @@ class BoxControlsPage extends StatelessWidget {
                             icon: 'assets/app_bar/icon_alerts.svg',
                             color: Color(0xFF8848DA),
                             title: 'ALERTS',
-                            content: Text(
+                            content: AutoSizeText(
                               '${state.plant!.alerts ? "ON" : "OFF"}',
                               style: TextStyle(
                                   fontSize: 28,
