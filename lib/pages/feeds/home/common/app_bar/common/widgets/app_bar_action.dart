@@ -102,12 +102,12 @@ class AppBarAction extends StatelessWidget {
   }
 
   Widget renderBody(BuildContext context) {
-    Widget top = AutoSizeText(title, style: TextStyle(color: color, fontWeight: FontWeight.bold));
+    Widget top = AutoSizeText(title, maxLines: 1, style: TextStyle(color: color, fontWeight: FontWeight.bold));
     if (titleIcon != null) {
       top = Row(children: [top, titleIcon!]);
     }
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
