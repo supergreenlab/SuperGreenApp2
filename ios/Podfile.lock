@@ -53,6 +53,8 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_keyboard_visibility (0.0.1):
+    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
@@ -81,9 +83,6 @@ PODS:
     - GoogleUtilities/Logger
   - heic_to_jpg (0.0.1):
     - Flutter
-  - keyboard_visibility (0.5.0):
-    - Flutter
-    - Reachability
   - libwebp (1.2.1):
     - libwebp/demux (= 1.2.1)
     - libwebp/mux (= 1.2.1)
@@ -155,10 +154,10 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - heic_to_jpg (from `.symlinks/plugins/heic_to_jpg/ios`)
-  - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
   - media_picker_builder (from `.symlinks/plugins/media_picker_builder/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
@@ -208,14 +207,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_email_sender/ios"
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_keyboard_visibility:
+    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   heic_to_jpg:
     :path: ".symlinks/plugins/heic_to_jpg/ios"
-  keyboard_visibility:
-    :path: ".symlinks/plugins/keyboard_visibility/ios"
   media_picker_builder:
     :path: ".symlinks/plugins/media_picker_builder/ios"
   package_info:
@@ -256,12 +255,12 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
+  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   heic_to_jpg: cce9d6463ab11852a7393daa61be23f98a951c64
-  keyboard_visibility: 96a24de806fe6823c3ad956c01ba2ec6d056616f
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   media_picker_builder: 780750c1948670b37a2824f086043a9e69e3a6f4
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
@@ -282,6 +281,6 @@ SPEC CHECKSUMS:
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
 
-PODFILE CHECKSUM: 04f9bd42bbbb0af677816da68ca854a29acf39fa
+PODFILE CHECKSUM: db3eadda2b7e6bfd2520bda91a302d76e1662793
 
 COCOAPODS: 1.11.2
