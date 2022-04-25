@@ -27,6 +27,8 @@ class ParamController extends Equatable {
   final int value;
   final int initialValue;
 
+  int get ivalue => param.ivalue!;
+
   bool get isChanged => value != initialValue;
 
   ParamController(this.param, this.value, this.initialValue);

@@ -139,6 +139,7 @@ class DeviceWebsocket {
               await sendRemoteCommand('geti -k TIME', nRetries: 0);
               await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(true)));
             } catch (e) {
+              //print(e.toString());
               await RelDB.get().devicesDAO.updateDevice(DevicesCompanion(id: Value(device.id), isRemote: Value(false)));
             }
           });
@@ -157,6 +158,7 @@ class DeviceWebsocket {
         if (log.module == 'CMD') {
           String cmdId = log.msg.split(')')[0].substring(1);
           if (commandCompleters.containsKey(cmdId)) {
+            //print('done: ${cmdId}');
             commandCompleters[cmdId]!.complete();
             commandCompleters.remove(cmdId);
           }

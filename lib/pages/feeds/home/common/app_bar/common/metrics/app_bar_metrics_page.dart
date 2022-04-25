@@ -92,7 +92,7 @@ class AppBarBoxMetricsPage extends StatelessWidget {
     List<Widget> widgets = [
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_temperature.svg', height: 35),
-          value: '${metrics.temp.value}',
+          value: '${metrics.temp.ivalue}',
           unit: '°',
           unitSize: 30,
           color: Color(0xFF3BB30B)),
@@ -101,26 +101,26 @@ class AppBarBoxMetricsPage extends StatelessWidget {
             'assets/app_bar/icon_humidity.svg',
             height: 30,
           ),
-          value: '${metrics.humidity.value}',
+          value: '${metrics.humidity.ivalue}',
           unit: '%',
           color: Color(0xFFD7352B)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
-          value: metrics.vpd == null ? 'n/a' : '${metrics.vpd!.value}',
+          value: metrics.vpd == null ? 'n/a' : '${metrics.vpd!.ivalue}',
           color: Color(0xFF115D87)),
     ];
-    if (metrics.co2 != null && metrics.co2!.value != 0) {
+    if (metrics.co2 != null && metrics.co2!.ivalue != 0) {
       widgets.add(AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
-          value: metrics.co2 == null ? 'n/a' : '${metrics.co2!.value}',
+          value: metrics.co2 == null ? 'n/a' : '${metrics.co2!.ivalue}',
           unit: 'ppm',
           unitSize: 14,
           color: Color(0xFF595959)));
     }
-    if (metrics.weight != null && metrics.weight!.value != 0) {
+    if (metrics.weight != null && metrics.weight!.ivalue != 0) {
       widgets.add(AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
-          value: metrics.weight == null ? 'n/a' : '${metrics.weight!.value}',
+          value: metrics.weight == null ? 'n/a' : '${metrics.weight!.ivalue}',
           unit: 'kg',
           color: Color(0xFF483581)));
     }

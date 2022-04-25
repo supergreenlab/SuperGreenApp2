@@ -104,7 +104,7 @@ class BoxControlsPage extends StatelessWidget {
                     color: Color(0xFF8EB5FF),
                     title: 'VENTILATION',
                     content: Text(
-                      '${state.metrics.blower.param.ivalue}%',
+                      '${state.metrics.blower.ivalue}%',
                       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                     ),
                     action: _onEnvironmentControlTapped(
@@ -147,7 +147,7 @@ class BoxControlsPage extends StatelessWidget {
                         color: Color(0xFFDABA48),
                         title: 'LIGHT',
                         content: AutoSizeText(
-                          '${state.metrics.light.param.ivalue}%',
+                          '${state.metrics.light.ivalue}%',
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: _onEnvironmentControlTapped(

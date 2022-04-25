@@ -17,6 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/device/device_helper.dart';
@@ -96,7 +97,11 @@ class SettingsRemoteControlBloc extends LegacyBloc<SettingsRemoteControlBlocEven
       );
     } else if (event is SettingsRemoteControlBlocEventPair) {
       yield SettingsRemoteControlBlocStateLoading();
-      await DeviceHelper.pairDevice(args.device);
+      try {
+        await DeviceHelper.pairDevice(args.device);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
       await Future.delayed(Duration(seconds: 1));
       yield SettingsRemoteControlBlocStateDonePairing(args.device);
     }
