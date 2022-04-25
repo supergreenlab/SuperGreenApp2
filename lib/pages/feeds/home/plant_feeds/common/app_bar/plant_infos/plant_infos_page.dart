@@ -97,10 +97,12 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
 
   Widget _renderLoaded(BuildContext context, PlantInfosBlocStateLoaded state) {
     String? strain;
+    double strainHeight = 65;
 
     if (state.plantInfos.plantSettings?.strain != null && state.plantInfos.plantSettings?.seedbank != null) {
       strain =
           '# ${state.plantInfos.plantSettings!.strain}\nfrom **${state.plantInfos.plantSettings!.seedbank!.trim()}**';
+      strainHeight = 85;
     } else if (state.plantInfos.plantSettings?.strain != null) {
       strain = '# ${state.plantInfos.plantSettings!.strain}';
     }
@@ -121,6 +123,7 @@ class _PlantInfosPageState extends State<PlantInfosPage> {
           icon: 'assets/plant_infos/icon_seed.svg',
           title: 'Strain name',
           value: strain,
+          height: strainHeight,
           onEdit: state.plantInfos.editable == false
               ? null
               : () {

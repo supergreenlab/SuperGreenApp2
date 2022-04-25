@@ -25,23 +25,33 @@ class PlantInfosWidget extends StatelessWidget {
   final String icon;
   final String title;
   final String? value;
+  final Widget? valueWidget;
   final Function()? onEdit;
   final Color color;
+  final double height;
 
   const PlantInfosWidget(
-      {Key? key, required this.icon, required this.title, this.value, this.onEdit, required this.color})
+      {Key? key,
+      required this.icon,
+      required this.title,
+      this.value,
+      this.valueWidget,
+      this.onEdit,
+      this.height = 65,
+      required this.color})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget valueWidget = value == null ? _renderNoValue() : _renderValue();
+    Widget content = value == null && this.valueWidget == null ? _renderNoValue() : _renderValue();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: AppBarAction(
         icon: icon,
+        height: height,
         color: color,
         title: title,
-        content: valueWidget,
+        content: content,
         action: onEdit,
         actionIcon: onEdit != null ? SvgPicture.asset("assets/plant_infos/edit.svg") : null,
       ),
@@ -60,6 +70,9 @@ class PlantInfosWidget extends StatelessWidget {
   }
 
   Widget _renderValue() {
+    if (valueWidget != null) {
+      return valueWidget!;
+    }
     return MarkdownBody(
       data: value ?? '',
       styleSheet: MarkdownStyleSheet(
