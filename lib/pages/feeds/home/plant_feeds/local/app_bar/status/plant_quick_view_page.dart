@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -88,10 +89,11 @@ class PlantQuickViewPage extends StatelessWidget {
             color: Color(0xFF506EBA),
             title: 'LAST WATERING',
             titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
-            content: Text(
+            content: AutoSizeText(
               state.watering != null
                   ? DateRenderer.renderDuration(DateTime.now().difference(state.watering!.date))
                   : 'No watering yet',
+              maxLines: 1,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300, color: Colors.orange),
             ),
             action: _onAction(
@@ -110,10 +112,11 @@ class PlantQuickViewPage extends StatelessWidget {
           icon: 'assets/feed_card/icon_media.svg',
           color: Color(0xFF617682),
           title: 'LAST GROWLOG',
-          content: Text(
+          content: AutoSizeText(
             state.media != null
                 ? DateRenderer.renderDuration(DateTime.now().difference(state.media!.date))
                 : 'No grow log yet',
+            maxLines: 1,
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
           ),
           action: _onAction(

@@ -297,11 +297,13 @@ class _MainPageState extends State<MainPage> {
               child: Scaffold(
                 body: Container(
                     color: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 21.0),
-                      child: Center(
-                          child:
-                              Text(MainPage.redBarSyncingProgress(state.text), style: TextStyle(color: Colors.white))),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 21.0),
+                        child: Center(
+                            child: Text(MainPage.redBarSyncingProgress(state.text),
+                                style: TextStyle(color: Colors.white))),
+                      ),
                     )),
               )));
         }

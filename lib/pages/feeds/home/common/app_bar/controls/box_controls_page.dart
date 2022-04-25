@@ -103,8 +103,9 @@ class BoxControlsPage extends StatelessWidget {
                     icon: 'assets/app_bar/icon_ventilation.svg',
                     color: Color(0xFF8EB5FF),
                     title: 'VENTILATION',
-                    content: Text(
+                    content: AutoSizeText(
                       '${state.metrics.blower.ivalue}%',
+                      maxLines: 1,
                       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                     ),
                     action: _onEnvironmentControlTapped(
@@ -120,9 +121,10 @@ class BoxControlsPage extends StatelessWidget {
                       icon: 'assets/app_bar/icon_schedule.svg',
                       color: Color(0xFF61A649),
                       title: 'SCHEDULE',
-                      content: Text(
+                      content: AutoSizeText(
                         DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param,
                             state.metrics.offHour.param, state.metrics.offMin.param),
+                        maxLines: 1,
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                       ),
                       action: _onEnvironmentControlTapped(
@@ -148,6 +150,7 @@ class BoxControlsPage extends StatelessWidget {
                         title: 'LIGHT',
                         content: AutoSizeText(
                           '${state.metrics.light.ivalue}%',
+                          maxLines: 1,
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: _onEnvironmentControlTapped(
@@ -169,6 +172,7 @@ class BoxControlsPage extends StatelessWidget {
                           title: 'ALERTS',
                           content: AutoSizeText(
                             '${state.plant!.alerts ? "ON" : "OFF"}',
+                            maxLines: 1,
                             style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
