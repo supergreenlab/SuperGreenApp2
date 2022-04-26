@@ -88,13 +88,16 @@ class PlantQuickViewPage extends StatelessWidget {
             icon: 'assets/feed_card/icon_watering.svg',
             color: Color(0xFF506EBA),
             title: 'LAST WATERING',
-            titleIcon: Icon(Icons.warning, size: 20, color: Colors.red),
+            titleIcon: wateringAlert(state) ? Icon(Icons.warning, size: 20, color: Colors.red) : null,
             content: AutoSizeText(
-              state.watering != null
-                  ? DateRenderer.renderDuration(DateTime.now().difference(state.watering!.date))
+              state.watering.length != 0
+                  ? DateRenderer.renderDuration(DateTime.now().difference(state.watering[0].date))
                   : 'No watering yet',
               maxLines: 1,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300, color: Colors.orange),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w300,
+                  color: wateringAlert(state) ? Colors.orange : Colors.green),
             ),
             action: _onAction(
                 context,
@@ -112,12 +115,14 @@ class PlantQuickViewPage extends StatelessWidget {
           icon: 'assets/feed_card/icon_media.svg',
           color: Color(0xFF617682),
           title: 'LAST GROWLOG',
+          titleIcon: mediaAlert(state) ? Icon(Icons.warning, size: 20, color: Colors.red) : null,
           content: AutoSizeText(
             state.media != null
                 ? DateRenderer.renderDuration(DateTime.now().difference(state.media!.date))
                 : 'No grow log yet',
             maxLines: 1,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+            style: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.w300, color: mediaAlert(state) ? Colors.orange : Colors.green),
           ),
           action: _onAction(
               context,
@@ -140,6 +145,22 @@ class PlantQuickViewPage extends StatelessWidget {
         BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
       }
     };
+  }
+
+  bool wateringAlert(PlantQuickViewBlocStateLoaded state) {
+    Duration period = Duration(days: 8);
+    if (state.watering.length >= 2) {
+      period = state.watering[0].date.difference(state.watering[1].date);
+    }
+    return DateTime.now().difference(state.watering[0].date).inSeconds > period.inSeconds * 0.85;
+  }
+
+  bool mediaAlert(PlantQuickViewBlocStateLoaded state) {
+    if (state.media == null) {
+      return true;
+    }
+    Duration period = Duration(days: 3);
+    return DateTime.now().difference(state.media!.date).inSeconds > period.inSeconds;
   }
 
   void Function(Future<dynamic>?) futureFn(BuildContext context, PlantQuickViewBlocStateLoaded state) {

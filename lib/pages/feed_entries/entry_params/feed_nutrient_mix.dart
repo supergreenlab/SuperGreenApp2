@@ -105,7 +105,7 @@ class FeedNutrientMixParams extends FeedEntryParams {
       tds: map['tds'],
       nutrientProducts: (nps ?? []).map((np) => NutrientProduct.fromMap(np)).toList(),
       message: map['message'],
-      phase: EnumToString.fromString(NutrientMixPhase.values, map['phase'] as String),
+      phase: map['phase'] == null ? null : EnumToString.fromString(NutrientMixPhase.values, map['phase'] as String),
       basedOn: map['basedOn'],
     );
   }
