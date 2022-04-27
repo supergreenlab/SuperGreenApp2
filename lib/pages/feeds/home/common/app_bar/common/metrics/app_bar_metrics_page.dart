@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -47,7 +48,7 @@ class AppBarMetric extends StatelessWidget {
             Text(value == null ? 'N/A' : value!,
                 style: TextStyle(
                   color: color,
-                  fontSize: 40,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                 )),
             unit != null
@@ -78,9 +79,40 @@ class AppBarBoxMetricsPage extends StatelessWidget {
             builder: (BuildContext context, AppBarMetricsBlocState state) {
               if (state is AppBarMetricsBlocStateInit) {
                 return _renderLoading(context, state);
+              } else if (state is AppBarMetricsBlocStateNoDevice) {
+                return _renderNoDevice(context, state);
               }
               return _renderLoaded(context, state as AppBarMetricsBlocStateLoaded);
             }));
+  }
+
+  Widget _renderNoDevice(BuildContext context, AppBarMetricsBlocStateNoDevice state) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: _renderMetrics(24, 56, 11, 453, 45),
+        ),
+        Container(
+          color: Colors.white.withAlpha(220),
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('No sensor yet',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Color(0xff909090),
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _renderLoading(BuildContext context, AppBarMetricsBlocStateInit state) {
@@ -89,10 +121,15 @@ class AppBarBoxMetricsPage extends StatelessWidget {
 
   Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
     AppBarMetricsParamsController metrics = state.metrics;
+    return _renderMetrics(metrics.temp.ivalue, metrics.humidity.ivalue, metrics.vpd?.ivalue.toDouble(),
+        metrics.co2?.ivalue, metrics.weight?.ivalue.toDouble());
+  }
+
+  Widget _renderMetrics(int temp, int humidity, double? vpd, int? co2, double? weight) {
     List<Widget> widgets = [
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_temperature.svg', height: 35),
-          value: '${metrics.temp.ivalue}',
+          value: '$temp',
           unit: '°',
           unitSize: 30,
           color: Color(0xFF3BB30B)),
@@ -101,29 +138,25 @@ class AppBarBoxMetricsPage extends StatelessWidget {
             'assets/app_bar/icon_humidity.svg',
             height: 30,
           ),
-          value: '${metrics.humidity.ivalue}',
+          value: '$humidity',
           unit: '%',
           color: Color(0xFFD7352B)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
-          value: metrics.vpd == null ? 'n/a' : '${metrics.vpd!.ivalue}',
+          value: vpd == null || vpd == 0 ? 'n/a' : '${vpd / 10.0}',
           color: Color(0xFF115D87)),
     ];
-    if (metrics.co2 != null && metrics.co2!.ivalue != 0) {
-      widgets.add(AppBarMetric(
-          icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
-          value: metrics.co2 == null ? 'n/a' : '${metrics.co2!.ivalue}',
-          unit: 'ppm',
-          unitSize: 14,
-          color: Color(0xFF595959)));
-    }
-    if (metrics.weight != null && metrics.weight!.ivalue != 0) {
-      widgets.add(AppBarMetric(
-          icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
-          value: metrics.weight == null ? 'n/a' : '${metrics.weight!.ivalue}',
-          unit: 'kg',
-          color: Color(0xFF483581)));
-    }
+    widgets.add(AppBarMetric(
+        icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
+        value: co2 == null || co2 == 0 ? 'n/a' : '$co2',
+        unit: 'ppm',
+        unitSize: 14,
+        color: Color(0xFF595959)));
+    widgets.add(AppBarMetric(
+        icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
+        value: weight == null || weight == 0 ? 'n/a' : '${weight / 10.0}',
+        unit: 'kg',
+        color: Color(0xFF483581)));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: widgets,

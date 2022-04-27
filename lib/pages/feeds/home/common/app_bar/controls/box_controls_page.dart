@@ -19,9 +19,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/date_renderer.dart';
@@ -57,9 +57,54 @@ class BoxControlsPage extends StatelessWidget {
           builder: (BuildContext context, BoxControlsBlocState state) {
             if (state is BoxControlsBlocStateInit) {
               return AppBarTab(child: _renderLoading(context, state));
+            } else if (state is BoxControlsBlocStateNoDevice) {
+              return AppBarTab(child: _renderNoDevice(context, state));
             }
             return AppBarTab(child: _renderLoaded(context, state as BoxControlsBlocStateLoaded));
           }),
+    );
+  }
+
+  Widget _renderNoDevice(BuildContext context, BoxControlsBlocStateNoDevice state) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _renderStatus(
+          context,
+          state.plant,
+        ),
+        Expanded(
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              _renderButtons(
+                context,
+                state.box,
+                state.plant,
+                '12%',
+                '18/6',
+                '66%',
+                'ON',
+              ),
+              Container(
+                color: Colors.white.withAlpha(220),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('No control device yet',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Color(0xff909090),
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -73,21 +118,35 @@ class BoxControlsPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _renderStatus(context, state),
+        _renderStatus(context, state.plant),
         _renderActions(context, state),
       ],
     );
   }
 
-  Widget _renderStatus(BuildContext context, BoxControlsBlocStateLoaded state) {
+  Widget _renderStatus(BuildContext context, Plant? plant) {
     return AppBarTitle(
       title: 'Controls',
-      plant: state.plant,
+      plant: plant,
       body: AppBarBoxMetricsPage(),
     );
   }
 
   Widget _renderActions(BuildContext context, BoxControlsBlocStateLoaded state) {
+    return _renderButtons(
+      context,
+      state.box,
+      state.plant,
+      '${state.metrics.blower.ivalue}%',
+      DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
+          state.metrics.offMin.param),
+      '${state.metrics.light.ivalue}%',
+      '${state.plant!.alerts ? "ON" : "OFF"}',
+    );
+  }
+
+  Widget _renderButtons(
+      BuildContext context, Box box, Plant? plant, String blower, String schedule, String light, String alerts) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -104,13 +163,13 @@ class BoxControlsPage extends StatelessWidget {
                     color: Color(0xFF8EB5FF),
                     title: 'VENTILATION',
                     content: AutoSizeText(
-                      '${state.metrics.blower.ivalue}%',
+                      blower,
                       maxLines: 1,
                       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                     ),
                     action: _onEnvironmentControlTapped(
                         context,
-                        ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(state.box,
+                        ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
                             pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
                   ),
                 ),
@@ -122,14 +181,13 @@ class BoxControlsPage extends StatelessWidget {
                       color: Color(0xFF61A649),
                       title: 'SCHEDULE',
                       content: AutoSizeText(
-                        DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param,
-                            state.metrics.offHour.param, state.metrics.offMin.param),
+                        schedule,
                         maxLines: 1,
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                       ),
                       action: _onEnvironmentControlTapped(
                           context,
-                          ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(state.box,
+                          ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
                               pushAsReplacement: pushAsReplacement, futureFn: futureFn),
                           tipID: 'TIP_BLOOM',
                           tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
@@ -149,20 +207,20 @@ class BoxControlsPage extends StatelessWidget {
                         color: Color(0xFFDABA48),
                         title: 'LIGHT',
                         content: AutoSizeText(
-                          '${state.metrics.light.ivalue}%',
+                          light,
                           maxLines: 1,
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                         ),
                         action: _onEnvironmentControlTapped(
                             context,
-                            ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(state.box,
+                            ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(box,
                                 pushAsReplacement: pushAsReplacement, futureFn: futureFn),
                             tipID: 'TIP_STRETCH',
                             tipPaths: [
                               't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
                               't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
                             ]))),
-                state.plant != null
+                plant != null
                     ? Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: AppBarAction(
@@ -171,15 +229,15 @@ class BoxControlsPage extends StatelessWidget {
                           color: Color(0xFF8848DA),
                           title: 'ALERTS',
                           content: AutoSizeText(
-                            '${state.plant!.alerts ? "ON" : "OFF"}',
+                            alerts,
                             maxLines: 1,
                             style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
-                                color: state.plant!.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
+                                color: plant.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
                           ),
                           action: () => BlocProvider.of<MainNavigatorBloc>(context).add(
-                            MainNavigateToSettingsPlantAlerts(state.plant!, futureFn: futureFn),
+                            MainNavigateToSettingsPlantAlerts(plant, futureFn: futureFn),
                           ),
                         ))
                     : Container(),

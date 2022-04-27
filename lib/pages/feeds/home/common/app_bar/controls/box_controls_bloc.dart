@@ -19,7 +19,6 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -62,6 +61,19 @@ class BoxControlsBlocEventLoaded extends BoxControlsBlocEvent {
 
 abstract class BoxControlsBlocState extends Equatable {}
 
+class BoxControlsBlocStateNoDevice extends BoxControlsBlocState {
+  final Plant? plant;
+  final Box box;
+
+  BoxControlsBlocStateNoDevice(this.plant, this.box);
+
+  @override
+  List<Object?> get props => [
+        this.plant,
+        this.box,
+      ];
+}
+
 class BoxControlsBlocStateInit extends BoxControlsBlocState {
   BoxControlsBlocStateInit();
 
@@ -88,7 +100,7 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
   final Plant? plant;
   final Box box;
   Device? device;
-  late BoxControlParamsController metrics;
+  BoxControlParamsController? metrics;
 
   late List<StreamSubscription<Param>> subscriptions;
 
@@ -100,10 +112,14 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
   Stream<BoxControlsBlocState> mapEventToState(BoxControlsBlocEvent event) async* {
     if (event is BoxControlsBlocEventInit) {
       final db = RelDB.get();
+      if (box.device == null) {
+        yield BoxControlsBlocStateNoDevice(plant, box);
+        return;
+      }
       device = await db.devicesDAO.getDevice(box.device!);
       metrics = await BoxControlParamsController.load(device!, box);
-      subscriptions = metrics.listenParams(device!, onParamUpdate);
-      yield BoxControlsBlocStateLoaded(plant, box, metrics);
+      subscriptions = metrics!.listenParams(device!, onParamUpdate);
+      yield BoxControlsBlocStateLoaded(plant, box, metrics!);
     } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;
     }
@@ -111,12 +127,14 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
 
   void onParamUpdate(ParamsController newValue) {
     metrics = newValue as BoxControlParamsController;
-    add(BoxControlsBlocEventLoaded(BoxControlsBlocStateLoaded(plant, box, metrics)));
+    add(BoxControlsBlocEventLoaded(BoxControlsBlocStateLoaded(plant, box, metrics!)));
   }
 
   @override
   Future<void> close() async {
-    await metrics.closeSubscriptions(subscriptions);
+    if (metrics != null) {
+      await metrics!.closeSubscriptions(subscriptions);
+    }
     return super.close();
   }
 }

@@ -149,6 +149,9 @@ class PlantQuickViewPage extends StatelessWidget {
 
   bool wateringAlert(PlantQuickViewBlocStateLoaded state) {
     Duration period = Duration(days: 8);
+    if (state.watering.length == 0) {
+      return true;
+    }
     if (state.watering.length >= 2) {
       period = state.watering[0].date.difference(state.watering[1].date);
     }

@@ -59,6 +59,15 @@ class AppBarMetricsBlocEventLoaded extends AppBarMetricsBlocEvent {
 
 abstract class AppBarMetricsBlocState extends Equatable {}
 
+class AppBarMetricsBlocStateNoDevice extends AppBarMetricsBlocState {
+  final Plant plant;
+
+  AppBarMetricsBlocStateNoDevice(this.plant);
+
+  @override
+  List<Object?> get props => [plant];
+}
+
 class AppBarMetricsBlocStateInit extends AppBarMetricsBlocState {
   final Plant plant;
 
@@ -83,11 +92,11 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
   Device? device;
   late Box box;
 
-  late Timer timer;
+  Timer? timer;
 
-  late AppBarMetricsParamsController metrics;
+  AppBarMetricsParamsController? metrics;
 
-  late List<StreamSubscription<Param>> subscriptions;
+  List<StreamSubscription<Param>>? subscriptions;
 
   AppBarMetricsBloc(this.plant) : super(AppBarMetricsBlocStateInit(plant)) {
     add(AppBarMetricsBlocEventInit());
@@ -98,18 +107,19 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
     if (event is AppBarMetricsBlocEventInit) {
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(this.plant.box);
-      device = await db.devicesDAO.getDevice(box.device!);
-
-      /*if (!device) {
+      if (box.device == null) {
         yield AppBarMetricsBlocStateNoDevice(plant);
-      }*/
+        return;
+      }
+
+      device = await db.devicesDAO.getDevice(box.device!);
 
       timer = Timer.periodic(Duration(seconds: 10), (timer) {
         forceRefresh();
       });
       metrics = await AppBarMetricsParamsController.load(device!, box);
-      subscriptions = metrics.listenParams(device!, onParamsUpdate);
-      yield AppBarMetricsBlocStateLoaded(plant, metrics);
+      subscriptions = metrics!.listenParams(device!, onParamsUpdate);
+      yield AppBarMetricsBlocStateLoaded(plant, metrics!);
     } else if (event is AppBarMetricsBlocEventLoaded) {
       yield event.state;
     }
@@ -117,17 +127,21 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
 
   void onParamsUpdate(ParamsController value) {
     this.metrics = value as AppBarMetricsParamsController;
-    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics)));
+    add(AppBarMetricsBlocEventLoaded(AppBarMetricsBlocStateLoaded(plant, metrics!)));
   }
 
   void forceRefresh() async {
-    await metrics.refreshParams(device!);
+    await metrics!.refreshParams(device!);
   }
 
   @override
   Future<void> close() async {
-    timer.cancel();
-    await metrics.closeSubscriptions(subscriptions);
+    if (timer != null) {
+      timer!.cancel();
+    }
+    if (metrics != null) {
+      await metrics!.closeSubscriptions(subscriptions!);
+    }
     return super.close();
   }
 }
