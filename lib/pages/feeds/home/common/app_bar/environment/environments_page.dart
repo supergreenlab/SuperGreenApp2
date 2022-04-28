@@ -21,71 +21,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_missing_controller.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/graphs/box_app_bar_metrics_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/environment/graphs/box_app_bar_metrics_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_tab.dart';
-import 'package:super_green_app/widgets/fullscreen.dart';
-import 'package:super_green_app/widgets/green_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class EnvironmentsPage extends StatelessWidget {
-  static String get environmentsPageControllerRequired {
-    return Intl.message(
-      'Monitoring feature\nrequires an SGL controller',
-      name: 'environmentsPageControllerRequired',
-      desc: 'Message over the graphs when controller is missing',
-      locale: SGLLocalizations.current?.localeName,
-    );
-  }
-
-  static String get environmentsPageShopNow {
-    return Intl.message(
-      'SHOP NOW',
-      name: 'environmentsPageShopNow',
-      desc: 'SHOW NOW button displayed when controller is missing',
-      locale: SGLLocalizations.current?.localeName,
-    );
-  }
-
-  static String get environmentsPageOr {
-    return Intl.message(
-      'or',
-      name: 'environmentsPageOr',
-      desc: 'SHOW NOW *or* DIY NOW displayed when controller is missing',
-      locale: SGLLocalizations.current?.localeName,
-    );
-  }
-
-  static String get environmentsPageDIYNow {
-    return Intl.message(
-      'DIY NOW',
-      name: 'environmentsPageDIYNow',
-      desc: 'DIY NOW button displayed when controller is missing',
-      locale: SGLLocalizations.current?.localeName,
-    );
-  }
-
-  static String get environmentsPageAlreadyGotOne {
-    return Intl.message(
-      'already got one?',
-      name: 'environmentsPageAlreadyGotOne',
-      desc:
-          'label for the SETUP CONTROLLER button displayed when controller is missing, opens the select controller dialog',
-      locale: SGLLocalizations.current?.localeName,
-    );
-  }
-
-  static String get environmentsPageSetupController {
-    return Intl.message(
-      'SETUP CONTROLLER',
-      name: 'environmentsPageSetupController',
-      desc: 'SETUP CONTROLLER displayed when controller is missing, opens the select controller dialog',
-      locale: SGLLocalizations.current?.localeName,
-    );
-  }
-
   static String get environmentsPageControlTitle {
     return Intl.message(
       'Environment control',
@@ -145,47 +87,7 @@ class EnvironmentsPage extends StatelessWidget {
     } else {
       graphBody = Stack(children: [
         _renderGraphs(context),
-        Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white.withAlpha(190)),
-          child: Fullscreen(
-            fontSize: 18,
-            fontWeight: FontWeight.normal,
-            title: EnvironmentsPage.environmentsPageControllerRequired,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GreenButton(
-                      title: EnvironmentsPage.environmentsPageShopNow,
-                      onPressed: () {
-                        launch('https://www.supergreenlab.com');
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(EnvironmentsPage.environmentsPageOr, style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    GreenButton(
-                      title: EnvironmentsPage.environmentsPageDIYNow,
-                      onPressed: () {
-                        launch('https://github.com/supergreenlab');
-                      },
-                    ),
-                  ],
-                ),
-                Text(EnvironmentsPage.environmentsPageAlreadyGotOne),
-                GreenButton(
-                  title: EnvironmentsPage.environmentsPageSetupController,
-                  onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(box));
-                  },
-                ),
-              ],
-            ),
-            childFirst: false,
-          ),
-        ),
+        AppBarMissingController(this.box),
       ]);
     }
 

@@ -25,6 +25,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/date_renderer.dart';
+import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_missing_controller.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
@@ -86,21 +87,7 @@ class BoxControlsPage extends StatelessWidget {
                 '66%',
                 'ON',
               ),
-              Container(
-                color: Colors.white.withAlpha(220),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('No control device yet',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Color(0xff909090),
-                          fontWeight: FontWeight.bold,
-                        )),
-                  ],
-                ),
-              ),
+              AppBarMissingController(state.box),
             ],
           ),
         ),
