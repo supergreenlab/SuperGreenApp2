@@ -26,11 +26,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_picker_builder/data/media_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_picker/picker_widget.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 
 class CapturePage extends TraceableStatefulWidget {
   @override

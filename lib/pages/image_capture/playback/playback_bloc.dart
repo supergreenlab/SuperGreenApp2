@@ -16,15 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:io';
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
+import 'package:image/image.dart';
+import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 
 abstract class PlaybackBlocEvent extends Equatable {}
 
-class CaptureBlocEventInit extends PlaybackBlocEvent {
+class PlaybackBlocEventInit extends PlaybackBlocEvent {
   @override
   List<Object> get props => [];
+}
+
+class PlaybackBlocEventRotate extends PlaybackBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+
+  @override
+  List<Object> get props => [rand];
 }
 
 class PlaybackBlocState extends Equatable {
@@ -45,6 +58,15 @@ class PlaybackBlocStateInit extends PlaybackBlocState {
       : super(filePath, isVideo, cancelButton, okButton, overlayPath);
 }
 
+class PlaybackBlocStateReload extends PlaybackBlocState {
+  final int rand = Random().nextInt(1 << 32);
+
+  PlaybackBlocStateReload(String filePath, bool isVideo, String cancelButton, String okButton, String? overlayPath)
+      : super(filePath, isVideo, cancelButton, okButton, overlayPath);
+  @override
+  List<Object?> get props => [...super.props, rand];
+}
+
 class PlaybackBloc extends LegacyBloc<PlaybackBlocEvent, PlaybackBlocState> {
   final MainNavigateToImageCapturePlaybackEvent _args;
 
@@ -53,13 +75,24 @@ class PlaybackBloc extends LegacyBloc<PlaybackBlocEvent, PlaybackBlocState> {
   PlaybackBloc(this._args)
       : super(PlaybackBlocState(_args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton,
             _args.okButton, _args.overlayPath)) {
-    add(CaptureBlocEventInit());
+    add(PlaybackBlocEventInit());
   }
 
   @override
   Stream<PlaybackBlocState> mapEventToState(PlaybackBlocEvent event) async* {
-    if (event is CaptureBlocEventInit) {
+    if (event is PlaybackBlocEventInit) {
       yield PlaybackBlocStateInit(
+          _args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton, _args.okButton, _args.overlayPath);
+    } else if (event is PlaybackBlocEventRotate) {
+      try {
+        Image? image = decodeImage(await new File(FeedMedias.makeAbsoluteFilePath(_args.filePath)).readAsBytes());
+        image = copyRotate(image!, 90);
+        List<int>? out = encodeNamedImage(image, _args.filePath);
+        await File(FeedMedias.makeAbsoluteFilePath(_args.filePath)).writeAsBytes(out!, flush: true);
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
+      yield PlaybackBlocStateReload(
           _args.filePath, PlaybackBloc._isVideo(_args.filePath), _args.cancelButton, _args.okButton, _args.overlayPath);
     }
   }

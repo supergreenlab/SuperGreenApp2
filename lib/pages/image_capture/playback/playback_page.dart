@@ -25,6 +25,7 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/image_capture/playback/playback_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:video_player/video_player.dart';
 
 class PlaybackPage extends TraceableStatefulWidget {
@@ -35,6 +36,9 @@ class PlaybackPage extends TraceableStatefulWidget {
 class _PlaybackPageState extends State<PlaybackPage> {
   VideoPlayerController? _videoPlayerController;
   double _opacity = 0.5;
+
+  int picRefresh = 0;
+  bool loading = false;
 
   @override
   void initState() {
@@ -63,10 +67,29 @@ class _PlaybackPageState extends State<PlaybackPage> {
               setState(() {});
             }
           }
+          if (state is PlaybackBlocStateReload) {
+            imageCache!.clear();
+            imageCache!.clearLiveImages();
+            setState(() {
+              ++picRefresh;
+              loading = false;
+            });
+          }
         },
         child: BlocBuilder<PlaybackBloc, PlaybackBlocState>(
             bloc: BlocProvider.of<PlaybackBloc>(context),
             builder: (context, state) {
+              if (loading) {
+                return Stack(
+                  children: [
+                    _renderPlayer(context, state),
+                    FullscreenLoading(
+                      title: 'Rotating',
+                      backgroundColor: Colors.white54,
+                    ),
+                  ],
+                );
+              }
               return _renderPlayer(context, state);
             }),
       ),
@@ -130,8 +153,12 @@ class _PlaybackPageState extends State<PlaybackPage> {
     Widget picture = SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
-        child:
-            FittedBox(fit: BoxFit.contain, child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.filePath)))));
+        child: FittedBox(
+            fit: BoxFit.contain,
+            child: Image.file(
+              File(FeedMedias.makeAbsoluteFilePath(state.filePath)),
+              key: Key('$picRefresh'),
+            )));
     if (state.overlayPath != null) {
       picture = Stack(children: [
         picture,
@@ -183,6 +210,21 @@ class _PlaybackPageState extends State<PlaybackPage> {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: false));
         },
       ),
+      !state.isVideo
+          ? RawMaterialButton(
+              child: Icon(
+                Icons.rotate_90_degrees_cw,
+                color: Colors.white,
+                size: 40,
+              ),
+              onPressed: () {
+                setState(() {
+                  loading = true;
+                });
+                BlocProvider.of<PlaybackBloc>(context).add(PlaybackBlocEventRotate());
+              },
+            )
+          : Container(),
       RawMaterialButton(
         child: Text(state.okButton, style: TextStyle(color: Colors.white, fontSize: 20)),
         onPressed: () {

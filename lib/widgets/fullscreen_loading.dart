@@ -26,9 +26,16 @@ class FullscreenLoading extends StatelessWidget {
   final String? circleText;
   final double fontSize;
   final double size;
+  final Color? backgroundColor;
 
   const FullscreenLoading(
-      {this.title = 'Loading..', this.percent, this.textColor, this.circleText, this.fontSize = 18, this.size = 60});
+      {this.title = 'Loading..',
+      this.percent,
+      this.textColor,
+      this.circleText,
+      this.fontSize = 18,
+      this.size = 60,
+      this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +80,7 @@ class FullscreenLoading extends StatelessWidget {
       child: child,
       textColor: textColor,
       fontSize: fontSize,
+      backgroundColor: backgroundColor,
     );
   }
 }
