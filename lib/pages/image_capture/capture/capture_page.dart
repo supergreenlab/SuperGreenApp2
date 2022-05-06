@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_picker_builder/data/media_file.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -388,6 +389,7 @@ class _CapturePageState extends State<CapturePage> {
     _cameraController = CameraController(_cameras[0], ResolutionPreset.veryHigh, enableAudio: _enableAudio);
     await _cameraController!.initialize();
     _cameraController!.setFocusMode(focusMode);
+    _cameraController!.lockCaptureOrientation(DeviceOrientation.portraitUp);
     setState(() {});
   }
 
@@ -436,7 +438,8 @@ class _CapturePageState extends State<CapturePage> {
     Map<Permission, PermissionStatus> res = await [
       permissionStorageGroup,
     ].request();
-    return res[permissionStorageGroup] == PermissionStatus.granted || res[permissionStorageGroup] == PermissionStatus.limited;
+    return res[permissionStorageGroup] == PermissionStatus.granted ||
+        res[permissionStorageGroup] == PermissionStatus.limited;
   }
 
   @override
