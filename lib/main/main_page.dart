@@ -293,7 +293,7 @@ class _MainPageState extends State<MainPage> {
               left: 0,
               top: 0,
               right: 0,
-              height: 40,
+              height: 50,
               child: Scaffold(
                 body: Container(
                     color: Colors.red,
