@@ -75,6 +75,13 @@ class HomeNavigateToBoxFeedEvent extends HomeNavigatorEvent implements DeviceNav
   }
 }
 
+class HomeNavigateToDashboardEvent extends HomeNavigatorEvent {
+  HomeNavigateToDashboardEvent() : super();
+
+  @override
+  List<Object> get props => [];
+}
+
 class HomeNavigateToSGLFeedEvent extends HomeNavigatorEvent {
   HomeNavigateToSGLFeedEvent() : super();
 
@@ -129,6 +136,9 @@ class HomeNavigatorBloc extends LegacyBloc<HomeNavigatorEvent, HomeNavigatorStat
   Stream<HomeNavigatorState> mapEventToState(HomeNavigatorEvent event) async* {
     if (event is HomeNavigateToSGLFeedEvent) {
       _navigatorKey.currentState!.pushReplacementNamed('/feed/sgl', arguments: event);
+      yield HomeNavigatorState(0);
+    } else if (event is HomeNavigateToDashboardEvent) {
+      _navigatorKey.currentState!.pushReplacementNamed('/dashboard', arguments: event);
       yield HomeNavigatorState(0);
     } else if (event is HomeNavigateToPlantFeedEvent) {
       _navigatorKey.currentState!.pushReplacementNamed('/feed/plant', arguments: event);

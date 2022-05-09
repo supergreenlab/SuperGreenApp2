@@ -24,6 +24,8 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n/common.dart';
+import 'package:super_green_app/pages/dashboard/dashboard_bloc.dart';
+import 'package:super_green_app/pages/dashboard/dashboard_page.dart';
 import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/explorer/explorer_page.dart';
 import 'package:super_green_app/pages/explorer/search/search_bloc.dart';
@@ -84,23 +86,6 @@ class HomePage extends TraceableStatelessWidget {
               onGenerateRoute: (settings) => this._onGenerateRoute(context, settings),
             );
 
-            Widget sglIcon = Icon(Icons.feedback);
-            try {
-              int nSgl = 0;
-              try {
-                nSgl = state.hasPending.where((e) => e.id == 1).map<int>((e) => e.nNew).reduce((a, e) => a + e);
-              } catch (e) {}
-              if (nSgl > 0) {
-                sglIcon = Stack(
-                  children: [
-                    sglIcon,
-                    _renderBadge(nSgl),
-                  ],
-                );
-              }
-            } catch (e, trace) {
-              Logger.logError(e, trace);
-            }
             Widget homeIcon = Icon(Icons.event_note);
             try {
               int nOthers = 0;
@@ -126,8 +111,8 @@ class HomePage extends TraceableStatelessWidget {
               currentIndex: navigatorState.index,
               items: [
                 BottomNavigationBarItem(
-                  icon: sglIcon,
-                  label: 'Towelie',
+                  icon: Icon(Icons.feedback),
+                  label: 'Dashboard',
                 ),
                 BottomNavigationBarItem(
                   icon: homeIcon,
@@ -179,7 +164,7 @@ class HomePage extends TraceableStatelessWidget {
   void _onNavigationBarItemSelect(BuildContext context, int i, HomeNavigatorState state) {
     if (i == state.index) return;
     if (i == 0) {
-      BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToSGLFeedEvent());
+      BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToDashboardEvent());
     } else if (i == 1) {
       BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToPlantFeedEvent(null));
     } else if (i == 2) {
@@ -200,6 +185,13 @@ class HomePage extends TraceableStatelessWidget {
             builder: (context) => BlocProvider(
                   create: (context) => SGLFeedBloc(),
                   child: TowelieHelper.wrapWidget(settings, context, SGLFeedPage()),
+                ));
+      case '/dashboard':
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (context) => BlocProvider(
+                  create: (context) => DashboardBloc(),
+                  child: TowelieHelper.wrapWidget(settings, context, DashboardPage()),
                 ));
       case '/feed/plant':
         return _plantFeedRoute(context, settings, settings.arguments as HomeNavigateToPlantFeedEvent, providers: [
