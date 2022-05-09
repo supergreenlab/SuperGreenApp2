@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,12 +30,9 @@ class SGLFeedBlocStateInit extends SGLFeedBlocState {
   List<Object> get props => [];
 }
 
-class SGLFeedBloc
-    extends LegacyBloc<SGLFeedBlocEvent, SGLFeedBlocState> {
-
+class SGLFeedBloc extends LegacyBloc<SGLFeedBlocEvent, SGLFeedBlocState> {
   SGLFeedBloc() : super(SGLFeedBlocStateInit());
 
   @override
-  Stream<SGLFeedBlocState> mapEventToState(
-      SGLFeedBlocEvent event) async* {}
+  Stream<SGLFeedBlocState> mapEventToState(SGLFeedBlocEvent event) async* {}
 }

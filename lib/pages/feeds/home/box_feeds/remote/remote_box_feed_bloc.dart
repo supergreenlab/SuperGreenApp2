@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,13 +29,11 @@ class RemoteBoxFeedBlocStateInit extends RemoteBoxFeedBlocState {
   List<Object> get props => [];
 }
 
-class RemoteBoxFeedBloc
-    extends LegacyBloc<RemoteBoxFeedBlocEvent, RemoteBoxFeedBlocState> {
+class RemoteBoxFeedBloc extends LegacyBloc<RemoteBoxFeedBlocEvent, RemoteBoxFeedBlocState> {
   MainNavigateToRemoteBoxEvent args;
 
   RemoteBoxFeedBloc(this.args) : super(RemoteBoxFeedBlocStateInit());
 
   @override
-  Stream<RemoteBoxFeedBlocState> mapEventToState(
-      RemoteBoxFeedBlocEvent event) async* {}
+  Stream<RemoteBoxFeedBlocState> mapEventToState(RemoteBoxFeedBlocEvent event) async* {}
 }

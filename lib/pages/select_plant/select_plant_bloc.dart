@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -54,8 +54,7 @@ class SelectPlantBloc extends LegacyBloc<SelectPlantBlocEvent, SelectPlantBlocSt
   }
 
   @override
-  Stream<SelectPlantBlocState> mapEventToState(
-      SelectPlantBlocEvent event) async* {
+  Stream<SelectPlantBlocState> mapEventToState(SelectPlantBlocEvent event) async* {
     if (event is SelectPlantBlocEventInit) {
       List<Plant> plants = await RelDB.get().plantsDAO.getPlants();
       List<Box> boxes = await RelDB.get().plantsDAO.getBoxes();

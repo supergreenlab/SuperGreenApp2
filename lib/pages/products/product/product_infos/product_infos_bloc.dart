@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,14 +32,11 @@ class ProductInfosBlocState extends Equatable {
   List<Object> get props => [productCategoryID];
 }
 
-class ProductInfosBloc
-    extends LegacyBloc<ProductInfosBlocEvent, ProductInfosBlocState> {
+class ProductInfosBloc extends LegacyBloc<ProductInfosBlocEvent, ProductInfosBlocState> {
   final MainNavigateToProductInfosEvent args;
 
-  ProductInfosBloc(this.args)
-      : super(ProductInfosBlocState(args.productCategoryID));
+  ProductInfosBloc(this.args) : super(ProductInfosBlocState(args.productCategoryID));
 
   @override
-  Stream<ProductInfosBlocState> mapEventToState(
-      ProductInfosBlocEvent event) async* {}
+  Stream<ProductInfosBlocState> mapEventToState(ProductInfosBlocEvent event) async* {}
 }

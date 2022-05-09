@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -74,7 +74,8 @@ class DeviceReachableListenerBlocStateDeviceReachable extends DeviceReachableLis
   List<Object> get props => [rand, device, reachable, usingWifi];
 }
 
-class DeviceReachableListenerBloc extends LegacyBloc<DeviceReachableListenerBlocEvent, DeviceReachableListenerBlocState> {
+class DeviceReachableListenerBloc
+    extends LegacyBloc<DeviceReachableListenerBlocEvent, DeviceReachableListenerBlocState> {
   final DeviceNavigationArgHolder deviceArgHolder;
 
   late Device device;

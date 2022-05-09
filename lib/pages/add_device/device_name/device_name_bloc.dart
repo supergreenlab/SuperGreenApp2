@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -56,8 +56,7 @@ class DeviceNameBlocStateLoading extends DeviceNameBlocState {
 class DeviceNameBlocStateDone extends DeviceNameBlocState {
   final bool requiresWifiSetup;
 
-  DeviceNameBlocStateDone(Device device, this.requiresWifiSetup)
-      : super(device);
+  DeviceNameBlocStateDone(Device device, this.requiresWifiSetup) : super(device);
 }
 
 class DeviceNameBloc extends LegacyBloc<DeviceNameBlocEvent, DeviceNameBlocState> {
@@ -66,8 +65,7 @@ class DeviceNameBloc extends LegacyBloc<DeviceNameBlocEvent, DeviceNameBlocState
   DeviceNameBloc(this.args) : super(DeviceNameBlocState(args.device));
 
   @override
-  Stream<DeviceNameBlocState> mapEventToState(
-      DeviceNameBlocEvent event) async* {
+  Stream<DeviceNameBlocState> mapEventToState(DeviceNameBlocEvent event) async* {
     if (event is DeviceNameBlocEventReset) {
       yield DeviceNameBlocState(args.device);
     } else if (event is DeviceNameBlocEventSetName) {

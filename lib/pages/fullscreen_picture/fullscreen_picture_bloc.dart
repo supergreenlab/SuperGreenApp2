@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -35,13 +35,11 @@ class FullscreenPictureBlocState extends Equatable {
   List<Object> get props => [];
 }
 
-class FullscreenPictureBloc
-    extends LegacyBloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
+class FullscreenPictureBloc extends LegacyBloc<FullscreenPictureBlocEvent, FullscreenPictureBlocState> {
   final MainNavigateToFullscreenPicture args;
 
   FullscreenPictureBloc(this.args) : super(FullscreenPictureBlocState(args.id, args.image));
 
   @override
-  Stream<FullscreenPictureBlocState> mapEventToState(
-      FullscreenPictureBlocEvent event) async* {}
+  Stream<FullscreenPictureBlocState> mapEventToState(FullscreenPictureBlocEvent event) async* {}
 }

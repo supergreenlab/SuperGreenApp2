@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -76,8 +76,7 @@ abstract class SpecsFormState<T extends StatefulWidget> extends State<T> {
             onPressed: isValid()
                 ? () {
                     Product product = createProduct();
-                    BlocProvider.of<MainNavigatorBloc>(context)
-                        .add(MainNavigatorActionPop(param: product));
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: product));
                   }
                 : null,
           ),

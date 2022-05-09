@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,32 +30,18 @@ class ProductCategoryUI extends Equatable {
 }
 
 Map<ProductCategoryID, ProductCategoryUI> productCategories = {
-  ProductCategoryID.SEED:
-      ProductCategoryUI('Seeds', 'assets/products/toolbox/icon_seed.svg'),
-  ProductCategoryID.COMPLETE_KIT: ProductCategoryUI(
-      'Complete kit', 'assets/products/toolbox/icon_complete_kit.svg'),
-  ProductCategoryID.VENTILATION: ProductCategoryUI(
-      'Ventilation', 'assets/products/toolbox/icon_ventilation.svg'),
-  ProductCategoryID.LIGHTING: ProductCategoryUI(
-      'Lighting', 'assets/products/toolbox/icon_lighting.svg'),
-  ProductCategoryID.SENSORS:
-      ProductCategoryUI('Sensors', 'assets/products/toolbox/icon_sensors.svg'),
-  ProductCategoryID.PH_EC:
-      ProductCategoryUI('PH/EC', 'assets/products/toolbox/icon_ph_ec.svg'),
-  ProductCategoryID.SUBSTRAT: ProductCategoryUI(
-      'Substrat', 'assets/products/toolbox/icon_substrat.svg'),
-  ProductCategoryID.FERTILIZER: ProductCategoryUI(
-      'Fertilizer', 'assets/products/toolbox/icon_fertilizer.svg'),
-  ProductCategoryID.IRRIGATION: ProductCategoryUI(
-      'Irrigation', 'assets/products/toolbox/icon_irrigation.svg'),
-  ProductCategoryID.FURNITURE: ProductCategoryUI(
-      'Furniture', 'assets/products/toolbox/icon_furniture.svg'),
-  ProductCategoryID.SEEDLING: ProductCategoryUI(
-      'Seedling', 'assets/products/toolbox/icon_seedling.svg'),
-  ProductCategoryID.ACCESSORIES: ProductCategoryUI(
-      'Accessories', 'assets/products/toolbox/icon_accessories.svg'),
-  ProductCategoryID.ELECTRICITY: ProductCategoryUI(
-      'Electricity', 'assets/products/toolbox/icon_electricity.svg'),
-  ProductCategoryID.OTHER:
-      ProductCategoryUI('Other', 'assets/products/toolbox/icon_other.svg'),
+  ProductCategoryID.SEED: ProductCategoryUI('Seeds', 'assets/products/toolbox/icon_seed.svg'),
+  ProductCategoryID.COMPLETE_KIT: ProductCategoryUI('Complete kit', 'assets/products/toolbox/icon_complete_kit.svg'),
+  ProductCategoryID.VENTILATION: ProductCategoryUI('Ventilation', 'assets/products/toolbox/icon_ventilation.svg'),
+  ProductCategoryID.LIGHTING: ProductCategoryUI('Lighting', 'assets/products/toolbox/icon_lighting.svg'),
+  ProductCategoryID.SENSORS: ProductCategoryUI('Sensors', 'assets/products/toolbox/icon_sensors.svg'),
+  ProductCategoryID.PH_EC: ProductCategoryUI('PH/EC', 'assets/products/toolbox/icon_ph_ec.svg'),
+  ProductCategoryID.SUBSTRAT: ProductCategoryUI('Substrat', 'assets/products/toolbox/icon_substrat.svg'),
+  ProductCategoryID.FERTILIZER: ProductCategoryUI('Fertilizer', 'assets/products/toolbox/icon_fertilizer.svg'),
+  ProductCategoryID.IRRIGATION: ProductCategoryUI('Irrigation', 'assets/products/toolbox/icon_irrigation.svg'),
+  ProductCategoryID.FURNITURE: ProductCategoryUI('Furniture', 'assets/products/toolbox/icon_furniture.svg'),
+  ProductCategoryID.SEEDLING: ProductCategoryUI('Seedling', 'assets/products/toolbox/icon_seedling.svg'),
+  ProductCategoryID.ACCESSORIES: ProductCategoryUI('Accessories', 'assets/products/toolbox/icon_accessories.svg'),
+  ProductCategoryID.ELECTRICITY: ProductCategoryUI('Electricity', 'assets/products/toolbox/icon_electricity.svg'),
+  ProductCategoryID.OTHER: ProductCategoryUI('Other', 'assets/products/toolbox/icon_other.svg'),
 };

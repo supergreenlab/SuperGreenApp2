@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -49,8 +49,6 @@ class DeletesDAO extends DatabaseAccessor<RelDB> with _$DeletesDAOMixin {
   }
 
   Future removeDeletes(List<Delete> dels) {
-    return (delete(deletes)
-          ..where((d) => d.id.isIn(dels.map<int>((d) => d.id))))
-        .go();
+    return (delete(deletes)..where((d) => d.id.isIn(dels.map<int>((d) => d.id)))).go();
   }
 }

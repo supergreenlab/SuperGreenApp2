@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,8 +27,7 @@ class TowelieButtonReminder extends TowelieButton {
   @override
   String get id => _id;
 
-  static Map<String, dynamic> createButton(
-          String title, NotificationData notificationData, int afterMinutes) =>
+  static Map<String, dynamic> createButton(String title, NotificationData notificationData, int afterMinutes) =>
       TowelieButton.createButton(_id, {
         'title': title,
         'notificationID': notificationData.id,
@@ -39,16 +38,12 @@ class TowelieButtonReminder extends TowelieButton {
       });
 
   @override
-  Stream<TowelieBlocState> buttonPressed(
-      TowelieBlocEventButtonPressed event) async* {
-    NotificationsBloc.localNotifications.reminderNotification(
-        event.params['notificationID'],
-        event.params['afterMinutes'],
-        NotificationData.fromJSON(event.params['notificationPayload']));
+  Stream<TowelieBlocState> buttonPressed(TowelieBlocEventButtonPressed event) async* {
+    NotificationsBloc.localNotifications.reminderNotification(event.params['notificationID'],
+        event.params['afterMinutes'], NotificationData.fromJSON(event.params['notificationPayload']));
     if (event.feedEntry != null) {
       await selectButtons(event.feedEntry,
-          selector: (params) =>
-              params['afterMinutes'] == event.params['afterMinutes']);
+          selector: (params) => params['afterMinutes'] == event.params['afterMinutes']);
     }
   }
 }

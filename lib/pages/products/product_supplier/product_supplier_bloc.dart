@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -48,8 +48,7 @@ class ProductSupplierBlocStateLoaded extends ProductSupplierBlocState {
   List<Object> get props => [products];
 }
 
-class ProductSupplierBloc
-    extends LegacyBloc<ProductSupplierBlocEvent, ProductSupplierBlocState> {
+class ProductSupplierBloc extends LegacyBloc<ProductSupplierBlocEvent, ProductSupplierBlocState> {
   final MainNavigateToProductSupplierEvent args;
 
   ProductSupplierBloc(this.args) : super(ProductSupplierBlocStateInit()) {
@@ -57,8 +56,7 @@ class ProductSupplierBloc
   }
 
   @override
-  Stream<ProductSupplierBlocState> mapEventToState(
-      ProductSupplierBlocEvent event) async* {
+  Stream<ProductSupplierBlocState> mapEventToState(ProductSupplierBlocEvent event) async* {
     if (event is ProductSupplierBlocEventInit) {
       yield ProductSupplierBlocStateLoaded(args.products);
     }

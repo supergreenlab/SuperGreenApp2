@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,8 +33,6 @@ class FeedTowelieInfoLoader extends LocalFeedEntryLoader {
   }
 
   @override
-  FeedEntryState stateForFeedEntry(FeedEntry feedEntry,
-          {bool forceNew = false}) =>
-      FeedTowelieInfoState(
-          super.stateForFeedEntry(feedEntry, forceNew: forceNew));
+  FeedEntryState stateForFeedEntry(FeedEntry feedEntry, {bool forceNew = false}) =>
+      FeedTowelieInfoState(super.stateForFeedEntry(feedEntry, forceNew: forceNew));
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,6 @@ class TowelieActionHelpNotification extends TowelieActionHelp {
   Stream<TowelieBlocState> idTrigger(TowelieBlocEventTrigger event) async* {
     NotificationsBlocStateNotification parameters = event.parameters;
     yield TowelieBlocStateHelper(
-        RouteSettings(name: event.currentRoute, arguments: null),
-        parameters.notificationData.body);
+        RouteSettings(name: event.currentRoute, arguments: null), parameters.notificationData.body);
   }
 }

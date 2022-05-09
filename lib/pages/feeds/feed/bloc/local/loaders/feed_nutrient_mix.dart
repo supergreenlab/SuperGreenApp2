@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -37,10 +37,8 @@ class FeedNutrientMixLoader extends LocalFeedEntryLoader {
 
   @override
   Future update(FeedEntryState entry, FeedEntryParams params) async {
-    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(
-        id: Value(entry.feedEntryID),
-        params: Value(params.toJSON()),
-        synced: Value(false)));
+    await FeedEntryHelper.updateFeedEntry(
+        FeedEntriesCompanion(id: Value(entry.feedEntryID), params: Value(params.toJSON()), synced: Value(false)));
   }
 
   @override

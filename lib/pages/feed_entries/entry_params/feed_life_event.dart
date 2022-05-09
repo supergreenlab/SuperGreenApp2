@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,8 +29,7 @@ class FeedLifeEventParams extends FeedEntryParams {
 
   factory FeedLifeEventParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedLifeEventParams(
-        PlantPhases.values.firstWhere((p) => describeEnum(p) == map['phase']));
+    return FeedLifeEventParams(PlantPhases.values.firstWhere((p) => describeEnum(p) == map['phase']));
   }
 
   @override

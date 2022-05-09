@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,8 +28,8 @@ class FeedLightParams extends FeedEntryParams {
 
   factory FeedLightParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedLightParams(map['values'].map<int>((v) => v as int).toList(),
-        map['initialValues'].map<int>((v) => v as int).toList());
+    return FeedLightParams(
+        map['values'].map<int>((v) => v as int).toList(), map['initialValues'].map<int>((v) => v as int).toList());
   }
 
   @override

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,13 +26,11 @@ class FeedScheduleParams extends FeedEntryParams {
   final String initialSchedule;
   final Map<String, dynamic> initialSchedules;
 
-  FeedScheduleParams(this.schedule, this.schedules, this.initialSchedule,
-      this.initialSchedules);
+  FeedScheduleParams(this.schedule, this.schedules, this.initialSchedule, this.initialSchedules);
 
   factory FeedScheduleParams.fromJSON(String json) {
     Map<String, dynamic> map = JsonDecoder().convert(json);
-    return FeedScheduleParams(map['schedule'], map['schedules'],
-        map['initialSchedule'], map['initialSchedules']);
+    return FeedScheduleParams(map['schedule'], map['schedules'], map['initialSchedule'], map['initialSchedules']);
   }
 
   @override
@@ -46,6 +44,5 @@ class FeedScheduleParams extends FeedEntryParams {
   }
 
   @override
-  List<Object> get props =>
-      [schedule, schedules, initialSchedule, initialSchedules];
+  List<Object> get props => [schedule, schedules, initialSchedule, initialSchedules];
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2022  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,8 +42,7 @@ class TowelieActionPlantCreated extends TowelieAction {
         Feed sglFeed = await fdb.getFeed(1);
         await CardPlantCreated.createPlantCreatedCard(sglFeed, event.plant);
       }
-      yield TowelieBlocStateHomeNavigation(
-          HomeNavigateToPlantFeedEvent(event.plant));
+      yield TowelieBlocStateHomeNavigation(HomeNavigateToPlantFeedEvent(event.plant));
     }
   }
 }
