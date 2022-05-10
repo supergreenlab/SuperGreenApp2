@@ -19,6 +19,7 @@
 import 'dart:async';
 
 import 'package:super_green_app/data/api/device/device_params.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor/moor.dart';
@@ -41,6 +42,8 @@ bool isTimerSource(int source) => source >= TIMER_REF_OFFSET && source < HUMI_RE
 bool isHumiSource(int source) => source >= HUMI_REF_OFFSET;
 
 class MinMaxParamsController extends ParamsController {
+  MinMaxParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+
   ParamController get blowerMin => params['blowerMin']!;
   ParamController get blowerMax => params['blowerMax']!;
   ParamController get blowerRefMin => params['blowerRefMin']!;
@@ -56,9 +59,14 @@ class MinMaxParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'BLOWER_REF_SOURCE', 'blowerRefSource');
     return c;
   }
+
+  ParamsController copyWith({Map<String, ParamController>? params}) =>
+      MinMaxParamsController(params: params ?? this.params);
 }
 
 class LegacyParamsController extends ParamsController {
+  LegacyParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+
   ParamController get blowerDay => params['blowerDay']!;
   ParamController get blowerNight => params['blowerNight']!;
 
@@ -68,6 +76,9 @@ class LegacyParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'BLOWER_NIGHT', 'blowerNight');
     return c;
   }
+
+  ParamsController copyWith({Map<String, ParamController>? params}) =>
+      LegacyParamsController(params: params ?? this.params);
 }
 
 abstract class FeedVentilationFormBlocEvent extends Equatable {}
@@ -196,7 +207,8 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       try {
         temperature = await DeviceHelper.loadBoxParam(device!, box, 'TEMP');
         humidity = await DeviceHelper.loadBoxParam(device!, box, 'HUMI');
-      } catch (e) {
+      } catch (e, trace) {
+        Logger.logError(e, trace);
         yield FeedVentilationFormBlocStateNoDevice();
         return;
       }
@@ -216,7 +228,12 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       }
       minMaxParams = event.minMaxController;
       legacyParams = event.legacyController;
-      await syncParams();
+      try {
+        await syncParams();
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
+
       yield loadedState();
     } else if (event is FeedVentilationFormBlocEventCreate) {
       final db = RelDB.get();
@@ -271,23 +288,19 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   }
 
   Future<void> syncParams() async {
-    List<Future> futures = [];
     if (legacyParams != null) {
-      await legacyParams!.syncParams(device!);
+      legacyParams = await legacyParams!.syncParams(device!) as LegacyParamsController;
     } else {
-      await minMaxParams!.syncParams(device!);
+      minMaxParams = await minMaxParams!.syncParams(device!) as MinMaxParamsController;
     }
-    await Future.wait(futures);
   }
 
   Future<void> cancelParams() async {
-    List<Future> futures = [];
     if (legacyParams != null) {
-      await legacyParams!.cancelParams(device!);
+      legacyParams = await legacyParams!.cancelParams(device!) as LegacyParamsController;
     } else {
-      await minMaxParams!.cancelParams(device!);
+      minMaxParams = await minMaxParams!.cancelParams(device!) as MinMaxParamsController;
     }
-    await Future.wait(futures);
   }
 
   FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(

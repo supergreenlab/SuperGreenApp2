@@ -61,7 +61,7 @@ class DeviceHelper {
   }
 
   static Future<Param> loadBoxParam(Device device, Box box, String key) async {
-    Param p = await RelDB.get().devicesDAO.getParam(device.id, key);
+    Param p = await RelDB.get().devicesDAO.getParam(device.id, "BOX_${box.deviceBox}_$key");
     return await DeviceHelper.refreshIntParam(device, p);
   }
 

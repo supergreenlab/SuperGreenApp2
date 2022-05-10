@@ -24,6 +24,8 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
 class BoxControlParamsController extends ParamsController {
+  BoxControlParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+
   ParamController get blower => params['blower']!;
   ParamController get light => params['light']!;
   ParamController get onHour => params['onHour']!;
@@ -41,6 +43,9 @@ class BoxControlParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'OFF_MIN', 'offMin');
     return c;
   }
+
+  ParamsController copyWith({Map<String, ParamController>? params}) =>
+      BoxControlParamsController(params: params ?? this.params);
 }
 
 abstract class BoxControlsBlocEvent extends Equatable {}

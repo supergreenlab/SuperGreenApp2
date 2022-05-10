@@ -69,8 +69,10 @@ class ParamController extends Equatable {
   List<Object?> get props => [param, value, initialValue];
 }
 
-class ParamsController extends Equatable {
-  final Map<String, ParamController> params = {};
+abstract class ParamsController extends Equatable {
+  final Map<String, ParamController> params;
+
+  ParamsController({required this.params});
 
   Future<ParamController> loadBoxParam(Device device, Box box, String key, name) async {
     ParamController pc = await ParamController.loadFromDB(device, "BOX_${box.deviceBox}_$key");
@@ -79,35 +81,39 @@ class ParamsController extends Equatable {
   }
 
   List<StreamSubscription<Param>> listenParams(Device device, void Function(ParamsController) fn) {
-    return params.keys.map<StreamSubscription<Param>>((String key) {
+    List<StreamSubscription<Param>> subscriptions = params.keys.map<StreamSubscription<Param>>((String key) {
       ParamController p = params[key]!;
       return p.listenParam(device, (p0) {
         p = p.copyWith(param: p0);
         params[key] = p;
-        fn(this);
+        fn(this.copyWith(params: {...params}));
       });
     }).toList();
+    return subscriptions;
   }
 
   Future<ParamsController> refreshParams(Device device) async {
+    Map<String, ParamController> p = {};
     await Future.wait(params.keys.map<Future>((String key) async {
-      params[key] = await params[key]!.refreshParam(device);
+      p[key] = await params[key]!.refreshParam(device);
     }).toList());
-    return this;
+    return this.copyWith(params: p);
   }
 
   Future<ParamsController> syncParams(Device device) async {
+    Map<String, ParamController> p = {};
     await Future.wait(params.keys.map<Future>((String key) async {
-      params[key] = await params[key]!.syncParam(device);
+      p[key] = await params[key]!.syncParam(device);
     }).toList());
-    return this;
+    return this.copyWith(params: p);
   }
 
   Future<ParamsController> cancelParams(Device device) async {
+    Map<String, ParamController> p = {};
     await Future.wait(params.keys.map<Future>((String key) async {
-      params[key] = await params[key]!.cancelParam(device);
+      p[key] = await params[key]!.cancelParam(device);
     }).toList());
-    return this;
+    return this.copyWith(params: p);
   }
 
   Future closeSubscriptions(List<StreamSubscription<Param>> subscriptions) async {
@@ -115,11 +121,14 @@ class ParamsController extends Equatable {
   }
 
   ParamsController copyWithValues(Map<String, int> values) {
+    Map<String, ParamController> p = {...params};
     values.forEach((key, value) {
-      params[key] = params[key]!.copyWith(value: value);
+      p[key] = params[key]!.copyWith(value: value);
     });
-    return this;
+    return this.copyWith(params: p);
   }
+
+  ParamsController copyWith({Map<String, ParamController>? params});
 
   @override
   List<Object?> get props => [...params.values];

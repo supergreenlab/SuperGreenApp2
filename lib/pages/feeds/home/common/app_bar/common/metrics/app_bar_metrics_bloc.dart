@@ -24,6 +24,8 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
 class AppBarMetricsParamsController extends ParamsController {
+  AppBarMetricsParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
+
   ParamController get temp => this.params['temp']!;
   ParamController get humidity => this.params['humidity']!;
   ParamController? get vpd => this.params['vpd'];
@@ -39,6 +41,9 @@ class AppBarMetricsParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'WEIGHT', 'weight');
     return c;
   }
+
+  ParamsController copyWith({Map<String, ParamController>? params}) =>
+      AppBarMetricsParamsController(params: params ?? this.params);
 }
 
 abstract class AppBarMetricsBlocEvent extends Equatable {}
