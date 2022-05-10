@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/dashboard/dashboard_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
@@ -86,29 +85,50 @@ class DashboardPage extends StatelessWidget {
         List<Widget> body = [
           Padding(
             padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
               top: 16.0,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SvgPicture.asset('assets/settings/icon_lab.svg'),
-                Text(
-                  "${p.name} in ${box.name}",
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/settings/icon_plants.svg",
+                      width: 35,
+                      height: 35,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${p.name}",
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          "in ${box.name}",
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: InkWell(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.remove_red_eye,
                           color: Color(0xff3bb30b),
                         ),
+                        Text("View"),
                       ],
                     ),
                     onTap: () {
@@ -134,7 +154,8 @@ class DashboardPage extends StatelessWidget {
                 loop: false,
               ),
             ),
-          )
+          ),
+          p == state.plants.last ? Container() : Container(height: 2, color: Color(0xffdedede)),
         ];
         return Container(
           height: 430,
