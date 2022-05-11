@@ -132,7 +132,13 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
       charts.Series<Metric, DateTime> light = TimeSeriesAPI.toTimeSeries(
           TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', charts.MaterialPalette.yellow.shadeDefault);
-      return [temp, humi, vpd, light, ventilation];
+      charts.Series<Metric, DateTime> co2 = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault,
+          transform: _vpd);
+      charts.Series<Metric, DateTime> weight = await TimeSeriesAPI.fetchTimeSeries(
+          box!, identifier, 'WEIGHT', 'BOX_${deviceBox}_WEIGHT', charts.MaterialPalette.purple.shadeDefault,
+          transform: _vpd);
+      return [temp, humi, vpd, light, ventilation, co2, weight];
     }
   }
 
@@ -154,6 +160,14 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
         (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
             ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
     final ventilationData = List.generate(
+        50,
+        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
+    final co2Data = List.generate(
+        50,
+        (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
+            ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
+    final weightData = List.generate(
         50,
         (index) => Metric(DateTime.now().subtract(Duration(hours: 72)).add(Duration(hours: index * 72 ~/ 50)),
             ((cos(index / 100) * 10).toInt() + Random().nextInt(5) + 20).toDouble()));
@@ -199,6 +213,22 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
         measureFn: (Metric metric, _) => metric.metric,
         data: ventilationData,
       ),
+      charts.Series<Metric, DateTime>(
+        id: 'CO2',
+        strokeWidthPxFn: (_, __) => 3,
+        colorFn: (_, __) => charts.MaterialPalette.cyan.shadeDefault,
+        domainFn: (Metric metric, _) => metric.time,
+        measureFn: (Metric metric, _) => metric.metric,
+        data: co2Data,
+      ),
+      charts.Series<Metric, DateTime>(
+        id: 'Weight',
+        strokeWidthPxFn: (_, __) => 3,
+        colorFn: (_, __) => charts.MaterialPalette.cyan.shadeDefault,
+        domainFn: (Metric metric, _) => metric.time,
+        measureFn: (Metric metric, _) => metric.metric,
+        data: weightData,
+      ),
     ];
   }
 
@@ -210,7 +240,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
   }
 
   double _vpd(double vpd) {
-    return vpd * 4;
+    return min(140, max(vpd * 4, 0));
   }
 
   @override

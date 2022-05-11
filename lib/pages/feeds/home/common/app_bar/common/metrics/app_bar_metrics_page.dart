@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
@@ -66,8 +67,28 @@ class AppBarMetric extends StatelessWidget {
   }
 }
 
-class AppBarBoxMetricsPage extends StatelessWidget {
+class AppBarBoxMetricsPage extends StatefulWidget {
   const AppBarBoxMetricsPage({Key? key}) : super(key: key);
+
+  @override
+  State<AppBarBoxMetricsPage> createState() => _AppBarBoxMetricsPageState();
+}
+
+class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
+  final ScrollController scrollController = ScrollController();
+  bool showRightArrow = true;
+  bool showLeftArrow = false;
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      setState(() {
+        showLeftArrow = scrollController.position.pixels > scrollController.position.minScrollExtent;
+        showRightArrow = scrollController.position.pixels < scrollController.position.maxScrollExtent;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +171,7 @@ class AppBarBoxMetricsPage extends StatelessWidget {
           icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
           value: co2 == null || co2 == 0 ? 'n/a' : '$co2',
           unit: 'ppm',
-          unitSize: 14,
+          unitSize: 12,
           color: Color(0xFF595959)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
@@ -160,14 +181,39 @@ class AppBarBoxMetricsPage extends StatelessWidget {
     ];
     return Container(
       height: 35,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: widgets
-            .map<Widget>((w) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: w,
-                ))
-            .toList(),
+      child: Stack(
+        children: [
+          ListView(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            children: widgets
+                .map<Widget>((w) => Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: w,
+                    ))
+                .toList(),
+          ),
+          showLeftArrow
+              ? Positioned(
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  child: Image.asset(
+                    "assets/left_scroll_arrow.png",
+                  ),
+                )
+              : Container(),
+          showRightArrow
+              ? Positioned(
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Image.asset(
+                    "assets/right_scroll_arrow.png",
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }
