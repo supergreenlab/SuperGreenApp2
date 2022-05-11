@@ -17,7 +17,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
@@ -36,6 +35,8 @@ class AppBarMetric extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Align(
           child: icon,
@@ -48,7 +49,7 @@ class AppBarMetric extends StatelessWidget {
             Text(value == null ? 'N/A' : value!,
                 style: TextStyle(
                   color: color,
-                  fontSize: 25,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 )),
             unit != null
@@ -145,21 +146,29 @@ class AppBarBoxMetricsPage extends StatelessWidget {
           icon: SvgPicture.asset('assets/app_bar/icon_vpd.svg'),
           value: vpd == null || vpd == 0 ? 'n/a' : '${vpd / 10.0}',
           color: Color(0xFF115D87)),
+      AppBarMetric(
+          icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
+          value: co2 == null || co2 == 0 ? 'n/a' : '$co2',
+          unit: 'ppm',
+          unitSize: 14,
+          color: Color(0xFF595959)),
+      AppBarMetric(
+          icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
+          value: weight == null || weight == 0 ? 'n/a' : '${weight / 10.0}',
+          unit: 'kg',
+          color: Color(0xFF483581)),
     ];
-    widgets.add(AppBarMetric(
-        icon: SvgPicture.asset('assets/app_bar/icon_co2.svg'),
-        value: co2 == null || co2 == 0 ? 'n/a' : '$co2',
-        unit: 'ppm',
-        unitSize: 14,
-        color: Color(0xFF595959)));
-    widgets.add(AppBarMetric(
-        icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
-        value: weight == null || weight == 0 ? 'n/a' : '${weight / 10.0}',
-        unit: 'kg',
-        color: Color(0xFF483581)));
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: widgets,
+    return Container(
+      height: 35,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: widgets
+            .map<Widget>((w) => Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: w,
+                ))
+            .toList(),
+      ),
     );
   }
 }
