@@ -85,7 +85,7 @@ class DashboardPage extends StatelessWidget {
         List<Widget> body = [
           Padding(
             padding: const EdgeInsets.only(
-              left: 20.0,
+              left: 10.0,
               right: 20.0,
               top: 16.0,
             ),
