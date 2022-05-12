@@ -226,8 +226,8 @@ class HomePage extends TraceableStatelessWidget {
         return MaterialPageRoute(
             settings: settings,
             builder: (context) => BlocProvider(
-                  create: (context) => SGLFeedBloc(),
-                  child: SGLFeedPage(),
+                  create: (context) => DashboardBloc(),
+                  child: TowelieHelper.wrapWidget(settings, context, DashboardPage()),
                 ));
     }
   }
