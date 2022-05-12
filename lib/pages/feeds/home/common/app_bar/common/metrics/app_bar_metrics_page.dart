@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -148,11 +149,20 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   }
 
   Widget _renderMetrics(int temp, int humidity, double? vpd, int? co2, double? weight) {
+    bool freedomUnits = AppDB().getAppData().freedomUnits;
+    String tempUnit = freedomUnits ? '°F' : '°C';
+    if (freedomUnits) {
+      temp = (temp * 9 / 5 + 32).toInt();
+    }
+    String weightUnit = freedomUnits ? 'lb' : 'kg';
+    if (weight != null && freedomUnits) {
+      weight = weight * 2.2;
+    }
     List<Widget> widgets = [
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_temperature.svg', height: 35),
           value: '$temp',
-          unit: '°',
+          unit: tempUnit,
           unitSize: 30,
           color: Color(0xFF3BB30B)),
       AppBarMetric(
@@ -176,7 +186,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
           value: weight == null || weight == 0 ? 'n/a' : '${weight / 10.0}',
-          unit: 'kg',
+          unit: weightUnit,
           color: Color(0xFF483581)),
     ];
     return Container(

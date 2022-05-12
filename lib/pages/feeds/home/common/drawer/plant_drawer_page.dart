@@ -114,83 +114,88 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                 p.settings.toLowerCase().indexOf(search) != -1;
           }).toList();
           List<Box> boxes = state.boxes;
-          content = MediaQuery.removePadding(
-            removeTop: true,
-            context: context,
-            child: ListView(
-                controller: drawerScrollController,
-                key: const PageStorageKey<String>('plants'),
-                children: boxes.where((b) => plants.where((p) => p.box == b.id).length != 0).map((b) {
-                  // TODO make this like the dashboard
-                  List<Widget> content = [
-                    Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1, offset: Offset(0, 2))],
-                        color: Colors.white,
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToBoxFeedEvent(b));
-                        },
-                        leading: Container(
-                          width: 60,
-                          height: 30,
-                          child: Row(
-                            children: [
-                              (widget.selectedBox?.id == b.id)
-                                  ? Icon(
-                                      Icons.check_box,
-                                      color: Colors.green,
-                                    )
-                                  : Icon(Icons.crop_square),
-                              SvgPicture.asset('assets/settings/icon_lab.svg'),
-                            ],
-                          ),
+          content = Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+              child: ListView(
+                  controller: drawerScrollController,
+                  key: const PageStorageKey<String>('plants'),
+                  children: boxes.where((b) => plants.where((p) => p.box == b.id).length != 0).map((b) {
+                    // TODO make this like the dashboard
+                    List<Widget> content = [
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1, offset: Offset(0, 2))],
+                          color: Colors.white,
                         ),
-                        title: Text(b.name),
-                        trailing: InkWell(
-                            onTap: () {
-                              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(b));
-                            },
-                            child: Icon(Icons.settings)),
-                      ),
-                    ),
-                  ];
-                  content.addAll(plants.where((p) => p.box == b.id).map((p) {
-                    int? nUnseen = 0;
-                    try {
-                      nUnseen =
-                          state.hasPending.where((e) => e.id == p.feed).map<int>((e) => e.nNew).reduce((a, e) => a + e);
-                    } catch (e) {}
-                    Widget item = Padding(
-                        padding: EdgeInsets.only(left: 16),
                         child: ListTile(
-                          leading: (widget.selectedPlant?.id == p.id)
-                              ? Icon(
-                                  Icons.check_box,
-                                  color: Colors.green,
-                                )
-                              : Icon(Icons.crop_square),
-                          trailing: Container(
-                              width: 50,
-                              height: 30,
-                              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                                nUnseen != null && nUnseen > 0 ? _renderBadge(nUnseen) : Container(),
-                                InkWell(
-                                    onTap: () {
-                                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlant(p));
-                                    },
-                                    child: Icon(Icons.settings)),
-                              ])),
-                          title: Text(p.name),
-                          onTap: () => _selectPlant(context, p),
-                        ));
-                    return item;
-                  }).toList());
-                  return Column(
-                    children: content,
-                  );
-                }).toList()),
+                          onTap: () {
+                            BlocProvider.of<HomeNavigatorBloc>(context).add(HomeNavigateToBoxFeedEvent(b));
+                          },
+                          leading: Container(
+                            width: 60,
+                            height: 30,
+                            child: Row(
+                              children: [
+                                (widget.selectedBox?.id == b.id)
+                                    ? Icon(
+                                        Icons.check_box,
+                                        color: Colors.green,
+                                      )
+                                    : Icon(Icons.crop_square),
+                                SvgPicture.asset('assets/settings/icon_lab.svg'),
+                              ],
+                            ),
+                          ),
+                          title: Text(b.name),
+                          trailing: InkWell(
+                              onTap: () {
+                                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsBox(b));
+                              },
+                              child: Icon(Icons.settings)),
+                        ),
+                      ),
+                    ];
+                    content.addAll(plants.where((p) => p.box == b.id).map((p) {
+                      int? nUnseen = 0;
+                      try {
+                        nUnseen = state.hasPending
+                            .where((e) => e.id == p.feed)
+                            .map<int>((e) => e.nNew)
+                            .reduce((a, e) => a + e);
+                      } catch (e) {}
+                      Widget item = Padding(
+                          padding: EdgeInsets.only(left: 16),
+                          child: ListTile(
+                            leading: (widget.selectedPlant?.id == p.id)
+                                ? Icon(
+                                    Icons.check_box,
+                                    color: Colors.green,
+                                  )
+                                : Icon(Icons.crop_square),
+                            trailing: Container(
+                                width: 50,
+                                height: 30,
+                                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                                  nUnseen != null && nUnseen > 0 ? _renderBadge(nUnseen) : Container(),
+                                  InkWell(
+                                      onTap: () {
+                                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlant(p));
+                                      },
+                                      child: Icon(Icons.settings)),
+                                ])),
+                            title: Text(p.name),
+                            onTap: () => _selectPlant(context, p),
+                          ));
+                      return item;
+                    }).toList());
+                    return Column(
+                      children: content,
+                    );
+                  }).toList()),
+            ),
           );
         }
         return AnimatedSwitcher(
