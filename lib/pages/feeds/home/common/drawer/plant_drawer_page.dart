@@ -42,6 +42,8 @@ class PlantDrawerPage extends TraceableStatefulWidget {
 }
 
 class _PlantDrawerPageState extends State<PlantDrawerPage> {
+  String search = '';
+  final TextEditingController searchController = TextEditingController();
   late ScrollController drawerScrollController;
 
   @override
@@ -74,6 +76,10 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
                 ),
               ])),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+              child: _renderSearchField(context),
+            ),
             Expanded(
               child: _plantList(context),
             ),
@@ -105,12 +111,19 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
         if (state is PlantDrawerBlocStateLoadingPlantList) {
           content = FullscreenLoading(title: CommonL10N.loading);
         } else if (state is PlantDrawerBlocStatePlantListUpdated) {
-          List<Plant> plants = state.plants.toList();
+          List<Plant> plants = state.plants.where((p) {
+            if (search == '') return true;
+            Box box = state.boxes.firstWhere((b) => b.id == p.box);
+            return box.name.toLowerCase().indexOf(search) != -1 ||
+                p.name.toLowerCase().indexOf(search) != -1 ||
+                p.settings.toLowerCase().indexOf(search) != -1;
+          }).toList();
           List<Box> boxes = state.boxes;
           content = ListView(
               controller: drawerScrollController,
               key: const PageStorageKey<String>('plants'),
-              children: boxes.map((b) {
+              children: boxes.where((b) => plants.where((p) => p.box == b.id).length != 0).map((b) {
+                // TODO make this like the dashboard
                 List<Widget> content = [
                   Container(
                     decoration: BoxDecoration(
@@ -223,5 +236,54 @@ class _PlantDrawerPageState extends State<PlantDrawerPage> {
 
   void _onAddPlant(BuildContext context) {
     BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+  }
+
+  Widget _renderSearchField(BuildContext context) {
+    // TODO DRY with dashboard and explorer
+    Widget trailing;
+    if (searchController.text == '') {
+      trailing = SvgPicture.asset('assets/explorer/icon_search.svg');
+    } else {
+      trailing = InkWell(
+        child: Icon(Icons.clear),
+        onTap: () {
+          setState(() {
+            searchController.text = '';
+          });
+        },
+      );
+    }
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        color: Color(0xffe9e9e9),
+        border: Border.all(width: 1, color: Color(0xffd8d8d8)),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(children: [
+          Expanded(
+            child: TextFormField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: 'Search',
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  search = value;
+                });
+              },
+            ),
+          ),
+          trailing,
+        ]),
+      ),
+    );
   }
 }

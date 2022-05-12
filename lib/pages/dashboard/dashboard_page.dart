@@ -35,7 +35,15 @@ import 'package:super_green_app/towelie/towelie_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  String search = '';
+  final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<DashboardBloc, DashboardBlocState>(
@@ -73,6 +81,66 @@ class DashboardPage extends StatelessWidget {
   }
 
   Widget _renderLoaded(BuildContext context, DashboardBlocStateLoaded state) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _renderSearchField(context, state),
+        ),
+        Expanded(child: _renderList(context, state)),
+      ],
+    );
+  }
+
+  Widget _renderSearchField(BuildContext context, DashboardBlocStateLoaded state) {
+    Widget trailing;
+    if (searchController.text == '') {
+      trailing = SvgPicture.asset('assets/explorer/icon_search.svg');
+    } else {
+      trailing = InkWell(
+        child: Icon(Icons.clear),
+        onTap: () {
+          setState(() {
+            searchController.text = '';
+          });
+        },
+      );
+    }
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        color: Color(0xffe9e9e9),
+        border: Border.all(width: 1, color: Color(0xffd8d8d8)),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(children: [
+          Expanded(
+            child: TextFormField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: 'Search',
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
+              onChanged: (value) {
+                setState(() {
+                  search = value;
+                });
+              },
+            ),
+          ),
+          trailing,
+        ]),
+      ),
+    );
+  }
+
+  Widget _renderList(BuildContext context, DashboardBlocStateLoaded state) {
     List<Widget Function(BuildContext, Plant, Box)> tabs = [
       _renderQuickView,
       _renderControls,
@@ -80,7 +148,13 @@ class DashboardPage extends StatelessWidget {
     ];
 
     return ListView(
-      children: state.plants.map<Widget>((p) {
+      children: state.plants.where((p) {
+        if (search == '') return true;
+        Box box = state.boxes.firstWhere((b) => b.id == p.box);
+        return box.name.toLowerCase().indexOf(search) != -1 ||
+            p.name.toLowerCase().indexOf(search) != -1 ||
+            p.settings.toLowerCase().indexOf(search) != -1;
+      }).map<Widget>((p) {
         Box box = state.boxes.firstWhere((b) => b.id == p.box);
         List<Widget> body = [
           Padding(
@@ -109,11 +183,22 @@ class DashboardPage extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Text(
-                          "in ${box.name}",
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              "in",
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              " ${box.name}",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
