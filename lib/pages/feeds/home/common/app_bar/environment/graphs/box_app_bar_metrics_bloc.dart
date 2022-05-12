@@ -133,11 +133,9 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
       charts.Series<Metric, DateTime> light = TimeSeriesAPI.toTimeSeries(
           TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', charts.MaterialPalette.yellow.shadeDefault);
       charts.Series<Metric, DateTime> co2 = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault,
-          transform: _vpd);
+          box!, identifier, 'CO2', 'BOX_${deviceBox}_CO2', charts.MaterialPalette.gray.shadeDefault);
       charts.Series<Metric, DateTime> weight = await TimeSeriesAPI.fetchTimeSeries(
-          box!, identifier, 'WEIGHT', 'BOX_${deviceBox}_WEIGHT', charts.MaterialPalette.purple.shadeDefault,
-          transform: _vpd);
+          box!, identifier, 'Weight', 'BOX_${deviceBox}_WEIGHT', charts.MaterialPalette.purple.shadeDefault);
       return [temp, humi, vpd, light, ventilation, co2, weight];
     }
   }
