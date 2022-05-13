@@ -146,8 +146,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
             children: [
               _renderCardfilter(context,
                   filterName: 'FE_MEDIA', icon: 'assets/feed_card/icon_media.svg', name: 'Grow log'),
@@ -157,23 +156,15 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                   filterName: 'FE_NUTRIENT_MIX', icon: 'assets/feed_card/icon_nutrient_mix.svg', name: 'Nutrient M'),
               _renderCardfilter(context,
                   filterName: 'FE_WATER', icon: 'assets/feed_card/icon_watering.svg', name: 'Watering'),
+              _renderCardfilter(context,
+                  filterName: 'FE_TIMELAPSE', icon: 'assets/feed_card/icon_timelapse.svg', name: 'Timelapse'),
+              _renderCardfilter(context,
+                  filterName: 'FE_LIGHT', icon: 'assets/feed_card/icon_light.svg', name: 'Light'),
+              _renderCardfilter(context,
+                  filterName: 'FE_VENTILATION', icon: 'assets/feed_card/icon_blower.svg', name: 'Ventilation'),
+              _renderCardfilter(context,
+                  filterName: 'FE_SCHEDULE', icon: 'assets/feed_card/icon_schedule.svg', name: 'Schedule'),
             ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _renderCardfilter(context,
-                    filterName: 'FE_TIMELAPSE', icon: 'assets/feed_card/icon_timelapse.svg', name: 'Timelapse'),
-                _renderCardfilter(context,
-                    filterName: 'FE_LIGHT', icon: 'assets/feed_card/icon_light.svg', name: 'Light'),
-                _renderCardfilter(context,
-                    filterName: 'FE_VENTILATION', icon: 'assets/feed_card/icon_blower.svg', name: 'Ventilation'),
-                _renderCardfilter(context,
-                    filterName: 'FE_SCHEDULE', icon: 'assets/feed_card/icon_schedule.svg', name: 'Schedule'),
-              ],
-            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -185,8 +176,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
               color: Color(0xffdedede),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
             children: [
               _renderCardfilter(context,
                   filterName: 'FE_TRANSPLANT', icon: 'assets/feed_card/icon_transplant.svg', name: 'Transplant'),
@@ -196,17 +186,9 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                   filterName: 'FE_FIMMING', icon: 'assets/feed_card/icon_fimming.svg', name: 'Fimming'),
               _renderCardfilter(context,
                   filterName: 'FE_TOPPING', icon: 'assets/feed_card/icon_topping.svg', name: 'Topping'),
+              _renderCardfilter(context,
+                  filterName: 'FE_DEFOLIATION', icon: 'assets/feed_card/icon_defoliation.svg', name: 'Defoliation'),
             ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _renderCardfilter(context,
-                    filterName: 'FE_DEFOLIATION', icon: 'assets/feed_card/icon_defoliation.svg', name: 'Defoliation'),
-              ],
-            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -218,26 +200,19 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
               color: Color(0xffdedede),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _renderCardfilter(context,
-                    filterName: 'FE_LIFE_EVENT',
-                    icon: 'assets/plant_infos/icon_germination_date.svg',
-                    name: 'Life events'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: _renderCardfilter(
-                    context,
-                    filterName: 'FE_TOWELIE_INFO',
-                    icon: 'assets/feed_card/icon_towelie.png',
-                    name: 'Towelie',
-                  ),
-                ),
-              ],
-            ),
+          Wrap(
+            children: [
+              _renderCardfilter(context,
+                  filterName: 'FE_LIFE_EVENT',
+                  icon: 'assets/plant_infos/icon_germination_date.svg',
+                  name: 'Life events'),
+              _renderCardfilter(
+                context,
+                filterName: 'FE_TOWELIE_INFO',
+                icon: 'assets/feed_card/icon_towelie.png',
+                name: 'Towelie',
+              ),
+            ],
           ),
         ],
       ),
@@ -257,43 +232,47 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
           filters[filterName] = !checked;
         });
       },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              name,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-                color: Color(0xff555555),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              icon.indexOf('.svg') != -1
-                  ? SvgPicture.asset(
-                      icon,
-                      height: 30,
-                      width: 30,
-                    )
-                  : Image.asset(
-                      icon,
-                      height: 30,
-                      width: 30,
-                    ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: SvgPicture.asset(
-                  'assets/feed_card/checkbox_${checked ? 'on' : 'off'}.svg',
-                  height: 30,
-                  width: 30,
+      child: Container(
+        width: 95,
+        height: 70,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                name,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: Color(0xff555555),
                 ),
               ),
-            ],
-          )
-        ],
+            ),
+            Row(
+              children: [
+                icon.indexOf('.svg') != -1
+                    ? SvgPicture.asset(
+                        icon,
+                        height: 30,
+                        width: 30,
+                      )
+                    : Image.asset(
+                        icon,
+                        height: 30,
+                        width: 30,
+                      ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SvgPicture.asset(
+                    'assets/feed_card/checkbox_${checked ? 'on' : 'off'}.svg',
+                    height: 30,
+                    width: 30,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
