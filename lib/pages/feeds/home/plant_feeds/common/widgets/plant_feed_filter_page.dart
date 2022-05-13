@@ -44,7 +44,10 @@ List<String> cardTypes = [
 ];
 
 class PlantFeedFilterPage extends StatefulWidget {
-  const PlantFeedFilterPage({Key? key}) : super(key: key);
+  final Function(List<String>) onSaveFilters;
+  final List<String> filters;
+
+  const PlantFeedFilterPage({Key? key, required this.onSaveFilters, required this.filters}) : super(key: key);
 
   @override
   State<PlantFeedFilterPage> createState() => _PlantFeedFilterPageState();
@@ -54,6 +57,20 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
   bool openned = false;
 
   Map<String, bool> filters = {};
+
+  @override
+  void initState() {
+    if (widget.filters.length > 0) {
+      cardTypes.forEach((f) {
+        this.filters[f] = false;
+      });
+
+      widget.filters.forEach((f) {
+        this.filters[f] = true;
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +136,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
               setState(() {
                 filters = {};
                 BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetFilters(null));
+                widget.onSaveFilters([]);
               })
             },
             child: Text(
@@ -137,8 +155,9 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                 cardTypes.forEach((f) {
                   filters[f] = false;
                 });
-                BlocProvider.of<FeedBloc>(context)
-                    .add(FeedBlocEventSetFilters(cardTypes.where((ct) => filters[ct] ?? true).toList()));
+                List<String> f = cardTypes.where((ct) => filters[ct] ?? true).toList();
+                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetFilters(f));
+                widget.onSaveFilters(f);
               })
             },
             child: Text(
@@ -245,8 +264,9 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
       onTap: () {
         setState(() {
           filters[filterName] = !checked;
-          BlocProvider.of<FeedBloc>(context)
-              .add(FeedBlocEventSetFilters(cardTypes.where((ct) => filters[ct] ?? true).toList()));
+          List<String> f = cardTypes.where((ct) => filters[ct] ?? true).toList();
+          BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetFilters(f));
+          widget.onSaveFilters(f);
         });
       },
       child: Container(

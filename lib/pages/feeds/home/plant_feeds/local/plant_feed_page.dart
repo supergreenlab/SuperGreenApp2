@@ -316,6 +316,8 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   bool _remote = false;
   String _deviceIP = '';
 
+  List<String> filters = [];
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -694,7 +696,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           title: '',
           appBarHeight: 380,
           appBar: _renderAppBar(context, state),
-          firstItem: PlantFeedFilterPage(),
+          firstItem: PlantFeedFilterPage(
+            filters: filters,
+            onSaveFilters: (f) {
+              filters = f;
+            },
+          ),
           bottom: bottom,
         ),
       );
