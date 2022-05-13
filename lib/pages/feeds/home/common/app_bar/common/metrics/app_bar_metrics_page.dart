@@ -139,7 +139,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
   }
 
   Widget _renderLoading(BuildContext context, AppBarMetricsBlocStateInit state) {
-    return FullscreenLoading();
+    return Container(height: 35, child: FullscreenLoading());
   }
 
   Widget _renderLoaded(BuildContext context, AppBarMetricsBlocStateLoaded state) {
