@@ -3,10 +3,14 @@ import 'package:super_green_app/pages/feeds/home/common/settings/box_settings.da
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
 class PlantFeedState extends FeedState {
+  final String plantID;
+  final String boxID;
+
   final PlantSettings plantSettings;
   final BoxSettings boxSettings;
 
-  PlantFeedState(bool loggedIn, String? storeGeo, this.plantSettings, this.boxSettings) : super(loggedIn, storeGeo);
+  PlantFeedState(bool loggedIn, String? storeGeo, this.plantID, this.boxID, this.plantSettings, this.boxSettings)
+      : super(loggedIn, storeGeo);
 
   @override
   List<Object?> get props => [...super.props, plantSettings, boxSettings];
@@ -21,6 +25,8 @@ class PlantFeedState extends FeedState {
     return PlantFeedState(
       loggedIn ?? this.loggedIn,
       storeGeo ?? this.storeGeo,
+      this.plantID,
+      this.boxID,
       plantSettings ?? this.plantSettings,
       boxSettings ?? this.boxSettings,
     );

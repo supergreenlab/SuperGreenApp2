@@ -54,8 +54,8 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
   }
 
   @override
-  Future<List<FeedEntryState>> loadEntries(int n, int offset) {
-    return super.loadEntries(n, offset);
+  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) {
+    return super.loadEntries(n, offset, filters);
   }
 
   @override
@@ -63,8 +63,8 @@ class LocalPlantFeedBlocDelegate extends LocalFeedBlocDelegate {
     plant = await RelDB.get().plantsDAO.getPlantWithFeed(feedID);
     box = await RelDB.get().plantsDAO.getBox(plant.box);
     AppData appData = AppDB().getAppData();
-    feedState = PlantFeedState(appData.jwt != null, appData.storeGeo, PlantSettings.fromJSON(plant.settings),
-        BoxSettings.fromJSON(box.settings));
+    feedState = PlantFeedState(appData.jwt != null, appData.storeGeo, plant.serverID ?? plant.id.toString(),
+        box.serverID ?? box.id.toString(), PlantSettings.fromJSON(plant.settings), BoxSettings.fromJSON(box.settings));
     add(FeedBlocEventFeedLoaded(feedState));
 
     plantStream = RelDB.get().plantsDAO.watchPlant(plant.id).listen(plantUpdated);

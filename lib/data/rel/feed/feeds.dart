@@ -269,7 +269,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
       ..limit(limit, offset: offset));
   }
 
-  Future<List<FeedEntry>> getFeedEntries(int feedID, int limit, int offset) {
+  Future<List<FeedEntry>> getFeedEntries(int feedID, int limit, int offset, List<String>? filters) {
+    if (filters != null && filters.length > 0) {
+      return (_selectFeedEntries(feedID, limit, offset)..where((f) => f.type.isIn(filters))).get();
+    }
     return _selectFeedEntries(feedID, limit, offset).get();
   }
 

@@ -40,7 +40,7 @@ class FollowsFeedBlocDelegate extends RemoteFeedBlocDelegate {
   }
 
   @override
-  Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
+  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
     List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicFollowedFeedEntries(n, offset);
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;

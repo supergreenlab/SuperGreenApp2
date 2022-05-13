@@ -44,7 +44,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
   }
 
   @override
-  Future<List<FeedEntryState>> loadEntries(int n, int offset) async {
+  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters) async {
     if (feedEntryID != null) {
       Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID!);
       return [loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap)];
@@ -62,6 +62,8 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
     feedState = PlantFeedState(
       BackendAPI().usersAPI.loggedIn,
       AppDB().getAppData().storeGeo,
+      plantID,
+      plant['boxID'],
       PlantSettings.fromJSON(plant['settings']),
       BoxSettings.fromJSON(plant['boxSettings']),
     );

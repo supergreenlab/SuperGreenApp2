@@ -112,6 +112,9 @@ class _FeedPageState extends State<FeedPage> {
           setState(() {
             feedState = state.feed;
             feedStateLoaded = true;
+            if (state.clear) {
+              entries.clear();
+            }
           });
         } else if (state is FeedBlocStateEntriesLoaded) {
           int nEntries = entries.length;
@@ -269,10 +272,6 @@ class _FeedPageState extends State<FeedPage> {
         slivers: content,
       ),
     );
-  }
-
-  Widget _renderFilters(BuildContext context) {
-    return Text('puet');
   }
 
   void scrollToTop({double height = 56.0}) {

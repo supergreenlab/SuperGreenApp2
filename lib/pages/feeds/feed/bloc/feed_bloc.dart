@@ -35,6 +35,15 @@ class FeedBlocEventInit extends FeedBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedBlocEventSetFilters extends FeedBlocEvent {
+  final List<String>? filters;
+
+  FeedBlocEventSetFilters(this.filters);
+
+  @override
+  List<Object?> get props => [filters];
+}
+
 class FeedBlocEventLoadEntries extends FeedBlocEvent {
   final int n;
   final int currentLength;
@@ -175,11 +184,12 @@ class FeedBlocStateInit extends FeedBlocState {
 
 class FeedBlocStateFeedLoaded extends FeedBlocState {
   final FeedState feed;
+  final bool clear;
 
-  FeedBlocStateFeedLoaded(this.feed);
+  FeedBlocStateFeedLoaded(this.feed, {this.clear = false});
 
   @override
-  List<Object> get props => [feed];
+  List<Object> get props => [feed, clear];
 }
 
 class FeedBlocStateEntriesLoaded extends FeedBlocState {
@@ -239,6 +249,9 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
   bool initialLoad = true;
   List<FeedEntryState> entries = [];
 
+  late FeedState feedState;
+  List<String>? filters;
+
   FeedBloc(this.delegate) : super(FeedBlocStateInit()) {
     add(FeedBlocEventInit());
     add(FeedBlocEventLoadEntries(10, entries.length));
@@ -250,9 +263,15 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
       await delegate.init(this.add);
       delegate.loadFeed();
     } else if (event is FeedBlocEventFeedLoaded) {
+      feedState = event.feed;
       yield FeedBlocStateFeedLoaded(event.feed);
+    } else if (event is FeedBlocEventSetFilters) {
+      filters = event.filters;
+      entries.clear();
+      yield FeedBlocStateFeedLoaded(feedState, clear: true);
+      add(FeedBlocEventLoadEntries(10, entries.length));
     } else if (event is FeedBlocEventLoadEntries) {
-      List<FeedEntryState> fes = await delegate.loadEntries(event.n, entries.length);
+      List<FeedEntryState> fes = await delegate.loadEntries(event.n, entries.length, filters);
       entries.addAll(fes.map((f) => delegate.postProcess(f)));
       yield FeedBlocStateEntriesLoaded(fes, fes.length < event.n, initialLoad);
       if (initialLoad) {
@@ -374,7 +393,7 @@ abstract class FeedBlocDelegate {
   void loadFeed();
   Stream<FeedBlocState> onInitialLoad() async* {}
   FeedEntryState postProcess(FeedEntryState state);
-  Future<List<FeedEntryState>> loadEntries(int n, int offset);
+  Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters);
   Future deleteFeedEntry(dynamic feedEntryID);
   Future markAsRead(dynamic feedEntryID);
   Future likeFeedEntry(FeedEntryState entry);

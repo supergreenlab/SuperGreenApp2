@@ -17,7 +17,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
+import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_feed_state.dart';
 
 List<String> cardTypes = [
   // TODO we really need a clean centralized place to put those
@@ -40,6 +44,8 @@ List<String> cardTypes = [
 ];
 
 class PlantFeedFilterPage extends StatefulWidget {
+  const PlantFeedFilterPage({Key? key}) : super(key: key);
+
   @override
   State<PlantFeedFilterPage> createState() => _PlantFeedFilterPageState();
 }
@@ -51,54 +57,60 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionPanelList(
-      elevation: 0,
-      children: [
-        ExpansionPanel(
-            canTapOnHeader: true,
-            backgroundColor: Colors.transparent,
-            headerBuilder: (BuildContext context, bool isExpanded) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/feed_card/icon_filter.svg',
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text('Filter',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                            color: Color(0xff454545),
-                          )),
-                    ),
-                  ],
-                ),
-              );
-            },
-            isExpanded: openned,
-            body: Column(
-              children: [
-                _renderSelectionButton(context),
-                _renderCardFilters(context),
-              ],
-            )),
-      ],
-      expansionCallback: (int item, bool status) {
-        setState(() {
-          openned = !openned;
-        });
+    return BlocListener<FeedBloc, FeedBlocState>(
+      bloc: BlocProvider.of<FeedBloc>(context),
+      listener: (BuildContext context, FeedBlocState state) {
+        if (state is FeedBlocStateFeedLoaded) {}
       },
+      child: ExpansionPanelList(
+        elevation: 0,
+        children: [
+          ExpansionPanel(
+              canTapOnHeader: true,
+              backgroundColor: Colors.transparent,
+              headerBuilder: (BuildContext context, bool isExpanded) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/feed_card/icon_filter.svg',
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text('Filter',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              color: Color(0xff454545),
+                            )),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              isExpanded: openned,
+              body: Column(
+                children: [
+                  _renderSelectionButton(context),
+                  _renderCardFilters(context),
+                ],
+              )),
+        ],
+        expansionCallback: (int item, bool status) {
+          setState(() {
+            openned = !openned;
+          });
+        },
+      ),
     );
   }
 
   Widget _renderSelectionButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      padding: const EdgeInsets.only(bottom: 12, right: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -106,6 +118,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             onTap: () => {
               setState(() {
                 filters = {};
+                BlocProvider.of<FeedBloc>(context).add(FeedBlocEventSetFilters(null));
               })
             },
             child: Text(
@@ -124,6 +137,8 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                 cardTypes.forEach((f) {
                   filters[f] = false;
                 });
+                BlocProvider.of<FeedBloc>(context)
+                    .add(FeedBlocEventSetFilters(cardTypes.where((ct) => filters[ct] ?? true).toList()));
               })
             },
             child: Text(
@@ -230,6 +245,8 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
       onTap: () {
         setState(() {
           filters[filterName] = !checked;
+          BlocProvider.of<FeedBloc>(context)
+              .add(FeedBlocEventSetFilters(cardTypes.where((ct) => filters[ct] ?? true).toList()));
         });
       },
       child: Container(
