@@ -271,6 +271,10 @@ class _FeedPageState extends State<FeedPage> {
     );
   }
 
+  Widget _renderFilters(BuildContext context) {
+    return Text('puet');
+  }
+
   void scrollToTop({double height = 56.0}) {
     if (scrollController.offset == 0) {
       // this is to prevent a bug with animateTo not triggering when offset == 0

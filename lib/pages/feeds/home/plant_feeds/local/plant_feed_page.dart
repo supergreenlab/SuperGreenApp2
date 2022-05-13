@@ -43,6 +43,7 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plan
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/plant_feed_filter_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/single_feed_entry.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/status/plant_quick_view_page.dart';
@@ -693,6 +694,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           title: '',
           appBarHeight: 380,
           appBar: _renderAppBar(context, state),
+          firstItem: PlantFeedFilterPage(),
           bottom: bottom,
         ),
       );
