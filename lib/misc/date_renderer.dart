@@ -30,7 +30,7 @@ class DateRenderer {
       off.add(Duration(days: 1));
     }
     Duration diff = off.difference(on);
-    return '${24 - diff.inHours.abs()}/${diff.inHours.abs()}';
+    return '${diff.inHours.abs()}/${24 - diff.inHours.abs()}';
   }
 
   static String renderAbsoluteDate(DateTime date) {
@@ -82,9 +82,9 @@ class DateRenderer {
       format = '$dayDiff day${dayDiff > 1 ? 's' : ''} ${hourDiff % 24}h$suffix';
     } else {
       if (dayDiff % 7 == 0) {
-        format = '${(dayDiff / 7).ceil()} weeks $suffix';
+        format = '${(dayDiff / 7).floor()} weeks $suffix';
       } else {
-        format = '${(dayDiff / 7).ceil()} weeks ${dayDiff % 7} days $suffix';
+        format = '${(dayDiff / 7).floor()} weeks ${dayDiff % 7} days $suffix';
       }
     }
     return format;

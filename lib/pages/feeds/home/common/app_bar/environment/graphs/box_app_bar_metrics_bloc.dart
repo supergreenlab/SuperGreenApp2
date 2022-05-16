@@ -243,7 +243,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
   }
 
   double _weight(double weight) {
-    return weight / 10;
+    return weight / 1000;
   }
 
   @override
