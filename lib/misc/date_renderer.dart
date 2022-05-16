@@ -27,7 +27,7 @@ class DateRenderer {
     DateTime on = DateTime(2022, 1, 1, onHour.ivalue!, onMin.ivalue!);
     DateTime off = DateTime(2022, 1, 1, offHour.ivalue!, offMin.ivalue!);
     if (on.isAfter(off)) {
-      off.add(Duration(days: 1));
+      off = off.add(Duration(days: 1));
     }
     Duration diff = off.difference(on);
     return '${diff.inHours}/${24 - diff.inHours}';
