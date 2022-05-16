@@ -30,7 +30,7 @@ class DateRenderer {
       off.add(Duration(days: 1));
     }
     Duration diff = off.difference(on);
-    return '${diff.inHours.abs()}/${24 - diff.inHours.abs()}';
+    return '${diff.inHours}/${24 - diff.inHours}';
   }
 
   static String renderAbsoluteDate(DateTime date) {
