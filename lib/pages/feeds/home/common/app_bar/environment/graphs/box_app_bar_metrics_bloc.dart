@@ -243,6 +243,9 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
   }
 
   double _weight(double weight) {
+    if (AppDB().getAppData().freedomUnits == true) {
+      return weight / 1000 * 2.20462;
+    }
     return weight / 1000;
   }
 

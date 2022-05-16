@@ -156,7 +156,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
     }
     String weightUnit = freedomUnits ? 'lb' : 'kg';
     if (weight != null && freedomUnits) {
-      weight = weight * 2.2;
+      weight = weight * 2.20462;
     }
     List<Widget> widgets = [
       AppBarMetric(
@@ -185,7 +185,7 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           color: Color(0xFF595959)),
       AppBarMetric(
           icon: SvgPicture.asset('assets/app_bar/icon_weight.svg'),
-          value: weight == null || weight == 0 ? 'n/a' : '${weight / 10.0}',
+          value: weight == null || weight == 0 ? 'n/a' : '${(weight / 1000.0).toStringAsFixed(3)}',
           unit: weightUnit,
           color: Color(0xFF483581)),
     ];

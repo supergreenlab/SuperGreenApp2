@@ -73,6 +73,7 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
   Widget _renderGraphs(BuildContext context, PlantFeedAppBarBlocStateLoaded state) {
     String tempUnit = AppDB().getAppData().freedomUnits ? '°F' : '°C';
     DateTime metricDate = state.graphData[0].data[selectedGraphIndex ?? state.graphData[0].data.length - 1].time;
+    String weightUnit = AppDB().getAppData().freedomUnits ? 'lb' : 'kg';
     String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
     Widget dateText = Text('${DateFormat(format).format(metricDate)}',
         style: TextStyle(color: Color(0xFF494949), fontSize: 15, fontWeight: FontWeight.bold));
@@ -241,10 +242,10 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                     }, disabledGraphs[5] ?? false),
                     _renderMetric(
                         Color(0xFF483581),
-                        'Weight',
-                        '${state.graphData[6].data[selectedGraphIndex ?? state.graphData[6].data.length - 1].metric.toInt()}',
-                        '${TimeSeriesAPI.min(state.graphData[6].data).metric.toInt()}',
-                        '${TimeSeriesAPI.max(state.graphData[6].data).metric.toInt()}', () {
+                        'Weight ($weightUnit)',
+                        '${state.graphData[6].data[selectedGraphIndex ?? state.graphData[6].data.length - 1].metric.toStringAsFixed(3)}',
+                        '${TimeSeriesAPI.min(state.graphData[6].data).metric.toStringAsFixed(3)}',
+                        '${TimeSeriesAPI.max(state.graphData[6].data).metric.toStringAsFixed(3)}', () {
                       setState(() {
                         disabledGraphs[6] = !(disabledGraphs[6] ?? false);
                       });
