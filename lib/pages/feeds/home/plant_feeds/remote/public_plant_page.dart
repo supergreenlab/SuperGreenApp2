@@ -23,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -74,6 +75,12 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
   }
 
   List<String> filters = [];
+
+  @override
+  void initState() {
+    filters = AppDB().getAppData().filters;
+    super.initState();
+  }
 
   Widget _renderFeed(BuildContext context, PublicPlantBlocState state) {
     List<Widget Function(BuildContext, PublicPlantBlocState)> tabs = [
@@ -133,8 +140,14 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
           ));
     }
     return BlocProvider(
-      create: (context) =>
-          FeedBloc(RemotePlantFeedBlocDelegate(state.plantID, state.feedEntryID, state.commentID, state.replyTo)),
+      create: (context) => FeedBloc(
+          RemotePlantFeedBlocDelegate(
+            state.plantID,
+            state.feedEntryID,
+            state.commentID,
+            state.replyTo,
+          ),
+          filters: filters),
       child: FeedPage(
           automaticallyImplyLeading: true,
           title: state.plantName ?? '',
@@ -164,6 +177,7 @@ class _PublicPlantPageState extends State<PublicPlantPage> {
                   filters: filters,
                   onSaveFilters: (f) {
                     filters = f;
+                    AppDB().setFilters(filters);
                   },
                 ),
           bottom: bottom),

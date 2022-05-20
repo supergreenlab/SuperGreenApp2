@@ -132,6 +132,12 @@ class AppDB {
     setDeviceData(identifier, deviceData);
   }
 
+  void setFilters(List<String> filters) {
+    AppData appData = getAppData();
+    appData.filters = filters;
+    setAppData(appData);
+  }
+
   void setAppData(AppData appData) {
     _settingsDB.put('data', appData);
   }

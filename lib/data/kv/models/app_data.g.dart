@@ -26,13 +26,14 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..syncOverGSM = fields[6] as bool
       ..notificationToken = fields[7] as String?
       ..notificationTokenSent = fields[8] as bool
-      ..notificationOnStartAsked = fields[9] as bool;
+      ..notificationOnStartAsked = fields[9] as bool
+      ..filters = (fields[10] as List).cast<String>();
   }
 
   @override
   void write(BinaryWriter writer, AppData obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.firstStart)
       ..writeByte(1)
@@ -52,7 +53,9 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..writeByte(8)
       ..write(obj.notificationTokenSent)
       ..writeByte(9)
-      ..write(obj.notificationOnStartAsked);
+      ..write(obj.notificationOnStartAsked)
+      ..writeByte(10)
+      ..write(obj.filters);
   }
 
   @override

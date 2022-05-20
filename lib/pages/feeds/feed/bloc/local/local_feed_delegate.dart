@@ -52,8 +52,9 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
 
   final String? commentID;
   final String? replyTo;
+  final List<String>? filters;
 
-  LocalFeedBlocDelegate(this.feedID, {this.feedEntryID, this.commentID, this.replyTo});
+  LocalFeedBlocDelegate(this.feedID, {this.feedEntryID, this.commentID, this.replyTo, this.filters});
 
   Stream<FeedBlocState> onInitialLoad() async* {
     if (commentID != null) {

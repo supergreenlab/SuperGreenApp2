@@ -40,6 +40,7 @@ class FeedPage extends StatefulWidget {
     );
   }
 
+  final List<String>? initFilter;
   final Color color;
   final String title;
   final bool pinned;
@@ -78,6 +79,7 @@ class FeedPage extends StatefulWidget {
     this.firstItem,
     this.automaticallyImplyLeading = false,
     this.onScroll,
+    this.initFilter,
   });
 
   @override

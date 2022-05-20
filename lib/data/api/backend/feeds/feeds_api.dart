@@ -514,6 +514,7 @@ class FeedsAPI {
   Future<List<dynamic>> publicPlantFeedEntries(String id, int n, int offset, {List<String>? filters}) async {
     try {
       String filterQuery = (filters ?? []).map((f) => '&f=$f').join('');
+      Logger.log(filterQuery);
       Map<String, dynamic> results =
           await BackendAPI().get('/public/plant/$id/feedEntries?limit=$n&offset=$offset$filterQuery');
       return results['entries'];

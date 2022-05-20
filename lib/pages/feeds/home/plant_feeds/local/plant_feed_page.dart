@@ -319,6 +319,12 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
   List<String> filters = [];
 
   @override
+  void initState() {
+    filters = AppDB().getAppData().filters;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
@@ -685,8 +691,10 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
       return BlocProvider(
         key: Key('feed'),
-        create: (context) => FeedBloc(LocalPlantFeedBlocDelegate(state.plant.feed,
-            feedEntryID: state.feedEntry?.id, commentID: state.commentID, replyTo: state.replyTo)),
+        create: (context) => FeedBloc(
+            LocalPlantFeedBlocDelegate(state.plant.feed,
+                feedEntryID: state.feedEntry?.id, commentID: state.commentID, replyTo: state.replyTo),
+            filters: filters),
         child: FeedPage(
           automaticallyImplyLeading: true,
           single: state.feedEntry != null,
@@ -700,6 +708,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
             filters: filters,
             onSaveFilters: (f) {
               filters = f;
+              AppDB().setFilters(filters);
             },
           ),
           bottom: bottom,

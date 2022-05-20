@@ -252,7 +252,7 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
   late FeedState feedState;
   List<String>? filters;
 
-  FeedBloc(this.delegate) : super(FeedBlocStateInit()) {
+  FeedBloc(this.delegate, {this.filters}) : super(FeedBlocStateInit()) {
     add(FeedBlocEventInit());
     add(FeedBlocEventLoadEntries(10, entries.length));
   }

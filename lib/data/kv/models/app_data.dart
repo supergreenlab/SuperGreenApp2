@@ -42,4 +42,6 @@ class AppData {
   bool notificationTokenSent = false;
   @HiveField(9)
   bool notificationOnStartAsked = false;
+  @HiveField(10)
+  List<String> filters = [];
 }
