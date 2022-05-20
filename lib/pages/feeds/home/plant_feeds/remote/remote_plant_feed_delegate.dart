@@ -49,7 +49,7 @@ class RemotePlantFeedBlocDelegate extends RemoteFeedBlocDelegate {
       Map<String, dynamic> entryMap = await BackendAPI().feedsAPI.publicFeedEntry(feedEntryID!);
       return [loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap)];
     }
-    List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicPlantFeedEntries(plantID, n, offset);
+    List<dynamic> entriesMap = await BackendAPI().feedsAPI.publicPlantFeedEntries(plantID, n, offset, filters: filters);
     return entriesMap.map<FeedEntryState>((dynamic em) {
       Map<String, dynamic> entryMap = em;
       return loaderForType(entryMap['type']).stateForFeedEntryMap(entryMap);

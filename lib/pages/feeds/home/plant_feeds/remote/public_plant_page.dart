@@ -32,13 +32,14 @@ import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plan
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/app_bar/plant_infos/plant_infos_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/products/products_page.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/plant_feed_filter_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/widgets/single_feed_entry.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/plant_infos_bloc_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/public_plant_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_plant_feed_delegate.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/remote/remote_products_delegate.dart';
 
-class PublicPlantPage extends TraceableStatelessWidget {
+class PublicPlantPage extends TraceableStatefulWidget {
   static String get publicPlantPageSingleEntry {
     return Intl.message(
       'Viewing single log entry',
@@ -58,6 +59,11 @@ class PublicPlantPage extends TraceableStatelessWidget {
   }
 
   @override
+  State<PublicPlantPage> createState() => _PublicPlantPageState();
+}
+
+class _PublicPlantPageState extends State<PublicPlantPage> {
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<PublicPlantBloc, PublicPlantBlocState>(
       bloc: BlocProvider.of<PublicPlantBloc>(context),
@@ -66,6 +72,8 @@ class PublicPlantPage extends TraceableStatelessWidget {
       },
     );
   }
+
+  List<String> filters = [];
 
   Widget _renderFeed(BuildContext context, PublicPlantBlocState state) {
     List<Widget Function(BuildContext, PublicPlantBlocState)> tabs = [
@@ -150,6 +158,14 @@ class PublicPlantPage extends TraceableStatelessWidget {
               ),
             ),
           ),
+          firstItem: bottom != null
+              ? null
+              : PlantFeedFilterPage(
+                  filters: filters,
+                  onSaveFilters: (f) {
+                    filters = f;
+                  },
+                ),
           bottom: bottom),
     );
   }
