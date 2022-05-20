@@ -35,9 +35,9 @@ const DEFAULT_SCHEDULES = {
     'OFF_MIN': 0,
   },
   'AUTO': {
-    'ON_HOUR': 0,
+    'ON_HOUR': 2,
     'ON_MIN': 0,
-    'OFF_HOUR': 0,
+    'OFF_HOUR': 22,
     'OFF_MIN': 0,
   },
 };
