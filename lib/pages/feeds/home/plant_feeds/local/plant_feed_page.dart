@@ -320,7 +320,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
 
   @override
   void initState() {
-    filters = AppDB().getAppData().filters;
+    filters = AppDB().getAppData().filters ?? [];
     super.initState();
   }
 

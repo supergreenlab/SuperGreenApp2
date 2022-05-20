@@ -43,5 +43,5 @@ class AppData {
   @HiveField(9)
   bool notificationOnStartAsked = false;
   @HiveField(10)
-  List<String> filters = [];
+  List<String>? filters = [];
 }

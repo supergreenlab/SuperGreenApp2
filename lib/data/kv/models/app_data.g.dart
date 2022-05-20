@@ -27,7 +27,7 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..notificationToken = fields[7] as String?
       ..notificationTokenSent = fields[8] as bool
       ..notificationOnStartAsked = fields[9] as bool
-      ..filters = (fields[10] as List).cast<String>();
+      ..filters = (fields[10] as List?)?.cast<String>();
   }
 
   @override
