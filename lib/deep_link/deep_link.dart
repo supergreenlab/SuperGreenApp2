@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -64,8 +62,13 @@ class DeepLinkBloc extends LegacyBloc<DeepLinkBlocEvent, DeepLinkBlocState> {
         yield DeepLinkBlocStateMainNavigation(MainNavigateToPublicPlant(event.uri.queryParameters['id']!,
             feedEntryID: event.uri.queryParameters['feid']));
       } else if (event.uri.path == '/plant') {
-        Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(event.uri.queryParameters['id']!);
-        yield DeepLinkBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+        if (event.uri.queryParameters['id']?.length == 36) {
+          Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(event.uri.queryParameters['id']!);
+          yield DeepLinkBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+        } else {
+          Plant plant = await RelDB.get().plantsDAO.getPlant(int.parse(event.uri.queryParameters['id']!));
+          yield DeepLinkBlocStateMainNavigation(MainNavigateToHomeEvent(plant: plant));
+        }
       }
     }
   }

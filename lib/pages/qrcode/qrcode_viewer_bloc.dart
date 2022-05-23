@@ -59,8 +59,9 @@ class QRCodeViewerBloc extends LegacyBloc<QRCodeViewerBlocEvent, QRCodeViewerBlo
   @override
   Stream<QRCodeViewerBlocState> mapEventToState(QRCodeViewerBlocEvent event) async* {
     if (event is QRCodeViewerBlocEventInit) {
+      Plant plant = await RelDB.get().plantsDAO.getPlant(args.plant.id);
       Box box = await RelDB.get().plantsDAO.getBox(args.plant.box);
-      yield QRCodeViewerBlocStateLoaded(args.plant, box);
+      yield QRCodeViewerBlocStateLoaded(plant, box);
     }
   }
 }

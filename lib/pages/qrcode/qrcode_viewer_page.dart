@@ -94,14 +94,14 @@ class _QRCodeViewerPageState extends State<QRCodeViewerPage> {
         ),
         Center(
           child: QrImage(
-            data: "sglapp:///plant?id=${state.plant.id}",
+            data: "sglapp://supergreenlab.com/plant?id=${state.plant.serverID ?? state.plant.id}",
             version: QrVersions.auto,
             size: 250.0,
           ),
         ),
         Center(
           child: Text(
-            '1. Screenshot this page\n2. Print this QR code\n3. Scan with your mobile phone camera\nto open the SGL app.',
+            '1. Screenshot this page\n2. Print this QR code\n3. Scan with your mobile phone camera\nto open the SGL app.${state.plant.serverID == null ? '\n\nCreate a SGL account to make\nthis QR code universal across devices.' : ''}',
             style: TextStyle(
               fontSize: 15,
             ),
