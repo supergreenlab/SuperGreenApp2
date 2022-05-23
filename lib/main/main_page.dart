@@ -120,6 +120,8 @@ import 'package:super_green_app/pages/products/product_supplier/product_supplier
 import 'package:super_green_app/pages/products/product_supplier/product_supplier_page.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_bloc.dart';
 import 'package:super_green_app/pages/products/search_new_product/select_new_product_page.dart';
+import 'package:super_green_app/pages/qrcode/qrcode_viewer_bloc.dart';
+import 'package:super_green_app/pages/qrcode/qrcode_viewer_page.dart';
 import 'package:super_green_app/pages/select_plant/select_plant_bloc.dart';
 import 'package:super_green_app/pages/select_plant/select_plant_page.dart';
 import 'package:super_green_app/pages/settings/auth/create_account/settings_create_account_bloc.dart';
@@ -516,6 +518,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => TimelapseViewerBloc(settings.arguments as MainNavigateToTimelapseViewer),
           child: addOnPopCallBack(TimelapseViewerPage(), onPop),
+        );
+      case '/qrcode/viewer':
+        return BlocProvider(
+          create: (context) => QRCodeViewerBloc(settings.arguments as MainNavigateToQRCodeViewer),
+          child: addOnPopCallBack(QRCodeViewerPage(), onPop),
         );
       case '/settings/auth':
         return BlocProvider(

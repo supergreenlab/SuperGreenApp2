@@ -389,6 +389,15 @@ class MainNavigateToTimelapseViewer extends MainNavigateToFeedFormEvent {
   List<Object> get props => [plant];
 }
 
+class MainNavigateToQRCodeViewer extends MainNavigateToFeedFormEvent {
+  final Plant plant;
+
+  MainNavigateToQRCodeViewer(this.plant, {pushAsReplacement = false}) : super(pushAsReplacement);
+
+  @override
+  List<Object> get props => [plant];
+}
+
 class MainNavigateToSettingsAuth extends MainNavigatorEvent {
   MainNavigateToSettingsAuth({futureFn}) : super(futureFn: futureFn);
 
@@ -706,6 +715,8 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState!.pushNamed('/picture', arguments: event);
     } else if (event is MainNavigateToTimelapseViewer) {
       future = _pushOrReplace('/timelapse/viewer', event);
+    } else if (event is MainNavigateToQRCodeViewer) {
+      future = _pushOrReplace('/qrcode/viewer', event);
     } else if (event is MainNavigateToSettingsAuth) {
       future = _navigatorKey.currentState!.pushNamed('/settings/auth', arguments: event);
     } else if (event is MainNavigateToSettingsLogin) {

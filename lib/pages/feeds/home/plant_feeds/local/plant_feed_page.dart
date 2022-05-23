@@ -678,6 +678,16 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ),
             ));
       }
+      actions.insert(
+        0,
+        IconButton(
+          icon: SvgPicture.asset('assets/home/icon_qrcode.svg'),
+          tooltip: 'View live cams',
+          onPressed: () {
+            BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToQRCodeViewer(state.plant));
+          },
+        ),
+      );
       Widget? bottom;
       if (state.feedEntry != null) {
         bottom = SingleFeedEntry(
