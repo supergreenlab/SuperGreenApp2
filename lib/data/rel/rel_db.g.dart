@@ -1518,7 +1518,7 @@ class $PlantsTable extends Plants with TableInfo<$PlantsTable, Plant> {
       type: const BoolType(),
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (alerts IN (0, 1))',
-      defaultValue: Constant(false));
+      defaultValue: Constant(true));
   final VerificationMeta _settingsMeta = const VerificationMeta('settings');
   @override
   late final GeneratedColumn<String?> settings = GeneratedColumn<String?>(

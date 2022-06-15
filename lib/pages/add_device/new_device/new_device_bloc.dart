@@ -95,7 +95,7 @@ class NewDeviceBloc extends LegacyBloc<NewDeviceBlocEvent, NewDeviceBlocState> {
     if (currentSSID != DefaultSSID) {
       yield NewDeviceBlocStateConnectingToSSID();
       if (await WiFiForIoTPlugin.connect(DefaultSSID,
-              password: DefaultPass, security: NetworkSecurity.WPA, joinOnce: false) ==
+              password: DefaultPass, security: NetworkSecurity.WPA, joinOnce: false, withInternet: false) ==
           false) {
         yield NewDeviceBlocStateConnectionToSSIDFailed(args.popOnComplete);
         return;
