@@ -68,7 +68,7 @@ class LocalNotifications {
 
     var scheduledNotificationDateTime = DateTime.now().add(Duration(minutes: afterMinutes));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails('REMINDERS', 'Towelie\'s reminders',
-        channelDescription: 'Towelie can help you not forget anything about your grow.');
+        'Towelie can help you not forget anything about your grow.');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);

@@ -39,10 +39,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
+AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
-  description: 'This channel is used for important notifications.', // description
+  'This channel is used for important notifications.', // description
   importance: Importance.high,
   enableVibration: true,
   playSound: true,

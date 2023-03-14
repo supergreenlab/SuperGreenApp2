@@ -30,7 +30,7 @@ class CardWelcomeApp {
     return Intl.message(
       '''Welcome to SuperGreenLab's grow diary app!
 ===
-Hey man, **welcome here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!
+Hey man, **tuto here**, my name’s **Towelie**, I’m here to make sure you don’t forget anything about your plant!
 
 To start off on a right foot, we made a **quick start checklist** of all the stuffs you'll need to **start growing**.
 

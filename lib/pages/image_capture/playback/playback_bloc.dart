@@ -86,8 +86,8 @@ class PlaybackBloc extends LegacyBloc<PlaybackBlocEvent, PlaybackBlocState> {
     } else if (event is PlaybackBlocEventRotate) {
       try {
         Image? image = decodeImage(await new File(FeedMedias.makeAbsoluteFilePath(_args.filePath)).readAsBytes());
-        image = copyRotate(image!, 90);
-        List<int>? out = encodeNamedImage(image, _args.filePath);
+        image = copyRotate(image!, angle: 90);
+        List<int>? out = encodeNamedImage(_args.filePath, image);
         await File(FeedMedias.makeAbsoluteFilePath(_args.filePath)).writeAsBytes(out!, flush: true);
       } catch (e, trace) {
         Logger.logError(e, trace);

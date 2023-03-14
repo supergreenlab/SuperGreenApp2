@@ -24,6 +24,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/pages/dashboard/dashboard_bloc.dart';
+import 'package:super_green_app/pages/dashboard/tuto/tuto_bloc.dart';
+import 'package:super_green_app/pages/dashboard/tuto/tuto_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/controls/box_controls_page.dart';
@@ -81,6 +83,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _renderLoaded(BuildContext context, DashboardBlocStateLoaded state) {
+    if (state.plants.length == 0) {
+      return _renderEmpty(context);
+    }
     return Column(
       children: [
         Padding(
@@ -89,6 +94,13 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         Expanded(child: _renderList(context, state)),
       ],
+    );
+  }
+
+  Widget _renderEmpty(BuildContext context) {
+    return BlocProvider<TutoBloc>(
+      create: (context) => TutoBloc(),
+      child: TutoPage(),
     );
   }
 

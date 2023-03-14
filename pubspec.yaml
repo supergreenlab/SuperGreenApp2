@@ -113,6 +113,7 @@ flutter:
     - assets/feed_card/
     - assets/box_setup/
     - assets/home/
+    - assets/tutos/
     - assets/settings/
     - assets/products/
     - assets/products/bundle/
