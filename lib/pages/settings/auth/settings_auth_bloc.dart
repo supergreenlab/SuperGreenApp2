@@ -25,7 +25,6 @@ import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/users/users_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/notifications/remote_notifications.dart';
 
 abstract class SettingsAuthBlocEvent extends Equatable {}
 
@@ -115,7 +114,6 @@ class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlo
       bool notificationEnabled = false;
       if (_isAuth) {
         user = await BackendAPI().usersAPI.me();
-        notificationEnabled = await RemoteNotifications.checkPermissions();
       }
       yield SettingsAuthBlocStateLoaded(_isAuth, notificationEnabled, AppDB().getAppData().syncOverGSM, user);
     } else if (event is SettingsAuthBlocEventSetSyncedOverGSM) {
