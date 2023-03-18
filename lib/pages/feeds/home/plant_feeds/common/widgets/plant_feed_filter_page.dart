@@ -23,6 +23,8 @@ import 'package:super_green_app/pages/explorer/explorer_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/common/plant_feed_state.dart';
 
+import 'icon_checkbox.dart';
+
 List<String> cardTypes = [
   // TODO we really need a clean centralized place to put those
   'FE_LIGHT',
@@ -80,6 +82,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
         if (state is FeedBlocStateFeedLoaded) {}
       },
       child: ExpansionPanelList(
+        expandedHeaderPadding: EdgeInsets.all(0.0),
         elevation: 0,
         children: [
           ExpansionPanel(
@@ -87,7 +90,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
               backgroundColor: Colors.transparent,
               headerBuilder: (BuildContext context, bool isExpanded) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                  padding: const EdgeInsets.only(top: 0.0, left: 16.0, right: 16.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -99,8 +102,8 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text('Filter',
                             style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 16,
                               color: Color(0xff454545),
                             )),
                       ),
@@ -127,7 +130,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
 
   Widget _renderSelectionButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12, right: 16),
+      padding: const EdgeInsets.only(bottom: 16.0, right: 24.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -142,7 +145,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             child: Text(
               'Select all',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 14,
                 color: Colors.blue,
                 decoration: TextDecoration.underline,
               ),
@@ -163,7 +166,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             child: Text(
               'Clear all',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 14,
                 color: Colors.blue,
                 decoration: TextDecoration.underline,
               ),
@@ -176,11 +179,12 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
 
   Widget _renderCardFilters(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Wrap(
+            alignment: WrapAlignment.spaceBetween,
             children: [
               _renderCardfilter(context,
                   filterName: 'FE_MEDIA', icon: 'assets/feed_card/icon_media.svg', name: 'Grow log'),
@@ -200,17 +204,9 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                   filterName: 'FE_TIMELAPSE', icon: 'assets/feed_card/icon_timelapse.svg', name: 'Timelapse'),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 18.0,
-            ),
-            child: Container(
-              height: 2,
-              color: Color(0xffdedede),
-            ),
-          ),
+          CardSeparator(),
           Wrap(
+            alignment: WrapAlignment.spaceBetween,
             children: [
               _renderCardfilter(context,
                   filterName: 'FE_NUTRIENT_MIX', icon: 'assets/feed_card/icon_nutrient_mix.svg', name: 'Nutrient M'),
@@ -224,22 +220,15 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                   filterName: 'FE_SCHEDULE', icon: 'assets/feed_card/icon_schedule.svg', name: 'Schedule'),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 18.0,
-            ),
-            child: Container(
-              height: 2,
-              color: Color(0xffdedede),
-            ),
-          ),
+          CardSeparator(),
           Wrap(
+            alignment: WrapAlignment.spaceEvenly,
             children: [
               _renderCardfilter(context,
-                  filterName: 'FE_LIFE_EVENT',
-                  icon: 'assets/plant_infos/icon_germination_date.svg',
-                  name: 'Life events'),
+                filterName: 'FE_LIFE_EVENT',
+                icon: 'assets/plant_infos/icon_germination_date.svg',
+                name: 'Life events'
+              ),
               _renderCardfilter(
                 context,
                 filterName: 'FE_TOWELIE_INFO',
@@ -271,8 +260,9 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
       },
       child: Container(
         width: 95,
-        height: 70,
+        height: 85,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
@@ -280,36 +270,35 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
                 name,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Color(0xff555555),
                 ),
               ),
             ),
-            Row(
-              children: [
-                icon.indexOf('.svg') != -1
-                    ? SvgPicture.asset(
-                        icon,
-                        height: 30,
-                        width: 30,
-                      )
-                    : Image.asset(
-                        icon,
-                        height: 30,
-                        width: 30,
-                      ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: SvgPicture.asset(
-                    'assets/feed_card/checkbox_${checked ? 'on' : 'off'}.svg',
-                    height: 30,
-                    width: 30,
-                  ),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: IconCheckbox(icon: icon, checked: checked, size: 30.0),
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CardSeparator extends StatelessWidget {
+  const CardSeparator({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 18.0,
+      ),
+      child: Container(
+        height: 2,
+        color: Color(0xffdedede),
       ),
     );
   }
