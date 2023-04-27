@@ -129,7 +129,7 @@ class RemoteNotifications {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              channel.description,
+              channelDescription: channel.description,
               icon: android.smallIcon,
             ),
           ),

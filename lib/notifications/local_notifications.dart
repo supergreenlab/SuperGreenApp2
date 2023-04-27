@@ -29,7 +29,7 @@ class LocalNotifications {
 
   Future init() async {
     var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_notification');
-    var initializationSettingsIOS = IOSInitializationSettings(
+    var initializationSettingsIOS = DarwinInitializationSettings(
         requestSoundPermission: false,
         requestBadgePermission: false,
         requestAlertPermission: false,
@@ -37,7 +37,7 @@ class LocalNotifications {
     var initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: _onSelectNotification);
+        onDidReceiveNotificationResponse: _onSelectNotification);
   }
 
   Future _onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) async {
@@ -45,8 +45,8 @@ class LocalNotifications {
     onNotificationData(notificationData);
   }
 
-  Future _onSelectNotification(String? payload) async {
-    NotificationData notificationData = NotificationData.fromJSON(payload ?? '{}');
+  Future _onSelectNotification(NotificationResponse? payload) async {
+    NotificationData notificationData = NotificationData.fromJSON(payload?.payload ?? '{}');
     onNotificationData(notificationData);
   }
 
@@ -68,8 +68,8 @@ class LocalNotifications {
 
     var scheduledNotificationDateTime = DateTime.now().add(Duration(minutes: afterMinutes));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails('REMINDERS', 'Towelie\'s reminders',
-        'Towelie can help you not forget anything about your grow.');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+        channelDescription: 'Towelie can help you not forget anything about your grow.');
+    var iOSPlatformChannelSpecifics = DarwinNotificationDetails();
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
