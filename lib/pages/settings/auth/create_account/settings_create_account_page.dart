@@ -65,77 +65,79 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
               ),
             );
           } else if (state is SettingsCreateAccountBlocStateLoaded) {
-            body = Column(
-              children: <Widget>[
-                Container(
-                  color: Colors.indigo,
-                  child: Center(
-                    child: Text('Create account', style: TextStyle(color: Colors.white, fontSize: 20)),
-                  ),
-                ),
-                Expanded(
-                  child: ListView(
-                    children: <Widget>[
-                      SectionTitle(
-                        title: 'Enter you nickname:',
-                        icon: 'assets/settings/icon_account.svg',
-                        backgroundColor: Colors.indigo,
-                        titleColor: Colors.white,
-                        elevation: 5,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
-                        child: SGLTextField(
-                            textCapitalization: TextCapitalization.none,
-                            focusNode: _nicknameFocusNode,
-                            onFieldSubmitted: (_) {
-                              _nicknameFocusNode.unfocus();
-                              FocusScope.of(context).requestFocus(_passwordFocusNode);
-                            },
-                            hintText: 'Ex: Bob',
-                            controller: _nicknameController,
-                            onChanged: (_) {
-                              setState(() {});
-                            }),
-                      ),
-                      SectionTitle(
-                        title: 'Enter your password:',
-                        icon: 'assets/settings/icon_password.svg',
-                        backgroundColor: Colors.indigo,
-                        titleColor: Colors.white,
-                        elevation: 5,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
-                        child: SGLTextField(
-                            textCapitalization: TextCapitalization.none,
-                            focusNode: _passwordFocusNode,
-                            onFieldSubmitted: (_) {
-                              _handleInput(context);
-                            },
-                            controller: _passwordController,
-                            obscureText: true,
-                            hintText: '***',
-                            onChanged: (_) {
-                              setState(() {});
-                            }),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: GreenButton(
-                      title: 'CREATE ACCOUNT',
-                      onPressed: _nicknameController.value.text != '' && _passwordController.value.text != ''
-                          ? () => _handleInput(context)
-                          : null,
+            body = SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    color: Colors.indigo,
+                    child: Center(
+                      child: Text('Create account', style: TextStyle(color: Colors.white, fontSize: 20)),
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: ListView(
+                      children: <Widget>[
+                        SectionTitle(
+                          title: 'Enter your nickname:',
+                          icon: 'assets/settings/icon_account.svg',
+                          backgroundColor: Colors.indigo,
+                          titleColor: Colors.white,
+                          elevation: 5,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                          child: SGLTextField(
+                              textCapitalization: TextCapitalization.none,
+                              focusNode: _nicknameFocusNode,
+                              onFieldSubmitted: (_) {
+                                _nicknameFocusNode.unfocus();
+                                FocusScope.of(context).requestFocus(_passwordFocusNode);
+                              },
+                              hintText: 'Ex: Bob',
+                              controller: _nicknameController,
+                              onChanged: (_) {
+                                setState(() {});
+                              }),
+                        ),
+                        SectionTitle(
+                          title: 'Enter your password:',
+                          icon: 'assets/settings/icon_password.svg',
+                          backgroundColor: Colors.indigo,
+                          titleColor: Colors.white,
+                          elevation: 5,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+                          child: SGLTextField(
+                              textCapitalization: TextCapitalization.none,
+                              focusNode: _passwordFocusNode,
+                              onFieldSubmitted: (_) {
+                                _handleInput(context);
+                              },
+                              controller: _passwordController,
+                              obscureText: true,
+                              hintText: '***',
+                              onChanged: (_) {
+                                setState(() {});
+                              }),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: GreenButton(
+                        title: 'CREATE ACCOUNT',
+                        onPressed: _nicknameController.value.text != '' && _passwordController.value.text != ''
+                            ? () => _handleInput(context)
+                            : null,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           }
           return Scaffold(
