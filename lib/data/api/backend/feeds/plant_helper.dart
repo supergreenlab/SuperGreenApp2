@@ -24,7 +24,7 @@ import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.
 import 'package:collection/collection.dart';
 
 class PlantHelper {
-  static Future deletePlant(Plant plant, {addDeleted: true}) async {
+  static Future deletePlant(Plant plant, {addDeleted = true}) async {
     plant = await RelDB.get().plantsDAO.getPlant(plant.id);
     await RelDB.get().plantsDAO.deletePlant(plant);
     if (addDeleted && plant.serverID != null) {
@@ -38,7 +38,7 @@ class PlantHelper {
     }
   }
 
-  static Future deleteBox(Box box, {addDeleted: true}) async {
+  static Future deleteBox(Box box, {addDeleted = true}) async {
     box = await RelDB.get().plantsDAO.getBox(box.id);
     await RelDB.get().plantsDAO.deleteBox(box);
     if (addDeleted && box.serverID != null) {
@@ -46,7 +46,7 @@ class PlantHelper {
     }
   }
 
-  static Future deleteTimelapse(Timelapse timelapse, {addDeleted: true}) async {
+  static Future deleteTimelapse(Timelapse timelapse, {addDeleted = true}) async {
     timelapse = await RelDB.get().plantsDAO.getTimelapse(timelapse.id);
     await RelDB.get().plantsDAO.deleteTimelapse(timelapse);
     if (addDeleted && timelapse.serverID != null) {

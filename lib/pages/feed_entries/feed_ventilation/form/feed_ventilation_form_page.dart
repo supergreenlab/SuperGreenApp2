@@ -83,14 +83,14 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                           GreenButton(
                             title: 'SHOP NOW',
                             onPressed: () {
-                              launch('https://www.supergreenlab.com');
+                              launchUrl(Uri.dataFromString('https://www.supergreenlab.com'));
                             },
                           ),
                           Text('or'),
                           GreenButton(
                             title: 'DIY NOW',
                             onPressed: () {
-                              launch('https://github.com/supergreenlab');
+                              launchUrl(Uri.dataFromString('https://github.com/supergreenlab'));
                             },
                           ),
                         ],

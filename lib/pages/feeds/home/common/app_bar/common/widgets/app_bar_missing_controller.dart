@@ -102,7 +102,7 @@ class AppBarMissingController extends StatelessWidget {
                 GreenButton(
                   title: AppBarMissingController.appBarMissingControllerShopNow,
                   onPressed: () {
-                    launch('https://www.supergreenlab.com');
+                    launchUrl(Uri.dataFromString('https://www.supergreenlab.com'));
                   },
                 ),
                 Padding(
@@ -133,7 +133,7 @@ class AppBarMissingController extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      launch('https://github.com/supergreenlab');
+                      launchUrl(Uri.dataFromString('https://github.com/supergreenlab'));
                     },
                   ),
                 ],

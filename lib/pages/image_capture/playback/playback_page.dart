@@ -68,8 +68,8 @@ class _PlaybackPageState extends State<PlaybackPage> {
             }
           }
           if (state is PlaybackBlocStateReload) {
-            imageCache!.clear();
-            imageCache!.clearLiveImages();
+            imageCache.clear();
+            imageCache.clearLiveImages();
             setState(() {
               ++picRefresh;
               loading = false;

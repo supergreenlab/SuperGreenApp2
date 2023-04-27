@@ -151,14 +151,14 @@ class _FeedLightFormPageState extends State<FeedLightFormPage> {
                           GreenButton(
                             title: FeedLightFormPage.feedLightFormPageShopNow,
                             onPressed: () {
-                              launch('https://www.supergreenlab.com');
+                              launchUrl(Uri.dataFromString('https://www.supergreenlab.com'));
                             },
                           ),
                           Text(FeedLightFormPage.feedLightFormPageOr),
                           GreenButton(
                             title: FeedLightFormPage.feedLightFormPageDIYNow,
                             onPressed: () {
-                              launch('https://github.com/supergreenlab');
+                              launchUrl(Uri.dataFromString('https://github.com/supergreenlab'));
                             },
                           ),
                         ],

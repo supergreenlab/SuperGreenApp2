@@ -28,7 +28,6 @@ import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/date_renderer.dart';
-import 'package:super_green_app/misc/date_renderer.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/form/comments_form_page.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
@@ -145,7 +144,7 @@ class CommentView extends StatelessWidget {
                     ? Expanded(
                         child: InkWell(
                         onTap: () {
-                          launch(p.supplier!.url);
+                          launchUrl(Uri.dataFromString(p.supplier!.url));
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),

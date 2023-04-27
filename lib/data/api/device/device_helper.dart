@@ -24,7 +24,6 @@ import 'package:crypto/crypto.dart';
 import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/devices/websocket.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
-import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:tuple/tuple.dart';
@@ -165,7 +164,7 @@ class DeviceHelper {
     return newParam;
   }
 
-  static Future deleteDevice(Device device, {addDeleted: true}) async {
+  static Future deleteDevice(Device device, {addDeleted = true}) async {
     device = await RelDB.get().devicesDAO.getDevice(device.id);
     await RelDB.get().devicesDAO.deleteDevice(device);
     if (addDeleted && device.serverID != null) {

@@ -58,7 +58,7 @@ class FeedEntryHelper {
     eventBus.fire(FeedEntryUpdateEvent(feedEntry));
   }
 
-  static Future<void> deleteFeedEntry(FeedEntry feedEntry, {addDeleted: true}) async {
+  static Future<void> deleteFeedEntry(FeedEntry feedEntry, {addDeleted = true}) async {
     await RelDB.get().feedsDAO.deleteFeedEntry(feedEntry);
     if (addDeleted && feedEntry.serverID != null) {
       await RelDB.get()
@@ -73,7 +73,7 @@ class FeedEntryHelper {
     eventBus.fire(FeedEntryDeleteEvent(feedEntry));
   }
 
-  static Future<void> deleteFeedMedia(FeedMedia feedMedia, {addDeleted: true}) async {
+  static Future<void> deleteFeedMedia(FeedMedia feedMedia, {addDeleted = true}) async {
     try {
       await File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath)).delete();
     } catch (e, trace) {
@@ -92,7 +92,7 @@ class FeedEntryHelper {
     }
   }
 
-  static Future<void> deleteFeed(Feed feed, {addDeleted: true}) async {
+  static Future<void> deleteFeed(Feed feed, {addDeleted = true}) async {
     feed = await RelDB.get().feedsDAO.getFeed(feed.id);
     List<FeedEntry> feedEntries = await RelDB.get().feedsDAO.getAllFeedEntriesForFeed(feed.id);
     for (FeedEntry feedEntry in feedEntries) {

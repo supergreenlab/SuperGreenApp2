@@ -329,7 +329,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       GreenButton(
                         title: SelectDevicePage.selectDeviceShopNow,
                         onPressed: () {
-                          launch('https://www.supergreenlab.com');
+                          launchUrl(Uri.dataFromString('https://www.supergreenlab.com'));
                         },
                       ),
                       Padding(
@@ -339,7 +339,7 @@ class _SelectDevicePageState extends State<SelectDevicePage> {
                       GreenButton(
                         title: SelectDevicePage.selectDeviceDIYNow,
                         onPressed: () {
-                          launch('https://github.com/supergreenlab/');
+                          launchUrl(Uri.dataFromString('https://github.com/supergreenlab/'));
                         },
                       ),
                     ],

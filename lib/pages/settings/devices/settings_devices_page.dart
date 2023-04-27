@@ -159,7 +159,7 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
                       GreenButton(
                         title: 'SHOP NOW',
                         onPressed: () {
-                          launch('https://www.supergreenlab.com');
+                          launchUrl(Uri.dataFromString('https://www.supergreenlab.com'));
                         },
                       ),
                       Padding(
@@ -169,7 +169,7 @@ class SettingsDevicesPage extends TraceableStatelessWidget {
                       GreenButton(
                         title: 'DIY NOW',
                         onPressed: () {
-                          launch('https://github.com/supergreenlab/');
+                          launchUrl(Uri.dataFromString('https://github.com/supergreenlab/'));
                         },
                       ),
                     ],
