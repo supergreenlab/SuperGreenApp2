@@ -177,14 +177,16 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
     );
   }
 
+  static double filterSidePadding=16.0;
+
   Widget _renderCardFilters(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+      padding: EdgeInsets.only(left: filterSidePadding, right: filterSidePadding, bottom: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Wrap(
-            alignment: WrapAlignment.spaceBetween,
+            alignment: WrapAlignment.start,
             children: [
               _renderCardfilter(context,
                   filterName: 'FE_MEDIA', icon: 'assets/feed_card/icon_media.svg', name: 'Grow log'),
@@ -206,7 +208,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
           ),
           CardSeparator(),
           Wrap(
-            alignment: WrapAlignment.spaceBetween,
+            alignment: WrapAlignment.start,
             children: [
               _renderCardfilter(context,
                   filterName: 'FE_NUTRIENT_MIX', icon: 'assets/feed_card/icon_nutrient_mix.svg', name: 'Nutrient M'),
@@ -222,7 +224,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
           ),
           CardSeparator(),
           Wrap(
-            alignment: WrapAlignment.spaceEvenly,
+            alignment: WrapAlignment.start,
             children: [
               _renderCardfilter(context,
                 filterName: 'FE_LIFE_EVENT',
@@ -249,6 +251,11 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
     required String name,
   }) {
     bool checked = filters[filterName] ?? true;
+    Size size = MediaQuery.of(context).size;
+    double width = (size.width - filterSidePadding*2) / 4;
+    if (width < 85) {
+      width = (size.width - filterSidePadding*2) / 3;
+    }
     return InkWell(
       onTap: () {
         setState(() {
@@ -259,13 +266,13 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
         });
       },
       child: Container(
-        width: 95,
+        width: width,
         height: 85,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.only(bottom: 4.0),
               child: Text(
                 name,
                 style: TextStyle(
