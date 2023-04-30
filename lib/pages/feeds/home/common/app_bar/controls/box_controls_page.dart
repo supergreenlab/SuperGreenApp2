@@ -120,15 +120,17 @@ class BoxControlsPage extends StatelessWidget {
   }
 
   Widget _renderActions(BuildContext context, BoxControlsBlocStateLoaded state) {
-    return _renderButtons(
-      context,
-      state.box,
-      state.plant,
-      '${state.metrics.blower.ivalue}%',
-      DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
-          state.metrics.offMin.param),
-      '${state.metrics.light.ivalue}%',
-      '${state.plant!.alerts ? "ON" : "OFF"}',
+    return Expanded(
+      child: _renderButtons(
+        context,
+        state.box,
+        state.plant,
+        '${state.metrics.blower.ivalue}%',
+        DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
+            state.metrics.offMin.param),
+        '${state.metrics.light.ivalue}%',
+        '${state.plant!.alerts ? "ON" : "OFF"}',
+      ),
     );
   }
 
