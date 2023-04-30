@@ -299,8 +299,20 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: SvgPicture.asset('assets/settings/icon_go.svg'),
                 ),
-                title: Text('View slots'),
+                title: Text('View box slots'),
                 subtitle: Text('Tap to view this controller\'s box slots'),
+                onTap: () {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceBoxEvent(state.device));
+                },
+              ),
+              ListTile(
+                leading: SvgPicture.asset('assets/settings/icon_boxslot.svg'),
+                trailing: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: SvgPicture.asset('assets/settings/icon_go.svg'),
+                ),
+                title: Text('View motor ports'),
+                subtitle: Text('Tap to view this controller\'s motor ports'),
                 onTap: () {
                   BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceBoxEvent(state.device));
                 },
