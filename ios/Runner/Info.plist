@@ -46,7 +46,7 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>BLE is only used to setup the raspberry pi remote live camera and timelapse feature.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To record and take pictures of your grow's advancement</string>
+	<string>To record and take pictures of your grow&apos;s advancement</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Only required for wifi automatic setup. (optional)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -82,6 +82,8 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Only used when auto-connecting to the emoji wifi, you can also connect manually with the password &apos;multipass&apos;</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
