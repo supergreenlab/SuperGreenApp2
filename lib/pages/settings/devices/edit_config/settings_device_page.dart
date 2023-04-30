@@ -392,7 +392,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   subtitle: Text(
                       'Open the controller\'s admin interface. Make sure you know what you\'re doing before going there.'),
                   onTap: () {
-                    launchUrl(Uri.dataFromString('http://${state.device.ip}/fs/app.html'));
+                    launchUrl(Uri.parse('http://${state.device.ip}/fs/app.html'));
                   },
                 ),
               ),

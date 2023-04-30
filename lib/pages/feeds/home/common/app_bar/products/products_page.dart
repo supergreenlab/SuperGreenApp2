@@ -229,7 +229,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       size: 30,
                     ),
                     onTap: () {
-                      launchUrl(Uri.dataFromString(p.supplier!.url));
+                      launchUrl(Uri.parse(p.supplier!.url));
                     },
                   )
                 : null,

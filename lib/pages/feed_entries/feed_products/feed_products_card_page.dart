@@ -181,7 +181,7 @@ class FeedProductsCardPage extends StatelessWidget {
                 //   await FlutterMatomo.trackScreenWithName(
                 //       'FeedProductsCardPage', 'product_clicked');
                 // }
-                launchUrl(Uri.dataFromString(product.link.data));
+                launchUrl(Uri.parse(product.link.data));
               },
             ),
           ),

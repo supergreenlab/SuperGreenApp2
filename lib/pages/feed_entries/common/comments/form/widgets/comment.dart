@@ -144,7 +144,7 @@ class CommentView extends StatelessWidget {
                     ? Expanded(
                         child: InkWell(
                         onTap: () {
-                          launchUrl(Uri.dataFromString(p.supplier!.url));
+                          launchUrl(Uri.parse(p.supplier!.url));
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),

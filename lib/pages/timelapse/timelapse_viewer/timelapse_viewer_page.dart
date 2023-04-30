@@ -135,7 +135,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
                 GreenButton(
                   title: 'SHOP NOW',
                   onPressed: () {
-                    launchUrl(Uri.dataFromString('https://www.supergreenlab.com'));
+                    launchUrl(Uri.parse('https://www.supergreenlab.com'));
                   },
                 ),
               ],
@@ -164,7 +164,7 @@ class _TimelapseViewerPageState extends State<TimelapseViewerPage> {
               GreenButton(
                 title: 'SHOP NOW',
                 onPressed: () {
-                  launchUrl(Uri.dataFromString('https://www.supergreenlab.com'));
+                  launchUrl(Uri.parse('https://www.supergreenlab.com'));
                 },
               ),
             ],
