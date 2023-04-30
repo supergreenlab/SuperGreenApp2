@@ -76,7 +76,7 @@ class BoxControlsPage extends StatelessWidget {
         ),
         Expanded(
           child: Stack(
-            fit: StackFit.passthrough,
+            fit: StackFit.expand,
             children: [
               _renderButtons(
                 context,
@@ -134,105 +134,103 @@ class BoxControlsPage extends StatelessWidget {
 
   Widget _renderButtons(
       BuildContext context, Box box, Plant? plant, String blower, String schedule, String light, String alerts) {
-    return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: AppBarAction(
+                  center: true,
+                  icon: 'assets/app_bar/icon_ventilation.svg',
+                  color: Color(0xFF8EB5FF),
+                  title: 'VENTILATION',
+                  content: AutoSizeText(
+                    blower,
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                  ),
+                  action: _onEnvironmentControlTapped(
+                      context,
+                      ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
+                          pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
+                ),
+              ),
+              Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: AppBarAction(
                     center: true,
-                    icon: 'assets/app_bar/icon_ventilation.svg',
-                    color: Color(0xFF8EB5FF),
-                    title: 'VENTILATION',
+                    icon: 'assets/app_bar/icon_schedule.svg',
+                    color: Color(0xFF61A649),
+                    title: 'SCHEDULE',
                     content: AutoSizeText(
-                      blower,
+                      schedule,
                       maxLines: 1,
                       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                     ),
                     action: _onEnvironmentControlTapped(
                         context,
-                        ({pushAsReplacement = false}) => MainNavigateToFeedVentilationFormEvent(box,
-                            pushAsReplacement: pushAsReplacement, futureFn: futureFn)),
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: AppBarAction(
+                        ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
+                            pushAsReplacement: pushAsReplacement, futureFn: futureFn),
+                        tipID: 'TIP_BLOOM',
+                        tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
+                  )),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: AppBarAction(
                       center: true,
-                      icon: 'assets/app_bar/icon_schedule.svg',
-                      color: Color(0xFF61A649),
-                      title: 'SCHEDULE',
+                      icon: 'assets/app_bar/icon_light.svg',
+                      color: Color(0xFFDABA48),
+                      title: 'LIGHT',
                       content: AutoSizeText(
-                        schedule,
+                        light,
                         maxLines: 1,
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
                       ),
                       action: _onEnvironmentControlTapped(
                           context,
-                          ({pushAsReplacement = false}) => MainNavigateToFeedScheduleFormEvent(box,
+                          ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(box,
                               pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                          tipID: 'TIP_BLOOM',
-                          tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/when_to_switch_to_bloom/l/en']),
-                    )),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: AppBarAction(
+                          tipID: 'TIP_STRETCH',
+                          tipPaths: [
+                            't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
+                            't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
+                          ]))),
+              plant != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: AppBarAction(
                         center: true,
-                        icon: 'assets/app_bar/icon_light.svg',
-                        color: Color(0xFFDABA48),
-                        title: 'LIGHT',
+                        icon: 'assets/app_bar/icon_alerts.svg',
+                        color: Color(0xFF8848DA),
+                        title: 'ALERTS',
                         content: AutoSizeText(
-                          light,
+                          alerts,
                           maxLines: 1,
-                          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF454545)),
+                          style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: plant.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
                         ),
-                        action: _onEnvironmentControlTapped(
-                            context,
-                            ({pushAsReplacement = false}) => MainNavigateToFeedLightFormEvent(box,
-                                pushAsReplacement: pushAsReplacement, futureFn: futureFn),
-                            tipID: 'TIP_STRETCH',
-                            tipPaths: [
-                              't/supergreenlab/SuperGreenTips/master/s/when_to_control_stretch_in_seedling/l/en',
-                              't/supergreenlab/SuperGreenTips/master/s/how_to_control_stretch_in_seedling/l/en'
-                            ]))),
-                plant != null
-                    ? Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: AppBarAction(
-                          center: true,
-                          icon: 'assets/app_bar/icon_alerts.svg',
-                          color: Color(0xFF8848DA),
-                          title: 'ALERTS',
-                          content: AutoSizeText(
-                            alerts,
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: plant.alerts ? Color(0xFF3BB28B) : Color(0xFFD7352B)),
-                          ),
-                          action: () => BlocProvider.of<MainNavigatorBloc>(context).add(
-                            MainNavigateToSettingsPlantAlerts(plant, futureFn: futureFn),
-                          ),
-                        ))
-                    : Container(),
-              ],
-            ),
+                        action: () => BlocProvider.of<MainNavigatorBloc>(context).add(
+                          MainNavigateToSettingsPlantAlerts(plant, futureFn: futureFn),
+                        ),
+                      ))
+                  : Container(),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
