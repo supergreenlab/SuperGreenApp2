@@ -314,7 +314,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 title: Text('View motor ports'),
                 subtitle: Text('Tap to view this controller\'s motor ports'),
                 onTap: () {
-                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectDeviceBoxEvent(state.device));
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToMotorPortEvent(state.device, null));
                 },
               ),
               Padding(

@@ -34,6 +34,8 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_pairing/device_pairing_page.dart';
+import 'package:super_green_app/pages/add_device/motor_ports/motor_ports_bloc.dart';
+import 'package:super_green_app/pages/add_device/motor_ports/motor_ports_page.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_bloc.dart';
 import 'package:super_green_app/pages/add_plant/create_box/create_box_page.dart';
 import 'package:super_green_app/pages/add_plant/create_plant/create_plant_bloc.dart';
@@ -347,10 +349,10 @@ class _MainPageState extends State<MainPage> {
           create: (context) => CreatePlantBloc(),
           child: addOnPopCallBack(CreatePlantPage(), onPop),
         );
-      case '/plant/box':
+      case '/device/motors':
         return BlocProvider(
-          create: (context) => SelectBoxBloc(settings.arguments as MainNavigateToSelectBoxEvent),
-          child: addOnPopCallBack(SelectBoxPage(), onPop),
+          create: (context) => MotorPortBloc(settings.arguments as MainNavigateToMotorPortEvent),
+          child: addOnPopCallBack(MotorPortPage(), onPop),
         );
       case '/plant/box/new':
         return BlocProvider(

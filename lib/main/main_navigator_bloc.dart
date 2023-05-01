@@ -69,6 +69,16 @@ class MainNavigateToCreateBoxEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
+class MainNavigateToMotorPortEvent extends MainNavigatorEvent {
+  final Device device;
+  final Box? box;
+
+  MainNavigateToMotorPortEvent(this.device, this.box, {futureFn}) : super(futureFn: futureFn);
+
+  @override
+  List<Object?> get props => [device, box];
+}
+
 class MainNavigateToSelectDeviceEvent extends MainNavigatorEvent {
   MainNavigateToSelectDeviceEvent({futureFn}) : super(futureFn: futureFn);
 }
@@ -653,12 +663,14 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState!.pushNamed('/plant/box', arguments: event);
     } else if (event is MainNavigateToCreateBoxEvent) {
       future = _navigatorKey.currentState!.pushNamed('/plant/box/new', arguments: event);
-    } else if (event is MainNavigateToSelectDeviceEvent) {
+    }  else if (event is MainNavigateToSelectDeviceEvent) {
       future = _navigatorKey.currentState!.pushNamed('/box/device', arguments: event);
     } else if (event is MainNavigateToSelectDeviceBoxEvent) {
       future = _navigatorKey.currentState!.pushNamed('/box/device/box', arguments: event);
     } else if (event is MainNavigateToSelectNewDeviceBoxEvent) {
       future = _navigatorKey.currentState!.pushNamed('/box/device/box/new', arguments: event);
+    } else if (event is MainNavigateToMotorPortEvent) {
+      future = _navigatorKey.currentState!.pushNamed('/device/motors', arguments: event);
     } else if (event is MainNavigateToAddDeviceEvent) {
       future = _navigatorKey.currentState!.pushNamed('/device/add', arguments: event);
     } else if (event is MainNavigateToNewDeviceEvent) {
