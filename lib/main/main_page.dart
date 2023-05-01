@@ -18,6 +18,7 @@
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -291,20 +292,28 @@ class _MainPageState extends State<MainPage> {
       builder: (BuildContext context, SyncerBlocState state) {
         List<Widget> content = [body];
         if (state is SyncerBlocStateSyncing && state.syncing) {
+          // SafeAre does not seem to work
+          double height = 50;
+          if (Platform.isIOS) {
+            height = 60;
+          }
           content.add(Positioned(
               left: 0,
               top: 0,
               right: 0,
-              height: 50,
+              height: height,
               child: Scaffold(
                 body: Container(
                     color: Colors.red,
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 21.0),
-                        child: Center(
-                            child: Text(MainPage.redBarSyncingProgress(state.text),
-                                style: TextStyle(color: Colors.white))),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 4.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Center(
+                              child: Text(MainPage.redBarSyncingProgress(state.text),
+                                  style: TextStyle(color: Colors.white))),
+                        ],
                       ),
                     )),
               )));
