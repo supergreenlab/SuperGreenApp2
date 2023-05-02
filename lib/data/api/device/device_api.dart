@@ -269,13 +269,14 @@ class DeviceAPI {
       final db = RelDB.get().devicesDAO;
       final Map<String, int> modules = Map();
 
+      final config = await DeviceAPI.fetchConfig(ip, auth: auth);
+
+      Map<String, dynamic> keys = json.decode(config);
+
       if (delete) {
         await db.deleteParams(deviceID);
         await db.deleteModules(deviceID);
       }
-
-      final config = await DeviceAPI.fetchConfig(ip, auth: auth);
-      Map<String, dynamic> keys = json.decode(config);
 
       double total = keys['keys'].length.toDouble(), done = 0;
       for (Map<String, dynamic> k in keys['keys']) {
@@ -342,6 +343,7 @@ class DeviceAPI {
       await db.updateDevice(DevicesCompanion(
         id: Value(deviceID),
         isSetup: Value(true),
+        config: Value(config),
       ));
     } catch (e, trace) {
       Logger.logError(e, trace, data: {"ip": ip, "deviceID": deviceID}, fwdThrow: true);

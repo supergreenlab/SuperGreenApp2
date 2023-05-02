@@ -47,16 +47,6 @@ class SettingsDevicePage extends TraceableStatefulWidget {
     );
   }
 
-  static String settingsDevicePageControllerRefreshed(String name) {
-    return Intl.message(
-      'Controller $name refreshed!',
-      args: [name],
-      name: 'settingsDevicePageControllerRefreshed',
-      desc: 'Controller params refreshed confirmation text',
-      locale: SGLLocalizations.current?.localeName,
-    );
-  }
-
   static String settingsDevicePageControllerDone(String name) {
     return Intl.message(
       'Controller $name updated!',
@@ -174,13 +164,6 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
               body = FullscreenLoading(
                 title: CommonL10N.loading,
               );
-            } else if (state is SettingsDeviceBlocStateRefreshing) {
-              body = FullscreenLoading(
-                percent: state.percent,
-                title: SettingsDevicePage.settingsDevicePageLoading,
-              );
-            } else if (state is SettingsDeviceBlocStateRefreshed) {
-              body = _renderRefreshDone(state);
             } else if (state is SettingsDeviceBlocStateDone) {
               body = _renderDone(state);
             } else if (state is SettingsDeviceBlocStateLoaded) {
@@ -227,12 +210,6 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
             );
           }),
     );
-  }
-
-  Widget _renderRefreshDone(SettingsDeviceBlocStateRefreshed state) {
-    String subtitle = SettingsDevicePage.settingsDevicePageControllerRefreshed(_nameController.value.text);
-    return Fullscreen(
-        title: CommonL10N.done, subtitle: subtitle, child: Icon(Icons.done, color: Color(0xff0bb354), size: 100));
   }
 
   Widget _renderDone(SettingsDeviceBlocStateDone state) {
@@ -328,7 +305,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                   title: Text('Refresh params'),
                   subtitle: Text('Use this button if there were changes made to the controller outside the app.'),
                   onTap: () {
-                    BlocProvider.of<SettingsDeviceBloc>(context).add(SettingsDeviceBlocEventRefresh());
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToRefreshParameters(state.device));
                   },
                 ),
               ),
@@ -386,7 +363,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                         .add(MainNavigateToSettingsUpgradeDevice(state.device, futureFn: (future) async {
                       dynamic ret = await future;
                       if (ret is bool && ret == true) {
-                        BlocProvider.of<SettingsDeviceBloc>(context).add(SettingsDeviceBlocEventRefresh(delete: true));
+                        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToRefreshParameters(state.device));
                       }
                     }));
                   },

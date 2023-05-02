@@ -143,6 +143,8 @@ import 'package:super_green_app/pages/settings/devices/auth_modal/auth_modal_blo
 import 'package:super_green_app/pages/settings/devices/auth_modal/auth_modal_page.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/edit_config/settings_device_page.dart';
+import 'package:super_green_app/pages/settings/devices/refresh_parameters/refresh_parameters_bloc.dart';
+import 'package:super_green_app/pages/settings/devices/refresh_parameters/refresh_parameters_page.dart';
 import 'package:super_green_app/pages/settings/devices/remote_control/settings_remote_control_bloc.dart';
 import 'package:super_green_app/pages/settings/devices/remote_control/settings_remote_control_page.dart';
 import 'package:super_green_app/pages/settings/devices/settings_devices_bloc.dart';
@@ -600,7 +602,11 @@ class _MainPageState extends State<MainPage> {
           create: (context) => SettingsUpgradeDeviceBloc(settings.arguments as MainNavigateToSettingsUpgradeDevice),
           child: addOnPopCallBack(SettingsUpgradeDevicePage(), onPop),
         );
-
+      case '/device/refresh':
+        return BlocProvider(
+          create: (context) => RefreshParametersBloc(settings.arguments as MainNavigateToRefreshParameters),
+          child: addOnPopCallBack(RefreshParametersPage(), onPop),
+        );
       case '/public/plant':
         return MultiBlocProvider(
           providers: [

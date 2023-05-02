@@ -32,37 +32,46 @@ class MotorPortBlocEventInit extends MotorPortBlocEvent {
   List<Object> get props => [];
 }
 
-class MotorPortBlocState extends Equatable {
-  final List<Device> devices;
-
-  MotorPortBlocState(this.devices);
+class MotorPortBlocEventUpdated extends MotorPortBlocEvent {
+  MotorPortBlocEventUpdated() : super();
 
   @override
-  List<Object> get props => [devices];
+  List<Object> get props => [];
 }
 
-class MotorPortBlocStateDeviceListUpdated extends MotorPortBlocState {
-  MotorPortBlocStateDeviceListUpdated(List<Device> devices) : super(devices);
+abstract class MotorPortBlocState extends Equatable {}
+
+class MotorPortBlocStateInit extends MotorPortBlocState {
+  MotorPortBlocStateInit() : super();
+
+  @override
+  List<Object> get props => [];
+}
+
+class MotorPortBlocStateLoaded extends MotorPortBlocState {
+  final Device device;
+
+  MotorPortBlocStateLoaded(this.device) : super();
+  
+  @override
+  List<Object?> get props => [device];
 }
 
 class MotorPortBlocStateDone extends MotorPortBlocState {
-  final Device device;
-  final int deviceBox;
-
-  MotorPortBlocStateDone(List<Device> devices, this.device, this.deviceBox) : super(devices);
+  MotorPortBlocStateDone() : super();
 
   @override
   List<Object> get props => [];
 }
 
 class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
-  List<Device> _devices = [];
-  StreamSubscription<List<Device>>? _stream;
-
   //ignore: unused_field
   final MainNavigateToMotorPortEvent args;
 
-  MotorPortBloc(this.args) : super(MotorPortBlocState([])) {
+  StreamSubscription<Device>? deviceStream;
+  late Device device;
+
+  MotorPortBloc(this.args) : super(MotorPortBlocStateInit()) {
     this.add(MotorPortBlocEventInit());
   }
 
@@ -70,11 +79,22 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
   Stream<MotorPortBlocState> mapEventToState(MotorPortBlocEvent event) async* {
     if (event is MotorPortBlocEventInit) {
       final ddb = RelDB.get().devicesDAO;
+      device = await ddb.getDevice(args.device.id);
+      deviceStream = ddb.watchDevice(args.device.id).listen(_onDeviceUpdated);
+      yield MotorPortBlocStateLoaded(device);
+    } if (event is MotorPortBlocEventUpdated) {
+      yield MotorPortBlocStateLoaded(device);
     }
+  }
+
+  void _onDeviceUpdated(Device d) {
+    device = d;
+    add(MotorPortBlocEventUpdated());
   }
 
   @override
   Future<void> close() async {
+    await deviceStream?.cancel();
     return super.close();
   }
 }

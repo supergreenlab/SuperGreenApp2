@@ -35,6 +35,8 @@ class Devices extends Table {
   BoolColumn get isRemote => boolean().withDefault(Constant(false))();
   BoolColumn get isSetup => boolean().withDefault(Constant(false))();
 
+  TextColumn get config => text().nullable()();
+
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 

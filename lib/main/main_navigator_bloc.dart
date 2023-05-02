@@ -515,6 +515,17 @@ class MainNavigateToSettingsUpgradeDevice extends MainNavigatorEvent {
   List<Object> get props => [device];
 }
 
+
+class MainNavigateToRefreshParameters extends MainNavigatorEvent {
+  final Device device;
+
+  MainNavigateToRefreshParameters(this.device, {void Function(Future<dynamic>? future)? futureFn})
+      : super(futureFn: futureFn);
+
+  @override
+  List<Object> get props => [device];
+}
+
 class MainNavigateToPublicPlant extends MainNavigatorEvent {
   final String id;
   final String? name;
@@ -755,6 +766,8 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState!.pushNamed('/settings/device/auth', arguments: event);
     } else if (event is MainNavigateToSettingsUpgradeDevice) {
       future = _navigatorKey.currentState!.pushNamed('/settings/device/upgrade', arguments: event);
+    } else if (event is MainNavigateToRefreshParameters) {
+      future = _navigatorKey.currentState!.pushNamed('/device/refresh', arguments: event);
     } else if (event is MainNavigateToPublicPlant) {
       future = _navigatorKey.currentState!.pushNamed('/public/plant', arguments: event);
     } else if (event is MainNavigateToBookmarks) {

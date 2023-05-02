@@ -45,6 +45,9 @@ class _MotorPortPageState extends State<MotorPortPage> {
             Widget body = FullscreenLoading(
               title: 'Loading..',
             );
+            if (state is MotorPortBlocStateLoaded) {
+              body = _renderLoaded(context, state);
+            }
             return Scaffold(
                 appBar: SGLAppBar(
                   '🤖',
@@ -56,5 +59,22 @@ class _MotorPortPageState extends State<MotorPortPage> {
                 body: body);
           }),
     );
+  }
+
+  Widget _renderLoaded(BuildContext context, MotorPortBlocStateLoaded state) {
+    if (state.device.config == null) {
+      return Column(
+        children: [
+          Text('Looks like you just upgraded the app, you need to refresh you controller\' parameters:'),
+          InkWell(
+            child: Text('Refresh parameters'),
+            onTap: () {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToRefreshParameters(state.device));
+            },
+          )
+        ],
+      );
+    }
+    return Text('Not loaded');
   }
 }

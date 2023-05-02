@@ -32,23 +32,6 @@ class SettingsDeviceBlocEventInit extends SettingsDeviceBlocEvent {
   List<Object> get props => [];
 }
 
-class SettingsDeviceBlocEventRefresh extends SettingsDeviceBlocEvent {
-  final bool delete;
-
-  SettingsDeviceBlocEventRefresh({this.delete = false});
-
-  @override
-  List<Object> get props => [delete];
-}
-
-class SettingsDeviceBlocEventRefreshing extends SettingsDeviceBlocEvent {
-  final double percent;
-  SettingsDeviceBlocEventRefreshing(this.percent);
-
-  @override
-  List<Object> get props => [percent];
-}
-
 class SettingsDeviceBlocEventUpdate extends SettingsDeviceBlocEvent {
   final String name;
 
@@ -65,27 +48,10 @@ class SettingsDeviceBlocStateLoading extends SettingsDeviceBlocState {
   List<Object> get props => [];
 }
 
-class SettingsDeviceBlocStateRefreshing extends SettingsDeviceBlocState {
-  final double percent;
-  SettingsDeviceBlocStateRefreshing(this.percent);
-
-  @override
-  List<Object> get props => [percent];
-}
-
 class SettingsDeviceBlocStateLoaded extends SettingsDeviceBlocState {
   final Device device;
 
   SettingsDeviceBlocStateLoaded(this.device);
-
-  @override
-  List<Object> get props => [device];
-}
-
-class SettingsDeviceBlocStateRefreshed extends SettingsDeviceBlocState {
-  final Device device;
-
-  SettingsDeviceBlocStateRefreshed(this.device);
 
   @override
   List<Object> get props => [device];
@@ -114,33 +80,10 @@ class SettingsDeviceBloc extends LegacyBloc<SettingsDeviceBlocEvent, SettingsDev
     if (event is SettingsDeviceBlocEventInit) {
       device = await RelDB.get().devicesDAO.getDevice(args.device.id);
       yield SettingsDeviceBlocStateLoaded(device);
-    } else if (event is SettingsDeviceBlocEventRefresh) {
-      yield SettingsDeviceBlocStateRefreshing(0);
-      refreshParams(delete: event.delete);
-    } else if (event is SettingsDeviceBlocEventRefreshing) {
-      if (event.percent != 100) {
-        yield SettingsDeviceBlocStateRefreshing(event.percent);
-      } else {
-        yield SettingsDeviceBlocStateRefreshed(device);
-        await Future.delayed(Duration(seconds: 2));
-        yield SettingsDeviceBlocStateLoaded(device);
-      }
     } else if (event is SettingsDeviceBlocEventUpdate) {
       yield SettingsDeviceBlocStateLoading();
       await DeviceHelper.updateDeviceName(args.device, event.name);
       yield SettingsDeviceBlocStateDone(device);
     }
-  }
-
-  void refreshParams({bool delete = false}) async {
-    String? auth = AppDB().getDeviceAuth(device.identifier);
-    final deviceName = await DeviceAPI.fetchStringParam(device.ip, "DEVICE_NAME", auth: auth);
-    final mdnsDomain = await DeviceAPI.fetchStringParam(device.ip, "MDNS_DOMAIN", auth: auth);
-    await RelDB.get().devicesDAO.updateDevice(
-        DevicesCompanion(id: Value(device.id), name: Value(deviceName), mdns: Value(mdnsDomain), synced: Value(false)));
-    await DeviceAPI.fetchAllParams(device.ip, device.id, (adv) {
-      add(SettingsDeviceBlocEventRefreshing(adv));
-    }, delete: delete, auth: auth);
-    add(SettingsDeviceBlocEventRefreshing(100));
   }
 }

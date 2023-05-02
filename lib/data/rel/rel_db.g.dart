@@ -6,7 +6,7 @@ part of 'rel_db.dart';
 // MoorGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class Device extends DataClass implements Insertable<Device> {
   final int id;
   final String identifier;
@@ -16,6 +16,7 @@ class Device extends DataClass implements Insertable<Device> {
   final bool isReachable;
   final bool isRemote;
   final bool isSetup;
+  final String? config;
   final String? serverID;
   final bool synced;
   Device(
@@ -27,6 +28,7 @@ class Device extends DataClass implements Insertable<Device> {
       required this.isReachable,
       required this.isRemote,
       required this.isSetup,
+      this.config,
       this.serverID,
       required this.synced});
   factory Device.fromData(Map<String, dynamic> data, GeneratedDatabase db,
@@ -49,6 +51,8 @@ class Device extends DataClass implements Insertable<Device> {
           .mapFromDatabaseResponse(data['${effectivePrefix}is_remote'])!,
       isSetup: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_setup'])!,
+      config: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}config']),
       serverID: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}server_i_d']),
       synced: const BoolType()
@@ -66,6 +70,9 @@ class Device extends DataClass implements Insertable<Device> {
     map['is_reachable'] = Variable<bool>(isReachable);
     map['is_remote'] = Variable<bool>(isRemote);
     map['is_setup'] = Variable<bool>(isSetup);
+    if (!nullToAbsent || config != null) {
+      map['config'] = Variable<String?>(config);
+    }
     if (!nullToAbsent || serverID != null) {
       map['server_i_d'] = Variable<String?>(serverID);
     }
@@ -83,6 +90,8 @@ class Device extends DataClass implements Insertable<Device> {
       isReachable: Value(isReachable),
       isRemote: Value(isRemote),
       isSetup: Value(isSetup),
+      config:
+          config == null && nullToAbsent ? const Value.absent() : Value(config),
       serverID: serverID == null && nullToAbsent
           ? const Value.absent()
           : Value(serverID),
@@ -102,6 +111,7 @@ class Device extends DataClass implements Insertable<Device> {
       isReachable: serializer.fromJson<bool>(json['isReachable']),
       isRemote: serializer.fromJson<bool>(json['isRemote']),
       isSetup: serializer.fromJson<bool>(json['isSetup']),
+      config: serializer.fromJson<String?>(json['config']),
       serverID: serializer.fromJson<String?>(json['serverID']),
       synced: serializer.fromJson<bool>(json['synced']),
     );
@@ -118,6 +128,7 @@ class Device extends DataClass implements Insertable<Device> {
       'isReachable': serializer.toJson<bool>(isReachable),
       'isRemote': serializer.toJson<bool>(isRemote),
       'isSetup': serializer.toJson<bool>(isSetup),
+      'config': serializer.toJson<String?>(config),
       'serverID': serializer.toJson<String?>(serverID),
       'synced': serializer.toJson<bool>(synced),
     };
@@ -132,6 +143,7 @@ class Device extends DataClass implements Insertable<Device> {
           bool? isReachable,
           bool? isRemote,
           bool? isSetup,
+          String? config,
           String? serverID,
           bool? synced}) =>
       Device(
@@ -143,6 +155,7 @@ class Device extends DataClass implements Insertable<Device> {
         isReachable: isReachable ?? this.isReachable,
         isRemote: isRemote ?? this.isRemote,
         isSetup: isSetup ?? this.isSetup,
+        config: config ?? this.config,
         serverID: serverID ?? this.serverID,
         synced: synced ?? this.synced,
       );
@@ -157,6 +170,7 @@ class Device extends DataClass implements Insertable<Device> {
           ..write('isReachable: $isReachable, ')
           ..write('isRemote: $isRemote, ')
           ..write('isSetup: $isSetup, ')
+          ..write('config: $config, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
           ..write(')'))
@@ -165,7 +179,7 @@ class Device extends DataClass implements Insertable<Device> {
 
   @override
   int get hashCode => Object.hash(id, identifier, name, ip, mdns, isReachable,
-      isRemote, isSetup, serverID, synced);
+      isRemote, isSetup, config, serverID, synced);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -178,6 +192,7 @@ class Device extends DataClass implements Insertable<Device> {
           other.isReachable == this.isReachable &&
           other.isRemote == this.isRemote &&
           other.isSetup == this.isSetup &&
+          other.config == this.config &&
           other.serverID == this.serverID &&
           other.synced == this.synced);
 }
@@ -191,6 +206,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
   final Value<bool> isReachable;
   final Value<bool> isRemote;
   final Value<bool> isSetup;
+  final Value<String?> config;
   final Value<String?> serverID;
   final Value<bool> synced;
   const DevicesCompanion({
@@ -202,6 +218,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.isReachable = const Value.absent(),
     this.isRemote = const Value.absent(),
     this.isSetup = const Value.absent(),
+    this.config = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   });
@@ -214,6 +231,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     this.isReachable = const Value.absent(),
     this.isRemote = const Value.absent(),
     this.isSetup = const Value.absent(),
+    this.config = const Value.absent(),
     this.serverID = const Value.absent(),
     this.synced = const Value.absent(),
   })  : identifier = Value(identifier),
@@ -229,6 +247,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     Expression<bool>? isReachable,
     Expression<bool>? isRemote,
     Expression<bool>? isSetup,
+    Expression<String?>? config,
     Expression<String?>? serverID,
     Expression<bool>? synced,
   }) {
@@ -241,6 +260,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       if (isReachable != null) 'is_reachable': isReachable,
       if (isRemote != null) 'is_remote': isRemote,
       if (isSetup != null) 'is_setup': isSetup,
+      if (config != null) 'config': config,
       if (serverID != null) 'server_i_d': serverID,
       if (synced != null) 'synced': synced,
     });
@@ -255,6 +275,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       Value<bool>? isReachable,
       Value<bool>? isRemote,
       Value<bool>? isSetup,
+      Value<String?>? config,
       Value<String?>? serverID,
       Value<bool>? synced}) {
     return DevicesCompanion(
@@ -266,6 +287,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
       isReachable: isReachable ?? this.isReachable,
       isRemote: isRemote ?? this.isRemote,
       isSetup: isSetup ?? this.isSetup,
+      config: config ?? this.config,
       serverID: serverID ?? this.serverID,
       synced: synced ?? this.synced,
     );
@@ -298,6 +320,9 @@ class DevicesCompanion extends UpdateCompanion<Device> {
     if (isSetup.present) {
       map['is_setup'] = Variable<bool>(isSetup.value);
     }
+    if (config.present) {
+      map['config'] = Variable<String?>(config.value);
+    }
     if (serverID.present) {
       map['server_i_d'] = Variable<String?>(serverID.value);
     }
@@ -318,6 +343,7 @@ class DevicesCompanion extends UpdateCompanion<Device> {
           ..write('isReachable: $isReachable, ')
           ..write('isRemote: $isRemote, ')
           ..write('isSetup: $isSetup, ')
+          ..write('config: $config, ')
           ..write('serverID: $serverID, ')
           ..write('synced: $synced')
           ..write(')'))
@@ -394,6 +420,11 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (is_setup IN (0, 1))',
       defaultValue: Constant(false));
+  final VerificationMeta _configMeta = const VerificationMeta('config');
+  @override
+  late final GeneratedColumn<String?> config = GeneratedColumn<String?>(
+      'config', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
   final VerificationMeta _serverIDMeta = const VerificationMeta('serverID');
   @override
   late final GeneratedColumn<String?> serverID = GeneratedColumn<String?>(
@@ -420,6 +451,7 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
         isReachable,
         isRemote,
         isSetup,
+        config,
         serverID,
         synced
       ];
@@ -473,6 +505,10 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
     if (data.containsKey('is_setup')) {
       context.handle(_isSetupMeta,
           isSetup.isAcceptableOrUnknown(data['is_setup']!, _isSetupMeta));
+    }
+    if (data.containsKey('config')) {
+      context.handle(_configMeta,
+          config.isAcceptableOrUnknown(data['config']!, _configMeta));
     }
     if (data.containsKey('server_i_d')) {
       context.handle(_serverIDMeta,
