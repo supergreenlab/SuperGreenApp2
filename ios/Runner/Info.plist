@@ -46,7 +46,7 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>BLE is only used to setup the raspberry pi remote live camera and timelapse feature.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To record and take pictures of your grow&apos;s advancement</string>
+	<string>To record videos and take pictures with your phone&apos;s camera. You can then use this pic for your diary entries, or as an avatar.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Only required for wifi automatic setup. (optional)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -54,7 +54,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>If you have anything to record with sound.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To pick a picture from your gallery app</string>
+	<string>To pick a picture or video from your gallery app. You can then use this pic for your diary entries, or as an avatar.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
@@ -75,6 +77,6 @@ class _MotorPortPageState extends State<MotorPortPage> {
         ],
       );
     }
-    return Text('Not loaded');
+    return Text(state.config!.keys.length.toString());
   }
 }

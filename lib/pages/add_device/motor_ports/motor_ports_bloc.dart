@@ -18,6 +18,7 @@
 
 import 'dart:async';
 
+import 'package:super_green_app/data/api/device/device_config.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -50,8 +51,9 @@ class MotorPortBlocStateInit extends MotorPortBlocState {
 
 class MotorPortBlocStateLoaded extends MotorPortBlocState {
   final Device device;
+  final Config? config;
 
-  MotorPortBlocStateLoaded(this.device) : super();
+  MotorPortBlocStateLoaded(this.device, this.config) : super();
   
   @override
   List<Object?> get props => [device];
@@ -70,6 +72,7 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
 
   StreamSubscription<Device>? deviceStream;
   late Device device;
+  late Config? config;
 
   MotorPortBloc(this.args) : super(MotorPortBlocStateInit()) {
     this.add(MotorPortBlocEventInit());
@@ -79,16 +82,17 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
   Stream<MotorPortBlocState> mapEventToState(MotorPortBlocEvent event) async* {
     if (event is MotorPortBlocEventInit) {
       final ddb = RelDB.get().devicesDAO;
-      device = await ddb.getDevice(args.device.id);
       deviceStream = ddb.watchDevice(args.device.id).listen(_onDeviceUpdated);
-      yield MotorPortBlocStateLoaded(device);
     } if (event is MotorPortBlocEventUpdated) {
-      yield MotorPortBlocStateLoaded(device);
+      yield MotorPortBlocStateLoaded(device, config);
     }
   }
 
   void _onDeviceUpdated(Device d) {
     device = d;
+    if (device.config != null) {
+      config = Config.fromString(device.config!);
+    }
     add(MotorPortBlocEventUpdated());
   }
 
