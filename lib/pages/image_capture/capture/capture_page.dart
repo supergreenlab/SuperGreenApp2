@@ -97,72 +97,74 @@ class _CapturePageState extends State<CapturePage> {
           }
           return true;
         },
-        child: Stack(
-          children: [
-            LayoutBuilder(builder: (context, constraints) {
-              double width = constraints.maxWidth;
-              double height = constraints.maxWidth * _cameraController!.value.aspectRatio;
-              Widget cameraPreview = Positioned(
-                  left: constraints.maxWidth / 2 - width / 2,
-                  top: constraints.maxHeight / 2 - height / 2,
-                  child: SizedBox(
-                      width: width,
-                      height: height,
-                      child: GestureDetector(
-                          onTapUp: (TapUpDetails details) => onFocusTap(details, width, height),
-                          child: CameraPreview(_cameraController!))));
-              if (state.overlayPath != null) {
-                Widget overlay = Positioned(
+        child: SafeArea(
+          child: Stack(
+            children: [
+              LayoutBuilder(builder: (context, constraints) {
+                double width = constraints.maxWidth;
+                double height = constraints.maxWidth * _cameraController!.value.aspectRatio;
+                Widget cameraPreview = Positioned(
                     left: constraints.maxWidth / 2 - width / 2,
                     top: constraints.maxHeight / 2 - height / 2,
                     child: SizedBox(
                         width: width,
                         height: height,
-                        child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Opacity(
-                                opacity: 0.6,
-                                child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath!)))))));
-                cameraPreview = Stack(children: [
-                  cameraPreview,
-                  overlay,
-                ]);
-              } else {
-                cameraPreview = Stack(children: [
-                  cameraPreview,
-                ]);
-              }
-              return cameraPreview;
-            }),
-            Positioned(
-              top: 25,
-              left: 0,
-              child: SizedBox(
-                width: 35,
-                height: 35,
-                child: _renderCloseButton(context),
+                        child: GestureDetector(
+                            onTapUp: (TapUpDetails details) => onFocusTap(details, width, height),
+                            child: CameraPreview(_cameraController!))));
+                if (state.overlayPath != null) {
+                  Widget overlay = Positioned(
+                      left: constraints.maxWidth / 2 - width / 2,
+                      top: constraints.maxHeight / 2 - height / 2,
+                      child: SizedBox(
+                          width: width,
+                          height: height,
+                          child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Opacity(
+                                  opacity: 0.6,
+                                  child: Image.file(File(FeedMedias.makeAbsoluteFilePath(state.overlayPath!)))))));
+                  cameraPreview = Stack(children: [
+                    cameraPreview,
+                    overlay,
+                  ]);
+                } else {
+                  cameraPreview = Stack(children: [
+                    cameraPreview,
+                  ]);
+                }
+                return cameraPreview;
+              }),
+              Positioned(
+                top: 25,
+                left: 0,
+                child: SizedBox(
+                  width: 35,
+                  height: 35,
+                  child: _renderCloseButton(context),
+                ),
               ),
-            ),
-            Positioned(
-              top: 25,
-              right: 0,
-              child: SizedBox(
-                width: 35,
-                height: 35,
-                child: _renderMuteButton(context, state),
+              Positioned(
+                top: 25,
+                right: 0,
+                child: SizedBox(
+                  width: 35,
+                  height: 35,
+                  child: _renderMuteButton(context, state),
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 100,
-              child: Container(
-                color: Colors.black26,
-                child: _renderIdleCameraMode(context, state),
-              ),
-            )
-          ],
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: 100,
+                child: Container(
+                  color: Colors.black26,
+                  child: _renderIdleCameraMode(context, state),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -434,12 +436,21 @@ class _CapturePageState extends State<CapturePage> {
   }
 
   Future<bool> _checkPermission() async {
-    final permissionStorageGroup = Platform.isIOS ? Permission.photos : Permission.storage;
-    Map<Permission, PermissionStatus> res = await [
-      permissionStorageGroup,
-    ].request();
-    return res[permissionStorageGroup] == PermissionStatus.granted ||
-        res[permissionStorageGroup] == PermissionStatus.limited;
+    if (Platform.isIOS) {
+      Map<Permission, PermissionStatus> res = await [
+        Permission.photos,
+      ].request();
+      return res[Permission.photos] == PermissionStatus.granted ||
+          res[Permission.photos] == PermissionStatus.limited;
+    } else {
+      Map<Permission, PermissionStatus> res = await [
+        Permission.photos,
+        Permission.videos,
+      ].request();
+      return (res[Permission.photos] == PermissionStatus.granted ||
+          res[Permission.photos] == PermissionStatus.limited) && (res[Permission.videos] == PermissionStatus.granted ||
+          res[Permission.videos] == PermissionStatus.limited);
+    }
   }
 
   @override

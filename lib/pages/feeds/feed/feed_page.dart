@@ -237,9 +237,7 @@ class _FeedPageState extends State<FeedPage> {
           FeedEntryState feedEntry = entries[index];
           Widget card =
               FeedEntriesCardHelpers.cardForFeedEntry(animation, feedState, feedEntry, cardActions: widget.cardActions);
-          if (index == 0) {
-            card = Padding(padding: EdgeInsets.only(top: 10), child: card);
-          } else if (index == entries.length - 1 && eof) {
+          if (index == entries.length - 1 && eof) {
             card = Padding(padding: EdgeInsets.only(bottom: 10), child: card);
           }
           return VisibilityDetector(
