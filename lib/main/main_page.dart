@@ -351,10 +351,10 @@ class _MainPageState extends State<MainPage> {
           create: (context) => CreatePlantBloc(),
           child: addOnPopCallBack(CreatePlantPage(), onPop),
         );
-      case '/device/motors':
+      case '/plant/box':
         return BlocProvider(
-          create: (context) => MotorPortBloc(settings.arguments as MainNavigateToMotorPortEvent),
-          child: addOnPopCallBack(MotorPortPage(), onPop),
+          create: (context) => SelectBoxBloc(settings.arguments as MainNavigateToSelectBoxEvent),
+          child: addOnPopCallBack(SelectBoxPage(), onPop),
         );
       case '/plant/box/new':
         return BlocProvider(
@@ -415,6 +415,11 @@ class _MainPageState extends State<MainPage> {
         return BlocProvider(
           create: (context) => DeviceWifiBloc(settings.arguments as MainNavigateToDeviceWifiEvent),
           child: addOnPopCallBack(DeviceWifiPage(), onPop),
+        );
+      case '/device/motors':
+        return BlocProvider(
+          create: (context) => MotorPortBloc(settings.arguments as MainNavigateToMotorPortEvent),
+          child: addOnPopCallBack(MotorPortPage(), onPop),
         );
       case '/feed/form/light':
         return MultiBlocProvider(
