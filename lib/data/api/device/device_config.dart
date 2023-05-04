@@ -28,18 +28,14 @@ class Config {
 
 	Config.fromMap(Map<String, dynamic> json) {
 		name = json['name'];
-		if (json['keys'] != null) {
-			keys = <Keys>[];
-			json['keys'].forEach((v) { keys!.add(new Keys.fromMap(v)); });
-		}
+		keys = <Keys>[];
+		json['keys'].forEach((v) { keys.add(new Keys.fromMap(v)); });
 	}
 
 	Map<String, dynamic> toMap() {
 		final Map<String, dynamic> data = new Map<String, dynamic>();
 		data['name'] = this.name;
-		if (this.keys != null) {
-      data['keys'] = this.keys!.map((v) => v.toMap()).toList();
-    }
+    data['keys'] = this.keys.map((v) => v.toMap()).toList();
 		return data;
 	}
 }

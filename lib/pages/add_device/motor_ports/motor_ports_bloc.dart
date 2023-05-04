@@ -84,6 +84,13 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
       final ddb = RelDB.get().devicesDAO;
       deviceStream = ddb.watchDevice(args.device.id).listen(_onDeviceUpdated);
     } if (event is MotorPortBlocEventUpdated) {
+      if (config != null) {
+        for (var k in config!.keys) {
+          if (k.array != null && k.array!.name == 'motor') {
+            print(k.name);
+          }
+        }
+      }
       yield MotorPortBlocStateLoaded(device, config);
     }
   }

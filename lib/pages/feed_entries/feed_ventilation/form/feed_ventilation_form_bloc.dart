@@ -30,7 +30,6 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
 import 'package:super_green_app/pages/feeds/home/common/settings/plant_settings.dart';
 
-// TODO make device param management/module helpers based on VentilationControllerParam
 // TODO ref source values from config
 
 const int TEMP_REF_OFFSET = 0x1;
