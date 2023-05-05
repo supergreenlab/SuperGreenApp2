@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:super_green_app/data/api/device/device_config.dart';
 import 'package:super_green_app/data/api/device/device_params.dart';
@@ -77,6 +78,7 @@ class MotorPortBlocStateInit extends MotorPortBlocState {
 }
 
 class MotorPortBlocStateLoaded extends MotorPortBlocState {
+  final int rand = Random().nextInt(1000000000);
   final List<int> values;
   final List<String> helpers;
   final List<MotorSourceParamsController> sources;
@@ -84,7 +86,7 @@ class MotorPortBlocStateLoaded extends MotorPortBlocState {
   MotorPortBlocStateLoaded(this.values, this.helpers, this.sources) : super();
   
   @override
-  List<Object?> get props => [values, helpers, sources];
+  List<Object?> get props => [rand, values, helpers, sources];
 }
 
 class MotorPortBlocStateMissingConfig extends MotorPortBlocState {
@@ -131,16 +133,16 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
       }
       sources = [];
       for (var k in config!.keys) {
-        int i = config!.keys.indexOf(k);
         if (k.array != null && k.array!.name == 'motor' && k.array!.param == 'source') {
           values = k.indir!.values;
           helpers = k.indir!.helpers;
-          sources.add(await MotorSourceParamsController.load(device, k.capsName, i));
+          sources.add(await MotorSourceParamsController.load(device, k.capsName, sources.length));
         }
       }
       yield MotorPortBlocStateLoaded(values, helpers, sources);
     } else if (event is MotorPortBlocEventSourceUpdated) {
       sources[event.source.index] = await event.source.syncParams(device) as MotorSourceParamsController;
+      print('póuet');
       yield MotorPortBlocStateLoaded(values, helpers, sources);
     }
   }
