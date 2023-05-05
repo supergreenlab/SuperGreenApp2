@@ -74,10 +74,14 @@ abstract class ParamsController extends Equatable {
 
   ParamsController({required this.params});
 
-  Future<ParamController> loadBoxParam(Device device, Box box, String key, name) async {
-    ParamController pc = await ParamController.loadFromDB(device, "BOX_${box.deviceBox}_$key");
+  Future<ParamController> loadParam(Device device, String key, name) async {
+    ParamController pc = await ParamController.loadFromDB(device, key);
     params[name] = pc;
     return pc;
+  }
+
+  Future<ParamController> loadBoxParam(Device device, Box box, String key, name) async {
+    return this.loadParam(device, "BOX_${box.deviceBox}_$key", name);
   }
 
   List<StreamSubscription<Param>> listenParams(Device device, void Function(ParamsController) fn) {

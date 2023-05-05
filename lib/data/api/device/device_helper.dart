@@ -59,9 +59,13 @@ class DeviceHelper {
         DevicesCompanion(id: Value(device.id), name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
   }
 
-  static Future<Param> loadBoxParam(Device device, Box box, String key) async {
-    Param p = await RelDB.get().devicesDAO.getParam(device.id, "BOX_${box.deviceBox}_$key");
+  static Future<Param> loadParam(Device device, String key) async {
+    Param p = await RelDB.get().devicesDAO.getParam(device.id, key);
     return await DeviceHelper.refreshIntParam(device, p);
+  }
+
+  static Future<Param> loadBoxParam(Device device, Box box, String key) async {
+    return await DeviceHelper.loadParam(device, "BOX_${box.deviceBox}_$key");
   }
 
   static Future<Param> watchParamChange(Param param, {int timeout = 5}) {

@@ -100,12 +100,12 @@ class Keys {
 }
 
 class Array {
-	String? name;
-	int? len;
-	int? index;
-	String? param;
+	late String name;
+	late int len;
+	late int index;
+	late String param;
 
-	Array({this.name, this.len, this.index, this.param});
+	Array({required this.name, required this.len, required this.index, required this.param});
 
 	Array.fromMap(Map<String, dynamic> json) {
 		name = json['name'];
@@ -124,30 +124,11 @@ class Array {
 	}
 }
 
-class Led {
-	int? index;
-	String? param;
-
-	Led({this.index, this.param});
-
-	Led.fromMap(Map<String, dynamic> json) {
-		index = json['index'];
-		param = json['param'];
-	}
-
-	Map<String, dynamic> toMap() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['index'] = this.index;
-		data['param'] = this.param;
-		return data;
-	}
-}
-
 class Indir {
-	List<int>? values;
-	List<String>? helpers;
+	late List<int> values;
+	late List<String> helpers;
 
-	Indir({this.values, this.helpers});
+	Indir({required this.values, required this.helpers});
 
 	Indir.fromMap(Map<String, dynamic> json) {
 		values = json['values'].cast<int>();
