@@ -37,8 +37,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
 
   @override
   void initState() {
-    _blowerDay = widget.state.legacyParams!.blowerDay.value;
-    _blowerNight = widget.state.legacyParams!.blowerNight.value;
+    _blowerDay = widget.state.legacyBlowerParamsController!.blowerDay.value;
+    _blowerNight = widget.state.legacyBlowerParamsController!.blowerNight.value;
     super.initState();
   }
 
@@ -49,8 +49,8 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerDay = state.legacyParams!.blowerDay.value;
-              _blowerNight = state.legacyParams!.blowerNight.value;
+              _blowerDay = state.legacyBlowerParamsController!.blowerDay.value;
+              _blowerNight = state.legacyBlowerParamsController!.blowerNight.value;
             });
           }
         },
@@ -71,9 +71,9 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyController: widget.state.legacyParams!.copyWithValues({
+                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
                     "blowerDay": _blowerDay,
-                  }) as LegacyParamsController,
+                  }) as LegacyBlowerParamsController,
                 ));
               },
             ),
@@ -92,9 +92,9 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyController: widget.state.legacyParams!.copyWithValues({
+                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
                     "blowerNight": _blowerNight,
-                  }) as LegacyParamsController,
+                  }) as LegacyBlowerParamsController,
                 ));
               },
             ),

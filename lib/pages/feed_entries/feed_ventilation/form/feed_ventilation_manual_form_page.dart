@@ -48,7 +48,7 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
 
   @override
   void initState() {
-    _blowerValue = widget.state.minMaxParams!.blowerMin.value;
+    _blowerValue = widget.state.blowerParamsController!.blowerMin.value;
     super.initState();
   }
 
@@ -59,7 +59,7 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerValue = state.minMaxParams!.blowerMin.value;
+              _blowerValue = state.blowerParamsController!.blowerMin.value;
             });
           }
         },
@@ -87,9 +87,9 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  minMaxController: widget.state.minMaxParams!.copyWithValues({
+                  blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
                     "blowerMin": _blowerValue,
-                  }) as MinMaxParamsController,
+                  }) as BlowerParamsController,
                 ));
               },
             ),

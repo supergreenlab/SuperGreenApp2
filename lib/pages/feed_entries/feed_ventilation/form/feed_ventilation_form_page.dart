@@ -136,13 +136,13 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   child: content);
             }
             bool changed = state is FeedVentilationFormBlocStateLoaded &&
-                (state.minMaxParams?.blowerMin.isChanged == true ||
-                    state.minMaxParams?.blowerMax.isChanged == true ||
-                    state.minMaxParams?.blowerRefMin.isChanged == true ||
-                    state.minMaxParams?.blowerRefMax.isChanged == true ||
-                    state.minMaxParams?.blowerRefSource.isChanged == true ||
-                    state.legacyParams?.blowerDay.isChanged == true ||
-                    state.legacyParams?.blowerNight.isChanged == true);
+                (state.blowerParamsController?.blowerMin.isChanged == true ||
+                    state.blowerParamsController?.blowerMax.isChanged == true ||
+                    state.blowerParamsController?.blowerRefMin.isChanged == true ||
+                    state.blowerParamsController?.blowerRefMax.isChanged == true ||
+                    state.blowerParamsController?.blowerRefSource.isChanged == true ||
+                    state.legacyBlowerParamsController?.blowerDay.isChanged == true ||
+                    state.legacyBlowerParamsController?.blowerNight.isChanged == true);
             return FeedFormLayout(
                 title: '💨',
                 fontSize: 35,
@@ -173,7 +173,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   }
 
   Widget _renderParams(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
-    if (state.legacyParams != null) {
+    if (state.legacyBlowerParamsController != null) {
       return FeedVentilationLegacyFormPage(state);
     }
     return _renderV3Params(context, state);
@@ -181,13 +181,13 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
 
   Widget _renderV3Params(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
     Widget body;
-    if (isTimerSource(state.minMaxParams!.blowerRefSource.value)) {
+    if (isTimerSource(state.blowerParamsController!.blowerRefSource.value)) {
       body = FeedVentilationTimerFormPage(state);
-    } else if (isTempSource(state.minMaxParams!.blowerRefSource.value)) {
+    } else if (isTempSource(state.blowerParamsController!.blowerRefSource.value)) {
       body = FeedVentilationTemperatureFormPage(state);
-    } else if (isHumiSource(state.minMaxParams!.blowerRefSource.value)) {
+    } else if (isHumiSource(state.blowerParamsController!.blowerRefSource.value)) {
       body = FeedVentilationHumidityFormPage(state);
-    } else if (state.minMaxParams!.blowerRefSource.value == 0) {
+    } else if (state.blowerParamsController!.blowerRefSource.value == 0) {
       body = FeedVentilationManualFormPage(state);
     } else {
       body = Fullscreen(
@@ -196,10 +196,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       );
     }
     List<bool> selection = [
-      isTimerSource(state.minMaxParams!.blowerRefSource.value),
-      state.minMaxParams!.blowerRefSource.value == 0,
-      isTempSource(state.minMaxParams!.blowerRefSource.value),
-      isHumiSource(state.minMaxParams!.blowerRefSource.value),
+      isTimerSource(state.blowerParamsController!.blowerRefSource.value),
+      state.blowerParamsController!.blowerRefSource.value == 0,
+      isTempSource(state.blowerParamsController!.blowerRefSource.value),
+      isHumiSource(state.blowerParamsController!.blowerRefSource.value),
     ];
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Center(
@@ -231,32 +231,32 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     ];
     List<FeedVentilationFormBlocParamsChangedEvent Function()> eventFactory = [
       () => FeedVentilationFormBlocParamsChangedEvent(
-            minMaxController: state.minMaxParams!.copyWithValues({
+            blowerParamsController: state.blowerParamsController!.copyWithValues({
               "blowerRefMin": 0,
               "blowerRefMax": 100,
               "blowerRefSource": TIMER_REF_OFFSET + state.box.deviceBox!,
-            }) as MinMaxParamsController,
+            }) as BlowerParamsController,
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
-            minMaxController: state.minMaxParams!.copyWithValues({
+            blowerParamsController: state.blowerParamsController!.copyWithValues({
               "blowerRefMin": 0,
               "blowerRefMax": 100,
               "blowerRefSource": 0,
-            }) as MinMaxParamsController,
+            }) as BlowerParamsController,
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
-            minMaxController: state.minMaxParams!.copyWithValues({
+            blowerParamsController: state.blowerParamsController!.copyWithValues({
               "blowerRefMin": 21,
               "blowerRefMax": 30,
               "blowerRefSource": TEMP_REF_OFFSET + state.box.deviceBox!,
-            }) as MinMaxParamsController,
+            }) as BlowerParamsController,
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
-            minMaxController: state.minMaxParams!.copyWithValues({
+            blowerParamsController: state.blowerParamsController!.copyWithValues({
               "blowerRefMin": 35,
               "blowerRefMax": 70,
               "blowerRefSource": HUMI_REF_OFFSET + state.box.deviceBox!,
-            }) as MinMaxParamsController,
+            }) as BlowerParamsController,
           ),
     ];
     bool? confirm = await showDialog<bool>(

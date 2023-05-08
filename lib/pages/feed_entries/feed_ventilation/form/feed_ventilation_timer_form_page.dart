@@ -49,8 +49,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
 
   @override
   void initState() {
-    _blowerDay = widget.state.minMaxParams!.blowerMax.value;
-    _blowerNight = widget.state.minMaxParams!.blowerMin.value;
+    _blowerDay = widget.state.blowerParamsController!.blowerMax.value;
+    _blowerNight = widget.state.blowerParamsController!.blowerMin.value;
     super.initState();
   }
 
@@ -61,8 +61,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerDay = state.minMaxParams!.blowerMax.value;
-              _blowerNight = state.minMaxParams!.blowerMin.value;
+              _blowerDay = state.blowerParamsController!.blowerMax.value;
+              _blowerNight = state.blowerParamsController!.blowerMin.value;
             });
           }
         },
@@ -90,9 +90,9 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyController: widget.state.legacyParams!.copyWithValues({
+                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
                     "blowerMin": _blowerNight,
-                  }) as LegacyParamsController,
+                  }) as LegacyBlowerParamsController,
                 ));
               },
             ),
@@ -111,9 +111,9 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyController: widget.state.legacyParams!.copyWithValues({
+                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
                     "blowerMax": _blowerDay,
-                  }) as LegacyParamsController,
+                  }) as LegacyBlowerParamsController,
                 ));
               },
             ),

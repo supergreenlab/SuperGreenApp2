@@ -53,10 +53,10 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
 
   @override
   void initState() {
-    _blowerMin = widget.state.minMaxParams!.blowerMin.value;
-    _blowerMax = widget.state.minMaxParams!.blowerMax.value;
-    _blowerRefMin = widget.state.minMaxParams!.blowerRefMin.value;
-    _blowerRefMax = widget.state.minMaxParams!.blowerRefMax.value;
+    _blowerMin = widget.state.blowerParamsController!.blowerMin.value;
+    _blowerMax = widget.state.blowerParamsController!.blowerMax.value;
+    _blowerRefMin = widget.state.blowerParamsController!.blowerRefMin.value;
+    _blowerRefMax = widget.state.blowerParamsController!.blowerRefMax.value;
     super.initState();
   }
 
@@ -68,10 +68,10 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerMin = state.minMaxParams!.blowerMin.value;
-              _blowerMax = state.minMaxParams!.blowerMax.value;
-              _blowerRefMin = state.minMaxParams!.blowerRefMin.value;
-              _blowerRefMax = state.minMaxParams!.blowerRefMax.value;
+              _blowerMin = state.blowerParamsController!.blowerMin.value;
+              _blowerMax = state.blowerParamsController!.blowerMax.value;
+              _blowerRefMin = state.blowerParamsController!.blowerRefMin.value;
+              _blowerRefMax = state.blowerParamsController!.blowerRefMax.value;
             });
           }
         },
@@ -116,9 +116,9 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                       _blowerRefMin = newValue.toInt();
                     });
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                      minMaxController: widget.state.minMaxParams!.copyWithValues({
+                      blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
                         "blowerRefMin": newValue.toInt(),
-                      }) as MinMaxParamsController,
+                      }) as BlowerParamsController,
                     ));
                   },
                 ),
@@ -137,9 +137,9 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                   },
                   onChangeEnd: (double newValue) {
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                      minMaxController: widget.state.minMaxParams!.copyWithValues({
+                      blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
                         "blowerMin": _blowerMin,
-                      }) as MinMaxParamsController,
+                      }) as BlowerParamsController,
                     ));
                   },
                 ),
@@ -177,9 +177,9 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                       _blowerRefMax = newValue.toInt();
                     });
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                      minMaxController: widget.state.minMaxParams!.copyWithValues({
+                      blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
                         "blowerRefMax": newValue.toInt(),
-                      }) as MinMaxParamsController,
+                      }) as BlowerParamsController,
                     ));
                   },
                 ),
@@ -198,9 +198,9 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
                   },
                   onChangeEnd: (double newValue) {
                     BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                      minMaxController: widget.state.minMaxParams!.copyWithValues({
+                      blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
                         "blowerMax": _blowerMax,
-                      }) as MinMaxParamsController,
+                      }) as BlowerParamsController,
                     ));
                   },
                 ),

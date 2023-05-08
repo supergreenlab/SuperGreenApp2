@@ -22,6 +22,12 @@ import 'package:equatable/equatable.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_entry_params.dart';
 
 class FeedVentilationParamsValues extends Equatable {
+  final int? fanRefSource;
+  final int? fanRefMin;
+  final int? fanRefMax;
+  final int? fanMin;
+  final int? fanMax;
+
   final int? blowerRefSource;
   final int? blowerRefMin;
   final int? blowerRefMax;
@@ -33,6 +39,11 @@ class FeedVentilationParamsValues extends Equatable {
   final int? blowerNight;
 
   FeedVentilationParamsValues({
+    required this.fanRefSource,
+    required this.fanRefMin,
+    required this.fanRefMax,
+    required this.fanMin,
+    required this.fanMax,
     required this.blowerRefSource,
     required this.blowerRefMin,
     required this.blowerRefMax,
@@ -44,6 +55,11 @@ class FeedVentilationParamsValues extends Equatable {
 
   factory FeedVentilationParamsValues.fromMap(Map<String, dynamic> map) {
     return FeedVentilationParamsValues(
+        fanRefSource: map['fanRefSource'],
+        fanRefMin: map['fanRefMin'],
+        fanRefMax: map['fanRefMax'],
+        fanMin: map['fanMin'],
+        fanMax: map['fanMax'],
         blowerRefSource: map['blowerRefSource'],
         blowerRefMin: map['blowerRefMin'],
         blowerRefMax: map['blowerRefMax'],
@@ -55,6 +71,11 @@ class FeedVentilationParamsValues extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'fanRefSource': fanRefSource,
+      'fanRefMin': fanRefMin,
+      'fanRefMax': fanRefMax,
+      'fanMin': fanMin,
+      'fanMax': fanMax,
       'blowerRefSource': blowerRefSource,
       'blowerRefMin': blowerRefMin,
       'blowerRefMax': blowerRefMax,
@@ -67,7 +88,7 @@ class FeedVentilationParamsValues extends Equatable {
 
   @override
   List<Object?> get props =>
-      [blowerRefSource, blowerRefMin, blowerRefMax, blowerMin, blowerMax, blowerDay, blowerNight];
+      [fanRefSource, fanRefMin, fanRefMax, fanMin, fanMax, blowerRefSource, blowerRefMin, blowerRefMax, blowerMin, blowerMax, blowerDay, blowerNight];
 }
 
 class FeedVentilationParams extends FeedEntryParams {
