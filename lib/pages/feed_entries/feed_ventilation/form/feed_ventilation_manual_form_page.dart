@@ -47,11 +47,11 @@ class FeedVentilationManualFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFormPage> {
-  int _blowerValue = 0;
+  int _value = 0;
 
   @override
   void didChangeDependencies() {
-    _blowerValue = widget.paramsController.min.value;
+    _value = widget.paramsController.min.value;
     super.didChangeDependencies();
   }
 
@@ -70,19 +70,19 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
           key: Key('blower_value'),
           title: 'Blower value',
           icon: 'assets/feed_form/icon_blower.svg',
-          value: _blowerValue.toDouble(),
+          value: _value.toDouble(),
           min: 0,
           max: 100,
           color: Colors.yellow,
           onChanged: (double newValue) {
             setState(() {
-              _blowerValue = newValue.toInt();
+              _value = newValue.toInt();
             });
           },
           onChangeEnd: (double newValue) {
             BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
               blowerParamsController: widget.paramsController.copyWithValues({
-                "blowerMin": _blowerValue,
+                "min": _value,
               }) as BlowerParamsController,
             ));
           },

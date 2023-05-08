@@ -136,7 +136,12 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   child: content);
             }
             bool changed = state is FeedVentilationFormBlocStateLoaded &&
-                (state.blowerParamsController?.min.isChanged == true ||
+                (state.fanParamsController?.min.isChanged == true ||
+                    state.fanParamsController?.max.isChanged == true ||
+                    state.fanParamsController?.refMin.isChanged == true ||
+                    state.fanParamsController?.refMax.isChanged == true ||
+                    state.fanParamsController?.refSource.isChanged == true ||
+                  state.blowerParamsController?.min.isChanged == true ||
                     state.blowerParamsController?.max.isChanged == true ||
                     state.blowerParamsController?.refMin.isChanged == true ||
                     state.blowerParamsController?.refMax.isChanged == true ||
@@ -232,30 +237,30 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     List<FeedVentilationFormBlocParamsChangedEvent Function()> eventFactory = [
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerParamsController: state.blowerParamsController!.copyWithValues({
-              "blowerRefMin": 0,
-              "blowerRefMax": 100,
-              "blowerRefSource": TIMER_REF_OFFSET + state.box.deviceBox!,
+              "refMin": 0,
+              "refMax": 100,
+              "refSource": TIMER_REF_OFFSET + state.box.deviceBox!,
             }) as BlowerParamsController,
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerParamsController: state.blowerParamsController!.copyWithValues({
-              "blowerRefMin": 0,
-              "blowerRefMax": 100,
-              "blowerRefSource": 0,
+              "refMin": 0,
+              "refMax": 100,
+              "refSource": 0,
             }) as BlowerParamsController,
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerParamsController: state.blowerParamsController!.copyWithValues({
-              "blowerRefMin": 21,
-              "blowerRefMax": 30,
-              "blowerRefSource": TEMP_REF_OFFSET + state.box.deviceBox!,
+              "refMin": 21,
+              "refMax": 30,
+              "refSource": TEMP_REF_OFFSET + state.box.deviceBox!,
             }) as BlowerParamsController,
           ),
       () => FeedVentilationFormBlocParamsChangedEvent(
             blowerParamsController: state.blowerParamsController!.copyWithValues({
-              "blowerRefMin": 35,
-              "blowerRefMax": 70,
-              "blowerRefSource": HUMI_REF_OFFSET + state.box.deviceBox!,
+              "refMin": 35,
+              "refMax": 70,
+              "refSource": HUMI_REF_OFFSET + state.box.deviceBox!,
             }) as BlowerParamsController,
           ),
     ];

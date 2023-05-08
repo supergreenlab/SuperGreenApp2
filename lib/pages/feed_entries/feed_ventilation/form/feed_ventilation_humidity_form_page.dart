@@ -48,17 +48,17 @@ class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidityFormPage> {
-  int _blowerMin = 0;
-  int _blowerMax = 0;
-  int _blowerRefMin = 0;
-  int _blowerRefMax = 0;
+  int _min = 0;
+  int _max = 0;
+  int _refMin = 0;
+  int _refMax = 0;
 
   @override
   void didChangeDependencies() {
-    _blowerMin = widget.paramsController.min.value;
-    _blowerMax = widget.paramsController.max.value;
-    _blowerRefMin = widget.paramsController.refMin.value;
-    _blowerRefMax = widget.paramsController.refMax.value;
+    _min = widget.paramsController.min.value;
+    _max = widget.paramsController.max.value;
+    _refMin = widget.paramsController.refMin.value;
+    _refMax = widget.paramsController.refMax.value;
     super.didChangeDependencies();
   }
 
@@ -97,38 +97,38 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
             NumberFormParam(
               title: 'Humidity low',
               icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerRefMin.toDouble(),
+              value: _refMin.toDouble(),
               unit: unit,
               displayFn: (v) => '$v',
               step: 1,
               onChange: (double newValue) {
                 setState(() {
-                  _blowerRefMin = newValue.toInt();
+                  _refMin = newValue.toInt();
                 });
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
                   blowerParamsController: widget.paramsController.copyWithValues({
-                    "blowerRefMin": newValue.toInt(),
+                    "refMin": newValue.toInt(),
                   }) as BlowerParamsController,
                 ));
               },
             ),
             SliderFormParam(
               key: Key('blower_humi_min'),
-              title: 'Blower power at ${_blowerRefMin.toDouble()}$unit',
+              title: 'Blower power at ${_refMin.toDouble()}$unit',
               icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerMin.toDouble(),
+              value: _min.toDouble(),
               min: 0,
               max: 100,
               color: Colors.blue,
               onChanged: (double newValue) {
                 setState(() {
-                  _blowerMin = newValue.toInt();
+                  _min = newValue.toInt();
                 });
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
                     blowerParamsController: widget.paramsController.copyWithValues({
-                  "blowerMin": _blowerMin,
+                  "min": _min,
                 }) as BlowerParamsController));
               },
             ),
@@ -157,39 +157,39 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
             NumberFormParam(
               title: 'Humidity high',
               icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerRefMax.toDouble(),
+              value: _refMax.toDouble(),
               unit: unit,
               displayFn: (v) => '$v',
               step: 1,
               onChange: (double newValue) {
                 setState(() {
-                  _blowerRefMax = newValue.toInt();
+                  _refMax = newValue.toInt();
                 });
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(
                   FeedVentilationFormBlocParamsChangedEvent(
                       blowerParamsController: widget.paramsController.copyWithValues({
-                    "blowerRefMax": newValue.toInt(),
+                    "refMax": newValue.toInt(),
                   }) as BlowerParamsController),
                 );
               },
             ),
             SliderFormParam(
               key: Key('blower_humi_max'),
-              title: 'Blower power at ${_blowerRefMax.toDouble()}$unit',
+              title: 'Blower power at ${_refMax.toDouble()}$unit',
               icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerMax.toDouble(),
+              value: _max.toDouble(),
               min: 0,
               max: 100,
               color: Colors.yellow,
               onChanged: (double newValue) {
                 setState(() {
-                  _blowerMax = newValue.toInt();
+                  _max = newValue.toInt();
                 });
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
                   blowerParamsController: widget.paramsController.copyWithValues({
-                    "blowerMax": _blowerMax,
+                    "max": _max,
                   }) as BlowerParamsController,
                 ));
               },

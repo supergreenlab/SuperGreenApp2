@@ -47,13 +47,13 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
 }
 
 class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormPage> {
-  int _blowerDay = 0;
-  int _blowerNight = 0;
+  int _day = 0;
+  int _night = 0;
 
   @override
   void initState() {
-    _blowerDay = widget.paramsController.max.value;
-    _blowerNight = widget.paramsController.min.value;
+    _day = widget.paramsController.max.value;
+    _night = widget.paramsController.min.value;
     super.initState();
   }
 
@@ -69,43 +69,43 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
           ),
         ),
         SliderFormParam(
-          key: Key('blower_night'),
+          key: Key('night'),
           title: 'Blower night (when lights are off)',
           icon: 'assets/feed_form/icon_blower.svg',
-          value: _blowerNight.toDouble(),
+          value: _night.toDouble(),
           min: 0,
           max: 100,
           color: Colors.blue,
           onChanged: (double newValue) {
             setState(() {
-              _blowerNight = newValue.toInt();
+              _night = newValue.toInt();
             });
           },
           onChangeEnd: (double newValue) {
             BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
               legacyBlowerParamsController: widget.paramsController.copyWithValues({
-                "blowerMin": _blowerNight,
+                "min": _night,
               }) as LegacyBlowerParamsController,
             ));
           },
         ),
         SliderFormParam(
-          key: Key('blower_day'),
+          key: Key('day'),
           title: 'Blower day (when lights are on)',
           icon: 'assets/feed_form/icon_blower.svg',
-          value: _blowerDay.toDouble(),
+          value: _day.toDouble(),
           min: 0,
           max: 100,
           color: Colors.yellow,
           onChanged: (double newValue) {
             setState(() {
-              _blowerDay = newValue.toInt();
+              _day = newValue.toInt();
             });
           },
           onChangeEnd: (double newValue) {
             BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
               legacyBlowerParamsController: widget.paramsController.copyWithValues({
-                "blowerMax": _blowerDay,
+                "max": _day,
               }) as LegacyBlowerParamsController,
             ));
           },
