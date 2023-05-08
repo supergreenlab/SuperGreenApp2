@@ -106,9 +106,9 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                   _refMin = newValue.toInt();
                 });
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  blowerParamsController: widget.paramsController.copyWithValues({
+                  paramsController: widget.paramsController.copyWithValues({
                     "refMin": newValue.toInt(),
-                  }) as BlowerParamsController,
+                  }) as FeedVentilationParamsController,
                 ));
               },
             ),
@@ -127,9 +127,9 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                    blowerParamsController: widget.paramsController.copyWithValues({
+                    paramsController: widget.paramsController.copyWithValues({
                   "min": _min,
-                }) as BlowerParamsController));
+                }) as FeedVentilationParamsController));
               },
             ),
           ],
@@ -167,9 +167,9 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
                 });
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(
                   FeedVentilationFormBlocParamsChangedEvent(
-                      blowerParamsController: widget.paramsController.copyWithValues({
+                      paramsController: widget.paramsController.copyWithValues({
                     "refMax": newValue.toInt(),
-                  }) as BlowerParamsController),
+                  }) as FeedVentilationParamsController),
                 );
               },
             ),
@@ -188,9 +188,9 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
               },
               onChangeEnd: (double newValue) {
                 BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  blowerParamsController: widget.paramsController.copyWithValues({
+                  paramsController: widget.paramsController.copyWithValues({
                     "max": _max,
-                  }) as BlowerParamsController,
+                  }) as FeedVentilationParamsController,
                 ));
               },
             ),

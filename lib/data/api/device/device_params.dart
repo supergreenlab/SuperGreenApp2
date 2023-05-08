@@ -132,6 +132,8 @@ abstract class ParamsController extends Equatable {
     return this.copyWith(params: p);
   }
 
+  bool isChanged() => params.values.any((p) => p.isChanged);
+
   ParamsController copyWith({Map<String, ParamController>? params});
 
   @override

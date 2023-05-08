@@ -23,9 +23,9 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
 class FeedVentilationLegacyFormPage extends TraceableStatefulWidget {
-  final FeedVentilationFormBlocStateLoaded state;
+  final LegacyBlowerParamsController paramsController;
 
-  const FeedVentilationLegacyFormPage(this.state, {Key? key}) : super(key: key);
+  const FeedVentilationLegacyFormPage(this.paramsController, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationLegacyFormPageState createState() => _FeedVentilationLegacyFormPageState();
@@ -36,69 +36,59 @@ class _FeedVentilationLegacyFormPageState extends State<FeedVentilationLegacyFor
   int _blowerNight = 0;
 
   @override
-  void initState() {
-    _blowerDay = widget.state.legacyBlowerParamsController!.blowerDay.value;
-    _blowerNight = widget.state.legacyBlowerParamsController!.blowerNight.value;
-    super.initState();
+  void didChangeDependencies() {
+    _blowerDay = widget.paramsController.blowerDay.value;
+    _blowerNight = widget.paramsController.blowerNight.value;
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
-        listener: (BuildContext context, FeedVentilationFormBlocState state) {
-          if (state is FeedVentilationFormBlocStateLoaded) {
+    return ListView(
+      children: [
+        SliderFormParam(
+          key: Key('day'),
+          title: 'Blower day',
+          icon: 'assets/feed_form/icon_blower.svg',
+          value: _blowerDay.toDouble(),
+          min: 0,
+          max: 100,
+          color: Colors.yellow,
+          onChanged: (double newValue) {
             setState(() {
-              _blowerDay = state.legacyBlowerParamsController!.blowerDay.value;
-              _blowerNight = state.legacyBlowerParamsController!.blowerNight.value;
+              _blowerDay = newValue.toInt();
             });
-          }
-        },
-        child: ListView(
-          children: [
-            SliderFormParam(
-              key: Key('day'),
-              title: 'Blower day',
-              icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerDay.toDouble(),
-              min: 0,
-              max: 100,
-              color: Colors.yellow,
-              onChanged: (double newValue) {
-                setState(() {
-                  _blowerDay = newValue.toInt();
-                });
-              },
-              onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
-                    "blowerDay": _blowerDay,
-                  }) as LegacyBlowerParamsController,
-                ));
-              },
-            ),
-            SliderFormParam(
-              key: Key('night'),
-              title: 'Blower night',
-              icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerNight.toDouble(),
-              min: 0,
-              max: 100,
-              color: Colors.blue,
-              onChanged: (double newValue) {
-                setState(() {
-                  _blowerNight = newValue.toInt();
-                });
-              },
-              onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
-                    "blowerNight": _blowerNight,
-                  }) as LegacyBlowerParamsController,
-                ));
-              },
-            ),
-          ],
-        ));
+          },
+          onChangeEnd: (double newValue) {
+            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+              paramsController: widget.paramsController.copyWithValues({
+                "blowerDay": _blowerDay,
+              }) as LegacyBlowerParamsController,
+            ));
+          },
+        ),
+        SliderFormParam(
+          key: Key('night'),
+          title: 'Blower night',
+          icon: 'assets/feed_form/icon_blower.svg',
+          value: _blowerNight.toDouble(),
+          min: 0,
+          max: 100,
+          color: Colors.blue,
+          onChanged: (double newValue) {
+            setState(() {
+              _blowerNight = newValue.toInt();
+            });
+          },
+          onChangeEnd: (double newValue) {
+            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+              paramsController: widget.paramsController.copyWithValues({
+                "blowerNight": _blowerNight,
+              }) as LegacyBlowerParamsController,
+            ));
+          },
+        ),
+      ],
+    );
   }
 }

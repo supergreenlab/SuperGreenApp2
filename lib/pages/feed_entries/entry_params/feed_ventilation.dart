@@ -39,18 +39,18 @@ class FeedVentilationParamsValues extends Equatable {
   final int? blowerNight;
 
   FeedVentilationParamsValues({
-    required this.fanRefSource,
-    required this.fanRefMin,
-    required this.fanRefMax,
-    required this.fanMin,
-    required this.fanMax,
-    required this.blowerRefSource,
-    required this.blowerRefMin,
-    required this.blowerRefMax,
-    required this.blowerMin,
-    required this.blowerMax,
-    required this.blowerDay,
-    required this.blowerNight,
+    this.fanRefSource,
+    this.fanRefMin,
+    this.fanRefMax,
+    this.fanMin,
+    this.fanMax,
+    this.blowerRefSource,
+    this.blowerRefMin,
+    this.blowerRefMax,
+    this.blowerMin,
+    this.blowerMax,
+    this.blowerDay,
+    this.blowerNight,
   });
 
   factory FeedVentilationParamsValues.fromMap(Map<String, dynamic> map) {

@@ -83,9 +83,9 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
           },
           onChangeEnd: (double newValue) {
             BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-              legacyBlowerParamsController: widget.paramsController.copyWithValues({
+              paramsController: widget.paramsController.copyWithValues({
                 "min": _night,
-              }) as LegacyBlowerParamsController,
+              }) as FeedVentilationParamsController,
             ));
           },
         ),
@@ -104,9 +104,9 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
           },
           onChangeEnd: (double newValue) {
             BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-              legacyBlowerParamsController: widget.paramsController.copyWithValues({
+              paramsController: widget.paramsController.copyWithValues({
                 "max": _day,
-              }) as LegacyBlowerParamsController,
+              }) as FeedVentilationParamsController,
             ));
           },
         ),

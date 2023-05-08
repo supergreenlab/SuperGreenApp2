@@ -40,7 +40,15 @@ bool isTempSource(int source) => source >= TEMP_REF_OFFSET && source < TIMER_REF
 bool isTimerSource(int source) => source >= TIMER_REF_OFFSET && source < HUMI_REF_OFFSET;
 bool isHumiSource(int source) => source >= HUMI_REF_OFFSET;
 
-abstract class VentilationParamsController extends ParamsController {
+abstract class FeedVentilationParamsController extends ParamsController {
+  FeedVentilationParamsController({required Map<String, ParamController> params}) : super(params: params);
+
+  FeedVentilationParamsController copyWith({Map<String, ParamController>? params});
+
+  FeedVentilationParams toCardParams();
+}
+
+abstract class VentilationParamsController extends FeedVentilationParamsController {
   VentilationParamsController({required Map<String, ParamController>? params}) : super(params: params ?? {});
 
   ParamController get min;
@@ -69,8 +77,25 @@ class FanParamsController extends VentilationParamsController {
     return c;
   }
 
-  ParamsController copyWith({Map<String, ParamController>? params}) =>
+  FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
       FanParamsController(params: params ?? this.params);
+
+  @override
+  FeedVentilationParams toCardParams() {
+    return FeedVentilationParams(
+        FeedVentilationParamsValues(
+            fanMin: min.value,
+            fanMax: max.value,
+            fanRefMin: refMin.value,
+            fanRefMax: refMax.value,
+            fanRefSource: refSource.value,),
+        FeedVentilationParamsValues(
+            fanMin: min.initialValue,
+            fanMax: max.initialValue,
+            fanRefMin: refMin.initialValue,
+            fanRefMax: refMax.initialValue,
+            fanRefSource: refSource.initialValue,));
+  }
 }
 
 class BlowerParamsController extends VentilationParamsController {
@@ -92,11 +117,28 @@ class BlowerParamsController extends VentilationParamsController {
     return c;
   }
 
-  ParamsController copyWith({Map<String, ParamController>? params}) =>
+  FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
       BlowerParamsController(params: params ?? this.params);
+
+        @override
+  FeedVentilationParams toCardParams() {
+    return FeedVentilationParams(
+        FeedVentilationParamsValues(
+            blowerMin: min.value,
+            blowerMax: max.value,
+            blowerRefMin: refMin.value,
+            blowerRefMax: refMax.value,
+            blowerRefSource: refSource.value,),
+        FeedVentilationParamsValues(
+            blowerMin: min.initialValue,
+            blowerMax: max.initialValue,
+            blowerRefMin: refMin.initialValue,
+            blowerRefMax: refMax.initialValue,
+            blowerRefSource: refSource.initialValue,));
+  }
 }
 
-class LegacyBlowerParamsController extends ParamsController {
+class LegacyBlowerParamsController extends FeedVentilationParamsController {
   LegacyBlowerParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
 
   ParamController get blowerDay => params['blowerDay']!;
@@ -109,8 +151,19 @@ class LegacyBlowerParamsController extends ParamsController {
     return c;
   }
 
-  ParamsController copyWith({Map<String, ParamController>? params}) =>
+  FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
       LegacyBlowerParamsController(params: params ?? this.params);
+
+        @override
+  FeedVentilationParams toCardParams() {
+    return FeedVentilationParams(
+        FeedVentilationParamsValues(
+            blowerDay: blowerDay.value,
+            blowerNight: blowerNight.value,),
+        FeedVentilationParamsValues(
+            blowerDay: blowerDay.initialValue,
+            blowerNight: blowerNight.initialValue,));
+  }
 }
 
 abstract class FeedVentilationFormBlocEvent extends Equatable {}
@@ -130,20 +183,14 @@ class FeedVentilationFormBlocEventCreate extends FeedVentilationFormBlocEvent {
 }
 
 class FeedVentilationFormBlocParamsChangedEvent extends FeedVentilationFormBlocEvent {
-  final FanParamsController? fanParamsController;
-  final BlowerParamsController? blowerParamsController;
-
-  // legacy fields
-  final LegacyBlowerParamsController? legacyBlowerParamsController;
+  final FeedVentilationParamsController paramsController;
 
   FeedVentilationFormBlocParamsChangedEvent({
-    this.fanParamsController,
-    this.blowerParamsController,
-    this.legacyBlowerParamsController,
+    required this.paramsController,
   });
 
   @override
-  List<Object?> get props => [fanParamsController, blowerParamsController, legacyBlowerParamsController];
+  List<Object?> get props => [paramsController];
 }
 
 class FeedVentilationFormBlocEventCancelEvent extends FeedVentilationFormBlocEvent {
@@ -170,20 +217,14 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
   late final Param temperature;
   late final Param humidity;
 
-  final FanParamsController? fanParamsController;
-  final BlowerParamsController? blowerParamsController;
-
-  // legacy fields
-  final LegacyBlowerParamsController? legacyBlowerParamsController;
+  final FeedVentilationParamsController paramsController;
 
   FeedVentilationFormBlocStateLoaded({
     this.noDevice = false,
     required this.box,
     required this.temperature,
     required this.humidity,
-    this.fanParamsController,
-    this.blowerParamsController,
-    this.legacyBlowerParamsController,
+    required this.paramsController,
   });
 
   @override
@@ -192,9 +233,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
         box,
         temperature,
         humidity,
-        fanParamsController,
-        blowerParamsController,
-        legacyBlowerParamsController,
+        paramsController,
       ];
 }
 
@@ -221,11 +260,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   late Param temperature;
   late Param humidity;
 
-  FanParamsController? fanParamsController;
-  BlowerParamsController? blowerParamsController;
-
-  // Legacy fields
-  LegacyBlowerParamsController? legacyBlowerParamsController;
+  late FeedVentilationParamsController paramsController;
 
   FeedVentilationFormBloc(this.args) : super(FeedVentilationFormBlocStateInit()) {
     add(FeedVentilationFormBlocEventInit());
@@ -252,11 +287,10 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       }
 
       try {
-        legacyBlowerParamsController = await LegacyBlowerParamsController.load(device!, box);
+        paramsController = await LegacyBlowerParamsController.load(device!, box);
         yield loadedState();
       } catch (e) {
-        fanParamsController = await FanParamsController.load(device!, box);
-        blowerParamsController = await BlowerParamsController.load(device!, box);
+        paramsController = await BlowerParamsController.load(device!, box);
         yield loadedState();
       }
     } else if (event is FeedVentilationFormBlocParamsChangedEvent) {
@@ -265,9 +299,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       if (box.device == null) {
         return;
       }
-      fanParamsController = event.fanParamsController;
-      blowerParamsController = event.blowerParamsController;
-      legacyBlowerParamsController = event.legacyBlowerParamsController;
+      paramsController = event.paramsController;
       try {
         await syncParams();
       } catch (e, trace) {
@@ -292,34 +324,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
           type: 'FE_VENTILATION',
           feed: plants[i].feed,
           date: DateTime.now(),
-          params: Value(FeedVentilationParams(
-                  FeedVentilationParamsValues(
-                      fanMin: fanParamsController?.min.value,
-                      fanMax: fanParamsController?.max.value,
-                      fanRefMin: fanParamsController?.refMin.value,
-                      fanRefMax: fanParamsController?.refMax.value,
-                      fanRefSource: fanParamsController?.refSource.value,
-                      blowerMin: blowerParamsController?.min.value,
-                      blowerMax: blowerParamsController?.max.value,
-                      blowerRefMin: blowerParamsController?.refMin.value,
-                      blowerRefMax: blowerParamsController?.refMax.value,
-                      blowerRefSource: blowerParamsController?.refSource.value,
-                      blowerDay: legacyBlowerParamsController?.blowerDay.value,
-                      blowerNight: legacyBlowerParamsController?.blowerNight.value),
-                  FeedVentilationParamsValues(
-                      fanMin: fanParamsController?.min.initialValue,
-                      fanMax: fanParamsController?.max.initialValue,
-                      fanRefMin: fanParamsController?.refMin.initialValue,
-                      fanRefMax: fanParamsController?.refMax.initialValue,
-                      fanRefSource: fanParamsController?.refSource.initialValue,
-                      blowerMin: blowerParamsController?.min.initialValue,
-                      blowerMax: blowerParamsController?.max.initialValue,
-                      blowerRefMin: blowerParamsController?.refMin.initialValue,
-                      blowerRefMax: blowerParamsController?.refMax.initialValue,
-                      blowerRefSource: blowerParamsController?.refSource.initialValue,
-                      blowerDay: legacyBlowerParamsController?.blowerDay.initialValue,
-                      blowerNight: legacyBlowerParamsController?.blowerNight.initialValue))
-              .toJSON()),
+          params: Value(paramsController.toCardParams().toJSON()),
         ));
       }
       yield FeedVentilationFormBlocStateDone();
@@ -338,29 +343,17 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   }
 
   Future<void> syncParams() async {
-    if (legacyBlowerParamsController != null) {
-      legacyBlowerParamsController = await legacyBlowerParamsController!.syncParams(device!) as LegacyBlowerParamsController;
-    } else {
-      fanParamsController = await fanParamsController!.syncParams(device!) as FanParamsController;
-      blowerParamsController = await blowerParamsController!.syncParams(device!) as BlowerParamsController;
-    }
+    paramsController = await paramsController.syncParams(device!) as FeedVentilationParamsController;
   }
 
   Future<void> cancelParams() async {
-    if (legacyBlowerParamsController != null) {
-      legacyBlowerParamsController = await legacyBlowerParamsController!.cancelParams(device!) as LegacyBlowerParamsController;
-    } else {
-      fanParamsController = await fanParamsController!.cancelParams(device!) as FanParamsController;
-      blowerParamsController = await blowerParamsController!.cancelParams(device!) as BlowerParamsController;
-    }
+    paramsController = await paramsController.cancelParams(device!) as FeedVentilationParamsController;
   }
 
   FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(
         box: box,
         temperature: temperature,
         humidity: humidity,
-        fanParamsController: fanParamsController,
-        blowerParamsController: blowerParamsController,
-        legacyBlowerParamsController: legacyBlowerParamsController,
+        paramsController: paramsController,
       );
 }
