@@ -53,10 +53,10 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
 
   @override
   void initState() {
-    _blowerMin = widget.state.blowerParamsController!.blowerMin.value;
-    _blowerMax = widget.state.blowerParamsController!.blowerMax.value;
-    _blowerRefMin = widget.state.blowerParamsController!.blowerRefMin.value;
-    _blowerRefMax = widget.state.blowerParamsController!.blowerRefMax.value;
+    _blowerMin = widget.state.blowerParamsController!.min.value;
+    _blowerMax = widget.state.blowerParamsController!.max.value;
+    _blowerRefMin = widget.state.blowerParamsController!.refMin.value;
+    _blowerRefMax = widget.state.blowerParamsController!.refMax.value;
     super.initState();
   }
 
@@ -68,10 +68,10 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerMin = state.blowerParamsController!.blowerMin.value;
-              _blowerMax = state.blowerParamsController!.blowerMax.value;
-              _blowerRefMin = state.blowerParamsController!.blowerRefMin.value;
-              _blowerRefMax = state.blowerParamsController!.blowerRefMax.value;
+              _blowerMin = state.blowerParamsController!.min.value;
+              _blowerMax = state.blowerParamsController!.max.value;
+              _blowerRefMin = state.blowerParamsController!.refMin.value;
+              _blowerRefMax = state.blowerParamsController!.refMax.value;
             });
           }
         },

@@ -40,22 +40,32 @@ bool isTempSource(int source) => source >= TEMP_REF_OFFSET && source < TIMER_REF
 bool isTimerSource(int source) => source >= TIMER_REF_OFFSET && source < HUMI_REF_OFFSET;
 bool isHumiSource(int source) => source >= HUMI_REF_OFFSET;
 
-class FanParamsController extends ParamsController {
+abstract class VentilationParamsController extends ParamsController {
+  VentilationParamsController({required Map<String, ParamController>? params}) : super(params: params ?? {});
+
+  ParamController get min;
+  ParamController get max;
+  ParamController get refMin;
+  ParamController get refMax;
+  ParamController get refSource;
+}
+
+class FanParamsController extends VentilationParamsController {
   FanParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
 
-  ParamController get fanMin => params['fanMin']!;
-  ParamController get fanMax => params['fanMax']!;
-  ParamController get fanRefMin => params['fanRefMin']!;
-  ParamController get fanRefMax => params['fanRefMax']!;
-  ParamController get fanRefSource => params['fanRefSource']!;
+  ParamController get min => params['min']!;
+  ParamController get max => params['max']!;
+  ParamController get refMin => params['refMin']!;
+  ParamController get refMax => params['refMax']!;
+  ParamController get refSource => params['refSource']!;
 
   static Future<FanParamsController> load(Device device, Box box) async {
     FanParamsController c = FanParamsController();
-    await c.loadBoxParam(device, box, 'FAN_MIN', 'fanMin');
-    await c.loadBoxParam(device, box, 'FAN_MAX', 'fanMax');
-    await c.loadBoxParam(device, box, 'FAN_REF_MIN', 'fanRefMin');
-    await c.loadBoxParam(device, box, 'FAN_REF_MAX', 'fanRefMax');
-    await c.loadBoxParam(device, box, 'FAN_REF_SOURCE', 'fanRefSource');
+    await c.loadBoxParam(device, box, 'FAN_MIN', 'min');
+    await c.loadBoxParam(device, box, 'FAN_MAX', 'max');
+    await c.loadBoxParam(device, box, 'FAN_REF_MIN', 'refMin');
+    await c.loadBoxParam(device, box, 'FAN_REF_MAX', 'refMax');
+    await c.loadBoxParam(device, box, 'FAN_REF_SOURCE', 'refSource');
     return c;
   }
 
@@ -63,22 +73,22 @@ class FanParamsController extends ParamsController {
       FanParamsController(params: params ?? this.params);
 }
 
-class BlowerParamsController extends ParamsController {
+class BlowerParamsController extends VentilationParamsController {
   BlowerParamsController({Map<String, ParamController>? params}) : super(params: params ?? {});
 
-  ParamController get blowerMin => params['blowerMin']!;
-  ParamController get blowerMax => params['blowerMax']!;
-  ParamController get blowerRefMin => params['blowerRefMin']!;
-  ParamController get blowerRefMax => params['blowerRefMax']!;
-  ParamController get blowerRefSource => params['blowerRefSource']!;
+  ParamController get min => params['min']!;
+  ParamController get max => params['max']!;
+  ParamController get refMin => params['refMin']!;
+  ParamController get refMax => params['refMax']!;
+  ParamController get refSource => params['refSource']!;
 
   static Future<BlowerParamsController> load(Device device, Box box) async {
     BlowerParamsController c = BlowerParamsController();
-    await c.loadBoxParam(device, box, 'BLOWER_MIN', 'blowerMin');
-    await c.loadBoxParam(device, box, 'BLOWER_MAX', 'blowerMax');
-    await c.loadBoxParam(device, box, 'BLOWER_REF_MIN', 'blowerRefMin');
-    await c.loadBoxParam(device, box, 'BLOWER_REF_MAX', 'blowerRefMax');
-    await c.loadBoxParam(device, box, 'BLOWER_REF_SOURCE', 'blowerRefSource');
+    await c.loadBoxParam(device, box, 'BLOWER_MIN', 'min');
+    await c.loadBoxParam(device, box, 'BLOWER_MAX', 'max');
+    await c.loadBoxParam(device, box, 'BLOWER_REF_MIN', 'refMin');
+    await c.loadBoxParam(device, box, 'BLOWER_REF_MAX', 'refMax');
+    await c.loadBoxParam(device, box, 'BLOWER_REF_SOURCE', 'refSource');
     return c;
   }
 
@@ -284,29 +294,29 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
           date: DateTime.now(),
           params: Value(FeedVentilationParams(
                   FeedVentilationParamsValues(
-                      fanMin: fanParamsController?.fanMin.value,
-                      fanMax: fanParamsController?.fanMax.value,
-                      fanRefMin: fanParamsController?.fanRefMin.value,
-                      fanRefMax: fanParamsController?.fanRefMax.value,
-                      fanRefSource: fanParamsController?.fanRefSource.value,
-                      blowerMin: blowerParamsController?.blowerMin.value,
-                      blowerMax: blowerParamsController?.blowerMax.value,
-                      blowerRefMin: blowerParamsController?.blowerRefMin.value,
-                      blowerRefMax: blowerParamsController?.blowerRefMax.value,
-                      blowerRefSource: blowerParamsController?.blowerRefSource.value,
+                      fanMin: fanParamsController?.min.value,
+                      fanMax: fanParamsController?.max.value,
+                      fanRefMin: fanParamsController?.refMin.value,
+                      fanRefMax: fanParamsController?.refMax.value,
+                      fanRefSource: fanParamsController?.refSource.value,
+                      blowerMin: blowerParamsController?.min.value,
+                      blowerMax: blowerParamsController?.max.value,
+                      blowerRefMin: blowerParamsController?.refMin.value,
+                      blowerRefMax: blowerParamsController?.refMax.value,
+                      blowerRefSource: blowerParamsController?.refSource.value,
                       blowerDay: legacyBlowerParamsController?.blowerDay.value,
                       blowerNight: legacyBlowerParamsController?.blowerNight.value),
                   FeedVentilationParamsValues(
-                      fanMin: fanParamsController?.fanMin.initialValue,
-                      fanMax: fanParamsController?.fanMax.initialValue,
-                      fanRefMin: fanParamsController?.fanRefMin.initialValue,
-                      fanRefMax: fanParamsController?.fanRefMax.initialValue,
-                      fanRefSource: fanParamsController?.fanRefSource.initialValue,
-                      blowerMin: blowerParamsController?.blowerMin.initialValue,
-                      blowerMax: blowerParamsController?.blowerMax.initialValue,
-                      blowerRefMin: blowerParamsController?.blowerRefMin.initialValue,
-                      blowerRefMax: blowerParamsController?.blowerRefMax.initialValue,
-                      blowerRefSource: blowerParamsController?.blowerRefSource.initialValue,
+                      fanMin: fanParamsController?.min.initialValue,
+                      fanMax: fanParamsController?.max.initialValue,
+                      fanRefMin: fanParamsController?.refMin.initialValue,
+                      fanRefMax: fanParamsController?.refMax.initialValue,
+                      fanRefSource: fanParamsController?.refSource.initialValue,
+                      blowerMin: blowerParamsController?.min.initialValue,
+                      blowerMax: blowerParamsController?.max.initialValue,
+                      blowerRefMin: blowerParamsController?.refMin.initialValue,
+                      blowerRefMax: blowerParamsController?.refMax.initialValue,
+                      blowerRefSource: blowerParamsController?.refSource.initialValue,
                       blowerDay: legacyBlowerParamsController?.blowerDay.initialValue,
                       blowerNight: legacyBlowerParamsController?.blowerNight.initialValue))
               .toJSON()),

@@ -136,11 +136,11 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   child: content);
             }
             bool changed = state is FeedVentilationFormBlocStateLoaded &&
-                (state.blowerParamsController?.blowerMin.isChanged == true ||
-                    state.blowerParamsController?.blowerMax.isChanged == true ||
-                    state.blowerParamsController?.blowerRefMin.isChanged == true ||
-                    state.blowerParamsController?.blowerRefMax.isChanged == true ||
-                    state.blowerParamsController?.blowerRefSource.isChanged == true ||
+                (state.blowerParamsController?.min.isChanged == true ||
+                    state.blowerParamsController?.max.isChanged == true ||
+                    state.blowerParamsController?.refMin.isChanged == true ||
+                    state.blowerParamsController?.refMax.isChanged == true ||
+                    state.blowerParamsController?.refSource.isChanged == true ||
                     state.legacyBlowerParamsController?.blowerDay.isChanged == true ||
                     state.legacyBlowerParamsController?.blowerNight.isChanged == true);
             return FeedFormLayout(
@@ -181,13 +181,13 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
 
   Widget _renderV3Params(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
     Widget body;
-    if (isTimerSource(state.blowerParamsController!.blowerRefSource.value)) {
+    if (isTimerSource(state.blowerParamsController!.refSource.value)) {
       body = FeedVentilationTimerFormPage(state);
-    } else if (isTempSource(state.blowerParamsController!.blowerRefSource.value)) {
+    } else if (isTempSource(state.blowerParamsController!.refSource.value)) {
       body = FeedVentilationTemperatureFormPage(state);
-    } else if (isHumiSource(state.blowerParamsController!.blowerRefSource.value)) {
+    } else if (isHumiSource(state.blowerParamsController!.refSource.value)) {
       body = FeedVentilationHumidityFormPage(state);
-    } else if (state.blowerParamsController!.blowerRefSource.value == 0) {
+    } else if (state.blowerParamsController!.refSource.value == 0) {
       body = FeedVentilationManualFormPage(state);
     } else {
       body = Fullscreen(
@@ -196,10 +196,10 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
       );
     }
     List<bool> selection = [
-      isTimerSource(state.blowerParamsController!.blowerRefSource.value),
-      state.blowerParamsController!.blowerRefSource.value == 0,
-      isTempSource(state.blowerParamsController!.blowerRefSource.value),
-      isHumiSource(state.blowerParamsController!.blowerRefSource.value),
+      isTimerSource(state.blowerParamsController!.refSource.value),
+      state.blowerParamsController!.refSource.value == 0,
+      isTempSource(state.blowerParamsController!.refSource.value),
+      isHumiSource(state.blowerParamsController!.refSource.value),
     ];
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Center(

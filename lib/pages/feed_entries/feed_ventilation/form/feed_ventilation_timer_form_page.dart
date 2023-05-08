@@ -49,8 +49,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
 
   @override
   void initState() {
-    _blowerDay = widget.state.blowerParamsController!.blowerMax.value;
-    _blowerNight = widget.state.blowerParamsController!.blowerMin.value;
+    _blowerDay = widget.state.blowerParamsController!.max.value;
+    _blowerNight = widget.state.blowerParamsController!.min.value;
     super.initState();
   }
 
@@ -61,8 +61,8 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
         listener: (BuildContext context, FeedVentilationFormBlocState state) {
           if (state is FeedVentilationFormBlocStateLoaded) {
             setState(() {
-              _blowerDay = state.blowerParamsController!.blowerMax.value;
-              _blowerNight = state.blowerParamsController!.blowerMin.value;
+              _blowerDay = state.blowerParamsController!.max.value;
+              _blowerNight = state.blowerParamsController!.min.value;
             });
           }
         },
