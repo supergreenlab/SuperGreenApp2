@@ -283,7 +283,7 @@ class _SettingsDevicePageState extends State<SettingsDevicePage> {
                 },
               ),
               ListTile(
-                leading: SvgPicture.asset('assets/settings/icon_boxslot.svg'),
+                leading: SvgPicture.asset('assets/settings/icon_motor.svg'),
                 trailing: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: SvgPicture.asset('assets/settings/icon_go.svg'),
