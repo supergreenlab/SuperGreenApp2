@@ -31,12 +31,18 @@ class MotorPortPage extends TraceableStatefulWidget {
 }
 
 class _MotorPortPageState extends State<MotorPortPage> {
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<MotorPortBloc, MotorPortBlocState>(
-      listener: (BuildContext context, state) {
+      listener: (BuildContext context, state) async {
         if (state is MotorPortBlocStateDone) {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+        } else if (state is MotorPortBlocStateLoaded) {
+          setState(() {
+            loading = false;
+          });
         }
       },
       child: BlocBuilder<MotorPortBloc, MotorPortBlocState>(
@@ -87,8 +93,12 @@ class _MotorPortPageState extends State<MotorPortPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
           child: DropdownButton<int>(
+            
             value: source.source.ivalue,
-            onChanged: (int? value) {
+            onChanged: loading ? null : (int? value) {
+              setState(() {
+                loading = true;
+              });
               BlocProvider.of<MotorPortBloc>(context).add(MotorPortBlocEventSourceUpdated(source.copyWith(params: {"source": source.source.copyWith(value: value!)}) as MotorSourceParamsController));
             },
             items: state.helpers.map<DropdownMenuItem<int>>((h) {

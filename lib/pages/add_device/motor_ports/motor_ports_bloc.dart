@@ -142,7 +142,6 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
       yield MotorPortBlocStateLoaded(values, helpers, sources);
     } else if (event is MotorPortBlocEventSourceUpdated) {
       sources[event.source.index] = await event.source.syncParams(device) as MotorSourceParamsController;
-      print('póuet');
       yield MotorPortBlocStateLoaded(values, helpers, sources);
     }
   }
