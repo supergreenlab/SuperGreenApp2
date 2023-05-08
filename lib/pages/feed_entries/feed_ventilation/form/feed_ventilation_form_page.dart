@@ -182,13 +182,13 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
   Widget _renderV3Params(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
     Widget body;
     if (isTimerSource(state.blowerParamsController!.refSource.value)) {
-      body = FeedVentilationTimerFormPage(state);
+      body = FeedVentilationTimerFormPage(state.humidity, state.temperature, state.blowerParamsController!);
     } else if (isTempSource(state.blowerParamsController!.refSource.value)) {
-      body = FeedVentilationTemperatureFormPage(state);
+      body = FeedVentilationTemperatureFormPage(state.humidity, state.temperature, state.blowerParamsController!);
     } else if (isHumiSource(state.blowerParamsController!.refSource.value)) {
-      body = FeedVentilationHumidityFormPage(state);
+      body = FeedVentilationHumidityFormPage(state.humidity, state.temperature, state.blowerParamsController!);
     } else if (state.blowerParamsController!.refSource.value == 0) {
-      body = FeedVentilationManualFormPage(state);
+      body = FeedVentilationManualFormPage(state.humidity, state.temperature, state.blowerParamsController!);
     } else {
       body = Fullscreen(
         child: Icon(Icons.upgrade),

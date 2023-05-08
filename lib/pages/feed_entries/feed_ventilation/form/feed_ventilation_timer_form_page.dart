@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
@@ -35,9 +36,11 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
     );
   }
 
-  final FeedVentilationFormBlocStateLoaded state;
+  final Param humidity;
+  final Param temperature;
+  final VentilationParamsController paramsController;
 
-  const FeedVentilationTimerFormPage(this.state, {Key? key}) : super(key: key);
+  const FeedVentilationTimerFormPage(this.humidity, this.temperature, this.paramsController, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationTimerFormPageState createState() => _FeedVentilationTimerFormPageState();
@@ -49,75 +52,65 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
 
   @override
   void initState() {
-    _blowerDay = widget.state.blowerParamsController!.max.value;
-    _blowerNight = widget.state.blowerParamsController!.min.value;
+    _blowerDay = widget.paramsController.max.value;
+    _blowerNight = widget.paramsController.min.value;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
-        listener: (BuildContext context, FeedVentilationFormBlocState state) {
-          if (state is FeedVentilationFormBlocStateLoaded) {
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MarkdownBody(
+            data: FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription,
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
+        ),
+        SliderFormParam(
+          key: Key('blower_night'),
+          title: 'Blower night (when lights are off)',
+          icon: 'assets/feed_form/icon_blower.svg',
+          value: _blowerNight.toDouble(),
+          min: 0,
+          max: 100,
+          color: Colors.blue,
+          onChanged: (double newValue) {
             setState(() {
-              _blowerDay = state.blowerParamsController!.max.value;
-              _blowerNight = state.blowerParamsController!.min.value;
+              _blowerNight = newValue.toInt();
             });
-          }
-        },
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MarkdownBody(
-                data: FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
-              ),
-            ),
-            SliderFormParam(
-              key: Key('blower_night'),
-              title: 'Blower night (when lights are off)',
-              icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerNight.toDouble(),
-              min: 0,
-              max: 100,
-              color: Colors.blue,
-              onChanged: (double newValue) {
-                setState(() {
-                  _blowerNight = newValue.toInt();
-                });
-              },
-              onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
-                    "blowerMin": _blowerNight,
-                  }) as LegacyBlowerParamsController,
-                ));
-              },
-            ),
-            SliderFormParam(
-              key: Key('blower_day'),
-              title: 'Blower day (when lights are on)',
-              icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerDay.toDouble(),
-              min: 0,
-              max: 100,
-              color: Colors.yellow,
-              onChanged: (double newValue) {
-                setState(() {
-                  _blowerDay = newValue.toInt();
-                });
-              },
-              onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  legacyBlowerParamsController: widget.state.legacyBlowerParamsController!.copyWithValues({
-                    "blowerMax": _blowerDay,
-                  }) as LegacyBlowerParamsController,
-                ));
-              },
-            ),
-          ],
-        ));
+          },
+          onChangeEnd: (double newValue) {
+            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+              legacyBlowerParamsController: widget.paramsController.copyWithValues({
+                "blowerMin": _blowerNight,
+              }) as LegacyBlowerParamsController,
+            ));
+          },
+        ),
+        SliderFormParam(
+          key: Key('blower_day'),
+          title: 'Blower day (when lights are on)',
+          icon: 'assets/feed_form/icon_blower.svg',
+          value: _blowerDay.toDouble(),
+          min: 0,
+          max: 100,
+          color: Colors.yellow,
+          onChanged: (double newValue) {
+            setState(() {
+              _blowerDay = newValue.toInt();
+            });
+          },
+          onChangeEnd: (double newValue) {
+            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+              legacyBlowerParamsController: widget.paramsController.copyWithValues({
+                "blowerMax": _blowerDay,
+              }) as LegacyBlowerParamsController,
+            ));
+          },
+        ),
+      ],
+    );
   }
 }

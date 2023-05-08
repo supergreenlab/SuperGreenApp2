@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
@@ -35,9 +36,11 @@ class FeedVentilationManualFormPage extends TraceableStatefulWidget {
     );
   }
 
-  final FeedVentilationFormBlocStateLoaded state;
+  final Param humidity;
+  final Param temperature;
+  final VentilationParamsController paramsController;
 
-  const FeedVentilationManualFormPage(this.state, {Key? key}) : super(key: key);
+  const FeedVentilationManualFormPage(this.humidity, this.temperature, this.paramsController, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationManualFormPageState createState() => _FeedVentilationManualFormPageState();
@@ -47,53 +50,44 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
   int _blowerValue = 0;
 
   @override
-  void initState() {
-    _blowerValue = widget.state.blowerParamsController!.min.value;
-    super.initState();
+  void didChangeDependencies() {
+    _blowerValue = widget.paramsController.min.value;
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
-        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
-        listener: (BuildContext context, FeedVentilationFormBlocState state) {
-          if (state is FeedVentilationFormBlocStateLoaded) {
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MarkdownBody(
+            data: FeedVentilationManualFormPage.instructionsManualTimerModeDescription,
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
+        ),
+        SliderFormParam(
+          key: Key('blower_value'),
+          title: 'Blower value',
+          icon: 'assets/feed_form/icon_blower.svg',
+          value: _blowerValue.toDouble(),
+          min: 0,
+          max: 100,
+          color: Colors.yellow,
+          onChanged: (double newValue) {
             setState(() {
-              _blowerValue = state.blowerParamsController!.min.value;
+              _blowerValue = newValue.toInt();
             });
-          }
-        },
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MarkdownBody(
-                data: FeedVentilationManualFormPage.instructionsManualTimerModeDescription,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
-              ),
-            ),
-            SliderFormParam(
-              key: Key('blower_value'),
-              title: 'Blower value',
-              icon: 'assets/feed_form/icon_blower.svg',
-              value: _blowerValue.toDouble(),
-              min: 0,
-              max: 100,
-              color: Colors.yellow,
-              onChanged: (double newValue) {
-                setState(() {
-                  _blowerValue = newValue.toInt();
-                });
-              },
-              onChangeEnd: (double newValue) {
-                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                  blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
-                    "blowerMin": _blowerValue,
-                  }) as BlowerParamsController,
-                ));
-              },
-            ),
-          ],
-        ));
+          },
+          onChangeEnd: (double newValue) {
+            BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+              blowerParamsController: widget.paramsController.copyWithValues({
+                "blowerMin": _blowerValue,
+              }) as BlowerParamsController,
+            ));
+          },
+        ),
+      ],
+    );
   }
 }

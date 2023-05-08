@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/feed_form/number_form_param.dart';
@@ -36,9 +37,11 @@ class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
     );
   }
 
-  final FeedVentilationFormBlocStateLoaded state;
+  final Param humidity;
+  final Param temperature;
+  final VentilationParamsController paramsController;
 
-  const FeedVentilationHumidityFormPage(this.state, {Key? key}) : super(key: key);
+  const FeedVentilationHumidityFormPage(this.humidity, this.temperature, this.paramsController, {Key? key}) : super(key: key);
 
   @override
   _FeedVentilationHumidityFormPageState createState() => _FeedVentilationHumidityFormPageState();
@@ -51,161 +54,149 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
   int _blowerRefMax = 0;
 
   @override
-  void initState() {
-    _blowerMin = widget.state.blowerParamsController!.min.value;
-    _blowerMax = widget.state.blowerParamsController!.max.value;
-    _blowerRefMin = widget.state.blowerParamsController!.refMin.value;
-    _blowerRefMax = widget.state.blowerParamsController!.refMax.value;
-    super.initState();
+  void didChangeDependencies() {
+    _blowerMin = widget.paramsController.min.value;
+    _blowerMax = widget.paramsController.max.value;
+    _blowerRefMin = widget.paramsController.refMin.value;
+    _blowerRefMax = widget.paramsController.refMax.value;
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     String unit = '%';
-    return BlocListener(
-        bloc: BlocProvider.of<FeedVentilationFormBloc>(context),
-        listener: (BuildContext context, FeedVentilationFormBlocState state) {
-          if (state is FeedVentilationFormBlocStateLoaded) {
-            setState(() {
-              _blowerMin = state.blowerParamsController!.min.value;
-              _blowerMax = state.blowerParamsController!.max.value;
-              _blowerRefMin = state.blowerParamsController!.refMin.value;
-              _blowerRefMax = state.blowerParamsController!.refMax.value;
-            });
-          }
-        },
-        child: ListView(
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: MarkdownBody(
+            data: FeedVentilationHumidityFormPage.instructionsBlowerHumidityModeDescription,
+            styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
+          ),
+        ),
+        Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MarkdownBody(
-                data: FeedVentilationHumidityFormPage.instructionsBlowerHumidityModeDescription,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
-              ),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(children: [
+                      Text(
+                        'Low ',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
+                      ),
+                      Text(
+                        'humidity settings',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                      ),
+                    ]),
+                    Text('Current box humidity: ${widget.humidity.ivalue}$unit'),
+                  ],
+                )),
+            NumberFormParam(
+              title: 'Humidity low',
+              icon: 'assets/feed_form/icon_blower.svg',
+              value: _blowerRefMin.toDouble(),
+              unit: unit,
+              displayFn: (v) => '$v',
+              step: 1,
+              onChange: (double newValue) {
+                setState(() {
+                  _blowerRefMin = newValue.toInt();
+                });
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                  blowerParamsController: widget.paramsController.copyWithValues({
+                    "blowerRefMin": newValue.toInt(),
+                  }) as BlowerParamsController,
+                ));
+              },
             ),
-            Column(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(children: [
-                          Text(
-                            'Low ',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
-                          ),
-                          Text(
-                            'humidity settings',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
-                          ),
-                        ]),
-                        Text('Current box humidity: ${widget.state.humidity.ivalue}$unit'),
-                      ],
-                    )),
-                NumberFormParam(
-                  title: 'Humidity low',
-                  icon: 'assets/feed_form/icon_blower.svg',
-                  value: _blowerRefMin.toDouble(),
-                  unit: unit,
-                  displayFn: (v) => '$v',
-                  step: 1,
-                  onChange: (double newValue) {
-                    setState(() {
-                      _blowerRefMin = newValue.toInt();
-                    });
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                      blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
-                        "blowerRefMin": newValue.toInt(),
-                      }) as BlowerParamsController,
-                    ));
-                  },
-                ),
-                SliderFormParam(
-                  key: Key('blower_humi_min'),
-                  title: 'Blower power at ${_blowerRefMin.toDouble()}$unit',
-                  icon: 'assets/feed_form/icon_blower.svg',
-                  value: _blowerMin.toDouble(),
-                  min: 0,
-                  max: 100,
-                  color: Colors.blue,
-                  onChanged: (double newValue) {
-                    setState(() {
-                      _blowerMin = newValue.toInt();
-                    });
-                  },
-                  onChangeEnd: (double newValue) {
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                        blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
-                      "blowerMin": _blowerMin,
-                    }) as BlowerParamsController));
-                  },
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(children: [
-                          Text(
-                            'High ',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
-                          ),
-                          Text(
-                            'humidity settings',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
-                          ),
-                        ]),
-                        Text('Current box humidity: ${widget.state.humidity.ivalue}$unit'),
-                      ],
-                    )),
-                NumberFormParam(
-                  title: 'Humidity high',
-                  icon: 'assets/feed_form/icon_blower.svg',
-                  value: _blowerRefMax.toDouble(),
-                  unit: unit,
-                  displayFn: (v) => '$v',
-                  step: 1,
-                  onChange: (double newValue) {
-                    setState(() {
-                      _blowerRefMax = newValue.toInt();
-                    });
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(
-                      FeedVentilationFormBlocParamsChangedEvent(
-                          blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
-                        "blowerRefMax": newValue.toInt(),
-                      }) as BlowerParamsController),
-                    );
-                  },
-                ),
-                SliderFormParam(
-                  key: Key('blower_humi_max'),
-                  title: 'Blower power at ${_blowerRefMax.toDouble()}$unit',
-                  icon: 'assets/feed_form/icon_blower.svg',
-                  value: _blowerMax.toDouble(),
-                  min: 0,
-                  max: 100,
-                  color: Colors.yellow,
-                  onChanged: (double newValue) {
-                    setState(() {
-                      _blowerMax = newValue.toInt();
-                    });
-                  },
-                  onChangeEnd: (double newValue) {
-                    BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
-                      blowerParamsController: widget.state.blowerParamsController!.copyWithValues({
-                        "blowerMax": _blowerMax,
-                      }) as BlowerParamsController,
-                    ));
-                  },
-                ),
-              ],
+            SliderFormParam(
+              key: Key('blower_humi_min'),
+              title: 'Blower power at ${_blowerRefMin.toDouble()}$unit',
+              icon: 'assets/feed_form/icon_blower.svg',
+              value: _blowerMin.toDouble(),
+              min: 0,
+              max: 100,
+              color: Colors.blue,
+              onChanged: (double newValue) {
+                setState(() {
+                  _blowerMin = newValue.toInt();
+                });
+              },
+              onChangeEnd: (double newValue) {
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                    blowerParamsController: widget.paramsController.copyWithValues({
+                  "blowerMin": _blowerMin,
+                }) as BlowerParamsController));
+              },
             ),
           ],
-        ));
+        ),
+        Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(children: [
+                      Text(
+                        'High ',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
+                      ),
+                      Text(
+                        'humidity settings',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87),
+                      ),
+                    ]),
+                    Text('Current box humidity: ${widget.humidity.ivalue}$unit'),
+                  ],
+                )),
+            NumberFormParam(
+              title: 'Humidity high',
+              icon: 'assets/feed_form/icon_blower.svg',
+              value: _blowerRefMax.toDouble(),
+              unit: unit,
+              displayFn: (v) => '$v',
+              step: 1,
+              onChange: (double newValue) {
+                setState(() {
+                  _blowerRefMax = newValue.toInt();
+                });
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(
+                  FeedVentilationFormBlocParamsChangedEvent(
+                      blowerParamsController: widget.paramsController.copyWithValues({
+                    "blowerRefMax": newValue.toInt(),
+                  }) as BlowerParamsController),
+                );
+              },
+            ),
+            SliderFormParam(
+              key: Key('blower_humi_max'),
+              title: 'Blower power at ${_blowerRefMax.toDouble()}$unit',
+              icon: 'assets/feed_form/icon_blower.svg',
+              value: _blowerMax.toDouble(),
+              min: 0,
+              max: 100,
+              color: Colors.yellow,
+              onChanged: (double newValue) {
+                setState(() {
+                  _blowerMax = newValue.toInt();
+                });
+              },
+              onChangeEnd: (double newValue) {
+                BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
+                  blowerParamsController: widget.paramsController.copyWithValues({
+                    "blowerMax": _blowerMax,
+                  }) as BlowerParamsController,
+                ));
+              },
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
