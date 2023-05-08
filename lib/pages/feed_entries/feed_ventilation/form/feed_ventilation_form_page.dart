@@ -72,35 +72,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
             } else if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: state.text);
             } else if (state is FeedVentilationFormBlocStateLoaded && state.noDevice == true) {
-              body = Stack(
-                children: <Widget>[
-                  _renderParams(context, state),
-                  Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white60),
-                    child: Fullscreen(
-                      title: 'Ventilation control\nrequires an SGL controller',
-                      child: Column(
-                        children: <Widget>[
-                          GreenButton(
-                            title: 'SHOP NOW',
-                            onPressed: () {
-                              launchUrl(Uri.parse('https://www.supergreenlab.com'));
-                            },
-                          ),
-                          Text('or'),
-                          GreenButton(
-                            title: 'DIY NOW',
-                            onPressed: () {
-                              launchUrl(Uri.parse('https://github.com/supergreenlab'));
-                            },
-                          ),
-                        ],
-                      ),
-                      childFirst: false,
-                    ),
-                  ),
-                ],
-              );
+              body = _renderNoDevice(context, state);
             } else if (state is FeedVentilationFormBlocStateLoaded) {
               Widget content = _renderParams(context, state);
               if (_reachable == false) {
@@ -166,14 +138,48 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     );
   }
 
+  Widget _renderNoDevice(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
+    return Stack(
+      children: <Widget>[
+        _renderParams(context, state),
+        Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white60),
+          child: Fullscreen(
+            title: 'Ventilation control\nrequires an SGL controller',
+            child: Column(
+              children: <Widget>[
+                GreenButton(
+                  title: 'SHOP NOW',
+                  onPressed: () {
+                    launchUrl(Uri.parse('https://www.supergreenlab.com'));
+                  },
+                ),
+                Text('or'),
+                GreenButton(
+                  title: 'DIY NOW',
+                  onPressed: () {
+                    launchUrl(Uri.parse('https://github.com/supergreenlab'));
+                  },
+                ),
+              ],
+            ),
+            childFirst: false,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _renderParams(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
     if (state.paramsController is LegacyBlowerParamsController) {
       return FeedVentilationLegacyFormPage(state.paramsController as LegacyBlowerParamsController);
     }
-    return _renderV3Params(context, state.box, state.humidity, state.temperature, state.paramsController as VentilationParamsController);
+    return _renderV3Params(
+        context, state.box, state.humidity, state.temperature, state.paramsController as VentilationParamsController);
   }
 
-  Widget _renderV3Params(BuildContext context, Box box, Param humidity, Param temperature, VentilationParamsController paramsController) {
+  Widget _renderV3Params(
+      BuildContext context, Box box, Param humidity, Param temperature, VentilationParamsController paramsController) {
     Widget body;
     if (isTimerSource(paramsController.refSource.value)) {
       body = FeedVentilationTimerFormPage(humidity, temperature, paramsController);

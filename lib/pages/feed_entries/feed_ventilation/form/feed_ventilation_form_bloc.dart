@@ -198,6 +198,16 @@ class FeedVentilationFormBlocEventCancelEvent extends FeedVentilationFormBlocEve
   List<Object> get props => [];
 }
 
+class FeedVentilationFormBlocFanModeEvent extends FeedVentilationFormBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class FeedVentilationFormBlocBlowerModeEvent extends FeedVentilationFormBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 abstract class FeedVentilationFormBlocState extends Equatable {}
 
 class FeedVentilationFormBlocStateInit extends FeedVentilationFormBlocState {
@@ -339,6 +349,12 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
         await cancelParams();
       } catch (e) {}
       yield FeedVentilationFormBlocStateDone();
+    } else if (event is FeedVentilationFormBlocBlowerModeEvent) {
+      paramsController = await BlowerParamsController.load(device!, box);
+      yield loadedState();
+    } else if (event is FeedVentilationFormBlocFanModeEvent) {
+      paramsController = await FanParamsController.load(device!, box);
+      yield loadedState();
     }
   }
 
