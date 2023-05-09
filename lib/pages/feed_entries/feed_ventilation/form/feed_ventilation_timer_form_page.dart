@@ -36,6 +36,17 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
     );
   }
 
+  static String get instructionsFanTimerModeDescription {
+    return Intl.message(
+      '''This is the **timer based fan control**, in this mode the fan is **in sync with the light timer**. Perfect if the box doesn't have a temperature sensor.\n\nEx: when the timer says 100% (which means all lights are on), it will set the fan power at the **fan day** value below.''',
+      name: 'instructionsFanTimerModeDescription',
+      desc: 'Instructions for fan timer mode',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
+  String get instructionsTimerModeDescription => paramsController is BlowerParamsController ? FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription : FeedVentilationTimerFormPage.instructionsFanTimerModeDescription;
+
   final Param humidity;
   final Param temperature;
   final VentilationParamsController paramsController;
@@ -64,13 +75,13 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
-            data: FeedVentilationTimerFormPage.instructionsBlowerTimerModeDescription,
+            data: widget.instructionsTimerModeDescription,
             styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
         SliderFormParam(
           key: Key('night'),
-          title: 'Blower night (when lights are off)',
+          title: 'Night power (when lights are off)',
           icon: 'assets/feed_form/icon_blower.svg',
           value: _night.toDouble(),
           min: 0,
@@ -91,7 +102,7 @@ class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormP
         ),
         SliderFormParam(
           key: Key('day'),
-          title: 'Blower day (when lights are on)',
+          title: 'Day power (when lights are on)',
           icon: 'assets/feed_form/icon_blower.svg',
           value: _day.toDouble(),
           min: 0,

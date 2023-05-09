@@ -38,6 +38,17 @@ class FeedVentilationTemperatureFormPage extends TraceableStatefulWidget {
     );
   }
 
+  static String get instructionsFanTemperatureModeDescription {
+    return Intl.message(
+      '''This is the **Temperature based fan control**, in this mode the fan is **in sync with the box temperature sensor**.''',
+      name: 'instructionsFanTemperatureModeDescription',
+      desc: 'Instructions for fan temperature mode',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
+  String get instructionsTemperatureModeDescription => paramsController is BlowerParamsController ? FeedVentilationTemperatureFormPage.instructionsBlowerTemperatureModeDescription : FeedVentilationTemperatureFormPage.instructionsFanTemperatureModeDescription;
+
   final Param humidity;
   final Param temperature;
   final VentilationParamsController paramsController;
@@ -71,7 +82,7 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
-            data: FeedVentilationTemperatureFormPage.instructionsBlowerTemperatureModeDescription,
+            data: widget.instructionsTemperatureModeDescription,
             styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
@@ -115,7 +126,7 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
             ),
             SliderFormParam(
               key: Key('blower_temp_min'),
-              title: 'Blower power at ${_tempUnit(_refMin.toDouble())}$unit',
+              title: 'Power at ${_tempUnit(_refMin.toDouble())}$unit',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _min.toDouble(),
               min: 0,
@@ -176,7 +187,7 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
             ),
             SliderFormParam(
               key: Key('blower_temp_max'),
-              title: 'Blower power at ${_tempUnit(_refMax.toDouble())}$unit',
+              title: 'Power at ${_tempUnit(_refMax.toDouble())}$unit',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _max.toDouble(),
               min: 0,

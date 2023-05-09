@@ -37,6 +37,17 @@ class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
     );
   }
 
+  static String get instructionsFanHumidityModeDescription {
+    return Intl.message(
+      '''This is the **Humidity based fan control**, in this mode the fan is **in sync with the box humidity sensor**.''',
+      name: 'instructionsFanHumidityModeDescription',
+      desc: 'Instructions for fan humidity mode',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
+  String get instructionsHumidityModeDescription => paramsController is BlowerParamsController ? FeedVentilationHumidityFormPage.instructionsBlowerHumidityModeDescription : FeedVentilationHumidityFormPage.instructionsFanHumidityModeDescription;
+
   final Param humidity;
   final Param temperature;
   final VentilationParamsController paramsController;
@@ -70,7 +81,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
-            data: FeedVentilationHumidityFormPage.instructionsBlowerHumidityModeDescription,
+            data: widget.instructionsHumidityModeDescription,
             styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
@@ -114,7 +125,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
             ),
             SliderFormParam(
               key: Key('blower_humi_min'),
-              title: 'Blower power at ${_refMin.toDouble()}$unit',
+              title: 'Power at ${_refMin.toDouble()}$unit',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _min.toDouble(),
               min: 0,
@@ -175,7 +186,7 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
             ),
             SliderFormParam(
               key: Key('blower_humi_max'),
-              title: 'Blower power at ${_refMax.toDouble()}$unit',
+              title: 'Power at ${_refMax.toDouble()}$unit',
               icon: 'assets/feed_form/icon_blower.svg',
               value: _max.toDouble(),
               min: 0,

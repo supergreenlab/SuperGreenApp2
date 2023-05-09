@@ -27,14 +27,25 @@ import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ve
 import 'package:super_green_app/widgets/feed_form/slider_form_param.dart';
 
 class FeedVentilationManualFormPage extends TraceableStatefulWidget {
-  static String get instructionsManualTimerModeDescription {
+  static String get instructionsManualTimerBlowerModeDescription {
     return Intl.message(
       'This is the **manual blower control** mode, just set a value and the blower will stay at this power.',
-      name: 'instructionsManualTimerModeDescription',
+      name: 'instructionsManualTimerBlowerModeDescription',
       desc: 'Instructions for blower manual mode',
       locale: SGLLocalizations.current?.localeName,
     );
   }
+
+    static String get instructionsManualTimerFanModeDescription {
+    return Intl.message(
+      'This is the **manual fan control** mode, just set a value and the fan will stay at this power.',
+      name: 'instructionsManualTimerFanModeDescription',
+      desc: 'Instructions for fan manual mode',
+      locale: SGLLocalizations.current?.localeName,
+    );
+  }
+
+  String get instructionsManualTimerModeDescription => paramsController is BlowerParamsController ? FeedVentilationManualFormPage.instructionsManualTimerBlowerModeDescription : FeedVentilationManualFormPage.instructionsManualTimerFanModeDescription;
 
   final Param humidity;
   final Param temperature;
@@ -62,13 +73,13 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
-            data: FeedVentilationManualFormPage.instructionsManualTimerModeDescription,
+            data: widget.instructionsManualTimerModeDescription,
             styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ),
         SliderFormParam(
           key: Key('blower_value'),
-          title: 'Blower value',
+          title: 'Fixed power',
           icon: 'assets/feed_form/icon_blower.svg',
           value: _value.toDouble(),
           min: 0,
