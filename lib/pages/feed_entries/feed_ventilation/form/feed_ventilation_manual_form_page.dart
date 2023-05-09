@@ -83,7 +83,7 @@ class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFor
             BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocParamsChangedEvent(
               paramsController: widget.paramsController.copyWithValues({
                 "min": _value,
-              }) as BlowerParamsController,
+              }) as FeedVentilationParamsController,
             ));
           },
         ),

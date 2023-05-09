@@ -203,20 +203,40 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     ];
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Center(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
-        child: ToggleButtons(
-          children: <Widget>[
-            Icon(Icons.timer),
-            Icon(Icons.touch_app),
-            Icon(Icons.device_thermostat),
-            Icon(Icons.cloud),
-          ],
-          onPressed: (int index) {
-            _changeRefSource(context, box, paramsController, index);
-          },
-          isSelected: selection,
-        ),
+          child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: ToggleButtons(
+              children: <Widget>[
+                Text('Blower'),
+                Text('Fan'),
+              ],
+              isSelected: [
+                paramsController is BlowerParamsController,
+                paramsController is FanParamsController,
+              ],
+              onPressed: (int index) {
+                _changeFanMotor(context, box, paramsController, index);
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: ToggleButtons(
+              children: <Widget>[
+                Icon(Icons.timer),
+                Icon(Icons.touch_app),
+                Icon(Icons.device_thermostat),
+                Icon(Icons.cloud),
+              ],
+              onPressed: (int index) {
+                _changeRefSource(context, box, paramsController, index);
+              },
+              isSelected: selection,
+            ),
+          ),
+        ],
       )),
       Expanded(child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body))
     ]);
@@ -286,5 +306,44 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
     if (confirm ?? false) {
       BlocProvider.of<FeedVentilationFormBloc>(context).add(eventFactory[index]());
     }
+  }
+
+  void _changeFanMotor(BuildContext context, Box box, VentilationParamsController paramsController, int index) async {
+    List<String> modeNames = [
+      'Blower',
+      'Fan',
+    ];
+    List<FeedVentilationFormBlocEvent Function(bool)> eventFactory = [
+      (bool savePrevious) => FeedVentilationFormBlocBlowerModeEvent(savePrevious),
+      (bool savePrevious) => FeedVentilationFormBlocFanModeEvent(savePrevious),
+    ];
+    if (paramsController.isChanged()) {
+      bool? confirm = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Change to ${modeNames[index]}?'),
+              content: Text('You have unsaved changes, save before switching to ${modeNames[index]} configuration?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('NO'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text('YES'),
+                ),
+              ],
+            );
+          });
+      BlocProvider.of<FeedVentilationFormBloc>(context).add(eventFactory[index](confirm ?? false));
+      return;
+    }
+    BlocProvider.of<FeedVentilationFormBloc>(context).add(eventFactory[index](false));
   }
 }

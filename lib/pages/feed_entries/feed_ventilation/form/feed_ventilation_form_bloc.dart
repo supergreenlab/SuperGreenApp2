@@ -84,17 +84,19 @@ class FanParamsController extends VentilationParamsController {
   FeedVentilationParams toCardParams() {
     return FeedVentilationParams(
         FeedVentilationParamsValues(
-            fanMin: min.value,
-            fanMax: max.value,
-            fanRefMin: refMin.value,
-            fanRefMax: refMax.value,
-            fanRefSource: refSource.value,),
+          fanMin: min.value,
+          fanMax: max.value,
+          fanRefMin: refMin.value,
+          fanRefMax: refMax.value,
+          fanRefSource: refSource.value,
+        ),
         FeedVentilationParamsValues(
-            fanMin: min.initialValue,
-            fanMax: max.initialValue,
-            fanRefMin: refMin.initialValue,
-            fanRefMax: refMax.initialValue,
-            fanRefSource: refSource.initialValue,));
+          fanMin: min.initialValue,
+          fanMax: max.initialValue,
+          fanRefMin: refMin.initialValue,
+          fanRefMax: refMax.initialValue,
+          fanRefSource: refSource.initialValue,
+        ));
   }
 }
 
@@ -120,21 +122,23 @@ class BlowerParamsController extends VentilationParamsController {
   FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
       BlowerParamsController(params: params ?? this.params);
 
-        @override
+  @override
   FeedVentilationParams toCardParams() {
     return FeedVentilationParams(
         FeedVentilationParamsValues(
-            blowerMin: min.value,
-            blowerMax: max.value,
-            blowerRefMin: refMin.value,
-            blowerRefMax: refMax.value,
-            blowerRefSource: refSource.value,),
+          blowerMin: min.value,
+          blowerMax: max.value,
+          blowerRefMin: refMin.value,
+          blowerRefMax: refMax.value,
+          blowerRefSource: refSource.value,
+        ),
         FeedVentilationParamsValues(
-            blowerMin: min.initialValue,
-            blowerMax: max.initialValue,
-            blowerRefMin: refMin.initialValue,
-            blowerRefMax: refMax.initialValue,
-            blowerRefSource: refSource.initialValue,));
+          blowerMin: min.initialValue,
+          blowerMax: max.initialValue,
+          blowerRefMin: refMin.initialValue,
+          blowerRefMax: refMax.initialValue,
+          blowerRefSource: refSource.initialValue,
+        ));
   }
 }
 
@@ -154,15 +158,17 @@ class LegacyBlowerParamsController extends FeedVentilationParamsController {
   FeedVentilationParamsController copyWith({Map<String, ParamController>? params}) =>
       LegacyBlowerParamsController(params: params ?? this.params);
 
-        @override
+  @override
   FeedVentilationParams toCardParams() {
     return FeedVentilationParams(
         FeedVentilationParamsValues(
-            blowerDay: blowerDay.value,
-            blowerNight: blowerNight.value,),
+          blowerDay: blowerDay.value,
+          blowerNight: blowerNight.value,
+        ),
         FeedVentilationParamsValues(
-            blowerDay: blowerDay.initialValue,
-            blowerNight: blowerNight.initialValue,));
+          blowerDay: blowerDay.initialValue,
+          blowerNight: blowerNight.initialValue,
+        ));
   }
 }
 
@@ -199,13 +205,21 @@ class FeedVentilationFormBlocEventCancelEvent extends FeedVentilationFormBlocEve
 }
 
 class FeedVentilationFormBlocFanModeEvent extends FeedVentilationFormBlocEvent {
+  final bool savePrevious;
+
+  FeedVentilationFormBlocFanModeEvent(this.savePrevious);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [savePrevious];
 }
 
 class FeedVentilationFormBlocBlowerModeEvent extends FeedVentilationFormBlocEvent {
+  final bool savePrevious;
+
+  FeedVentilationFormBlocBlowerModeEvent(this.savePrevious);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [savePrevious];
 }
 
 abstract class FeedVentilationFormBlocState extends Equatable {}
@@ -318,25 +332,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
 
       yield loadedState();
     } else if (event is FeedVentilationFormBlocEventCreate) {
-      final db = RelDB.get();
-      Box box = await db.plantsDAO.getBox(args.box.id);
-      if (box.device == null) {
-        return;
-      }
-      yield FeedVentilationFormBlocStateLoading('Saving..');
-      List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
-      for (int i = 0; i < plants.length; ++i) {
-        PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
-        if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
-          continue;
-        }
-        await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
-          type: 'FE_VENTILATION',
-          feed: plants[i].feed,
-          date: DateTime.now(),
-          params: Value(paramsController.toCardParams().toJSON()),
-        ));
-      }
+      yield* saveParamsController();
       yield FeedVentilationFormBlocStateDone();
     } else if (event is FeedVentilationFormBlocEventCancelEvent) {
       final db = RelDB.get();
@@ -350,9 +346,23 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       } catch (e) {}
       yield FeedVentilationFormBlocStateDone();
     } else if (event is FeedVentilationFormBlocBlowerModeEvent) {
+      if (event.savePrevious) {
+        yield* saveParamsController();
+      } else if (paramsController.isChanged()) {
+        try {
+          await cancelParams();
+        } catch (e) {}
+      }
       paramsController = await BlowerParamsController.load(device!, box);
       yield loadedState();
     } else if (event is FeedVentilationFormBlocFanModeEvent) {
+      if (event.savePrevious) {
+        yield* saveParamsController();
+      } else if (paramsController.isChanged()) {
+        try {
+          await cancelParams();
+        } catch (e) {}
+      }
       paramsController = await FanParamsController.load(device!, box);
       yield loadedState();
     }
@@ -364,6 +374,28 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
 
   Future<void> cancelParams() async {
     paramsController = await paramsController.cancelParams(device!) as FeedVentilationParamsController;
+  }
+
+  Stream<FeedVentilationFormBlocState> saveParamsController() async* {
+    final db = RelDB.get();
+    Box box = await db.plantsDAO.getBox(args.box.id);
+    if (box.device == null) {
+      return;
+    }
+    yield FeedVentilationFormBlocStateLoading('Saving..');
+    List<Plant> plants = await db.plantsDAO.getPlantsInBox(args.box.id);
+    for (int i = 0; i < plants.length; ++i) {
+      PlantSettings plantSettings = PlantSettings.fromJSON(plants[i].settings);
+      if (plantSettings.dryingStart != null || plantSettings.curingStart != null) {
+        continue;
+      }
+      await FeedEntryHelper.addFeedEntry(FeedEntriesCompanion.insert(
+        type: 'FE_VENTILATION',
+        feed: plants[i].feed,
+        date: DateTime.now(),
+        params: Value(paramsController.toCardParams().toJSON()),
+      ));
+    }
   }
 
   FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(
