@@ -59,15 +59,18 @@ class FeedVentilationManualFormPage extends TraceableStatefulWidget {
 
 class _FeedVentilationManualFormPageState extends State<FeedVentilationManualFormPage> {
   int _value = 0;
+  VentilationParamsController? paramsController;
 
-  @override
-  void didChangeDependencies() {
-    _value = widget.paramsController.min.value;
-    super.didChangeDependencies();
+  void refreshParamsController() {
+    _value = paramsController!.min.value;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.paramsController != paramsController) {
+      paramsController = widget.paramsController;
+      this.refreshParamsController();
+    }
     return ListView(
       children: [
         Padding(

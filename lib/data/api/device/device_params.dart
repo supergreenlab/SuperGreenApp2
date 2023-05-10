@@ -89,9 +89,12 @@ abstract class ParamsController extends Equatable {
     List<StreamSubscription<Param>> subscriptions = params.keys.map<StreamSubscription<Param>>((String key) {
       ParamController p = params[key]!;
       return p.listenParam(device, (p0) {
-        p = p.copyWith(param: p0, value: p0?.ivalue);
+        if (p0!.ivalue == p.ivalue) {
+          return;
+        }
+        p = p.copyWith(param: p0, value: p0.ivalue);
         params[key] = p;
-        fn(this.copyWith(params: {...params}));
+        fn(this.copyWith(params: {...this.params}));
       });
     }).toList();
     return subscriptions;

@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
@@ -63,18 +64,21 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
   int _max = 0;
   int _refMin = 0;
   int _refMax = 0;
+  VentilationParamsController? paramsController;
 
-  @override
-  void didChangeDependencies() {
-    _min = widget.paramsController.min.value;
-    _max = widget.paramsController.max.value;
-    _refMin = widget.paramsController.refMin.value;
-    _refMax = widget.paramsController.refMax.value;
-    super.didChangeDependencies();
+  void refreshParamsController() {
+    _min = paramsController!.min.value;
+    _max = paramsController!.max.value;
+    _refMin = paramsController!.refMin.value;
+    _refMax = paramsController!.refMax.value;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.paramsController != paramsController) {
+      paramsController = widget.paramsController;
+      this.refreshParamsController();
+    }
     String unit = '%';
     return ListView(
       children: [

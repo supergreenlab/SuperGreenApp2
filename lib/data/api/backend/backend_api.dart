@@ -67,7 +67,7 @@ class BackendAPI {
 
   void initAndroidDevUrls() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if ((await deviceInfo.androidInfo).isPhysicalDevice) {
+    if (true || (await deviceInfo.androidInfo).isPhysicalDevice) {
       bool local = true;
       serverHost = local ? 'http://192.168.1.49:8080' : 'https://devapi2.supergreenlab.com';
       websocketServerHost = local ? 'ws://192.168.1.49:8080' : 'wss://devapi2.supergreenlab.com';

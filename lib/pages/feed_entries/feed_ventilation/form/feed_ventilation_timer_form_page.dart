@@ -60,16 +60,19 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
 class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormPage> {
   int _day = 0;
   int _night = 0;
+  VentilationParamsController? paramsController;
 
-  @override
-  void initState() {
-    _day = widget.paramsController.max.value;
-    _night = widget.paramsController.min.value;
-    super.initState();
+  void refreshParamsController() {
+    _day = paramsController!.max.value;
+    _night = paramsController!.min.value;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.paramsController != paramsController) {
+      paramsController = widget.paramsController;
+      this.refreshParamsController();
+    }
     return ListView(
       children: [
         Padding(

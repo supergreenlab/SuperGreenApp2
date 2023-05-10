@@ -17,6 +17,7 @@
  */
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/logger/logger.dart';
@@ -181,6 +182,15 @@ class FeedVentilationFormBlocEventInit extends FeedVentilationFormBlocEvent {
   List<Object> get props => [];
 }
 
+class FeedVentilationFormBlocEventUpdate extends FeedVentilationFormBlocEvent {
+  final int rand = Random().nextInt(1000000000);
+
+  FeedVentilationFormBlocEventUpdate();
+
+  @override
+  List<Object> get props => [rand];
+}
+
 class FeedVentilationFormBlocEventCreate extends FeedVentilationFormBlocEvent {
   FeedVentilationFormBlocEventCreate();
 
@@ -243,6 +253,8 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
 
   final FeedVentilationParamsController paramsController;
 
+  final int rand = Random().nextInt(1000000000);
+
   FeedVentilationFormBlocStateLoaded({
     this.device,
     required this.box,
@@ -258,6 +270,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
         temperature,
         humidity,
         paramsController,
+        rand,
       ];
 }
 
@@ -371,6 +384,8 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       }
       paramsController = await FanParamsController.load(device!, box);
       yield loadedState();
+    } else if (event is FeedVentilationFormBlocEventUpdate) {
+      yield loadedState();
     }
   }
 
@@ -383,18 +398,24 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   }
 
   void onTemperatureChange(Param temperature) {
+    if (this.temperature.ivalue == temperature.ivalue) {
+      return;
+    }
     this.temperature = temperature;
-    this.loadedState();
+    this.add(FeedVentilationFormBlocEventUpdate());
   }
 
   void onHumidityChange(Param humidity) {
+    if (this.humidity.ivalue == humidity.ivalue) {
+      return;
+    }
     this.humidity = humidity;
-    this.loadedState();
+    this.add(FeedVentilationFormBlocEventUpdate());
   }
 
   void onParamsChange(ParamsController paramsController) {
     this.paramsController = paramsController as FeedVentilationParamsController;
-    this.loadedState();
+    this.add(FeedVentilationFormBlocEventUpdate());
   }
 
   Stream<FeedVentilationFormBlocState> saveParamsController() async* {

@@ -64,18 +64,21 @@ class _FeedVentilationTemperatureFormPageState extends State<FeedVentilationTemp
   int _max = 0;
   int _refMin = 0;
   int _refMax = 0;
+  VentilationParamsController? paramsController;
 
-  @override
-  void didChangeDependencies() {
-    _min = widget.paramsController.min.value;
-    _max = widget.paramsController.max.value;
-    _refMin = widget.paramsController.refMin.value;
-    _refMax = widget.paramsController.refMax.value;
-    super.didChangeDependencies();
+  void refreshParamsController() {
+    _min = paramsController!.min.value;
+    _max = paramsController!.max.value;
+    _refMin = paramsController!.refMin.value;
+    _refMax = paramsController!.refMax.value;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.paramsController != paramsController) {
+      paramsController = widget.paramsController;
+      this.refreshParamsController();
+    }
     String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
     return ListView(
       children: [
