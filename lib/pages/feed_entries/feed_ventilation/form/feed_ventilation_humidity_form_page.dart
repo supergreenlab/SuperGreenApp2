@@ -64,21 +64,24 @@ class _FeedVentilationHumidityFormPageState extends State<FeedVentilationHumidit
   int _max = 0;
   int _refMin = 0;
   int _refMax = 0;
-  VentilationParamsController? paramsController;
+  int? _previousHashCode;
 
   void refreshParamsController() {
-    _min = paramsController!.min.value;
-    _max = paramsController!.max.value;
-    _refMin = paramsController!.refMin.value;
-    _refMax = paramsController!.refMax.value;
+    if (widget.paramsController.hashCode == this._previousHashCode) { // WTF is there anything better, keeping the object reference would change that reference without assignment oO
+      return;
+    }
+    setState(() {
+      this._previousHashCode = widget.paramsController.hashCode;
+      _min = widget.paramsController.min.value;
+      _max = widget.paramsController.max.value;
+      _refMin = widget.paramsController.refMin.value;
+      _refMax = widget.paramsController.refMax.value;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.paramsController != paramsController) {
-      paramsController = widget.paramsController;
-      this.refreshParamsController();
-    }
+    this.refreshParamsController();
     String unit = '%';
     return ListView(
       children: [

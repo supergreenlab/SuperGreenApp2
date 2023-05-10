@@ -60,19 +60,22 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
 class _FeedVentilationTimerFormPageState extends State<FeedVentilationTimerFormPage> {
   int _day = 0;
   int _night = 0;
-  VentilationParamsController? paramsController;
+  int? _previousHashCode;
 
   void refreshParamsController() {
-    _day = paramsController!.max.value;
-    _night = paramsController!.min.value;
+    if (widget.paramsController.hashCode == this._previousHashCode) { // WTF is there anything better, keeping the object reference would change that reference without assignment oO
+      return;
+    }
+    setState(() {
+      this._previousHashCode = widget.paramsController.hashCode;
+      _day = widget.paramsController.max.value;
+      _night = widget.paramsController.min.value;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.paramsController != paramsController) {
-      paramsController = widget.paramsController;
-      this.refreshParamsController();
-    }
+    this.refreshParamsController();
     return ListView(
       children: [
         Padding(
