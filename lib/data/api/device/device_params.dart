@@ -37,13 +37,14 @@ class ParamController extends Equatable {
       ParamController(param ?? this.param, value ?? this.value, initialValue ?? this.initialValue);
 
   Future<ParamController> refreshParam(Device device) async {
-    return this.copyWith(param: await DeviceHelper.refreshIntParam(device, param));
+    Param param = await DeviceHelper.refreshIntParam(device, this.param);
+    return this.copyWith(param: param, value: param.ivalue, initialValue: param.ivalue);
   }
 
   Future<ParamController> syncParam(Device device) async {
     if (value != param.ivalue) {
       Param p = await DeviceHelper.updateIntParam(device, param, value);
-      return this.copyWith(param: p, value: p.ivalue);
+      return this.copyWith(param: p, value: p.ivalue, initialValue: param.ivalue);
     }
     return this;
   }
@@ -51,7 +52,7 @@ class ParamController extends Equatable {
   Future<ParamController> cancelParam(Device device) async {
     if (initialValue != param.ivalue) {
       Param p = await DeviceHelper.updateIntParam(device, param, initialValue);
-      return this.copyWith(param: p);
+      return this.copyWith(param: p, value: p.ivalue);
     }
     return this;
   }

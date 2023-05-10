@@ -71,7 +71,7 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
               body = FullscreenLoading(title: 'Loading..');
             } else if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: state.text);
-            } else if (state is FeedVentilationFormBlocStateLoaded && state.noDevice == true) {
+            } else if (state is FeedVentilationFormBlocStateLoaded && state.device == null) {
               body = _renderNoDevice(context, state);
             } else if (state is FeedVentilationFormBlocStateLoaded) {
               Widget content = _renderParams(context, state);
@@ -118,12 +118,15 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                 onOK: () {
                   BlocProvider.of<FeedVentilationFormBloc>(context).add(FeedVentilationFormBlocEventCreate());
                 },
+                onSettings: state is FeedVentilationFormBlocStateLoaded ? () {
+                  BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToMotorPortEvent((state as FeedVentilationFormBlocStateLoaded).device!, null));
+                } : null,
                 body: WillPopScope(
                   onWillPop: () async {
                     if (_reachable == false && changed) {
                       return false;
                     }
-                    if (state is FeedVentilationFormBlocStateLoaded && state.noDevice == true) {
+                    if (state is FeedVentilationFormBlocStateLoaded && state.device == null) {
                       return true;
                     }
                     if (changed) {

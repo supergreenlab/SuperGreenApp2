@@ -25,6 +25,7 @@ class FeedFormLayout extends StatelessWidget {
   final bool changed;
   final void Function()? onOK;
   final void Function()? onCancel;
+  final void Function()? onSettings;
   final String title;
   final bool hideBackButton;
   final double fontSize;
@@ -35,6 +36,7 @@ class FeedFormLayout extends StatelessWidget {
       required this.onOK,
       required this.title,
       this.onCancel,
+      this.onSettings,
       this.valid = true,
       this.changed = false,
       this.hideBackButton = false,
@@ -44,6 +46,12 @@ class FeedFormLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> actions = [];
+    if (this.onSettings != null) {
+      actions.add(IconButton(
+        icon: Icon(Icons.settings, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
+        onPressed: onSettings,
+      ));
+    }
     if (this.onOK != null) {
       actions.add(IconButton(
         icon: Icon(Icons.check, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),

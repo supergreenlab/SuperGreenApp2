@@ -235,7 +235,7 @@ class FeedVentilationFormBlocStateNoDevice extends FeedVentilationFormBlocState 
 }
 
 class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
-  final bool noDevice;
+  final Device? device;
   final Box box;
 
   late final Param temperature;
@@ -244,7 +244,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
   final FeedVentilationParamsController paramsController;
 
   FeedVentilationFormBlocStateLoaded({
-    this.noDevice = false,
+    this.device,
     required this.box,
     required this.temperature,
     required this.humidity,
@@ -253,7 +253,7 @@ class FeedVentilationFormBlocStateLoaded extends FeedVentilationFormBlocState {
 
   @override
   List<Object?> get props => [
-        noDevice,
+        device,
         box,
         temperature,
         humidity,
@@ -282,9 +282,12 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   late Box box;
 
   late Param temperature;
+  late StreamSubscription<Param> temperatureListener;
   late Param humidity;
+  late StreamSubscription<Param> humidityListener;
 
   late FeedVentilationParamsController paramsController;
+  late List<StreamSubscription<Param>> paramsControllerListeners;
 
   FeedVentilationFormBloc(this.args) : super(FeedVentilationFormBlocStateInit()) {
     add(FeedVentilationFormBlocEventInit());
@@ -312,11 +315,14 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
 
       try {
         paramsController = await LegacyBlowerParamsController.load(device!, box);
-        yield loadedState();
       } catch (e) {
-        paramsController = await BlowerParamsController.load(device!, box);
-        yield loadedState();
+        paramsController = await BlowerParamsController.load(device!, box);        
       }
+      paramsController = await paramsController.refreshParams(device!) as FeedVentilationParamsController;
+      yield loadedState();
+      paramsControllerListeners = paramsController.listenParams(device!, onParamsChange);
+      temperatureListener = RelDB.get().devicesDAO.watchParam(device!.id, temperature.key).listen(onTemperatureChange);
+      humidityListener = RelDB.get().devicesDAO.watchParam(device!.id, humidity.key).listen(onHumidityChange);
     } else if (event is FeedVentilationFormBlocParamsChangedEvent) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(args.box.id);
@@ -376,6 +382,21 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     paramsController = await paramsController.cancelParams(device!) as FeedVentilationParamsController;
   }
 
+  void onTemperatureChange(Param temperature) {
+    this.temperature = temperature;
+    this.loadedState();
+  }
+
+  void onHumidityChange(Param humidity) {
+    this.humidity = humidity;
+    this.loadedState();
+  }
+
+  void onParamsChange(ParamsController paramsController) {
+    this.paramsController = paramsController as FeedVentilationParamsController;
+    this.loadedState();
+  }
+
   Stream<FeedVentilationFormBlocState> saveParamsController() async* {
     final db = RelDB.get();
     Box box = await db.plantsDAO.getBox(args.box.id);
@@ -398,10 +419,27 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     }
   }
 
+  @override
+  Future<void> close() async {
+    if (humidityListener != null) {
+      await humidityListener.cancel();
+    }
+    if (temperatureListener != null) {
+      await temperatureListener.cancel();
+    }
+    if (paramsController != null) {
+      await paramsController.closeSubscriptions(paramsControllerListeners);
+    }
+    return super.close();
+  }
+
   FeedVentilationFormBlocStateLoaded loadedState() => FeedVentilationFormBlocStateLoaded(
+        device: device,
         box: box,
         temperature: temperature,
         humidity: humidity,
         paramsController: paramsController,
       );
+
+  
 }
