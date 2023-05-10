@@ -39,7 +39,7 @@ class FeedVentilationHumidityFormPage extends TraceableStatefulWidget {
 
   static String get instructionsFanHumidityModeDescription {
     return Intl.message(
-      '''This is the **Humidity based fan control**, in this mode the fan is **in sync with the box humidity sensor**.''',
+      '''This is the **Humidity based fan control**, in this mode the fan is **in sync with the box humidity sensor**.\n\nMake sure your motor port is configured in the settings.''',
       name: 'instructionsFanHumidityModeDescription',
       desc: 'Instructions for fan humidity mode',
       locale: SGLLocalizations.current?.localeName,

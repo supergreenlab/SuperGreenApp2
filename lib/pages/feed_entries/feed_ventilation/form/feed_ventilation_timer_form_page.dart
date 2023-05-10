@@ -38,7 +38,7 @@ class FeedVentilationTimerFormPage extends TraceableStatefulWidget {
 
   static String get instructionsFanTimerModeDescription {
     return Intl.message(
-      '''This is the **timer based fan control**, in this mode the fan is **in sync with the light timer**. Perfect if the box doesn't have a temperature sensor.\n\nEx: when the timer says 100% (which means all lights are on), it will set the fan power at the **fan day** value below.''',
+      '''This is the **timer based fan control**, in this mode the fan is **in sync with the light timer**. Perfect if the box doesn't have a temperature sensor.\n\nEx: when the timer says 100% (which means all lights are on), it will set the fan power at the **fan day** value below.\n\nMake sure your motor port is configured in the settings.''',
       name: 'instructionsFanTimerModeDescription',
       desc: 'Instructions for fan timer mode',
       locale: SGLLocalizations.current?.localeName,

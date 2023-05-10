@@ -48,7 +48,7 @@ class FeedFormLayout extends StatelessWidget {
     List<Widget> actions = [];
     if (this.onSettings != null) {
       actions.add(IconButton(
-        icon: Icon(Icons.settings, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
+        icon: Icon(Icons.settings, color: Color(0xffffffff), size: 40),
         onPressed: onSettings,
       ));
     }

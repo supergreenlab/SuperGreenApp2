@@ -40,7 +40,7 @@ class FeedVentilationTemperatureFormPage extends TraceableStatefulWidget {
 
   static String get instructionsFanTemperatureModeDescription {
     return Intl.message(
-      '''This is the **Temperature based fan control**, in this mode the fan is **in sync with the box temperature sensor**.''',
+      '''This is the **Temperature based fan control**, in this mode the fan is **in sync with the box temperature sensor**.\n\nMake sure your motor port is configured in the settings.''',
       name: 'instructionsFanTemperatureModeDescription',
       desc: 'Instructions for fan temperature mode',
       locale: SGLLocalizations.current?.localeName,

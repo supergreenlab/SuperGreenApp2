@@ -38,7 +38,7 @@ class FeedVentilationManualFormPage extends TraceableStatefulWidget {
 
     static String get instructionsManualTimerFanModeDescription {
     return Intl.message(
-      'This is the **manual fan control** mode, just set a value and the fan will stay at this power.',
+      'This is the **manual fan control** mode, just set a value and the fan will stay at this power.\n\nMake sure your motor port is configured in the settings.',
       name: 'instructionsManualTimerFanModeDescription',
       desc: 'Instructions for fan manual mode',
       locale: SGLLocalizations.current?.localeName,
