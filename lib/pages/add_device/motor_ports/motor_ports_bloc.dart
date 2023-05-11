@@ -111,7 +111,7 @@ class MotorPortBloc extends LegacyBloc<MotorPortBlocEvent, MotorPortBlocState> {
 
   StreamSubscription<Device>? deviceStream;
   late Device device;
-  late Config? config;
+  Config? config;
 
   late List<MotorSourceParamsController> sources;
   late List<int> values;

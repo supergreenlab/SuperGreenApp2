@@ -24,6 +24,7 @@ import 'package:super_green_app/pages/add_device/motor_ports/motor_ports_bloc.da
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class MotorPortPage extends TraceableStatefulWidget {
   @override
@@ -71,14 +72,22 @@ class _MotorPortPageState extends State<MotorPortPage> {
 
   Widget _renderMissingConfig(BuildContext context, MotorPortBlocStateMissingConfig state) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Looks like you just upgraded the app, you need to refresh you controller\'s parameters:'),
-        InkWell(
-          child: Text('Refresh parameters'),
-          onTap: () {
+        Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Text(
+            'Looks like you just upgraded the app, you need to refresh you controller\'s parameters. Make sure you are connected to the same wifi as the controller, then press the button below.',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        GreenButton(
+          title: 'REFRESH PARAMETERS',
+          onPressed: () {
             BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToRefreshParameters(state.device));
           },
-        )
+        ),
       ],
     );
   }
@@ -88,19 +97,22 @@ class _MotorPortPageState extends State<MotorPortPage> {
         children: state.sources.map((source) {
       int i = state.sources.indexOf(source);
       return FeedFormParamLayout(
-        title: 'Motor #${i+1}',
+        title: 'Motor #${i + 1}',
         icon: 'assets/settings/icon_motor.svg',
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
           child: DropdownButton<int>(
-            
             value: source.source.ivalue,
-            onChanged: loading ? null : (int? value) {
-              setState(() {
-                loading = true;
-              });
-              BlocProvider.of<MotorPortBloc>(context).add(MotorPortBlocEventSourceUpdated(source.copyWith(params: {"source": source.source.copyWith(value: value!)}) as MotorSourceParamsController));
-            },
+            onChanged: loading
+                ? null
+                : (int? value) {
+                    setState(() {
+                      loading = true;
+                    });
+                    BlocProvider.of<MotorPortBloc>(context).add(MotorPortBlocEventSourceUpdated(
+                        source.copyWith(params: {"source": source.source.copyWith(value: value!)})
+                            as MotorSourceParamsController));
+                  },
             items: state.helpers.map<DropdownMenuItem<int>>((h) {
               int j = state.helpers.indexOf(h);
               return DropdownMenuItem(
