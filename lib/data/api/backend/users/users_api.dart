@@ -70,6 +70,20 @@ class UsersAPI {
     }
   }
 
+  Future deleteUser(String nickname, String password) async {
+    Response resp = await BackendAPI().apiClient.delete(Uri.parse('${BackendAPI().serverHost}/user'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JsonEncoder().convert({
+          'nickname': nickname,
+          'password': password,
+        }));
+    if (resp.statusCode ~/ 100 != 2) {
+      Logger.throwError('CreateUser failed with error: ${resp.body}');
+    }
+  }
+
   Future uploadProfilePic(File file) async {
     Response resp = await BackendAPI().apiClient.post(
       Uri.parse('${BackendAPI().serverHost}/profilePicUploadURL'),

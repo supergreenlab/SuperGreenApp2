@@ -35,6 +35,7 @@ import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:super_green_app/widgets/red_button.dart';
 
 class SettingsAuthPage extends TraceableStatefulWidget {
   @override
@@ -43,6 +44,10 @@ class SettingsAuthPage extends TraceableStatefulWidget {
 
 class _SettingsAuthPageState extends State<SettingsAuthPage> {
   bool _syncOverGSM = false;
+
+  // Account delete popup
+  TextEditingController nickname = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -115,67 +120,75 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
       pic = BackendAPI().feedsAPI.absoluteFileURL(pic);
     }
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-      Center(
-          child: Column(children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
-          child: InkWell(
-              onTap: () {
-                _checkPermission().then((granted) {
-                  if (!granted) return;
-                  _buildPicker(context);
-                });
-              },
-              child: Column(
-                children: [
-                  UserAvatar(icon: pic, size: 150),
-                  Text(
-                    "Tap to change",
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                ],
-              )),
-        ),
-        Text(
-          'Already connected to your',
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
-          textAlign: TextAlign.center,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Text('SGL ACCOUNT',
-              style: TextStyle(fontSize: 45, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
-        ),
-        state.user != null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Connected as '),
-                  Text(state.user!.nickname, style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              )
-            : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+      Expanded(child: Container()),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 20.0),
+        child: InkWell(
+            onTap: () {
+              _checkPermission().then((granted) {
+                if (!granted) return;
+                _buildPicker(context);
+              });
+            },
+            child: Column(
+              children: [
+                UserAvatar(icon: pic, size: 150),
+                Text(
+                  "Tap to change",
+                  style: TextStyle(color: Colors.blue),
                 ),
-                Text('Loading user data..')
-              ]),
-        _renderOptionCheckbx(context, 'Sync over mobile data too', (bool? newValue) {
-          setState(() {
-            _syncOverGSM = newValue ?? false;
-            BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlocEventSetSyncedOverGSM(_syncOverGSM));
-          });
-        }, _syncOverGSM == true),
-        !state.notificationEnabled
-            ? GreenButton(
-                title: 'ACTIVATE NOTIFICATION',
-                onPressed: () {
-                  BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
-                },
-              )
-            : Container(),
-      ])),
+              ],
+            )),
+      ),
+      Text(
+        'Already connected to your',
+        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+        textAlign: TextAlign.center,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child:
+            Text('SGL ACCOUNT', style: TextStyle(fontSize: 45, fontWeight: FontWeight.w200, color: Color(0xff3bb30b))),
+      ),
+      state.user != null
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Connected as '),
+                Text(state.user!.nickname, style: TextStyle(fontWeight: FontWeight.bold)),
+              ],
+            )
+          : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+              ),
+              Text('Loading user data..')
+            ]),
+      _renderOptionCheckbx(context, 'Sync over mobile data too', (bool? newValue) {
+        setState(() {
+          _syncOverGSM = newValue ?? false;
+          BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlocEventSetSyncedOverGSM(_syncOverGSM));
+        });
+      }, _syncOverGSM == true),
+      !state.notificationEnabled
+          ? GreenButton(
+              title: 'ACTIVATE NOTIFICATION',
+              onPressed: () {
+                BlocProvider.of<NotificationsBloc>(context).add(NotificationsBlocEventRequestPermission());
+              },
+            )
+          : Container(),
+      Expanded(child: Container()),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: InkWell(
+            onTap: _requestDelete,
+            child: Text(
+              'Request account deletion',
+              style: TextStyle(decoration: TextDecoration.underline, color: Color(0xffff0000)),
+            )),
+      ),
     ]);
   }
 
@@ -272,6 +285,63 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
         );
       },
     );
+  }
+
+  void _requestDelete() {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 80.0, left: 16, right: 16,),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Please enter your nickname and password to confirm.\nAll your account data will be totally deleted after a quick verification.\nAll data locally stored by the SGL app will be removed too.',
+                    style: TextStyle(
+                      fontSize: 17,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text('Username:'),
+                  ),
+                  TextField(controller: nickname,),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text('Password:'),
+                  ),
+                  TextField(controller: password, obscureText: true,),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        RedButton(
+                          title: 'Cancel',
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: GreenButton(
+                            title: 'Confirm delete',
+                            onPressed: () {
+                              BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlockEventRequestDelete(nickname.text, password.text));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   Future<bool> _checkPermission() async {

@@ -57,6 +57,16 @@ class SettingsAuthBlocEventUpdatePic extends SettingsAuthBlocEvent {
   List<Object> get props => [file];
 }
 
+class SettingsAuthBlockEventRequestDelete extends SettingsAuthBlocEvent {
+  final String nickname;
+  final String password;
+
+  SettingsAuthBlockEventRequestDelete(this.nickname, this.password);
+
+  @override
+  List<Object?> get props => [nickname, password,];
+}
+
 abstract class SettingsAuthBlocState extends Equatable {}
 
 class SettingsAuthBlocStateInit extends SettingsAuthBlocState {
@@ -141,6 +151,8 @@ class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlo
 
       await BackendAPI().usersAPI.uploadProfilePic(tmpDest);
       add(SettingsAuthBlocEventInit());
+    } else if (event is SettingsAuthBlockEventRequestDelete) {
+      await BackendAPI().usersAPI.deleteUser(event.nickname, event.password);
     }
   }
 }
