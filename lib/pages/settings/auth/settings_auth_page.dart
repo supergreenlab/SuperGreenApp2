@@ -290,9 +290,11 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
         isScrollControlled: true,
         builder: (BuildContext context) {
           return BlocProvider(
-          create: (context) => DeleteAccountBloc(),
-          child: DeleteAccountPage(),
-        );
+            create: (context) => DeleteAccountBloc(),
+            child: DeleteAccountPage(onDone: () {
+              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+            }),
+          );
         });
   }
 

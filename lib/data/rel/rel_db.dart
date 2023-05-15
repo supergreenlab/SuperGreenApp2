@@ -78,7 +78,7 @@ class RelDB extends _$RelDB {
   @override
   int get schemaVersion => 15;
 
-  Future<void> reconnect() async {
+  void reconnect() {
     _instance = RelDB();
   }
 
