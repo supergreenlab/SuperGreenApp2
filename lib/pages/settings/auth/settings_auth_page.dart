@@ -30,12 +30,13 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
 import 'package:super_green_app/pages/image_picker/picker_widget.dart';
+import 'package:super_green_app/pages/settings/auth/delete_account/delete_account_bloc.dart';
+import 'package:super_green_app/pages/settings/auth/delete_account/delete_account_page.dart';
 import 'package:super_green_app/pages/settings/auth/settings_auth_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
-import 'package:super_green_app/widgets/red_button.dart';
 
 class SettingsAuthPage extends TraceableStatefulWidget {
   @override
@@ -44,10 +45,6 @@ class SettingsAuthPage extends TraceableStatefulWidget {
 
 class _SettingsAuthPageState extends State<SettingsAuthPage> {
   bool _syncOverGSM = false;
-
-  // Account delete popup
-  TextEditingController nickname = TextEditingController();
-  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -292,55 +289,10 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
         context: context,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 80.0, left: 16, right: 16,),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Please enter your nickname and password to confirm.\nAll your account data will be totally deleted after a quick verification.\nAll data locally stored by the SGL app will be removed too.',
-                    style: TextStyle(
-                      fontSize: 17,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Text('Username:'),
-                  ),
-                  TextField(controller: nickname,),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Text('Password:'),
-                  ),
-                  TextField(controller: password, obscureText: true,),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        RedButton(
-                          title: 'Cancel',
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: GreenButton(
-                            title: 'Confirm delete',
-                            onPressed: () {
-                              BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlockEventRequestDelete(nickname.text, password.text));
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
+          return BlocProvider(
+          create: (context) => DeleteAccountBloc(),
+          child: DeleteAccountPage(),
+        );
         });
   }
 
