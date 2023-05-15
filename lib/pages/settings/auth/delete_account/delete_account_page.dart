@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/delete_account/delete_account_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -32,11 +33,18 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
   TextEditingController nickname = TextEditingController();
   TextEditingController password = TextEditingController();
   bool deleteLocalData = false;
+  bool done = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<DeleteAccountBloc, DeleteAccountBlocState>(
-        listener: (BuildContext context, DeleteAccountBlocState state) {},
+        listener: (BuildContext context, DeleteAccountBlocState state) {
+          if (state is DeleteAccountBlocStateDone) {
+            setState(() {
+              done = true;
+            });
+          }
+        },
         child: BlocBuilder<DeleteAccountBloc, DeleteAccountBlocState>(
             bloc: BlocProvider.of<DeleteAccountBloc>(context),
             builder: (BuildContext context, DeleteAccountBlocState state) {
@@ -52,9 +60,17 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
   }
 
   Widget _renderDone(BuildContext context, DeleteAccountBlocStateDone state) {
-    return Fullscreen(
-      title: 'Done!',
-      child: Icon(Icons.check, color: Colors.green),
+    return WillPopScope(
+      onWillPop: () async {
+        if (done) {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+        }
+        return true;
+      },
+      child: Fullscreen(
+        title: 'Done!',
+        child: Icon(Icons.check, color: Colors.green),
+      ),
     );
   }
 

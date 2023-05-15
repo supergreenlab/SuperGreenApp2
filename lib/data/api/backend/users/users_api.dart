@@ -74,13 +74,14 @@ class UsersAPI {
     Response resp = await BackendAPI().apiClient.delete(Uri.parse('${BackendAPI().serverHost}/user'),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
         },
         body: JsonEncoder().convert({
-          'nickname': nickname,
+          'handle': nickname,
           'password': password,
         }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('CreateUser failed with error: ${resp.body}');
+      Logger.throwError('DeleteUser failed with error: ${resp.body}');
     }
   }
 

@@ -78,6 +78,10 @@ class RelDB extends _$RelDB {
   @override
   int get schemaVersion => 15;
 
+  Future<void> reconnect() async {
+    _instance = RelDB();
+  }
+
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
         return m.createAll();

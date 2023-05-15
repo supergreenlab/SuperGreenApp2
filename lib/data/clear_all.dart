@@ -52,11 +52,12 @@ class ClearAll {
       yield ClearAllState(++i, feedMedias.length * 2);
     }
 
-    String dbFile = '${AppDB().documentPath}/db.sqlite';
     try {
-      await File(FeedMedias.makeAbsoluteFilePath(dbFile)).delete();
+      await RelDB.get().close();
+      await File(FeedMedias.makeAbsoluteFilePath('db.sqlite')).delete();
+      RelDB.get().reconnect();
     } catch (e, trace) {
-      Logger.logError(e, trace, data: {"filePath": dbFile});
+      Logger.logError(e, trace, data: {"filePath": 'db.sqlite'});
     }
     try {
       await AppDB().clearData();
