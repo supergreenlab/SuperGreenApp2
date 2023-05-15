@@ -246,6 +246,10 @@ class FeedsDAO extends DatabaseAccessor<RelDB> with _$FeedsDAOMixin {
     return (update(feeds)..where((tbl) => tbl.id.equals(feed.id.value))).write(feed);
   }
 
+  Future<List<Feed>> getAllFeeds() {
+    return select(feeds).get();
+  }
+
   Future<Feed> getFeed(int feedID) {
     return (select(feeds)..where((f) => f.id.equals(feedID))).getSingle();
   }

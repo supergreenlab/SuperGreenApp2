@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/delete_account/delete_account_bloc.dart';
+import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
 import 'package:super_green_app/widgets/red_button.dart';
 
@@ -43,17 +44,59 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                 return _renderDeleting(context, state);
               } else if (state is DeleteAccountBlocStateError) {
                 return _renderError(context, state);
+              } else if (state is DeleteAccountBlocStateDone) {
+                return _renderDone(context, state);
               }
               return _renderForm();
             }));
   }
 
+  Widget _renderDone(BuildContext context, DeleteAccountBlocStateDone state) {
+    return Fullscreen(
+      title: 'Done!',
+      child: Icon(Icons.check, color: Colors.green),
+    );
+  }
+
   Widget _renderDeleting(BuildContext context, DeleteAccountBlocStateDeletingFiles state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Center(
-          child: Text('Deleting'),
+        Text(
+          deleteLocalData ? 'Deleting files' : 'Clean up serverIDs',
+          style: TextStyle(fontSize: 20),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 24.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${state.nFiles}',
+                style: TextStyle(
+                  fontSize: 50,
+                  color: Color(0xff454545),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  '/',
+                  style: TextStyle(fontSize: 25, color: Color(0xff454545)),
+                ),
+              ),
+              Text(
+                '${state.totalFiles}',
+                style: TextStyle(
+                  fontSize: 50,
+                  color: Color(0xff454545),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -62,9 +105,20 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
   Widget _renderError(BuildContext context, DeleteAccountBlocStateError state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Center(
-          child: Text('Deleting'),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Login/password error',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        GreenButton(
+          title: 'Back',
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ],
     );
