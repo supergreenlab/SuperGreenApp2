@@ -38,6 +38,11 @@ class AppDB {
     _miscDB = await Hive.openBox('misc');
   }
 
+  Future<void> clearData() async {
+    _settingsDB.clear();
+    _miscDB.clear();
+  }
+
   AppData getAppData() {
     return _settingsDB.get('data', defaultValue: AppData());
   }

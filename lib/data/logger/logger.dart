@@ -31,6 +31,12 @@ class Logger {
     }
   }
 
+  static Future clearLogs() async {
+    String logFilePath = await Logger.logFilePath();
+    await logFile.delete();
+    logFile = File(logFilePath);
+  }
+
   static void log(Object message) {
     print(message);
     try {

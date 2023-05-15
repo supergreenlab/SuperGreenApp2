@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -35,19 +36,26 @@ class DeleteAccountBlocEventInit extends DeleteAccountBlocEvent {
 class DeleteAccountBlocEventDelete extends DeleteAccountBlocEventInit {
   final String nickname;
   final String password;
+  final bool deleteLocalData;
 
-  DeleteAccountBlocEventDelete(this.nickname, this.password);
+  DeleteAccountBlocEventDelete(this.nickname, this.password, this.deleteLocalData);
 
   @override
   List<Object?> get props => [
         nickname,
         password,
+        deleteLocalData,
       ];
 }
 
 abstract class DeleteAccountBlocState extends Equatable {}
 
 class DeleteAccountBlocStateInit extends DeleteAccountBlocState {
+  @override
+  List<Object?> get props => [];
+}
+
+class DeleteAccountBlocStateError extends DeleteAccountBlocState {
   @override
   List<Object?> get props => [];
 }
@@ -62,6 +70,11 @@ class DeleteAccountBlocStateDeletingFiles extends DeleteAccountBlocState {
   List<Object?> get props => [nFiles, totalFiles];
 }
 
+class DeleteAccountBlocStateDone extends DeleteAccountBlocState {
+  @override
+  List<Object?> get props => [];
+}
+
 class DeleteAccountBloc extends LegacyBloc<DeleteAccountBlocEvent, DeleteAccountBlocState> {
   DeleteAccountBloc() : super(DeleteAccountBlocStateInit()) {
     add(DeleteAccountBlocEventInit());
@@ -71,20 +84,52 @@ class DeleteAccountBloc extends LegacyBloc<DeleteAccountBlocEvent, DeleteAccount
   Stream<DeleteAccountBlocState> mapEventToState(DeleteAccountBlocEvent event) async* {
     if (event is DeleteAccountBlocEventInit) {
     } else if (event is DeleteAccountBlocEventDelete) {
-      List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getAllFeedMedias();
-      for (FeedMedia feedMedia in feedMedias) {
-        try {
-          await File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath)).delete();
-        } catch (e, trace) {
-          Logger.logError(e, trace, data: {"filePath": feedMedia.filePath});
+      if (event.deleteLocalData) {
+        yield DeleteAccountBlocStateDeletingFiles(0, 0);
+        List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getAllFeedMedias();
+        yield DeleteAccountBlocStateDeletingFiles(0, feedMedias.length * 2);
+        int i = 0;
+        for (FeedMedia feedMedia in feedMedias) {
+          try {
+            await File(FeedMedias.makeAbsoluteFilePath(feedMedia.filePath)).delete();
+          } catch (e, trace) {
+            Logger.logError(e, trace, data: {"filePath": feedMedia.filePath});
+          }
+          yield DeleteAccountBlocStateDeletingFiles(++i, feedMedias.length * 2);
+          try {
+            await File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath)).delete();
+          } catch (e, trace) {
+            Logger.logError(e, trace, data: {"filePath": feedMedia.thumbnailPath});
+          }
+          yield DeleteAccountBlocStateDeletingFiles(++i, feedMedias.length * 2);
         }
+        String dbFile = '${AppDB().documentPath}/db.sqlite';
         try {
-          await File(FeedMedias.makeAbsoluteFilePath(feedMedia.thumbnailPath)).delete();
+          await File(FeedMedias.makeAbsoluteFilePath(dbFile)).delete();
         } catch (e, trace) {
-          Logger.logError(e, trace, data: {"filePath": feedMedia.thumbnailPath});
+          Logger.logError(e, trace, data: {"filePath": dbFile});
         }
+
       }
-      await BackendAPI().usersAPI.deleteUser(event.nickname, event.password);
+
+      try {
+        await BackendAPI().usersAPI.deleteUser(event.nickname, event.password);
+      } catch (e) {
+        yield DeleteAccountBlocStateError();
+        return;
+      }
+
+      try {
+        await AppDB().clearData();
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
+
+      try {
+        await Logger.clearLogs();
+      } catch (e, trace) {
+        Logger.logError(e, trace);
+      }
     }
   }
 }
