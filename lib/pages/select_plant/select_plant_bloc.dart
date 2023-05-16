@@ -39,11 +39,12 @@ class SelectPlantBlocStateLoaded extends SelectPlantBlocState {
   final String title;
   final List<Plant> plants;
   final List<Box> boxes;
+  final bool noPublic;
 
-  SelectPlantBlocStateLoaded(this.title, this.plants, this.boxes);
+  SelectPlantBlocStateLoaded(this.title, this.plants, this.boxes, this.noPublic);
 
   @override
-  List<Object> get props => [title, plants, boxes];
+  List<Object> get props => [title, plants, boxes, noPublic];
 }
 
 class SelectPlantBloc extends LegacyBloc<SelectPlantBlocEvent, SelectPlantBlocState> {
@@ -58,7 +59,12 @@ class SelectPlantBloc extends LegacyBloc<SelectPlantBlocEvent, SelectPlantBlocSt
     if (event is SelectPlantBlocEventInit) {
       List<Plant> plants = await RelDB.get().plantsDAO.getPlants();
       List<Box> boxes = await RelDB.get().plantsDAO.getBoxes();
-      yield SelectPlantBlocStateLoaded(args.title, plants, boxes);
+      int initialPlantsCount = plants.length;
+      if (args.noPublic) {
+        plants = plants.where((p) => p.public == false).toList();
+      }
+
+      yield SelectPlantBlocStateLoaded(args.title, plants, boxes, plants.length == 0 && initialPlantsCount != 0);
     }
   }
 }

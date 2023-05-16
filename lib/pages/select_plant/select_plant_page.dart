@@ -46,7 +46,11 @@ class SelectPlantPage extends StatelessWidget {
             );
           } else if (state is SelectPlantBlocStateLoaded) {
             if (state.plants.length == 0) {
-              body = _renderNoPlant(context);
+              if (state.noPublic) {
+                body = _renderNoPublicPlant(context);
+              } else {
+                body = _renderNoPlant(context);
+              }
             } else {
               body = Column(
                 children: [
@@ -139,6 +143,36 @@ class SelectPlantPage extends StatelessWidget {
               title: 'START',
               onPressed: () {
                 BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreatePlantEvent());
+              },
+            ),
+          ],
+        )),
+      ],
+    );
+  }
+
+  Widget _renderNoPublicPlant(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Center(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24.0),
+                    child: Text('You have no private diaries to make public.\nCheck your plant settings to un-public a plant.', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w200)),
+                  ),
+                ],
+              ),
+            ),
+            GreenButton(
+              title: 'OPEN SETTINGS',
+              onPressed: () {
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsPlants());
               },
             ),
           ],

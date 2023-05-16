@@ -367,7 +367,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
   void onMakePublic(ExplorerBlocState state) {
     if (state is ExplorerBlocStateLoaded && state.loggedIn) {
       BlocProvider.of<MainNavigatorBloc>(context).add(
-          MainNavigateToSelectPlantEvent(ExplorerPage.explorerPageSelectPlantTitle, futureFn: (Future future) async {
+          MainNavigateToSelectPlantEvent(ExplorerPage.explorerPageSelectPlantTitle, true, futureFn: (Future future) async {
         dynamic plant = await future;
         if (plant == null) {
           return;

@@ -593,8 +593,9 @@ class MainNavigateToPlantPickerEvent extends MainNavigatorEvent {
 
 class MainNavigateToSelectPlantEvent extends MainNavigatorEvent {
   final String title;
+  final bool noPublic;
 
-  MainNavigateToSelectPlantEvent(this.title, {futureFn}) : super(futureFn: futureFn);
+  MainNavigateToSelectPlantEvent(this.title, this.noPublic, {futureFn}) : super(futureFn: futureFn);
 
   @override
   List<Object?> get props => [...super.props, title];
