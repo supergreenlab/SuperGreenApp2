@@ -51,7 +51,7 @@ class UsersAPI {
           'password': password,
         }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('Access denied: ${resp.body}');
+      Logger.throwError('Access denied: ${resp.body}', fwdThrow: true);
     }
     AppDB().setJWT(resp.headers['x-sgl-token']!);
   }
@@ -66,7 +66,7 @@ class UsersAPI {
           'password': password,
         }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('CreateUser failed with error: ${resp.body}');
+      Logger.throwError('CreateUser failed with error: ${resp.body}', fwdThrow: true);
     }
   }
 
@@ -81,7 +81,7 @@ class UsersAPI {
           'password': password,
         }));
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('DeleteUser failed with error: ${resp.body}');
+      Logger.throwError('DeleteUser failed with error: ${resp.body}', fwdThrow: true);
     }
   }
 
@@ -94,7 +94,7 @@ class UsersAPI {
       },
     );
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('feedMediaUploadURL failed with error ${resp.body}');
+      Logger.throwError('feedMediaUploadURL failed with error ${resp.body}', fwdThrow: true);
     }
     Map<String, dynamic> uploadUrl = JsonDecoder().convert(resp.body);
 
@@ -105,7 +105,7 @@ class UsersAPI {
           headers: {'Host': BackendAPI().storageServerHostHeader});
       if (resp.statusCode ~/ 100 != 2) {
         Logger.throwError('Upload failed with error: ${resp.body}',
-            data: {"filePath": file.path, "fileSize": file.lengthSync()});
+            data: {"filePath": file.path, "fileSize": file.lengthSync()}, fwdThrow: true);
       }
     }
     try {
@@ -126,7 +126,7 @@ class UsersAPI {
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });
     if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('/me failed with error: ${resp.body}');
+      Logger.throwError('/me failed with error: ${resp.body}', fwdThrow: true);
     }
     Map<String, dynamic> userMap = JsonDecoder().convert(resp.body);
     return User.fromMap(userMap);

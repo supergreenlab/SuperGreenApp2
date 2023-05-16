@@ -89,11 +89,11 @@ class DeleteAccountBloc extends LegacyBloc<DeleteAccountBlocEvent, DeleteAccount
       AppDB().setJWT(null);
       if (event.deleteLocalData) {
         await for (ClearAllState s in ClearAll.clear()) {
-          yield DeleteAccountBlocStateDeletingFiles(s.nFiles, s.totalFiles);
+          yield DeleteAccountBlocStateDeletingFiles(s.nItems, s.totalItems);
         }
       } else {
         await for (ClearAllState s in ClearAll.clearServerIDs()) {
-          yield DeleteAccountBlocStateDeletingFiles(s.nFiles, s.totalFiles);
+          yield DeleteAccountBlocStateDeletingFiles(s.nItems, s.totalItems);
         }
       }
 
