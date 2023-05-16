@@ -17,6 +17,7 @@
  */
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/misc/bloc.dart';
@@ -30,8 +31,10 @@ import 'package:super_green_app/notifications/remote_notifications.dart';
 abstract class SettingsAuthBlocEvent extends Equatable {}
 
 class SettingsAuthBlocEventInit extends SettingsAuthBlocEvent {
+  final int rand = Random().nextInt(1 << 32);
+  
   @override
-  List<Object> get props => [];
+  List<Object> get props => [rand];
 }
 
 class SettingsAuthBlocEventSetSyncedOverGSM extends SettingsAuthBlocEvent {
@@ -101,7 +104,6 @@ class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlo
   late bool _isAuth;
 
   SettingsAuthBloc(this.args) : super(SettingsAuthBlocStateInit()) {
-    _isAuth = BackendAPI().usersAPI.loggedIn;
     add(SettingsAuthBlocEventInit());
   }
 
@@ -113,6 +115,7 @@ class SettingsAuthBloc extends LegacyBloc<SettingsAuthBlocEvent, SettingsAuthBlo
           _isAuth, AppDB().getAppData().syncOverGSM, null);*/
       User? user;
       bool notificationEnabled = false;
+      _isAuth = BackendAPI().usersAPI.loggedIn;
       if (_isAuth) {
         user = await BackendAPI().usersAPI.me();
         notificationEnabled = await RemoteNotifications.checkPermissions();

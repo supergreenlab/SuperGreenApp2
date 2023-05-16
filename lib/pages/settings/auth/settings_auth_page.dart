@@ -138,7 +138,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
             )),
       ),
       Text(
-        'Already connected to your',
+        'Connected to your',
         style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
         textAlign: TextAlign.center,
       ),
@@ -180,7 +180,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-            onTap: _requestDelete,
+            onTap: () {_requestDelete(context);},
             child: Text(
               'Request account deletion',
               style: TextStyle(decoration: TextDecoration.underline, color: Color(0xffff0000)),
@@ -212,7 +212,8 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                 BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSettingsLogin(futureFn: (future) async {
                   dynamic res = await future;
                   if (res == true) {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: res));
+                    BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlocEventInit());
+                    //BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: res));
                   }
                 }));
               },
@@ -228,7 +229,8 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
                     .add(MainNavigateToSettingsCreateAccount(futureFn: (future) async {
                   dynamic res = await future;
                   if (res == true) {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: res));
+                    BlocProvider.of<SettingsAuthBloc>(context).add(SettingsAuthBlocEventInit());
+                    //BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(param: res));
                   }
                 }));
               },
@@ -284,7 +286,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
     );
   }
 
-  void _requestDelete() {
+  void _requestDelete(BuildContext pageContext) {
     showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
@@ -292,7 +294,8 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
           return BlocProvider(
             create: (context) => DeleteAccountBloc(),
             child: DeleteAccountPage(onDone: () {
-              BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+              //BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop());
+              BlocProvider.of<SettingsAuthBloc>(pageContext).add(SettingsAuthBlocEventInit());
             }),
           );
         });
