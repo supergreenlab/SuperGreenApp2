@@ -511,6 +511,26 @@ class FeedsAPI {
     }
   }
 
+  Future<List<dynamic>> publicLikedFeedEntries(int n, int offset) async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/public/liked/entries?limit=$n&offset=$offset');
+      return results['entries'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
+  Future<List<dynamic>> publicLikedComments(int n, int offset) async {
+    try {
+      Map<String, dynamic> results = await BackendAPI().get('/public/liked/comments?limit=$n&offset=$offset');
+      return results['entries'];
+    } catch (e, trace) {
+      Logger.logError(e, trace, data: {"n": n, "offset": offset});
+      throw e;
+    }
+  }
+
   Future<List<dynamic>> publicPlantFeedEntries(String id, int n, int offset, {List<String>? filters}) async {
     try {
       String filterQuery = (filters ?? []).map((f) => '&f=$f').join('');

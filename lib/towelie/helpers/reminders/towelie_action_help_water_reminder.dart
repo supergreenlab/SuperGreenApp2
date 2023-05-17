@@ -83,7 +83,23 @@ class TowelieActionHelpWaterReminder extends TowelieActionHelp {
                   title: 'Water your plant',
                   body: '${plant.name} last watered 6 days ago.',
                   plantID: plant.id),
-              60 * 144)
+              60 * 144),
+          TowelieButtonReminder.createButton(
+              '8 days',
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Water your plant',
+                  body: '${plant.name} last watered 8 days ago.',
+                  plantID: plant.id),
+              60 * 192),
+          TowelieButtonReminder.createButton(
+              '10 days',
+              NotificationDataReminder(
+                  id: event.feedEntry.id,
+                  title: 'Water your plant',
+                  body: '${plant.name} last watered 10 days ago.',
+                  plantID: plant.id),
+              60 * 240),
         ]);
   }
 }
