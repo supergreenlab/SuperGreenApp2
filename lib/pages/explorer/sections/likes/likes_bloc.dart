@@ -29,7 +29,7 @@ class LikesBloc extends SectionBloc<PublicFeedEntry> {
     List<dynamic> likedComments = await BackendAPI().feedsAPI.publicLikedComments(n, offset);
     List<Map<String, dynamic>> allLikes = [...likedFeedEntries, ...likedComments];
     allLikes.sort((l1, l2) {
-      return 0;
+      return DateTime.parse(l2['likeDate']).difference(DateTime.parse(l1['likeDate'])).inSeconds;
     });
     return allLikes;
   }

@@ -85,12 +85,12 @@ class CommentsFormBlocEventLoadComments extends CommentsFormBlocEvent {
 }
 
 class CommentsFormBlocEventUser extends CommentsFormBlocEvent {
-  final User user;
+  final User? user;
 
   CommentsFormBlocEventUser(this.user);
 
   @override
-  List<Object> get props => [user];
+  List<Object?> get props => [user];
 }
 
 abstract class CommentsFormBlocState extends Equatable {}
@@ -110,7 +110,7 @@ class CommentsFormBlocStateLoaded extends CommentsFormBlocState {
   final FeedEntryStateLoaded feedEntry;
   final List<Comment> comments;
   final int n;
-  final User user;
+  final User? user;
   final bool eof;
   final String? commentID;
   final String? replyTo;
@@ -161,19 +161,19 @@ class CommentsFormBlocStateAddComment extends CommentsFormBlocState {
 }
 
 class CommentsFormBlocStateUser extends CommentsFormBlocState {
-  final User user;
+  final User? user;
 
   CommentsFormBlocStateUser(this.user);
 
   @override
-  List<Object> get props => [user];
+  List<Object?> get props => [user];
 }
 
 class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlocState> {
   final MainNavigateToCommentFormEvent args;
 
   StreamSubscription<hive.BoxEvent>? appDataStream;
-  late User user;
+  User? user;
   late String feedEntryID;
 
   CommentsFormBloc(this.args) : super(CommentsFormBlocStateInit()) {
@@ -206,9 +206,9 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
       Comment comment = Comment(
         id: tempID,
         feedEntryID: feedEntryID,
-        userID: this.user.id!,
-        from: this.user.nickname,
-        pic: this.user.pic,
+        userID: this.user!.id!,
+        from: this.user!.nickname,
+        pic: this.user!.pic,
         replyTo: event.replyTo?.id,
         text: event.text,
         type: event.type,
@@ -247,6 +247,8 @@ class CommentsFormBloc extends LegacyBloc<CommentsFormBlocEvent, CommentsFormBlo
   void appDataUpdated(hive.BoxEvent boxEvent) async {
     if ((boxEvent.value as AppData).jwt != null) {
       this.user = await BackendAPI().usersAPI.me();
+    } else {
+      this.user = null;
     }
     add(CommentsFormBlocEventUser(this.user));
   }

@@ -161,7 +161,7 @@ class CommentsFormPage extends TraceableStatefulWidget {
 class _CommentsFormPageState extends State<CommentsFormPage> {
   final List<Comment> comments = [];
   late FeedEntryStateLoaded feedEntry;
-  late User? user;
+  User? user;
   late bool autoFocus;
 
   List<Product>? recommended;
