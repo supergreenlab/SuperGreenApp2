@@ -27,6 +27,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/misc/permissions.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/feed_entries/common/widgets/user_avatar.dart';
 import 'package:super_green_app/pages/image_picker/picker_widget.dart';
@@ -122,7 +123,7 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
         padding: const EdgeInsets.only(bottom: 20.0),
         child: InkWell(
             onTap: () {
-              _checkPermission().then((granted) {
+              Permissions.checkCapturePermissions().then((granted) {
                 if (!granted) return;
                 _buildPicker(context);
               });
@@ -299,13 +300,5 @@ class _SettingsAuthPageState extends State<SettingsAuthPage> {
             }),
           );
         });
-  }
-
-  Future<bool> _checkPermission() async {
-    final permissionStorageGroup = Platform.isIOS ? Permission.photos : Permission.storage;
-    Map<Permission, PermissionStatus> res = await [
-      permissionStorageGroup,
-    ].request();
-    return res[permissionStorageGroup] == PermissionStatus.granted;
   }
 }

@@ -27,9 +27,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_picker_builder/data/media_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
-import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/misc/permissions.dart';
 import 'package:super_green_app/pages/image_capture/capture/capture_bloc.dart';
 import 'package:super_green_app/pages/image_picker/picker_widget.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -297,7 +297,7 @@ class _CapturePageState extends State<CapturePage> {
                   ),
                   child: Icon(Icons.library_books, color: Colors.white54),
                   onPressed: () async {
-                    _checkPermission().then((granted) {
+                    Permissions.checkCapturePermissions().then((granted) {
                       if (!granted) return;
                       _buildPicker(context);
                     });
@@ -435,36 +435,6 @@ class _CapturePageState extends State<CapturePage> {
         );
       },
     );
-  }
-
-  Future<bool> _checkPermission() async {
-    if (Platform.isIOS) {
-      Map<Permission, PermissionStatus> res = await [
-        Permission.photos,
-      ].request();
-      return res[Permission.photos] == PermissionStatus.granted ||
-          res[Permission.photos] == PermissionStatus.limited;
-    } else if (Platform.isAndroid) {
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      int version = int.tryParse(androidInfo.version.release) ?? 0;
-      if (version >= 13) {
-        Map<Permission, PermissionStatus> res = await [
-          Permission.photos,
-          Permission.videos,
-        ].request();
-        return (res[Permission.photos] == PermissionStatus.granted ||
-            res[Permission.photos] == PermissionStatus.limited) && (res[Permission.videos] == PermissionStatus.granted ||
-            res[Permission.videos] == PermissionStatus.limited);
-      } else {
-        Map<Permission, PermissionStatus> res = await [
-          Permission.storage,
-        ].request();
-        return (res[Permission.storage] == PermissionStatus.granted ||
-            res[Permission.storage] == PermissionStatus.limited);
-      }
-    }
-    return false;
   }
 
   @override
