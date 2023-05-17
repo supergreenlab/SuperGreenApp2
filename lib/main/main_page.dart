@@ -237,12 +237,15 @@ class _MainPageState extends State<MainPage> {
                     lastRouteContextsStack.addLast(lastRouteContext!);
                   }
                   lastRouteContext = context;
-                  return wrapSyncIndicator(TowelieHelper.wrapWidget(
-                      settings,
-                      context,
-                      _onGenerateRoute(context, settings, onPop: () {
-                        lastRouteContext = lastRouteContextsStack.removeLast();
-                      })));
+                  return MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                    child: wrapSyncIndicator(TowelieHelper.wrapWidget(
+                        settings,
+                        context,
+                        _onGenerateRoute(context, settings, onPop: () {
+                          lastRouteContext = lastRouteContextsStack.removeLast();
+                        }))),
+                  );
                 }),
             theme: ThemeData(
               fontFamily: 'Roboto',
