@@ -71,8 +71,6 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
               body = FullscreenLoading(title: 'Loading..');
             } else if (state is FeedVentilationFormBlocStateLoading) {
               body = FullscreenLoading(title: state.text);
-            } else if (state is FeedVentilationFormBlocStateLoaded && state.device == null) {
-              body = _renderNoDevice(context, state);
             } else if (state is FeedVentilationFormBlocStateLoaded) {
               Widget content = _renderParams(context, state);
               if (_reachable == false) {
@@ -138,38 +136,6 @@ class _FeedVentilationFormPageState extends State<FeedVentilationFormPage> {
                   child: AnimatedSwitcher(duration: Duration(milliseconds: 200), child: body),
                 ));
           }),
-    );
-  }
-
-  Widget _renderNoDevice(BuildContext context, FeedVentilationFormBlocStateLoaded state) {
-    return Stack(
-      children: <Widget>[
-        _renderParams(context, state),
-        Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Colors.white60),
-          child: Fullscreen(
-            title: 'Ventilation control\nrequires an SGL controller',
-            child: Column(
-              children: <Widget>[
-                GreenButton(
-                  title: 'SHOP NOW',
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://www.supergreenlab.com'));
-                  },
-                ),
-                Text('or'),
-                GreenButton(
-                  title: 'DIY NOW',
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://github.com/supergreenlab'));
-                  },
-                ),
-              ],
-            ),
-            childFirst: false,
-          ),
-        ),
-      ],
     );
   }
 

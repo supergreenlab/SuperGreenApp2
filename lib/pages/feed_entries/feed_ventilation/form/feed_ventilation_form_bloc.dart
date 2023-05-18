@@ -291,7 +291,7 @@ class FeedVentilationFormBlocStateDone extends FeedVentilationFormBlocState {
 class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, FeedVentilationFormBlocState> {
   final MainNavigateToFeedVentilationFormEvent args;
 
-  Device? device;
+  late Device device;
   late Box box;
 
   late Param temperature;
@@ -311,31 +311,21 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
     if (event is FeedVentilationFormBlocEventInit) {
       final db = RelDB.get();
       box = await db.plantsDAO.getBox(args.box.id);
-      if (box.device == null) {
-        yield FeedVentilationFormBlocStateNoDevice();
-        return;
-      }
       device = await db.devicesDAO.getDevice(box.device!);
 
-      try {
-        temperature = await DeviceHelper.loadBoxParam(device!, box, 'TEMP');
-        humidity = await DeviceHelper.loadBoxParam(device!, box, 'HUMI');
-      } catch (e, trace) {
-        Logger.logError(e, trace);
-        yield FeedVentilationFormBlocStateNoDevice();
-        return;
-      }
+      temperature = await DeviceHelper.loadBoxParam(device, box, 'TEMP', asyncRefresh: true);
+      humidity = await DeviceHelper.loadBoxParam(device, box, 'HUMI', asyncRefresh: true);
 
       try {
-        paramsController = await LegacyBlowerParamsController.load(device!, box);
+        paramsController = await LegacyBlowerParamsController.load(device, box);
       } catch (e) {
-        paramsController = await BlowerParamsController.load(device!, box);        
+        paramsController = await BlowerParamsController.load(device, box);        
       }
-      paramsController = await paramsController.refreshParams(device!) as FeedVentilationParamsController;
+      paramsController.refreshParams(device); // no await
       yield loadedState();
-      paramsControllerListeners = paramsController.listenParams(device!, onParamsChange);
-      temperatureListener = RelDB.get().devicesDAO.watchParam(device!.id, temperature.key).listen(onTemperatureChange);
-      humidityListener = RelDB.get().devicesDAO.watchParam(device!.id, humidity.key).listen(onHumidityChange);
+      paramsControllerListeners = paramsController.listenParams(device, onParamsChange);
+      temperatureListener = RelDB.get().devicesDAO.watchParam(device.id, temperature.key).listen(onTemperatureChange);
+      humidityListener = RelDB.get().devicesDAO.watchParam(device.id, humidity.key).listen(onHumidityChange);
     } else if (event is FeedVentilationFormBlocParamsChangedEvent) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(args.box.id);
@@ -372,7 +362,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
           await cancelParams();
         } catch (e) {}
       }
-      paramsController = await BlowerParamsController.load(device!, box);
+      paramsController = await BlowerParamsController.load(device, box);
       yield loadedState();
     } else if (event is FeedVentilationFormBlocFanModeEvent) {
       if (event.savePrevious) {
@@ -382,7 +372,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
           await cancelParams();
         } catch (e) {}
       }
-      paramsController = await FanParamsController.load(device!, box);
+      paramsController = await FanParamsController.load(device, box);
       yield loadedState();
     } else if (event is FeedVentilationFormBlocEventUpdate) {
       yield loadedState();
@@ -390,11 +380,11 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
   }
 
   Future<void> syncParams() async {
-    paramsController = await paramsController.syncParams(device!) as FeedVentilationParamsController;
+    paramsController = await paramsController.syncParams(device) as FeedVentilationParamsController;
   }
 
   Future<void> cancelParams() async {
-    paramsController = await paramsController.cancelParams(device!) as FeedVentilationParamsController;
+    paramsController = await paramsController.cancelParams(device) as FeedVentilationParamsController;
   }
 
   void onTemperatureChange(Param temperature) {

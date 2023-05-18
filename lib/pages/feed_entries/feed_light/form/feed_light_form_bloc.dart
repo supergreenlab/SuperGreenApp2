@@ -127,10 +127,6 @@ class FeedLightFormBloc extends LegacyBloc<FeedLightFormBlocEvent, FeedLightForm
     if (event is FeedLightFormBlocEventLoadLights) {
       final db = RelDB.get();
       Box box = await db.plantsDAO.getBox(args.box.id);
-      if (box.device == null) {
-        yield FeedLightFormBlocStateNoDevice([45, 45, 65, 65], box);
-        return;
-      }
       device = await db.devicesDAO.getDevice(box.device!);
       Module lightModule = await db.devicesDAO.getModule(device.id, "led");
       lightParams = [];

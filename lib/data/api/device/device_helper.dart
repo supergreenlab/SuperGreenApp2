@@ -25,6 +25,7 @@ import 'package:moor/moor.dart';
 import 'package:super_green_app/data/api/backend/devices/websocket.dart';
 import 'package:super_green_app/data/api/device/device_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:tuple/tuple.dart';
 
@@ -59,13 +60,21 @@ class DeviceHelper {
         DevicesCompanion(id: Value(device.id), name: Value(name), mdns: Value(mdnsDomain), synced: Value(false)));
   }
 
-  static Future<Param> loadParam(Device device, String key) async {
+  static Future<Param> loadParam(Device device, String key, {bool asyncRefresh = false}) async {
     Param p = await RelDB.get().devicesDAO.getParam(device.id, key);
-    return await DeviceHelper.refreshIntParam(device, p);
+    try {
+      Future<Param> future = DeviceHelper.refreshIntParam(device, p);
+      if (!asyncRefresh) {
+        return await future;
+      }
+    } catch(e, trace) {
+      Logger.logError(e, trace, fwdThrow: !asyncRefresh);
+    }
+    return p;
   }
 
-  static Future<Param> loadBoxParam(Device device, Box box, String key) async {
-    return await DeviceHelper.loadParam(device, "BOX_${box.deviceBox}_$key");
+  static Future<Param> loadBoxParam(Device device, Box box, String key, {bool asyncRefresh = false}) async {
+    return await DeviceHelper.loadParam(device, "BOX_${box.deviceBox}_$key", asyncRefresh: asyncRefresh);
   }
 
   static Future<Param> watchParamChange(Param param, {int timeout = 5}) {

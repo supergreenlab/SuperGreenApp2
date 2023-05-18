@@ -24,7 +24,8 @@ class LikesBloc extends SectionBloc<PublicFeedEntry> {
   @override
   int get nItemsLoad => 20;
 
-  Future<List<dynamic>> loadItems(int n, int offset) async {
+  Future<List<dynamic>> loadItems(int n, int offset) => BackendAPI().feedsAPI.publicLiked(n, offset);
+  /*Future<List<dynamic>> loadItems(int n, int offset) async {
     List<dynamic> likedFeedEntries = await BackendAPI().feedsAPI.publicLikedFeedEntries(n, offset);
     List<dynamic> likedComments = await BackendAPI().feedsAPI.publicLikedComments(n, offset);
     List<Map<String, dynamic>> allLikes = [...likedFeedEntries, ...likedComments];
@@ -32,7 +33,7 @@ class LikesBloc extends SectionBloc<PublicFeedEntry> {
       return DateTime.parse(l2['likeDate']).difference(DateTime.parse(l1['likeDate'])).inSeconds;
     });
     return allLikes;
-  }
+  }*/
 
   PublicFeedEntry itemFromMap(Map<String, dynamic> map) => PublicFeedEntry.fromMap(map);
 }
