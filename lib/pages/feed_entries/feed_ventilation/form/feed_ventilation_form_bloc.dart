@@ -319,7 +319,7 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
       try {
         paramsController = await LegacyBlowerParamsController.load(device, box);
       } catch (e) {
-        paramsController = await BlowerParamsController.load(device, box);        
+        paramsController = await BlowerParamsController.load(device, box);
       }
       paramsController.refreshParams(device); // no await
       yield loadedState();
@@ -432,15 +432,9 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
 
   @override
   Future<void> close() async {
-    if (humidityListener != null) {
-      await humidityListener.cancel();
-    }
-    if (temperatureListener != null) {
-      await temperatureListener.cancel();
-    }
-    if (paramsController != null) {
-      await paramsController.closeSubscriptions(paramsControllerListeners);
-    }
+    await humidityListener.cancel();
+    await temperatureListener.cancel();
+    await paramsController.closeSubscriptions(paramsControllerListeners);
     return super.close();
   }
 
@@ -451,6 +445,4 @@ class FeedVentilationFormBloc extends LegacyBloc<FeedVentilationFormBlocEvent, F
         humidity: humidity,
         paramsController: paramsController,
       );
-
-  
 }
