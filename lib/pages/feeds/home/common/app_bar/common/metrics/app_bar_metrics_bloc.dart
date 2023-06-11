@@ -125,6 +125,7 @@ class AppBarMetricsBloc extends LegacyBloc<AppBarMetricsBlocEvent, AppBarMetrics
       metrics = await AppBarMetricsParamsController.load(device!, box);
       subscriptions = metrics!.listenParams(device!, onParamsUpdate);
       yield AppBarMetricsBlocStateLoaded(plant, metrics!);
+      forceRefresh();
     } else if (event is AppBarMetricsBlocEventLoaded) {
       yield event.state;
     }
