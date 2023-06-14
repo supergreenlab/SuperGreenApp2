@@ -125,6 +125,7 @@ class BoxControlsBloc extends LegacyBloc<BoxControlsBlocEvent, BoxControlsBlocSt
       metrics = await BoxControlParamsController.load(device!, box);
       subscriptions = metrics!.listenParams(device!, onParamUpdate);
       yield BoxControlsBlocStateLoaded(plant, box, metrics!);
+      metrics!.refreshParams(device!);
     } else if (event is BoxControlsBlocEventLoaded) {
       yield event.state;
     }

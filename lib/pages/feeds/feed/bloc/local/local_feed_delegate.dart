@@ -132,6 +132,24 @@ abstract class LocalFeedBlocDelegate extends FeedBlocDelegate {
   }
 
   @override
+  Future forceSyncFeedEntry(feedEntryID) async {
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(id: Value(feedEntryID), synced: Value(false)));
+    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getFeedMedias(feedEntryID);
+    for (FeedMedia feedMedia in feedMedias) {
+      await RelDB.get().feedsDAO.updateFeedMedia(FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(false)));
+    }
+  }
+  
+   @override
+  Future moveFeedEntry(feedEntryID, feedID) async {
+    await FeedEntryHelper.updateFeedEntry(FeedEntriesCompanion(id: Value(feedEntryID), feed: Value(feedID), synced: Value(false)));
+    List<FeedMedia> feedMedias = await RelDB.get().feedsDAO.getFeedMedias(feedEntryID);
+    for (FeedMedia feedMedia in feedMedias) {
+      await RelDB.get().feedsDAO.updateFeedMedia(FeedMediasCompanion(id: Value(feedMedia.id), synced: Value(false)));
+    }
+  }
+
+  @override
   Future likeFeedEntry(FeedEntryState entry) async {
     FeedEntry feedEntry = await RelDB.get().feedsDAO.getFeedEntry(entry.feedEntryID);
 

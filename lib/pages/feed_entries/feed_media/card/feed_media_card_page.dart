@@ -122,6 +122,35 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
 
   Widget _renderLoaded(BuildContext context, FeedMediaState state) {
     FeedMediaParams params = state.params as FeedMediaParams;
+    List<Widget> otherActions = widget.cardActions != null ? widget.cardActions!(context, state) : [];
+    /*if (!state.isRemoteState) {
+      otherActions.add(IconButton(
+        icon: Icon(
+          Icons.refresh,
+          color: Colors.grey,
+        ),
+        onPressed: () {
+          BlocProvider.of<FeedBloc>(context).add(FeedBlocEventForceResync(state.feedEntryID));
+        },
+      ));
+      otherActions.add(IconButton(
+        icon: Icon(
+          Icons.move_to_inbox,
+          color: Colors.grey,
+        ),
+        onPressed: () {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToSelectPlantEvent(
+              "Move card to plant", false, futureFn: (Future future) async {
+            dynamic plant = await future;
+            if (plant == null) {
+              return;
+            }
+            BlocProvider.of<FeedBloc>(context).add(FeedBlocEventMoveCard(state.feedEntryID, plant.feed));
+          }));
+        },
+      ));
+    }*/
+
     return FeedCard(
       animation: widget.animation,
       child: Column(
@@ -152,7 +181,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
               onDelete: () {
                 BlocProvider.of<FeedBloc>(context).add(FeedBlocEventDeleteEntry(state));
               },
-              actions: widget.cardActions != null ? widget.cardActions!(context, state) : []),
+              actions: otherActions),
           state.showPlantInfos
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),

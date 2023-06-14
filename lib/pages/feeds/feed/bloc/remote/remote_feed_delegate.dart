@@ -89,6 +89,10 @@ abstract class RemoteFeedBlocDelegate extends FeedBlocDelegate {
 
   @override
   Future deleteFeedEntry(feedEntryID) async {}
+    @override
+  Future forceSyncFeedEntry(feedEntryID) async {}
+    @override
+  Future moveFeedEntry(feedEntryID, feedID) async {}
 
   @override
   Future likeFeedEntry(FeedEntryState entry) async {

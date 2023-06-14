@@ -81,6 +81,25 @@ class FeedBlocEventDeletedFeedEntry extends FeedBlocEvent {
   List<Object> get props => [feedEntryID];
 }
 
+class FeedBlocEventForceResync extends FeedBlocEvent {
+  final dynamic feedEntryID;
+
+  FeedBlocEventForceResync(this.feedEntryID);
+
+  @override
+  List<Object> get props => [feedEntryID];
+}
+
+class FeedBlocEventMoveCard extends FeedBlocEvent {
+  final dynamic feedEntryID;
+  final dynamic feedID;
+
+  FeedBlocEventMoveCard(this.feedEntryID, this.feedID);
+
+  @override
+  List<Object> get props => [feedEntryID, feedID];
+}
+
 class FeedBlocEventFeedLoaded extends FeedBlocEvent {
   final FeedState feed;
 
@@ -322,6 +341,10 @@ class FeedBloc extends LegacyBloc<FeedBlocEvent, FeedBlocState> {
       await loader.update(event.entry, event.params);
     } else if (event is FeedBlocEventDeleteEntry) {
       await delegate.deleteFeedEntry(event.entry.feedEntryID);
+    } else if (event is FeedBlocEventForceResync) {
+      await delegate.forceSyncFeedEntry(event.feedEntryID);
+    } else if (event is FeedBlocEventMoveCard) {
+      await delegate.moveFeedEntry(event.feedEntryID, event.feedID);
     } else if (event is FeedBlocEventLikeComment) {
       await BackendAPI().feedsAPI.likeComment(event.comment);
       FeedEntryLoader loader = delegate.loaderForType(event.entry.type);
@@ -395,6 +418,8 @@ abstract class FeedBlocDelegate {
   FeedEntryState postProcess(FeedEntryState state);
   Future<List<FeedEntryState>> loadEntries(int n, int offset, List<String>? filters);
   Future deleteFeedEntry(dynamic feedEntryID);
+  Future forceSyncFeedEntry(dynamic feedEntryID);
+  Future moveFeedEntry(dynamic feedEntryID, dynamic plantID);
   Future markAsRead(dynamic feedEntryID);
   Future likeFeedEntry(FeedEntryState entry);
   Future bookmarkFeedEntry(FeedEntryState entry);
