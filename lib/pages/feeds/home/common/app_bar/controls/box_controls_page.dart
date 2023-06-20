@@ -135,7 +135,7 @@ class BoxControlsPage extends StatelessWidget {
         '${state.metrics.blower.ivalue}%',
         DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
             state.metrics.offMin.param),
-        '${totalDimming.round()}%',
+        '${totalDimming.floor()}%',
         '${state.plant!.alerts ? "ON" : "OFF"}',
       ),
     );

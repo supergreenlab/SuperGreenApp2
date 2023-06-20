@@ -25,8 +25,6 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/notifications/notifications.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
-import 'package:super_green_app/towelie/actions/towelie_action_appinit.dart';
-import 'package:super_green_app/towelie/actions/towelie_action_plant_created.dart';
 import 'package:super_green_app/towelie/buttons/combo/towelie_button_push_route_feed_media.dart';
 import 'package:super_green_app/towelie/buttons/combo/towelie_button_push_route_measure.dart';
 import 'package:super_green_app/towelie/buttons/misc/towelie_button_create_account.dart';
@@ -36,16 +34,6 @@ import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_phase
 import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_start_seedling.dart';
 import 'package:super_green_app/towelie/buttons/plant/towelie_button_plant_type.dart';
 import 'package:super_green_app/towelie/buttons/reminder/towelie_button_reminder.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_create_plant.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_end_checklist.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_i_need_help.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_bundle.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_growbox.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_growing_medium.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_nutrients.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_show_products_seed.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_skip_checklist.dart';
-import 'package:super_green_app/towelie/buttons/welcome/towelie_button_view_plant.dart';
 import 'package:super_green_app/towelie/helpers/combo/towelie_action_help_measure_after_stretch.dart';
 import 'package:super_green_app/towelie/helpers/device/towelie_action_help_add_device.dart';
 import 'package:super_green_app/towelie/helpers/device/towelie_action_help_add_existing_device.dart';
@@ -205,8 +193,6 @@ class TowelieBlocStateHelperPop extends TowelieBlocState {
 
 class TowelieBloc extends LegacyBloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
-    TowelieActionAppInit(),
-    TowelieActionPlantCreated(),
     TowelieActionHelpCreatePlant(),
     TowelieActionHelpCreateLab(),
     TowelieActionHelpSelectDevice(),
@@ -225,20 +211,7 @@ class TowelieBloc extends LegacyBloc<TowelieBlocEvent, TowelieBlocState> {
   ];
 
   static List<TowelieButton> buttons = [
-    // App onboarding
-    TowelieButtonINeedHelp(),
-    TowelieButtonIDontNeedHelp(),
-    TowelieButtonCreatePlant(),
-    TowelieButtonShowProductsBundle(),
-    TowelieButtonSkipChecklist(),
-    TowelieButtonShowProductsGrowbox(),
-    TowelieButtonShowProductsSeeds(),
-    TowelieButtonShowProductsGrowingMedium(),
-    TowelieButtonShowProductsNutrients(),
-    TowelieButtonEndChecklist(),
-
     // Plant onboarding
-    TowelieButtonViewPlant(),
     TowelieButtonPlantSeedPhase(),
     TowelieButtonPlantSeedlingPhase(),
     TowelieButtonPlantVegPhase(),
