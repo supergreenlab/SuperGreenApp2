@@ -33,6 +33,15 @@ class BoxControlParamsController extends ParamsController {
   ParamController get offHour => params['offHour']!;
   ParamController get offMin => params['offMin']!;
 
+  late int nLights;
+  List<ParamController> get lightsDimming {
+    List<ParamController> dimmings = [];
+    for (int i = 0; i < nLights; ++i) {
+      dimmings.add(params['dim$i']!);
+    }
+    return dimmings;
+  }
+
   static Future<BoxControlParamsController> load(Device device, Box box) async {
     BoxControlParamsController c = BoxControlParamsController();
     await c.loadBoxParam(device, box, 'BLOWER_DUTY', 'blower');
@@ -41,6 +50,16 @@ class BoxControlParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'ON_MIN', 'onMin');
     await c.loadBoxParam(device, box, 'OFF_HOUR', 'offHour');
     await c.loadBoxParam(device, box, 'OFF_MIN', 'offMin');
+
+    Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
+    c.nLights = lightModule.arrayLen;
+    for (int i = 0; i < lightModule.arrayLen; ++i) {
+      Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
+      if (boxParam.ivalue != box.deviceBox!) {
+        continue;
+      }
+      await c.loadBoxParam(device, box, "LED_${i}_DIM", 'dim$i');
+    }
     return c;
   }
 

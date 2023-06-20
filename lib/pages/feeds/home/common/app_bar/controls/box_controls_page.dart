@@ -20,6 +20,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:super_green_app/data/api/device/device_params.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
@@ -120,6 +121,12 @@ class BoxControlsPage extends StatelessWidget {
   }
 
   Widget _renderActions(BuildContext context, BoxControlsBlocStateLoaded state) {
+    double totalDimming = 0;
+    List<ParamController> dimmings = state.metrics.lightsDimming;
+    for (ParamController dimming in dimmings) {
+      totalDimming += dimming.ivalue;
+    }
+    totalDimming /= dimmings.length;
     return Expanded(
       child: _renderButtons(
         context,
@@ -128,7 +135,7 @@ class BoxControlsPage extends StatelessWidget {
         '${state.metrics.blower.ivalue}%',
         DateRenderer.renderSchedule(state.metrics.onHour.param, state.metrics.onMin.param, state.metrics.offHour.param,
             state.metrics.offMin.param),
-        '${state.metrics.light.ivalue}%',
+        '${totalDimming.round()}%',
         '${state.plant!.alerts ? "ON" : "OFF"}',
       ),
     );
