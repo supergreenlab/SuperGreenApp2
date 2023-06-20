@@ -33,27 +33,22 @@ class AppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold, fontSize: 25)),
-        Container(height: 2, color: Color(0xFF777777)),
-        showDate || plant != null
-            ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    showDate
-                        ? Text(DateRenderer.renderAbsoluteDate(DateTime.now()),
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))
-                        : Container(),
-                    plant != null
-                        ? Text(DateRenderer.renderSincePhase(PlantSettings.fromJSON(plant!.settings), DateTime.now()),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: TextStyle(color: Color(0xFF494949), fontWeight: FontWeight.bold, fontSize: 20)),
+              plant != null
+                  ? Text(DateRenderer.renderSincePhase(PlantSettings.fromJSON(plant!.settings), DateTime.now()),
                             style: TextStyle(fontSize: 16))
-                        : Container(),
-                  ],
-                ),
-              )
-            : Container(),
+                  : Container(),
+            ],
+          ),
+        ),
+        Container(height: 2, color: Color(0xFF777777)),
         body ?? Container(),
       ],
     );

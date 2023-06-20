@@ -188,41 +188,44 @@ class _AppBarBoxMetricsPageState extends State<AppBarBoxMetricsPage> {
           unit: weightUnit,
           color: Color(0xFF483581)),
     ];
-    return Container(
-      height: 35,
-      child: Stack(
-        children: [
-          ListView(
-            controller: scrollController,
-            scrollDirection: Axis.horizontal,
-            children: widgets
-                .map<Widget>((w) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: w,
-                    ))
-                .toList(),
-          ),
-          showLeftArrow
-              ? Positioned(
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  child: Image.asset(
-                    "assets/left_scroll_arrow.png",
-                  ),
-                )
-              : Container(),
-          showRightArrow
-              ? Positioned(
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Image.asset(
-                    "assets/right_scroll_arrow.png",
-                  ),
-                )
-              : Container(),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        height: 35,
+        child: Stack(
+          children: [
+            ListView(
+              controller: scrollController,
+              scrollDirection: Axis.horizontal,
+              children: widgets
+                  .map<Widget>((w) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: w,
+                      ))
+                  .toList(),
+            ),
+            showLeftArrow
+                ? Positioned(
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    child: Image.asset(
+                      "assets/left_scroll_arrow.png",
+                    ),
+                  )
+                : Container(),
+            showRightArrow
+                ? Positioned(
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Image.asset(
+                      "assets/right_scroll_arrow.png",
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }

@@ -96,7 +96,7 @@ class EnvironmentsPage extends StatelessWidget {
             duration: Duration(milliseconds: 200),
             child: Column(
               children: [
-                AppBarTitle(title: 'Graphs', showDate: false),
+                AppBarTitle(title: 'Graphs', plant: this.plant,),
                 Expanded(child: graphBody),
               ],
             )));

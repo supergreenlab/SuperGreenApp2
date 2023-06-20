@@ -50,9 +50,9 @@ class DateRenderer {
       return 'Life events not set.';
     }
     List<String Function(Duration)> phases = [
-      (Duration diff) => 'Germinated ${renderDuration(phaseData.item3)}',
-      (Duration diff) => 'Vegging for ${renderDuration(phaseData.item3, suffix: '')}',
-      (Duration diff) => 'Blooming for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) => 'Germ. ${renderDuration(phaseData.item3)}',
+      (Duration diff) => 'Veg. for ${renderDuration(phaseData.item3, suffix: '')}',
+      (Duration diff) => 'Bloom. for ${renderDuration(phaseData.item3, suffix: '')}',
       (Duration diff) => 'Drying for ${renderDuration(phaseData.item3, suffix: '')}',
       (Duration diff) => 'Curing for ${renderDuration(phaseData.item3, suffix: '')}'
     ];
