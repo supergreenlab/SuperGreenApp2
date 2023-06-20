@@ -149,7 +149,7 @@ class BoxControlsPage extends StatelessWidget {
       children: [
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.all(4.0),
@@ -193,7 +193,7 @@ class BoxControlsPage extends StatelessWidget {
         ),
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                   padding: const EdgeInsets.all(4.0),

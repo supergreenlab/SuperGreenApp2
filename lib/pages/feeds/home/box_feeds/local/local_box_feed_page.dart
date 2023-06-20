@@ -234,7 +234,7 @@ class _LocalBoxFeedPageState extends State<LocalBoxFeedPage> {
           actions: actions,
           bottomPadding: true,
           title: '',
-          appBarHeight: 380,
+          appBarHeight: 350,
           appBar: _renderAppBar(context, state),
         ),
       );

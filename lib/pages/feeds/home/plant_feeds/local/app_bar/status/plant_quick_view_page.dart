@@ -79,7 +79,7 @@ class PlantQuickViewPage extends StatelessWidget {
 
   Widget _renderActions(BuildContext context, PlantQuickViewBlocStateLoaded state) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(

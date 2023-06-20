@@ -34,8 +34,6 @@ import 'package:super_green_app/pages/feeds/home/box_feeds/local/local_box_feed_
 import 'package:super_green_app/pages/feeds/home/common/drawer/plant_drawer_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/plant_feed_page.dart';
-import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_bloc.dart';
-import 'package:super_green_app/pages/feeds/sgl_feed/sgl_feed_page.dart';
 import 'package:super_green_app/pages/home/home_bloc.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/settings_bloc.dart';
@@ -179,13 +177,6 @@ class HomePage extends TraceableStatelessWidget {
       BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventRoute(settings));
     });
     switch (settings.name) {
-      case '/feed/sgl':
-        return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => BlocProvider(
-                  create: (context) => SGLFeedBloc(),
-                  child: TowelieHelper.wrapWidget(settings, context, SGLFeedPage()),
-                ));
       case '/dashboard':
         return MaterialPageRoute(
             settings: settings,
