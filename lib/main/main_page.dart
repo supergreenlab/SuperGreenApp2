@@ -215,8 +215,10 @@ class _MainPageState extends State<MainPage> {
             FocusManager.instance.primaryFocus!.unfocus();
           }
         },
-        child: wrapListeners(
-          MaterialApp(
+        child: wrapListeners(MediaQuery(
+          data: MediaQueryData.fromWindow(WidgetsBinding.instance.window).copyWith(boldText: false),
+          child: MaterialApp(
+            useInheritedMediaQuery: true,
             //navigatorObservers: [_analyticsObserver,],
             localizationsDelegates: [
               const SGLLocalizationsDelegate(),
@@ -255,7 +257,7 @@ class _MainPageState extends State<MainPage> {
               child: AppInitPage(),
             ),
           ),
-        ));
+        )));
   }
 
   Widget wrapListeners(Widget body) {
