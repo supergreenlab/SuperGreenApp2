@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gcaptcha_v3/web_view.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/settings/auth/common/captcha/captcha.dart';
 import 'package:super_green_app/pages/settings/auth/login/settings_login_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -127,7 +127,7 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ReCaptchaWebView(
+                          child: Captcha(
                             width: 200,
                             height: 50,
                             webViewColor: null,

@@ -19,7 +19,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
 import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:devicelocale/devicelocale.dart';
@@ -34,6 +33,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
+import 'package:super_green_app/pages/settings/auth/common/captcha/captcha.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 
