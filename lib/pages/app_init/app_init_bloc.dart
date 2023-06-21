@@ -19,6 +19,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_gcaptcha_v3/recaptca_config.dart';
+import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:equatable/equatable.dart';
@@ -86,6 +88,8 @@ class AppInitBloc extends LegacyBloc<AppInitBlocEvent, AppInitBlocState> {
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
       ]);
+
+      RecaptchaHandler.instance.setupSiteKey(dataSiteKey: Config.recaptchaKey);
 
       await Logger.init();
       FlutterError.onError = (FlutterErrorDetails details) {

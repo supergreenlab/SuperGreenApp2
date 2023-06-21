@@ -24,6 +24,4 @@ part 'config.g.dart';
 abstract class Config {
   @EnviedField(varName: 'RECAPTCHA_KEY')
   static const String recaptchaKey = _Config.recaptchaKey;
-  @EnviedField(varName: 'RECAPTCHA_SECRET')
-  static const String recaptchaSecret = _Config.recaptchaSecret;
 }

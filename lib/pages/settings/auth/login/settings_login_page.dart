@@ -125,12 +125,15 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                                 setState(() {});
                               }),
                         ),
-                        ReCaptchaWebView(
-                          width: 200,
-                          height: 22,
-                          webViewColor: null,
-                          onTokenReceived: _onTokenReceived,
-                          url: '${BackendAPI().serverHost}/user/captcha',
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ReCaptchaWebView(
+                            width: 200,
+                            height: 50,
+                            webViewColor: null,
+                            onTokenReceived: _onTokenReceived,
+                            url: '${BackendAPI().serverHost}/user/captcha',
+                          ),
                         )
                       ],
                     ),
