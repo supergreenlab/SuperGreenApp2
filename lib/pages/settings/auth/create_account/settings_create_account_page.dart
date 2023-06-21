@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
-import 'package:super_green_app/pages/settings/auth/common/captcha/captcha.dart';
+import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 import 'package:super_green_app/pages/settings/auth/create_account/settings_create_account_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -128,8 +128,6 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Captcha(
-                            width: 200,
-                            height: 50,
                             webViewColor: null,
                             onTokenReceived: _onTokenReceived,
                             url: '${BackendAPI().serverHost}/user/captcha',

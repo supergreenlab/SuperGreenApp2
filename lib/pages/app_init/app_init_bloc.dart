@@ -33,7 +33,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/kv/models/app_data.dart';
 import 'package:super_green_app/data/kv/models/device_data.dart';
 import 'package:super_green_app/data/logger/logger.dart';
-import 'package:super_green_app/pages/settings/auth/common/captcha/captcha.dart';
+import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 
 abstract class AppInitBlocEvent extends Equatable {}
 

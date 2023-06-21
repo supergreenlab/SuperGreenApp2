@@ -15,11 +15,12 @@ class SettingsLoginBlocEventInit extends SettingsLoginBlocEvent {
 class SettingsLoginBlocEventLogin extends SettingsLoginBlocEvent {
   final String nickname;
   final String password;
+  final String token;
 
-  SettingsLoginBlocEventLogin(this.nickname, this.password);
+  SettingsLoginBlocEventLogin(this.nickname, this.password, this.token);
 
   @override
-  List<Object> get props => [nickname, password];
+  List<Object> get props => [nickname, password, token];
 }
 
 abstract class SettingsLoginBlocState extends Equatable {}
