@@ -138,6 +138,8 @@ PODS:
   - video_thumbnail (0.0.1):
     - Flutter
     - libwebp
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
   - wifi_iot (0.0.1):
     - Flutter
 
@@ -168,6 +170,7 @@ DEPENDENCIES:
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
   - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
   - wifi_iot (from `.symlinks/plugins/wifi_iot/ios`)
 
 SPEC REPOS:
@@ -238,6 +241,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player_avfoundation/ios"
   video_thumbnail:
     :path: ".symlinks/plugins/video_thumbnail/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
   wifi_iot:
     :path: ".symlinks/plugins/wifi_iot/ios"
 
@@ -281,6 +286,7 @@ SPEC CHECKSUMS:
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
+  webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
   wifi_iot: b5aafd6f9b52f8a357383a1deabab45f31cd602d
 
 PODFILE CHECKSUM: 9f18ceca47786a948040ec6b17597c3d916eeead

@@ -23,6 +23,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/deep_link/deep_link.dart';
 import 'package:super_green_app/device_daemon/device_daemon_bloc.dart';

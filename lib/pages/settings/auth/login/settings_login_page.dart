@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gcaptcha_v3/web_view.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/login/settings_login_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
@@ -23,6 +25,8 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
 
   final FocusNode _nicknameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+
+  String? token;
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +125,13 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
                                 setState(() {});
                               }),
                         ),
+                        ReCaptchaWebView(
+                          width: 200,
+                          height: 22,
+                          webViewColor: null,
+                          onTokenReceived: _onTokenReceived,
+                          url: '${BackendAPI().serverHost}/user/captcha',
+                        )
                       ],
                     ),
                   ),
@@ -153,6 +164,12 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
         },
       ),
     );
+  }
+
+  void _onTokenReceived(String token) {
+    setState(() {
+      this.token = token;
+    });
   }
 
   void _handleInput(BuildContext context) {

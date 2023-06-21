@@ -393,6 +393,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  dotenv:
+    dependency: transitive
+    description:
+      name: dotenv
+      sha256: e169b516bc7b88801919e1c508772bcb8e3d0d1776a43f74ab692c57e741cd8a
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   drift:
     dependency: transitive
     description:
@@ -417,6 +425,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  envied:
+    dependency: "direct main"
+    description:
+      name: envied
+      sha256: "2545198df33f6ecb701af530bcc4f85385950d9c71a75882c16c85d0f95d0928"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4"
+  envied_generator:
+    dependency: "direct main"
+    description:
+      name: envied_generator
+      sha256: "1d1264439857ca4b40f3b664b0c79d85b84c043358d1bdd92f3ea108fc1c47e6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.3"
   equatable:
     dependency: "direct main"
     description:
@@ -550,6 +574,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.0"
+  flutter_gcaptcha_v3:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "244957b2fe4f40a8446164fd4f4e52500fb7db00"
+      url: "https://github.com/basnetjiten/flutter_gcaptcha_v3.git"
+    source: git
+    version: "1.0.0"
   flutter_inappwebview:
     dependency: transitive
     description:
@@ -968,10 +1001,10 @@ packages:
     dependency: "direct main"
     description:
       name: path_provider
-      sha256: c7edf82217d4b2952b2129a61d3ad60f1075b9299e629e149a8d2e39c2e6aad4
+      sha256: "3087813781ab814e4157b172f1a11c46be20179fcc9bea043e0fba36bc0acaa2"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.14"
+    version: "2.0.15"
   path_provider_android:
     dependency: transitive
     description:
@@ -1609,6 +1642,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  webview_flutter:
+    dependency: transitive
+    description:
+      name: webview_flutter
+      sha256: "392c1d83b70fe2495de3ea2c84531268d5b8de2de3f01086a53334d8b6030a88"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.4"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: "8b3b2450e98876c70bfcead876d9390573b34b9418c19e28168b74f6cb252dbd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.10.4"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: "812165e4e34ca677bdfbfa58c01e33b27fd03ab5fa75b70832d4b7d4ca1fa8cf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.5"
+  webview_flutter_plus:
+    dependency: transitive
+    description:
+      name: webview_flutter_plus
+      sha256: bea8756ae096529254725def7c4a633851a785c7d49206e0817125ab02b14307
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0+2"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: a5364369c758892aa487cbf59ea41d9edd10f9d9baf06a94e80f1bd1b4c7bbc0
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.5"
   wifi_iot:
     dependency: "direct main"
     description:
@@ -1658,5 +1731,5 @@ packages:
     source: hosted
     version: "8.1.2"
 sdks:
-  dart: ">=2.19.0 <3.0.0"
-  flutter: ">=3.7.0-0"
+  dart: ">=2.19.6 <3.0.0"
+  flutter: ">=3.7.12"
