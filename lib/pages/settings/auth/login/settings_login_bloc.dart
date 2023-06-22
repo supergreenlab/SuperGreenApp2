@@ -72,7 +72,7 @@ class SettingsLoginBloc extends LegacyBloc<SettingsLoginBlocEvent, SettingsLogin
     } else if (event is SettingsLoginBlocEventLogin) {
       yield SettingsLoginBlocStateLoading();
       try {
-        await BackendAPI().usersAPI.login(event.nickname, event.password);
+        await BackendAPI().usersAPI.login(event.nickname, event.password, event.token);
         String? notificationToken = AppDB().getAppData().notificationToken;
         await BackendAPI().feedsAPI.createUserEnd(notificationToken: notificationToken);
       } catch (e, trace) {

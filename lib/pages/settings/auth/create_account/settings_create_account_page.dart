@@ -125,14 +125,6 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
                                 setState(() {});
                               }),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Captcha(
-                            webViewColor: null,
-                            onTokenReceived: _onTokenReceived,
-                            url: '${BackendAPI().serverHost}/user/captcha',
-                          ),
-                        )
                       ],
                     ),
                   ),
@@ -168,14 +160,26 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
   }
 
   void _onTokenReceived(String token) {
-    setState(() {
-      this.token = token;
-    });
+    Navigator.pop(context);
+    BlocProvider.of<SettingsCreateAccountBloc>(context).add(SettingsCreateAccountBlocEventCreateAccount(
+        _nicknameController.value.text, _passwordController.value.text, token));
   }
 
   void _handleInput(BuildContext context) {
-    BlocProvider.of<SettingsCreateAccountBloc>(context).add(
-        SettingsCreateAccountBlocEventCreateAccount(_nicknameController.value.text, _passwordController.value.text));
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        useSafeArea: true,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Captcha(
+              webViewColor: null,
+              onTokenReceived: _onTokenReceived,
+              url: '${BackendAPI().serverHost}/user/captcha',
+            ),
+          );
+        });
   }
 
   @override

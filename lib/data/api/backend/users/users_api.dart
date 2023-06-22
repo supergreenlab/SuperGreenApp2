@@ -43,12 +43,13 @@ class User extends Equatable {
 class UsersAPI {
   bool get loggedIn => AppDB().getAppData().jwt != null;
 
-  Future login(String nickname, String password) async {
+  Future login(String nickname, String password, String token) async {
     Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/login'),
         headers: {'Content-Type': 'application/json'},
         body: JsonEncoder().convert({
           'handle': nickname,
           'password': password,
+          'token': token,
         }));
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('Access denied: ${resp.body}', fwdThrow: true);
@@ -56,7 +57,7 @@ class UsersAPI {
     AppDB().setJWT(resp.headers['x-sgl-token']!);
   }
 
-  Future createUser(String nickname, String password) async {
+  Future createUser(String nickname, String password, String token) async {
     Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/user'),
         headers: {
           'Content-Type': 'application/json',
@@ -64,13 +65,14 @@ class UsersAPI {
         body: JsonEncoder().convert({
           'nickname': nickname,
           'password': password,
+          'token': token,
         }));
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('CreateUser failed with error: ${resp.body}', fwdThrow: true);
     }
   }
 
-  Future deleteUser(String nickname, String password) async {
+  Future deleteUser(String nickname, String password, String token) async {
     Response resp = await BackendAPI().apiClient.delete(Uri.parse('${BackendAPI().serverHost}/user'),
         headers: {
           'Content-Type': 'application/json',
@@ -79,6 +81,7 @@ class UsersAPI {
         body: JsonEncoder().convert({
           'handle': nickname,
           'password': password,
+          'token': token,
         }));
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('DeleteUser failed with error: ${resp.body}', fwdThrow: true);
@@ -121,7 +124,7 @@ class UsersAPI {
   }
 
   Future<User> me() async {
-    Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/users/me'), headers: {
+    Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/user/me'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
     });

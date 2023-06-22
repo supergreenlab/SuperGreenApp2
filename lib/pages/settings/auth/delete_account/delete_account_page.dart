@@ -18,6 +18,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 import 'package:super_green_app/pages/settings/auth/delete_account/delete_account_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -205,12 +207,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: GreenButton(
                       title: 'Confirm delete',
-                      onPressed: nickname.text != '' && password.text != ''
-                          ? () {
-                              BlocProvider.of<DeleteAccountBloc>(context)
-                                  .add(DeleteAccountBlocEventDelete(nickname.text, password.text, deleteLocalData));
-                            }
-                          : null,
+                      onPressed: nickname.text != '' && password.text != '' ? this._handleInput : null,
                     ),
                   ),
                 ],
@@ -220,5 +217,28 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
         ),
       ),
     );
+  }
+
+  void _onTokenReceived(String token) {
+    Navigator.pop(context);
+    BlocProvider.of<DeleteAccountBloc>(context)
+        .add(DeleteAccountBlocEventDelete(nickname.text, password.text, token, deleteLocalData));
+  }
+
+  void _handleInput(BuildContext context) {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        useSafeArea: true,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Captcha(
+              webViewColor: null,
+              onTokenReceived: _onTokenReceived,
+              url: '${BackendAPI().serverHost}/user/captcha',
+            ),
+          );
+        });
   }
 }

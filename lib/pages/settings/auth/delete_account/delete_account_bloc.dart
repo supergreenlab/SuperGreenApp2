@@ -32,14 +32,16 @@ class DeleteAccountBlocEventInit extends DeleteAccountBlocEvent {
 class DeleteAccountBlocEventDelete extends DeleteAccountBlocEvent {
   final String nickname;
   final String password;
+  final String token;
   final bool deleteLocalData;
 
-  DeleteAccountBlocEventDelete(this.nickname, this.password, this.deleteLocalData);
+  DeleteAccountBlocEventDelete(this.nickname, this.password, this.token, this.deleteLocalData);
 
   @override
   List<Object?> get props => [
         nickname,
         password,
+        token,
         deleteLocalData,
       ];
 }
@@ -81,7 +83,7 @@ class DeleteAccountBloc extends LegacyBloc<DeleteAccountBlocEvent, DeleteAccount
     if (event is DeleteAccountBlocEventInit) {
     } else if (event is DeleteAccountBlocEventDelete) {
       try {
-        await BackendAPI().usersAPI.deleteUser(event.nickname, event.password);
+        await BackendAPI().usersAPI.deleteUser(event.nickname, event.password, event.token);
       } catch (e) {
         yield DeleteAccountBlocStateError();
         return;

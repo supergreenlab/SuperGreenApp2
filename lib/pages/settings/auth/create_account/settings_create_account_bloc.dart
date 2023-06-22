@@ -15,11 +15,12 @@ class SettingsCreateAccountBlocEventInit extends SettingsCreateAccountBlocEvent 
 class SettingsCreateAccountBlocEventCreateAccount extends SettingsCreateAccountBlocEvent {
   final String nickname;
   final String password;
+  final String token;
 
-  SettingsCreateAccountBlocEventCreateAccount(this.nickname, this.password);
+  SettingsCreateAccountBlocEventCreateAccount(this.nickname, this.password, this.token);
 
   @override
-  List<Object> get props => [nickname, password];
+  List<Object> get props => [nickname, password, token];
 }
 
 abstract class SettingsCreateAccountBlocState extends Equatable {}
@@ -71,8 +72,8 @@ class SettingsCreateAccountBloc extends LegacyBloc<SettingsCreateAccountBlocEven
     } else if (event is SettingsCreateAccountBlocEventCreateAccount) {
       yield SettingsCreateAccountBlocStateLoading();
       try {
-        await BackendAPI().usersAPI.createUser(event.nickname, event.password);
-        await BackendAPI().usersAPI.login(event.nickname, event.password);
+        await BackendAPI().usersAPI.createUser(event.nickname, event.password, event.token);
+        await BackendAPI().usersAPI.login(event.nickname, event.password, event.token);
         await BackendAPI().feedsAPI.createUserEnd(notificationToken: AppDB().getAppData().notificationToken);
       } catch (e, trace) {
         Logger.logError(e, trace);
