@@ -58,7 +58,7 @@ class BoxControlParamsController extends ParamsController {
       if (boxParam.ivalue != box.deviceBox!) {
         continue;
       }
-      await c.loadParam(device, "LED_${i}_DIM", 'dim$i');
+      await c.loadParam(device, "LED_${i}_DIM", 'dim$nLights');
       nLights++;
     }
     c.nLights = nLights;
