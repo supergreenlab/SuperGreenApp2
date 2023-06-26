@@ -73,7 +73,7 @@ class SettingsCreateAccountBloc extends LegacyBloc<SettingsCreateAccountBlocEven
       yield SettingsCreateAccountBlocStateLoading();
       try {
         await BackendAPI().usersAPI.createUser(event.nickname, event.password, event.token);
-        await BackendAPI().usersAPI.login(event.nickname, event.password, event.token);
+        //await BackendAPI().usersAPI.login(event.nickname, event.password, event.token);
         await BackendAPI().feedsAPI.createUserEnd(notificationToken: AppDB().getAppData().notificationToken);
       } catch (e, trace) {
         Logger.logError(e, trace);

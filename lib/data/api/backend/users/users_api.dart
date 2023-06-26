@@ -70,6 +70,7 @@ class UsersAPI {
     if (resp.statusCode ~/ 100 != 2) {
       Logger.throwError('CreateUser failed with error: ${resp.body}', fwdThrow: true);
     }
+    AppDB().setJWT(resp.headers['x-sgl-token']!);
   }
 
   Future deleteUser(String nickname, String password, String token) async {

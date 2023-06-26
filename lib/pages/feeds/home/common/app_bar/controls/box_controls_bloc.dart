@@ -33,7 +33,7 @@ class BoxControlParamsController extends ParamsController {
   ParamController get offHour => params['offHour']!;
   ParamController get offMin => params['offMin']!;
 
-  late int nLights;
+  late final int nLights;
   List<ParamController> get lightsDimming {
     List<ParamController> dimmings = [];
     for (int i = 0; i < nLights; ++i) {
@@ -52,14 +52,16 @@ class BoxControlParamsController extends ParamsController {
     await c.loadBoxParam(device, box, 'OFF_MIN', 'offMin');
 
     Module lightModule = await RelDB.get().devicesDAO.getModule(device.id, "led");
-    c.nLights = lightModule.arrayLen;
+    int nLights = 0;
     for (int i = 0; i < lightModule.arrayLen; ++i) {
       Param boxParam = await RelDB.get().devicesDAO.getParam(device.id, "LED_${i}_BOX");
       if (boxParam.ivalue != box.deviceBox!) {
         continue;
       }
       await c.loadParam(device, "LED_${i}_DIM", 'dim$i');
+      nLights++;
     }
+    c.nLights = nLights;
     return c;
   }
 
