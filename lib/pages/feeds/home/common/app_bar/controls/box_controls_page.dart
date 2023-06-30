@@ -126,8 +126,10 @@ class BoxControlsPage extends StatelessWidget {
     for (ParamController dimming in dimmings) {
       totalDimming += dimming.ivalue;
     }
-    totalDimming /= dimmings.length;
-    totalDimming *= state.metrics.light.ivalue / 100.0;
+    if (dimmings.length != 0) {
+      totalDimming /= dimmings.length;
+      totalDimming *= state.metrics.light.ivalue / 100.0;
+    }
     return Expanded(
       child: _renderButtons(
         context,
