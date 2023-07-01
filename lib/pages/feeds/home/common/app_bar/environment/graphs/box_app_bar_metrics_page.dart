@@ -220,12 +220,21 @@ class _BoxAppBarMetricsPageState extends State<BoxAppBarMetricsPage> {
                         disabledGraphs[4] = !(disabledGraphs[4] ?? false);
                       });
                     }, disabledGraphs[4] ?? false),
-                    _renderMetric(
+                    state.graphData[3].data.length > 0 ? _renderMetric(
                         Color(0xffB3B634),
                         'Light',
                         '${state.graphData[3].data[selectedGraphIndex ?? state.graphData[3].data.length - 1].metric.toInt()}%',
                         '${TimeSeriesAPI.min(state.graphData[3].data).metric.toInt()}%',
                         '${TimeSeriesAPI.max(state.graphData[3].data).metric.toInt()}%', () {
+                      setState(() {
+                        disabledGraphs[3] = !(disabledGraphs[3] ?? false);
+                      });
+                    }, disabledGraphs[3] ?? false) : _renderMetric(
+                        Color(0xffB3B634),
+                        'Light',
+                        '0',
+                        'n/a%',
+                        'n/a%', () {
                       setState(() {
                         disabledGraphs[3] = !(disabledGraphs[3] ?? false);
                       });

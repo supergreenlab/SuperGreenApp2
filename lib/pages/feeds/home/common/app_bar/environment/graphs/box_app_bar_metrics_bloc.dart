@@ -130,6 +130,7 @@ class BoxAppBarMetricsBloc extends LegacyBloc<PlantFeedAppBarBlocEvent, PlantFee
         dims.add(dim);
       }
       List<int> avgDims = TimeSeriesAPI.avgMetrics(dims);
+      print('pouet');
       charts.Series<Metric, DateTime> light = TimeSeriesAPI.toTimeSeries(
           TimeSeriesAPI.multiplyMetric(timerOutput, avgDims), 'Light', charts.MaterialPalette.yellow.shadeDefault);
       charts.Series<Metric, DateTime> co2 = await TimeSeriesAPI.fetchTimeSeries(

@@ -27,6 +27,9 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class TimeSeriesAPI {
   static List<dynamic> multiplyMetric(List<dynamic> metric, List<int> values) {
+    if (metric.length == 0 || values.length == 0) {
+      return [];
+    }
     int i = 0;
     return metric
         .map<dynamic>((d) => [d[0], d[1] * values[i >= values.length ? values.length - 1 : i++].toDouble() / 100.0])
@@ -38,6 +41,9 @@ class TimeSeriesAPI {
     metrics.forEach((m) {
       maxN = math.max(m.length, maxN);
     });
+    if (maxN == 0) {
+      return [];
+    }
     List<int> result = List<int>.generate(maxN, (index) {
       int value = 0;
       int n = 0;
@@ -47,6 +53,9 @@ class TimeSeriesAPI {
           n += 1;
         }
       });
+      if (n == 0) {
+        return 0;
+      }
       return value ~/ n;
     });
     return result;

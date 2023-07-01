@@ -145,7 +145,7 @@ class SelectDeviceNewBoxPageState extends State<SelectDeviceNewBoxPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: GreenButton(
                   title: SelectDeviceNewBoxPage.selectDeviceNewBoxSetupEmptyBox,
                   onPressed: () => _handleInput(context),
