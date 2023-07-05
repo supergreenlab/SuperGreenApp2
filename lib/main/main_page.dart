@@ -215,47 +215,44 @@ class _MainPageState extends State<MainPage> {
             FocusManager.instance.primaryFocus!.unfocus();
           }
         },
-        child: wrapListeners(MediaQuery(
-          data: MediaQueryData.fromWindow(WidgetsBinding.instance.window).copyWith(boldText: false),
-          child: MaterialApp(
-            useInheritedMediaQuery: true,
-            //navigatorObservers: [_analyticsObserver,],
-            localizationsDelegates: [
-              const SGLLocalizationsDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale('en'),
-              const Locale('es'),
-              const Locale('fr'),
-            ],
-            navigatorKey: widget._navigatorKey,
-            onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context)!.title,
-            onGenerateRoute: (settings) => CupertinoPageRoute(
-                settings: settings,
-                builder: (context) {
-                  if (lastRouteContext != null) {
-                    lastRouteContextsStack.addLast(lastRouteContext!);
-                  }
-                  lastRouteContext = context;
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                    child: wrapSyncIndicator(TowelieHelper.wrapWidget(
-                        settings,
-                        context,
-                        _onGenerateRoute(context, settings, onPop: () {
-                          lastRouteContext = lastRouteContextsStack.removeLast();
-                        }))),
-                  );
-                }),
-            theme: ThemeData(
-              fontFamily: 'Roboto',
-            ),
-            home: BlocProvider<AppInitBloc>(
-              create: (context) => AppInitBloc(),
-              child: AppInitPage(),
-            ),
+        child: wrapListeners(MaterialApp(
+          useInheritedMediaQuery: true,
+          //navigatorObservers: [_analyticsObserver,],
+          localizationsDelegates: [
+            const SGLLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en'),
+            const Locale('es'),
+            const Locale('fr'),
+          ],
+          navigatorKey: widget._navigatorKey,
+          onGenerateTitle: (BuildContext context) => SGLLocalizations.of(context)!.title,
+          onGenerateRoute: (settings) => CupertinoPageRoute(
+              settings: settings,
+              builder: (context) {
+                if (lastRouteContext != null) {
+                  lastRouteContextsStack.addLast(lastRouteContext!);
+                }
+                lastRouteContext = context;
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+                  child: wrapSyncIndicator(TowelieHelper.wrapWidget(
+                      settings,
+                      context,
+                      _onGenerateRoute(context, settings, onPop: () {
+                        lastRouteContext = lastRouteContextsStack.removeLast();
+                      }))),
+                );
+              }),
+          theme: ThemeData(
+            fontFamily: 'Roboto',
+          ),
+          home: BlocProvider<AppInitBloc>(
+            create: (context) => AppInitBloc(),
+            child: AppInitPage(),
           ),
         )));
   }
