@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
@@ -164,20 +165,25 @@ class _SettingsLoginPageState extends State<SettingsLoginPage> {
   }
 
   void _handleInput(BuildContext context) {
-    showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled:true,
-        useSafeArea: true,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Captcha(
-              webViewColor: null,
-              onTokenReceived: _onTokenReceived,
-              url: '${BackendAPI().serverHost}/user/captcha',
-            ),
-          );
-        });
+    if (kReleaseMode) {
+      showModalBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          useSafeArea: true,
+          builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Captcha(
+                webViewColor: null,
+                onTokenReceived: _onTokenReceived,
+                url: '${BackendAPI().serverHost}/user/captcha',
+              ),
+            );
+          });
+    } else {
+      BlocProvider.of<SettingsLoginBloc>(context).add(
+          SettingsLoginBlocEventLogin(_nicknameController.value.text, _passwordController.value.text, "SKIP_CAPTCHA"));
+    }
   }
 
   @override

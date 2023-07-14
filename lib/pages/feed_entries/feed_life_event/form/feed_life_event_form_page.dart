@@ -32,8 +32,7 @@ import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:tuple/tuple.dart';
 
 List<Tuple2<String, String>> phasesTitles = [
-  Tuple2(
-      FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelGermination, FeedEntryIcons[FE_LIFE_EVENT]!),
+  Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelGermination, FeedEntryIcons[FE_LIFE_EVENT]!),
   Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelVegging, 'assets/plant_infos/icon_vegging_since.svg'),
   Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelBlooming, 'assets/plant_infos/icon_blooming_since.svg'),
   Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabelDrying, 'assets/plant_infos/icon_drying_since.svg'),
@@ -147,8 +146,8 @@ class _FeedLifeEventFormPageState extends State<FeedLifeEventFormPage> {
             Widget body = FullscreenLoading(
               title: 'Loading..',
             );
-            Tuple2<String, String> phaseTitle = Tuple2(
-                FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabel, FeedEntryIcons[FE_LIFE_EVENT]!);
+            Tuple2<String, String> phaseTitle =
+                Tuple2(FeedLifeEventFormPage.feedLifeEventFormPagePhaseLabel, FeedEntryIcons[FE_LIFE_EVENT]!);
             if (state is FeedLifeEventFormBlocStateInit || state is FeedLifeEventFormBlocStateDone) {
               body = Expanded(child: FullscreenLoading());
             } else if (state is FeedLifeEventFormBlocStateLoaded) {
