@@ -22,6 +22,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 class TowelieHelper extends StatefulWidget {
@@ -184,7 +185,7 @@ class _TowelieHelperState extends State<TowelieHelper> {
                           alignment: Alignment.center,
                           transform: Matrix4.rotationY(pi),
                           child:
-                              SizedBox(width: 60, height: 60, child: Image.asset('assets/feed_card/icon_towelie.png'))),
+                              SizedBox(width: 60, height: 60, child: Image.asset(FeedEntryIcons[FE_TOWELIE_INFO]!))),
                     ),
                   ),
                 ],

@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 
 import 'icon_checkbox.dart';
@@ -187,21 +188,21 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             alignment: WrapAlignment.start,
             children: [
               _renderCardfilter(context,
-                  filterName: 'FE_MEDIA', icon: 'assets/feed_card/icon_media.svg', name: 'Grow log'),
+                  filterName: 'FE_MEDIA', name: 'Grow log'),
               _renderCardfilter(context,
-                  filterName: 'FE_MEASURE', icon: 'assets/feed_card/icon_measure.svg', name: 'Measure'),
+                  filterName: 'FE_MEASURE', name: 'Measure'),
               _renderCardfilter(context,
-                  filterName: 'FE_TRANSPLANT', icon: 'assets/feed_card/icon_transplant.svg', name: 'Transplant'),
+                  filterName: 'FE_TRANSPLANT', name: 'Transplant'),
               _renderCardfilter(context,
-                  filterName: 'FE_BENDING', icon: 'assets/feed_card/icon_bending.svg', name: 'Bending'),
+                  filterName: 'FE_BENDING', name: 'Bending'),
               _renderCardfilter(context,
-                  filterName: 'FE_FIMMING', icon: 'assets/feed_card/icon_fimming.svg', name: 'Fimming'),
+                  filterName: 'FE_FIMMING', name: 'Fimming'),
               _renderCardfilter(context,
-                  filterName: 'FE_TOPPING', icon: 'assets/feed_card/icon_topping.svg', name: 'Topping'),
+                  filterName: 'FE_TOPPING', name: 'Topping'),
               _renderCardfilter(context,
-                  filterName: 'FE_DEFOLIATION', icon: 'assets/feed_card/icon_defoliation.svg', name: 'Defoliation'),
+                  filterName: 'FE_DEFOLIATION', name: 'Defoliation'),
               _renderCardfilter(context,
-                  filterName: 'FE_TIMELAPSE', icon: 'assets/feed_card/icon_timelapse.svg', name: 'Timelapse'),
+                  filterName: 'FE_TIMELAPSE', name: 'Timelapse'),
             ],
           ),
           CardSeparator(),
@@ -209,15 +210,15 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             alignment: WrapAlignment.start,
             children: [
               _renderCardfilter(context,
-                  filterName: 'FE_NUTRIENT_MIX', icon: 'assets/feed_card/icon_nutrient_mix.svg', name: 'Nutrient M'),
+                  filterName: 'FE_NUTRIENT_MIX', name: 'Nutrient M'),
               _renderCardfilter(context,
-                  filterName: 'FE_WATER', icon: 'assets/feed_card/icon_watering.svg', name: 'Watering'),
+                  filterName: 'FE_WATER', name: 'Watering'),
               _renderCardfilter(context,
-                  filterName: 'FE_LIGHT', icon: 'assets/feed_card/icon_light.svg', name: 'Light'),
+                  filterName: 'FE_LIGHT', name: 'Light'),
               _renderCardfilter(context,
-                  filterName: 'FE_VENTILATION', icon: 'assets/feed_card/icon_blower.svg', name: 'Ventilation'),
+                  filterName: 'FE_VENTILATION', name: 'Ventilation'),
               _renderCardfilter(context,
-                  filterName: 'FE_SCHEDULE', icon: 'assets/feed_card/icon_schedule.svg', name: 'Schedule'),
+                  filterName: 'FE_SCHEDULE', name: 'Schedule'),
             ],
           ),
           CardSeparator(),
@@ -226,13 +227,11 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             children: [
               _renderCardfilter(context,
                 filterName: 'FE_LIFE_EVENT',
-                icon: 'assets/plant_infos/icon_germination_date.svg',
                 name: 'Life events'
               ),
               _renderCardfilter(
                 context,
                 filterName: 'FE_TOWELIE_INFO',
-                icon: 'assets/feed_card/icon_towelie.png',
                 name: 'Towelie',
               ),
             ],
@@ -245,7 +244,6 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
   Widget _renderCardfilter(
     BuildContext context, {
     required String filterName,
-    required String icon,
     required String name,
   }) {
     bool checked = filters[filterName] ?? true;
@@ -282,7 +280,7 @@ class _PlantFeedFilterPageState extends State<PlantFeedFilterPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: IconCheckbox(icon: icon, checked: checked, size: 30.0),
+              child: IconCheckbox(icon: FeedEntryIcons[filterName]!, checked: checked, size: 30.0),
             )
           ],
         ),

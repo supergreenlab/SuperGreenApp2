@@ -25,6 +25,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_phase.dart';
 import 'package:super_green_app/pages/explorer/sections/widgets/plant_strain.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feed_entries/common/media_state.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_media.dart';
@@ -88,7 +89,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_media.svg',
+            FeedEntryIcons[FE_MEDIA]!,
             FeedMediaCardPage.feedMediaCardPageTitle,
             widget.state.synced,
             showSyncStatus: !state.isRemoteState,
@@ -157,7 +158,7 @@ class _FeedMediaCardPageState extends State<FeedMediaCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_media.svg',
+              FeedEntryIcons[FE_MEDIA]!,
               params.boxFeed == true
                   ? FeedMediaCardPage.feedMediaCardPageBoxTitle
                   : FeedMediaCardPage.feedMediaCardPageTitle,

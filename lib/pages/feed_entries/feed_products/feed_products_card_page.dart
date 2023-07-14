@@ -22,6 +22,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_products.dart';
 import 'package:super_green_app/pages/feed_entries/feed_products/feed_products_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
@@ -82,7 +83,7 @@ class FeedProductsCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-              'assets/feed_card/icon_towelie.png', FeedProductsCardPage.feedProductsCardPageTitle, state.synced),
+              FeedEntryIcons[FE_TOWELIE_INFO]!, FeedProductsCardPage.feedProductsCardPageTitle, state.synced),
           Container(
             height: 150,
             alignment: Alignment.center,
@@ -97,7 +98,7 @@ class FeedProductsCardPage extends StatelessWidget {
     FeedProductsParams params = state.params as FeedProductsParams;
     List<Widget> content = [
       FeedCardTitle(
-        'assets/feed_card/icon_towelie.png',
+        FeedEntryIcons[FE_TOWELIE_INFO]!,
         FeedProductsCardPage.feedProductsCardPageTitle,
         state.synced,
       ),

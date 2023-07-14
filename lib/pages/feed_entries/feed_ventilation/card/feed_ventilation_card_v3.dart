@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_page.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/form/feed_ventilation_form_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
@@ -64,7 +65,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
     String unit = AppDB().getAppData().freedomUnits == true ? '°F' : '°C';
     List<Widget> cards = [
       renderCard(
-          'assets/feed_card/icon_blower.svg',
+          FeedEntryIcons[FE_VENTILATION]!,
           8,
           FeedVentilationCardPage.feedVentilationCardPageLowTempSettings,
           Column(
@@ -76,7 +77,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
             ],
           )),
       renderCard(
-          'assets/feed_card/icon_blower.svg',
+          FeedEntryIcons[FE_VENTILATION]!,
           8,
           FeedVentilationCardPage.feedVentilationCardPageHighTempSettings,
           Column(
@@ -113,7 +114,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
 
     List<Widget> cards = [
       renderCard(
-          'assets/feed_card/icon_blower.svg',
+          FeedEntryIcons[FE_VENTILATION]!,
           8,
           FeedVentilationCardPage.feedVentilationCardPageLowHumiSettings,
           Column(
@@ -125,7 +126,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
             ],
           )),
       renderCard(
-          'assets/feed_card/icon_blower.svg',
+          FeedEntryIcons[FE_VENTILATION]!,
           8,
           FeedVentilationCardPage.feedVentilationCardPageHighHumiSettings,
           Column(
@@ -160,7 +161,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
   Widget _renderTimerMode() {
     List<Widget> cards = [
       renderCard(
-          'assets/feed_card/icon_blower.svg',
+          FeedEntryIcons[FE_VENTILATION]!,
           8,
           FeedVentilationCardPage.feedVentilationCardPageNightSettings,
           Column(
@@ -170,7 +171,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
             ],
           )),
       renderCard(
-          'assets/feed_card/icon_blower.svg',
+          FeedEntryIcons[FE_VENTILATION]!,
           8,
           FeedVentilationCardPage.feedVentilationCardPageDaySettings,
           Column(
@@ -203,7 +204,7 @@ class FeedVentilationCardV3 extends StatelessWidget {
   Widget _renderManualMode() {
     List<Widget> cards = [
       renderCard(
-          'assets/feed_card/icon_blower.svg',
+          FeedEntryIcons[FE_VENTILATION]!,
           8,
           FeedVentilationCardPage.feedVentilationCardPagePower,
           Column(

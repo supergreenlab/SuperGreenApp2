@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_water.dart';
 import 'package:super_green_app/pages/feed_entries/feed_water/card/feed_water_state.dart';
@@ -110,7 +111,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_watering.svg', FeedWaterCardPage.feedWateringCardPageTitle, state.synced,
+          FeedCardTitle(FeedEntryIcons[FE_WATER]!, FeedWaterCardPage.feedWateringCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState),
           Container(
             height: 200,
@@ -150,7 +151,7 @@ class _FeedWaterCardPageState extends State<FeedWaterCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_watering.svg', FeedWaterCardPage.feedWateringCardPageTitle, state.synced,
+          FeedCardTitle(FeedEntryIcons[FE_WATER]!, FeedWaterCardPage.feedWateringCardPageTitle, state.synced,
               showSyncStatus: !state.isRemoteState, showControls: !state.isRemoteState, onEdit: () {
             setState(() {
               editText = true;

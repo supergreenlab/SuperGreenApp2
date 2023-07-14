@@ -26,6 +26,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/date_renderer.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_action.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_tab.dart';
@@ -85,7 +86,7 @@ class PlantQuickViewPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 12.0),
           child: AppBarAction(
-            icon: 'assets/feed_card/icon_watering.svg',
+            icon: FeedEntryIcons[FE_WATER]!,
             color: Color(0xFF506EBA),
             title: 'LAST WATERING',
             titleIcon: wateringAlert(state) ? Icon(Icons.warning, size: 20, color: Colors.red) : null,
@@ -112,7 +113,7 @@ class PlantQuickViewPage extends StatelessWidget {
           ),
         ),
         AppBarAction(
-          icon: 'assets/feed_card/icon_media.svg',
+          icon: FeedEntryIcons[FE_MEDIA]!,
           color: Color(0xFF617682),
           title: 'LAST GROWLOG',
           titleIcon: mediaAlert(state) ? Icon(Icons.warning, size: 20, color: Colors.red) : null,

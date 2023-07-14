@@ -114,7 +114,7 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                           Image.network(
                               BackendAPI()
                                   .feedsAPI
-                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath!),
+                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath ?? ""),
                               fit: BoxFit.cover,
                               headers: {'Host': BackendAPI().storageServerHostHeader},
                               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {

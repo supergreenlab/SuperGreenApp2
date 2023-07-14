@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_nutrient_mix.dart';
 import 'package:super_green_app/pages/feed_entries/feed_nutrient_mix/form/feed_nutrient_mix_form_page.dart';
@@ -111,7 +112,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_nutrient_mix.svg', FeedNutrientMixCardPage.feedNutrientMixCardTitle,
+          FeedCardTitle(FeedEntryIcons[FE_NUTRIENT_MIX]!, FeedNutrientMixCardPage.feedNutrientMixCardTitle,
               widget.state.synced,
               showSyncStatus: !widget.state.isRemoteState,
               showControls: !widget.state.isRemoteState,
@@ -155,7 +156,7 @@ class _FeedNutrientMixCardPageState extends State<FeedNutrientMixCardPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_nutrient_mix.svg',
+            FeedEntryIcons[FE_NUTRIENT_MIX]!,
             FeedNutrientMixCardPage.feedNutrientMixCardTitle,
             state.synced,
             showSyncStatus: !state.isRemoteState,

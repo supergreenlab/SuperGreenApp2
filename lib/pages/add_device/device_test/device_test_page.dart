@@ -28,6 +28,7 @@ import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/l10n/common.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/add_device/device_test/device_test_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -161,14 +162,14 @@ class _DeviceTestPageState extends State<DeviceTestPage> {
                     children: <Widget>[
                       SectionTitle(
                         title: DeviceTestPage.ledTestingInstructions,
-                        icon: 'assets/feed_card/icon_light.svg',
+                        icon: FeedEntryIcons[FE_LIGHT]!,
                         backgroundColor: Color(0xff0b6ab3),
                         titleColor: Colors.white,
                         elevation: 5,
                       ),
                       Expanded(
                         child: _renderChannels(context, state.nLedChannels, DeviceTestPage.ledTestingChannelTitle,
-                            'assets/feed_card/icon_light.svg'),
+                            FeedEntryIcons[FE_LIGHT]!),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),

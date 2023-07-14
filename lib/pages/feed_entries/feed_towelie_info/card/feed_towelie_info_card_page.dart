@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_towelie_info.dart';
 import 'package:super_green_app/pages/feed_entries/feed_towelie_info/card/feed_towelie_info_state.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/state/feed_entry_state.dart';
@@ -53,7 +54,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie', state.synced,
+          FeedCardTitle(FeedEntryIcons[FE_TOWELIE_INFO]!, 'Towelie', state.synced,
               actions: cardActions != null ? cardActions!(context, state) : []),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -72,7 +73,7 @@ class FeedTowelieInfoCardPage extends StatelessWidget {
   Widget _renderLoaded(BuildContext context, FeedTowelieInfoState state) {
     FeedTowelieInfoParams params = state.params as FeedTowelieInfoParams;
     List<Widget> content = [
-      FeedCardTitle('assets/feed_card/icon_towelie.png', 'Towelie', state.synced),
+      FeedCardTitle(FeedEntryIcons[FE_TOWELIE_INFO]!, 'Towelie', state.synced),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 24.0),
         child: _renderBody(context, state),

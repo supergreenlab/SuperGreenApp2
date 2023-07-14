@@ -31,6 +31,7 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/device_daemon/device_reachable_listener_bloc.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feeds/feed/bloc/feed_bloc.dart';
 import 'package:super_green_app/pages/feeds/feed/feed_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_bloc.dart';
@@ -445,7 +446,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           }),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuDefoliation,
-          'assets/feed_card/icon_defoliation.svg',
+          FeedEntryIcons[FE_DEFOLIATION]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedDefoliationFormEvent(state.plant,
@@ -454,7 +455,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_defoliate/l/en'])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuTopping,
-          'assets/feed_card/icon_topping.svg',
+          FeedEntryIcons[FE_TOPPING]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedToppingFormEvent(state.plant,
@@ -466,7 +467,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuFimming,
-          'assets/feed_card/icon_fimming.svg',
+          FeedEntryIcons[FE_FIMMING]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedFimmingFormEvent(state.plant,
@@ -478,7 +479,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuBending,
-          'assets/feed_card/icon_bending.svg',
+          FeedEntryIcons[FE_BENDING]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedBendingFormEvent(state.plant,
@@ -487,7 +488,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               tipPaths: ['t/supergreenlab/SuperGreenTips/master/s/how_to_low_stress_training_LST/l/en'])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuTransplant,
-          'assets/feed_card/icon_transplant.svg',
+          FeedEntryIcons[FE_TRANSPLANT]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedTransplantFormEvent(state.plant,
@@ -512,7 +513,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
           }),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuGerminating,
-          'assets/plant_infos/icon_germination_date.svg',
+          FeedEntryIcons[FE_LIFE_EVENT]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedLifeEventFormEvent(
@@ -563,21 +564,21 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
     return [
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuGrowlog,
-          'assets/feed_card/icon_media.svg',
+          FeedEntryIcons[FE_MEDIA]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMediaFormEvent(
                   plant: state.plant, pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuMeasure,
-          'assets/feed_card/icon_measure.svg',
+          FeedEntryIcons[FE_MEASURE]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedMeasureFormEvent(state.plant,
                   pushAsReplacement: pushAsReplacement, futureFn: futureFn(context, state)))),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuNutrientMix,
-          'assets/feed_card/icon_nutrient_mix.svg',
+          FeedEntryIcons[FE_NUTRIENT_MIX]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedNutrientMixFormEvent(state.plant,
@@ -589,7 +590,7 @@ class _PlantFeedPageState extends State<PlantFeedPage> {
               ])),
       _renderSpeedDialChild(
           PlantFeedPage.plantFeedPageMenuWatering,
-          'assets/feed_card/icon_watering.svg',
+          FeedEntryIcons[FE_WATER]!,
           _onSpeedDialSelected(
               context,
               ({pushAsReplacement = false}) => MainNavigateToFeedWaterFormEvent(state.plant,

@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:super_green_app/l10n.dart';
 import 'package:super_green_app/pages/feed_entries/common/comments/card/comments_card_page.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:super_green_app/pages/feed_entries/common/social_bar/social_bar_page.dart';
 import 'package:super_green_app/pages/feed_entries/entry_params/feed_ventilation.dart';
 import 'package:super_green_app/pages/feed_entries/feed_ventilation/card/feed_ventilation_card_legacy.dart';
@@ -210,7 +211,7 @@ class FeedVentilationCardPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FeedCardTitle(
-            'assets/feed_card/icon_blower.svg',
+            FeedEntryIcons[FE_VENTILATION]!,
             FeedVentilationCardPage.feedVentilationCardPageTitle,
             state.synced,
             showSyncStatus: !state.isRemoteState,
@@ -234,7 +235,7 @@ class FeedVentilationCardPage extends StatelessWidget {
     FeedVentilationParams params = state.params as FeedVentilationParams;
     Widget body;
     String title = FeedVentilationCardPage.feedVentilationCardPageTitle;
-    String icon = 'assets/feed_card/icon_blower.svg';
+    String icon = FeedEntryIcons[FE_VENTILATION]!;
     if (params.values.blowerRefSource == null && params.values.fanRefSource == null) {
       body = FeedVentilationCardLegacy(params: state.params as FeedVentilationParams);
     } else {
