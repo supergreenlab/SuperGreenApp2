@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -112,10 +113,10 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
-                          Image.network(
+                          (feedEntry.thumbnailPath ?? "") != "" || (feedEntry.plantThumbnailPath ?? "") != "" ? Image.network(
                               BackendAPI()
                                   .feedsAPI
-                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath ?? FeedEntryIcons[feedEntry.type] ?? ""),
+                                  .absoluteFileURL(feedEntry.thumbnailPath ?? feedEntry.plantThumbnailPath ?? ""),
                               fit: BoxFit.cover,
                               headers: {'Host': BackendAPI().storageServerHostHeader},
                               loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
@@ -123,7 +124,7 @@ class DiscussionsPage extends SectionPage<DiscussionsBloc, PublicFeedEntry> {
                               return child;
                             }
                             return ItemLoading();
-                          }),
+                          }) : SvgPicture.asset(FeedEntryIcons[feedEntry.type] ?? ""),
                           Positioned(
                             child: avatar,
                             top: -4,
