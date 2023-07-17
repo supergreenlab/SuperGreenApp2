@@ -18,43 +18,42 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
-abstract class ChecklistBlocEvent extends Equatable {}
+abstract class AppbarChecklistBlocEvent extends Equatable {}
 
-class ChecklistBlocEventInit extends ChecklistBlocEvent {
+class AppbarChecklistBlocEventInit extends AppbarChecklistBlocEvent {
   @override
   List<Object> get props => [];
 }
 
-abstract class ChecklistBlocState extends Equatable {}
+abstract class AppbarChecklistBlocState extends Equatable {}
 
-class ChecklistBlocStateInit extends ChecklistBlocState {
+class AppbarChecklistBlocStateInit extends AppbarChecklistBlocState {
   @override
   List<Object> get props => [];
 }
 
-class ChecklistBlocStateLoaded extends ChecklistBlocState {
+class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
   final Plant plant;
 
-  ChecklistBlocStateLoaded(this.plant);
+  AppbarChecklistBlocStateLoaded(this.plant);
 
   @override
   List<Object> get props => [plant];
 }
 
-class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
-  final MainNavigateToChecklist args;
+class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChecklistBlocState> {
+  final Plant plant;
 
-  ChecklistBloc(this.args) : super(ChecklistBlocStateInit()) {
-    add(ChecklistBlocEventInit());
+  AppbarChecklistBloc(this.plant) : super(AppbarChecklistBlocStateInit()) {
+    add(AppbarChecklistBlocEventInit());
   }
 
   @override
-  Stream<ChecklistBlocState> mapEventToState(ChecklistBlocEvent event) async* {
-    if (event is ChecklistBlocEventInit) {
-      yield ChecklistBlocStateLoaded(this.args.plant);
+  Stream<AppbarChecklistBlocState> mapEventToState(AppbarChecklistBlocEvent event) async* {
+    if (event is AppbarChecklistBlocEventInit) {
+      yield AppbarChecklistBlocStateLoaded(this.plant);
     }
   }
 }
