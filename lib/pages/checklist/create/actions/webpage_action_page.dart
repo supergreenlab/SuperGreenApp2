@@ -20,9 +20,15 @@ import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 
 class WebpageActionPage extends StatelessWidget {
+
+  final void Function() onClose;
+
+  const WebpageActionPage({Key? key, required this.onClose}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      onClose: onClose,
       title: 'Open webpage',
       child: Padding(
         padding: const EdgeInsets.all(8.0),

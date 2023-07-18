@@ -25,6 +25,11 @@ import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class MetricConditionPage extends StatefulWidget {
+
+  final void Function() onClose;
+
+  const MetricConditionPage({Key? key, required this.onClose}) : super(key: key);
+
   @override
   State<MetricConditionPage> createState() => _MetricConditionPageState();
 }
@@ -36,6 +41,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      onClose: this.widget.onClose,
       title: 'Metric condition',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
