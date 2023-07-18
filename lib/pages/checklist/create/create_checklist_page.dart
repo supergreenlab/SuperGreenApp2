@@ -19,8 +19,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/pages/checklist/create/actions/diary_action_page.dart';
+import 'package:super_green_app/pages/checklist/create/actions/webpage_action_page.dart';
+import 'package:super_green_app/pages/checklist/create/conditions/card_condition_page.dart';
+import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
+import 'package:super_green_app/pages/checklist/create/conditions/phase_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
@@ -111,8 +115,13 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   textEditingController: _descriptionController,
                 ),
               ),
-              _renderOptionCheckbx(context, 'This checklist entry can repeat. Entries that don\’t repeat will be removed from your checklist when checked.', (p0) => null, false),
-              _renderOptionCheckbx(context, 'Make this checklist entry public so others can add it to their checklist too.', (p0) => null, true),
+              _renderOptionCheckbx(
+                  context,
+                  'This checklist entry can repeat. Entries that don\’t repeat will be removed from your checklist when checked.',
+                  (p0) => null,
+                  false),
+              _renderOptionCheckbx(context,
+                  'Make this checklist entry public so others can add it to their checklist too.', (p0) => null, true),
             ],
           ),
         ),
@@ -137,6 +146,24 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24.0,
+                  horizontal: 32,
+                ),
+                child: MarkdownBody(
+                  fitContent: true,
+                  shrinkWrap: true,
+                  data:
+                      'Configure the conditions for this checklist item to show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the temperature reaches a given value”',
+                  styleSheet: MarkdownStyleSheet(
+                      p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
+                ),
+              ),
+              MetricConditionPage(),
+              CardConditionPage(),
+              PhaseConditionPage(),
+              _renderAddButton(context, '+ ADD CONDITION'),
             ],
           ),
         ),
@@ -161,6 +188,23 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24.0,
+                  horizontal: 32,
+                ),
+                child: MarkdownBody(
+                  fitContent: true,
+                  shrinkWrap: true,
+                  data:
+                      'Here you can set the actions required to complete this checklist item.\n\nActions can be things like “Add watering entry to diary” or “Read this webpage”',
+                  styleSheet: MarkdownStyleSheet(
+                      p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
+                ),
+              ),
+              WebpageActionPage(),
+              DiaryActionPage(),
+              _renderAddButton(context, '+ ADD ACTION'),
             ],
           ),
         ),
@@ -170,7 +214,10 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
 
   Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 8,),
+      padding: const EdgeInsets.only(
+        top: 16.0,
+        bottom: 8,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -199,6 +246,26 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _renderAddButton(BuildContext context, String title) {
+    return InkWell(
+      onTap: () {
+      },
+      child: Container(
+          height: 50, // Specify your container height
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Color.fromARGB(255, 86, 86, 86),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
       ),
     );
   }
