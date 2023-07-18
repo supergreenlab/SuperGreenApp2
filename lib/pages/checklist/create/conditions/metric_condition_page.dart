@@ -21,6 +21,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
@@ -67,21 +68,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
           'Monitored metric:',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        DropdownButton<int>(
-          value: 0,
-          onChanged: (int? value) {},
-          items: [
-            DropdownMenuItem(
-              value: 0,
-              child: Row(
-                children: [
-                  SvgPicture.asset('assets/feed_card/icon_media.svg'),
-                  Text('Temperature'),
-                ],
-              ),
-            ),
-          ],
-        ),
+        ChecklistCardType(),
       ],
     );
   }

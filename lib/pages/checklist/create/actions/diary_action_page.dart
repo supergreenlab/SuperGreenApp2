@@ -18,9 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 
 class DiaryActionPage extends StatelessWidget {
-
   final void Function() onClose;
 
   const DiaryActionPage({Key? key, required this.onClose}) : super(key: key);
@@ -29,12 +29,20 @@ class DiaryActionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CreateChecklistSection(
       onClose: onClose,
-      title: 'Diary action',
+      title: 'Open webpage',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('diary action'),
+        child: _renderCardTypes(context),
       ),
     );
   }
 
+  Widget _renderCardTypes(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ChecklistCardType(),
+      ],
+    );
+  }
 }
