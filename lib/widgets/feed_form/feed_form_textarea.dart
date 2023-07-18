@@ -37,6 +37,7 @@ class FeedFormTextarea extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: TextField(
             decoration: placeholder != null ? InputDecoration(
+              border: InputBorder.none,
               hintText: placeholder,
             ) : null,
             textCapitalization: TextCapitalization.sentences,
