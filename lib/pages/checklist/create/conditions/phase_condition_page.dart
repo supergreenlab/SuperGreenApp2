@@ -17,12 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 
 class PhaseConditionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
+    return CreateChecklistSection(
+      title: 'Phase condition',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text('phase condition'),

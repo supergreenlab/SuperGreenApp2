@@ -17,12 +17,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 
 class DiaryActionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
+    return CreateChecklistSection(
+      title: 'Diary action',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text('diary action'),
