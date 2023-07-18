@@ -73,9 +73,15 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
   Widget _renderLoaded(BuildContext context, CreateChecklistBlocStateLoaded state) {
     return ListView(
       children: [
+        Container(
+          height: 10,
+        ),
         _renderInfos(context, state),
         _renderConditions(context, state),
         _renderActions(context, state),
+        Container(
+          height: 60,
+        ),
       ],
     );
   }
@@ -252,20 +258,19 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
 
   Widget _renderAddButton(BuildContext context, String title) {
     return InkWell(
-      onTap: () {
-      },
+      onTap: () {},
       child: Container(
-          height: 50, // Specify your container height
-          child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: Color.fromARGB(255, 86, 86, 86),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+        height: 50, // Specify your container height
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Color.fromARGB(255, 86, 86, 86),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
+        ),
       ),
     );
   }
