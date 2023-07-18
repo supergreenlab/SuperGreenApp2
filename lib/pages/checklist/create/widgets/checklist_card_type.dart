@@ -17,31 +17,24 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
-import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class DiaryActionPage extends StatelessWidget {
-  final void Function() onClose;
-
-  const DiaryActionPage({Key? key, required this.onClose}) : super(key: key);
-
+class ChecklistCardType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CreateChecklistSection(
-      onClose: onClose,
-      title: 'Create diary card',
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _renderCardTypes(context),
-      ),
-    );
-  }
-
-  Widget _renderCardTypes(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ChecklistCardType(),
+    return DropdownButton<int>(
+      value: 0,
+      onChanged: (int? value) {},
+      items: [
+        DropdownMenuItem(
+          value: 0,
+          child: Row(
+            children: [
+              SvgPicture.asset('assets/feed_card/icon_media.svg'),
+              Text('Temperature'),
+            ],
+          ),
+        ),
       ],
     );
   }
