@@ -21,6 +21,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
@@ -150,38 +151,8 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('For how long?'),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: FeedFormTextarea(
-                  placeholder: '(Optional)',
-                  soloLine: true,
-                  noPadding: true,
-                  textEditingController: _minController,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: DropdownButton<int>(
-                    value: 0,
-                    onChanged: (int? value) {},
-                    items: [
-                      DropdownMenuItem(
-                        value: 0,
-                        child: Text('Days'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        )
-      ],
+        ChecklistDuration(),
+      ]
     );
   }
 }
