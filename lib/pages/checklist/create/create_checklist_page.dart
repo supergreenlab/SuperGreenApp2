@@ -27,6 +27,7 @@ import 'package:super_green_app/pages/checklist/create/conditions/metric_conditi
 import 'package:super_green_app/pages/checklist/create/conditions/phase_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
+import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 
@@ -100,10 +101,12 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   'Title',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
                 ),
               ),
               FeedFormTextarea(
+                placeholder: 'ex: Check for XXX',
+                soloLine: true,
                 noPadding: true,
                 textEditingController: _titleController,
               ),
@@ -111,23 +114,26 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   'Description',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
                 ),
               ),
               SizedBox(
                 height: 150,
                 child: FeedFormTextarea(
+                  placeholder: 'ex: When the temperature gets too high, some fungus might develop on your leaves.',
                   noPadding: true,
                   textEditingController: _descriptionController,
                 ),
               ),
-              _renderOptionCheckbx(
-                  context,
-                  'This checklist entry can repeat. Entries that don\’t repeat will be removed from your checklist when checked.',
-                  (p0) => null,
-                  false),
-              _renderOptionCheckbx(context,
-                  'Make this checklist entry public so others can add it to their checklist too.', (p0) => null, true),
+              CheckboxLabel(
+                  text:
+                      'This checklist entry can repeat. Entries that don\’t repeat will be removed from your checklist when checked.',
+                  onChanged: (p0) => null,
+                  value: false),
+              CheckboxLabel(
+                  text: 'Make this checklist entry public so others can add it to their checklist too.',
+                  onChanged: (p0) => null,
+                  value: true),
             ],
           ),
         ),
@@ -214,44 +220,6 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _renderOptionCheckbx(BuildContext context, String text, Function(bool?) onChanged, bool value) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 16.0,
-        bottom: 8,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: SizedBox(
-              width: 24,
-              height: 32,
-              child: Checkbox(
-                onChanged: onChanged,
-                value: value,
-              ),
-            ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                onChanged(!value);
-              },
-              child: MarkdownBody(
-                fitContent: true,
-                shrinkWrap: true,
-                data: text,
-                styleSheet: MarkdownStyleSheet(p: TextStyle(color: Colors.black, fontSize: 14)),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

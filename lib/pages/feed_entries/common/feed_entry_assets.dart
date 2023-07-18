@@ -31,3 +31,21 @@ const Map<String, String> FeedEntryIcons = {
   FE_LIFE_EVENT: 'assets/plant_infos/icon_germination_date.svg',
   FE_TOWELIE_INFO: 'assets/feed_card/icon_towelie.png',
 };
+
+const Map<String, String> FeedEntryName = {
+  FE_MEDIA: 'Media',
+  FE_MEASURE: 'Measure',
+  FE_TRANSPLANT: 'Transplant',
+  FE_BENDING: 'Banding',
+  FE_FIMMING: 'Fimming',
+  FE_TOPPING: 'Topping',
+  FE_DEFOLIATION: 'Defoliation',
+  FE_TIMELAPSE: 'Timelapse',
+  FE_NUTRIENT_MIX: 'Nutrient mix',
+  FE_WATER: 'Watering',
+  FE_LIGHT: 'Light',
+  FE_VENTILATION: 'Ventilation',
+  FE_SCHEDULE: 'Schedule',
+  FE_LIFE_EVENT: 'Life event',
+  FE_TOWELIE_INFO: 'Towelie',
+};
