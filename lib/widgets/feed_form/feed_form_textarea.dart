@@ -20,13 +20,14 @@ import 'package:flutter/material.dart';
 
 class FeedFormTextarea extends StatelessWidget {
   final TextEditingController textEditingController;
+  final bool noPadding;
 
-  const FeedFormTextarea({required this.textEditingController});
+  const FeedFormTextarea({required this.textEditingController, this.noPadding=false});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(noPadding ? 0 : 8.0),
       child: Container(
         decoration:
             BoxDecoration(border: Border.all(width: 1, color: Colors.black26), borderRadius: BorderRadius.circular(3)),
