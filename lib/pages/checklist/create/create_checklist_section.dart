@@ -21,8 +21,9 @@ import 'package:flutter/material.dart';
 class CreateChecklistSection extends StatelessWidget {
   final String title;
   final Widget child;
+  final void Function() onClose;
 
-  const CreateChecklistSection({Key? key, required this.child, required this.title}) : super(key: key);
+  const CreateChecklistSection({Key? key, required this.child, required this.title, required this.onClose}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +56,7 @@ class CreateChecklistSection extends StatelessWidget {
                   child: Text(title, style: TextStyle(color: Color(0xff757575))),
                 ),
                 InkWell(
+                  onTap: this.onClose,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0, right: 8.0),
                     child: Icon(Icons.close),
