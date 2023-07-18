@@ -18,9 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 
 class CardConditionPage extends StatelessWidget {
-
   final void Function() onClose;
 
   const CardConditionPage({Key? key, required this.onClose}) : super(key: key);
@@ -32,9 +32,22 @@ class CardConditionPage extends StatelessWidget {
       title: 'Card condition',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('card condition'),
+        child: Column(children: [
+          _renderCardType(context),
+          _renderDuration(context),
+        ]),
       ),
     );
   }
 
+  Widget _renderCardType(BuildContext context) {
+    return Text('pouet');
+  }
+
+  Widget _renderDuration(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('After:'),
+      ChecklistDuration(),
+    ]);
+  }
 }

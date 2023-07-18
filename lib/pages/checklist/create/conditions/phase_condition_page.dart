@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 
 class PhaseConditionPage extends StatelessWidget {
 
@@ -28,12 +29,26 @@ class PhaseConditionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
-      onClose: this.onClose,
+      onClose: onClose,
       title: 'Phase condition',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('phase condition'),
+        child: Column(children: [
+          _renderCardType(context),
+          _renderDuration(context),
+        ]),
       ),
     );
+  }
+
+  Widget _renderCardType(BuildContext context) {
+    return Text('pouet');
+  }
+
+  Widget _renderDuration(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('After:'),
+      ChecklistDuration(),
+    ]);
   }
 }
