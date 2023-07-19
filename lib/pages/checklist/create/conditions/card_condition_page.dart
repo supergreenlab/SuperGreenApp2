@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 
 class CardConditionPage extends StatelessWidget {
@@ -32,7 +33,9 @@ class CardConditionPage extends StatelessWidget {
       title: 'Card condition',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
           _renderCardType(context),
           _renderDuration(context),
         ]),
@@ -41,7 +44,15 @@ class CardConditionPage extends StatelessWidget {
   }
 
   Widget _renderCardType(BuildContext context) {
-    return Text('pouet');
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Text('After card with type:', style: TextStyle(fontWeight: FontWeight.bold),),
+        ),
+        ChecklistCardType(),
+      ],
+    );
   }
 
   Widget _renderDuration(BuildContext context) {
