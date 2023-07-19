@@ -5292,6 +5292,7 @@ abstract class _$RelDB extends GeneratedDatabase {
   late final PlantsDAO plantsDAO = PlantsDAO(this as RelDB);
   late final FeedsDAO feedsDAO = FeedsDAO(this as RelDB);
   late final DeletesDAO deletesDAO = DeletesDAO(this as RelDB);
+  late final ChecklistsDAO checklistsDAO = ChecklistsDAO(this as RelDB);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

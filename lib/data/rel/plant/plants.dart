@@ -193,11 +193,12 @@ class Timelapses extends Table {
     }
     Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
-        plant: Value(plant.id),
-        type: Value(map['type']),
-        settings: Value(map['settings']),
-        synced: Value(true),
-        serverID: Value(map['id'] as String));
+      plant: Value(plant.id),
+      type: Value(map['type']),
+      settings: Value(map['settings']),
+      synced: Value(true),
+      serverID: Value(map['id'] as String),
+    );
   }
 
   static Future<Map<String, dynamic>> toMap(Timelapse timelapse) async {
