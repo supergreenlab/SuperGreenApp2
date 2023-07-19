@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_phase.dart';
 
 class PhaseConditionPage extends StatelessWidget {
 
@@ -33,7 +34,9 @@ class PhaseConditionPage extends StatelessWidget {
       title: 'Phase condition',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
           _renderCardType(context),
           _renderDuration(context),
         ]),
@@ -42,7 +45,15 @@ class PhaseConditionPage extends StatelessWidget {
   }
 
   Widget _renderCardType(BuildContext context) {
-    return Text('pouet');
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Text('When plant is:', style: TextStyle(fontWeight: FontWeight.bold),),
+        ),
+        ChecklistPhase(),
+      ],
+    );
   }
 
   Widget _renderDuration(BuildContext context) {

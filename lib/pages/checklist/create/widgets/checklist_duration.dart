@@ -32,7 +32,7 @@ class ChecklistDuration extends StatelessWidget {
         children: [
           Expanded(
             child: FeedFormTextarea(
-              placeholder: '(Optional)',
+              placeholder: ' ',
               soloLine: true,
               noPadding: true,
               textEditingController: _controller,

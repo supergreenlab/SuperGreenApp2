@@ -75,6 +75,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
-    return Text("Checklist loaded pouet");
+    return Text("Checklist loaded pouet 2");
   }
 }
