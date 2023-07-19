@@ -28,11 +28,21 @@ class Checklists extends Table {
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
-  // static Future<ChecklistsCompanion> fromMap(Map<String, dynamic> map) async {
-  // }
+  static Future<ChecklistsCompanion> fromMap(Map<String, dynamic> map) async {
+    Plant plant = await RelDB.get().plantsDAO.getPlant(map['plantID']);
+    return ChecklistsCompanion(
+      plant: Value(plant.id),
+      serverID: Value(map['id']),
+    );
+  }
 
-  // static Future<Map<String, dynamic>> toMap(Checklist checklist) async {
-  // }
+  static Future<Map<String, dynamic>> toMap(Checklist checklist) async {
+    Plant plant = await RelDB.get().plantsDAO.getPlant(checklist.plant);
+    return {
+      'id': checklist.serverID,
+      'plantID': plant.serverID,
+    };
+  }
 }
 
 class ChecklistSeeds extends Table {
@@ -49,6 +59,34 @@ class ChecklistSeeds extends Table {
 
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
+
+  static Future<ChecklistSeedsCompanion> fromMap(Map<String, dynamic> map) async {
+    Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(map['checklistID']);
+    return ChecklistSeedsCompanion(
+      checklist: Value(checklist.id),
+      public: Value(map['public']),
+      repeat: Value(map['repeat']),
+      title: Value(map['title']),
+      description: Value(map['description']),
+      conditions: Value(map['conditions']),
+      actions: Value(map['actions']),
+      serverID: Value(map['id'] as String),
+    );
+  }
+
+  static Future<Map<String, dynamic>> toMap(ChecklistSeed checklistSeed) async {
+    Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(checklistSeed.checklist);
+    return {
+      'id': checklistSeed.serverID,
+      'checklistID': checklistSeed.serverID,
+      'public': checklistSeed.public,
+      'repeat': checklistSeed.repeat,
+      'title': checklistSeed.title,
+      'description': checklistSeed.description,
+      'conditions': checklistSeed.conditions,
+      'actions': checklistSeed.actions,
+    };
+  }
 }
 
 @DriftAccessor(tables: [
@@ -57,4 +95,8 @@ class ChecklistSeeds extends Table {
 ])
 class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   ChecklistsDAO(RelDB db) : super(db);
+
+  Future<Checklist> getChecklist(int id) {
+    return (select(checklists)..where((p) => p.id.equals(id))).getSingle();
+  }
 }

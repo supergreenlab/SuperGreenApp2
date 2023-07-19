@@ -68,6 +68,7 @@ LazyDatabase _openConnection() {
   PlantsDAO,
   FeedsDAO,
   DeletesDAO,
+  ChecklistsDAO,
 ])
 class RelDB extends _$RelDB {
   static RelDB _instance = RelDB();
