@@ -54,7 +54,7 @@ class ChecklistAPI {
 
   Future syncChecklistSeed(ChecklistSeed checklistSeed) async {
     Map<String, dynamic> obj = await ChecklistSeeds.toMap(checklistSeed);
-    String? serverID = await BackendAPI().postPut('/feedEntry', obj);
+    String? serverID = await BackendAPI().postPut('/checklist/seed', obj);
 
     ChecklistSeedsCompanion checklistSeedsCompanion =
         ChecklistSeedsCompanion(id: Value(checklistSeed.id), synced: Value(true));
