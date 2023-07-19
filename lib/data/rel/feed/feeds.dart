@@ -18,7 +18,7 @@
 
 import 'dart:convert';
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -215,7 +215,7 @@ class FeedMedias extends Table {
   }
 }
 
-@UseDao(tables: [
+@DriftAccessor(tables: [
   Feeds,
   FeedEntries,
   FeedEntryDrafts,

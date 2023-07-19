@@ -23,7 +23,7 @@ import 'package:super_green_app/misc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:image/image.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:path/path.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/feed/feeds.dart';

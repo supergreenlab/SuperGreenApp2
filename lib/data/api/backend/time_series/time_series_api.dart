@@ -21,7 +21,7 @@ import 'dart:math' as math;
 
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:http/http.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 

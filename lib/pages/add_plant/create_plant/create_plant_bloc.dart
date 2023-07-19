@@ -20,7 +20,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/misc/bloc.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 abstract class CreatePlantBlocEvent extends Equatable {}
