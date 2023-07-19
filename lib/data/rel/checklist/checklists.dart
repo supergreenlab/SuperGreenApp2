@@ -45,6 +45,10 @@ class Checklists extends Table {
   }
 }
 
+class SkipChecklistSeedsCompanion extends ChecklistSeedsCompanion {
+  SkipChecklistSeedsCompanion(serverID) : super(serverID: serverID);
+}
+
 class ChecklistSeeds extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get checklist => integer()();
@@ -61,7 +65,12 @@ class ChecklistSeeds extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<ChecklistSeedsCompanion> fromMap(Map<String, dynamic> map) async {
-    Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(map['checklistID']);
+    Checklist checklist;
+    try {
+      checklist = await RelDB.get().checklistsDAO.getChecklist(map['checklistID']);
+    } catch(e) {
+      return SkipChecklistSeedsCompanion(map['id'] as String);
+    }
     return ChecklistSeedsCompanion(
       checklist: Value(checklist.id),
       public: Value(map['public']),
@@ -78,7 +87,7 @@ class ChecklistSeeds extends Table {
     Checklist checklist = await RelDB.get().checklistsDAO.getChecklist(checklistSeed.checklist);
     return {
       'id': checklistSeed.serverID,
-      'checklistID': checklistSeed.serverID,
+      'checklistID': checklist.serverID,
       'public': checklistSeed.public,
       'repeat': checklistSeed.repeat,
       'title': checklistSeed.title,
@@ -98,5 +107,9 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Future<Checklist> getChecklist(int id) {
     return (select(checklists)..where((p) => p.id.equals(id))).getSingle();
+  }
+
+  Future updateChecklistSeed(ChecklistSeedsCompanion checklistSeed) {
+    return (update(checklistSeeds)..where((tbl) => tbl.id.equals(checklistSeed.id.value))).write(checklistSeed);
   }
 }
