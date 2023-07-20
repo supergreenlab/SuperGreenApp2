@@ -16,13 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
 abstract class AppbarChecklistBlocEvent extends Equatable {}
 
 class AppbarChecklistBlocEventInit extends AppbarChecklistBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class AppbarChecklistBlocEventCreate extends AppbarChecklistBlocEvent {
   @override
   List<Object> get props => [];
 }
@@ -34,17 +41,28 @@ class AppbarChecklistBlocStateInit extends AppbarChecklistBlocState {
   List<Object> get props => [];
 }
 
-class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
-  final Plant plant;
+class AppbarChecklistBlocStateCreated extends AppbarChecklistBlocState {
+  final Checklist checklist;
 
-  AppbarChecklistBlocStateLoaded(this.plant);
+  AppbarChecklistBlocStateCreated(this.checklist);
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [checklist,];
+}
+
+class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
+  final Plant plant;
+  final Checklist? checklist;
+
+  AppbarChecklistBlocStateLoaded(this.plant, this.checklist);
+
+  @override
+  List<Object?> get props => [plant, checklist];
 }
 
 class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChecklistBlocState> {
   final Plant plant;
+  Checklist? checklist;
 
   AppbarChecklistBloc(this.plant) : super(AppbarChecklistBlocStateInit()) {
     add(AppbarChecklistBlocEventInit());
@@ -53,7 +71,16 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
   @override
   Stream<AppbarChecklistBlocState> mapEventToState(AppbarChecklistBlocEvent event) async* {
     if (event is AppbarChecklistBlocEventInit) {
-      yield AppbarChecklistBlocStateLoaded(this.plant);
+      try {
+        checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
+      } catch(e) {}
+      yield AppbarChecklistBlocStateLoaded(this.plant, checklist);
+    } else if (event is AppbarChecklistBlocEventCreate) {
+      int checklistID = await RelDB.get().checklistsDAO.addChecklist(ChecklistsCompanion.insert(
+        plant: this.plant.id,
+      ));
+      checklist = await RelDB.get().checklistsDAO.getChecklist(checklistID);
+      yield AppbarChecklistBlocStateCreated(checklist!);
     }
   }
 }
