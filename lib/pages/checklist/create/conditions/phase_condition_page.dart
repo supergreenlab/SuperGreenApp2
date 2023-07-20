@@ -17,15 +17,18 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_phase.dart';
 
 class PhaseConditionPage extends StatelessWidget {
 
+  final ChecklistConditionAfterPhase condition;
+
   final void Function() onClose;
 
-  const PhaseConditionPage({Key? key, required this.onClose}) : super(key: key);
+  const PhaseConditionPage({Key? key, required this.onClose, required this.condition}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

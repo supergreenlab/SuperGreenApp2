@@ -215,7 +215,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
                 ),
               ),
-              Padding(
+              conditions.length == 0 ? Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 24.0,
                   horizontal: 32,
@@ -228,16 +228,27 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   styleSheet: MarkdownStyleSheet(
                       p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
                 ),
-              ),
-              MetricConditionPage(
-                onClose: () {},
-              ),
-              CardConditionPage(
-                onClose: () {},
-              ),
-              PhaseConditionPage(
-                onClose: () {},
-              ),
+              ) : Container(),
+              ...conditions.map((c) {
+                switch (c.type) {
+                  case ChecklistConditionMetric.TYPE:
+                    return MetricConditionPage(
+                      condition: c as ChecklistConditionMetric,
+                      onClose: () {},
+                    );
+                  case ChecklistConditionAfterCard.TYPE:
+                    return CardConditionPage(
+                      condition: c as ChecklistConditionAfterCard,
+                      onClose: () {},
+                    );
+                  case ChecklistConditionAfterPhase.TYPE:
+                    return PhaseConditionPage(
+                      condition: c as ChecklistConditionAfterPhase,
+                      onClose: () {},
+                    );
+                }
+                return Container();
+              }),
               _renderAddButton(context, '+ ADD CONDITION'),
             ],
           ),
@@ -263,7 +274,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
                 ),
               ),
-              Padding(
+              actions.length == 0 ? Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 24.0,
                   horizontal: 32,
@@ -276,13 +287,22 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   styleSheet: MarkdownStyleSheet(
                       p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
                 ),
-              ),
-              WebpageActionPage(
-                onClose: () {},
-              ),
-              DiaryActionPage(
-                onClose: () {},
-              ),
+              ) : Container(),
+              ...actions.map((a) {
+                switch (a.type) {
+                  case ChecklistActionWebpage.TYPE:
+                    return WebpageActionPage(
+                      action: a as ChecklistActionWebpage,
+                      onClose: () {},
+                    );
+                  case ChecklistActionCreateCard.TYPE:
+                    return DiaryActionPage(
+                      action: a as ChecklistActionCreateCard,
+                      onClose: () {},
+                    );
+                }
+                return Container();
+              }),
               _renderAddButton(context, '+ ADD ACTION'),
             ],
           ),

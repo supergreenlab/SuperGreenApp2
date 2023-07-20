@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
@@ -28,9 +26,11 @@ import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class MetricConditionPage extends StatefulWidget {
 
+  final ChecklistConditionMetric condition;
+
   final void Function() onClose;
 
-  const MetricConditionPage({Key? key, required this.onClose}) : super(key: key);
+  const MetricConditionPage({Key? key, required this.onClose, required this.condition}) : super(key: key);
 
   @override
   State<MetricConditionPage> createState() => _MetricConditionPageState();
