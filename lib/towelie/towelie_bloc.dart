@@ -47,6 +47,7 @@ import 'package:super_green_app/towelie/helpers/form/towelie_action_help_take_pi
 import 'package:super_green_app/towelie/helpers/misc/towelie_action_help_notification.dart';
 import 'package:super_green_app/towelie/helpers/plant/towelie_action_help_create_lab.dart';
 import 'package:super_green_app/towelie/helpers/plant/towelie_action_help_create_plant.dart';
+import 'package:super_green_app/towelie/helpers/plant/towelie_action_plant_created.dart';
 import 'package:super_green_app/towelie/helpers/reminders/towelie_action_help_measure_reminder.dart';
 import 'package:super_green_app/towelie/helpers/reminders/towelie_action_help_water_reminder.dart';
 import 'package:super_green_app/towelie/towelie_action.dart';
@@ -193,6 +194,7 @@ class TowelieBlocStateHelperPop extends TowelieBlocState {
 
 class TowelieBloc extends LegacyBloc<TowelieBlocEvent, TowelieBlocState> {
   static List<TowelieAction> actions = [
+    TowelieActionPlantCreated(),
     TowelieActionHelpCreatePlant(),
     TowelieActionHelpCreateLab(),
     TowelieActionHelpSelectDevice(),
