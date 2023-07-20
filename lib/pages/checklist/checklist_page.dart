@@ -19,6 +19,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
@@ -32,11 +33,18 @@ class ChecklistPage extends TraceableStatefulWidget {
 }
 
 class _ChecklistPageState extends State<ChecklistPage> {
+
+  bool showAutoChecklist = true;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ChecklistBloc, ChecklistBlocState>(
       listener: (BuildContext context, ChecklistBlocState state) {
-        if (state is ChecklistBlocStateLoaded) {}
+        if (state is ChecklistBlocStateLoaded) {
+          setState(() {
+            showAutoChecklist = !AppDB().isCloseAutoChecklist(state.checklist.id);
+          });
+        }
       },
       child: BlocBuilder<ChecklistBloc, ChecklistBlocState>(
           bloc: BlocProvider.of<ChecklistBloc>(context),
@@ -115,11 +123,19 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderAutoChecklistPopulate(BuildContext context, ChecklistBlocStateLoaded state) {
+    if (!showAutoChecklist) {
+      return Container();
+    }
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CreateChecklistSection(
         title: 'Auto checklist',
-        onClose: () {},
+        onClose: () {
+          setState(() {
+            this.showAutoChecklist = false;
+            AppDB().setCloseAutoChecklist(state.checklist.id);
+          });
+        },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

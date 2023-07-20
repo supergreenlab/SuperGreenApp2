@@ -176,4 +176,12 @@ class AppDB {
   bool isTipDone(String tipID) {
     return _miscDB.get('$tipID.done', defaultValue: false);
   }
+
+  void setCloseAutoChecklist(int checklistID) {
+    _miscDB.put('$checklistID.close', true);
+  }
+
+  bool isCloseAutoChecklist(int checklistID) {
+    return _miscDB.get('$checklistID.close', defaultValue: false);
+  }
 }
