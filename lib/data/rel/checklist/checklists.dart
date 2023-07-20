@@ -119,6 +119,10 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklists)..where((p) => p.id.equals(id))).getSingle();
   }
 
+  Future<List<ChecklistSeed>> getChecklistSeeds(int checklistID) {
+    return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))).get();
+  }
+
   Future updateChecklistSeed(ChecklistSeedsCompanion checklistSeed) {
     return (update(checklistSeeds)..where((tbl) => tbl.id.equals(checklistSeed.id.value))).write(checklistSeed);
   }

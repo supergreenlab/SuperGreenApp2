@@ -37,11 +37,12 @@ class ChecklistBlocStateInit extends ChecklistBlocState {
 
 class ChecklistBlocStateLoaded extends ChecklistBlocState {
   final Checklist checklist;
+  final List<ChecklistSeed> checklistSeeds;
 
-  ChecklistBlocStateLoaded(this.checklist);
+  ChecklistBlocStateLoaded(this.checklist, this.checklistSeeds);
 
   @override
-  List<Object> get props => [checklist];
+  List<Object> get props => [checklist, checklistSeeds,];
 }
 
 class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
@@ -54,7 +55,8 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
   @override
   Stream<ChecklistBlocState> mapEventToState(ChecklistBlocEvent event) async* {
     if (event is ChecklistBlocEventInit) {
-      yield ChecklistBlocStateLoaded(this.args.checklist);
+      List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(this.args.checklist.id);
+      yield ChecklistBlocStateLoaded(this.args.checklist, checklistSeeds);
     }
   }
 }

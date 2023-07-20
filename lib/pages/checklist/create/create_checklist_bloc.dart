@@ -55,6 +55,7 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
   @override
   Stream<CreateChecklistBlocState> mapEventToState(CreateChecklistBlocEvent event) async* {
     if (event is CreateChecklistBlocEventInit) {
+      
       yield CreateChecklistBlocStateLoaded(this.args.checklist);
     }
   }
