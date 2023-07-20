@@ -57,15 +57,43 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             } else if (state is CreateChecklistBlocStateLoaded) {
               body = _renderLoaded(context, state);
             }
-            return Scaffold(
-              backgroundColor: Color(0xffededed),
-              appBar: SGLAppBar(
-                '🦜',
-                backgroundColor: Colors.deepPurple,
-                titleColor: Colors.yellow,
-                iconColor: Colors.white,
+            return WillPopScope(
+              onWillPop: () async {
+                return (await showDialog<bool>(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Unsaved changed'),
+                            content: Text('Changes will not be saved. Continue?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                },
+                                child: Text('NO'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text('YES'),
+                              ),
+                            ],
+                          );
+                        })) ??
+                    false;
+              },
+              child: Scaffold(
+                backgroundColor: Color(0xffededed),
+                appBar: SGLAppBar(
+                  '🦜',
+                  backgroundColor: Colors.deepPurple,
+                  titleColor: Colors.yellow,
+                  iconColor: Colors.white,
+                ),
+                body: body,
               ),
-              body: body,
             );
           }),
     );
@@ -172,9 +200,15 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                       p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
                 ),
               ),
-              MetricConditionPage(onClose: () {},),
-              CardConditionPage(onClose: () {},),
-              PhaseConditionPage(onClose: () {},),
+              MetricConditionPage(
+                onClose: () {},
+              ),
+              CardConditionPage(
+                onClose: () {},
+              ),
+              PhaseConditionPage(
+                onClose: () {},
+              ),
               _renderAddButton(context, '+ ADD CONDITION'),
             ],
           ),
@@ -214,8 +248,12 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                       p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
                 ),
               ),
-              WebpageActionPage(onClose: () {},),
-              DiaryActionPage(onClose: () {},),
+              WebpageActionPage(
+                onClose: () {},
+              ),
+              DiaryActionPage(
+                onClose: () {},
+              ),
               _renderAddButton(context, '+ ADD ACTION'),
             ],
           ),
