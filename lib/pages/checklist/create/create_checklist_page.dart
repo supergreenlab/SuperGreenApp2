@@ -16,10 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/actions/diary_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/actions/webpage_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/card_condition_page.dart';
@@ -40,11 +44,28 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
+  bool public = false;
+  bool repeat = false;
+
+  final List<ChecklistCondition> conditions = [];
+  final List<ChecklistAction> actions = [];
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<CreateChecklistBloc, CreateChecklistBlocState>(
       listener: (BuildContext context, CreateChecklistBlocState state) {
-        if (state is CreateChecklistBlocStateLoaded) {}
+        if (state is CreateChecklistBlocStateLoaded) {
+          setState(() {
+            _titleController.text = state.checklistSeed.title.value;
+            _descriptionController.text = state.checklistSeed.description.value;
+
+            this.public = state.checklistSeed.public.value;
+            this.repeat = state.checklistSeed.repeat.value;
+
+            this.conditions.addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions.value)));
+            this.actions.addAll(ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions.value)));
+          });
+        }
       },
       child: BlocBuilder<CreateChecklistBloc, CreateChecklistBlocState>(
           bloc: BlocProvider.of<CreateChecklistBloc>(context),
@@ -156,12 +177,20 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               CheckboxLabel(
                   text:
                       'This checklist entry can repeat. Entries that don\’t repeat will be removed from your checklist when checked.',
-                  onChanged: (p0) => null,
-                  value: false),
+                  onChanged: (p0) {
+                    setState(() {
+                      repeat = p0 ?? false;
+                    });
+                  },
+                  value: repeat),
               CheckboxLabel(
                   text: 'Make this checklist entry public so others can add it to their checklist too.',
-                  onChanged: (p0) => null,
-                  value: true),
+                  onChanged: (p0) {
+                    setState(() {
+                      public = p0 ?? false;
+                    });
+                  },
+                  value: public),
             ],
           ),
         ),

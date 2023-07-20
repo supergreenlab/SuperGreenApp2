@@ -33,6 +33,10 @@ abstract class ChecklistCondition {
 
   String toJSON() => json.encode(toMap());
 
+  static List<ChecklistCondition> fromMapArray(List<Map<String, dynamic>> maps) {
+    return maps.map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m)).toList();
+  }
+
   static ChecklistCondition fromMap(Map<String, dynamic> map) {
     var type = map['type'] as String;
     var params = jsonDecode(map['params']) as Map<String, dynamic>;

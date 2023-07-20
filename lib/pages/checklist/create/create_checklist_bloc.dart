@@ -37,8 +37,9 @@ class CreateChecklistBlocStateInit extends CreateChecklistBlocState {
 
 class CreateChecklistBlocStateLoaded extends CreateChecklistBlocState {
   final Checklist checklist;
+  final ChecklistSeedsCompanion checklistSeed;
 
-  CreateChecklistBlocStateLoaded(this.checklist);
+  CreateChecklistBlocStateLoaded(this.checklist, this.checklistSeed);
 
   @override
   List<Object> get props => [checklist];
@@ -47,6 +48,7 @@ class CreateChecklistBlocStateLoaded extends CreateChecklistBlocState {
 class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChecklistBlocState> {
 
   final MainNavigateToCreateChecklist args;
+  late final ChecklistSeedsCompanion checklistSeed;
 
   CreateChecklistBloc(this.args) : super(CreateChecklistBlocStateInit()) {
     add(CreateChecklistBlocEventInit());
@@ -55,8 +57,12 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
   @override
   Stream<CreateChecklistBlocState> mapEventToState(CreateChecklistBlocEvent event) async* {
     if (event is CreateChecklistBlocEventInit) {
-      
-      yield CreateChecklistBlocStateLoaded(this.args.checklist);
+      if (args.checklistSeed == null) {
+        checklistSeed = ChecklistSeedsCompanion.insert(checklist: this.args.checklist.id);
+      } else {
+        checklistSeed = args.checklistSeed!.toCompanion(true);
+      }
+      yield CreateChecklistBlocStateLoaded(this.args.checklist, checklistSeed);
     }
   }
 }

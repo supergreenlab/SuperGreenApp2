@@ -107,7 +107,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 child: GreenButton(
                   title: 'Create new item',
                   onPressed: () {
-                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.checklist!));
+                    BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.checklist));
                   },
                 ),
               ),
