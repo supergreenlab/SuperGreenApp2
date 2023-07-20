@@ -95,6 +95,24 @@ class ChecklistConditionMetric extends ChecklistCondition {
       durationUnit: map['durationUnit'],
     );
   }
+
+  ChecklistConditionMetric copyWith({
+    String? key,
+    bool? inRange,
+    double? min,
+    double? max,
+    int? duration,
+    String? durationUnit,
+  }) {
+    return ChecklistConditionMetric(
+      key: key ?? this.key,
+      inRange: inRange ?? this.inRange,
+      min: min ?? this.min,
+      max: max ?? this.max,
+      duration: duration ?? this.duration,
+      durationUnit: durationUnit ?? this.durationUnit,
+    );
+  }
 }
 
 class ChecklistConditionAfterCard extends ChecklistCondition {
@@ -126,6 +144,18 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
       durationUnit: map['durationUnit'],
     );
   }
+
+  ChecklistConditionAfterCard copyWith({
+    String? type,
+    int? duration,
+    String? durationUnit,
+  }) {
+    return ChecklistConditionAfterCard(
+      type: type ?? this.type,
+      duration: duration ?? this.duration,
+      durationUnit: durationUnit ?? this.durationUnit,
+    );
+  }
 }
 
 class ChecklistConditionAfterPhase extends ChecklistCondition {
@@ -155,6 +185,18 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
       phase: map['phase'],
       duration: map['duration'],
       durationUnit: map['durationUnit'],
+    );
+  }
+
+  ChecklistConditionAfterPhase copyWith({
+    String? phase,
+    int? duration,
+    String? durationUnit,
+  }) {
+    return ChecklistConditionAfterPhase(
+      phase: phase ?? this.phase,
+      duration: duration ?? this.duration,
+      durationUnit: durationUnit ?? this.durationUnit,
     );
   }
 }

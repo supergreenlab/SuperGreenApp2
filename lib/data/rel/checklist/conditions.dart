@@ -68,6 +68,14 @@ class ChecklistActionWebpage extends ChecklistAction {
   static ChecklistActionWebpage fromMap(Map<String, dynamic> map) {
     return ChecklistActionWebpage(url: map['url']);
   }
+
+  ChecklistActionWebpage copyWith({
+    String? url,
+  }) {
+    return ChecklistActionWebpage(
+      url: url ?? this.url,
+    );
+  }
 }
 
 class ChecklistActionCreateCard extends ChecklistAction {
@@ -87,5 +95,13 @@ class ChecklistActionCreateCard extends ChecklistAction {
 
   static ChecklistActionCreateCard fromMap(Map<String, dynamic> map) {
     return ChecklistActionCreateCard(entryType: map['entryType']);
+  }
+
+  ChecklistActionCreateCard copyWith({
+    String? entryType,
+  }) {
+    return ChecklistActionCreateCard(
+      entryType: entryType ?? this.entryType,
+    );
   }
 }
