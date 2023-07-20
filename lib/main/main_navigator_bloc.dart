@@ -628,11 +628,12 @@ class MainNavigateToChecklist extends MainNavigatorEvent {
 
 class MainNavigateToCreateChecklist extends MainNavigatorEvent {
   final Checklist checklist;
+  final ChecklistSeed? checklistSeed;
 
-  MainNavigateToCreateChecklist(this.checklist);
+  MainNavigateToCreateChecklist(this.checklist, {this.checklistSeed});
 
   @override
-  List<Object> get props => [checklist,];
+  List<Object?> get props => [checklist, checklistSeed,];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {

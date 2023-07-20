@@ -31,6 +31,10 @@ abstract class ChecklistAction {
 
   String toJSON() => json.encode(toMap());
 
+  static List<ChecklistAction> fromMapArray(List<Map<String, dynamic>> maps) {
+    return maps.map<ChecklistAction>((m) => ChecklistAction.fromMap(m)).toList();
+  }
+
   static ChecklistAction fromMap(Map<String, dynamic> map) {
     var type = map['type'] as String;
     var params = jsonDecode(map['params']) as Map<String, dynamic>;

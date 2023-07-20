@@ -53,10 +53,11 @@ class ChecklistSeeds extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get checklist => integer()();
 
-  BoolColumn get public => boolean().withDefault(Constant(false))();
-  BoolColumn get repeat => boolean().withDefault(Constant(false))();
   TextColumn get title => text().withDefault(Constant(''))();
   TextColumn get description => text().withDefault(Constant(''))();
+
+  BoolColumn get public => boolean().withDefault(Constant(false))();
+  BoolColumn get repeat => boolean().withDefault(Constant(false))();
 
   BoolColumn get active => boolean().withDefault(Constant(false))();
 
