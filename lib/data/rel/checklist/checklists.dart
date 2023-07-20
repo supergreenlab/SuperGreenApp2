@@ -58,6 +58,8 @@ class ChecklistSeeds extends Table {
   TextColumn get title => text().withDefault(Constant(''))();
   TextColumn get description => text().withDefault(Constant(''))();
 
+  BoolColumn get active => boolean().withDefault(Constant(false))();
+
   TextColumn get conditions => text().withDefault(Constant('{}'))();
   TextColumn get actions => text().withDefault(Constant('{}'))();
 

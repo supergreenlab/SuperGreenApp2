@@ -16,9 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
-import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/misc/bloc.dart';
 
@@ -53,11 +51,12 @@ class AppbarChecklistBlocStateCreated extends AppbarChecklistBlocState {
 class AppbarChecklistBlocStateLoaded extends AppbarChecklistBlocState {
   final Plant plant;
   final Checklist? checklist;
+  final List<ChecklistSeed> activeSeeds;
 
-  AppbarChecklistBlocStateLoaded(this.plant, this.checklist);
+  AppbarChecklistBlocStateLoaded(this.plant, this.checklist, this.activeSeeds);
 
   @override
-  List<Object?> get props => [plant, checklist];
+  List<Object?> get props => [plant, checklist, activeSeeds];
 }
 
 class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChecklistBlocState> {
@@ -74,7 +73,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       try {
         checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
       } catch(e) {}
-      yield AppbarChecklistBlocStateLoaded(this.plant, checklist);
+      yield AppbarChecklistBlocStateLoaded(this.plant, checklist, []);
     } else if (event is AppbarChecklistBlocEventCreate) {
       int checklistID = await RelDB.get().checklistsDAO.addChecklist(ChecklistsCompanion.insert(
         plant: this.plant.id,
