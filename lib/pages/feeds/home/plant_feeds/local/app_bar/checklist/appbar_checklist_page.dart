@@ -22,20 +22,21 @@ import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/appbar_checklist_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
+import 'package:super_green_app/widgets/green_button.dart';
 
 class AppbarChecklistPage extends TraceableStatefulWidget {
-
   @override
   _AppbarChecklistPageState createState() => _AppbarChecklistPageState();
 }
 
 class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<AppbarChecklistBloc, AppbarChecklistBlocState>(
       listener: (BuildContext context, AppbarChecklistBlocState state) {
-        if (state is AppbarChecklistBlocStateLoaded) {}
+        if (state is AppbarChecklistBlocStateCreated) {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.checklist));
+        }
       },
       child: BlocBuilder<AppbarChecklistBloc, AppbarChecklistBlocState>(
           bloc: BlocProvider.of<AppbarChecklistBloc>(context),
@@ -54,11 +55,28 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
   }
 
   Widget _renderLoaded(BuildContext context, AppbarChecklistBlocStateLoaded state) {
-    return InkWell(
-      onTap: () {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.plant));
-      },
-      child: Text("Open checklist"),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Your checklist is empty.\n\nPress the button below to start using it.",
+          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+          textAlign: TextAlign.center,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: GreenButton(
+            title: 'Create checklist',
+            onPressed: () {
+              if (state.checklist != null) {
+                BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.checklist!));
+              } else {
+                BlocProvider.of<AppbarChecklistBloc>(context).add(AppbarChecklistBlocEventCreate());
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 

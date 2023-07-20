@@ -27,6 +27,7 @@ import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistAPI {
+
   Future<ChecklistsCompanion> getChecklist(String plantID) async {
     Response resp =
         await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/checklist/$plantID'), headers: {
@@ -40,7 +41,7 @@ class ChecklistAPI {
     return Checklists.fromMap(checklistMap);
   }
 
-  Future<ChecklistSeedsCompanion> seeds() async {
+  Future<ChecklistSeedsCompanion> getSeeds() async {
     Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/seeds'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
@@ -92,4 +93,5 @@ class ChecklistAPI {
     }
     return JsonDecoder().convert(resp.body);
   }
+
 }

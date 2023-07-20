@@ -36,12 +36,12 @@ class ChecklistBlocStateInit extends ChecklistBlocState {
 }
 
 class ChecklistBlocStateLoaded extends ChecklistBlocState {
-  final Plant plant;
+  final Checklist checklist;
 
-  ChecklistBlocStateLoaded(this.plant);
+  ChecklistBlocStateLoaded(this.checklist);
 
   @override
-  List<Object> get props => [plant];
+  List<Object> get props => [checklist];
 }
 
 class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
@@ -54,7 +54,7 @@ class ChecklistBloc extends LegacyBloc<ChecklistBlocEvent, ChecklistBlocState> {
   @override
   Stream<ChecklistBlocState> mapEventToState(ChecklistBlocEvent event) async* {
     if (event is ChecklistBlocEventInit) {
-      yield ChecklistBlocStateLoaded(this.args.plant);
+      yield ChecklistBlocStateLoaded(this.args.checklist);
     }
   }
 }

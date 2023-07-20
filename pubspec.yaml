@@ -117,6 +117,7 @@ flutter:
     - assets/feed_card/
     - assets/box_setup/
     - assets/home/
+    - assets/checklist/
     - assets/tutos/
     - assets/settings/
     - assets/products/

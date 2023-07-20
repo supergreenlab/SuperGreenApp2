@@ -18,7 +18,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
@@ -63,7 +62,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.plant));
+                      BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToCreateChecklist(state.checklist));
                     },
                   ),
                 ] : [],

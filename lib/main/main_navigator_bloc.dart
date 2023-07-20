@@ -618,21 +618,21 @@ class MainNavigateToFollowsFeedEvent extends MainNavigatorEvent {
 }
 
 class MainNavigateToChecklist extends MainNavigatorEvent {
-  final Plant plant;
+  final Checklist checklist;
 
-  MainNavigateToChecklist(this.plant);
+  MainNavigateToChecklist(this.checklist);
 
   @override
-  List<Object> get props => [plant,];
+  List<Object> get props => [checklist,];
 }
 
 class MainNavigateToCreateChecklist extends MainNavigatorEvent {
-  final Plant plant;
+  final Checklist checklist;
 
-  MainNavigateToCreateChecklist(this.plant);
+  MainNavigateToCreateChecklist(this.checklist);
 
   @override
-  List<Object> get props => [plant,];
+  List<Object> get props => [checklist,];
 }
 
 class MainNavigatorActionPop extends MainNavigatorEvent {
