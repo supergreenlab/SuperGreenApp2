@@ -18,7 +18,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/appbar_checklist_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
@@ -47,14 +49,40 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             if (state is AppbarChecklistBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is AppbarChecklistBlocStateLoaded) {
-              body = _renderLoaded(context, state);
+              if (state.checklist == null) {
+                body = _renderCreateChecklist(context, state);
+              } else if (state.activeSeeds.length == 0) {
+                body = _renderEmpty(context, state);
+              } else {
+                body = _renderLoaded(context, state);
+              }
             }
             return body;
           }),
     );
   }
 
-  Widget _renderLoaded(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+  Widget _renderEmpty(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+    return Column(
+      children: [
+        _checklistButton(context, state),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Nothing for today. 👌",
+                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 18, color: Color(0xff454545)),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _renderCreateChecklist(BuildContext context, AppbarChecklistBlocStateLoaded state) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -77,6 +105,36 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _renderLoaded(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+    return Column(
+      children: [
+        _checklistButton(context, state),
+        Expanded(
+          child: Column(
+            children: state.activeSeeds.map((ChecklistSeed seed) {
+              return Text(seed.title);
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _checklistButton(BuildContext context, AppbarChecklistBlocStateLoaded state) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToChecklist(state.checklist!));
+      },
+      child: Row(
+        children: [
+          Expanded(child: Container()),
+          SvgPicture.asset('assets/checklist/icon_checklist.svg'),
+          Text('OPEN CHECKLIST', style: TextStyle(color: Color(0xff3bb30b), decoration: TextDecoration.underline)),
+        ],
+      ),
     );
   }
 
