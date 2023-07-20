@@ -20,14 +20,13 @@ import 'dart:convert';
 
 abstract class ChecklistCondition {
   String type;
-  String params;
 
-  ChecklistCondition({required this.type, required this.params});
+  ChecklistCondition({required this.type});
 
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'params': params,
+      'params': toJSON(),
     };
   }
 
@@ -55,6 +54,8 @@ abstract class ChecklistCondition {
 }
 
 class ChecklistConditionMetric extends ChecklistCondition {
+  static const String TYPE = 'metric';
+
   String key;
   bool inRange;
   double min;
@@ -69,7 +70,9 @@ class ChecklistConditionMetric extends ChecklistCondition {
     required this.max,
     required this.duration,
     required this.durationUnit,
-  }) : super(type: 'metric', params: '');
+  }) : super(
+          type: TYPE,
+        );
 
   @override
   Map<String, dynamic> toMap() {
@@ -116,21 +119,23 @@ class ChecklistConditionMetric extends ChecklistCondition {
 }
 
 class ChecklistConditionAfterCard extends ChecklistCondition {
-  String type;
+  static const String TYPE = 'metric';
+
+  String entryType;
   int duration;
   String durationUnit;
 
   ChecklistConditionAfterCard({
-    required this.type,
+    required this.entryType,
     required this.duration,
     required this.durationUnit,
-  }) : super(type: type, params: '');
+  }) : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {
     var map = super.toMap();
     map.addAll({
-      'type': type,
+      'entryType': entryType,
       'duration': duration,
       'durationUnit': durationUnit,
     });
@@ -139,19 +144,19 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 
   static ChecklistConditionAfterCard fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterCard(
-      type: map['type'],
+      entryType: map['entryType'],
       duration: map['duration'],
       durationUnit: map['durationUnit'],
     );
   }
 
   ChecklistConditionAfterCard copyWith({
-    String? type,
+    String? entryType,
     int? duration,
     String? durationUnit,
   }) {
     return ChecklistConditionAfterCard(
-      type: type ?? this.type,
+      entryType: entryType ?? this.entryType,
       duration: duration ?? this.duration,
       durationUnit: durationUnit ?? this.durationUnit,
     );
@@ -159,6 +164,8 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 }
 
 class ChecklistConditionAfterPhase extends ChecklistCondition {
+  static const String TYPE = 'after_phase';
+
   String phase;
   int duration;
   String durationUnit;
@@ -167,7 +174,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
     required this.phase,
     required this.duration,
     required this.durationUnit,
-  }) : super(type: 'after_phase', params: '');
+  }) : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {

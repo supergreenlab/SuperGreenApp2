@@ -17,13 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class WebpageActionPage extends StatefulWidget {
+
+  final ChecklistActionWebpage action;
+
   final void Function() onClose;
 
-  const WebpageActionPage({Key? key, required this.onClose}) : super(key: key);
+  const WebpageActionPage({Key? key, required this.onClose, required this.action}) : super(key: key);
 
   @override
   State<WebpageActionPage> createState() => _WebpageActionPageState();

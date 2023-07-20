@@ -26,6 +26,7 @@ abstract class ChecklistAction {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
+      'params': toJSON(),
     };
   }
 
@@ -51,9 +52,11 @@ abstract class ChecklistAction {
 }
 
 class ChecklistActionWebpage extends ChecklistAction {
+  static const String TYPE = 'webpage';
+
   String url;
 
-  ChecklistActionWebpage({required this.url}) : super(type: 'webpage');
+  ChecklistActionWebpage({required this.url}) : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {
@@ -79,9 +82,11 @@ class ChecklistActionWebpage extends ChecklistAction {
 }
 
 class ChecklistActionCreateCard extends ChecklistAction {
+  static const String TYPE = 'card';
+
   String entryType;
 
-  ChecklistActionCreateCard({required this.entryType}) : super(type: 'card');
+  ChecklistActionCreateCard({required this.entryType}) : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {

@@ -17,13 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 
 class DiaryActionPage extends StatelessWidget {
+
+  final ChecklistActionCreateCard action;
+
   final void Function() onClose;
 
-  const DiaryActionPage({Key? key, required this.onClose}) : super(key: key);
+  const DiaryActionPage({Key? key, required this.onClose, required this.action}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
