@@ -30,7 +30,12 @@ class ChecklistMetricKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Tuple3<String, String, String>> choices = [
-      Tuple3('TEMP', 'assets/feed_card/icon_media.svg', 'Temperature'),
+      Tuple3('TEMP', 'assets/app_bar/icon_temperature.svg', 'Temperature'),
+      Tuple3('HUMI', 'assets/app_bar/icon_humidity.svg', 'Humidity'),
+      Tuple3('CO2', 'assets/app_bar/icon_co2.svg', 'CO2'),
+      Tuple3('CO2', 'assets/app_bar/icon_vpd.svg', 'VPD'),
+      Tuple3('WEIGHT', 'assets/app_bar/icon_weight.svg', 'Weight'),
+      Tuple3('WATERING_LEFT', 'assets/app_bar/icon_watering.svg', 'Watering left'),
     ];
     return DropdownButton<String?>(
       hint: Text('Select metric'),
@@ -43,7 +48,10 @@ class ChecklistMetricKey extends StatelessWidget {
           value: c.item1,
           child: Row(
             children: [
-              SvgPicture.asset(c.item2),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(c.item2),
+              ),
               Text(c.item3),
             ],
           ),
