@@ -20,12 +20,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 
-abstract class CreateChecklistPopup extends StatelessWidget {
+abstract class CreateChecklistActionConditionPopup extends StatelessWidget {
+
+  final List<String> filteredValues;
 
   final String title;
   final Function() onClose;
 
-  const CreateChecklistPopup({Key? key, required this.onClose, required this.title}) : super(key: key);
+  const CreateChecklistActionConditionPopup({Key? key, required this.onClose, required this.title, required this.filteredValues}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

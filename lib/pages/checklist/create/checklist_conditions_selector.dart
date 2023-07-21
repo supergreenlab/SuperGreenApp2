@@ -18,19 +18,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
-import 'package:super_green_app/pages/checklist/create/create_checklist_popup.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_action_condition_popup.dart';
 
-class ChecklistConditionsSelector extends CreateChecklistPopup {
+class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
   final void Function(ChecklistCondition action) onAdd;
 
-  ChecklistConditionsSelector({required this.onAdd, required Function() onClose})
-      : super(onClose: onClose, title: 'Select new condition type');
+  ChecklistConditionsSelector({required this.onAdd, required Function() onClose, required List<String> filteredValues})
+      : super(onClose: onClose, title: 'Select new condition type', filteredValues: filteredValues);
 
   Widget renderConditions(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        renderCondition(
+        this.filteredValues.contains(ChecklistConditionTimer.TYPE) ? Container() : renderCondition(
             context,
             'assets/checklist/icon_reminder.svg',
             'Time reminder',
@@ -38,7 +38,7 @@ class ChecklistConditionsSelector extends CreateChecklistPopup {
             'Ex: In X days.', () {
           onAdd(ChecklistConditionTimer());
         }),
-        renderCondition(
+        this.filteredValues.contains(ChecklistConditionMetric.TYPE) ? Container() : renderCondition(
             context,
             'assets/checklist/icon_monitoring.svg',
             'Metric monitoring',
@@ -46,7 +46,7 @@ class ChecklistConditionsSelector extends CreateChecklistPopup {
             'Ex: When temperature is >X° for 3 days.', () {
           onAdd(ChecklistConditionMetric());
         }),
-        renderCondition(
+        this.filteredValues.contains(ChecklistConditionAfterCard.TYPE) ? Container() : renderCondition(
             context,
             'assets/checklist/icon_diary.svg',
             'After a diary entry is created',
@@ -54,7 +54,7 @@ class ChecklistConditionsSelector extends CreateChecklistPopup {
             'Ex: 5 days after last watering card', () {
           onAdd(ChecklistConditionAfterCard());
         }),
-        renderCondition(
+        this.filteredValues.contains(ChecklistConditionAfterPhase.TYPE) ? Container() : renderCondition(
             context,
             'assets/checklist/icon_phase.svg',
             'Plant phase',
