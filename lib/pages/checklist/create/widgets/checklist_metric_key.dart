@@ -33,7 +33,7 @@ class ChecklistMetricKey extends StatelessWidget {
       Tuple3('TEMP', 'assets/app_bar/icon_temperature.svg', 'Temperature'),
       Tuple3('HUMI', 'assets/app_bar/icon_humidity.svg', 'Humidity'),
       Tuple3('CO2', 'assets/app_bar/icon_co2.svg', 'CO2'),
-      Tuple3('CO2', 'assets/app_bar/icon_vpd.svg', 'VPD'),
+      Tuple3('VPD', 'assets/app_bar/icon_vpd.svg', 'VPD'),
       Tuple3('WEIGHT', 'assets/app_bar/icon_weight.svg', 'Weight'),
       Tuple3('WATERING_LEFT', 'assets/app_bar/icon_watering.svg', 'Watering left'),
     ];
