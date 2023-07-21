@@ -16,15 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
+import 'package:tuple/tuple.dart';
 
-class ChecklistDuration extends StatelessWidget {
+class ChecklistDuration extends StatefulWidget {
 
+  final int? duration;
+  final String? unit;
+  final Function(int? duration, String? unit) onUpdate;
+
+  const ChecklistDuration({Key? key, required this.onUpdate, required this.unit, required this.duration}) : super(key: key);
+
+  @override
+  State<ChecklistDuration> createState() => _ChecklistDurationState();
+}
+
+class _ChecklistDurationState extends State<ChecklistDuration> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void initState() {
+    _controller.text = widget.duration == null ? '' : widget.duration.toString();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List<Tuple2<String, String>> choices = [
+      Tuple2('DAYS', 'Days'),
+    ];
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -32,6 +54,9 @@ class ChecklistDuration extends StatelessWidget {
         children: [
           Expanded(
             child: FeedFormTextarea(
+              onChanged: (value) {
+                widget.onUpdate(int.parse(_controller.text), widget.unit);
+              },
               placeholder: ' ',
               soloLine: true,
               noPadding: true,
@@ -41,15 +66,17 @@ class ChecklistDuration extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
-              child: DropdownButton<int>(
-                value: 0,
-                onChanged: (int? value) {},
-                items: [
-                  DropdownMenuItem(
-                    value: 0,
-                    child: Text('Days'),
-                  ),
-                ],
+              child: DropdownButton<String>(
+                value: widget.unit,
+                onChanged: (String? value) {
+                  widget.onUpdate(widget.duration, value!);
+                },
+                items: choices.map((c) {
+                  return DropdownMenuItem(
+                    value: c.item1,
+                    child: Text(c.item2),
+                  );
+                }).toList(),
               ),
             ),
           ),

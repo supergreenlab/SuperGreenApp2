@@ -24,9 +24,10 @@ import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
 class TimerConditionPage extends StatelessWidget {
   final ChecklistConditionTimer condition;
 
+  final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const TimerConditionPage({Key? key, required this.onClose, required this.condition}) : super(key: key);
+  const TimerConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class TimerConditionPage extends StatelessWidget {
     return FeedFormDatePicker(
       condition.date ?? DateTime.now(),
       onChange: (DateTime? newDate) {
-
+        onUpdate(condition.copyWith(date: newDate));
       },
     );
   }

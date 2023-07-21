@@ -25,9 +25,10 @@ class DiaryActionPage extends StatelessWidget {
 
   final ChecklistActionCreateCard action;
 
+  final void Function(ChecklistAction) onUpdate;
   final void Function() onClose;
 
-  const DiaryActionPage({Key? key, required this.onClose, required this.action}) : super(key: key);
+  const DiaryActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,9 @@ class DiaryActionPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ChecklistCardType(),
+        ChecklistCardType(onChange: (String entryType) {
+          onUpdate(action.copyWith(entryType: entryType));
+        }, cardType: action.entryType,),
       ],
     );
   }

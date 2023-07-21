@@ -21,6 +21,7 @@ import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_metric_key.dart';
 import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
@@ -28,9 +29,10 @@ class MetricConditionPage extends StatefulWidget {
 
   final ChecklistConditionMetric condition;
 
+  final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const MetricConditionPage({Key? key, required this.onClose, required this.condition}) : super(key: key);
+  const MetricConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
 
   @override
   State<MetricConditionPage> createState() => _MetricConditionPageState();
@@ -68,7 +70,10 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
           'Monitored metric:',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        ChecklistCardType(),
+        ChecklistMetricKey(
+          metricKey: widget.condition.key,
+          onChange: (String type) {  },
+        ),
       ],
     );
   }
@@ -122,7 +127,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                     placeholder: '(Optional)',
                     soloLine: true,
                     noPadding: true,
-                    textEditingController: _minController,
+                    textEditingController: _maxController,
                   ),
                 ),
               ],
@@ -138,7 +143,16 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('For how long?'),
-        ChecklistDuration(),
+        ChecklistDuration(
+          duration: widget.condition.duration,
+          unit: widget.condition.durationUnit,
+          onUpdate: (int? duration, String? unit) {
+            widget.onUpdate(widget.condition.copyWith(
+              duration: duration,
+              durationUnit: unit,
+            ));
+          },
+          ),
       ]
     );
   }

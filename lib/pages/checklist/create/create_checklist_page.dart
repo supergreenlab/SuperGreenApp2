@@ -285,21 +285,41 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   case ChecklistConditionMetric.TYPE:
                     return MetricConditionPage(
                       condition: c as ChecklistConditionMetric,
+                      onUpdate: (ChecklistCondition nc) {
+                        setState(() {
+                          conditions[conditions.indexOf(c)] = nc;
+                        });
+                      },
                       onClose: () {},
                     );
                   case ChecklistConditionAfterCard.TYPE:
                     return CardConditionPage(
                       condition: c as ChecklistConditionAfterCard,
+                      onUpdate: (ChecklistCondition nc) {
+                        setState(() {
+                          conditions[conditions.indexOf(c)] = nc;
+                        });
+                      },
                       onClose: () {},
                     );
                   case ChecklistConditionAfterPhase.TYPE:
                     return PhaseConditionPage(
                       condition: c as ChecklistConditionAfterPhase,
+                      onUpdate: (ChecklistCondition nc) {
+                        setState(() {
+                          conditions[conditions.indexOf(c)] = nc;
+                        });
+                      },
                       onClose: () {},
                     );
                   case ChecklistConditionTimer.TYPE:
                     return TimerConditionPage(
                       condition: c as ChecklistConditionTimer,
+                      onUpdate: (ChecklistCondition nc) {
+                        setState(() {
+                          conditions[conditions.indexOf(c)] = nc;
+                        });
+                      },
                       onClose: () {},
                     );
                 }
@@ -355,11 +375,21 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   case ChecklistActionWebpage.TYPE:
                     return WebpageActionPage(
                       action: a as ChecklistActionWebpage,
+                      onUpdate: (ChecklistAction na) {
+                        setState(() {
+                          actions[actions.indexOf(a)] = na;
+                        });
+                      },
                       onClose: () {},
                     );
                   case ChecklistActionCreateCard.TYPE:
                     return DiaryActionPage(
                       action: a as ChecklistActionCreateCard,
+                      onUpdate: (ChecklistAction na) {
+                        setState(() {
+                          actions[actions.indexOf(a)] = na;
+                        });
+                      },
                       onClose: () {},
                     );
                 }
