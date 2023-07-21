@@ -36,6 +36,8 @@ abstract class ChecklistAction extends Equatable {
 
   List<Object?> get props => [type,];
 
+  bool get valid => !props.contains(null) && !props.contains('');
+
   static List<ChecklistAction> fromMapArray(List<dynamic> maps) {
     return maps.map<ChecklistAction>((m) => ChecklistAction.fromMap(m)).toList();
   }

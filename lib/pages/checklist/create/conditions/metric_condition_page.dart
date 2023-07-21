@@ -127,9 +127,9 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                     noPadding: true,
                     textEditingController: _minController,
                     onChanged: (value) {
-                      widget.condition.copyWith(
+                      widget.onUpdate(widget.condition.copyWith(
                         min: double.parse(value),
-                      );
+                      ));
                     },
                   ),
                 ),
@@ -149,9 +149,9 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                     noPadding: true,
                     textEditingController: _maxController,
                     onChanged: (value) {
-                      widget.condition.copyWith(
+                      widget.onUpdate(widget.condition.copyWith(
                         max: double.parse(value),
-                      );
+                      ));
                     },
                   
                   ),

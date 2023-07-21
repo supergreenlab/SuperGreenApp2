@@ -21,6 +21,8 @@ import 'dart:convert';
 abstract class ChecklistCondition {
   final String type;
 
+  bool get valid => !props.contains(null) && !props.contains('');
+
   ChecklistCondition({required this.type});
 
   Map<String, dynamic> toMap() {
@@ -32,7 +34,9 @@ abstract class ChecklistCondition {
 
   String toJSON() => json.encode(toMap());
 
-  List<Object?> get props => [type,];
+  List<Object?> get props => [
+    type,
+  ];
 
   static List<ChecklistCondition> fromMapArray(List<dynamic> maps) {
     return maps.map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m)).toList();
@@ -71,7 +75,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
     this.min,
     this.max,
     this.duration,
-    this.durationUnit='DAYS',
+    this.durationUnit = 'DAYS',
   }) : super(
           type: TYPE,
         );
@@ -90,7 +94,15 @@ class ChecklistConditionMetric extends ChecklistCondition {
     return map;
   }
 
-  List<Object?> get props => [type, key, inRange, min, max, duration, durationUnit,];
+  List<Object?> get props => [
+        type,
+        key,
+        inRange,
+        min,
+        max,
+        duration,
+        durationUnit,
+      ];
 
   static ChecklistConditionMetric fromMap(Map<String, dynamic> map) {
     return ChecklistConditionMetric(
@@ -132,7 +144,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   ChecklistConditionAfterCard({
     this.entryType,
     this.duration,
-    this.durationUnit='DAYS',
+    this.durationUnit = 'DAYS',
   }) : super(type: TYPE);
 
   @override
@@ -146,7 +158,12 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
     return map;
   }
 
-  List<Object?> get props => [type, entryType, duration, durationUnit,];
+  List<Object?> get props => [
+        type,
+        entryType,
+        duration,
+        durationUnit,
+      ];
 
   static ChecklistConditionAfterCard fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterCard(
@@ -159,7 +176,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   ChecklistConditionAfterCard copyWith({
     String? entryType,
     int? duration,
-    String? durationUnit='DAYS',
+    String? durationUnit = 'DAYS',
   }) {
     return ChecklistConditionAfterCard(
       entryType: entryType ?? this.entryType,
@@ -179,7 +196,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   ChecklistConditionAfterPhase({
     this.phase,
     this.duration,
-    this.durationUnit='DAYS',
+    this.durationUnit = 'DAYS',
   }) : super(type: TYPE);
 
   @override
@@ -193,7 +210,12 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
     return map;
   }
 
-  List<Object?> get props => [type, phase, duration, durationUnit,];
+  List<Object?> get props => [
+        type,
+        phase,
+        duration,
+        durationUnit,
+      ];
 
   static ChecklistConditionAfterPhase fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterPhase(
@@ -206,7 +228,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   ChecklistConditionAfterPhase copyWith({
     String? phase,
     int? duration,
-    String? durationUnit='DAYS',
+    String? durationUnit = 'DAYS',
   }) {
     return ChecklistConditionAfterPhase(
       phase: phase ?? this.phase,
@@ -228,13 +250,14 @@ class ChecklistConditionTimer extends ChecklistCondition {
   @override
   Map<String, dynamic> toMap() {
     var map = super.toMap();
-    map.addAll({
-      'date': date
-    });
+    map.addAll({'date': date});
     return map;
   }
 
-  List<Object?> get props => [type, date,];
+  List<Object?> get props => [
+        type,
+        date,
+      ];
 
   static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
     return ChecklistConditionTimer(

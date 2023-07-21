@@ -34,9 +34,9 @@ const Map<String, String> FeedEntryIcons = {
   FE_VENTILATION: 'assets/feed_card/icon_blower.svg',
   
   FE_SCHEDULE: 'assets/feed_card/icon_schedule.svg',
-  FE_SCHEDULE_VEG: 'assets/feed_card/icon_schedule_veg.svg',
-  FE_SCHEDULE_BLOOM: 'assets/feed_card/icon_schedule_bloom.svg',
-  FE_SCHEDULE_AUTO: 'assets/feed_card/icon_schedule_auto.svg',
+  FE_SCHEDULE_VEG: 'assets/feed_card/icon_schedule.svg',
+  FE_SCHEDULE_BLOOM: 'assets/feed_card/icon_schedule.svg',
+  FE_SCHEDULE_AUTO: 'assets/feed_card/icon_schedule.svg',
 
   FE_LIFE_EVENT: 'assets/plant_infos/icon_germination_date.svg',
   FE_TOWELIE_INFO: 'assets/feed_card/icon_towelie.png',
