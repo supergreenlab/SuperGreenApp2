@@ -29,7 +29,11 @@ class ChecklistPhase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Tuple3> choices = [
+      Tuple3('SEED', 'Seed', 'assets/plant_infos/icon_seed.svg'),
+      Tuple3('VEGGING', 'Vegging', 'assets/plant_infos/icon_vegging_since.svg'),
       Tuple3('BLOOMING', 'Blooming', 'assets/plant_infos/icon_blooming_since.svg'),
+      Tuple3('DRYING', 'Drying', 'assets/plant_infos/icon_drying_since.svg'),
+      Tuple3('CURING', 'Curing', 'assets/plant_infos/icon_curing_since.svg'),
     ];
 
     return DropdownButton<String>(

@@ -18,6 +18,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:super_green_app/pages/feed_entries/common/feed_entry_assets.dart';
 import 'package:tuple/tuple.dart';
 
 class ChecklistCardType extends StatelessWidget {
@@ -29,8 +30,23 @@ class ChecklistCardType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Tuple3<String, String, String>> choices = [
-      Tuple3('FE_MEDIA', 'assets/feed_card/icon_media.svg', 'Media'),
+    List<String> choices = [
+      FE_MEDIA,
+      FE_MEASURE,
+      FE_TRANSPLANT,
+      FE_BENDING,
+      FE_FIMMING,
+      FE_TOPPING,
+      FE_DEFOLIATION,
+      FE_TIMELAPSE,
+      FE_NUTRIENT_MIX,
+      FE_WATER,
+      FE_LIGHT,
+      FE_VENTILATION,
+      FE_SCHEDULE,
+      FE_SCHEDULE_VEG,
+      FE_SCHEDULE_BLOOM,
+      FE_SCHEDULE_AUTO,
     ];
     return DropdownButton<String?>(
       hint: Text('Select card type'),
@@ -40,11 +56,14 @@ class ChecklistCardType extends StatelessWidget {
       },
       items: choices.map<DropdownMenuItem<String>>((c) {
         return DropdownMenuItem<String>(
-          value: c.item1,
+          value: c,
           child: Row(
             children: [
-              SvgPicture.asset(c.item2),
-              Text(c.item3),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(FeedEntryIcons[c]!),
+              ),
+              Text(FeedEntryName[c]!),
             ],
           ),
         );

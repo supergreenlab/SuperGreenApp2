@@ -45,7 +45,11 @@ class _ChecklistDurationState extends State<ChecklistDuration> {
   @override
   Widget build(BuildContext context) {
     List<Tuple2<String, String>> choices = [
+      Tuple2('MINUTES', 'Minutes'),
+      Tuple2('HOURS', 'Hours'),
       Tuple2('DAYS', 'Days'),
+      Tuple2('WEEKS', 'Weeks'),
+      Tuple2('MONTHS', 'Months'),
     ];
     return Padding(
       padding: const EdgeInsets.all(8.0),
