@@ -38,6 +38,12 @@ class _WebpageActionPageState extends State<WebpageActionPage> {
   TextEditingController controller = TextEditingController();
 
   @override
+  void initState() {
+    controller.text = widget.action.url ?? '';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
       onClose: widget.onClose,
@@ -61,6 +67,11 @@ class _WebpageActionPageState extends State<WebpageActionPage> {
             soloLine: true,
             noPadding: true,
             textEditingController: controller,
+            onChanged: (value) {
+              widget.onUpdate(widget.action.copyWith(
+                url: value,
+              ));
+            },
           ),
         ),
       ],

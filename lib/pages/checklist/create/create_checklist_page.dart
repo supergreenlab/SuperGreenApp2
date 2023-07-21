@@ -19,6 +19,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
@@ -57,6 +58,13 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
 
   bool showNewAction = false;
   bool showNewCondition = false;
+
+  bool get valid {
+    if (conditions.length == 0 || actions.length == 0) {
+      return false;
+    }
+    return (conditions).firstWhereOrNull((c) => !c.valid) == null && (actions).firstWhereOrNull((a) => !a.valid) == null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +128,12 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   backgroundColor: Colors.deepPurple,
                   titleColor: Colors.yellow,
                   iconColor: Colors.white,
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.check, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
+                      onPressed: this.valid ? () {} : null,
+                    ),
+                  ],
                 ),
                 body: body,
               ),
@@ -158,7 +172,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               setState(() {
                 showNewAction = false;
               });
-            }, filteredValues: actions.map((a) => a.type).toList(),
+            },
+            filteredValues: actions.map((a) => a.type).toList(),
           ),
         ],
       );
@@ -177,7 +192,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               setState(() {
                 showNewCondition = false;
               });
-            }, filteredValues: conditions.map((a) => a.type).toList(),
+            },
+            filteredValues: conditions.map((a) => a.type).toList(),
           ),
         ],
       );
