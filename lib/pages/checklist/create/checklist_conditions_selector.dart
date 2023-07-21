@@ -17,38 +17,52 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_popup.dart';
 
 class ChecklistConditionsSelector extends CreateChecklistPopup {
+  final void Function(ChecklistCondition action) onAdd;
 
-  ChecklistConditionsSelector({required Function() onClose}) : super(onClose: onClose, title: 'Select new condition type');
+  ChecklistConditionsSelector({required this.onAdd, required Function() onClose})
+      : super(onClose: onClose, title: 'Select new condition type');
 
   Widget renderConditions(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        renderCondition(context, 'assets/checklist/icon_reminder.svg', 'Time reminder',
-            'Just a simple reminder, set a date and it will show up in your checklist at that date.', 'Ex: In X days.'),
+        renderCondition(
+            context,
+            'assets/checklist/icon_reminder.svg',
+            'Time reminder',
+            'Just a simple reminder, set a date and it will show up in your checklist at that date.',
+            'Ex: In X days.', () {
+          onAdd(ChecklistConditionTimer());
+        }),
         renderCondition(
             context,
             'assets/checklist/icon_monitoring.svg',
             'Metric monitoring',
             'This checklist item will show up in your checklist if a metric is in or out of a given range.',
-            'Ex: When temperature is >X° for 3 days.'),
+            'Ex: When temperature is >X° for 3 days.', () {
+          onAdd(ChecklistConditionMetric());
+        }),
         renderCondition(
             context,
             'assets/checklist/icon_diary.svg',
             'After a diary entry is created',
             'Choose a diary entry type and set a duration after which this checklist entry will show up in your checklist.',
-            'Ex: 5 days after last watering card'),
+            'Ex: 5 days after last watering card', () {
+          onAdd(ChecklistConditionAfterCard());
+        }),
         renderCondition(
             context,
             'assets/checklist/icon_phase.svg',
             'Plant phase',
             'Select a phase and a duration. This checklist item will show up on time in your checklist.',
-            'Ex: after 2 weeks into bloom, start the next seeds'),
+            'Ex: after 2 weeks into bloom, start the next seeds', () {
+          onAdd(ChecklistConditionAfterPhase());
+        }),
       ],
     );
   }
-
 }

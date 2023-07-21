@@ -18,10 +18,10 @@
 
 import 'dart:convert';
 
-abstract class ChecklistAction {
+abstract class ChecklistCondition {
   String type;
 
-  ChecklistAction({required this.type});
+  ChecklistCondition({required this.type});
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,81 +32,211 @@ abstract class ChecklistAction {
 
   String toJSON() => json.encode(toMap());
 
-  static List<ChecklistAction> fromMapArray(List<Map<String, dynamic>> maps) {
-    return maps.map<ChecklistAction>((m) => ChecklistAction.fromMap(m)).toList();
+  static List<ChecklistCondition> fromMapArray(List<Map<String, dynamic>> maps) {
+    return maps.map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m)).toList();
   }
 
-  static ChecklistAction fromMap(Map<String, dynamic> map) {
+  static ChecklistCondition fromMap(Map<String, dynamic> map) {
     var type = map['type'] as String;
     var params = jsonDecode(map['params']) as Map<String, dynamic>;
 
     switch (type) {
-      case 'webpage':
-        return ChecklistActionWebpage.fromMap(params);
-      case 'create_card':
-        return ChecklistActionCreateCard.fromMap(params);
+      case 'metric':
+        return ChecklistConditionMetric.fromMap(params);
+      case 'after_card':
+        return ChecklistConditionAfterCard.fromMap(params);
+      case 'after_phase':
+        return ChecklistConditionAfterPhase.fromMap(params);
       default:
-        throw UnimplementedError('Action type $type is not implemented');
+        throw UnimplementedError('Condition type $type is not implemented');
     }
   }
 }
 
-class ChecklistActionWebpage extends ChecklistAction {
-  static const String TYPE = 'webpage';
+class ChecklistConditionMetric extends ChecklistCondition {
+  static const String TYPE = 'metric';
 
-  String url;
+  String? key;
+  bool? inRange;
+  double? min;
+  double? max;
+  int? duration;
+  String? durationUnit;
 
-  ChecklistActionWebpage({required this.url}) : super(type: TYPE);
-
-  @override
-  Map<String, dynamic> toMap() {
-    var map = this.toMap();
-    var params = {'url': this.url};
-    map.addAll({
-      'params': json.encode(params),
-    });
-    return map;
-  }
-
-  static ChecklistActionWebpage fromMap(Map<String, dynamic> map) {
-    return ChecklistActionWebpage(url: map['url']);
-  }
-
-  ChecklistActionWebpage copyWith({
-    String? url,
-  }) {
-    return ChecklistActionWebpage(
-      url: url ?? this.url,
-    );
-  }
-}
-
-class ChecklistActionCreateCard extends ChecklistAction {
-  static const String TYPE = 'card';
-
-  String entryType;
-
-  ChecklistActionCreateCard({required this.entryType}) : super(type: TYPE);
+  ChecklistConditionMetric({
+    this.key,
+    this.inRange,
+    this.min,
+    this.max,
+    this.duration,
+    this.durationUnit,
+  }) : super(
+          type: TYPE,
+        );
 
   @override
   Map<String, dynamic> toMap() {
     var map = super.toMap();
-    var params = {'entryType': this.entryType};
     map.addAll({
-      'params': params,
+      'key': key,
+      'inRange': inRange,
+      'min': min,
+      'max': max,
+      'duration': duration,
+      'durationUnit': durationUnit,
     });
     return map;
   }
 
-  static ChecklistActionCreateCard fromMap(Map<String, dynamic> map) {
-    return ChecklistActionCreateCard(entryType: map['entryType']);
+  static ChecklistConditionMetric fromMap(Map<String, dynamic> map) {
+    return ChecklistConditionMetric(
+      key: map['key'],
+      inRange: map['inRange'],
+      min: map['min'],
+      max: map['max'],
+      duration: map['duration'],
+      durationUnit: map['durationUnit'],
+    );
   }
 
-  ChecklistActionCreateCard copyWith({
-    String? entryType,
+  ChecklistConditionMetric copyWith({
+    String? key,
+    bool? inRange,
+    double? min,
+    double? max,
+    int? duration,
+    String? durationUnit,
   }) {
-    return ChecklistActionCreateCard(
+    return ChecklistConditionMetric(
+      key: key ?? this.key,
+      inRange: inRange ?? this.inRange,
+      min: min ?? this.min,
+      max: max ?? this.max,
+      duration: duration ?? this.duration,
+      durationUnit: durationUnit ?? this.durationUnit,
+    );
+  }
+}
+
+class ChecklistConditionAfterCard extends ChecklistCondition {
+  static const String TYPE = 'metric';
+
+  String? entryType;
+  int? duration;
+  String? durationUnit;
+
+  ChecklistConditionAfterCard({
+    this.entryType,
+    this.duration,
+    this.durationUnit,
+  }) : super(type: TYPE);
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = super.toMap();
+    map.addAll({
+      'entryType': entryType,
+      'duration': duration,
+      'durationUnit': durationUnit,
+    });
+    return map;
+  }
+
+  static ChecklistConditionAfterCard fromMap(Map<String, dynamic> map) {
+    return ChecklistConditionAfterCard(
+      entryType: map['entryType'],
+      duration: map['duration'],
+      durationUnit: map['durationUnit'],
+    );
+  }
+
+  ChecklistConditionAfterCard copyWith({
+    String? entryType,
+    int? duration,
+    String? durationUnit,
+  }) {
+    return ChecklistConditionAfterCard(
       entryType: entryType ?? this.entryType,
+      duration: duration ?? this.duration,
+      durationUnit: durationUnit ?? this.durationUnit,
+    );
+  }
+}
+
+class ChecklistConditionAfterPhase extends ChecklistCondition {
+  static const String TYPE = 'after_phase';
+
+  String? phase;
+  int? duration;
+  String? durationUnit;
+
+  ChecklistConditionAfterPhase({
+    this.phase,
+    this.duration,
+    this.durationUnit,
+  }) : super(type: TYPE);
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = super.toMap();
+    map.addAll({
+      'phase': phase,
+      'duration': duration,
+      'durationUnit': durationUnit,
+    });
+    return map;
+  }
+
+  static ChecklistConditionAfterPhase fromMap(Map<String, dynamic> map) {
+    return ChecklistConditionAfterPhase(
+      phase: map['phase'],
+      duration: map['duration'],
+      durationUnit: map['durationUnit'],
+    );
+  }
+
+  ChecklistConditionAfterPhase copyWith({
+    String? phase,
+    int? duration,
+    String? durationUnit,
+  }) {
+    return ChecklistConditionAfterPhase(
+      phase: phase ?? this.phase,
+      duration: duration ?? this.duration,
+      durationUnit: durationUnit ?? this.durationUnit,
+    );
+  }
+}
+
+class ChecklistConditionTimer extends ChecklistCondition {
+  static const String TYPE = 'timer';
+
+  DateTime? date;
+
+  ChecklistConditionTimer({
+    this.date,
+  }) : super(type: TYPE);
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = super.toMap();
+    map.addAll({
+      'date': date
+    });
+    return map;
+  }
+
+  static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
+    return ChecklistConditionTimer(
+      date: map['date'],
+    );
+  }
+
+  ChecklistConditionTimer copyWith({
+    DateTime? date,
+  }) {
+    return ChecklistConditionTimer(
+      date: date ?? this.date,
     );
   }
 }

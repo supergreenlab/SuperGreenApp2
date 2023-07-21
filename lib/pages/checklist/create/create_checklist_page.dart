@@ -31,6 +31,7 @@ import 'package:super_green_app/pages/checklist/create/checklist_conditions_sele
 import 'package:super_green_app/pages/checklist/create/conditions/card_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/phase_condition_page.dart';
+import 'package:super_green_app/pages/checklist/create/conditions/timer_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_bloc.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/checkbox_label.dart';
@@ -44,7 +45,7 @@ class CreateChecklistPage extends TraceableStatefulWidget {
 
 class _CreateChecklistPageState extends State<CreateChecklistPage> {
   final GlobalKey listKey = GlobalKey();
-  
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -147,6 +148,12 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
         children: [
           body,
           ChecklistActionsSelector(
+            onAdd: (ChecklistAction a) {
+              setState(() {
+                showNewAction = false;
+                actions.add(a);
+              });
+            },
             onClose: () {
               setState(() {
                 showNewAction = false;
@@ -160,6 +167,12 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
         children: [
           body,
           ChecklistConditionsSelector(
+            onAdd: (ChecklistCondition c) {
+              setState(() {
+                showNewCondition = false;
+                conditions.add(c);
+              });
+            },
             onClose: () {
               setState(() {
                 showNewCondition = false;
@@ -251,20 +264,22 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
                 ),
               ),
-              conditions.length == 0 ? Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24.0,
-                  horizontal: 32,
-                ),
-                child: MarkdownBody(
-                  fitContent: true,
-                  shrinkWrap: true,
-                  data:
-                      'Configure the conditions for this checklist item to show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the temperature reaches a given value”',
-                  styleSheet: MarkdownStyleSheet(
-                      p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
-                ),
-              ) : Container(),
+              conditions.length == 0
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 24.0,
+                        horizontal: 32,
+                      ),
+                      child: MarkdownBody(
+                        fitContent: true,
+                        shrinkWrap: true,
+                        data:
+                            'Configure the conditions for this checklist item to show up in your checklist.\n\nIt can be as simple as a classic reminder, or something smarter like “If the temperature reaches a given value”',
+                        styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
+                      ),
+                    )
+                  : Container(),
               ...conditions.map((c) {
                 switch (c.type) {
                   case ChecklistConditionMetric.TYPE:
@@ -280,6 +295,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   case ChecklistConditionAfterPhase.TYPE:
                     return PhaseConditionPage(
                       condition: c as ChecklistConditionAfterPhase,
+                      onClose: () {},
+                    );
+                  case ChecklistConditionTimer.TYPE:
+                    return TimerConditionPage(
+                      condition: c as ChecklistConditionTimer,
                       onClose: () {},
                     );
                 }
@@ -314,20 +334,22 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xff6A6A6A)),
                 ),
               ),
-              actions.length == 0 ? Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 24.0,
-                  horizontal: 32,
-                ),
-                child: MarkdownBody(
-                  fitContent: true,
-                  shrinkWrap: true,
-                  data:
-                      'Here you can set the actions required to complete this checklist item.\n\nActions can be things like “Add watering entry to diary” or “Read this webpage”',
-                  styleSheet: MarkdownStyleSheet(
-                      p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
-                ),
-              ) : Container(),
+              actions.length == 0
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 24.0,
+                        horizontal: 32,
+                      ),
+                      child: MarkdownBody(
+                        fitContent: true,
+                        shrinkWrap: true,
+                        data:
+                            'Here you can set the actions required to complete this checklist item.\n\nActions can be things like “Add watering entry to diary” or “Read this webpage”',
+                        styleSheet: MarkdownStyleSheet(
+                            p: TextStyle(color: Color(0xff636363), fontSize: 14), textAlign: WrapAlignment.center),
+                      ),
+                    )
+                  : Container(),
               ...actions.map((a) {
                 switch (a.type) {
                   case ChecklistActionWebpage.TYPE:
