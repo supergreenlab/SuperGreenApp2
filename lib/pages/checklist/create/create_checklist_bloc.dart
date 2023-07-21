@@ -65,8 +65,8 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
           repeat: Value(false),
           title: Value(''),
           description: Value(''),
-          conditions: Value('{}'),
-          actions: Value('{}'),
+          conditions: Value('[]'),
+          actions: Value('[]'),
           synced: Value(false),
         );
       } else {
