@@ -18,22 +18,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
-import 'package:super_green_app/pages/checklist/create/create_checklist_popup.dart';
+import 'package:super_green_app/pages/checklist/create/create_checklist_action_condition_popup.dart';
 
-class ChecklistActionsSelector extends CreateChecklistPopup {
+class ChecklistActionsSelector extends CreateChecklistActionConditionPopup {
   final void Function(ChecklistAction action) onAdd;
 
-  ChecklistActionsSelector({required this.onAdd, required Function() onClose})
-      : super(onClose: onClose, title: 'Select new action type');
+  ChecklistActionsSelector({required this.onAdd, required Function() onClose, required List<String> filteredValues})
+      : super(onClose: onClose, title: 'Select new action type', filteredValues: filteredValues);
 
   Widget renderConditions(BuildContext context) {
     return Column(
       children: [
-        renderCondition(context, 'assets/checklist/icon_webpage.svg', 'Open webpage',
+        filteredValues.contains(ChecklistActionWebpage.TYPE) ? Container() : renderCondition(context, 'assets/checklist/icon_webpage.svg', 'Open webpage',
             'Open a webpage to complete the checklist entry.', 'Ex: some growweedeasy.com article about pests', () {
           onAdd(ChecklistActionWebpage());
         }),
-        renderCondition(context, 'assets/checklist/icon_create_diary.svg', 'Create diary entry',
+        filteredValues.contains(ChecklistActionCreateCard.TYPE) ? Container() : renderCondition(context, 'assets/checklist/icon_create_diary.svg', 'Create diary entry',
             'Create a diary entry to complete the checklist entry.', 'Ex: create watering entry', () {
           onAdd(ChecklistActionCreateCard());
         }),

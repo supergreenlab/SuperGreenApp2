@@ -158,7 +158,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               setState(() {
                 showNewAction = false;
               });
-            },
+            }, filteredValues: actions.map((a) => a.type).toList(),
           ),
         ],
       );
@@ -177,7 +177,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               setState(() {
                 showNewCondition = false;
               });
-            },
+            }, filteredValues: conditions.map((a) => a.type).toList(),
           ),
         ],
       );
@@ -343,6 +343,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               }),
               _renderAddButton(context, '+ ADD CONDITION', () {
                 setState(() {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
                   showNewCondition = true;
                 });
               }),
@@ -421,6 +426,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
               }),
               _renderAddButton(context, '+ ADD ACTION', () {
                 setState(() {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
                   showNewAction = true;
                 });
               }),

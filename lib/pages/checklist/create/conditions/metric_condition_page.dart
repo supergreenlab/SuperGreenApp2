@@ -19,20 +19,19 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
-import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_metric_key.dart';
 import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
 class MetricConditionPage extends StatefulWidget {
-
   final ChecklistConditionMetric condition;
 
   final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const MetricConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
+  const MetricConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate})
+      : super(key: key);
 
   @override
   State<MetricConditionPage> createState() => _MetricConditionPageState();
@@ -41,6 +40,14 @@ class MetricConditionPage extends StatefulWidget {
 class _MetricConditionPageState extends State<MetricConditionPage> {
   final TextEditingController _minController = TextEditingController();
   final TextEditingController _maxController = TextEditingController();
+
+  @override
+  void initState() {
+    _minController.text = widget.condition.min.toString();
+    _maxController.text = widget.condition.max.toString();
+    
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,11 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
         ),
         ChecklistMetricKey(
           metricKey: widget.condition.key,
-          onChange: (String type) {  },
+          onChange: (String type) {
+            widget.onUpdate(widget.condition.copyWith(
+              key: type,
+            ));
+          },
         ),
       ],
     );
@@ -83,12 +94,16 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
       children: [
         CheckboxLabel(
             text: 'Trigger this condition when the temperature is OUT of this range.',
-            onChanged: (p0) => null,
-            value: true),
+            onChanged: (p0) => widget.onUpdate(widget.condition.copyWith(
+                  inRange: !(p0!),
+                )),
+            value: !(widget.condition.inRange ?? false)),
         CheckboxLabel(
             text: 'Trigger this condition when the temperature is IN this range.',
-            onChanged: (p0) => null,
-            value: false),
+            onChanged: (p0) => widget.onUpdate(widget.condition.copyWith(
+              inRange: p0!,
+            )),
+            value: widget.condition.inRange ?? false),
       ],
     );
   }
@@ -111,6 +126,11 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                     soloLine: true,
                     noPadding: true,
                     textEditingController: _minController,
+                    onChanged: (value) {
+                      widget.condition.copyWith(
+                        min: double.parse(value),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -128,6 +148,12 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                     soloLine: true,
                     noPadding: true,
                     textEditingController: _maxController,
+                    onChanged: (value) {
+                      widget.condition.copyWith(
+                        max: double.parse(value),
+                      );
+                    },
+                  
                   ),
                 ),
               ],
@@ -139,21 +165,18 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
   }
 
   Widget _renderDuration(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('For how long?'),
-        ChecklistDuration(
-          duration: widget.condition.duration,
-          unit: widget.condition.durationUnit,
-          onUpdate: (int? duration, String? unit) {
-            widget.onUpdate(widget.condition.copyWith(
-              duration: duration,
-              durationUnit: unit,
-            ));
-          },
-          ),
-      ]
-    );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('For how long?'),
+      ChecklistDuration(
+        duration: widget.condition.duration,
+        unit: widget.condition.durationUnit,
+        onUpdate: (int? duration, String? unit) {
+          widget.onUpdate(widget.condition.copyWith(
+            duration: duration,
+            durationUnit: unit,
+          ));
+        },
+      ),
+    ]);
   }
 }
