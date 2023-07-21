@@ -66,8 +66,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             _titleController.text = state.checklistSeed.title.value;
             _descriptionController.text = state.checklistSeed.description.value;
 
-            this.public = state.checklistSeed.public.value ?? false;
-            this.repeat = state.checklistSeed.repeat.value ?? false;
+            this.public = state.checklistSeed.public.value;
+            this.repeat = state.checklistSeed.repeat.value;
 
             this.conditions.addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions.value)));
             this.actions.addAll(ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions.value)));
