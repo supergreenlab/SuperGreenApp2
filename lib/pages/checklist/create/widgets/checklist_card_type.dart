@@ -33,6 +33,7 @@ class ChecklistCardType extends StatelessWidget {
       Tuple3('FE_MEDIA', 'assets/feed_card/icon_media.svg', 'Media'),
     ];
     return DropdownButton<String?>(
+      hint: Text('Select card type'),
       value: cardType,
       onChanged: (String? value) {
         onChange(value == null ? '' : value);

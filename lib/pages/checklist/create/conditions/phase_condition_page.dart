@@ -55,7 +55,12 @@ class PhaseConditionPage extends StatelessWidget {
           padding: const EdgeInsets.only(right: 8.0),
           child: Text('When plant is:', style: TextStyle(fontWeight: FontWeight.bold),),
         ),
-        ChecklistPhase(),
+        ChecklistPhase(
+          phase: condition.phase,
+          onChange: (String phase) {
+            onUpdate(condition.copyWith(phase: phase));
+          },
+        ),
       ],
     );
   }

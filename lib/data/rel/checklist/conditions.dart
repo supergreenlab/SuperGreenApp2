@@ -19,7 +19,7 @@
 import 'dart:convert';
 
 abstract class ChecklistCondition {
-  String type;
+  final String type;
 
   ChecklistCondition({required this.type});
 
@@ -31,6 +31,8 @@ abstract class ChecklistCondition {
   }
 
   String toJSON() => json.encode(toMap());
+
+  List<Object?> get props => [type,];
 
   static List<ChecklistCondition> fromMapArray(List<dynamic> maps) {
     return maps.map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m)).toList();
@@ -56,12 +58,12 @@ abstract class ChecklistCondition {
 class ChecklistConditionMetric extends ChecklistCondition {
   static const String TYPE = 'metric';
 
-  String? key;
-  bool? inRange;
-  double? min;
-  double? max;
-  int? duration;
-  String? durationUnit;
+  final String? key;
+  final bool? inRange;
+  final double? min;
+  final double? max;
+  final int? duration;
+  final String durationUnit;
 
   ChecklistConditionMetric({
     this.key,
@@ -69,7 +71,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
     this.min,
     this.max,
     this.duration,
-    this.durationUnit,
+    this.durationUnit='DAYS',
   }) : super(
           type: TYPE,
         );
@@ -87,6 +89,8 @@ class ChecklistConditionMetric extends ChecklistCondition {
     });
     return map;
   }
+
+  List<Object?> get props => [type, key, inRange, min, max, duration, durationUnit,];
 
   static ChecklistConditionMetric fromMap(Map<String, dynamic> map) {
     return ChecklistConditionMetric(
@@ -123,12 +127,12 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 
   String? entryType;
   int? duration;
-  String? durationUnit;
+  final String durationUnit;
 
   ChecklistConditionAfterCard({
     this.entryType,
     this.duration,
-    this.durationUnit,
+    this.durationUnit='DAYS',
   }) : super(type: TYPE);
 
   @override
@@ -142,6 +146,8 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
     return map;
   }
 
+  List<Object?> get props => [type, entryType, duration, durationUnit,];
+
   static ChecklistConditionAfterCard fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterCard(
       entryType: map['entryType'],
@@ -153,7 +159,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   ChecklistConditionAfterCard copyWith({
     String? entryType,
     int? duration,
-    String? durationUnit,
+    String? durationUnit='DAYS',
   }) {
     return ChecklistConditionAfterCard(
       entryType: entryType ?? this.entryType,
@@ -166,14 +172,14 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 class ChecklistConditionAfterPhase extends ChecklistCondition {
   static const String TYPE = 'after_phase';
 
-  String? phase;
-  int? duration;
-  String? durationUnit;
+  final String? phase;
+  final int? duration;
+  final String durationUnit;
 
   ChecklistConditionAfterPhase({
     this.phase,
     this.duration,
-    this.durationUnit,
+    this.durationUnit='DAYS',
   }) : super(type: TYPE);
 
   @override
@@ -187,6 +193,8 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
     return map;
   }
 
+  List<Object?> get props => [type, phase, duration, durationUnit,];
+
   static ChecklistConditionAfterPhase fromMap(Map<String, dynamic> map) {
     return ChecklistConditionAfterPhase(
       phase: map['phase'],
@@ -198,7 +206,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   ChecklistConditionAfterPhase copyWith({
     String? phase,
     int? duration,
-    String? durationUnit,
+    String? durationUnit='DAYS',
   }) {
     return ChecklistConditionAfterPhase(
       phase: phase ?? this.phase,
@@ -211,7 +219,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
 class ChecklistConditionTimer extends ChecklistCondition {
   static const String TYPE = 'timer';
 
-  DateTime? date;
+  final DateTime? date;
 
   ChecklistConditionTimer({
     this.date,
@@ -225,6 +233,8 @@ class ChecklistConditionTimer extends ChecklistCondition {
     });
     return map;
   }
+
+  List<Object?> get props => [type, date,];
 
   static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
     return ChecklistConditionTimer(

@@ -18,8 +18,10 @@
 
 import 'dart:convert';
 
-abstract class ChecklistAction {
-  String type;
+import 'package:equatable/equatable.dart';
+
+abstract class ChecklistAction extends Equatable {
+  final String type;
 
   ChecklistAction({required this.type});
 
@@ -31,6 +33,8 @@ abstract class ChecklistAction {
   }
 
   String toJSON() => json.encode(toMap());
+
+  List<Object?> get props => [type,];
 
   static List<ChecklistAction> fromMapArray(List<dynamic> maps) {
     return maps.map<ChecklistAction>((m) => ChecklistAction.fromMap(m)).toList();
@@ -54,7 +58,7 @@ abstract class ChecklistAction {
 class ChecklistActionWebpage extends ChecklistAction {
   static const String TYPE = 'webpage';
 
-  String? url;
+  final String? url;
 
   ChecklistActionWebpage({this.url}) : super(type: TYPE);
 
@@ -67,6 +71,8 @@ class ChecklistActionWebpage extends ChecklistAction {
     });
     return map;
   }
+
+  List<Object?> get props => [...super.props, url];
 
   static ChecklistActionWebpage fromMap(Map<String, dynamic> map) {
     return ChecklistActionWebpage(url: map['url']);
@@ -84,7 +90,7 @@ class ChecklistActionWebpage extends ChecklistAction {
 class ChecklistActionCreateCard extends ChecklistAction {
   static const String TYPE = 'card';
 
-  String? entryType;
+  final String? entryType;
 
   ChecklistActionCreateCard({this.entryType}) : super(type: TYPE);
 
@@ -97,6 +103,8 @@ class ChecklistActionCreateCard extends ChecklistAction {
     });
     return map;
   }
+
+  List<Object?> get props => [...super.props, entryType];
 
   static ChecklistActionCreateCard fromMap(Map<String, dynamic> map) {
     return ChecklistActionCreateCard(entryType: map['entryType']);
