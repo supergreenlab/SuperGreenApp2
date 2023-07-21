@@ -25,9 +25,10 @@ class WebpageActionPage extends StatefulWidget {
 
   final ChecklistActionWebpage action;
 
+  final void Function(ChecklistAction) onUpdate;
   final void Function() onClose;
 
-  const WebpageActionPage({Key? key, required this.onClose, required this.action}) : super(key: key);
+  const WebpageActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
 
   @override
   State<WebpageActionPage> createState() => _WebpageActionPageState();

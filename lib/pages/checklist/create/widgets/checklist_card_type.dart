@@ -18,24 +18,36 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tuple/tuple.dart';
 
 class ChecklistCardType extends StatelessWidget {
+
+  final String? cardType;
+  final Function(String type) onChange;
+
+  const ChecklistCardType({Key? key, required this.onChange, required this.cardType}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<int>(
-      value: 0,
-      onChanged: (int? value) {},
-      items: [
-        DropdownMenuItem(
-          value: 0,
+    List<Tuple3<String, String, String>> choices = [
+      Tuple3('FE_MEDIA', 'assets/feed_card/icon_media.svg', 'Media'),
+    ];
+    return DropdownButton<String?>(
+      value: cardType,
+      onChanged: (String? value) {
+        onChange(value == null ? '' : value);
+      },
+      items: choices.map<DropdownMenuItem<String>>((c) {
+        return DropdownMenuItem<String>(
+          value: c.item1,
           child: Row(
             children: [
-              SvgPicture.asset('assets/feed_card/icon_media.svg'),
-              Text('Temperature'),
+              SvgPicture.asset(c.item2),
+              Text(c.item3),
             ],
           ),
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 }

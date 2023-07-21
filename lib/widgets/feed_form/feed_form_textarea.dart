@@ -23,8 +23,9 @@ class FeedFormTextarea extends StatelessWidget {
   final bool noPadding;
   final bool soloLine;
   final String? placeholder;
+  final Function(String value)? onChanged;
 
-  const FeedFormTextarea({required this.textEditingController, this.noPadding=false, this.placeholder, this.soloLine=false});
+  const FeedFormTextarea({required this.textEditingController, this.noPadding=false, this.placeholder, this.soloLine=false, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class FeedFormTextarea extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: TextField(
+            onChanged: onChanged,
             decoration: placeholder != null ? InputDecoration(
               border: InputBorder.none,
               hintText: placeholder,

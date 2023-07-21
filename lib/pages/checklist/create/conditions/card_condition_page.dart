@@ -26,9 +26,10 @@ class CardConditionPage extends StatelessWidget {
 
   final ChecklistConditionAfterCard condition;
 
+  final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const CardConditionPage({Key? key, required this.onClose, required this.condition}) : super(key: key);
+  const CardConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,12 @@ class CardConditionPage extends StatelessWidget {
           padding: const EdgeInsets.only(right: 8.0),
           child: Text('After card with type:', style: TextStyle(fontWeight: FontWeight.bold),),
         ),
-        ChecklistCardType(),
+        ChecklistCardType(
+          cardType: condition.entryType,
+          onChange: (String type) { 
+            onUpdate(condition.copyWith(entryType: type));
+          },
+        ),
       ],
     );
   }
@@ -62,7 +68,13 @@ class CardConditionPage extends StatelessWidget {
   Widget _renderDuration(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text('After:'),
-      ChecklistDuration(),
+      ChecklistDuration(
+        duration: condition.duration,
+        onUpdate: (int? duration, String? unit) {
+          onUpdate(condition.copyWith(duration: duration, durationUnit: unit));
+        },
+        unit: condition.durationUnit,
+        ),
     ]);
   }
 }

@@ -26,9 +26,10 @@ class PhaseConditionPage extends StatelessWidget {
 
   final ChecklistConditionAfterPhase condition;
 
+  final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const PhaseConditionPage({Key? key, required this.onClose, required this.condition}) : super(key: key);
+  const PhaseConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,16 @@ class PhaseConditionPage extends StatelessWidget {
   Widget _renderDuration(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text('After:'),
-      ChecklistDuration(),
+      ChecklistDuration(
+        duration: condition.duration,
+        unit: condition.durationUnit,
+        onUpdate: (int? duration, String? unit) {
+          onUpdate(condition.copyWith(
+            duration: duration,
+            durationUnit: unit,
+          ));
+        },
+      ),
     ]);
   }
 }
