@@ -26,6 +26,8 @@ import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/actions/diary_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/actions/webpage_action_page.dart';
+import 'package:super_green_app/pages/checklist/create/checklist_actions_selector.dart';
+import 'package:super_green_app/pages/checklist/create/checklist_conditions_selector.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/card_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/metric_condition_page.dart';
 import 'package:super_green_app/pages/checklist/create/conditions/phase_condition_page.dart';
@@ -41,6 +43,8 @@ class CreateChecklistPage extends TraceableStatefulWidget {
 }
 
 class _CreateChecklistPageState extends State<CreateChecklistPage> {
+  final GlobalKey listKey = GlobalKey();
+  
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -49,6 +53,9 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
 
   final List<ChecklistCondition> conditions = [];
   final List<ChecklistAction> actions = [];
+
+  bool showNewAction = false;
+  bool showNewCondition = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +66,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             _titleController.text = state.checklistSeed.title.value;
             _descriptionController.text = state.checklistSeed.description.value;
 
-            this.public = state.checklistSeed.public.value;
-            this.repeat = state.checklistSeed.repeat.value;
+            this.public = state.checklistSeed.public.value ?? false;
+            this.repeat = state.checklistSeed.repeat.value ?? false;
 
             this.conditions.addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions.value)));
             this.actions.addAll(ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions.value)));
@@ -121,7 +128,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
   }
 
   Widget _renderLoaded(BuildContext context, CreateChecklistBlocStateLoaded state) {
-    return ListView(
+    Widget body = ListView(
+      key: listKey,
       children: [
         Container(
           height: 10,
@@ -134,6 +142,34 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
         ),
       ],
     );
+    if (showNewAction) {
+      body = Stack(
+        children: [
+          body,
+          ChecklistActionsSelector(
+            onClose: () {
+              setState(() {
+                showNewAction = false;
+              });
+            },
+          ),
+        ],
+      );
+    } else if (showNewCondition) {
+      body = Stack(
+        children: [
+          body,
+          ChecklistConditionsSelector(
+            onClose: () {
+              setState(() {
+                showNewCondition = false;
+              });
+            },
+          ),
+        ],
+      );
+    }
+    return body;
   }
 
   Widget _renderInfos(BuildContext context, CreateChecklistBlocStateLoaded state) {
@@ -249,7 +285,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                 }
                 return Container();
               }),
-              _renderAddButton(context, '+ ADD CONDITION'),
+              _renderAddButton(context, '+ ADD CONDITION', () {
+                setState(() {
+                  showNewCondition = true;
+                });
+              }),
             ],
           ),
         ),
@@ -303,7 +343,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                 }
                 return Container();
               }),
-              _renderAddButton(context, '+ ADD ACTION'),
+              _renderAddButton(context, '+ ADD ACTION', () {
+                setState(() {
+                  showNewAction = true;
+                });
+              }),
             ],
           ),
         ),
@@ -311,9 +355,9 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
     );
   }
 
-  Widget _renderAddButton(BuildContext context, String title) {
+  Widget _renderAddButton(BuildContext context, String title, Function() onTap) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         height: 50, // Specify your container height
         child: Center(

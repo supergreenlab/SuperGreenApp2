@@ -60,7 +60,7 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
       if (args.checklistSeed == null) {
         checklistSeed = ChecklistSeedsCompanion.insert(checklist: this.args.checklist.id);
       } else {
-        checklistSeed = args.checklistSeed!.toCompanion(true);
+        checklistSeed = args.checklistSeed!.toCompanion(false);
       }
       yield CreateChecklistBlocStateLoaded(this.args.checklist, checklistSeed);
     }
