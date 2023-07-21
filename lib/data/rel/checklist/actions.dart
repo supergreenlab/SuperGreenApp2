@@ -18,10 +18,10 @@
 
 import 'dart:convert';
 
-abstract class ChecklistCondition {
+abstract class ChecklistAction {
   String type;
 
-  ChecklistCondition({required this.type});
+  ChecklistAction({required this.type});
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,178 +32,81 @@ abstract class ChecklistCondition {
 
   String toJSON() => json.encode(toMap());
 
-  static List<ChecklistCondition> fromMapArray(List<Map<String, dynamic>> maps) {
-    return maps.map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m)).toList();
+  static List<ChecklistAction> fromMapArray(List<Map<String, dynamic>> maps) {
+    return maps.map<ChecklistAction>((m) => ChecklistAction.fromMap(m)).toList();
   }
 
-  static ChecklistCondition fromMap(Map<String, dynamic> map) {
+  static ChecklistAction fromMap(Map<String, dynamic> map) {
     var type = map['type'] as String;
     var params = jsonDecode(map['params']) as Map<String, dynamic>;
 
     switch (type) {
-      case 'metric':
-        return ChecklistConditionMetric.fromMap(params);
-      case 'after_card':
-        return ChecklistConditionAfterCard.fromMap(params);
-      case 'after_phase':
-        return ChecklistConditionAfterPhase.fromMap(params);
+      case 'webpage':
+        return ChecklistActionWebpage.fromMap(params);
+      case 'create_card':
+        return ChecklistActionCreateCard.fromMap(params);
       default:
-        throw UnimplementedError('Condition type $type is not implemented');
+        throw UnimplementedError('Action type $type is not implemented');
     }
   }
 }
 
-class ChecklistConditionMetric extends ChecklistCondition {
-  static const String TYPE = 'metric';
+class ChecklistActionWebpage extends ChecklistAction {
+  static const String TYPE = 'webpage';
 
-  String key;
-  bool inRange;
-  double min;
-  double max;
-  int duration;
-  String durationUnit;
+  String? url;
 
-  ChecklistConditionMetric({
-    required this.key,
-    required this.inRange,
-    required this.min,
-    required this.max,
-    required this.duration,
-    required this.durationUnit,
-  }) : super(
-          type: TYPE,
-        );
+  ChecklistActionWebpage({this.url}) : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {
-    var map = super.toMap();
+    var map = this.toMap();
+    var params = {'url': this.url};
     map.addAll({
-      'key': key,
-      'inRange': inRange,
-      'min': min,
-      'max': max,
-      'duration': duration,
-      'durationUnit': durationUnit,
+      'params': json.encode(params),
     });
     return map;
   }
 
-  static ChecklistConditionMetric fromMap(Map<String, dynamic> map) {
-    return ChecklistConditionMetric(
-      key: map['key'],
-      inRange: map['inRange'],
-      min: map['min'],
-      max: map['max'],
-      duration: map['duration'],
-      durationUnit: map['durationUnit'],
-    );
+  static ChecklistActionWebpage fromMap(Map<String, dynamic> map) {
+    return ChecklistActionWebpage(url: map['url']);
   }
 
-  ChecklistConditionMetric copyWith({
-    String? key,
-    bool? inRange,
-    double? min,
-    double? max,
-    int? duration,
-    String? durationUnit,
+  ChecklistActionWebpage copyWith({
+    String? url,
   }) {
-    return ChecklistConditionMetric(
-      key: key ?? this.key,
-      inRange: inRange ?? this.inRange,
-      min: min ?? this.min,
-      max: max ?? this.max,
-      duration: duration ?? this.duration,
-      durationUnit: durationUnit ?? this.durationUnit,
+    return ChecklistActionWebpage(
+      url: url ?? this.url,
     );
   }
 }
 
-class ChecklistConditionAfterCard extends ChecklistCondition {
-  static const String TYPE = 'metric';
+class ChecklistActionCreateCard extends ChecklistAction {
+  static const String TYPE = 'card';
 
-  String entryType;
-  int duration;
-  String durationUnit;
+  String? entryType;
 
-  ChecklistConditionAfterCard({
-    required this.entryType,
-    required this.duration,
-    required this.durationUnit,
-  }) : super(type: TYPE);
+  ChecklistActionCreateCard({this.entryType}) : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {
     var map = super.toMap();
+    var params = {'entryType': this.entryType};
     map.addAll({
-      'entryType': entryType,
-      'duration': duration,
-      'durationUnit': durationUnit,
+      'params': params,
     });
     return map;
   }
 
-  static ChecklistConditionAfterCard fromMap(Map<String, dynamic> map) {
-    return ChecklistConditionAfterCard(
-      entryType: map['entryType'],
-      duration: map['duration'],
-      durationUnit: map['durationUnit'],
-    );
+  static ChecklistActionCreateCard fromMap(Map<String, dynamic> map) {
+    return ChecklistActionCreateCard(entryType: map['entryType']);
   }
 
-  ChecklistConditionAfterCard copyWith({
+  ChecklistActionCreateCard copyWith({
     String? entryType,
-    int? duration,
-    String? durationUnit,
   }) {
-    return ChecklistConditionAfterCard(
+    return ChecklistActionCreateCard(
       entryType: entryType ?? this.entryType,
-      duration: duration ?? this.duration,
-      durationUnit: durationUnit ?? this.durationUnit,
-    );
-  }
-}
-
-class ChecklistConditionAfterPhase extends ChecklistCondition {
-  static const String TYPE = 'after_phase';
-
-  String phase;
-  int duration;
-  String durationUnit;
-
-  ChecklistConditionAfterPhase({
-    required this.phase,
-    required this.duration,
-    required this.durationUnit,
-  }) : super(type: TYPE);
-
-  @override
-  Map<String, dynamic> toMap() {
-    var map = super.toMap();
-    map.addAll({
-      'phase': phase,
-      'duration': duration,
-      'durationUnit': durationUnit,
-    });
-    return map;
-  }
-
-  static ChecklistConditionAfterPhase fromMap(Map<String, dynamic> map) {
-    return ChecklistConditionAfterPhase(
-      phase: map['phase'],
-      duration: map['duration'],
-      durationUnit: map['durationUnit'],
-    );
-  }
-
-  ChecklistConditionAfterPhase copyWith({
-    String? phase,
-    int? duration,
-    String? durationUnit,
-  }) {
-    return ChecklistConditionAfterPhase(
-      phase: phase ?? this.phase,
-      duration: duration ?? this.duration,
-      durationUnit: durationUnit ?? this.durationUnit,
     );
   }
 }

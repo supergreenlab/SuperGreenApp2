@@ -63,7 +63,7 @@ abstract class CreateChecklistPopup extends StatelessWidget {
 
   Widget renderConditions(BuildContext context);
 
-  Widget renderCondition(BuildContext context, String icon, String title, String description, String expample) {
+  Widget renderCondition(BuildContext context, String icon, String title, String description, String expample, Function() onTap) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -82,7 +82,7 @@ abstract class CreateChecklistPopup extends StatelessWidget {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

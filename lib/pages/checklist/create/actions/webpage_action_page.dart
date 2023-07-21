@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/data/rel/checklist/conditions.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 

@@ -17,36 +17,37 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/data/rel/checklist/actions.dart';
+import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
-import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
+import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
 
-class DiaryActionPage extends StatelessWidget {
-
-  final ChecklistActionCreateCard action;
+class TimerConditionPage extends StatelessWidget {
+  final ChecklistConditionTimer condition;
 
   final void Function() onClose;
 
-  const DiaryActionPage({Key? key, required this.onClose, required this.action}) : super(key: key);
+  const TimerConditionPage({Key? key, required this.onClose, required this.condition}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
       onClose: onClose,
-      title: 'Create diary card',
+      title: 'Timer condition',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: _renderCardTypes(context),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          _renderDate(context),
+        ]),
       ),
     );
   }
 
-  Widget _renderCardTypes(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ChecklistCardType(),
-      ],
+  Widget _renderDate(BuildContext context) {
+    return FeedFormDatePicker(
+      condition.date ?? DateTime.now(),
+      onChange: (DateTime? newDate) {
+
+      },
     );
   }
 }
