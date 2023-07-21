@@ -119,7 +119,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
 }
 
 class ChecklistConditionAfterCard extends ChecklistCondition {
-  static const String TYPE = 'metric';
+  static const String TYPE = 'after_card';
 
   String? entryType;
   int? duration;
