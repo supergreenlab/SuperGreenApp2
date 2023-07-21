@@ -18,24 +18,37 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tuple/tuple.dart';
 
 class ChecklistPhase extends StatelessWidget {
+  final String? phase;
+  final Function(String phase) onChange;
+
+  const ChecklistPhase({Key? key, required this.phase, required this.onChange}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<int>(
-      value: 0,
-      onChanged: (int? value) {},
-      items: [
-        DropdownMenuItem(
-          value: 0,
+    List<Tuple3> choices = [
+      Tuple3('BLOOMING', 'Blooming', 'assets/plant_infos/icon_blooming_since.svg'),
+    ];
+
+    return DropdownButton<String>(
+      hint: Text('Select plant phase'),
+      value: phase,
+      onChanged: (String? value) {
+        onChange(value!);
+      },
+      items: choices.map<DropdownMenuItem<String>>((c) {
+        return DropdownMenuItem(
+          value: c.item1,
           child: Row(
             children: [
-              SvgPicture.asset('assets/plant_infos/icon_blooming_since.svg'),
-              Text('Blooming'),
+              SvgPicture.asset(c.item3),
+              Text(c.item2),
             ],
           ),
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 }

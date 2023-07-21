@@ -33,6 +33,7 @@ class ChecklistMetricKey extends StatelessWidget {
       Tuple3('TEMP', 'assets/feed_card/icon_media.svg', 'Temperature'),
     ];
     return DropdownButton<String?>(
+      hint: Text('Select metric'),
       value: metricKey,
       onChanged: (String? value) {
         onChange(value == null ? '' : value);
