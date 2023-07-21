@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
@@ -58,7 +59,16 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
   Stream<CreateChecklistBlocState> mapEventToState(CreateChecklistBlocEvent event) async* {
     if (event is CreateChecklistBlocEventInit) {
       if (args.checklistSeed == null) {
-        checklistSeed = ChecklistSeedsCompanion.insert(checklist: this.args.checklist.id);
+        checklistSeed = ChecklistSeedsCompanion.insert(
+          checklist: this.args.checklist.id,
+          public: Value(false),
+          repeat: Value(false),
+          title: Value(''),
+          description: Value(''),
+          conditions: Value('{}'),
+          actions: Value('{}'),
+          synced: Value(false),
+        );
       } else {
         checklistSeed = args.checklistSeed!.toCompanion(false);
       }
