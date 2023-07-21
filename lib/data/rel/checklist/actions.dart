@@ -32,7 +32,7 @@ abstract class ChecklistAction {
 
   String toJSON() => json.encode(toMap());
 
-  static List<ChecklistAction> fromMapArray(List<Map<String, dynamic>> maps) {
+  static List<ChecklistAction> fromMapArray(List<dynamic> maps) {
     return maps.map<ChecklistAction>((m) => ChecklistAction.fromMap(m)).toList();
   }
 

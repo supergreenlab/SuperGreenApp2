@@ -290,7 +290,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                           conditions[conditions.indexOf(c)] = nc;
                         });
                       },
-                      onClose: () {},
+                      onClose: () {
+                        setState(() {
+                          conditions.removeAt(conditions.indexOf(c));
+                        });
+                      },
                     );
                   case ChecklistConditionAfterCard.TYPE:
                     return CardConditionPage(
@@ -300,7 +304,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                           conditions[conditions.indexOf(c)] = nc;
                         });
                       },
-                      onClose: () {},
+                      onClose: () {
+                        setState(() {
+                          conditions.removeAt(conditions.indexOf(c));
+                        });
+                      },
                     );
                   case ChecklistConditionAfterPhase.TYPE:
                     return PhaseConditionPage(
@@ -310,7 +318,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                           conditions[conditions.indexOf(c)] = nc;
                         });
                       },
-                      onClose: () {},
+                      onClose: () {
+                        setState(() {
+                          conditions.removeAt(conditions.indexOf(c));
+                        });
+                      },
                     );
                   case ChecklistConditionTimer.TYPE:
                     return TimerConditionPage(
@@ -320,7 +332,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                           conditions[conditions.indexOf(c)] = nc;
                         });
                       },
-                      onClose: () {},
+                      onClose: () {
+                        setState(() {
+                          conditions.removeAt(conditions.indexOf(c));
+                        });
+                      },
                     );
                 }
                 return Container();
@@ -380,7 +396,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                           actions[actions.indexOf(a)] = na;
                         });
                       },
-                      onClose: () {},
+                      onClose: () {
+                        setState(() {
+                          actions.removeAt(actions.indexOf(a));
+                        });
+                      },
                     );
                   case ChecklistActionCreateCard.TYPE:
                     return DiaryActionPage(
@@ -390,7 +410,11 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                           actions[actions.indexOf(a)] = na;
                         });
                       },
-                      onClose: () {},
+                      onClose: () {
+                        setState(() {
+                          actions.removeAt(actions.indexOf(a));
+                        });
+                      },
                     );
                 }
                 return Container();
