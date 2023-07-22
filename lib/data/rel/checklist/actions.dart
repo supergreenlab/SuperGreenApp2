@@ -28,7 +28,6 @@ abstract class ChecklistAction extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'params': toJSON(),
     };
   }
 
@@ -66,7 +65,7 @@ class ChecklistActionWebpage extends ChecklistAction {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
+    Map<String, dynamic> map = super.toMap();
     var params = {'url': this.url};
     map.addAll({
       'params': json.encode(params),
@@ -98,7 +97,7 @@ class ChecklistActionCreateCard extends ChecklistAction {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
+    Map<String, dynamic> map = super.toMap();
     var params = {'entryType': this.entryType};
     map.addAll({
       'params': params,
