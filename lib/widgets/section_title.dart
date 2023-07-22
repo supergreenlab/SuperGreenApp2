@@ -27,15 +27,18 @@ class SectionTitle extends StatelessWidget {
   final bool large;
   final double? elevation;
   final double iconPadding;
+  final Widget? child;
 
-  const SectionTitle(
-      {required this.title,
+  const SectionTitle({
+      required this.title,
       required this.icon,
       this.large = false,
       this.backgroundColor,
       this.titleColor = Colors.black,
       this.elevation,
-      this.iconPadding = 8});
+      this.iconPadding = 8,
+      this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +51,21 @@ class SectionTitle extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: large ? 16.0 : 8.0),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          _renderIcon(),
-          Text(
-            this.title,
-            style: TextStyle(fontWeight: FontWeight.w300, fontSize: large ? 20 : 16, color: this.titleColor),
-          ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _renderIcon(),
+            Text(
+              this.title,
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: large ? 20 : 16, color: this.titleColor),
+            ),
+            if (this.child != null)
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: child,
+                ),
+              ),
         ]),
       ),
     );
