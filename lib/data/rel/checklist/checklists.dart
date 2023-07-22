@@ -71,7 +71,7 @@ class ChecklistSeeds extends Table {
     Checklist checklist;
     try {
       checklist = await RelDB.get().checklistsDAO.getChecklist(map['checklistID']);
-    } catch(e) {
+    } catch (e) {
       return SkipChecklistSeedsCompanion(map['id'] as String);
     }
     return ChecklistSeedsCompanion(
@@ -130,5 +130,9 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
 
   Future updateChecklistSeed(ChecklistSeedsCompanion checklistSeed) {
     return (update(checklistSeeds)..where((tbl) => tbl.id.equals(checklistSeed.id.value))).write(checklistSeed);
+  }
+
+  Stream<List<ChecklistSeed>> watchChecklistSeeds(int checklistID) {
+    return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))).watch();
   }
 }
