@@ -26,14 +26,17 @@ class FeedFormParamLayout extends StatelessWidget {
   final Color? titleBackgroundColor;
   final Color? titleColor;
   final bool largeTitle;
+  final bool inline;
 
-  FeedFormParamLayout(
-      {required this.child,
+  FeedFormParamLayout({
+      required this.child,
       required this.icon,
       required this.title,
       this.titleBackgroundColor,
       this.titleColor,
-      this.largeTitle = false});
+      this.largeTitle = false,
+      this.inline = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +57,9 @@ class FeedFormParamLayout extends StatelessWidget {
               backgroundColor: titleBackgroundColor,
               titleColor: titleColor,
               large: largeTitle,
+              child: inline ? child : null,
             ),
-            this.child,
+            if (!inline) this.child,
           ],
         ),
       ),

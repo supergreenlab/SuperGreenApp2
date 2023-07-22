@@ -17,7 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:super_green_app/widgets/feed_form/feed_form_button.dart';
+import 'package:super_green_app/theme.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_param_layout.dart';
 
 class YesNoFormParam extends StatelessWidget {
@@ -28,13 +28,14 @@ class YesNoFormParam extends StatelessWidget {
   final void Function(bool?) onPressed;
   final Widget? child;
 
-  const YesNoFormParam(
-      {required this.icon,
+  const YesNoFormParam({
+      required this.icon,
       required this.title,
       required this.yes,
       required this.onPressed,
       this.titleBackgroundColor,
-      this.child});
+      this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,34 +43,86 @@ class YesNoFormParam extends StatelessWidget {
       icon: icon,
       title: title,
       titleBackgroundColor: titleBackgroundColor,
+      inline: true,
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                FeedFormButton(
-                    title: 'YES',
-                    icon: Icon(Icons.check, color: yes == true ? Color(0xff3bb30b) : Colors.white),
-                    border: yes == true,
-                    onPressed: () {
-                      this.onPressed(yes == true ? null : true);
-                    },
-                    textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                FeedFormButton(
-                    title: 'NO',
-                    icon: Icon(Icons.close, color: yes == false ? Colors.red : Colors.white),
-                    border: yes == false,
-                    onPressed: () {
-                      this.onPressed(yes == false ? null : false);
-                    },
-                    textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-              ],
+        padding: const EdgeInsets.only(right: 4.0),
+        child: AnimatedSwitch(
+          yes: 'Yes',
+          no: 'NO',
+          value: yes ?? false,
+          onPressed: this.onPressed,
+        ),
+      ),
+    );
+  }
+}
+
+class AnimatedSwitch extends StatefulWidget {
+  AnimatedSwitch({
+    Key? key,
+    required this.yes,
+    required this.no,
+    required this.value,
+    required this.onPressed,
+    this.textStyle,
+  }) : super(key: key);
+
+  final String yes;
+  final String no;
+  bool value;
+  final void Function(bool x)? onPressed;
+  final TextStyle? textStyle;
+
+  @override
+  _AnimatedSwitchState createState() => _AnimatedSwitchState();
+}
+
+class _AnimatedSwitchState extends State<AnimatedSwitch> {
+  final animationDuration = Duration(milliseconds: 300);
+
+  Color get color {
+    return isYes ? SglColor.green : SglColor.inactive;
+  }
+
+  bool get isYes {
+    return widget.value == true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          widget.value = !widget.value;
+        });
+        widget.onPressed!(widget.value);
+      },
+      child: AnimatedContainer(
+        height: 40,
+        width: 70,
+        duration: animationDuration,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: color,
+          border: Border.all(
+            color: Colors.white,
+            width: 2
+          ),
+        ),
+        child: AnimatedAlign(
+          duration: animationDuration,
+          alignment: isYes ? Alignment.centerRight : Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 3),
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
             ),
-            this.child ?? Container(),
-          ],
+          ),
         ),
       ),
     );
