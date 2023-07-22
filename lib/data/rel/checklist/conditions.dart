@@ -94,7 +94,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    var map = super.toMap();
+    Map<String, dynamic> map = {};
     map.addAll({
       'key': key,
       'inRange': inRange,
@@ -161,7 +161,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    var map = super.toMap();
+    Map<String, dynamic> map = {};
     map.addAll({
       'entryType': entryType,
       'duration': duration,
@@ -213,7 +213,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    var map = super.toMap();
+    Map<String, dynamic> map = {};
     map.addAll({
       'phase': phase,
       'duration': duration,
@@ -261,8 +261,8 @@ class ChecklistConditionTimer extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    var map = super.toMap();
-    map.addAll({'date': date});
+    Map<String, dynamic> map = {};
+    map.addAll({'date': date!.toUtc().toIso8601String()});
     return map;
   }
 
@@ -273,7 +273,7 @@ class ChecklistConditionTimer extends ChecklistCondition {
 
   static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
     return ChecklistConditionTimer(
-      date: map['date'],
+      date: DateTime.parse(map['date'] as String).toLocal(),
     );
   }
 

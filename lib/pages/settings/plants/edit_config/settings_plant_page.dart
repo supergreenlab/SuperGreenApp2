@@ -98,7 +98,7 @@ class _SettingsPlantPageState extends State<SettingsPlantPage> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Unsaved changed'),
+                            title: Text('Unsaved changes'),
                             content: Text('Changes will not be saved. Continue?'),
                             actions: <Widget>[
                               TextButton(

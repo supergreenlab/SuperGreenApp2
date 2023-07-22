@@ -29,6 +29,16 @@ class CreateChecklistBlocEventInit extends CreateChecklistBlocEvent {
   List<Object> get props => [];
 }
 
+class CreateChecklistBlocEventSave extends CreateChecklistBlocEvent {
+
+  final ChecklistSeedsCompanion checklistSeed;
+
+  CreateChecklistBlocEventSave(this.checklistSeed);
+
+  @override
+  List<Object> get props => [checklistSeed];
+}
+
 abstract class CreateChecklistBlocState extends Equatable {}
 
 class CreateChecklistBlocStateInit extends CreateChecklistBlocState {
@@ -44,6 +54,11 @@ class CreateChecklistBlocStateLoaded extends CreateChecklistBlocState {
 
   @override
   List<Object> get props => [checklist];
+}
+
+class CreateChecklistBlocStateCreated extends CreateChecklistBlocState {
+  @override
+  List<Object> get props => [];
 }
 
 class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChecklistBlocState> {
@@ -73,6 +88,9 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
         checklistSeed = args.checklistSeed!.toCompanion(false);
       }
       yield CreateChecklistBlocStateLoaded(this.args.checklist, checklistSeed);
+    } else if (event is CreateChecklistBlocEventSave) {
+      await RelDB.get().checklistsDAO.addChecklistSeed(event.checklistSeed);
+      yield CreateChecklistBlocStateCreated();
     }
   }
 }

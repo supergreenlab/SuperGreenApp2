@@ -119,7 +119,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
   }
 
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
-    return Text("Checklist loaded pouet 2");
+    return ListView(
+      children: state.checklistSeeds.map((cks) {
+        return Text(cks.title);
+      }).toList(),
+    );
   }
 
   Widget _renderAutoChecklistPopulate(BuildContext context, ChecklistBlocStateLoaded state) {
