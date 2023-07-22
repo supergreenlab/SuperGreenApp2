@@ -29,11 +29,11 @@ class ChecklistActionsSelector extends CreateChecklistActionConditionPopup {
   Widget renderConditions(BuildContext context) {
     return Column(
       children: [
-        filteredValues.contains(ChecklistActionWebpage.TYPE) ? Container() : renderCondition(context, 'assets/checklist/icon_webpage.svg', 'Open webpage',
+        renderCondition(context, 'assets/checklist/icon_webpage.svg', 'Open webpage',
             'Open a webpage to complete the checklist entry.', 'Ex: some growweedeasy.com article about pests', () {
           onAdd(ChecklistActionWebpage());
         }),
-        filteredValues.contains(ChecklistActionCreateCard.TYPE) ? Container() : renderCondition(context, 'assets/checklist/icon_create_diary.svg', 'Create diary entry',
+        renderCondition(context, 'assets/checklist/icon_create_diary.svg', 'Create diary entry',
             'Create a diary entry to complete the checklist entry.', 'Ex: create watering entry', () {
           onAdd(ChecklistActionCreateCard());
         }),

@@ -18,6 +18,7 @@
 
 import 'dart:convert';
 
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +26,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
+import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/actions/diary_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/actions/webpage_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/checklist_actions_selector.dart';
@@ -84,6 +87,8 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             this.conditions.addAll(ChecklistCondition.fromMapArray(json.decode(state.checklistSeed.conditions.value)));
             this.actions.addAll(ChecklistAction.fromMapArray(json.decode(state.checklistSeed.actions.value)));
           });
+        } else if (state is CreateChecklistBlocStateCreated) {
+          BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigatorActionPop(mustPop: true));
         }
       },
       child: BlocBuilder<CreateChecklistBloc, CreateChecklistBlocState>(
@@ -92,10 +97,22 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
             Widget body = FullscreenLoading(
               title: 'Loading..',
             );
+            Function() onSave = () {};
             if (state is CreateChecklistBlocStateInit) {
               body = FullscreenLoading();
             } else if (state is CreateChecklistBlocStateLoaded) {
               body = _renderLoaded(context, state);
+              onSave = () {
+                ChecklistSeedsCompanion cks = state.checklistSeed.copyWith(
+                  title: drift.Value(_titleController.text),
+                  description: drift.Value(_descriptionController.text),
+                  public: drift.Value(public),
+                  repeat: drift.Value(repeat),
+                  conditions: drift.Value(json.encode(conditions.map((c) => c.toMap()).toList())),
+                  actions: drift.Value(json.encode(actions.map((a) => a.toMap()).toList())),
+                );
+                BlocProvider.of<CreateChecklistBloc>(context).add(CreateChecklistBlocEventSave(cks));
+              };
             }
             return WillPopScope(
               onWillPop: () async {
@@ -104,7 +121,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Unsaved changed'),
+                            title: Text('Unsaved changes'),
                             content: Text('Changes will not be saved. Continue?'),
                             actions: <Widget>[
                               TextButton(
@@ -134,7 +151,7 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   actions: [
                     IconButton(
                       icon: Icon(Icons.check, color: Color(this.valid ? 0xff3bb30b : 0xa0ffffff), size: 40),
-                      onPressed: this.valid ? () {} : null,
+                      onPressed: !this.valid ? null : onSave,
                     ),
                   ],
                 ),

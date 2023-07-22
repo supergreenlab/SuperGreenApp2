@@ -66,7 +66,7 @@ class ChecklistActionWebpage extends ChecklistAction {
 
   @override
   Map<String, dynamic> toMap() {
-    var map = this.toMap();
+    Map<String, dynamic> map = {};
     var params = {'url': this.url};
     map.addAll({
       'params': json.encode(params),
@@ -98,7 +98,7 @@ class ChecklistActionCreateCard extends ChecklistAction {
 
   @override
   Map<String, dynamic> toMap() {
-    var map = super.toMap();
+    Map<String, dynamic> map = {};
     var params = {'entryType': this.entryType};
     map.addAll({
       'params': params,
