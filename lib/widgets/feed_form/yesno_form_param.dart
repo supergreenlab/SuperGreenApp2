@@ -47,8 +47,6 @@ class YesNoFormParam extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(right: 4.0),
         child: AnimatedSwitch(
-          yes: 'Yes',
-          no: 'NO',
           value: yes ?? false,
           onPressed: this.onPressed,
         ),
@@ -60,18 +58,12 @@ class YesNoFormParam extends StatelessWidget {
 class AnimatedSwitch extends StatefulWidget {
   AnimatedSwitch({
     Key? key,
-    required this.yes,
-    required this.no,
     required this.value,
     required this.onPressed,
-    this.textStyle,
   }) : super(key: key);
 
-  final String yes;
-  final String no;
   bool value;
   final void Function(bool x)? onPressed;
-  final TextStyle? textStyle;
 
   @override
   _AnimatedSwitchState createState() => _AnimatedSwitchState();
