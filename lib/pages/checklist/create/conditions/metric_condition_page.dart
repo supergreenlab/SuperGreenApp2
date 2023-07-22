@@ -97,13 +97,13 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
             onChanged: (p0) => widget.onUpdate(widget.condition.copyWith(
                   inRange: !(p0!),
                 )),
-            value: !(widget.condition.inRange ?? false)),
+            value: !(widget.condition.inRange)),
         CheckboxLabel(
             text: 'Trigger this condition when the temperature is IN this range.',
             onChanged: (p0) => widget.onUpdate(widget.condition.copyWith(
               inRange: p0!,
             )),
-            value: widget.condition.inRange ?? false),
+            value: widget.condition.inRange),
       ],
     );
   }
@@ -122,6 +122,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FeedFormTextarea(
+                    keyboardType: TextInputType.number,
                     placeholder: '(Optional)',
                     soloLine: true,
                     noPadding: true,
@@ -144,6 +145,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FeedFormTextarea(
+                    keyboardType: TextInputType.number,
                     placeholder: '(Optional)',
                     soloLine: true,
                     noPadding: true,

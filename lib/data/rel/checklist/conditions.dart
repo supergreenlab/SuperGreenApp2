@@ -18,7 +18,9 @@
 
 import 'dart:convert';
 
-abstract class ChecklistCondition {
+import 'package:equatable/equatable.dart';
+
+abstract class ChecklistCondition extends Equatable {
   final String type;
 
   bool get valid => !props.contains(null) && !props.contains('');
@@ -63,15 +65,25 @@ class ChecklistConditionMetric extends ChecklistCondition {
   static const String TYPE = 'metric';
 
   final String? key;
-  final bool? inRange;
+  final bool inRange;
   final double? min;
   final double? max;
   final int? duration;
   final String durationUnit;
 
+  bool get valid {
+    if (key == null || duration == null) {
+      return false;
+    }
+    if (min == null && max == null) {
+      return false;
+    }
+    return true;
+  }
+
   ChecklistConditionMetric({
     this.key,
-    this.inRange,
+    this.inRange = true,
     this.min,
     this.max,
     this.duration,
@@ -137,8 +149,8 @@ class ChecklistConditionMetric extends ChecklistCondition {
 class ChecklistConditionAfterCard extends ChecklistCondition {
   static const String TYPE = 'after_card';
 
-  String? entryType;
-  int? duration;
+  final String? entryType;
+  final int? duration;
   final String durationUnit;
 
   ChecklistConditionAfterCard({

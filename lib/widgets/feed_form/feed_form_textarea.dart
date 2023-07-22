@@ -20,12 +20,13 @@ import 'package:flutter/material.dart';
 
 class FeedFormTextarea extends StatelessWidget {
   final TextEditingController textEditingController;
+  final TextInputType? keyboardType;
   final bool noPadding;
   final bool soloLine;
   final String? placeholder;
   final Function(String value)? onChanged;
 
-  const FeedFormTextarea({required this.textEditingController, this.noPadding=false, this.placeholder, this.soloLine=false, this.onChanged});
+  const FeedFormTextarea({required this.textEditingController, this.noPadding=false, this.placeholder, this.soloLine=false, this.onChanged, this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class FeedFormTextarea extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: TextField(
+            keyboardType: keyboardType,
             onChanged: onChanged,
             decoration: placeholder != null ? InputDecoration(
               border: InputBorder.none,
