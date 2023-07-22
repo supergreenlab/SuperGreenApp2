@@ -22,7 +22,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:equatable/equatable.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';

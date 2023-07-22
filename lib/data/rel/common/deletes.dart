@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'deletes.g.dart';
@@ -34,7 +34,7 @@ class Deletes extends Table {
   }
 }
 
-@UseDao(tables: [
+@DriftAccessor(tables: [
   Deletes,
 ])
 class DeletesDAO extends DatabaseAccessor<RelDB> with _$DeletesDAOMixin {

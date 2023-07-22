@@ -21,7 +21,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/misc/bloc.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
 import 'package:super_green_app/data/api/backend/services/models/alerts.dart';
 import 'package:super_green_app/data/kv/app_db.dart';

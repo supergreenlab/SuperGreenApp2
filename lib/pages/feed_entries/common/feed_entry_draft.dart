@@ -17,7 +17,7 @@
  */
 
 import 'package:equatable/equatable.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class MediaDraftState extends Equatable {

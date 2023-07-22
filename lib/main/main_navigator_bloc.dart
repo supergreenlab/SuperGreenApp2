@@ -617,6 +617,25 @@ class MainNavigateToFollowsFeedEvent extends MainNavigatorEvent {
   List<Object> get props => [];
 }
 
+class MainNavigateToChecklist extends MainNavigatorEvent {
+  final Checklist checklist;
+
+  MainNavigateToChecklist(this.checklist);
+
+  @override
+  List<Object> get props => [checklist,];
+}
+
+class MainNavigateToCreateChecklist extends MainNavigatorEvent {
+  final Checklist checklist;
+  final ChecklistSeed? checklistSeed;
+
+  MainNavigateToCreateChecklist(this.checklist, {this.checklistSeed});
+
+  @override
+  List<Object?> get props => [checklist, checklistSeed,];
+}
+
 class MainNavigatorActionPop extends MainNavigatorEvent {
   final dynamic param;
   final bool mustPop;
@@ -789,6 +808,10 @@ class MainNavigatorBloc extends LegacyBloc<MainNavigatorEvent, dynamic> {
       future = _navigatorKey.currentState!.pushNamed('/public/box', arguments: event);
     } else if (event is MainNavigateToFollowsFeedEvent) {
       future = _navigatorKey.currentState!.pushNamed('/public/follows', arguments: event);
+    } else if (event is MainNavigateToChecklist) {
+      future = _navigatorKey.currentState!.pushNamed('/checklist', arguments: event);
+    } else if (event is MainNavigateToCreateChecklist) {
+      future = _navigatorKey.currentState!.pushNamed('/checklist/create', arguments: event);
     }
     if (event.futureFn != null) {
       event.futureFn!(future);

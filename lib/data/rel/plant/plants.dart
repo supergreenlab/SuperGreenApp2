@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
@@ -193,11 +193,12 @@ class Timelapses extends Table {
     }
     Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return TimelapsesCompanion(
-        plant: Value(plant.id),
-        type: Value(map['type']),
-        settings: Value(map['settings']),
-        synced: Value(true),
-        serverID: Value(map['id'] as String));
+      plant: Value(plant.id),
+      type: Value(map['type']),
+      settings: Value(map['settings']),
+      synced: Value(true),
+      serverID: Value(map['id'] as String),
+    );
   }
 
   static Future<Map<String, dynamic>> toMap(Timelapse timelapse) async {
@@ -214,7 +215,7 @@ class Timelapses extends Table {
   }
 }
 
-@UseDao(tables: [
+@DriftAccessor(tables: [
   Plants,
   Boxes,
   ChartCaches,

@@ -22,6 +22,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:super_green_app/data/api/backend/checklist/checklist_api.dart';
 import 'package:super_green_app/data/api/backend/feeds/feeds_api.dart';
 import 'package:super_green_app/data/api/backend/products/products_api.dart';
 import 'package:super_green_app/data/api/backend/services/services_api.dart';
@@ -39,6 +40,7 @@ class BackendAPI {
   ProductsAPI productsAPI = ProductsAPI();
   TimeSeriesAPI timeSeriesAPI = TimeSeriesAPI();
   ServicesAPI servicesAPI = ServicesAPI();
+  ChecklistAPI checklistAPI = ChecklistAPI();
 
   late String serverHost;
   late String websocketServerHost;
@@ -51,7 +53,7 @@ class BackendAPI {
   factory BackendAPI() => _instance;
 
   BackendAPI._newInstance() {
-    bool forceProduction = true;
+    bool forceProduction = false;
     if (forceProduction || kReleaseMode || Platform.isIOS) {
       serverHost = 'https://api2.supergreenlab.com';
       websocketServerHost = 'wss://api2.supergreenlab.com';
