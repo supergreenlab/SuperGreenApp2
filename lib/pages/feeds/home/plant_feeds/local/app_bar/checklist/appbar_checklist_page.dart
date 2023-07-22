@@ -20,11 +20,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
+import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/actions/checklist_action_page.dart';
 import 'package:super_green_app/pages/feeds/home/plant_feeds/local/app_bar/checklist/appbar_checklist_bloc.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
+import 'package:tuple/tuple.dart';
 
 class AppbarChecklistPage extends TraceableStatefulWidget {
   @override
@@ -51,7 +54,7 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
             } else if (state is AppbarChecklistBlocStateLoaded) {
               if (state.checklist == null) {
                 body = _renderCreateChecklist(context, state);
-              } else if (state.activeSeeds.length == 0) {
+              } else if (state.activeSeeds!.length == 0) {
                 body = _renderEmpty(context, state);
               } else {
                 body = _renderLoaded(context, state);
@@ -114,8 +117,11 @@ class _AppbarChecklistPageState extends State<AppbarChecklistPage> {
         _checklistButton(context, state),
         Expanded(
           child: Column(
-            children: state.activeSeeds.map((ChecklistSeed seed) {
-              return Text(seed.title);
+            children: state.actions!.map((Tuple2<ChecklistSeed, ChecklistAction> action) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: ChecklistActionPage(checklistSeed: action.item1, checklistAction: action.item2),
+              );
             }).toList(),
           ),
         ),

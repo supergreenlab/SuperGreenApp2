@@ -19,10 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/l10n.dart';
-import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/metrics/app_bar_metrics_page.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_tab.dart';
 import 'package:super_green_app/pages/feeds/home/common/app_bar/common/widgets/app_bar_title.dart';
@@ -82,19 +80,6 @@ class PlantQuickViewPage extends StatelessWidget {
     );
   }
 
-  // TODO DRY this with plant_feed_page
-  void Function() _onAction(BuildContext context, MainNavigatorEvent Function({bool pushAsReplacement}) navigatorEvent,
-      {String? tipID, List<String>? tipPaths}) {
-    return () {
-      if (tipPaths != null && !AppDB().isTipDone(tipID!)) {
-        BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToTipEvent(
-            tipID, tipPaths, navigatorEvent(pushAsReplacement: true) as MainNavigateToFeedFormEvent));
-      } else {
-        BlocProvider.of<MainNavigatorBloc>(context).add(navigatorEvent());
-      }
-    };
-  }
-
   bool wateringAlert(PlantQuickViewBlocStateLoaded state) {
     Duration period = Duration(days: 8);
     if (state.watering.length == 0) {
@@ -112,14 +97,5 @@ class PlantQuickViewPage extends StatelessWidget {
     }
     Duration period = Duration(days: 3);
     return DateTime.now().difference(state.media!.date).inSeconds > period.inSeconds;
-  }
-
-  void Function(Future<dynamic>?) futureFn(BuildContext context, PlantQuickViewBlocStateLoaded state) {
-    return (Future<dynamic>? future) async {
-      dynamic feedEntry = await future;
-      if (feedEntry != null && feedEntry is FeedEntry) {
-        BlocProvider.of<TowelieBloc>(context).add(TowelieBlocEventFeedEntryCreated(state.plant, feedEntry));
-      }
-    };
   }
 }
