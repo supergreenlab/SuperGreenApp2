@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:super_green_app/data/analytics/matomo.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/config.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/settings/auth/common/captcha.dart';
 import 'package:super_green_app/pages/settings/auth/create_account/settings_create_account_bloc.dart';
@@ -184,7 +185,7 @@ class _SettingsCreateAccountPageState extends State<SettingsCreateAccountPage> {
           });
     } else {
       BlocProvider.of<SettingsCreateAccountBloc>(context).add(SettingsCreateAccountBlocEventCreateAccount(
-        _nicknameController.value.text, _passwordController.value.text, "SKIP_CAPTCHA"));
+        _nicknameController.value.text, _passwordController.value.text, Config.skipCaptchaToken));
     }
   }
 
