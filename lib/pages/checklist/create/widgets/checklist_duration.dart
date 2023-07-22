@@ -58,8 +58,15 @@ class _ChecklistDurationState extends State<ChecklistDuration> {
         children: [
           Expanded(
             child: FeedFormTextarea(
+              keyboardType: TextInputType.number,
               onChanged: (value) {
-                widget.onUpdate(int.parse(_controller.text), widget.unit);
+                int nv = 0;
+                try {
+                   nv = int.parse(value);
+                } catch(e) {
+                  _controller.text = '';
+                }
+                widget.onUpdate(nv, widget.unit);
               },
               placeholder: ' ',
               soloLine: true,

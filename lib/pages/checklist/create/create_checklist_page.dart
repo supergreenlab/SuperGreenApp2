@@ -63,7 +63,10 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
     if (conditions.length == 0 || actions.length == 0) {
       return false;
     }
-    return (conditions).firstWhereOrNull((c) => !c.valid) == null && (actions).firstWhereOrNull((a) => !a.valid) == null;
+    return (conditions).firstWhereOrNull((c) => !c.valid) == null &&
+        (actions).firstWhereOrNull((a) => !a.valid) == null &&
+        _titleController.text != '' &&
+        _descriptionController.text != '';
   }
 
   @override
@@ -297,62 +300,40 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                     )
                   : Container(),
               ...conditions.map((c) {
+                Function(ChecklistCondition nc) onUpdate = (ChecklistCondition nc) {
+                  setState(() {
+                    conditions[conditions.indexOf(c)] = nc;
+                  });
+                };
+                Function() onClose = () {
+                  setState(() {
+                    conditions.removeAt(conditions.indexOf(c));
+                  });
+                };
                 switch (c.type) {
                   case ChecklistConditionMetric.TYPE:
                     return MetricConditionPage(
                       condition: c as ChecklistConditionMetric,
-                      onUpdate: (ChecklistCondition nc) {
-                        setState(() {
-                          conditions[conditions.indexOf(c)] = nc;
-                        });
-                      },
-                      onClose: () {
-                        setState(() {
-                          conditions.removeAt(conditions.indexOf(c));
-                        });
-                      },
+                      onUpdate: onUpdate,
+                      onClose: onClose,
                     );
                   case ChecklistConditionAfterCard.TYPE:
                     return CardConditionPage(
                       condition: c as ChecklistConditionAfterCard,
-                      onUpdate: (ChecklistCondition nc) {
-                        setState(() {
-                          conditions[conditions.indexOf(c)] = nc;
-                        });
-                      },
-                      onClose: () {
-                        setState(() {
-                          conditions.removeAt(conditions.indexOf(c));
-                        });
-                      },
+                      onUpdate: onUpdate,
+                      onClose: onClose,
                     );
                   case ChecklistConditionAfterPhase.TYPE:
                     return PhaseConditionPage(
                       condition: c as ChecklistConditionAfterPhase,
-                      onUpdate: (ChecklistCondition nc) {
-                        setState(() {
-                          conditions[conditions.indexOf(c)] = nc;
-                        });
-                      },
-                      onClose: () {
-                        setState(() {
-                          conditions.removeAt(conditions.indexOf(c));
-                        });
-                      },
+                      onUpdate: onUpdate,
+                      onClose: onClose,
                     );
                   case ChecklistConditionTimer.TYPE:
                     return TimerConditionPage(
                       condition: c as ChecklistConditionTimer,
-                      onUpdate: (ChecklistCondition nc) {
-                        setState(() {
-                          conditions[conditions.indexOf(c)] = nc;
-                        });
-                      },
-                      onClose: () {
-                        setState(() {
-                          conditions.removeAt(conditions.indexOf(c));
-                        });
-                      },
+                      onUpdate: onUpdate,
+                      onClose: onClose,
                     );
                 }
                 return Container();
@@ -408,34 +389,28 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                     )
                   : Container(),
               ...actions.map((a) {
+                Function(ChecklistAction na) onUpdate = (ChecklistAction na) {
+                  setState(() {
+                    actions[actions.indexOf(a)] = na;
+                  });
+                };
+                Function() onClose = () {
+                  setState(() {
+                    actions.removeAt(actions.indexOf(a));
+                  });
+                };
                 switch (a.type) {
                   case ChecklistActionWebpage.TYPE:
                     return WebpageActionPage(
                       action: a as ChecklistActionWebpage,
-                      onUpdate: (ChecklistAction na) {
-                        setState(() {
-                          actions[actions.indexOf(a)] = na;
-                        });
-                      },
-                      onClose: () {
-                        setState(() {
-                          actions.removeAt(actions.indexOf(a));
-                        });
-                      },
+                      onUpdate: onUpdate,
+                      onClose: onClose,
                     );
                   case ChecklistActionCreateCard.TYPE:
                     return DiaryActionPage(
                       action: a as ChecklistActionCreateCard,
-                      onUpdate: (ChecklistAction na) {
-                        setState(() {
-                          actions[actions.indexOf(a)] = na;
-                        });
-                      },
-                      onClose: () {
-                        setState(() {
-                          actions.removeAt(actions.indexOf(a));
-                        });
-                      },
+                      onUpdate: onUpdate,
+                      onClose: onClose,
                     );
                 }
                 return Container();

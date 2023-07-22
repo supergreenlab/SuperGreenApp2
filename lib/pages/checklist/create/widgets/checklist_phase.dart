@@ -47,7 +47,10 @@ class ChecklistPhase extends StatelessWidget {
           value: c.item1,
           child: Row(
             children: [
-              SvgPicture.asset(c.item3),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SvgPicture.asset(c.item3),
+              ),
               Text(c.item2),
             ],
           ),

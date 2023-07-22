@@ -60,7 +60,7 @@ class ChecklistCardType extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(right: 8.0),
                 child: SvgPicture.asset(FeedEntryIcons[c]!),
               ),
               Text(FeedEntryName[c]!),
