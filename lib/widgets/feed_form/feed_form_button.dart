@@ -45,7 +45,7 @@ class FeedFormButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: EdgeInsets.only(right: this.icon != null ? 8.0 : 0.0),
               child: this.icon ?? Container(),
             ),
             Text(
