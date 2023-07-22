@@ -136,6 +136,7 @@ class NotificationRequestPage extends TraceableStatelessWidget {
                 child: GreenButton(
                   title: NotificationRequestPage.notificationRequestButton,
                   onPressed: () async {
+                    await NotificationsBloc.remoteNotifications.requestPermissions();
                     BlocProvider.of<NotificationRequestBloc>(context).add(NotificationRequestBlocEventDone());
                   },
                 ),

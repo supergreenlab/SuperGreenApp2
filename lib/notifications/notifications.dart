@@ -25,6 +25,7 @@ import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:super_green_app/notifications/local_notifications.dart';
 import 'package:super_green_app/notifications/model.dart';
+import 'package:super_green_app/notifications/remote_notifications.dart';
 import 'package:super_green_app/pages/home/home_navigator_bloc.dart';
 
 abstract class NotificationsBlocEvent extends Equatable {}
@@ -116,15 +117,22 @@ class NotificationsBlocStateRequestPermission extends NotificationsBlocState {
 }
 
 class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, NotificationsBlocState> {
+  static late RemoteNotifications remoteNotifications;
   static late LocalNotifications localNotifications;
 
   NotificationsBloc() : super(NotificationsBlocStateInit()) {
+    remoteNotifications = RemoteNotifications(this.add, onNotificationData);
     localNotifications = LocalNotifications(this.add, onNotificationData);
   }
 
   @override
   Stream<NotificationsBlocState> mapEventToState(NotificationsBlocEvent event) async* {
-    if (event is NotificationsBlocEventReceived) {
+    if (event is NotificationsBlocEventInit) {
+      await Future.wait([
+        remoteNotifications.init(),
+        localNotifications.init(),
+      ]);
+    } else if (event is NotificationsBlocEventReceived) {
       NotificationData notificationData = event.notificationData;
       if (notificationData is NotificationDataPlantComment) {
         try {
@@ -236,6 +244,10 @@ class NotificationsBloc extends LegacyBloc<NotificationsBlocEvent, Notifications
     } else if (event is NotificationsBlocEventReminder) {
       await localNotifications.reminderNotification(
           event.id, event.afterMinutes, NotificationData.fromJSON(event.payload));
+    } else if (event is NotificationsBlocEventRequestPermission) {
+      if (!await RemoteNotifications.checkPermissions()) {
+        yield NotificationsBlocStateRequestPermission();
+      }
     }
   }
 
