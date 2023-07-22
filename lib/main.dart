@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+// @dart=2.9
+import 'dart:developer';
 import 'dart:async';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -34,11 +32,6 @@ import 'package:super_green_app/syncer/syncer_bloc.dart';
 import 'package:super_green_app/towelie/towelie_bloc.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print("Handling a background message: ${message.messageId}");
-}
 
 AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
@@ -55,16 +48,7 @@ void main() async {
   runZonedGuarded<Future<void>>(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp();
-      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
-      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-        alert: true, // Required to display a heads up notification
-        badge: true,
-        sound: true,
-      );
+      log("[DEV mode] Firebase disabled; If you see this message while on master you need to revert the commit introducing this message!");
 
       runApp(MultiBlocProvider(providers: <BlocProvider>[
         BlocProvider<MainNavigatorBloc>(create: (context) => MainNavigatorBloc(navigatorKey)),
