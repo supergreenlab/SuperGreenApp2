@@ -30,7 +30,6 @@ abstract class ChecklistCondition extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'params': toJSON(),
     };
   }
 
@@ -95,13 +94,16 @@ class ChecklistConditionMetric extends ChecklistCondition {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map.addAll({
+    var params = {
       'key': key,
       'inRange': inRange,
       'min': min,
       'max': max,
       'duration': duration,
       'durationUnit': durationUnit,
+    };
+    map.addAll({
+      'params': json.encode(params),
     });
     return map;
   }
@@ -162,10 +164,13 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map.addAll({
+    var params = {
       'entryType': entryType,
       'duration': duration,
       'durationUnit': durationUnit,
+    };
+    map.addAll({
+      'params': json.encode(params),
     });
     return map;
   }
@@ -214,10 +219,13 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map.addAll({
+    var params = {
       'phase': phase,
       'duration': duration,
       'durationUnit': durationUnit,
+    };
+    map.addAll({
+      'params': json.encode(params),
     });
     return map;
   }
@@ -262,7 +270,10 @@ class ChecklistConditionTimer extends ChecklistCondition {
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map.addAll({'date': date!.toUtc().toIso8601String()});
+    var params = {'date': date!.toUtc().toIso8601String()};
+    map.addAll({
+      'params': json.encode(params),
+    });
     return map;
   }
 

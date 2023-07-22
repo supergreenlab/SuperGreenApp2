@@ -17,12 +17,17 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:super_green_app/data/rel/rel_db.dart';
 
-abstract class ChecklistSeedItemPage extends StatelessWidget {
+class ChecklistSeedItemPage extends StatelessWidget {
+
+  final ChecklistSeed checklistSeed;
+
+  const ChecklistSeedItemPage({Key? key, required this.checklistSeed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text('pouet');
+    return Text(checklistSeed.title);
   }
 
 }

@@ -23,6 +23,7 @@ import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
 import 'package:super_green_app/pages/checklist/checklist_bloc.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/items/checklist_item_page.dart';
 import 'package:super_green_app/widgets/appbar.dart';
 import 'package:super_green_app/widgets/fullscreen_loading.dart';
 import 'package:super_green_app/widgets/green_button.dart';
@@ -121,7 +122,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
     return ListView(
       children: state.checklistSeeds.map((cks) {
-        return Text(cks.title);
+        return ChecklistSeedItemPage(checklistSeed: cks);
       }).toList(),
     );
   }
