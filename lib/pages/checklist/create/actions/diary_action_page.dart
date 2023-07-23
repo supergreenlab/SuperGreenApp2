@@ -75,15 +75,18 @@ class _DiaryActionPageState extends State<DiaryActionPage> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
           ),
         ),
-        SizedBox(
-          height: 150,
-          child: FeedFormTextarea(
-            placeholder: 'ex: Check the leaves for small white dots. Make sure to check both sides of the leaf. Getting a macro lens will help.',
-            noPadding: true,
-            textEditingController: _instructionController,
-            onChanged: (value) {
-              widget.onUpdate(widget.action.copyWith(instructions: _instructionController.text));
-            },
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 150,
+            child: FeedFormTextarea(
+              placeholder: 'ex: Check the leaves for small white dots. Make sure to check both sides of the leaf. Getting a macro lens will help.',
+              noPadding: true,
+              textEditingController: _instructionController,
+              onChanged: (value) {
+                widget.onUpdate(widget.action.copyWith(instructions: _instructionController.text));
+              },
+            ),
           ),
         ),
       ],
