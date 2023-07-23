@@ -19,6 +19,8 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
+import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
+import 'package:super_green_app/widgets/checkbox_label.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_date_picker.dart';
 
 class TimerConditionPage extends StatelessWidget {
@@ -27,7 +29,8 @@ class TimerConditionPage extends StatelessWidget {
   final void Function(ChecklistCondition) onUpdate;
   final void Function() onClose;
 
-  const TimerConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate}) : super(key: key);
+  const TimerConditionPage({Key? key, required this.onClose, required this.condition, required this.onUpdate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +47,39 @@ class TimerConditionPage extends StatelessWidget {
   }
 
   Widget _renderDate(BuildContext context) {
-    return FeedFormDatePicker(
-      condition.date ?? DateTime.now(),
-      onChange: (DateTime? newDate) {
-        onUpdate(condition.copyWith(date: newDate));
-      },
+    return Column(
+      children: [
+        FeedFormDatePicker(
+          condition.date ?? DateTime.now(),
+          onChange: (DateTime? newDate) {
+            onUpdate(condition.copyWith(date: newDate));
+          },
+        ),
+        CheckboxLabel(
+          text: 'Repeat this checklist item.',
+          onChanged: (p0) => onUpdate(condition.copyWith(
+            repeat: p0!,
+          )),
+          value: condition.repeat,
+        ),
+        condition.repeat ? _renderDuration(context) : Container(),
+      ],
     );
+  }
+
+  Widget _renderDuration(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Enter the repeat period:'),
+      ChecklistDuration(
+        duration: condition.repeatDuration,
+        unit: condition.durationUnit,
+        onUpdate: (int? duration, String? unit) {
+          onUpdate(condition.copyWith(
+            repeatDuration: duration,
+            durationUnit: unit,
+          ));
+        },
+      ),
+    ]);
   }
 }

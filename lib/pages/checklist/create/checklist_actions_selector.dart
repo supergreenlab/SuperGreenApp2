@@ -37,7 +37,7 @@ class ChecklistActionsSelector extends CreateChecklistActionConditionPopup {
             'Create a diary entry to complete the checklist entry.', 'Ex: create watering entry', () {
           onAdd(ChecklistActionCreateCard());
         }),
-        renderCondition(context, 'assets/checklist/icon_create_diary.svg', 'Buy product',
+        renderCondition(context, 'assets/checklist/icon_buy_product.svg', 'Buy product',
             'Buy a product to complete the checklist entry.', 'Ex: Buy insecticidal soap', () {
           onAdd(ChecklistActionBuyProduct());
         }),

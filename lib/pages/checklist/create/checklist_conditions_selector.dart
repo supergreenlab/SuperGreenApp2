@@ -38,7 +38,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
             'Ex: In X days.', () {
           onAdd(ChecklistConditionTimer(date: DateTime.now().add(Duration(days: 1)),));
         }),
-        this.filteredValues.contains(ChecklistConditionMetric.TYPE) ? Container() : renderCondition(
+        renderCondition(
             context,
             'assets/checklist/icon_monitoring.svg',
             'Metric monitoring',

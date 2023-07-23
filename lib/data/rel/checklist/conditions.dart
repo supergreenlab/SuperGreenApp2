@@ -265,8 +265,16 @@ class ChecklistConditionTimer extends ChecklistCondition {
 
   final DateTime? date;
 
+  final bool repeat;
+  final int? repeatDuration;
+  final String durationUnit;
+
+
   ChecklistConditionTimer({
     this.date,
+    this.repeat=false,
+    this.repeatDuration,
+    this.durationUnit = 'DAYS',
   }) : super(type: TYPE);
 
   @override
@@ -274,6 +282,9 @@ class ChecklistConditionTimer extends ChecklistCondition {
     Map<String, dynamic> map = super.toMap();
     var params = {
       'date': date!.toUtc().toIso8601String(),
+      'repeat': repeat,
+      'repeatDuration': repeatDuration,
+      'durationUnit': durationUnit,
     };
     map.addAll({
       'params': json.encode(params),
@@ -289,14 +300,23 @@ class ChecklistConditionTimer extends ChecklistCondition {
   static ChecklistConditionTimer fromMap(Map<String, dynamic> map) {
     return ChecklistConditionTimer(
       date: DateTime.parse(map['date'] as String).toLocal(),
+      repeat: map['repeat'],
+      repeatDuration: map['repeatDuration'],
+      durationUnit: map['durationUnit'],
     );
   }
 
   ChecklistConditionTimer copyWith({
     DateTime? date,
+    bool? repeat,
+    int? repeatDuration,
+    String? durationUnit,
   }) {
     return ChecklistConditionTimer(
       date: date ?? this.date,
+      repeat: repeat ?? this.repeat,
+      repeatDuration: repeatDuration ?? this.repeatDuration,
+      durationUnit: durationUnit ?? this.durationUnit,
     );
   }
 }

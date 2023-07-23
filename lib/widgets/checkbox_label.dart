@@ -34,7 +34,7 @@ class CheckboxLabel extends StatelessWidget {
         bottom: 8,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
