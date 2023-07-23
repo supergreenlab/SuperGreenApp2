@@ -36,7 +36,7 @@ class ChecklistConditionsSelector extends CreateChecklistActionConditionPopup {
             'Time reminder',
             'Just a simple reminder, set a date and it will show up in your checklist at that date.',
             'Ex: In X days.', () {
-          onAdd(ChecklistConditionTimer());
+          onAdd(ChecklistConditionTimer(date: DateTime.now().add(Duration(days: 1)),));
         }),
         this.filteredValues.contains(ChecklistConditionMetric.TYPE) ? Container() : renderCondition(
             context,
