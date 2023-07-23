@@ -36,8 +36,8 @@ abstract class ChecklistCondition extends Equatable {
   String toJSON() => json.encode(toMap());
 
   List<Object?> get props => [
-    type,
-  ];
+        type,
+      ];
 
   static List<ChecklistCondition> fromMapArray(List<dynamic> maps) {
     return maps.map<ChecklistCondition>((m) => ChecklistCondition.fromMap(m)).toList();
@@ -269,10 +269,19 @@ class ChecklistConditionTimer extends ChecklistCondition {
   final int? repeatDuration;
   final String durationUnit;
 
+  bool get valid {
+    if (date == null) {
+      return false;
+    }
+    if (repeat && repeatDuration == null) {
+      return false;
+    }
+    return true;
+  }
 
   ChecklistConditionTimer({
     this.date,
-    this.repeat=false,
+    this.repeat = false,
     this.repeatDuration,
     this.durationUnit = 'DAYS',
   }) : super(type: TYPE);
