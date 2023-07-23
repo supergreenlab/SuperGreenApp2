@@ -54,6 +54,8 @@ abstract class ChecklistCondition extends Equatable {
         return ChecklistConditionAfterCard.fromMap(params);
       case 'after_phase':
         return ChecklistConditionAfterPhase.fromMap(params);
+      case 'timer':
+        return ChecklistConditionTimer.fromMap(params);
       default:
         throw UnimplementedError('Condition type $type is not implemented');
     }
@@ -93,7 +95,7 @@ class ChecklistConditionMetric extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
+    Map<String, dynamic> map = super.toMap();
     var params = {
       'key': key,
       'inRange': inRange,
@@ -163,7 +165,7 @@ class ChecklistConditionAfterCard extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
+    Map<String, dynamic> map = super.toMap();
     var params = {
       'entryType': entryType,
       'duration': duration,
@@ -218,7 +220,7 @@ class ChecklistConditionAfterPhase extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
+    Map<String, dynamic> map = super.toMap();
     var params = {
       'phase': phase,
       'duration': duration,
@@ -269,8 +271,10 @@ class ChecklistConditionTimer extends ChecklistCondition {
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {};
-    var params = {'date': date!.toUtc().toIso8601String()};
+    Map<String, dynamic> map = super.toMap();
+    var params = {
+      'date': date!.toUtc().toIso8601String(),
+    };
     map.addAll({
       'params': json.encode(params),
     });

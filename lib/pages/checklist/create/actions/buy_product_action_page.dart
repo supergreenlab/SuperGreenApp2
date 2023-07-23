@@ -19,27 +19,30 @@
 import 'package:flutter/material.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
-import 'package:super_green_app/pages/checklist/create/widgets/checklist_card_type.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
 
-class DiaryActionPage extends StatefulWidget {
-  final ChecklistActionCreateCard action;
+class BuyProductActionPage extends StatefulWidget {
+
+  final ChecklistActionBuyProduct action;
 
   final void Function(ChecklistAction) onUpdate;
   final void Function() onClose;
 
-  DiaryActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate})
-      : super(key: key);
+  BuyProductActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
 
   @override
-  State<DiaryActionPage> createState() => _DiaryActionPageState();
+  State<BuyProductActionPage> createState() => _BuyProductActionPageState();
 }
 
-class _DiaryActionPageState extends State<DiaryActionPage> {
+class _BuyProductActionPageState extends State<BuyProductActionPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _urlController = TextEditingController();
   final TextEditingController _instructionController = TextEditingController();
 
   @override
   void initState() {
+    _nameController.text = widget.action.name ?? '';
+    _urlController.text = widget.action.url ?? '';
     _instructionController.text = widget.action.instructions ?? '';
     super.initState();
   }
@@ -48,35 +51,59 @@ class _DiaryActionPageState extends State<DiaryActionPage> {
   Widget build(BuildContext context) {
     return CreateChecklistSection(
       onClose: widget.onClose,
-      title: 'Create diary card',
+      title: 'Buy a product',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: _renderCardTypes(context),
+        child: _renderURLField(context),
       ),
     );
   }
 
-  Widget _renderCardTypes(BuildContext context) {
+  Widget _renderURLField(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ChecklistCardType(
-          onChange: (String entryType) {
-            widget.onUpdate(widget.action.copyWith(entryType: entryType));
-          },
-          cardType: widget.action.entryType,
+        Text('Name of the product:'),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FeedFormTextarea(
+            placeholder: 'Ex: Calmag',
+            soloLine: true,
+            noPadding: true,
+            textEditingController: _nameController,
+            onChanged: (value) {
+              widget.onUpdate(widget.action.copyWith(
+                name: value,
+              ));
+            },
+          ),
+        ),
+        Text('Enter URL of webpage to open:'),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FeedFormTextarea(
+            placeholder: 'https://...',
+            soloLine: true,
+            noPadding: true,
+            textEditingController: _urlController,
+            onChanged: (value) {
+              widget.onUpdate(widget.action.copyWith(
+                url: value,
+              ));
+            },
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            'Instructions',
+            'Description',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
           ),
         ),
         SizedBox(
           height: 150,
           child: FeedFormTextarea(
-            placeholder: 'ex: Check the leaves for small white dots. Make sure to check both sides of the leaf. Getting a macro lens will help.',
+            placeholder: 'ex: When the temperature gets too high, some fungus might develop on your leaves.',
             noPadding: true,
             textEditingController: _instructionController,
             onChanged: (value) {

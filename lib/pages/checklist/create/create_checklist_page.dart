@@ -28,6 +28,7 @@ import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 import 'package:super_green_app/main/main_navigator_bloc.dart';
+import 'package:super_green_app/pages/checklist/create/actions/buy_product_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/actions/diary_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/actions/webpage_action_page.dart';
 import 'package:super_green_app/pages/checklist/create/checklist_actions_selector.dart';
@@ -426,6 +427,12 @@ class _CreateChecklistPageState extends State<CreateChecklistPage> {
                   case ChecklistActionCreateCard.TYPE:
                     return DiaryActionPage(
                       action: a as ChecklistActionCreateCard,
+                      onUpdate: onUpdate,
+                      onClose: onClose,
+                    );
+                  case ChecklistActionBuyProduct.TYPE:
+                    return BuyProductActionPage(
+                      action: a as ChecklistActionBuyProduct,
                       onUpdate: onUpdate,
                       onClose: onClose,
                     );

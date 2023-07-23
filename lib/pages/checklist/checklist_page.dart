@@ -122,7 +122,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
     return ListView(
       children: state.checklistSeeds.map((cks) {
-        return ChecklistSeedItemPage(checklistSeed: cks);
+        return ChecklistSeedItemPage(checklistSeed: cks, onSelect: () { 
+          BlocProvider.of<MainNavigatorBloc>(context)
+                                .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
+        },);
       }).toList(),
     );
   }

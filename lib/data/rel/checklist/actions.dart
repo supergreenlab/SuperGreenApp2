@@ -33,7 +33,9 @@ abstract class ChecklistAction extends Equatable {
 
   String toJSON() => json.encode(toMap());
 
-  List<Object?> get props => [type,];
+  List<Object?> get props => [
+        type,
+      ];
 
   bool get valid => !props.contains(null) && !props.contains('');
 
@@ -48,8 +50,10 @@ abstract class ChecklistAction extends Equatable {
     switch (type) {
       case 'webpage':
         return ChecklistActionWebpage.fromMap(params);
-      case 'create_card':
+      case 'card':
         return ChecklistActionCreateCard.fromMap(params);
+      case 'buy_product':
+        return ChecklistActionBuyProduct.fromMap(params);
       default:
         throw UnimplementedError('Action type $type is not implemented');
     }
@@ -60,14 +64,42 @@ class ChecklistActionWebpage extends ChecklistAction {
   static const String TYPE = 'webpage';
 
   final String? url;
+  final String? instructions;
 
-  ChecklistActionWebpage({this.url}) : super(type: TYPE);
+  ChecklistActionWebpage({this.url, this.instructions}) : super(type: TYPE);
+
+  bool get valid {
+    if (url == null) {
+      return false;
+    }
+    String u = this.url!;
+    if (!url!.startsWith('http://') && !url!.startsWith('https://')) {
+      u = 'https://$url';
+    }
+    Uri? p = Uri.tryParse(u);
+    if (p == null) {
+      return false;
+    }
+    List<String> h = p.host.split('.');
+    if (h.length < 2 || h[1].length < 2) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
-    var params = {'url': this.url};
+    String u = this.url!;
+    if (!url!.startsWith('http://') && !url!.startsWith('https://')) {
+      u = 'https://$url';
+    }
+    var params = {
+      'url': u,
+      'instructions': instructions,
+    };
     map.addAll({
+      'type': type,
       'params': json.encode(params),
     });
     return map;
@@ -76,14 +108,19 @@ class ChecklistActionWebpage extends ChecklistAction {
   List<Object?> get props => [...super.props, url];
 
   static ChecklistActionWebpage fromMap(Map<String, dynamic> map) {
-    return ChecklistActionWebpage(url: map['url']);
+    return ChecklistActionWebpage(
+      url: map['url'],
+      instructions: map['instructions'],
+    );
   }
 
   ChecklistActionWebpage copyWith({
     String? url,
+    String? instructions,
   }) {
     return ChecklistActionWebpage(
       url: url ?? this.url,
+      instructions: instructions ?? this.instructions,
     );
   }
 }
@@ -92,15 +129,20 @@ class ChecklistActionCreateCard extends ChecklistAction {
   static const String TYPE = 'card';
 
   final String? entryType;
+  final String? instructions;
 
-  ChecklistActionCreateCard({this.entryType}) : super(type: TYPE);
+  ChecklistActionCreateCard({this.entryType, this.instructions}) : super(type: TYPE);
 
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
-    var params = {'entryType': this.entryType};
+    var params = {
+      'entryType': this.entryType,
+      'instructions': this.instructions,
+    };
     map.addAll({
-      'params': params,
+      'type': type,
+      'params': json.encode(params),
     });
     return map;
   }
@@ -108,14 +150,89 @@ class ChecklistActionCreateCard extends ChecklistAction {
   List<Object?> get props => [...super.props, entryType];
 
   static ChecklistActionCreateCard fromMap(Map<String, dynamic> map) {
-    return ChecklistActionCreateCard(entryType: map['entryType']);
+    return ChecklistActionCreateCard(
+      entryType: map['entryType'],
+      instructions: map['instructions'],
+    );
   }
 
   ChecklistActionCreateCard copyWith({
     String? entryType,
+    String? instructions,
   }) {
     return ChecklistActionCreateCard(
       entryType: entryType ?? this.entryType,
+      instructions: instructions ?? this.instructions,
+    );
+  }
+}
+
+class ChecklistActionBuyProduct extends ChecklistAction {
+  static const String TYPE = 'buy_product';
+
+  final String? name;
+  final String? url;
+  final String? instructions;
+
+  ChecklistActionBuyProduct({this.name, this.url, this.instructions}) : super(type: TYPE);
+
+  bool get valid {
+    if (url == null) {
+      return false;
+    }
+    String u = this.url!;
+    if (!url!.startsWith('http://') && !url!.startsWith('https://')) {
+      u = 'https://$url';
+    }
+    Uri? p = Uri.tryParse(u);
+    if (p == null) {
+      return false;
+    }
+    List<String> h = p.host.split('.');
+    if (h.length < 2 || h[1].length < 2) {
+      return false;
+    }
+    return name != null;
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = super.toMap();
+    String u = this.url!;
+    if (!url!.startsWith('http://') && !url!.startsWith('https://')) {
+      u = 'https://$url';
+    }
+    var params = {
+      'name': name,
+      'url': u,
+      'instructions': instructions,
+    };
+    map.addAll({
+      'type': type,
+      'params': json.encode(params),
+    });
+    return map;
+  }
+
+  List<Object?> get props => [...super.props, url];
+
+  static ChecklistActionBuyProduct fromMap(Map<String, dynamic> map) {
+    return ChecklistActionBuyProduct(
+      name: map['name'],
+      url: map['url'],
+      instructions: map['instructions'],
+    );
+  }
+
+  ChecklistActionBuyProduct copyWith({
+    String? name,
+    String? url,
+    String? instructions,
+  }) {
+    return ChecklistActionBuyProduct(
+      name: name ?? this.name,
+      url: url ?? this.url,
+      instructions: instructions ?? this.instructions,
     );
   }
 }

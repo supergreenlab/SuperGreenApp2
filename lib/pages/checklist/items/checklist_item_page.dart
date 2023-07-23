@@ -21,13 +21,20 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistSeedItemPage extends StatelessWidget {
 
+  final Function() onSelect;
   final ChecklistSeed checklistSeed;
 
-  const ChecklistSeedItemPage({Key? key, required this.checklistSeed}) : super(key: key);
+  const ChecklistSeedItemPage({Key? key, required this.checklistSeed, required this.onSelect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text(checklistSeed.title);
+    return InkWell(
+      onTap: onSelect,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(checklistSeed.title),
+      ),
+    );
   }
 
 }

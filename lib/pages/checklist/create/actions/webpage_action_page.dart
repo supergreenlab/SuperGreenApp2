@@ -28,18 +28,20 @@ class WebpageActionPage extends StatefulWidget {
   final void Function(ChecklistAction) onUpdate;
   final void Function() onClose;
 
-  const WebpageActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
+  WebpageActionPage({Key? key, required this.onClose, required this.action, required this.onUpdate}) : super(key: key);
 
   @override
   State<WebpageActionPage> createState() => _WebpageActionPageState();
 }
 
 class _WebpageActionPageState extends State<WebpageActionPage> {
-  TextEditingController controller = TextEditingController();
+  final TextEditingController _urlController = TextEditingController();
+  final TextEditingController _instructionController = TextEditingController();
 
   @override
   void initState() {
-    controller.text = widget.action.url ?? '';
+    _urlController.text = widget.action.url ?? '';
+    _instructionController.text = widget.action.instructions ?? '';
     super.initState();
   }
 
@@ -66,11 +68,29 @@ class _WebpageActionPageState extends State<WebpageActionPage> {
             placeholder: 'https://...',
             soloLine: true,
             noPadding: true,
-            textEditingController: controller,
+            textEditingController: _urlController,
             onChanged: (value) {
               widget.onUpdate(widget.action.copyWith(
                 url: value,
               ));
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            'Description',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xff6A6A6A)),
+          ),
+        ),
+        SizedBox(
+          height: 150,
+          child: FeedFormTextarea(
+            placeholder: 'ex: When the temperature gets too high, some fungus might develop on your leaves.',
+            noPadding: true,
+            textEditingController: _instructionController,
+            onChanged: (value) {
+              widget.onUpdate(widget.action.copyWith(instructions: _instructionController.text));
             },
           ),
         ),
