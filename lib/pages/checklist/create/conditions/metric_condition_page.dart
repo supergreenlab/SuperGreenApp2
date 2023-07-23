@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
@@ -52,6 +53,7 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      icon: SvgPicture.asset('assets/checklist/icon_monitoring.svg'),
       onClose: this.widget.onClose,
       title: 'Metric condition',
       child: Padding(

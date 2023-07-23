@@ -30,7 +30,7 @@ class CheckboxLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 16.0,
+        top: 8.0,
         bottom: 8,
       ),
       child: Row(

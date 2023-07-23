@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/widgets/feed_form/feed_form_textarea.dart';
@@ -50,6 +51,7 @@ class _BuyProductActionPageState extends State<BuyProductActionPage> {
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      icon: SvgPicture.asset('assets/checklist/icon_buy_product.svg'),
       onClose: widget.onClose,
       title: 'Buy a product',
       child: Padding(

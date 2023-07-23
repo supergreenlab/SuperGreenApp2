@@ -19,11 +19,13 @@
 import 'package:flutter/material.dart';
 
 class CreateChecklistSection extends StatelessWidget {
+  final Widget? icon;
   final String title;
   final Widget child;
   final void Function() onClose;
 
-  const CreateChecklistSection({Key? key, required this.child, required this.title, required this.onClose}) : super(key: key);
+  const CreateChecklistSection({Key? key, required this.child, required this.title, required this.onClose, this.icon})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +53,24 @@ class CreateChecklistSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                  child: Text(title, style: TextStyle(color: Color(0xff757575))),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    icon == null
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: icon,
+                            ),
+                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0, left: 8.0, bottom: 4.0),
+                      child: Text(title, style: TextStyle(color: Color(0xff757575))),
+                    ),
+                  ],
                 ),
                 InkWell(
                   onTap: this.onClose,

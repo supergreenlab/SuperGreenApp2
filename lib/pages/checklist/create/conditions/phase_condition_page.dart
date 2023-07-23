@@ -17,6 +17,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_green_app/data/rel/checklist/conditions.dart';
 import 'package:super_green_app/pages/checklist/create/create_checklist_section.dart';
 import 'package:super_green_app/pages/checklist/create/widgets/checklist_duration.dart';
@@ -34,6 +35,7 @@ class PhaseConditionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CreateChecklistSection(
+      icon: SvgPicture.asset('assets/checklist/icon_phase.svg'),
       onClose: onClose,
       title: 'Phase condition',
       child: Padding(

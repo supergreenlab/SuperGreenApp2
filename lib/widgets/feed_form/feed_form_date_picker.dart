@@ -32,7 +32,7 @@ class FeedFormDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     String format = AppDB().getAppData().freedomUnits ? 'MM/dd/yyyy HH:mm' : 'dd/MM/yyyy HH:mm';
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       child: Container(
         child: Row(
           children: <Widget>[
