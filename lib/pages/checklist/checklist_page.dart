@@ -34,7 +34,6 @@ class ChecklistPage extends TraceableStatefulWidget {
 }
 
 class _ChecklistPageState extends State<ChecklistPage> {
-
   bool showAutoChecklist = true;
 
   @override
@@ -121,12 +120,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   Widget _renderLoaded(BuildContext context, ChecklistBlocStateLoaded state) {
     return ListView(
-      children: state.checklistSeeds.map((cks) {
-        return ChecklistSeedItemPage(checklistSeed: cks, onSelect: () { 
-          BlocProvider.of<MainNavigatorBloc>(context)
-                                .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
-        },);
-      }).toList(),
+      children: [
+        _renderAutoChecklistPopulate(context, state),
+        ...state.checklistSeeds.map((cks) {
+          return ChecklistSeedItemPage(
+            checklistSeed: cks,
+            onSelect: () {
+              BlocProvider.of<MainNavigatorBloc>(context)
+                  .add(MainNavigateToCreateChecklist(state.checklist, checklistSeed: cks));
+            },
+          );
+        }).toList(),
+      ],
     );
   }
 
@@ -164,7 +169,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 32.0, bottom: 12, right: 8, top: 8,),
+                padding: const EdgeInsets.only(
+                  left: 32.0,
+                  bottom: 12,
+                  right: 8,
+                  top: 8,
+                ),
                 child: Text(
                     'If checked, your checklist will be automatically populated with common checklist items based on your plant stage, diary items, environment etc.. Can be changed later in the settings.',
                     style: TextStyle(color: Color(0xff454545))),

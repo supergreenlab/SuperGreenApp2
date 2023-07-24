@@ -90,7 +90,7 @@ class CreateChecklistBloc extends LegacyBloc<CreateChecklistBlocEvent, CreateChe
       yield CreateChecklistBlocStateLoaded(this.args.checklist, checklistSeed);
     } else if (event is CreateChecklistBlocEventSave) {
       if (event.checklistSeed.id.present) {
-        await RelDB.get().checklistsDAO.updateChecklistSeed(event.checklistSeed);
+        await RelDB.get().checklistsDAO.updateChecklistSeed(event.checklistSeed.copyWith(synced: Value(false)));
       } else {
         await RelDB.get().checklistsDAO.addChecklistSeed(event.checklistSeed);
       }
