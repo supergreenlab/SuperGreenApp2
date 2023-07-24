@@ -37,7 +37,7 @@ class Checklists extends Table {
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
   static Future<ChecklistsCompanion> fromMap(Map<String, dynamic> map) async {
-    Plant plant = await RelDB.get().plantsDAO.getPlant(map['plantID']);
+    Plant plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
     return ChecklistsCompanion(
       plant: Value(plant.id),
       serverID: Value(map['id']),
@@ -82,7 +82,7 @@ class ChecklistSeeds extends Table {
   static Future<ChecklistSeedsCompanion> fromMap(Map<String, dynamic> map) async {
     Checklist checklist;
     try {
-      checklist = await RelDB.get().checklistsDAO.getChecklist(map['checklistID']);
+      checklist = await RelDB.get().checklistsDAO.getChecklistForServerID(map['checklistID']);
     } catch (e) {
       return SkipChecklistSeedsCompanion(map['id'] as String);
     }

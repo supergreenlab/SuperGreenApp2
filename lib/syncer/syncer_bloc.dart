@@ -376,7 +376,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().checklistsDAO.addChecklistSeed(checklistSeedsCompanion);
         }
       }
-      await UserEndHelper.setSynced("checklist", checklistSeedsCompanion.serverID.value!);
+      await UserEndHelper.setSynced("checklistseed", checklistSeedsCompanion.serverID.value!);
     }
   }
 
@@ -386,7 +386,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'timelapse: ${i + 1}/${checklists.length}'));
+      add(SyncerBlocEventSyncing(true, 'checklist: ${i + 1}/${checklists.length}'));
       ChecklistsCompanion checklistsCompanion = checklists[i];
       Checklist? exists;
       try {
