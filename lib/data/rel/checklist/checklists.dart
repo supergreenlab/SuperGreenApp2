@@ -21,6 +21,14 @@ import 'package:super_green_app/data/rel/rel_db.dart';
 
 part 'checklists.g.dart';
 
+class DeletedChecklistsCompanion extends TimelapsesCompanion {
+  DeletedChecklistsCompanion(serverID) : super(serverID: serverID);
+}
+
+class SkipChecklistsCompanion extends ChecklistsCompanion {
+  SkipChecklistsCompanion(serverID) : super(serverID: serverID);
+}
+
 class Checklists extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get plant => integer()();
@@ -43,6 +51,10 @@ class Checklists extends Table {
       'plantID': plant.serverID,
     };
   }
+}
+
+class DeletedChecklistSeedsCompanion extends TimelapsesCompanion {
+  DeletedChecklistSeedsCompanion(serverID) : super(serverID: serverID);
 }
 
 class SkipChecklistSeedsCompanion extends ChecklistSeedsCompanion {
@@ -124,6 +136,14 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklists)..where((p) => p.id.equals(id))).getSingle();
   }
 
+  Future<Checklist> getChecklistForServerID(String serverID) {
+    return (select(checklists)..where((cks) => cks.serverID.equals(serverID))).getSingle();
+  }
+
+  Future<ChecklistSeed> getChecklistSeedForServerID(String serverID) {
+    return (select(checklistSeeds)..where((cks) => cks.serverID.equals(serverID))).getSingle();
+  }
+
   Future<List<ChecklistSeed>> getChecklistSeeds(int checklistID) {
     return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))).get();
   }
@@ -132,7 +152,19 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (update(checklistSeeds)..where((tbl) => tbl.id.equals(checklistSeed.id.value))).write(checklistSeed);
   }
 
+  Future updateChecklist(ChecklistsCompanion checklist) {
+    return (update(checklists)..where((tbl) => tbl.id.equals(checklist.id.value))).write(checklist);
+  }
+
   Stream<List<ChecklistSeed>> watchChecklistSeeds(int checklistID) {
     return (select(checklistSeeds)..where((p) => p.checklist.equals(checklistID))).watch();
+  }
+
+  Future<List<Checklist>> getUnsyncedChecklists() {
+    return (select(checklists)..where((b) => b.synced.equals(false))).get();
+  }
+
+  Future<List<ChecklistSeed>> getUnsyncedChecklistSeeds() {
+    return (select(checklistSeeds)..where((b) => b.synced.equals(false))).get();
   }
 }

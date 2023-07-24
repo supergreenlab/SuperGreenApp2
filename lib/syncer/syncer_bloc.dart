@@ -21,6 +21,9 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
+import 'package:super_green_app/data/api/backend/checklist/checklist_helper.dart';
+import 'package:super_green_app/data/api/backend/userend/userend_helper.dart';
+import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/misc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
@@ -138,6 +141,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncInBoxes();
     await _syncInPlants();
     await _syncInTimelapses();
+    await _syncInChecklists();
+    await _syncInChecklistSeeds();
     add(SyncerBlocEventSyncing(false, ''));
   }
 
@@ -164,7 +169,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().feedsDAO.addFeed(feedsCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("feed", feedsCompanion.serverID.value!);
+      await UserEndHelper.setSynced("feed", feedsCompanion.serverID.value!);
     }
   }
 
@@ -191,7 +196,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           await FeedEntryHelper.addFeedEntry(feedEntriesCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("feedEntry", feedEntriesCompanion.serverID.value!);
+      await UserEndHelper.setSynced("feedEntry", feedEntriesCompanion.serverID.value!);
     }
   }
 
@@ -233,7 +238,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
               feedMediasCompanion.copyWith(filePath: Value(filePath), thumbnailPath: Value(thumbnailPath)));
         }
       }
-      await BackendAPI().feedsAPI.setSynced("feedMedia", feedMediasCompanion.serverID.value!);
+      await UserEndHelper.setSynced("feedMedia", feedMediasCompanion.serverID.value!);
     }
   }
 
@@ -263,7 +268,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           DeviceAPI.fetchAllParams(devicesCompanion.ip.value, deviceID, (adv) {}, auth: auth);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("device", devicesCompanion.serverID.value!);
+      await UserEndHelper.setSynced("device", devicesCompanion.serverID.value!);
     }
   }
 
@@ -290,7 +295,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addBox(boxesCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("box", boxesCompanion.serverID.value!);
+      await UserEndHelper.setSynced("box", boxesCompanion.serverID.value!);
     }
   }
 
@@ -317,7 +322,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addPlant(plantsCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("plant", plantsCompanion.serverID.value!);
+      await UserEndHelper.setSynced("plant", plantsCompanion.serverID.value!);
     }
   }
 
@@ -344,7 +349,61 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
           await RelDB.get().plantsDAO.addTimelapse(timelapsesCompanion);
         }
       }
-      await BackendAPI().feedsAPI.setSynced("timelapse", timelapsesCompanion.serverID.value!);
+      await UserEndHelper.setSynced("timelapse", timelapsesCompanion.serverID.value!);
+    }
+  }
+
+  Future _syncInChecklistSeeds() async {
+    List<ChecklistSeedsCompanion> checklistSeeds = await BackendAPI().checklistAPI.unsyncedChecklistSeeds();
+    for (int i = 0; i < checklistSeeds.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(true, 'timelapse: ${i + 1}/${checklistSeeds.length}'));
+      ChecklistSeedsCompanion checklistSeedsCompanion = checklistSeeds[i];
+      ChecklistSeed? exists;
+      try {
+        exists = await RelDB.get().checklistsDAO.getChecklistSeedForServerID(checklistSeedsCompanion.serverID.value!);
+      } catch (e) {}
+      if (checklistSeedsCompanion is DeletedChecklistSeedsCompanion) {
+        if (exists != null) {
+          await ChecklistHelper.deleteChecklistSeed(exists, addDeleted: false);
+        }
+      } else {
+        if (exists != null) {
+          await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeedsCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await RelDB.get().checklistsDAO.addChecklistSeed(checklistSeedsCompanion);
+        }
+      }
+      await UserEndHelper.setSynced("checklist", checklistSeedsCompanion.serverID.value!);
+    }
+  }
+
+  Future _syncInChecklists() async {
+    List<ChecklistsCompanion> checklists = await BackendAPI().checklistAPI.unsyncedChecklists();
+    for (int i = 0; i < checklists.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      add(SyncerBlocEventSyncing(true, 'timelapse: ${i + 1}/${checklists.length}'));
+      ChecklistsCompanion checklistsCompanion = checklists[i];
+      Checklist? exists;
+      try {
+        exists = await RelDB.get().checklistsDAO.getChecklistForServerID(checklistsCompanion.serverID.value!);
+      } catch (e) {}
+      if (checklistsCompanion is DeletedChecklistsCompanion) {
+        if (exists != null) {
+          await ChecklistHelper.deleteChecklist(exists, addDeleted: false);
+        }
+      } else {
+        if (exists != null) {
+          await RelDB.get().checklistsDAO.updateChecklist(checklistsCompanion.copyWith(id: Value(exists.id)));
+        } else {
+          await RelDB.get().checklistsDAO.addChecklist(checklistsCompanion);
+        }
+      }
+      await UserEndHelper.setSynced("checklist", checklistsCompanion.serverID.value!);
     }
   }
 
@@ -360,6 +419,8 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
     await _syncOutBoxes();
     await _syncOutPlants();
     await _syncOutTimelapses();
+    await _syncOutChecklists();
+    await _syncOutChecklistSeeds();
   }
 
   Future _syncOutDeletes() async {
@@ -457,6 +518,28 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       }
       Timelapse timelapse = timelapses[i];
       await BackendAPI().feedsAPI.syncTimelapse(timelapse);
+    }
+  }
+
+  Future _syncOutChecklistSeeds() async {
+    List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getUnsyncedChecklistSeeds();
+    for (int i = 0; i < checklistSeeds.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      ChecklistSeed checklistSeed = checklistSeeds[i];
+      await BackendAPI().checklistAPI.syncChecklistSeed(checklistSeed);
+    }
+  }
+
+  Future _syncOutChecklists() async {
+    List<Checklist> checklists = await RelDB.get().checklistsDAO.getUnsyncedChecklists();
+    for (int i = 0; i < checklists.length; ++i) {
+      if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
+        throw 'Can\'t sync over GSM';
+      }
+      Checklist checklist = checklists[i];
+      await BackendAPI().checklistAPI.syncChecklist(checklist);
     }
   }
 

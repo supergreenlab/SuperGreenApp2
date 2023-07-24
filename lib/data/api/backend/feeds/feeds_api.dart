@@ -28,6 +28,7 @@ import 'package:super_green_app/data/api/backend/feeds/models/comments.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/follows.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/likes.dart';
 import 'package:super_green_app/data/api/backend/feeds/models/reports.dart';
+import 'package:super_green_app/data/api/backend/userend/userend_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/common/deletes.dart';
@@ -321,7 +322,7 @@ class FeedsAPI {
   }
 
   Future<List<PlantsCompanion>> unsyncedPlants() async {
-    Map<String, dynamic> syncData = await _unsynced("Plants");
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("Plants");
     List<dynamic> maps = syncData['items'];
     List<PlantsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -335,7 +336,7 @@ class FeedsAPI {
   }
 
   Future<List<BoxesCompanion>> unsyncedBoxes() async {
-    Map<String, dynamic> syncData = await _unsynced("Boxes");
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("Boxes");
     List<dynamic> maps = syncData['items'];
     List<BoxesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -349,7 +350,7 @@ class FeedsAPI {
   }
 
   Future<List<TimelapsesCompanion>> unsyncedTimelapses() async {
-    Map<String, dynamic> syncData = await _unsynced("Timelapses");
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("Timelapses");
     List<dynamic> maps = syncData['items'];
     List<TimelapsesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -363,13 +364,13 @@ class FeedsAPI {
   }
 
   Future<List<DevicesCompanion>> unsyncedDevices() async {
-    Map<String, dynamic> syncData = await _unsynced("Devices");
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("Devices");
     List<dynamic> maps = syncData['items'];
     return maps.map<DevicesCompanion>((m) => Devices.fromMap(m)).toList();
   }
 
   Future<List<FeedsCompanion>> unsyncedFeeds() async {
-    Map<String, dynamic> syncData = await _unsynced("Feeds");
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("Feeds");
     List<dynamic> maps = syncData['items'];
     List<FeedsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -383,7 +384,7 @@ class FeedsAPI {
   }
 
   Future<List<FeedEntriesCompanion>> unsyncedFeedEntries() async {
-    Map<String, dynamic> syncData = await _unsynced("FeedEntries");
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("FeedEntries");
     List<dynamic> maps = syncData['items'];
     List<FeedEntriesCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -401,7 +402,7 @@ class FeedsAPI {
   }
 
   Future<List<FeedMediasCompanion>> unsyncedFeedMedias() async {
-    Map<String, dynamic> syncData = await _unsynced("FeedMedias");
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("FeedMedias");
     List<dynamic> maps = syncData['items'];
     List<FeedMediasCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -627,26 +628,5 @@ class FeedsAPI {
 
   String absoluteFileURL(String path) {
     return '${BackendAPI().storageServerHost}$path';
-  }
-
-  Future setSynced(String type, String id) async {
-    Response resp = await BackendAPI().apiClient.post(Uri.parse('${BackendAPI().serverHost}/$type/$id/sync'), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
-    });
-    if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('setSynced failed: ${resp.body}', data: {"type": type, "id": id});
-    }
-  }
-
-  Future<Map<String, dynamic>> _unsynced(String type) async {
-    Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
-    });
-    if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('_unsynced failed: ${resp.body}', data: {"type": type});
-    }
-    return JsonDecoder().convert(resp.body);
   }
 }

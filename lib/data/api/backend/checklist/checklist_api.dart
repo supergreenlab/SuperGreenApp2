@@ -21,13 +21,13 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:http/http.dart';
 import 'package:super_green_app/data/api/backend/backend_api.dart';
+import 'package:super_green_app/data/api/backend/userend/userend_helper.dart';
 import 'package:super_green_app/data/kv/app_db.dart';
 import 'package:super_green_app/data/logger/logger.dart';
 import 'package:super_green_app/data/rel/checklist/checklists.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistAPI {
-
   Future<ChecklistsCompanion> getChecklist(String plantID) async {
     Response resp =
         await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/checklist/$plantID'), headers: {
@@ -65,8 +65,8 @@ class ChecklistAPI {
     await RelDB.get().checklistsDAO.updateChecklistSeed(checklistSeedsCompanion);
   }
 
-  Future<List<ChecklistSeedsCompanion>> unsyncedCHecklistSeeds() async {
-    Map<String, dynamic> syncData = await _unsynced("ChecklistSeeds");
+  Future<List<ChecklistSeedsCompanion>> unsyncedChecklistSeeds() async {
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("ChecklistSeeds");
     List<dynamic> maps = syncData['items'];
     List<ChecklistSeedsCompanion> results = [];
     for (int i = 0; i < maps.length; ++i) {
@@ -83,15 +83,33 @@ class ChecklistAPI {
     return results;
   }
 
-  Future<Map<String, dynamic>> _unsynced(String type) async {
-    Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
-    });
-    if (resp.statusCode ~/ 100 != 2) {
-      Logger.throwError('_unsynced failed: ${resp.body}', data: {"type": type});
+  Future syncChecklist(Checklist checklist) async {
+    Map<String, dynamic> obj = await Checklists.toMap(checklist);
+    String? serverID = await BackendAPI().postPut('/checklist', obj);
+
+    ChecklistsCompanion checklistsCompanion =
+        ChecklistsCompanion(id: Value(checklist.id), synced: Value(true));
+    if (serverID != null) {
+      checklistsCompanion = checklistsCompanion.copyWith(serverID: Value(serverID));
     }
-    return JsonDecoder().convert(resp.body);
+    await RelDB.get().checklistsDAO.updateChecklist(checklistsCompanion);
   }
 
+  Future<List<ChecklistsCompanion>> unsyncedChecklists() async {
+    Map<String, dynamic> syncData = await UserEndHelper.unsynced("Checklists");
+    List<dynamic> maps = syncData['items'];
+    List<ChecklistsCompanion> results = [];
+    for (int i = 0; i < maps.length; ++i) {
+      try {
+        ChecklistsCompanion fe = await Checklists.fromMap(maps[i]);
+        if (fe is SkipChecklistsCompanion) {
+          continue;
+        }
+        results.add(fe);
+      } catch (e, trace) {
+        Logger.logError(e, trace, data: {"data": maps[i]}, fwdThrow: true);
+      }
+    }
+    return results;
+  }
 }
