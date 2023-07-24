@@ -29,8 +29,7 @@ import 'package:super_green_app/widgets/green_button.dart';
 class WelcomePage extends StatefulWidget {
   static String get formAllowAnalytics {
     return Intl.message(
-      '''**Help us** discern what's **useful** from what's **useless** by sharing **anonymous** usage data.
-*Note: no third party (ie google, facebook..) is involved in our data analytics strategy.*''',
+      '''**Help us** discern what's **useful** from what's **useless** by sharing **anonymous** usage data.''',
       name: 'formAllowAnalytics',
       desc: 'Form allow analytics',
       locale: SGLLocalizations.current?.localeName,
@@ -71,24 +70,27 @@ class _WelcomePageState extends State<WelcomePage> {
           BlocProvider.of<MainNavigatorBloc>(context).add(MainNavigateToHomeEvent());
         }
       },
-      child: Scaffold(
-          body: Container(
-        padding: EdgeInsets.all(4),
-        child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 250),
-            child: Column(
-              key: ValueKey<bool>(widget._loading),
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: widgets,
-            )),
-      )),
+      child: MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaleFactor: 1, boldText: false),
+        child: Scaffold(
+            body: Container(
+          padding: EdgeInsets.all(4),
+          child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 250),
+              child: Column(
+                key: ValueKey<bool>(widget._loading),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: widgets,
+              )),
+        )),
+      ),
     );
   }
 
   Widget _logo() {
     List<Widget> body = <Widget>[
       Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 48.0),
         child: SizedBox(width: 200, height: 200, child: SvgPicture.asset('assets/super_green_lab_vertical.svg')),
       ),
     ];
