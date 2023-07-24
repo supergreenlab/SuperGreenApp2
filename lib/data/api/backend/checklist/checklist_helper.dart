@@ -16,15 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'package:drift/drift.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
 
 class ChecklistHelper {
-
   static Future deleteChecklist(Checklist checklist, {addDeleted = true}) async {
+    await RelDB.get().checklistsDAO.deleteChecklist(checklist);
+    if (addDeleted && checklist.serverID != null) {
+      await RelDB.get()
+          .deletesDAO
+          .addDelete(DeletesCompanion(serverID: Value(checklist.serverID!), type: Value('checklists')));
+    }
+
+    List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(checklist.id);
+    for (ChecklistSeed checklistSeed in checklistSeeds) {
+      await ChecklistHelper.deleteChecklistSeed(checklistSeed, addDeleted: addDeleted);
+    }
   }
 
   static Future deleteChecklistSeed(ChecklistSeed checklistSeed, {addDeleted = true}) async {
-    
+    await RelDB.get().checklistsDAO.deleteChecklistSeed(checklistSeed);
+    if (addDeleted && checklistSeed.serverID != null) {
+      await RelDB.get()
+          .deletesDAO
+          .addDelete(DeletesCompanion(serverID: Value(checklistSeed.serverID!), type: Value('checklistseeds')));
+    }
   }
-
 }

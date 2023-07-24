@@ -167,4 +167,12 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
   Future<List<ChecklistSeed>> getUnsyncedChecklistSeeds() {
     return (select(checklistSeeds)..where((b) => b.synced.equals(false))).get();
   }
+
+  Future deleteChecklist(Checklist checklist) {
+    return delete(checklists).delete(checklist);
+  }
+
+  Future deleteChecklistSeed(ChecklistSeed checklistSeed) {
+    return delete(checklistSeeds).delete(checklistSeed);
+  }
 }
