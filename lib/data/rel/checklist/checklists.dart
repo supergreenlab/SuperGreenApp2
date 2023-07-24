@@ -40,12 +40,13 @@ class Checklists extends Table {
     Plant plant;
     try {
       plant = await RelDB.get().plantsDAO.getPlantForServerID(map['plantID']);
-    } catch(e) {
+    } catch (e) {
       return SkipChecklistsCompanion(Value(map['id'] as String));
     }
     return ChecklistsCompanion(
       plant: Value(plant.id),
       serverID: Value(map['id']),
+      synced: Value(true),
     );
   }
 
@@ -100,6 +101,7 @@ class ChecklistSeeds extends Table {
       conditions: Value(map['conditions']),
       actions: Value(map['actions']),
       serverID: Value(map['id'] as String),
+      synced: Value(true),
     );
   }
 
