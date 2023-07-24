@@ -18,6 +18,7 @@
 
 import 'dart:convert';
 
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:super_green_app/data/rel/checklist/actions.dart';
 import 'package:super_green_app/data/rel/rel_db.dart';
@@ -94,6 +95,7 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
     } else if (event is AppbarChecklistBlocEventCreate) {
       int checklistID = await RelDB.get().checklistsDAO.addChecklist(ChecklistsCompanion.insert(
             plant: this.plant.id,
+            synced: Value(false),
           ));
       checklist = await RelDB.get().checklistsDAO.getChecklist(checklistID);
       yield AppbarChecklistBlocStateCreated(checklist!);
