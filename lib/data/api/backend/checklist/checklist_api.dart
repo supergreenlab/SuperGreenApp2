@@ -55,6 +55,9 @@ class ChecklistAPI {
 
   Future syncChecklistSeed(ChecklistSeed checklistSeed) async {
     Map<String, dynamic> obj = await ChecklistSeeds.toMap(checklistSeed);
+    if (checklistSeed.serverID != null) {
+      obj.remove('checklistID');
+    }
     String? serverID = await BackendAPI().postPut('/checklistseed', obj);
 
     ChecklistSeedsCompanion checklistSeedsCompanion =
@@ -87,8 +90,7 @@ class ChecklistAPI {
     Map<String, dynamic> obj = await Checklists.toMap(checklist);
     String? serverID = await BackendAPI().postPut('/checklist', obj);
 
-    ChecklistsCompanion checklistsCompanion =
-        ChecklistsCompanion(id: Value(checklist.id), synced: Value(true));
+    ChecklistsCompanion checklistsCompanion = ChecklistsCompanion(id: Value(checklist.id), synced: Value(true));
     if (serverID != null) {
       checklistsCompanion = checklistsCompanion.copyWith(serverID: Value(serverID));
     }
