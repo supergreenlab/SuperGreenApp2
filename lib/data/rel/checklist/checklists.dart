@@ -82,6 +82,8 @@ class ChecklistSeeds extends Table {
   TextColumn get conditions => text().withDefault(Constant('{}'))();
   TextColumn get actions => text().withDefault(Constant('{}'))();
 
+  TextColumn get checklistServerID => text().withLength(min: 36, max: 36).nullable()();
+
   TextColumn get serverID => text().withLength(min: 36, max: 36).nullable()();
   BoolColumn get synced => boolean().withDefault(Constant(false))();
 
@@ -101,6 +103,7 @@ class ChecklistSeeds extends Table {
       conditions: Value(map['conditions']),
       actions: Value(map['actions']),
       serverID: Value(map['id'] as String),
+      checklistServerID: Value(map['checklistID'] as String),
       synced: Value(true),
     );
   }
@@ -147,8 +150,8 @@ class ChecklistsDAO extends DatabaseAccessor<RelDB> with _$ChecklistsDAOMixin {
     return (select(checklists)..where((cks) => cks.serverID.equals(serverID))).getSingle();
   }
 
-  Future<ChecklistSeed> getChecklistSeedForServerID(String serverID) {
-    return (select(checklistSeeds)..where((cks) => cks.serverID.equals(serverID))).getSingle();
+  Future<ChecklistSeed> getChecklistSeedForServerIDs(String serverID, String checklistServerID) {
+    return (select(checklistSeeds)..where((cks) => cks.serverID.equals(serverID) & cks.checklistServerID.equals(checklistServerID))).getSingle();
   }
 
   Future<List<ChecklistSeed>> getChecklistSeeds(int checklistID) {

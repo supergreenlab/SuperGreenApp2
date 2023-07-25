@@ -363,7 +363,7 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
       ChecklistSeedsCompanion checklistSeedsCompanion = checklistSeeds[i];
       ChecklistSeed? exists;
       try {
-        exists = await RelDB.get().checklistsDAO.getChecklistSeedForServerID(checklistSeedsCompanion.serverID.value!);
+        exists = await RelDB.get().checklistsDAO.getChecklistSeedForServerIDs(checklistSeedsCompanion.serverID.value!, checklistSeedsCompanion.checklistServerID.value!);
       } catch (e) {}
       if (checklistSeedsCompanion is DeletedChecklistSeedsCompanion) {
         if (exists != null) {
