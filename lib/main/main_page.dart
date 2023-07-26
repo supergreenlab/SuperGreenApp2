@@ -366,7 +366,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           // SafeAre does not seem to work
           double height = 50;
           if (Platform.isIOS) {
-            height = 60;
+            height = 70;
           }
           content.add(Positioned(
               left: 0,
