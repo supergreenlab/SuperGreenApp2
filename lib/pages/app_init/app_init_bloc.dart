@@ -75,8 +75,6 @@ class AppInitBlocStateDone extends AppInitBlocState {
 }
 
 class AppInitBloc extends LegacyBloc<AppInitBlocEvent, AppInitBlocState> {
-  AppDB _db = AppDB();
-
   AppInitBloc() : super(AppInitBlocStateLoading()) {
     add(AppInitBlocEventInit());
   }
@@ -96,20 +94,8 @@ class AppInitBloc extends LegacyBloc<AppInitBlocEvent, AppInitBlocState> {
         Logger.logError(details.exception, details.stack);
       };
 
-      final Directory appDocDir = await getApplicationDocumentsDirectory();
-      final Directory tmpDocDir = await getTemporaryDirectory();
-      Hive.init(appDocDir.path);
-      Hive.registerAdapter(AppDataAdapter());
-      Hive.registerAdapter(DeviceDataAdapter());
-      AppDB().documentPath = appDocDir.path;
-      AppDB().tmpPath = tmpDocDir.path;
-
-      final String dirPath = '${appDocDir.path}/Pictures/sgl';
-      await Directory(dirPath).create(recursive: true);
-
-      await _db.init();
-
-      final AppData appData = _db.getAppData();
+      await AppDB().init();
+      final AppData appData = AppDB().getAppData();
 
       if (appData.storeGeo == null) {
         final Map<String, String> localeToStoreGeo = {
@@ -130,8 +116,8 @@ class AppInitBloc extends LegacyBloc<AppInitBlocEvent, AppInitBlocState> {
       MatomoTracker().setOptOut(!appData.allowAnalytics);
       yield AppInitBlocStateReady(appData.firstStart);
     } else if (event is AppInitBlocEventAllowAnalytics) {
-      _db.setFirstStart(false);
-      _db.setAllowAnalytics(event.allowAnalytics);
+      AppDB().setFirstStart(false);
+      AppDB().setAllowAnalytics(event.allowAnalytics);
       MatomoTracker().setOptOut(!event.allowAnalytics);
       yield AppInitBlocStateDone();
     }

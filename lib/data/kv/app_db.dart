@@ -89,6 +89,20 @@ class AppDB {
     setAppData(appData);
   }
 
+  void setPinLock(String pinLock) {
+    AppData appData = getAppData();
+    appData.pinLock = pinLock;
+    setAppData(appData);
+  }
+
+  bool hasPinLock() {
+    return getAppData().pinLock?.isNotEmpty ?? false;
+  }
+
+  String get pinLock {
+    return getAppData().pinLock ?? '';
+  }
+
   void setJWT(String? jwt) {
     AppData appData = getAppData();
     appData.jwt = jwt;

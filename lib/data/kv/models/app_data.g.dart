@@ -27,13 +27,14 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..notificationToken = fields[7] as String?
       ..notificationTokenSent = fields[8] as bool
       ..notificationOnStartAsked = fields[9] as bool
-      ..filters = (fields[10] as List?)?.cast<String>();
+      ..filters = (fields[10] as List?)?.cast<String>()
+      ..pinLock = fields[11] as String?;
   }
 
   @override
   void write(BinaryWriter writer, AppData obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.firstStart)
       ..writeByte(1)
@@ -55,7 +56,9 @@ class AppDataAdapter extends TypeAdapter<AppData> {
       ..writeByte(9)
       ..write(obj.notificationOnStartAsked)
       ..writeByte(10)
-      ..write(obj.filters);
+      ..write(obj.filters)
+      ..writeByte(11)
+      ..write(obj.pinLock);
   }
 
   @override
