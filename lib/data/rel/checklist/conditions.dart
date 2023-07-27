@@ -71,12 +71,17 @@ class ChecklistConditionMetric extends ChecklistCondition {
   final double? max;
   final int? duration;
   final String durationUnit;
+  final bool daysInRow;
+  final int? nDaysInRow;
 
   bool get valid {
     if (key == null || duration == null) {
       return false;
     }
     if (min == null && max == null) {
+      return false;
+    }
+    if (daysInRow && nDaysInRow == null) {
       return false;
     }
     return true;
@@ -88,7 +93,9 @@ class ChecklistConditionMetric extends ChecklistCondition {
     this.min,
     this.max,
     this.duration,
-    this.durationUnit = 'DAYS',
+    this.durationUnit = 'HOURS',
+    this.daysInRow = false,
+    this.nDaysInRow,
   }) : super(
           type: TYPE,
         );
@@ -103,6 +110,8 @@ class ChecklistConditionMetric extends ChecklistCondition {
       'max': max,
       'duration': duration,
       'durationUnit': durationUnit,
+      'daysInRow': daysInRow,
+      'nDaysInRow': nDaysInRow,
     };
     map.addAll({
       'params': json.encode(params),
@@ -118,6 +127,8 @@ class ChecklistConditionMetric extends ChecklistCondition {
         max,
         duration,
         durationUnit,
+        daysInRow,
+        nDaysInRow,
       ];
 
   static ChecklistConditionMetric fromMap(Map<String, dynamic> map) {
@@ -128,6 +139,8 @@ class ChecklistConditionMetric extends ChecklistCondition {
       max: map['max'],
       duration: map['duration'],
       durationUnit: map['durationUnit'],
+      daysInRow: map['daysInRow'],
+      nDaysInRow: map['nDaysInRow'],
     );
   }
 
@@ -138,6 +151,8 @@ class ChecklistConditionMetric extends ChecklistCondition {
     double? max,
     int? duration,
     String? durationUnit,
+    bool? daysInRow,
+    int? nDaysInRow,
   }) {
     return ChecklistConditionMetric(
       key: key ?? this.key,
@@ -146,6 +161,8 @@ class ChecklistConditionMetric extends ChecklistCondition {
       max: max ?? this.max,
       duration: duration ?? this.duration,
       durationUnit: durationUnit ?? this.durationUnit,
+      daysInRow: daysInRow ?? this.daysInRow,
+      nDaysInRow: nDaysInRow ?? this.nDaysInRow,
     );
   }
 }

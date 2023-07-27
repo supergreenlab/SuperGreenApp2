@@ -25,8 +25,9 @@ class ChecklistDuration extends StatefulWidget {
   final int? duration;
   final String? unit;
   final Function(int? duration, String? unit) onUpdate;
+  final bool hideUnit;
 
-  const ChecklistDuration({Key? key, required this.onUpdate, required this.unit, required this.duration}) : super(key: key);
+  const ChecklistDuration({Key? key, required this.onUpdate, required this.unit, required this.duration, this.hideUnit=false}) : super(key: key);
 
   @override
   State<ChecklistDuration> createState() => _ChecklistDurationState();
@@ -59,11 +60,17 @@ class _ChecklistDurationState extends State<ChecklistDuration> {
             child: FeedFormTextarea(
               keyboardType: TextInputType.number,
               onChanged: (value) {
+                if (value == '') {
+                  widget.onUpdate(null, widget.unit);
+                  return;
+                }
                 int nv = 0;
                 try {
                    nv = int.parse(value);
                 } catch(e) {
-                  _controller.text = '';
+                  setState(() {
+                    _controller.text = '';
+                  });
                 }
                 widget.onUpdate(nv, widget.unit);
               },
@@ -73,7 +80,7 @@ class _ChecklistDurationState extends State<ChecklistDuration> {
               textEditingController: _controller,
             ),
           ),
-          Expanded(
+          widget.hideUnit ? Container() : Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: DropdownButton<String>(

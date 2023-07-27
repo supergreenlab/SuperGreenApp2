@@ -181,6 +181,35 @@ class _MetricConditionPageState extends State<MetricConditionPage> {
           ));
         },
       ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: CheckboxLabel(
+          text: 'This should repeat multiple days in a row.',
+          value: widget.condition.daysInRow,
+          onChanged: (newValue) {
+            widget.onUpdate(widget.condition.copyWith(
+              daysInRow: newValue,
+            ));
+          },
+        ),
+      ),
+      !widget.condition.daysInRow ? Container() : Row(
+        children: [
+          Expanded(
+            child: ChecklistDuration(
+              hideUnit: true,
+              duration: widget.condition.duration,
+              unit: widget.condition.durationUnit,
+              onUpdate: (int? duration, String? unit) {
+                widget.onUpdate(widget.condition.copyWith(
+                  nDaysInRow: duration,
+                ));
+              },
+            ),
+          ),
+          Expanded(child: Text('Days')),
+        ],
+      ),
     ]);
   }
 }
