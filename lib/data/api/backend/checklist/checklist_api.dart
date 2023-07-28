@@ -86,7 +86,7 @@ class ChecklistAPI {
     return results;
   }
 
-  Future syncChecklist(Checklist checklist) async {
+  Future<String?> syncChecklist(Checklist checklist) async {
     Map<String, dynamic> obj = await Checklists.toMap(checklist);
     String? serverID = await BackendAPI().postPut('/checklist', obj);
 
@@ -95,6 +95,7 @@ class ChecklistAPI {
       checklistsCompanion = checklistsCompanion.copyWith(serverID: Value(serverID));
     }
     await RelDB.get().checklistsDAO.updateChecklist(checklistsCompanion);
+    return serverID;
   }
 
   Future<List<ChecklistsCompanion>> unsyncedChecklists() async {

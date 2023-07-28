@@ -36,6 +36,10 @@ class UserEndHelper {
   }
 
   static Future<Map<String, dynamic>> unsynced(String type) async {
+    // var headers = {
+    //   'Content-Type': 'application/json',
+    //   'Authorization': 'Bearer ${AppDB().getAppData().jwt}',
+    // };
     Response resp = await BackendAPI().apiClient.get(Uri.parse('${BackendAPI().serverHost}/sync$type'), headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${AppDB().getAppData().jwt}',

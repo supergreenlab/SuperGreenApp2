@@ -410,13 +410,13 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
   }
 
   Future _syncInChecklistLogs() async {
-    List<ChecklistLogsCompanion> checklists = await BackendAPI().checklistAPI.unsyncedChecklistLogs();
-    for (int i = 0; i < checklists.length; ++i) {
+    List<ChecklistLogsCompanion> checklistLogs = await BackendAPI().checklistAPI.unsyncedChecklistLogs();
+    for (int i = 0; i < checklistLogs.length; ++i) {
       if (_usingWifi == false && AppDB().getAppData().syncOverGSM == false) {
         throw 'Can\'t sync over GSM';
       }
-      add(SyncerBlocEventSyncing(true, 'checklist: ${i + 1}/${checklists.length}'));
-      ChecklistLogsCompanion checklistLogsCompanion = checklists[i];
+      add(SyncerBlocEventSyncing(true, 'checklist: ${i + 1}/${checklistLogs.length}'));
+      ChecklistLogsCompanion checklistLogsCompanion = checklistLogs[i];
       ChecklistLog? exists;
       try {
         exists = await RelDB.get().checklistsDAO.getChecklistLogForServerID(checklistLogsCompanion.serverID.value!);
@@ -569,7 +569,15 @@ class SyncerBloc extends LegacyBloc<SyncerBlocEvent, SyncerBlocState> {
         throw 'Can\'t sync over GSM';
       }
       Checklist checklist = checklists[i];
-      await BackendAPI().checklistAPI.syncChecklist(checklist);
+      String? serverID = await BackendAPI().checklistAPI.syncChecklist(checklist);
+      if (serverID != null) {
+        List<ChecklistSeed> checklistSeeds = await RelDB.get().checklistsDAO.getChecklistSeeds(checklist.id);
+        for (int j = 0; j < checklistSeeds.length; ++j) {
+          await RelDB.get()
+              .checklistsDAO
+              .updateChecklistSeed(checklistSeeds[j].copyWith(checklistServerID: serverID).toCompanion(false));
+        }
+      }
     }
   }
 
