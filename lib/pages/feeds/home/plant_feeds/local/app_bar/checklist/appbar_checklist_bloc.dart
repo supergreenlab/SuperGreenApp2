@@ -33,6 +33,11 @@ class AppbarChecklistBlocEventInit extends AppbarChecklistBlocEvent {
   List<Object> get props => [];
 }
 
+class AppbarChecklistBlocEventoad extends AppbarChecklistBlocEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class AppbarChecklistBlocEventCreate extends AppbarChecklistBlocEvent {
   @override
   List<Object> get props => [];
@@ -86,7 +91,15 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       } catch (e) {
         yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
       }
-      actions = [];
+      sub = RelDB.get().checklistsDAO.watchChecklistLogs(checklist!.id).listen((e) {
+        add(AppbarChecklistBlocEventoad());
+      });
+    } else if (event is AppbarChecklistBlocEventoad) {
+      try {
+        checklist = await RelDB.get().checklistsDAO.getChecklistForPlant(this.plant.id);
+      } catch (e) {
+        yield AppbarChecklistBlocStateLoaded(this.plant, checklist, actions);
+      }
       List<ChecklistLog> logs = await RelDB.get().checklistsDAO.getChecklistLogs(checklist!.id);
       for (int i = 0; i < logs.length; ++i) {
         Map<String, dynamic> action = json.decode(logs[i].action);
@@ -102,5 +115,11 @@ class AppbarChecklistBloc extends LegacyBloc<AppbarChecklistBlocEvent, AppbarChe
       checklist = await RelDB.get().checklistsDAO.getChecklist(checklistID);
       yield AppbarChecklistBlocStateCreated(checklist!);
     }
+  }
+
+  @override
+  Future<void> close() async {
+    await sub.cancel();
+    return super.close();
   }
 }
